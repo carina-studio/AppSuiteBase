@@ -4,8 +4,8 @@
 		<AssemblyVersion>0.9.0</AssemblyVersion>
 		<Version>0.9.0</Version>
 		<TargetFramework>net5.0</TargetFramework>
-		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
-		<AssemblyName>CarinaStudio AppSuite</AssemblyName>
+		<RootNamespace>CarinaStudio.AppSuiteBase</RootNamespace>
+		<AssemblyName>CarinaStudio.AppSuiteBase</AssemblyName>
 		<Nullable>enable</Nullable>
 		<Authors>Carina Studio</Authors>
 		<Company>Carina Studio</Company>
@@ -13,13 +13,30 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DocumentationFile>CarinaStudio.AppSuite.xml</DocumentationFile>
+		<DocumentationFile>CarinaStudio.AppSuiteBase.xml</DocumentationFile>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<DocumentationFile>CarinaStudio.AppSuite.xml</DocumentationFile>
+		<DocumentationFile>CarinaStudio.AppSuiteBase.xml</DocumentationFile>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Avalonia" Version="0.10.7" />
+		<PackageReference Include="Avalonia.Desktop" Version="0.10.7" />
+		<PackageReference Include="CarinaStudio.AppBase.Application.Avalonia" Version="0.26.0.919" />
+		<PackageReference Include="CarinaStudio.AppBase.Application" Version="0.26.0.919" />
+		<PackageReference Include="CarinaStudio.AppBase.AutoUpdate" Version="0.26.0.919" />
+		<PackageReference Include="CarinaStudio.AppBase.Configuration" Version="0.26.0.919" />
+		<PackageReference Include="CarinaStudio.AppBase.Core" Version="0.26.0.919" />
+		<PackageReference Include="NLog" Version="4.7.11" />
+		<PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
+		
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Themes\" />
+	</ItemGroup>
 
 </Project>
