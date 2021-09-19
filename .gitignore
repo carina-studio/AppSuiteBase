@@ -2,5 +2,5 @@
 obj
 bin
 PublishProfiles
-/AppSuiteBase/CarinaStudio.AppSuiteBase.xml
+/Core/CarinaStudio.AppSuite.Core.xml
 /Packages
