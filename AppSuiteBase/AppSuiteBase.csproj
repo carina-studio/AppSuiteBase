@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<AssemblyVersion>0.9.0</AssemblyVersion>
+		<Version>0.9.0</Version>
+		<TargetFramework>net5.0</TargetFramework>
+		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
+		<AssemblyName>CarinaStudio AppSuite</AssemblyName>
+		<Nullable>enable</Nullable>
+		<Authors>Carina Studio</Authors>
+		<Company>Carina Studio</Company>
+		<Copyright>©2021 Carina Studio</Copyright>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DocumentationFile>CarinaStudio.AppSuite.xml</DocumentationFile>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DocumentationFile>CarinaStudio.AppSuite.xml</DocumentationFile>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+</Project>
