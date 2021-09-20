@@ -3,6 +3,22 @@
 					xmlns:sys="using:System">
 	
 	<!-- Common -->
+	<sys:String x:Key="String/Common.Add">Add</sys:String>
+	<sys:String x:Key="String/Common.Cancel">Cancel</sys:String>
+	<sys:String x:Key="String/Common.Close">Close</sys:String>
+	<sys:String x:Key="String/Common.Copy">Copy</sys:String>
+	<sys:String x:Key="String/Common.Create">Create</sys:String>
+	<sys:String x:Key="String/Common.Delete">Delete</sys:String>
+	<sys:String x:Key="String/Common.Edit">Edit</sys:String>
+	<sys:String x:Key="String/Common.Empty">Empty</sys:String>
+	<sys:String x:Key="String/Common.Load">Load</sys:String>
+	<sys:String x:Key="String/Common.No">No</sys:String>
+	<sys:String x:Key="String/Common.None">None</sys:String>
 	<sys:String x:Key="String/Common.OK">OK</sys:String>
+	<sys:String x:Key="String/Common.Open">Open</sys:String>
+	<sys:String x:Key="String/Common.Paste">Paste</sys:String>
+	<sys:String x:Key="String/Common.Remove">Remove</sys:String>
+	<sys:String x:Key="String/Common.Save">Save</sys:String>
+	<sys:String x:Key="String/Common.Yes">Yes</sys:String>
 	
 </ResourceDictionary>

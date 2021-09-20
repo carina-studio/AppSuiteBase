@@ -8,12 +8,14 @@ using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
 using NLog;
 using NLog.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 #if WINDOWS10_0_17763_0_OR_GREATER
 using Windows.UI.ViewManagement;
@@ -319,6 +321,29 @@ namespace CarinaStudio.AppSuite
             });
             this.OnLoadDefaultStringResource()?.Let(it => this.Resources.MergedDictionaries.Add(it));
             this.UpdateStringResources();
+
+            // attach to system event
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                SystemEvents.UserPreferenceChanged += this.OnWindowsUserPreferenceChanged;
+            }
+        }
+
+
+        /// <summary>
+        /// Called to perform asynchronous operations before shutting down.
+        /// </summary>
+        /// <returns>Task of performing operations.</returns>
+        protected virtual Task OnPrepareShuttingDownAsync()
+        {
+            // detach from system event
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                SystemEvents.UserPreferenceChanged -= this.OnWindowsUserPreferenceChanged;
+            }
+
+            // complete
+            return Task.CompletedTask;
         }
 
 
@@ -335,13 +360,6 @@ namespace CarinaStudio.AppSuite
             if (e.Key == this.CultureSettingKey)
                 this.UpdateCultureInfo(true);
         }
-
-
-        /// <summary>
-        /// Called to perform asynchronous operations before shutting down.
-        /// </summary>
-        /// <returns>Task of performing operations.</returns>
-        protected virtual Task OnPrepareShuttingDownAsync() => Task.CompletedTask;
 
 
         /// <summary>
@@ -362,6 +380,16 @@ namespace CarinaStudio.AppSuite
         /// <param name="newVersion">New version.</param>
         protected virtual void OnUpgradeSettings(ISettings settings, int oldVersion, int newVersion)
         { }
+
+
+#pragma warning disable CA1416
+        // Called when user preference changed on Windows
+        void OnWindowsUserPreferenceChanged(object? sender, UserPreferenceChangedEventArgs e)
+        {
+            if (e.Category == UserPreferenceCategory.Locale)
+                this.SynchronizationContext.Post(() => this.UpdateCultureInfo(true));
+        }
+#pragma warning restore CA1416
 
 
         /// <summary>
@@ -514,6 +542,7 @@ namespace CarinaStudio.AppSuite
         {
             // get culture info
             var cultureInfo = this.Settings.GetValueOrDefault(this.CultureSettingKey).ToCultureInfo();
+            cultureInfo.ClearCachedData();
             if (object.Equals(cultureInfo, this.cultureInfo))
                 return;
 

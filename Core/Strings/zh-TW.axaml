@@ -3,6 +3,22 @@
 					xmlns:sys="using:System">
 	
 	<!-- Common -->
+	<sys:String x:Key="String/Common.Add">加入</sys:String>
+	<sys:String x:Key="String/Common.Cancel">取消</sys:String>
+	<sys:String x:Key="String/Common.Close">關閉</sys:String>
+	<sys:String x:Key="String/Common.Copy">複製</sys:String>
+	<sys:String x:Key="String/Common.Create">建立</sys:String>
+	<sys:String x:Key="String/Common.Delete">刪除</sys:String>
+	<sys:String x:Key="String/Common.Edit">編輯</sys:String>
+	<sys:String x:Key="String/Common.Empty">空</sys:String>
+	<sys:String x:Key="String/Common.Load">載入</sys:String>
+	<sys:String x:Key="String/Common.No">否</sys:String>
+	<sys:String x:Key="String/Common.None">無</sys:String>
 	<sys:String x:Key="String/Common.OK">確定</sys:String>
+	<sys:String x:Key="String/Common.Open">開啟</sys:String>
+	<sys:String x:Key="String/Common.Paste">貼上</sys:String>
+	<sys:String x:Key="String/Common.Remove">移除</sys:String>
+	<sys:String x:Key="String/Common.Save">儲存</sys:String>
+	<sys:String x:Key="String/Common.Yes">是</sys:String>
 	
 </ResourceDictionary>
