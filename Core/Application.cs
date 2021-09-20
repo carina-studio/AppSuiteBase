@@ -3,6 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
+using Avalonia.Styling;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
@@ -74,6 +75,8 @@ namespace CarinaStudio.AppSuite
         readonly string settingsFilePath;
         ResourceDictionary? stringResource;
         CultureInfo? stringResourceCulture;
+        Styles? styles;
+        ThemeMode stylesThemeMode = ThemeMode.Auto;
 
 
         /// <summary>
@@ -264,6 +267,14 @@ namespace CarinaStudio.AppSuite
         /// <param name="cultureInfo">Culture info.</param>
         /// <returns>String resource.</returns>
         protected virtual IResourceProvider? OnLoadStringResource(CultureInfo cultureInfo) => null;
+
+
+        /// <summary>
+        /// Called to load <see cref="IStyle"/> for given theme mode.
+        /// </summary>
+        /// <param name="themeMode">Theme mode.</param>
+        /// <returns><see cref="IStyle"/>.</returns>
+        protected virtual IStyle? OnLoadTheme(ThemeMode themeMode) => null;
 
 
         // Called when main window closed.
@@ -535,6 +546,12 @@ namespace CarinaStudio.AppSuite
             this.Logger.LogWarning("Shut down");
             (this.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
         }
+
+
+        /// <summary>
+        /// Get key of theme mode setting.
+        /// </summary>
+        public virtual SettingKey<ThemeMode> ThemeModeSettingKey { get; } = new SettingKey<ThemeMode>("ThemeMode", ThemeMode.Auto);
 
 
         // Update culture info according to settings.

@@ -63,5 +63,11 @@ namespace CarinaStudio.AppSuite
         /// Close all main windows and shut down application.
         /// </summary>
         void Shutdown();
+
+
+        /// <summary>
+        /// Get key of theme mode setting.
+        /// </summary>
+        SettingKey<ThemeMode> ThemeModeSettingKey { get; }
     }
 }

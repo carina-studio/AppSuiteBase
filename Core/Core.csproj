@@ -25,6 +25,9 @@
 	<ItemGroup>
 		<AvaloniaResource Include="Strings/Default.axaml" />
 		<AvaloniaResource Include="Strings/zh-TW.axaml" />
+		<AvaloniaResource Include="Themes/Base.axaml" />
+		<AvaloniaResource Include="Themes/Dark.axaml" />
+		<AvaloniaResource Include="Themes/Light.axaml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -38,10 +41,6 @@
 		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="5.0.0" />
 		<PackageReference Include="NLog" Version="4.7.11" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Themes\" />
 	</ItemGroup>
 
 </Project>
