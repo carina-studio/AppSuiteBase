@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Tests
 {
-    public class App : Application
+    public class App : AppSuiteApplication
     {
         // Avalonia configuration, don't remove; also used by visual designer.
         static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>()

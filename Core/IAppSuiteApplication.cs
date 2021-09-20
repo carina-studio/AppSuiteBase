@@ -9,7 +9,7 @@ namespace CarinaStudio.AppSuite
     /// <summary>
     /// Interface of AppSuite application.
     /// </summary>
-    public interface IApplication : CarinaStudio.IApplication
+    public interface IAppSuiteApplication : CarinaStudio.IApplication
     {
         /// <summary>
         /// Get key of application culture setting.

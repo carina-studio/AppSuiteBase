@@ -6,7 +6,7 @@ using CarinaStudio.Controls;
 
 namespace CarinaStudio.AppSuite.Tests
 {
-    public partial class MainWindow : Window<IApplication>
+    public partial class MainWindow : Window<IAppSuiteApplication>
     {
         public MainWindow()
         {

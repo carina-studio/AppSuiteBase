@@ -25,18 +25,18 @@ using Windows.UI.ViewManagement;
 namespace CarinaStudio.AppSuite
 {
     /// <summary>
-    /// Base implementation of <see cref="IApplication"/>.
+    /// Base implementation of <see cref="IAppSuiteApplication"/>.
     /// </summary>
-    public abstract class Application : CarinaStudio.Application, IApplication
+    public abstract class AppSuiteApplication : CarinaStudio.Application, IAppSuiteApplication
     {
         // Implementation of PersistentState.
         class PersistentStateImpl : PersistentSettings
         {
             // Fields.
-            readonly Application app;
+            readonly AppSuiteApplication app;
 
             // Constructor.
-            public PersistentStateImpl(Application app) : base(JsonSettingsSerializer.Default)
+            public PersistentStateImpl(AppSuiteApplication app) : base(JsonSettingsSerializer.Default)
             {
                 this.app = app;
             }
@@ -51,10 +51,10 @@ namespace CarinaStudio.AppSuite
         class SettingsImpl : PersistentSettings
         {
             // Fields.
-            readonly Application app;
+            readonly AppSuiteApplication app;
 
             // Constructor.
-            public SettingsImpl(Application app) : base(JsonSettingsSerializer.Default)
+            public SettingsImpl(AppSuiteApplication app) : base(JsonSettingsSerializer.Default)
             {
                 this.app = app;
             }
@@ -80,9 +80,9 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Initialize new <see cref="Application"/> instance.
+        /// Initialize new <see cref="AppSuiteApplication"/> instance.
         /// </summary>
-        protected Application()
+        protected AppSuiteApplication()
         {
             // create logger
             this.LoggerFactory = new LoggerFactory(new ILoggerProvider[] { this.OnCreateLoggerProvider() });
