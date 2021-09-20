@@ -3,6 +3,6 @@
 
 	<!-- Base styles -->
 	<FluentTheme Mode="Light"/>
-	<StyleInclude Source="/Styles/Base.axaml"/>
+	<StyleInclude Source="/Themes/Base.axaml"/>
 	
 </Styles>

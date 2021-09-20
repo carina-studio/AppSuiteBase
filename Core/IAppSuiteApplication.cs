@@ -9,7 +9,7 @@ namespace CarinaStudio.AppSuite
     /// <summary>
     /// Interface of AppSuite application.
     /// </summary>
-    public interface IAppSuiteApplication : CarinaStudio.IApplication
+    public interface IAppSuiteApplication : IApplication
     {
         /// <summary>
         /// Get key of application culture setting.
@@ -18,14 +18,20 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Load <see cref="CarinaStudio.IApplication.PersistentState"/> from file.
+        /// Check whether <see cref="ThemeMode.System"/> is supported or not.
+        /// </summary>
+        bool IsSystemThemeModeSupported { get; }
+
+
+        /// <summary>
+        /// Load <see cref="IApplication.PersistentState"/> from file.
         /// </summary>
         /// <returns>Task of loading.</returns>
         Task LoadPersistentStateAsync();
 
 
         /// <summary>
-        /// Load <see cref="CarinaStudio.IApplication.Settings"/> from file.
+        /// Load <see cref="IApplication.Settings"/> from file.
         /// </summary>
         /// <returns>Task of loading.</returns>
         Task LoadSettingsAsync();

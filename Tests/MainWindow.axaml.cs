@@ -18,11 +18,11 @@ namespace CarinaStudio.AppSuite.Tests
 
         void Test()
         {
-            this.Settings.SetValue<ApplicationCulture>(this.Application.CultureSettingKey, this.Settings.GetValueOrDefault(this.Application.CultureSettingKey) switch
+            this.Settings.SetValue<ThemeMode>(this.Application.ThemeModeSettingKey, this.Settings.GetValueOrDefault(this.Application.ThemeModeSettingKey) switch
             {
-                ApplicationCulture.System => ApplicationCulture.EN_US,
-                ApplicationCulture.EN_US => ApplicationCulture.ZH_TW,
-                _ => ApplicationCulture.System,
+                ThemeMode.System => ThemeMode.Dark,
+                ThemeMode.Dark => ThemeMode.Light,
+                _ => ThemeMode.System,
             });
         }
     }

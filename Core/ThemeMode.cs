@@ -8,9 +8,9 @@ namespace CarinaStudio.AppSuite
     public enum ThemeMode
     {
         /// <summary>
-        /// Auto.
+        /// System.
         /// </summary>
-        Auto,
+        System,
         /// <summary>
         /// Dark.
         /// </summary>

@@ -27,7 +27,7 @@ namespace CarinaStudio.AppSuite
     /// <summary>
     /// Base implementation of <see cref="IAppSuiteApplication"/>.
     /// </summary>
-    public abstract class AppSuiteApplication : CarinaStudio.Application, IAppSuiteApplication
+    public abstract class AppSuiteApplication : Application, IAppSuiteApplication
     {
         // Implementation of PersistentState.
         class PersistentStateImpl : PersistentSettings
@@ -75,8 +75,12 @@ namespace CarinaStudio.AppSuite
         readonly string settingsFilePath;
         ResourceDictionary? stringResource;
         CultureInfo? stringResourceCulture;
-        Styles? styles;
-        ThemeMode stylesThemeMode = ThemeMode.Auto;
+        IStyle? styles;
+        ThemeMode stylesThemeMode = ThemeMode.System;
+        ThemeMode systemThemeMode = ThemeMode.Dark;
+#if WINDOWS10_0_17763_0_OR_GREATER
+        readonly UISettings uiSettings = new UISettings();
+#endif
 
 
         /// <summary>
@@ -126,6 +130,22 @@ namespace CarinaStudio.AppSuite
             if (this.TryFindResource<string>($"String/{key}", out var str))
                 return str;
             return null;
+        }
+
+
+        /// <summary>
+        /// Check whether <see cref="ThemeMode.System"/> is supported or not.
+        /// </summary>
+        public bool IsSystemThemeModeSupported
+        {
+            get
+            {
+#if WINDOWS10_0_17763_0_OR_GREATER
+                return true;
+#else
+                return false;
+#endif
+            }
         }
 
 
@@ -312,6 +332,26 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Called to perform asynchronous operations before shutting down.
+        /// </summary>
+        /// <returns>Task of performing operations.</returns>
+        protected virtual Task OnPrepareShuttingDownAsync()
+        {
+            // detach from system event
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                SystemEvents.UserPreferenceChanged -= this.OnWindowsUserPreferenceChanged;
+#if WINDOWS10_0_17763_0_OR_GREATER
+                this.uiSettings.ColorValuesChanged -= this.OnWindowsUIColorValueChanged;
+#endif
+            }
+
+            // complete
+            return Task.CompletedTask;
+        }
+
+
+        /// <summary>
         /// Called to prepare application after Avalonia framework initialized.
         /// </summary>
         /// <returns>Task of preparation.</returns>
@@ -333,28 +373,18 @@ namespace CarinaStudio.AppSuite
             this.OnLoadDefaultStringResource()?.Let(it => this.Resources.MergedDictionaries.Add(it));
             this.UpdateStringResources();
 
+            // setup styles
+            this.UpdateSystemThemeMode(false);
+            this.UpdateStyles();
+
             // attach to system event
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 SystemEvents.UserPreferenceChanged += this.OnWindowsUserPreferenceChanged;
+#if WINDOWS10_0_17763_0_OR_GREATER
+                this.uiSettings.ColorValuesChanged += this.OnWindowsUIColorValueChanged;
+#endif
             }
-        }
-
-
-        /// <summary>
-        /// Called to perform asynchronous operations before shutting down.
-        /// </summary>
-        /// <returns>Task of performing operations.</returns>
-        protected virtual Task OnPrepareShuttingDownAsync()
-        {
-            // detach from system event
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                SystemEvents.UserPreferenceChanged -= this.OnWindowsUserPreferenceChanged;
-            }
-
-            // complete
-            return Task.CompletedTask;
         }
 
 
@@ -370,6 +400,8 @@ namespace CarinaStudio.AppSuite
         {
             if (e.Key == this.CultureSettingKey)
                 this.UpdateCultureInfo(true);
+            else if (e.Key == this.ThemeModeSettingKey)
+                this.UpdateStyles();
         }
 
 
@@ -391,6 +423,15 @@ namespace CarinaStudio.AppSuite
         /// <param name="newVersion">New version.</param>
         protected virtual void OnUpgradeSettings(ISettings settings, int oldVersion, int newVersion)
         { }
+
+
+#if WINDOWS10_0_17763_0_OR_GREATER
+        // Called when Windows UI color changed.
+        void OnWindowsUIColorValueChanged(UISettings sender, object result)
+        {
+            this.UpdateSystemThemeMode(true);
+        }
+#endif
 
 
 #pragma warning disable CA1416
@@ -551,7 +592,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get key of theme mode setting.
         /// </summary>
-        public virtual SettingKey<ThemeMode> ThemeModeSettingKey { get; } = new SettingKey<ThemeMode>("ThemeMode", ThemeMode.Auto);
+        public virtual SettingKey<ThemeMode> ThemeModeSettingKey { get; } = new SettingKey<ThemeMode>("ThemeMode", ThemeMode.System);
 
 
         // Update culture info according to settings.
@@ -645,6 +686,73 @@ namespace CarinaStudio.AppSuite
             // raise event
             if (resourceUpdated)
                 this.OnStringUpdated(EventArgs.Empty);
+        }
+
+
+        // Update styles.
+        void UpdateStyles()
+        {
+            // get theme mode
+            var themeMode = this.Settings.GetValueOrDefault(this.ThemeModeSettingKey).Let(it =>
+            {
+                if (it == ThemeMode.System)
+                    return this.systemThemeMode;
+                return it;
+            });
+
+            // update styles
+            if (this.styles == null || this.stylesThemeMode != themeMode)
+            {
+                // remove current styles
+                if (this.styles != null)
+                {
+                    this.Styles.Remove(this.styles);
+                    this.styles = null;
+                }
+
+                // load styles
+                var builtInStyles = new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/")).Also(it =>
+                {
+                    it.Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}.axaml");
+                });
+                this.styles = this.OnLoadTheme(themeMode)?.Let(it =>
+                {
+                    var styles = new Styles();
+                    styles.Add(builtInStyles);
+                    styles.Add(it);
+                    return (IStyle)styles;
+                }) ?? builtInStyles;
+
+                // apply styles
+                this.Styles.Add(this.styles);
+                this.stylesThemeMode = themeMode;
+            }
+            else if (!this.Styles.Contains(this.styles))
+                this.Styles.Add(this.styles);
+        }
+
+
+        // Update system theme mode.
+        void UpdateSystemThemeMode(bool updateStyles)
+        {
+            // get current theme
+#if WINDOWS10_0_17763_0_OR_GREATER
+            var backgroundColor = this.uiSettings.GetColorValue(UIColorType.Background);
+            var themeMode = (backgroundColor.R + backgroundColor.G +backgroundColor.B) / 3 < 128
+                ? ThemeMode.Dark
+                : ThemeMode.Light;
+#else
+            var themeMode = ThemeMode.Dark;
+#endif
+            if (this.systemThemeMode == themeMode)
+                return;
+
+            this.Logger.LogDebug($"System theme mode changed to {themeMode}");
+
+            // update styles
+            this.systemThemeMode = themeMode;
+            if (updateStyles)
+                this.UpdateStyles();
         }
     }
 }
