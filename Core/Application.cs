@@ -1,5 +1,8 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Markup.Xaml;
+using Avalonia.Markup.Xaml.MarkupExtensions;
+using Avalonia.Markup.Xaml.Styling;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
@@ -12,8 +15,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
+#if WINDOWS10_0_17763_0_OR_GREATER
+using Windows.UI.ViewManagement;
+#endif
 
-namespace CarinaStudio.AppSuiteBase
+namespace CarinaStudio.AppSuite
 {
     /// <summary>
     /// Base implementation of <see cref="IApplication"/>.
@@ -64,6 +70,12 @@ namespace CarinaStudio.AppSuiteBase
         readonly string persistentStateFilePath;
         SettingsImpl? settings;
         readonly string settingsFilePath;
+        ResourceDictionary? stringResource;
+        CultureInfo? stringResourceCulture;
+
+#if WINDOWS10_0_17763_0_OR_GREATER
+        global::Windows.UI.ViewManagement.UISettings uiSettings = new global::Windows.UI.ViewManagement.UISettings();
+#endif
 
 
         /// <summary>
@@ -235,6 +247,21 @@ namespace CarinaStudio.AppSuiteBase
         }
 
 
+        /// <summary>
+        /// Called to load default string resource.
+        /// </summary>
+        /// <returns>Default string resource.</returns>
+        protected virtual IResourceProvider? OnLoadDefaultStringResource() => null;
+
+
+        /// <summary>
+        /// Called to load string resource for given culture.
+        /// </summary>
+        /// <param name="cultureInfo">Culture info.</param>
+        /// <returns>String resource.</returns>
+        protected virtual IResourceProvider? OnLoadStringResource(CultureInfo cultureInfo) => null;
+
+
         // Called when main window closed.
         async void OnMainWindowClosed(object? sender, EventArgs e)
         {
@@ -278,6 +305,14 @@ namespace CarinaStudio.AppSuiteBase
             // load persistent state and settings
             await this.LoadPersistentStateAsync();
             await this.LoadSettingsAsync();
+
+            // load strings
+            this.Resources.MergedDictionaries.Add(new ResourceInclude()
+            {
+                Source = new Uri("avares://CarinaStudio.AppSuite.Core/Strings/Default.axaml")
+            });
+            this.OnLoadDefaultStringResource()?.Let(it => this.Resources.MergedDictionaries.Add(it));
+            this.UpdateStringResources();
         }
 
 
@@ -450,6 +485,79 @@ namespace CarinaStudio.AppSuiteBase
             // shut down
             this.Logger.LogWarning("Shut down");
             (this.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
+        }
+
+
+        // Update string resource according to current culture.
+        void UpdateStringResources()
+        {
+            // update string resources
+            var resourceUpdated = false;
+            if (this.cultureInfo.Name != "en-US")
+            {
+                if (this.stringResource == null || this.stringResourceCulture != this.cultureInfo)
+                {
+                    // remove previous resource
+                    if (this.stringResource != null)
+                    {
+                        this.Resources.MergedDictionaries.Remove(this.stringResource);
+                        this.stringResource = null;
+                        resourceUpdated = true;
+                    }
+
+                    // load built-in resource
+                    var builtInResource = new ResourceInclude().Let(it =>
+                    {
+                        it.Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}.axaml");
+                        try
+                        {
+                            _ = it.Loaded;  // trigger error if resource not found
+                            return it;
+                        }
+                        catch
+                        {
+                            this.Logger.LogWarning($"No built-in string resource for {this.cultureInfo.Name}");
+                            return null;
+                        }
+                    });
+
+                    // load custom resource
+                    var resource = (IResourceProvider?)null;
+                    try
+                    {
+                        resource = this.OnLoadStringResource(this.cultureInfo);
+                    }
+                    catch
+                    {
+                        this.Logger.LogWarning($"No string resource for {this.cultureInfo.Name}");
+                    }
+
+                    // merge resources
+                    if (builtInResource != null || resource != null)
+                    {
+                        this.stringResource = new ResourceDictionary();
+                        builtInResource?.Let(it => this.stringResource.MergedDictionaries.Add(it));
+                        resource?.Let(it => this.stringResource.MergedDictionaries.Add(it));
+                        this.stringResourceCulture = this.cultureInfo;
+                        this.Resources.MergedDictionaries.Add(this.stringResource);
+                        resourceUpdated = true;
+                    }
+                }
+                else if (!this.Resources.MergedDictionaries.Contains(this.stringResource))
+                {
+                    this.Resources.MergedDictionaries.Add(this.stringResource);
+                    resourceUpdated = true;
+                }
+            }
+            else if (this.stringResource != null)
+            {
+                this.Resources.MergedDictionaries.Remove(this.stringResource);
+                resourceUpdated = true;
+            }
+
+            // raise event
+            if (resourceUpdated)
+                this.OnStringUpdated(EventArgs.Empty);
         }
     }
 }

@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net5.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<RootNamespace>CarinaStudio.AppSuite.Tests</RootNamespace>
+		<AssemblyName>CarinaStudio.AppSuite.Tests</AssemblyName>
+		<StartupObject>CarinaStudio.AppSuite.Tests.App</StartupObject>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Avalonia" Version="0.10.7" />
+		<PackageReference Include="Avalonia.Desktop" Version="0.10.7" />
+		<PackageReference Include="Avalonia.Diagnostics" Version="0.10.7" />
+	 </ItemGroup>
+	
+	<ItemGroup>
+		<ProjectReference Include="..\Core\Core.csproj" />
+	</ItemGroup>
+	
+</Project>
