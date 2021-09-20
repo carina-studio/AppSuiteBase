@@ -24,7 +24,7 @@ namespace CarinaStudio.AppSuite
     /// <summary>
     /// Base implementation of <see cref="IApplication"/>.
     /// </summary>
-    public abstract class Application : CarinaStudio.Application
+    public abstract class Application : CarinaStudio.Application, IApplication
     {
         // Implementation of PersistentState.
         class PersistentStateImpl : PersistentSettings
@@ -73,10 +73,6 @@ namespace CarinaStudio.AppSuite
         ResourceDictionary? stringResource;
         CultureInfo? stringResourceCulture;
 
-#if WINDOWS10_0_17763_0_OR_GREATER
-        global::Windows.UI.ViewManagement.UISettings uiSettings = new global::Windows.UI.ViewManagement.UISettings();
-#endif
-
 
         /// <summary>
         /// Initialize new <see cref="Application"/> instance.
@@ -100,6 +96,12 @@ namespace CarinaStudio.AppSuite
         /// Check whether multiple main windows are allowed or not.
         /// </summary>
         protected virtual bool AllowMultipleMainWindows { get => false; }
+
+
+        /// <summary>
+        /// Get key of application culture setting.
+        /// </summary>
+        public virtual SettingKey<ApplicationCulture> CultureSettingKey { get; } = new SettingKey<ApplicationCulture>("Culture", ApplicationCulture.System);
 
 
         /// <summary>
@@ -305,6 +307,10 @@ namespace CarinaStudio.AppSuite
             // load persistent state and settings
             await this.LoadPersistentStateAsync();
             await this.LoadSettingsAsync();
+            this.Settings.SettingChanged += this.OnSettingChanged;
+
+            // setup culture info
+            this.UpdateCultureInfo(false);
 
             // load strings
             this.Resources.MergedDictionaries.Add(new ResourceInclude()
@@ -313,6 +319,21 @@ namespace CarinaStudio.AppSuite
             });
             this.OnLoadDefaultStringResource()?.Let(it => this.Resources.MergedDictionaries.Add(it));
             this.UpdateStringResources();
+        }
+
+
+        // Called when application setting changed.
+        void OnSettingChanged(object? sender, SettingChangedEventArgs e) => this.OnSettingChanged(e);
+
+
+        /// <summary>
+        /// Called when application setting changed.
+        /// </summary>
+        /// <param name="e">Event data.</param>
+        protected virtual void OnSettingChanged(SettingChangedEventArgs e)
+        {
+            if (e.Key == this.CultureSettingKey)
+                this.UpdateCultureInfo(true);
         }
 
 
@@ -422,7 +443,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="param">Parameter to create main window.</param>
         /// <returns>True if main window created and shown successfully.</returns>
-        protected bool ShowMainWindow(object? param = null)
+        public bool ShowMainWindow(object? param = null)
         {
             // check state
             this.VerifyAccess();
@@ -488,6 +509,26 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        // Update culture info according to settings.
+        void UpdateCultureInfo(bool updateStringResources)
+        {
+            // get culture info
+            var cultureInfo = this.Settings.GetValueOrDefault(this.CultureSettingKey).ToCultureInfo();
+            if (object.Equals(cultureInfo, this.cultureInfo))
+                return;
+
+            this.Logger.LogDebug($"Change culture info to {cultureInfo.Name}");
+
+            // change culture info
+            this.cultureInfo = cultureInfo;
+            this.OnPropertyChanged(nameof(CultureInfo));
+
+            // update string
+            if (updateStringResources)
+                this.UpdateStringResources();
+        }
+
+
         // Update string resource according to current culture.
         void UpdateStringResources()
         {
@@ -495,7 +536,7 @@ namespace CarinaStudio.AppSuite
             var resourceUpdated = false;
             if (this.cultureInfo.Name != "en-US")
             {
-                if (this.stringResource == null || this.stringResourceCulture != this.cultureInfo)
+                if (this.stringResource == null || !object.Equals(this.stringResourceCulture, this.cultureInfo))
                 {
                     // remove previous resource
                     if (this.stringResource != null)

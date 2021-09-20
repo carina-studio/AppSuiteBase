@@ -8,7 +8,7 @@
 
 	<StackPanel Orientation="Vertical">
 		<TextBlock Text="{DynamicResource String/Common.OK}"/>
-		<Button Content="Change culture"/>
+		<Button Command="{Binding $parent[Window].Test}" Content="Change culture"/>
 	</StackPanel>
 	
 </Window>
