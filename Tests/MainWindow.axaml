@@ -6,7 +6,7 @@
         x:Class="CarinaStudio.AppSuite.Tests.MainWindow"
         Title="Main Window">
 
-	<StackPanel Orientation="Vertical">
+	<StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
 		<TextBlock Text="{DynamicResource String/Common.OK}"/>
 		
 		<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5"/>
@@ -31,7 +31,40 @@
 		<ComboBox HorizontalAlignment="Left" Width="200" Margin="5">
 			12345
 		</ComboBox>
-		
+
+		<Border Classes="ToolBar" Margin="5">
+			<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+
+				<Button Classes="ToolBar_Button">
+					<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+				</Button>
+
+				<Button Classes="ToolBar_Button" IsEnabled="False">
+					<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+				</Button>
+				
+				<TextBox Classes="ToolBar_TextBox" Width="100"/>
+
+				<ToggleButton Classes="ToolBar_Button">
+					<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+				</ToggleButton>
+				
+				<Separator Classes="ToolBar_Separator"/>
+
+				<ToggleButton Classes="ToolBar_Button" IsEnabled="False">
+					<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+				</ToggleButton>
+
+				<ComboBox Classes="ToolBar_ComboBox" Width="100">
+					12345
+				</ComboBox>
+
+				<TextBlock Classes="ToolBar_TextBlock" Text="test:"/>
+				<TextBox Classes="ToolBar_TextBox" Width="100"/>
+
+			</StackPanel>
+		</Border>
+
 	</StackPanel>
 	
 </Window>

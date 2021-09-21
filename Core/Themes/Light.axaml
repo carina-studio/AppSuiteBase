@@ -11,6 +11,12 @@
 		<!-- Icon -->
 		<Color x:Key="Color/Icon">#222222</Color>
 
+		<!-- Separator -->
+		<Color x:Key="Color/Separator.Background">#4f000000</Color>
+
+		<!-- ToolBar -->
+		<Color x:Key="Color/ToolBar.Background">#eeeeee</Color>
+
 		<!-- Window -->
 		<Color x:Key="Color/Window.Background">#eeeeee</Color>
 		<Color x:Key="Color/Window.Background.Transparent">#bfd0d0d0</Color>
