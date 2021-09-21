@@ -1,6 +1,95 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-   
-	
+
+	<!-- Resources -->
+	<Styles.Resources>
+
+		<!-- Accent -->
+		<Color x:Key="Color/Accent">#0000ff</Color>
+
+		<!-- Icon -->
+		<Color x:Key="Color/Icon">#000000</Color>
+		<SolidColorBrush x:Key="Brush/Icon" Color="{DynamicResource Color/Icon}"/>
+
+		<!-- ListBox -->
+		<Thickness x:Key="Thickness/ListBox.Padding">0,5,0,5</Thickness>
+
+		<!-- ListBoxItem -->
+		<Thickness x:Key="Thickness/ListBoxItem.Padding">6</Thickness>
+
+		<!-- Window -->
+		<Color x:Key="Color/Window.Background">#ffffff</Color>
+		<Color x:Key="Color/Window.Background.Transparent">#ffffff</Color>
+		<SolidColorBrush x:Key="Brush/Window.Background" Color="{DynamicResource Color/Window.Background}"/>
+		<SolidColorBrush x:Key="Brush/Window.Background.Transparent" Color="{DynamicResource Color/Window.Background.Transparent}"/>
+		
+	</Styles.Resources>
+
+	<!-- ComboBox -->
+	<Style Selector="ComboBox">
+		<Setter Property="BorderThickness" Value="0"/>
+	</Style>
+
+	<!-- Dialog -->
+	<Style Selector="Window.Dialog">
+		<Setter Property="CanResize" Value="False"/>
+		<Setter Property="ShowInTaskbar" Value="False"/>
+		<Setter Property="SizeToContent" Value="Height"/>
+		<Setter Property="WindowStartupLocation" Value="CenterOwner"/>
+	</Style>
+
+	<!-- Icon -->
+	<Style Selector="DrawingPresenter.Icon">
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="DrawingPresenter.Icon:disabled">
+		<Setter Property="Opacity" Value="0.3"/>
+	</Style>
+
+	<!-- ListBox -->
+	<Style Selector="ListBox">
+		<Setter Property="Background" Value="{DynamicResource TextControlBackground}"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ListBox.Padding}"/>
+	</Style>
+
+	<!-- ListBoxItem -->
+	<Style Selector="ListBoxItem">
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ListBoxItem.Padding}"/>
+	</Style>
+
+	<!-- MenuItem -->
+	<Style Selector="Border.MenuItem_Icon">
+		<Setter Property="Height" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
+	</Style>
+	<Style Selector="Border.MenuItem_Icon:disabled">
+		<Setter Property="Opacity" Value="0.3"/>
+	</Style>
+	<Style Selector="Panel.MenuItem_Icon">
+		<Setter Property="Height" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
+	</Style>
+	<Style Selector="Panel.MenuItem_Icon:disabled">
+		<Setter Property="Opacity" Value="0.3"/>
+	</Style>
+
+	<!-- TextBox -->
+	<Style Selector="TextBox">
+		<Setter Property="BorderThickness" Value="0"/>
+	</Style>
+
+	<!-- Window -->
+	<Style Selector="Window">
+		<Setter Property="Background" Value="{StaticResource Brush/Window.Background}"/>
+	</Style>
+	<Style Selector="Window[TransparencyLevelHint=AcrylicBlur]">
+		<Setter Property="Background" Value="{StaticResource Brush/Window.Background.Transparent}"/>
+	</Style>
+	<Style Selector="Window[TransparencyLevelHint=Transparent]">
+		<Setter Property="Background" Value="{StaticResource Brush/Window.Background.Transparent}"/>
+	</Style>
 	
 </Styles>

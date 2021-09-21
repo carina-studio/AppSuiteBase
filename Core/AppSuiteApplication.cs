@@ -3,6 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
+using Avalonia.Media;
 using Avalonia.Styling;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
@@ -66,6 +67,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Fields.
+        ResourceDictionary? accentColorResources;
         CultureInfo cultureInfo = CultureInfo.CurrentCulture;
         bool isShutdownStarted;
         readonly ObservableList<Window> mainWindows = new ObservableList<Window>();
@@ -117,6 +119,16 @@ namespace CarinaStudio.AppSuite
         /// Get current culture info of application.
         /// </summary>
         public override CultureInfo CultureInfo { get => cultureInfo; }
+
+
+        // Transform RGB color values.
+        static Color GammaTransform(Color color, double gamma)
+        {
+            double r = (color.R / 255.0);
+            double g = (color.G / 255.0);
+            double b = (color.B / 255.0);
+            return Color.FromArgb(color.A, (byte)(Math.Pow(r, gamma) * 255 + 0.5), (byte)(Math.Pow(g, gamma) * 255 + 0.5), (byte)(Math.Pow(b, gamma) * 255 + 0.5));
+        }
 
 
         /// <summary>
@@ -373,6 +385,12 @@ namespace CarinaStudio.AppSuite
             this.OnLoadDefaultStringResource()?.Let(it => this.Resources.MergedDictionaries.Add(it));
             this.UpdateStringResources();
 
+            // load built-in resources
+            this.Resources.MergedDictionaries.Add(new ResourceInclude()
+            {
+                Source = new Uri("avares://CarinaStudio.AppSuite.Core/Resources/Icons.axaml")
+            });
+
             // setup styles
             this.UpdateSystemThemeMode(false);
             this.UpdateStyles();
@@ -429,7 +447,10 @@ namespace CarinaStudio.AppSuite
         // Called when Windows UI color changed.
         void OnWindowsUIColorValueChanged(UISettings sender, object result)
         {
-            this.UpdateSystemThemeMode(true);
+            this.SynchronizationContext.Post(() =>
+            {
+                this.UpdateSystemThemeMode(true);
+            });
         }
 #endif
 
@@ -729,6 +750,41 @@ namespace CarinaStudio.AppSuite
             }
             else if (!this.Styles.Contains(this.styles))
                 this.Styles.Add(this.styles);
+
+            // update accent color
+            if (this.Styles.TryGetResource("Color/Accent", out var res) && res is Color accentColor)
+            {
+                // create resources
+                if (this.accentColorResources == null)
+                {
+                    this.accentColorResources = new ResourceDictionary();
+                    this.Resources.MergedDictionaries.Add(this.accentColorResources);
+                }
+
+                // accent colors
+                var sysAccentColorDark1 = GammaTransform(accentColor, 2.8);
+                var sysAccentColorLight1 = GammaTransform(accentColor, 0.682);
+                this.accentColorResources["SystemAccentColor"] = accentColor;
+                this.accentColorResources["SystemAccentColorDark1"] = sysAccentColorDark1;
+                this.accentColorResources["SystemAccentColorDark2"] = GammaTransform(accentColor, 4.56);
+                this.accentColorResources["SystemAccentColorDark3"] = GammaTransform(accentColor, 5.365);
+                this.accentColorResources["SystemAccentColorLight1"] = sysAccentColorLight1;
+                this.accentColorResources["SystemAccentColorLight2"] = GammaTransform(accentColor, 0.431);
+                this.accentColorResources["SystemAccentColorLight3"] = GammaTransform(accentColor, 0.006);
+
+                // icon colors
+                this.accentColorResources["Brush.Icon.Active"] = new SolidColorBrush(sysAccentColorLight1);
+                this.accentColorResources["Brush.Icon.LogProfile"] = new SolidColorBrush(sysAccentColorLight1);
+
+                // [Workaround] Brushes of ToggleButton
+                this.accentColorResources["ToggleButtonBackgroundCheckedPointerOver"] = new SolidColorBrush(sysAccentColorDark1);
+
+                // [Workaround] Brushes of ToggleSwitch
+                this.accentColorResources["ToggleSwitchFillOnPointerOver"] = new SolidColorBrush(sysAccentColorLight1);
+                this.accentColorResources["ToggleSwitchFillOnPressed"] = new SolidColorBrush(sysAccentColorDark1);
+                this.accentColorResources["ToggleSwitchStrokeOnPointerOver"] = new SolidColorBrush(sysAccentColorLight1);
+                this.accentColorResources["ToggleSwitchStrokeOnPressed"] = new SolidColorBrush(sysAccentColorDark1);
+            }
         }
 
 

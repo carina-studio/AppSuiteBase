@@ -4,11 +4,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Tests.MainWindow"
+		TransparencyLevelHint="Transparent"
         Title="Main Window">
 
 	<StackPanel Orientation="Vertical">
 		<TextBlock Text="{DynamicResource String/Common.OK}"/>
-		<Button Command="{Binding $parent[Window].Test}" Content="Change culture"/>
+		
+		<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5"/>
+		
+		<TextBox Width="200" Margin="5" HorizontalAlignment="Left"/>
+
+		<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left">
+			<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+		</Border>
+
+		<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left" IsEnabled="False">
+			<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+		</Border>
+
+		<ListBox HorizontalAlignment="Left" Width="200" Margin="5">
+			<ListBoxItem>Item 1</ListBoxItem>
+			<ListBoxItem>Item 2</ListBoxItem>
+			<ListBoxItem>Item 3</ListBoxItem>
+			<ListBoxItem>Item 4</ListBoxItem>
+		</ListBox>
+
+		<ComboBox HorizontalAlignment="Left" Width="200" Margin="5">
+			12345
+		</ComboBox>
+		
 	</StackPanel>
 	
 </Window>

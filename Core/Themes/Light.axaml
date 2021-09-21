@@ -4,5 +4,17 @@
 	<!-- Base styles -->
 	<FluentTheme Mode="Light"/>
 	<StyleInclude Source="/Themes/Base.axaml"/>
+
+	<!-- Resources -->
+	<Styles.Resources>
+
+		<!-- Icon -->
+		<Color x:Key="Color/Icon">#222222</Color>
+
+		<!-- Window -->
+		<Color x:Key="Color/Window.Background">#eeeeee</Color>
+		<Color x:Key="Color/Window.Background.Transparent">#bfd0d0d0</Color>
+
+	</Styles.Resources>
 	
 </Styles>

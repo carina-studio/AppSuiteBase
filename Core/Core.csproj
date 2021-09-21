@@ -23,6 +23,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<AvaloniaResource Include="Resources/Icons.axaml" />
 		<AvaloniaResource Include="Strings/Default.axaml" />
 		<AvaloniaResource Include="Strings/zh-TW.axaml" />
 		<AvaloniaResource Include="Themes/Base.axaml" />
