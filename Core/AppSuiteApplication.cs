@@ -68,7 +68,7 @@ namespace CarinaStudio.AppSuite
 
         // Fields.
         ResourceDictionary? accentColorResources;
-        CultureInfo cultureInfo = CultureInfo.CurrentCulture;
+        CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
         bool isShutdownStarted;
         readonly ObservableList<Window> mainWindows = new ObservableList<Window>();
         PersistentStateImpl? persistentState;
@@ -702,6 +702,15 @@ namespace CarinaStudio.AppSuite
             {
                 this.Resources.MergedDictionaries.Remove(this.stringResource);
                 resourceUpdated = true;
+            }
+
+            // update fall-back font families
+            if (resourceUpdated)
+            {
+                if (this.Resources.TryGetResource("String/TextBox.FallbackFontFamilies", out var res) && res is string fontFamilies)
+                    this.Resources["FontFamily/TextBox.FallbackFontFamilies"] = new FontFamily(fontFamilies);
+                else
+                    this.Resources.Remove("FontFamily/TextBox.FallbackFontFamilies");
             }
 
             // raise event

@@ -20,5 +20,8 @@
 	<sys:String x:Key="String/Common.Remove">移除</sys:String>
 	<sys:String x:Key="String/Common.Save">儲存</sys:String>
 	<sys:String x:Key="String/Common.Yes">是</sys:String>
+
+	<!-- FallbackFontFamilies -->
+	<sys:String x:Key="String/TextBox.FallbackFontFamilies">Microsoft JhengHei,蘋方-繁</sys:String>
 	
 </ResourceDictionary>
