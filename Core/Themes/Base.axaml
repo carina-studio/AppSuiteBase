@@ -24,6 +24,19 @@
 		<Color x:Key="Color/Separator.Background">#000000</Color>
 		<SolidColorBrush x:Key="Brush/Separator.Background" Color="{DynamicResource Color/Separator.Background}"/>
 
+		<!-- StatusBar -->
+		<Color x:Key="Color/StatusBar.Background.Inactive">#ffffff</Color>
+		<Color x:Key="Color/StatusBar.Foreground">#ffffff</Color>
+		<Color x:Key="Color/StatusBar.Foreground.Disabled">#7fffffff</Color>
+		<sys:Double x:Key="Double/StatusBar.Icon.Size">16</sys:Double>
+		<SolidColorBrush x:Key="Brush/StatusBar.Background" Color="{DynamicResource SystemAccentColorDark2}"/>
+		<SolidColorBrush x:Key="Brush/StatusBar.Background.Inactive" Color="{DynamicResource Color/StatusBar.Background.Inactive}"/>
+		<SolidColorBrush x:Key="Brush/StatusBar.Foreground" Color="{DynamicResource Color/StatusBar.Foreground}"/>
+		<Thickness x:Key="Thickness/StatusBar.Button.Padding">5</Thickness>
+		<Thickness x:Key="Thickness/StatusBar.Icon.Margin">1,0,1,0</Thickness>
+		<Thickness x:Key="Thickness/StatusBar.Item.Margin">1,5,1,5</Thickness>
+		<Thickness x:Key="Thickness/StatusBar.Padding">5,0,5,0</Thickness>
+
 		<!-- ToolBar -->
 		<Color x:Key="Color/ToolBar.Background">#ffffff</Color>
 		<sys:Double x:Key="Double/ToolBar.Button.Size">34</sys:Double>
@@ -32,6 +45,7 @@
 		<Thickness x:Key="Thickness/ToolBar.Item.Margin">1,0,1,0</Thickness>
 		<Thickness x:Key="Thickness/ToolBar.Padding">3</Thickness>
 		<Thickness x:Key="Thickness/ToolBar.Separator.Margin">2,3,2,3</Thickness>
+		<Thickness x:Key="Thickness/ToolBar.TextBlock.Margin">3,0,2,0</Thickness>
 
 		<!-- Window -->
 		<Color x:Key="Color/Window.Background">#ffffff</Color>
@@ -97,6 +111,63 @@
 		<Setter Property="Background" Value="{StaticResource Brush/Separator.Background}"/>
 	</Style>
 
+	<!-- StatusBar -->
+	<Style Selector="Border.StatusBar">
+		<Setter Property="Background" Value="{StaticResource Brush/StatusBar.Background}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/StatusBar.Padding}"/>
+		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
+	</Style>
+	<Style Selector="Border.StatusBar_Icon">
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+	</Style>
+	<Style Selector="Button.StatusBar_Button">
+		<Style.Resources>
+			<SolidColorBrush x:Key="ButtonBackgroundDisabled">#00000000</SolidColorBrush>
+			<SolidColorBrush x:Key="ButtonForegroundDisabled" Color="{DynamicResource Color/StatusBar.Foreground.Disabled}"/>
+			<SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="{DynamicResource Color/StatusBar.Foreground}"/>
+			<SolidColorBrush x:Key="ButtonForegroundPressed" Color="{DynamicResource Color/StatusBar.Foreground}"/>
+		</Style.Resources>
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
+		<Setter Property="CornerRadius" Value="0"/>
+		<Setter Property="Margin" Value="0"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/StatusBar.Button.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="Panel.StatusBar_Icon">
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+	</Style>
+	<Style Selector="Separator.StatusBar_Separator">
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="Width" Value="20"/>
+	</Style>
+	<Style Selector="TextBlock.StatusBar_TextBlock">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Item.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="ToggleButton.StatusBar_ToggleButton">
+		<Style.Resources>
+			<SolidColorBrush x:Key="ToggleButtonBackgroundDisabled">#00000000</SolidColorBrush>
+			<SolidColorBrush x:Key="ToggleButtonForegroundDisabled" Color="{DynamicResource Color/StatusBar.Foreground.Disabled}"/>
+			<SolidColorBrush x:Key="ToggleButtonForegroundPointerOver" Color="{DynamicResource Color/StatusBar.Foreground}"/>
+			<SolidColorBrush x:Key="ToggleButtonForegroundPressed" Color="{DynamicResource Color/StatusBar.Foreground}"/>
+		</Style.Resources>
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
+		<Setter Property="CornerRadius" Value="0"/>
+		<Setter Property="Margin" Value="0"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/StatusBar.Button.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+
 	<!-- TextBox -->
 	<Style Selector="TextBox">
 		<Setter Property="BorderThickness" Value="0"/>
@@ -132,7 +203,7 @@
 		<Setter Property="Width" Value="1"/>
 	</Style>
 	<Style Selector="TextBlock.ToolBar_TextBlock">
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.TextBlock.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="TextBox.ToolBar_TextBox">

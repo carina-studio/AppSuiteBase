@@ -14,6 +14,9 @@
 		<!-- Separator -->
 		<Color x:Key="Color/Separator.Background">#4f000000</Color>
 
+		<!-- StatusBar -->
+		<Color x:Key="Color/StatusBar.Background.Inactive">#8a8a8a</Color>
+
 		<!-- ToolBar -->
 		<Color x:Key="Color/ToolBar.Background">#eeeeee</Color>
 
