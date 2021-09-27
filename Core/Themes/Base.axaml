@@ -7,6 +7,7 @@
 
 		<!-- Accent -->
 		<Color x:Key="Color/Accent">#912fbf</Color>
+		<SolidColorBrush x:Key="Brush/Accent" Color="{DynamicResource Color/Accent}"/>
 
 		<!-- Dialog -->
 		<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#ffffff</Color>
@@ -63,6 +64,27 @@
 		<Thickness x:Key="Thickness/StatusBar.Icon.Margin">1,0,1,0</Thickness>
 		<Thickness x:Key="Thickness/StatusBar.Item.Margin">1,5,1,5</Thickness>
 		<Thickness x:Key="Thickness/StatusBar.Padding">5,0,5,0</Thickness>
+
+		<!-- TabControl -->
+
+		<!-- TabItem -->
+		<Color x:Key="Color/TabItem.Header.Background">#ffffff</Color>
+		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#ffffff</Color>
+		<Color x:Key="Color/TabItem.Header.Background.Selected">#ffffff</Color>
+		<CornerRadius x:Key="CornerRadius/TabItem.Header">3,3,0,0</CornerRadius>
+		<sys:Double x:Key="Double/TabItem.Header.ColorBar.Height">3</sys:Double>
+		<sys:Double x:Key="Double/TabItem.Header.Content.Height">20</sys:Double>
+		<sys:Double x:Key="Double/TabItem.Header.FontSize">16</sys:Double>
+		<sys:Double x:Key="Double/TabItem.Header.Height">40</sys:Double>
+		<sys:Double x:Key="Double/TabItem.Header.MaxWidth">250</sys:Double>
+		<SolidColorBrush x:Key="TabItemHeaderSelectedPipeFill">#00000000</SolidColorBrush>
+		<SolidColorBrush x:Key="Brush/TabItem.Header.Background" Color="{DynamicResource Color/TabItem.Header.Background}"/>
+		<SolidColorBrush x:Key="Brush/TabItem.Header.Background.PointerOver" Color="{DynamicResource Color/TabItem.Header.Background.PointerOver}"/>
+		<SolidColorBrush x:Key="Brush/TabItem.Header.Background.Selected" Color="{DynamicResource Color/TabItem.Header.Background.Selected}"/>
+		<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">5,0,0,0</Thickness>
+		<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">3</Thickness>
+		<Thickness x:Key="Thickness/TabItem.Header.Margin">1,2,1,0</Thickness>
+		<Thickness x:Key="Thickness/TabItem.Header.Padding">10</Thickness>
 
 		<!-- ToolBar -->
 		<Color x:Key="Color/ToolBar.Background">#ffffff</Color>
@@ -301,6 +323,63 @@
 	</Style>
 	<Style Selector="ToggleButton.StatusBar_ToggleButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
+	</Style>
+
+	<!-- TabControl -->
+	<Style Selector="TabControl.aaa">
+		<Setter Property="Template">
+			<Setter.Value>
+				
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<!-- TabItem -->
+	<Style Selector="Button.TabItem_Button">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Content.Height}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Button.Margin}"/>
+		<Setter Property="Opacity" Value="0.5"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/TabItem.Header.Button.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Content.Height}"/>
+	</Style>
+	<Style Selector="Button.TabItem_Button:pointerover">
+		<Setter Property="Opacity" Value="1"/>
+	</Style>
+	<Style Selector="TabItem">
+		<Setter Property="MaxHeight" Value="{DynamicResource Double/TabItem.Header.Height}"/>
+		<Setter Property="MinHeight" Value="{DynamicResource Double/TabItem.Header.Height}"/>
+		<Setter Property="MaxWidth" Value="{DynamicResource Double/TabItem.Header.MaxWidth}"/>
+		<Setter Property="Padding" Value="0"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate>
+					<Panel HorizontalAlignment="Stretch" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" VerticalAlignment="Stretch">
+						<Border Background="{StaticResource Brush/TabItem.Header.Background}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"/>
+						<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsPointerOver}"/>
+						<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsSelected}"/>
+						<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Height="{DynamicResource Double/TabItem.Header.ColorBar.Height}" IsVisible="{Binding $parent[TabItem].IsSelected}" VerticalAlignment="Top"/>
+						<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
+					</Panel>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="TextBlock.FontSize" Value="{DynamicResource Double/TabItem.Header.FontSize}"/>
+	</Style>
+	<Style Selector="TabItem.Empty">
+		<Setter Property="MaxHeight" Value="{DynamicResource Double/TabItem.Header.Height}"/>
+		<Setter Property="MinHeight" Value="{DynamicResource Double/TabItem.Header.Height}"/>
+		<Setter Property="MaxWidth" Value="{DynamicResource Double/TabItem.Header.MaxWidth}"/>
+		<Setter Property="Padding" Value="0"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate>
+					<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Setter Property="TextBlock.FontSize" Value="{DynamicResource Double/TabItem.Header.FontSize}"/>
 	</Style>
 
 	<!-- TextBox -->

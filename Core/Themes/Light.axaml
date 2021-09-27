@@ -28,6 +28,11 @@
 		<!-- StatusBar -->
 		<Color x:Key="Color/StatusBar.Background.Inactive">#8a8a8a</Color>
 
+		<!-- TabItem -->
+		<Color x:Key="Color/TabItem.Header.Background">#d8d8d8</Color>
+		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#e0e0e0</Color>
+		<Color x:Key="Color/TabItem.Header.Background.Selected">#eeeeee</Color>
+
 		<!-- ToolBar -->
 		<Color x:Key="Color/ToolBar.Background">#eeeeee</Color>
 

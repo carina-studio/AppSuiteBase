@@ -32,68 +32,93 @@
 			</StackPanel>
 		</Border>
 
-		<StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
-			<TextBlock Text="{DynamicResource String/Common.OK}"/>
+		<TabControl>
 
-			<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5"/>
-			<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
+			<TabItem>
 
-			<TextBox Width="200" Margin="5" HorizontalAlignment="Left"/>
+				<TabItem.Header>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="Item 1" VerticalAlignment="Center"/>
+						<Button Classes="TabItem_Button">
+							<DrawingPresenter Classes="Icon" Drawing="{DynamicResource Drawing/Icon.Folder}"/>
+						</Button>
+					</StackPanel>
+				</TabItem.Header>
 
-			<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left">
-				<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
-			</Border>
+				<StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
+					<TextBlock Text="{DynamicResource String/Common.OK}"/>
 
-			<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left" IsEnabled="False">
-				<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
-			</Border>
+					<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5"/>
+					<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
 
-			<ListBox HorizontalAlignment="Left" Width="200" Margin="5">
-				<ListBoxItem>Item 1</ListBoxItem>
-				<ListBoxItem>Item 2</ListBoxItem>
-				<ListBoxItem>Item 3</ListBoxItem>
-				<ListBoxItem>Item 4</ListBoxItem>
-			</ListBox>
+					<TextBox Width="200" Margin="5" HorizontalAlignment="Left"/>
 
-			<ComboBox HorizontalAlignment="Left" Width="200" Margin="5">
-				12345
-			</ComboBox>
-
-			<Border Classes="ToolBar" Margin="5">
-				<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
-
-					<Button Classes="ToolBar_Button">
+					<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left">
 						<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
-					</Button>
+					</Border>
 
-					<Button Classes="ToolBar_Button" IsEnabled="False">
+					<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left" IsEnabled="False">
 						<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
-					</Button>
+					</Border>
 
-					<TextBox Classes="ToolBar_TextBox" Width="50"/>
-					<TextBox Classes="ToolBar_TextBox" Width="50"/>
+					<ListBox HorizontalAlignment="Left" Width="200" Margin="5">
+						<ListBoxItem>Item 1</ListBoxItem>
+						<ListBoxItem>Item 2</ListBoxItem>
+						<ListBoxItem>Item 3</ListBoxItem>
+						<ListBoxItem>Item 4</ListBoxItem>
+					</ListBox>
 
-					<ToggleButton Classes="ToolBar_Button">
-						<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
-					</ToggleButton>
-
-					<Separator Classes="ToolBar_Separator"/>
-
-					<ToggleButton Classes="ToolBar_Button" IsEnabled="False">
-						<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
-					</ToggleButton>
-
-					<ComboBox Classes="ToolBar_ComboBox" Width="100">
+					<ComboBox HorizontalAlignment="Left" Width="200" Margin="5">
 						12345
 					</ComboBox>
 
-					<TextBlock Classes="ToolBar_TextBlock" Text="test:"/>
-					<TextBox Classes="ToolBar_TextBox" Width="100"/>
+					<Border Classes="ToolBar" Margin="5">
+						<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+
+							<Button Classes="ToolBar_Button">
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+							</Button>
+
+							<Button Classes="ToolBar_Button" IsEnabled="False">
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+							</Button>
+
+							<TextBox Classes="ToolBar_TextBox" Width="50"/>
+							<TextBox Classes="ToolBar_TextBox" Width="50"/>
+
+							<ToggleButton Classes="ToolBar_Button">
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+							</ToggleButton>
+
+							<Separator Classes="ToolBar_Separator"/>
+
+							<ToggleButton Classes="ToolBar_Button" IsEnabled="False">
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+							</ToggleButton>
+
+							<ComboBox Classes="ToolBar_ComboBox" Width="100">
+								12345
+							</ComboBox>
+
+							<TextBlock Classes="ToolBar_TextBlock" Text="test:"/>
+							<TextBox Classes="ToolBar_TextBox" Width="100"/>
+
+						</StackPanel>
+					</Border>
 
 				</StackPanel>
-			</Border>
+				
+			</TabItem>
 
-		</StackPanel>
+			<TabItem>
+				<TabItem.Header>
+					12345
+				</TabItem.Header>
+			</TabItem>
+			
+			<TabItem Classes="Empty" Header="Close"/>
+			
+		</TabControl>
 		
 	</DockPanel>
 
