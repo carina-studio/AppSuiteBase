@@ -25,5 +25,10 @@ namespace CarinaStudio.AppSuite.Tests
                 _ => ThemeMode.System,
             });
         }
+
+        void Test2()
+        {
+            new Dialog().ShowDialog(this);
+        }
     }
 }

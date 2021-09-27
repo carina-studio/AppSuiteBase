@@ -1,0 +1,60 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="CarinaStudio.AppSuite.Tests.Dialog"
+		Classes="Dialog"
+        Title="Dialog"
+		Width="400">
+
+	<DockPanel>
+
+		<Border Classes="Dialog_ControlButtonsPanel">
+			<StackPanel Classes="Dialog_ControlButtonsPanel">
+				<Button Classes="Dialog_ControlButton" Content="Test"/>
+				<Separator Classes="Dialog_ControlButton_Separator"/>
+				<Button Classes="Dialog_ControlButton" Content="{DynamicResource String/Common.OK}"/>
+				<Button Classes="Dialog_ControlButton" Content="{DynamicResource String/Common.Cancel}"/>
+			</StackPanel>
+		</Border>
+
+		<Border Classes="Dialog_ContentPanel">
+			<StackPanel Classes="Dialog_ContentPanel">
+
+				<Border Classes="Dialog_TextBlock_Header1">
+					<TextBlock Classes="Dialog_TextBlock_Header1" Text="Header1"/>
+				</Border>
+				<TextBlock Classes="Dialog_TextBlock_Header2" Text="Header2"/>
+				
+				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<TextBox Classes="Dialog_TextBox"/>
+				<Separator Classes="Dialog_Separator"/>
+
+				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<TextBox Classes="Dialog_TextBox"/>
+				<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+				<Separator Classes="Dialog_Separator"/>
+
+				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<ComboBox Classes="Dialog_ComboBox"/>
+				<Separator Classes="Dialog_Separator"/>
+
+				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<NumericUpDown Classes="Dialog_NumericUpDown"/>
+				<Separator Classes="Dialog_Separator"/>
+
+				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<ListBox Classes="Dialog_ListBox" Height="100"/>
+				<Separator Classes="Dialog_Separator"/>
+
+				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<ToggleSwitch Classes="Dialog_ToggleSwitch"/>
+				<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+				
+			</StackPanel>
+		</Border>
+		
+	</DockPanel>
+	
+</Window>
