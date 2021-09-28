@@ -1,6 +1,8 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:sys="using:System">
+		xmlns:sys="using:System"
+		xmlns:aConverters="using:Avalonia.Data.Converters"
+		xmlns:controls="using:CarinaStudio.AppSuite.Controls">
 
 	<!-- Resources -->
 	<Styles.Resources>
@@ -66,6 +68,8 @@
 		<Thickness x:Key="Thickness/StatusBar.Padding">5,0,5,0</Thickness>
 
 		<!-- TabControl -->
+		<sys:Double x:Key="Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace">20</sys:Double>
+		<Thickness x:Key="Thickness/TabControl.TabStrip.Padding">10,0,10,0</Thickness>
 
 		<!-- TabItem -->
 		<Color x:Key="Color/TabItem.Header.Background">#ffffff</Color>
@@ -326,10 +330,48 @@
 	</Style>
 
 	<!-- TabControl -->
-	<Style Selector="TabControl.aaa">
+	<Style Selector="TabControl">
 		<Setter Property="Template">
 			<Setter.Value>
-				
+				<ControlTemplate>
+					<Border BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}"
+							CornerRadius="{TemplateBinding CornerRadius}"
+							Background="{x:Null}"
+							HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+							VerticalAlignment="{TemplateBinding VerticalAlignment}">
+						<DockPanel>
+							<Grid ColumnDefinitions="Auto,*,Auto" DockPanel.Dock="Top">
+								<Border IsVisible="{Binding $parent[Window].ExtendClientAreaToDecorationsHint}">
+									<StackPanel IsVisible="{x:Static controls:ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtLeft}" Orientation="Horizontal">
+										<Border Width="{x:Static controls:ExtendedClientAreaWindowConfiguration.SystemChromeWidth}"/>
+										<Border Width="{DynamicResource Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace}"/>
+									</StackPanel>
+								</Border>
+								<ScrollViewer Grid.Column="1" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+									<ItemsPresenter Name="PART_ItemsPresenter"
+													Items="{TemplateBinding Items}"
+													ItemsPanel="{TemplateBinding ItemsPanel}"
+													ItemTemplate="{TemplateBinding ItemTemplate}"
+													Margin="{DynamicResource Thickness/TabControl.TabStrip.Padding}"/>
+								</ScrollViewer>
+								<Border Grid.Column="2" IsVisible="{Binding $parent[Window].ExtendClientAreaToDecorationsHint}">
+									<StackPanel IsVisible="{x:Static controls:ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtRight}" Orientation="Horizontal">
+										<Border Width="{x:Static controls:ExtendedClientAreaWindowConfiguration.SystemChromeWidth}"/>
+										<Border Width="{DynamicResource Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace}"/>
+									</StackPanel>
+								</Border>
+							</Grid>
+							<ContentPresenter Name="PART_SelectedContentHost"
+											  Background="{TemplateBinding Background}"
+											  Margin="0,-2,0,0"
+											  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+											  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+											  Content="{TemplateBinding SelectedContent}"
+											  ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
+						</DockPanel>
+					</Border>
+				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
 	</Style>
@@ -339,7 +381,7 @@
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Content.Height}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Button.Margin}"/>
-		<Setter Property="Opacity" Value="0.5"/>
+		<Setter Property="Opacity" Value="0.3"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/TabItem.Header.Button.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Content.Height}"/>
@@ -368,10 +410,6 @@
 		<Setter Property="TextBlock.FontSize" Value="{DynamicResource Double/TabItem.Header.FontSize}"/>
 	</Style>
 	<Style Selector="TabItem.Empty">
-		<Setter Property="MaxHeight" Value="{DynamicResource Double/TabItem.Header.Height}"/>
-		<Setter Property="MinHeight" Value="{DynamicResource Double/TabItem.Header.Height}"/>
-		<Setter Property="MaxWidth" Value="{DynamicResource Double/TabItem.Header.MaxWidth}"/>
-		<Setter Property="Padding" Value="0"/>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate>
@@ -379,7 +417,6 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
-		<Setter Property="TextBlock.FontSize" Value="{DynamicResource Double/TabItem.Header.FontSize}"/>
 	</Style>
 
 	<!-- TextBox -->

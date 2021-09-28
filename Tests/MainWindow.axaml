@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Tests.MainWindow"
+		Background="{DynamicResource Brush/TabItem.Header.Background}"
         Title="Main Window">
 
 	<DockPanel>
@@ -40,7 +41,7 @@
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Text="Item 1" VerticalAlignment="Center"/>
 						<Button Classes="TabItem_Button">
-							<DrawingPresenter Classes="Icon" Drawing="{DynamicResource Drawing/Icon.Folder}"/>
+							<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
 						</Button>
 					</StackPanel>
 				</TabItem.Header>

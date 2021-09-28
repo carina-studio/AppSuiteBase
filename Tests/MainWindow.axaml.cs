@@ -6,10 +6,12 @@ using CarinaStudio.Controls;
 
 namespace CarinaStudio.AppSuite.Tests
 {
-    public partial class MainWindow : Window<IAppSuiteApplication>
+    public partial class MainWindow : Controls.MainWindow<IAppSuiteApplication>
     {
         public MainWindow()
         {
+            this.ExtendClientAreaToDecorationsHint = true;
+            
             InitializeComponent();
         }
 
