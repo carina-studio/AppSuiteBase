@@ -1,9 +1,11 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
+using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
 using System;
+using System.ComponentModel;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -11,7 +13,8 @@ namespace CarinaStudio.AppSuite.Controls
     /// Base class of main window pf application.
     /// </summary>
     /// <typeparam name="TApp">Type of application.</typeparam>
-    public abstract class MainWindow<TApp> : CarinaStudio.Controls.Window<TApp> where TApp : class, IAppSuiteApplication
+    /// <typeparam name="TViewModel">Type of view-model.</typeparam>
+    public abstract class MainWindow<TApp, TViewModel> : CarinaStudio.Controls.Window<TApp> where TApp : class, IAppSuiteApplication<TApp> where TViewModel : MainWindowViewModel<TApp>
     {
         // Constants.
         const int SaveWindowSizeDelay = 300;
@@ -29,7 +32,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
-        /// Initialize new <see cref="MainWindow{TApp}"/> instance.
+        /// Initialize new <see cref="MainWindow{TApp, TViewModel}"/> instance.
         /// </summary>
         protected MainWindow()
         {
@@ -64,6 +67,55 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
+        // Called when property of application changed.
+        void OnApplicationPropertyChanged(object? sender, PropertyChangedEventArgs e) => this.OnApplicationPropertyChanged(e);
+
+
+        /// <summary>
+        /// Called when property of application changed.
+        /// </summary>
+        /// <param name="e">Event data.</param>
+        protected virtual void OnApplicationPropertyChanged(PropertyChangedEventArgs e)
+        { }
+
+
+        /// <summary>
+        /// Called to attach to view-model.
+        /// </summary>
+        /// <param name="viewModel">View-model.</param>
+        protected virtual void OnAttachToViewModel(TViewModel viewModel)
+        {
+            // attach
+            viewModel.PropertyChanged += this.OnViewModelPropertyChanged;
+
+            // update title
+            this.Title = viewModel.Title;
+        }
+
+
+        /// <summary>
+        /// Called when window closed.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnClosed(EventArgs e)
+        {
+            this.DataContext = null;
+            this.Application.PropertyChanged -= this.OnApplicationPropertyChanged;
+            base.OnClosed(e);
+        }
+
+
+        /// <summary>
+        /// Called to detach from view-model.
+        /// </summary>
+        /// <param name="viewModel">View-model.</param>
+        protected virtual void OnDetachFromViewModel(TViewModel viewModel)
+        {
+            // detach
+            viewModel.PropertyChanged -= this.OnViewModelPropertyChanged;
+        }
+
+
         /// <summary>
         /// Called when window opened.
         /// </summary>
@@ -72,6 +124,9 @@ namespace CarinaStudio.AppSuite.Controls
         {
             // call base
             base.OnOpened(e);
+
+            // attach to application
+            this.Application.PropertyChanged += this.OnApplicationPropertyChanged;
 
             // update content padding
             this.updateContentPaddingAction.Schedule();
@@ -86,7 +141,12 @@ namespace CarinaStudio.AppSuite.Controls
         {
             base.OnPropertyChanged(change);
             var property = change.Property;
-            if (property == ExtendClientAreaToDecorationsHintProperty)
+            if (property == DataContextProperty)
+            {
+                (change.OldValue.Value as TViewModel)?.Let(it => this.OnDetachFromViewModel(it));
+                (change.NewValue.Value as TViewModel)?.Let(it => this.OnAttachToViewModel(it));
+            }
+            else if (property == ExtendClientAreaToDecorationsHintProperty)
                 this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.OSXThickTitleBar | ExtendClientAreaChromeHints.PreferSystemChrome;
             else if (property == HeightProperty || property == WidthProperty)
                 this.saveWindowSizeAction.Reschedule(SaveWindowSizeDelay);
@@ -96,6 +156,23 @@ namespace CarinaStudio.AppSuite.Controls
                     this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, this.WindowState);
                 this.updateContentPaddingAction.Schedule();
             }
+        }
+
+
+        // Called when property of view-model changed.
+        void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e) => this.OnViewModelPropertyChanged(e);
+
+
+        /// <summary>
+        /// Called when property of view-model changed.
+        /// </summary>
+        /// <param name="e">Event data.</param>
+        protected virtual void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (this.DataContext is not TViewModel viewModel)
+                return;
+            if (e.PropertyName == nameof(MainWindowViewModel<TApp>.Title))
+                this.Title = viewModel.Title;
         }
     }
 }

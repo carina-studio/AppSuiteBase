@@ -1,5 +1,5 @@
-﻿using Avalonia.Controls;
-using CarinaStudio.Configuration;
+﻿using CarinaStudio.Configuration;
+using CarinaStudio.Controls;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,12 +9,18 @@ namespace CarinaStudio.AppSuite
     /// <summary>
     /// Interface of AppSuite application.
     /// </summary>
-    public interface IAppSuiteApplication : IApplication
+    public interface IAppSuiteApplication<TApp> : IApplication where TApp : class, IAppSuiteApplication<TApp>
     {
         /// <summary>
         /// Get key of application culture setting.
         /// </summary>
         SettingKey<ApplicationCulture> CultureSettingKey { get; }
+
+
+        /// <summary>
+        /// Check whether restarting all main windows is needed or not.
+        /// </summary>
+        bool IsRestartingMainWindowsNeeded { get; }
 
 
         /// <summary>
@@ -40,7 +46,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get list of main windows.
         /// </summary>
-        IList<Window> MainWindows { get; }
+        IList<Window<TApp>> MainWindows { get; }
 
 
         /// <summary>

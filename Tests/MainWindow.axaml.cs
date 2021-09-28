@@ -3,10 +3,11 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
+using System.ComponentModel;
 
 namespace CarinaStudio.AppSuite.Tests
 {
-    public partial class MainWindow : Controls.MainWindow<IAppSuiteApplication>
+    partial class MainWindow : Controls.MainWindow<App, Workspace>
     {
         public MainWindow()
         {
@@ -16,6 +17,17 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+
+
+        protected override void OnApplicationPropertyChanged(PropertyChangedEventArgs e)
+        {
+            base.OnApplicationPropertyChanged(e);
+            if (e.PropertyName == nameof(IAppSuiteApplication<App>.IsRestartingMainWindowsNeeded))
+            {
+                if (this.Application.IsRestartingMainWindowsNeeded)
+                    this.Application.RestartMainWindows();
+            }
+        }
 
 
         void Test()

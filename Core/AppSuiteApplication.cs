@@ -1,6 +1,5 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
@@ -9,6 +8,7 @@ using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
+using CarinaStudio.ViewModels;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using NLog;
@@ -26,18 +26,37 @@ using Windows.UI.ViewManagement;
 namespace CarinaStudio.AppSuite
 {
     /// <summary>
-    /// Base implementation of <see cref="IAppSuiteApplication"/>.
+    /// Base implementation of <see cref="IAppSuiteApplication{TApp}"/>.
     /// </summary>
-    public abstract class AppSuiteApplication : Application, IAppSuiteApplication
+    public abstract class AppSuiteApplication<TApp> : Application, IAppSuiteApplication<TApp> where TApp : class, IAppSuiteApplication<TApp>
     {
+        // Holder of main window.
+        class MainWindowHolder
+        {
+            // Fields.
+            public readonly object? CreationParam;
+            public bool IsRestartingRequested;
+            public readonly ViewModel<TApp> ViewModel;
+            public readonly Window<TApp> Window;
+
+            // Constructor.
+            public MainWindowHolder(object? param, ViewModel<TApp> viewModel, Window<TApp> window)
+            {
+                this.CreationParam = param;
+                this.ViewModel = viewModel;
+                this.Window = window;
+            }
+        }
+
+
         // Implementation of PersistentState.
         class PersistentStateImpl : PersistentSettings
         {
             // Fields.
-            readonly AppSuiteApplication app;
+            readonly AppSuiteApplication<TApp> app;
 
             // Constructor.
-            public PersistentStateImpl(AppSuiteApplication app) : base(JsonSettingsSerializer.Default)
+            public PersistentStateImpl(AppSuiteApplication<TApp> app) : base(JsonSettingsSerializer.Default)
             {
                 this.app = app;
             }
@@ -52,10 +71,10 @@ namespace CarinaStudio.AppSuite
         class SettingsImpl : PersistentSettings
         {
             // Fields.
-            readonly AppSuiteApplication app;
+            readonly AppSuiteApplication<TApp> app;
 
             // Constructor.
-            public SettingsImpl(AppSuiteApplication app) : base(JsonSettingsSerializer.Default)
+            public SettingsImpl(AppSuiteApplication<TApp> app) : base(JsonSettingsSerializer.Default)
             {
                 this.app = app;
             }
@@ -70,7 +89,8 @@ namespace CarinaStudio.AppSuite
         ResourceDictionary? accentColorResources;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
         bool isShutdownStarted;
-        readonly ObservableList<Window> mainWindows = new ObservableList<Window>();
+        readonly Dictionary<Window<TApp>, MainWindowHolder> mainWindowHolders = new Dictionary<Window<TApp>, MainWindowHolder>();
+        readonly ObservableList<Window<TApp>> mainWindows = new ObservableList<Window<TApp>>();
         PersistentStateImpl? persistentState;
         readonly string persistentStateFilePath;
         SettingsImpl? settings;
@@ -86,7 +106,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Initialize new <see cref="AppSuiteApplication"/> instance.
+        /// Initialize new <see cref="AppSuiteApplication{TApp}"/> instance.
         /// </summary>
         protected AppSuiteApplication()
         {
@@ -109,6 +129,35 @@ namespace CarinaStudio.AppSuite
         protected virtual bool AllowMultipleMainWindows { get => false; }
 
 
+        // Check whether restarting all main windows is needed or not.
+        void CheckRestartingMainWindowsNeeded()
+        {
+            if (this.IsShutdownStarted)
+                return;
+            var isRestartingNeeded = Global.Run(() =>
+            {
+                if (this.mainWindowHolders.IsEmpty())
+                    return false;
+                var themeMode = this.Settings.GetValueOrDefault(this.ThemeModeSettingKey).Let(it =>
+                {
+                    if (it == ThemeMode.System)
+                        return this.systemThemeMode;
+                    return it;
+                });
+                return themeMode != this.stylesThemeMode;
+            });
+            if (this.IsRestartingMainWindowsNeeded != isRestartingNeeded)
+            {
+                if (isRestartingNeeded)
+                    this.Logger.LogWarning("Need to restart main windows");
+                else
+                    this.Logger.LogWarning("No need to restart main windows");
+                this.IsRestartingMainWindowsNeeded = isRestartingNeeded;
+                this.OnPropertyChanged(nameof(IsRestartingMainWindowsNeeded));
+            }
+        }
+
+
         /// <summary>
         /// Get key of application culture setting.
         /// </summary>
@@ -119,6 +168,12 @@ namespace CarinaStudio.AppSuite
         /// Get current culture info of application.
         /// </summary>
         public override CultureInfo CultureInfo { get => cultureInfo; }
+
+
+        /// <summary>
+        /// Get <see cref="AppSuiteApplication{TApp}"/> instance for current process.
+        /// </summary>
+        public static new AppSuiteApplication<TApp> Current { get => (AppSuiteApplication<TApp>)Application.Current; }
 
 
         // Transform RGB color values.
@@ -146,6 +201,18 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Check whether restarting all main windows is needed or not.
+        /// </summary>
+        public bool IsRestartingMainWindowsNeeded { get; private set; }
+
+
+        /// <summary>
+        /// Check whether application is shutting down or not.
+        /// </summary>
+        public override bool IsShutdownStarted { get => isShutdownStarted; }
+
+
+        /// <summary>
         /// Check whether <see cref="ThemeMode.System"/> is supported or not.
         /// </summary>
         public bool IsSystemThemeModeSupported
@@ -159,12 +226,6 @@ namespace CarinaStudio.AppSuite
 #endif
             }
         }
-
-
-        /// <summary>
-        /// Check whether application is shutting down or not.
-        /// </summary>
-        public override bool IsShutdownStarted { get => isShutdownStarted; }
 
 
         /// <summary>
@@ -236,7 +297,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get list of main windows.
         /// </summary>
-        public IList<Window> MainWindows { get; }
+        public IList<Window<TApp>> MainWindows { get; }
 
 
         /// <summary>
@@ -255,7 +316,15 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="param">Parameter to create main window.</param>
         /// <returns>Main window.</returns>
-        protected abstract Window OnCreateMainWindow(object? param);
+        protected abstract Window<TApp> OnCreateMainWindow(object? param);
+
+
+        /// <summary>
+        /// Called to create view-model of main window.
+        /// </summary>
+        /// <param name="param">Parameter which is same as passing to <see cref="OnCreateMainWindow(object?)"/>.</param>
+        /// <returns>View-model.</returns>
+        protected abstract ViewModel<TApp> OnCreateMainWindowViewModel(object? param);
 
 
         /// <summary>
@@ -313,8 +382,11 @@ namespace CarinaStudio.AppSuite
         async void OnMainWindowClosed(object? sender, EventArgs e)
         {
             // detach from main window
-            if (sender is not Window mainWindow)
+            if (sender is not Window<TApp> mainWindow)
                 return;
+            if (!this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
+                return;
+            this.mainWindowHolders.Remove(mainWindow);
             if (!this.mainWindows.Remove(mainWindow))
                 return;
             mainWindow.Closed -= this.OnMainWindowClosed;
@@ -323,6 +395,19 @@ namespace CarinaStudio.AppSuite
 
             // perform operations
             await this.OnMainWindowClosedAsync(mainWindow);
+
+            // restart main window
+            if (mainWindowHolder.IsRestartingRequested)
+            {
+                this.Logger.LogWarning("Restart main window requested");
+                if (this.ShowMainWindow(mainWindowHolder.CreationParam, mainWindowHolder.ViewModel))
+                    return;
+                this.Logger.LogError("Unable to restart main window");
+            }
+
+            // dispose view model
+            await mainWindowHolder.ViewModel.WaitForNecessaryTasksAsync();
+            mainWindowHolder.ViewModel.Dispose();
 
             // shut down
             if (this.mainWindows.IsEmpty())
@@ -392,8 +477,7 @@ namespace CarinaStudio.AppSuite
             });
 
             // setup styles
-            this.UpdateSystemThemeMode(false);
-            this.UpdateStyles();
+            this.UpdateSystemThemeMode();
 
             // attach to system event
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -419,7 +503,7 @@ namespace CarinaStudio.AppSuite
             if (e.Key == this.CultureSettingKey)
                 this.UpdateCultureInfo(true);
             else if (e.Key == this.ThemeModeSettingKey)
-                this.UpdateStyles();
+                this.CheckRestartingMainWindowsNeeded();
         }
 
 
@@ -449,7 +533,7 @@ namespace CarinaStudio.AppSuite
         {
             this.SynchronizationContext.Post(() =>
             {
-                this.UpdateSystemThemeMode(true);
+                this.UpdateSystemThemeMode();
             });
         }
 #endif
@@ -475,6 +559,75 @@ namespace CarinaStudio.AppSuite
         /// Get version of <see cref="PersistentState"/>.
         /// </summary>
         protected virtual int PersistentStateVersion { get => 1; }
+
+
+        /// <summary>
+        /// Request restarting given main window.
+        /// </summary>
+        /// <param name="mainWindow">Main window to restart.</param>
+        /// <returns>True if restarting has been accepted.</returns>
+        public bool RestartMainWindow(Window<TApp> mainWindow)
+        {
+            // check state
+            this.VerifyAccess();
+            if (this.IsShutdownStarted)
+            {
+                this.Logger.LogWarning("Cannot restart main window when shutting down");
+                return false;
+            }
+            if (!this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
+            {
+                this.Logger.LogError("Unknown main window to restart");
+                return false;
+            }
+            if (mainWindowHolder.IsRestartingRequested)
+                return true;
+
+            // restart
+            this.Logger.LogWarning("Request restarting main window");
+            mainWindowHolder.IsRestartingRequested = true;
+            this.SynchronizationContext.Post(() =>
+            {
+                if (!mainWindow.IsClosed)
+                    mainWindow.Close();
+            });
+            return true;
+        }
+
+
+        /// <summary>
+        /// Request restarting all main windows.
+        /// </summary>
+        /// <returns>True if restarting has been accepted.</returns>
+        public bool RestartMainWindows()
+        {
+            // check state
+            this.VerifyAccess();
+            if (this.IsShutdownStarted)
+            {
+                this.Logger.LogWarning("Cannot restart main windows when shutting down");
+                return false;
+            }
+            if (this.mainWindowHolders.IsEmpty())
+            {
+                this.Logger.LogWarning("No main window to restart");
+                return false;
+            }
+
+            // restart
+            this.Logger.LogWarning($"Request restarting all {this.mainWindowHolders.Count} main window(s)");
+            foreach (var mainWindowHolder in this.mainWindowHolders.Values)
+                mainWindowHolder.IsRestartingRequested = true;
+            this.SynchronizationContext.Post(() =>
+            {
+                foreach (var mainWindow in this.mainWindowHolders.Keys)
+                {
+                    if (!mainWindow.IsClosed)
+                        mainWindow.Close();
+                }
+            });
+            return true;
+        }
 
 
         /// <summary>
@@ -544,7 +697,11 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="param">Parameter to create main window.</param>
         /// <returns>True if main window created and shown successfully.</returns>
-        public bool ShowMainWindow(object? param = null)
+        public bool ShowMainWindow(object? param = null) => this.ShowMainWindow(param, null);
+
+
+        // Create and show main window.
+        bool ShowMainWindow(object? param, ViewModel<TApp>? viewModel)
         {
             // check state
             this.VerifyAccess();
@@ -560,20 +717,44 @@ namespace CarinaStudio.AppSuite
                 return false;
             }
 
+            // update styles
+            if (mainWindowCount == 0)
+                this.UpdateStyles();
+
+            // create view-model
+            if (viewModel == null)
+                viewModel = this.OnCreateMainWindowViewModel(param);
+
             // create main window
             var mainWindow = this.OnCreateMainWindow(param);
             if (mainWindowCount != this.mainWindows.Count)
+            {
+                viewModel.Dispose();
                 throw new InternalStateCorruptedException("Nested main window showing found.");
+            }
 
             // attach to main window
+            var mainWindowHolder = new MainWindowHolder(param, viewModel, mainWindow);
+            this.mainWindowHolders[mainWindow] = mainWindowHolder;
             this.mainWindows.Add(mainWindow);
             mainWindow.Closed += this.OnMainWindowClosed;
 
             this.Logger.LogDebug($"Show main window, {this.mainWindows.Count} created");
 
             // show main window
-            this.SynchronizationContext.Post(mainWindow.Show);
+            this.ShowMainWindow(mainWindowHolder);
             return true;
+        }
+
+
+        // Show given main window.
+        void ShowMainWindow(MainWindowHolder mainWindowHolder)
+        {
+            this.SynchronizationContext.Post(() =>
+            {
+                mainWindowHolder.Window.DataContext = mainWindowHolder.ViewModel;
+                mainWindowHolder.Window.Show();
+            });
         }
 
 
@@ -794,11 +975,14 @@ namespace CarinaStudio.AppSuite
                 this.accentColorResources["ToggleSwitchStrokeOnPointerOver"] = new SolidColorBrush(sysAccentColorLight1);
                 this.accentColorResources["ToggleSwitchStrokeOnPressed"] = new SolidColorBrush(sysAccentColorDark1);
             }
+
+            // check state
+            this.CheckRestartingMainWindowsNeeded();
         }
 
 
         // Update system theme mode.
-        void UpdateSystemThemeMode(bool updateStyles)
+        void UpdateSystemThemeMode()
         {
             // get current theme
 #if WINDOWS10_0_17763_0_OR_GREATER
@@ -814,10 +998,9 @@ namespace CarinaStudio.AppSuite
 
             this.Logger.LogDebug($"System theme mode changed to {themeMode}");
 
-            // update styles
+            // update state
             this.systemThemeMode = themeMode;
-            if (updateStyles)
-                this.UpdateStyles();
+            this.CheckRestartingMainWindowsNeeded();
         }
     }
 }

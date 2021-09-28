@@ -1,16 +1,20 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using CarinaStudio.Controls;
+using CarinaStudio.ViewModels;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Tests
 {
-    public class App : AppSuiteApplication
+    public class App : AppSuiteApplication<App>
     {
         // Avalonia configuration, don't remove; also used by visual designer.
         static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .LogToTrace();
+
+
+        protected override bool AllowMultipleMainWindows => true;
 
 
         public override void Initialize()
@@ -25,13 +29,17 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        protected override Window OnCreateMainWindow(object? param) => new MainWindow();
+        protected override Window<App> OnCreateMainWindow(object? param) => new MainWindow();
+
+
+        protected override ViewModel<App> OnCreateMainWindowViewModel(object? param) => new Workspace();
 
 
         protected override async Task OnPrepareStartingAsync()
         {
             await base.OnPrepareStartingAsync();
-            this.ShowMainWindow();
+            for (var i = 0; i < 1; ++i)
+                this.ShowMainWindow();
         }
     }
 }
