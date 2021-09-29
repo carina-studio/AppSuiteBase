@@ -39,15 +39,32 @@
 
 		<!-- Icon -->
 		<Color x:Key="Color/Icon">#000000</Color>
+		<Color x:Key="Color/Icon.Dark">#000000</Color>
+		<Color x:Key="Color/Icon.Error">#ff3232</Color>
+		<Color x:Key="Color/Icon.Information">#007acc</Color>
 		<Color x:Key="Color/Icon.Light">#ffffff</Color>
+		<Color x:Key="Color/Icon.OK">#329932</Color>
+		<Color x:Key="Color/Icon.Question">#007acc</Color>
+		<Color x:Key="Color/Icon.Warning">#ff8432</Color>
 		<SolidColorBrush x:Key="Brush/Icon" Color="{DynamicResource Color/Icon}"/>
+		<SolidColorBrush x:Key="Brush/Icon.Dark" Color="{DynamicResource Color/Icon.Dark}"/>
+		<SolidColorBrush x:Key="Brush/Icon.Error" Color="{DynamicResource Color/Icon.Error}"/>
+		<SolidColorBrush x:Key="Brush/Icon.Information" Color="{DynamicResource Color/Icon.Information}"/>
 		<SolidColorBrush x:Key="Brush/Icon.Light" Color="{DynamicResource Color/Icon.Light}"/>
+		<SolidColorBrush x:Key="Brush/Icon.OK" Color="{DynamicResource Color/Icon.OK}"/>
+		<SolidColorBrush x:Key="Brush/Icon.Question" Color="{DynamicResource Color/Icon.Question}"/>
+		<SolidColorBrush x:Key="Brush/Icon.Warning" Color="{DynamicResource Color/Icon.Warning}"/>
 
 		<!-- ListBox -->
 		<Thickness x:Key="Thickness/ListBox.Padding">0,5,0,5</Thickness>
 
 		<!-- ListBoxItem -->
 		<Thickness x:Key="Thickness/ListBoxItem.Padding">6</Thickness>
+
+		<!-- MessageDialog -->
+		<sys:Double x:Key="Double/MessageDialog.Icon.Size">45</sys:Double>
+		<sys:Double x:Key="Double/MessageDialog.MinWidth">200</sys:Double>
+		<Thickness x:Key="Thickness/MessageDialog.Icon.Margin">0,0,15,0</Thickness>
 
 		<!-- Separator -->
 		<Color x:Key="Color/Separator.Background">#000000</Color>

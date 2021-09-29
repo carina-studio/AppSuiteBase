@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
 using System.ComponentModel;
@@ -30,14 +31,16 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        void Test()
+        async void Test()
         {
+            /*
             this.Settings.SetValue<ThemeMode>(this.Application.ThemeModeSettingKey, this.Settings.GetValueOrDefault(this.Application.ThemeModeSettingKey) switch
             {
                 ThemeMode.System => ThemeMode.Dark,
                 ThemeMode.Dark => ThemeMode.Light,
                 _ => ThemeMode.System,
             });
+            */
         }
 
         void Test2()
