@@ -1,6 +1,9 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:sys="using:System">
+
+	<!-- AppCulture -->
+	<sys:String x:Key="String/ApplicationCulture.System">系統設定</sys:String>
 	
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Add">加入</sys:String>
@@ -23,5 +26,10 @@
 
 	<!-- FallbackFontFamilies -->
 	<sys:String x:Key="String/TextBox.FallbackFontFamilies">Microsoft JhengHei,蘋方-繁</sys:String>
+
+	<!-- ThemeMode -->
+	<sys:String x:Key="String/ThemeMode.Dark">深色</sys:String>
+	<sys:String x:Key="String/ThemeMode.Light">淺色</sys:String>
+	<sys:String x:Key="String/ThemeMode.System">系統設定</sys:String>
 	
 </ResourceDictionary>

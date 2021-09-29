@@ -1,6 +1,11 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:sys="using:System">
+
+	<!-- AppCulture -->
+	<sys:String x:Key="String/ApplicationCulture.EN_US">English (United States)</sys:String>
+	<sys:String x:Key="String/ApplicationCulture.System">System</sys:String>
+	<sys:String x:Key="String/ApplicationCulture.ZH_TW">正體中文 (台灣)</sys:String>
 	
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Add">Add</sys:String>
@@ -20,5 +25,10 @@
 	<sys:String x:Key="String/Common.Remove">Remove</sys:String>
 	<sys:String x:Key="String/Common.Save">Save</sys:String>
 	<sys:String x:Key="String/Common.Yes">Yes</sys:String>
+
+	<!-- ThemeMode -->
+	<sys:String x:Key="String/ThemeMode.Dark">Dark</sys:String>
+	<sys:String x:Key="String/ThemeMode.Light">Light</sys:String>
+	<sys:String x:Key="String/ThemeMode.System">System</sys:String>
 	
 </ResourceDictionary>
