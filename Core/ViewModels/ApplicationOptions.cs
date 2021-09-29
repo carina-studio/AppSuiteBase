@@ -10,12 +10,12 @@ namespace CarinaStudio.AppSuite.ViewModels
     /// View-model for application options UI.
     /// </summary>
     /// <typeparam name="TApp"></typeparam>
-    public class AppOptions<TApp> : ViewModel<TApp> where TApp : class, IAppSuiteApplication<TApp>
+    public class ApplicationOptions<TApp> : ViewModel<TApp> where TApp : class, IAppSuiteApplication<TApp>
     {
         /// <summary>
-        /// Initialize new <see cref="AppOptions{TApp}"/> instance.
+        /// Initialize new <see cref="ApplicationOptions{TApp}"/> instance.
         /// </summary>
-        public AppOptions() : base((TApp)(IAppSuiteApplication<TApp>)AppSuiteApplication<TApp>.Current)
+        public ApplicationOptions() : base((TApp)(IAppSuiteApplication<TApp>)AppSuiteApplication<TApp>.Current)
         {
             this.ThemeModes = new List<ThemeMode>(Enum.GetValues<ThemeMode>()).Also(it =>
             {

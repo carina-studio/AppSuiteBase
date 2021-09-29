@@ -1087,5 +1087,9 @@ namespace CarinaStudio.AppSuite
             if (checkRestartingMainWindows)
                 this.CheckRestartingMainWindowsNeeded();
         }
+
+
+        // Interface implementations.
+        string IAppSuiteApplication<TApp>.Name { get => this.Name ?? ""; }
     }
 }

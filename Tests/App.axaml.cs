@@ -19,6 +19,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         public override void Initialize()
         {
+            this.Name = "AppSuite";
             AvaloniaXamlLoader.Load(this);
         }
 

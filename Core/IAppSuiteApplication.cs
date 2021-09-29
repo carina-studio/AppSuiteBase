@@ -62,6 +62,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get name of application.
+        /// </summary>
+        string Name { get; }
+
+
+        /// <summary>
         /// Request restarting given main window.
         /// </summary>
         /// <param name="mainWindow">Main window to restart.</param>
