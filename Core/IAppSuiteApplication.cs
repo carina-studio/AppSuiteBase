@@ -62,6 +62,21 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Request restarting given main window.
+        /// </summary>
+        /// <param name="mainWindow">Main window to restart.</param>
+        /// <returns>True if restarting has been accepted.</returns>
+        bool RestartMainWindow(Window<TApp> mainWindow);
+
+
+        /// <summary>
+        /// Request restarting all main windows.
+        /// </summary>
+        /// <returns>True if restarting has been accepted.</returns>
+        bool RestartMainWindows();
+
+
+        /// <summary>
         /// Save <see cref="CarinaStudio.IApplication.PersistentState"/> to file.
         /// </summary>
         /// <returns>Task of saving.</returns>
