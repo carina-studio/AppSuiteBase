@@ -4,3 +4,4 @@ bin
 PublishProfiles
 /Core/CarinaStudio.AppSuite.Core.xml
 /Packages
+/Tests/Properties/launchSettings.json

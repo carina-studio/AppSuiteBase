@@ -85,6 +85,11 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        // Constants.
+        const string DebugModeRequestedKey = "IsDebugModeRequested";
+        const string RestoreStateRequestedKey = "IsRestoringStateRequested";
+
+
         // Fields.
         ResourceDictionary? accentColorResources;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
@@ -201,6 +206,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Check whether application is running in debug mode or not.
+        /// </summary>
+        public bool IsDebugMode { get; private set; }
+
+
+        /// <summary>
         /// Check whether restarting all main windows is needed or not.
         /// </summary>
         public bool IsRestartingMainWindowsNeeded { get; private set; }
@@ -226,6 +237,12 @@ namespace CarinaStudio.AppSuite
 #endif
             }
         }
+
+
+        /// <summary>
+        /// Get options to launch application which is converted by arguments passed to application.
+        /// </summary>
+        public IDictionary<string, object> LaunchOptions { get; private set; } = new Dictionary<string, object>().AsReadOnly();
 
 
         /// <summary>
@@ -335,8 +352,20 @@ namespace CarinaStudio.AppSuite
             // call base
             base.OnFrameworkInitializationCompleted();
 
+            // parse arguments
+            var desktopLifetime = (this.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime);
+            if (desktopLifetime != null)
+                this.LaunchOptions = this.ParseArguments(desktopLifetime.Args);
+
+            // enter debug mode
+            if (this.OnSelectEnteringDebugMode())
+            {
+                this.Logger.LogWarning("Enter debug mode");
+                this.IsDebugMode = true;
+            }
+
             // attach to lifetime
-            if (this.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+            if (desktopLifetime != null)
             {
                 desktopLifetime.ShutdownMode = ShutdownMode.OnExplicitShutdown;
                 desktopLifetime.ShutdownRequested += (_, e) =>
@@ -429,6 +458,32 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Called to parse single argument in argument list passed to application.
+        /// </summary>
+        /// <param name="args">Argument list.</param>
+        /// <param name="index">Index of argument to parse.</param>
+        /// <param name="launchOptions">Dictionary to hold parsed arguments.</param>
+        /// <returns>Index of next argument to parse.</returns>
+        protected virtual int OnParseArguments(string[] args, int index, IDictionary<string, object> launchOptions)
+        {
+            var arg = args[index];
+            switch (arg)
+            {
+                case "-debug":
+                    launchOptions[DebugModeRequestedKey] = true;
+                    break;
+                case "-restore":
+                    launchOptions[RestoreStateRequestedKey] = true;
+                    break;
+                default:
+                    this.Logger.LogWarning($"Unknown argument: {arg}");
+                    break;
+            }
+            return (index + 1);
+        }
+
+
+        /// <summary>
         /// Called to perform asynchronous operations before shutting down.
         /// </summary>
         /// <returns>Task of performing operations.</returns>
@@ -477,7 +532,7 @@ namespace CarinaStudio.AppSuite
             });
 
             // setup styles
-            this.UpdateSystemThemeMode();
+            this.UpdateSystemThemeMode(false);
 
             // attach to system event
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -487,6 +542,18 @@ namespace CarinaStudio.AppSuite
                 this.uiSettings.ColorValuesChanged += this.OnWindowsUIColorValueChanged;
 #endif
             }
+        }
+
+
+        /// <summary>
+        /// Called to check whether application needs to enter debug mode or not.
+        /// </summary>
+        /// <returns></returns>
+        protected virtual bool OnSelectEnteringDebugMode()
+        {
+            if (this.LaunchOptions.TryGetValue(DebugModeRequestedKey, out var value) && value is bool boolValue)
+                return boolValue;
+            return false;
         }
 
 
@@ -533,7 +600,7 @@ namespace CarinaStudio.AppSuite
         {
             this.SynchronizationContext.Post(() =>
             {
-                this.UpdateSystemThemeMode();
+                this.UpdateSystemThemeMode(true);
             });
         }
 #endif
@@ -547,6 +614,23 @@ namespace CarinaStudio.AppSuite
                 this.SynchronizationContext.Post(() => this.UpdateCultureInfo(true));
         }
 #pragma warning restore CA1416
+
+
+        // Parse arguments to launch options.
+        IDictionary<string, object> ParseArguments(string[] args)
+        {
+            var launchOptions = new Dictionary<string, object>();
+            var argCount = args.Length;
+            for (var index = 0; index < argCount;)
+            {
+                var nextIndex = this.OnParseArguments(args, index, launchOptions);
+                if (nextIndex > index)
+                    index = nextIndex;
+                else
+                    ++index;
+            }
+            return launchOptions.AsReadOnly();
+        }
 
 
         /// <summary>
@@ -982,7 +1066,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Update system theme mode.
-        void UpdateSystemThemeMode()
+        void UpdateSystemThemeMode(bool checkRestartingMainWindows)
         {
             // get current theme
 #if WINDOWS10_0_17763_0_OR_GREATER
@@ -1000,7 +1084,8 @@ namespace CarinaStudio.AppSuite
 
             // update state
             this.systemThemeMode = themeMode;
-            this.CheckRestartingMainWindowsNeeded();
+            if (checkRestartingMainWindows)
+                this.CheckRestartingMainWindowsNeeded();
         }
     }
 }

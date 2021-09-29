@@ -18,6 +18,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Check whether application is running in debug mode or not.
+        /// </summary>
+        bool IsDebugMode { get; }
+
+
+        /// <summary>
         /// Check whether restarting all main windows is needed or not.
         /// </summary>
         bool IsRestartingMainWindowsNeeded { get; }
@@ -27,6 +33,12 @@ namespace CarinaStudio.AppSuite
         /// Check whether <see cref="ThemeMode.System"/> is supported or not.
         /// </summary>
         bool IsSystemThemeModeSupported { get; }
+
+
+        /// <summary>
+        /// Get options to launch application which is converted by arguments passed to application.
+        /// </summary>
+        IDictionary<string, object> LaunchOptions { get; }
 
 
         /// <summary>

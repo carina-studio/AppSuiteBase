@@ -41,5 +41,15 @@ namespace CarinaStudio.AppSuite.Tests
             for (var i = 0; i < 1; ++i)
                 this.ShowMainWindow();
         }
+
+
+        protected override bool OnSelectEnteringDebugMode()
+        {
+#if DEBUG
+            return true;
+#else
+            return base.OnSelectEnteringDebugMode();
+#endif
+        }
     }
 }
