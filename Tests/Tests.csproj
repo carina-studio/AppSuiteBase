@@ -9,6 +9,10 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
+	  <AvaloniaResource Include="AppIcon.ico" />
+	</ItemGroup>
+	
+	<ItemGroup>
 		<PackageReference Include="Avalonia" Version="0.10.7" />
 		<PackageReference Include="Avalonia.Desktop" Version="0.10.7" />
 		<PackageReference Include="Avalonia.Diagnostics" Version="0.10.7" />
