@@ -22,6 +22,11 @@
 		<!-- Icon -->
 		<Color x:Key="Color/Icon">#222222</Color>
 
+		<!-- LinkTextBlock -->
+		<Color x:Key="Color/LinkTextBlock.Foreground">#0077cc</Color>
+		<Color x:Key="Color/LinkTextBlock.Foreground.PointerOver">#0085e5</Color>
+		<Color x:Key="Color/LinkTextBlock.Foreground.Pressed">#0068b2</Color>
+
 		<!-- Separator -->
 		<Color x:Key="Color/Separator.Background">#4f000000</Color>
 

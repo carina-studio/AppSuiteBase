@@ -33,19 +33,12 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void Test()
         {
-            /*
             this.Settings.SetValue<ThemeMode>(this.Application.ThemeModeSettingKey, this.Settings.GetValueOrDefault(this.Application.ThemeModeSettingKey) switch
             {
                 ThemeMode.System => ThemeMode.Dark,
                 ThemeMode.Dark => ThemeMode.Light,
                 _ => ThemeMode.System,
             });
-            */
-            var result = await new TextInputDialog()
-            {
-                InitialText = "Hello world",
-                Message = "Message:"
-            }.ShowDialog(this);
         }
 
         void Test2()

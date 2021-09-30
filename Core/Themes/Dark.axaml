@@ -16,6 +16,11 @@
 		<!-- Icon -->
 		<Color x:Key="Color/Icon">#ffffff</Color>
 
+		<!-- LinkTextBlock -->
+		<Color x:Key="Color/LinkTextBlock.Foreground">#0085e5</Color>
+		<Color x:Key="Color/LinkTextBlock.Foreground.PointerOver">#32aaff</Color>
+		<Color x:Key="Color/LinkTextBlock.Foreground.Pressed">#0077cc</Color>
+
 		<!-- Separator -->
 		<Color x:Key="Color/Separator.Background">#4fffffff</Color>
 

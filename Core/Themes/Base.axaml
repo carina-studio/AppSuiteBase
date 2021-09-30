@@ -56,6 +56,14 @@
 		<SolidColorBrush x:Key="Brush/Icon.Question" Color="{DynamicResource Color/Icon.Question}"/>
 		<SolidColorBrush x:Key="Brush/Icon.Warning" Color="{DynamicResource Color/Icon.Warning}"/>
 
+		<!-- LinkTextBlock -->
+		<Color x:Key="Color/LinkTextBlock.Foreground">#0000ff</Color>
+		<Color x:Key="Color/LinkTextBlock.Foreground.PointerOver">#0000ff</Color>
+		<Color x:Key="Color/LinkTextBlock.Foreground.Pressed">#0000ff</Color>
+		<SolidColorBrush x:Key="Brush/LinkTextBlock.Foreground" Color="{DynamicResource Color/LinkTextBlock.Foreground}"/>
+		<SolidColorBrush x:Key="Brush/LinkTextBlock.Foreground.PointerOver" Color="{DynamicResource Color/LinkTextBlock.Foreground.PointerOver}"/>
+		<SolidColorBrush x:Key="Brush/LinkTextBlock.Foreground.Pressed" Color="{DynamicResource Color/LinkTextBlock.Foreground.Pressed}"/>
+
 		<!-- ListBox -->
 		<Thickness x:Key="Thickness/ListBox.Padding">0,5,0,5</Thickness>
 
@@ -164,6 +172,12 @@
 	<Style Selector="Grid.Dialog_ContentPanel">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding}"/>
 	</Style>
+	<Style Selector="controls|LinkTextBlock.Dialog_LinkTextBlock_Description">
+		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
+	</Style>
 	<Style Selector="ListBox.Dialog_ListBox">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 	</Style>
@@ -242,6 +256,20 @@
 	</Style>
 	<Style Selector="DrawingPresenter.Icon:disabled">
 		<Setter Property="Opacity" Value="0.3"/>
+	</Style>
+
+	<!-- LinkTextBlock -->
+	<Style Selector="controls|LinkTextBlock">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Cursor" Value="Hand"/>
+		<Setter Property="Foreground" Value="{StaticResource Brush/LinkTextBlock.Foreground}"/>
+		<Setter Property="ToolTip.Tip" Value="{Binding $self.Uri}"/>
+	</Style>
+	<Style Selector="controls|LinkTextBlock:pointerover">
+		<Setter Property="Foreground" Value="{StaticResource Brush/LinkTextBlock.Foreground.PointerOver}"/>
+	</Style>
+	<Style Selector="controls|LinkTextBlock:pressed">
+		<Setter Property="Foreground" Value="{StaticResource Brush/LinkTextBlock.Foreground.Pressed}"/>
 	</Style>
 
 	<!-- ListBox -->
