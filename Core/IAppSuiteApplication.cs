@@ -9,7 +9,7 @@ namespace CarinaStudio.AppSuite
     /// <summary>
     /// Interface of AppSuite application.
     /// </summary>
-    public interface IAppSuiteApplication<TApp> : IApplication where TApp : class, IAppSuiteApplication<TApp>
+    public interface IAppSuiteApplication : IApplication
     {
         /// <summary>
         /// Get key of application culture setting.
@@ -58,7 +58,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get list of main windows.
         /// </summary>
-        IList<Window<TApp>> MainWindows { get; }
+        IList<Window> MainWindows { get; }
 
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="mainWindow">Main window to restart.</param>
         /// <returns>True if restarting has been accepted.</returns>
-        bool RestartMainWindow(Window<TApp> mainWindow);
+        bool RestartMainWindow(Window mainWindow);
 
 
         /// <summary>

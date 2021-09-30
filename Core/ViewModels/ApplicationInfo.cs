@@ -8,12 +8,12 @@ namespace CarinaStudio.AppSuite.ViewModels
     /// <summary>
     /// View-model of application information UI.
     /// </summary>
-    public abstract class ApplicationInfo<TApp> : ViewModel<TApp> where TApp : class, IAppSuiteApplication<TApp>
+    public abstract class ApplicationInfo : ViewModel<IAppSuiteApplication>
     {
         /// <summary>
-        /// Initialize new <see cref="ApplicationInfo{TApp}"/> instance.
+        /// Initialize new <see cref="ApplicationInfo"/> instance.
         /// </summary>
-        protected ApplicationInfo() : base((TApp)(IAppSuiteApplication<TApp>)AppSuiteApplication<TApp>.Current)
+        protected ApplicationInfo() : base(AppSuiteApplication.Current)
         { }
 
 

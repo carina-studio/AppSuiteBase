@@ -10,7 +10,7 @@ namespace CarinaStudio.AppSuite.Controls
 	/// <summary>
 	/// Message dialog.
 	/// </summary>
-	partial class MessageDialogImpl : Dialog<IApplication>
+	partial class MessageDialogImpl : Dialog
 	{
 		// Static fields.
 		static readonly AvaloniaProperty<MessageDialogResult?> Button1ResultProperty = AvaloniaProperty.Register<MessageDialogImpl, MessageDialogResult?>(nameof(Button1Result));

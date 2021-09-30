@@ -10,12 +10,12 @@ namespace CarinaStudio.AppSuite.ViewModels
     /// View-model for application options UI.
     /// </summary>
     /// <typeparam name="TApp"></typeparam>
-    public class ApplicationOptions<TApp> : ViewModel<TApp> where TApp : class, IAppSuiteApplication<TApp>
+    public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     {
         /// <summary>
-        /// Initialize new <see cref="ApplicationOptions{TApp}"/> instance.
+        /// Initialize new <see cref="ApplicationOptions"/> instance.
         /// </summary>
-        public ApplicationOptions() : base((TApp)(IAppSuiteApplication<TApp>)AppSuiteApplication<TApp>.Current)
+        public ApplicationOptions() : base(AppSuiteApplication.Current)
         {
             this.ThemeModes = new List<ThemeMode>(Enum.GetValues<ThemeMode>()).Also(it =>
             {
@@ -57,7 +57,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         protected override void OnApplicationPropertyChanged(PropertyChangedEventArgs e)
         {
             base.OnApplicationPropertyChanged(e);
-            if (e.PropertyName == nameof(IAppSuiteApplication<TApp>.IsRestartingMainWindowsNeeded))
+            if (e.PropertyName == nameof(IAppSuiteApplication.IsRestartingMainWindowsNeeded))
                 this.OnPropertyChanged(nameof(IsRestartingMainWindowsNeeded));
         }
 

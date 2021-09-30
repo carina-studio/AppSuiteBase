@@ -12,9 +12,8 @@ namespace CarinaStudio.AppSuite.Controls
     /// <summary>
     /// Base class of main window pf application.
     /// </summary>
-    /// <typeparam name="TApp">Type of application.</typeparam>
     /// <typeparam name="TViewModel">Type of view-model.</typeparam>
-    public abstract class MainWindow<TApp, TViewModel> : CarinaStudio.Controls.Window<TApp> where TApp : class, IAppSuiteApplication<TApp> where TViewModel : MainWindowViewModel<TApp>
+    public abstract class MainWindow<TViewModel> : Window where TViewModel : MainWindowViewModel
     {
         // Constants.
         const int SaveWindowSizeDelay = 300;
@@ -32,7 +31,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
-        /// Initialize new <see cref="MainWindow{TApp, TViewModel}"/> instance.
+        /// Initialize new <see cref="MainWindow{TViewModel}"/> instance.
         /// </summary>
         protected MainWindow()
         {
@@ -171,8 +170,25 @@ namespace CarinaStudio.AppSuite.Controls
         {
             if (this.DataContext is not TViewModel viewModel)
                 return;
-            if (e.PropertyName == nameof(MainWindowViewModel<TApp>.Title))
+            if (e.PropertyName == nameof(MainWindowViewModel.Title))
                 this.Title = viewModel.Title;
+        }
+    }
+
+
+    /// <summary>
+    /// Base class of main window pf application.
+    /// </summary>
+    /// <typeparam name="TApp">Type of application.</typeparam>
+    /// <typeparam name="TViewModel">Type of view-model.</typeparam>
+    public abstract class MainWindow<TApp, TViewModel> : MainWindow<TViewModel> where TApp : class, IAppSuiteApplication where TViewModel : MainWindowViewModel
+    {
+        /// <summary>
+        /// Get application instance.
+        /// </summary>
+        public new TApp Application
+        {
+            get => (TApp)base.Application;
         }
     }
 }

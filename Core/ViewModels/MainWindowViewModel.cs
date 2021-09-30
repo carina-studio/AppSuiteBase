@@ -5,15 +5,14 @@ using System;
 namespace CarinaStudio.AppSuite.ViewModels
 {
     /// <summary>
-    /// Base class of view-model for <see cref="Controls.MainWindow{TApp, TViewModel}"/>.
+    /// Base class of view-model for <see cref="Controls.MainWindow{TViewModel}"/>.
     /// </summary>
-    /// <typeparam name="TApp">Type of application.</typeparam>
-    public abstract class MainWindowViewModel<TApp> : ViewModel<TApp> where TApp : class, IAppSuiteApplication<TApp>
+    public abstract class MainWindowViewModel : ViewModel<IAppSuiteApplication>
     {
         /// <summary>
         /// Property of <see cref="Title"/>.
         /// </summary>
-        public static readonly ObservableProperty<string?> TitleProperty = ObservableProperty.Register<MainWindowViewModel<TApp>, string?>(nameof(Title));
+        public static readonly ObservableProperty<string?> TitleProperty = ObservableProperty.Register<MainWindowViewModel, string?>(nameof(Title));
 
 
         // Fields.
@@ -21,9 +20,9 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
-        /// Initialize new <see cref="MainWindowViewModel{TApp}"/> instance.
+        /// Initialize new <see cref="MainWindowViewModel"/> instance.
         /// </summary>
-        protected MainWindowViewModel() : base((TApp)(IAppSuiteApplication<TApp>)AppSuiteApplication<TApp>.Current)
+        protected MainWindowViewModel() : base(AppSuiteApplication.Current)
         {
             this.updateTitleAction = new ScheduledAction(() =>
             {
@@ -69,5 +68,21 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// Get title of main window.
         /// </summary>
         public string? Title { get => this.GetValue(TitleProperty); }
+    }
+
+
+    /// <summary>
+    /// Base class of view-model for <see cref="Controls.MainWindow{TViewModel}"/>.
+    /// </summary>
+    /// <typeparam name="TApp">Type of application.</typeparam>
+    public abstract class MainWindowViewModel<TApp> : MainWindowViewModel where TApp : class, IAppSuiteApplication
+    {
+        /// <summary>
+        /// Get application instance.
+        /// </summary>
+        public new TApp Application
+        {
+            get => (TApp)base.Application;
+        }
     }
 }

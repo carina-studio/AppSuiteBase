@@ -1,5 +1,4 @@
-﻿using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
+﻿using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
@@ -26,9 +25,9 @@ using Windows.UI.ViewManagement;
 namespace CarinaStudio.AppSuite
 {
     /// <summary>
-    /// Base implementation of <see cref="IAppSuiteApplication{TApp}"/>.
+    /// Base implementation of <see cref="IAppSuiteApplication"/>.
     /// </summary>
-    public abstract class AppSuiteApplication<TApp> : Application, IAppSuiteApplication<TApp> where TApp : class, IAppSuiteApplication<TApp>
+    public abstract class AppSuiteApplication : Application, IAppSuiteApplication
     {
         // Holder of main window.
         class MainWindowHolder
@@ -36,11 +35,11 @@ namespace CarinaStudio.AppSuite
             // Fields.
             public readonly object? CreationParam;
             public bool IsRestartingRequested;
-            public readonly ViewModel<TApp> ViewModel;
-            public readonly Window<TApp> Window;
+            public readonly ViewModel ViewModel;
+            public readonly Window Window;
 
             // Constructor.
-            public MainWindowHolder(object? param, ViewModel<TApp> viewModel, Window<TApp> window)
+            public MainWindowHolder(object? param, ViewModel viewModel, Window window)
             {
                 this.CreationParam = param;
                 this.ViewModel = viewModel;
@@ -53,10 +52,10 @@ namespace CarinaStudio.AppSuite
         class PersistentStateImpl : PersistentSettings
         {
             // Fields.
-            readonly AppSuiteApplication<TApp> app;
+            readonly AppSuiteApplication app;
 
             // Constructor.
-            public PersistentStateImpl(AppSuiteApplication<TApp> app) : base(JsonSettingsSerializer.Default)
+            public PersistentStateImpl(AppSuiteApplication app) : base(JsonSettingsSerializer.Default)
             {
                 this.app = app;
             }
@@ -71,10 +70,10 @@ namespace CarinaStudio.AppSuite
         class SettingsImpl : PersistentSettings
         {
             // Fields.
-            readonly AppSuiteApplication<TApp> app;
+            readonly AppSuiteApplication app;
 
             // Constructor.
-            public SettingsImpl(AppSuiteApplication<TApp> app) : base(JsonSettingsSerializer.Default)
+            public SettingsImpl(AppSuiteApplication app) : base(JsonSettingsSerializer.Default)
             {
                 this.app = app;
             }
@@ -91,16 +90,16 @@ namespace CarinaStudio.AppSuite
 
 
         // Fields.
-        ResourceDictionary? accentColorResources;
+        Avalonia.Controls.ResourceDictionary? accentColorResources;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
         bool isShutdownStarted;
-        readonly Dictionary<Window<TApp>, MainWindowHolder> mainWindowHolders = new Dictionary<Window<TApp>, MainWindowHolder>();
-        readonly ObservableList<Window<TApp>> mainWindows = new ObservableList<Window<TApp>>();
+        readonly Dictionary<Window, MainWindowHolder> mainWindowHolders = new Dictionary<Window, MainWindowHolder>();
+        readonly ObservableList<Window> mainWindows = new ObservableList<Window>();
         PersistentStateImpl? persistentState;
         readonly string persistentStateFilePath;
         SettingsImpl? settings;
         readonly string settingsFilePath;
-        ResourceDictionary? stringResource;
+        Avalonia.Controls.ResourceDictionary? stringResource;
         CultureInfo? stringResourceCulture;
         IStyle? styles;
         ThemeMode stylesThemeMode = ThemeMode.System;
@@ -111,7 +110,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Initialize new <see cref="AppSuiteApplication{TApp}"/> instance.
+        /// Initialize new <see cref="AppSuiteApplication"/> instance.
         /// </summary>
         protected AppSuiteApplication()
         {
@@ -176,9 +175,9 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Get <see cref="AppSuiteApplication{TApp}"/> instance for current process.
+        /// Get <see cref="AppSuiteApplication"/> instance for current process.
         /// </summary>
-        public static new AppSuiteApplication<TApp> Current { get => (AppSuiteApplication<TApp>)Application.Current; }
+        public static new AppSuiteApplication Current { get => (AppSuiteApplication)Application.Current; }
 
 
         // Transform RGB color values.
@@ -314,7 +313,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get list of main windows.
         /// </summary>
-        public IList<Window<TApp>> MainWindows { get; }
+        public IList<Window> MainWindows { get; }
 
 
         /// <summary>
@@ -333,7 +332,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="param">Parameter to create main window.</param>
         /// <returns>Main window.</returns>
-        protected abstract Window<TApp> OnCreateMainWindow(object? param);
+        protected abstract Window OnCreateMainWindow(object? param);
 
 
         /// <summary>
@@ -341,7 +340,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="param">Parameter which is same as passing to <see cref="OnCreateMainWindow(object?)"/>.</param>
         /// <returns>View-model.</returns>
-        protected abstract ViewModel<TApp> OnCreateMainWindowViewModel(object? param);
+        protected abstract ViewModel OnCreateMainWindowViewModel(object? param);
 
 
         /// <summary>
@@ -367,7 +366,7 @@ namespace CarinaStudio.AppSuite
             // attach to lifetime
             if (desktopLifetime != null)
             {
-                desktopLifetime.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+                desktopLifetime.ShutdownMode = Avalonia.Controls.ShutdownMode.OnExplicitShutdown;
                 desktopLifetime.ShutdownRequested += (_, e) =>
                 {
                     if (!this.isShutdownStarted)
@@ -388,7 +387,7 @@ namespace CarinaStudio.AppSuite
         /// Called to load default string resource.
         /// </summary>
         /// <returns>Default string resource.</returns>
-        protected virtual IResourceProvider? OnLoadDefaultStringResource() => null;
+        protected virtual Avalonia.Controls.IResourceProvider? OnLoadDefaultStringResource() => null;
 
 
         /// <summary>
@@ -396,7 +395,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="cultureInfo">Culture info.</param>
         /// <returns>String resource.</returns>
-        protected virtual IResourceProvider? OnLoadStringResource(CultureInfo cultureInfo) => null;
+        protected virtual Avalonia.Controls.IResourceProvider? OnLoadStringResource(CultureInfo cultureInfo) => null;
 
 
         /// <summary>
@@ -411,7 +410,7 @@ namespace CarinaStudio.AppSuite
         async void OnMainWindowClosed(object? sender, EventArgs e)
         {
             // detach from main window
-            if (sender is not Window<TApp> mainWindow)
+            if (sender is not Window mainWindow)
                 return;
             if (!this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
                 return;
@@ -650,7 +649,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="mainWindow">Main window to restart.</param>
         /// <returns>True if restarting has been accepted.</returns>
-        public bool RestartMainWindow(Window<TApp> mainWindow)
+        public bool RestartMainWindow(Window mainWindow)
         {
             // check state
             this.VerifyAccess();
@@ -785,7 +784,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Create and show main window.
-        bool ShowMainWindow(object? param, ViewModel<TApp>? viewModel)
+        bool ShowMainWindow(object? param, ViewModel? viewModel)
         {
             // check state
             this.VerifyAccess();
@@ -936,7 +935,7 @@ namespace CarinaStudio.AppSuite
                     });
 
                     // load custom resource
-                    var resource = (IResourceProvider?)null;
+                    var resource = (Avalonia.Controls.IResourceProvider?)null;
                     try
                     {
                         resource = this.OnLoadStringResource(this.cultureInfo);
@@ -949,7 +948,7 @@ namespace CarinaStudio.AppSuite
                     // merge resources
                     if (builtInResource != null || resource != null)
                     {
-                        this.stringResource = new ResourceDictionary();
+                        this.stringResource = new Avalonia.Controls.ResourceDictionary();
                         builtInResource?.Let(it => this.stringResource.MergedDictionaries.Add(it));
                         resource?.Let(it => this.stringResource.MergedDictionaries.Add(it));
                         this.stringResourceCulture = this.cultureInfo;
@@ -1031,7 +1030,7 @@ namespace CarinaStudio.AppSuite
                 // create resources
                 if (this.accentColorResources == null)
                 {
-                    this.accentColorResources = new ResourceDictionary();
+                    this.accentColorResources = new Avalonia.Controls.ResourceDictionary();
                     this.Resources.MergedDictionaries.Add(this.accentColorResources);
                 }
 
@@ -1090,6 +1089,6 @@ namespace CarinaStudio.AppSuite
 
 
         // Interface implementations.
-        string IAppSuiteApplication<TApp>.Name { get => this.Name ?? ""; }
+        string IAppSuiteApplication.Name { get => this.Name ?? ""; }
     }
 }

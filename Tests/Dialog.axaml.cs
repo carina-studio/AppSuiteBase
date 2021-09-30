@@ -4,7 +4,7 @@ using Avalonia.Markup.Xaml;
 
 namespace CarinaStudio.AppSuite.Tests
 {
-    public partial class Dialog : CarinaStudio.Controls.Dialog<IAppSuiteApplication<App>>
+    public partial class Dialog : Controls.Dialog<App>
     {
         public Dialog()
         {

@@ -23,7 +23,7 @@ namespace CarinaStudio.AppSuite.Tests
         protected override void OnApplicationPropertyChanged(PropertyChangedEventArgs e)
         {
             base.OnApplicationPropertyChanged(e);
-            if (e.PropertyName == nameof(IAppSuiteApplication<App>.IsRestartingMainWindowsNeeded))
+            if (e.PropertyName == nameof(IAppSuiteApplication.IsRestartingMainWindowsNeeded))
             {
                 if (this.Application.IsRestartingMainWindowsNeeded)
                     this.Application.RestartMainWindows();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Tests
 {
-    public class App : AppSuiteApplication<App>
+    public class App : AppSuiteApplication
     {
         // Avalonia configuration, don't remove; also used by visual designer.
         static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>()
@@ -30,10 +30,10 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        protected override Window<App> OnCreateMainWindow(object? param) => new MainWindow();
+        protected override Window OnCreateMainWindow(object? param) => new MainWindow();
 
 
-        protected override ViewModel<App> OnCreateMainWindowViewModel(object? param) => new Workspace();
+        protected override ViewModel OnCreateMainWindowViewModel(object? param) => new Workspace();
 
 
         protected override async Task OnPrepareStartingAsync()
