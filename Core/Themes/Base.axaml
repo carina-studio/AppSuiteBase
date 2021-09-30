@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:sys="using:System"
 		xmlns:aConverters="using:Avalonia.Data.Converters"
+		xmlns:appSuite="using:CarinaStudio.AppSuite"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls">
 
 	<!-- Resources -->
@@ -106,6 +107,9 @@
 		<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">3</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Margin">1,2,1,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Padding">10</Thickness>
+
+		<!-- TextInputDialog -->
+		<sys:Double x:Key="Double/TextInputDialog.Width">450</sys:Double>
 
 		<!-- ToolBar -->
 		<Color x:Key="Color/ToolBar.Background">#ffffff</Color>

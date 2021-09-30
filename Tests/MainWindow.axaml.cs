@@ -41,6 +41,11 @@ namespace CarinaStudio.AppSuite.Tests
                 _ => ThemeMode.System,
             });
             */
+            var result = await new TextInputDialog()
+            {
+                InitialText = "Hello world",
+                Message = "Message:"
+            }.ShowDialog(this);
         }
 
         void Test2()

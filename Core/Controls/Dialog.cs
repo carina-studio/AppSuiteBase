@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalonia.Input;
+using System;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -10,7 +11,23 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Initialize new <see cref="Dialog"/> instance.
         /// </summary>
-        protected Dialog() => new WindowContentFadingHelper(this);
+        protected Dialog()
+        {
+            new WindowContentFadingHelper(this);
+            this.Title = this.Application.Name;
+        }
+
+
+        /// <summary>
+        /// Called when key up.
+        /// </summary>
+        /// <param name="e">Event data.</param>
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+            if (e.Key == Key.Escape && !e.Handled)
+                this.Close();
+        }
     }
 
 

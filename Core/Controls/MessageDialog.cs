@@ -1,4 +1,4 @@
-﻿using Avalonia.Controls;
+﻿using CarinaStudio.Threading;
 using System;
 using System.Threading.Tasks;
 
@@ -7,14 +7,12 @@ namespace CarinaStudio.AppSuite.Controls
 	/// <summary>
 	/// Message dialog.
 	/// </summary>
-	public class MessageDialog
+	public class MessageDialog:CommonDialog<MessageDialogResult>
 	{
 		// Fields.
 		MessageDialogButtons buttons = MessageDialogButtons.OK;
 		MessageDialogIcon icon = MessageDialogIcon.Information;
-		bool isDialogShowing;
 		string? message;
-		string? title;
 
 
 		/// <summary>
@@ -25,6 +23,7 @@ namespace CarinaStudio.AppSuite.Controls
 			get => this.buttons;
 			set
 			{
+				this.VerifyAccess();
 				this.VerifyShowing();
 				this.buttons = value;
 			}
@@ -39,6 +38,7 @@ namespace CarinaStudio.AppSuite.Controls
 			get => this.icon;
 			set
 			{
+				this.VerifyAccess();
 				this.VerifyShowing();
 				this.icon = value;
 			}
@@ -53,68 +53,32 @@ namespace CarinaStudio.AppSuite.Controls
 			get => this.message;
 			set
 			{
+				this.VerifyAccess();
 				this.VerifyShowing();
 				this.message = value;
 			}
 		}
 
 
-		/// <summary>
-		/// Show message dialog.
-		/// </summary>
-		/// <param name="owner">Owner window.</param>
-		/// <returns>Task to get result of dialog.</returns>
-		public async Task<MessageDialogResult> ShowDialog(Window owner)
-		{
-			// check state
-			this.VerifyShowing();
-			owner.VerifyAccess();
-
-			// update state
-			this.isDialogShowing = true;
-
-			// show dialog
-			try
-			{
-				var dialog = new MessageDialogImpl();
-				dialog.Buttons = this.buttons;
-				dialog.Icon = this.icon;
-				dialog.Message = this.message;
-				dialog.Title = this.title ?? Avalonia.Application.Current.Name;
-				return await dialog.ShowDialog<MessageDialogResult>(owner);
-			}
-			finally
-			{
-				this.isDialogShowing = false;
-			}
-		}
-
-
-		/// <summary>
-		/// Get or set title of dialog.
-		/// </summary>
-		public string? Title
-		{
-			get => this.title;
-			set
-			{
-				this.VerifyShowing();
-				this.title = value;
-			}
-		}
-
-
-		// Throw exception if dialog is showing.
-		void VerifyShowing()
-		{
-			if (this.isDialogShowing)
-				throw new InvalidOperationException("Cannot perform operation when dialog is showing.");
+        /// <summary>
+        /// Show message dialog.
+        /// </summary>
+        /// <param name="owner">Owner window.</param>
+        /// <returns>Task to get result of dialog.</returns>
+        protected override Task<MessageDialogResult> ShowDialogCore(Avalonia.Controls.Window owner)
+        {
+			var dialog = new MessageDialogImpl();
+			dialog.Buttons = this.buttons;
+			dialog.Icon = this.icon;
+			dialog.Message = this.message;
+			dialog.Title = this.Title ?? Avalonia.Application.Current.Name;
+			return dialog.ShowDialog<MessageDialogResult>(owner);
 		}
 	}
 
 
 	/// <summary>
-	/// Combination of buttons of <see cref="MessageDialog{TApp}"/>.
+	/// Combination of buttons of <see cref="MessageDialog"/>.
 	/// </summary>
 	public enum MessageDialogButtons
 	{
@@ -138,7 +102,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 	/// <summary>
-	/// Icon of <see cref="MessageDialog{TApp}"/>.
+	/// Icon of <see cref="MessageDialog"/>.
 	/// </summary>
 	public enum MessageDialogIcon
 	{
@@ -162,7 +126,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 	/// <summary>
-	/// Result of <see cref="MessageDialog{TApp}"/>
+	/// Result of <see cref="MessageDialog"/>
 	/// </summary>
 	public enum MessageDialogResult
 	{

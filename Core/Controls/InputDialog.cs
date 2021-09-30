@@ -10,7 +10,11 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Initialize new <see cref="InputDialog"/> instance.
         /// </summary>
-        protected InputDialog() => new WindowContentFadingHelper(this);
+        protected InputDialog()
+        {
+            new WindowContentFadingHelper(this);
+            this.Title = this.Application.Name;
+        }
     }
 
 
