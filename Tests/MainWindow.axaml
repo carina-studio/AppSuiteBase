@@ -78,24 +78,29 @@
 						<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
 
 							<Button Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Information.Colored}"/>
 							</Button>
-
-							<Button Classes="ToolBar_Button" IsEnabled="False">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+							<Button Classes="ToolBar_Button">
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Question.Colored}"/>
+							</Button>
+							<Button Classes="ToolBar_Button">
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Warning.Colored}"/>
+							</Button>
+							<Button Classes="ToolBar_Button">
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Error.Colored}"/>
 							</Button>
 
 							<TextBox Classes="ToolBar_TextBox" Width="50"/>
 							<TextBox Classes="ToolBar_TextBox" Width="50"/>
 
 							<ToggleButton Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.OK.Colored}"/>
 							</ToggleButton>
 
 							<Separator Classes="ToolBar_Separator"/>
 
-							<ToggleButton Classes="ToolBar_Button" IsEnabled="False">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+							<ToggleButton Classes="ToolBar_Button">
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.SaveAll}"/>
 							</ToggleButton>
 
 							<ComboBox Classes="ToolBar_ComboBox" Width="100">
