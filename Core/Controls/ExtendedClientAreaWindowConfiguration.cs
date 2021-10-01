@@ -1,12 +1,11 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using System;
-using System.Runtime.InteropServices;
 
 namespace CarinaStudio.AppSuite.Controls
 {
     /// <summary>
-    /// Configuration of <see cref="Window"/> with <see cref="Window.ExtendClientAreaToDecorationsHint"/> set to true.
+    /// Configuration of <see cref="Window"/> with <see cref="Avalonia.Controls.Window.ExtendClientAreaToDecorationsHint"/> set to true.
     /// </summary>
     public static class ExtendedClientAreaWindowConfiguration
     {
@@ -15,7 +14,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public static Thickness ContentPaddingWhenMaximized { get; } = Global.Run(() =>
         {
-            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (!Platform.IsWindows)
                 return new Thickness();
             return new Thickness(6); // Windows 10
         });
@@ -26,11 +25,8 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public static bool IsExtendedClientAreaSupported { get; } = Global.Run(() =>
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
-                /*|| RuntimeInformation.IsOSPlatform(OSPlatform.OSX)*/)
-            {
+            if (Platform.IsWindows || Platform.IsMacOS)
                 return true;
-            }
             return false;
         });
 
@@ -52,7 +48,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public static PlacementMode SystemChromePlacement { get; } = Global.Run(() =>
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            if (Platform.IsMacOS)
                 return PlacementMode.Left;
             return PlacementMode.Right;
         });
@@ -63,8 +59,10 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public static double SystemChromeWidth { get; } = Global.Run(() =>
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            if (Platform.IsWindows)
                 return 140; // Windows 10
+            if (Platform.IsMacOS)
+                return 70;
             return 0;
         });
     }
