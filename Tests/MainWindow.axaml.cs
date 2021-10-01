@@ -15,6 +15,7 @@ namespace CarinaStudio.AppSuite.Tests
             InitializeComponent();
         }
 
+
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
 
@@ -29,7 +30,7 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        async void Test()
+        void SwitchTheme()
         {
             this.Settings.SetValue<ThemeMode>(this.Application.ThemeModeSettingKey, this.Settings.GetValueOrDefault(this.Application.ThemeModeSettingKey) switch
             {
@@ -37,6 +38,12 @@ namespace CarinaStudio.AppSuite.Tests
                 ThemeMode.Dark => ThemeMode.Light,
                 _ => ThemeMode.System,
             });
+        }
+
+
+        async void Test()
+        {
+            
         }
 
         void Test2()
