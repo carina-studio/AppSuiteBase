@@ -43,7 +43,8 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void Test()
         {
-            
+            using var appInfo = new AppInfo();
+            await new ApplicationInfoDialog<AppInfo>(appInfo).ShowDialog(this);
         }
 
         void Test2()

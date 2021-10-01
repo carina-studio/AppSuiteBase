@@ -1,4 +1,4 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia.Media.Imaging;
 using CarinaStudio.ViewModels;
 using Microsoft.Extensions.Logging;
 using System;
@@ -74,7 +74,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Get application icon.
         /// </summary>
-        public abstract WindowIcon Icon { get; }
+        public abstract IBitmap Icon { get; }
 
 
         /// <summary>

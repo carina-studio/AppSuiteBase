@@ -2,8 +2,24 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:sys="using:System">
 
-	<!-- AppCulture -->
+	<!-- ApplicationCulture -->
 	<sys:String x:Key="String/ApplicationCulture.System">系統設定</sys:String>
+
+	<!-- ApplicationInfoDialog -->
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">應用程式圖示由</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">提供，並發布於</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon" xml:space="preserve">。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.Framework.Section1" xml:space="preserve">基於</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.Framework.Section2" xml:space="preserve">以及</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.Framework.Section3" xml:space="preserve">開發完成。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">匯出應用程式日誌…</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">無法匯出應用程式日誌。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">GitHub 上的原始程式碼</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">隱私權政策</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">應用程式日誌匯出完成。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Title">關於 {0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">使用者協議</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Version">版本：{0}</sys:String>
 	
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Add">加入</sys:String>
@@ -26,6 +42,10 @@
 
 	<!-- FallbackFontFamilies -->
 	<sys:String x:Key="String/TextBox.FallbackFontFamilies">Microsoft JhengHei,蘋方-繁</sys:String>
+
+	<!-- FileFormat -->
+	<sys:String x:Key="String/FileFormat.All">所有檔案</sys:String>
+	<sys:String x:Key="String/FileFormat.Text">文字文件</sys:String>
 
 	<!-- ThemeMode -->
 	<sys:String x:Key="String/ThemeMode.Dark">深色</sys:String>

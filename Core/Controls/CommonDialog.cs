@@ -1,8 +1,5 @@
 ﻿using CarinaStudio.Threading;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,7 +33,7 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		/// <param name="owner">Owner window.</param>
 		/// <returns>Task to get result of dialog.</returns>
-		public async Task<TResult> ShowDialog(Window owner)
+		public async Task<TResult> ShowDialog(Avalonia.Controls.Window owner)
         {
             // check state
             this.VerifyAccess();

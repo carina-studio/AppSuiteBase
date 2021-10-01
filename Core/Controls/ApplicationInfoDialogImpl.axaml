@@ -1,0 +1,102 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
+		xmlns:ia="using:Avalonia.Xaml.Interactivity"
+        xmlns:iaCore="using:Avalonia.Xaml.Interactions.Core"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="CarinaStudio.AppSuite.Controls.ApplicationInfoDialogImpl"
+        Classes="Dialog"
+        MinWidth="{DynamicResource Double/ApplicationInfoDialog.MinWidth}"
+        SizeToContent="WidthAndHeight">
+
+	<DockPanel>
+
+		<!-- Control buttons -->
+		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
+			<StackPanel Classes="Dialog_ControlButtonsPanel">
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.OK}"/>
+			</StackPanel>
+		</Border>
+
+		<!-- Content -->
+		<StackPanel Classes="Dialog_ContentPanel" Orientation="Vertical">
+
+			<!-- Icon and title -->
+			<DockPanel HorizontalAlignment="Stretch">
+
+				<!-- Icon -->
+				<Border DockPanel.Dock="Left">
+					<Image Height="{DynamicResource Double/ApplicationInfoDialog.AppIcon.Size}" Margin="{DynamicResource Thickness/ApplicationInfoDialog.AppIcon.Margin}" Source="{Binding Icon}" VerticalAlignment="Center" Width="{DynamicResource Double/ApplicationInfoDialog.AppIcon.Size}"/>
+				</Border>
+
+				<!-- Title and version -->
+				<Border>
+					<StackPanel Orientation="Vertical" VerticalAlignment="Center">
+						<TextBlock FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Margin="{DynamicResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Text="{Binding Name}"/>
+						<TextBlock Text="{Binding $parent[Window].VersionString}"/>
+						<TextBlock Text="©2021 Carina Studio"/>
+					</StackPanel>
+				</Border>
+				
+			</DockPanel>
+			<Separator Classes="Dialog_Separator_Large"/>
+
+			<!-- Framework attribution -->
+			<StackPanel Orientation="Horizontal">
+				<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section1}" VerticalAlignment="Center"/>
+				<controls:LinkTextBlock Text=" .NET " Uri="https://dotnet.microsoft.com/" VerticalAlignment="Center"/>
+				<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section2}" VerticalAlignment="Center"/>
+				<controls:LinkTextBlock Text=" Avalonia " Uri="http://avaloniaui.net/" VerticalAlignment="Center"/>
+				<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section3}" VerticalAlignment="Center"/>
+			</StackPanel>
+			<Separator Classes="Dialog_Separator_Small"/>
+
+			<!-- App icon attribution (Flaticon) -->
+			<StackPanel Orientation="Horizontal" IsVisible="False">
+				<ia:Interaction.Behaviors>
+					<iaCore:DataTriggerBehavior Binding="{Binding IconWebSite}" Value="Flaticon">
+						<iaCore:ChangePropertyAction PropertyName="IsVisible" Value="True"/>
+					</iaCore:DataTriggerBehavior>
+				</ia:Interaction.Behaviors>
+				<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon}" VerticalAlignment="Center"/>
+				<controls:LinkTextBlock IsVisible="False" Text=" Freepik " Uri="https://www.freepik.com/" VerticalAlignment="Center">
+					<ia:Interaction.Behaviors>
+						<iaCore:DataTriggerBehavior Binding="{Binding IconCreator}" Value="Freepik">
+							<iaCore:ChangePropertyAction PropertyName="IsVisible" Value="True"/>
+						</iaCore:DataTriggerBehavior>
+					</ia:Interaction.Behaviors>
+				</controls:LinkTextBlock>
+				<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon}" VerticalAlignment="Center"/>
+				<controls:LinkTextBlock Text=" Flaticon " Uri="https://www.flaticon.com/" VerticalAlignment="Center"/>
+				<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon}" VerticalAlignment="Center"/>
+			</StackPanel>
+			<Separator Classes="Dialog_Separator_Large"/>
+
+			<!-- User agreement -->
+			<StackPanel IsVisible="{Binding $parent[Window].HasUserAgreement}" Orientation="Vertical">
+				<controls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.UserAgreement}" Uri="{Binding UserAgreementUri}"/>
+				<Separator Classes="Dialog_Separator"/>
+			</StackPanel>
+
+			<!-- Privacy policy -->
+			<StackPanel IsVisible="{Binding $parent[Window].HasPrivacyPolicy}" Orientation="Vertical">
+				<controls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
+				<Separator Classes="Dialog_Separator"/>
+			</StackPanel>
+
+			<!-- Source code -->
+			<StackPanel IsVisible="{Binding $parent[Window].HasGitHubProject}" Orientation="Vertical">
+				<controls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.GitHubProject}" Uri="{Binding GitHubProjectUri}"/>
+				<Separator Classes="Dialog_Separator"/>
+			</StackPanel>
+
+			<!-- Export logs -->
+			<controls:LinkTextBlock Command="{Binding $parent[Window].ExportLogs}" HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}"/>
+			
+		</StackPanel>
+
+	</DockPanel>
+
+</Window>
