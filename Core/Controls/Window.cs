@@ -18,11 +18,14 @@ namespace CarinaStudio.AppSuite.Controls
     /// Base class of window of AppSuite.
     /// </summary>
     /// <typeparam name="TApp">Type of application.</typeparam>
-    public abstract class Window<TApp> : CarinaStudio.Controls.Window<TApp> where TApp : class, IAppSuiteApplication
+    public abstract class Window<TApp> : Window where TApp : class, IAppSuiteApplication
     {
         /// <summary>
-        /// Initialize new <see cref="Window{TApp}"/> instance.
+        /// Get application instance.
         /// </summary>
-        protected Window() => new WindowContentFadingHelper(this);
+        public new TApp Application
+        {
+            get => (TApp)base.Application;
+        }
     }
 }

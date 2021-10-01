@@ -12,8 +12,6 @@ namespace CarinaStudio.AppSuite.Tests
     {
         public MainWindow()
         {
-            this.ExtendClientAreaToDecorationsHint = true;
-            
             InitializeComponent();
         }
 

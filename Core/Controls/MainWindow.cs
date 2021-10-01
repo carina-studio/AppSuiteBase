@@ -51,9 +51,12 @@ namespace CarinaStudio.AppSuite.Controls
                     return;
 
                 // update content padding
-                this.Padding = this.WindowState != WindowState.Maximized
-                    ? new Thickness(0)
-                    : ExtendedClientAreaWindowConfiguration.ContentPaddingWhenMaximized;
+                this.Padding = this.WindowState switch
+                {
+                    WindowState.FullScreen
+                    or WindowState.Maximized => ExtendedClientAreaWindowConfiguration.ContentPaddingWhenMaximized,
+                    _ => new Thickness(0),
+                };
             });
 
             // restore window state
@@ -63,7 +66,16 @@ namespace CarinaStudio.AppSuite.Controls
                 this.Width = Math.Max(0, it.GetValueOrDefault(WindowWidthSettingKey));
                 this.WindowState = it.GetValueOrDefault(WindowStateSettingKey);
             });
+
+            // extend client area if needed
+            this.UpdateExtendingClientArea();
         }
+
+
+        /// <summary>
+        /// Check whether extending client area to title bar is enabled or not.
+        /// </summary>
+        protected virtual bool IsExtendingClientAreaEnabled { get; } = true;
 
 
         // Called when property of application changed.
@@ -151,9 +163,13 @@ namespace CarinaStudio.AppSuite.Controls
                 this.saveWindowSizeAction.Reschedule(SaveWindowSizeDelay);
             else if (property == WindowStateProperty)
             {
-                if (this.WindowState != WindowState.Minimized)
-                    this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, this.WindowState);
+                var windowState = this.WindowState;
+                if (windowState == WindowState.FullScreen)
+                    windowState = WindowState.Maximized; // [Workaround] Prevent launching in FullScreen mode because that layout may be incorrect on macOS
+                if (windowState != WindowState.Minimized)
+                    this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, windowState);
                 this.updateContentPaddingAction.Schedule();
+                this.UpdateExtendingClientArea();
             }
         }
 
@@ -172,6 +188,18 @@ namespace CarinaStudio.AppSuite.Controls
                 return;
             if (e.PropertyName == nameof(MainWindowViewModel.Title))
                 this.Title = viewModel.Title;
+        }
+
+
+        // Update client area extending state.
+        void UpdateExtendingClientArea()
+        {
+            if (!this.IsExtendingClientAreaEnabled || !ExtendedClientAreaWindowConfiguration.IsExtendedClientAreaSupported)
+            {
+                this.ExtendClientAreaToDecorationsHint = false;
+                return;
+            }
+            this.ExtendClientAreaToDecorationsHint = this.WindowState != WindowState.FullScreen;
         }
     }
 
