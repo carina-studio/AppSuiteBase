@@ -97,6 +97,7 @@ namespace CarinaStudio.AppSuite
         readonly ObservableList<Window> mainWindows = new ObservableList<Window>();
         PersistentStateImpl? persistentState;
         readonly string persistentStateFilePath;
+        ProcessInformation? processInfo;
         SettingsImpl? settings;
         readonly string settingsFilePath;
         Avalonia.Controls.ResourceDictionary? stringResource;
@@ -350,6 +351,9 @@ namespace CarinaStudio.AppSuite
         {
             // call base
             base.OnFrameworkInitializationCompleted();
+
+            // create process information
+            this.processInfo = new ProcessInformation(this);
 
             // parse arguments
             var desktopLifetime = (this.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime);
@@ -642,6 +646,12 @@ namespace CarinaStudio.AppSuite
         /// Get version of <see cref="PersistentState"/>.
         /// </summary>
         protected virtual int PersistentStateVersion { get => 1; }
+
+
+        /// <summary>
+        /// Get information of current process.
+        /// </summary>
+        public ProcessInformation ProcessInformation { get => this.processInfo ?? throw new InvalidOperationException("Application is not initialized yet."); }
 
 
         /// <summary>

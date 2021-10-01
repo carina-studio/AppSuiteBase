@@ -68,6 +68,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get information of current process.
+        /// </summary>
+        ProcessInformation ProcessInformation { get; }
+
+
+        /// <summary>
         /// Request restarting given main window.
         /// </summary>
         /// <param name="mainWindow">Main window to restart.</param>

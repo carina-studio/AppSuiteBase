@@ -31,5 +31,12 @@
 	<sys:String x:Key="String/ThemeMode.Dark">深色</sys:String>
 	<sys:String x:Key="String/ThemeMode.Light">淺色</sys:String>
 	<sys:String x:Key="String/ThemeMode.System">系統設定</sys:String>
+
+	<!-- TimeSpanConverter -->
+	<sys:String x:Key="String/TimeSpanConverter.Days">{0} 天 {1} 小時 {2} 分 {3}.{4:000} 秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Hours">{0} 小時 {1} 分 {2}.{3:000} 秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Milliseconds">{0} 毫秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Minutes">{0} 分 {1}.{2:000} 秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Seconds">{0}.{1:000} 秒</sys:String>
 	
 </ResourceDictionary>
