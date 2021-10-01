@@ -116,8 +116,35 @@ namespace CarinaStudio.AppSuite
         protected AppSuiteApplication()
         {
             // create logger
+            LogManager.Configuration = new NLog.Config.LoggingConfiguration().Also(it =>
+            {
+                var fileTarget = new NLog.Targets.FileTarget("file")
+                {
+                    FileName = Path.Combine(this.RootPrivateDirectoryPath, "Log", "log.txt"),
+                    Layout = "${longdate} ${pad:padding=-5:inner=${processid}} ${pad:padding=-4:inner=${threadid}} ${pad:padding=-5:inner=${level:uppercase=true}} ${logger:shortName=true}: ${message} ${all-event-properties} ${exception:format=tostring}",
+                };
+                var rule = new NLog.Config.LoggingRule("logToFile").Also(rule =>
+                {
+                    rule.LoggerNamePattern = "*";
+                    rule.SetLoggingLevels(NLog.LogLevel.Trace, NLog.LogLevel.Error);
+                    rule.Targets.Add(fileTarget);
+                });
+                it.AddTarget(fileTarget);
+                it.LoggingRules.Add(rule);
+            });
             this.LoggerFactory = new LoggerFactory(new ILoggerProvider[] { this.OnCreateLoggerProvider() });
             this.Logger = this.LoggerFactory.CreateLogger(this.GetType().Name);
+            this.Logger.LogDebug("Created");
+
+            // setup global exception handler
+            AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+            {
+                var exceptionObj = e.ExceptionObject;
+                if (exceptionObj is Exception exception)
+                    this.Logger.LogError(exception, "***** Unhandled application exception *****");
+                else
+                    this.Logger.LogError($"***** Unhandled application exception ***** {exceptionObj}");
+            };
 
             // get file paths
             this.persistentStateFilePath = Path.Combine(this.RootPrivateDirectoryPath, "PersistentState.json");
@@ -365,6 +392,17 @@ namespace CarinaStudio.AppSuite
             {
                 this.Logger.LogWarning("Enter debug mode");
                 this.IsDebugMode = true;
+            }
+            else
+            {
+                try
+                {
+                    LogManager.Configuration.FindRuleByName("logToFile").SetLoggingLevels(NLog.LogLevel.Debug, NLog.LogLevel.Error);
+                }
+                catch (Exception ex)
+                {
+                    this.Logger.LogError(ex, "Failed to setup default NLog rule");
+                }
             }
 
             // attach to lifetime
