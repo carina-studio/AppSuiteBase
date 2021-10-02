@@ -25,6 +25,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get theme mode which is currently applied to application.
+        /// </summary>
+        ThemeMode EffectiveThemeMode { get; }
+
+
+        /// <summary>
         /// Check whether application is running in debug mode or not.
         /// </summary>
         bool IsDebugMode { get; }

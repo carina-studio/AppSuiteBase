@@ -285,6 +285,12 @@ namespace CarinaStudio.AppSuite
         public static new AppSuiteApplication Current { get => (AppSuiteApplication)Application.Current; }
 
 
+        /// <summary>
+        /// Get theme mode which is currently applied to application.
+        /// </summary>
+        public ThemeMode EffectiveThemeMode { get; private set; } = ThemeMode.Dark;
+
+
         // Transform RGB color values.
         static Color GammaTransform(Color color, double gamma)
         {
@@ -1207,6 +1213,13 @@ namespace CarinaStudio.AppSuite
                 this.accentColorResources["ToggleSwitchFillOnPressed"] = new SolidColorBrush(sysAccentColorDark1);
                 this.accentColorResources["ToggleSwitchStrokeOnPointerOver"] = new SolidColorBrush(sysAccentColorLight1);
                 this.accentColorResources["ToggleSwitchStrokeOnPressed"] = new SolidColorBrush(sysAccentColorDark1);
+            }
+
+            // update property
+            if (this.EffectiveThemeMode != themeMode)
+            {
+                this.EffectiveThemeMode = themeMode;
+                this.OnPropertyChanged(nameof(EffectiveThemeMode));
             }
 
             // check state

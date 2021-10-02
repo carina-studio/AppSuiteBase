@@ -41,6 +41,7 @@
 		<PackageReference Include="CarinaStudio.AppBase.Configuration" Version="0.27.2.1002" />
 		<PackageReference Include="CarinaStudio.AppBase.Core" Version="0.27.2.1002" />
 		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="5.0.0" />
+		<PackageReference Include="Mono.Posix" Version="7.1.0-final.1.21458.1" />
 		<PackageReference Include="NLog" Version="4.7.11" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
 	</ItemGroup>
