@@ -3,9 +3,12 @@ using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.Styling;
+using CarinaStudio.AutoUpdate;
+using CarinaStudio.AutoUpdate.Resolvers;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
+using CarinaStudio.Net;
 using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
 using Microsoft.Extensions.Logging;
@@ -14,6 +17,7 @@ using NLog;
 using NLog.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -87,17 +91,19 @@ namespace CarinaStudio.AppSuite
         // Constants.
         const string DebugModeRequestedKey = "IsDebugModeRequested";
         const string RestoreStateRequestedKey = "IsRestoringStateRequested";
+        const int UpdateCheckingInterval = 3600000; // 1 hr
 
 
         // Fields.
         Avalonia.Controls.ResourceDictionary? accentColorResources;
+        ScheduledAction? checkUpdateInfoAction;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
         bool isShutdownStarted;
         readonly Dictionary<Window, MainWindowHolder> mainWindowHolders = new Dictionary<Window, MainWindowHolder>();
         readonly ObservableList<Window> mainWindows = new ObservableList<Window>();
         PersistentStateImpl? persistentState;
         readonly string persistentStateFilePath;
-        ProcessInformation? processInfo;
+        ProcessInfo? processInfo;
         SettingsImpl? settings;
         readonly string settingsFilePath;
         Avalonia.Controls.ResourceDictionary? stringResource;
@@ -187,6 +193,77 @@ namespace CarinaStudio.AppSuite
                 this.IsRestartingMainWindowsNeeded = isRestartingNeeded;
                 this.OnPropertyChanged(nameof(IsRestartingMainWindowsNeeded));
             }
+        }
+
+
+        /// <summary>
+        /// Check application update information asynchronously.
+        /// </summary>
+        /// <returns>Task to wait for checking.</returns>
+        public async Task<ApplicationUpdateInfo?> CheckUpdateInfoAsync()
+        {
+            // check state
+            this.VerifyAccess();
+            if (this.IsShutdownStarted)
+                return null;
+
+            // check package manifest URI
+            var packageManifestUri = this.PackageManifestUri;
+            if (packageManifestUri == null)
+            {
+                this.Logger.LogWarning("No package manifest URI specified to check update");
+                return null;
+            }
+
+            // schedule next checking
+            this.checkUpdateInfoAction?.Reschedule(UpdateCheckingInterval);
+
+            // check update by package manifest
+            var stopWatch = new Stopwatch().Also(it => it.Start());
+            var packageResolver = new JsonPackageResolver() { Source = new WebRequestStreamProvider(packageManifestUri) };
+            this.Logger.LogInformation("Start checking update");
+            try
+            {
+                await packageResolver.StartAndWaitAsync();
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Failed to check update");
+                return null;
+            }
+
+            // delay to make UX better
+            var delay = (1000 - stopWatch.ElapsedMilliseconds);
+            if (delay > 0)
+                await Task.Delay((int)delay);
+
+            // check version
+            var packageVersion = packageResolver.PackageVersion;
+            if (packageVersion == null)
+            {
+                this.Logger.LogError("No application version gotten from package manifest");
+                return null;
+            }
+            if (packageVersion <= this.Assembly.GetName().Version)
+            {
+                this.Logger.LogInformation("This is the latest application");
+                if (this.UpdateInfo != null)
+                {
+                    this.UpdateInfo = null;
+                    this.OnPropertyChanged(nameof(UpdateInfo));
+                }
+                return null;
+            }
+
+            // create update info
+            this.Logger.LogDebug($"New application version found: {packageVersion}");
+            var updateInfo = new ApplicationUpdateInfo(packageVersion, packageResolver.PageUri, packageResolver.PackageUri);
+            if (updateInfo != this.UpdateInfo)
+            {
+                this.UpdateInfo = updateInfo;
+                this.OnPropertyChanged(nameof(UpdateInfo));
+            }
+            return this.UpdateInfo;
         }
 
 
@@ -380,7 +457,7 @@ namespace CarinaStudio.AppSuite
             base.OnFrameworkInitializationCompleted();
 
             // create process information
-            this.processInfo = new ProcessInformation(this);
+            this.processInfo = new ProcessInfo(this);
 
             // parse arguments
             var desktopLifetime = (this.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime);
@@ -419,6 +496,16 @@ namespace CarinaStudio.AppSuite
                     }
                 };
             }
+
+            // start checking update
+            this.PackageManifestUri?.Let(it =>
+            {
+                this.checkUpdateInfoAction = new ScheduledAction(() =>
+                {
+                    _ = this.CheckUpdateInfoAsync();
+                });
+                this.checkUpdateInfoAction?.Schedule();
+            });
 
             // prepare
             _ = this.OnPrepareStartingAsync();
@@ -539,6 +626,9 @@ namespace CarinaStudio.AppSuite
 #endif
             }
 
+            // cancel checking update
+            this.checkUpdateInfoAction?.Cancel();
+
             // complete
             return Task.CompletedTask;
         }
@@ -657,6 +747,12 @@ namespace CarinaStudio.AppSuite
 #pragma warning restore CA1416
 
 
+        /// <summary>
+        /// Get URI of application package manifest.
+        /// </summary>
+        public virtual Uri? PackageManifestUri { get; }
+
+
         // Parse arguments to launch options.
         IDictionary<string, object> ParseArguments(string[] args)
         {
@@ -689,7 +785,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get information of current process.
         /// </summary>
-        public ProcessInformation ProcessInformation { get => this.processInfo ?? throw new InvalidOperationException("Application is not initialized yet."); }
+        public ProcessInfo ProcessInfo { get => this.processInfo ?? throw new InvalidOperationException("Application is not initialized yet."); }
 
 
         /// <summary>
@@ -947,6 +1043,12 @@ namespace CarinaStudio.AppSuite
             if (updateStringResources)
                 this.UpdateStringResources();
         }
+
+
+        /// <summary>
+        /// Get latest checked application update information.
+        /// </summary>
+        public ApplicationUpdateInfo? UpdateInfo { get; private set; }
 
 
         // Update string resource according to current culture.

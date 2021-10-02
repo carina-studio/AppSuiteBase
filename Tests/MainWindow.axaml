@@ -52,19 +52,6 @@
 				<StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
 					<TextBlock Text="{DynamicResource String/Common.OK}"/>
 
-					<StackPanel Margin="5" Orientation="Horizontal">
-						<TextBlock Text="CPU: "/>
-						<TextBlock Text="{Binding $parent[Window].Application.ProcessInformation.CpuUsagePercentage, StringFormat={}{0}%}"/>
-					</StackPanel>
-					<StackPanel Margin="5" Orientation="Horizontal">
-						<TextBlock Text="Memory: "/>
-						<TextBlock Text="{Binding $parent[Window].Application.ProcessInformation.PrivateMemoryUsage, Converter={x:Static appConverters:FileSizeConverter.Default}}"/>
-					</StackPanel>
-					<StackPanel Margin="5" Orientation="Horizontal">
-						<TextBlock Text="UI response time: "/>
-						<TextBlock Text="{Binding $parent[Window].Application.ProcessInformation.UIResponseDuration, Converter={x:Static appConverters:TimeSpanConverter.Default}}"/>
-					</StackPanel>
-
 					<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5"/>
 					<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
 

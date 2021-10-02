@@ -11,7 +11,7 @@ namespace CarinaStudio.AppSuite
     /// <summary>
     /// Provide information of current process.
     /// </summary>
-    public class ProcessInformation : INotifyPropertyChanged
+    public class ProcessInfo : INotifyPropertyChanged
     {
         // Constants.
         const int ProcessInfoUpdateInterval = 1000;
@@ -32,11 +32,11 @@ namespace CarinaStudio.AppSuite
 
 
         // Constructor.
-        internal ProcessInformation(AppSuiteApplication app)
+        internal ProcessInfo(AppSuiteApplication app)
         {
             // setup fields and properties
             this.app = app;
-			this.logger = app.LoggerFactory.CreateLogger(nameof(ProcessInformation));
+			this.logger = app.LoggerFactory.CreateLogger(nameof(ProcessInfo));
             this.ProcessId = this.process.Id;
 
             // create scheduled actions

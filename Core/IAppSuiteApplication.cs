@@ -12,6 +12,13 @@ namespace CarinaStudio.AppSuite
     public interface IAppSuiteApplication : IApplication
     {
         /// <summary>
+        /// Check application update information asynchronously.
+        /// </summary>
+        /// <returns>Task to wait for checking.</returns>
+        public Task<ApplicationUpdateInfo?> CheckUpdateInfoAsync();
+
+
+        /// <summary>
         /// Get key of application culture setting.
         /// </summary>
         SettingKey<ApplicationCulture> CultureSettingKey { get; }
@@ -68,9 +75,15 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get URI of application package manifest.
+        /// </summary>
+        Uri? PackageManifestUri { get; }
+
+
+        /// <summary>
         /// Get information of current process.
         /// </summary>
-        ProcessInformation ProcessInformation { get; }
+        ProcessInfo ProcessInfo { get; }
 
 
         /// <summary>
@@ -120,5 +133,11 @@ namespace CarinaStudio.AppSuite
         /// Get key of theme mode setting.
         /// </summary>
         SettingKey<ThemeMode> ThemeModeSettingKey { get; }
+
+
+        /// <summary>
+        /// Get latest checked application update information.
+        /// </summary>
+        ApplicationUpdateInfo? UpdateInfo { get; }
     }
 }

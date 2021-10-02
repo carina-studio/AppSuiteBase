@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.Controls;
 using CarinaStudio.ViewModels;
+using System;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Tests
@@ -52,5 +53,8 @@ namespace CarinaStudio.AppSuite.Tests
             return base.OnSelectEnteringDebugMode();
 #endif
         }
+
+
+        public override System.Uri? PackageManifestUri => new Uri("https://raw.githubusercontent.com/carina-studio/ULogViewer/master/PackageManifest.json");
     }
 }
