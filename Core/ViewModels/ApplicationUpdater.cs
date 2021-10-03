@@ -30,6 +30,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 		static readonly ObservableProperty<bool> IsCheckingForUpdateProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsCheckingForUpdate));
 		static readonly ObservableProperty<bool> IsLatestVersionProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsLatestVersion));
 		static readonly ObservableProperty<bool> IsPreparingForUpdateProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsPreparingForUpdate));
+		static readonly ObservableProperty<bool> IsShutdownNeededToContinueUpdateProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsShutdownNeededToContinueUpdate));
 		static readonly ObservableProperty<bool> IsUpdatePreparationProgressAvailableProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsUpdatePreparationProgressAvailable));
 		static readonly ObservableProperty<Uri?> ReleasePageUriProperty = ObservableProperty.Register<ApplicationUpdater, Uri?>(nameof(ReleasePageUri));
 		static readonly ObservableProperty<Uri?> UpdatePackageUriProperty = ObservableProperty.Register<ApplicationUpdater, Uri?>(nameof(UpdatePackageUri));
@@ -149,6 +150,12 @@ namespace CarinaStudio.AppSuite.ViewModels
 		/// Check whether update preparation is on-going or not.
 		/// </summary>
 		public bool IsPreparingForUpdate { get => this.GetValue(IsPreparingForUpdateProperty); }
+
+
+		/// <summary>
+		/// Check whether shutting down is needed to continue update or not.
+		/// </summary>
+		public bool IsShutdownNeededToContinueUpdate { get => this.GetValue(IsShutdownNeededToContinueUpdateProperty); }
 
 
 		/// <summary>
@@ -296,8 +303,8 @@ namespace CarinaStudio.AppSuite.ViewModels
 			}
 
 			// shutdown
-			this.Logger.LogWarning("Shutdown for updating");
-			this.Application.Shutdown();
+			this.Logger.LogWarning("Need to shutdown to continue updating");
+			this.SetValue(IsShutdownNeededToContinueUpdateProperty, true);
 		}
 
 

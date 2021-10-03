@@ -19,6 +19,9 @@
 		<Thickness x:Key="Thickness/ApplicationInfoDialog.AppIcon.Margin">0,0,15,0</Thickness>
 		<Thickness x:Key="Thickness/ApplicationInfoDialog.AppTitle.Margin">0,0,0,5</Thickness>
 
+		<!-- ApplicationUpdateDialog -->
+		<sys:Double x:Key="Double/ApplicationUpdateDialog.Width">500</sys:Double>
+
 		<!-- Dialog -->
 		<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#ffffff</Color>
 		<Color x:Key="Color/Dialog.TextBlock.Border.Header1">#000000</Color>

@@ -1,0 +1,68 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
+        xmlns:ia="using:Avalonia.Xaml.Interactivity"
+        xmlns:iaCore="using:Avalonia.Xaml.Interactions.Core"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="CarinaStudio.AppSuite.Controls.ApplicationUpdateDialogImpl"
+        Classes="Dialog"
+        Title="{DynamicResource String/ApplicationUpdateDialog.Title}"
+        Width="{DynamicResource Double/ApplicationUpdateDialog.Width}">
+
+	<DockPanel>
+
+		<!-- Control buttons -->
+		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
+			<StackPanel Classes="Dialog_ControlButtonsPanel">
+				<Button Classes="Dialog_ControlButton" Command="{Binding CheckForUpdateCommand}" Content="{DynamicResource String/ApplicationUpdateDialog.CheckForUpdate}" IsEnabled="{Binding !IsPreparingForUpdate}"/>
+				<Panel IsVisible="{Binding !IsLatestVersion}">
+					<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].DownloadUpdatePackage}" Content="{DynamicResource String/ApplicationUpdateDialog.DownloadUpdatePackage}" IsVisible="{Binding !IsAutoUpdateSupported}"/>
+					<Button Classes="Dialog_ControlButton" Command="{Binding StartUpdatingCommand}" Content="{DynamicResource String/ApplicationUpdateDialog.StartUpdating}" IsVisible="{Binding IsAutoUpdateSupported}"/>
+				</Panel>
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.Cancel}"/>
+			</StackPanel>
+		</Border>
+
+		<!-- Content -->
+		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*">
+
+			<!-- Icon -->
+			<Panel Height="{DynamicResource Double/MessageDialog.Icon.Size}" IsVisible="{Binding !IsCheckingForUpdate}" Margin="{DynamicResource Thickness/MessageDialog.Icon.Margin}" VerticalAlignment="Center" Width="{DynamicResource Double/MessageDialog.Icon.Size}">
+				<DrawingPresenter Classes="Icon" Drawing="{DynamicResource Drawing/Icon.OK.Colored}" IsVisible="{Binding IsLatestVersion}"/>
+				<DrawingPresenter Classes="Icon" Drawing="{DynamicResource Drawing/Icon.Update.Colored}" IsVisible="{Binding !IsLatestVersion}"/>
+			</Panel>
+			<Border Height="{DynamicResource Double.MessageDialog.Icon.Size}" IsVisible="{Binding IsCheckingForUpdate}" Margin="{DynamicResource Thickness/MessageDialog.Icon.Margin}" VerticalAlignment="Center" Width="{DynamicResource Double/MessageDialog.Icon.Size}">
+				<DrawingPresenter Classes="Icon" Drawing="{DynamicResource Drawing/Icon.Refresh}"/>
+			</Border>
+
+			<!-- Message and progress -->
+			<StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
+
+				<!-- Message -->
+				<Panel IsVisible="{Binding !IsPreparingForUpdate}">
+					<Panel IsVisible="{Binding !IsCheckingForUpdate}">
+						<TextBlock IsVisible="{Binding IsLatestVersion}" Text="{Binding $parent[Window].LatestVersionMessage}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+						<StackPanel IsVisible="{Binding !IsLatestVersion}" Orientation="Vertical">
+							<TextBlock Text="{Binding $parent[Window].NewVersionFoundMessage}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+							<controls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" IsVisible="{Binding !IsLatestVersion}" Text="{DynamicResource String/ApplicationUpdateDialog.ReleasePage}" Uri="{Binding ReleasePageUri}"/>
+						</StackPanel>
+					</Panel>
+					<TextBlock IsVisible="{Binding IsCheckingForUpdate}" Text="{DynamicResource String/ApplicationUpdateDialog.CheckingForUpdate}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+				</Panel>
+				<TextBlock IsVisible="{Binding IsPreparingForUpdate}" Text="{Binding UpdatePreparationMessage}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+
+				<!-- Progress bar -->
+				<StackPanel IsVisible="{Binding IsPreparingForUpdate}" Orientation="Vertical">
+					<Separator Classes="Dialog_Separator_Small"/>
+					<ProgressBar IsIndeterminate="{Binding !IsUpdatePreparationProgressAvailable}" Maximum="100" Value="{Binding UpdatePreparationProgressPercentage}"/>
+				</StackPanel>
+				
+			</StackPanel>
+			
+		</Grid>
+		
+	</DockPanel>
+	
+</Window>

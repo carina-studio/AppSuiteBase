@@ -74,6 +74,7 @@
 	<GeometryDrawing x:Key="Drawing/Icon.Settings" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Settings}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Undo" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Undo}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Update" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Update}"/>
+	<GeometryDrawing x:Key="Drawing/Icon.Update.Colored" Brush="{DynamicResource Brush/Icon.Information}" Geometry="{StaticResource Geometry/Icon.Update}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Waiting" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Waiting}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Warning" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Warning}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Warning.Colored" Brush="{DynamicResource Brush/Icon.Warning}" Geometry="{StaticResource Geometry/Icon.Warning}"/>
