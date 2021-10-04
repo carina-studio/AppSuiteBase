@@ -58,13 +58,16 @@ namespace CarinaStudio.AppSuite.Controls
                 // check state
                 if (!this.IsOpened || !this.ExtendClientAreaToDecorationsHint)
                     return;
+                var windowState = this.WindowState;
+                if (windowState == WindowState.Minimized)
+                    return;
 
                 // update content padding
-                this.Padding = this.WindowState switch
+                this.Padding = windowState switch
                 {
                     WindowState.FullScreen
                     or WindowState.Maximized => ExtendedClientAreaWindowConfiguration.ContentPaddingWhenMaximized,
-                    _ => new Thickness(0),
+                    _ => ExtendedClientAreaWindowConfiguration.ContentPadding,
                 };
             });
 

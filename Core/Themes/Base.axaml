@@ -105,7 +105,7 @@
 
 		<!-- TabControl -->
 		<sys:Double x:Key="Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace">20</sys:Double>
-		<Thickness x:Key="Thickness/TabControl.TabStrip.Padding">10,0,10,0</Thickness>
+		<Thickness x:Key="Thickness/TabControl.TabStrip.Padding">6,0,6,0</Thickness>
 
 		<!-- TabItem -->
 		<Color x:Key="Color/TabItem.Header.Background">#ffffff</Color>

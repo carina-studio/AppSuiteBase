@@ -10,7 +10,16 @@ namespace CarinaStudio.AppSuite.Controls
     public static class ExtendedClientAreaWindowConfiguration
     {
         /// <summary>
-        /// Get padding of window content when maximized.
+        /// Get padding of window content when <see cref="Avalonia.Controls.Window.WindowState"/> is <see cref="WindowState.Normal"/>.
+        /// </summary>
+        public static Thickness ContentPadding { get; } = Global.Run(() =>
+        {
+            return new Thickness(0, 6, 0, 0); // Windows 10
+        });
+
+
+        /// <summary>
+        /// Get padding of window content when <see cref="Avalonia.Controls.Window.WindowState"/> is <see cref="WindowState.Maximized"/> or <see cref="WindowState.FullScreen"/>.
         /// </summary>
         public static Thickness ContentPaddingWhenMaximized { get; } = Global.Run(() =>
         {
