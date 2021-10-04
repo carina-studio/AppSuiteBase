@@ -244,7 +244,7 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogError("No application version gotten from package manifest");
                 return null;
             }
-            if (packageVersion <= this.Assembly.GetName().Version)
+            if (!this.ForceAcceptingUpdateInfo && packageVersion <= this.Assembly.GetName().Version)
             {
                 this.Logger.LogInformation("This is the latest application");
                 if (this.UpdateInfo != null)
@@ -289,6 +289,12 @@ namespace CarinaStudio.AppSuite
         /// Get theme mode which is currently applied to application.
         /// </summary>
         public ThemeMode EffectiveThemeMode { get; private set; } = ThemeMode.Dark;
+
+
+        /// <summary>
+        /// Check whether retrieved application update info should be always accepted or not. This is designed for debugging purpose.
+        /// </summary>
+        protected virtual bool ForceAcceptingUpdateInfo { get; } = false;
 
 
         // Transform RGB color values.
