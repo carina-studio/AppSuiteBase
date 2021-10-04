@@ -43,10 +43,8 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Generate result.
-		protected override async Task<object?> GenerateResultAsync(CancellationToken cancellationToken)
-		{
-			return this.textBox.Text.AsNonNull();
-		}
+		protected override Task<object?> GenerateResultAsync(CancellationToken cancellationToken) =>
+			Task.FromResult((object?)this.textBox.Text.AsNonNull());
 
 
 		// Initialize.

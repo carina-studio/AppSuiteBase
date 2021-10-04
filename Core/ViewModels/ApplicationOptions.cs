@@ -9,7 +9,6 @@ namespace CarinaStudio.AppSuite.ViewModels
     /// <summary>
     /// View-model for application options UI.
     /// </summary>
-    /// <typeparam name="TApp"></typeparam>
     public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     {
         /// <summary>
