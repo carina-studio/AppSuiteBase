@@ -45,7 +45,7 @@ namespace CarinaStudio.AppSuite.Tests
         {
             using var appUpdater = new ViewModels.ApplicationUpdater();
             
-            var result = await new ApplicationUpdateDialog<ViewModels.ApplicationUpdater>(appUpdater)
+            var result = await new ApplicationUpdateDialog(appUpdater)
             {
                 CheckForUpdateWhenShowing = true
             }.ShowDialog(this);

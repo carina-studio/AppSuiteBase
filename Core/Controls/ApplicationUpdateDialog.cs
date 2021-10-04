@@ -1,4 +1,5 @@
 ﻿using CarinaStudio.AppSuite.ViewModels;
+using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
 using System;
 using System.Threading.Tasks;
@@ -8,19 +9,18 @@ namespace CarinaStudio.AppSuite.Controls
     /// <summary>
     /// Dialog to update application.
     /// </summary>
-    /// <typeparam name="TAppUpdater">View-model of dialog.</typeparam>
-    public class ApplicationUpdateDialog<TAppUpdater> : CommonDialog<ApplicationUpdateDialogResult> where TAppUpdater : ApplicationUpdater
+    public class ApplicationUpdateDialog : CommonDialog<ApplicationUpdateDialogResult>
     {
         // Fields.
-        readonly TAppUpdater appUpdater;
+        readonly ApplicationUpdater appUpdater;
         bool checkForUpdateWhenShowing;
 
 
         /// <summary>
-        /// Initialize new <see cref="ApplicationUpdateDialog{TAppUpdater}"/> instance.
+        /// Initialize new <see cref="ApplicationUpdateDialog"/> instance.
         /// </summary>
         /// <param name="appUpdater">View-model of dialog.</param>
-        public ApplicationUpdateDialog(TAppUpdater appUpdater) => this.appUpdater = appUpdater;
+        public ApplicationUpdateDialog(ApplicationUpdater appUpdater) => this.appUpdater = appUpdater;
 
 
         /// <summary>
@@ -35,6 +35,43 @@ namespace CarinaStudio.AppSuite.Controls
                 this.VerifyShowing();
                 this.checkForUpdateWhenShowing = value;
             }
+        }
+
+
+        /// <summary>
+        /// Get latest time of showing update info to user.
+        /// </summary>
+        public static DateTime? LatestShownTime
+        {
+            get => AppSuiteApplication.Current.PersistentState.GetValueOrDefault(ApplicationUpdateDialogImpl.LatestNotifiedTimeKey);
+        }
+
+
+        /// <summary>
+        /// Get latest version of application update shown to user.
+        /// </summary>
+        public static Version? LatestShownVersion
+        {
+            get
+            {
+                var str = AppSuiteApplication.Current.PersistentState.GetValueOrDefault(ApplicationUpdateDialogImpl.LatestNotifiedVersionKey);
+                if (Version.TryParse(str, out var version))
+                    return version;
+                return null;
+            }
+        }
+
+
+        /// <summary>
+        /// Reset <see cref="LatestShownTime"/> and <see cref="LatestShownVersion"/>.
+        /// </summary>
+        public static void ResetLatestShownInfo()
+        {
+            AppSuiteApplication.Current.PersistentState.Let(it =>
+            {
+                it.ResetValue(ApplicationUpdateDialogImpl.LatestNotifiedTimeKey);
+                it.ResetValue(ApplicationUpdateDialogImpl.LatestNotifiedVersionKey);
+            });
         }
 
 
@@ -56,7 +93,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
     /// <summary>
-    /// Result of <see cref="ApplicationUpdateDialog{TAppUpdater}"/>.
+    /// Result of <see cref="ApplicationUpdateDialog"/>.
     /// </summary>
     public enum ApplicationUpdateDialogResult
     {

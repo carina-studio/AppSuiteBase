@@ -4,8 +4,11 @@ using Avalonia.Platform;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
+using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -16,17 +19,22 @@ namespace CarinaStudio.AppSuite.Controls
     public abstract class MainWindow<TViewModel> : Window where TViewModel : MainWindowViewModel
     {
         // Constants.
+        const int AppUpdateNotificationDelay = 1000;
         const int SaveWindowSizeDelay = 300;
 
 
         // Static fields.
+        static bool IsNotifyingAppUpdateFound;
         static readonly SettingKey<int> WindowHeightSettingKey = new SettingKey<int>("MainWindow.Height", 600);
         static readonly SettingKey<WindowState> WindowStateSettingKey = new SettingKey<WindowState>("MainWindow.State", WindowState.Maximized);
         static readonly SettingKey<int> WindowWidthSettingKey = new SettingKey<int>("MainWindow.Width", 800);
 
 
         // Fields.
+        readonly ScheduledAction notifyAppUpdateFoundAction;
+        long openedTime;
         readonly ScheduledAction saveWindowSizeAction;
+        readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
         readonly ScheduledAction updateContentPaddingAction;
 
 
@@ -36,6 +44,7 @@ namespace CarinaStudio.AppSuite.Controls
         protected MainWindow()
         {
             // create scheduled actions
+            this.notifyAppUpdateFoundAction = new ScheduledAction(this.NotifyApplicationUpdateFound);
             this.saveWindowSizeAction = new ScheduledAction(() =>
             {
                 if (this.WindowState == WindowState.Normal)
@@ -78,6 +87,64 @@ namespace CarinaStudio.AppSuite.Controls
         protected virtual bool IsExtendingClientAreaEnabled { get; } = true;
 
 
+        /// <summary>
+        /// Show dialog if it is needed to notify user that application update has been found.
+        /// </summary>
+        protected async void NotifyApplicationUpdateFound()
+        {
+            // check state
+            this.VerifyAccess();
+            if (!this.IsOpened || !this.IsActive)
+                return;
+            if (IsNotifyingAppUpdateFound)
+                return;
+            if (this.HasDialogs)
+                return;
+
+            // check version
+            var updateInfo = this.Application.UpdateInfo;
+            if (updateInfo == null)
+                return;
+            if (updateInfo.Version == ApplicationUpdateDialog.LatestShownVersion)
+                return;
+
+            // notify later
+            var delay = AppUpdateNotificationDelay - (this.stopWatch.ElapsedMilliseconds - this.openedTime);
+            if (delay > 0)
+            {
+                this.notifyAppUpdateFoundAction.Reschedule((int)delay);
+                return;
+            }
+
+            // show dialog
+            using var updater = this.OnCreateApplicationUpdater();
+            var dialogResult = ApplicationUpdateDialogResult.None;
+            IsNotifyingAppUpdateFound = true;
+            try
+            {
+                dialogResult = await new ApplicationUpdateDialog(updater)
+                {
+                    CheckForUpdateWhenShowing = false
+                }.ShowDialog(this);
+            }
+            finally
+            {
+                IsNotifyingAppUpdateFound = false;
+            }
+            if (this.IsClosed)
+                return;
+
+            // shutdown to update
+            if (dialogResult == ApplicationUpdateDialogResult.ShutdownNeeded)
+            {
+                this.Logger.LogWarning("Prepare shutting down to update application");
+                await this.OnPrepareShuttingDownForApplicationUpdate();
+                this.Logger.LogWarning("Shut down to update application");
+                this.Application.Shutdown();
+            }
+        }
+
+
         // Called when property of application changed.
         void OnApplicationPropertyChanged(object? sender, PropertyChangedEventArgs e) => this.OnApplicationPropertyChanged(e);
 
@@ -87,7 +154,10 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         /// <param name="e">Event data.</param>
         protected virtual void OnApplicationPropertyChanged(PropertyChangedEventArgs e)
-        { }
+        {
+            if (e.PropertyName == nameof(IAppSuiteApplication.UpdateInfo))
+                this.notifyAppUpdateFoundAction.Schedule();
+        }
 
 
         /// <summary>
@@ -112,8 +182,16 @@ namespace CarinaStudio.AppSuite.Controls
         {
             this.DataContext = null;
             this.Application.PropertyChanged -= this.OnApplicationPropertyChanged;
+            this.notifyAppUpdateFoundAction.Cancel();
             base.OnClosed(e);
         }
+
+
+        /// <summary>
+        /// Called to create view-model for application update dialog.
+        /// </summary>
+        /// <returns>View-model for application update dialog.</returns>
+        protected virtual ApplicationUpdater OnCreateApplicationUpdater() => new ApplicationUpdater();
 
 
         /// <summary>
@@ -133,6 +211,9 @@ namespace CarinaStudio.AppSuite.Controls
         /// <param name="e">Event data.</param>
         protected override void OnOpened(EventArgs e)
         {
+            // keep time
+            this.openedTime = this.stopWatch.ElapsedMilliseconds;
+
             // call base
             base.OnOpened(e);
 
@@ -141,7 +222,19 @@ namespace CarinaStudio.AppSuite.Controls
 
             // update content padding
             this.updateContentPaddingAction.Schedule();
+
+            // notify application update found
+            if (this.Application.MainWindows.Count == 1)
+                ApplicationUpdateDialog.ResetLatestShownInfo();
+            this.notifyAppUpdateFoundAction.Schedule();
         }
+
+
+        /// <summary>
+        /// Called to prepare before shutting down application to update.
+        /// </summary>
+        /// <returns>Task of preparation.</returns>
+        protected virtual Task OnPrepareShuttingDownForApplicationUpdate() => Task.CompletedTask;
 
 
         /// <summary>
@@ -159,8 +252,18 @@ namespace CarinaStudio.AppSuite.Controls
             }
             else if (property == ExtendClientAreaToDecorationsHintProperty)
                 this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.OSXThickTitleBar | ExtendClientAreaChromeHints.PreferSystemChrome;
+            else if (property == HasDialogsProperty)
+            {
+                if (!this.HasDialogs)
+                    this.notifyAppUpdateFoundAction.Reschedule(AppUpdateNotificationDelay);
+            }
             else if (property == HeightProperty || property == WidthProperty)
                 this.saveWindowSizeAction.Reschedule(SaveWindowSizeDelay);
+            else if (property == IsActiveProperty)
+            {
+                if (this.IsActive)
+                    this.notifyAppUpdateFoundAction.Schedule();
+            }
             else if (property == WindowStateProperty)
             {
                 var windowState = this.WindowState;

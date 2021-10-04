@@ -108,7 +108,8 @@ namespace CarinaStudio.AppSuite.Controls
 		// Called when opened.
 		protected override void OnOpened(EventArgs e)
 		{
-			this.Application.StringsUpdated -= this.OnApplicationStringsUpdated;
+			this.Application.StringsUpdated += this.OnApplicationStringsUpdated;
+			this.UpdateLatestNotifiedInfo();
 			this.UpdateMessages();
 			if (this.CheckForUpdateWhenOpening && this.DataContext is ApplicationUpdater updater)
 				updater.CheckForUpdateCommand.TryExecute();
@@ -154,18 +155,27 @@ namespace CarinaStudio.AppSuite.Controls
 			}
 			else if (e.PropertyName == nameof(ApplicationUpdater.UpdateVersion))
 			{
-				var version = updater.UpdateVersion;
-				if (version != null)
-				{
-					this.PersistentState.SetValue<DateTime>(LatestNotifiedTimeKey, DateTime.Now);
-					this.PersistentState.SetValue<string>(LatestNotifiedVersionKey, version.ToString());
-				}
-				else
-				{
-					this.PersistentState.ResetValue(LatestNotifiedTimeKey);
-					this.PersistentState.ResetValue(LatestNotifiedVersionKey);
-				}
+				this.UpdateLatestNotifiedInfo();
 				this.UpdateMessages();
+			}
+		}
+
+
+		// Update latest info shown to user.
+		void UpdateLatestNotifiedInfo()
+        {
+			if (this.DataContext is not ApplicationUpdater updater)
+				return;
+			var version = updater.UpdateVersion;
+			if (version != null)
+			{
+				this.PersistentState.SetValue<DateTime>(LatestNotifiedTimeKey, DateTime.Now);
+				this.PersistentState.SetValue<string>(LatestNotifiedVersionKey, version.ToString());
+			}
+			else
+			{
+				this.PersistentState.ResetValue(LatestNotifiedTimeKey);
+				this.PersistentState.ResetValue(LatestNotifiedVersionKey);
 			}
 		}
 
