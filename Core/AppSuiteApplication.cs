@@ -299,15 +299,15 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Get key of application culture setting.
-        /// </summary>
-        public virtual SettingKey<ApplicationCulture> CultureSettingKey { get; } = new SettingKey<ApplicationCulture>("Culture", ApplicationCulture.System);
-
-
-        /// <summary>
         /// Get current culture info of application.
         /// </summary>
         public override CultureInfo CultureInfo { get => cultureInfo; }
+
+
+        /// <summary>
+        /// Get key of application culture setting.
+        /// </summary>
+        public virtual SettingKey<ApplicationCulture> CultureSettingKey { get; } = new SettingKey<ApplicationCulture>("Culture", ApplicationCulture.System);
 
 
         /// <summary>

@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<AssemblyVersion>0.9.0.1004</AssemblyVersion>
-		<Version>0.9.0.1004</Version>
+		<AssemblyVersion>0.10.0.1004</AssemblyVersion>
+		<Version>0.10.0.1004</Version>
 		<TargetFrameworks>net5.0;net5.0-windows10.0.17763.0</TargetFrameworks>
 		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Core</AssemblyName>
@@ -48,6 +48,12 @@
 		<PackageReference Include="Mono.Posix" Version="7.1.0-final.1.21458.1" />
 		<PackageReference Include="NLog" Version="4.7.11" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="1.7.4" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+			<_Parameter1>$(AssemblyName).Tests</_Parameter1>
+		</AssemblyAttribute>
 	</ItemGroup>
 
 </Project>

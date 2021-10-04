@@ -20,7 +20,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Fields.
-        readonly AppSuiteApplication app;
+        readonly IAppSuiteApplication app;
 		readonly ILogger logger;
 		long previousProcessInfoUpdateTime;
 		TimeSpan previousTotalProcessorTime;
@@ -32,7 +32,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Constructor.
-        internal ProcessInfo(AppSuiteApplication app)
+        internal ProcessInfo(IAppSuiteApplication app)
         {
             // setup fields and properties
             this.app = app;
