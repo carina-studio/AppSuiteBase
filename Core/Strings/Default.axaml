@@ -32,6 +32,13 @@
 	<sys:String x:Key="String/ApplicationUpdateDialog.StartUpdating">Update</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.Title">Application update</sys:String>
 
+	<!-- ApplicationUpdater -->
+	<sys:String x:Key="String/ApplicationUpdater.DownloadingAutoUpdater">Downloading auto updating component ({0})…</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.FailedToPrepareForUpdate">Failed to prepare for update.</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.FailedToStartAutoUpdater">Failed to start auto updater.</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.PreparingForUpdate">Preparing for update…</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.ReleasePage">Changes in new version</sys:String>
+
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Add">Add</sys:String>
 	<sys:String x:Key="String/Common.Cancel">Cancel</sys:String>

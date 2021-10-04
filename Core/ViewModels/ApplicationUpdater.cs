@@ -246,7 +246,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 					return;
 				default:
 					this.Logger.LogError("Update preparation was failed");
-					this.ErrorMessageGenerated?.Invoke(this, new MessageEventArgs(this.Application.GetStringNonNull("AppUpdater.FailedToPrepareForUpdate")));
+					this.ErrorMessageGenerated?.Invoke(this, new MessageEventArgs(this.Application.GetStringNonNull("ApplicationUpdater.FailedToPrepareForUpdate")));
 					return;
 			}
 
@@ -277,7 +277,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 				if (mainModule == null)
 				{
 					this.Logger.LogError("Unable to get information of current process");
-					this.ErrorMessageGenerated?.Invoke(this, new MessageEventArgs(this.Application.GetStringNonNull("AppUpdater.FailedToPrepareForUpdate")));
+					this.ErrorMessageGenerated?.Invoke(this, new MessageEventArgs(this.Application.GetStringNonNull("ApplicationUpdater.FailedToPrepareForUpdate")));
 					return;
 				}
 				var useDarkMode = this.Application.EffectiveThemeMode == ThemeMode.Dark;
@@ -298,7 +298,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 			catch (Exception ex)
 			{
 				this.Logger.LogError(ex, "Unable to start auto updater");
-				this.ErrorMessageGenerated?.Invoke(this, new MessageEventArgs(this.Application.GetStringNonNull("AppUpdater.FailedToStartAutoUpdater")));
+				this.ErrorMessageGenerated?.Invoke(this, new MessageEventArgs(this.Application.GetStringNonNull("ApplicationUpdater.FailedToStartAutoUpdater")));
 				return;
 			}
 
@@ -320,12 +320,12 @@ namespace CarinaStudio.AppSuite.ViewModels
 					var downloadedSizeString = this.auUpdater.DownloadedPackageSize.ToFileSizeString();
 					var packageSize = this.auUpdater.PackageSize.GetValueOrDefault();
 					if (packageSize > 0)
-						this.SetValue(UpdatePreparationMessageProperty, this.Application.GetFormattedString("AppUpdater.DownloadingAutoUpdater", $"{downloadedSizeString} / {packageSize.ToFileSizeString()}"));
+						this.SetValue(UpdatePreparationMessageProperty, this.Application.GetFormattedString("ApplicationUpdater.DownloadingAutoUpdater", $"{downloadedSizeString} / {packageSize.ToFileSizeString()}"));
 					else
-						this.SetValue(UpdatePreparationMessageProperty, this.Application.GetFormattedString("AppUpdater.DownloadingAutoUpdater", downloadedSizeString));
+						this.SetValue(UpdatePreparationMessageProperty, this.Application.GetFormattedString("ApplicationUpdater.DownloadingAutoUpdater", downloadedSizeString));
 				}
 				else
-					this.SetValue(UpdatePreparationMessageProperty, this.Application.GetString("AppUpdater.PreparingForUpdate"));
+					this.SetValue(UpdatePreparationMessageProperty, this.Application.GetString("ApplicationUpdater.PreparingForUpdate"));
 			}
 			else
 				this.SetValue(UpdatePreparationMessageProperty, null);

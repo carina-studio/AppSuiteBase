@@ -29,6 +29,13 @@
 	<sys:String x:Key="String/ApplicationUpdateDialog.NewVersionFound">已經有新的 {0} 版本：{1}</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.StartUpdating">更新</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.Title">應用程式更新</sys:String>
+
+	<!-- ApplicationUpdater -->
+	<sys:String x:Key="String/ApplicationUpdater.DownloadingAutoUpdater">正在下載自動更新元件 ({0})…</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.FailedToPrepareForUpdate">自動升級準備失敗。</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.FailedToStartAutoUpdater">無法啟動自動更新元件。</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.PreparingForUpdate">正在準備更新…</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.ReleasePage">新版本中的變更</sys:String>
 	
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Add">加入</sys:String>
