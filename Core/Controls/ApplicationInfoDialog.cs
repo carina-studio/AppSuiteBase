@@ -7,18 +7,17 @@ namespace CarinaStudio.AppSuite.Controls
     /// <summary>
     /// Application information dialog.
     /// </summary>
-    /// <typeparam name="TAppInfo">Type of view-model.</typeparam>
-    public class ApplicationInfoDialog<TAppInfo> : CommonDialog<object?> where TAppInfo : ApplicationInfo
+    public class ApplicationInfoDialog : CommonDialog<object?>
     {
         // Fields.
-        readonly TAppInfo appInfo;
+        readonly ApplicationInfo appInfo;
 
 
         /// <summary>
-        /// Initialize new <see cref="ApplicationInfoDialog{TAppInfo}"/> instance.
+        /// Initialize new <see cref="ApplicationInfoDialog"/> instance.
         /// </summary>
         /// <param name="appInfo">View-model.</param>
-        public ApplicationInfoDialog(TAppInfo appInfo) => this.appInfo = appInfo;
+        public ApplicationInfoDialog(ApplicationInfo appInfo) => this.appInfo = appInfo;
 
 
         /// <summary>
