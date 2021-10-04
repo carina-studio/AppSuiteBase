@@ -3,6 +3,7 @@ using Avalonia.Markup.Xaml;
 using CarinaStudio.Controls;
 using CarinaStudio.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Tests
@@ -35,6 +36,13 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         protected override ViewModel OnCreateMainWindowViewModel(object? param) => new Workspace();
+
+
+        protected override void OnNewInstanceLaunched(IDictionary<string, object> launchOptions)
+        {
+            base.OnNewInstanceLaunched(launchOptions);
+            this.ShowMainWindow();
+        }
 
 
         protected override async Task OnPrepareStartingAsync()

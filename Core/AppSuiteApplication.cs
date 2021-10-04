@@ -20,7 +20,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.IO.Pipes;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 #if WINDOWS10_0_17763_0_OR_GREATER
 using Windows.UI.ViewManagement;
@@ -101,6 +104,9 @@ namespace CarinaStudio.AppSuite
         bool isShutdownStarted;
         readonly Dictionary<Window, MainWindowHolder> mainWindowHolders = new Dictionary<Window, MainWindowHolder>();
         readonly ObservableList<Window> mainWindows = new ObservableList<Window>();
+        readonly CancellationTokenSource multiInstancesServerCancellationTokenSource = new CancellationTokenSource();
+        NamedPipeServerStream? multiInstancesServerStream;
+        string multiInstancesServerStreamName = "";
         PersistentStateImpl? persistentState;
         readonly string persistentStateFilePath;
         ProcessInfo? processInfo;
@@ -267,6 +273,31 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        // Create server stream for multi-instances.
+        bool CreateMultiInstancesServerStream(bool printErrorLog = true)
+        {
+            if (this.multiInstancesServerStream != null)
+                return true;
+            if (this.IsShutdownStarted)
+            {
+                this.Logger.LogWarning("No need to create multi-instances server stream when shutting down");
+                return false;
+            }
+            try
+            {
+                this.multiInstancesServerStream = new NamedPipeServerStream(this.multiInstancesServerStreamName, PipeDirection.In, 1);
+                this.Logger.LogWarning("Multi-instances server stream created");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (printErrorLog)
+                    this.Logger.LogError(ex, "Unable to create multi-instances server stream");
+                return false;
+            }
+        }
+
+
         /// <summary>
         /// Get key of application culture setting.
         /// </summary>
@@ -325,6 +356,12 @@ namespace CarinaStudio.AppSuite
         /// Check whether application is running in debug mode or not.
         /// </summary>
         public bool IsDebugMode { get; private set; }
+
+
+        /// <summary>
+        /// Check whether multiple application processes is supported or not.
+        /// </summary>
+        protected virtual bool IsMultipleProcessesSupported { get; } = false;
 
 
         /// <summary>
@@ -468,11 +505,43 @@ namespace CarinaStudio.AppSuite
             // call base
             base.OnFrameworkInitializationCompleted();
 
+            // start multi-instances server or send arguments to server
+            var desktopLifetime = (this.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime);
+            if (!this.IsMultipleProcessesSupported && desktopLifetime != null)
+            {
+                this.multiInstancesServerStreamName = this.Name.Let(it =>
+                {
+                    var nameBuilder = new StringBuilder(it);
+                    for (var i = nameBuilder.Length - 1; i >= 0; --i)
+                    {
+                        if (!char.IsLetterOrDigit(nameBuilder[i]))
+                            nameBuilder[i] = '_';
+                    }
+                    return nameBuilder.ToString();
+                });
+                if (Platform.IsLinux)
+                {
+                    // [workaround] treat process as client first becase limitation of max server instance seems not working on Linux
+                    if (this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args))
+                    {
+                        this.SynchronizationContext.Post(() => desktopLifetime.Shutdown());
+                        return;
+                    }
+                }
+                if (this.CreateMultiInstancesServerStream(false))
+                    this.WaitForMultiInstancesClient();
+                else
+                {
+                    this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args);
+                    this.SynchronizationContext.Post(() => desktopLifetime.Shutdown());
+                    return;
+                }
+            }
+
             // create process information
             this.processInfo = new ProcessInfo(this);
 
             // parse arguments
-            var desktopLifetime = (this.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime);
             if (desktopLifetime != null)
                 this.LaunchOptions = this.ParseArguments(desktopLifetime.Args);
 
@@ -598,6 +667,15 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Called when new application instance has been launched and be redirected to current application instance.
+        /// </summary>
+        /// <remarks>The method will be call ONLY when <see cref="IsMultipleProcessesSupported"/> is False.</remarks>
+        /// <param name="launchOptions">Options to launch new instance.</param>
+        protected virtual void OnNewInstanceLaunched(IDictionary<string, object> launchOptions)
+        { }
+
+
+        /// <summary>
         /// Called to parse single argument in argument list passed to application.
         /// </summary>
         /// <param name="args">Argument list.</param>
@@ -640,6 +718,15 @@ namespace CarinaStudio.AppSuite
 
             // cancel checking update
             this.checkUpdateInfoAction?.Cancel();
+
+            // close server stream for multi-instances
+            this.multiInstancesServerCancellationTokenSource.Cancel();
+            if (this.multiInstancesServerStream != null)
+            {
+                this.Logger.LogWarning("Close multi-instances server stream");
+                Global.RunWithoutError(() => this.multiInstancesServerStream.Close());
+                this.multiInstancesServerStream = null;
+            }
 
             // complete
             return Task.CompletedTask;
@@ -915,6 +1002,37 @@ namespace CarinaStudio.AppSuite
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, $"Failed to save settings to '{this.settingsFilePath}'");
+            }
+        }
+
+
+        // Try sending arguments to multi-instances server.
+        bool SendArgumentsToMultiInstancesServer(string[] args)
+        {
+            try
+            {
+                // connect
+                this.Logger.LogWarning("Try connect to multi-instances server");
+                using var clientStream = new NamedPipeClientStream(".", this.multiInstancesServerStreamName, PipeDirection.Out);
+                clientStream.Connect(500);
+
+                // send arguments
+                this.Logger.LogWarning("Send application arguments to multi-instances server");
+                using var writer = new BinaryWriter(clientStream);
+                writer.Write(args.Length);
+                foreach (var arg in args)
+                    writer.Write(arg);
+                return true;
+            }
+            catch (TimeoutException)
+            {
+                this.Logger.LogWarning("Unable to connect to multi-instances server");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Unable to send application arguments to multi-instances server");
+                return false;
             }
         }
 
@@ -1254,6 +1372,62 @@ namespace CarinaStudio.AppSuite
             this.systemThemeMode = themeMode;
             if (checkRestartingMainWindows)
                 this.CheckRestartingMainWindowsNeeded();
+        }
+
+
+        // Wait for client of multi-instances and handle incoming messages.
+        async void WaitForMultiInstancesClient()
+        {
+            if (this.multiInstancesServerStream == null)
+            {
+                this.Logger.LogError("No multi-instances server stream");
+                return;
+            }
+            try
+            {
+                // wait for connection
+                this.Logger.LogWarning("Start waiting for multi-instances client");
+                await this.multiInstancesServerStream.WaitForConnectionAsync(this.multiInstancesServerCancellationTokenSource.Token);
+
+                // read arguments and parse
+                this.Logger.LogWarning("Start reading arguments from multi-instances client");
+                var launchOptions = await Task.Run(() =>
+                {
+                    // read arguments
+                    using var reader = new BinaryReader(this.multiInstancesServerStream, Encoding.UTF8);
+                    var argCount = Math.Max(0, reader.ReadInt32());
+                    var argList = new List<string>(argCount);
+                    for (var i = argCount; i > 0; --i)
+                        argList.Add(reader.ReadString());
+
+                    // parse arguments
+                    return this.ParseArguments(argList.ToArray());
+                });
+
+                // handle new instance
+                this.OnNewInstanceLaunched(launchOptions);
+            }
+            catch (Exception ex)
+            {
+                if (!this.multiInstancesServerCancellationTokenSource.IsCancellationRequested)
+                    this.Logger.LogError(ex, "Error occurred while waiting for or handling multi-instances client");
+            }
+            finally
+            {
+                // close server stream
+                Global.RunWithoutError(() => this.multiInstancesServerStream.Close());
+                this.multiInstancesServerStream = null;
+
+                // handle next connection
+                if (!this.multiInstancesServerCancellationTokenSource.IsCancellationRequested)
+                {
+                    this.SynchronizationContext.Post(() =>
+                    {
+                        if (this.CreateMultiInstancesServerStream())
+                            this.WaitForMultiInstancesClient();
+                    });
+                }
+            }
         }
 
 
