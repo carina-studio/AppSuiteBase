@@ -632,7 +632,7 @@ namespace CarinaStudio.AppSuite
             this.Logger.LogDebug($"Main window closed, {this.mainWindows.Count} remains");
 
             // perform operations
-            await this.OnMainWindowClosedAsync(mainWindow);
+            await this.OnMainWindowClosedAsync(mainWindow, mainWindowHolder.ViewModel);
 
             // restart main window
             if (mainWindowHolder.IsRestartingRequested)
@@ -657,8 +657,9 @@ namespace CarinaStudio.AppSuite
         /// Called to perform asynchronous operations after closing main window.
         /// </summary>
         /// <param name="mainWindow">Closed main window.</param>
+        /// <param name="viewModel">View-model of main window.</param>
         /// <returns>Task of performing operations.</returns>
-        protected virtual async Task OnMainWindowClosedAsync(Window mainWindow)
+        protected virtual async Task OnMainWindowClosedAsync(Window mainWindow, ViewModel viewModel)
         {
             // save persistent state and settings
             await this.SavePersistentStateAsync();
