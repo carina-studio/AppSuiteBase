@@ -21,6 +21,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -43,10 +44,10 @@ namespace CarinaStudio.AppSuite
             public readonly object? CreationParam;
             public bool IsRestartingRequested;
             public readonly ViewModel ViewModel;
-            public readonly Window Window;
+            public readonly Window? Window;
 
             // Constructor.
-            public MainWindowHolder(object? param, ViewModel viewModel, Window window)
+            public MainWindowHolder(object? param, ViewModel viewModel, Window? window)
             {
                 this.CreationParam = param;
                 this.ViewModel = viewModel;
@@ -101,12 +102,14 @@ namespace CarinaStudio.AppSuite
         Avalonia.Controls.ResourceDictionary? accentColorResources;
         ScheduledAction? checkUpdateInfoAction;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
+        bool isRestartingMainWindowsRequested;
         bool isShutdownStarted;
         readonly Dictionary<Window, MainWindowHolder> mainWindowHolders = new Dictionary<Window, MainWindowHolder>();
         readonly ObservableList<Window> mainWindows = new ObservableList<Window>();
         readonly CancellationTokenSource multiInstancesServerCancellationTokenSource = new CancellationTokenSource();
         NamedPipeServerStream? multiInstancesServerStream;
         string multiInstancesServerStreamName = "";
+        readonly List<MainWindowHolder> pendingMainWindowHolders = new List<MainWindowHolder>();
         PersistentStateImpl? persistentState;
         readonly string persistentStateFilePath;
         ProcessInfo? processInfo;
@@ -498,6 +501,18 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Called to dispose view-model of main window.
+        /// </summary>
+        /// <param name="viewModel">View-model to dispose.</param>
+        /// <returns>Task of disposing view-model.</returns>
+        protected virtual async Task OnDisposeMainWindowViewModelAsync(ViewModel viewModel)
+        {
+            await viewModel.WaitForNecessaryTasksAsync();
+            viewModel.Dispose();
+        }
+
+
+        /// <summary>
         /// Called when Avalonia framework initialized.
         /// </summary>
         public override void OnFrameworkInitializationCompleted()
@@ -628,9 +643,7 @@ namespace CarinaStudio.AppSuite
                 return;
             if (!this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
                 return;
-            this.mainWindowHolders.Remove(mainWindow);
-            if (!this.mainWindows.Remove(mainWindow))
-                return;
+            this.mainWindows.Remove(mainWindow);
             mainWindow.Closed -= this.OnMainWindowClosed;
 
             this.Logger.LogDebug($"Main window closed, {this.mainWindows.Count} remains");
@@ -641,18 +654,52 @@ namespace CarinaStudio.AppSuite
             // restart main window
             if (mainWindowHolder.IsRestartingRequested)
             {
-                this.Logger.LogWarning("Restart main window requested");
-                if (this.ShowMainWindow(mainWindowHolder.CreationParam, mainWindowHolder.ViewModel))
-                    return;
-                this.Logger.LogError("Unable to restart main window");
+                if (!this.IsShutdownStarted)
+                {
+                    if (this.isRestartingMainWindowsRequested)
+                    {
+                        this.mainWindowHolders.Remove(mainWindow);
+                        this.pendingMainWindowHolders.Add(new MainWindowHolder(mainWindowHolder.CreationParam, mainWindowHolder.ViewModel, null));
+                        if (this.mainWindowHolders.IsEmpty())
+                        {
+                            this.Logger.LogWarning("Restart all main windows");
+                            this.isRestartingMainWindowsRequested = false;
+                            var pendingMainWindowHolders = this.pendingMainWindowHolders.ToArray().Also(_ =>
+                            {
+                                this.pendingMainWindowHolders.Clear();
+                            });
+                            foreach (var pendingMainWindowHolder in pendingMainWindowHolders)
+                            {
+                                if (!this.ShowMainWindow(pendingMainWindowHolder.CreationParam, pendingMainWindowHolder.ViewModel))
+                                {
+                                    this.Logger.LogError("Unable to restart main window");
+                                    await this.OnDisposeMainWindowViewModelAsync(pendingMainWindowHolder.ViewModel);
+                                }
+                            }
+                        }
+                        else
+                            this.Logger.LogWarning("Restart main window later after closing all main windows");
+                        return;
+                    }
+                    else
+                    {
+                        this.Logger.LogWarning("Restart single main window requested");
+                        this.mainWindowHolders.Remove(mainWindow);
+                        if (this.ShowMainWindow(mainWindowHolder.CreationParam, mainWindowHolder.ViewModel))
+                            return;
+                        this.Logger.LogError("Unable to restart single main window");
+                    }
+                }
+                else
+                    this.Logger.LogError("Unable to restart main window when shutting down");
             }
 
             // dispose view model
-            await mainWindowHolder.ViewModel.WaitForNecessaryTasksAsync();
-            mainWindowHolder.ViewModel.Dispose();
+            await this.OnDisposeMainWindowViewModelAsync(mainWindowHolder.ViewModel);
 
             // shut down
-            if (this.mainWindows.IsEmpty())
+            this.mainWindowHolders.Remove(mainWindow);
+            if (this.mainWindowHolders.IsEmpty())
                 this.Shutdown();
         }
 
@@ -710,8 +757,17 @@ namespace CarinaStudio.AppSuite
         /// Called to perform asynchronous operations before shutting down.
         /// </summary>
         /// <returns>Task of performing operations.</returns>
-        protected virtual Task OnPrepareShuttingDownAsync()
+        protected virtual async Task OnPrepareShuttingDownAsync()
         {
+            // dispose pending view-model of main windows
+            if (this.pendingMainWindowHolders.IsNotEmpty())
+            {
+                this.Logger.LogWarning($"Dispose {this.pendingMainWindowHolders.Count} pending view-model of main windows before shutting down");
+                foreach (var mainWindowHolder in this.pendingMainWindowHolders)
+                    await this.OnDisposeMainWindowViewModelAsync(mainWindowHolder.ViewModel);
+                this.pendingMainWindowHolders.Clear();
+            }
+
             // detach from system event
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -732,9 +788,6 @@ namespace CarinaStudio.AppSuite
                 Global.RunWithoutError(() => this.multiInstancesServerStream.Close());
                 this.multiInstancesServerStream = null;
             }
-
-            // complete
-            return Task.CompletedTask;
         }
 
 
@@ -944,14 +997,17 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogWarning("No main window to restart");
                 return false;
             }
+            if (this.isRestartingMainWindowsRequested)
+                return true;
 
             // restart
             this.Logger.LogWarning($"Request restarting all {this.mainWindowHolders.Count} main window(s)");
+            this.isRestartingMainWindowsRequested = true;
             foreach (var mainWindowHolder in this.mainWindowHolders.Values)
                 mainWindowHolder.IsRestartingRequested = true;
             this.SynchronizationContext.Post(() =>
             {
-                foreach (var mainWindow in this.mainWindowHolders.Keys)
+                foreach (var mainWindow in this.mainWindowHolders.Keys.ToArray())
                 {
                     if (!mainWindow.IsClosed)
                         mainWindow.Close();
@@ -1076,6 +1132,8 @@ namespace CarinaStudio.AppSuite
             if (mainWindowCount > 0 && !this.AllowMultipleMainWindows)
             {
                 this.Logger.LogError("Multiple main windows are not allowed");
+                if (viewModel != null)
+                    _ = this.OnDisposeMainWindowViewModelAsync(viewModel);
                 return false;
             }
 
@@ -1086,6 +1144,14 @@ namespace CarinaStudio.AppSuite
             // create view-model
             if (viewModel == null)
                 viewModel = this.OnCreateMainWindowViewModel(param);
+
+            // creat and show window later if restarting main windows
+            if (this.isRestartingMainWindowsRequested)
+            {
+                this.Logger.LogWarning("Show main window later after closing all main windows");
+                this.pendingMainWindowHolders.Add(new MainWindowHolder(param, viewModel, null));
+                return true;
+            }
 
             // create main window
             var mainWindow = this.OnCreateMainWindow(param);
@@ -1112,6 +1178,11 @@ namespace CarinaStudio.AppSuite
         // Show given main window.
         void ShowMainWindow(MainWindowHolder mainWindowHolder)
         {
+            if (mainWindowHolder.Window == null)
+            {
+                this.Logger.LogError("No main window instance created to show");
+                return;
+            }
             this.SynchronizationContext.Post(() =>
             {
                 mainWindowHolder.Window.DataContext = mainWindowHolder.ViewModel;
@@ -1127,19 +1198,24 @@ namespace CarinaStudio.AppSuite
         {
             // check state
             this.VerifyAccess();
-            if (this.isShutdownStarted)
-                return;
 
             // update state
-            this.isShutdownStarted = true;
-            this.OnPropertyChanged(nameof(IsShutdownStarted));
+            bool isFirstCall = !this.isShutdownStarted;
+            if (isFirstCall)
+            {
+                this.isShutdownStarted = true;
+                this.OnPropertyChanged(nameof(IsShutdownStarted));
+            }
 
             // close all main windows
             if (this.mainWindows.IsNotEmpty())
             {
-                this.Logger.LogWarning($"Close {this.mainWindows.Count} main window(s) to shut down");
-                foreach (var mainWindow in this.mainWindows.ToArray())
-                    mainWindow.Close();
+                if (isFirstCall)
+                {
+                    this.Logger.LogWarning($"Close {this.mainWindows.Count} main window(s) to shut down");
+                    foreach (var mainWindow in this.mainWindows.ToArray())
+                        mainWindow.Close();
+                }
                 return;
             }
 

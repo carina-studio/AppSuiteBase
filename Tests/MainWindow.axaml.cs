@@ -43,17 +43,12 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void Test()
         {
-            using var appUpdater = new ViewModels.ApplicationUpdater();
-            
-            var result = await new ApplicationUpdateDialog(appUpdater)
-            {
-                CheckForUpdateWhenShowing = true
-            }.ShowDialog(this);
+            this.Application.RestartMainWindows();
         }
 
         void Test2()
         {
-            new Dialog().ShowDialog(this);
+            this.Application.Shutdown();
         }
     }
 }

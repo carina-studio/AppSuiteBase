@@ -55,7 +55,7 @@ namespace CarinaStudio.AppSuite.Tests
             await Task.Delay(1000);
 
             await base.OnPrepareStartingAsync();
-            for (var i = 0; i < 1; ++i)
+            for (var i = 0; i < 2; ++i)
                 this.ShowMainWindow();
 
             splashWindow.Close();
