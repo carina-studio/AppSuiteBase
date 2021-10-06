@@ -1138,7 +1138,7 @@ namespace CarinaStudio.AppSuite
             if (this.mainWindows.IsNotEmpty())
             {
                 this.Logger.LogWarning($"Close {this.mainWindows.Count} main window(s) to shut down");
-                foreach (var mainWindow in this.mainWindows)
+                foreach (var mainWindow in this.mainWindows.ToArray())
                     mainWindow.Close();
                 return;
             }
