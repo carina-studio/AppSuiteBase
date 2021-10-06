@@ -22,15 +22,22 @@
 		<!-- ApplicationUpdateDialog -->
 		<sys:Double x:Key="Double/ApplicationUpdateDialog.Width">500</sys:Double>
 
+		<!-- BrowseButton -->
+		<Thickness x:Key="Thickness/BrowseButton.Margin">5,0,0,0</Thickness>
+
 		<!-- Dialog -->
 		<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#ffffff</Color>
 		<Color x:Key="Color/Dialog.TextBlock.Border.Header1">#000000</Color>
 		<Color x:Key="Color/Dialog.TextBlock.Foreground.Description">#000000</Color>
+		<Color x:Key="Color/Dialog.TextBlock.Foreground.Error">#ff0000</Color>
 		<sys:Double x:Key="Double/Dialog.ControlButton.MinWidth">100</sys:Double>
 		<sys:Double x:Key="Double/Dialog.ControlButton.Separator.Width">15</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height">15</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height.Large">40</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height.Small">5</sys:Double>
+		<sys:Double x:Key="Double/Dialog.Separator.Width">15</sys:Double>
+		<sys:Double x:Key="Double/Dialog.Separator.Width.Large">40</sys:Double>
+		<sys:Double x:Key="Double/Dialog.Separator.Width.Small">5</sys:Double>
 		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize">16</sys:Double>
 		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Description">12</sys:Double>
 		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Header1">26</sys:Double>
@@ -38,6 +45,7 @@
 		<SolidColorBrush x:Key="Brush/Dialog.ControlButtonsPanel.Background" Color="{DynamicResource Color/Dialog.ControlButtonsPanel.Background}"/>
 		<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Border.Header1" Color="{DynamicResource Color/Dialog.TextBlock.Border.Header1}"/>
 		<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Foreground.Description" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Description}"/>
+		<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Foreground.Error" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Error}"/>
 		<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding">20,15,20,15</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Margin">3,0,3,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Padding">10,5,10,5</Thickness>
@@ -47,6 +55,9 @@
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,5,0,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">0,0,0,5</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">0,0,0,5</Thickness>
+
+		<!-- GridSplitter -->
+		<sys:Double x:Key="Double/GridSplitter.Thickness">5</sys:Double>
 
 		<!-- Icon -->
 		<Color x:Key="Color/Icon">#000000</Color>
@@ -66,6 +77,12 @@
 		<SolidColorBrush x:Key="Brush/Icon.OK" Color="{DynamicResource Color/Icon.OK}"/>
 		<SolidColorBrush x:Key="Brush/Icon.Question" Color="{DynamicResource Color/Icon.Question}"/>
 		<SolidColorBrush x:Key="Brush/Icon.Warning" Color="{DynamicResource Color/Icon.Warning}"/>
+
+		<!-- InPlaceAction -->
+		<sys:Double x:Key="Double/InPlaceAction.IconSize">10</sys:Double>
+		<sys:Double x:Key="Double/InPlaceAction.ReservedHeight">18</sys:Double>
+		<Thickness x:Key="Thickness/InPlaceAction.Margin">3,0,0,0</Thickness>
+		<Thickness x:Key="Thickness/InPlaceAction.Padding">3</Thickness>
 
 		<!-- LinkTextBlock -->
 		<Color x:Key="Color/LinkTextBlock.Foreground">#0000ff</Color>
@@ -148,6 +165,18 @@
 		
 	</Styles.Resources>
 
+	<!-- BrowseButton -->
+	<Style Selector="Button.BrowseButton">
+		<Setter Property="Content" Value="…"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/BrowseButton.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+	</Style>
+	<Style Selector="ToggleButton.BrowseButton">
+		<Setter Property="Content" Value="…"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/BrowseButton.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+	</Style>
+
 	<!-- ComboBox -->
 	<Style Selector="ComboBox">
 		<Setter Property="BorderThickness" Value="0"/>
@@ -210,14 +239,17 @@
 	<Style Selector="Separator.Dialog_Separator">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width}"/>
 	</Style>
 	<Style Selector="Separator.Dialog_Separator_Large">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height.Large}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width.Large}"/>
 	</Style>
 	<Style Selector="Separator.Dialog_Separator_Small">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height.Small}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width.Small}"/>
 	</Style>
 	<Style Selector="StackPanel.Dialog_ContentPanel">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding}"/>
@@ -234,6 +266,12 @@
 	<Style Selector="TextBlock.Dialog_TextBlock_Description">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{StaticResource Brush/Dialog.TextBlock.Foreground.Description}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
+	</Style>
+	<Style Selector="TextBlock.Dialog_TextBlock_Description_Error">
+		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
+		<Setter Property="Foreground" Value="{StaticResource Brush/Dialog.TextBlock.Foreground.Error}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
@@ -259,6 +297,16 @@
 		<Setter Property="WindowStartupLocation" Value="CenterOwner"/>
 	</Style>
 
+	<!-- GridSplitter -->
+	<Style Selector="GridSplitter.Splitter_Horizontal">
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="Width" Value="{DynamicResource Thickness/GridSplitter.Thickness}"/>
+	</Style>
+	<Style Selector="GridSplitter.Splitter_Vertical">
+		<Setter Property="Height" Value="{DynamicResource Thickness/GridSplitter.Thickness}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+	</Style>
+
 	<!-- Icon -->
 	<Style Selector="DrawingPresenter.Icon">
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -267,6 +315,25 @@
 	</Style>
 	<Style Selector="DrawingPresenter.Icon:disabled">
 		<Setter Property="Opacity" Value="0.3"/>
+	</Style>
+
+	<!-- InPlaceAction -->
+	<Style Selector="Border.InPlaceAction_Icon">
+		<Setter Property="Height" Value="{DynamicResource Double/InPlaceAction.IconSize}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/InPlaceAction.IconSize}"/>
+	</Style>
+	<Style Selector="Border.InPlaceAction_Reserved">
+		<Setter Property="Height" Value="{DynamicResource Double/InPlaceAction.ReservedHeight}"/>
+		<Setter Property="Opacity" Value="0"/>
+		<Setter Property="Width" Value="1"/>
+	</Style>
+	<Style Selector="Button.InPlaceAction_Button">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/InPlaceAction.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
 
 	<!-- LinkTextBlock -->

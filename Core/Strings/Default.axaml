@@ -45,6 +45,7 @@
 	<sys:String x:Key="String/Common.Close">Close</sys:String>
 	<sys:String x:Key="String/Common.Copy">Copy</sys:String>
 	<sys:String x:Key="String/Common.Create">Create</sys:String>
+	<sys:String x:Key="String/Common.DebugMode">Debug Mode</sys:String>
 	<sys:String x:Key="String/Common.Delete">Delete</sys:String>
 	<sys:String x:Key="String/Common.Edit">Edit</sys:String>
 	<sys:String x:Key="String/Common.Empty">Empty</sys:String>
