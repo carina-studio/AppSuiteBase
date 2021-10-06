@@ -58,6 +58,7 @@
 		<Color x:Key="Color/Icon.Question">#007acc</Color>
 		<Color x:Key="Color/Icon.Warning">#ff8432</Color>
 		<SolidColorBrush x:Key="Brush/Icon" Color="{DynamicResource Color/Icon}"/>
+		<SolidColorBrush x:Key="Brush/Icon.Active" Color="{DynamicResource Color/Accent}"/>
 		<SolidColorBrush x:Key="Brush/Icon.Dark" Color="{DynamicResource Color/Icon.Dark}"/>
 		<SolidColorBrush x:Key="Brush/Icon.Error" Color="{DynamicResource Color/Icon.Error}"/>
 		<SolidColorBrush x:Key="Brush/Icon.Information" Color="{DynamicResource Color/Icon.Information}"/>
