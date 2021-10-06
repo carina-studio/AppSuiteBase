@@ -47,9 +47,18 @@ namespace CarinaStudio.AppSuite.Tests
 
         protected override async Task OnPrepareStartingAsync()
         {
+            var splashWindow = new Avalonia.Controls.Window();
+            splashWindow.Width = 200;
+            splashWindow.Height = 100;
+            splashWindow.Show();
+
+            await Task.Delay(1000);
+
             await base.OnPrepareStartingAsync();
             for (var i = 0; i < 1; ++i)
                 this.ShowMainWindow();
+
+            splashWindow.Close();
         }
 
 

@@ -589,7 +589,11 @@ namespace CarinaStudio.AppSuite
             });
 
             // prepare
-            _ = this.OnPrepareStartingAsync();
+            this.SynchronizationContext.Post(() =>
+            {
+                if (!this.IsShutdownStarted)
+                    _ = this.OnPrepareStartingAsync();
+            });
         }
 
 
