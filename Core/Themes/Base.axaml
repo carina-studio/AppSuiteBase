@@ -12,6 +12,10 @@
 		<Color x:Key="Color/Accent">#912fbf</Color>
 		<SolidColorBrush x:Key="Brush/Accent" Color="{DynamicResource Color/Accent}"/>
 
+		<!-- AddTabItemButton -->
+		<sys:Double x:Key="Double/AddTabItemButton.Size">30</sys:Double>
+		<Thickness x:Key="Thickness/AddTabItemButton.Padding">7</Thickness>
+
 		<!-- ApplicationInfoDialog -->
 		<sys:Double x:Key="Double/ApplicationInfoDialog.AppIcon.Size">80</sys:Double>
 		<sys:Double x:Key="Double/ApplicationInfoDialog.AppTitle.FontSize">25</sys:Double>
@@ -179,6 +183,21 @@
 		
 	</Styles.Resources>
 
+	<!-- AddTabItemButton -->
+	<Style Selector="Border.AddTabItemButton">
+		<Setter Property="Background" Value="{DynamicResource Brush/TabItem.Header.Background.Selected}"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/AddTabItemButton.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="Opacity" Value="0.7"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/AddTabItemButton.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/AddTabItemButton.Size}"/>
+	</Style>
+	<Style Selector="Border.AddTabItemButton:pointerover">
+		<Setter Property="Opacity" Value="1"/>
+	</Style>
+
 	<!-- BrowseButton -->
 	<Style Selector="Button.BrowseButton">
 		<Setter Property="Content" Value="…"/>
@@ -324,6 +343,7 @@
 	<!-- Icon -->
 	<Style Selector="DrawingPresenter.Icon">
 		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Stretch" Value="Uniform"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>

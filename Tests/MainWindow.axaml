@@ -127,8 +127,14 @@
 					12345
 				</TabItem.Header>
 			</TabItem>
-			
-			<TabItem Classes="Empty" Header="Close"/>
+
+			<TabItem Classes="Empty">
+				<TabItem.Header>
+					<Border Classes="AddTabItemButton">
+						<DrawingPresenter Classes="Icon" Drawing="{DynamicResource Drawing/Icon.Add}"/>
+					</Border>
+				</TabItem.Header>
+			</TabItem>
 			
 		</TabControl>
 		
