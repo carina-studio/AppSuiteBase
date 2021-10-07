@@ -17,39 +17,34 @@
 	<!-- Styles -->
 	<Window.Styles>
 		<Style Selector="TextBlock">
-			<Setter Property="Foreground" Value="#ffffff"/>
+			<Setter Property="Foreground" Value="{DynamicResource Brush/SplashWindow.Foreground}"/>
 		</Style>
 	</Window.Styles>
 
 	<!-- Content -->
-	<Border BorderThickness="1" CornerRadius="4" Opacity="0">
+	<Border Background="{DynamicResource Brush/SplashWindow.Background}" BorderBrush="{DynamicResource Brush/SplashWindow.Border}" BorderThickness="{DynamicResource Thickness/SplashWindow.Border}" CornerRadius="{DynamicResource CornerRadius/SplashWindow}" Opacity="0">
 		
-		<Border.Background>
-			<SolidColorBrush Color="{DynamicResource SystemAccentColorDark3}" Opacity="0.8"/>
-		</Border.Background>
-		<Border.BorderBrush>
-			<SolidColorBrush Color="Black"/>
-		</Border.BorderBrush>
 		<Border.Transitions>
 			<Transitions>
 				<DoubleTransition Property="Opacity" Duration="0:0:1"/>
 			</Transitions>
 		</Border.Transitions>
 		
-		<Grid ColumnDefinitions="Auto,Auto" HorizontalAlignment="Center" Margin="30" RowDefinitions="Auto,Auto" VerticalAlignment="Center">
+		<Grid ColumnDefinitions="Auto,Auto" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/SplashWindow.Padding}" RowDefinitions="Auto,Auto" VerticalAlignment="Center">
 
 			<!-- Icon -->
-			<Image Height="80" Margin="0,0,20,0" Source="{Binding $parent[Window].IconBitmap}" Width="80" VerticalAlignment="Center"/>
+			<Image Height="{DynamicResource Double/SplashWindow.Icon.Size}" Margin="{DynamicResource Thickness/SplashWindow.Icon.Margin}" Source="{Binding $parent[Window].IconBitmap}" Width="{DynamicResource Double/SplashWindow.Icon.Size}" VerticalAlignment="Center"/>
 
 			<!-- Title and version -->
 			<StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
-				<TextBlock FontSize="30" FontWeight="Bold" Margin="0,0,0,10" Text="{Binding $parent[Window].ApplicationName}"/>
-				<TextBlock Margin="0,0,0,3" Text="{Binding $parent[Window].Version}"/>
+				<TextBlock FontSize="{DynamicResource Double/SplashWindow.Title.FontSize}}" FontWeight="Bold" Margin="{DynamicResource Thickness/SplashWindow.Title.Margin}" Text="{Binding $parent[Window].ApplicationName}"/>
+				<TextBlock Text="{Binding $parent[Window].Version}"/>
 				<TextBlock Text="©2021 Carina Studio"/>
 			</StackPanel>
 
 			<!-- Message -->
-			<TextBlock Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center" Margin="0,30,0,0" Text="{Binding $parent[Window].Message}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+			<Border Grid.ColumnSpan="2" Grid.Row="1" Height="{DynamicResource Double/SplashWindow.Message.ReservedSpace}" HorizontalAlignment="Stretch"/>
+			<TextBlock FontSize="{DynamicResource Double/SplashWindow.Message.FontSize}" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/SplashWindow.Message.Margin}" Text="{Binding $parent[Window].Message}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" VerticalAlignment="Center"/>
 
 		</Grid>
 	</Border>
