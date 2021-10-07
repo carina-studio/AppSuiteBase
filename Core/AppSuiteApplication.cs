@@ -95,6 +95,8 @@ namespace CarinaStudio.AppSuite
         // Constants.
         const string DebugModeRequestedKey = "IsDebugModeRequested";
         const string RestoreStateRequestedKey = "IsRestoringStateRequested";
+        const int MinSplashWindowDuration = 2000;
+        const int SplashWindowShowingDuration = 1000;
         const int UpdateCheckingInterval = 3600000; // 1 hr
 
 
@@ -115,6 +117,9 @@ namespace CarinaStudio.AppSuite
         ProcessInfo? processInfo;
         SettingsImpl? settings;
         readonly string settingsFilePath;
+        Controls.SplashWindowImpl? splashWindow;
+        long splashWindowShownTime;
+        readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
         Avalonia.Controls.ResourceDictionary? stringResource;
         CultureInfo? stringResourceCulture;
         IStyle? styles;
@@ -377,6 +382,12 @@ namespace CarinaStudio.AppSuite
         /// Check whether application is shutting down or not.
         /// </summary>
         public override bool IsShutdownStarted { get => isShutdownStarted; }
+
+
+        /// <summary>
+        /// Check whether splash window is needed when launching application or not.
+        /// </summary>
+        protected virtual bool IsSplashWindowNeeded { get; } = true;
 
 
         /// <summary>
@@ -792,6 +803,16 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Called to prepare showing splash window when launching application.
+        /// </summary>
+        /// <returns>Parameters of splash window.</returns>
+        protected virtual Controls.SplashWindowParams OnPrepareSplashWindow() => new Controls.SplashWindowParams()
+        {
+            IconUri = new Uri($"avares://{this.Assembly.GetName().Name}/AppIcon.ico"),
+        };
+
+
+        /// <summary>
         /// Called to prepare application after Avalonia framework initialized.
         /// </summary>
         /// <returns>Task of preparation.</returns>
@@ -821,6 +842,20 @@ namespace CarinaStudio.AppSuite
 
             // setup styles
             this.UpdateSystemThemeMode(false);
+            this.UpdateStyles();
+
+            // show splash window
+            if (this.IsSplashWindowNeeded)
+            {
+                var splashWindowParams = this.OnPrepareSplashWindow();
+                this.splashWindow = new Controls.SplashWindowImpl()
+                {
+                    IconUri = splashWindowParams.IconUri,
+                };
+                this.splashWindow.Show();
+                this.splashWindowShownTime = this.stopWatch.ElapsedMilliseconds;
+                await Task.Delay(SplashWindowShowingDuration);
+            }
 
             // attach to system event
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -1137,6 +1172,9 @@ namespace CarinaStudio.AppSuite
                 return false;
             }
 
+            // update message on splash window
+            this.UpdateSplashWindowMessage(this.GetStringNonNull("SplashWindow.ShowingMainWindow"));
+
             // update styles
             if (mainWindowCount == 0)
                 this.UpdateStyles();
@@ -1176,17 +1214,34 @@ namespace CarinaStudio.AppSuite
 
 
         // Show given main window.
-        void ShowMainWindow(MainWindowHolder mainWindowHolder)
+        async void ShowMainWindow(MainWindowHolder mainWindowHolder)
         {
             if (mainWindowHolder.Window == null)
             {
                 this.Logger.LogError("No main window instance created to show");
                 return;
             }
+            if (this.splashWindow != null)
+            {
+                var delay = MinSplashWindowDuration - (this.stopWatch.ElapsedMilliseconds - this.splashWindowShownTime);
+                if (delay > 0)
+                {
+                    this.Logger.LogDebug("Delay for showing splash window");
+                    await Task.Delay((int)delay);
+                }
+            }
             this.SynchronizationContext.Post(() =>
             {
                 mainWindowHolder.Window.DataContext = mainWindowHolder.ViewModel;
                 mainWindowHolder.Window.Show();
+                this.SynchronizationContext.Post(() =>
+                {
+                    this.splashWindow = this.splashWindow?.Let(it =>
+                    {
+                        it.Close();
+                        return (Controls.SplashWindowImpl?)null;
+                    });
+                });
             });
         }
 
@@ -1260,6 +1315,17 @@ namespace CarinaStudio.AppSuite
         /// Get latest checked application update information.
         /// </summary>
         public ApplicationUpdateInfo? UpdateInfo { get; private set; }
+
+
+        /// <summary>
+        /// Update message shown on splash window.
+        /// </summary>
+        /// <param name="message">Message to show.</param>
+        protected void UpdateSplashWindowMessage(string message)
+        {
+            this.VerifyAccess();
+            this.splashWindow?.Let(it => it.Message = message);
+        }
 
 
         // Update string resource according to current culture.

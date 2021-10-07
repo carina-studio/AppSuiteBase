@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.Controls;
+using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -47,18 +48,16 @@ namespace CarinaStudio.AppSuite.Tests
 
         protected override async Task OnPrepareStartingAsync()
         {
-            var splashWindow = new Avalonia.Controls.Window();
-            splashWindow.Width = 200;
-            splashWindow.Height = 100;
-            splashWindow.Show();
-
-            await Task.Delay(1000);
-
             await base.OnPrepareStartingAsync();
-            for (var i = 0; i < 2; ++i)
-                this.ShowMainWindow();
 
-            splashWindow.Close();
+            this.ShowMainWindow();
+
+            this.SynchronizationContext.PostDelayed(() =>
+            {
+                //for (var i = 0; i < 1; ++i)
+                    //this.ShowMainWindow();
+                //splashWindow.Close();
+            }, 5000);
         }
 
 

@@ -107,6 +107,20 @@
 		<Color x:Key="Color/Separator.Background">#000000</Color>
 		<SolidColorBrush x:Key="Brush/Separator.Background" Color="{DynamicResource Color/Separator.Background}"/>
 
+		<!-- SplashWindow -->
+		<SolidColorBrush x:Key="Brush/SplashWindow.Background" Color="{DynamicResource SystemAccentColorDark3}"/>
+		<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="{DynamicResource Color/SplashWindow.Foreground}"/>
+		<Color x:Key="Color/SplashWindow.Foreground">#ffffff</Color>
+		<CornerRadius x:Key="CornerRadius/SplashWindow">5</CornerRadius>
+		<sys:Double x:Key="Double/SplashWindow.Height">200</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.Icon.Size">70</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.Title.FontSize">30</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.Width">400</sys:Double>
+		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">0,0,10,0</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Padding">30</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Title.Margin">0,0,0,5</Thickness>
+
 		<!-- StatusBar -->
 		<Color x:Key="Color/StatusBar.Background.Inactive">#ffffff</Color>
 		<Color x:Key="Color/StatusBar.Foreground">#ffffff</Color>

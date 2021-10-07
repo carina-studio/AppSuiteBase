@@ -63,6 +63,10 @@
 	<sys:String x:Key="String/FileFormat.All">All formats</sys:String>
 	<sys:String x:Key="String/FileFormat.Text">Text File</sys:String>
 
+	<!-- SplashWindow -->
+	<sys:String x:Key="String/SplashWindow.Launching">Launching</sys:String>
+	<sys:String x:Key="String/SplashWindow.ShowingMainWindow">Showing main window</sys:String>
+
 	<!-- ThemeMode -->
 	<sys:String x:Key="String/ThemeMode.Dark">Dark</sys:String>
 	<sys:String x:Key="String/ThemeMode.Light">Light</sys:String>
