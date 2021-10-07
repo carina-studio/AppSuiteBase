@@ -58,7 +58,7 @@
 	<sys:String x:Key="String/Common.Yes">是</sys:String>
 
 	<!-- FallbackFontFamilies -->
-	<sys:String x:Key="String/TextBox.FallbackFontFamilies">Microsoft JhengHei,蘋方-繁</sys:String>
+	<sys:String x:Key="String/TextBox.FallbackFontFamilies">Microsoft JhengHei,Noto Sans CJK TC,蘋方-繁</sys:String>
 
 	<!-- FileFormat -->
 	<sys:String x:Key="String/FileFormat.All">所有檔案</sys:String>
