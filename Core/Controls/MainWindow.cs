@@ -20,6 +20,7 @@ namespace CarinaStudio.AppSuite.Controls
     {
         // Constants.
         const int AppUpdateNotificationDelay = 1000;
+        const int RestartingMainWindowsDelay = 500;
         const int SaveWindowSizeDelay = 300;
 
 
@@ -33,6 +34,7 @@ namespace CarinaStudio.AppSuite.Controls
         // Fields.
         readonly ScheduledAction notifyAppUpdateFoundAction;
         long openedTime;
+        readonly ScheduledAction restartingMainWindowsAction;
         readonly ScheduledAction saveWindowSizeAction;
         readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
         readonly ScheduledAction updateContentPaddingAction;
@@ -45,6 +47,13 @@ namespace CarinaStudio.AppSuite.Controls
         {
             // create scheduled actions
             this.notifyAppUpdateFoundAction = new ScheduledAction(this.NotifyApplicationUpdateFound);
+            this.restartingMainWindowsAction = new ScheduledAction(() =>
+            {
+                if (!this.IsOpened || this.HasDialogs || !this.Application.IsRestartingMainWindowsNeeded)
+                    return;
+                this.Logger.LogWarning("Restart main windows");
+                this.Application.RestartMainWindows();
+            });
             this.saveWindowSizeAction = new ScheduledAction(() =>
             {
                 if (this.WindowState == WindowState.Normal)
@@ -158,7 +167,14 @@ namespace CarinaStudio.AppSuite.Controls
         /// <param name="e">Event data.</param>
         protected virtual void OnApplicationPropertyChanged(PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(IAppSuiteApplication.UpdateInfo))
+            if (e.PropertyName == nameof(IAppSuiteApplication.IsRestartingMainWindowsNeeded))
+            {
+                if (this.Application.IsRestartingMainWindowsNeeded)
+                    this.restartingMainWindowsAction.Reschedule(RestartingMainWindowsDelay);
+                else
+                    this.restartingMainWindowsAction.Cancel();
+            }
+            else if (e.PropertyName == nameof(IAppSuiteApplication.UpdateInfo))
                 this.notifyAppUpdateFoundAction.Schedule();
         }
 
@@ -185,6 +201,7 @@ namespace CarinaStudio.AppSuite.Controls
         {
             this.DataContext = null;
             this.Application.PropertyChanged -= this.OnApplicationPropertyChanged;
+            this.restartingMainWindowsAction.Cancel();
             this.notifyAppUpdateFoundAction.Cancel();
             base.OnClosed(e);
         }
@@ -258,7 +275,11 @@ namespace CarinaStudio.AppSuite.Controls
             else if (property == HasDialogsProperty)
             {
                 if (!this.HasDialogs)
+                {
+                    if (this.Application.IsRestartingMainWindowsNeeded)
+                        this.restartingMainWindowsAction.Reschedule(RestartingMainWindowsDelay);
                     this.notifyAppUpdateFoundAction.Reschedule(AppUpdateNotificationDelay);
+                }
             }
             else if (property == HeightProperty || property == WidthProperty)
                 this.saveWindowSizeAction.Reschedule(SaveWindowSizeDelay);
