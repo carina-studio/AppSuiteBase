@@ -463,6 +463,13 @@ namespace CarinaStudio.AppSuite
             {
                 this.Logger.LogError(ex, $"Failed to load settings from '{this.settingsFilePath}'");
             }
+
+            // set theme mode to 'Dark' if 'System' is unsuported
+            if (this.settings.GetValueOrDefault(this.ThemeModeSettingKey) == ThemeMode.System
+                && !this.IsSystemThemeModeSupported)
+            {
+                this.settings.SetValue<ThemeMode>(this.ThemeModeSettingKey, ThemeMode.Dark);
+            }
         }
 
 
@@ -1142,7 +1149,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get version of <see cref="Settings"/>.
         /// </summary>
-        protected virtual int SettingsVersion { get => 1; }
+        protected virtual int SettingsVersion { get; } = 2;
 
 
         /// <summary>
