@@ -1443,16 +1443,20 @@ namespace CarinaStudio.AppSuite
                 {
                     Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}.axaml"),
                 };
-                if (Platform.IsWindows && Environment.OSVersion.Version.Major <= 10)
+                if (Platform.IsWindows)
                 {
-                    this.styles = new Styles().Also(it =>
+                    var osVersion = Environment.OSVersion.Version;
+                    if (osVersion.Major < 10 || (osVersion.Major == 10 && osVersion.Build < 22000))
                     {
-                        it.Add(this.styles);
-                        it.Add(new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
+                        this.styles = new Styles().Also(it =>
                         {
-                            Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}-Windows10.axaml"),
+                            it.Add(this.styles);
+                            it.Add(new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
+                            {
+                                Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}-Windows10.axaml"),
+                            });
                         });
-                    });
+                    }
                 }
                 this.styles = this.OnLoadTheme(themeMode)?.Let(it =>
                 {
