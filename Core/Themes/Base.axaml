@@ -506,11 +506,13 @@
 							VerticalAlignment="{TemplateBinding VerticalAlignment}">
 						<DockPanel>
 							<Grid ColumnDefinitions="Auto,*,Auto" DockPanel.Dock="Top">
-								<Border IsVisible="{Binding $parent[Window].ExtendClientAreaToDecorationsHint}">
-									<StackPanel IsVisible="{x:Static controls:ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtLeft}" Orientation="Horizontal">
-										<Border Width="{x:Static controls:ExtendedClientAreaWindowConfiguration.SystemChromeWidth}"/>
-										<Border Width="{DynamicResource Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace}"/>
-									</StackPanel>
+								<Border IsVisible="{Binding $parent[Window].IsSystemChromeVisibleInClientArea}">
+									<Border IsVisible="{Binding $parent[Window].ExtendClientAreaToDecorationsHint}">
+										<StackPanel IsVisible="{x:Static controls:ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtLeft}" Orientation="Horizontal">
+											<Border Width="{x:Static controls:ExtendedClientAreaWindowConfiguration.SystemChromeWidth}"/>
+											<Border Width="{DynamicResource Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace}"/>
+										</StackPanel>
+									</Border>
 								</Border>
 								<ScrollViewer Grid.Column="1" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
 									<ItemsPresenter Name="PART_ItemsPresenter"
@@ -519,11 +521,13 @@
 													ItemTemplate="{TemplateBinding ItemTemplate}"
 													Margin="{DynamicResource Thickness/TabControl.TabStrip.Padding}"/>
 								</ScrollViewer>
-								<Border Grid.Column="2" IsVisible="{Binding $parent[Window].ExtendClientAreaToDecorationsHint}">
-									<StackPanel IsVisible="{x:Static controls:ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtRight}" Orientation="Horizontal">
-										<Border Width="{x:Static controls:ExtendedClientAreaWindowConfiguration.SystemChromeWidth}"/>
-										<Border Width="{DynamicResource Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace}"/>
-									</StackPanel>
+								<Border Grid.Column="2" IsVisible="{Binding $parent[Window].IsSystemChromeVisibleInClientArea}">
+									<Border IsVisible="{Binding $parent[Window].ExtendClientAreaToDecorationsHint}">
+										<StackPanel IsVisible="{x:Static controls:ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtRight}" Orientation="Horizontal">
+											<Border Width="{x:Static controls:ExtendedClientAreaWindowConfiguration.SystemChromeWidth}"/>
+											<Border Width="{DynamicResource Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace}"/>
+										</StackPanel>
+									</Border>
 								</Border>
 							</Grid>
 							<ContentPresenter Name="PART_SelectedContentHost"

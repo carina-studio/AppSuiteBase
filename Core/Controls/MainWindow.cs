@@ -75,7 +75,7 @@ namespace CarinaStudio.AppSuite.Controls
                 this.Padding = windowState switch
                 {
                     WindowState.FullScreen
-                    or WindowState.Maximized => ExtendedClientAreaWindowConfiguration.ContentPaddingWhenMaximized,
+                    or WindowState.Maximized => ExtendedClientAreaWindowConfiguration.ContentPaddingInMaximized,
                     _ => ExtendedClientAreaWindowConfiguration.ContentPadding,
                 };
             });

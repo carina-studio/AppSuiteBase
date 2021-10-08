@@ -21,7 +21,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Get padding of window content when <see cref="Avalonia.Controls.Window.WindowState"/> is <see cref="WindowState.Maximized"/> or <see cref="WindowState.FullScreen"/>.
         /// </summary>
-        public static Thickness ContentPaddingWhenMaximized { get; } = Global.Run(() =>
+        public static Thickness ContentPaddingInMaximized { get; } = Global.Run(() =>
         {
             if (!Platform.IsWindows)
                 return new Thickness();
@@ -50,6 +50,12 @@ namespace CarinaStudio.AppSuite.Controls
         /// Check whether <see cref="SystemChromePlacement"/> is <see cref="PlacementMode.Right"/> or not.
         /// </summary>
         public static bool IsSystemChromePlacedAtRight { get => SystemChromePlacement == PlacementMode.Right; }
+
+
+        /// <summary>
+        /// Check whether system chrome is visible when <see cref="Avalonia.Controls.Window.WindowState"/> is <see cref="WindowState.FullScreen"/> or not.
+        /// </summary>
+        public static bool IsSystemChromeVisibleInFullScreen { get; } = false;
 
 
         /// <summary>
