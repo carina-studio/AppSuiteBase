@@ -73,8 +73,13 @@ namespace CarinaStudio.AppSuite.Controls
 			var screen = this.Screens.ScreenFromVisual(this);
 			var screenBounds = screen.Bounds;
 			var pixelDensity = screen.PixelDensity;
-			var width = this.Width * pixelDensity;
-			var height = this.Height * pixelDensity;
+			var width = this.Width;
+			var height = this.Height;
+			if (!Platform.IsMacOS)
+			{
+				width *= pixelDensity;
+				height *= pixelDensity;
+			}
 			this.Position = new PixelPoint((int)((screenBounds.Width - width) / 2), (int)((screenBounds.Height - height) / 2));
 
             // show content
