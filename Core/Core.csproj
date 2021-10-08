@@ -32,7 +32,9 @@
 		<AvaloniaResource Include="Strings/zh-TW.axaml" />
 		<AvaloniaResource Include="Themes/Base.axaml" />
 		<AvaloniaResource Include="Themes/Dark.axaml" />
+		<AvaloniaResource Include="Themes/Dark-Windows10.axaml" />
 		<AvaloniaResource Include="Themes/Light.axaml" />
+		<AvaloniaResource Include="Themes/Light-Windows10.axaml" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -1439,17 +1439,28 @@ namespace CarinaStudio.AppSuite
                 }
 
                 // load styles
-                var builtInStyles = new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/")).Also(it =>
+                this.styles = new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
                 {
-                    it.Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}.axaml");
-                });
+                    Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}.axaml"),
+                };
+                if (Platform.IsWindows && Environment.OSVersion.Version.Major <= 10)
+                {
+                    this.styles = new Styles().Also(it =>
+                    {
+                        it.Add(this.styles);
+                        it.Add(new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
+                        {
+                            Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}-Windows10.axaml"),
+                        });
+                    });
+                }
                 this.styles = this.OnLoadTheme(themeMode)?.Let(it =>
                 {
                     var styles = new Styles();
-                    styles.Add(builtInStyles);
+                    styles.Add(this.styles);
                     styles.Add(it);
                     return (IStyle)styles;
-                }) ?? builtInStyles;
+                }) ?? this.styles;
 
                 // apply styles
                 this.Styles.Add(this.styles);
