@@ -42,10 +42,10 @@
 		<sys:Double x:Key="Double/Dialog.Separator.Width">15</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Width.Large">40</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Width.Small">5</sys:Double>
-		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize">16</sys:Double>
+		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize">14</sys:Double>
 		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Description">12</sys:Double>
 		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Header1">26</sys:Double>
-		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Header2">22</sys:Double>
+		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Header2">20</sys:Double>
 		<SolidColorBrush x:Key="Brush/Dialog.ControlButtonsPanel.Background" Color="{DynamicResource Color/Dialog.ControlButtonsPanel.Background}"/>
 		<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Border.Header1" Color="{DynamicResource Color/Dialog.TextBlock.Border.Header1}"/>
 		<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Foreground.Description" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Description}"/>
@@ -55,10 +55,11 @@
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Padding">10,5,10,5</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButtonsPanel.Padding">15</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Border.Header1">0,0,0,1</Thickness>
+		<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">0,0,0,3</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin">0,0,0,3</Thickness>
-		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,5,0,0</Thickness>
-		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">0,0,0,5</Thickness>
-		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">0,0,0,5</Thickness>
+		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,3,0,0</Thickness>
+		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">0,0,0,15</Thickness>
+		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">0,0,0,10</Thickness>
 
 		<!-- GridSplitter -->
 		<sys:Double x:Key="Double/GridSplitter.Thickness">5</sys:Double>
@@ -239,6 +240,7 @@
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Dialog.TextBlock.Border.Header1}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Header1}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Header1}"/>
 	</Style>
 	<Style Selector="Button.Dialog_ControlButton">
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -319,7 +321,6 @@
 	<Style Selector="TextBlock.Dialog_TextBlock_Header1">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Header1}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Header1}"/>
 	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock_Header2">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Header2}"/>
