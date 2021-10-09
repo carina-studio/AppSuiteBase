@@ -134,15 +134,21 @@
 
 		<!-- StatusBar -->
 		<Color x:Key="Color/StatusBar.Background.Inactive">#ffffff</Color>
+		<Color x:Key="Color/StatusBar.Button.Background.PointerOver">#3fffffff</Color>
+		<Color x:Key="Color/StatusBar.Button.Background.Pressed">#3f000000</Color>
 		<Color x:Key="Color/StatusBar.Foreground">#ffffff</Color>
 		<Color x:Key="Color/StatusBar.Foreground.Disabled">#7fffffff</Color>
+		<Color x:Key="Color/StatusBar.ToggleButton.Background.Checked">#7f000000</Color>
 		<sys:Double x:Key="Double/StatusBar.Icon.Size">16</sys:Double>
 		<SolidColorBrush x:Key="Brush/StatusBar.Background" Color="{DynamicResource SystemAccentColorDark1}"/>
 		<SolidColorBrush x:Key="Brush/StatusBar.Background.Inactive" Color="{DynamicResource Color/StatusBar.Background.Inactive}"/>
+		<SolidColorBrush x:Key="Brush/StatusBar.Button.Background.PointerOver" Color="{DynamicResource Color/StatusBar.Button.Background.PointerOver}"/>
+		<SolidColorBrush x:Key="Brush/StatusBar.Button.Background.Pressed" Color="{DynamicResource Color/StatusBar.Button.Background.Pressed}"/>
 		<SolidColorBrush x:Key="Brush/StatusBar.Foreground" Color="{DynamicResource Color/StatusBar.Foreground}"/>
 		<SolidColorBrush x:Key="Brush/StatusBar.Foreground.Disabled" Color="{DynamicResource Color/StatusBar.Foreground.Disabled}"/>
+		<SolidColorBrush x:Key="Brush/StatusBar.ToggleButton.Background.Checked" Color="{DynamicResource Color/StatusBar.ToggleButton.Background.Checked}"/>
 		<Thickness x:Key="Thickness/StatusBar.Button.Padding">5</Thickness>
-		<Thickness x:Key="Thickness/StatusBar.Icon.Margin">1,0,1,0</Thickness>
+		<Thickness x:Key="Thickness/StatusBar.Icon.Margin">2,0,2,0</Thickness>
 		<Thickness x:Key="Thickness/StatusBar.Item.Margin">1,5,1,5</Thickness>
 		<Thickness x:Key="Thickness/StatusBar.Padding">5,0,5,0</Thickness>
 
@@ -170,6 +176,9 @@
 		<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Margin">1,2,1,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Padding">10</Thickness>
+
+		<!-- TextBox -->
+		<Thickness x:Key="TextControlBorderThemeThicknessFocused">0,0,0,2</Thickness>
 
 		<!-- TextInputDialog -->
 		<sys:Double x:Key="Double/TextInputDialog.Width">450</sys:Double>
@@ -221,7 +230,7 @@
 
 	<!-- ComboBox -->
 	<Style Selector="ComboBox">
-		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="BorderThickness" Value="0,0,0,1"/>
 	</Style>
 
 	<!-- Dialog -->
@@ -396,8 +405,16 @@
 	<!-- ListBox -->
 	<Style Selector="ListBox">
 		<Setter Property="Background" Value="{DynamicResource TextControlBackground}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrush}"/>
+		<Setter Property="BorderThickness" Value="0,0,0,1"/>
 		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ListBox.Padding}"/>
+	</Style>
+	<Style Selector="ListBox:focused">
+		<Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushFocused}"/>
+	</Style>
+	<Style Selector="ListBox:pointerover">
+		<Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushPointerOver}"/>
 	</Style>
 
 	<!-- ListBoxItem -->
@@ -423,7 +440,7 @@
 
 	<!-- NumericUpDown -->
 	<Style Selector="NumericUpDown">
-		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="BorderThickness" Value="0,0,0,1"/>
 	</Style>
 
 	<!-- Separator -->
@@ -460,9 +477,11 @@
 		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground.Disabled}"/>
 	</Style>
 	<Style Selector="Button.StatusBar_Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.PointerOver}"/>
 		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
 	</Style>
 	<Style Selector="Button.StatusBar_Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
 		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
 	</Style>
 	<Style Selector="Panel.StatusBar_Icon">
@@ -493,10 +512,18 @@
 		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground.Disabled}"/>
 	</Style>
 	<Style Selector="ToggleButton.StatusBar_ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.PointerOver}"/>
 		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
 	</Style>
 	<Style Selector="ToggleButton.StatusBar_ToggleButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
 		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
+	</Style>
+	<Style Selector="ToggleButton.StatusBar_ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.ToggleButton.Background.Checked}"/>
+	</Style>
+	<Style Selector="ToggleButton.StatusBar_ToggleButton:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
 	</Style>
 
 	<!-- TabControl -->
@@ -612,7 +639,7 @@
 
 	<!-- TextBox -->
 	<Style Selector="TextBox">
-		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="BorderThickness" Value="0,0,0,1"/>
 		<Setter Property="FontFamily" Value="{DynamicResource FontFamily/TextBox.FallbackFontFamilies}"/>
 	</Style>
 

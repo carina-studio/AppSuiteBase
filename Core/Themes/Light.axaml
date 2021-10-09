@@ -13,6 +13,8 @@
 		<SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="{DynamicResource SystemAltMediumColor}"/>
 		<SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="{DynamicResource SystemAltHighColor}"/>
 		<SolidColorBrush x:Key="ComboBoxBackgroundUnfocused" Color="{DynamicResource SystemAltMediumLowColor}"/>
+		<SolidColorBrush x:Key="ComboBoxBorderBrush">#9f9f9f</SolidColorBrush>
+		<SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver">#7f7f7f</SolidColorBrush>
 
 		<!-- Dialog -->
 		<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#e0e0e0</Color>
@@ -41,6 +43,10 @@
 		<Color x:Key="Color/TabItem.Header.Background">#d8d8d8</Color>
 		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#e0e0e0</Color>
 		<Color x:Key="Color/TabItem.Header.Background.Selected">#eeeeee</Color>
+
+		<!-- TextBox -->
+		<SolidColorBrush x:Key="TextControlBorderBrush">#9f9f9f</SolidColorBrush>
+		<SolidColorBrush x:Key="TextControlBorderBrushPointerOver">#7f7f7f</SolidColorBrush>
 
 		<!-- ToolBar -->
 		<Color x:Key="Color/ToolBar.Background">#eeeeee</Color>
