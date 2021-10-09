@@ -21,6 +21,14 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">使用者協議</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Version">版本：{0}</sys:String>
 
+	<!-- ApplicationOptions -->
+	<sys:String x:Key="String/ApplicationOptions">應用程式選項</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.Culture">語言</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">系統支援時使用模糊玻璃視窗背景</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.Others">其他設定</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.ThemeMode">佈景</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.UserInterface">使用者介面</sys:String>
+
 	<!-- ApplicationUpdateDialog -->
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckForUpdate">檢查更新</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckingForUpdate">正在檢查更新…</sys:String>

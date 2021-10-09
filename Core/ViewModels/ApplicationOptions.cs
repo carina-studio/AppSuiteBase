@@ -41,6 +41,16 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
+        /// Get or set whether to enable blurry window background if available or not.
+        /// </summary>
+        public bool EnableBlurryBackground
+        {
+            get => this.Settings.GetValueOrDefault(SettingKeys.EnableBlurryBackground);
+            set => this.Settings.SetValue<bool>(SettingKeys.EnableBlurryBackground, value);
+        }
+
+
+        /// <summary>
         /// Check whether restarting all main windows is needed or not.
         /// </summary>
         public bool IsRestartingMainWindowsNeeded
@@ -71,6 +81,8 @@ namespace CarinaStudio.AppSuite.ViewModels
             var key = e.Key;
             if (key == SettingKeys.Culture)
                 this.OnPropertyChanged(nameof(Culture));
+            else if (key == SettingKeys.EnableBlurryBackground)
+                this.OnPropertyChanged(nameof(EnableBlurryBackground));
             else if (key == SettingKeys.ThemeMode)
                 this.OnPropertyChanged(nameof(ThemeMode));
         }

@@ -15,7 +15,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Setting key of enabling blurry window background if available.
+        /// Enable blurry window background if available.
         /// </summary>
         public static readonly SettingKey<bool> EnableBlurryBackground = new SettingKey<bool>(nameof(EnableBlurryBackground), true);
 

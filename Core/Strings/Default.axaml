@@ -23,6 +23,14 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">User Agreement</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Version">Version: {0}</sys:String>
 
+	<!-- ApplicationOptions -->
+	<sys:String x:Key="String/ApplicationOptions">Application options</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.Culture">Language</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">Use blurry window background if supported by system</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.Others">Other Settings</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.ThemeMode">Theme</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.UserInterface">User Interface</sys:String>
+
 	<!-- ApplicationUpdateDialog -->
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckForUpdate">Check for update</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckingForUpdate">Checking for update…</sys:String>
