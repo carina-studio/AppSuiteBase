@@ -127,10 +127,10 @@
 		<sys:Double x:Key="Double/SplashWindow.Message.ReservedSpace">50</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Title.FontSize">30</sys:Double>
 		<Thickness x:Key="Thickness/SplashWindow.Border">1</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">0,0,20,0</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">0,0,10,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Padding">20</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Title.Margin">0,0,0,15</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Title.Margin">0,0,0,5</Thickness>
 
 		<!-- StatusBar -->
 		<Color x:Key="Color/StatusBar.Background.Inactive">#ffffff</Color>
