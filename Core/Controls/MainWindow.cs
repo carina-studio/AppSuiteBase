@@ -94,9 +94,9 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
-        /// Check whether extending client area to title bar is enabled or not.
+        /// Check whether extending client area to title bar is allowed or not.
         /// </summary>
-        protected virtual bool IsExtendingClientAreaEnabled { get; } = true;
+        public virtual bool IsExtendingClientAreaAllowed { get; } = true;
 
 
         /// <summary>
@@ -296,9 +296,22 @@ namespace CarinaStudio.AppSuite.Controls
                 if (windowState != WindowState.Minimized)
                     this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, windowState);
                 this.updateContentPaddingAction.Schedule();
+                this.InvalidateTransparencyLevelHint();
                 this.UpdateExtendingClientArea();
             }
         }
+
+
+        /// <summary>
+        /// Called to select transparency level.
+        /// </summary>
+        /// <returns>Transparency level.</returns>
+        protected override WindowTransparencyLevel OnSelectTransparentLevelHint() => this.WindowState switch
+        {
+            WindowState.FullScreen
+            or WindowState.Maximized => WindowTransparencyLevel.None,
+            _ => base.OnSelectTransparentLevelHint(),
+        };
 
 
         // Called when property of view-model changed.
@@ -321,7 +334,7 @@ namespace CarinaStudio.AppSuite.Controls
         // Update client area extending state.
         void UpdateExtendingClientArea()
         {
-            if (!this.IsExtendingClientAreaEnabled || !ExtendedClientAreaWindowConfiguration.IsExtendedClientAreaSupported)
+            if (!this.IsExtendingClientAreaAllowed || !ExtendedClientAreaWindowConfiguration.IsExtendedClientAreaSupported)
             {
                 this.ExtendClientAreaToDecorationsHint = false;
                 return;

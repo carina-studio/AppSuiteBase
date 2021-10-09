@@ -32,7 +32,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         void SwitchTheme()
         {
-            this.Settings.SetValue<ThemeMode>(this.Application.ThemeModeSettingKey, this.Settings.GetValueOrDefault(this.Application.ThemeModeSettingKey) switch
+            this.Settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, this.Settings.GetValueOrDefault(SettingKeys.ThemeMode) switch
             {
                 ThemeMode.System => ThemeMode.Dark,
                 ThemeMode.Dark => ThemeMode.Light,
@@ -43,7 +43,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void Test()
         {
-            this.Application.RestartMainWindows();
+            await new Dialog().ShowDialog(this);
         }
 
         void Test2()

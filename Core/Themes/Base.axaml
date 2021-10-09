@@ -102,6 +102,9 @@
 		<!-- ListBoxItem -->
 		<Thickness x:Key="Thickness/ListBoxItem.Padding">6</Thickness>
 
+		<!-- MainWindow -->
+		<sys:Double x:Key="Double/MainWindow.Background.Opacity.SemiTransparent">0.9</sys:Double>
+
 		<!-- MessageDialog -->
 		<sys:Double x:Key="Double/MessageDialog.Icon.Size">45</sys:Double>
 		<sys:Double x:Key="Double/MessageDialog.MinWidth">200</sys:Double>

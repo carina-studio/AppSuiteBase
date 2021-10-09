@@ -1,5 +1,4 @@
-﻿using CarinaStudio.Configuration;
-using CarinaStudio.Controls;
+﻿using CarinaStudio.Controls;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -19,15 +18,15 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Get key of application culture setting.
-        /// </summary>
-        SettingKey<ApplicationCulture> CultureSettingKey { get; }
-
-
-        /// <summary>
         /// Get theme mode which is currently applied to application.
         /// </summary>
         ThemeMode EffectiveThemeMode { get; }
+
+
+        /// <summary>
+        /// Get information of hardware.
+        /// </summary>
+        public HardwareInfo HardwareInfo { get; }
 
 
         /// <summary>
@@ -133,12 +132,6 @@ namespace CarinaStudio.AppSuite
         /// Close all main windows and shut down application.
         /// </summary>
         void Shutdown();
-
-
-        /// <summary>
-        /// Get key of theme mode setting.
-        /// </summary>
-        SettingKey<ThemeMode> ThemeModeSettingKey { get; }
 
 
         /// <summary>

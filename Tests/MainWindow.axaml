@@ -6,9 +6,12 @@
 		xmlns:appConverters="using:CarinaStudio.AppSuite.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Tests.MainWindow"
-		Background="{DynamicResource Brush/TabItem.Header.Background}"
 		Icon="/AppIcon.ico"
         Title="Main Window">
+
+	<Window.Background>
+		<SolidColorBrush Color="{DynamicResource Color/TabItem.Header.Background}" Opacity="{DynamicResource Double/MainWindow.Background.Opacity.SemiTransparent}"/>
+	</Window.Background>
 
 	<DockPanel>
 
@@ -49,7 +52,7 @@
 					</StackPanel>
 				</TabItem.Header>
 
-				<StackPanel HorizontalAlignment="Stretch" Orientation="Vertical">
+				<StackPanel Background="{DynamicResource Brush/ToolBar.Background}" HorizontalAlignment="Stretch" Orientation="Vertical">
 					<TextBlock Text="{DynamicResource String/Common.OK}"/>
 
 					<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5"/>

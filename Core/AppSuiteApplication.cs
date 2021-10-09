@@ -104,6 +104,7 @@ namespace CarinaStudio.AppSuite
         Avalonia.Controls.ResourceDictionary? accentColorResources;
         ScheduledAction? checkUpdateInfoAction;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
+        HardwareInfo? hardwareInfo;
         bool isRestartingMainWindowsRequested;
         bool isShutdownStarted;
         readonly Dictionary<Window, MainWindowHolder> mainWindowHolders = new Dictionary<Window, MainWindowHolder>();
@@ -190,7 +191,7 @@ namespace CarinaStudio.AppSuite
             {
                 if (this.mainWindowHolders.IsEmpty())
                     return false;
-                var themeMode = this.Settings.GetValueOrDefault(this.ThemeModeSettingKey).Let(it =>
+                var themeMode = this.Settings.GetValueOrDefault(SettingKeys.ThemeMode).Let(it =>
                 {
                     if (it == ThemeMode.System)
                         return this.systemThemeMode;
@@ -313,12 +314,6 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Get key of application culture setting.
-        /// </summary>
-        public virtual SettingKey<ApplicationCulture> CultureSettingKey { get; } = new SettingKey<ApplicationCulture>("Culture", ApplicationCulture.System);
-
-
-        /// <summary>
         /// Get <see cref="AppSuiteApplication"/> instance for current process.
         /// </summary>
         public static new AppSuiteApplication Current { get => (AppSuiteApplication)Application.Current; }
@@ -358,6 +353,13 @@ namespace CarinaStudio.AppSuite
                 return str;
             return null;
         }
+
+
+        /// <summary>
+        /// Get information of hardware.
+        /// </summary>
+        public HardwareInfo HardwareInfo { get => this.hardwareInfo ?? throw new InvalidOperationException("Application is not initialized yet."); }
+
 
 
         /// <summary>
@@ -465,10 +467,10 @@ namespace CarinaStudio.AppSuite
             }
 
             // set theme mode to 'Dark' if 'System' is unsuported
-            if (this.settings.GetValueOrDefault(this.ThemeModeSettingKey) == ThemeMode.System
+            if (this.settings.GetValueOrDefault(SettingKeys.ThemeMode) == ThemeMode.System
                 && !this.IsSystemThemeModeSupported)
             {
-                this.settings.SetValue<ThemeMode>(this.ThemeModeSettingKey, ThemeMode.Dark);
+                this.settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, ThemeMode.Dark);
             }
         }
 
@@ -571,7 +573,8 @@ namespace CarinaStudio.AppSuite
                 }
             }
 
-            // create process information
+            // create hardware and process information
+            this.hardwareInfo = new HardwareInfo(this);
             this.processInfo = new ProcessInfo(this);
 
             // parse arguments
@@ -897,9 +900,9 @@ namespace CarinaStudio.AppSuite
         /// <param name="e">Event data.</param>
         protected virtual void OnSettingChanged(SettingChangedEventArgs e)
         {
-            if (e.Key == this.CultureSettingKey)
+            if (e.Key == SettingKeys.Culture)
                 this.UpdateCultureInfo(true);
-            else if (e.Key == this.ThemeModeSettingKey)
+            else if (e.Key == SettingKeys.ThemeMode)
                 this.CheckRestartingMainWindowsNeeded();
         }
 
@@ -1291,17 +1294,11 @@ namespace CarinaStudio.AppSuite
         }
 
 
-        /// <summary>
-        /// Get key of theme mode setting.
-        /// </summary>
-        public virtual SettingKey<ThemeMode> ThemeModeSettingKey { get; } = new SettingKey<ThemeMode>("ThemeMode", ThemeMode.System);
-
-
         // Update culture info according to settings.
         void UpdateCultureInfo(bool updateStringResources)
         {
             // get culture info
-            var cultureInfo = this.Settings.GetValueOrDefault(this.CultureSettingKey).ToCultureInfo();
+            var cultureInfo = this.Settings.GetValueOrDefault(SettingKeys.Culture).ToCultureInfo();
             cultureInfo.ClearCachedData();
             if (object.Equals(cultureInfo, this.cultureInfo))
                 return;
@@ -1421,7 +1418,7 @@ namespace CarinaStudio.AppSuite
         void UpdateStyles()
         {
             // get theme mode
-            var themeMode = this.Settings.GetValueOrDefault(this.ThemeModeSettingKey).Let(it =>
+            var themeMode = this.Settings.GetValueOrDefault(SettingKeys.ThemeMode).Let(it =>
             {
                 if (it == ThemeMode.System)
                     return this.systemThemeMode;

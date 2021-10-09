@@ -29,8 +29,8 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// </summary>
         public ApplicationCulture Culture
         {
-            get => this.Settings.GetValueOrDefault(this.Application.CultureSettingKey);
-            set => this.Settings.SetValue<ApplicationCulture>(this.Application.CultureSettingKey, value);
+            get => this.Settings.GetValueOrDefault(SettingKeys.Culture);
+            set => this.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, value);
         }
 
 
@@ -69,9 +69,9 @@ namespace CarinaStudio.AppSuite.ViewModels
         {
             base.OnSettingChanged(e);
             var key = e.Key;
-            if (key == this.Application.CultureSettingKey)
+            if (key == SettingKeys.Culture)
                 this.OnPropertyChanged(nameof(Culture));
-            else if (key == this.Application.ThemeModeSettingKey)
+            else if (key == SettingKeys.ThemeMode)
                 this.OnPropertyChanged(nameof(ThemeMode));
         }
 
@@ -81,12 +81,12 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// </summary>
         public ThemeMode ThemeMode
         {
-            get => this.Settings.GetValueOrDefault(this.Application.ThemeModeSettingKey);
+            get => this.Settings.GetValueOrDefault(SettingKeys.ThemeMode);
             set
             {
                 if (value == ThemeMode.System && !this.Application.IsSystemThemeModeSupported)
                     return;
-                this.Settings.SetValue<ThemeMode>(this.Application.ThemeModeSettingKey, value);
+                this.Settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, value);
             }
         }
 
