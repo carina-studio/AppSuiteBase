@@ -12,7 +12,7 @@ namespace CarinaStudio.AppSuite
     public class HardwareInfo : INotifyPropertyChanged
     {
         // Fields.
-        readonly AppSuiteApplication app;
+        readonly IAppSuiteApplication app;
         readonly ScheduledAction checkGraphicsCardAction;
         readonly ManagementEventWatcher? graphicsCardWatcher;
         readonly ILogger logger;
@@ -20,7 +20,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Constructor.
-        internal HardwareInfo(AppSuiteApplication app)
+        internal HardwareInfo(IAppSuiteApplication app)
         {
             // setup fields
             this.app = app;

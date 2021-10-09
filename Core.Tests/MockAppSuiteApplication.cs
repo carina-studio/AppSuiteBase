@@ -30,6 +30,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         protected internal MockAppSuiteApplication()
         {
+            this.HardwareInfo = new HardwareInfo(this);
             this.ProcessInfo = new ProcessInfo(this);
             this.RootPrivateDirectoryPath = Path.Combine(Path.GetTempPath(), $"AppSuiteTest-{DateTime.Now.ToBinary()}");
             Directory.CreateDirectory(this.RootPrivateDirectoryPath);
@@ -87,6 +88,12 @@ namespace CarinaStudio.AppSuite
         /// <param name="defaultValue">Default value.</param>
         /// <returns>String from resources.</returns>
         public virtual string? GetString(string key, string? defaultValue = null) => defaultValue;
+
+
+        /// <summary>
+        /// Get information of hardware.
+        /// </summary>
+        public HardwareInfo HardwareInfo { get; }
 
 
         /// <summary>
