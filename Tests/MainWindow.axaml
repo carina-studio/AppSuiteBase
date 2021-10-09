@@ -44,12 +44,15 @@
 			<TabItem>
 
 				<TabItem.Header>
-					<StackPanel Orientation="Horizontal">
-						<TextBlock Text="Item 1" VerticalAlignment="Center"/>
-						<Button Classes="TabItem_Button">
+					<Grid ColumnDefinitions="Auto,*,Auto">
+						<Border Classes="TabItem_Icon">
+							<DrawingPresenter Classes="Icon" Drawing="{DynamicResource Drawing/Icon.File}"/>
+						</Border>
+						<TextBlock Classes="TabItem_TextBlock" Grid.Column="1" Text="Item 1"/>
+						<Button Classes="TabItem_Button" Grid.Column="2">
 							<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
 						</Button>
-					</StackPanel>
+					</Grid>
 				</TabItem.Header>
 
 				<StackPanel Background="{DynamicResource Brush/ToolBar.Background}" HorizontalAlignment="Stretch" Orientation="Vertical">
