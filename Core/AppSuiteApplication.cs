@@ -326,6 +326,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get fall-back theme mode if <see cref="IsSystemThemeModeSupported"/> is false.
+        /// </summary>
+        public virtual ThemeMode FallbackThemeMode { get; } = Platform.IsMacOS ? ThemeMode.Light : ThemeMode.Dark;
+
+
+        /// <summary>
         /// Check whether retrieved application update info should be always accepted or not. This is designed for debugging purpose.
         /// </summary>
         protected virtual bool ForceAcceptingUpdateInfo { get; } = false;
@@ -466,11 +472,11 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogError(ex, $"Failed to load settings from '{this.settingsFilePath}'");
             }
 
-            // set theme mode to 'Dark' if 'System' is unsuported
+            // Fall-back to default theme mode if 'System' is unsuported
             if (this.settings.GetValueOrDefault(SettingKeys.ThemeMode) == ThemeMode.System
                 && !this.IsSystemThemeModeSupported)
             {
-                this.settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, ThemeMode.Dark);
+                this.settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, this.FallbackThemeMode);
             }
         }
 
