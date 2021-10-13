@@ -100,6 +100,10 @@ namespace CarinaStudio.AppSuite
         const int UpdateCheckingInterval = 3600000; // 1 hr
 
 
+        // Static fields.
+        static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new SettingKey<bool>("IsAcceptNonStableApplicationUpdateInitialized", false);
+
+
         // Fields.
         Avalonia.Controls.ResourceDictionary? accentColorResources;
         ScheduledAction? checkUpdateInfoAction;
@@ -472,9 +476,12 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogError(ex, $"Failed to load settings from '{this.settingsFilePath}'");
             }
 
-            // disable accepting non-stable update for stable build
-            if (this.settings.GetRawValue(SettingKeys.AcceptNonStableApplicationUpdate) == null && this.ReleasingType == ApplicationReleasingType.Stable)
-                this.settings.SetValue<bool>(SettingKeys.AcceptNonStableApplicationUpdate, false);
+            // setup accepting non-stable update
+            if (!this.PersistentState.GetValueOrDefault(IsAcceptNonStableApplicationUpdateInitKey))
+            {
+                this.settings.SetValue<bool>(SettingKeys.AcceptNonStableApplicationUpdate, this.ReleasingType != ApplicationReleasingType.Stable);
+                this.PersistentState.SetValue<bool>(IsAcceptNonStableApplicationUpdateInitKey, true);
+            }
 
             // Fall-back to default theme mode if 'System' is unsuported
             if (this.settings.GetValueOrDefault(SettingKeys.ThemeMode) == ThemeMode.System
