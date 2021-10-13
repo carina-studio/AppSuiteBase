@@ -1,7 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.AppSuite.ViewModels;
+using CarinaStudio.Data.Converters;
 using System;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -12,6 +14,7 @@ namespace CarinaStudio.AppSuite.Controls
 	partial class ApplicationInfoDialogImpl : Dialog
 	{
 		// Static fields.
+		static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
 		static readonly AvaloniaProperty<bool> HasGitHubProjectProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasGitHubProject));
 		static readonly AvaloniaProperty<bool> HasPrivacyPolicyProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasPrivacyPolicy));
 		static readonly AvaloniaProperty<bool> HasUserAgreementProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasUserAgreement));
@@ -99,7 +102,13 @@ namespace CarinaStudio.AppSuite.Controls
 					this.SetValue<bool>(HasGitHubProjectProperty, appInfo.GitHubProjectUri != null);
 					this.SetValue<bool>(HasPrivacyPolicyProperty, appInfo.PrivacyPolicyUri != null);
 					this.SetValue<bool>(HasUserAgreementProperty, appInfo.UserAgreementUri != null);
-					this.SetValue<string?>(VersionStringProperty, this.Application.GetFormattedString("ApplicationInfoDialog.Version", appInfo.Version));
+					this.SetValue<string?>(VersionStringProperty, Global.Run(() =>
+					{
+						var str = this.Application.GetFormattedString("ApplicationInfoDialog.Version", appInfo.Version);
+						if (appInfo.ReleasingType == ApplicationReleasingType.Stable)
+							return str;
+						return str + $" ({AppReleasingTypeConverter.Convert<string?>(appInfo.ReleasingType)})";
+					}));
 				}
 			}
         }

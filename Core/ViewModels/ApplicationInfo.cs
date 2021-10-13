@@ -1,4 +1,6 @@
-﻿using Avalonia.Media.Imaging;
+﻿using Avalonia;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using CarinaStudio.ViewModels;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,7 +13,7 @@ namespace CarinaStudio.AppSuite.ViewModels
     /// <summary>
     /// View-model of application information UI.
     /// </summary>
-    public abstract class ApplicationInfo : ViewModel<IAppSuiteApplication>
+    public class ApplicationInfo : ViewModel<IAppSuiteApplication>
     {
         /// <summary>
         /// Creator of application icon.
@@ -40,7 +42,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Initialize new <see cref="ApplicationInfo"/> instance.
         /// </summary>
-        protected ApplicationInfo() : base(AppSuiteApplication.Current)
+        public ApplicationInfo() : base(AppSuiteApplication.Current)
         { }
 
 
@@ -74,7 +76,10 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Get application icon.
         /// </summary>
-        public abstract IBitmap Icon { get; }
+        public virtual IBitmap Icon { get; } = AvaloniaLocator.Current.GetService<IAssetLoader>().Let(loader =>
+        {
+            return loader.Open(new Uri($"avares://{Assembly.GetEntryAssembly().AsNonNull().GetName().Name}/AppIcon.ico")).Use(stream => new Bitmap(stream));
+        });
 
 
         /// <summary>
@@ -99,6 +104,12 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// Get URI of Privacy Policy.
         /// </summary>
         public virtual Uri? PrivacyPolicyUri { get; }
+
+
+        /// <summary>
+        /// Get type of application releasing.
+        /// </summary>
+        public ApplicationReleasingType ReleasingType { get => this.Application.ReleasingType; }
 
 
         /// <summary>

@@ -9,6 +9,12 @@ namespace CarinaStudio.AppSuite
     public static class SettingKeys
     {
         /// <summary>
+        /// Accept application update with non-stable version.
+        /// </summary>
+        public static readonly SettingKey<bool> AcceptNonStableApplicationUpdate = new SettingKey<bool>(nameof(AcceptNonStableApplicationUpdate), true);
+
+
+        /// <summary>
         /// Application culture.
         /// </summary>
         public static readonly SettingKey<ApplicationCulture> Culture = new SettingKey<ApplicationCulture>(nameof(Culture), ApplicationCulture.System);

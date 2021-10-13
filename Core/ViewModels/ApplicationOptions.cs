@@ -25,6 +25,16 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
+        /// Get or set whether to accept application update with non-stable version or not.
+        /// </summary>
+        public bool AcceptNonStableApplicationUpdate
+        {
+            get => this.Settings.GetValueOrDefault(SettingKeys.AcceptNonStableApplicationUpdate);
+            set => this.Settings.SetValue<bool>(SettingKeys.AcceptNonStableApplicationUpdate, value);
+        }
+
+
+        /// <summary>
         /// Get or set application culture.
         /// </summary>
         public ApplicationCulture Culture
@@ -79,7 +89,9 @@ namespace CarinaStudio.AppSuite.ViewModels
         {
             base.OnSettingChanged(e);
             var key = e.Key;
-            if (key == SettingKeys.Culture)
+            if (key == SettingKeys.AcceptNonStableApplicationUpdate)
+                this.OnPropertyChanged(nameof(AcceptNonStableApplicationUpdate));
+            else if (key == SettingKeys.Culture)
                 this.OnPropertyChanged(nameof(Culture));
             else if (key == SettingKeys.EnableBlurryBackground)
                 this.OnPropertyChanged(nameof(EnableBlurryBackground));

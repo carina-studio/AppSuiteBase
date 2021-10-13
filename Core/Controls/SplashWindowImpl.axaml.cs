@@ -1,8 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using CarinaStudio.Data.Converters;
 using System;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -13,6 +15,7 @@ namespace CarinaStudio.AppSuite.Controls
 	partial class SplashWindowImpl : Avalonia.Controls.Window
 	{
 		// Static fields.
+		static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
 		static readonly AvaloniaProperty<IBitmap?> IconBitmapProperty = AvaloniaProperty.Register<SplashWindowImpl, IBitmap?>(nameof(IconBitmap));
 		static readonly AvaloniaProperty<string> MessageProperty = AvaloniaProperty.Register<SplashWindowImpl, string>(nameof(Message), " ", coerce: ((_, it) => string.IsNullOrEmpty(it) ? " " : it));
 
@@ -26,6 +29,8 @@ namespace CarinaStudio.AppSuite.Controls
 			this.ApplicationName = app.Name ?? "";
 			this.Message = app.GetStringNonNull("SplashWindow.Launching");
 			this.Version = app.GetFormattedString("ApplicationInfoDialog.Version", app.Assembly.GetName().Version).AsNonNull();
+			if (app.ReleasingType != ApplicationReleasingType.Stable)
+				this.Version += $" ({AppReleasingTypeConverter.Convert<string?>(app.ReleasingType)})";
 			InitializeComponent();
 		}
 

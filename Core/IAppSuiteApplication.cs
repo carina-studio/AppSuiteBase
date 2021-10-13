@@ -92,6 +92,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get type of application releasing.
+        /// </summary>
+        ApplicationReleasingType ReleasingType { get; }
+
+
+        /// <summary>
         /// Request restarting given main window.
         /// </summary>
         /// <param name="mainWindow">Main window to restart.</param>

@@ -25,11 +25,17 @@
 
 	<!-- ApplicationOptions -->
 	<sys:String x:Key="String/ApplicationOptions">Application options</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">Accept non-stable application update</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">Language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">Use blurry window background if supported by system</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Others">Other Settings</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">Theme</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UserInterface">User Interface</sys:String>
+
+	<!-- ApplicationReleasingType -->
+	<sys:String x:Key="String/ApplicationReleasingType.Development">Development</sys:String>
+	<sys:String x:Key="String/ApplicationReleasingType.Preview">Preview</sys:String>
+	<sys:String x:Key="String/ApplicationReleasingType.Stable">Stable</sys:String>
 
 	<!-- ApplicationUpdateDialog -->
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckForUpdate">Check for update</sys:String>

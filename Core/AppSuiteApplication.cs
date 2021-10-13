@@ -472,6 +472,10 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogError(ex, $"Failed to load settings from '{this.settingsFilePath}'");
             }
 
+            // disable accepting non-stable update for stable build
+            if (this.settings.GetRawValue(SettingKeys.AcceptNonStableApplicationUpdate) == null && this.ReleasingType == ApplicationReleasingType.Stable)
+                this.settings.SetValue<bool>(SettingKeys.AcceptNonStableApplicationUpdate, false);
+
             // Fall-back to default theme mode if 'System' is unsuported
             if (this.settings.GetValueOrDefault(SettingKeys.ThemeMode) == ThemeMode.System
                 && !this.IsSystemThemeModeSupported)
@@ -906,7 +910,9 @@ namespace CarinaStudio.AppSuite
         /// <param name="e">Event data.</param>
         protected virtual void OnSettingChanged(SettingChangedEventArgs e)
         {
-            if (e.Key == SettingKeys.Culture)
+            if (e.Key == SettingKeys.AcceptNonStableApplicationUpdate)
+                _ = this.CheckUpdateInfoAsync();
+            else if (e.Key == SettingKeys.Culture)
                 this.UpdateCultureInfo(true);
             else if (e.Key == SettingKeys.ThemeMode)
                 this.CheckRestartingMainWindowsNeeded();
@@ -994,6 +1000,12 @@ namespace CarinaStudio.AppSuite
         /// Get information of current process.
         /// </summary>
         public ProcessInfo ProcessInfo { get => this.processInfo ?? throw new InvalidOperationException("Application is not initialized yet."); }
+
+
+        /// <summary>
+        /// Get type of application releasing.
+        /// </summary>
+        public virtual ApplicationReleasingType ReleasingType { get; } = ApplicationReleasingType.Development;
 
 
         /// <summary>
