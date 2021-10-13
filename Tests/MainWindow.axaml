@@ -89,13 +89,13 @@
 						<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
 
 							<Button Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Information.Colored}"/>
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.ZoomIn}"/>
 							</Button>
 							<Button Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Question.Colored}"/>
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.ZoomOut}"/>
 							</Button>
 							<Button Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Warning.Colored}"/>
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Search}"/>
 							</Button>
 							<Button Classes="ToolBar_Button">
 								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Error.Colored}"/>
