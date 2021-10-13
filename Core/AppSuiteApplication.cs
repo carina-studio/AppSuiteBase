@@ -624,16 +624,6 @@ namespace CarinaStudio.AppSuite
                 };
             }
 
-            // start checking update
-            this.PackageManifestUri?.Let(it =>
-            {
-                this.checkUpdateInfoAction = new ScheduledAction(() =>
-                {
-                    _ = this.CheckUpdateInfoAsync();
-                });
-                this.checkUpdateInfoAction?.Schedule();
-            });
-
             // prepare
             this.SynchronizationContext.Post(() =>
             {
@@ -842,6 +832,16 @@ namespace CarinaStudio.AppSuite
             await this.LoadPersistentStateAsync();
             await this.LoadSettingsAsync();
             this.Settings.SettingChanged += this.OnSettingChanged;
+
+            // start checking update
+            this.PackageManifestUri?.Let(it =>
+            {
+                this.checkUpdateInfoAction = new ScheduledAction(() =>
+                {
+                    _ = this.CheckUpdateInfoAsync();
+                });
+                this.checkUpdateInfoAction?.Schedule();
+            });
 
             // setup culture info
             this.UpdateCultureInfo(false);
