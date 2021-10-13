@@ -767,10 +767,9 @@ namespace CarinaStudio.AppSuite
                     launchOptions[RestoreStateRequestedKey] = true;
                     break;
                 default:
-                    this.Logger.LogWarning($"Unknown argument: {arg}");
-                    break;
+                    return index;
             }
-            return (index + 1);
+            return index + 1;
         }
 
 
