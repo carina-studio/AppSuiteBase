@@ -40,20 +40,28 @@
 		<Color x:Key="Color/StatusBar.Background.Inactive">#8a8a8a</Color>
 
 		<!-- TabItem -->
-		<Color x:Key="Color/TabItem.Header.Background">#d8d8d8</Color>
-		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#e0e0e0</Color>
-		<Color x:Key="Color/TabItem.Header.Background.Selected">#eeeeee</Color>
+		<Color x:Key="Color/TabItem.Header.Background">#d0d0d0</Color>
+		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#d8d8d8</Color>
+		<Color x:Key="Color/TabItem.Header.Background.Selected">#e0e0e0</Color>
+		<Color x:Key="Color/TabItem.Header.Border">#d0d0d0</Color>
+		<Color x:Key="Color/TabItem.Header.Border.PointerOver">#d8d8d8</Color>
+		<Color x:Key="Color/TabItem.Header.Border.Selected">#b0b0b0</Color>
 
 		<!-- TextBox -->
 		<SolidColorBrush x:Key="TextControlBorderBrush">#9f9f9f</SolidColorBrush>
 		<SolidColorBrush x:Key="TextControlBorderBrushPointerOver">#7f7f7f</SolidColorBrush>
 
 		<!-- ToolBar -->
-		<Color x:Key="Color/ToolBar.Background">#eeeeee</Color>
+		<Color x:Key="Color/ToolBar.Background">#e0e0e0</Color>
 
 		<!-- Window -->
 		<Color x:Key="Color/Window.Background">#eeeeee</Color>
-		<Color x:Key="Color/Window.Background.Transparent">#bfd0d0d0</Color>
+		<Color x:Key="Color/Window.Background.Tabbed">#c0c0c0</Color>
+		<Color x:Key="Color/Window.Background.Tabbed.Transparent">#e5c0c0c0</Color>
+		<Color x:Key="Color/Window.Background.Transparent">#e5eeeeee</Color>
+
+		<!-- WorkingArea -->
+		<Color x:Key="Color/WorkingArea.Background">#eeeeee</Color>
 
 	</Styles.Resources>
 	

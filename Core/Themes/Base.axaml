@@ -103,9 +103,6 @@
 		<!-- ListBoxItem -->
 		<Thickness x:Key="Thickness/ListBoxItem.Padding">6</Thickness>
 
-		<!-- MainWindow -->
-		<sys:Double x:Key="Double/MainWindow.Background.Opacity.SemiTransparent">0.9</sys:Double>
-
 		<!-- MessageDialog -->
 		<sys:Double x:Key="Double/MessageDialog.Icon.Size">45</sys:Double>
 		<sys:Double x:Key="Double/MessageDialog.MinWidth">200</sys:Double>
@@ -157,20 +154,27 @@
 		<Thickness x:Key="Thickness/TabControl.TabStrip.Padding">6,0,6,0</Thickness>
 
 		<!-- TabItem -->
+		<SolidColorBrush x:Key="TabItemHeaderSelectedPipeFill">#00000000</SolidColorBrush>
+		<SolidColorBrush x:Key="Brush/TabItem.Header.Background" Color="{DynamicResource Color/TabItem.Header.Background}"/>
+		<SolidColorBrush x:Key="Brush/TabItem.Header.Background.PointerOver" Color="{DynamicResource Color/TabItem.Header.Background.PointerOver}"/>
+		<SolidColorBrush x:Key="Brush/TabItem.Header.Background.Selected" Color="{DynamicResource Color/TabItem.Header.Background.Selected}"/>
+		<SolidColorBrush x:Key="Brush/TabItem.Header.Border" Color="{DynamicResource Color/TabItem.Header.Border}"/>
+		<SolidColorBrush x:Key="Brush/TabItem.Header.Border.PointerOver" Color="{DynamicResource Color/TabItem.Header.Border.PointerOver}"/>
+		<SolidColorBrush x:Key="Brush/TabItem.Header.Border.Selected" Color="{DynamicResource Color/TabItem.Header.Border.Selected}"/>
 		<Color x:Key="Color/TabItem.Header.Background">#ffffff</Color>
 		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#ffffff</Color>
 		<Color x:Key="Color/TabItem.Header.Background.Selected">#ffffff</Color>
-		<CornerRadius x:Key="CornerRadius/TabItem.Header">3,3,0,0</CornerRadius>
+		<Color x:Key="Color/TabItem.Header.Border">#ffffff</Color>
+		<Color x:Key="Color/TabItem.Header.Border.PointerOver">#ffffff</Color>
+		<Color x:Key="Color/TabItem.Header.Border.Selected">#ffffff</Color>
+		<CornerRadius x:Key="CornerRadius/TabItem.Header">5,5,0,0</CornerRadius>
 		<sys:Double x:Key="Double/TabItem.Header.ColorBar.Height">3</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.Content.Height">20</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.FontSize">14</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.Height">40</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.Icon.Size">16</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.MaxWidth">250</sys:Double>
-		<SolidColorBrush x:Key="TabItemHeaderSelectedPipeFill">#00000000</SolidColorBrush>
-		<SolidColorBrush x:Key="Brush/TabItem.Header.Background" Color="{DynamicResource Color/TabItem.Header.Background}"/>
-		<SolidColorBrush x:Key="Brush/TabItem.Header.Background.PointerOver" Color="{DynamicResource Color/TabItem.Header.Background.PointerOver}"/>
-		<SolidColorBrush x:Key="Brush/TabItem.Header.Background.Selected" Color="{DynamicResource Color/TabItem.Header.Background.Selected}"/>
+		<Thickness x:Key="Thickness/TabItem.Header.Border">0,0,1,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">10,0,0,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">3</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
@@ -194,10 +198,18 @@
 		<Thickness x:Key="Thickness/ToolBar.TextBlock.Margin">3,0,2,0</Thickness>
 
 		<!-- Window -->
-		<Color x:Key="Color/Window.Background">#ffffff</Color>
-		<Color x:Key="Color/Window.Background.Transparent">#ffffff</Color>
 		<SolidColorBrush x:Key="Brush/Window.Background" Color="{DynamicResource Color/Window.Background}"/>
+		<SolidColorBrush x:Key="Brush/Window.Background.Tabbed" Color="{DynamicResource Color/Window.Background.Tabbed}"/>
+		<SolidColorBrush x:Key="Brush/Window.Background.Tabbed.Transparent" Color="{DynamicResource Color/Window.Background.Tabbed.Transparent}"/>
 		<SolidColorBrush x:Key="Brush/Window.Background.Transparent" Color="{DynamicResource Color/Window.Background.Transparent}"/>
+		<Color x:Key="Color/Window.Background">#ffffff</Color>
+		<Color x:Key="Color/Window.Background.Tabbed">#ffffff</Color>
+		<Color x:Key="Color/Window.Background.Tabbed.Transparent">#ffffff</Color>
+		<Color x:Key="Color/Window.Background.Transparent">#ffffff</Color>
+
+		<!-- WorkingArea -->
+		<SolidColorBrush x:Key="Brush/WorkingArea.Background" Color="{DynamicResource Color/WorkingArea.Background}"/>
+		<Color x:Key="Color/WorkingArea.Background">#ffffff</Color>
 		
 	</Styles.Resources>
 
@@ -611,10 +623,11 @@
 			<Setter.Value>
 				<ControlTemplate>
 					<Panel HorizontalAlignment="Stretch" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" VerticalAlignment="Stretch">
-						<Border Background="{StaticResource Brush/TabItem.Header.Background}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"/>
-						<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsPointerOver}"/>
-						<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsSelected}"/>
-						<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Height="{DynamicResource Double/TabItem.Header.ColorBar.Height}" IsVisible="{Binding $parent[TabItem].IsSelected}" VerticalAlignment="Top"/>
+						<Border Background="{StaticResource Brush/TabItem.Header.Background}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"/>
+						<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsPointerOver}"/>
+						<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsSelected}">
+							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Height="{DynamicResource Double/TabItem.Header.ColorBar.Height}" IsVisible="{Binding $parent[TabItem].IsSelected}" VerticalAlignment="Top"/>	
+						</Border>
 						<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
 					</Panel>
 				</ControlTemplate>
@@ -708,6 +721,15 @@
 	</Style>
 	<Style Selector="Window[TransparencyLevelHint=Transparent]">
 		<Setter Property="Background" Value="{StaticResource Brush/Window.Background.Transparent}"/>
+	</Style>
+	<Style Selector="Window.Tabbed">
+		<Setter Property="Background" Value="{StaticResource Brush/Window.Background.Tabbed}"/>
+	</Style>
+	<Style Selector="Window.Tabbed[TransparencyLevelHint=AcrylicBlur]">
+		<Setter Property="Background" Value="{StaticResource Brush/Window.Background.Tabbed.Transparent}"/>
+	</Style>
+	<Style Selector="Window.Tabbed[TransparencyLevelHint=Transparent]">
+		<Setter Property="Background" Value="{StaticResource Brush/Window.Background.Tabbed.Transparent}"/>
 	</Style>
 	
 </Styles>
