@@ -62,6 +62,7 @@
 
 		<!-- WorkingArea -->
 		<Color x:Key="Color/WorkingArea.Background">#eeeeee</Color>
+		<Color x:Key="Color/WorkingArea.Panel.Background">#d8d8d8</Color>
 
 	</Styles.Resources>
 	

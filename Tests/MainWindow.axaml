@@ -124,6 +124,8 @@
 
 						</StackPanel>
 					</Border>
+					
+					<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" Height="50"/>
 
 				</StackPanel>
 				

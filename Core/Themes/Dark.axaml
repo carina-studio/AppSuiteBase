@@ -54,6 +54,7 @@
 
 		<!-- WorkingArea -->
 		<Color x:Key="Color/WorkingArea.Background">#0e0e0e</Color>
+		<Color x:Key="Color/WorkingArea.Panel.Background">#161616</Color>
 
 	</Styles.Resources>
 	
