@@ -86,13 +86,13 @@
 						<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
 
 							<Button Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.ZoomIn}"/>
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.PlayMedia}"/>
 							</Button>
 							<Button Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.ZoomOut}"/>
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.PauseMedia}"/>
 							</Button>
 							<Button Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Search}"/>
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.StopMedia}"/>
 							</Button>
 							<Button Classes="ToolBar_Button">
 								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Error.Colored}"/>
