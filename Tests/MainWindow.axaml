@@ -101,19 +101,23 @@
 							<TextBox Classes="ToolBar_TextBox" Width="50"/>
 							<TextBox Classes="ToolBar_TextBox" Width="50"/>
 
-							<ToggleButton Classes="ToolBar_Button">
+							<ToggleButton Classes="ToolBar_ToggleButton">
 								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.OK.Colored}"/>
 							</ToggleButton>
 
 							<Separator Classes="ToolBar_Separator"/>
 
-							<ToggleButton Classes="ToolBar_Button">
+							<ToggleButton Classes="ToolBar_ToggleButton">
 								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.SaveAll}"/>
 							</ToggleButton>
 
 							<ComboBox Classes="ToolBar_ComboBox" Width="100">
 								12345
 							</ComboBox>
+
+							<RepeatButton Classes="ToolBar_RepeatButton">
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.File}"/>
+							</RepeatButton>
 
 							<TextBlock Classes="ToolBar_TextBlock" Text="test:"/>
 							<TextBox Classes="ToolBar_TextBox" Width="100"/>
