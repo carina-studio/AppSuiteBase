@@ -33,7 +33,7 @@
 		<Color x:Key="Color/Separator.Background">#4f000000</Color>
 
 		<!-- SplashWindow -->
-		<Color x:Key="Color/SplashWindow.Background">#cceeeeee</Color>
+		<Color x:Key="Color/SplashWindow.Background">#eeeeee</Color>
 		<Color x:Key="Color/SplashWindow.Foreground">#222222</Color>
 
 		<!-- StatusBar -->

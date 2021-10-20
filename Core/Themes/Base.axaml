@@ -118,7 +118,7 @@
 		<SolidColorBrush x:Key="Brush/SplashWindow.Background" Color="{DynamicResource Color/SplashWindow.Background}"/>
 		<SolidColorBrush x:Key="Brush/SplashWindow.Border" Color="{DynamicResource Color/Accent}"/>
 		<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="{DynamicResource Color/SplashWindow.Foreground}"/>
-		<Color x:Key="Color/SplashWindow.Background">#cc000000</Color>
+		<Color x:Key="Color/SplashWindow.Background">#000000</Color>
 		<Color x:Key="Color/SplashWindow.Foreground">#ffffff</Color>
 		<CornerRadius x:Key="CornerRadius/SplashWindow">8</CornerRadius>
 		<sys:Double x:Key="Double/SplashWindow.Icon.Size">80</sys:Double>
