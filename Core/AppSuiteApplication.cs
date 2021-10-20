@@ -324,6 +324,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get <see cref="AppSuiteApplication"/> instance for current process or null if <see cref="AppSuiteApplication"/> is not ready yet.
+        /// </summary>
+        public static new AppSuiteApplication? CurrentOrNull { get => Application.CurrentOrNull as AppSuiteApplication; }
+
+
+        /// <summary>
         /// Get theme mode which is currently applied to application.
         /// </summary>
         public ThemeMode EffectiveThemeMode { get; private set; } = ThemeMode.Dark;

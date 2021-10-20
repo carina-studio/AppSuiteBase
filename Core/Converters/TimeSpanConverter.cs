@@ -12,15 +12,15 @@ namespace CarinaStudio.AppSuite.Converters
 		/// <summary>
 		/// Default instance.
 		/// </summary>
-		public static readonly TimeSpanConverter Default = new TimeSpanConverter(AppSuiteApplication.Current);
+		public static readonly TimeSpanConverter Default = new TimeSpanConverter(AppSuiteApplication.CurrentOrNull);
 
 
 		// Fields.
-		readonly IApplication app;
+		readonly IApplication? app;
 
 
 		// Constructor.
-		TimeSpanConverter(IApplication app) => this.app = app;
+		TimeSpanConverter(IApplication? app) => this.app = app;
 
 
 		/// <summary>
@@ -33,6 +33,8 @@ namespace CarinaStudio.AppSuite.Converters
 		/// <returns>Converted string.</returns>
 		public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
+			if (this.app == null)
+				return null;
 			if (targetType != typeof(string))
 				return null;
 			if (value is TimeSpan timeSpan)
