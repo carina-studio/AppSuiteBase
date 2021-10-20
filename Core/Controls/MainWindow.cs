@@ -22,6 +22,7 @@ namespace CarinaStudio.AppSuite.Controls
         const int AppUpdateNotificationDelay = 1000;
         const int RestartingMainWindowsDelay = 500;
         const int SaveWindowSizeDelay = 300;
+        const int UpdateContentPaddingDelay = 300;
 
 
         // Static fields.
@@ -295,9 +296,11 @@ namespace CarinaStudio.AppSuite.Controls
                     windowState = WindowState.Maximized; // [Workaround] Prevent launching in FullScreen mode because that layout may be incorrect on macOS
                 if (windowState != WindowState.Minimized)
                     this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, windowState);
-                this.updateContentPaddingAction.Schedule();
+                if (windowState == WindowState.FullScreen)
+                    this.updateContentPaddingAction.Reschedule();
+                else
+                    this.updateContentPaddingAction.Reschedule(UpdateContentPaddingDelay);
                 this.InvalidateTransparencyLevelHint();
-                this.UpdateExtendingClientArea();
             }
         }
 
@@ -339,7 +342,7 @@ namespace CarinaStudio.AppSuite.Controls
                 this.ExtendClientAreaToDecorationsHint = false;
                 return;
             }
-            this.ExtendClientAreaToDecorationsHint = this.WindowState != WindowState.FullScreen;
+            this.ExtendClientAreaToDecorationsHint = true;
         }
     }
 
