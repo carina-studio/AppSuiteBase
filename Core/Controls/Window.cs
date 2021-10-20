@@ -18,7 +18,12 @@ namespace CarinaStudio.AppSuite.Controls
         public static readonly AvaloniaProperty<bool> IsSystemChromeVisibleInClientAreaProperty = AvaloniaProperty.Register<Window, bool>(nameof(IsSystemChromeVisibleInClientArea), false);
 
 
+        // Constants.
+        const int SystemChromeVisibilityCheckingDelay = 500;
+
+
         // Fields.
+        readonly ScheduledAction checkSystemChromeVisibilityAction;
         readonly ScheduledAction updateTransparencyLevelAction;
 
 
@@ -30,28 +35,26 @@ namespace CarinaStudio.AppSuite.Controls
             new WindowContentFadingHelper(this);
             this.Application.HardwareInfo.PropertyChanged += this.OnHardwareInfoPropertyChanged;
             this.Settings.SettingChanged += this.OnSettingChanged;
+            this.checkSystemChromeVisibilityAction = new ScheduledAction(() =>
+            {
+                this.SetValue<bool>(IsSystemChromeVisibleInClientAreaProperty, Global.Run(() =>
+                {
+                    if (this.SystemDecorations != SystemDecorations.Full)
+                        return false;
+                    if (!this.ExtendClientAreaToDecorationsHint)
+                        return false;
+                    if (this.WindowState == WindowState.FullScreen)
+                        return ExtendedClientAreaWindowConfiguration.IsSystemChromeVisibleInFullScreen;
+                    return true;
+                }));
+            });
             this.updateTransparencyLevelAction = new ScheduledAction(() =>
             {
                 if (!this.IsClosed)
                     this.TransparencyLevelHint = this.OnSelectTransparentLevelHint();
             });
+            this.checkSystemChromeVisibilityAction.Schedule();
             this.updateTransparencyLevelAction.Schedule();
-        }
-
-
-        // Check system chrome visibility.
-        void CheckSystemChromeVisibility()
-        {
-            this.SetValue<bool>(IsSystemChromeVisibleInClientAreaProperty, Global.Run(() =>
-            {
-                if (this.SystemDecorations != SystemDecorations.Full)
-                    return false;
-                if (!this.ExtendClientAreaToDecorationsHint)
-                    return false;
-                if (this.WindowState == WindowState.FullScreen)
-                    return ExtendedClientAreaWindowConfiguration.IsSystemChromeVisibleInFullScreen;
-                return true;
-            }));
         }
 
 
@@ -73,6 +76,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// <param name="e">Event data.</param>
         protected override void OnClosed(EventArgs e)
         {
+            this.checkSystemChromeVisibilityAction.Cancel();
             this.updateTransparencyLevelAction.Cancel();
             this.Application.HardwareInfo.PropertyChanged -= this.OnHardwareInfoPropertyChanged;
             this.Settings.SettingChanged -= this.OnSettingChanged;
@@ -119,7 +123,7 @@ namespace CarinaStudio.AppSuite.Controls
                 || property == SystemDecorationsProperty
                 || property == WindowStateProperty)
             {
-                this.CheckSystemChromeVisibility();
+                this.checkSystemChromeVisibilityAction.Reschedule(SystemChromeVisibilityCheckingDelay);
             }
         }
 
