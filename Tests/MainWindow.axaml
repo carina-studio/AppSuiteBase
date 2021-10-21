@@ -45,7 +45,7 @@
 						<Border Classes="TabItem_Icon">
 							<DrawingPresenter Classes="Icon" Drawing="{DynamicResource Drawing/Icon.File}"/>
 						</Border>
-						<TextBlock Classes="TabItem_TextBlock" Grid.Column="1" Text="Item 1"/>
+						<TextBlock Classes="TabItem_TextBlock" Grid.Column="1" Text="Item 1 Item 1 Item 1 Item 1 kkkkkkkkkkkkkkkkk"/>
 						<Button Classes="TabItem_Button" Grid.Column="2">
 							<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
 						</Button>

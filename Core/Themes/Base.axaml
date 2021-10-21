@@ -182,7 +182,7 @@
 		<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">10,0,0,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">3</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
-		<Thickness x:Key="Thickness/TabItem.Header.Margin">1,2,1,0</Thickness>
+		<Thickness x:Key="Thickness/TabItem.Header.Margin">1,2,2,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Padding">10</Thickness>
 
 		<!-- TextBox -->
@@ -584,11 +584,12 @@
 									</Border>
 								</Border>
 								<ScrollViewer Grid.Column="1" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
-									<ItemsPresenter Name="PART_ItemsPresenter"
+									<Border Padding="{DynamicResource Thickness/TabControl.TabStrip.Padding}">
+										<ItemsPresenter Name="PART_ItemsPresenter"
 													Items="{TemplateBinding Items}"
 													ItemsPanel="{TemplateBinding ItemsPanel}"
-													ItemTemplate="{TemplateBinding ItemTemplate}"
-													Margin="{DynamicResource Thickness/TabControl.TabStrip.Padding}"/>
+													ItemTemplate="{TemplateBinding ItemTemplate}"/>
+									</Border>
 								</ScrollViewer>
 								<Border Grid.Column="2" IsVisible="{Binding $parent[Window].IsSystemChromeVisibleInClientArea}">
 									<Border IsVisible="{Binding $parent[Window].ExtendClientAreaToDecorationsHint}">
