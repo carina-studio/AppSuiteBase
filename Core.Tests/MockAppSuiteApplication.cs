@@ -75,6 +75,14 @@ namespace CarinaStudio.AppSuite
         public static MockAppSuiteApplication Current { get => current ?? throw new InvalidOperationException("Application instance is not ready."); }
 
 
+        /// <inheritdoc/>
+        public double CustomScreenScaleFactor { get => double.NaN; set { } }
+
+
+        /// <inheritdoc/>
+        public double EffectiveCustomScreenScaleFactor { get => double.NaN; }
+
+
         /// <summary>
         /// Get theme mode which is currently applied to application.
         /// </summary>
