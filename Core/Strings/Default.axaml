@@ -27,6 +27,7 @@
 	<sys:String x:Key="String/ApplicationOptions">Application options</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">Accept non-stable application update</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">Language</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">User interface scale factor</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">Use blurry window background if supported by system</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Others">Other Settings</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">Theme</sys:String>

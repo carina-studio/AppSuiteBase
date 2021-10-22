@@ -14,7 +14,19 @@ namespace CarinaStudio.AppSuite
         /// Check application update information asynchronously.
         /// </summary>
         /// <returns>Task to wait for checking.</returns>
-        public Task<ApplicationUpdateInfo?> CheckUpdateInfoAsync();
+        Task<ApplicationUpdateInfo?> CheckUpdateInfoAsync();
+
+
+        /// <summary>
+        /// Get or set custom screen scale factor for Linux.
+        /// </summary>
+        double CustomScreenScaleFactor { get; set; }
+
+
+        /// <summary>
+        /// Get effective custom screen scale factor for Linux.
+        /// </summary>
+        double EffectiveCustomScreenScaleFactor { get; }
 
 
         /// <summary>
@@ -24,9 +36,9 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Get information of hardware.
+        /// Get information of hardware.iapsu
         /// </summary>
-        public HardwareInfo HardwareInfo { get; }
+        HardwareInfo HardwareInfo { get; }
 
 
         /// <summary>

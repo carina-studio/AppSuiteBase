@@ -16,6 +16,9 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// </summary>
         public ApplicationOptions() : base(AppSuiteApplication.Current)
         {
+            this.IsCustomScreenScaleFactorSupported = double.IsFinite(this.Application.CustomScreenScaleFactor);
+            this.IsCustomScreenScaleFactorAdjusted = this.IsCustomScreenScaleFactorSupported
+                && Math.Abs(this.Application.CustomScreenScaleFactor - this.Application.EffectiveCustomScreenScaleFactor) >= 0.01;
             this.ThemeModes = new List<ThemeMode>(Enum.GetValues<ThemeMode>()).Also(it =>
             {
                 if (!this.Application.IsSystemThemeModeSupported)
@@ -51,6 +54,22 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
+        /// Get or set custom screen scale factor.
+        /// </summary>
+        public double CustomScreenScaleFactor
+        {
+            get => this.Application.CustomScreenScaleFactor;
+            set => this.Application.CustomScreenScaleFactor = value;
+        }
+
+
+        /// <summary>
+        /// Get effective custom screen scale factor.
+        /// </summary>
+        public double EffectiveCustomScreenScaleFactor { get => this.Application.EffectiveCustomScreenScaleFactor; }
+
+
+        /// <summary>
         /// Get or set whether to enable blurry window background if available or not.
         /// </summary>
         public bool EnableBlurryBackground
@@ -58,6 +77,18 @@ namespace CarinaStudio.AppSuite.ViewModels
             get => this.Settings.GetValueOrDefault(SettingKeys.EnableBlurryBackground);
             set => this.Settings.SetValue<bool>(SettingKeys.EnableBlurryBackground, value);
         }
+
+
+        /// <summary>
+        /// Check whether custom screen scale factor is different from effective scale factor or not.
+        /// </summary>
+        public bool IsCustomScreenScaleFactorAdjusted { get; private set; }
+
+
+        /// <summary>
+        /// Check whether custom screen scale factor is supported or not.
+        /// </summary>
+        public bool IsCustomScreenScaleFactorSupported { get; }
 
 
         /// <summary>
@@ -76,7 +107,17 @@ namespace CarinaStudio.AppSuite.ViewModels
         protected override void OnApplicationPropertyChanged(PropertyChangedEventArgs e)
         {
             base.OnApplicationPropertyChanged(e);
-            if (e.PropertyName == nameof(IAppSuiteApplication.IsRestartingMainWindowsNeeded))
+            if (e.PropertyName == nameof(IAppSuiteApplication.CustomScreenScaleFactor))
+            {
+                this.OnPropertyChanged(nameof(CustomScreenScaleFactor));
+                var adjusted = Math.Abs(this.Application.CustomScreenScaleFactor - this.Application.EffectiveCustomScreenScaleFactor) >= 0.01;
+                if (this.IsCustomScreenScaleFactorAdjusted != adjusted)
+                {
+                    this.IsCustomScreenScaleFactorAdjusted = adjusted;
+                    this.OnPropertyChanged(nameof(IsCustomScreenScaleFactorAdjusted));
+                }
+            }
+            else if (e.PropertyName == nameof(IAppSuiteApplication.IsRestartingMainWindowsNeeded))
                 this.OnPropertyChanged(nameof(IsRestartingMainWindowsNeeded));
         }
 

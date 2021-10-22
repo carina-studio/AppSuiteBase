@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls.ApplicationLifetimes;
+﻿using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
@@ -24,6 +25,7 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 #if WINDOWS10_0_17763_0_OR_GREATER
@@ -101,7 +103,18 @@ namespace CarinaStudio.AppSuite
 
 
         // Static fields.
+        static double CachedCustomScreenScaleFactor = double.NaN;
+        static readonly string? CustomScreenScaleFactorFilePath = Global.Run(() =>
+        {
+            if (!Platform.IsLinux)
+                return null;
+            var mainModule = Process.GetCurrentProcess().MainModule;
+            if (mainModule != null)
+                return Path.Combine(Path.GetDirectoryName(mainModule.FileName) ?? "", "ScreenScaleFactor");
+            return null;
+        });
         static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new SettingKey<bool>("IsAcceptNonStableApplicationUpdateInitialized", false);
+        static readonly Regex X11MonitorLineRegex = new Regex("^[\\s]*[\\d]+[\\s]*\\:[\\s]*\\+\\*(?<Name>[^\\s]+)");
 
 
         // Fields.
@@ -184,6 +197,108 @@ namespace CarinaStudio.AppSuite
         /// Check whether multiple main windows are allowed or not.
         /// </summary>
         protected virtual bool AllowMultipleMainWindows { get => false; }
+
+
+        // Apply given screen scale factor for Linux.
+        static void ApplyScreenScaleFactor(double factor)
+        {
+            // check state
+            if (!Platform.IsLinux || !double.IsFinite(factor) || factor < 1)
+                return;
+            if (Math.Abs(factor - 1) < 0.01)
+                return;
+            
+            // get all screens
+            var screenNames = new List<string>();
+            try
+            {
+                using var process = Process.Start(new ProcessStartInfo()
+                {
+                    Arguments = "--listactivemonitors",
+                    CreateNoWindow = true,
+                    FileName = "xrandr",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                });
+                if (process == null)
+                    return;
+                using var reader = process.StandardOutput;
+                var line = reader.ReadLine();
+                while (line != null)
+                {
+                    var match = X11MonitorLineRegex.Match(line);
+                    if (match.Success)
+                        screenNames.Add(match.Groups["Name"].Value);
+                    line = reader.ReadLine();
+                }
+            }
+            catch
+            { }
+            if (screenNames.IsEmpty())
+                return;
+            
+            // set environment variable
+            var valueBuilder = new StringBuilder();
+            foreach (var screenName in screenNames)
+            {
+                if (valueBuilder.Length > 0)
+                    valueBuilder.Append(';');
+                valueBuilder.Append(screenName);
+                valueBuilder.Append('=');
+                valueBuilder.AppendFormat("{0:F1}", factor);
+            }
+            Environment.SetEnvironmentVariable("AVALONIA_SCREEN_SCALE_FACTORS", valueBuilder.ToString());
+        }
+
+
+        /// <summary>
+        /// Build application.
+        /// </summary>
+        /// <param name="setupAction">Action to do further setup.</param>
+        /// <typeparam name="TApp">Type of application.</typeparam>
+        /// <returns></returns>
+        protected static AppBuilder BuildApplication<TApp>(Action<AppBuilder>? setupAction = null) where TApp: AppSuiteApplication, new()
+        {
+            // apply screen scale factor
+            if (Platform.IsLinux)
+            {
+                if (CustomScreenScaleFactorFilePath != null)
+                {
+                    CachedCustomScreenScaleFactor = 1;
+                    try
+                    {
+                        if (File.Exists(CustomScreenScaleFactorFilePath) 
+                            && CarinaStudio.IO.File.TryOpenRead(CustomScreenScaleFactorFilePath, 5000, out var stream)
+                            && stream != null)
+                        {
+                            using (stream)
+                            {
+                                using var reader = new StreamReader(stream, Encoding.UTF8);
+                                var line = reader.ReadLine();
+                                if (line != null && double.TryParse(line, out CachedCustomScreenScaleFactor))
+                                    CachedCustomScreenScaleFactor = Math.Max(1, CachedCustomScreenScaleFactor);
+                            }
+                        }
+                    }
+                    catch
+                    { }
+                    if (!double.IsFinite(CachedCustomScreenScaleFactor))
+                        CachedCustomScreenScaleFactor = 1;
+                    ApplyScreenScaleFactor(CachedCustomScreenScaleFactor);
+                }
+            }
+
+            // build application
+            return AppBuilder.Configure<TApp>()
+                .UsePlatformDetect()
+                .LogToTrace().Also(it =>
+                {
+                    if (Platform.IsLinux)
+                        it.With(new X11PlatformOptions());
+                    if (setupAction != null)
+                        setupAction(it);
+                });
+        }
 
 
         // Check whether restarting all main windows is needed or not.
@@ -327,6 +442,28 @@ namespace CarinaStudio.AppSuite
         /// Get <see cref="AppSuiteApplication"/> instance for current process or null if <see cref="AppSuiteApplication"/> is not ready yet.
         /// </summary>
         public static new AppSuiteApplication? CurrentOrNull { get => Application.CurrentOrNull as AppSuiteApplication; }
+
+
+        /// <summary>
+        /// Get or set custom screen scale factor for Linux.
+        /// </summary>
+        public double CustomScreenScaleFactor 
+        {
+            get => CachedCustomScreenScaleFactor;
+            set
+            {
+                if (!Platform.IsLinux)
+                    return;
+                if (!double.IsFinite(value))
+                    throw new ArgumentException();
+                CachedCustomScreenScaleFactor = Math.Max(1, value);
+                this.OnPropertyChanged(nameof(CustomScreenScaleFactor));
+            }
+        }
+
+
+        /// <inheritdoc/>
+        public double EffectiveCustomScreenScaleFactor { get; } = CachedCustomScreenScaleFactor;
 
 
         /// <summary>
@@ -820,6 +957,45 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogWarning("Close multi-instances server stream");
                 Global.RunWithoutError(() => this.multiInstancesServerStream.Close());
                 this.multiInstancesServerStream = null;
+            }
+
+            // save custom screen scale factor
+            if (Platform.IsLinux && double.IsFinite(CachedCustomScreenScaleFactor))
+            {
+                if (CustomScreenScaleFactorFilePath == null)
+                    this.Logger.LogError("Unknown path to save custom screen scale factor");
+                else if (Math.Abs(CachedCustomScreenScaleFactor - 1) <= 0.1)
+                {
+                    this.Logger.LogWarning("Reset custom screen scale factor");
+                    await Task.Run(() =>
+                    {
+                        Global.RunWithoutError(() => System.IO.File.Delete(CustomScreenScaleFactorFilePath));
+                    });
+                }
+                else
+                {
+                    this.Logger.LogWarning("Save custom screen scale factor");
+                    await Task.Run(() =>
+                    {
+                        if (CarinaStudio.IO.File.TryOpenWrite(CustomScreenScaleFactorFilePath, 5000, out var stream) && stream != null)
+                        {
+                            try
+                            {
+                                using (stream)
+                                {
+                                    using var writer = new StreamWriter(stream, Encoding.UTF8);
+                                    writer.Write(string.Format("{0:F2}", Math.Max(1, CachedCustomScreenScaleFactor)));
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                this.Logger.LogError(ex, "Failed to save custom screen scale factor");
+                            }
+                        }
+                        else
+                            this.Logger.LogError("Unable to open file to save custom screen scale factor");
+                    });
+                }
             }
         }
 

@@ -25,6 +25,7 @@
 	<sys:String x:Key="String/ApplicationOptions">應用程式選項</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">接收非正式版本的應用程式更新</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">語言</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">使用者介面縮放比例</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">系統支援時使用模糊玻璃視窗背景</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Others">其他設定</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">佈景</sys:String>

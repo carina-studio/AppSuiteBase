@@ -11,12 +11,6 @@ namespace CarinaStudio.AppSuite.Tests
 {
     public class App : AppSuiteApplication
     {
-        // Avalonia configuration, don't remove; also used by visual designer.
-        static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>()
-            .UsePlatformDetect()
-            .LogToTrace();
-
-
         protected override bool AllowMultipleMainWindows => true;
 
 
@@ -29,7 +23,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         static void Main(string[] args)
         {
-            BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+            BuildApplication<App>().StartWithClassicDesktopLifetime(args);
         }
 
 
