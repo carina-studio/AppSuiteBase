@@ -10,7 +10,7 @@ namespace CarinaStudio.AppSuite.Converters
     public class EnumConverter : IValueConverter
     {
         // Fields.
-        readonly IApplication app;
+        readonly IApplication? app;
         readonly Type enumType;
         readonly string enumTypeName;
 
@@ -20,7 +20,7 @@ namespace CarinaStudio.AppSuite.Converters
         /// </summary>
         /// <param name="app">Application.</param>
         /// <param name="enumType">Type of enumeration.</param>
-        public EnumConverter(IApplication app, Type enumType)
+        public EnumConverter(IApplication? app, Type enumType)
         {
             if (!enumType.IsEnum)
                 throw new ArgumentException($"{enumType} is not a type of enumeration.");
@@ -30,28 +30,43 @@ namespace CarinaStudio.AppSuite.Converters
         }
 
 
-        /// <summary>
-        /// Convert value to string.
-        /// </summary>
-        /// <param name="value">Value to convert.</param>
-        /// <param name="targetType">Target type which should be <see cref="string"/>.</param>
-        /// <param name="parameter">Parameter which will be ignored.</param>
-        /// <param name="culture"><see cref="CultureInfo"/>.</param>
-        /// <returns>Converted string.</returns>
+        /// <inheritdoc/>
         public object? Convert(object value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (targetType != typeof(string))
                 return null;
             if (value.GetType() == this.enumType)
-                return this.app.GetString($"{this.enumTypeName}.{value}", value.ToString());
+            {
+                if (this.app != null)
+                    return this.app.GetString($"{this.enumTypeName}.{value}", value.ToString());
+                return value.ToString();
+            }
             return null;
         }
 
 
-        /// <summary>
-        /// Convert string back to value.
-        /// </summary>
-        /// <remarks>The method is not implemented.</remarks>
-        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => null;
+        /// <inheritdoc/>
+        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (targetType != this.enumType)
+                return null;
+            if (value is string str)
+            {
+                if (this.app != null)
+                {
+                    var enumValues = Enum.GetValues(this.enumType);
+                    foreach (var enumValue in enumValues)
+                    {
+                        if (this.app.GetString($"{this.enumTypeName}.{value}") == str)
+                            return enumValue;
+                    }
+                }
+                else if (Enum.TryParse(this.enumType, str, out var enumValue))
+                    return enumValue;
+            }
+            else if (value.GetType() == this.enumType)
+                return value;
+            return null;
+        }
     }
 }

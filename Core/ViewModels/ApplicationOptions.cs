@@ -1,4 +1,5 @@
-﻿using CarinaStudio.Configuration;
+﻿using Avalonia.Data.Converters;
+using CarinaStudio.Configuration;
 using CarinaStudio.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,16 @@ namespace CarinaStudio.AppSuite.ViewModels
     /// </summary>
     public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     {
+        /// <summary>
+        /// <see cref="IValueConverter"/> to convert from <see cref="ApplicationCulture"/> to <see cref="string"/>.
+        /// </summary>
+        public static readonly IValueConverter ApplicationCultureConverter = new Converters.EnumConverter(AppSuiteApplication.CurrentOrNull, typeof(ApplicationCulture));
+        /// <summary>
+        /// <see cref="IValueConverter"/> to convert from <see cref="ThemeMode"/> to <see cref="string"/>.
+        /// </summary>
+        public static readonly IValueConverter ThemeModeConverter = new Converters.EnumConverter(AppSuiteApplication.CurrentOrNull, typeof(ThemeMode));
+
+
         /// <summary>
         /// Initialize new <see cref="ApplicationOptions"/> instance.
         /// </summary>

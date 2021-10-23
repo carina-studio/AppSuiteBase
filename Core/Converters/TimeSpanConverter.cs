@@ -33,12 +33,12 @@ namespace CarinaStudio.AppSuite.Converters
 		/// <returns>Converted string.</returns>
 		public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (this.app == null)
-				return null;
 			if (targetType != typeof(string))
 				return null;
 			if (value is TimeSpan timeSpan)
 			{
+				if (this.app == null)
+					return timeSpan.ToString();
 				if (timeSpan.Days > 0)
 					return this.app.GetFormattedString("TimeSpanConverter.Days", timeSpan.Days, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
 				if (timeSpan.Hours > 0)
