@@ -110,6 +110,14 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Restart application.
+        /// </summary>
+        /// <param name="args">Arguments to restart.</param>
+        /// <returns>True if restarting has been accepted.</returns>
+        bool Restart(string? args = null);
+
+
+        /// <summary>
         /// Request restarting given main window.
         /// </summary>
         /// <param name="mainWindow">Main window to restart.</param>
@@ -141,9 +149,8 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Create and show main window.
         /// </summary>
-        /// <param name="param">Parameter to create main window.</param>
         /// <returns>True if main window created and shown successfully.</returns>
-        bool ShowMainWindow(object? param = null);
+        bool ShowMainWindow();
 
 
         /// <summary>

@@ -49,7 +49,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         void Test2()
         {
-            this.Application.Shutdown();
+            this.Application.Restart(App.RestoreMainWindowsArgument);
         }
     }
 }

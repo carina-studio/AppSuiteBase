@@ -5,6 +5,7 @@ using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Tests
@@ -27,10 +28,10 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        protected override Window OnCreateMainWindow(object? param) => new MainWindow();
+        protected override Window OnCreateMainWindow() => new MainWindow();
 
 
-        protected override ViewModel OnCreateMainWindowViewModel(object? param) => new Workspace();
+        protected override ViewModel OnCreateMainWindowViewModel(JsonElement? savedState) => new Workspace(savedState);
 
 
         protected override void OnNewInstanceLaunched(IDictionary<string, object> launchOptions)
@@ -44,14 +45,8 @@ namespace CarinaStudio.AppSuite.Tests
         {
             await base.OnPrepareStartingAsync();
 
-            this.ShowMainWindow();
-
-            this.SynchronizationContext.PostDelayed(() =>
-            {
-                //for (var i = 0; i < 1; ++i)
-                    //this.ShowMainWindow();
-                //splashWindow.Close();
-            }, 5000);
+            if (!this.IsRestoringMainWindowsRequested)
+                this.ShowMainWindow();
         }
 
 
