@@ -145,6 +145,10 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         public bool IsRestartingMainWindowsNeeded { get; } = false;
 
+        
+        /// <inheritdoc/>
+        public bool IsRunningAsAdministrator { get; } = false;
+
 
         /// <summary>
         /// Check whether application shutting down is started or not.
@@ -242,6 +246,10 @@ namespace CarinaStudio.AppSuite
         public virtual ApplicationReleasingType ReleasingType { get; } = ApplicationReleasingType.Development;
 
 
+        /// <inheritdoc/>
+        public bool Restart(string? args, bool asAdministrator) => false;
+
+
         /// <summary>
         /// Request restarting given main window.
         /// </summary>
@@ -264,7 +272,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Save <see cref="CarinaStudio.IApplication.PersistentState"/> to file.
+        /// Save <see cref="IApplication.PersistentState"/> to file.
         /// </summary>
         /// <returns>Task of saving.</returns>
         public Task SavePersistentStateAsync() => Task.CompletedTask;
@@ -283,12 +291,8 @@ namespace CarinaStudio.AppSuite
         public ISettings Settings { get; } = new MemorySettings();
 
 
-        /// <summary>
-        /// Create and show main window.
-        /// </summary>
-        /// <param name="param">Parameter to create main window.</param>
-        /// <returns>True if main window created and shown successfully.</returns>
-        public bool ShowMainWindow(object? param = null) => false;
+        /// <inheritdoc/>
+        public bool ShowMainWindow() => false;
 
 
         /// <summary>
