@@ -1,6 +1,8 @@
-﻿using CarinaStudio.AutoUpdate;
+﻿using Avalonia.Media;
+using CarinaStudio.AutoUpdate;
 using CarinaStudio.AutoUpdate.Installers;
 using CarinaStudio.AutoUpdate.Resolvers;
+using CarinaStudio.Controls;
 using CarinaStudio.IO;
 using CarinaStudio.Net;
 using CarinaStudio.Threading;
@@ -12,6 +14,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -282,18 +285,35 @@ namespace CarinaStudio.AppSuite.ViewModels
 				}
 				var useDarkMode = this.Application.EffectiveThemeMode == ThemeMode.Dark;
 				this.Logger.LogWarning("Start auto updater");
-				using var process = Process.Start(new ProcessStartInfo()
+				using var process = Process.Start(new ProcessStartInfo().Also(it =>
 				{
-					Arguments = $"-culture {this.Application.CultureInfo}" + 
+					// get accent color
+					var accentColor = Colors.Transparent;
+					(this.Application as AppSuiteApplication)?.Let(app =>
+					{
+						if (app.Resources.TryGetResource("SystemAccentColor", out var res) && res is Color color)
+							accentColor = color;
+					});
+
+					// get screen scale factor
+					var screenScaleFactor = this.Application.CustomScreenScaleFactor;
+
+					// prepare arguments
+					var argsBuilder = new StringBuilder($"-culture {this.Application.CultureInfo}" +
 						$" {(useDarkMode ? "-dark-mode" : "")}" +
 						$" -directory \"{Path.GetDirectoryName(mainModule.FileName)}\"" +
 						$" -executable \"{mainModule.FileName}\"" +
 						$" -executable-args \"-restore-state\"" +
 						$" -name \"{this.Application.Name}\"" +
 						$" -package-manifest {this.Application.PackageManifestUri}" +
-						$" -wait-for-process {currentProcess.Id}",
-					FileName = autoUpdaterPath,
-				});
+						$" -wait-for-process {currentProcess.Id}");
+					if (accentColor.A > 0)
+						argsBuilder.AppendFormat(" -accent-color #{0:x2}{1:x2}{2:x2}{3:x2}", accentColor.A, accentColor.R, accentColor.G, accentColor.B);
+					if (!double.IsNaN(screenScaleFactor))
+						argsBuilder.AppendFormat(" -screen-scale-factor {0:F2}", screenScaleFactor);
+					it.Arguments = argsBuilder.ToString();
+					it.FileName = autoUpdaterPath;
+				}));
 			}
 			catch (Exception ex)
 			{
