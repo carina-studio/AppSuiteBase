@@ -90,13 +90,13 @@
 						<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
 
 							<Button Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.PlayMedia}"/>
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Administrator}"/>
 							</Button>
 							<Button Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.PauseMedia}"/>
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Link}"/>
 							</Button>
 							<Button Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.StopMedia}"/>
+								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.AddFile}"/>
 							</Button>
 							<Button Classes="ToolBar_Button">
 								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Error.Colored}"/>
