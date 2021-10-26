@@ -23,6 +23,10 @@
 		<Thickness x:Key="Thickness/ApplicationInfoDialog.AppIcon.Margin">0,0,15,0</Thickness>
 		<Thickness x:Key="Thickness/ApplicationInfoDialog.AppTitle.Margin">0,0,0,5</Thickness>
 
+		<!-- ApplicationOptionsDialog -->
+		<sys:Double x:Key="Double/ApplicationOptionsDialog.Content.MaxHeight">500</sys:Double>
+		<sys:Double x:Key="Double/ApplicationOptionsDialog.Width">500</sys:Double>
+
 		<!-- ApplicationUpdateDialog -->
 		<sys:Double x:Key="Double/ApplicationUpdateDialog.Width">500</sys:Double>
 
