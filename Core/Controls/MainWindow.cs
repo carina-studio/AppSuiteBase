@@ -1,4 +1,6 @@
 ﻿using Avalonia;
+using Avalonia.Animation;
+using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Platform;
 using CarinaStudio.AppSuite.ViewModels;
@@ -33,6 +35,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Fields.
+        bool isContentPaddingTransitionReady;
         readonly ScheduledAction notifyAppUpdateFoundAction;
         long openedTime;
         readonly ScheduledAction restartingMainWindowsAction;
@@ -72,13 +75,39 @@ namespace CarinaStudio.AppSuite.Controls
                 if (windowState == WindowState.Minimized)
                     return;
 
+                // check content
+                if (this.Content is not Control contentControl)
+                    return;
+
                 // update content padding
-                this.Padding = windowState switch
+                // [Workaround] cannot use padding of window because that thickness transition doesn't work on it
+                contentControl.Margin = windowState switch
                 {
                     WindowState.FullScreen
                     or WindowState.Maximized => ExtendedClientAreaWindowConfiguration.ContentPaddingInMaximized,
                     _ => ExtendedClientAreaWindowConfiguration.ContentPadding,
                 };
+
+                // setup transition after the first padding ready
+                if (!this.isContentPaddingTransitionReady)
+                {
+                    this.isContentPaddingTransitionReady = true;
+                    if (this.TryFindResource("TimeSpan/MainWindow.ContentPaddingTransition", out var res) && res is TimeSpan duration)
+                    {
+                        var transitions = contentControl.Transitions;
+                        if (transitions == null)
+                        {
+                            transitions = new Transitions();
+                            contentControl.Transitions = transitions;
+                        }
+                        transitions.Add(new ThicknessTransition()
+                        {
+                            Duration = duration,
+                            Easing = new ExponentialEaseOut(),
+                            Property = MarginProperty,
+                        });
+                    }
+                }
             });
 
             // restore window state
