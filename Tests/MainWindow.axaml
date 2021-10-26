@@ -54,6 +54,7 @@
 
 				<StackPanel Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalAlignment="Stretch" Orientation="Vertical">
 					<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5"/>
+					<TextBlock Text="{Binding $parent[Window].Application.IsRunningAsAdministrator, StringFormat={}Admin:{0}}" Margin="5"/>
 					
 					<TextBlock Text="{Binding $parent[Window].Application.EffectiveCustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5"/>
 					<NumericUpDown HorizontalAlignment="Left" Increment="0.1" Minimum="1.0" Maximum="2.0" Margin="5" Width="200" Value="{Binding $parent[Window].Application.CustomScreenScaleFactor, Mode=TwoWay}" FormatString="F2"/>

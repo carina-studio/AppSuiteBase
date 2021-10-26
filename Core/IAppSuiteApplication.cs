@@ -54,6 +54,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Check whether application is running as Administrator/Superuser or not.
+        /// </summary>
+        bool IsRunningAsAdministrator { get; }
+
+
+        /// <summary>
         /// Check whether <see cref="ThemeMode.System"/> is supported or not.
         /// </summary>
         bool IsSystemThemeModeSupported { get; }
@@ -113,8 +119,9 @@ namespace CarinaStudio.AppSuite
         /// Restart application.
         /// </summary>
         /// <param name="args">Arguments to restart.</param>
+        /// <param name="asAdministrator">True to restart application as Administrator/Superuser.</param>
         /// <returns>True if restarting has been accepted.</returns>
-        bool Restart(string? args = null);
+        bool Restart(string? args = null, bool asAdministrator = false);
 
 
         /// <summary>

@@ -48,7 +48,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         void Test2()
         {
-            this.Application.Restart(App.RestoreMainWindowsArgument);
+            this.Application.Restart(App.RestoreMainWindowsArgument, !this.Application.IsRunningAsAdministrator);
         }
     }
 }

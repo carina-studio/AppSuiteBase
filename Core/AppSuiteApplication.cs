@@ -24,6 +24,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -132,6 +133,7 @@ namespace CarinaStudio.AppSuite
         ScheduledAction? checkUpdateInfoAction;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
         HardwareInfo? hardwareInfo;
+        bool isRestartAsAdminRequested;
         bool isRestartingMainWindowsRequested;
         bool isRestartRequested;
         bool isShutdownStarted;
@@ -199,6 +201,18 @@ namespace CarinaStudio.AppSuite
             // get file paths
             this.persistentStateFilePath = Path.Combine(this.RootPrivateDirectoryPath, "PersistentState.json");
             this.settingsFilePath = Path.Combine(this.RootPrivateDirectoryPath, "Settings.json");
+
+            // check whether process is running as admin or not
+            if (Platform.IsWindows)
+            {
+#pragma warning disable CA1416
+                using var identity = WindowsIdentity.GetCurrent();
+                var principal = new WindowsPrincipal(identity);
+                this.IsRunningAsAdministrator = principal.IsInRole(WindowsBuiltInRole.Administrator);
+#pragma warning restore CA1416
+            }
+            if (this.IsRunningAsAdministrator)
+                this.Logger.LogWarning("Application is running as administrator/superuser");
 
             // setup properties
             this.MainWindows = this.mainWindows.AsReadOnly();
@@ -549,6 +563,10 @@ namespace CarinaStudio.AppSuite
         /// Check whether restoring main windows when launching is requested or not.
         /// </summary>
         protected bool IsRestoringMainWindowsRequested { get; private set; }
+
+
+        /// <inheritdoc/>
+        public bool IsRunningAsAdministrator { get; private set; }
 
 
         /// <summary>
@@ -1067,6 +1085,20 @@ namespace CarinaStudio.AppSuite
             {
                 Source = new Uri("avares://CarinaStudio.AppSuite.Core/Strings/Default.axaml")
             });
+            if (Platform.IsLinux)
+            {
+                this.Resources.MergedDictionaries.Add(new ResourceInclude()
+                {
+                    Source = new Uri("avares://CarinaStudio.AppSuite.Core/Strings/Default-Linux.axaml")
+                });
+            }
+            else if (Platform.IsMacOS)
+            {
+                this.Resources.MergedDictionaries.Add(new ResourceInclude()
+                {
+                    Source = new Uri("avares://CarinaStudio.AppSuite.Core/Strings/Default-OSX.axaml")
+                });
+            }
             this.OnLoadDefaultStringResource()?.Let(it => this.Resources.MergedDictionaries.Add(it));
             this.UpdateStringResources();
 
@@ -1261,14 +1293,17 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public bool Restart(string? args = null)
+        public bool Restart(string? args = null, bool asAdministrator = false)
         {
             // check state
             this.VerifyAccess();
             if (this.isRestartRequested)
             {
                 if (this.restartArgs == args)
+                {
+                    this.isRestartAsAdminRequested |= asAdministrator;
                     return true;
+                }
                 this.Logger.LogError("Cannot restart with different arguments");
                 return false;
             }
@@ -1276,6 +1311,7 @@ namespace CarinaStudio.AppSuite
             // update state
             this.Logger.LogWarning("Request restarting");
             this.isRestartRequested = true;
+            this.isRestartAsAdminRequested = asAdministrator;
             this.restartArgs = args;
 
             // shutdown to restart
@@ -1607,20 +1643,21 @@ namespace CarinaStudio.AppSuite
             {
                 try
                 {
-                    this.Logger.LogWarning("Restart");
+                    if (this.isRestartAsAdminRequested)
+                        this.Logger.LogWarning("Restart as administrator/superuser");
+                    else
+                        this.Logger.LogWarning("Restart");
                     var process = new Process().Also(process =>
                     {
                         process.StartInfo.Let(it =>
                         {
                             it.Arguments = this.restartArgs ?? "";
                             it.FileName = (Process.GetCurrentProcess().MainModule?.FileName).AsNonNull();
-                            /*
                             if (this.isRestartAsAdminRequested && Platform.IsWindows)
                             {
                                 it.UseShellExecute = true;
                                 it.Verb = "runas";
                             }
-                            */
                         });
                     });
                     process.Start();
@@ -1689,7 +1726,7 @@ namespace CarinaStudio.AppSuite
                     }
 
                     // load built-in resource
-                    var builtInResource = new ResourceInclude().Let(it =>
+                    var builtInResource = (Avalonia.Controls.IResourceProvider?)new ResourceInclude().Let(it =>
                     {
                         it.Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}.axaml");
                         try
@@ -1703,6 +1740,49 @@ namespace CarinaStudio.AppSuite
                             return null;
                         }
                     });
+                    if (builtInResource != null)
+                    {
+                        if (Platform.IsLinux)
+                        {
+                            try
+                            {
+                                var builtInResourcesForOS = new ResourceInclude().Also(it =>
+                                {
+                                    it.Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}-Linux.axaml");
+                                     _ = it.Loaded;  // trigger error if resource not found
+                                });
+                                builtInResource = new Avalonia.Controls.ResourceDictionary().Also(it =>
+                                {
+                                    it.MergedDictionaries.Add(builtInResource);
+                                    it.MergedDictionaries.Add(builtInResourcesForOS);
+                                });
+                            }
+                            catch
+                            {
+                                this.Logger.LogWarning($"No built-in string resource for {this.cultureInfo.Name} (Linux)");
+                            }
+                        }
+                        else if (Platform.IsMacOS)
+                        {
+                            try
+                            {
+                                var builtInResourcesForOS = new ResourceInclude().Also(it =>
+                                {
+                                    it.Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}-OSX.axaml");
+                                    _ = it.Loaded;  // trigger error if resource not found
+                                });
+                                builtInResource = new Avalonia.Controls.ResourceDictionary().Also(it =>
+                                {
+                                    it.MergedDictionaries.Add(builtInResource);
+                                    it.MergedDictionaries.Add(builtInResourcesForOS);
+                                });
+                            }
+                            catch
+                            {
+                                this.Logger.LogWarning($"No built-in string resource for {this.cultureInfo.Name} (Linux)");
+                            }
+                        }
+                    }
 
                     // load custom resource
                     var resource = (Avalonia.Controls.IResourceProvider?)null;
