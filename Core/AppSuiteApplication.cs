@@ -819,10 +819,18 @@ namespace CarinaStudio.AppSuite
             }
 
             // prepare
-            this.SynchronizationContext.Post(() =>
+            this.SynchronizationContext.Post(async () =>
             {
-                if (!this.IsShutdownStarted)
-                    _ = this.OnPrepareStartingAsync();
+                // check state
+                if (this.IsShutdownStarted)
+                    return;
+
+                // prepare
+                await this.OnPrepareStartingAsync();
+
+                // restore main windows
+                if (this.IsRestoringMainWindowsRequested)
+                    this.OnRestoreMainWindows();
             });
         }
 
@@ -1133,10 +1141,6 @@ namespace CarinaStudio.AppSuite
                 this.uiSettings.ColorValuesChanged += this.OnWindowsUIColorValueChanged;
 #endif
             }
-
-            // restore main windows
-            if (this.IsRestoringMainWindowsRequested)
-                this.OnRestoreMainWindows();
         }
 
 
