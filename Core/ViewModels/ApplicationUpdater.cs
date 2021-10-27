@@ -303,7 +303,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 						$" {(useDarkMode ? "-dark-mode" : "")}" +
 						$" -directory \"{Path.GetDirectoryName(mainModule.FileName)}\"" +
 						$" -executable \"{mainModule.FileName}\"" +
-						$" -executable-args \"-restore-state\"" +
+						$" -executable-args \"{AppSuiteApplication.RestoreMainWindowsArgument}\"" +
 						$" -name \"{this.Application.Name}\"" +
 						$" -package-manifest {this.Application.PackageManifestUri}" +
 						$" -wait-for-process {currentProcess.Id}");
