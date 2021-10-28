@@ -86,8 +86,8 @@
 						12345
 					</ComboBox>
 
-					<appControls:RegexTextBox Margin="5" Width="200"/>
-					<appControls:UriTextBox Margin="5" Width="200"/>
+					<appControls:RegexTextBox Name="regexTextBox" HorizontalAlignment="Left" Margin="5" Width="200" Watermark="Regex"/>
+					<appControls:UriTextBox Name="uriTextBox" HorizontalAlignment="Left" Margin="5" Width="200" Watermark="Uri"/>
 
 					<Border Classes="ToolBar" Margin="5">
 						<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">

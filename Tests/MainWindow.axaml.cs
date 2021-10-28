@@ -4,6 +4,7 @@ using Avalonia.Markup.Xaml;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
+using System;
 using System.ComponentModel;
 
 namespace CarinaStudio.AppSuite.Tests
@@ -43,7 +44,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void Test()
         {
-            var result = await new AppOptionsDialog().ShowDialog<ApplicationOptionsDialogResult>(this);
+            this.FindControl<RegexTextBox>("regexTextBox").AsNonNull().Regex = new System.Text.RegularExpressions.Regex("hello$");
         }
 
         void Test2()
