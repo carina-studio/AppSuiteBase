@@ -44,7 +44,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void Test()
         {
-            this.FindControl<RegexTextBox>("regexTextBox").AsNonNull().Regex = new System.Text.RegularExpressions.Regex("hello$");
+            this.FindControl<IPAddressTextBox>("ipAddressTextBox").AsNonNull().IPAddress = System.Net.IPAddress.IPv6Loopback;
         }
 
         void Test2()

@@ -86,6 +86,7 @@
 						12345
 					</ComboBox>
 
+					<appControls:IPAddressTextBox Name="ipAddressTextBox" HorizontalAlignment="Left" Margin="5" Width="200" Watermark="IPv4 or IPv6"/>
 					<appControls:RegexTextBox Name="regexTextBox" HorizontalAlignment="Left" Margin="5" Width="200" Watermark="Regex"/>
 					<appControls:UriTextBox Name="uriTextBox" HorizontalAlignment="Left" Margin="5" Width="200" Watermark="Uri"/>
 
