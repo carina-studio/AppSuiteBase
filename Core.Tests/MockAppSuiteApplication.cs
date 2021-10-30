@@ -324,5 +324,14 @@ namespace CarinaStudio.AppSuite
         /// Get latest checked application update information.
         /// </summary>
         public virtual ApplicationUpdateInfo? UpdateInfo { get; } = null;
+
+
+        // Interface implementations.
+        bool Avalonia.Controls.IResourceNode.HasResources => false;
+        bool Avalonia.Controls.IResourceNode.TryGetResource(object key, out object? value)
+        {
+            value = null;
+            return false;
+        }
     }
 }
