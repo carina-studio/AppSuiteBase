@@ -1,11 +1,13 @@
 ﻿using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.ViewModels
@@ -43,7 +45,25 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// Initialize new <see cref="ApplicationInfo"/> instance.
         /// </summary>
         public ApplicationInfo() : base(AppSuiteApplication.Current)
-        { }
+        {
+            _ = Task.Run(() =>
+            {
+                var version = Platform.GetInstalledFrameworkVersion();
+                if (version != null)
+                {
+                    this.SynchronizationContext.Post(() =>
+                    {
+                        if (!this.IsDisposed)
+                        {
+                            this.InstalledFrameworkVersion = version;
+                            this.OnPropertyChanged(nameof(InstalledFrameworkVersion));
+                            this.IsFrameworkInstalled = true;
+                            this.OnPropertyChanged(nameof(IsFrameworkInstalled));
+                        }
+                    });
+                }
+            });
+        }
 
 
         /// <summary>
@@ -65,6 +85,12 @@ namespace CarinaStudio.AppSuite.ViewModels
                 return false;
             }
         });
+
+
+        /// <summary>
+        /// Version of .NET currently used by application.
+        /// </summary>
+        public Version FrameworkVersion { get; } = Environment.Version;
 
 
         /// <summary>
@@ -95,9 +121,27 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
+        /// Version of .NET installed on device.
+        /// </summary>
+        public Version? InstalledFrameworkVersion { get; private set; }
+
+
+        /// <summary>
+        /// Check whether .NET has been installed on device or not.
+        /// </summary>
+        public bool IsFrameworkInstalled { get; private set; }
+
+
+        /// <summary>
         /// Get name of application.
         /// </summary>
         public string Name { get => this.Application.Name; }
+
+
+        /// <summary>
+        /// Description of operating system.
+        /// </summary>
+        public string OperatingSystemDescription { get; } = $"{RuntimeInformation.OSDescription} ({RuntimeInformation.OSArchitecture.ToString().ToUpperInvariant()})";
 
 
         /// <summary>

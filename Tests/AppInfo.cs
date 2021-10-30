@@ -7,9 +7,10 @@ namespace CarinaStudio.AppSuite.Tests
 {
     class AppInfo : ViewModels.ApplicationInfo
     {
-        public override IBitmap Icon { get; } = AvaloniaLocator.Current.GetService<IAssetLoader>().Let(it =>
-        {
-            return it.Open(new Uri("avares://CarinaStudio.AppSuite.Tests/AppIcon.ico")).Use(stream => new Bitmap(stream));
-        });
+        public override Uri? GitHubProjectUri => new Uri("http://localhost/");
+
+        public override Uri? PrivacyPolicyUri => new Uri("http://localhost/");
+
+        public override Uri? UserAgreementUri => new Uri("http://localhost/");
     }
 }

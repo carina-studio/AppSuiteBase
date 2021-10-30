@@ -44,7 +44,8 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void Test()
         {
-            this.FindControl<IPAddressTextBox>("ipAddressTextBox").AsNonNull().IPAddress = System.Net.IPAddress.IPv6Loopback;
+            using var appInfo = new AppInfo();
+            await new ApplicationInfoDialog(appInfo).ShowDialog(this);
         }
 
         void Test2()
