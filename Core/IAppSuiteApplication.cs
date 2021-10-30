@@ -8,7 +8,7 @@ namespace CarinaStudio.AppSuite
     /// <summary>
     /// Interface of AppSuite application.
     /// </summary>
-    public interface IAppSuiteApplication : IApplication
+    public interface IAppSuiteApplication : IAvaloniaApplication
     {
         /// <summary>
         /// Check application update information asynchronously.
