@@ -103,6 +103,12 @@
 	<sys:String x:Key="String/ThemeMode.Light">淺色</sys:String>
 	<sys:String x:Key="String/ThemeMode.System">系統設定</sys:String>
 
+	<!-- TimePicker -->
+	<sys:String x:Key="String/TimePicker.Hour">小時</sys:String>
+	<sys:String x:Key="String/TimePicker.HourFormat">{0:D2} 時</sys:String>
+	<sys:String x:Key="String/TimePicker.Minute">分鐘</sys:String>
+	<sys:String x:Key="String/TimePicker.MinuteFormat">{0:D2} 分 </sys:String>
+
 	<!-- TimeSpanConverter -->
 	<sys:String x:Key="String/TimeSpanConverter.Days">{0} 天 {1} 小時 {2} 分 {3}.{4:000} 秒</sys:String>
 	<sys:String x:Key="String/TimeSpanConverter.Hours">{0} 小時 {1} 分 {2}.{3:000} 秒</sys:String>

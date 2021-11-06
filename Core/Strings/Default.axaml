@@ -102,6 +102,12 @@
 	<sys:String x:Key="String/ThemeMode.Light">Light</sys:String>
 	<sys:String x:Key="String/ThemeMode.System">System</sys:String>
 
+	<!-- TimePicker -->
+	<sys:String x:Key="String/TimePicker.Hour">Hour</sys:String>
+	<sys:String x:Key="String/TimePicker.HourFormat">{0:D2}</sys:String>
+	<sys:String x:Key="String/TimePicker.Minute">Minute</sys:String>
+	<sys:String x:Key="String/TimePicker.MinuteFormat">{0:D2}</sys:String>
+
 	<!-- TimeSpanConverter -->
 	<sys:String x:Key="String/TimeSpanConverter.Days">{0} d {1} hr {2} min {3}.{4} sec</sys:String>
 	<sys:String x:Key="String/TimeSpanConverter.Hours">{0} hr {1} min {2}.{3} sec</sys:String>
