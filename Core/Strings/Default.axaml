@@ -80,6 +80,14 @@
 	<sys:String x:Key="String/Common.Remove">Remove</sys:String>
 	<sys:String x:Key="String/Common.Save">Save</sys:String>
 	<sys:String x:Key="String/Common.Yes">Yes</sys:String>
+	
+	<!-- DatePicker -->
+	<sys:String x:Key="String/DatePicker.Day">Day</sys:String>
+	<sys:String x:Key="String/DatePicker.DayFormat">d (ddd)</sys:String>
+	<sys:String x:Key="String/DatePicker.Month">Month</sys:String>
+	<sys:String x:Key="String/DatePicker.MonthFormat">MMM</sys:String>
+	<sys:String x:Key="String/DatePicker.Year">Year</sys:String>
+	<sys:String x:Key="String/DatePicker.YearFormat">yyyy</sys:String>
 
 	<!-- FileFormat -->
 	<sys:String x:Key="String/FileFormat.All">All formats</sys:String>

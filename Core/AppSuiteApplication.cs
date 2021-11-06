@@ -320,6 +320,12 @@ namespace CarinaStudio.AppSuite
                 }
             }
 
+            CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
+            CultureInfo.CurrentCulture = cultureInfo;
+            CultureInfo.CurrentUICulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
             // build application
             return AppBuilder.Configure<TApp>()
                 .UsePlatformDetect()
@@ -1524,7 +1530,7 @@ namespace CarinaStudio.AppSuite
             // update message on splash window
             this.UpdateSplashWindowMessage(this.GetStringNonNull("SplashWindow.ShowingMainWindow"));
 
-            // update styles
+            // update styles and culture
             if (mainWindowCount == 0)
                 this.UpdateStyles();
 
@@ -1581,6 +1587,13 @@ namespace CarinaStudio.AppSuite
             }
             this.SynchronizationContext.Post(() =>
             {
+                // [Workaround] sync culture back to system because it may be resetted
+                CultureInfo.CurrentCulture = this.cultureInfo;
+                CultureInfo.CurrentUICulture = this.cultureInfo;
+                CultureInfo.DefaultThreadCurrentCulture = this.cultureInfo;
+                CultureInfo.DefaultThreadCurrentUICulture = this.cultureInfo;
+
+                // show window
                 mainWindowHolder.Window.DataContext = mainWindowHolder.ViewModel;
                 mainWindowHolder.Window.Show();
                 this.SynchronizationContext.Post(() =>

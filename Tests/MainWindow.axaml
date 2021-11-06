@@ -66,6 +66,8 @@
 
 					<appControls:LinkTextBlock HorizontalAlignment="Left" Margin="5" Text="Google" Uri="http://www.google.com/"/>
 					<appControls:LinkTextBlock Command="{Binding $parent[Window].SwitchTheme}" HorizontalAlignment="Left" Margin="5" Text="Switch theme"/>
+					
+					<appControls:DatePicker HorizontalAlignment="Left" Margin="5"/>
 
 					<TextBox Width="200" Margin="5" HorizontalAlignment="Left"/>
 

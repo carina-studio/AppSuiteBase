@@ -260,6 +260,14 @@
 		<Setter Property="BorderThickness" Value="0,0,0,1"/>
 	</Style>
 
+	<!-- DatePicker -->
+	<Style Selector="DatePicker">
+		<Setter Property="BorderThickness" Value="0,0,0,1"/>
+		<Setter Property="DayFormat" Value="{DynamicResource String/DatePicker.DayFormat}"/>
+		<Setter Property="MonthFormat" Value="{DynamicResource String/DatePicker.MonthFormat}"/>
+		<Setter Property="YearFormat" Value="{DynamicResource String/DatePicker.YearFormat}"/>
+	</Style>
+
 	<!-- Dialog -->
 	<Style Selector="Border.Dialog_ContentPanel">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
