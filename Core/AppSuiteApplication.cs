@@ -216,6 +216,12 @@ namespace CarinaStudio.AppSuite
 
             // setup properties
             this.MainWindows = this.mainWindows.AsReadOnly();
+
+            // setup default culture
+            CultureInfo.CurrentCulture = this.cultureInfo;
+            CultureInfo.CurrentUICulture = this.cultureInfo;
+            CultureInfo.DefaultThreadCurrentCulture = this.cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = this.cultureInfo;
         }
 
 
@@ -1687,6 +1693,10 @@ namespace CarinaStudio.AppSuite
 
             // change culture info
             this.cultureInfo = cultureInfo;
+            CultureInfo.CurrentCulture = cultureInfo;
+            CultureInfo.CurrentUICulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
             this.OnPropertyChanged(nameof(CultureInfo));
 
             // update string

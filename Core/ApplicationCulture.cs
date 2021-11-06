@@ -37,7 +37,7 @@ namespace CarinaStudio.AppSuite
 		public static CultureInfo ToCultureInfo(this ApplicationCulture culture)
         {
 			if (culture == ApplicationCulture.System)
-				return CultureInfo.CurrentCulture;
+				return CultureInfo.InstalledUICulture;
 			var nameBuilder = new StringBuilder(culture.ToString());
 			for (var i = 0; i < nameBuilder.Length; ++i)
 			{

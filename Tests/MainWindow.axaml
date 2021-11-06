@@ -53,6 +53,8 @@
 				</TabItem.Header>
 
 				<StackPanel Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalAlignment="Stretch" Orientation="Vertical">
+					<TextBlock Text="{DynamicResource String/Common.OK}" Margin="5"/>
+
 					<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5"/>
 					<TextBlock Text="{Binding $parent[Window].Application.IsRunningAsAdministrator, StringFormat={}Admin:{0}}" Margin="5"/>
 					

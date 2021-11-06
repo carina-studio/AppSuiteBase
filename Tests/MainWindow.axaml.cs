@@ -50,7 +50,12 @@ namespace CarinaStudio.AppSuite.Tests
 
         void Test2()
         {
-            this.Application.Restart(App.RestoreMainWindowsArgument, !this.Application.IsRunningAsAdministrator);
+            this.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, this.Settings.GetValueOrDefault(SettingKeys.Culture) switch
+            {
+                ApplicationCulture.System => ApplicationCulture.EN_US,
+                ApplicationCulture.EN_US => ApplicationCulture.ZH_TW,
+                _ => ApplicationCulture.System,
+            });
         }
     }
 }
