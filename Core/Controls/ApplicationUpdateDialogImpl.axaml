@@ -46,7 +46,7 @@
 						<TextBlock IsVisible="{Binding IsLatestVersion}" Text="{Binding $parent[Window].LatestVersionMessage}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
 						<StackPanel IsVisible="{Binding !IsLatestVersion}" Orientation="Vertical">
 							<TextBlock Text="{Binding $parent[Window].NewVersionFoundMessage}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
-							<controls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" IsVisible="{Binding !IsLatestVersion}" Text="{DynamicResource String/ApplicationUpdateDialog.ReleasePage}" Uri="{Binding ReleasePageUri}"/>
+							<controls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" IsVisible="{Binding HasReleasePageUri}" Text="{DynamicResource String/ApplicationUpdateDialog.ReleasePage}" Uri="{Binding ReleasePageUri}"/>
 						</StackPanel>
 					</Panel>
 					<TextBlock IsVisible="{Binding IsCheckingForUpdate}" Text="{DynamicResource String/ApplicationUpdateDialog.CheckingForUpdate}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>

@@ -30,6 +30,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 		// Static fields.
 		static readonly Regex AutoUpdaterDirNameRegex = new Regex("^AutoUpdater\\-(?<Version>[\\d\\.]+)$", RegexOptions.IgnoreCase);
 		static readonly Uri AutoUpdaterPackageManifestUri = new Uri("https://raw.githubusercontent.com/carina-studio/AutoUpdater/master/PackageManifest-Avalonia.json");
+		static readonly ObservableProperty<bool> HasReleasePageUriProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(HasReleasePageUri));
 		static readonly ObservableProperty<bool> IsCheckingForUpdateProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsCheckingForUpdate));
 		static readonly ObservableProperty<bool> IsLatestVersionProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsLatestVersion));
 		static readonly ObservableProperty<bool> IsPreparingForUpdateProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsPreparingForUpdate));
@@ -95,12 +96,14 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 			// check for update
 			this.canCheckForUpdate.Update(false);
+			this.canStartUpdating.Update(false);
 			this.SetValue(IsCheckingForUpdateProperty, true);
 			await this.Application.CheckUpdateInfoAsync();
 			if (!this.IsDisposed)
 			{
 				this.SetValue(IsCheckingForUpdateProperty, false);
 				this.canCheckForUpdate.Update(true);
+				this.canStartUpdating.Update(this.IsAutoUpdateSupported && !this.IsPreparingForUpdate);
 			}
 		}
 
@@ -129,6 +132,12 @@ namespace CarinaStudio.AppSuite.ViewModels
 		/// Raised when error message generated.
 		/// </summary>
 		public event EventHandler<MessageEventArgs>? ErrorMessageGenerated;
+
+
+		/// <summary>
+		/// Check whether <see cref="ReleasePageUri"/> is valid or not.
+		/// </summary>
+		public bool HasReleasePageUri { get => this.GetValue(HasReleasePageUriProperty); }
 
 
 		/// <summary>
@@ -218,7 +227,9 @@ namespace CarinaStudio.AppSuite.ViewModels
 		protected override void OnPropertyChanged(ObservableProperty property, object? oldValue, object? newValue)
 		{
 			base.OnPropertyChanged(property, oldValue, newValue);
-			if (property == UpdatePreparationProgressPercentageProperty)
+			if (property == ReleasePageUriProperty)
+				this.SetValue(HasReleasePageUriProperty, newValue != null);
+			else if (property == UpdatePreparationProgressPercentageProperty)
 				this.SetValue(IsUpdatePreparationProgressAvailableProperty, double.IsFinite(this.UpdatePreparationProgressPercentage));
 		}
 
@@ -236,7 +247,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 			// update state
 			this.SetValue(IsPreparingForUpdateProperty, false);
-			this.canStartUpdating.Update(true);
+			this.canStartUpdating.Update(!this.IsCheckingForUpdate);
 			this.RefreshMessages();
 
 			// check state
@@ -376,7 +387,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 				this.SetValue(ReleasePageUriProperty, updateInfo.ReleasePageUri);
 				this.SetValue(UpdatePackageUriProperty, updateInfo.PackageUri);
 				this.SetValue(UpdateVersionProperty, updateInfo.Version);
-				this.canStartUpdating.Update(IsAutoUpdateSupported && !this.IsPreparingForUpdate);
+				this.canStartUpdating.Update(IsAutoUpdateSupported && !this.IsPreparingForUpdate && !this.IsCheckingForUpdate);
 			}
 		}
 

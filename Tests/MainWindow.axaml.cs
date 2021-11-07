@@ -44,14 +44,8 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void Test()
         {
-            /*
-            using var appInfo = new AppInfo();
-            await new ApplicationInfoDialog(appInfo).ShowDialog(this);
-            */
-            this.SynchronizationContext.Post(_ =>
-            {
-                new Dialog().ShowDialog(this);
-            }, null);
+            using var updater = new ViewModels.ApplicationUpdater();
+            await new ApplicationUpdateDialog(updater) { CheckForUpdateWhenShowing = true }.ShowDialog(this);
         }
 
         void Test2()
