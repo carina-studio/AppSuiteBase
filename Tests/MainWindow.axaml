@@ -73,11 +73,11 @@
 					<TextBox Width="200" Margin="5" HorizontalAlignment="Left"/>
 
 					<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left">
-						<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+						<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
 					</Border>
 
 					<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left" IsEnabled="False">
-						<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+						<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
 					</Border>
 
 					<ListBox HorizontalAlignment="Left" Width="200" Margin="5">
@@ -99,29 +99,29 @@
 						<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
 
 							<Button Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Administrator}"/>
+								<Image Classes="Icon" Source="{StaticResource Image/Icon.Administrator}"/>
 							</Button>
 							<Button Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Link}"/>
+								<Image Classes="Icon" Source="{StaticResource Image/Icon.Link}"/>
 							</Button>
 							<Button Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.AddFile}"/>
+								<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
 							</Button>
 							<Button Classes="ToolBar_Button">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Error.Colored}"/>
+								<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
 							</Button>
 
 							<TextBox Classes="ToolBar_TextBox" Width="50"/>
 							<TextBox Classes="ToolBar_TextBox" Width="50"/>
 
 							<ToggleButton Classes="ToolBar_ToggleButton">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.OK.Colored}"/>
+								<Image Classes="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
 							</ToggleButton>
 
 							<Separator Classes="ToolBar_Separator"/>
 
 							<ToggleButton Classes="ToolBar_ToggleButton">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.SaveAll}"/>
+								<Image Classes="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
 							</ToggleButton>
 
 							<ComboBox Classes="ToolBar_ComboBox" Width="100">
@@ -129,7 +129,7 @@
 							</ComboBox>
 
 							<RepeatButton Classes="ToolBar_RepeatButton">
-								<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.File}"/>
+								<Image Classes="Icon" Source="{StaticResource Image/Icon.File}"/>
 							</RepeatButton>
 
 							<TextBlock Classes="ToolBar_TextBlock" Text="test:"/>

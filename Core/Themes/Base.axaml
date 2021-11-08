@@ -432,6 +432,16 @@
 	<Style Selector="DrawingPresenter.Icon:disabled">
 		<Setter Property="Opacity" Value="0.3"/>
 	</Style>
+	<Style Selector="Image.Icon">
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="Image.Icon:disabled">
+		<Setter Property="Opacity" Value="0.3"/>
+	</Style>
 
 	<!-- InPlaceAction -->
 	<Style Selector="Border.InPlaceAction_Icon">

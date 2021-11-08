@@ -130,5 +130,75 @@
 	<GeometryDrawing x:Key="Drawing/Icon.Warning.Colored" Brush="{DynamicResource Brush/Icon.Warning}" Geometry="{StaticResource Geometry/Icon.Warning}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.ZoomIn" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.ZoomIn}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.ZoomOut" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.ZoomOut}"/>
+
+	<!-- Images -->
+	<DrawingImage x:Key="Image/Icon.Add" Drawing="{StaticResource Drawing/Icon.Add}"/>
+	<DrawingImage x:Key="Image/Icon.AddFile" Drawing="{StaticResource Drawing/Icon.AddFile}"/>
+	<DrawingImage x:Key="Image/Icon.AddFolder" Drawing="{StaticResource Drawing/Icon.AddFolder}"/>
+	<DrawingImage x:Key="Image/Icon.Administrator" Drawing="{StaticResource Drawing/Icon.Administrator}"/>
+	<DrawingImage x:Key="Image/Icon.Backward" Drawing="{StaticResource Drawing/Icon.Backward}"/>
+	<DrawingImage x:Key="Image/Icon.CheckingForUpdateInfo" Drawing="{StaticResource Drawing/Icon.CheckingForUpdateInfo}"/>
+	<DrawingImage x:Key="Image/Icon.Circle" Drawing="{StaticResource Drawing/Icon.Circle}"/>
+	<DrawingImage x:Key="Image/Icon.Circle.Filled" Drawing="{StaticResource Drawing/Icon.Circle.Filled}"/>
+	<DrawingImage x:Key="Image/Icon.Close" Drawing="{StaticResource Drawing/Icon.Close}"/>
+	<DrawingImage x:Key="Image/Icon.Copy" Drawing="{StaticResource Drawing/Icon.Copy}"/>
+	<DrawingImage x:Key="Image/Icon.Cpu" Drawing="{StaticResource Drawing/Icon.Cpu}"/>
+	<DrawingImage x:Key="Image/Icon.Cut" Drawing="{StaticResource Drawing/Icon.Cut}"/>
+	<DrawingImage x:Key="Image/Icon.Debug" Drawing="{StaticResource Drawing/Icon.Debug}"/>
+	<DrawingImage x:Key="Image/Icon.Debug.Light" Drawing="{StaticResource Drawing/Icon.Debug.Light}"/>
+	<DrawingImage x:Key="Image/Icon.Delete" Drawing="{StaticResource Drawing/Icon.Delete}"/>
+	<DrawingImage x:Key="Image/Icon.Details" Drawing="{StaticResource Drawing/Icon.Details}"/>
+	<DrawingImage x:Key="Image/Icon.Edit" Drawing="{StaticResource Drawing/Icon.Edit}"/>
+	<DrawingImage x:Key="Image/Icon.Error" Drawing="{StaticResource Drawing/Icon.Error}"/>
+	<DrawingImage x:Key="Image/Icon.Error.Colored" Drawing="{StaticResource Drawing/Icon.Error.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.Export" Drawing="{StaticResource Drawing/Icon.Export}"/>
+	<DrawingImage x:Key="Image/Icon.FastBackward" Drawing="{StaticResource Drawing/Icon.FastBackward}"/>
+	<DrawingImage x:Key="Image/Icon.FastForward" Drawing="{StaticResource Drawing/Icon.FastForward}"/>
+	<DrawingImage x:Key="Image/Icon.File" Drawing="{StaticResource Drawing/Icon.File}"/>
+	<DrawingImage x:Key="Image/Icon.FileManager" Drawing="{StaticResource Drawing/Icon.FileManager}"/>
+	<DrawingImage x:Key="Image/Icon.Folder" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+	<DrawingImage x:Key="Image/Icon.Forward" Drawing="{StaticResource Drawing/Icon.Forward}"/>
+	<DrawingImage x:Key="Image/Icon.Import" Drawing="{StaticResource Drawing/Icon.Import}"/>
+	<DrawingImage x:Key="Image/Icon.Information" Drawing="{StaticResource Drawing/Icon.Information}"/>
+	<DrawingImage x:Key="Image/Icon.Information.Colored" Drawing="{StaticResource Drawing/Icon.Information.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.Lab" Drawing="{StaticResource Drawing/Icon.Lab}"/>
+	<DrawingImage x:Key="Image/Icon.Link" Drawing="{StaticResource Drawing/Icon.Link}"/>
+	<DrawingImage x:Key="Image/Icon.Memory" Drawing="{StaticResource Drawing/Icon.Memory}"/>
+	<DrawingImage x:Key="Image/Icon.More" Drawing="{StaticResource Drawing/Icon.More}"/>
+	<DrawingImage x:Key="Image/Icon.More.Light" Drawing="{StaticResource Drawing/Icon.More.Light}"/>
+	<DrawingImage x:Key="Image/Icon.MoveDown" Drawing="{StaticResource Drawing/Icon.MoveDown}"/>
+	<DrawingImage x:Key="Image/Icon.MoveUp" Drawing="{StaticResource Drawing/Icon.MoveUp}"/>
+	<DrawingImage x:Key="Image/Icon.OK" Drawing="{StaticResource Drawing/Icon.OK}"/>
+	<DrawingImage x:Key="Image/Icon.OK.Colored" Drawing="{StaticResource Drawing/Icon.OK.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.OpenFile" Drawing="{StaticResource Drawing/Icon.OpenFile}"/>
+	<DrawingImage x:Key="Image/Icon.Paste" Drawing="{StaticResource Drawing/Icon.Paste}"/>
+	<DrawingImage x:Key="Image/Icon.PauseMedia" Drawing="{StaticResource Drawing/Icon.PauseMedia}"/>
+	<DrawingImage x:Key="Image/Icon.PlayMedia" Drawing="{StaticResource Drawing/Icon.PlayMedia}"/>
+	<DrawingImage x:Key="Image/Icon.Pin" Drawing="{StaticResource Drawing/Icon.Pin}"/>
+	<DrawingImage x:Key="Image/Icon.Question" Drawing="{StaticResource Drawing/Icon.Question}"/>
+	<DrawingImage x:Key="Image/Icon.Question.Colored" Drawing="{StaticResource Drawing/Icon.Question.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.Redo" Drawing="{StaticResource Drawing/Icon.Redo}"/>
+	<DrawingImage x:Key="Image/Icon.Refresh" Drawing="{StaticResource Drawing/Icon.Refresh}"/>
+	<DrawingImage x:Key="Image/Icon.RemoveFile" Drawing="{StaticResource Drawing/Icon.RemoveFile}"/>
+	<DrawingImage x:Key="Image/Icon.RemoveFolder" Drawing="{StaticResource Drawing/Icon.RemoveFolder}"/>
+	<DrawingImage x:Key="Image/Icon.Save" Drawing="{StaticResource Drawing/Icon.Save}"/>
+	<DrawingImage x:Key="Image/Icon.SaveAll" Drawing="{StaticResource Drawing/Icon.SaveAll}"/>
+	<DrawingImage x:Key="Image/Icon.Search" Drawing="{StaticResource Drawing/Icon.Search}"/>
+	<DrawingImage x:Key="Image/Icon.Settings" Drawing="{StaticResource Drawing/Icon.Settings}"/>
+	<DrawingImage x:Key="Image/Icon.Speed" Drawing="{StaticResource Drawing/Icon.Speed}"/>
+	<DrawingImage x:Key="Image/Icon.Star" Drawing="{StaticResource Drawing/Icon.Star}"/>
+	<DrawingImage x:Key="Image/Icon.Star.Active" Drawing="{StaticResource Drawing/Icon.Star.Active}"/>
+	<DrawingImage x:Key="Image/Icon.Star.Filled" Drawing="{StaticResource Drawing/Icon.Star.Filled}"/>
+	<DrawingImage x:Key="Image/Icon.Star.Filled.Active" Drawing="{StaticResource Drawing/Icon.Star.Filled.Active}"/>
+	<DrawingImage x:Key="Image/Icon.StopMedia" Drawing="{StaticResource Drawing/Icon.StopMedia}"/>
+	<DrawingImage x:Key="Image/Icon.Tab" Drawing="{StaticResource Drawing/Icon.Tab}"/>
+	<DrawingImage x:Key="Image/Icon.Undo" Drawing="{StaticResource Drawing/Icon.Undo}"/>
+	<DrawingImage x:Key="Image/Icon.Update" Drawing="{StaticResource Drawing/Icon.Update}"/>
+	<DrawingImage x:Key="Image/Icon.Update.Colored" Drawing="{StaticResource Drawing/Icon.Update.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.Waiting" Drawing="{StaticResource Drawing/Icon.Waiting}"/>
+	<DrawingImage x:Key="Image/Icon.Warning" Drawing="{StaticResource Drawing/Icon.Warning}"/>
+	<DrawingImage x:Key="Image/Icon.Warning.Colored" Drawing="{StaticResource Drawing/Icon.Warning.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.ZoomIn" Drawing="{StaticResource Drawing/Icon.ZoomIn}"/>
+	<DrawingImage x:Key="Image/Icon.ZoomOut" Drawing="{StaticResource Drawing/Icon.ZoomOut}"/>
 	
 </ResourceDictionary>
