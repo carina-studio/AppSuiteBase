@@ -1,4 +1,5 @@
 ﻿using CarinaStudio.AppSuite.ViewModels;
+using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using System;
 using System.Threading.Tasks;
@@ -26,6 +27,13 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
+        /// Reset all internal states which are related to showing dialog.
+        /// </summary>
+        public static void ResetShownState() =>
+            AppSuiteApplication.CurrentOrNull?.PersistentState?.ResetValue(LatestShownVersionKey);
+
+
+        /// <summary>
 		/// Show dialog.
 		/// </summary>
 		/// <param name="owner">Owner window.</param>
@@ -41,7 +49,9 @@ namespace CarinaStudio.AppSuite.Controls
                 DataContext = this.changeList
             };
             this.changeList.Application.PersistentState.SetValue<string>(LatestShownVersionKey, this.changeList.Version.ToString());
-            return dialog.ShowDialog<object?>(owner);
+            if (this.changeList.ChangeList.IsNotEmpty())
+                return dialog.ShowDialog<object?>(owner);
+            return Task.FromResult((object?)null); // skip showing because there is no change
         }
 
 

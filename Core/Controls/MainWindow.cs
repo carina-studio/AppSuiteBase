@@ -21,7 +21,7 @@ namespace CarinaStudio.AppSuite.Controls
     public abstract class MainWindow<TViewModel> : Window where TViewModel : MainWindowViewModel
     {
         // Constants.
-        const int AppUpdateNotificationDelay = 1000;
+        const int InitialDialogsDelay = 1000;
         const int RestartingMainWindowsDelay = 500;
         const int SaveWindowSizeDelay = 300;
         const int UpdateContentPaddingDelay = 300;
@@ -36,10 +36,11 @@ namespace CarinaStudio.AppSuite.Controls
 
         // Fields.
         bool isContentPaddingTransitionReady;
-        readonly ScheduledAction notifyAppUpdateFoundAction;
+        bool isShowingInitialDialogs;
         long openedTime;
         readonly ScheduledAction restartingMainWindowsAction;
         readonly ScheduledAction saveWindowSizeAction;
+        readonly ScheduledAction showInitDialogsAction;
         readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
         readonly ScheduledAction updateContentPaddingAction;
 
@@ -50,7 +51,6 @@ namespace CarinaStudio.AppSuite.Controls
         protected MainWindow()
         {
             // create scheduled actions
-            this.notifyAppUpdateFoundAction = new ScheduledAction(this.NotifyApplicationUpdateFound);
             this.restartingMainWindowsAction = new ScheduledAction(() =>
             {
                 if (!this.IsOpened || this.HasDialogs || !this.Application.IsRestartingMainWindowsNeeded)
@@ -66,6 +66,7 @@ namespace CarinaStudio.AppSuite.Controls
                     this.PersistentState.SetValue<int>(WindowHeightSettingKey, (int)(this.Height + 0.5));
                 }
             });
+            this.showInitDialogsAction = new ScheduledAction(this.ShowInitialDialogs);
             this.updateContentPaddingAction = new ScheduledAction(() =>
             {
                 // check state
@@ -124,6 +125,12 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
+        /// Check whether all dialogs which need to be shown after showing main window are closed or not.
+        /// </summary>
+        protected bool AreInitialDialogsClosed { get; private set; }
+
+
+        /// <summary>
         /// Check whether extending client area to title bar is allowed or not.
         /// </summary>
         public virtual bool IsExtendingClientAreaAllowed { get; } = true;
@@ -132,7 +139,8 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Show dialog if it is needed to notify user that application update has been found.
         /// </summary>
-        protected async void NotifyApplicationUpdateFound()
+        /// <returns>Task of notifying user.</returns>
+        protected async Task NotifyApplicationUpdateFound()
         {
             // check state
             this.VerifyAccess();
@@ -149,14 +157,6 @@ namespace CarinaStudio.AppSuite.Controls
                 return;
             if (updateInfo.Version == ApplicationUpdateDialog.LatestShownVersion)
                 return;
-
-            // notify later
-            var delay = AppUpdateNotificationDelay - (this.stopWatch.ElapsedMilliseconds - this.openedTime);
-            if (delay > 0)
-            {
-                this.notifyAppUpdateFoundAction.Reschedule((int)delay);
-                return;
-            }
 
             // show dialog
             using var updater = this.OnCreateApplicationUpdater();
@@ -187,6 +187,13 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
+        /// <summary>
+        /// Called when all dialogs which need to be shown after showing main window are closed.
+        /// </summary>
+        protected virtual void OnInitialDialogsClosed()
+        { }
+
+
         // Called when property of application changed.
         void OnApplicationPropertyChanged(object? sender, PropertyChangedEventArgs e) => this.OnApplicationPropertyChanged(e);
 
@@ -205,7 +212,10 @@ namespace CarinaStudio.AppSuite.Controls
                     this.restartingMainWindowsAction.Cancel();
             }
             else if (e.PropertyName == nameof(IAppSuiteApplication.UpdateInfo))
-                this.notifyAppUpdateFoundAction.Schedule();
+            {
+                if (this.AreInitialDialogsClosed)
+                    this.SynchronizationContext.Post(() => _ = this.NotifyApplicationUpdateFound());
+            }
         }
 
 
@@ -232,9 +242,17 @@ namespace CarinaStudio.AppSuite.Controls
             this.DataContext = null;
             this.Application.PropertyChanged -= this.OnApplicationPropertyChanged;
             this.restartingMainWindowsAction.Cancel();
-            this.notifyAppUpdateFoundAction.Cancel();
+            this.showInitDialogsAction.Cancel();
             base.OnClosed(e);
         }
+
+
+
+        /// <summary>
+        /// Called to create view-model for application change list dialog.
+        /// </summary>
+        /// <returns>View-model for application change list dialog.</returns>
+        protected virtual ApplicationChangeList OnCreateApplicationChangeList() => new ApplicationChangeList();
 
 
         /// <summary>
@@ -276,7 +294,7 @@ namespace CarinaStudio.AppSuite.Controls
             // notify application update found
             if (this.Application.MainWindows.Count == 1)
                 ApplicationUpdateDialog.ResetLatestShownInfo();
-            this.notifyAppUpdateFoundAction.Schedule();
+            this.showInitDialogsAction.Schedule();
         }
 
 
@@ -308,15 +326,16 @@ namespace CarinaStudio.AppSuite.Controls
                 {
                     if (this.Application.IsRestartingMainWindowsNeeded)
                         this.restartingMainWindowsAction.Reschedule(RestartingMainWindowsDelay);
-                    this.notifyAppUpdateFoundAction.Reschedule(AppUpdateNotificationDelay);
+                    if (!this.AreInitialDialogsClosed)
+                        this.showInitDialogsAction.Schedule();
                 }
             }
             else if (property == HeightProperty || property == WidthProperty)
                 this.saveWindowSizeAction.Reschedule(SaveWindowSizeDelay);
             else if (property == IsActiveProperty)
             {
-                if (this.IsActive)
-                    this.notifyAppUpdateFoundAction.Schedule();
+                if (this.IsActive && !this.AreInitialDialogsClosed)
+                    this.showInitDialogsAction.Schedule();
             }
             else if (property == WindowStateProperty)
             {
@@ -360,6 +379,62 @@ namespace CarinaStudio.AppSuite.Controls
                 return;
             if (e.PropertyName == nameof(MainWindowViewModel.Title))
                 this.Title = viewModel.Title;
+        }
+
+
+        // Show dialogs which are needed to be shown after showing main window.
+        async void ShowInitialDialogs()
+        {
+            // check state
+            if (this.AreInitialDialogsClosed)
+                return;
+            if (!this.IsOpened || !this.IsActive)
+                return;
+            if (this.HasDialogs || this.isShowingInitialDialogs)
+                return;
+
+            // show later
+            var delay = InitialDialogsDelay - (this.stopWatch.ElapsedMilliseconds - this.openedTime);
+            if (delay > 0)
+            {
+                this.showInitDialogsAction.Reschedule((int)delay);
+                return;
+            }
+
+            // show application change list
+            if (!ApplicationChangeListDialog.ShownBeforeForCurrentVersion)
+            {
+                this.Logger.LogDebug("Show application change list dialog");
+
+                // check for change list
+                this.isShowingInitialDialogs = true;
+                using var appChangeList = this.OnCreateApplicationChangeList();
+                await appChangeList.WaitForChangeListReadyAsync();
+                if (this.IsClosed || !this.IsActive)
+                {
+                    this.Logger.LogWarning("Window is closed or inactive, show dialog later");
+                    this.isShowingInitialDialogs = false;
+                    return;
+                }
+                await new ApplicationChangeListDialog(appChangeList).ShowDialog(this);
+                this.isShowingInitialDialogs = false;
+                return;
+            }
+
+            // notify application update found
+            var updateInfo = this.Application.UpdateInfo;
+            if (updateInfo != null && updateInfo.Version > ApplicationUpdateDialog.LatestShownVersion)
+            {
+                this.Logger.LogDebug("Show application update dialog");
+                this.isShowingInitialDialogs = true;
+                await this.NotifyApplicationUpdateFound();
+                this.isShowingInitialDialogs = false;
+            }
+
+            // all dialogs closed
+            this.Logger.LogWarning("All initial dialogs closed");
+            this.AreInitialDialogsClosed = true;
+            this.OnInitialDialogsClosed();
         }
 
 
