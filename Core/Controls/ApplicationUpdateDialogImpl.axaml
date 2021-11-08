@@ -30,11 +30,11 @@
 
 			<!-- Icon -->
 			<Panel Height="{DynamicResource Double/MessageDialog.Icon.Size}" IsVisible="{Binding !IsCheckingForUpdate}" Margin="{DynamicResource Thickness/MessageDialog.Icon.Margin}" VerticalAlignment="Center" Width="{DynamicResource Double/MessageDialog.Icon.Size}">
-				<DrawingPresenter Classes="Icon" Drawing="{DynamicResource Drawing/Icon.OK.Colored}" IsVisible="{Binding IsLatestVersion}"/>
-				<DrawingPresenter Classes="Icon" Drawing="{DynamicResource Drawing/Icon.Update.Colored}" IsVisible="{Binding !IsLatestVersion}"/>
+				<Image Classes="Icon" Source="{DynamicResource Image/Icon.OK.Colored}" IsVisible="{Binding IsLatestVersion}"/>
+				<Image Classes="Icon" Source="{DynamicResource Image/Icon.Update.Colored}" IsVisible="{Binding !IsLatestVersion}"/>
 			</Panel>
 			<Border Height="{DynamicResource Double.MessageDialog.Icon.Size}" IsVisible="{Binding IsCheckingForUpdate}" Margin="{DynamicResource Thickness/MessageDialog.Icon.Margin}" VerticalAlignment="Center" Width="{DynamicResource Double/MessageDialog.Icon.Size}">
-				<DrawingPresenter Classes="Icon" Drawing="{DynamicResource Drawing/Icon.CheckingForUpdateInfo}"/>
+				<Image Classes="Icon" Source="{DynamicResource Image/Icon.CheckingForUpdateInfo}"/>
 			</Border>
 
 			<!-- Message and progress -->

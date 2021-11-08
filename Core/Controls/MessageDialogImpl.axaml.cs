@@ -19,7 +19,7 @@ namespace CarinaStudio.AppSuite.Controls
 		static readonly AvaloniaProperty<string?> Button2TextProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(Button2Text));
 		static readonly AvaloniaProperty<MessageDialogResult?> Button3ResultProperty = AvaloniaProperty.Register<MessageDialogImpl, MessageDialogResult?>(nameof(Button3Result));
 		static readonly AvaloniaProperty<string?> Button3TextProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(Button3Text));
-		static readonly AvaloniaProperty<Drawing?> IconDrawingProperty = AvaloniaProperty.Register<MessageDialogImpl, Drawing?>(nameof(IconDrawing));
+		static readonly AvaloniaProperty<IImage?> IconImageProperty = AvaloniaProperty.Register<MessageDialogImpl, IImage?>(nameof(IconImage));
 		static readonly AvaloniaProperty<bool> IsButton1VisibleProperty = AvaloniaProperty.Register<MessageDialogImpl, bool>(nameof(IsButton1Visible));
 		static readonly AvaloniaProperty<bool> IsButton2VisibleProperty = AvaloniaProperty.Register<MessageDialogImpl, bool>(nameof(IsButton2Visible));
 		static readonly AvaloniaProperty<bool> IsButton3VisibleProperty = AvaloniaProperty.Register<MessageDialogImpl, bool>(nameof(IsButton3Visible));
@@ -73,8 +73,8 @@ namespace CarinaStudio.AppSuite.Controls
 		public new MessageDialogIcon Icon { get; set; } = MessageDialogIcon.Information;
 
 
-		// Get Drawing according to Icon.
-		Drawing? IconDrawing { get => this.GetValue<Drawing?>(IconDrawingProperty); }
+		// Get IImage according to Icon.
+		IImage? IconImage { get => this.GetValue<IImage?>(IconImageProperty); }
 
 
 		// Initialize Avalonia components.
@@ -117,8 +117,8 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			// setup icon
 			var app = this.Application;
-			if (((Avalonia.Application)app).TryFindResource<Drawing>($"Drawing/Icon.{this.Icon}.Colored", out var drawing))
-				this.SetValue<Drawing?>(IconDrawingProperty, drawing);
+			if (((Avalonia.Application)app).TryFindResource<IImage>($"Image/Icon.{this.Icon}.Colored", out var image))
+				this.SetValue<IImage?>(IconImageProperty, image);
 
 			// setup buttons
 			switch (this.Buttons)

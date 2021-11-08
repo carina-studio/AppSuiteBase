@@ -17,7 +17,7 @@
 				<Panel VerticalAlignment="Top">
 					<TextBlock Text="{DynamicResource String/ApplicationChangeListDialog.IconSpaceReservationChar}" Opacity="0" VerticalAlignment="Center"/>
 					<Border Height="{DynamicResource Double/ApplicationChangeListDialog.Icon.Size}" Margin="{DynamicResource Thickness/ApplicationChangeListDialog.Icon.Margin}" VerticalAlignment="Center" Width="{DynamicResource Double/ApplicationChangeListDialog.Icon.Size}">
-						<DrawingPresenter Classes="Icon" Drawing="{Binding Type, Converter={x:Static controls:ApplicationChangeListDialogImpl.ApplicationChangeTypeConverter}}"/>
+						<Image Classes="Icon" Source="{Binding Type, Converter={x:Static controls:ApplicationChangeListDialogImpl.ApplicationChangeTypeConverter}}"/>
 					</Border>
 				</Panel>
 				<StackPanel Grid.Column="1" VerticalAlignment="Center">

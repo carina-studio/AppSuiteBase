@@ -15,6 +15,8 @@ namespace CarinaStudio.AppSuite.Tests
         protected override bool AllowMultipleMainWindows => true;
 
 
+        //protected override bool ForceAcceptingUpdateInfo => true;
+
         public override void Initialize()
         {
             this.Name = "AppSuite";
@@ -58,5 +60,8 @@ namespace CarinaStudio.AppSuite.Tests
             return base.OnSelectEnteringDebugMode();
 #endif
         }
+
+
+        //public override Uri? PackageManifestUri => new Uri("https://raw.githubusercontent.com/carina-studio/PixelViewer/master/PackageManifest-Preview.json");
     }
 }

@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.AppSuite.Controls;
+using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
 using System;
@@ -44,7 +45,10 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void Test()
         {
-            _ = new Dialog().ShowDialog(this);
+            _ = new MessageDialog()
+            {
+                Icon = Enum.GetValues<MessageDialogIcon>().SelectRandomElement()
+            }.ShowDialog(this);
         }
 
         void Test2()

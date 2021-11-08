@@ -15,7 +15,7 @@ namespace CarinaStudio.AppSuite.Controls
     /// </summary>
     partial class ApplicationChangeListDialogImpl : Dialog
     {
-        // Convert from ApplicationChangeType to Drawing.
+        // Convert from ApplicationChangeType to IImage.
         class ApplicationChangeTypeConverterImpl : IValueConverter
         {
             // Fields.
@@ -28,25 +28,25 @@ namespace CarinaStudio.AppSuite.Controls
                     return null;
                 if (value is not ApplicationChangeType type)
                     return null;
-                if (!targetType.IsAssignableFrom(typeof(object)) && !targetType.IsAssignableFrom(typeof(Drawing)))
+                if (!targetType.IsAssignableFrom(typeof(object)) && !targetType.IsAssignableFrom(typeof(IImage)))
                     return null;
-                var drawing = (Drawing?)null;
+                var image = (IImage?)null;
                 switch (type)
                 {
                     case ApplicationChangeType.BehaviorChange:
-                        this.app.TryGetResource<Drawing>($"Drawing/Icon.Information", out drawing);
+                        this.app.TryGetResource<IImage>($"Image/Icon.Information", out image);
                         break;
                     case ApplicationChangeType.BugFixing:
-                        this.app.TryGetResource<Drawing>($"Drawing/Icon.Debug", out drawing);
+                        this.app.TryGetResource<IImage>($"Image/Icon.Debug", out image);
                         break;
                     case ApplicationChangeType.NewFeature:
-                        this.app.TryGetResource<Drawing>($"Drawing/Icon.Star.Filled", out drawing);
+                        this.app.TryGetResource<IImage>($"Image/Icon.Star.Filled", out image);
                         break;
                     default:
-                        this.app.TryGetResource<Drawing>($"Drawing/Icon.Circle.Filled", out drawing);
+                        this.app.TryGetResource<IImage>($"Image/Icon.Circle.Filled", out image);
                         break;
                 }
-                return drawing;
+                return image;
             }
 
             // Convert back.
