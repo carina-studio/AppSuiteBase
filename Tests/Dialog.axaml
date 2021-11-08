@@ -33,6 +33,9 @@
 
 				<appControls:DatePicker HorizontalAlignment="Stretch"/>
 				<Separator Classes="Dialog_Separator"/>
+				
+				<ListBox HorizontalAlignment="Stretch" Height="100"/>
+				<Button Classes="Dialog_ListActionButton" Content="{DynamicResource String/Common.OK}"/>
 
 				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
 				<TextBox Classes="Dialog_TextBox"/>

@@ -52,6 +52,7 @@
 		<Color x:Key="Color/Dialog.TextBlock.Foreground.Warning">#ff6a00</Color>
 		<sys:Double x:Key="Double/Dialog.ControlButton.MinWidth">100</sys:Double>
 		<sys:Double x:Key="Double/Dialog.ControlButton.Separator.Width">15</sys:Double>
+		<sys:Double x:Key="Double/Dialog.ListActionButton.MinWidth">80</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height">15</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height.Large">40</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height.Small">5</sys:Double>
@@ -66,6 +67,8 @@
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Margin">3,0,3,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Padding">10,5,10,5</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButtonsPanel.Padding">15</Thickness>
+		<Thickness x:Key="Thickness/Dialog.ListActionButton.Padding">10,5,10,5</Thickness>
+		<Thickness x:Key="Thickness/Dialog.ListActionButton.Margin">5,5,0,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Border.Header1">0,0,0,1</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">0,0,0,3</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin">0,0,0,3</Thickness>
@@ -297,6 +300,14 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ControlButton.Margin}"/>
 		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.ControlButton.MinWidth}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ControlButton.Padding}"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="Button.Dialog_ListActionButton">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ListActionButton.Margin}"/>
+		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.ListActionButton.MinWidth}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ListActionButton.Padding}"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="ComboBox.Dialog_ComboBox">

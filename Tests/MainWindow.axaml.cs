@@ -44,10 +44,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void Test()
         {
-            var shownBefore = ApplicationChangeListDialog.ShownBeforeForCurrentVersion;
-            using var changeList = new ViewModels.ApplicationChangeList();
-            await changeList.WaitForChangeListReadyAsync();
-            await new ApplicationChangeListDialog(changeList).ShowDialog(this);
+            _ = new Dialog().ShowDialog(this);
         }
 
         void Test2()
