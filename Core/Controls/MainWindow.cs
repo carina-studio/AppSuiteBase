@@ -213,7 +213,7 @@ namespace CarinaStudio.AppSuite.Controls
             }
             else if (e.PropertyName == nameof(IAppSuiteApplication.UpdateInfo))
             {
-                if (this.AreInitialDialogsClosed)
+                if (this.AreInitialDialogsClosed && this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate))
                     this.SynchronizationContext.Post(() => _ = this.NotifyApplicationUpdateFound());
             }
         }
@@ -422,13 +422,16 @@ namespace CarinaStudio.AppSuite.Controls
             }
 
             // notify application update found
-            var updateInfo = this.Application.UpdateInfo;
-            if (updateInfo != null && updateInfo.Version > ApplicationUpdateDialog.LatestShownVersion)
+            if (this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate))
             {
-                this.Logger.LogDebug("Show application update dialog");
-                this.isShowingInitialDialogs = true;
-                await this.NotifyApplicationUpdateFound();
-                this.isShowingInitialDialogs = false;
+                var updateInfo = this.Application.UpdateInfo;
+                if (updateInfo != null && updateInfo.Version > ApplicationUpdateDialog.LatestShownVersion)
+                {
+                    this.Logger.LogDebug("Show application update dialog");
+                    this.isShowingInitialDialogs = true;
+                    await this.NotifyApplicationUpdateFound();
+                    this.isShowingInitialDialogs = false;
+                }
             }
 
             // all dialogs closed

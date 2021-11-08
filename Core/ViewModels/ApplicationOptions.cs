@@ -112,6 +112,16 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
+        /// Get or set whether to notify user when application update found or not.
+        /// </summary>
+        public bool NotifyApplicationUpdate
+        {
+            get => this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate);
+            set => this.Settings.SetValue<bool>(SettingKeys.NotifyApplicationUpdate, value);
+        }
+
+
+        /// <summary>
         /// Called when property of application changed.
         /// </summary>
         /// <param name="e">Event data.</param>
@@ -147,6 +157,8 @@ namespace CarinaStudio.AppSuite.ViewModels
                 this.OnPropertyChanged(nameof(Culture));
             else if (key == SettingKeys.EnableBlurryBackground)
                 this.OnPropertyChanged(nameof(EnableBlurryBackground));
+            else if (key == SettingKeys.NotifyApplicationUpdate)
+                this.OnPropertyChanged(nameof(NotifyApplicationUpdate));
             else if (key == SettingKeys.ThemeMode)
                 this.OnPropertyChanged(nameof(ThemeMode));
         }

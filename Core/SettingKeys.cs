@@ -27,6 +27,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Notify user when application update found.
+        /// </summary>
+        public static readonly SettingKey<bool> NotifyApplicationUpdate = new SettingKey<bool>(nameof(NotifyApplicationUpdate), true);
+
+
+        /// <summary>
         /// Theme mode.
         /// </summary>
         public static readonly SettingKey<ThemeMode> ThemeMode = new SettingKey<ThemeMode>(nameof(ThemeMode), AppSuite.ThemeMode.System);
