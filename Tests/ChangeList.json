@@ -1,0 +1,36 @@
+﻿[
+	{
+		"Description": "New feature 1",
+		"Type": "NewFeature"
+	},
+	{
+		"Description": "New feature 2",
+		"DetailsPageUri": "https://github.com/carina-studio",
+		"Type": "NewFeature"
+	},
+	{
+		"Description": "Behavior change 1",
+		"Type": "BehaviorChange"
+	},
+	{
+		"Description": "Behavior change 2",
+		"Type": "BehaviorChange"
+	},
+	{
+		"Description": "Behavior change 3 with LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONG description",
+		"DetailsPageUri": "https://github.com/carina-studio",
+		"Type": "BehaviorChange"
+	},
+	{
+		"Description": "Bug fixing 1",
+		"Type": "BugFixing"
+	},
+	{
+		"Description": "Bug fixing 2",
+		"Type": "BugFixing"
+	},
+	{
+		"Description": "Unclassified",
+		"DetailsPageUri": "https://github.com/carina-studio"
+	}
+]

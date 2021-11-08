@@ -1,0 +1,57 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
+		xmlns:viewModels="using:CarinaStudio.AppSuite.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="CarinaStudio.AppSuite.Controls.ApplicationChangeListDialogImpl"
+		Classes="Dialog"
+        Title="{DynamicResource String/ApplicationChangeListDialog.Title}"
+		Width="{DynamicResource Double/ApplicationChangeListDialog.Width}">
+
+	<!-- DataTemplate -->
+	<Window.DataTemplates>
+		<DataTemplate DataType="{x:Type viewModels:ApplicationChange}">
+			<Grid ColumnDefinitions="Auto,*">
+				<Panel VerticalAlignment="Top">
+					<TextBlock Text="{DynamicResource String/ApplicationChangeListDialog.IconSpaceReservationChar}" Opacity="0" VerticalAlignment="Center"/>
+					<Border Height="{DynamicResource Double/ApplicationChangeListDialog.Icon.Size}" Margin="{DynamicResource Thickness/ApplicationChangeListDialog.Icon.Margin}" VerticalAlignment="Center" Width="{DynamicResource Double/ApplicationChangeListDialog.Icon.Size}">
+						<DrawingPresenter Classes="Icon" Drawing="{Binding Type, Converter={x:Static controls:ApplicationChangeListDialogImpl.ApplicationChangeTypeConverter}}"/>
+					</Border>
+				</Panel>
+				<StackPanel Grid.Column="1" VerticalAlignment="Center">
+					<TextBlock FontSize="{DynamicResource Double/Dialog.TextBlock.FontSize}" Text="{Binding Description}" TextWrapping="Wrap"/>
+					<controls:LinkTextBlock FontSize="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}" HorizontalAlignment="Left" IsVisible="{Binding HasDetailsPageUri}" Text="{DynamicResource String/ApplicationChangeListDialog.Details}" Uri="{Binding DetailsPageUri}"/>
+				</StackPanel>
+			</Grid>
+		</DataTemplate>
+	</Window.DataTemplates>
+	
+	<!-- Content -->
+	<DockPanel>
+
+		<!-- Control buttons -->
+		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
+			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.OK}"/>
+			</StackPanel>
+		</Border>
+
+		<!-- Content -->
+		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="{DynamicResource Double/ApplicationChangeListDialog.Content.MaxHeight}">
+			<StackPanel Name="contentPanel" Classes="Dialog_ContentPanel">
+
+				<!-- Header -->
+				<Border Classes="Dialog_TextBlock_Header1">
+					<TextBlock Classes="Dialog_TextBlock_Header1" Text="{Binding $parent[Window].Header}"/>
+				</Border>
+
+				<!-- Change list -->
+
+			</StackPanel>
+		</ScrollViewer>
+
+	</DockPanel>
+	
+</Window>

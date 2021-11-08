@@ -16,6 +16,12 @@
 		<sys:Double x:Key="Double/AddTabItemButton.Size">30</sys:Double>
 		<Thickness x:Key="Thickness/AddTabItemButton.Padding">7</Thickness>
 
+		<!-- ApplicationChangeListDialog -->
+		<sys:Double x:Key="Double/ApplicationChangeListDialog.Content.MaxHeight">500</sys:Double>
+		<sys:Double x:Key="Double/ApplicationChangeListDialog.Icon.Size">14</sys:Double>
+		<sys:Double x:Key="Double/ApplicationChangeListDialog.Width">500</sys:Double>
+		<Thickness x:Key="Thickness/ApplicationChangeListDialog.Icon.Margin">0,0,10,0</Thickness>
+
 		<!-- ApplicationInfoDialog -->
 		<sys:Double x:Key="Double/ApplicationInfoDialog.AppIcon.Size">80</sys:Double>
 		<sys:Double x:Key="Double/ApplicationInfoDialog.AppTitle.FontSize">25</sys:Double>

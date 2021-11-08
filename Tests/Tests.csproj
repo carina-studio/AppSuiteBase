@@ -7,9 +7,18 @@
 		<AssemblyName>CarinaStudio.AppSuite.Tests</AssemblyName>
 		<StartupObject>CarinaStudio.AppSuite.Tests.App</StartupObject>
 	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="ChangeList-zh-TW.json" />
+	  <None Remove="ChangeList.json" />
+	</ItemGroup>
 	
 	<ItemGroup>
 	  <AvaloniaResource Include="AppIcon.ico" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <EmbeddedResource Include="ChangeList-zh-TW.json" />
+	  <EmbeddedResource Include="ChangeList.json" />
 	</ItemGroup>
 	
 	<ItemGroup>

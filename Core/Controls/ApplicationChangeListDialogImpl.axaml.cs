@@ -1,0 +1,129 @@
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Data.Converters;
+using Avalonia.Markup.Xaml;
+using Avalonia.Media;
+using CarinaStudio.AppSuite.ViewModels;
+using CarinaStudio.Controls;
+using System;
+using System.Globalization;
+
+namespace CarinaStudio.AppSuite.Controls
+{
+    /// <summary>
+    /// Dialog to show application change list.
+    /// </summary>
+    partial class ApplicationChangeListDialogImpl : Dialog
+    {
+        // Convert from ApplicationChangeType to Drawing.
+        class ApplicationChangeTypeConverterImpl : IValueConverter
+        {
+            // Fields.
+            readonly AppSuiteApplication? app = AppSuiteApplication.CurrentOrNull;
+
+            // Convert.
+            public object? Convert(object value, Type targetType, object? parameter, CultureInfo culture)
+            {
+                if (this.app == null)
+                    return null;
+                if (value is not ApplicationChangeType type)
+                    return null;
+                if (!targetType.IsAssignableFrom(typeof(object)) && !targetType.IsAssignableFrom(typeof(Drawing)))
+                    return null;
+                var drawing = (Drawing?)null;
+                switch (type)
+                {
+                    case ApplicationChangeType.BehaviorChange:
+                        this.app.TryGetResource<Drawing>($"Drawing/Icon.Information", out drawing);
+                        break;
+                    case ApplicationChangeType.BugFixing:
+                        this.app.TryGetResource<Drawing>($"Drawing/Icon.Debug", out drawing);
+                        break;
+                    case ApplicationChangeType.NewFeature:
+                        this.app.TryGetResource<Drawing>($"Drawing/Icon.Star.Filled", out drawing);
+                        break;
+                    default:
+                        this.app.TryGetResource<Drawing>($"Drawing/Icon.Circle.Filled", out drawing);
+                        break;
+                }
+                return drawing;
+            }
+
+            // Convert back.
+            public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => null;
+        }
+
+
+        // Static fields.
+        public static readonly IValueConverter ApplicationChangeTypeConverter = new ApplicationChangeTypeConverterImpl();
+        static readonly AvaloniaProperty<string?> HeaderProperty = AvaloniaProperty.Register<ApplicationChangeListDialogImpl, string?>(nameof(Header));
+
+
+        // Fields.
+        readonly Panel contentPanel;
+
+
+        // Constructor.
+        public ApplicationChangeListDialogImpl()
+        {
+            InitializeComponent();
+            this.contentPanel = this.FindControl<Panel>(nameof(contentPanel));
+        }
+
+
+        // Build change list views.
+        void BuildChangeListViews()
+        {
+            // check state
+            if (this.IsClosed)
+                return;
+
+            // clear current views
+            for (var i = this.contentPanel.Children.Count - 1; i > 1; --i)
+                this.contentPanel.Children.RemoveAt(i);
+
+            // build views
+            if (this.DataContext is ApplicationChangeList appChangeList)
+            {
+                var changeList = appChangeList.ChangeList;
+                for (int i = 0, count = changeList.Count; i < count; ++i)
+                {
+                    if (i > 0)
+                    {
+                        this.contentPanel.Children.Add(new Separator().Also(it =>
+                        {
+                            it.Classes.Add("Dialog_Separator");
+                        }));
+                    }
+                    this.contentPanel.Children.Add(this.DataTemplates[0].Build(changeList[i]).Also(it =>
+                    {
+                        it.DataContext = changeList[i];
+                    }));
+                }
+            }
+        }
+
+
+        // Header text.
+        public string? Header { get => this.GetValue<string?>(HeaderProperty); }
+
+
+        // Initialize.
+        private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+
+
+        // Property changed.
+        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
+        {
+            base.OnPropertyChanged(change);
+            if (change.Property == DataContextProperty)
+            {
+                (change.NewValue.Value as ApplicationChangeList)?.Let(it =>
+                {
+                    this.SetValue<string?>(HeaderProperty, this.Application.GetFormattedString("ApplicationChangeListDialog.Header", it.Version));
+                    this.BuildChangeListViews();
+                });
+            }
+        }
+    }
+}
