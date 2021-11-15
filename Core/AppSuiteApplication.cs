@@ -2017,6 +2017,10 @@ namespace CarinaStudio.AppSuite
                 this.accentColorResources["Brush.Icon.Active"] = new SolidColorBrush(sysAccentColorLight1);
                 this.accentColorResources["Brush.Icon.LogProfile"] = new SolidColorBrush(sysAccentColorLight1);
 
+                // [Workaround] Brushes of Slider
+                this.accentColorResources["SliderThumbBackgroundPointerOver"] = new SolidColorBrush(sysAccentColorLight1);
+                this.accentColorResources["SliderThumbBackgroundPressed"] = new SolidColorBrush(sysAccentColorDark1);
+
                 // [Workaround] Brushes of ToggleButton
                 this.accentColorResources["ToggleButtonBackgroundCheckedPointerOver"] = new SolidColorBrush(sysAccentColorDark1);
 

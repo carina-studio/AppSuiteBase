@@ -71,6 +71,10 @@
 					<appControls:DatePicker HorizontalAlignment="Left" Margin="5"/>
 					<appControls:TimePicker HorizontalAlignment="Left" Margin="5"/>
 
+					<Border BorderBrush="{DynamicResource Brush/Accent}" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
+						<Slider Maximum="100" TickPlacement="BottomRight" Width="300"/>
+					</Border>
+
 					<TextBox Width="200" Margin="5" HorizontalAlignment="Left"/>
 
 					<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left">
