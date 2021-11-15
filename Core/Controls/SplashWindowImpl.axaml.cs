@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CarinaStudio.Data.Converters;
@@ -89,7 +90,32 @@ namespace CarinaStudio.AppSuite.Controls
 
             // show content
             ((Control)(this.Content)).Opacity = 1;
-        }
+			this.FindControl<Image>("iconImage").AsNonNull().Let(image =>
+			{
+				image.Opacity = 1;
+				(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+			});
+			this.FindControl<TextBlock>("titleTextBlock").AsNonNull().Let(image =>
+			{
+				image.Opacity = 1;
+				(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+			});
+			this.FindControl<TextBlock>("versionTextBlock").AsNonNull().Let(image =>
+			{
+				image.Opacity = 1;
+				(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+			});
+			this.FindControl<TextBlock>("copyrightTextBlock").AsNonNull().Let(image =>
+			{
+				image.Opacity = 1;
+				(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+			});
+			this.FindControl<TextBlock>("messageTextBlock").AsNonNull().Let(image =>
+			{
+				image.Opacity = 1;
+				(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+			});
+		}
 
 
         // String represents version.

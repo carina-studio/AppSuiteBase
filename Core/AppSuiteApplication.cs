@@ -108,7 +108,7 @@ namespace CarinaStudio.AppSuite
         const string DebugModeRequestedKey = "IsDebugModeRequested";
         const string RestoreMainWindowsRequestedKey = "IsRestoringMainWindowsRequested";
         const int MinSplashWindowDuration = 2000;
-        const int SplashWindowShowingDuration = 1000;
+        const int SplashWindowShowingDuration = 1400;
         const int UpdateCheckingInterval = 3600000; // 1 hr
 
 
