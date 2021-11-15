@@ -103,11 +103,27 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
+        /// Check whether <see cref="LogOutputTargetPort"/> is supported or not.
+        /// </summary>
+        public bool IsLogOutputTargetPortSupported { get => (this.Application as AppSuiteApplication)?.DefaultLogOutputTargetPort != 0; }
+
+
+        /// <summary>
         /// Check whether restarting all main windows is needed or not.
         /// </summary>
         public bool IsRestartingMainWindowsNeeded
         {
             get => this.Application.IsRestartingMainWindowsNeeded;
+        }
+
+
+        /// <summary>
+        /// Get or set port of localhost to receive log output.
+        /// </summary>
+        public int LogOutputTargetPort
+        {
+            get => (this.Application as AppSuiteApplication)?.LogOutputTargetPort ?? 0;
+            set => (this.Application as AppSuiteApplication)?.Let(app => app.LogOutputTargetPort = value);
         }
 
 
@@ -140,6 +156,8 @@ namespace CarinaStudio.AppSuite.ViewModels
             }
             else if (e.PropertyName == nameof(IAppSuiteApplication.IsRestartingMainWindowsNeeded))
                 this.OnPropertyChanged(nameof(IsRestartingMainWindowsNeeded));
+            else if (e.PropertyName == nameof(AppSuiteApplication.LogOutputTargetPort))
+                this.OnPropertyChanged(nameof(LogOutputTargetPort));
         }
 
 

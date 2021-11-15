@@ -124,6 +124,7 @@ namespace CarinaStudio.AppSuite
             return null;
         });
         static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new SettingKey<bool>("IsAcceptNonStableApplicationUpdateInitialized", false);
+        static readonly SettingKey<int> LogOutputTargetPortKey = new SettingKey<int>("LogOutputTargetPort");
         static readonly SettingKey<byte[]> MainWindowViewModelStatesKey = new SettingKey<byte[]>("MainWindowViewModelStates", new byte[0]);
         static readonly Regex X11MonitorLineRegex = new Regex("^[\\s]*[\\d]+[\\s]*\\:[\\s]*\\+\\*(?<Name>[^\\s]+)");
 
@@ -137,6 +138,7 @@ namespace CarinaStudio.AppSuite
         bool isRestartingMainWindowsRequested;
         bool isRestartRequested;
         bool isShutdownStarted;
+        int logOutputTargetPort;
         readonly Dictionary<Window, MainWindowHolder> mainWindowHolders = new Dictionary<Window, MainWindowHolder>();
         readonly ObservableList<Window> mainWindows = new ObservableList<Window>();
         readonly CancellationTokenSource multiInstancesServerCancellationTokenSource = new CancellationTokenSource();
@@ -500,6 +502,12 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <summary>
+        /// Default port at localhost to receive log output.
+        /// </summary>
+        public virtual int DefaultLogOutputTargetPort { get; } = 0;
+
+
         /// <inheritdoc/>
         public double EffectiveCustomScreenScaleFactor { get; } = CachedCustomScreenScaleFactor;
 
@@ -693,6 +701,25 @@ namespace CarinaStudio.AppSuite
         /// Get logger factory.
         /// </summary>
         public override ILoggerFactory LoggerFactory { get; }
+
+
+        /// <summary>
+        /// Get or set port at localhost to receive log output.
+        /// </summary>
+        public int LogOutputTargetPort
+        {
+            get => this.logOutputTargetPort;
+            set
+            {
+                this.VerifyAccess();
+                if (this.logOutputTargetPort == value)
+                    return;
+                this.logOutputTargetPort = value;
+                this.PersistentState.SetValue<int>(LogOutputTargetPortKey, value);
+                this.UpdateLogOutputToLocalhost();
+                this.OnPropertyChanged(nameof(LogOutputTargetPort));
+            }
+        }
 
 
         /// <summary>
@@ -1086,6 +1113,12 @@ namespace CarinaStudio.AppSuite
             await this.LoadPersistentStateAsync();
             await this.LoadSettingsAsync();
             this.Settings.SettingChanged += this.OnSettingChanged;
+
+            // start log output to localhost
+            this.logOutputTargetPort = this.PersistentState.GetValueOrDefault(LogOutputTargetPortKey);
+            if (this.logOutputTargetPort == 0)
+                this.logOutputTargetPort = this.DefaultLogOutputTargetPort;
+            this.UpdateLogOutputToLocalhost();
 
             // start checking update
             this.PackageManifestUri?.Let(it =>
@@ -1722,6 +1755,49 @@ namespace CarinaStudio.AppSuite
         /// Get latest checked application update information.
         /// </summary>
         public ApplicationUpdateInfo? UpdateInfo { get; private set; }
+
+
+        // Update log output.
+        void UpdateLogOutputToLocalhost()
+        {
+            // get port
+            var port = this.PersistentState.GetValueOrDefault(LogOutputTargetPortKey);
+            var config = LogManager.Configuration;
+            if (port == 0)
+            {
+                port = this.DefaultLogOutputTargetPort;
+                if (port <= 0 || port > ushort.MaxValue)
+                {
+                    this.Logger.LogDebug("No need to output log to localhost");
+                    config.RemoveRuleByName("outputToLocalhost");
+                    return;
+                }
+            }
+
+            // setup target
+            var target = config.AllTargets.FirstOrDefault(it => it.Name == "outputToLocalhost") as NLog.Targets.NLogViewerTarget;
+            target = new NLog.Targets.NLogViewerTarget("outputToLocalhost")
+            {
+                Address = new NLog.Layouts.SimpleLayout($"tcp://127.0.0.1:{port}"),
+                NewLine = true,
+            };
+            config.RemoveTarget("outputToLocalhost");
+            config.AddTarget(target);
+            this.Logger.LogWarning($"Set log output target to tcp://127.0.0.1:{port}");
+
+            // setup rule
+            config.RemoveRuleByName("outputToLocalhost");
+            config.LoggingRules.Add(new NLog.Config.LoggingRule().Also(it =>
+            {
+                it.EnableLoggingForLevels(NLog.LogLevel.Trace, NLog.LogLevel.Fatal);
+                it.LoggerNamePattern = "*";
+                it.RuleName = "outputToLocalhost";
+                it.Targets.Add(target);
+            }));
+
+            // update loggers
+            LogManager.ReconfigExistingLoggers();
+        }
 
 
         /// <summary>

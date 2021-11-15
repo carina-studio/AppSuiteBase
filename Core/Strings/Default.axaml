@@ -38,6 +38,7 @@
 	<sys:String x:Key="String/ApplicationOptions.Culture">Language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">User interface scale factor</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">Use blurry window background if supported by system</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">Target port of log output</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">Need to restart application to take effect</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NotifyApplicationUpdate">Notify when application update found</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Others">Other Settings</sys:String>

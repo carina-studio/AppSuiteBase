@@ -5,6 +5,7 @@ using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
+using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
 
@@ -16,6 +17,9 @@ namespace CarinaStudio.AppSuite.Tests
         {
             InitializeComponent();
         }
+
+
+        ViewModels.ApplicationOptions ApplicationOptions { get; } = new ViewModels.ApplicationOptions();
 
 
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
@@ -45,10 +49,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void Test()
         {
-            _ = new MessageDialog()
-            {
-                Icon = Enum.GetValues<MessageDialogIcon>().SelectRandomElement()
-            }.ShowDialog(this);
+            this.Logger.Log(Enum.GetValues<LogLevel>().SelectRandomElement(), "Test");
         }
 
         void Test2()
