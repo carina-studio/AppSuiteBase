@@ -9,6 +9,10 @@
 		"Type": "NewFeature"
 	},
 	{
+		"Description": "改善 1",
+		"Type": "Improvement"
+	},
+	{
 		"Description": "行為變更 1",
 		"Type": "BehaviorChange"
 	},

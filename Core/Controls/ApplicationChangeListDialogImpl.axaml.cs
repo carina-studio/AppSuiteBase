@@ -28,7 +28,7 @@ namespace CarinaStudio.AppSuite.Controls
                     return null;
                 if (value is not ApplicationChangeType type)
                     return null;
-                if (!targetType.IsAssignableFrom(typeof(object)) && !targetType.IsAssignableFrom(typeof(IImage)))
+                if (!typeof(object).IsAssignableFrom(targetType) && !targetType.IsAssignableFrom(typeof(IImage)))
                     return null;
                 var image = (IImage?)null;
                 switch (type)
@@ -38,6 +38,9 @@ namespace CarinaStudio.AppSuite.Controls
                         break;
                     case ApplicationChangeType.BugFixing:
                         this.app.TryGetResource<IImage>($"Image/Icon.Debug", out image);
+                        break;
+                    case ApplicationChangeType.Improvement:
+                        this.app.TryGetResource<IImage>($"Image/Icon.Update", out image);
                         break;
                     case ApplicationChangeType.NewFeature:
                         this.app.TryGetResource<IImage>($"Image/Icon.Star.Filled", out image);

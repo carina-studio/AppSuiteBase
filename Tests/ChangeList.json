@@ -9,6 +9,10 @@
 		"Type": "NewFeature"
 	},
 	{
+		"Description": "Improvement 1",
+		"Type": "Improvement"
+	},
+	{
 		"Description": "Behavior change 1",
 		"Type": "BehaviorChange"
 	},

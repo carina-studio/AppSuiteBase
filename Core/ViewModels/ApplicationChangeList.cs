@@ -269,6 +269,10 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// </summary>
         NewFeature,
         /// <summary>
+        /// Improvement.
+        /// </summary>
+        Improvement,
+        /// <summary>
         /// Existing behavior change.
         /// </summary>
         BehaviorChange,
