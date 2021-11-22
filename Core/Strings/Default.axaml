@@ -14,6 +14,7 @@
 	<sys:String x:Key="String/ApplicationCulture.ZH_TW">正體中文 (台灣)</sys:String>
 
 	<!-- ApplicationInfoDialog -->
+	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">List of assemblies</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">Application icon is made by</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">from</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon" xml:space="preserve">.</sys:String>
@@ -28,6 +29,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">Operating system:</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">Privacy Policy</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">Application logs exported.</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">System information</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">About {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">User Agreement</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Version">Version: {0}</sys:String>

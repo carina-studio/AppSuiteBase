@@ -1,11 +1,14 @@
 ﻿using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using CarinaStudio.Collections;
 using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -41,11 +44,16 @@ namespace CarinaStudio.AppSuite.ViewModels
         }
 
 
+        // Fields.
+        readonly ApplicationChangeList appChangeList = new ApplicationChangeList();
+
+
         /// <summary>
         /// Initialize new <see cref="ApplicationInfo"/> instance.
         /// </summary>
         public ApplicationInfo() : base(AppSuiteApplication.Current)
         {
+            // get system info
             _ = Task.Run(() =>
             {
                 var version = Platform.GetInstalledFrameworkVersion();
@@ -63,6 +71,35 @@ namespace CarinaStudio.AppSuite.ViewModels
                     });
                 }
             });
+
+            // get assemblies
+            var appAssembly = this.Application.Assembly;
+            this.Assemblies = AppDomain.CurrentDomain.GetAssemblies()
+                .Where(it => it != appAssembly)
+                .OrderBy(it => it.GetName().Name)
+                .ToArray()
+                .AsReadOnly();
+        }
+
+
+        /// <summary>
+        /// Get change list of current version of application.
+        /// </summary>
+        public virtual ApplicationChangeList ApplicationChangeList { get => this.appChangeList; }
+
+
+        /// <summary>
+        /// Get assemblies of this application.
+        /// </summary>
+        public IList<Assembly> Assemblies { get; }
+
+
+        /// <inheritdoc/>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+                this.appChangeList.Dispose();
+            base.Dispose(disposing);
         }
 
 

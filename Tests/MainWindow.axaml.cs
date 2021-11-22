@@ -50,9 +50,8 @@ namespace CarinaStudio.AppSuite.Tests
         async void Test()
         {
             //this.Logger.Log(Enum.GetValues<LogLevel>().SelectRandomElement(), "Test");
-            using var appChangeList = new ViewModels.ApplicationChangeList();
-            await appChangeList.WaitForChangeListReadyAsync();
-            await new ApplicationChangeListDialog(appChangeList).ShowDialog(this);
+            using var appInfo = new AppInfo();
+            await new ApplicationInfoDialog(appInfo).ShowDialog(this);
         }
 
         void Test2()

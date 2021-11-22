@@ -98,6 +98,7 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				if (change.NewValue.Value is ApplicationInfo appInfo)
 				{
+					// sync state
 					this.Title = this.Application.GetFormattedString("ApplicationInfoDialog.Title", appInfo.Name);
 					this.SetValue<bool>(HasGitHubProjectProperty, appInfo.GitHubProjectUri != null);
 					this.SetValue<bool>(HasPrivacyPolicyProperty, appInfo.PrivacyPolicyUri != null);
@@ -109,6 +110,18 @@ namespace CarinaStudio.AppSuite.Controls
 							return str;
 						return str + $" ({AppReleasingTypeConverter.Convert<string?>(appInfo.ReleasingType)})";
 					}));
+
+					// show assemblies
+					this.FindControl<Panel>("assembliesPanel")?.Let(panel =>
+					{
+						panel.Children.Clear();
+						foreach (var assembly in appInfo.Assemblies)
+						{
+							if (panel.Children.Count > 0)
+								panel.Children.Add(new Separator().Also(it => it.Classes.Add("Dialog_Separator_Small")));
+							panel.Children.Add(new TextBlock() { Text = $"{assembly.GetName().Name} {assembly.GetName().Version}" });
+						}
+					});
 				}
 			}
         }

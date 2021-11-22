@@ -12,6 +12,7 @@
 	<sys:String x:Key="String/ApplicationCulture.System">系統設定</sys:String>
 
 	<!-- ApplicationInfoDialog -->
+	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">組件列表</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">應用程式圖示由</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">提供，並發布於</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon" xml:space="preserve">。</sys:String>
@@ -26,6 +27,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作業系統：</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">隱私權政策</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">應用程式日誌匯出完成。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">系統資訊</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">關於 {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">使用者協議</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Version">版本：{0}</sys:String>
