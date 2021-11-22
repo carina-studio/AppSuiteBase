@@ -14,6 +14,7 @@
 	<sys:String x:Key="String/ApplicationCulture.ZH_TW">正體中文 (台灣)</sys:String>
 
 	<!-- ApplicationInfoDialog -->
+	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">Change list</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">List of assemblies</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">Application icon is made by</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">from</sys:String>

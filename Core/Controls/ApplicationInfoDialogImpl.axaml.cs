@@ -3,7 +3,9 @@ using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.AppSuite.ViewModels;
+using CarinaStudio.Collections;
 using CarinaStudio.Data.Converters;
+using CarinaStudio.Threading;
 using System;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -15,6 +17,7 @@ namespace CarinaStudio.AppSuite.Controls
 	{
 		// Static fields.
 		static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
+		static readonly AvaloniaProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
 		static readonly AvaloniaProperty<bool> HasGitHubProjectProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasGitHubProject));
 		static readonly AvaloniaProperty<bool> HasPrivacyPolicyProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasPrivacyPolicy));
 		static readonly AvaloniaProperty<bool> HasUserAgreementProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasUserAgreement));
@@ -74,6 +77,10 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
+		// Check whether application change list is available or not.
+		public bool HasApplicationChangeList { get => this.GetValue<bool>(HasApplicationChangeListProperty); }
+
+
 		// Check whether GitHub exists or not.
 		public bool HasGitHubProject { get => this.GetValue<bool>(HasGitHubProjectProperty); }
 
@@ -111,6 +118,17 @@ namespace CarinaStudio.AppSuite.Controls
 						return str + $" ({AppReleasingTypeConverter.Convert<string?>(appInfo.ReleasingType)})";
 					}));
 
+					// check change list
+					this.SynchronizationContext.Post(async () =>
+					{
+						if (this.DataContext is not ApplicationInfo appInfo)
+							return;
+						await appInfo.ApplicationChangeList.WaitForChangeListReadyAsync();
+						if (this.DataContext != appInfo)
+							return;
+						this.SetValue(HasApplicationChangeListProperty, appInfo.ApplicationChangeList.ChangeList.IsNotEmpty());
+					});
+
 					// show assemblies
 					this.FindControl<Panel>("assembliesPanel")?.Let(panel =>
 					{
@@ -125,6 +143,20 @@ namespace CarinaStudio.AppSuite.Controls
 				}
 			}
         }
+
+
+		// Show change list of application.
+		void ShowApplicationChangeList()
+        {
+			// check state
+			if (this.DataContext is not ApplicationInfo appInfo)
+				return;
+			if (appInfo.ApplicationChangeList.ChangeList.IsEmpty())
+				return;
+
+			// show dialog
+			_ = new ApplicationChangeListDialog(appInfo.ApplicationChangeList).ShowDialog(this);
+		}
 
 
         // String represent version.

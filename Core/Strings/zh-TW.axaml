@@ -12,6 +12,7 @@
 	<sys:String x:Key="String/ApplicationCulture.System">系統設定</sys:String>
 
 	<!-- ApplicationInfoDialog -->
+	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">變更列表</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">組件列表</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">應用程式圖示由</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">提供，並發布於</sys:String>

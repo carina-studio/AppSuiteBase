@@ -38,7 +38,13 @@
 					<Border>
 						<StackPanel Orientation="Vertical" VerticalAlignment="Center">
 							<TextBlock FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Margin="{DynamicResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Text="{Binding Name}"/>
-							<TextBlock Text="{Binding $parent[Window].VersionString}"/>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="{Binding $parent[Window].VersionString}" VerticalAlignment="Center"/>
+								<Separator Classes="Dialog_Separator_Small"/>
+								<TextBlock Text="(" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
+								<controls:LinkTextBlock Command="{Binding $parent[Window].ShowApplicationChangeList}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{DynamicResource String/ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
+								<TextBlock Text=")" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
+							</StackPanel>
 							<TextBlock Text="©2021 Carina Studio"/>
 						</StackPanel>
 					</Border>
