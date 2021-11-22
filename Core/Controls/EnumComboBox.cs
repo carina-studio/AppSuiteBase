@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Styling;
 using CarinaStudio.AppSuite.Converters;
@@ -35,12 +36,33 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		/// <summary>
-		/// Called when property changed.
-		/// </summary>
-		/// <typeparam name="T">Type of property.</typeparam>
-		/// <param name="change">Change data.</param>
-		protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
+		// Strings updated.
+		void OnApplicationStringsUpdated(object? sender, EventArgs e) =>
+			this.UpdateItemTemplate();
+
+
+		/// <inheritdoc/>
+        protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
+        {
+            base.OnAttachedToLogicalTree(e);
+			Application.CurrentOrNull?.Let(it => it.StringsUpdated += this.OnApplicationStringsUpdated);
+        }
+
+
+		/// <inheritdoc/>
+		protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
+        {
+			Application.CurrentOrNull?.Let(it => it.StringsUpdated -= this.OnApplicationStringsUpdated);
+			base.OnDetachedFromLogicalTree(e);
+        }
+
+
+        /// <summary>
+        /// Called when property changed.
+        /// </summary>
+        /// <typeparam name="T">Type of property.</typeparam>
+        /// <param name="change">Change data.</param>
+        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
 		{
 			base.OnPropertyChanged(change);
 			if (change.Property == EnumTypeProperty)
@@ -48,31 +70,40 @@ namespace CarinaStudio.AppSuite.Controls
 				this.enumConverter = null;
 				this.enumValues = null;
 				this.Items = null;
-				this.ItemTemplate = null;
 				if (change.NewValue.Value is Type type)
 				{
 					this.enumConverter = new EnumConverter(AppSuiteApplication.Current, type);
 					this.enumValues = Enum.GetValues(type);
 					this.Items = this.enumValues;
-					this.ItemTemplate = new DataTemplate()
-					{
-						Content = new Func<IServiceProvider, object>(_ =>
-						{
-							var textBlock = new TextBlock().Also(it =>
-							{
-								it.Bind(TextBlock.TextProperty, new Binding { Converter = this.enumConverter });
-								it.TextTrimming = Avalonia.Media.TextTrimming.CharacterEllipsis;
-							});
-							return new ControlTemplateResult(textBlock, null);
-						}),
-						DataType = type,
-					};
 				}
+				this.UpdateItemTemplate();
 			}
 		}
 
 
 		// Interface implementations.
 		Type IStyleable.StyleKey => typeof(ComboBox);
+
+
+		// Update item template.
+		void UpdateItemTemplate()
+        {
+			var type = this.EnumType;
+			this.ItemTemplate = (type == null)
+				? null
+				: new DataTemplate()
+				{
+					Content = new Func<IServiceProvider, object>(_ =>
+					{
+						var textBlock = new TextBlock().Also(it =>
+						{
+							it.Bind(TextBlock.TextProperty, new Binding { Converter = this.enumConverter });
+							it.TextTrimming = Avalonia.Media.TextTrimming.CharacterEllipsis;
+						});
+						return new ControlTemplateResult(textBlock, null);
+					}),
+					DataType = type,
+				};
+		}
 	}
 }
