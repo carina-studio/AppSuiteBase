@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<AssemblyVersion>0.23.0.1115</AssemblyVersion>
-		<Version>0.23.0.1115</Version>
+		<AssemblyVersion>0.24.0.1122</AssemblyVersion>
+		<Version>0.24.0.1122</Version>
 		<TargetFrameworks>net5.0;net5.0-windows10.0.17763.0</TargetFrameworks>
 		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Core</AssemblyName>
