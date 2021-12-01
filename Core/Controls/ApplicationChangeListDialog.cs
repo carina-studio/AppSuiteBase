@@ -68,7 +68,7 @@ namespace CarinaStudio.AppSuite.Controls
                     && Version.TryParse(app.PersistentState.GetValueOrDefault(LatestShownVersionKey), out var version)
                     && version != null)
                 {
-                    return new Version(version.Major, version.Minor) >= app.Assembly.GetName().Version;
+                    return new Version(version.Major, version.Minor) >= app.Assembly.GetName().Version?.Let(it => new Version(it.Major, it.Minor));
                 }
                 return false;
             }
