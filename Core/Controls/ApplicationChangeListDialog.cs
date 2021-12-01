@@ -48,7 +48,8 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 DataContext = this.changeList
             };
-            this.changeList.Application.PersistentState.SetValue<string>(LatestShownVersionKey, this.changeList.Version.ToString());
+            var showVersion = this.changeList.Version.Let(it => new Version(it.Major, it.Minor));
+            this.changeList.Application.PersistentState.SetValue<string>(LatestShownVersionKey, showVersion.ToString());
             if (this.changeList.ChangeList.IsNotEmpty())
                 return dialog.ShowDialog<object?>(owner);
             return Task.FromResult((object?)null); // skip showing because there is no change
