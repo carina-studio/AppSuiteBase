@@ -12,6 +12,10 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         Stable,
         /// <summary>
+        /// Release Candidate.
+        /// </summary>
+        ReleaseCandidate,
+        /// <summary>
         /// Preview release.
         /// </summary>
         Preview,

@@ -53,6 +53,7 @@
 	<!-- ApplicationReleasingType -->
 	<sys:String x:Key="String/ApplicationReleasingType.Development">Development</sys:String>
 	<sys:String x:Key="String/ApplicationReleasingType.Preview">Preview</sys:String>
+	<sys:String x:Key="String/ApplicationReleasingType.ReleaseCandidate">RC</sys:String>
 	<sys:String x:Key="String/ApplicationReleasingType.Stable">Stable</sys:String>
 
 	<!-- ApplicationUpdateDialog -->

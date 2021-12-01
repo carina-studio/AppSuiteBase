@@ -51,6 +51,7 @@
 	<!-- ApplicationReleasingType -->
 	<sys:String x:Key="String/ApplicationReleasingType.Development">開發版</sys:String>
 	<sys:String x:Key="String/ApplicationReleasingType.Preview">預覽版</sys:String>
+	<sys:String x:Key="String/ApplicationReleasingType.ReleaseCandidate">RC 版</sys:String>
 	<sys:String x:Key="String/ApplicationReleasingType.Stable">正式版</sys:String>
 
 	<!-- ApplicationUpdateDialog -->
