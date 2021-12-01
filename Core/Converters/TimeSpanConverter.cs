@@ -39,15 +39,47 @@ namespace CarinaStudio.AppSuite.Converters
 			{
 				if (this.app == null)
 					return timeSpan.ToString();
-				if (timeSpan.Days > 0)
-					return this.app.GetFormattedString("TimeSpanConverter.Days", timeSpan.Days, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
-				if (timeSpan.Hours > 0)
-					return this.app.GetFormattedString("TimeSpanConverter.Hours", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
-				if (timeSpan.Minutes > 0)
-					return this.app.GetFormattedString("TimeSpanConverter.Minutes", timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
-				if (timeSpan.Seconds > 0)
-					return this.app.GetFormattedString("TimeSpanConverter.Seconds", timeSpan.Seconds, timeSpan.Milliseconds);
-				return this.app.GetFormattedString("TimeSpanConverter.Milliseconds", timeSpan.Milliseconds);
+				var isPositive = timeSpan.Ticks >= 0;
+				var ms = Math.Abs(timeSpan.Milliseconds);
+				var us = (int)((timeSpan.TotalMilliseconds - ((int)timeSpan.TotalMilliseconds)) * 1000);
+				var secString = Math.Abs(timeSpan.Seconds).Let(sec =>
+				{
+					if (us != 0)
+						return $"{sec}.{ms:D3}{Math.Abs(us):D3}";
+					if (ms != 0)
+						return $"{sec}.{ms:D3}";
+					return sec.ToString();
+				});
+				if (timeSpan.Days != 0)
+					return this.app.GetFormattedString("TimeSpanConverter.Days", timeSpan.Days, Math.Abs(timeSpan.Hours), Math.Abs(timeSpan.Minutes), secString);
+				if (timeSpan.Hours != 0)
+					return this.app.GetFormattedString("TimeSpanConverter.Hours", timeSpan.Hours, Math.Abs(timeSpan.Minutes), secString);
+				if (timeSpan.Minutes != 0)
+					return this.app.GetFormattedString("TimeSpanConverter.Minutes", timeSpan.Minutes, secString);
+				if (timeSpan.Seconds != 0)
+				{
+					if (isPositive)
+						return this.app.GetFormattedString("TimeSpanConverter.Seconds", secString);
+					return this.app.GetFormattedString("TimeSpanConverter.Seconds", $"-{secString}");
+				}
+				if (ms != 0)
+				{
+					if (isPositive)
+                    {
+						if (us != 0)
+							return this.app.GetFormattedString("TimeSpanConverter.Milliseconds", $"{ms}.{Math.Abs(us):D3}");
+						return this.app.GetFormattedString("TimeSpanConverter.Milliseconds", ms);
+					}
+					else
+                    {
+						if (us != 0)
+							return this.app.GetFormattedString("TimeSpanConverter.Milliseconds", $"-{ms}.{Math.Abs(us):D3}");
+						return this.app.GetFormattedString("TimeSpanConverter.Milliseconds", -ms);
+					}
+				}
+				else if (us != 0)
+					return this.app.GetFormattedString("TimeSpanConverter.Microseconds", us);
+				return this.app.GetFormattedString("TimeSpanConverter.Seconds", 0);
 			}
 			return null;
 		}

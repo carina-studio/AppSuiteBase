@@ -1,10 +1,12 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using CarinaStudio.AppSuite.Converters;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
+using CarinaStudio.Data.Converters;
 using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
@@ -49,9 +51,22 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void Test()
         {
-            //this.Logger.Log(Enum.GetValues<LogLevel>().SelectRandomElement(), "Test");
-            using var appInfo = new AppInfo();
-            await new ApplicationInfoDialog(appInfo).ShowDialog(this);
+            var s = Converters.TimeSpanConverter.Default.Convert<string>(new TimeSpan(1, 2, 3, 4, 5));
+            s = Converters.TimeSpanConverter.Default.Convert<string>(new TimeSpan(2, 3, 4, 5));
+            s = Converters.TimeSpanConverter.Default.Convert<string>(new TimeSpan(3, 4, 5));
+            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromSeconds(123.0));
+            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromSeconds(123.456));
+            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromSeconds(123.456789));
+            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromMilliseconds(123));
+            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromMilliseconds(123.456));
+
+            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromMilliseconds(-123.456));
+            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromMilliseconds(-123));
+            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromSeconds(-23.456789));
+            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromSeconds(-123.456789));
+            s = Converters.TimeSpanConverter.Default.Convert<string>(new TimeSpan(-1, 2, 3, 4, 5));
+
+            s = Converters.TimeSpanConverter.Default.Convert<string>(new TimeSpan());
         }
 
         void Test2()

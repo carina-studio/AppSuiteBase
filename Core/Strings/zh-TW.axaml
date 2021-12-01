@@ -123,10 +123,11 @@
 	<sys:String x:Key="String/TimePicker.MinuteFormat">{0:D2} 分 </sys:String>
 
 	<!-- TimeSpanConverter -->
-	<sys:String x:Key="String/TimeSpanConverter.Days">{0} 天 {1} 小時 {2} 分 {3}.{4:000} 秒</sys:String>
-	<sys:String x:Key="String/TimeSpanConverter.Hours">{0} 小時 {1} 分 {2}.{3:000} 秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Days">{0} 天 {1} 小時 {2} 分 {3} 秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Hours">{0} 小時 {1} 分 {2} 秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Microseconds">{0} 微秒</sys:String>
 	<sys:String x:Key="String/TimeSpanConverter.Milliseconds">{0} 毫秒</sys:String>
-	<sys:String x:Key="String/TimeSpanConverter.Minutes">{0} 分 {1}.{2:000} 秒</sys:String>
-	<sys:String x:Key="String/TimeSpanConverter.Seconds">{0}.{1:000} 秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Minutes">{0} 分 {1} 秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Seconds">{0} 秒</sys:String>
 	
 </ResourceDictionary>
