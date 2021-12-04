@@ -29,6 +29,16 @@ namespace CarinaStudio.AppSuite.Controls
 		});
 
 
+		/// <summary>
+		/// Initialize new <see cref="RegexTextBox"/> instance.
+		/// </summary>
+		public RegexTextBox()
+		{
+			this.MaxLength = 65536;
+			this.Bind(WatermarkProperty, this.GetResourceObservable("String/RegexTextBox.Watermark"));
+		}
+
+
 		/// <inheritdoc/>
 		protected override bool CheckObjectEquality(Regex? x, Regex? y)
 		{

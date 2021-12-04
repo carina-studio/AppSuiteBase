@@ -54,98 +54,100 @@
 					</Grid>
 				</TabItem.Header>
 
-				<StackPanel Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalAlignment="Stretch" Orientation="Vertical">
-					<TextBlock Text="{DynamicResource String/ApplicationOptions.LogOutputTargetPort}" Margin="5,5,5,0"/>
-					<NumericUpDown HorizontalAlignment="Left" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
+				<ScrollViewer HorizontalAlignment="Stretch">
+					<StackPanel Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalAlignment="Stretch" Orientation="Vertical">
+						<TextBlock Text="{DynamicResource String/ApplicationOptions.LogOutputTargetPort}" Margin="5,5,5,0"/>
+						<NumericUpDown HorizontalAlignment="Left" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
 
-					<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5"/>
-					<TextBlock Text="{Binding $parent[Window].Application.IsRunningAsAdministrator, StringFormat={}Admin:{0}}" Margin="5"/>
-					
-					<TextBlock Text="{Binding $parent[Window].Application.EffectiveCustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5"/>
-					<NumericUpDown HorizontalAlignment="Left" Increment="0.1" Minimum="1.0" Maximum="2.0" Margin="5" Width="200" Value="{Binding $parent[Window].Application.CustomScreenScaleFactor, Mode=TwoWay}" FormatString="F2"/>
+						<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5"/>
+						<TextBlock Text="{Binding $parent[Window].Application.IsRunningAsAdministrator, StringFormat={}Admin:{0}}" Margin="5"/>
 
-					<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5"/>
-					<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
+						<TextBlock Text="{Binding $parent[Window].Application.EffectiveCustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5"/>
+						<NumericUpDown HorizontalAlignment="Left" Increment="0.1" Minimum="1.0" Maximum="2.0" Margin="5" Width="200" Value="{Binding $parent[Window].Application.CustomScreenScaleFactor, Mode=TwoWay}" FormatString="F2"/>
 
-					<appControls:LinkTextBlock HorizontalAlignment="Left" Margin="5" Text="Google" Uri="http://www.google.com/"/>
-					<appControls:LinkTextBlock Command="{Binding $parent[Window].SwitchTheme}" HorizontalAlignment="Left" Margin="5" Text="Switch theme"/>
-					
-					<appControls:DateTimeTextBox Name="dateTimeTextBox" HorizontalAlignment="Left" Margin="5" Width="200" Watermark="Date and time"/>
-					<TextBlock Margin="5" Text="{Binding #dateTimeTextBox.Value}"/>
+						<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5"/>
+						<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
 
-					<appControls:EnumComboBox EnumType="{x:Type app:ThemeMode}" HorizontalAlignment="Left" Margin="5" Width="200"/>
+						<appControls:LinkTextBlock HorizontalAlignment="Left" Margin="5" Text="Google" Uri="http://www.google.com/"/>
+						<appControls:LinkTextBlock Command="{Binding $parent[Window].SwitchTheme}" HorizontalAlignment="Left" Margin="5" Text="Switch theme"/>
 
-					<TextBox Width="200" Margin="5" HorizontalAlignment="Left"/>
+						<appControls:DateTimeTextBox Name="dateTimeTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
+						<TextBlock Margin="5" Text="{Binding #dateTimeTextBox.Value}"/>
 
-					<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left">
-						<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
-					</Border>
+						<appControls:EnumComboBox EnumType="{x:Type app:ThemeMode}" HorizontalAlignment="Left" Margin="5" Width="200"/>
 
-					<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left" IsEnabled="False">
-						<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
-					</Border>
+						<TextBox Width="200" Margin="5" HorizontalAlignment="Left"/>
 
-					<ListBox HorizontalAlignment="Left" Width="200" Margin="5">
-						<ListBoxItem>Item 1</ListBoxItem>
-						<ListBoxItem>Item 2</ListBoxItem>
-						<ListBoxItem>Item 3</ListBoxItem>
-						<ListBoxItem>Item 4</ListBoxItem>
-					</ListBox>
+						<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left">
+							<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
+						</Border>
 
-					<ComboBox HorizontalAlignment="Left" Width="200" Margin="5">
-						12345
-					</ComboBox>
+						<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left" IsEnabled="False">
+							<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
+						</Border>
 
-					<appControls:IPAddressTextBox Name="ipAddressTextBox" HorizontalAlignment="Left" Margin="5" Width="200" Watermark="IPv4 or IPv6"/>
-					<appControls:RegexTextBox Name="regexTextBox" HorizontalAlignment="Left" Margin="5" Width="200" Watermark="Regex"/>
-					<appControls:UriTextBox Name="uriTextBox" HorizontalAlignment="Left" Margin="5" Width="200" Watermark="Uri"/>
+						<ListBox HorizontalAlignment="Left" Width="200" Margin="5">
+							<ListBoxItem>Item 1</ListBoxItem>
+							<ListBoxItem>Item 2</ListBoxItem>
+							<ListBoxItem>Item 3</ListBoxItem>
+							<ListBoxItem>Item 4</ListBoxItem>
+						</ListBox>
 
-					<Border Classes="ToolBar" Margin="5">
-						<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+						<ComboBox HorizontalAlignment="Left" Width="200" Margin="5">
+							12345
+						</ComboBox>
 
-							<Button Classes="ToolBar_Button">
-								<Image Classes="Icon" Source="{StaticResource Image/Icon.Administrator}"/>
-							</Button>
-							<Button Classes="ToolBar_Button">
-								<Image Classes="Icon" Source="{StaticResource Image/Icon.Link}"/>
-							</Button>
-							<Button Classes="ToolBar_Button">
-								<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
-							</Button>
-							<Button Classes="ToolBar_Button">
-								<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
-							</Button>
+						<appControls:IPAddressTextBox Name="ipAddressTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
+						<appControls:RegexTextBox Name="regexTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
+						<appControls:UriTextBox Name="uriTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
 
-							<TextBox Classes="ToolBar_TextBox" Width="50"/>
-							<TextBox Classes="ToolBar_TextBox" Width="50"/>
+						<Border Classes="ToolBar" Margin="5">
+							<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
 
-							<ToggleButton Classes="ToolBar_ToggleButton">
-								<Image Classes="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
-							</ToggleButton>
+								<Button Classes="ToolBar_Button">
+									<Image Classes="Icon" Source="{StaticResource Image/Icon.Administrator}"/>
+								</Button>
+								<Button Classes="ToolBar_Button">
+									<Image Classes="Icon" Source="{StaticResource Image/Icon.Link}"/>
+								</Button>
+								<Button Classes="ToolBar_Button">
+									<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
+								</Button>
+								<Button Classes="ToolBar_Button">
+									<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
+								</Button>
 
-							<Separator Classes="ToolBar_Separator"/>
+								<TextBox Classes="ToolBar_TextBox" Width="50"/>
+								<TextBox Classes="ToolBar_TextBox" Width="50"/>
 
-							<ToggleButton Classes="ToolBar_ToggleButton">
-								<Image Classes="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
-							</ToggleButton>
+								<ToggleButton Classes="ToolBar_ToggleButton">
+									<Image Classes="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
+								</ToggleButton>
 
-							<ComboBox Classes="ToolBar_ComboBox" Width="100">
-								12345
-							</ComboBox>
+								<Separator Classes="ToolBar_Separator"/>
 
-							<RepeatButton Classes="ToolBar_RepeatButton">
-								<Image Classes="Icon" Source="{StaticResource Image/Icon.File}"/>
-							</RepeatButton>
+								<ToggleButton Classes="ToolBar_ToggleButton">
+									<Image Classes="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
+								</ToggleButton>
 
-							<TextBlock Classes="ToolBar_TextBlock" Text="test:"/>
-							<TextBox Classes="ToolBar_TextBox" Width="100"/>
+								<ComboBox Classes="ToolBar_ComboBox" Width="100">
+									12345
+								</ComboBox>
 
-						</StackPanel>
-					</Border>
-					
-					<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" Height="50"/>
+								<RepeatButton Classes="ToolBar_RepeatButton">
+									<Image Classes="Icon" Source="{StaticResource Image/Icon.File}"/>
+								</RepeatButton>
 
-				</StackPanel>
+								<TextBlock Classes="ToolBar_TextBlock" Text="test:"/>
+								<TextBox Classes="ToolBar_TextBox" Width="100"/>
+
+							</StackPanel>
+						</Border>
+
+						<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" Height="50"/>
+
+					</StackPanel>
+				</ScrollViewer>
 				
 			</TabItem>
 

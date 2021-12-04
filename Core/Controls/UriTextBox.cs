@@ -19,6 +19,16 @@ namespace CarinaStudio.AppSuite.Controls
 		public static readonly AvaloniaProperty<UriKind> UriKindProperty = AvaloniaProperty.Register<UriTextBox, UriKind>(nameof(IsTextValid), UriKind.Absolute);
 
 
+		/// <summary>
+		/// Initialize new <see cref="UriTextBox"/> instance.
+		/// </summary>
+		public UriTextBox()
+		{
+			this.MaxLength = 65536;
+			this.Bind(WatermarkProperty, this.GetResourceObservable("String/UriTextBox.Watermark"));
+		}
+
+
 		/// <inheritdoc/>
 		protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
 		{

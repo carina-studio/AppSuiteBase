@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Avalonia;
+using Avalonia.Controls;
+using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace CarinaStudio.AppSuite.Controls
 {
     /// <summary>
-    /// <see cref="Avalonia.Controls.TextBox"/> to let user input a <see cref="DateTime"/>.
+    /// <see cref="TextBox"/> to let user input a <see cref="DateTime"/>.
     /// </summary>
     public class DateTimeTextBox : ValueTextBox<DateTime>
     {
@@ -19,6 +21,16 @@ namespace CarinaStudio.AppSuite.Controls
         static readonly Regex CompactFormatRegex = new Regex("^(?<Year>[\\d]{4})?(?<Month>[\\d]{2})(?<Day>[\\d]{2})[\\s\\-_]+(?<Hours>[\\d]{2})[:]?(?<Minutes>[\\d]{2})[:]?(?<Seconds>[\\d]{2}(\\.[\\d]+)?)?[\\s]*$");
         static readonly CultureInfo DefaultCultureInfo = CultureInfo.GetCultureInfo("en-US");
         static readonly DateTime UnixTimestampBase = new DateTime(1970, 1, 1);
+
+
+        /// <summary>
+        /// Initialize new <see cref="DateTimeTextBox"/> instance.
+        /// </summary>
+        public DateTimeTextBox()
+        {
+            this.MaxLength = 128;
+            this.Bind(WatermarkProperty, this.GetResourceObservable("String/DateTimeTextBox.Watermark"));
+        }
 
 
         /// <inheritdoc/>.

@@ -100,12 +100,21 @@
 	<sys:String x:Key="String/DatePicker.Year">年份</sys:String>
 	<sys:String x:Key="String/DatePicker.YearFormat">yyyy 年</sys:String>
 
+	<!-- DateTimeTextBox -->
+	<sys:String x:Key="String/DateTimeTextBox.Watermark">日期與時間</sys:String>
+
 	<!-- FallbackFontFamilies -->
 	<sys:String x:Key="String/TextBox.FallbackFontFamilies">Microsoft JhengHei,Noto Sans CJK TC,蘋方-繁</sys:String>
 
 	<!-- FileFormat -->
 	<sys:String x:Key="String/FileFormat.All">所有檔案</sys:String>
 	<sys:String x:Key="String/FileFormat.Text">文字文件</sys:String>
+
+	<!-- IPAddressTextBox -->
+	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 或 IPv6</sys:String>
+
+	<!-- RegexTextBox -->
+	<sys:String x:Key="String/RegexTextBox.Watermark">正規表示式</sys:String>
 
 	<!-- SplashWindow -->
 	<sys:String x:Key="String/SplashWindow.Launching">啟動中</sys:String>
@@ -129,5 +138,8 @@
 	<sys:String x:Key="String/TimeSpanConverter.Milliseconds">{0} 毫秒</sys:String>
 	<sys:String x:Key="String/TimeSpanConverter.Minutes">{0} 分 {1} 秒</sys:String>
 	<sys:String x:Key="String/TimeSpanConverter.Seconds">{0} 秒</sys:String>
+
+	<!-- UriTextBox -->
+	<sys:String x:Key="String/UriTextBox.Watermark">網址 (URI)</sys:String>
 	
 </ResourceDictionary>

@@ -102,9 +102,18 @@
 	<sys:String x:Key="String/DatePicker.Year">Year</sys:String>
 	<sys:String x:Key="String/DatePicker.YearFormat">yyyy</sys:String>
 
+	<!-- DateTimeTextBox -->
+	<sys:String x:Key="String/DateTimeTextBox.Watermark">Date and Time</sys:String>
+
 	<!-- FileFormat -->
 	<sys:String x:Key="String/FileFormat.All">All formats</sys:String>
 	<sys:String x:Key="String/FileFormat.Text">Text File</sys:String>
+
+	<!-- IPAddressTextBox -->
+	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 or IPv6</sys:String>
+
+	<!-- RegexTextBox -->
+	<sys:String x:Key="String/RegexTextBox.Watermark">Regular Expression</sys:String>
 
 	<!-- SplashWindow -->
 	<sys:String x:Key="String/SplashWindow.Launching">Launching</sys:String>
@@ -128,5 +137,8 @@
 	<sys:String x:Key="String/TimeSpanConverter.Milliseconds">{0} ms</sys:String>
 	<sys:String x:Key="String/TimeSpanConverter.Minutes">{0} min {1} sec</sys:String>
 	<sys:String x:Key="String/TimeSpanConverter.Seconds">{0} sec</sys:String>
+
+	<!-- UriTextBox -->
+	<sys:String x:Key="String/UriTextBox.Watermark">URI</sys:String>
 	
 </ResourceDictionary>

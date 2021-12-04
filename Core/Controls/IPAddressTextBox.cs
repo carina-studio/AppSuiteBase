@@ -17,6 +17,16 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
+        /// Initialize new <see cref="IPAddressTextBox"/> instance.
+        /// </summary>
+        public IPAddressTextBox()
+        {
+            this.MaxLength = 1024;
+            this.Bind(WatermarkProperty, this.GetResourceObservable("String/IPAddressTextBox.Watermark"));
+        }
+
+
+        /// <summary>
         /// Get or set <see cref="IPAddress"/>.
         /// </summary>
         public IPAddress? IPAddress
