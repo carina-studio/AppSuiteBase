@@ -8,23 +8,23 @@ using System;
 namespace CarinaStudio.AppSuite.Controls
 {
     /// <summary>
-    /// <see cref="TextBox"/> which treat input text as object with type <typeparamref name="T"/>.
+    /// <see cref="TextBox"/> which treat input text as given value with type <typeparamref name="T"/>.
     /// </summary>
     /// <typeparam name="T">Type of object.</typeparam>
-    public abstract class ObjectTextBox<T> : TextBox, IStyleable where T : class
+    public abstract class ValueTextBox<T> : TextBox, IStyleable where T : struct
 	{
 		/// <summary>
 		/// Property of <see cref="IsTextValid"/>.
 		/// </summary>
-		public static readonly AvaloniaProperty<bool> IsTextValidProperty = AvaloniaProperty.Register<ObjectTextBox<T>, bool>(nameof(IsTextValid), true);
-		/// <summary>
-		/// Property of <see cref="Object"/>.
-		/// </summary>
-		public static readonly AvaloniaProperty<T?> ObjectProperty = AvaloniaProperty.Register<ObjectTextBox<T>, T?>(nameof(Object), null);
+		public static readonly AvaloniaProperty<bool> IsTextValidProperty = AvaloniaProperty.Register<ValueTextBox<T>, bool>(nameof(IsTextValid), true);
 		/// <summary>
 		/// Property of <see cref="ValidationDelay"/>.
 		/// </summary>
-		public static readonly AvaloniaProperty<int> ValidationDelayProperty = AvaloniaProperty.Register<ObjectTextBox<T>, int>(nameof(ValidationDelay), 500, coerce: (_, it) => Math.Max(0, it));
+		public static readonly AvaloniaProperty<int> ValidationDelayProperty = AvaloniaProperty.Register<ValueTextBox<T>, int>(nameof(ValidationDelay), 500, coerce: (_, it) => Math.Max(0, it));
+		/// <summary>
+		/// Property of <see cref="Value"/>.
+		/// </summary>
+		public static readonly AvaloniaProperty<T?> ValueProperty = AvaloniaProperty.Register<ValueTextBox<T>, T?>(nameof(Value), null);
 
 
 		// Fields.
@@ -34,9 +34,9 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		/// <summary>
-		/// Initialize new <see cref="ObjectTextBox{T}"/> instance.
+		/// Initialize new <see cref="ValueTextBox{T}"/> instance.
 		/// </summary>
-		protected ObjectTextBox()
+		protected ValueTextBox()
 		{
 			this.invalidTextBrush = this.GetResourceObservable("Brush/TextBox.Foreground.Error");
 			this.validateAction = new ScheduledAction(() => this.Validate());
@@ -44,36 +44,26 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		/// <summary>
-		/// Check equality of objects.
+		/// Check equality of values.
 		/// </summary>
-		/// <param name="x">First object.</param>
-		/// <param name="y">Second object.</param>
-		/// <returns>True if two objects are equalvant.</returns>
-		protected virtual bool CheckObjectEquality(T? x, T? y) => x?.Equals(y) ?? y == null;
+		/// <param name="x">First value.</param>
+		/// <param name="y">Second value.</param>
+		/// <returns>True if two values are equalvant.</returns>
+		protected virtual bool CheckValueEquality(T? x, T? y) => x?.Equals(y) ?? y == null;
 
 
 		/// <summary>
-		/// Convert object to text.
+		/// Convert value to text.
 		/// </summary>
-		/// <param name="obj">Object.</param>
+		/// <param name="value">Value.</param>
 		/// <returns>Converted text.</returns>
-		protected virtual string? ConvertToText(T obj) => obj.ToString();
+		protected virtual string? ConvertToText(T value) => value.ToString();
 
 
 		/// <summary>
-		/// Get whether input <see cref="TextBox.Text"/> represent a valid object or not.
+		/// Get whether input <see cref="TextBox.Text"/> represent a valid value or not.
 		/// </summary>
 		public bool IsTextValid { get => this.GetValue<bool>(IsTextValidProperty); }
-
-
-		/// <summary>
-		/// Get or set object.
-		/// </summary>
-		protected T? Object
-		{
-			get => this.GetValue<T?>(ObjectProperty);
-			set => this.SetValue<T?>(ObjectProperty, value);
-		}
 
 
 		/// <inheritdoc/>
@@ -95,21 +85,21 @@ namespace CarinaStudio.AppSuite.Controls
 				else
 					this.validateAction.Reschedule(this.ValidationDelay);
 			}
-			else if (property == ObjectProperty)
-			{
-				var obj = (change.NewValue.Value as T);
-				if (obj != null)
-				{
-					if (!this.Validate() || !this.CheckObjectEquality(this.Object, obj))
-						this.Text = this.ConvertToText(obj);
-				}
-				else if (this.Text != null)
-					this.Text = "";
-			}
 			else if (property == ValidationDelayProperty)
 			{
 				if (this.validateAction.IsScheduled)
 					this.validateAction.Reschedule(this.ValidationDelay);
+			}
+			else if (property == ValueProperty)
+			{
+				var value = (T?)(object?)change.NewValue.Value;
+				if (value != null)
+				{
+					if (!this.Validate() || !this.CheckValueEquality(this.Value, value))
+						this.Text = this.ConvertToText(value.Value);
+				}
+				else if (this.Text != null)
+					this.Text = "";
 			}
 		}
 
@@ -128,18 +118,18 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		/// <summary>
-		/// Try converting text to object.
+		/// Try converting text to value.
 		/// </summary>
 		/// <param name="text">Text.</param>
-		/// <param name="obj">Converted object.</param>
+		/// <param name="value">Converted value.</param>
 		/// <returns>True if conversion succeeded.</returns>
-		protected abstract bool TryConvertToObject(string text, out T? obj);
+		protected abstract bool TryConvertToValue(string text, out T? value);
 
 
 		/// <summary>
-		/// Validate input <see cref="TextBox.Text"/> and generate corresponding object.
+		/// Validate input <see cref="TextBox.Text"/> and generate corresponding value.
 		/// </summary>
-		/// <returns>True if input <see cref="TextBox.Text"/> generates a valid object.</returns>
+		/// <returns>True if input <see cref="TextBox.Text"/> generates a valid value.</returns>
 		public bool Validate()
 		{
 			// check state
@@ -161,21 +151,21 @@ namespace CarinaStudio.AppSuite.Controls
 			// clear object
 			if (text.Length == 0)
 			{
-				this.SetValue<T?>(ObjectProperty, null);
+				this.SetValue<T?>(ValueProperty, null);
 				this.SetValue<bool>(IsTextValidProperty, true);
 				return true;
 			}
 
 			// try convert to object
-			if (!this.TryConvertToObject(text, out var obj) || obj == null)
+			if (!this.TryConvertToValue(text, out var value) || value == null)
 			{
 				this.SetValue<bool>(IsTextValidProperty, false);
 				return false;
 			}
 
 			// complete
-			if (!this.CheckObjectEquality(obj, this.Object))
-				this.SetValue<T?>(ObjectProperty, obj);
+			if (!this.CheckValueEquality(value, this.Value))
+				this.SetValue<T?>(ValueProperty, value);
 			this.SetValue<bool>(IsTextValidProperty, true);
 			return true;
 		}
@@ -188,6 +178,16 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			get => this.GetValue<int>(ValidationDelayProperty);
 			set => this.SetValue<int>(ValidationDelayProperty, value);
+		}
+
+
+		/// <summary>
+		/// Get or set value.
+		/// </summary>
+		public T? Value
+		{
+			get => this.GetValue<T?>(ValueProperty);
+			set => this.SetValue<T?>(ValueProperty, value);
 		}
 
 

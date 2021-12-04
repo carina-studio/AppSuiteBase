@@ -5,6 +5,7 @@
 		xmlns:app="using:CarinaStudio.AppSuite"
 		xmlns:appControls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:appConverters="using:CarinaStudio.AppSuite.Converters"
+		xmlns:sys="using:System"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Tests.MainWindow"
 		Classes="Tabbed"
@@ -69,8 +70,8 @@
 					<appControls:LinkTextBlock HorizontalAlignment="Left" Margin="5" Text="Google" Uri="http://www.google.com/"/>
 					<appControls:LinkTextBlock Command="{Binding $parent[Window].SwitchTheme}" HorizontalAlignment="Left" Margin="5" Text="Switch theme"/>
 					
-					<appControls:DatePicker HorizontalAlignment="Left" Margin="5"/>
-					<appControls:TimePicker HorizontalAlignment="Left" Margin="5"/>
+					<appControls:DateTimeTextBox Name="dateTimeTextBox" HorizontalAlignment="Left" Margin="5" Width="200" Watermark="Date and time"/>
+					<TextBlock Margin="5" Text="{Binding #dateTimeTextBox.Value}"/>
 
 					<appControls:EnumComboBox EnumType="{x:Type app:ThemeMode}" HorizontalAlignment="Left" Margin="5" Width="200"/>
 
