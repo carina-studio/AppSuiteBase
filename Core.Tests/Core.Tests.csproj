@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<AssemblyVersion>0.25.2.1201</AssemblyVersion>
-		<Version>0.25.2.1201</Version>
+		<AssemblyVersion>0.26.0.1204</AssemblyVersion>
+		<Version>0.26.0.1204</Version>
 		<TargetFramework>net5.0</TargetFramework>
 		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Core.Tests</AssemblyName>
