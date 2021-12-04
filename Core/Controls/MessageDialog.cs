@@ -11,6 +11,7 @@ namespace CarinaStudio.AppSuite.Controls
 	{
 		// Fields.
 		MessageDialogButtons buttons = MessageDialogButtons.OK;
+		bool? doNotAskAgain;
 		MessageDialogIcon icon = MessageDialogIcon.Information;
 		string? message;
 
@@ -26,6 +27,21 @@ namespace CarinaStudio.AppSuite.Controls
 				this.VerifyAccess();
 				this.VerifyShowing();
 				this.buttons = value;
+			}
+		}
+
+
+		/// <summary>
+		/// Get or set whether "Do not ask me again" has been checked or not. Set Null to hide the UI.
+		/// </summary>
+		public bool? DoNotAskAgain
+		{
+			get => this.doNotAskAgain;
+			set
+			{
+				this.VerifyAccess();
+				this.VerifyShowing();
+				this.doNotAskAgain = value;
 			}
 		}
 
@@ -65,14 +81,17 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         /// <param name="owner">Owner window.</param>
         /// <returns>Task to get result of dialog.</returns>
-        protected override Task<MessageDialogResult> ShowDialogCore(Avalonia.Controls.Window owner)
+        protected override async Task<MessageDialogResult> ShowDialogCore(Avalonia.Controls.Window owner)
         {
 			var dialog = new MessageDialogImpl();
 			dialog.Buttons = this.buttons;
+			dialog.DoNotAskAgain = this.doNotAskAgain;
 			dialog.Icon = this.icon;
 			dialog.Message = this.message;
 			dialog.Title = this.Title ?? Avalonia.Application.Current.Name;
-			return dialog.ShowDialog<MessageDialogResult>(owner);
+			var result = await dialog.ShowDialog<MessageDialogResult>(owner);
+			this.doNotAskAgain = dialog.DoNotAskAgain;
+			return result;
 		}
 	}
 

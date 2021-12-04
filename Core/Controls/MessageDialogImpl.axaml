@@ -12,11 +12,18 @@
 	<Grid RowDefinitions="Auto,Auto">
 
 		<!-- Content -->
-		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*">
+		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
 			<Border Height="{DynamicResource Double/MessageDialog.Icon.Size}" Margin="{DynamicResource Thickness/MessageDialog.Icon.Margin}" VerticalAlignment="Top" Width="{DynamicResource Double/MessageDialog.Icon.Size}">
 				<Image Classes="Icon" Source="{Binding $parent[Window].IconImage}"/>
 			</Border>
 			<TextBlock Grid.Column="1" Text="{Binding $parent[Window].Message}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+			<StackPanel Name="doNotAskAgainPanel" Grid.Column="1" Grid.Row="1" IsVisible="False">
+				<Separator Classes="Dialog_Separator"/>
+				<StackPanel Orientation="Horizontal">
+					<ToggleSwitch Name="doNotAskAgainSwitch" Classes="Dialog_ToggleSwitch" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+					<TextBlock Text="{DynamicResource String/Common.DoNotAskAgain}" VerticalAlignment="Center"/>
+				</StackPanel>
+			</StackPanel>
 		</Grid>
 
 		<!-- Control buttons -->

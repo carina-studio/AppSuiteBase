@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using CarinaStudio.Controls;
@@ -27,6 +28,8 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Fields.
+		readonly Panel doNotAskAgainPanel;
+		readonly ToggleSwitch doNotAskAgainSwitch;
 		MessageDialogResult? result;
 
 
@@ -34,6 +37,8 @@ namespace CarinaStudio.AppSuite.Controls
 		public MessageDialogImpl()
 		{
 			InitializeComponent();
+			this.doNotAskAgainPanel = this.FindControl<Panel>(nameof(doNotAskAgainPanel)).AsNonNull();
+			this.doNotAskAgainSwitch = this.doNotAskAgainPanel.FindControl<ToggleSwitch>(nameof(doNotAskAgainSwitch)).AsNonNull();
 		}
 
 
@@ -65,6 +70,10 @@ namespace CarinaStudio.AppSuite.Controls
 		/// Get or set buttons.
 		/// </summary>
 		public MessageDialogButtons Buttons { get; set; } = MessageDialogButtons.OK;
+
+
+		// Do not ask again or not.
+		public bool? DoNotAskAgain { get; set; }
 
 
 		/// <summary>
@@ -120,6 +129,13 @@ namespace CarinaStudio.AppSuite.Controls
 			if (((Avalonia.Application)app).TryFindResource<IImage>($"Image/Icon.{this.Icon}.Colored", out var image))
 				this.SetValue<IImage?>(IconImageProperty, image);
 
+			// setup "do not ask again" UI
+			if (this.DoNotAskAgain.HasValue)
+			{
+				this.doNotAskAgainPanel.IsVisible = true;
+				this.doNotAskAgainSwitch.IsChecked = this.DoNotAskAgain.GetValueOrDefault();
+			}
+
 			// setup buttons
 			switch (this.Buttons)
 			{
@@ -170,6 +186,8 @@ namespace CarinaStudio.AppSuite.Controls
 			if (result != null)
 			{
 				this.result = result;
+				if (this.doNotAskAgainPanel.IsVisible)
+					this.DoNotAskAgain = this.doNotAskAgainSwitch.IsChecked;
 				this.Close(result);
 			}
 		}

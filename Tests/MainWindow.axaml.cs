@@ -51,22 +51,15 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void Test()
         {
-            var s = Converters.TimeSpanConverter.Default.Convert<string>(new TimeSpan(1, 2, 3, 4, 5));
-            s = Converters.TimeSpanConverter.Default.Convert<string>(new TimeSpan(2, 3, 4, 5));
-            s = Converters.TimeSpanConverter.Default.Convert<string>(new TimeSpan(3, 4, 5));
-            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromSeconds(123.0));
-            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromSeconds(123.456));
-            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromSeconds(123.456789));
-            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromMilliseconds(123));
-            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromMilliseconds(123.456));
+            var dialog = new MessageDialog()
+            {
+                DoNotAskAgain = true,
+                Icon = MessageDialogIcon.Question,
+                Message = "Test message.\nLine #2\nLine #3\nLoooooooooooong message"
+            };
+            await dialog.ShowDialog(this);
 
-            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromMilliseconds(-123.456));
-            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromMilliseconds(-123));
-            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromSeconds(-23.456789));
-            s = Converters.TimeSpanConverter.Default.Convert<string>(TimeSpan.FromSeconds(-123.456789));
-            s = Converters.TimeSpanConverter.Default.Convert<string>(new TimeSpan(-1, 2, 3, 4, 5));
-
-            s = Converters.TimeSpanConverter.Default.Convert<string>(new TimeSpan());
+            var doNotAskAgain = dialog.DoNotAskAgain;
         }
 
         void Test2()

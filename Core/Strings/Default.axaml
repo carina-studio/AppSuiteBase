@@ -82,6 +82,8 @@
 	<sys:String x:Key="String/Common.Create">Create</sys:String>
 	<sys:String x:Key="String/Common.DebugMode">Debug Mode</sys:String>
 	<sys:String x:Key="String/Common.Delete">Delete</sys:String>
+	<sys:String x:Key="String/Common.DoNotAskAgain">Do not ask me again</sys:String>
+	<sys:String x:Key="String/Common.DoNotShowAgain">Do not show again</sys:String>
 	<sys:String x:Key="String/Common.Edit">Edit</sys:String>
 	<sys:String x:Key="String/Common.Empty">Empty</sys:String>
 	<sys:String x:Key="String/Common.Load">Load</sys:String>
