@@ -62,7 +62,7 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				_ = new MessageDialog()
 				{
-					Icon = MessageDialogIcon.Information,
+					Icon = MessageDialogIcon.Success,
 					Message = this.Application.GetString("ApplicationInfoDialog.SucceededToExportAppLogs"),
 				}.ShowDialog(this);
 			}

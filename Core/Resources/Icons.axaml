@@ -193,6 +193,8 @@
 	<DrawingImage x:Key="Image/Icon.Star.Filled" Drawing="{StaticResource Drawing/Icon.Star.Filled}"/>
 	<DrawingImage x:Key="Image/Icon.Star.Filled.Active" Drawing="{StaticResource Drawing/Icon.Star.Filled.Active}"/>
 	<DrawingImage x:Key="Image/Icon.StopMedia" Drawing="{StaticResource Drawing/Icon.StopMedia}"/>
+	<DrawingImage x:Key="Image/Icon.Success" Drawing="{StaticResource Drawing/Icon.OK}"/>
+	<DrawingImage x:Key="Image/Icon.Success.Colored" Drawing="{StaticResource Drawing/Icon.OK.Colored}"/>
 	<DrawingImage x:Key="Image/Icon.Tab" Drawing="{StaticResource Drawing/Icon.Tab}"/>
 	<DrawingImage x:Key="Image/Icon.Undo" Drawing="{StaticResource Drawing/Icon.Undo}"/>
 	<DrawingImage x:Key="Image/Icon.Update" Drawing="{StaticResource Drawing/Icon.Update}"/>

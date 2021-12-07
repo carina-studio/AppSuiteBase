@@ -134,6 +134,10 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		Question,
 		/// <summary>
+		/// Success.
+		/// </summary>
+		Success,
+		/// <summary>
 		/// Warning.
 		/// </summary>
 		Warning,
