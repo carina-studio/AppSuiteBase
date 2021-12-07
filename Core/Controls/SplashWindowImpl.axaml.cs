@@ -21,6 +21,10 @@ namespace CarinaStudio.AppSuite.Controls
 		static readonly AvaloniaProperty<string> MessageProperty = AvaloniaProperty.Register<SplashWindowImpl, string>(nameof(Message), " ", coerce: ((_, it) => string.IsNullOrEmpty(it) ? " " : it));
 
 
+		// Fields.
+		Uri? iconUri;
+
+
 		/// <summary>
 		/// Initialize new <see cref="SplashWindowImpl"/>.
 		/// </summary>
@@ -45,7 +49,26 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Get or set URI of application icon.
-		public Uri? IconUri { get; set; }
+		public Uri? IconUri
+        {
+			get => this.iconUri;
+			set
+            {
+				this.VerifyAccess();
+				if (this.iconUri == value)
+					return;
+				this.iconUri = value;
+				value = value ?? new Uri($"avares://{AppSuiteApplication.Current.Assembly.GetName()}/AppIcon.ico");
+				this.Icon = AvaloniaLocator.Current.GetService<IAssetLoader>().Let(loader =>
+				{
+					return loader.Open(value).Use(stream => new WindowIcon(stream));
+				});
+				this.SetValue<IBitmap?>(IconBitmapProperty, AvaloniaLocator.Current.GetService<IAssetLoader>().Let(loader =>
+				{
+					return loader.Open(value).Use(stream => new Bitmap(stream));
+				}));
+			}
+        }
 
 
 		// Initialize.
@@ -67,13 +90,6 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			// call base
 			base.OnOpened(e);
-
-			// load icon
-			var iconUri = this.IconUri ?? new Uri($"avares://{AppSuiteApplication.Current.Assembly.GetName()}/AppIcon.ico");
-			this.SetValue<IBitmap?>(IconBitmapProperty, AvaloniaLocator.Current.GetService<IAssetLoader>().Let(loader =>
-			{
-				return loader.Open(iconUri).Use(stream => new Bitmap(stream));
-			}));
 
 			// move to center of screen
 			var screen = this.Screens.ScreenFromVisual(this);

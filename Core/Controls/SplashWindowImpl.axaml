@@ -8,7 +8,6 @@
         CanResize="False"
         HasSystemDecorations="False"
         Height="200"
-        ShowInTaskbar="False"
         Title="{Binding $parent[Window].ApplicationName}"
         TransparencyLevelHint="Transparent"
         Width="400"
