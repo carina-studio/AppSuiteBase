@@ -113,6 +113,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Static fields.
+        static readonly SettingKey<string> AgreedUserAgreementVersionKey = new SettingKey<string>("AgreedUserAgreementVersion", "");
         static double CachedCustomScreenScaleFactor = double.NaN;
         static readonly string? CustomScreenScaleFactorFilePath = Global.Run(() =>
         {
@@ -224,6 +225,44 @@ namespace CarinaStudio.AppSuite
             CultureInfo.CurrentUICulture = this.cultureInfo;
             CultureInfo.DefaultThreadCurrentCulture = this.cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = this.cultureInfo;
+        }
+
+
+        /// <inheritdoc/>
+        public void AgreeUserAgreement()
+        {
+            // check state
+            this.VerifyAccess();
+            if (this.IsUserAgreementAgreed)
+                return;
+            if (this.IsShutdownStarted)
+            {
+                this.Logger.LogWarning("Cannot change User Agreement state when shutting down");
+                return;
+            }
+
+            this.Logger.LogWarning("User agreed the User Agreement");
+
+            // update state and save
+            this.UserAgreementVersion?.Let(version =>
+            {
+                this.PersistentState.SetValue<string>(AgreedUserAgreementVersionKey, version.ToString());
+                _ = this.SavePersistentStateAsync();
+            });
+            this.IsUserAgreementAgreed = true;
+            this.OnPropertyChanged(nameof(IsUserAgreementAgreed));
+            if (!this.IsUserAgreementAgreedBefore)
+            {
+                this.IsUserAgreementAgreedBefore = true;
+                this.OnPropertyChanged(nameof(IsUserAgreementAgreedBefore));
+            }
+
+            // notify
+            this.SynchronizationContext.Post(() =>
+            {
+                if (this.IsUserAgreementAgreed)
+                    this.OnUserAgreementAgreed();
+            });
         }
 
 
@@ -617,6 +656,14 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <inheritdoc/>
+        public bool IsUserAgreementAgreed { get; private set; }
+
+
+        /// <inheritdoc/>
+        public bool IsUserAgreementAgreedBefore { get; private set; }
+
+
         /// <summary>
         /// Get options to launch application which is converted by arguments passed to application.
         /// </summary>
@@ -647,6 +694,45 @@ namespace CarinaStudio.AppSuite
             {
                 this.Logger.LogError(ex, $"Failed to load persistent state from '{this.persistentStateFilePath}'");
             }
+
+            // check agreement state
+            this.UserAgreementVersion?.Let(version =>
+            {
+                var agreedVersion = this.persistentState.GetValueOrDefault(AgreedUserAgreementVersionKey).Let(it =>
+                {
+                    if (Version.TryParse(it, out var v))
+                        return v;
+                    return null;
+                });
+                bool isAgreed = (agreedVersion != null && agreedVersion >= version);
+                if (agreedVersion != null)
+                {
+                    if (!this.IsUserAgreementAgreedBefore)
+                    {
+                        this.IsUserAgreementAgreedBefore = true;
+                        this.OnPropertyChanged(nameof(IsUserAgreementAgreedBefore));
+                    }
+                }
+                else
+                {
+                    if (this.IsUserAgreementAgreedBefore)
+                    {
+                        this.IsUserAgreementAgreedBefore = false;
+                        this.OnPropertyChanged(nameof(IsUserAgreementAgreedBefore));
+                    }
+                }
+                if (isAgreed)
+                    this.Logger.LogDebug("Current User Agreement has been agreed");
+                else if (this.IsUserAgreementAgreedBefore)
+                    this.Logger.LogWarning("User Agreement has been updated and is not agreed yet");
+                else
+                    this.Logger.LogWarning("User Agreement is not agreed yet");
+                if (isAgreed != this.IsUserAgreementAgreed)
+                {
+                    this.IsUserAgreementAgreed = isAgreed;
+                    this.OnPropertyChanged(nameof(IsUserAgreementAgreed));
+                }
+            });
         }
 
 
@@ -855,6 +941,14 @@ namespace CarinaStudio.AppSuite
                         this.OnPropertyChanged(nameof(IsShutdownStarted));
                     }
                 };
+            }
+
+            // check user agreement version
+            if (this.UserAgreementVersion == null)
+            {
+                this.Logger.LogWarning("No User Agreement");
+                this.IsUserAgreementAgreed = true;
+                this.OnPropertyChanged(nameof(IsUserAgreementAgreed));
             }
 
             // prepare
@@ -1269,6 +1363,13 @@ namespace CarinaStudio.AppSuite
         /// <param name="oldVersion">Old version.</param>
         /// <param name="newVersion">New version.</param>
         protected virtual void OnUpgradeSettings(ISettings settings, int oldVersion, int newVersion)
+        { }
+
+
+        /// <summary>
+        /// Called when user agreed the current User Agreement.
+        /// </summary>
+        protected virtual void OnUserAgreementAgreed()
         { }
 
 
@@ -1755,6 +1856,10 @@ namespace CarinaStudio.AppSuite
         /// Get latest checked application update information.
         /// </summary>
         public ApplicationUpdateInfo? UpdateInfo { get; private set; }
+
+
+        /// <inheritdoc/>
+        public abstract Version? UserAgreementVersion { get; }
 
 
         // Update log output.

@@ -37,6 +37,11 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <inheritdoc/>
+        public virtual void AgreeUserAgreement()
+        { }
+
+
         /// <summary>
         /// Get assembly of application.
         /// </summary>
@@ -60,7 +65,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get current culture info of application.
         /// </summary>
-        public virtual CultureInfo CultureInfo { get; } = System.Globalization.CultureInfo.CurrentCulture;
+        public virtual CultureInfo CultureInfo { get; } = CultureInfo.CurrentCulture;
 
 
         /// <summary>
@@ -154,6 +159,14 @@ namespace CarinaStudio.AppSuite
         /// Check whether application shutting down is started or not.
         /// </summary>
         public virtual bool IsShutdownStarted { get; } = false;
+
+
+        /// <inheritdoc/>.
+        public virtual bool IsUserAgreementAgreed { get; } = false;
+
+
+        /// <inheritdoc/>.
+        public virtual bool IsUserAgreementAgreedBefore { get; } = false;
 
 
         /// <summary>
@@ -324,6 +337,10 @@ namespace CarinaStudio.AppSuite
         /// Get latest checked application update information.
         /// </summary>
         public virtual ApplicationUpdateInfo? UpdateInfo { get; } = null;
+
+
+        /// <inheritdoc/>.
+        public virtual Version? UserAgreementVersion { get; } = null;
 
 
         // Interface implementations.

@@ -66,5 +66,8 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         //public override Uri? PackageManifestUri => new Uri("https://raw.githubusercontent.com/carina-studio/PixelViewer/master/PackageManifest-Preview.json");
+
+
+        public override Version? UserAgreementVersion => new Version(1, 1);
     }
 }

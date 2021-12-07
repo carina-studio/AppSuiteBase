@@ -11,6 +11,12 @@ namespace CarinaStudio.AppSuite
     public interface IAppSuiteApplication : IAvaloniaApplication
     {
         /// <summary>
+        /// Called when user agree the User Agreement.
+        /// </summary>
+        void AgreeUserAgreement();
+
+
+        /// <summary>
         /// Check application update information asynchronously.
         /// </summary>
         /// <returns>Task to wait for checking.</returns>
@@ -63,6 +69,18 @@ namespace CarinaStudio.AppSuite
         /// Check whether <see cref="ThemeMode.System"/> is supported or not.
         /// </summary>
         bool IsSystemThemeModeSupported { get; }
+
+
+        /// <summary>
+        /// Check whether the current User Agreement has been agreed by user or not.
+        /// </summary>
+        bool IsUserAgreementAgreed { get; }
+
+
+        /// <summary>
+        /// Check whether the User Agreement has been agreed by user before or not.
+        /// </summary>
+        bool IsUserAgreementAgreedBefore { get; }
 
 
         /// <summary>
@@ -170,5 +188,11 @@ namespace CarinaStudio.AppSuite
         /// Get latest checked application update information.
         /// </summary>
         ApplicationUpdateInfo? UpdateInfo { get; }
+
+
+        /// <summary>
+        /// Get version of the User Agreement.
+        /// </summary>
+        Version? UserAgreementVersion { get; }
     }
 }

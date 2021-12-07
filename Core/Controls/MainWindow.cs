@@ -211,6 +211,8 @@ namespace CarinaStudio.AppSuite.Controls
                 else
                     this.restartingMainWindowsAction.Cancel();
             }
+            else if (e.PropertyName == nameof(IAppSuiteApplication.IsUserAgreementAgreed))
+                (this.Content as Control)?.Let(content => content.IsEnabled = this.Application.IsUserAgreementAgreed);
             else if (e.PropertyName == nameof(IAppSuiteApplication.UpdateInfo))
             {
                 if (this.AreInitialDialogsClosed && this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate))
@@ -253,6 +255,13 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         /// <returns>View-model for application change list dialog.</returns>
         protected virtual ApplicationChangeList OnCreateApplicationChangeList() => new ApplicationChangeList();
+
+
+        /// <summary>
+        /// Called to create view-model of application info.
+        /// </summary>
+        /// <returns>View-model of application info.</returns>
+        protected virtual ApplicationInfo OnCreateApplicationInfo() => new ApplicationInfo();
 
 
         /// <summary>
@@ -313,7 +322,12 @@ namespace CarinaStudio.AppSuite.Controls
         {
             base.OnPropertyChanged(change);
             var property = change.Property;
-            if (property == DataContextProperty)
+            if (property == ContentProperty)
+            {
+                if (!this.Application.IsUserAgreementAgreed)
+                    (change.NewValue.Value as Control)?.Let(content => content.IsEnabled = false);
+            }
+            else if (property == DataContextProperty)
             {
                 (change.OldValue.Value as TViewModel)?.Let(it => this.OnDetachFromViewModel(it));
                 (change.NewValue.Value as TViewModel)?.Let(it => this.OnAttachToViewModel(it));
@@ -398,6 +412,21 @@ namespace CarinaStudio.AppSuite.Controls
             if (delay > 0)
             {
                 this.showInitDialogsAction.Reschedule((int)delay);
+                return;
+            }
+
+            // show user agreement
+            if (!this.Application.IsUserAgreementAgreed)
+            {
+                this.Logger.LogDebug("Show User Agreement dialog");
+                using var appInfo = this.OnCreateApplicationInfo();
+                this.isShowingInitialDialogs = true;
+                if (!await new UserAgreementDialog(appInfo).ShowDialog(this))
+                {
+                    this.Logger.LogWarning("User decline the current User Agreement");
+                    this.Close();
+                }
+                this.isShowingInitialDialogs = false;
                 return;
             }
 

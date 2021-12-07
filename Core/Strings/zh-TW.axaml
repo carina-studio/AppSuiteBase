@@ -26,11 +26,11 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">GitHub 上的原始程式碼</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">已安裝：</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作業系統：</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">隱私權政策</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">《隱私權政策》</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">應用程式日誌匯出完成。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">系統資訊</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">關於 {0}</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">使用者協議</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">《使用者協議》</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Version">版本：{0}</sys:String>
 
 	<!-- ApplicationOptions -->
@@ -74,11 +74,13 @@
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Add">加入</sys:String>
 	<sys:String x:Key="String/Common.Administrator">系統管理員</sys:String>
+	<sys:String x:Key="String/Common.Agree">同意</sys:String>
 	<sys:String x:Key="String/Common.Cancel">取消</sys:String>
 	<sys:String x:Key="String/Common.Close">關閉</sys:String>
 	<sys:String x:Key="String/Common.Copy">複製</sys:String>
 	<sys:String x:Key="String/Common.Create">建立</sys:String>
 	<sys:String x:Key="String/Common.DebugMode">偵錯模式</sys:String>
+	<sys:String x:Key="String/Common.Decline">不同意</sys:String>
 	<sys:String x:Key="String/Common.Delete">刪除</sys:String>
 	<sys:String x:Key="String/Common.DoNotAskAgain">不要再詢問</sys:String>
 	<sys:String x:Key="String/Common.DoNotShowAgain">不要再顯示</sys:String>
@@ -143,5 +145,13 @@
 
 	<!-- UriTextBox -->
 	<sys:String x:Key="String/UriTextBox.Watermark">網址 (URI)</sys:String>
+
+	<!-- UserAgreementDialog -->
+	<sys:String x:Key="String/UserAgreementDialog.Message.Section1">在您使用 {0} 之前，您必須閱讀且同意</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.Message.Section2">。</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.Message.Updated.Section1">在您使用 {0} 之前，您必須閱讀且同意新的</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.Message.Updated.Section2">。</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.Title">使用者協議</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.UserAgreement">《使用者協議》</sys:String>
 	
 </ResourceDictionary>

@@ -28,11 +28,11 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">Source code on GitHub</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">Installed:</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">Operating system:</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">Privacy Policy</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">《Privacy Policy》</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">Application logs exported.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">System information</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">About {0}</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">User Agreement</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">《User Agreement》</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Version">Version: {0}</sys:String>
 
 	<!-- ApplicationOptions -->
@@ -76,11 +76,13 @@
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Add">Add</sys:String>
 	<sys:String x:Key="String/Common.Administrator">Administrator</sys:String>
+	<sys:String x:Key="String/Common.Agree">Agree</sys:String>
 	<sys:String x:Key="String/Common.Cancel">Cancel</sys:String>
 	<sys:String x:Key="String/Common.Close">Close</sys:String>
 	<sys:String x:Key="String/Common.Copy">Copy</sys:String>
 	<sys:String x:Key="String/Common.Create">Create</sys:String>
 	<sys:String x:Key="String/Common.DebugMode">Debug Mode</sys:String>
+	<sys:String x:Key="String/Common.Decline">Decline</sys:String>
 	<sys:String x:Key="String/Common.Delete">Delete</sys:String>
 	<sys:String x:Key="String/Common.DoNotAskAgain">Do not ask me again</sys:String>
 	<sys:String x:Key="String/Common.DoNotShowAgain">Do not show again</sys:String>
@@ -142,5 +144,13 @@
 
 	<!-- UriTextBox -->
 	<sys:String x:Key="String/UriTextBox.Watermark">URI</sys:String>
+
+	<!-- UserAgreementDialog -->
+	<sys:String x:Key="String/UserAgreementDialog.Message.Section1">You must read and agree the</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.Message.Section2">before you start using {0}.</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.Message.Updated.Section1">You must read and agree the updated</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.Message.Updated.Section2">before you start using {0}.</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.Title">User Agreement</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.UserAgreement">《User Agreement》</sys:String>
 	
 </ResourceDictionary>

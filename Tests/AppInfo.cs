@@ -11,6 +11,6 @@ namespace CarinaStudio.AppSuite.Tests
 
         public override Uri? PrivacyPolicyUri => new Uri("http://localhost/");
 
-        public override Uri? UserAgreementUri => new Uri("http://localhost/");
+        public override Uri? UserAgreementUri => new Uri("https://carina-studio.github.io/ULogViewer/user_agreement.html");
     }
 }

@@ -10,6 +10,7 @@ using CarinaStudio.Data.Converters;
 using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
+using CarinaStudio.AppSuite.ViewModels;
 
 namespace CarinaStudio.AppSuite.Tests
 {
@@ -37,6 +38,8 @@ namespace CarinaStudio.AppSuite.Tests
             }
         }
 
+        protected override ApplicationInfo OnCreateApplicationInfo() => new AppInfo();
+
 
         void SwitchTheme()
         {
@@ -51,15 +54,8 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void Test()
         {
-            var dialog = new MessageDialog()
-            {
-                DoNotAskAgain = true,
-                Icon = MessageDialogIcon.Question,
-                Message = "Test message.\nLine #2\nLine #3\nLoooooooooooong message"
-            };
-            await dialog.ShowDialog(this);
-
-            var doNotAskAgain = dialog.DoNotAskAgain;
+            using var appInfo = new AppInfo();
+            await new ApplicationInfoDialog(appInfo).ShowDialog(this);
         }
 
         void Test2()
