@@ -176,8 +176,13 @@ namespace CarinaStudio.AppSuite
             {
                 var fileTarget = new NLog.Targets.FileTarget("file")
                 {
+                    ArchiveAboveSize = 10L << 20, // 10 MB per log file
+                    ArchiveFileKind = NLog.Targets.FilePathKind.Absolute,
+                    ArchiveFileName = Path.Combine(this.RootPrivateDirectoryPath, "Log", "log.txt"),
+                    ArchiveNumbering = NLog.Targets.ArchiveNumberingMode.Sequence,
                     FileName = Path.Combine(this.RootPrivateDirectoryPath, "Log", "log.txt"),
                     Layout = "${longdate} ${pad:padding=-5:inner=${processid}} ${pad:padding=-4:inner=${threadid}} ${pad:padding=-5:inner=${level:uppercase=true}} ${logger:shortName=true}: ${message} ${all-event-properties} ${exception:format=tostring}",
+                    MaxArchiveFiles = 10,
                 };
                 var rule = new NLog.Config.LoggingRule("logToFile").Also(rule =>
                 {

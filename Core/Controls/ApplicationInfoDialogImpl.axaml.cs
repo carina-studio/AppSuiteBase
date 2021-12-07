@@ -44,10 +44,10 @@ namespace CarinaStudio.AppSuite.Controls
 				var dateTime = DateTime.Now;
 				it.Filters.Add(new FileDialogFilter().Also(filter =>
 				{
-					filter.Extensions.Add("txt");
-					filter.Name = this.Application.GetString("FileFormat.Text");
+					filter.Extensions.Add("zip");
+					filter.Name = this.Application.GetString("FileFormat.Zip");
 				}));
-				it.InitialFileName = $"Logs-{dateTime.ToString("yyyyMMdd-HHmmss")}.txt";
+				it.InitialFileName = $"Logs-{dateTime.ToString("yyyyMMdd-HHmmss")}.zip";
 			}).ShowAsync(this);
 			if (fileName == null)
 				return;

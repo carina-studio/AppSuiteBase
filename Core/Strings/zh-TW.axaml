@@ -113,6 +113,7 @@
 	<!-- FileFormat -->
 	<sys:String x:Key="String/FileFormat.All">所有檔案</sys:String>
 	<sys:String x:Key="String/FileFormat.Text">文字文件</sys:String>
+	<sys:String x:Key="String/FileFormat.Zip">ZIP 壓縮檔</sys:String>
 
 	<!-- IPAddressTextBox -->
 	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 或 IPv6</sys:String>

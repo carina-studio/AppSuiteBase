@@ -7,6 +7,7 @@ using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
 using CarinaStudio.Data.Converters;
+using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
@@ -16,9 +17,18 @@ namespace CarinaStudio.AppSuite.Tests
 {
     partial class MainWindow : Controls.MainWindow<App, Workspace>
     {
+        readonly ScheduledAction logAction;
+
+
         public MainWindow()
         {
             InitializeComponent();
+
+            this.logAction = new ScheduledAction(() =>
+            {
+                this.Logger.LogDebug($"Time: {DateTime.Now}");
+                this.logAction?.Schedule(500);
+            });
         }
 
 
@@ -37,6 +47,14 @@ namespace CarinaStudio.AppSuite.Tests
                     this.Application.RestartMainWindows();
             }
         }
+
+
+        protected override void OnClosed(EventArgs e)
+        {
+            this.logAction.Cancel();
+            base.OnClosed(e);
+        }
+
 
         protected override ApplicationInfo OnCreateApplicationInfo() => new AppInfo();
 

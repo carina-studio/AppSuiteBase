@@ -112,6 +112,7 @@
 	<!-- FileFormat -->
 	<sys:String x:Key="String/FileFormat.All">All formats</sys:String>
 	<sys:String x:Key="String/FileFormat.Text">Text File</sys:String>
+	<sys:String x:Key="String/FileFormat.Zip">ZIP File</sys:String>
 
 	<!-- IPAddressTextBox -->
 	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 or IPv6</sys:String>

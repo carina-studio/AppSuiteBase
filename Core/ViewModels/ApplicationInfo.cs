@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -112,8 +113,8 @@ namespace CarinaStudio.AppSuite.ViewModels
         {
             try
             {
-                var srcFileName = Path.Combine(this.Application.RootPrivateDirectoryPath, "Log", "log.txt");
-                File.Copy(srcFileName, outputFileName, true);
+                var srcDirectory = Path.Combine(this.Application.RootPrivateDirectoryPath, "Log");
+                ZipFile.CreateFromDirectory(srcDirectory, outputFileName, CompressionLevel.Optimal, false);
                 return true;
             }
             catch (Exception ex)
