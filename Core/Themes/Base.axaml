@@ -152,7 +152,7 @@
 		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Padding">20</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Title.Margin">0,0,0,5</Thickness>
-		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1</sys:TimeSpan>
+		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1.5</sys:TimeSpan>
 
 		<!-- StatusBar -->
 		<Color x:Key="Color/StatusBar.Background.Inactive">#ffffff</Color>
