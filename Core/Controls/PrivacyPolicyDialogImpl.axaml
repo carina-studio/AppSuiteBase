@@ -1,0 +1,41 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="CarinaStudio.AppSuite.Controls.PrivacyPolicyDialogImpl"
+		Classes="Dialog"
+		SizeToContent="WidthAndHeight"
+        Title="{DynamicResource String/PrivacyPolicyDialog.Title}">
+
+	<DockPanel>
+
+		<!-- Control buttons -->
+		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
+			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Agree}" Content="{DynamicResource String/Common.Agree}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Decline}" Content="{DynamicResource String/Common.Decline}"/>
+			</StackPanel>
+		</Border>
+
+		<!-- Content -->
+		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,Auto">
+
+			<!-- Icon -->
+			<Border Height="{DynamicResource Double/MessageDialog.Icon.Size}" Margin="{DynamicResource Thickness/MessageDialog.Icon.Margin}" Width="{DynamicResource Double/MessageDialog.Icon.Size}">
+				<Image Classes="Icon" Source="{DynamicResource Image/Icon.Information.Colored}"/>
+			</Border>
+			
+			<!-- Message -->
+			<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+				<TextBlock Text="{Binding $parent[Window].Message1}"/>
+				<controls:LinkTextBlock Text="{DynamicResource String/PrivacyPolicyDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
+				<TextBlock Text="{Binding $parent[Window].Message2}"/>
+			</StackPanel>
+			
+		</Grid>
+		
+	</DockPanel>
+	
+</Window>

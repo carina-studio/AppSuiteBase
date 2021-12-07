@@ -116,6 +116,14 @@
 	<!-- IPAddressTextBox -->
 	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 or IPv6</sys:String>
 
+	<!-- PrivacyPolicyDialog -->
+	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Section1">You must read and agree the</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Section2">before you start using {0}.</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Updated.Section1">You must read and agree the updated</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Updated.Section2">before you start using {0}.</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.PrivacyPolicy">《Privacy Policy》</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.Title">Privacy Policy</sys:String>
+
 	<!-- RegexTextBox -->
 	<sys:String x:Key="String/RegexTextBox.Watermark">Regular Expression</sys:String>
 

@@ -117,6 +117,14 @@
 	<!-- IPAddressTextBox -->
 	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 或 IPv6</sys:String>
 
+	<!-- PrivacyPolicyDialog -->
+	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Section1">在您使用 {0} 之前，您必須閱讀且同意</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Section2">。</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Updated.Section1">在您使用 {0} 之前，您必須閱讀且同意新的</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Updated.Section2">。</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.PrivacyPolicy">《隱私權政策》</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.Title">隱私權政策</sys:String>
+
 	<!-- RegexTextBox -->
 	<sys:String x:Key="String/RegexTextBox.Watermark">正規表示式</sys:String>
 

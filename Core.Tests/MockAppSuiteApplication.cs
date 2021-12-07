@@ -38,6 +38,11 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public virtual void AgreePrivacyPolicy()
+        { }
+
+
+        /// <inheritdoc/>
         public virtual void AgreeUserAgreement()
         { }
 
@@ -145,6 +150,14 @@ namespace CarinaStudio.AppSuite
         public virtual bool IsDebugMode { get; } = true;
 
 
+        /// <inheritdoc/>
+        public virtual bool IsPrivacyPolicyAgreed { get; } = false;
+
+
+        /// <inheritdoc/>
+        public virtual bool IsPrivacyPolicyAgreedBefore { get; } = false;
+
+
         /// <summary>
         /// Check whether restarting all main windows is needed or not.
         /// </summary>
@@ -239,6 +252,10 @@ namespace CarinaStudio.AppSuite
         /// Get persistent state.
         /// </summary>
         public ISettings PersistentState { get; } = new MemorySettings();
+
+
+        /// <inheritdoc/>
+        public virtual Version? PrivacyPolicyVersion { get; } = null;
 
 
         /// <summary>

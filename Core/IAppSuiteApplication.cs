@@ -11,6 +11,12 @@ namespace CarinaStudio.AppSuite
     public interface IAppSuiteApplication : IAvaloniaApplication
     {
         /// <summary>
+        /// Called when user agree the Privacy Policy.
+        /// </summary>
+        void AgreePrivacyPolicy();
+
+
+        /// <summary>
         /// Called when user agree the User Agreement.
         /// </summary>
         void AgreeUserAgreement();
@@ -51,6 +57,18 @@ namespace CarinaStudio.AppSuite
         /// Check whether application is running in debug mode or not.
         /// </summary>
         bool IsDebugMode { get; }
+
+
+        /// <summary>
+        /// Check whether the current Privacy Policy has been agreed by user or not.
+        /// </summary>
+        bool IsPrivacyPolicyAgreed { get; }
+
+
+        /// <summary>
+        /// Check whether the Privacy Policy has been agreed by user before or not.
+        /// </summary>
+        bool IsPrivacyPolicyAgreedBefore { get; }
 
 
         /// <summary>
@@ -119,6 +137,12 @@ namespace CarinaStudio.AppSuite
         /// Get URI of application package manifest.
         /// </summary>
         Uri? PackageManifestUri { get; }
+
+
+        /// <summary>
+        /// Get version of the Privacy Policy. Null means there is no Privacy Policy.
+        /// </summary>
+        Version? PrivacyPolicyVersion { get; }
 
 
         /// <summary>
@@ -191,7 +215,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Get version of the User Agreement.
+        /// Get version of the User Agreement. Null means there is no User Agreement.
         /// </summary>
         Version? UserAgreementVersion { get; }
     }

@@ -113,6 +113,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Static fields.
+        static readonly SettingKey<string> AgreedPrivacyPolicyVersionKey = new SettingKey<string>("AgreedPrivacyPolicyVersion", "");
         static readonly SettingKey<string> AgreedUserAgreementVersionKey = new SettingKey<string>("AgreedUserAgreementVersion", "");
         static double CachedCustomScreenScaleFactor = double.NaN;
         static readonly string? CustomScreenScaleFactorFilePath = Global.Run(() =>
@@ -229,6 +230,37 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public void AgreePrivacyPolicy()
+        {
+            // check state
+            this.VerifyAccess();
+            if (this.IsPrivacyPolicyAgreed)
+                return;
+            if (this.IsShutdownStarted)
+            {
+                this.Logger.LogWarning("Cannot change Privacy Policy state when shutting down");
+                return;
+            }
+
+            this.Logger.LogWarning("User agreed the Privacy Policy");
+
+            // update state and save
+            this.PrivacyPolicyVersion?.Let(version =>
+            {
+                this.PersistentState.SetValue<string>(AgreedPrivacyPolicyVersionKey, version.ToString());
+                _ = this.SavePersistentStateAsync();
+            });
+            this.IsPrivacyPolicyAgreed = true;
+            this.OnPropertyChanged(nameof(IsPrivacyPolicyAgreed));
+            if (!this.IsPrivacyPolicyAgreedBefore)
+            {
+                this.IsPrivacyPolicyAgreedBefore = true;
+                this.OnPropertyChanged(nameof(IsPrivacyPolicyAgreedBefore));
+            }
+        }
+
+
+        /// <inheritdoc/>
         public void AgreeUserAgreement()
         {
             // check state
@@ -256,13 +288,6 @@ namespace CarinaStudio.AppSuite
                 this.IsUserAgreementAgreedBefore = true;
                 this.OnPropertyChanged(nameof(IsUserAgreementAgreedBefore));
             }
-
-            // notify
-            this.SynchronizationContext.Post(() =>
-            {
-                if (this.IsUserAgreementAgreed)
-                    this.OnUserAgreementAgreed();
-            });
         }
 
 
@@ -612,6 +637,14 @@ namespace CarinaStudio.AppSuite
         protected virtual bool IsMultipleProcessesSupported { get; } = false;
 
 
+        /// <inheritdoc/>
+        public bool IsPrivacyPolicyAgreed { get; private set; }
+
+
+        /// <inheritdoc/>
+        public bool IsPrivacyPolicyAgreedBefore { get; private set; }
+
+
         /// <summary>
         /// Check whether restarting all main windows is needed or not.
         /// </summary>
@@ -695,7 +728,46 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogError(ex, $"Failed to load persistent state from '{this.persistentStateFilePath}'");
             }
 
-            // check agreement state
+            // check privacy policy state
+            this.PrivacyPolicyVersion?.Let(version =>
+            {
+                var agreedVersion = this.persistentState.GetValueOrDefault(AgreedPrivacyPolicyVersionKey).Let(it =>
+                {
+                    if (Version.TryParse(it, out var v))
+                        return v;
+                    return null;
+                });
+                bool isAgreed = (agreedVersion != null && agreedVersion >= version);
+                if (agreedVersion != null)
+                {
+                    if (!this.IsPrivacyPolicyAgreedBefore)
+                    {
+                        this.IsPrivacyPolicyAgreedBefore = true;
+                        this.OnPropertyChanged(nameof(IsPrivacyPolicyAgreedBefore));
+                    }
+                }
+                else
+                {
+                    if (this.IsPrivacyPolicyAgreedBefore)
+                    {
+                        this.IsPrivacyPolicyAgreedBefore = false;
+                        this.OnPropertyChanged(nameof(IsPrivacyPolicyAgreedBefore));
+                    }
+                }
+                if (isAgreed)
+                    this.Logger.LogDebug("Current Privacy Policy has been agreed");
+                else if (this.IsPrivacyPolicyAgreedBefore)
+                    this.Logger.LogWarning("Privacy Policy has been updated and is not agreed yet");
+                else
+                    this.Logger.LogWarning("Privacy Policy is not agreed yet");
+                if (isAgreed != this.IsPrivacyPolicyAgreed)
+                {
+                    this.IsPrivacyPolicyAgreed = isAgreed;
+                    this.OnPropertyChanged(nameof(IsPrivacyPolicyAgreed));
+                }
+            });
+
+            // check user agreement state
             this.UserAgreementVersion?.Let(version =>
             {
                 var agreedVersion = this.persistentState.GetValueOrDefault(AgreedUserAgreementVersionKey).Let(it =>
@@ -941,6 +1013,14 @@ namespace CarinaStudio.AppSuite
                         this.OnPropertyChanged(nameof(IsShutdownStarted));
                     }
                 };
+            }
+
+            // check privacy policy version
+            if (this.PrivacyPolicyVersion == null)
+            {
+                this.Logger.LogWarning("No Privacy Policy");
+                this.IsPrivacyPolicyAgreed = true;
+                this.OnPropertyChanged(nameof(IsPrivacyPolicyAgreed));
             }
 
             // check user agreement version
@@ -1366,13 +1446,6 @@ namespace CarinaStudio.AppSuite
         { }
 
 
-        /// <summary>
-        /// Called when user agreed the current User Agreement.
-        /// </summary>
-        protected virtual void OnUserAgreementAgreed()
-        { }
-
-
 #if WINDOWS10_0_17763_0_OR_GREATER
         // Called when Windows UI color changed.
         void OnWindowsUIColorValueChanged(UISettings sender, object result)
@@ -1428,6 +1501,10 @@ namespace CarinaStudio.AppSuite
         /// Get version of <see cref="PersistentState"/>.
         /// </summary>
         protected virtual int PersistentStateVersion { get => 1; }
+
+
+        /// <inheritdoc/>
+        public abstract Version? PrivacyPolicyVersion { get; }
 
 
         /// <summary>

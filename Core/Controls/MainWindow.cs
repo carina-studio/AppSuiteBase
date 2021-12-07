@@ -204,19 +204,22 @@ namespace CarinaStudio.AppSuite.Controls
         /// <param name="e">Event data.</param>
         protected virtual void OnApplicationPropertyChanged(PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(IAppSuiteApplication.IsRestartingMainWindowsNeeded))
+            switch (e.PropertyName)
             {
-                if (this.Application.IsRestartingMainWindowsNeeded)
-                    this.restartingMainWindowsAction.Reschedule(RestartingMainWindowsDelay);
-                else
-                    this.restartingMainWindowsAction.Cancel();
-            }
-            else if (e.PropertyName == nameof(IAppSuiteApplication.IsUserAgreementAgreed))
-                (this.Content as Control)?.Let(content => content.IsEnabled = this.Application.IsUserAgreementAgreed);
-            else if (e.PropertyName == nameof(IAppSuiteApplication.UpdateInfo))
-            {
-                if (this.AreInitialDialogsClosed && this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate))
-                    this.SynchronizationContext.Post(() => _ = this.NotifyApplicationUpdateFound());
+                case nameof(IAppSuiteApplication.IsPrivacyPolicyAgreed):
+                case nameof(IAppSuiteApplication.IsUserAgreementAgreed):
+                    (this.Content as Control)?.Let(content => content.IsEnabled = this.Application.IsPrivacyPolicyAgreed && this.Application.IsUserAgreementAgreed);
+                    break;
+                case nameof(IAppSuiteApplication.IsRestartingMainWindowsNeeded):
+                    if (this.Application.IsRestartingMainWindowsNeeded)
+                        this.restartingMainWindowsAction.Reschedule(RestartingMainWindowsDelay);
+                    else
+                        this.restartingMainWindowsAction.Cancel();
+                    break;
+                case nameof(IAppSuiteApplication.UpdateInfo):
+                    if (this.AreInitialDialogsClosed && this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate))
+                        this.SynchronizationContext.Post(() => _ = this.NotifyApplicationUpdateFound());
+                    break;
             }
         }
 
@@ -324,7 +327,7 @@ namespace CarinaStudio.AppSuite.Controls
             var property = change.Property;
             if (property == ContentProperty)
             {
-                if (!this.Application.IsUserAgreementAgreed)
+                if (!this.Application.IsPrivacyPolicyAgreed || !this.Application.IsUserAgreementAgreed)
                     (change.NewValue.Value as Control)?.Let(content => content.IsEnabled = false);
             }
             else if (property == DataContextProperty)
@@ -424,6 +427,21 @@ namespace CarinaStudio.AppSuite.Controls
                 if (!await new UserAgreementDialog(appInfo).ShowDialog(this))
                 {
                     this.Logger.LogWarning("User decline the current User Agreement");
+                    this.Close();
+                }
+                this.isShowingInitialDialogs = false;
+                return;
+            }
+
+            // show privacy policy
+            if (!this.Application.IsPrivacyPolicyAgreed)
+            {
+                this.Logger.LogDebug("Show Privacy Policy dialog");
+                using var appInfo = this.OnCreateApplicationInfo();
+                this.isShowingInitialDialogs = true;
+                if (!await new PrivacyPolicyDialog(appInfo).ShowDialog(this))
+                {
+                    this.Logger.LogWarning("User decline the current Privacy Policy");
                     this.Close();
                 }
                 this.isShowingInitialDialogs = false;
