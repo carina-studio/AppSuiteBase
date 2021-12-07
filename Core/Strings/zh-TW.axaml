@@ -23,7 +23,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">匯出應用程式日誌…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">無法匯出應用程式日誌。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET 版本：</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">GitHub 上的原始程式碼</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">GitHub 上的專案頁面</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">已安裝：</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作業系統：</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">《隱私權政策》</sys:String>

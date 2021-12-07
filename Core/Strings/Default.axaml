@@ -25,7 +25,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">Export application logs…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">Failed to export application logs.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET version:</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">Source code on GitHub</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">Project page on GitHub</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">Installed:</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">Operating system:</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">《Privacy Policy》</sys:String>
