@@ -1,6 +1,6 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:sys="using:System"
+		xmlns:sys="clr-namespace:System;assembly=System.Runtime"
 		xmlns:aConverters="using:Avalonia.Data.Converters"
 		xmlns:appSuite="using:CarinaStudio.AppSuite"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
@@ -129,9 +129,11 @@
 		<SolidColorBrush x:Key="Brush/LinkTextBlock.Foreground.Pressed" Color="{DynamicResource Color/LinkTextBlock.Foreground.Pressed}"/>
 
 		<!-- ListBox -->
-		<Thickness x:Key="Thickness/ListBox.Padding">0,5,0,5</Thickness>
+		<Thickness x:Key="Thickness/ListBox.Padding">5</Thickness>
 
 		<!-- ListBoxItem -->
+		<CornerRadius x:Key="CornerRadius/ListBoxItem">3</CornerRadius>
+		<Thickness x:Key="Thickness/ListBoxItem.Margin">0,1,0,1</Thickness>
 		<Thickness x:Key="Thickness/ListBoxItem.Padding">6</Thickness>
 
 		<!-- MainWindow -->
@@ -283,9 +285,6 @@
 	<Style Selector="Border.AddTabItemButton:pointerover">
 		<Setter Property="Opacity" Value="1"/>
 	</Style>
-
-	<!-- Button -->
-	
 
 	<!-- BrowseButton -->
 	<Style Selector="Button.BrowseButton">
@@ -542,6 +541,8 @@
 
 	<!-- ListBoxItem -->
 	<Style Selector="ListBoxItem">
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ListBoxItem}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ListBoxItem.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ListBoxItem.Padding}"/>
 	</Style>
 

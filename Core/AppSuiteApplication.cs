@@ -1,9 +1,12 @@
 ﻿using Avalonia;
+using Avalonia.Animation;
+using Avalonia.Animation.Easings;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.Styling;
+using CarinaStudio.AppSuite.Animation;
 using CarinaStudio.AutoUpdate;
 using CarinaStudio.AutoUpdate.Resolvers;
 using CarinaStudio.Collections;
@@ -135,6 +138,7 @@ namespace CarinaStudio.AppSuite
         Avalonia.Controls.ResourceDictionary? accentColorResources;
         ScheduledAction? checkUpdateInfoAction;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
+        readonly Styles extraStyles = new Styles();
         HardwareInfo? hardwareInfo;
         bool isRestartAsAdminRequested;
         bool isRestartingMainWindowsRequested;
@@ -575,6 +579,36 @@ namespace CarinaStudio.AppSuite
         /// Default port at localhost to receive log output.
         /// </summary>
         public virtual int DefaultLogOutputTargetPort { get; } = 0;
+
+
+        // Define extra styles by code.
+        void DefineExtraStyles()
+        {
+            // check state
+            if (this.extraStyles.IsNotEmpty())
+                return;
+
+            // get resources
+            var durationFast = this.TryFindResource<TimeSpan>("TimeSpan/Animation.Fast", out var timeSpanRes) ? timeSpanRes.GetValueOrDefault() : new TimeSpan();
+            var easing = this.TryFindResource<Easing>("Easing/Animation", out var easingRes) ? easingRes : null;
+
+            // define styles for ListBoxItem
+            this.extraStyles.Add(new Style(s => s.OfType(typeof(Avalonia.Controls.ListBoxItem)).Template().Name("PART_ContentPresenter")).Also(style =>
+            {
+                style.Setters.Add(new Setter(Animatable.TransitionsProperty, new Transitions().Also(transitions =>
+                {
+                    transitions.Add(new SolidColorBrushTransition()
+                    {
+                        Duration = durationFast,
+                        Easing = easing,
+                        Property = Avalonia.Controls.Primitives.TemplatedControl.BackgroundProperty,
+                    });
+                })));
+            }));
+
+            // add to top styles
+            this.Styles.Add(this.extraStyles);
+        }
 
 
         /// <inheritdoc/>
@@ -2178,6 +2212,9 @@ namespace CarinaStudio.AppSuite
             }
             else if (!this.Styles.Contains(this.styles))
                 this.Styles.Add(this.styles);
+
+            // define extra styles
+            this.DefineExtraStyles();
 
             // update accent color
             if (this.Styles.TryGetResource("Color/Accent", out var res) && res is Color accentColor)
