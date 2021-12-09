@@ -54,6 +54,36 @@
 
 				<ScrollViewer HorizontalAlignment="Stretch">
 					<StackPanel Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalAlignment="Stretch" Orientation="Vertical">
+
+						<StackPanel.ContextMenu>
+							<ContextMenu>
+								<MenuItem Header="Item" InputGesture="Ctrl+Z">
+									<MenuItem.Icon>
+										<Image Classes="MenuItem_Icon" Source="{DynamicResource Image/Icon.OK}"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<Separator/>
+								<MenuItem Header="Item">
+									<MenuItem.Icon>
+										<Border Background="Red" Height="30" Width="20"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Item" IsEnabled="False">
+									<MenuItem.Icon>
+										<Image Classes="MenuItem_Icon" Source="{DynamicResource Image/Icon.Update}"/>
+									</MenuItem.Icon>
+								</MenuItem>
+								<MenuItem Header="Item">
+									<MenuItem Header=" Sub Item"/>
+									<MenuItem Header=" Sub Item"/>
+									<Separator/>
+									<MenuItem Header=" Sub Item"/>
+									<MenuItem Header=" Sub Item"/>
+								</MenuItem>
+								<MenuItem Header="Item"/>
+							</ContextMenu>
+						</StackPanel.ContextMenu>
+						
 						<TextBlock Text="{DynamicResource String/ApplicationOptions.LogOutputTargetPort}" Margin="5,5,5,0"/>
 						<NumericUpDown HorizontalAlignment="Left" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
 

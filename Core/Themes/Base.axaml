@@ -41,6 +41,9 @@
 		<!-- BrowseButton -->
 		<Thickness x:Key="Thickness/BrowseButton.Margin">5,0,0,0</Thickness>
 
+		<!-- ContextMenu -->
+		<Thickness x:Key="Thickness/ContextMenu.Padding">4,0,4,0</Thickness>
+
 		<!-- Control -->
 		<Thickness x:Key="Thickness/Control.Border">0,0,0,1</Thickness>
 		<Thickness x:Key="Thickness/Control.Border.Focused">0,0,0,2</Thickness>
@@ -128,6 +131,16 @@
 
 		<!-- MainWindow -->
 		<sys:TimeSpan x:Key="TimeSpan/MainWindow.ContentPaddingTransition">0:0:0.8</sys:TimeSpan>
+
+		<!-- MenuFlyout -->
+		<Thickness x:Key="MenuFlyoutPresenterThemePadding">4,0,4,0</Thickness>
+		<Thickness x:Key="MenuFlyoutScrollerMargin">0,4,0,4</Thickness>
+		<Thickness x:Key="Thickness/MenuFlyout.Separator.Margin">0,3,0,3</Thickness>
+
+		<!-- MenuItem -->
+		<CornerRadius x:Key="CornerRadius/MenuItem">3</CornerRadius>
+		<Thickness x:Key="Thickness/MenuItem.Padding">6</Thickness>
+		<sys:TimeSpan x:Key="TimeSpan/MenuItem.Animation">0:0:0.3</sys:TimeSpan>
 
 		<!-- MessageDialog -->
 		<sys:Double x:Key="Double/MessageDialog.Icon.Size">45</sys:Double>
@@ -284,6 +297,11 @@
 	<!-- ComboBox -->
 	<Style Selector="ComboBox">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
+	</Style>
+
+	<!-- ContextMenu -->
+	<Style Selector="ContextMenu">
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ContextMenu.Padding}"/>
 	</Style>
 
 	<!-- DatePicker -->
@@ -539,6 +557,17 @@
 	<Style Selector="Image.MenuItem_Icon:disabled">
 		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
+	<Style Selector="MenuItem">
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/MenuItem}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/MenuItem.Padding}"/>
+	</Style>
+	<Style Selector="MenuItem /template/ Border#PART_LayoutRoot">
+		<Setter Property="Transitions">
+			<Transitions>
+				<BrushTransition Property="Background" Duration="{StaticResource TimeSpan/MenuItem.Animation}" Easing="ExponentialEaseOut"/>
+			</Transitions>
+		</Setter>
+	</Style>
 	<Style Selector="Panel.MenuItem_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
@@ -552,6 +581,10 @@
 	<!-- Separator -->
 	<Style Selector="Separator">
 		<Setter Property="Background" Value="{StaticResource Brush/Separator.Background}"/>
+	</Style>
+	<Style Selector="MenuItem > Separator, ContextMenu > Separator">
+		<Setter Property="Background" Value="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" />
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MenuFlyout.Separator.Margin}"/>
 	</Style>
 
 	<!-- StatusBar -->
