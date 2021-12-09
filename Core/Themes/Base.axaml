@@ -257,6 +257,11 @@
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="Opacity" Value="0.7"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/AddTabItemButton.Padding}"/>
+		<Setter Property="Transitions">
+			<Transitions>
+				<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/TabItem.Header.Animation.Fast}" Easing="ExponentialEaseOut"/>
+			</Transitions>
+		</Setter>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/AddTabItemButton.Size}"/>
 	</Style>
@@ -453,6 +458,11 @@
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Stretch" Value="Uniform"/>
 		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="Transitions">
+			<Transitions>
+				<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Icon.Animation}" Easing="ExponentialEaseOut"/>
+			</Transitions>
+		</Setter>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="Image.Icon:disabled">

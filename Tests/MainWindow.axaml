@@ -111,14 +111,14 @@
 								<Button Classes="ToolBar_Button">
 									<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
 								</Button>
-								<Button Classes="ToolBar_Button">
+								<Button Classes="ToolBar_Button" IsEnabled="{Binding #toolBarToggleButton.IsChecked}">
 									<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
 								</Button>
 
 								<TextBox Classes="ToolBar_TextBox" Width="50"/>
 								<TextBox Classes="ToolBar_TextBox" Width="50"/>
 
-								<ToggleButton Classes="ToolBar_ToggleButton">
+								<ToggleButton Name="toolBarToggleButton" Classes="ToolBar_ToggleButton">
 									<Image Classes="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
 								</ToggleButton>
 
