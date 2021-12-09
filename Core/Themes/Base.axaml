@@ -103,6 +103,8 @@
 		<SolidColorBrush x:Key="Brush/Icon.OK" Color="{DynamicResource Color/Icon.OK}"/>
 		<SolidColorBrush x:Key="Brush/Icon.Question" Color="{DynamicResource Color/Icon.Question}"/>
 		<SolidColorBrush x:Key="Brush/Icon.Warning" Color="{DynamicResource Color/Icon.Warning}"/>
+		<sys:Double x:Key="Double/Icon.Opacity.Disabled">0.3</sys:Double>
+		<sys:TimeSpan x:Key="TimeSpan/Icon.Animation">0:0:0.3</sys:TimeSpan>
 
 		<!-- InPlaceAction -->
 		<sys:Double x:Key="Double/InPlaceAction.IconSize">10</sys:Double>
@@ -208,8 +210,8 @@
 		<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Margin">1,2,2,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Padding">10</Thickness>
-		<sys:TimeSpan x:Key="TimeSpan/TabItem.Header.AnimationDuration">0:0:0.5</sys:TimeSpan>
-		<sys:TimeSpan x:Key="TimeSpan/TabItem.Header.AnimationDuration.Fast">0:0:0.3</sys:TimeSpan>
+		<sys:TimeSpan x:Key="TimeSpan/TabItem.Header.Animation">0:0:0.5</sys:TimeSpan>
+		<sys:TimeSpan x:Key="TimeSpan/TabItem.Header.Animation.Fast">0:0:0.3</sys:TimeSpan>
 
 		<!-- TextBox -->
 		<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>
@@ -444,7 +446,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="DrawingPresenter.Icon:disabled">
-		<Setter Property="Opacity" Value="0.3"/>
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="Image.Icon">
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -454,7 +456,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="Image.Icon:disabled">
-		<Setter Property="Opacity" Value="0.3"/>
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 
 	<!-- InPlaceAction -->
@@ -524,6 +526,9 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
 	</Style>
+	<Style Selector="Image.MenuItem_Icon:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
 	<Style Selector="Panel.MenuItem_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
@@ -588,8 +593,16 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin}"/>
 		<Setter Property="Stretch" Value="Uniform"/>
 		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="Transitions">
+			<Transitions>
+				<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Icon.Animation}" Easing="ExponentialEaseOut"/>
+			</Transitions>
+		</Setter>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+	</Style>
+	<Style Selector="Image.StatusBar_Icon:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="Panel.StatusBar_DropDownIcon">
 		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
@@ -702,11 +715,11 @@
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Content.Height}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Button.Margin}"/>
-		<Setter Property="Opacity" Value="0.3"/>
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/TabItem.Header.Button.Padding}"/>
 		<Setter Property="Transitions">
 			<Transitions>
-				<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/TabItem.Header.AnimationDuration.Fast}" Easing="ExponentialEaseOut"/>
+				<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/TabItem.Header.Animation.Fast}" Easing="ExponentialEaseOut"/>
 			</Transitions>
 		</Setter>
 		<Setter Property="VerticalAlignment" Value="Center"/>
@@ -724,14 +737,14 @@
 		<Setter Property="StretchDirection" Value="Both"/>
 		<Setter Property="Transitions">
 			<Transitions>
-				<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/TabItem.Header.AnimationDuration.Fast}" Easing="ExponentialEaseOut"/>
+				<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Icon.Animation}" Easing="ExponentialEaseOut"/>
 			</Transitions>
 		</Setter>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
 	</Style>
 	<Style Selector="Image.TabItem_Icon:disabled">
-		<Setter Property="Opacity" Value="0.3"/>
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="Panel.TabItem_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
@@ -752,14 +765,14 @@
 						<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsPointerOver, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
 							<Border.Transitions>
 								<Transitions>
-									<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/TabItem.Header.AnimationDuration.Fast}" Easing="ExponentialEaseOut"/>
+									<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/TabItem.Header.Animation.Fast}" Easing="ExponentialEaseOut"/>
 								</Transitions>
 							</Border.Transitions>
 						</Border>
 						<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
 							<Border.Transitions>
 								<Transitions>
-									<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/TabItem.Header.AnimationDuration}" Easing="ExponentialEaseOut"/>
+									<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/TabItem.Header.Animation}" Easing="ExponentialEaseOut"/>
 								</Transitions>
 							</Border.Transitions>
 							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Height="{DynamicResource Double/TabItem.Header.ColorBar.Height}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}" VerticalAlignment="Top">
@@ -767,14 +780,14 @@
 									<ScaleTransform ScaleX="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
 										<ScaleTransform.Transitions>
 											<Transitions>
-												<DoubleTransition Property="ScaleX" Duration="{StaticResource TimeSpan/TabItem.Header.AnimationDuration}" Easing="ExponentialEaseOut"/>
+												<DoubleTransition Property="ScaleX" Duration="{StaticResource TimeSpan/TabItem.Header.Animation}" Easing="ExponentialEaseOut"/>
 											</Transitions>
 										</ScaleTransform.Transitions>
 									</ScaleTransform>
 								</Border.RenderTransform>
 								<Border.Transitions>
 									<Transitions>
-										<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/TabItem.Header.AnimationDuration}" Easing="ExponentialEaseOut"/>
+										<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/TabItem.Header.Animation}" Easing="ExponentialEaseOut"/>
 									</Transitions>
 								</Border.Transitions>
 							</Border>
