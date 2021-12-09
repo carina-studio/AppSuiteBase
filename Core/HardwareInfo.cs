@@ -2,7 +2,10 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Management;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace CarinaStudio.AppSuite
 {
@@ -27,8 +30,46 @@ namespace CarinaStudio.AppSuite
             this.checkGraphicsCardAction = new ScheduledAction(this.hwCheckingSyncContext, this.CheckGraphicsCard);
             this.logger = app.LoggerFactory.CreateLogger(nameof(HardwareInfo));
 
-            // start checking
+            // start checking graphics card
             this.CheckGraphicsCard();
+
+            // get physical memory
+            if (Platform.IsWindows)
+            {
+                //
+            }
+            else if (Platform.IsLinux)
+            {
+                try
+                {
+                    using var reader = new StreamReader("/proc/meminfo", Encoding.UTF8);
+                    var regex = new Regex("^[\\s]*MemTotal\\:[\\s]*(?<Size>[\\d]+)[\\s]*(?<Unit>[\\w]+)", RegexOptions.IgnoreCase);
+                    var line = reader.ReadLine();
+                    while (line != null)
+                    {
+                        var match = regex.Match(line);
+                        if (match.Success && long.TryParse(match.Groups["Size"].Value, out var size))
+                        {
+                            this.TotalPhysicalMemory = match.Groups["Unit"].Value.ToLower() switch
+                            {
+                                "kb" => size << 10,
+                                _ => (long?)null,
+                            };
+                            break;
+                        }
+                    }
+                    if (this.TotalPhysicalMemory == null)
+                        this.logger.LogWarning("Unable to get total physical memory on Linux");
+                }
+                catch (Exception ex)
+                {
+                    this.logger.LogError(ex, "Unable to get total physical memory on Linux");
+                }
+            }
+            else if (Platform.IsMacOS)
+            {
+                //
+            }
 
             // start monitoring hardware change
             if (Platform.IsWindows)
@@ -93,5 +134,11 @@ namespace CarinaStudio.AppSuite
         /// Raised when property changed.
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
+
+
+        /// <summary>
+        /// Get size of total physical memory on device in bytes.
+        /// </summary>
+        public long? TotalPhysicalMemory{ get; }
     }
 }
