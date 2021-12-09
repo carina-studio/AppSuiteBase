@@ -34,42 +34,7 @@ namespace CarinaStudio.AppSuite
             this.CheckGraphicsCard();
 
             // get physical memory
-            if (Platform.IsWindows)
-            {
-                //
-            }
-            else if (Platform.IsLinux)
-            {
-                try
-                {
-                    using var reader = new StreamReader("/proc/meminfo", Encoding.UTF8);
-                    var regex = new Regex("^[\\s]*MemTotal\\:[\\s]*(?<Size>[\\d]+)[\\s]*(?<Unit>[\\w]+)", RegexOptions.IgnoreCase);
-                    var line = reader.ReadLine();
-                    while (line != null)
-                    {
-                        var match = regex.Match(line);
-                        if (match.Success && long.TryParse(match.Groups["Size"].Value, out var size))
-                        {
-                            this.TotalPhysicalMemory = match.Groups["Unit"].Value.ToLower() switch
-                            {
-                                "kb" => size << 10,
-                                _ => (long?)null,
-                            };
-                            break;
-                        }
-                    }
-                    if (this.TotalPhysicalMemory == null)
-                        this.logger.LogWarning("Unable to get total physical memory on Linux");
-                }
-                catch (Exception ex)
-                {
-                    this.logger.LogError(ex, "Unable to get total physical memory on Linux");
-                }
-            }
-            else if (Platform.IsMacOS)
-            {
-                //
-            }
+            this.CheckPhysicalMemory();
 
             // start monitoring hardware change
             if (Platform.IsWindows)
@@ -124,6 +89,76 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        // Check physical memory.
+        void CheckPhysicalMemory()
+        {
+            var physicalMemorySize = (long?)null;
+            if (Platform.IsWindows)
+            {
+#pragma warning disable CA1416
+                try
+                {
+                    using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PhysicalMemory");
+                    var size = 0L;
+                    foreach (var obj in searcher.Get())
+                    {
+                        obj["Capacity"]?.ToString()?.Let(it =>
+                        {
+                            if (long.TryParse(it, out var partialSize) && partialSize > 0)
+                                size += partialSize;
+                        });
+                    }
+                    if (size > 0)
+                        physicalMemorySize = size;
+                    else
+                        this.logger.LogWarning("Unable to get total physical memory on Windows");
+                }
+                catch (Exception ex)
+                {
+                    this.logger.LogError(ex, "Unable to get total physical memory on Windows");
+                }
+#pragma warning restore CA1416
+            }
+            else if (Platform.IsLinux)
+            {
+                try
+                {
+                    using var reader = new StreamReader("/proc/meminfo", Encoding.UTF8);
+                    var regex = new Regex("^[\\s]*MemTotal\\:[\\s]*(?<Size>[\\d]+)[\\s]*(?<Unit>[\\w]+)", RegexOptions.IgnoreCase);
+                    var line = reader.ReadLine();
+                    while (line != null)
+                    {
+                        var match = regex.Match(line);
+                        if (match.Success && long.TryParse(match.Groups["Size"].Value, out var size))
+                        {
+                            physicalMemorySize = match.Groups["Unit"].Value.ToLower() switch
+                            {
+                                "kb" => size << 10,
+                                _ => (long?)null,
+                            };
+                            break;
+                        }
+                    }
+                    if (physicalMemorySize == null)
+                        this.logger.LogWarning("Unable to get total physical memory on Linux");
+                }
+                catch (Exception ex)
+                {
+                    this.logger.LogError(ex, "Unable to get total physical memory on Linux");
+                }
+            }
+            else if (Platform.IsMacOS)
+            {
+                //
+            }
+            if (this.TotalPhysicalMemory != physicalMemorySize)
+            {
+                this.TotalPhysicalMemory = physicalMemorySize;
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalPhysicalMemory)));
+            }
+        }
+
+
         /// <summary>
         /// Check whether at least one dedicated graphics has been attached to device or not.
         /// </summary>
@@ -139,6 +174,6 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get size of total physical memory on device in bytes.
         /// </summary>
-        public long? TotalPhysicalMemory{ get; }
+        public long? TotalPhysicalMemory{ get; private set; }
     }
 }
