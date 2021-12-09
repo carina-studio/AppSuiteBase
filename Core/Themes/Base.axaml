@@ -512,6 +512,15 @@
 		<Setter Property="Height" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
 	</Style>
+	<Style Selector="Image.MenuItem_Icon">
+		<Setter Property="Height" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
+	</Style>
 	<Style Selector="Panel.MenuItem_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
@@ -568,6 +577,16 @@
 	<Style Selector="Button.StatusBar_Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
 		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
+	</Style>
+	<Style Selector="Image.StatusBar_Icon">
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 	</Style>
 	<Style Selector="Panel.StatusBar_DropDownIcon">
 		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
@@ -687,6 +706,16 @@
 	</Style>
 	<Style Selector="Button.TabItem_Button:pointerover">
 		<Setter Property="Opacity" Value="1"/>
+	</Style>
+	<Style Selector="Image.TabItem_Icon">
+		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Icon.Margin}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
 	</Style>
 	<Style Selector="Panel.TabItem_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>

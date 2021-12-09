@@ -21,11 +21,11 @@
 				<TextBlock Classes="StatusBar_TextBlock" Text="{DynamicResource String/Common.Cancel}"/>
 
 				<Separator Classes="StatusBar_Separator"/>
-				<Border Classes="StatusBar_Icon">
-					<DrawingPresenter Classes="Icon">
+				<Image Classes="StatusBar_Icon">
+					<DrawingImage>
 						<GeometryDrawing Brush="{DynamicResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.Folder}"/>
-					</DrawingPresenter>
-				</Border>
+					</DrawingImage>
+				</Image>
 				<TextBlock Classes="StatusBar_TextBlock" Text="Test"/>
 
 				<Separator Classes="StatusBar_Separator"/>
@@ -44,12 +44,10 @@
 
 				<TabItem.Header>
 					<Grid ColumnDefinitions="Auto,*,Auto">
-						<Border Classes="TabItem_Icon">
-							<DrawingPresenter Classes="Icon" Drawing="{DynamicResource Drawing/Icon.File}"/>
-						</Border>
+						<Image Classes="TabItem_Icon" Source="{DynamicResource Image/Icon.File}"/>
 						<TextBlock Classes="TabItem_TextBlock" Grid.Column="1" Text="Item 1 Item 1 Item 1 Item 1 kkkkkkkkkkkkkkkkk"/>
 						<Button Classes="TabItem_Button" Grid.Column="2">
-							<DrawingPresenter Classes="Icon" Drawing="{StaticResource Drawing/Icon.Folder}"/>
+							<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
 						</Button>
 					</Grid>
 				</TabItem.Header>
@@ -160,7 +158,7 @@
 			<TabItem Classes="Empty">
 				<TabItem.Header>
 					<Border Classes="AddTabItemButton">
-						<DrawingPresenter Classes="Icon" Drawing="{DynamicResource Drawing/Icon.Add}"/>
+						<Image Classes="Icon" Source="{DynamicResource Image/Icon.Add}"/>
 					</Border>
 				</TabItem.Header>
 			</TabItem>
