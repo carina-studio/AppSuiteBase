@@ -56,9 +56,6 @@
 		<Thickness x:Key="Thickness/ComboBoxItem.Margin">0,1,0,1</Thickness>
 		<Thickness x:Key="Thickness/ComboBoxItem.Padding">6</Thickness>
 
-		<!-- ContextMenu -->
-		<Thickness x:Key="Thickness/ContextMenu.Padding">4,0,4,0</Thickness>
-
 		<!-- Control -->
 		<Thickness x:Key="Thickness/Control.Border">0,0,0,1</Thickness>
 		<Thickness x:Key="Thickness/Control.Border.Focused">0,0,0,2</Thickness>
@@ -148,9 +145,15 @@
 		<!-- MainWindow -->
 		<sys:TimeSpan x:Key="TimeSpan/MainWindow.ContentPaddingTransition">0:0:0.8</sys:TimeSpan>
 
+		<!-- Menu -->
+		<Color x:Key="Color/Menu.Background">#ffffff</Color>
+		<SolidColorBrush x:Key="Brush/Menu.Background" Color="{DynamicResource Color/Menu.Background}"/>
+		<Thickness x:Key="Thickness/Menu.MenuItem.Padding">5,3,5,3</Thickness>
+		<Thickness x:Key="Thickness/Menu.Padding">3</Thickness>
+
 		<!-- MenuFlyout -->
-		<Thickness x:Key="MenuFlyoutPresenterThemePadding">4,0,4,0</Thickness>
-		<Thickness x:Key="MenuFlyoutScrollerMargin">0,4,0,4</Thickness>
+		<Thickness x:Key="MenuFlyoutPresenterThemePadding">4</Thickness>
+		<Thickness x:Key="MenuFlyoutScrollerMargin">0</Thickness>
 		<Thickness x:Key="Thickness/MenuFlyout.Separator.Margin">0,3,0,3</Thickness>
 
 		<!-- MenuItem -->
@@ -317,11 +320,6 @@
 		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ComboBoxItem}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ComboBoxItem.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ComboBoxItem.Padding}"/>
-	</Style>
-
-	<!-- ContextMenu -->
-	<Style Selector="ContextMenu">
-		<Setter Property="Padding" Value="{DynamicResource Thickness/ContextMenu.Padding}"/>
 	</Style>
 
 	<!-- DatePicker -->
@@ -560,6 +558,13 @@
 		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ListBoxItem}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ListBoxItem.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ListBoxItem.Padding}"/>
+	</Style>
+
+	<!-- Menu -->
+	<Style Selector="Menu">
+		<Setter Property="Background" Value="{DynamicResource Brush/Menu.Background}"/>
+		<Setter Property="Height" Value="NaN"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Menu.Padding}"/>
 	</Style>
 
 	<!-- MenuItem -->

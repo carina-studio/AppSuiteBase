@@ -25,6 +25,9 @@
 		<Color x:Key="Color/LinkTextBlock.Foreground.PointerOver">#32aaff</Color>
 		<Color x:Key="Color/LinkTextBlock.Foreground.Pressed">#0077cc</Color>
 
+		<!-- Menu -->
+		<Color x:Key="Color/Menu.Background">#1e1e1e</Color>
+
 		<!-- Separator -->
 		<Color x:Key="Color/Separator.Background">#4fffffff</Color>
 

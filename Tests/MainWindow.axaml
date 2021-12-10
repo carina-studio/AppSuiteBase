@@ -74,15 +74,76 @@
 									</MenuItem.Icon>
 								</MenuItem>
 								<MenuItem Header="Item">
-									<MenuItem Header=" Sub Item"/>
-									<MenuItem Header=" Sub Item"/>
+									<MenuItem Header="Sub Item"/>
+									<MenuItem Header="Sub Item"/>
 									<Separator/>
-									<MenuItem Header=" Sub Item"/>
-									<MenuItem Header=" Sub Item"/>
+									<MenuItem Header="Sub Item"/>
+									<MenuItem Header="Sub Item"/>
 								</MenuItem>
 								<MenuItem Header="Item"/>
 							</ContextMenu>
 						</StackPanel.ContextMenu>
+
+						<Menu>
+
+							<MenuItem Header="File">
+								<MenuItem Header="Sub Item"/>
+								<MenuItem Header="Sub Item"/>
+								<Separator/>
+								<MenuItem Header="Sub Item"/>
+								<MenuItem Header="Sub Item"/>
+							</MenuItem>
+
+							<MenuItem Header="Edit">
+								<MenuItem.Icon>
+									<Image Classes="MenuItem_Icon" Source="{DynamicResource Image/Icon.Edit}"/>
+								</MenuItem.Icon>
+							</MenuItem>
+							
+						</Menu>
+
+						<Border Classes="ToolBar">
+							<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+
+								<Button Classes="ToolBar_Button">
+									<Image Classes="Icon" Source="{StaticResource Image/Icon.Administrator}"/>
+								</Button>
+								<Button Classes="ToolBar_Button">
+									<Image Classes="Icon" Source="{StaticResource Image/Icon.Link}"/>
+								</Button>
+								<Button Classes="ToolBar_Button">
+									<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
+								</Button>
+								<Button Classes="ToolBar_Button" IsEnabled="{Binding #toolBarToggleButton.IsChecked}">
+									<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
+								</Button>
+
+								<TextBox Classes="ToolBar_TextBox" Width="50"/>
+								<TextBox Classes="ToolBar_TextBox" Width="50"/>
+
+								<ToggleButton Name="toolBarToggleButton" Classes="ToolBar_ToggleButton">
+									<Image Classes="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
+								</ToggleButton>
+
+								<Separator Classes="ToolBar_Separator"/>
+
+								<ToggleButton Classes="ToolBar_ToggleButton">
+									<Image Classes="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
+								</ToggleButton>
+
+								<ComboBox Classes="ToolBar_ComboBox" Width="100">
+									12345
+								</ComboBox>
+
+								<RepeatButton Classes="ToolBar_RepeatButton">
+									<Image Classes="Icon" Source="{StaticResource Image/Icon.File}"/>
+								</RepeatButton>
+
+								<TextBlock Classes="ToolBar_TextBlock" Text="test:"/>
+								<TextBox Classes="ToolBar_TextBox" Width="100"/>
+
+							</StackPanel>
+						</Border>
 						
 						<TextBlock Text="{DynamicResource String/ApplicationOptions.LogOutputTargetPort}" Margin="5,5,5,0"/>
 						<NumericUpDown HorizontalAlignment="Left" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
@@ -139,49 +200,6 @@
 						<appControls:IPAddressTextBox Name="ipAddressTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
 						<appControls:RegexTextBox Name="regexTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
 						<appControls:UriTextBox Name="uriTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
-
-						<Border Classes="ToolBar" Margin="5">
-							<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
-
-								<Button Classes="ToolBar_Button">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.Administrator}"/>
-								</Button>
-								<Button Classes="ToolBar_Button">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.Link}"/>
-								</Button>
-								<Button Classes="ToolBar_Button">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
-								</Button>
-								<Button Classes="ToolBar_Button" IsEnabled="{Binding #toolBarToggleButton.IsChecked}">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
-								</Button>
-
-								<TextBox Classes="ToolBar_TextBox" Width="50"/>
-								<TextBox Classes="ToolBar_TextBox" Width="50"/>
-
-								<ToggleButton Name="toolBarToggleButton" Classes="ToolBar_ToggleButton">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
-								</ToggleButton>
-
-								<Separator Classes="ToolBar_Separator"/>
-
-								<ToggleButton Classes="ToolBar_ToggleButton">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
-								</ToggleButton>
-
-								<ComboBox Classes="ToolBar_ComboBox" Width="100">
-									12345
-								</ComboBox>
-
-								<RepeatButton Classes="ToolBar_RepeatButton">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.File}"/>
-								</RepeatButton>
-
-								<TextBlock Classes="ToolBar_TextBlock" Text="test:"/>
-								<TextBox Classes="ToolBar_TextBox" Width="100"/>
-
-							</StackPanel>
-						</Border>
 
 						<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" Height="50"/>
 
