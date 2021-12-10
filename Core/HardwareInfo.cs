@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Management;
 using System.Text;
@@ -149,7 +150,40 @@ namespace CarinaStudio.AppSuite
             }
             else if (Platform.IsMacOS)
             {
-                //
+                try
+                {
+                    using var process = Process.Start(new ProcessStartInfo()
+                    {
+                        Arguments = "hw.memsize",
+                        CreateNoWindow = true,
+                        FileName = "sysctl",
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                    });
+                    if (process != null)
+                    {
+                        using var reader = process.StandardOutput;
+                        var regex = new Regex("^[\\s]*hw\\.memsize[\\s]*:[\\s]*(?<Size>[\\d]+)", RegexOptions.IgnoreCase);
+                        var line = reader.ReadLine();
+                        while (line != null)
+                        {
+                            var match = regex.Match(line);
+                            if (match.Success && long.TryParse(match.Groups["Size"].Value, out var size))
+                            {
+                                physicalMemorySize = size;
+                                break;
+                            }
+                        }
+                        if (physicalMemorySize == null)
+                            this.logger.LogWarning("Unable to get total physical memory on macOS");
+                    }
+                    else
+                        this.logger.LogWarning("Unable to start process to get total physical memory on macOS");
+                }
+                catch (Exception ex)
+                {
+                    this.logger.LogError(ex, "Unable to get total physical memory on macOS");
+                }
             }
             if (this.TotalPhysicalMemory != physicalMemorySize)
             {
