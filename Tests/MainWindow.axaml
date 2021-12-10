@@ -93,6 +93,17 @@
 						<TextBlock Text="{Binding $parent[Window].Application.EffectiveCustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5"/>
 						<NumericUpDown HorizontalAlignment="Left" Increment="0.1" Minimum="1.0" Maximum="2.0" Margin="5" Width="200" Value="{Binding $parent[Window].Application.CustomScreenScaleFactor, Mode=TwoWay}" FormatString="F2"/>
 
+						<Expander HorizontalAlignment="Left" Header="Expander">
+							<StackPanel>
+
+								<appControls:DatePicker HorizontalAlignment="Left"/>
+								<appControls:TimePicker HorizontalAlignment="Left"/>
+
+								<Slider HorizontalAlignment="Left" Width="200"/>
+
+							</StackPanel>
+						</Expander>
+
 						<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5"/>
 						<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
 

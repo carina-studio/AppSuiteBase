@@ -27,18 +27,20 @@ namespace CarinaStudio.AppSuite.Animation.Animators
         {
             var oldColor = new Color();
             var newColor = new Color();
-            var oldOpacity = 1.0;
-            var newOpacity = 1.0;
             (oldValue as ISolidColorBrush)?.Let(brush =>
             {
                 oldColor = brush.Color;
-                oldOpacity = brush.Opacity;
+                oldColor = Color.FromArgb(ClipToByte(oldColor.A * brush.Opacity), oldColor.R, oldColor.G, oldColor.B);
             });
             (newValue as ISolidColorBrush)?.Let(brush =>
             {
                 newColor = brush.Color;
-                newOpacity = brush.Opacity;
+                newColor = Color.FromArgb(ClipToByte(newColor.A * brush.Opacity), newColor.R, newColor.G, newColor.B);
             });
+            if (oldColor == Colors.Transparent)
+                oldColor = Color.FromArgb(0, newColor.R, newColor.G, newColor.B);
+            if (newColor == Colors.Transparent)
+                newColor = Color.FromArgb(0, oldColor.R, oldColor.G, oldColor.B);
             var oldA = (double)oldColor.A;
             var oldR = (double)oldColor.R;
             var oldG = (double)oldColor.G;
@@ -53,8 +55,7 @@ namespace CarinaStudio.AppSuite.Animation.Animators
                 ClipToByte(oldG + (newG - oldG) * progress),
                 ClipToByte(oldB + (newB - oldB) * progress)
             );
-            var interpolatedOpacity = Math.Max(0, Math.Min(1, oldOpacity + (newOpacity - oldOpacity) * progress));
-            return new ImmutableSolidColorBrush(interpolatedColor, interpolatedOpacity);
+            return new ImmutableSolidColorBrush(interpolatedColor);
         }
     }
 }

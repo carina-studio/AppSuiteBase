@@ -47,6 +47,15 @@
 		<!-- BrowseButton -->
 		<Thickness x:Key="Thickness/BrowseButton.Margin">5,0,0,0</Thickness>
 
+		<!-- ComboBox -->
+		<Thickness x:Key="ComboBoxDropdownBorderPadding">4,3,4,3</Thickness>
+		<Thickness x:Key="ComboBoxDropdownContentMargin">0</Thickness>
+
+		<!-- ComboBoxItem -->
+		<CornerRadius x:Key="CornerRadius/ComboBoxItem">3</CornerRadius>
+		<Thickness x:Key="Thickness/ComboBoxItem.Margin">0,1,0,1</Thickness>
+		<Thickness x:Key="Thickness/ComboBoxItem.Padding">6</Thickness>
+
 		<!-- ContextMenu -->
 		<Thickness x:Key="Thickness/ContextMenu.Padding">4,0,4,0</Thickness>
 
@@ -301,6 +310,13 @@
 	<!-- ComboBox -->
 	<Style Selector="ComboBox">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
+	</Style>
+
+	<!-- ComboBoxItem -->
+	<Style Selector="ComboBoxItem">
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ComboBoxItem}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ComboBoxItem.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ComboBoxItem.Padding}"/>
 	</Style>
 
 	<!-- ContextMenu -->
@@ -566,13 +582,6 @@
 	<Style Selector="MenuItem">
 		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/MenuItem}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/MenuItem.Padding}"/>
-	</Style>
-	<Style Selector="MenuItem /template/ Border#PART_LayoutRoot">
-		<Setter Property="Transitions">
-			<Transitions>
-				<BrushTransition Property="Background" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
-			</Transitions>
-		</Setter>
 	</Style>
 	<Style Selector="Panel.MenuItem_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
