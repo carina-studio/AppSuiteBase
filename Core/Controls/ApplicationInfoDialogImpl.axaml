@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
+		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
 		xmlns:ia="using:Avalonia.Xaml.Interactivity"
         xmlns:iaCore="using:Avalonia.Xaml.Interactions.Core"
 		xmlns:interop="using:System.Runtime.InteropServices"
@@ -108,6 +109,15 @@
 							</MultiBinding>
 						</TextBlock.Text>
 					</TextBlock>
+				</StackPanel>
+
+				<!-- Total physical memory -->
+				<StackPanel IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}">
+					<Separator Classes="Dialog_Separator_Small"/>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.TotalPhysicalMemory}" VerticalAlignment="Center"/>
+						<TextBlock Text="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" VerticalAlignment="Center"/>
+					</StackPanel>
 				</StackPanel>
 				<Separator Classes="Dialog_Separator_Large"/>
 

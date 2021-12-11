@@ -32,6 +32,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">Application logs exported.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">System information</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">About {0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">RAM:</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">《User Agreement》</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Version">Version: {0}</sys:String>
 

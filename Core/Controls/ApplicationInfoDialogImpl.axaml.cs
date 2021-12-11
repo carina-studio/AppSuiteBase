@@ -20,6 +20,7 @@ namespace CarinaStudio.AppSuite.Controls
 		static readonly AvaloniaProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
 		static readonly AvaloniaProperty<bool> HasGitHubProjectProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasGitHubProject));
 		static readonly AvaloniaProperty<bool> HasPrivacyPolicyProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasPrivacyPolicy));
+		static readonly AvaloniaProperty<bool> HasTotalPhysicalMemoryProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasTotalPhysicalMemory));
 		static readonly AvaloniaProperty<bool> HasUserAgreementProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasUserAgreement));
 		static readonly AvaloniaProperty<string?> VersionStringProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, string?>(nameof(VersionString));
 
@@ -28,6 +29,7 @@ namespace CarinaStudio.AppSuite.Controls
 		public ApplicationInfoDialogImpl()
 		{
 			InitializeComponent();
+			this.SetValue(HasTotalPhysicalMemoryProperty, this.Application.HardwareInfo.TotalPhysicalMemory.HasValue);
 		}
 
 
@@ -87,6 +89,10 @@ namespace CarinaStudio.AppSuite.Controls
 
 		// Check whether Privacy Policy exists or not.
 		public bool HasPrivacyPolicy { get => this.GetValue<bool>(HasPrivacyPolicyProperty); }
+
+
+		// Check whether total physical memory info is valid or not.
+		public bool HasTotalPhysicalMemory { get => this.GetValue<bool>(HasTotalPhysicalMemoryProperty); }
 
 
 		// Check whether User Agreement exists or not.
