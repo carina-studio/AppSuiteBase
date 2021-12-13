@@ -518,6 +518,18 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="Image.InPlaceAction_Icon">
+		<Setter Property="Height" Value="{DynamicResource Double/InPlaceAction.IconSize}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/InPlaceAction.IconSize}"/>
+	</Style>
+	<Style Selector="Image.InPlaceAction_Icon:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
 
 	<!-- LinkTextBlock -->
 	<Style Selector="controls|LinkTextBlock">
@@ -644,6 +656,19 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
 		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
 	</Style>
+	<Style Selector="Image.StatusBar_DropDownIcon">
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.DropDownIcon.Margin}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
+	</Style>
+	<Style Selector="Image.StatusBar_DropDownIcon:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
 	<Style Selector="Image.StatusBar_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -651,11 +676,6 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin}"/>
 		<Setter Property="Stretch" Value="Uniform"/>
 		<Setter Property="StretchDirection" Value="Both"/>
-		<Setter Property="Transitions">
-			<Transitions>
-				<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
-			</Transitions>
-		</Setter>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 	</Style>
