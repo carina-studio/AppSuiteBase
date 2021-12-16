@@ -25,7 +25,10 @@ namespace CarinaStudio.AppSuite.Controls
         {
             if (!Platform.IsWindows)
                 return new Thickness();
-            return new Thickness(6); // Windows 10
+            var version = Environment.OSVersion.Version;
+            if (version.Major >= 10)
+                return new Thickness(6); // Windows 10
+            return new Thickness();
         });
 
 
@@ -34,7 +37,9 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public static bool IsExtendedClientAreaSupported { get; } = Global.Run(() =>
         {
-            if (Platform.IsWindows || Platform.IsMacOS)
+            if (Platform.IsWindows)
+                return Environment.OSVersion.Version.Major >= 10;
+            if (Platform.IsMacOS)
                 return true;
             return false;
         });
