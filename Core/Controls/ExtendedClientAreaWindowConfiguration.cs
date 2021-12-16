@@ -28,7 +28,9 @@ namespace CarinaStudio.AppSuite.Controls
             var version = Environment.OSVersion.Version;
             if (version.Major >= 10)
                 return new Thickness(6); // Windows 10
-            return new Thickness();
+            if (version.Major >= 6 && version.Minor >= 3)
+                return new Thickness(7); // Windows 8.1
+            return new Thickness(0);
         });
 
 
@@ -38,7 +40,10 @@ namespace CarinaStudio.AppSuite.Controls
         public static bool IsExtendedClientAreaSupported { get; } = Global.Run(() =>
         {
             if (Platform.IsWindows)
-                return Environment.OSVersion.Version.Major >= 10;
+            {
+                var version = Environment.OSVersion.Version;
+                return version.Major > 6 || (version.Major == 6 && version.Minor >= 3 /* Windows 8.1 */);
+            }
             if (Platform.IsMacOS)
                 return true;
             return false;
@@ -80,7 +85,7 @@ namespace CarinaStudio.AppSuite.Controls
         public static double SystemChromeWidth { get; } = Global.Run(() =>
         {
             if (Platform.IsWindows)
-                return 140; // Windows 10
+                return 140; // Windows 8.1+
             if (Platform.IsMacOS)
                 return 70;
             return 0;
