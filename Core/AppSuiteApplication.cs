@@ -136,6 +136,14 @@ namespace CarinaStudio.AppSuite
 
         // Fields.
         Avalonia.Controls.ResourceDictionary? accentColorResources;
+#if WINDOWS10_0_17763_0_OR_GREATER
+        readonly bool canUseWindows10Features = Environment.OSVersion.Version.Let(version =>
+        {
+            if (!Platform.IsWindows)
+                return false;
+            return version.Major > 10 || (version.Major == 10 && version.Build >= 17763);
+        });
+#endif
         ScheduledAction? checkUpdateInfoAction;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
         readonly Styles extraStyles = new Styles();
@@ -166,7 +174,7 @@ namespace CarinaStudio.AppSuite
         ThemeMode stylesThemeMode = ThemeMode.System;
         ThemeMode systemThemeMode = ThemeMode.Dark;
 #if WINDOWS10_0_17763_0_OR_GREATER
-        readonly UISettings uiSettings = new UISettings();
+        readonly UISettings? uiSettings;
 #endif
 
 
@@ -214,6 +222,12 @@ namespace CarinaStudio.AppSuite
             // get file paths
             this.persistentStateFilePath = Path.Combine(this.RootPrivateDirectoryPath, "PersistentState.json");
             this.settingsFilePath = Path.Combine(this.RootPrivateDirectoryPath, "Settings.json");
+
+            // create UISettings to monitor system UI change
+#if WINDOWS10_0_17763_0_OR_GREATER
+            if (this.canUseWindows10Features)
+                this.uiSettings = new UISettings();
+#endif
 
             // check whether process is running as admin or not
             if (Platform.IsWindows)
@@ -780,7 +794,7 @@ namespace CarinaStudio.AppSuite
             get
             {
 #if WINDOWS10_0_17763_0_OR_GREATER
-                return true;
+                return (this.uiSettings != null);
 #else
                 return false;
 #endif
@@ -1306,7 +1320,8 @@ namespace CarinaStudio.AppSuite
             {
                 SystemEvents.UserPreferenceChanged -= this.OnWindowsUserPreferenceChanged;
 #if WINDOWS10_0_17763_0_OR_GREATER
-                this.uiSettings.ColorValuesChanged -= this.OnWindowsUIColorValueChanged;
+                if (this.uiSettings != null)
+                    this.uiSettings.ColorValuesChanged -= this.OnWindowsUIColorValueChanged;
 #endif
             }
 
@@ -1456,7 +1471,8 @@ namespace CarinaStudio.AppSuite
             {
                 SystemEvents.UserPreferenceChanged += this.OnWindowsUserPreferenceChanged;
 #if WINDOWS10_0_17763_0_OR_GREATER
-                this.uiSettings.ColorValuesChanged += this.OnWindowsUIColorValueChanged;
+                if (this.uiSettings != null)
+                    this.uiSettings.ColorValuesChanged += this.OnWindowsUIColorValueChanged;
 #endif
             }
         }
@@ -2315,13 +2331,15 @@ namespace CarinaStudio.AppSuite
         void UpdateSystemThemeMode(bool checkRestartingMainWindows)
         {
             // get current theme
-#if WINDOWS10_0_17763_0_OR_GREATER
-            var backgroundColor = this.uiSettings.GetColorValue(UIColorType.Background);
-            var themeMode = (backgroundColor.R + backgroundColor.G +backgroundColor.B) / 3 < 128
-                ? ThemeMode.Dark
-                : ThemeMode.Light;
-#else
             var themeMode = ThemeMode.Dark;
+#if WINDOWS10_0_17763_0_OR_GREATER
+            if (this.uiSettings != null)
+            {
+                var backgroundColor = this.uiSettings.GetColorValue(UIColorType.Background);
+                themeMode = (backgroundColor.R + backgroundColor.G + backgroundColor.B) / 3 < 128
+                    ? ThemeMode.Dark
+                    : ThemeMode.Light;
+            }
 #endif
             if (this.systemThemeMode == themeMode)
                 return;
