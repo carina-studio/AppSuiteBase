@@ -2263,6 +2263,21 @@ namespace CarinaStudio.AppSuite
                 {
                     Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}.axaml"),
                 };
+                if (Platform.IsWindows)
+                {
+                    var version = Environment.OSVersion.Version;
+                    if (version.Major == 6 && version.Minor <= 1) // Windows 7 specific styles
+                    {
+                        this.styles = new Styles().Also(styles =>
+                        {
+                            styles.Add(this.styles);
+                            styles.Add(new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
+                            {
+                                Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}-Windows7.axaml"),
+                            });
+                        });
+                    }
+                }
                 this.styles = this.OnLoadTheme(themeMode)?.Let(it =>
                 {
                     var styles = new Styles();
