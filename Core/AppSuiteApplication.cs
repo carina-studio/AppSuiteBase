@@ -612,8 +612,10 @@ namespace CarinaStudio.AppSuite
                 .Template().Name("PART_ContentPresenter"), durationFast));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ComboBox))
                 .Template().Name("Background"), durationFast));
+            /*
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ComboBoxItem))
                 .Template().Name("PART_ContentPresenter"), durationFast));
+            */
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.DatePicker))
                 .Template().Name("FlyoutButton"), durationFast));
             this.extraStyles.Add(new Style(s => s.OfType(typeof(Controls.LinkTextBlock))).Also(style =>
@@ -629,10 +631,12 @@ namespace CarinaStudio.AppSuite
                 })));
             }));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ListBox)), durationFast));
+            /*
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ListBoxItem))
                 .Template().Name("PART_ContentPresenter"), durationFast));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.MenuItem))
                 .Template().Name("PART_LayoutRoot"), durationFast));
+            */
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.RepeatButton))
                 .Template().Name("PART_ContentPresenter"), durationFast));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.Primitives.ScrollBar))
