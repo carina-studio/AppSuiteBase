@@ -28,8 +28,8 @@ namespace CarinaStudio.AppSuite.Controls
             var version = Environment.OSVersion.Version;
             if (version.Major >= 10)
                 return new Thickness(6); // Windows 10
-            if (version.Major >= 6 && version.Minor >= 3)
-                return new Thickness(7); // Windows 8.1
+            if (version.Major >= 6 && version.Minor >= 2)
+                return new Thickness(7); // Windows 8
             return new Thickness(0);
         });
 
@@ -42,7 +42,7 @@ namespace CarinaStudio.AppSuite.Controls
             if (Platform.IsWindows)
             {
                 var version = Environment.OSVersion.Version;
-                return version.Major > 6 || (version.Major == 6 && version.Minor >= 3 /* Windows 8.1 */);
+                return version.Major > 6 || (version.Major == 6 && version.Minor >= 2 /* Windows 8 */);
             }
             if (Platform.IsMacOS)
                 return true;
@@ -85,7 +85,7 @@ namespace CarinaStudio.AppSuite.Controls
         public static double SystemChromeWidth { get; } = Global.Run(() =>
         {
             if (Platform.IsWindows)
-                return 140; // Windows 8.1+
+                return 140; // Windows 8+
             if (Platform.IsMacOS)
                 return 70;
             return 0;
