@@ -13,4 +13,9 @@
 		
 	</Styles.Resources>
 	
+	<!-- ComboBox -->
+	<Style Selector="ComboBox /template/ ScrollViewer">
+		<Setter Property="AllowAutoHide" Value="False"/>
+	</Style>
+	
 </Styles>
