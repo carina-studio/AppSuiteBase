@@ -57,7 +57,7 @@ namespace CarinaStudio.AppSuite.ViewModels
             // get system info
             _ = Task.Run(() =>
             {
-                var version = Platform.GetInstalledFrameworkVersion();
+                var version = Platform.GetInstalledRuntimeVersion();
                 if (version != null)
                 {
                     this.SynchronizationContext.Post(() =>
