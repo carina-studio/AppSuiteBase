@@ -179,7 +179,35 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Description of operating system.
         /// </summary>
-        public string OperatingSystemDescription { get; } = $"{RuntimeInformation.OSDescription} ({RuntimeInformation.OSArchitecture.ToString().ToUpperInvariant()})";
+        public string OperatingSystemDescription { get; } = Global.Run(() =>
+        {
+            var osArchName = RuntimeInformation.OSArchitecture.ToString().ToUpperInvariant();
+            var osVersion = Environment.OSVersion.Version;
+            if (Platform.IsWindows)
+            {
+                return Platform.WindowsVersion switch
+                {
+                    WindowsVersion.Windows11 => "Windows 11",
+                    WindowsVersion.Windows10 => "Windows 10",
+                    WindowsVersion.Windows8 => "Windows 8",
+                    WindowsVersion.Windows7 => "Windows 7",
+                    _ => $"Windows",
+                } + $" ({osVersion}, {osArchName})";
+            }
+            if (Platform.IsMacOS)
+                return $"macOS {osVersion} ({osArchName})";
+            if (Platform.IsLinux)
+            {
+                return Platform.LinuxDistribution switch
+                {
+                    LinuxDistribution.Debian => $"Debian {osVersion} ({osArchName})",
+                    LinuxDistribution.Fedora => $"Fedora {osVersion} ({osArchName})",
+                    LinuxDistribution.Ubuntu => $"Ubuntu {osVersion} ({osArchName})",
+                    _ => $"Linux ({osArchName})",
+                };
+            }
+            return $"{RuntimeInformation.OSDescription} ({osArchName})";
+        });
 
 
         /// <summary>
