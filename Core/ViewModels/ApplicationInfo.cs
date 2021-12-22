@@ -200,10 +200,10 @@ namespace CarinaStudio.AppSuite.ViewModels
             {
                 return Platform.LinuxDistribution switch
                 {
-                    LinuxDistribution.Debian => $"Debian {osVersion} ({osArchName})",
-                    LinuxDistribution.Fedora => $"Fedora {osVersion} ({osArchName})",
-                    LinuxDistribution.Ubuntu => $"Ubuntu {osVersion} ({osArchName})",
-                    _ => $"Linux ({osArchName})",
+                    LinuxDistribution.Debian => $"Debian (Linux kernel {osVersion}, {osArchName})",
+                    LinuxDistribution.Fedora => $"Fedora (Linux kernel {osVersion}, {osArchName})",
+                    LinuxDistribution.Ubuntu => $"Ubuntu (Linux kernel {osVersion}, {osArchName})",
+                    _ => $"Linux kernel {osVersion} ({osArchName})",
                 };
             }
             return $"{RuntimeInformation.OSDescription} ({osArchName})";
