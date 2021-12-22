@@ -967,6 +967,36 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Load string resource in XAML format.
+        /// </summary>
+        /// <param name="uri">URI of string resource.</param>
+        /// <returns>Loaded string resource, or Null if failed to load.</returns>
+        protected Avalonia.Controls.IResourceProvider? LoadStringResource(Uri uri)
+        {
+            try
+            {
+                return new ResourceInclude().Also(it =>
+                {
+                    it.Source = uri;
+                    var resDictionary = it.Loaded;  // trigger error if resource not found
+                    foreach (var pair in resDictionary.ToArray())
+                    {
+                        if (pair.Value is not string str)
+                            continue;
+                        if (str.EndsWith(':'))
+                            resDictionary[pair.Key] = str + " ";
+                    }
+                });
+            }
+            catch
+            {
+                this.Logger.LogWarning($"Unable to load string resource from {uri}");
+                return null;
+            }
+        }
+
+
+        /// <summary>
         /// Get logger.
         /// </summary>
         protected Microsoft.Extensions.Logging.ILogger Logger { get; }
@@ -1426,24 +1456,11 @@ namespace CarinaStudio.AppSuite
             this.UpdateCultureInfo(false);
 
             // load strings
-            this.Resources.MergedDictionaries.Add(new ResourceInclude()
-            {
-                Source = new Uri("avares://CarinaStudio.AppSuite.Core/Strings/Default.axaml")
-            });
+            this.Resources.MergedDictionaries.Add(this.LoadStringResource(new Uri("avares://CarinaStudio.AppSuite.Core/Strings/Default.axaml")).AsNonNull());
             if (Platform.IsLinux)
-            {
-                this.Resources.MergedDictionaries.Add(new ResourceInclude()
-                {
-                    Source = new Uri("avares://CarinaStudio.AppSuite.Core/Strings/Default-Linux.axaml")
-                });
-            }
+                this.Resources.MergedDictionaries.Add(this.LoadStringResource(new Uri("avares://CarinaStudio.AppSuite.Core/Strings/Default-Linux.axaml")).AsNonNull());
             else if (Platform.IsMacOS)
-            {
-                this.Resources.MergedDictionaries.Add(new ResourceInclude()
-                {
-                    Source = new Uri("avares://CarinaStudio.AppSuite.Core/Strings/Default-OSX.axaml")
-                });
-            }
+                this.Resources.MergedDictionaries.Add(this.LoadStringResource(new Uri("avares://CarinaStudio.AppSuite.Core/Strings/Default-OSX.axaml")).AsNonNull());
             this.OnLoadDefaultStringResource()?.Let(it => this.Resources.MergedDictionaries.Add(it));
             this.UpdateStringResources();
 
@@ -2130,63 +2147,40 @@ namespace CarinaStudio.AppSuite
                     }
 
                     // load built-in resource
-                    var builtInResource = (Avalonia.Controls.IResourceProvider?)new ResourceInclude().Let(it =>
-                    {
-                        it.Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}.axaml");
-                        try
-                        {
-                            _ = it.Loaded;  // trigger error if resource not found
-                            return it;
-                        }
-                        catch
-                        {
-                            this.Logger.LogWarning($"No built-in string resource for {this.cultureInfo.Name}");
-                            return null;
-                        }
-                    });
+                    var builtInResource = this.LoadStringResource(new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}.axaml"));
                     if (builtInResource != null)
                     {
                         if (Platform.IsLinux)
                         {
-                            try
+                            var builtInResourcesForOS = this.LoadStringResource(new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}-Linux.axaml"));
+                            if (builtInResourcesForOS != null)
                             {
-                                var builtInResourcesForOS = new ResourceInclude().Also(it =>
-                                {
-                                    it.Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}-Linux.axaml");
-                                     _ = it.Loaded;  // trigger error if resource not found
-                                });
                                 builtInResource = new Avalonia.Controls.ResourceDictionary().Also(it =>
                                 {
                                     it.MergedDictionaries.Add(builtInResource);
                                     it.MergedDictionaries.Add(builtInResourcesForOS);
                                 });
                             }
-                            catch
-                            {
+                            else
                                 this.Logger.LogWarning($"No built-in string resource for {this.cultureInfo.Name} (Linux)");
-                            }
                         }
                         else if (Platform.IsMacOS)
                         {
-                            try
+                            var builtInResourcesForOS = this.LoadStringResource(new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}-OSX.axaml")).AsNonNull();
+                            if (builtInResourcesForOS != null)
                             {
-                                var builtInResourcesForOS = new ResourceInclude().Also(it =>
-                                {
-                                    it.Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}-OSX.axaml");
-                                    _ = it.Loaded;  // trigger error if resource not found
-                                });
                                 builtInResource = new Avalonia.Controls.ResourceDictionary().Also(it =>
                                 {
                                     it.MergedDictionaries.Add(builtInResource);
                                     it.MergedDictionaries.Add(builtInResourcesForOS);
                                 });
                             }
-                            catch
-                            {
+                            else
                                 this.Logger.LogWarning($"No built-in string resource for {this.cultureInfo.Name} (Linux)");
-                            }
                         }
                     }
+                    else
+                        this.Logger.LogWarning($"No built-in string resource for {this.cultureInfo.Name}");
 
                     // load custom resource
                     var resource = (Avalonia.Controls.IResourceProvider?)null;
