@@ -41,7 +41,7 @@ namespace CarinaStudio.AppSuite.Converters
 					return timeSpan.ToString();
 				var isPositive = timeSpan.Ticks >= 0;
 				var ms = Math.Abs(timeSpan.Milliseconds);
-				var us = (int)((timeSpan.TotalMilliseconds - ((int)timeSpan.TotalMilliseconds)) * 1000);
+				var us = (long)((timeSpan.TotalMilliseconds - ((long)timeSpan.TotalMilliseconds)) * 1000);
 				var secString = Math.Abs(timeSpan.Seconds).Let(sec =>
 				{
 					if (us != 0)
