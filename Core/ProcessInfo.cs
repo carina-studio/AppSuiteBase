@@ -147,7 +147,7 @@ namespace CarinaStudio.AppSuite
 					});
 					if (!Monitor.Wait(syncLock, UIResponseUpdateInterval))
 					{
-						this.logger.LogError("UI is not responding");
+						this.logger.LogWarning("UI is not responding");
 						totalDuration = 0;
 						checkingCount = 0;
 						++checkingId;

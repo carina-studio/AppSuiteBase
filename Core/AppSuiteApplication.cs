@@ -1140,6 +1140,7 @@ namespace CarinaStudio.AppSuite
                 try
                 {
                     LogManager.Configuration.FindRuleByName("logToFile").SetLoggingLevels(NLog.LogLevel.Debug, NLog.LogLevel.Error);
+                    LogManager.ReconfigExistingLoggers();
                 }
                 catch (Exception ex)
                 {
