@@ -63,6 +63,7 @@ namespace CarinaStudio.AppSuite.Controls
             base.OnPointerReleased(e);
             if (e.InitialPressMouseButton == MouseButton.Left && this.IsPointerOver)
             {
+                ToolTip.SetIsOpen(this, false);
                 var command = this.Command;
                 if (command != null)
                     command.TryExecute(this.CommandParameter);
