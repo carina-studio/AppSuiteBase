@@ -121,6 +121,7 @@ namespace CarinaStudio.AppSuite.Controls
 
             // extend client area if needed
             this.UpdateExtendingClientArea();
+            this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.OSXThickTitleBar | ExtendClientAreaChromeHints.NoChrome; // show system chrome when opened
         }
 
 
@@ -307,6 +308,10 @@ namespace CarinaStudio.AppSuite.Controls
             if (this.Application.MainWindows.Count == 1)
                 ApplicationUpdateDialog.ResetLatestShownInfo();
             this.showInitDialogsAction.Schedule();
+
+            // show system chrome
+            if (this.ExtendClientAreaToDecorationsHint)
+                this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.OSXThickTitleBar | ExtendClientAreaChromeHints.PreferSystemChrome;
         }
 
 
@@ -336,7 +341,10 @@ namespace CarinaStudio.AppSuite.Controls
                 (change.NewValue.Value as TViewModel)?.Let(it => this.OnAttachToViewModel(it));
             }
             else if (property == ExtendClientAreaToDecorationsHintProperty)
-                this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.OSXThickTitleBar | ExtendClientAreaChromeHints.PreferSystemChrome;
+            {
+                if (this.IsOpened && this.ExtendClientAreaToDecorationsHint)
+                    this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.OSXThickTitleBar | ExtendClientAreaChromeHints.PreferSystemChrome;
+            }
             else if (property == HasDialogsProperty)
             {
                 if (!this.HasDialogs)

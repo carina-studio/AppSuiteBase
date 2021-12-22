@@ -136,6 +136,8 @@ namespace CarinaStudio.AppSuite.Controls
         {
             if (Platform.IsLinux)
                 return WindowTransparencyLevel.None;
+            if (Platform.IsMacOS)
+                return WindowTransparencyLevel.AcrylicBlur;
             if (this.Application.HardwareInfo.HasDedicatedGraphicsCard != true)
                 return WindowTransparencyLevel.None;
             if (!this.Settings.GetValueOrDefault(SettingKeys.EnableBlurryBackground))
