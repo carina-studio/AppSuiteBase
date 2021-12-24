@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.Windows.Input;
 using System;
@@ -51,19 +50,11 @@ namespace CarinaStudio.AppSuite.Controls
 		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
 
-        // Called when key up.
-        protected override void OnKeyUp(KeyEventArgs e)
-		{
-			base.OnKeyUp(e);
-			if (e.Source == this.textBox)
-			{
-				switch (e.Key)
-				{
-					case Key.Enter:
-						this.GenerateResultCommand.TryExecute();
-						break;
-				}
-			}
+		/// <inheritdoc/>
+        protected override void OnEnterKeyClickedOnInputControl(IControl control)
+        {
+            base.OnEnterKeyClickedOnInputControl(control);
+			this.GenerateResultCommand.TryExecute();
 		}
 
 
