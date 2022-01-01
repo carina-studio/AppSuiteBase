@@ -55,7 +55,7 @@
 		<!-- Window -->
 		<Color x:Key="Color/Window.Background">#1e1e1e</Color>
 		<Color x:Key="Color/Window.Background.Tabbed">#000000</Color>
-		<Color x:Key="Color/Window.Background.Tabbed.Transparent">#e5000000</Color>
+		<Color x:Key="Color/Window.Background.Tabbed.Transparent">#c0000000</Color>
 		<Color x:Key="Color/Window.Background.Transparent">#e51e1e1e</Color>
 
 		<!-- WorkingArea -->

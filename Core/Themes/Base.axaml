@@ -1047,22 +1047,22 @@
 
 	<!-- Window -->
 	<Style Selector="Window">
-		<Setter Property="Background" Value="{StaticResource Brush/Window.Background}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background}"/>
 	</Style>
 	<Style Selector="Window[TransparencyLevelHint=AcrylicBlur]">
-		<Setter Property="Background" Value="{StaticResource Brush/Window.Background.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Transparent}"/>
 	</Style>
 	<Style Selector="Window[TransparencyLevelHint=Transparent]">
-		<Setter Property="Background" Value="{StaticResource Brush/Window.Background.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Transparent}"/>
 	</Style>
 	<Style Selector="Window.Tabbed">
-		<Setter Property="Background" Value="{StaticResource Brush/Window.Background.Tabbed}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed}"/>
 	</Style>
 	<Style Selector="Window.Tabbed[TransparencyLevelHint=AcrylicBlur]">
-		<Setter Property="Background" Value="{StaticResource Brush/Window.Background.Tabbed.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed.Transparent}"/>
 	</Style>
 	<Style Selector="Window.Tabbed[TransparencyLevelHint=Transparent]">
-		<Setter Property="Background" Value="{StaticResource Brush/Window.Background.Tabbed.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed.Transparent}"/>
 	</Style>
 	
 </Styles>
