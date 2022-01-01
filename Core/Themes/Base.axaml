@@ -212,7 +212,10 @@
 
 		<!-- TabControl -->
 		<sys:Double x:Key="Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace">20</sys:Double>
+		<sys:Double x:Key="Double/TabControl.TabStrip.ScrollingButton.Icon.Size">10</sys:Double>
 		<Thickness x:Key="Thickness/TabControl.TabStrip.Padding">6,0,6,0</Thickness>
+		<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Margin">5,7,5,8</Thickness>
+		<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Padding">5</Thickness>
 
 		<!-- TabItem -->
 		<SolidColorBrush x:Key="TabItemHeaderSelectedPipeFill">#00000000</SolidColorBrush>
@@ -731,6 +734,79 @@
 	</Style>
 
 	<!-- TabControl -->
+	<Style Selector="RepeatButton.TabStripScroller">
+		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundChecked}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/TabControl.TabStrip.ScrollingButton.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/TabControl.TabStrip.ScrollingButton.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="RepeatButton.TabStripScroller:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
+	</Style>
+	<Style Selector="RepeatButton.TabStripScroller:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
+	</Style>
+	<Style Selector="controls|TabStripScrollViewer">
+		<Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Panel Background="{TemplateBinding Background}">
+					<ScrollContentPresenter Name="PART_ContentPresenter"
+                        CanHorizontallyScroll="{TemplateBinding CanHorizontallyScroll}"
+                        CanVerticallyScroll="{TemplateBinding CanVerticallyScroll}"
+                        Content="{TemplateBinding Content}"
+                        Extent="{TemplateBinding Extent, Mode=TwoWay}"
+                        Margin="{TemplateBinding Padding}"
+                        Offset="{TemplateBinding Offset, Mode=TwoWay}"
+                        Viewport="{TemplateBinding Viewport, Mode=TwoWay}">
+						<ScrollContentPresenter.GestureRecognizers>
+							<ScrollGestureRecognizer
+							  CanHorizontallyScroll="{TemplateBinding CanHorizontallyScroll}"
+							  CanVerticallyScroll="{TemplateBinding CanVerticallyScroll}" />
+						</ScrollContentPresenter.GestureRecognizers>
+					</ScrollContentPresenter>
+					<RepeatButton
+						Classes="TabStripScroller"
+						Command="{Binding ScrollLeft, RelativeSource={RelativeSource TemplatedParent}}"
+                        HorizontalAlignment="Left">
+						<RepeatButton.IsVisible>
+							<MultiBinding Converter="{x:Static converters:TabStripScrollingButtonVisibilityConverter.Default}" ConverterParameter="Left">
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Offset.X"/>
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Extent.Width"/>
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Viewport.Width"/>
+							</MultiBinding>
+						</RepeatButton.IsVisible>
+						<Image 
+							Classes="Icon" 
+							Height="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"
+							Source="{DynamicResource Image/Icon.Backward.Light}"
+							Width="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
+					</RepeatButton>
+					<RepeatButton
+						Classes="TabStripScroller"
+						Command="{Binding ScrollRight, RelativeSource={RelativeSource TemplatedParent}}"
+                        HorizontalAlignment="Right">
+						<RepeatButton.IsVisible>
+							<MultiBinding Converter="{x:Static converters:TabStripScrollingButtonVisibilityConverter.Default}" ConverterParameter="Right">
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Offset.X"/>
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Extent.Width"/>
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Viewport.Width"/>
+							</MultiBinding>
+						</RepeatButton.IsVisible>
+						<Image
+							Classes="Icon"
+							Height="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"
+							Source="{DynamicResource Image/Icon.Forward.Light}"
+							Width="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
+					</RepeatButton>
+				</Panel>
+			</ControlTemplate>
+		</Setter>
+		<Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
+	</Style>
 	<Style Selector="TabControl">
 		<Setter Property="Template">
 			<Setter.Value>
@@ -751,14 +827,14 @@
 										</StackPanel>
 									</Border>
 								</Border>
-								<ScrollViewer Grid.Column="1" HorizontalAlignment="Left" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+								<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" Background="{x:Null}" Grid.Column="1" HorizontalAlignment="Left">
 									<Border Padding="{DynamicResource Thickness/TabControl.TabStrip.Padding}">
 										<ItemsPresenter Name="PART_ItemsPresenter"
 													Items="{TemplateBinding Items}"
 													ItemsPanel="{TemplateBinding ItemsPanel}"
 													ItemTemplate="{TemplateBinding ItemTemplate}"/>
 									</Border>
-								</ScrollViewer>
+								</controls:TabStripScrollViewer>
 								<Border Grid.Column="2" IsVisible="{Binding $parent[Window].IsSystemChromeVisibleInClientArea}">
 									<Border IsVisible="{Binding $parent[Window].ExtendClientAreaToDecorationsHint}">
 										<StackPanel IsVisible="{x:Static controls:ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtRight}" Orientation="Horizontal">
@@ -833,40 +909,42 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate>
-					<Panel HorizontalAlignment="Stretch" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" VerticalAlignment="Stretch">
-						<Border Background="{StaticResource Brush/TabItem.Header.Background}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"/>
-						<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsPointerOver, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
-							<Border.Transitions>
-								<Transitions>
-									<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
-								</Transitions>
-							</Border.Transitions>
-						</Border>
-						<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
-							<Border.Transitions>
-								<Transitions>
-									<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
-								</Transitions>
-							</Border.Transitions>
-							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Height="{DynamicResource Double/TabItem.Header.ColorBar.Height}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}" VerticalAlignment="Top">
-								<Border.RenderTransform>
-									<ScaleTransform ScaleX="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
-										<ScaleTransform.Transitions>
-											<Transitions>
-												<DoubleTransition Property="ScaleX" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
-											</Transitions>
-										</ScaleTransform.Transitions>
-									</ScaleTransform>
-								</Border.RenderTransform>
+					<Border Background="{x:Static Brushes.Transparent}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+						<Panel Margin="{DynamicResource Thickness/TabItem.Header.Margin}">
+							<Border Background="{StaticResource Brush/TabItem.Header.Background}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"/>
+							<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsPointerOver, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
+								<Border.Transitions>
+									<Transitions>
+										<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
+									</Transitions>
+								</Border.Transitions>
+							</Border>
+							<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
 								<Border.Transitions>
 									<Transitions>
 										<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
 									</Transitions>
 								</Border.Transitions>
+								<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Height="{DynamicResource Double/TabItem.Header.ColorBar.Height}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}" VerticalAlignment="Top">
+									<Border.RenderTransform>
+										<ScaleTransform ScaleX="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
+											<ScaleTransform.Transitions>
+												<Transitions>
+													<DoubleTransition Property="ScaleX" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
+												</Transitions>
+											</ScaleTransform.Transitions>
+										</ScaleTransform>
+									</Border.RenderTransform>
+									<Border.Transitions>
+										<Transitions>
+											<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
+										</Transitions>
+									</Border.Transitions>
+								</Border>
 							</Border>
-						</Border>
-						<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
-					</Panel>
+							<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
+						</Panel>
+					</Border>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>

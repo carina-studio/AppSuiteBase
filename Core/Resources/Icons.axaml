@@ -139,6 +139,9 @@
 	<DrawingImage x:Key="Image/Icon.AddFolder" Drawing="{StaticResource Drawing/Icon.AddFolder}"/>
 	<DrawingImage x:Key="Image/Icon.Administrator" Drawing="{StaticResource Drawing/Icon.Administrator}"/>
 	<DrawingImage x:Key="Image/Icon.Backward" Drawing="{StaticResource Drawing/Icon.Backward}"/>
+	<DrawingImage x:Key="Image/Icon.Backward.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Backward}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.CheckingForUpdateInfo" Drawing="{StaticResource Drawing/Icon.CheckingForUpdateInfo}"/>
 	<DrawingImage x:Key="Image/Icon.Circle" Drawing="{StaticResource Drawing/Icon.Circle}"/>
 	<DrawingImage x:Key="Image/Icon.Circle.Filled" Drawing="{StaticResource Drawing/Icon.Circle.Filled}"/>
@@ -155,11 +158,20 @@
 	<DrawingImage x:Key="Image/Icon.Error.Colored" Drawing="{StaticResource Drawing/Icon.Error.Colored}"/>
 	<DrawingImage x:Key="Image/Icon.Export" Drawing="{StaticResource Drawing/Icon.Export}"/>
 	<DrawingImage x:Key="Image/Icon.FastBackward" Drawing="{StaticResource Drawing/Icon.FastBackward}"/>
+	<DrawingImage x:Key="Image/Icon.FastBackward.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.FastBackward}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.FastForward" Drawing="{StaticResource Drawing/Icon.FastForward}"/>
+	<DrawingImage x:Key="Image/Icon.FastForward.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.FastForward}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.File" Drawing="{StaticResource Drawing/Icon.File}"/>
 	<DrawingImage x:Key="Image/Icon.FileManager" Drawing="{StaticResource Drawing/Icon.FileManager}"/>
 	<DrawingImage x:Key="Image/Icon.Folder" Drawing="{StaticResource Drawing/Icon.Folder}"/>
 	<DrawingImage x:Key="Image/Icon.Forward" Drawing="{StaticResource Drawing/Icon.Forward}"/>
+	<DrawingImage x:Key="Image/Icon.Forward.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Forward}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Import" Drawing="{StaticResource Drawing/Icon.Import}"/>
 	<DrawingImage x:Key="Image/Icon.Information" Drawing="{StaticResource Drawing/Icon.Information}"/>
 	<DrawingImage x:Key="Image/Icon.Information.Colored" Drawing="{StaticResource Drawing/Icon.Information.Colored}"/>
