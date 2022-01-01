@@ -44,7 +44,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Scroll by given offset.
-        void ScrollBy(double offset)
+        public void ScrollBy(double offset)
         {
             // get current offset
             var currentOffset = this.offsetAnimator?.EndValue ?? this.Offset;

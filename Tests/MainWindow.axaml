@@ -38,7 +38,7 @@
 			</StackPanel>
 		</Border>
 
-		<TabControl>
+		<appControls:TabControl>
 
 			<TabItem>
 
@@ -99,7 +99,7 @@
 									<Image Classes="MenuItem_Icon" Source="{DynamicResource Image/Icon.Edit}"/>
 								</MenuItem.Icon>
 							</MenuItem>
-							
+
 						</Menu>
 
 						<Border Classes="ToolBar">
@@ -144,7 +144,7 @@
 
 							</StackPanel>
 						</Border>
-						
+
 						<TextBlock Text="{DynamicResource String/ApplicationOptions.LogOutputTargetPort}" Margin="5,5,5,0"/>
 						<NumericUpDown HorizontalAlignment="Left" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
 
@@ -205,7 +205,7 @@
 
 					</StackPanel>
 				</ScrollViewer>
-				
+
 			</TabItem>
 
 			<TabItem>
@@ -221,8 +221,8 @@
 					</Border>
 				</TabItem.Header>
 			</TabItem>
-			
-		</TabControl>
+
+		</appControls:TabControl>
 		
 	</DockPanel>
 
