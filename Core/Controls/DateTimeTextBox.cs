@@ -18,7 +18,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Static fields.
-        static readonly Regex CompactFormatRegex = new Regex("^(?<Year>[\\d]{4})?(?<Month>[\\d]{2})(?<Day>[\\d]{2})[\\s\\-_]+(?<Hours>[\\d]{2})[:]?(?<Minutes>[\\d]{2})[:]?(?<Seconds>[\\d]{2}(\\.[\\d]+)?)?[\\s]*$");
+        static readonly Regex CompactFormatRegex = new Regex("^((?<Year>[\\d]{4})[\\.\\-_]?)?((?<Month>[\\d]{2})|(?<Month>[\\d]{1,2})[\\.\\-_])(?<Day>[\\d]{1,2})[\\s\\-_]+((?<Hours>[\\d]{2})|(?<Hours>[\\d]{1,2})[:\\-_])((?<Minutes>[\\d]{2})|(?<Minutes>[\\d]{1,2})[:\\-_])(?<Seconds>[\\d]{1,2}(\\.[\\d]+)?)?[\\s]*$");
         static readonly CultureInfo DefaultCultureInfo = CultureInfo.GetCultureInfo("en-US");
         static readonly DateTime UnixTimestampBase = new DateTime(1970, 1, 1);
 
