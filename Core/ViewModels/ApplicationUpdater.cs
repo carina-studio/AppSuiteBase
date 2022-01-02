@@ -27,6 +27,10 @@ namespace CarinaStudio.AppSuite.ViewModels
 	/// </summary>
 	public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 	{
+		// Constants.
+		const string TempAutoUpdaterDirName = "AutoUpdater-Temp";
+
+
 		// Static fields.
 		static readonly Regex AutoUpdaterDirNameRegex = new Regex("^AutoUpdater\\-(?<Version>[\\d\\.]+)$", RegexOptions.IgnoreCase);
 		static readonly Uri AutoUpdaterPackageManifestUri = new Uri("https://raw.githubusercontent.com/carina-studio/AutoUpdater/master/PackageManifest-Avalonia.json");
@@ -45,6 +49,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 		// Fields.
 		Updater? auUpdater;
+		Version? auVersion;
 		readonly MutableObservableBoolean canCheckForUpdate = new MutableObservableBoolean(true);
 		readonly MutableObservableBoolean canStartUpdating = new MutableObservableBoolean();
 		CancellationTokenSource? updatePreparationCancellationTokenSource;
@@ -189,7 +194,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
 		// Called when property of updater of AutoUpdater changed.
-		void OnAuUpdaterPropertyChanged(object? sender, PropertyChangedEventArgs e)
+		async void OnAuUpdaterPropertyChanged(object? sender, PropertyChangedEventArgs e)
 		{
 			if (sender is not Updater updater)
 				return;
@@ -209,8 +214,44 @@ namespace CarinaStudio.AppSuite.ViewModels
 					{
 						case UpdaterState.Cancelled:
 						case UpdaterState.Failed:
-						case UpdaterState.Succeeded:
+							Global.RunWithoutErrorAsync(() =>
+							{
+								var tempDirectory = Path.Combine(this.Application.RootPrivateDirectoryPath, TempAutoUpdaterDirName);
+								this.Logger.LogWarning($"Delete auto updater download directory '{tempDirectory}'");
+								Directory.Delete(tempDirectory, true);
+							});
 							this.OnUpdatePreparationCompleted(updater.State, updater.ApplicationDirectoryPath.AsNonNull());
+							break;
+						case UpdaterState.Succeeded:
+							// rename to final auto updater directory
+							var tempDirectory = Path.Combine(this.Application.RootPrivateDirectoryPath, TempAutoUpdaterDirName);
+							var finalDirectory = Path.Combine(this.Application.RootPrivateDirectoryPath, $"AutoUpdater-{this.auVersion}");
+							var success = await Task.Run(() =>
+							{
+								this.Logger.LogDebug($"Rename auto updater directory from '{tempDirectory}' to '{finalDirectory}'");
+								try
+								{
+									Directory.Move(tempDirectory, finalDirectory);
+									return true;
+								}
+								catch (Exception ex)
+								{
+									this.Logger.LogError(ex, $"Unable to rename auto updater directory from '{tempDirectory}' to '{finalDirectory}'");
+									Global.RunWithoutError(() => Directory.Delete(tempDirectory, true));
+									return false;
+								}
+							});
+
+							// complete
+							if (this.updatePreparationCancellationTokenSource?.IsCancellationRequested == true)
+							{
+								Global.RunWithoutErrorAsync(() => Directory.Delete(tempDirectory, true));
+								this.OnUpdatePreparationCompleted(UpdaterState.Cancelled, "");
+							}
+							else if (success)
+								this.OnUpdatePreparationCompleted(UpdaterState.Succeeded, finalDirectory);
+							else
+								this.OnUpdatePreparationCompleted(UpdaterState.Failed, "");
 							break;
 					}
 					break;
@@ -435,14 +476,22 @@ namespace CarinaStudio.AppSuite.ViewModels
 			}
 
 			// delete current auto updater version
+			this.auVersion = auPackageResolver.PackageVersion;
+			var isAutoUpdaterInstalled = false;
 			await Task.Run(() =>
 			{
 				try
 				{
 					foreach (var path in Directory.EnumerateDirectories(this.Application.RootPrivateDirectoryPath))
 					{
-						if (AutoUpdaterDirNameRegex.IsMatch(Path.GetFileName(path)))
+						var match = AutoUpdaterDirNameRegex.Match(Path.GetFileName(path));
+						if (match.Success)
 						{
+							if (Version.TryParse(match.Groups["Version"].Value, out var version) && version == auPackageResolver.PackageVersion)
+							{
+								isAutoUpdaterInstalled = true;
+								continue;
+							}
 							try
 							{
 								this.Logger.LogDebug($"Delete auto updater '{path}'");
@@ -468,17 +517,25 @@ namespace CarinaStudio.AppSuite.ViewModels
 				return;
 			}
 
-			// create directory for auto updater
-			var autoUpdaterDirectory = Path.Combine(this.Application.RootPrivateDirectoryPath, $"AutoUpdater-{auPackageResolver.PackageVersion}");
+			// continue updating if auto updater is already installed
+			if (isAutoUpdaterInstalled)
+			{
+				this.Logger.LogDebug($"Auto updater {auPackageResolver.PackageVersion} is already installed before");
+				this.OnUpdatePreparationCompleted(UpdaterState.Succeeded, Path.Combine(this.Application.RootPrivateDirectoryPath, $"AutoUpdater-{auPackageResolver.PackageVersion}"));
+				return;
+			}
+
+			// create directory to download auto updater
+			var tempAutoUpdaterDirectory = Path.Combine(this.Application.RootPrivateDirectoryPath, TempAutoUpdaterDirName);
 			await Task.Run(() =>
 			{
 				try
 				{
-					Directory.CreateDirectory(autoUpdaterDirectory);
+					Directory.CreateDirectory(tempAutoUpdaterDirectory);
 				}
 				catch (Exception ex)
 				{
-					this.Logger.LogError(ex, $"Fail to create '{autoUpdaterDirectory}'");
+					this.Logger.LogError(ex, $"Fail to create '{tempAutoUpdaterDirectory}'");
 				}
 			});
 			if (this.IsDisposed)
@@ -492,11 +549,11 @@ namespace CarinaStudio.AppSuite.ViewModels
 			// download auto updater
 			this.auUpdater = new Updater()
 			{
-				ApplicationDirectoryPath = autoUpdaterDirectory,
+				ApplicationDirectoryPath = tempAutoUpdaterDirectory,
 				PackageInstaller = new ZipPackageInstaller(),
 				PackageResolver = new JsonPackageResolver() { Source = new WebRequestStreamProvider(AutoUpdaterPackageManifestUri) },
 			};
-			this.Logger.LogWarning($"Start downloading auto updater to '{autoUpdaterDirectory}'");
+			this.Logger.LogWarning($"Start downloading auto updater to '{tempAutoUpdaterDirectory}'");
 			this.auUpdater.PropertyChanged += this.OnAuUpdaterPropertyChanged;
 			if (!this.auUpdater.Start())
 			{
