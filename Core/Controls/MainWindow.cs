@@ -359,8 +359,13 @@ namespace CarinaStudio.AppSuite.Controls
                 this.saveWindowSizeAction.Reschedule(SaveWindowSizeDelay);
             else if (property == IsActiveProperty)
             {
-                if (this.IsActive && !this.AreInitialDialogsClosed)
-                    this.showInitDialogsAction.Schedule();
+                if (this.IsActive)
+                {
+                    if (!this.AreInitialDialogsClosed)
+                        this.showInitDialogsAction.Schedule();
+                    else if (this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate))
+                        this.SynchronizationContext.Post(() => _ = this.NotifyApplicationUpdateFound());
+                }
             }
             else if (property == WindowStateProperty)
             {

@@ -156,6 +156,9 @@
 	<DrawingImage x:Key="Image/Icon.Edit" Drawing="{StaticResource Drawing/Icon.Edit}"/>
 	<DrawingImage x:Key="Image/Icon.Error" Drawing="{StaticResource Drawing/Icon.Error}"/>
 	<DrawingImage x:Key="Image/Icon.Error.Colored" Drawing="{StaticResource Drawing/Icon.Error.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.Error.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Error}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Export" Drawing="{StaticResource Drawing/Icon.Export}"/>
 	<DrawingImage x:Key="Image/Icon.FastBackward" Drawing="{StaticResource Drawing/Icon.FastBackward}"/>
 	<DrawingImage x:Key="Image/Icon.FastBackward.Light">
@@ -175,6 +178,9 @@
 	<DrawingImage x:Key="Image/Icon.Import" Drawing="{StaticResource Drawing/Icon.Import}"/>
 	<DrawingImage x:Key="Image/Icon.Information" Drawing="{StaticResource Drawing/Icon.Information}"/>
 	<DrawingImage x:Key="Image/Icon.Information.Colored" Drawing="{StaticResource Drawing/Icon.Information.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.Information.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Information}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Lab" Drawing="{StaticResource Drawing/Icon.Lab}"/>
 	<DrawingImage x:Key="Image/Icon.Link" Drawing="{StaticResource Drawing/Icon.Link}"/>
 	<DrawingImage x:Key="Image/Icon.Memory" Drawing="{StaticResource Drawing/Icon.Memory}"/>
@@ -191,6 +197,9 @@
 	<DrawingImage x:Key="Image/Icon.Pin" Drawing="{StaticResource Drawing/Icon.Pin}"/>
 	<DrawingImage x:Key="Image/Icon.Question" Drawing="{StaticResource Drawing/Icon.Question}"/>
 	<DrawingImage x:Key="Image/Icon.Question.Colored" Drawing="{StaticResource Drawing/Icon.Question.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.Question.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Question}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Redo" Drawing="{StaticResource Drawing/Icon.Redo}"/>
 	<DrawingImage x:Key="Image/Icon.Refresh" Drawing="{StaticResource Drawing/Icon.Refresh}"/>
 	<DrawingImage x:Key="Image/Icon.RemoveFile" Drawing="{StaticResource Drawing/Icon.RemoveFile}"/>
@@ -214,6 +223,9 @@
 	<DrawingImage x:Key="Image/Icon.Waiting" Drawing="{StaticResource Drawing/Icon.Waiting}"/>
 	<DrawingImage x:Key="Image/Icon.Warning" Drawing="{StaticResource Drawing/Icon.Warning}"/>
 	<DrawingImage x:Key="Image/Icon.Warning.Colored" Drawing="{StaticResource Drawing/Icon.Warning.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.Warning.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Warning}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.ZoomIn" Drawing="{StaticResource Drawing/Icon.ZoomIn}"/>
 	<DrawingImage x:Key="Image/Icon.ZoomOut" Drawing="{StaticResource Drawing/Icon.ZoomOut}"/>
 	

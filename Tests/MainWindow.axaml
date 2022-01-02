@@ -142,6 +142,15 @@
 								<TextBlock Classes="ToolBar_TextBlock" Text="test:"/>
 								<TextBox Classes="ToolBar_TextBox" Width="100"/>
 
+								<Button Classes="ToolBar_Button">
+									<Panel Classes="Icon">
+										<Image Classes="Icon" Source="{DynamicResource Image/Icon.More}"/>
+										<Border Classes="ToolBar_NotificationIndicator" IsVisible="{Binding $parent[Window].Application.UpdateInfo, Converter={x:Static appConverters:ValueToBooleanConverters.NonNullToTrue}}">
+											<Image Classes="ToolBar_NotificationIndicator" Source="{DynamicResource Image/Icon.Information.Colored}"/>
+										</Border>
+									</Panel>
+								</Button>
+
 							</StackPanel>
 						</Border>
 

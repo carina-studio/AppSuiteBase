@@ -255,6 +255,8 @@
 
 		<!-- ToolBar -->
 		<Color x:Key="Color/ToolBar.Background">#ffffff</Color>
+		<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Size">8</sys:Double>
+		<sys:Double x:Key="Double/ToolBar.Button.Icon.Size">24</sys:Double>
 		<sys:Double x:Key="Double/ToolBar.Button.Size">34</sys:Double>
 		<SolidColorBrush x:Key="Brush/ToolBar.Background" Color="{DynamicResource Color/ToolBar.Background}"/>
 		<Thickness x:Key="Thickness/ToolBar.Button.Padding">5</Thickness>
@@ -987,6 +989,12 @@
 		<Setter Property="Background" Value="{StaticResource Brush/ToolBar.Background}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Padding}"/>
 	</Style>
+	<Style Selector="Border.ToolBar_NotificationIndicator">
+		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
+	</Style>
 	<Style Selector="Button.ToolBar_Button">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
@@ -1003,6 +1011,20 @@
 	<Style Selector="ComboBox.ToolBar_ComboBox">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="Image.ToolBar_NotificationIndicator">
+		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Stretch" Value="Fill"/>
+		<Setter Property="VerticalAlignment" Value="Bottom"/>
+		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
+	</Style>
+	<Style Selector="Panel.ToolBar_NotificationIndicator">
+		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
 	</Style>
 	<Style Selector="RepeatButton.ToolBar_RepeatButton">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
