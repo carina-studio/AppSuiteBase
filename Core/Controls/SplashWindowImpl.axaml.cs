@@ -93,7 +93,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 			// move to center of screen
 			var screen = this.Screens.ScreenFromVisual(this);
-			var screenBounds = screen.Bounds;
+			var screenBounds = screen.WorkingArea;
 			var pixelDensity = screen.PixelDensity;
 			var width = this.Width;
 			var height = this.Height;
