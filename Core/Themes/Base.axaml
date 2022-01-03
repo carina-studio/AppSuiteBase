@@ -471,7 +471,7 @@
 		<Setter Property="CanResize" Value="False"/>
 		<Setter Property="ShowInTaskbar" Value="False"/>
 		<Setter Property="SizeToContent" Value="Height"/>
-		<Setter Property="WindowStartupLocation" Value="CenterScreen"/>
+		<Setter Property="WindowStartupLocation" Value="CenterOwner"/>
 	</Style>
 
 	<!-- GridSplitter -->
