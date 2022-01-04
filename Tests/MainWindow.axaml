@@ -38,7 +38,7 @@
 			</StackPanel>
 		</Border>
 
-		<appControls:TabControl>
+		<appControls:TabControl DragDrop.AllowDrop="True" DragOverItem="OnDragOverTabItem" DropOnItem="OnDropOnTabItem">
 
 			<TabItem>
 

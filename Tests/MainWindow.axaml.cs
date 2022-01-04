@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.AppSuite.Converters;
 using CarinaStudio.AppSuite.Controls;
@@ -10,6 +11,7 @@ using CarinaStudio.Data.Converters;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections;
 using System.ComponentModel;
 using CarinaStudio.AppSuite.ViewModels;
 
@@ -57,6 +59,23 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         protected override ApplicationInfo OnCreateApplicationInfo() => new AppInfo();
+
+
+        void OnDragOverTabItem(object? sender, DragOnTabItemEventArgs e)
+        {
+            e.DragEffects = DragDropEffects.Copy;
+
+            var tabItems = (sender as Controls.TabControl)?.Items as ICollection;
+
+            if (tabItems != null && e.ItemIndex < tabItems.Count - 1)
+                (sender as Controls.TabControl)?.Let(it => it.SelectedIndex = e.ItemIndex);
+        }
+
+
+        void OnDropOnTabItem(object? sender, DragOnTabItemEventArgs e)
+        {
+            //
+        }
 
 
         void SwitchTheme()

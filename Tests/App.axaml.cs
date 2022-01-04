@@ -27,6 +27,7 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
+        [STAThread]
         static void Main(string[] args)
         {
             BuildApplication<App>().StartWithClassicDesktopLifetime(args);
