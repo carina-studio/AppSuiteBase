@@ -2,6 +2,7 @@
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Platform;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Configuration;
@@ -186,13 +187,6 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
-        /// <summary>
-        /// Called when all dialogs which need to be shown after showing main window are closed.
-        /// </summary>
-        protected virtual void OnInitialDialogsClosed()
-        { }
-
-
         // Called when property of application changed.
         void OnApplicationPropertyChanged(object? sender, PropertyChangedEventArgs e) => this.OnApplicationPropertyChanged(e);
 
@@ -245,6 +239,7 @@ namespace CarinaStudio.AppSuite.Controls
         {
             this.DataContext = null;
             this.Application.PropertyChanged -= this.OnApplicationPropertyChanged;
+            this.RemoveHandler(DragDrop.DragEnterEvent, this.OnDragEnter);
             this.restartingMainWindowsAction.Cancel();
             this.showInitDialogsAction.Cancel();
             base.OnClosed(e);
@@ -284,6 +279,17 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
+        // Called when data dragged into window,
+        void OnDragEnter(object? sender, DragEventArgs e) => this.ActivateAndBringToFront();
+
+
+        /// <summary>
+        /// Called when all dialogs which need to be shown after showing main window are closed.
+        /// </summary>
+        protected virtual void OnInitialDialogsClosed()
+        { }
+
+
         /// <summary>
         /// Called when window opened.
         /// </summary>
@@ -296,8 +302,9 @@ namespace CarinaStudio.AppSuite.Controls
             // call base
             base.OnOpened(e);
 
-            // attach to application
+            // add event handlers
             this.Application.PropertyChanged += this.OnApplicationPropertyChanged;
+            this.AddHandler(DragDrop.DragEnterEvent, this.OnDragEnter);
 
             // update content padding
             this.updateContentPaddingAction.Schedule();
