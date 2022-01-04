@@ -4,6 +4,7 @@ using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -22,8 +23,13 @@ namespace CarinaStudio.AppSuite.Controls
         const int SystemChromeVisibilityCheckingDelay = 500;
 
 
+        // Static fields.
+        internal static readonly Stopwatch Stopwatch = new Stopwatch().Also(it => it.Start());
+
+
         // Fields.
         readonly ScheduledAction checkSystemChromeVisibilityAction;
+        readonly WindowContentFadingHelper contentFadingHelper;
         readonly ScheduledAction updateTransparencyLevelAction;
 
 
@@ -32,9 +38,16 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         protected Window()
         {
-            new WindowContentFadingHelper(this);
             this.Application.HardwareInfo.PropertyChanged += this.OnHardwareInfoPropertyChanged;
             this.Settings.SettingChanged += this.OnSettingChanged;
+            this.contentFadingHelper = new WindowContentFadingHelper(this).Also(it =>
+            {
+                it.PropertyChanged += (_, e) =>
+                {
+                    if (e.PropertyName == nameof(WindowContentFadingHelper.IsFadingContent))
+                        this.InvalidateTransparencyLevelHint();
+                };
+            });
             this.checkSystemChromeVisibilityAction = new ScheduledAction(() =>
             {
                 this.SetValue<bool>(IsSystemChromeVisibleInClientAreaProperty, Global.Run(() =>
@@ -125,6 +138,8 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 this.checkSystemChromeVisibilityAction.Reschedule(SystemChromeVisibilityCheckingDelay);
             }
+            else if (property == IsActiveProperty)
+                this.updateTransparencyLevelAction.Schedule();
         }
 
 
@@ -134,6 +149,8 @@ namespace CarinaStudio.AppSuite.Controls
         /// <returns>Transparency level.</returns>
         protected virtual WindowTransparencyLevel OnSelectTransparentLevelHint()
         {
+            if (!this.IsActive || this.contentFadingHelper.IsFadingContent)
+                return WindowTransparencyLevel.None;
             if (Platform.IsLinux)
                 return WindowTransparencyLevel.None;
             if (Platform.IsMacOS)

@@ -658,6 +658,19 @@ namespace CarinaStudio.AppSuite
                 .Template().Name("PART_ContentPresenter"), durationFast));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ToggleSwitch))
                 .Template().Name("OuterBorder"), durationFast));
+            this.extraStyles.Add(new Style(s => s.OfType(typeof(Avalonia.Controls.Window))
+                .Template().Name("PART_Background")).Also(style =>
+            {
+                style.Setters.Add(new Setter(Animatable.TransitionsProperty, new Transitions().Also(transitions =>
+                {
+                    transitions.Add(new SolidColorBrushTransition()
+                    {
+                        Duration = duration,
+                        Easing = easing,
+                        Property = Avalonia.Controls.Primitives.TemplatedControl.BackgroundProperty,
+                    });
+                })));
+            }));
 
             // add to top styles
             this.Styles.Add(this.extraStyles);

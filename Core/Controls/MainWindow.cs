@@ -9,7 +9,6 @@ using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -41,7 +40,6 @@ namespace CarinaStudio.AppSuite.Controls
         readonly ScheduledAction restartingMainWindowsAction;
         readonly ScheduledAction saveWindowSizeAction;
         readonly ScheduledAction showInitDialogsAction;
-        readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
         readonly ScheduledAction updateContentPaddingAction;
 
 
@@ -293,7 +291,7 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnOpened(EventArgs e)
         {
             // keep time
-            this.openedTime = this.stopWatch.ElapsedMilliseconds;
+            this.openedTime = Stopwatch.ElapsedMilliseconds;
 
             // call base
             base.OnOpened(e);
@@ -424,7 +422,7 @@ namespace CarinaStudio.AppSuite.Controls
                 return;
 
             // show later
-            var delay = InitialDialogsDelay - (this.stopWatch.ElapsedMilliseconds - this.openedTime);
+            var delay = InitialDialogsDelay - (Stopwatch.ElapsedMilliseconds - this.openedTime);
             if (delay > 0)
             {
                 this.showInitDialogsAction.Reschedule((int)delay);

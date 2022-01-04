@@ -163,6 +163,8 @@
 						<TextBlock Text="{Binding $parent[Window].Application.EffectiveCustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5"/>
 						<NumericUpDown HorizontalAlignment="Left" Increment="0.1" Minimum="1.0" Maximum="2.0" Margin="5" Width="200" Value="{Binding $parent[Window].Application.CustomScreenScaleFactor, Mode=TwoWay}" FormatString="F2"/>
 
+						<TextBlock Text="{Binding $parent[Window].ActualTransparencyLevel}" Margin="5"/>
+
 						<Expander HorizontalAlignment="Left" Header="Expander">
 							<StackPanel>
 
@@ -220,6 +222,42 @@
 			<TabItem>
 				<TabItem.Header>
 					12345
+				</TabItem.Header>
+			</TabItem>
+
+			<TabItem>
+				<TabItem.Header>
+					Tab
+				</TabItem.Header>
+			</TabItem>
+
+			<TabItem>
+				<TabItem.Header>
+					Tab
+				</TabItem.Header>
+			</TabItem>
+
+			<TabItem>
+				<TabItem.Header>
+					Tab
+				</TabItem.Header>
+			</TabItem>
+
+			<TabItem>
+				<TabItem.Header>
+					Tab
+				</TabItem.Header>
+			</TabItem>
+
+			<TabItem>
+				<TabItem.Header>
+					Tab
+				</TabItem.Header>
+			</TabItem>
+
+			<TabItem>
+				<TabItem.Header>
+					Tab
 				</TabItem.Header>
 			</TabItem>
 
