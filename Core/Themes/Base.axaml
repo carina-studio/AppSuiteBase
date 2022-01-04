@@ -771,6 +771,7 @@
 						</ScrollContentPresenter.GestureRecognizers>
 					</ScrollContentPresenter>
 					<RepeatButton
+						Name="PART_ScrollLeftButton"
 						Classes="TabStripScroller"
 						Command="{Binding ScrollLeft, RelativeSource={RelativeSource TemplatedParent}}"
                         HorizontalAlignment="Left">
@@ -788,6 +789,7 @@
 							Width="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton
+						Name="PART_ScrollRightButton"
 						Classes="TabStripScroller"
 						Command="{Binding ScrollRight, RelativeSource={RelativeSource TemplatedParent}}"
                         HorizontalAlignment="Right">

@@ -3,10 +3,12 @@ using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
 using CarinaStudio.Threading;
+using CarinaStudio.Windows.Input;
 using System;
 using System.Collections;
 
@@ -17,7 +19,15 @@ namespace CarinaStudio.AppSuite.Controls
     /// </summary>
     public class TabControl : Avalonia.Controls.TabControl, IStyleable
     {
+        // Constants.
+        const int ScrollTabStripByButtonInterval = 300;
+
+
         // Fields.
+        RepeatButton? scrollTabStripLeftButton;
+        readonly ScheduledAction scrollTabStripLeftByButtonAction;
+        RepeatButton? scrollTabStripRightButton;
+        readonly ScheduledAction scrollTabStripRightByButtonAction;
         readonly ScheduledAction scrollToSelectedItemAction;
         ItemsPresenter? tabItemsPresenter;
         TabStripScrollViewer? tabStripScrollViewer;
@@ -28,6 +38,22 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public TabControl()
         {
+            this.scrollTabStripLeftByButtonAction = new ScheduledAction(() =>
+            {
+                if (this.scrollTabStripLeftButton != null)
+                {
+                    this.scrollTabStripLeftButton.Command?.TryExecute();
+                    this.scrollTabStripLeftByButtonAction?.Reschedule(ScrollTabStripByButtonInterval);
+                }
+            });
+            this.scrollTabStripRightByButtonAction = new ScheduledAction(() =>
+            {
+                if (this.scrollTabStripRightButton != null)
+                {
+                    this.scrollTabStripRightButton.Command?.TryExecute();
+                    this.scrollTabStripRightByButtonAction?.Reschedule(ScrollTabStripByButtonInterval);
+                }
+            });
             this.scrollToSelectedItemAction = new ScheduledAction(() =>
             {
                 // get state
@@ -118,8 +144,19 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
         {
             base.OnApplyTemplate(e);
+            this.scrollTabStripLeftByButtonAction.Cancel();
+            this.scrollTabStripRightByButtonAction.Cancel();
+            this.scrollTabStripLeftButton = null;
+            this.scrollTabStripRightButton = null;
             this.tabItemsPresenter = e.NameScope.Find<ItemsPresenter>("PART_ItemsPresenter");
-            this.tabStripScrollViewer = e.NameScope.Find<TabStripScrollViewer>("PART_TabStripScrollViewer");
+            this.tabStripScrollViewer = e.NameScope.Find<TabStripScrollViewer>("PART_TabStripScrollViewer")?.Also(it =>
+            {
+                it.TemplateApplied += (_, e) =>
+                {
+                    this.scrollTabStripLeftButton = e.NameScope.Find<RepeatButton>("PART_ScrollLeftButton");
+                    this.scrollTabStripRightButton = e.NameScope.Find<RepeatButton>("PART_ScrollRightButton");
+                };
+            });
         }
 
 
@@ -128,6 +165,7 @@ namespace CarinaStudio.AppSuite.Controls
         {
             base.OnAttachedToLogicalTree(e);
             this.AddHandler(DragDrop.DragEnterEvent, this.OnDragOver);
+            this.AddHandler(DragDrop.DragLeaveEvent, this.OnDragLeave);
             this.AddHandler(DragDrop.DragOverEvent, this.OnDragOver);
             this.AddHandler(DragDrop.DropEvent, this.OnDrop);
         }
@@ -137,9 +175,18 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
         {
             this.RemoveHandler(DragDrop.DragEnterEvent, this.OnDragOver);
+            this.RemoveHandler(DragDrop.DragLeaveEvent, this.OnDragLeave);
             this.RemoveHandler(DragDrop.DragOverEvent, this.OnDragOver);
             this.RemoveHandler(DragDrop.DropEvent, this.OnDrop);
             base.OnDetachedFromLogicalTree(e);
+        }
+
+
+        // Called when data drag leave.
+        void OnDragLeave(object? sender, RoutedEventArgs e)
+        {
+            this.scrollTabStripLeftByButtonAction.Cancel();
+            this.scrollTabStripRightByButtonAction.Cancel();
         }
 
 
@@ -148,10 +195,40 @@ namespace CarinaStudio.AppSuite.Controls
         {
             // check state
             if (e.Handled)
+            {
+                this.scrollTabStripLeftByButtonAction.Cancel();
+                this.scrollTabStripRightByButtonAction.Cancel();
                 return;
+            }
 
             // not to accept data by default
             e.DragEffects = DragDropEffects.None;
+
+            // scroll tab strip left or right
+            if (this.scrollTabStripLeftButton != null)
+            {
+                var position = e.GetPosition(this.scrollTabStripLeftButton);
+                var bounds = this.scrollTabStripLeftButton.Bounds;
+                if (position.X >= 0 && position.Y >= 0 && position.X < bounds.Width && position.Y < bounds.Height)
+                {
+                    this.scrollTabStripLeftByButtonAction.Schedule(ScrollTabStripByButtonInterval);
+                    this.scrollTabStripRightByButtonAction.Cancel();
+                    return;
+                }
+            }
+            if (this.scrollTabStripRightButton != null)
+            {
+                var position = e.GetPosition(this.scrollTabStripRightButton);
+                var bounds = this.scrollTabStripRightButton.Bounds;
+                if (position.X >= 0 && position.Y >= 0 && position.X < bounds.Width && position.Y < bounds.Height)
+                {
+                    this.scrollTabStripRightByButtonAction.Schedule(ScrollTabStripByButtonInterval);
+                    this.scrollTabStripLeftByButtonAction.Cancel();
+                    return;
+                }
+            }
+            this.scrollTabStripLeftByButtonAction.Cancel();
+            this.scrollTabStripRightByButtonAction.Cancel();
 
             // find tab item which data is dragged over
             if (!this.FindItemDraggedOver(e, out var itemIndex, out var item) || item == null)
@@ -168,6 +245,10 @@ namespace CarinaStudio.AppSuite.Controls
         // Called when data dropped.
         void OnDrop(object? sender, DragEventArgs e)
         {
+            // stop scrolling tab strip
+            this.scrollTabStripLeftByButtonAction.Cancel();
+            this.scrollTabStripRightByButtonAction.Cancel();
+
             // check state
             if (e.Handled)
                 return;
