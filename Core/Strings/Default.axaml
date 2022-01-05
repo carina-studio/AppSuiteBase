@@ -120,6 +120,9 @@
 
 	<!-- MainWindow -->
 	<sys:String x:Key="String/MainWindow.ConfirmLayoutingLotsOfMainWindows">Layouting lots of windows may cause improper result, do you still want to layout windows?</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">Layout windows horizontally</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">Tile windows</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">Layout windows vertically</sys:String>
 
 	<!-- PrivacyPolicyDialog -->
 	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Section1">You must read and agree the</sys:String>

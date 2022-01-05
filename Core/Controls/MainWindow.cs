@@ -7,10 +7,13 @@ using Avalonia.Platform;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
+using CarinaStudio.Windows.Input;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -35,6 +38,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Fields.
+        readonly MutableObservableBoolean canLayoutMainWindows = new MutableObservableBoolean();
         bool isContentPaddingTransitionReady;
         bool isShowingInitialDialogs;
         long openedTime;
@@ -49,6 +53,9 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         protected MainWindow()
         {
+            // create commands
+            this.LayoutMainWindowsCommand = new Command<MultiWindowLayout>(this.LayoutMainWindows, this.canLayoutMainWindows);
+
             // create scheduled actions
             this.restartingMainWindowsAction = new ScheduledAction(() =>
             {
@@ -134,6 +141,26 @@ namespace CarinaStudio.AppSuite.Controls
         /// Check whether extending client area to title bar is allowed or not.
         /// </summary>
         public virtual bool IsExtendingClientAreaAllowed { get; } = true;
+
+
+        // Layout main windows.
+        void LayoutMainWindows(MultiWindowLayout layout)
+        {
+            // check state
+            this.VerifyAccess();
+            if (this.IsClosed || !this.canLayoutMainWindows.Value)
+                return;
+
+            // layout
+            this.Application.LayoutMainWindows(Screens.ScreenFromVisual(this), layout, this);
+        }
+
+
+        /// <summary>
+        /// Command to layout main windows.
+        /// </summary>
+        /// <remarks>Type of parameter is <see cref="MultiWindowLayout"/>.</remarks>
+        public ICommand LayoutMainWindowsCommand { get; }
 
 
         /// <summary>
@@ -241,6 +268,7 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnClosed(EventArgs e)
         {
             this.DataContext = null;
+            ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged -= this.OnMainWindowsChanged;
             this.Application.PropertyChanged -= this.OnApplicationPropertyChanged;
             this.RemoveHandler(DragDrop.DragEnterEvent, this.OnDragEnter);
             this.restartingMainWindowsAction.Cancel();
@@ -293,6 +321,13 @@ namespace CarinaStudio.AppSuite.Controls
         { }
 
 
+        // Called when list of main window changed.
+        void OnMainWindowsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            this.canLayoutMainWindows.Update(this.Application.MainWindows.Count > 1);
+        }
+
+
         /// <summary>
         /// Called when window opened.
         /// </summary>
@@ -306,8 +341,12 @@ namespace CarinaStudio.AppSuite.Controls
             base.OnOpened(e);
 
             // add event handlers
+            ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged += this.OnMainWindowsChanged;
             this.Application.PropertyChanged += this.OnApplicationPropertyChanged;
             this.AddHandler(DragDrop.DragEnterEvent, this.OnDragEnter);
+
+            // check command state
+            this.canLayoutMainWindows.Update(this.Application.MainWindows.Count > 1);
 
             // update content padding
             this.updateContentPaddingAction.Schedule();
