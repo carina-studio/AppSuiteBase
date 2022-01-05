@@ -841,7 +841,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, Window? activeMainWindow)
+        public async void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, Window? activeMainWindow)
         {
             // check state
             this.VerifyAccess();
@@ -874,6 +874,22 @@ namespace CarinaStudio.AppSuite
                     Controls.WindowExtensions.ActivateAndBringToFront(it);
                 });
                 return;
+            }
+
+            // confirm layouting lots of main windows
+            if (activeMainWindow == null)
+                activeMainWindow = this.mainWindows[0];
+            if (mainWindowCount > 4)
+            {
+                Controls.WindowExtensions.ActivateAndBringToFront(activeMainWindow);
+                var result = await new Controls.MessageDialog()
+                {
+                    Buttons = Controls.MessageDialogButtons.YesNo,
+                    Icon = Controls.MessageDialogIcon.Question,
+                    Message = this.GetString("MainWindow.ConfirmLayoutingLotsOfMainWindows"),
+                }.ShowDialog(activeMainWindow);
+                if (result != Controls.MessageDialogResult.Yes)
+                    return;
             }
 
             // layout main windows
@@ -961,8 +977,7 @@ namespace CarinaStudio.AppSuite
                     Controls.WindowExtensions.ActivateAndBringToFront(it);
                 });
             }
-            if (activeMainWindow != null)
-                Controls.WindowExtensions.ActivateAndBringToFront(activeMainWindow);
+            Controls.WindowExtensions.ActivateAndBringToFront(activeMainWindow);
         }
 
 

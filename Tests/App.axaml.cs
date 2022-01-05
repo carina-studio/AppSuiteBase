@@ -53,7 +53,7 @@ namespace CarinaStudio.AppSuite.Tests
 
             if (!this.IsRestoringMainWindowsRequested)
             {
-                for (var i = 0; i < 2; ++i)
+                for (var i = 0; i < 1; ++i)
                     this.ShowMainWindow();
             }
         }
