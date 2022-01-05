@@ -198,6 +198,11 @@ namespace CarinaStudio.AppSuite
         public virtual IDictionary<string, object> LaunchOptions { get; } = new Dictionary<string, object>().AsReadOnly();
 
 
+        /// <inheritdoc/>
+        public virtual void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, Window? activeMainWindow)
+        { }
+
+
         /// <summary>
         /// Load <see cref="IApplication.PersistentState"/> from file.
         /// </summary>

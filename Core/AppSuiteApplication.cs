@@ -840,6 +840,132 @@ namespace CarinaStudio.AppSuite
         public IDictionary<string, object> LaunchOptions { get; private set; } = new Dictionary<string, object>().AsReadOnly();
 
 
+        /// <inheritdoc/>
+        public void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, Window? activeMainWindow)
+        {
+            // check state
+            this.VerifyAccess();
+            if (this.isShutdownStarted)
+            {
+                this.Logger.LogError("Cannot layout main windows when shutting down");
+                return;
+            }
+            var mainWindowCount = this.mainWindows.Count;
+            if (mainWindowCount <= 0)
+            {
+                this.Logger.LogWarning("No main window to layout");
+                return;
+            }
+
+            // layout single main window
+            if (mainWindowCount == 1)
+            {
+                this.mainWindows.First().Let(it =>
+                {
+                    switch (it.WindowState)
+                    {
+                        case Avalonia.Controls.WindowState.FullScreen:
+                        case Avalonia.Controls.WindowState.Maximized:
+                            break;
+                        default:
+                            it.WindowState = Avalonia.Controls.WindowState.Maximized;
+                            break;
+                    }
+                    Controls.WindowExtensions.ActivateAndBringToFront(it);
+                });
+                return;
+            }
+
+            // layout main windows
+            var workingArea = screen.WorkingArea;
+            var pixelDensity = screen.PixelDensity;
+            var windowBounds = new PixelRect[mainWindowCount];
+            switch (layout)
+            {
+                case Controls.MultiWindowLayout.Horizontal:
+                    {
+                        var width = (workingArea.Width / mainWindowCount);
+                        var height = workingArea.Height;
+                        var left = workingArea.Right - width;
+                        var top = workingArea.Y;
+                        for (var i = mainWindowCount - 1; i >= 0; --i, left -= width)
+                        {
+                            if (i > 0)
+                                windowBounds[i] = new PixelRect(left, top, width, height);
+                            else
+                                windowBounds[i] = new PixelRect(workingArea.X, top, windowBounds[1].X - workingArea.X, height);
+                        }
+                    }
+                    break;
+                case Controls.MultiWindowLayout.Tile:
+                    {
+                        var columnCount = (int)(Math.Ceiling(Math.Sqrt(mainWindowCount)) + 0.1);
+                        var rowCount = (mainWindowCount / columnCount);
+                        if (mainWindowCount > (columnCount * rowCount))
+                            ++rowCount;
+                        var width = workingArea.Width / columnCount;
+                        var height = workingArea.Height / rowCount;
+                        var left = workingArea.X;
+                        var top = workingArea.Y;
+                        var column = 0;
+                        for (var i = 0; i < mainWindowCount; ++i)
+                        {
+                            windowBounds[i] = new PixelRect(left, top, width, height);
+                            ++column;
+                            if (column < columnCount)
+                                left += width;
+                            else
+                            {
+                                column = 0;
+                                left = workingArea.X;
+                                top += height;
+                            }
+                        }
+                    }
+                    break;
+                case Controls.MultiWindowLayout.Vertical:
+                    {
+                        var width = workingArea.Width;
+                        var height = (workingArea.Height / mainWindowCount);
+                        var left = workingArea.X;
+                        var top = workingArea.Bottom - height;
+                        for (var i = mainWindowCount - 1; i >= 0; --i, top -= height)
+                        {
+                            if (i > 0)
+                                windowBounds[i] = new PixelRect(left, top, width, height);
+                            else
+                                windowBounds[i] = new PixelRect(left, workingArea.Y, width, windowBounds[1].Y - workingArea.Y);
+                        }
+                    }
+                    break;
+                default:
+                    return;
+            }
+            for (var i = mainWindowCount - 1; i >= 0; --i)
+            {
+                this.mainWindows[i].Let(it =>
+                {
+                    var bounds = windowBounds[i];
+                    it.WindowState = Avalonia.Controls.WindowState.Normal;
+                    it.Position = new PixelPoint(bounds.X, bounds.Y);
+                    if (Platform.IsMacOS)
+                    {
+                        it.Width = bounds.Width;
+                        it.Height = bounds.Height;
+                    }
+                    else
+                    {
+                        it.Width = bounds.Width / pixelDensity;
+                        it.Height = bounds.Height / pixelDensity;
+                    }
+                    Controls.WindowExtensions.ActivateAndBringToFront(it);
+                });
+            }
+            if (activeMainWindow != null)
+                Controls.WindowExtensions.ActivateAndBringToFront(activeMainWindow);
+        }
+
+
         /// <summary>
         /// Load <see cref="PersistentState"/> from file.
         /// </summary>

@@ -52,7 +52,10 @@ namespace CarinaStudio.AppSuite.Tests
             await base.OnPrepareStartingAsync();
 
             if (!this.IsRestoringMainWindowsRequested)
-                this.ShowMainWindow();
+            {
+                for (var i = 0; i < 2; ++i)
+                    this.ShowMainWindow();
+            }
         }
 
 

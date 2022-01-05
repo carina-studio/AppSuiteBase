@@ -114,6 +114,15 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Layout existing main windows.
+        /// </summary>
+        /// <param name="screen"><see cref="Avalonia.Platform.Screen"/> to layout main windows.</param>
+        /// <param name="layout">Layout.</param>
+        /// <param name="activeMainWindow">Main window which should be active one after layout.</param>
+        void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, Window? activeMainWindow);
+
+
+        /// <summary>
         /// Load <see cref="IApplication.PersistentState"/> from file.
         /// </summary>
         /// <returns>Task of loading.</returns>
