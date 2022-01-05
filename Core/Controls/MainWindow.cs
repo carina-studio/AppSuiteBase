@@ -205,7 +205,10 @@ namespace CarinaStudio.AppSuite.Controls
                     break;
                 case nameof(IAppSuiteApplication.IsRestartingMainWindowsNeeded):
                     if (this.Application.IsRestartingMainWindowsNeeded)
-                        this.restartingMainWindowsAction.Reschedule(RestartingMainWindowsDelay);
+                    {
+                        if (!BaseApplicationOptionsDialog.HasOpenedDialogs)
+                            this.restartingMainWindowsAction.Reschedule(RestartingMainWindowsDelay);
+                    }
                     else
                         this.restartingMainWindowsAction.Cancel();
                     break;

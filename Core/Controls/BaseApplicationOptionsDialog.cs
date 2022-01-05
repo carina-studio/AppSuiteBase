@@ -11,6 +11,10 @@ namespace CarinaStudio.AppSuite.Controls
     /// </summary>
     public abstract class BaseApplicationOptionsDialog : InputDialog<IAppSuiteApplication>
     {
+        // Static fields.
+        static int OpenedDialogCount;
+
+
         /// <summary>
         /// Initialize new <see cref="BaseApplicationOptionsDialog"/> instance.
         /// </summary>
@@ -21,6 +25,12 @@ namespace CarinaStudio.AppSuite.Controls
             this.Bind(TitleProperty, this.GetResourceObservable("String/ApplicationOptions"));
             this.Bind(WidthProperty, this.GetResourceObservable("Double/ApplicationOptionsDialog.Width"));
         }
+
+
+        /// <summary>
+        /// Check whether at least one <see cref="BaseApplicationOptionsDialog"/> instance is opened or not.
+        /// </summary>
+        public static bool HasOpenedDialogs { get => OpenedDialogCount > 0; }
 
 
         /// <inheritdoc/>
@@ -40,6 +50,7 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnClosed(EventArgs e)
         {
             (this.DataContext as ViewModels.ApplicationOptions)?.Dispose();
+            --OpenedDialogCount;
             base.OnClosed(e);
         }
 
@@ -49,6 +60,14 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         /// <returns>View-model of dialog.</returns>
         protected abstract ViewModels.ApplicationOptions OnCreateViewModel();
+
+
+        /// <inheritdoc/>
+        protected override void OnOpened(EventArgs e)
+        {
+            base.OnOpened(e);
+            ++OpenedDialogCount;
+        }
     }
 
 

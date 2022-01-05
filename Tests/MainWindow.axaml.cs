@@ -43,11 +43,6 @@ namespace CarinaStudio.AppSuite.Tests
         protected override void OnApplicationPropertyChanged(PropertyChangedEventArgs e)
         {
             base.OnApplicationPropertyChanged(e);
-            if (e.PropertyName == nameof(IAppSuiteApplication.IsRestartingMainWindowsNeeded))
-            {
-                if (this.Application.IsRestartingMainWindowsNeeded)
-                    this.Application.RestartMainWindows();
-            }
         }
 
 
@@ -93,7 +88,9 @@ namespace CarinaStudio.AppSuite.Tests
         {
             //using var appInfo = new AppInfo();
             //await new ApplicationInfoDialog(appInfo).ShowDialog(this);
-            _ = new TextInputDialog().ShowDialog(this);
+            var result = await new Dialog().ShowDialog<ApplicationOptionsDialogResult>(this);
+            if (result == ApplicationOptionsDialogResult.RestartMainWindowsNeeded)
+                this.Application.RestartMainWindows();
         }
 
         void Test2()

@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:appControls="using:CarinaStudio.AppSuite.Controls"
+		xmlns:as="using:CarinaStudio.AppSuite"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Tests.Dialog"
 		Classes="Dialog"
@@ -14,13 +15,17 @@
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
 				<Button Classes="Dialog_ControlButton" Content="Test"/>
 				<Separator Classes="Dialog_ControlButton_Separator"/>
-				<Button Classes="Dialog_ControlButton" Content="{DynamicResource String/Common.OK}"/>
-				<Button Classes="Dialog_ControlButton" Content="{DynamicResource String/Common.Cancel}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].GenerateResultCommand}" Content="{DynamicResource String/Common.OK}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.Cancel}"/>
 			</StackPanel>
 		</Border>
 
-		<Border Classes="Dialog_ContentPanel">
+		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="500" VerticalScrollBarVisibility="Auto">
 			<StackPanel Classes="Dialog_ContentPanel">
+
+				<TextBlock Classes="Dialog_TextBlock" Text="Theme"/>
+				<ComboBox Classes="Dialog_ComboBox" Items="{Binding ThemeModes}" SelectedItem="{Binding ThemeMode, Mode=TwoWay}"/>
+				<Separator Classes="Dialog_Separator"/>
 
 				<Border Classes="Dialog_TextBlock_Header1">
 					<TextBlock Classes="Dialog_TextBlock_Header1" Text="Header1"/>
@@ -60,7 +65,7 @@
 				<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 				
 			</StackPanel>
-		</Border>
+		</ScrollViewer>
 		
 	</DockPanel>
 	

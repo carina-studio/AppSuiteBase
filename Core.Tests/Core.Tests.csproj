@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<AssemblyVersion>0.30.0.104</AssemblyVersion>
 		<Version>0.30.0.104</Version>
-		<TargetFramework>net5.0;net6.0</TargetFramework>
+		<TargetFrameworks>net5.0;net6.0</TargetFrameworks>
 		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Core.Tests</AssemblyName>
 		<Nullable>enable</Nullable>
