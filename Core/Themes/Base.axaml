@@ -822,32 +822,14 @@
 							HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
 							VerticalAlignment="{TemplateBinding VerticalAlignment}">
 						<DockPanel>
-							<DockPanel DockPanel.Dock="Top">
-								<Border DockPanel.Dock="Left" IsVisible="{Binding $parent[Window].IsSystemChromeVisibleInClientArea}">
-									<Border IsVisible="{Binding $parent[Window].ExtendClientAreaToDecorationsHint}">
-										<StackPanel IsVisible="{x:Static controls:ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtLeft}" Orientation="Horizontal">
-											<Border Width="{x:Static controls:ExtendedClientAreaWindowConfiguration.SystemChromeWidth}"/>
-											<Border Width="{DynamicResource Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace}"/>
-										</StackPanel>
-									</Border>
+							<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" Background="{x:Null}" DockPanel.Dock="Top">
+								<Border Padding="{DynamicResource Thickness/TabControl.TabStrip.Padding}">
+									<ItemsPresenter Name="PART_ItemsPresenter"
+												Items="{TemplateBinding Items}"
+												ItemsPanel="{TemplateBinding ItemsPanel}"
+												ItemTemplate="{TemplateBinding ItemTemplate}"/>
 								</Border>
-								<Border DockPanel.Dock="Right" IsVisible="{Binding $parent[Window].IsSystemChromeVisibleInClientArea}">
-									<Border IsVisible="{Binding $parent[Window].ExtendClientAreaToDecorationsHint}">
-										<StackPanel IsVisible="{x:Static controls:ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtRight}" Orientation="Horizontal">
-											<Border Width="{DynamicResource Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace}"/>
-											<Border Width="{x:Static controls:ExtendedClientAreaWindowConfiguration.SystemChromeWidth}"/>
-										</StackPanel>
-									</Border>
-								</Border>
-								<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" Background="{x:Null}">
-									<Border Padding="{DynamicResource Thickness/TabControl.TabStrip.Padding}">
-										<ItemsPresenter Name="PART_ItemsPresenter"
-													Items="{TemplateBinding Items}"
-													ItemsPanel="{TemplateBinding ItemsPanel}"
-													ItemTemplate="{TemplateBinding ItemTemplate}"/>
-									</Border>
-								</controls:TabStripScrollViewer>
-							</DockPanel>
+							</controls:TabStripScrollViewer>
 							<ContentPresenter Name="PART_SelectedContentHost"
 											  Background="{TemplateBinding Background}"
 											  Margin="0,-2,0,0"

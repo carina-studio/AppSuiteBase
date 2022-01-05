@@ -19,10 +19,6 @@ namespace CarinaStudio.AppSuite.Controls
         public static readonly AvaloniaProperty<bool> IsSystemChromeVisibleInClientAreaProperty = AvaloniaProperty.Register<Window, bool>(nameof(IsSystemChromeVisibleInClientArea), false);
 
 
-        // Constants.
-        const int SystemChromeVisibilityCheckingDelay = 500;
-
-
         // Static fields.
         internal static readonly Stopwatch Stopwatch = new Stopwatch().Also(it => it.Start());
 
@@ -66,6 +62,7 @@ namespace CarinaStudio.AppSuite.Controls
                 if (!this.IsClosed)
                     this.TransparencyLevelHint = this.OnSelectTransparentLevelHint();
             });
+            this.checkSystemChromeVisibilityAction.Schedule();
             this.updateTransparencyLevelAction.Schedule();
         }
 
@@ -118,10 +115,7 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
-            if (ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtRight)
-                this.checkSystemChromeVisibilityAction.Reschedule(SystemChromeVisibilityCheckingDelay);
-            else
-                this.checkSystemChromeVisibilityAction.Execute();
+            this.checkSystemChromeVisibilityAction.Execute();
             this.updateTransparencyLevelAction.ExecuteIfScheduled();
         }
 
@@ -139,8 +133,7 @@ namespace CarinaStudio.AppSuite.Controls
                 || property == SystemDecorationsProperty
                 || property == WindowStateProperty)
             {
-                if (this.IsOpened)
-                    this.checkSystemChromeVisibilityAction.Reschedule(SystemChromeVisibilityCheckingDelay);
+                this.checkSystemChromeVisibilityAction.Schedule();
             }
             else if (property == IsActiveProperty)
                 this.updateTransparencyLevelAction.Schedule();

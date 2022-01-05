@@ -88,10 +88,7 @@ namespace CarinaStudio.AppSuite.Tests
         {
             //using var appInfo = new AppInfo();
             //await new ApplicationInfoDialog(appInfo).ShowDialog(this);
-            //if (this.Width <= 1000)
-            //this.Width += 50;
-            if (this.Width >= 500)
-                this.Width -= 50;
+            this.ExtendClientAreaToDecorationsHint = !this.ExtendClientAreaToDecorationsHint;
         }
 
         void Test2()

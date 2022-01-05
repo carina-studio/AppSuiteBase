@@ -7,6 +7,7 @@ using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
+using CarinaStudio.Animation;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
@@ -19,11 +20,18 @@ namespace CarinaStudio.AppSuite.Controls
     /// </summary>
     public class TabControl : Avalonia.Controls.TabControl, IStyleable
     {
+        /// <summary>
+        /// Property of <see cref="IsFullWindowMode"/>.
+        /// </summary>
+        public static readonly AvaloniaProperty<bool> IsFullWindowModeProperty = AvaloniaProperty.Register<TabControl, bool>(nameof(IsFullWindowMode), true);
+
+
         // Constants.
         const int ScrollTabStripByButtonInterval = 300;
 
 
         // Fields.
+        Window? attachedWindow;
         RepeatButton? scrollTabStripLeftButton;
         readonly ScheduledAction scrollTabStripLeftByButtonAction;
         RepeatButton? scrollTabStripRightButton;
@@ -31,6 +39,8 @@ namespace CarinaStudio.AppSuite.Controls
         readonly ScheduledAction scrollToSelectedItemAction;
         ItemsPresenter? tabItemsPresenter;
         TabStripScrollViewer? tabStripScrollViewer;
+        ThicknessAnimator? tabStripScrollViewerMarginAnimator;
+        readonly ScheduledAction updateTabStripScrollViewerMarginAction;
 
 
         /// <summary>
@@ -87,6 +97,7 @@ namespace CarinaStudio.AppSuite.Controls
                 else if (left + tabItemHeaderBounds.Width > this.tabStripScrollViewer.Bounds.Width)
                     this.tabStripScrollViewer.ScrollBy(left + tabItemHeaderBounds.Width - this.tabStripScrollViewer.Bounds.Width);
             });
+            this.updateTabStripScrollViewerMarginAction = new ScheduledAction(() => this.UpdateTabStripScrollViewerMargin(true));
         }
 
 
@@ -140,6 +151,16 @@ namespace CarinaStudio.AppSuite.Controls
         public event EventHandler<DragOnTabItemEventArgs>? DropOnItem;
 
 
+        /// <summary>
+        /// Get or set whether <see cref="TabControl"/> should be layout as full-window mode or not.
+        /// </summary>
+        public bool IsFullWindowMode
+        {
+            get => this.GetValue<bool>(IsFullWindowModeProperty);
+            set => this.SetValue<bool>(IsFullWindowModeProperty, value);
+        }
+
+
         /// <inheritdoc/>
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
         {
@@ -157,6 +178,8 @@ namespace CarinaStudio.AppSuite.Controls
                     this.scrollTabStripRightButton = e.NameScope.Find<RepeatButton>("PART_ScrollRightButton");
                 };
             });
+            this.updateTabStripScrollViewerMarginAction.Cancel();
+            this.UpdateTabStripScrollViewerMargin(false);
         }
 
 
@@ -172,6 +195,18 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <inheritdoc/>
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            base.OnAttachedToVisualTree(e);
+            this.attachedWindow = this.FindLogicalAncestorOfType<Window>()?.Also(it =>
+            {
+                it.PropertyChanged += this.OnWindowPropertyChanged;
+            });
+            this.UpdateTabStripScrollViewerMargin(false);
+        }
+
+
+        /// <inheritdoc/>
         protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
         {
             this.RemoveHandler(DragDrop.DragEnterEvent, this.OnDragOver);
@@ -179,6 +214,19 @@ namespace CarinaStudio.AppSuite.Controls
             this.RemoveHandler(DragDrop.DragOverEvent, this.OnDragOver);
             this.RemoveHandler(DragDrop.DropEvent, this.OnDrop);
             base.OnDetachedFromLogicalTree(e);
+        }
+
+
+        /// <inheritdoc/>
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            this.attachedWindow?.Let(it =>
+            {
+                it.PropertyChanged -= this.OnWindowPropertyChanged;
+                this.attachedWindow = null;
+            });
+            this.updateTabStripScrollViewerMarginAction.Cancel();
+            base.OnDetachedFromVisualTree(e);
         }
 
 
@@ -269,8 +317,70 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
         {
             base.OnPropertyChanged(change);
-            if (change.Property == SelectedIndexProperty)
+            if (change.Property == IsFullWindowModeProperty)
+                this.updateTabStripScrollViewerMarginAction.Schedule();
+            else if (change.Property == SelectedIndexProperty)
                 this.scrollToSelectedItemAction.Schedule();
+        }
+
+
+        // Called on property of window changed.
+        void OnWindowPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+        {
+            if (e.Property == Avalonia.Controls.Window.ExtendClientAreaToDecorationsHintProperty
+                || e.Property == Window.IsSystemChromeVisibleInClientAreaProperty)
+            {
+                this.updateTabStripScrollViewerMarginAction.Schedule();
+            }
+        }
+
+
+        // Update margin of tab strip.
+        void UpdateTabStripScrollViewerMargin(bool animate)
+        {
+            // check state
+            if (this.attachedWindow == null || this.tabStripScrollViewer == null)
+                return;
+
+            // calculate margin
+            var margin = Global.Run(() =>
+            {
+                if (!this.attachedWindow.ExtendClientAreaToDecorationsHint
+                    || !this.attachedWindow.IsSystemChromeVisibleInClientArea
+                    || !this.IsFullWindowMode)
+                {
+                    return new Thickness();
+                }
+                var reservedSize = ExtendedClientAreaWindowConfiguration.SystemChromeWidth;
+                if (this.TryFindResource("Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace", out var res) && res is double doubleValue)
+                    reservedSize += doubleValue;
+                if (ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtRight)
+                    return new Thickness(0, 0, reservedSize, 0);
+                return new Thickness(reservedSize, 0, 0, 0);
+            });
+
+            // update margin
+            if (this.tabStripScrollViewerMarginAnimator != null)
+            {
+                this.tabStripScrollViewerMarginAnimator.Cancel();
+                this.tabStripScrollViewerMarginAnimator = null;
+            }
+            if (animate)
+            {
+                var duration = (this.TryFindResource("TimeSpan/Animation.Fast", out var res) && res is TimeSpan timeSpanValue)
+                    ? timeSpanValue
+                    : TimeSpan.FromMilliseconds(250);
+                this.tabStripScrollViewerMarginAnimator = new ThicknessAnimator(this.tabStripScrollViewer.Margin, margin).Also(it =>
+                {
+                    it.Completed += (_, e) => this.tabStripScrollViewerMarginAnimator = null;
+                    it.Duration = duration;
+                    it.Interpolator = Interpolators.Deleceleration;
+                    it.ProgressChanged += (_, e) => this.tabStripScrollViewer.Margin = it.Value;
+                    it.Start();
+                });
+            }
+            else
+                this.tabStripScrollViewer.Margin = margin;
         }
 
 
