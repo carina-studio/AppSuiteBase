@@ -188,6 +188,10 @@ namespace CarinaStudio.AppSuite
         public virtual bool IsSystemThemeModeSupported { get; } = false;
 
 
+        /// <inheritdoc/>
+        public virtual Window? LatestActiveMainWindow { get; }
+
+
         /// <summary>
         /// Get options to launch application which is converted by arguments passed to application.
         /// </summary>

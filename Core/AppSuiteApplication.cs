@@ -48,6 +48,7 @@ namespace CarinaStudio.AppSuite
         class MainWindowHolder
         {
             // Fields.
+            public readonly LinkedListNode<MainWindowHolder> ActiveListNode;
             public bool IsRestartingRequested;
             public readonly ViewModel ViewModel;
             public readonly Window? Window;
@@ -55,6 +56,7 @@ namespace CarinaStudio.AppSuite
             // Constructor.
             public MainWindowHolder(ViewModel viewModel, Window? window)
             {
+                this.ActiveListNode = new LinkedListNode<MainWindowHolder>(this);
                 this.ViewModel = viewModel;
                 this.Window = window;
             }
@@ -136,6 +138,7 @@ namespace CarinaStudio.AppSuite
 
         // Fields.
         Avalonia.Controls.ResourceDictionary? accentColorResources;
+        readonly LinkedList<MainWindowHolder> activeMainWindowList = new LinkedList<MainWindowHolder>();
 #if WINDOWS10_0_17763_0_OR_GREATER
         readonly bool canUseWindows10Features = Environment.OSVersion.Version.Let(version =>
         {
@@ -827,6 +830,10 @@ namespace CarinaStudio.AppSuite
         public bool IsUserAgreementAgreedBefore { get; private set; }
 
 
+        /// <inheritdoc/>
+        public Window? LatestActiveMainWindow { get => this.activeMainWindowList.IsNotEmpty() ? this.activeMainWindowList.First?.Value?.Window : null; }
+
+
         /// <summary>
         /// Get options to launch application which is converted by arguments passed to application.
         /// </summary>
@@ -1240,8 +1247,16 @@ namespace CarinaStudio.AppSuite
                 return;
             if (!this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
                 return;
+            if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value?.Window == mainWindow)
+            {
+                this.activeMainWindowList.RemoveFirst();
+                this.OnPropertyChanged(nameof(LatestActiveMainWindow));
+            }
+            else if (mainWindowHolder.ActiveListNode.List != null)
+                this.activeMainWindowList.Remove(mainWindowHolder.ActiveListNode);
             this.mainWindows.Remove(mainWindow);
             mainWindow.Closed -= this.OnMainWindowClosed;
+            mainWindow.PropertyChanged -= this.OnMainWindowPropertyChanged;
 
             this.Logger.LogDebug($"Main window closed, {this.mainWindows.Count} remains");
 
@@ -1311,6 +1326,36 @@ namespace CarinaStudio.AppSuite
         {
             // save settings
             await this.SaveSettingsAsync();
+        }
+
+
+        // Called when property of main window changed.
+        void OnMainWindowPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e) =>
+            (sender as Window)?.Let(it => this.OnMainWindowPropertyChanged(it, e));
+
+
+        /// <summary>
+        /// Called when property of main window changed.
+        /// </summary>
+        /// <param name="mainWindow">Main window.</param>
+        /// <param name="e">Event data.</param>
+        protected virtual void OnMainWindowPropertyChanged(Window mainWindow, AvaloniaPropertyChangedEventArgs e)
+        {
+            if (e.Property == Window.IsActiveProperty)
+            {
+                if (mainWindow.IsActive)
+                {
+                    if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value?.Window == mainWindow)
+                        return;
+                    if (this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
+                    {
+                        if (mainWindowHolder.ActiveListNode.List != null)
+                            this.activeMainWindowList.Remove(mainWindowHolder.ActiveListNode);
+                        this.activeMainWindowList.AddFirst(mainWindowHolder.ActiveListNode);
+                        this.OnPropertyChanged(nameof(LatestActiveMainWindow));
+                    }
+                }
+            }
         }
 
 
@@ -1920,6 +1965,7 @@ namespace CarinaStudio.AppSuite
             this.mainWindowHolders[mainWindow] = mainWindowHolder;
             this.mainWindows.Add(mainWindow);
             mainWindow.Closed += this.OnMainWindowClosed;
+            mainWindow.PropertyChanged += this.OnMainWindowPropertyChanged;
 
             this.Logger.LogDebug($"Show main window, {this.mainWindows.Count} created");
 

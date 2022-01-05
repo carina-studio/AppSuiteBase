@@ -102,6 +102,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get latest active main window.
+        /// </summary>
+        Window? LatestActiveMainWindow { get; }
+
+
+        /// <summary>
         /// Get options to launch application which is converted by arguments passed to application.
         /// </summary>
         IDictionary<string, object> LaunchOptions { get; }
