@@ -66,7 +66,6 @@ namespace CarinaStudio.AppSuite.Controls
                 if (!this.IsClosed)
                     this.TransparencyLevelHint = this.OnSelectTransparentLevelHint();
             });
-            this.checkSystemChromeVisibilityAction.Schedule();
             this.updateTransparencyLevelAction.Schedule();
         }
 
@@ -118,8 +117,12 @@ namespace CarinaStudio.AppSuite.Controls
         /// <param name="e">Event data.</param>
         protected override void OnOpened(EventArgs e)
         {
-            this.updateTransparencyLevelAction.ExecuteIfScheduled();
             base.OnOpened(e);
+            if (ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtRight)
+                this.checkSystemChromeVisibilityAction.Reschedule(SystemChromeVisibilityCheckingDelay);
+            else
+                this.checkSystemChromeVisibilityAction.Execute();
+            this.updateTransparencyLevelAction.ExecuteIfScheduled();
         }
 
 
@@ -136,7 +139,8 @@ namespace CarinaStudio.AppSuite.Controls
                 || property == SystemDecorationsProperty
                 || property == WindowStateProperty)
             {
-                this.checkSystemChromeVisibilityAction.Reschedule(SystemChromeVisibilityCheckingDelay);
+                if (this.IsOpened)
+                    this.checkSystemChromeVisibilityAction.Reschedule(SystemChromeVisibilityCheckingDelay);
             }
             else if (property == IsActiveProperty)
                 this.updateTransparencyLevelAction.Schedule();

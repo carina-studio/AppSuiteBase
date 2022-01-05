@@ -81,7 +81,7 @@ namespace CarinaStudio.AppSuite.Controls
         public static double SystemChromeWidth { get; } = Global.Run(() =>
         {
             if (Platform.IsWindows)
-                return 140; // Windows 8+
+                return 135; // Windows 8+, managed chrome
             if (Platform.IsMacOS)
                 return 70;
             return 0;
