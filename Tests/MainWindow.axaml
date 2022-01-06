@@ -38,7 +38,7 @@
 			</StackPanel>
 		</Border>
 
-		<appControls:TabControl Name="tabControl" DragDrop.AllowDrop="True" DragOverItem="OnDragOverTabItem" DropOnItem="OnDropOnTabItem" ItemDragged="OnTabItemDragged">
+		<appControls:TabControl Name="tabControl" DragDrop.AllowDrop="True" DragEnterItem="OnDragEnterTabItem" DragLeaveItem="OnDragLeaveTabItem" DragOverItem="OnDragOverTabItem" DropOnItem="OnDropOnTabItem" ItemDragged="OnTabItemDragged">
 
 			<TabItem>
 
@@ -237,43 +237,43 @@
 
 			<TabItem>
 				<TabItem.Header>
-					12345
+					<TextBlock Text="12345"/>
 				</TabItem.Header>
 			</TabItem>
 
 			<TabItem>
 				<TabItem.Header>
-					Tab
+					<TextBlock Text="Tab"/>
 				</TabItem.Header>
 			</TabItem>
 
 			<TabItem>
 				<TabItem.Header>
-					Tab
+					<TextBlock Text="Tab"/>
 				</TabItem.Header>
 			</TabItem>
 
 			<TabItem>
 				<TabItem.Header>
-					Tab
+					<TextBlock Text="Tab"/>
 				</TabItem.Header>
 			</TabItem>
 
 			<TabItem>
 				<TabItem.Header>
-					Tab
+					<TextBlock Text="Tab"/>
 				</TabItem.Header>
 			</TabItem>
 
 			<TabItem>
 				<TabItem.Header>
-					Tab
+					<TextBlock Text="Tab"/>
 				</TabItem.Header>
 			</TabItem>
 
 			<TabItem>
 				<TabItem.Header>
-					Tab
+					<TextBlock Text="Tab"/>
 				</TabItem.Header>
 			</TabItem>
 

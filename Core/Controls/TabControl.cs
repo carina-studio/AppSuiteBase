@@ -33,6 +33,8 @@ namespace CarinaStudio.AppSuite.Controls
 
         // Fields.
         Window? attachedWindow;
+        object? draggingOverItem;
+        int draggingOverItemIndex = -1;
         object? pointerPressedItem;
         int pointerPressedItemIndex = -1;
         Point? pointerPressedPosition;
@@ -182,6 +184,18 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
+        /// Raised when data dragged into an item.
+        /// </summary>
+        public event EventHandler<DragOnTabItemEventArgs>? DragEnterItem;
+
+
+        /// <summary>
+        /// Raised when data dragged from an item.
+        /// </summary>
+        public event EventHandler<TabItemEventArgs>? DragLeaveItem;
+
+
+        /// <summary>
         /// Raised when data dragged over an item.
         /// </summary>
         public event EventHandler<DragOnTabItemEventArgs>? DragOverItem;
@@ -287,8 +301,17 @@ namespace CarinaStudio.AppSuite.Controls
         // Called when data drag leave.
         void OnDragLeave(object? sender, RoutedEventArgs e)
         {
+            // cancel scrolling
             this.scrollTabStripLeftByButtonAction.Cancel();
             this.scrollTabStripRightByButtonAction.Cancel();
+
+            // raise event
+            if (this.draggingOverItem != null)
+            {
+                this.DragLeaveItem?.Invoke(this, new TabItemEventArgs(this.draggingOverItemIndex, this.draggingOverItem));
+                this.draggingOverItem = null;
+                this.draggingOverItemIndex = -1;
+            }
         }
 
 
@@ -334,7 +357,28 @@ namespace CarinaStudio.AppSuite.Controls
 
             // find tab item which data is dragged over
             if (!this.FindItemDraggedOver(e, out var itemIndex, out var item) || item == null)
+            {
+                if (this.draggingOverItem != null)
+                {
+                    this.DragLeaveItem?.Invoke(this, new TabItemEventArgs(this.draggingOverItemIndex, this.draggingOverItem));
+                    this.draggingOverItem = null;
+                    this.draggingOverItemIndex = -1;
+                }
                 return;
+            }
+
+            // leave and enter item
+            if (this.draggingOverItem != null && this.draggingOverItem != item)
+            {
+                this.DragLeaveItem?.Invoke(this, new TabItemEventArgs(this.draggingOverItemIndex, this.draggingOverItem));
+                this.draggingOverItem = null;
+            }
+            if (this.draggingOverItem == null)
+            {
+                this.DragEnterItem?.Invoke(this, new DragOnTabItemEventArgs(e, itemIndex, item));
+                this.draggingOverItem = item;
+            }
+            this.draggingOverItemIndex = itemIndex;
 
             // raise event
             var dragOnItemEventArgs = new DragOnTabItemEventArgs(e, itemIndex, item);

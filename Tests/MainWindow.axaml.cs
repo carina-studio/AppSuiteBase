@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Converters;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.Collections;
@@ -59,6 +60,22 @@ namespace CarinaStudio.AppSuite.Tests
         protected override ApplicationInfo OnCreateApplicationInfo() => new AppInfo();
 
 
+        void OnDragEnterTabItem(object? sender, DragOnTabItemEventArgs e)
+        {
+            var textBlock = ((e.Item as TabItem)?.Header as IVisual)?.FindDescendantOfType<TextBlock>(true);
+            if (textBlock != null && e.Data.Get(TabItemKey) != e.Item)
+                textBlock.FontWeight = Avalonia.Media.FontWeight.Bold;
+        }
+
+
+        void OnDragLeaveTabItem(object? sender, TabItemEventArgs e)
+        {
+            var textBlock = ((e.Item as TabItem)?.Header as IVisual)?.FindDescendantOfType<TextBlock>(true);
+            if (textBlock != null)
+                textBlock.FontWeight = Avalonia.Media.FontWeight.Normal;
+        }
+
+
         void OnDragOverTabItem(object? sender, DragOnTabItemEventArgs e)
         {
             e.DragEffects = DragDropEffects.None;
@@ -98,6 +115,10 @@ namespace CarinaStudio.AppSuite.Tests
 
         void OnDropOnTabItem(object? sender, DragOnTabItemEventArgs e)
         {
+            var textBlock = ((e.Item as TabItem)?.Header as IVisual)?.FindDescendantOfType<TextBlock>(true);
+            if (textBlock != null)
+                textBlock.FontWeight = Avalonia.Media.FontWeight.Normal;
+
             var item = e.Data.Get(TabItemKey);
             if (item == null || item == e.Item)
                 return;
