@@ -78,8 +78,12 @@
 	<sys:String x:Key="String/Common.Agree">同意</sys:String>
 	<sys:String x:Key="String/Common.Cancel">取消</sys:String>
 	<sys:String x:Key="String/Common.Close">關閉</sys:String>
+	<sys:String x:Key="String/Common.CloseTab">關閉分頁</sys:String>
+	<sys:String x:Key="String/Common.CloseWindow">關閉視窗</sys:String>
 	<sys:String x:Key="String/Common.Copy">複製</sys:String>
 	<sys:String x:Key="String/Common.Create">建立</sys:String>
+	<sys:String x:Key="String/Common.CreateTab">建立新的分頁</sys:String>
+	<sys:String x:Key="String/Common.CreateWindow">建立新的視窗</sys:String>
 	<sys:String x:Key="String/Common.DebugMode">偵錯模式</sys:String>
 	<sys:String x:Key="String/Common.Decline">不同意</sys:String>
 	<sys:String x:Key="String/Common.Delete">刪除</sys:String>
@@ -92,6 +96,8 @@
 	<sys:String x:Key="String/Common.None">無</sys:String>
 	<sys:String x:Key="String/Common.OK">確定</sys:String>
 	<sys:String x:Key="String/Common.Open">開啟</sys:String>
+	<sys:String x:Key="String/Common.OpenInNewTab">在新分頁中開啟</sys:String>
+	<sys:String x:Key="String/Common.OpenInNewWindow">在新視窗中開啟</sys:String>
 	<sys:String x:Key="String/Common.Paste">貼上</sys:String>
 	<sys:String x:Key="String/Common.Remove">移除</sys:String>
 	<sys:String x:Key="String/Common.Save">儲存</sys:String>
@@ -121,6 +127,7 @@
 
 	<!-- MainWindow -->
 	<sys:String x:Key="String/MainWindow.ConfirmLayoutingLotsOfMainWindows">排列較多數量的視窗可能導致不適合的排列結果，是否仍要進行排列？</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows">排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">水平排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">網格排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">垂直排列視窗</sys:String>

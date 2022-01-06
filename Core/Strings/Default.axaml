@@ -80,8 +80,12 @@
 	<sys:String x:Key="String/Common.Agree">Agree</sys:String>
 	<sys:String x:Key="String/Common.Cancel">Cancel</sys:String>
 	<sys:String x:Key="String/Common.Close">Close</sys:String>
+	<sys:String x:Key="String/Common.CloseTab">Close tab</sys:String>
+	<sys:String x:Key="String/Common.CloseWindow">Close window</sys:String>
 	<sys:String x:Key="String/Common.Copy">Copy</sys:String>
 	<sys:String x:Key="String/Common.Create">Create</sys:String>
+	<sys:String x:Key="String/Common.CreateTab">Create new tab</sys:String>
+	<sys:String x:Key="String/Common.CreateWindow">Create new window</sys:String>
 	<sys:String x:Key="String/Common.DebugMode">Debug Mode</sys:String>
 	<sys:String x:Key="String/Common.Decline">Decline</sys:String>
 	<sys:String x:Key="String/Common.Delete">Delete</sys:String>
@@ -94,6 +98,8 @@
 	<sys:String x:Key="String/Common.None">None</sys:String>
 	<sys:String x:Key="String/Common.OK">OK</sys:String>
 	<sys:String x:Key="String/Common.Open">Open</sys:String>
+	<sys:String x:Key="String/Common.OpenInNewTab">Open in new tab</sys:String>
+	<sys:String x:Key="String/Common.OpenInNewWindow">Open in new window</sys:String>
 	<sys:String x:Key="String/Common.Paste">Paste</sys:String>
 	<sys:String x:Key="String/Common.Remove">Remove</sys:String>
 	<sys:String x:Key="String/Common.Save">Save</sys:String>
@@ -120,6 +126,7 @@
 
 	<!-- MainWindow -->
 	<sys:String x:Key="String/MainWindow.ConfirmLayoutingLotsOfMainWindows">Layouting lots of windows may cause improper result, do you still want to layout windows?</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows">Layout windows</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">Layout windows horizontally</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">Tile windows</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">Layout windows vertically</sys:String>
