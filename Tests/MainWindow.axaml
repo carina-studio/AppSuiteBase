@@ -181,6 +181,8 @@
 
 						<TextBlock Text="{Binding $parent[Window].ActualTransparencyLevel}" Margin="5"/>
 
+						<TextBlock Text="{Binding $parent[Window].Application.IsDebugMode, StringFormat={}IsDebugMode: {0}}" Margin="5"/>
+
 						<Expander HorizontalAlignment="Left" Header="Expander">
 							<StackPanel>
 

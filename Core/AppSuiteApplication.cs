@@ -2282,9 +2282,9 @@ namespace CarinaStudio.AppSuite
             // get port
             var port = this.PersistentState.GetValueOrDefault(LogOutputTargetPortKey);
             var config = LogManager.Configuration;
-            if (port == 0)
+            if (port == 0 || !this.IsDebugMode)
             {
-                port = this.DefaultLogOutputTargetPort;
+                port = this.IsDebugMode ? this.DefaultLogOutputTargetPort : 0;
                 if (port <= 0 || port > ushort.MaxValue)
                 {
                     this.Logger.LogDebug("No need to output log to localhost");
