@@ -19,6 +19,9 @@ namespace CarinaStudio.AppSuite.Tests
 {
     partial class MainWindow : Controls.MainWindow<App, Workspace>
     {
+        const string TabItemKey = "TabItem";
+
+
         readonly ScheduledAction logAction;
 
 
@@ -58,18 +61,68 @@ namespace CarinaStudio.AppSuite.Tests
 
         void OnDragOverTabItem(object? sender, DragOnTabItemEventArgs e)
         {
-            e.DragEffects = DragDropEffects.Copy;
+            e.DragEffects = DragDropEffects.None;
 
-            var tabItems = (sender as Controls.TabControl)?.Items as ICollection;
+            var tabItems = (sender as Controls.TabControl)?.Items as IList;
+            if (tabItems == null)
+                return;
 
-            if (tabItems != null && e.ItemIndex < tabItems.Count - 1)
+            //if (tabItems != null && e.ItemIndex < tabItems.Count - 1)
+            //(sender as Controls.TabControl)?.Let(it => it.SelectedIndex = e.ItemIndex);
+
+            var tabItem = e.Data.Get(TabItemKey);
+            if (tabItem == null)
+                return;
+
+            if (tabItem == e.Item)
+            {
+                e.DragEffects = DragDropEffects.Move;
+                e.Handled = true;
+            }
+            else if (e.ItemIndex < tabItems.Count - 1)
+            {
+                e.DragEffects = DragDropEffects.Move;
+                /*
+                var srcIndex = tabItems.IndexOf(tabItem);
+                if (srcIndex < 0)
+                    return;
                 (sender as Controls.TabControl)?.Let(it => it.SelectedIndex = e.ItemIndex);
+                tabItems.RemoveAt(srcIndex);
+                tabItems.Insert(e.ItemIndex, tabItem);
+                (sender as Controls.TabControl)?.Let(it => it.SelectedIndex = e.ItemIndex);
+                */
+                e.Handled = true;
+            }
         }
 
 
         void OnDropOnTabItem(object? sender, DragOnTabItemEventArgs e)
         {
-            //
+            var item = e.Data.Get(TabItemKey);
+            if (item == null || item == e.Item)
+                return;
+
+            var tabItems = (sender as Controls.TabControl)?.Items as IList;
+            if (tabItems == null)
+                return;
+
+            var srcIndex = tabItems.IndexOf(item);
+            if (srcIndex < 0)
+                return;
+
+            (sender as Controls.TabControl)?.Let(it => it.SelectedIndex = e.ItemIndex);
+            tabItems.RemoveAt(srcIndex);
+            tabItems.Insert(e.ItemIndex, item);
+            (sender as Controls.TabControl)?.Let(it => it.SelectedIndex = e.ItemIndex);
+        }
+
+
+        void OnTabItemDragged(object? sender, TabItemDraggedEventArgs e)
+        {
+            var data = new DataObject();
+            data.Set(TabItemKey, e.Item);
+            DragDrop.DoDragDrop(e.PointerEventArgs, data, DragDropEffects.Move);
+            e.Handled = true;
         }
 
 
