@@ -23,6 +23,12 @@ namespace CarinaStudio.AppSuite.Controls
     /// <typeparam name="TViewModel">Type of view-model.</typeparam>
     public abstract class MainWindow<TViewModel> : Window where TViewModel : MainWindowViewModel
     {
+        /// <summary>
+        /// Property of <see cref="HasMultipleMainWindows"/>.
+        /// </summary>
+        public static readonly AvaloniaProperty<bool> HasMultipleMainWindowsProperty = AvaloniaProperty.Register<MainWindow<TViewModel>, bool>(nameof(HasMultipleMainWindows), true);
+
+
         // Constants.
         const int InitialDialogsDelay = 1000;
         const int RestartingMainWindowsDelay = 500;
@@ -38,7 +44,6 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Fields.
-        readonly MutableObservableBoolean canLayoutMainWindows = new MutableObservableBoolean();
         bool isContentPaddingTransitionReady;
         bool isShowingInitialDialogs;
         long openedTime;
@@ -54,7 +59,7 @@ namespace CarinaStudio.AppSuite.Controls
         protected MainWindow()
         {
             // create commands
-            this.LayoutMainWindowsCommand = new Command<MultiWindowLayout>(this.LayoutMainWindows, this.canLayoutMainWindows);
+            this.LayoutMainWindowsCommand = new Command<MultiWindowLayout>(this.LayoutMainWindows, this.GetObservable(HasMultipleMainWindowsProperty));
 
             // create scheduled actions
             this.restartingMainWindowsAction = new ScheduledAction(() =>
@@ -138,6 +143,12 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
+        /// Check whether multiple main windows were opened or not.
+        /// </summary>
+        public bool HasMultipleMainWindows { get => this.GetValue<bool>(HasMultipleMainWindowsProperty); }
+
+
+        /// <summary>
         /// Check whether extending client area to title bar is allowed or not.
         /// </summary>
         public virtual bool IsExtendingClientAreaAllowed { get; } = true;
@@ -148,7 +159,7 @@ namespace CarinaStudio.AppSuite.Controls
         {
             // check state
             this.VerifyAccess();
-            if (this.IsClosed || !this.canLayoutMainWindows.Value)
+            if (this.IsClosed || !this.HasMultipleMainWindows)
                 return;
 
             // layout
@@ -322,10 +333,8 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Called when list of main window changed.
-        void OnMainWindowsChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            this.canLayoutMainWindows.Update(this.Application.MainWindows.Count > 1);
-        }
+        void OnMainWindowsChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
+            this.SetValue<bool>(HasMultipleMainWindowsProperty, this.Application.MainWindows.Count > 1);
 
 
         /// <summary>
@@ -345,8 +354,8 @@ namespace CarinaStudio.AppSuite.Controls
             this.Application.PropertyChanged += this.OnApplicationPropertyChanged;
             this.AddHandler(DragDrop.DragEnterEvent, this.OnDragEnter);
 
-            // check command state
-            this.canLayoutMainWindows.Update(this.Application.MainWindows.Count > 1);
+            // check main window count
+            this.SetValue<bool>(HasMultipleMainWindowsProperty, this.Application.MainWindows.Count > 1);
 
             // update content padding
             this.updateContentPaddingAction.Schedule();
