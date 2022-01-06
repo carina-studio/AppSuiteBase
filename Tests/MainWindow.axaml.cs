@@ -65,6 +65,7 @@ namespace CarinaStudio.AppSuite.Tests
             var textBlock = ((e.Item as TabItem)?.Header as IVisual)?.FindDescendantOfType<TextBlock>(true);
             if (textBlock != null && e.Data.Get(TabItemKey) != e.Item)
                 textBlock.FontWeight = Avalonia.Media.FontWeight.Bold;
+            (sender as Controls.TabControl)?.ScrollHeaderIntoView(e.ItemIndex);
         }
 
 

@@ -72,36 +72,10 @@ namespace CarinaStudio.AppSuite.Controls
             });
             this.scrollToSelectedItemAction = new ScheduledAction(() =>
             {
-                // get state
                 var index = this.SelectedIndex;
                 if (index < 0)
                     return;
-                if (this.tabStripScrollViewer == null || this.tabItemsPresenter == null)
-                    return;
-
-                // find tab item header
-                var tabItemHeader = this.tabItemsPresenter.FindDescendantOfType<Panel>()?.Let(panel =>
-                {
-                    if (panel.Children.Count > index)
-                        return panel.Children[index];
-                    return null;
-                });
-                if (tabItemHeader == null)
-                    return;
-
-                // scroll into viewport
-                var tabItemHeaderBounds = tabItemHeader.Bounds;
-                var left = tabItemHeaderBounds.Left + this.tabItemsPresenter.Bounds.Left;
-                var parent = this.tabItemsPresenter.Parent;
-                while (parent != this.tabStripScrollViewer && parent != null)
-                {
-                    left += parent.Bounds.Left;
-                    parent = parent.Parent;
-                }
-                if (left < 0)
-                    this.tabStripScrollViewer.ScrollBy(left);
-                else if (left + tabItemHeaderBounds.Width > this.tabStripScrollViewer.Bounds.Width)
-                    this.tabStripScrollViewer.ScrollBy(left + tabItemHeaderBounds.Width - this.tabStripScrollViewer.Bounds.Width);
+                this.ScrollHeaderIntoViewCore(index);
             });
             this.updateTabStripScrollViewerMarginAction = new ScheduledAction(() => this.UpdateTabStripScrollViewerMargin(true));
         }
@@ -223,6 +197,18 @@ namespace CarinaStudio.AppSuite.Controls
         public event EventHandler<TabItemDraggedEventArgs>? ItemDragged;
 
 
+        // Leave the item which is currently dragging over.
+        void LeaveDraggingOverItem()
+        {
+            if (this.draggingOverItem != null)
+            {
+                this.DragLeaveItem?.Invoke(this, new TabItemEventArgs(this.draggingOverItemIndex, this.draggingOverItem));
+                this.draggingOverItem = null;
+                this.draggingOverItemIndex = -1;
+            }
+        }
+
+
         /// <inheritdoc/>
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
         {
@@ -305,13 +291,8 @@ namespace CarinaStudio.AppSuite.Controls
             this.scrollTabStripLeftByButtonAction.Cancel();
             this.scrollTabStripRightByButtonAction.Cancel();
 
-            // raise event
-            if (this.draggingOverItem != null)
-            {
-                this.DragLeaveItem?.Invoke(this, new TabItemEventArgs(this.draggingOverItemIndex, this.draggingOverItem));
-                this.draggingOverItem = null;
-                this.draggingOverItemIndex = -1;
-            }
+            // leave item
+            this.LeaveDraggingOverItem();
         }
 
 
@@ -323,6 +304,7 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 this.scrollTabStripLeftByButtonAction.Cancel();
                 this.scrollTabStripRightByButtonAction.Cancel();
+                this.LeaveDraggingOverItem();
                 return;
             }
 
@@ -338,6 +320,7 @@ namespace CarinaStudio.AppSuite.Controls
                 {
                     this.scrollTabStripLeftByButtonAction.Schedule(ScrollTabStripByButtonInterval);
                     this.scrollTabStripRightByButtonAction.Cancel();
+                    this.LeaveDraggingOverItem();
                     return;
                 }
             }
@@ -349,6 +332,7 @@ namespace CarinaStudio.AppSuite.Controls
                 {
                     this.scrollTabStripRightByButtonAction.Schedule(ScrollTabStripByButtonInterval);
                     this.scrollTabStripLeftByButtonAction.Cancel();
+                    this.LeaveDraggingOverItem();
                     return;
                 }
             }
@@ -358,21 +342,13 @@ namespace CarinaStudio.AppSuite.Controls
             // find tab item which data is dragged over
             if (!this.FindItemDraggedOver(e, out var itemIndex, out var item) || item == null)
             {
-                if (this.draggingOverItem != null)
-                {
-                    this.DragLeaveItem?.Invoke(this, new TabItemEventArgs(this.draggingOverItemIndex, this.draggingOverItem));
-                    this.draggingOverItem = null;
-                    this.draggingOverItemIndex = -1;
-                }
+                this.LeaveDraggingOverItem();
                 return;
             }
 
             // leave and enter item
             if (this.draggingOverItem != null && this.draggingOverItem != item)
-            {
-                this.DragLeaveItem?.Invoke(this, new TabItemEventArgs(this.draggingOverItemIndex, this.draggingOverItem));
-                this.draggingOverItem = null;
-            }
+                this.LeaveDraggingOverItem();
             if (this.draggingOverItem == null)
             {
                 this.DragEnterItem?.Invoke(this, new DragOnTabItemEventArgs(e, itemIndex, item));
@@ -494,6 +470,72 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 this.updateTabStripScrollViewerMarginAction.Schedule();
             }
+        }
+
+
+        /// <summary>
+        /// Scroll header of given item into view of tab strip.
+        /// </summary>
+        /// <param name="item">Item.</param>
+        public void ScrollHeaderIntoView(object item)
+        {
+            this.VerifyAccess();
+            if (this.Items is not IList items)
+                return;
+            var itemIndex = items.IndexOf(item);
+            if (itemIndex < 0)
+                return;
+            this.scrollToSelectedItemAction.Cancel();
+            this.ScrollHeaderIntoViewCore(itemIndex);
+        }
+
+
+        /// <summary>
+        /// Scroll header of given item into view of tab strip.
+        /// </summary>
+        /// <param name="itemIndex">Index of item.</param>
+        public void ScrollHeaderIntoView(int itemIndex)
+        {
+            this.VerifyAccess();
+            if (this.Items is not IList items)
+                return;
+            if (itemIndex < 0 || itemIndex >= items.Count)
+                throw new ArgumentOutOfRangeException();
+            this.scrollToSelectedItemAction.Cancel();
+            this.ScrollHeaderIntoViewCore(itemIndex);
+        }
+
+
+        // Scroll header item into view.
+        void ScrollHeaderIntoViewCore(int itemIndex)
+        {
+            // check state
+            if (this.tabStripScrollViewer == null || this.tabItemsPresenter == null)
+                return;
+
+            // find tab item header
+            var tabItemHeader = this.tabItemsPresenter.FindDescendantOfType<Panel>()?.Let(panel =>
+            {
+                if (panel.Children.Count > itemIndex)
+                    return panel.Children[itemIndex];
+                return null;
+            });
+            if (tabItemHeader == null)
+                return;
+
+            // scroll into viewport
+            var tabItemHeaderBounds = tabItemHeader.Bounds;
+            var left = tabItemHeaderBounds.Left + this.tabItemsPresenter.Bounds.Left;
+            var parent = this.tabItemsPresenter.Parent;
+            while (parent != this.tabStripScrollViewer && parent != null)
+            {
+                left += parent.Bounds.Left;
+                parent = parent.Parent;
+            }
+            if (left < 0)
+                this.tabStripScrollViewer.ScrollBy(left);
+            else if (left + tabItemHeaderBounds.Width > this.tabStripScrollViewer.Bounds.Width)
+                this.tabStripScrollViewer.ScrollBy(left + tabItemHeaderBounds.Width - this.tabStripScrollViewer.Bounds.Width);
         }
 
 
