@@ -68,5 +68,15 @@
 		<Color x:Key="Color/WorkingArea.Panel.Background">#d8d8d8</Color>
 
 	</Styles.Resources>
+
+	<!-- TabControl -->
+	<Style Selector="RepeatButton.TabStripScroller">
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Dark.1}"/>
+	</Style>
+
+	<!-- ToolBarScrollViewer -->
+	<Style Selector="RepeatButton.ToolBarScrollViewer">
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Dark.1}"/>
+	</Style>
 	
 </Styles>

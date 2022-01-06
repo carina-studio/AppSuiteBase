@@ -118,57 +118,64 @@
 
 						</Menu>
 
-						<Border Classes="ToolBar">
-							<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+						<appControls:ToolBarScrollViewer>
+							<Border Classes="ToolBar">
+								<Grid ColumnDefinitions="Auto,*,Auto">
+									<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
 
-								<Button Classes="ToolBar_Button">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.Administrator}"/>
-								</Button>
-								<Button Classes="ToolBar_Button">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.Link}"/>
-								</Button>
-								<Button Classes="ToolBar_Button">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
-								</Button>
-								<Button Classes="ToolBar_Button" IsEnabled="{Binding #toolBarToggleButton.IsChecked}">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
-								</Button>
+										<Button Classes="ToolBar_Button">
+											<Image Classes="Icon" Source="{StaticResource Image/Icon.Administrator}"/>
+										</Button>
+										<Button Classes="ToolBar_Button">
+											<Image Classes="Icon" Source="{StaticResource Image/Icon.Link}"/>
+										</Button>
+										<Button Classes="ToolBar_Button">
+											<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
+										</Button>
+										<Button Classes="ToolBar_Button" IsEnabled="{Binding #toolBarToggleButton.IsChecked}">
+											<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
+										</Button>
 
-								<TextBox Classes="ToolBar_TextBox" Width="50"/>
-								<TextBox Classes="ToolBar_TextBox" Width="50"/>
+										<TextBox Classes="ToolBar_TextBox" Width="50"/>
+										<TextBox Classes="ToolBar_TextBox" Width="50"/>
 
-								<ToggleButton Name="toolBarToggleButton" Classes="ToolBar_ToggleButton">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
-								</ToggleButton>
+										<ToggleButton Name="toolBarToggleButton" Classes="ToolBar_ToggleButton">
+											<Image Classes="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
+										</ToggleButton>
 
-								<Separator Classes="ToolBar_Separator"/>
+										<Separator Classes="ToolBar_Separator"/>
 
-								<ToggleButton Classes="ToolBar_ToggleButton">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
-								</ToggleButton>
+										<ToggleButton Classes="ToolBar_ToggleButton">
+											<Image Classes="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
+										</ToggleButton>
 
-								<ComboBox Classes="ToolBar_ComboBox" Width="100">
-									12345
-								</ComboBox>
+										<ComboBox Classes="ToolBar_ComboBox" Width="100">
+											12345
+										</ComboBox>
 
-								<RepeatButton Classes="ToolBar_RepeatButton">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.File}"/>
-								</RepeatButton>
+										<RepeatButton Classes="ToolBar_RepeatButton">
+											<Image Classes="Icon" Source="{StaticResource Image/Icon.File}"/>
+										</RepeatButton>
 
-								<TextBlock Classes="ToolBar_TextBlock" Text="test:"/>
-								<TextBox Classes="ToolBar_TextBox" Width="100"/>
+										<TextBlock Classes="ToolBar_TextBlock" Text="test:"/>
 
-								<Button Classes="ToolBar_Button">
-									<Panel Classes="Icon">
-										<Image Classes="Icon" Source="{DynamicResource Image/Icon.More}"/>
-										<Border Classes="ToolBar_NotificationIndicator" IsVisible="{Binding $parent[Window].Application.UpdateInfo, Converter={x:Static appConverters:ValueToBooleanConverters.NonNullToTrue}}">
-											<Image Classes="ToolBar_NotificationIndicator" Source="{DynamicResource Image/Icon.Information.Colored}"/>
-										</Border>
-									</Panel>
-								</Button>
+									</StackPanel>
 
-							</StackPanel>
-						</Border>
+									<TextBox Classes="ToolBar_TextBox" Grid.Column="1" MinWidth="200"/>
+
+									<StackPanel Grid.Column="2" HorizontalAlignment="Stretch" Orientation="Horizontal">
+										<Button Classes="ToolBar_Button">
+											<Panel Classes="Icon">
+												<Image Classes="Icon" Source="{DynamicResource Image/Icon.More}"/>
+												<Border Classes="ToolBar_NotificationIndicator" IsVisible="{Binding $parent[Window].Application.UpdateInfo, Converter={x:Static appConverters:ValueToBooleanConverters.NonNullToTrue}}">
+													<Image Classes="ToolBar_NotificationIndicator" Source="{DynamicResource Image/Icon.Information.Colored}"/>
+												</Border>
+											</Panel>
+										</Button>
+									</StackPanel>
+								</Grid>
+							</Border>
+						</appControls:ToolBarScrollViewer>
 
 						<TextBlock Text="{DynamicResource String/ApplicationOptions.LogOutputTargetPort}" Margin="5,5,5,0"/>
 						<NumericUpDown HorizontalAlignment="Left" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>

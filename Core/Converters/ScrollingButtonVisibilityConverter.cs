@@ -5,10 +5,10 @@ using System.Globalization;
 
 namespace CarinaStudio.AppSuite.Converters
 {
-    internal class TabStripScrollingButtonVisibilityConverter : IMultiValueConverter
+    internal class ScrollingButtonVisibilityConverter : IMultiValueConverter
     {
         // Static fields.
-        public static readonly TabStripScrollingButtonVisibilityConverter Default = new TabStripScrollingButtonVisibilityConverter();
+        public static readonly ScrollingButtonVisibilityConverter Default = new ScrollingButtonVisibilityConverter();
 
 
         /// <inheritdoc/>
@@ -18,12 +18,14 @@ namespace CarinaStudio.AppSuite.Converters
                 return null;
             if (values.Count >= 3
                 && values[0] is double offset
-                && values[1] is double extentWidth
-                && values[2] is double viewportWidth)
+                && values[1] is double extentSize
+                && values[2] is double viewportSize)
             {
-                if ((parameter as string) == "Right")
-                    return (extentWidth > viewportWidth && (offset + viewportWidth) < extentWidth - 1);
-                return (extentWidth > viewportWidth && offset > 1);
+                return (parameter as string) switch
+                {
+                    "Right" or "Bottom" => (extentSize > viewportSize && (offset + viewportSize) < extentSize - 1),
+                    _ => (extentSize > viewportSize && offset > 1),
+                };
             }
             return false;
         }

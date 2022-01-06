@@ -12,6 +12,12 @@
 		<!-- Accent -->
 		<Color x:Key="Color/Accent">#912fbf</Color>
 		<SolidColorBrush x:Key="Brush/Accent" Color="{DynamicResource Color/Accent}"/>
+		<SolidColorBrush x:Key="Brush/Accent.Dark.1" Color="{DynamicResource SystemAccentColorDark1}"/>
+		<SolidColorBrush x:Key="Brush/Accent.Dark.2" Color="{DynamicResource SystemAccentColorDark2}"/>
+		<SolidColorBrush x:Key="Brush/Accent.Dark.3" Color="{DynamicResource SystemAccentColorDark3}"/>
+		<SolidColorBrush x:Key="Brush/Accent.Light.1" Color="{DynamicResource SystemAccentColorLight1}"/>
+		<SolidColorBrush x:Key="Brush/Accent.Light.2" Color="{DynamicResource SystemAccentColorLight2}"/>
+		<SolidColorBrush x:Key="Brush/Accent.Light.3" Color="{DynamicResource SystemAccentColorLight3}"/>
 
 		<!-- AddTabItemButton -->
 		<sys:Double x:Key="Double/AddTabItemButton.Size">30</sys:Double>
@@ -214,7 +220,7 @@
 		<sys:Double x:Key="Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace">30</sys:Double>
 		<sys:Double x:Key="Double/TabControl.TabStrip.ScrollingButton.Icon.Size">10</sys:Double>
 		<Thickness x:Key="Thickness/TabControl.TabStrip.Padding">6,0,6,0</Thickness>
-		<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Margin">5,7,5,8</Thickness>
+		<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Margin">2,4,2,4</Thickness>
 		<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Padding">5</Thickness>
 
 		<!-- TabItem -->
@@ -264,6 +270,11 @@
 		<Thickness x:Key="Thickness/ToolBar.Padding">3</Thickness>
 		<Thickness x:Key="Thickness/ToolBar.Separator.Margin">2,3,2,3</Thickness>
 		<Thickness x:Key="Thickness/ToolBar.TextBlock.Margin">3,0,2,0</Thickness>
+
+		<!-- ToolBarScrollViewer -->
+		<sys:Double x:Key="Double/ToolBarScrollViewer.ScrollingButton.Icon.Size">10</sys:Double>
+		<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Margin">2</Thickness>
+		<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Padding">5</Thickness>
 
 		<!-- Window -->
 		<SolidColorBrush x:Key="Brush/Window.Background" Color="{DynamicResource Color/Window.Background}"/>
@@ -738,7 +749,8 @@
 	<!-- TabControl -->
 	<Style Selector="RepeatButton.TabStripScroller">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundChecked}"/>
-		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Light.1}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/TabControl.TabStrip.ScrollingButton.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/TabControl.TabStrip.ScrollingButton.Padding}"/>
@@ -747,9 +759,11 @@
 	</Style>
 	<Style Selector="RepeatButton.TabStripScroller:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Dark.1}"/>
 	</Style>
 	<Style Selector="RepeatButton.TabStripScroller:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Dark.1}"/>
 	</Style>
 	<Style Selector="controls|TabStripScrollViewer">
 		<Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
@@ -776,7 +790,7 @@
 						Command="{Binding ScrollLeft, RelativeSource={RelativeSource TemplatedParent}}"
                         HorizontalAlignment="Left">
 						<RepeatButton.IsVisible>
-							<MultiBinding Converter="{x:Static converters:TabStripScrollingButtonVisibilityConverter.Default}" ConverterParameter="Left">
+							<MultiBinding Converter="{x:Static converters:ScrollingButtonVisibilityConverter.Default}" ConverterParameter="Left">
 								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Offset.X"/>
 								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Extent.Width"/>
 								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Viewport.Width"/>
@@ -794,7 +808,7 @@
 						Command="{Binding ScrollRight, RelativeSource={RelativeSource TemplatedParent}}"
                         HorizontalAlignment="Right">
 						<RepeatButton.IsVisible>
-							<MultiBinding Converter="{x:Static converters:TabStripScrollingButtonVisibilityConverter.Default}" ConverterParameter="Right">
+							<MultiBinding Converter="{x:Static converters:ScrollingButtonVisibilityConverter.Default}" ConverterParameter="Right">
 								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Offset.X"/>
 								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Extent.Width"/>
 								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Viewport.Width"/>
@@ -1049,6 +1063,85 @@
 	</Style>
 	<Style Selector="ToggleButton.ToolBar_ToggleButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+
+	<!-- ToolBarScrollViewer -->
+	<Style Selector="RepeatButton.ToolBarScrollViewer">
+		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundChecked}"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Light.1}"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBarScrollViewer.ScrollingButton.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBarScrollViewer.ScrollingButton.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="RepeatButton.ToolBarScrollViewer:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Dark.1}"/>
+	</Style>
+	<Style Selector="RepeatButton.ToolBarScrollViewer:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Dark.1}"/>
+	</Style>
+	<Style Selector="controls|ToolBarScrollViewer">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Panel Background="{TemplateBinding Background}">
+					<ScrollContentPresenter Name="PART_ContentPresenter"
+                        CanHorizontallyScroll="{TemplateBinding CanHorizontallyScroll}"
+                        CanVerticallyScroll="{TemplateBinding CanVerticallyScroll}"
+                        Content="{TemplateBinding Content}"
+                        Extent="{TemplateBinding Extent, Mode=TwoWay}"
+                        Margin="{TemplateBinding Padding}"
+                        Offset="{TemplateBinding Offset, Mode=TwoWay}"
+                        Viewport="{TemplateBinding Viewport, Mode=TwoWay}">
+						<ScrollContentPresenter.GestureRecognizers>
+							<ScrollGestureRecognizer
+							  CanHorizontallyScroll="{TemplateBinding CanHorizontallyScroll}"
+							  CanVerticallyScroll="{TemplateBinding CanVerticallyScroll}" />
+						</ScrollContentPresenter.GestureRecognizers>
+					</ScrollContentPresenter>
+					<RepeatButton
+						Classes="ToolBarScrollViewer"
+						Command="{Binding ScrollLeft, RelativeSource={RelativeSource TemplatedParent}}"
+                        HorizontalAlignment="Left">
+						<RepeatButton.IsVisible>
+							<MultiBinding Converter="{x:Static converters:ScrollingButtonVisibilityConverter.Default}" ConverterParameter="Left">
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Offset.X"/>
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Extent.Width"/>
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Viewport.Width"/>
+							</MultiBinding>
+						</RepeatButton.IsVisible>
+						<Image
+							Classes="Icon"
+							Height="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
+							Source="{DynamicResource Image/Icon.Backward.Light}"
+							Width="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
+					</RepeatButton>
+					<RepeatButton
+						Classes="ToolBarScrollViewer"
+						Command="{Binding ScrollRight, RelativeSource={RelativeSource TemplatedParent}}"
+                        HorizontalAlignment="Right">
+						<RepeatButton.IsVisible>
+							<MultiBinding Converter="{x:Static converters:ScrollingButtonVisibilityConverter.Default}" ConverterParameter="Right">
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Offset.X"/>
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Extent.Width"/>
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Viewport.Width"/>
+							</MultiBinding>
+						</RepeatButton.IsVisible>
+						<Image
+							Classes="Icon"
+							Height="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
+							Source="{DynamicResource Image/Icon.Forward.Light}"
+							Width="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
+					</RepeatButton>
+				</Panel>
+			</ControlTemplate>
+		</Setter>
+		<Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
 	</Style>
 
 	<!-- Window -->
