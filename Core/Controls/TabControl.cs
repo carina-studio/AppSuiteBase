@@ -24,6 +24,10 @@ namespace CarinaStudio.AppSuite.Controls
         /// Property of <see cref="IsFullWindowMode"/>.
         /// </summary>
         public static readonly AvaloniaProperty<bool> IsFullWindowModeProperty = AvaloniaProperty.Register<TabControl, bool>(nameof(IsFullWindowMode), true);
+        /// <summary>
+        /// Property of <see cref="TabStripSize"/>.
+        /// </summary>
+        public static readonly AvaloniaProperty<double> TabStripSizeProperty = AvaloniaProperty.Register<TabControl, double>(nameof(TabStripSize), -1);
 
 
         // Constants.
@@ -218,14 +222,17 @@ namespace CarinaStudio.AppSuite.Controls
             this.scrollTabStripLeftButton = null;
             this.scrollTabStripRightButton = null;
             this.tabItemsPresenter = e.NameScope.Find<ItemsPresenter>("PART_ItemsPresenter");
+            this.tabStripScrollViewer?.Let(it => it.PropertyChanged -= this.OnTabStripScrollViewerPropertyChanged);
             this.tabStripScrollViewer = e.NameScope.Find<TabStripScrollViewer>("PART_TabStripScrollViewer")?.Also(it =>
             {
+                it.PropertyChanged += this.OnTabStripScrollViewerPropertyChanged;
                 it.TemplateApplied += (_, e) =>
                 {
                     this.scrollTabStripLeftButton = e.NameScope.Find<RepeatButton>("PART_ScrollLeftButton");
                     this.scrollTabStripRightButton = e.NameScope.Find<RepeatButton>("PART_ScrollRightButton");
                 };
             });
+            this.SetValue<double>(TabStripSizeProperty, this.tabStripScrollViewer?.Bounds.Height ?? -1);
             this.updateTabStripScrollViewerMarginAction.Cancel();
             this.UpdateTabStripScrollViewerMargin(false);
         }
@@ -462,6 +469,14 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
+        // Property of tab strip scroll viewer changed.
+        void OnTabStripScrollViewerPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+        {
+            if (e.Property == BoundsProperty)
+                this.SetValue<double>(TabStripSizeProperty, this.tabStripScrollViewer?.Bounds.Height ?? -1);
+        }
+
+
         // Called on property of window changed.
         void OnWindowPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
         {
@@ -537,6 +552,12 @@ namespace CarinaStudio.AppSuite.Controls
             else if (left + tabItemHeaderBounds.Width > this.tabStripScrollViewer.Bounds.Width)
                 this.tabStripScrollViewer.ScrollBy(left + tabItemHeaderBounds.Width - this.tabStripScrollViewer.Bounds.Width);
         }
+
+
+        /// <summary>
+        /// Get width or height of tab strip.
+        /// </summary>
+        public double TabStripSize { get => this.GetValue<double>(TabStripSizeProperty); }
 
 
         // Update margin of tab strip.
