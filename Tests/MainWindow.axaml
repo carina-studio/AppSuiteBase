@@ -125,10 +125,10 @@
 									<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
 
 										<Button Classes="ToolBar_Button">
-											<Image Classes="Icon" Source="{StaticResource Image/Icon.Administrator}"/>
+											<Image Classes="Icon" Source="{StaticResource Image/Icon.SidePanel}"/>
 										</Button>
 										<Button Classes="ToolBar_Button">
-											<Image Classes="Icon" Source="{StaticResource Image/Icon.Link}"/>
+											<Image Classes="Icon" Source="{StaticResource Image/Icon.Sliders}"/>
 										</Button>
 										<Button Classes="ToolBar_Button">
 											<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
