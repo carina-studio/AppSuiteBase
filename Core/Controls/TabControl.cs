@@ -555,12 +555,13 @@ namespace CarinaStudio.AppSuite.Controls
                 {
                     return new Thickness();
                 }
-                var reservedSize = ExtendedClientAreaWindowConfiguration.SystemChromeWidth;
-                if (this.TryFindResource("Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace", out var res) && res is double doubleValue)
-                    reservedSize += doubleValue;
+                var sysChromeSize = ExtendedClientAreaWindowConfiguration.SystemChromeWidth;
+                var reservedSize = (this.TryFindResource("Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace", out var res) && res is double doubleValue)
+                    ? doubleValue
+                    : 0.0;
                 if (ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtRight)
-                    return new Thickness(0, 0, reservedSize, 0);
-                return new Thickness(reservedSize, 0, 0, 0);
+                    return new Thickness(0, 0, sysChromeSize + reservedSize, 0);
+                return new Thickness(sysChromeSize, 0, reservedSize, 0);
             });
 
             // update margin
