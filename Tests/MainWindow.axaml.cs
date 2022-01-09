@@ -154,7 +154,7 @@ namespace CarinaStudio.AppSuite.Tests
             {
                 ThemeMode.System => ThemeMode.Dark,
                 ThemeMode.Dark => ThemeMode.Light,
-                _ => ThemeMode.System,
+                _ => this.Application.IsSystemThemeModeSupported ? ThemeMode.System : ThemeMode.Dark,
             });
         }
 

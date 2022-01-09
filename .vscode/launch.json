@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Tests/bin/Debug/net5.0/CarinaStudio.AppSuite.Tests.dll",
+            "program": "${workspaceFolder}/Tests/bin/Debug/net6.0/CarinaStudio.AppSuite.Tests.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Tests",
             "console": "internalConsole",
