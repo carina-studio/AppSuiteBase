@@ -2469,6 +2469,17 @@ namespace CarinaStudio.AppSuite
                         });
                     });
                 }
+                else if (Platform.IsMacOS)
+                {
+                    this.styles = new Styles().Also(styles =>
+                    {
+                        styles.Add(this.styles);
+                        styles.Add(new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
+                        {
+                            Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}-OSX.axaml"),
+                        });
+                    });
+                }
                 this.styles = this.OnLoadTheme(themeMode)?.Let(it =>
                 {
                     var styles = new Styles();

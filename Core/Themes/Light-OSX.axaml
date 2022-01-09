@@ -1,0 +1,13 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<!-- Resources -->
+	<Styles.Resources>
+
+		<!-- Window -->
+		<Color x:Key="Color/Window.Background.Tabbed.Transparent">#40c0c0c0</Color>
+		<Color x:Key="Color/Window.Background.Transparent">#401e1e1e</Color>
+
+	</Styles.Resources>
+	
+</Styles>
