@@ -22,12 +22,6 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Avalonia" Version="0.10.10" />
-		<PackageReference Include="Avalonia.Desktop" Version="0.10.10" />
-		<PackageReference Include="Avalonia.Diagnostics" Version="0.10.10" />
-	 </ItemGroup>
-	
-	<ItemGroup>
 		<ProjectReference Include="..\Core\Core.csproj" />
 	</ItemGroup>
 	
