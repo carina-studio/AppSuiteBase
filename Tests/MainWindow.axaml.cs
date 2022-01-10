@@ -163,7 +163,9 @@ namespace CarinaStudio.AppSuite.Tests
         {
             //using var appInfo = new AppInfo();
             //await new ApplicationInfoDialog(appInfo).ShowDialog(this);
-            _ = new Dialog().ShowDialog(this);
+            var result = await new Dialog().ShowDialog<ApplicationOptionsDialogResult>(this);
+            if (result == ApplicationOptionsDialogResult.RestartMainWindowsNeeded)
+                this.Application.RestartMainWindows();
         }
 
         void Test2()

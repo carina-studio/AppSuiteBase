@@ -816,7 +816,7 @@ namespace CarinaStudio.AppSuite
 #if WINDOWS10_0_17763_0_OR_GREATER
                 return (this.uiSettings != null);
 #else
-                return false;
+                return Platform.IsMacOS;
 #endif
             }
         }
@@ -1380,6 +1380,26 @@ namespace CarinaStudio.AppSuite
         protected virtual IStyle? OnLoadTheme(ThemeMode themeMode) => null;
 
 
+        // Called when IsActive of main window changed.
+        void OnMainWindowActivationChanged(Window mainWindow, bool isActive)
+        {
+            if (isActive)
+            {
+                if (Platform.IsMacOS)
+                    this.UpdateSystemThemeMode(true);
+                if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value?.Window == mainWindow)
+                    return;
+                if (this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
+                {
+                    if (mainWindowHolder.ActiveListNode.List != null)
+                        this.activeMainWindowList.Remove(mainWindowHolder.ActiveListNode);
+                    this.activeMainWindowList.AddFirst(mainWindowHolder.ActiveListNode);
+                    this.OnPropertyChanged(nameof(LatestActiveMainWindow));
+                }
+            }
+        }
+
+
         // Called when main window closed.
         async void OnMainWindowClosed(object? sender, EventArgs e)
         {
@@ -1397,7 +1417,6 @@ namespace CarinaStudio.AppSuite
                 this.activeMainWindowList.Remove(mainWindowHolder.ActiveListNode);
             this.mainWindows.Remove(mainWindow);
             mainWindow.Closed -= this.OnMainWindowClosed;
-            mainWindow.PropertyChanged -= this.OnMainWindowPropertyChanged;
 
             this.Logger.LogDebug($"Main window closed, {this.mainWindows.Count} remains");
 
@@ -1467,36 +1486,6 @@ namespace CarinaStudio.AppSuite
         {
             // save settings
             await this.SaveSettingsAsync();
-        }
-
-
-        // Called when property of main window changed.
-        void OnMainWindowPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e) =>
-            (sender as Window)?.Let(it => this.OnMainWindowPropertyChanged(it, e));
-
-
-        /// <summary>
-        /// Called when property of main window changed.
-        /// </summary>
-        /// <param name="mainWindow">Main window.</param>
-        /// <param name="e">Event data.</param>
-        protected virtual void OnMainWindowPropertyChanged(Window mainWindow, AvaloniaPropertyChangedEventArgs e)
-        {
-            if (e.Property == Window.IsActiveProperty)
-            {
-                if (mainWindow.IsActive)
-                {
-                    if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value?.Window == mainWindow)
-                        return;
-                    if (this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
-                    {
-                        if (mainWindowHolder.ActiveListNode.List != null)
-                            this.activeMainWindowList.Remove(mainWindowHolder.ActiveListNode);
-                        this.activeMainWindowList.AddFirst(mainWindowHolder.ActiveListNode);
-                        this.OnPropertyChanged(nameof(LatestActiveMainWindow));
-                    }
-                }
-            }
         }
 
 
@@ -1758,7 +1747,11 @@ namespace CarinaStudio.AppSuite
             else if (e.Key == SettingKeys.Culture)
                 this.UpdateCultureInfo(true);
             else if (e.Key == SettingKeys.ThemeMode)
+            {
+                if (Platform.IsMacOS && (ThemeMode)e.Value == ThemeMode.System)
+                    this.UpdateSystemThemeMode(false);
                 this.CheckRestartingMainWindowsNeeded();
+            }
         }
 
 
@@ -2106,7 +2099,10 @@ namespace CarinaStudio.AppSuite
             this.mainWindowHolders[mainWindow] = mainWindowHolder;
             this.mainWindows.Add(mainWindow);
             mainWindow.Closed += this.OnMainWindowClosed;
-            mainWindow.PropertyChanged += this.OnMainWindowPropertyChanged;
+            mainWindow.GetObservable(Window.IsActiveProperty).Subscribe(new Observer<bool>(value =>
+            {
+                this.OnMainWindowActivationChanged(mainWindow, value);
+            }));
 
             this.Logger.LogDebug($"Show main window, {this.mainWindows.Count} created");
 
@@ -2560,6 +2556,42 @@ namespace CarinaStudio.AppSuite
                 themeMode = (backgroundColor.R + backgroundColor.G + backgroundColor.B) / 3 < 128
                     ? ThemeMode.Dark
                     : ThemeMode.Light;
+            }
+#else
+            if (Platform.IsMacOS)
+            {
+                try
+                {
+                    using var process = Process.Start(new ProcessStartInfo()
+                    {
+                        Arguments = "read -g AppleInterfaceStyle",
+                        CreateNoWindow = true,
+                        FileName = "defaults",
+                        RedirectStandardError = true,
+                        RedirectStandardOutput = true,
+                    });
+                    if (process != null)
+                    {
+                        var interfaceStyle = process.StandardOutput.ReadLine();
+                        themeMode = interfaceStyle == null
+                            ? ThemeMode.Light
+                            : interfaceStyle switch
+                            {
+                                "Dark" => ThemeMode.Dark,
+                                _ => Global.Run(() =>
+                                {
+                                    this.Logger.LogWarning($"Unknown system theme mode on macOS: {interfaceStyle}");
+                                    return themeMode;
+                                }),
+                            };
+                    }
+                    else
+                        this.Logger.LogError("Unable to start 'defaults' to check system theme mode on macOS");
+                }
+                catch (Exception ex)
+                {
+                    this.Logger.LogError(ex, "Unable to check system theme mode on macOS");
+                }
             }
 #endif
             if (this.systemThemeMode == themeMode)
