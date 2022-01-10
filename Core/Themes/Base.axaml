@@ -1189,5 +1189,16 @@
 	<Style Selector="Window.Tabbed[ActualTransparencyLevel=Transparent]">
 		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed.Transparent}"/>
 	</Style>
+
+	<!-- [Workaround] Need to override background for class 'Dialog' to prevent applying transparent background on Dialog -->
+	<Style Selector="Window.Dialog[ActualTransparencyLevel=AcrylicBlur]">
+		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background}"/>
+	</Style>
+	<Style Selector="Window.Dialog[ActualTransparencyLevel=Blur]">
+		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background}"/>
+	</Style>
+	<Style Selector="Window.Dialog[ActualTransparencyLevel=Transparent]">
+		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background}"/>
+	</Style>
 	
 </Styles>

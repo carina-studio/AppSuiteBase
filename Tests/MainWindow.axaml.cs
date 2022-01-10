@@ -163,7 +163,7 @@ namespace CarinaStudio.AppSuite.Tests
         {
             //using var appInfo = new AppInfo();
             //await new ApplicationInfoDialog(appInfo).ShowDialog(this);
-            this.ExtendClientAreaToDecorationsHint = !this.ExtendClientAreaToDecorationsHint;
+            _ = new Dialog().ShowDialog(this);
         }
 
         void Test2()
