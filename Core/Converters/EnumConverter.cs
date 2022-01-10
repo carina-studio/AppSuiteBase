@@ -31,9 +31,9 @@ namespace CarinaStudio.AppSuite.Converters
 
 
         /// <inheritdoc/>
-        public object? Convert(object value, Type targetType, object? parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            if (targetType != typeof(string))
+            if (targetType != typeof(string) || value == null)
                 return null;
             if (value.GetType() == this.enumType)
             {
@@ -46,7 +46,7 @@ namespace CarinaStudio.AppSuite.Converters
 
 
         /// <inheritdoc/>
-        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (targetType != this.enumType)
                 return null;
@@ -64,7 +64,7 @@ namespace CarinaStudio.AppSuite.Converters
                 else if (Enum.TryParse(this.enumType, str, out var enumValue))
                     return enumValue;
             }
-            else if (value.GetType() == this.enumType)
+            else if (value?.GetType() == this.enumType)
                 return value;
             return null;
         }

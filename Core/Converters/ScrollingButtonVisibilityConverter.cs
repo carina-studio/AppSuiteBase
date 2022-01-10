@@ -12,7 +12,7 @@ namespace CarinaStudio.AppSuite.Converters
 
 
         /// <inheritdoc/>
-        public object? Convert(IList<object> values, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
         {
             if (typeof(object) != targetType && typeof(bool) != targetType)
                 return null;
@@ -32,6 +32,6 @@ namespace CarinaStudio.AppSuite.Converters
 
 
         /// <inheritdoc/>
-        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => null;
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => null;
     }
 }

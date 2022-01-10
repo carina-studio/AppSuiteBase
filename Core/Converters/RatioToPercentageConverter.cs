@@ -41,7 +41,7 @@ namespace CarinaStudio.AppSuite.Converters
 
 
 		/// <inheritdoc/>
-		public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 		{
 			var ratio = value.Let(it =>
 			{
@@ -82,7 +82,7 @@ namespace CarinaStudio.AppSuite.Converters
 
 
 		/// <inheritdoc/>
-		public object? ConvertBack(object value, Type targetType, object? parameter, CultureInfo culture)
+		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
 		{
 			if (value is string str && str.Length > 1 && str[str.Length - 1] == '%')
 				value = str.Substring(0, str.Length - 1);

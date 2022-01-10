@@ -88,7 +88,7 @@ namespace CarinaStudio.AppSuite.Controls
 			dialog.DoNotAskAgain = this.doNotAskAgain;
 			dialog.Icon = this.icon;
 			dialog.Message = this.message;
-			dialog.Title = this.Title ?? Avalonia.Application.Current.Name;
+			dialog.Title = this.Title ?? Avalonia.Application.Current?.Name;
 			var result = await dialog.ShowDialog<MessageDialogResult>(owner);
 			this.doNotAskAgain = dialog.DoNotAskAgain;
 			return result;

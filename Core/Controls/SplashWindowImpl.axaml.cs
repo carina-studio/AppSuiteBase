@@ -59,11 +59,11 @@ namespace CarinaStudio.AppSuite.Controls
 					return;
 				this.iconUri = value;
 				value = value ?? new Uri($"avares://{AppSuiteApplication.Current.Assembly.GetName()}/AppIcon.ico");
-				this.Icon = AvaloniaLocator.Current.GetService<IAssetLoader>().Let(loader =>
+				this.Icon = AvaloniaLocator.Current.GetService<IAssetLoader>()?.Let(loader =>
 				{
 					return loader.Open(value).Use(stream => new WindowIcon(stream));
 				});
-				this.SetValue<IBitmap?>(IconBitmapProperty, AvaloniaLocator.Current.GetService<IAssetLoader>().Let(loader =>
+				this.SetValue<IBitmap?>(IconBitmapProperty, AvaloniaLocator.Current.GetService<IAssetLoader>()?.Let(loader =>
 				{
 					return loader.Open(value).Use(stream => new Bitmap(stream));
 				}));

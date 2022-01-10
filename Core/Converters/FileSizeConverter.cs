@@ -29,7 +29,7 @@ namespace CarinaStudio.AppSuite.Converters
         /// <param name="parameter">Parameter which will be ignored.</param>
         /// <param name="culture"><see cref="CultureInfo"/>.</param>
         /// <returns>Converted string.</returns>
-        public object? Convert(object value, Type targetType, object? parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             if (targetType != typeof(string))
                 return null;
@@ -45,6 +45,6 @@ namespace CarinaStudio.AppSuite.Converters
         /// Convert string back to value.
         /// </summary>
         /// <remarks>The method is not implemented.</remarks>
-        public object? ConvertBack(object value, Type targetType, object? parameter, CultureInfo culture) => null;
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => null;
     }
 }

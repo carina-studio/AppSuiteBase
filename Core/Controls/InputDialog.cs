@@ -58,7 +58,7 @@ namespace CarinaStudio.AppSuite.Controls
         {
             if (e.Key == Key.Enter && e.KeyModifiers == 0)
             {
-                var control = (FocusManager.Instance.Current as Control);
+                var control = (FocusManager.Instance?.Current as Control);
                 this.isEnterKeyDownOnInputControl = control switch
                 {
                     NumericUpDown or TextBox => true,

@@ -29,7 +29,7 @@ namespace CarinaStudio.AppSuite.Converters
             public NullToBooleanConverterImpl(bool nullIsTrue) => this.nullIsTrue = nullIsTrue;
 
             // Convert.
-            public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)
+            public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
             {
                 if (typeof(object) != targetType && typeof(bool) != targetType)
                     return null;
@@ -37,7 +37,7 @@ namespace CarinaStudio.AppSuite.Converters
             }
 
             // Convert back.
-            public object? ConvertBack(object? value, Type targetType, object parameter, CultureInfo culture) => null;
+            public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => null;
         }
     }
 }

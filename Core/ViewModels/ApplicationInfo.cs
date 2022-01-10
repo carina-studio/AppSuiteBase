@@ -142,6 +142,8 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// </summary>
         public virtual IBitmap Icon { get; } = AvaloniaLocator.Current.GetService<IAssetLoader>().Let(loader =>
         {
+            if (loader == null)
+                throw new NotImplementedException("Cannot load default icon.");
             return loader.Open(new Uri($"avares://{Assembly.GetEntryAssembly().AsNonNull().GetName().Name}/AppIcon.ico")).Use(stream => new Bitmap(stream));
         });
 

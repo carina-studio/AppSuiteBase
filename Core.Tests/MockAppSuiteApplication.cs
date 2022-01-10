@@ -344,7 +344,9 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Raised when string resources updated.
         /// </summary>
+#pragma warning disable CS0067
         public event EventHandler? StringsUpdated;
+#pragma warning restore CS0067
 
 
         /// <summary>

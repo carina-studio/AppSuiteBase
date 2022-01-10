@@ -71,7 +71,7 @@ namespace CarinaStudio.AppSuite.Controls
             dialog.MaxTextLength = this.maxTextLength;
             dialog.Message = this.message;
             dialog.Text = this.initialText;
-            dialog.Title = this.Title ?? Avalonia.Application.Current.Name;
+            dialog.Title = this.Title ?? Avalonia.Application.Current?.Name;
             return dialog.ShowDialog<string?>(owner);
         }
     }

@@ -22,7 +22,7 @@ namespace CarinaStudio.AppSuite.Controls
             readonly AppSuiteApplication? app = AppSuiteApplication.CurrentOrNull;
 
             // Convert.
-            public object? Convert(object value, Type targetType, object? parameter, CultureInfo culture)
+            public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
             {
                 if (this.app == null)
                     return null;
@@ -53,7 +53,7 @@ namespace CarinaStudio.AppSuite.Controls
             }
 
             // Convert back.
-            public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => null;
+            public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => null;
         }
 
 
