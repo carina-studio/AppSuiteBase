@@ -138,7 +138,7 @@
 										</Button>
 
 										<TextBox Classes="ToolBar_TextBox" Width="50"/>
-										<TextBox Classes="ToolBar_TextBox" Width="50"/>
+										<TextBox Classes="ToolBar_TextBox" Width="50" IsEnabled="False"/>
 
 										<ToggleButton Name="toolBarToggleButton" Classes="ToolBar_ToggleButton">
 											<Image Classes="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
@@ -146,16 +146,23 @@
 
 										<Separator Classes="ToolBar_Separator"/>
 
-										<ToggleButton Classes="ToolBar_ToggleButton">
+										<ToggleButton Classes="ToolBar_ToggleButton" IsEnabled="False">
 											<Image Classes="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
 										</ToggleButton>
 
 										<ComboBox Classes="ToolBar_ComboBox" Width="100">
 											12345
 										</ComboBox>
+										<ComboBox Classes="ToolBar_ComboBox" Width="100" IsEnabled="False">
+											6789
+										</ComboBox>
 
 										<RepeatButton Classes="ToolBar_RepeatButton">
 											<Image Classes="Icon" Source="{StaticResource Image/Icon.File}"/>
+										</RepeatButton>
+
+										<RepeatButton Classes="ToolBar_RepeatButton" IsEnabled="False">
+											<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
 										</RepeatButton>
 
 										<TextBlock Classes="ToolBar_TextBlock" Text="test:"/>

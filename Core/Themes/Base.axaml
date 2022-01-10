@@ -990,6 +990,7 @@
 	<Style Selector="Border.ToolBar_NotificationIndicator">
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
 	</Style>
@@ -1003,12 +1004,18 @@
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
 	</Style>
+	<Style Selector="Button.ToolBar_Button:disabled">
+		<Setter Property="IsHitTestVisible" Value="False"/>
+	</Style>
 	<Style Selector="Button.ToolBar_Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="ComboBox.ToolBar_ComboBox">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="ComboBox.ToolBar_ComboBox:disabled">
+		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
 	<Style Selector="Image.ToolBar_NotificationIndicator">
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
@@ -1021,6 +1028,7 @@
 	<Style Selector="Panel.ToolBar_NotificationIndicator">
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
 	</Style>
@@ -1033,6 +1041,9 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+	</Style>
+	<Style Selector="RepeatButton.ToolBar_RepeatButton:disabled">
+		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
 	<Style Selector="RepeatButton.ToolBar_RepeatButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
@@ -1051,6 +1062,9 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="TextBox.ToolBar_TextBox:disabled">
+		<Setter Property="IsHitTestVisible" Value="False"/>
+	</Style>
 	<Style Selector="ToggleButton.ToolBar_ToggleButton">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
@@ -1060,6 +1074,9 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton">
+		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
 	<Style Selector="ToggleButton.ToolBar_ToggleButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
