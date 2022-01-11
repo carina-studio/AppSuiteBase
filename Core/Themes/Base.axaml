@@ -1085,7 +1085,7 @@
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
 	</Style>
-	<Style Selector="ToggleButton.ToolBar_ToggleButton">
+	<Style Selector="ToggleButton.ToolBar_ToggleButton:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
 	<Style Selector="ToggleButton.ToolBar_ToggleButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
