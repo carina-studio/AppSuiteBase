@@ -275,7 +275,7 @@
 
 		<!-- ToolBarScrollViewer -->
 		<sys:Double x:Key="Double/ToolBarScrollViewer.ScrollingButton.Icon.Size">10</sys:Double>
-		<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Margin">2</Thickness>
+		<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Margin">0</Thickness>
 		<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Padding">5</Thickness>
 
 		<!-- Window -->
@@ -1220,7 +1220,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed.Transparent}"/>
 	</Style>
 	<Style Selector="Window.Tabbed[TransparencyLevelHint=None]">
-		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed}"/>
 	</Style>
 	
 </Styles>
