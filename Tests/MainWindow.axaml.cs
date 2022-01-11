@@ -103,10 +103,29 @@ namespace CarinaStudio.AppSuite.Tests
 
                 e.DragEffects = DragDropEffects.Move;
 
-                if (srcIndex < e.ItemIndex)
+                var targetIndex = e.PointerPosition.X <= e.HeaderVisual.Bounds.Width / 2
+                    ? e.ItemIndex
+                    : e.ItemIndex + 1;
+
+                //System.Diagnostics.Debug.WriteLine($"srcIndex: {srcIndex}, targetIndex: {targetIndex}");
+
+                if (targetIndex == srcIndex || targetIndex == srcIndex + 1)
+                {
+                    ItemInsertionIndicator.SetInsertingItemAfter((Control)e.Item, false);
+                    ItemInsertionIndicator.SetInsertingItemBefore((Control)e.Item, false);
+                    return;
+                }
+
+                if (targetIndex > e.ItemIndex)
+                {
                     ItemInsertionIndicator.SetInsertingItemAfter((Control)e.Item, true);
+                    ItemInsertionIndicator.SetInsertingItemBefore((Control)e.Item, false);
+                }
                 else
+                {
+                    ItemInsertionIndicator.SetInsertingItemAfter((Control)e.Item, false);
                     ItemInsertionIndicator.SetInsertingItemBefore((Control)e.Item, true);
+                }
 
                 /*
                 var srcIndex = tabItems.IndexOf(tabItem);
@@ -142,10 +161,25 @@ namespace CarinaStudio.AppSuite.Tests
             if (srcIndex < 0)
                 return;
 
-            (sender as Controls.TabControl)?.Let(it => it.SelectedIndex = e.ItemIndex);
-            tabItems.RemoveAt(srcIndex);
-            tabItems.Insert(e.ItemIndex, item);
-            (sender as Controls.TabControl)?.Let(it => it.SelectedIndex = e.ItemIndex);
+            var targetIndex = e.PointerPosition.X <= e.HeaderVisual.Bounds.Width / 2
+                    ? e.ItemIndex
+                    : e.ItemIndex + 1;
+
+            if (targetIndex != srcIndex && targetIndex != srcIndex + 1)
+            {
+                (sender as Controls.TabControl)?.Let(it => it.SelectedIndex = e.ItemIndex);
+                tabItems.RemoveAt(srcIndex);
+                if (srcIndex < targetIndex)
+                {
+                    tabItems.Insert(targetIndex - 1, item);
+                    (sender as Controls.TabControl)?.Let(it => it.SelectedIndex = targetIndex - 1);
+                }
+                else
+                {
+                    tabItems.Insert(targetIndex, item);
+                    (sender as Controls.TabControl)?.Let(it => it.SelectedIndex = targetIndex);
+                }
+            }
         }
 
 

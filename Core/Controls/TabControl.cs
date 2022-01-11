@@ -12,6 +12,7 @@ using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
 using System.Collections;
+using System.Linq;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -86,15 +87,20 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Find tab item which data is dragged over.
-        bool FindItemDraggedOver(DragEventArgs e, out int itemIndex, out object? item)
+        bool FindItemDraggedOver(DragEventArgs e, out int itemIndex, out object? item, out IVisual? headerVisual)
         {
+            // find index of item
             itemIndex = -1;
             item = null;
-            var index = this.tabItemsPresenter.FindDescendantOfType<Panel>()?.Let(panel =>
+            headerVisual = null;
+            var itemsPanel = this.tabItemsPresenter.FindDescendantOfType<Panel>();
+            if (itemsPanel == null)
+                return false;
+            var index = Global.Run(() =>
             {
-                for (var i = panel.Children.Count - 1; i >= 0; --i)
+                for (var i = itemsPanel.Children.Count - 1; i >= 0; --i)
                 {
-                    if (panel.Children[i] is IVisual visual)
+                    if (itemsPanel.Children[i] is IVisual visual)
                     {
                         var position = e.GetPosition(visual);
                         var bounds = visual.Bounds;
@@ -103,7 +109,7 @@ namespace CarinaStudio.AppSuite.Controls
                     }
                 }
                 return -1;
-            }) ?? -1;
+            });
             if (index < 0)
                 return false;
 
@@ -117,6 +123,10 @@ namespace CarinaStudio.AppSuite.Controls
             if (item != null)
             {
                 itemIndex = index;
+                headerVisual = itemsPanel.Children[index].GetVisualChildren()?.FirstOrDefault()?.Let(it =>
+                {
+                    return (it as IControl)?.FindChildControl<Panel>("PART_ContentContainer") ?? it;
+                }) ?? headerVisual;
                 return true;
             }
             return false;
@@ -347,7 +357,7 @@ namespace CarinaStudio.AppSuite.Controls
             this.scrollTabStripRightByButtonAction.Cancel();
 
             // find tab item which data is dragged over
-            if (!this.FindItemDraggedOver(e, out var itemIndex, out var item) || item == null)
+            if (!this.FindItemDraggedOver(e, out var itemIndex, out var item, out var headerVisual) || item == null || headerVisual == null)
             {
                 this.LeaveDraggingOverItem();
                 return;
@@ -358,13 +368,13 @@ namespace CarinaStudio.AppSuite.Controls
                 this.LeaveDraggingOverItem();
             if (this.draggingOverItem == null)
             {
-                this.DragEnterItem?.Invoke(this, new DragOnTabItemEventArgs(e, itemIndex, item));
+                this.DragEnterItem?.Invoke(this, new DragOnTabItemEventArgs(e, itemIndex, item, headerVisual));
                 this.draggingOverItem = item;
             }
             this.draggingOverItemIndex = itemIndex;
 
             // raise event
-            var dragOnItemEventArgs = new DragOnTabItemEventArgs(e, itemIndex, item);
+            var dragOnItemEventArgs = new DragOnTabItemEventArgs(e, itemIndex, item, headerVisual);
             this.DragOverItem?.Invoke(this, dragOnItemEventArgs);
             e.DragEffects = dragOnItemEventArgs.DragEffects;
             e.Handled = dragOnItemEventArgs.Handled;
@@ -383,11 +393,11 @@ namespace CarinaStudio.AppSuite.Controls
                 return;
 
             // find tab item which data is dragged over
-            if (!this.FindItemDraggedOver(e, out var itemIndex, out var item) || item == null)
+            if (!this.FindItemDraggedOver(e, out var itemIndex, out var item, out var headerVisual) || item == null || headerVisual == null)
                 return;
 
             // raise event
-            var dragOnItemEventArgs = new DragOnTabItemEventArgs(e, itemIndex, item);
+            var dragOnItemEventArgs = new DragOnTabItemEventArgs(e, itemIndex, item, headerVisual);
             this.DropOnItem?.Invoke(this, dragOnItemEventArgs);
             e.DragEffects = dragOnItemEventArgs.DragEffects;
             e.Handled = dragOnItemEventArgs.Handled;
@@ -621,11 +631,13 @@ namespace CarinaStudio.AppSuite.Controls
     public class DragOnTabItemEventArgs : TabItemEventArgs
     {
         // Constuctor.
-        internal DragOnTabItemEventArgs(DragEventArgs e, int itemIndex, object item) : base(itemIndex, item)
+        internal DragOnTabItemEventArgs(DragEventArgs e, int itemIndex, object item, IVisual headerVisual) : base(itemIndex, item)
         {
             this.Data = e.Data;
             this.DragEffects = e.DragEffects;
+            this.HeaderVisual = headerVisual;
             this.KeyModifiers = e.KeyModifiers;
+            this.PointerPosition = e.GetPosition(headerVisual);
         }
 
 
@@ -642,9 +654,21 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
+        /// Get <see cref="IVisual"/> of header of item.
+        /// </summary>
+        public IVisual HeaderVisual { get; }
+
+
+        /// <summary>
         /// Get key modifiers.
         /// </summary>
         public KeyModifiers KeyModifiers { get; }
+
+
+        /// <summary>
+        /// Get position of pointer relates to <see cref="HeaderVisual"/>.
+        /// </summary>
+        public Point PointerPosition { get; }
     }
 
 
