@@ -62,18 +62,16 @@ namespace CarinaStudio.AppSuite.Tests
 
         void OnDragEnterTabItem(object? sender, DragOnTabItemEventArgs e)
         {
-            var textBlock = ((e.Item as TabItem)?.Header as IVisual)?.FindDescendantOfType<TextBlock>(true);
-            if (textBlock != null && e.Data.Get(TabItemKey) != e.Item)
-                textBlock.FontWeight = Avalonia.Media.FontWeight.Bold;
             (sender as Controls.TabControl)?.ScrollHeaderIntoView(e.ItemIndex);
         }
 
 
         void OnDragLeaveTabItem(object? sender, TabItemEventArgs e)
         {
-            var textBlock = ((e.Item as TabItem)?.Header as IVisual)?.FindDescendantOfType<TextBlock>(true);
-            if (textBlock != null)
-                textBlock.FontWeight = Avalonia.Media.FontWeight.Normal;
+            if (e.Item is not TabItem tabItem)
+                return;
+            ItemInsertionIndicator.SetInsertingItemAfter(tabItem, false);
+            ItemInsertionIndicator.SetInsertingItemBefore(tabItem, false);
         }
 
 
@@ -99,7 +97,17 @@ namespace CarinaStudio.AppSuite.Tests
             }
             else if (e.ItemIndex < tabItems.Count - 1)
             {
+                var srcIndex = tabItems.IndexOf(tabItem);
+                if (srcIndex < 0)
+                    return;
+
                 e.DragEffects = DragDropEffects.Move;
+
+                if (srcIndex < e.ItemIndex)
+                    ItemInsertionIndicator.SetInsertingItemAfter((Control)e.Item, true);
+                else
+                    ItemInsertionIndicator.SetInsertingItemBefore((Control)e.Item, true);
+
                 /*
                 var srcIndex = tabItems.IndexOf(tabItem);
                 if (srcIndex < 0)
@@ -116,9 +124,11 @@ namespace CarinaStudio.AppSuite.Tests
 
         void OnDropOnTabItem(object? sender, DragOnTabItemEventArgs e)
         {
-            var textBlock = ((e.Item as TabItem)?.Header as IVisual)?.FindDescendantOfType<TextBlock>(true);
-            if (textBlock != null)
-                textBlock.FontWeight = Avalonia.Media.FontWeight.Normal;
+            if (e.Item is not TabItem tabItem)
+                return;
+
+            ItemInsertionIndicator.SetInsertingItemAfter(tabItem, false);
+            ItemInsertionIndicator.SetInsertingItemBefore(tabItem, false);
 
             var item = e.Data.Get(TabItemKey);
             if (item == null || item == e.Item)

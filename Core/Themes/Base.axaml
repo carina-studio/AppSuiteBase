@@ -243,12 +243,14 @@
 		<sys:Double x:Key="Double/TabItem.Header.FontSize">14</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.Height">40</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.Icon.Size">16</sys:Double>
+		<sys:Double x:Key="Double/TabItem.Header.InsertionIndicator.Opacity">0.3</sys:Double>
+		<sys:Double x:Key="Double/TabItem.Header.InsertionIndicator.Width">20</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.MaxWidth">250</sys:Double>
 		<Thickness x:Key="Thickness/TabItem.Header.Border">0,0,1,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">10,0,0,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">3</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
-		<Thickness x:Key="Thickness/TabItem.Header.Margin">1,2,2,0</Thickness>
+		<Thickness x:Key="Thickness/TabItem.Header.Margin">1,2,1,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Padding">10</Thickness>
 
 		<!-- TextBox -->
@@ -910,40 +912,48 @@
 			<Setter.Value>
 				<ControlTemplate>
 					<Border Background="{x:Static Brushes.Transparent}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-						<Panel Margin="{DynamicResource Thickness/TabItem.Header.Margin}">
-							<Border Background="{StaticResource Brush/TabItem.Header.Background}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"/>
-							<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsPointerOver, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
-								<Border.Transitions>
-									<Transitions>
-										<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
-									</Transitions>
-								</Border.Transitions>
-							</Border>
-							<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
-								<Border.Transitions>
-									<Transitions>
-										<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
-									</Transitions>
-								</Border.Transitions>
-								<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Height="{DynamicResource Double/TabItem.Header.ColorBar.Height}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}" VerticalAlignment="Top">
-									<Border.RenderTransform>
-										<ScaleTransform ScaleX="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
-											<ScaleTransform.Transitions>
-												<Transitions>
-													<DoubleTransition Property="ScaleX" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
-												</Transitions>
-											</ScaleTransform.Transitions>
-										</ScaleTransform>
-									</Border.RenderTransform>
+						<Grid ColumnDefinitions="Auto,*,Auto">
+
+							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemBefore}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Opacity="{DynamicResource Double/TabItem.Header.InsertionIndicator.Opacity}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
+
+							<Panel Grid.Column="1" Margin="{DynamicResource Thickness/TabItem.Header.Margin}">
+								<Border Background="{StaticResource Brush/TabItem.Header.Background}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"/>
+								<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsPointerOver, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
+									<Border.Transitions>
+										<Transitions>
+											<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
+										</Transitions>
+									</Border.Transitions>
+								</Border>
+								<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
 									<Border.Transitions>
 										<Transitions>
 											<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
 										</Transitions>
 									</Border.Transitions>
+									<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Height="{DynamicResource Double/TabItem.Header.ColorBar.Height}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}" VerticalAlignment="Top">
+										<Border.RenderTransform>
+											<ScaleTransform ScaleX="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
+												<ScaleTransform.Transitions>
+													<Transitions>
+														<DoubleTransition Property="ScaleX" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
+													</Transitions>
+												</ScaleTransform.Transitions>
+											</ScaleTransform>
+										</Border.RenderTransform>
+										<Border.Transitions>
+											<Transitions>
+												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
+											</Transitions>
+										</Border.Transitions>
+									</Border>
 								</Border>
-							</Border>
-							<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
-						</Panel>
+								<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
+							</Panel>
+
+							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Grid.Column="2" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemAfter}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Opacity="{DynamicResource Double/TabItem.Header.InsertionIndicator.Opacity}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
+							
+						</Grid>
 					</Border>
 				</ControlTemplate>
 			</Setter.Value>
