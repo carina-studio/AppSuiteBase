@@ -8,7 +8,7 @@ namespace CarinaStudio.AppSuite.ViewModels
     /// <summary>
     /// Base class of view-model for <see cref="Controls.MainWindow{TViewModel}"/>.
     /// </summary>
-    public abstract class MainWindowViewModel : ViewModel<IAppSuiteApplication>
+    public abstract class MainWindowViewModel : ViewModel<IAppSuiteApplication>, IStateSavable
     {
         /// <summary>
         /// Property of <see cref="Title"/>.
@@ -68,6 +68,14 @@ namespace CarinaStudio.AppSuite.ViewModels
         }
 
 
+        /// <inheritdoc/>
+        bool IStateSavable.CanRestoreState { get => false; }
+
+
+        /// <inheritdoc/>
+        bool IStateSavable.RestoreState(JsonElement savedState) => throw new NotSupportedException();
+
+
         /// <summary>
         /// Called to update title.
         /// </summary>
@@ -75,12 +83,8 @@ namespace CarinaStudio.AppSuite.ViewModels
         protected abstract string? OnUpdateTitle();
 
 
-        /// <summary>
-        /// Save state in JSON format.
-        /// </summary>
-        /// <param name="writer"><see cref="Utf8JsonWriter"/> to write state.</param>
-        public virtual void SaveState(Utf8JsonWriter writer)
-        { }
+        /// <inheritdoc/>
+        public virtual bool SaveState(Utf8JsonWriter writer) => false;
 
 
         /// <summary>

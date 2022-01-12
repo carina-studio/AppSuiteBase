@@ -1118,7 +1118,7 @@ namespace CarinaStudio.AppSuite
                 this.PersistentState.SetValue<bool>(IsAcceptNonStableApplicationUpdateInitKey, true);
             }
 
-            // Fall-back to default theme mode if 'System' is unsuported
+            // Fall-back to default theme mode if 'System' is unsupported
             if (this.settings.GetValueOrDefault(SettingKeys.ThemeMode) == ThemeMode.System
                 && !this.IsSystemThemeModeSupported)
             {
