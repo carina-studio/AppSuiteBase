@@ -534,7 +534,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Create server stream for multi-instances.
-        bool CreateMultiInstancesServerStream(bool printErrorLog = true)
+        bool CreateMultiInstancesServerStream(bool canRetry, bool printErrorStackTrace)
         {
             if (this.multiInstancesServerStream != null)
                 return true;
@@ -543,17 +543,35 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogWarning("No need to create multi-instances server stream when shutting down");
                 return false;
             }
-            try
+            var retryCount = 20;
+            while (true)
             {
-                this.multiInstancesServerStream = new NamedPipeServerStream(this.multiInstancesServerStreamName, PipeDirection.In, 1);
-                this.Logger.LogWarning("Multi-instances server stream created");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                if (printErrorLog)
-                    this.Logger.LogError(ex, "Unable to create multi-instances server stream");
-                return false;
+                try
+                {
+                    this.multiInstancesServerStream = new NamedPipeServerStream(this.multiInstancesServerStreamName, PipeDirection.In, 1);
+                    this.Logger.LogWarning("Multi-instances server stream created");
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    --retryCount;
+                    if (retryCount > 0 && canRetry)
+                    {
+                        if (printErrorStackTrace)
+                            this.Logger.LogError(ex, "Unable to create multi-instances server stream, retry later");
+                        else
+                            this.Logger.LogWarning("Unable to create multi-instances server stream, retry later");
+                        Thread.Sleep(500);
+                    }
+                    else
+                    {
+                        if (printErrorStackTrace)
+                            this.Logger.LogError(ex, "Unable to create multi-instances server stream");
+                        else
+                            this.Logger.LogWarning("Unable to create multi-instances server stream");
+                        return false;
+                    }
+                }
             }
         }
 
@@ -1265,7 +1283,7 @@ namespace CarinaStudio.AppSuite
                         return;
                     }
                 }
-                if (this.CreateMultiInstancesServerStream(false))
+                if (this.CreateMultiInstancesServerStream(true, false))
                     this.WaitForMultiInstancesClient();
                 else
                 {
@@ -2662,7 +2680,7 @@ namespace CarinaStudio.AppSuite
                 {
                     this.SynchronizationContext.Post(() =>
                     {
-                        if (this.CreateMultiInstancesServerStream())
+                        if (this.CreateMultiInstancesServerStream(false, true))
                             this.WaitForMultiInstancesClient();
                     });
                 }
