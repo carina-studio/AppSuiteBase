@@ -52,13 +52,15 @@ namespace CarinaStudio.AppSuite
             public bool IsRestartingRequested;
             public readonly ViewModel ViewModel;
             public readonly Window? Window;
+            public Action<Window>? WindowCreatedAction;
 
             // Constructor.
-            public MainWindowHolder(ViewModel viewModel, Window? window)
+            public MainWindowHolder(ViewModel viewModel, Window? window, Action<Window>? windowCreatedAction)
             {
                 this.ActiveListNode = new LinkedListNode<MainWindowHolder>(this);
                 this.ViewModel = viewModel;
                 this.Window = window;
+                this.WindowCreatedAction = windowCreatedAction;
             }
         }
 
@@ -1431,7 +1433,7 @@ namespace CarinaStudio.AppSuite
                     if (this.isRestartingMainWindowsRequested)
                     {
                         this.mainWindowHolders.Remove(mainWindow);
-                        this.pendingMainWindowHolders.Add(new MainWindowHolder(mainWindowHolder.ViewModel, null));
+                        this.pendingMainWindowHolders.Add(new MainWindowHolder(mainWindowHolder.ViewModel, null, mainWindowHolder.WindowCreatedAction));
                         if (this.mainWindowHolders.IsEmpty())
                         {
                             this.Logger.LogWarning("Restart all main windows");
@@ -1442,7 +1444,7 @@ namespace CarinaStudio.AppSuite
                             });
                             foreach (var pendingMainWindowHolder in pendingMainWindowHolders)
                             {
-                                if (!this.ShowMainWindow(pendingMainWindowHolder.ViewModel))
+                                if (!this.ShowMainWindow(pendingMainWindowHolder.ViewModel, pendingMainWindowHolder.WindowCreatedAction))
                                 {
                                     this.Logger.LogError("Unable to restart main window");
                                     await this.OnDisposeMainWindowViewModelAsync(pendingMainWindowHolder.ViewModel);
@@ -1457,7 +1459,7 @@ namespace CarinaStudio.AppSuite
                     {
                         this.Logger.LogWarning("Restart single main window requested");
                         this.mainWindowHolders.Remove(mainWindow);
-                        if (this.ShowMainWindow(mainWindowHolder.ViewModel))
+                        if (this.ShowMainWindow(mainWindowHolder.ViewModel, mainWindowHolder.WindowCreatedAction))
                             return;
                         this.Logger.LogError("Unable to restart single main window");
                     }
@@ -1715,7 +1717,7 @@ namespace CarinaStudio.AppSuite
                 if (jsonDocument.RootElement.ValueKind != JsonValueKind.Array)
                     return;
                 foreach (var stateElement in jsonDocument.RootElement.EnumerateArray())
-                    this.ShowMainWindow(this.OnCreateMainWindowViewModel(stateElement));
+                    this.ShowMainWindow(this.OnCreateMainWindowViewModel(stateElement), null);
             }
         }
 
@@ -2041,15 +2043,12 @@ namespace CarinaStudio.AppSuite
         protected virtual int SettingsVersion { get; } = 2;
 
 
-        /// <summary>
-        /// Create and show main window.
-        /// </summary>
-        /// <returns>True if main window created and shown successfully.</returns>
-        public bool ShowMainWindow() => this.ShowMainWindow((ViewModel?)null);
+        /// <inheritdoc/>
+        public bool ShowMainWindow(Action<Window>? windowCreatedAction = null) => this.ShowMainWindow(null, windowCreatedAction);
 
 
         // Create and show main window.
-        bool ShowMainWindow(ViewModel? viewModel)
+        bool ShowMainWindow(ViewModel? viewModel, Action<Window>? windowCreatedAction)
         {
             // check state
             this.VerifyAccess();
@@ -2082,7 +2081,7 @@ namespace CarinaStudio.AppSuite
             if (this.isRestartingMainWindowsRequested)
             {
                 this.Logger.LogWarning("Show main window later after closing all main windows");
-                this.pendingMainWindowHolders.Add(new MainWindowHolder(viewModel, null));
+                this.pendingMainWindowHolders.Add(new MainWindowHolder(viewModel, null, windowCreatedAction));
                 return true;
             }
 
@@ -2095,7 +2094,7 @@ namespace CarinaStudio.AppSuite
             }
 
             // attach to main window
-            var mainWindowHolder = new MainWindowHolder(viewModel, mainWindow);
+            var mainWindowHolder = new MainWindowHolder(viewModel, mainWindow, windowCreatedAction);
             this.mainWindowHolders[mainWindow] = mainWindowHolder;
             this.mainWindows.Add(mainWindow);
             mainWindow.Closed += this.OnMainWindowClosed;
@@ -2137,8 +2136,17 @@ namespace CarinaStudio.AppSuite
                 CultureInfo.DefaultThreadCurrentCulture = this.cultureInfo;
                 CultureInfo.DefaultThreadCurrentUICulture = this.cultureInfo;
 
-                // show window
+                // setup data context
                 mainWindowHolder.Window.DataContext = mainWindowHolder.ViewModel;
+
+                // notify window created
+                if (mainWindowHolder.WindowCreatedAction != null)
+                {
+                    mainWindowHolder.WindowCreatedAction(mainWindowHolder.Window);
+                    mainWindowHolder.WindowCreatedAction = null;
+                }
+
+                // show window
                 mainWindowHolder.Window.Show();
                 this.SynchronizationContext.Post(() =>
                 {

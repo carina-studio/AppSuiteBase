@@ -197,14 +197,14 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Save <see cref="CarinaStudio.IApplication.PersistentState"/> to file.
+        /// Save <see cref="IApplication.PersistentState"/> to file.
         /// </summary>
         /// <returns>Task of saving.</returns>
         Task SavePersistentStateAsync();
 
 
         /// <summary>
-        /// Save <see cref="CarinaStudio.IApplication.Settings"/> to file.
+        /// Save <see cref="IApplication.Settings"/> to file.
         /// </summary>
         /// <returns>Task of saving.</returns>
         Task SaveSettingsAsync();
@@ -213,8 +213,9 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Create and show main window.
         /// </summary>
+        /// <param name="windowCreatedAction">Action to perform when window created.</param>
         /// <returns>True if main window created and shown successfully.</returns>
-        bool ShowMainWindow();
+        bool ShowMainWindow(Action<Window>? windowCreatedAction = null);
 
 
         /// <summary>

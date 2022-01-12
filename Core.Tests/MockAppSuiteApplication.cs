@@ -331,7 +331,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public bool ShowMainWindow() => false;
+        public bool ShowMainWindow(Action<Window>? windowCreatedAction = null) => false;
 
 
         /// <summary>
