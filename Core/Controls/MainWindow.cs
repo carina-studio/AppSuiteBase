@@ -1,9 +1,8 @@
 ﻿using Avalonia;
-using Avalonia.Animation;
-using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Platform;
+using CarinaStudio.Animation;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
@@ -44,7 +43,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Fields.
-        bool isContentPaddingTransitionReady;
+        ThicknessAnimator? contentPaddingAnimator;
         bool isShowingInitialDialogs;
         long openedTime;
         readonly ScheduledAction restartingMainWindowsAction;
@@ -91,35 +90,26 @@ namespace CarinaStudio.AppSuite.Controls
                 if (this.Content is not Control contentControl)
                     return;
 
+                // cancel current animation
+                this.contentPaddingAnimator?.Cancel();
+
                 // update content padding
                 // [Workaround] cannot use padding of window because that thickness transition doesn't work on it
-                contentControl.Margin = windowState switch
+                var margin = windowState switch
                 {
                     WindowState.FullScreen
                     or WindowState.Maximized => ExtendedClientAreaWindowConfiguration.ContentPaddingInMaximized,
                     _ => ExtendedClientAreaWindowConfiguration.ContentPadding,
                 };
-
-                // setup transition after the first padding ready
-                if (!this.isContentPaddingTransitionReady)
+                this.contentPaddingAnimator = new ThicknessAnimator(contentControl.Margin, margin).Also(it =>
                 {
-                    this.isContentPaddingTransitionReady = true;
+                    it.Completed += (_, e) => contentControl.Margin = it.EndValue;
                     if (this.TryFindResource("TimeSpan/MainWindow.ContentPaddingTransition", out var res) && res is TimeSpan duration)
-                    {
-                        var transitions = contentControl.Transitions;
-                        if (transitions == null)
-                        {
-                            transitions = new Transitions();
-                            contentControl.Transitions = transitions;
-                        }
-                        transitions.Add(new ThicknessTransition()
-                        {
-                            Duration = duration,
-                            Easing = new ExponentialEaseOut(),
-                            Property = MarginProperty,
-                        });
-                    }
-                }
+                        it.Duration = duration;
+                    it.Interpolator = Interpolators.Deceleration;
+                    it.ProgressChanged += (_, e) => contentControl.Margin = it.Value;
+                    it.Start();
+                });
             });
 
             // restore window state
