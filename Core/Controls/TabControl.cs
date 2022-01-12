@@ -9,6 +9,7 @@ using Avalonia.Styling;
 using Avalonia.VisualTree;
 using CarinaStudio.Animation;
 using CarinaStudio.Threading;
+using CarinaStudio.VisualTree;
 using CarinaStudio.Windows.Input;
 using System;
 using System.Collections;
@@ -125,7 +126,7 @@ namespace CarinaStudio.AppSuite.Controls
                 itemIndex = index;
                 headerVisual = itemsPanel.Children[index].GetVisualChildren()?.FirstOrDefault()?.Let(it =>
                 {
-                    return (it as IControl)?.FindChildControl<Panel>("PART_ContentContainer") ?? it;
+                    return it.FindDescendantOfTypeAndName<Panel>("PART_ContentContainer") ?? it;
                 }) ?? headerVisual;
                 return true;
             }

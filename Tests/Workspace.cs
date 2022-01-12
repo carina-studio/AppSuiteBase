@@ -30,11 +30,12 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        public override void SaveState(Utf8JsonWriter writer)
+        public override bool SaveState(Utf8JsonWriter writer)
         {
             writer.WriteStartObject();
             writer.WriteNumber("ID", this.ID);
             writer.WriteEndObject();
+            return true;
         }
     }
 }
