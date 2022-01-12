@@ -610,7 +610,7 @@ namespace CarinaStudio.AppSuite.Controls
                 {
                     it.Completed += (_, e) => this.tabStripScrollViewerMarginAnimator = null;
                     it.Duration = duration;
-                    it.Interpolator = Interpolators.Deleceleration;
+                    it.Interpolator = Interpolators.Deceleration;
                     it.ProgressChanged += (_, e) => this.tabStripScrollViewer.Margin = it.Value;
                     it.Start();
                 });

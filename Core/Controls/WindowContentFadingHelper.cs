@@ -45,7 +45,7 @@ namespace CarinaStudio.AppSuite.Controls
                         this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFadingContent)));
                     };
                     it.Duration = ContentFadeInDuration;
-                    it.Interpolator = Interpolators.Deleceleration;
+                    it.Interpolator = Interpolators.Deceleration;
                     it.ProgressChanged += (_, e) => this.content.Opacity = it.Value;
                     it.Start();
                 });
@@ -94,7 +94,7 @@ namespace CarinaStudio.AppSuite.Controls
                                 this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFadingContent)));
                             };
                             it.Duration = ContentFadeOutDuration;
-                            it.Interpolator = Interpolators.Deleceleration;
+                            it.Interpolator = Interpolators.Deceleration;
                             it.ProgressChanged += (_, e) => this.content.Opacity = it.Value;
                             it.Start();
                         });

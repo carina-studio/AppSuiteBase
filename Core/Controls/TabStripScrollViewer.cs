@@ -73,7 +73,7 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 it.Completed += (_, e) => this.offsetAnimator = null;
                 it.Duration = duration;
-                it.Interpolator = Interpolators.Deleceleration;
+                it.Interpolator = Interpolators.Deceleration;
                 it.ProgressChanged += (_, e) => this.Offset = it.Value;
                 it.Start();
             });
