@@ -122,15 +122,26 @@ namespace CarinaStudio.AppSuite
         // Static fields.
         static readonly SettingKey<string> AgreedPrivacyPolicyVersionKey = new SettingKey<string>("AgreedPrivacyPolicyVersion", "");
         static readonly SettingKey<string> AgreedUserAgreementVersionKey = new SettingKey<string>("AgreedUserAgreementVersion", "");
+        static readonly string AppDirectoryPath = Global.Run(() =>
+        {
+            var mainModule = Process.GetCurrentProcess().MainModule;
+            if (mainModule != null && Path.GetFileNameWithoutExtension(mainModule.FileName) != "dotnet")
+                return Path.GetDirectoryName(mainModule.FileName) ?? "";
+            var codeBase = System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.CodeBase;
+            if (codeBase != null && codeBase.StartsWith("file://") && codeBase.Length > 7)
+            {
+                if (Platform.IsWindows)
+                    return Path.GetDirectoryName(codeBase.Substring(8).Replace('/', '\\')) ?? Environment.CurrentDirectory;
+                return Path.GetDirectoryName(codeBase.Substring(7)) ?? Environment.CurrentDirectory;
+            }
+            return Environment.CurrentDirectory;
+        });
         static double CachedCustomScreenScaleFactor = double.NaN;
         static readonly string? CustomScreenScaleFactorFilePath = Global.Run(() =>
         {
             if (!Platform.IsLinux)
                 return null;
-            var mainModule = Process.GetCurrentProcess().MainModule;
-            if (mainModule != null)
-                return Path.Combine(Path.GetDirectoryName(mainModule.FileName) ?? "", "ScreenScaleFactor");
-            return null;
+            return Path.Combine(AppDirectoryPath, "ScreenScaleFactor");
         });
         static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new SettingKey<bool>("IsAcceptNonStableApplicationUpdateInitialized", false);
         static readonly SettingKey<int> LogOutputTargetPortKey = new SettingKey<int>("LogOutputTargetPort");
@@ -151,6 +162,7 @@ namespace CarinaStudio.AppSuite
 #endif
         ScheduledAction? checkUpdateInfoAction;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
+        readonly string? customScreenScaleFactorFilePath;
         readonly Styles extraStyles = new Styles();
         HardwareInfo? hardwareInfo;
         bool isRestartAsAdminRequested;
@@ -188,23 +200,6 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         protected AppSuiteApplication()
         {
-            // check root directory
-            this.RootPrivateDirectoryPath = base.RootPrivateDirectoryPath.Let(it =>
-            {
-                if (Path.GetFileNameWithoutExtension(it) == "dotnet")
-                {
-                    var codeBase = this.Assembly.GetName().CodeBase;
-                    if (codeBase != null && codeBase.StartsWith("file://") && codeBase.Length > 7)
-                    {
-                        if (Platform.IsWindows)
-                            return Path.GetDirectoryName(codeBase.Substring(8).Replace('/', '\\')) ?? Environment.CurrentDirectory;
-                        return Path.GetDirectoryName(codeBase.Substring(7)) ?? Environment.CurrentDirectory;
-                    }
-                    return Environment.CurrentDirectory;
-                }
-                return it;
-            });
-
             // create logger
             LogManager.Configuration = new NLog.Config.LoggingConfiguration().Also(it =>
             {
@@ -1986,7 +1981,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public override string RootPrivateDirectoryPath { get; }
+        public override string RootPrivateDirectoryPath { get => AppDirectoryPath; }
 
 
         /// <summary>
