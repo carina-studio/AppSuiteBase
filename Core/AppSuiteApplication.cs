@@ -188,6 +188,23 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         protected AppSuiteApplication()
         {
+            // check root directory
+            this.RootPrivateDirectoryPath = base.RootPrivateDirectoryPath.Let(it =>
+            {
+                if (Path.GetFileNameWithoutExtension(it) == "dotnet")
+                {
+                    var codeBase = this.Assembly.GetName().CodeBase;
+                    if (codeBase != null && codeBase.StartsWith("file://") && codeBase.Length > 7)
+                    {
+                        if (Platform.IsWindows)
+                            return Path.GetDirectoryName(codeBase.Substring(8).Replace('/', '\\')) ?? Environment.CurrentDirectory;
+                        return Path.GetDirectoryName(codeBase.Substring(7)) ?? Environment.CurrentDirectory;
+                    }
+                    return Environment.CurrentDirectory;
+                }
+                return it;
+            });
+
             // create logger
             LogManager.Configuration = new NLog.Config.LoggingConfiguration().Also(it =>
             {
@@ -1966,6 +1983,10 @@ namespace CarinaStudio.AppSuite
             });
             return true;
         }
+
+
+        /// <inheritdoc/>
+        public override string RootPrivateDirectoryPath { get; }
 
 
         /// <summary>
