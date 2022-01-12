@@ -162,7 +162,6 @@ namespace CarinaStudio.AppSuite
 #endif
         ScheduledAction? checkUpdateInfoAction;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
-        readonly string? customScreenScaleFactorFilePath;
         readonly Styles extraStyles = new Styles();
         HardwareInfo? hardwareInfo;
         bool isRestartAsAdminRequested;
