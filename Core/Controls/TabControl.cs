@@ -13,6 +13,7 @@ using CarinaStudio.VisualTree;
 using CarinaStudio.Windows.Input;
 using System;
 using System.Collections;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -41,6 +42,7 @@ namespace CarinaStudio.AppSuite.Controls
         Window? attachedWindow;
         object? draggingOverItem;
         int draggingOverItemIndex = -1;
+        bool isAttachedToVisualTree;
         object? pointerPressedItem;
         int pointerPressedItemIndex = -1;
         Point? pointerPressedPosition;
@@ -271,6 +273,8 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 it.PropertyChanged += this.OnWindowPropertyChanged;
             });
+            this.isAttachedToVisualTree = true;
+            (this.Items as INotifyCollectionChanged)?.Let(it => it.CollectionChanged += this.OnItemsChanged);
             this.UpdateTabStripScrollViewerMargin(false);
         }
 
@@ -297,6 +301,8 @@ namespace CarinaStudio.AppSuite.Controls
                 it.PropertyChanged -= this.OnWindowPropertyChanged;
                 this.attachedWindow = null;
             });
+            this.isAttachedToVisualTree = false;
+            (this.Items as INotifyCollectionChanged)?.Let(it => it.CollectionChanged -= this.OnItemsChanged);
             this.updateTabStripScrollViewerMarginAction.Cancel();
             base.OnDetachedFromVisualTree(e);
         }
@@ -405,6 +411,22 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
+        // Called when element in Items has been changed.
+        void OnItemsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Move)
+            {
+                // [Workaround] Prevent selecting items more than one
+                (this.Items as IList)?.Let(it =>
+                {
+                    var selectedIndex = this.SelectedIndex;
+                    for (var i = it.Count - 1 ; i >= 0 ; --i)
+                        (it[i] as TabItem)?.Let(tabItem => tabItem.IsSelected = (i == selectedIndex));
+                });
+            }
+        }
+
+
         // Called before handling pointer-move event by its child.
         void OnPreviewPointerMove(object? sender, PointerEventArgs e)
         {
@@ -473,9 +495,16 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
         {
             base.OnPropertyChanged(change);
-            if (change.Property == IsFullWindowModeProperty)
+            var property = change.Property;
+            if (property == IsFullWindowModeProperty)
                 this.updateTabStripScrollViewerMarginAction.Schedule();
-            else if (change.Property == SelectedIndexProperty)
+            else if (property == ItemsProperty)
+            {
+                (change.OldValue as INotifyCollectionChanged)?.Let(it => it.CollectionChanged -= this.OnItemsChanged);
+                if (this.isAttachedToVisualTree)
+                    (change.NewValue as INotifyCollectionChanged)?.Let(it => it.CollectionChanged -= this.OnItemsChanged);
+            }
+            else if (property == SelectedIndexProperty)
                 this.scrollToSelectedItemAction.Schedule();
         }
 

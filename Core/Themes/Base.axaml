@@ -926,26 +926,26 @@
 									</Border.Transitions>
 								</Border>
 								<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
-									<Border.Transitions>
+									<!--Border.Transitions>
 										<Transitions>
 											<DoubleTransition Property="Opacity" Delay="0:0:0.15" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
 										</Transitions>
-									</Border.Transitions>
+									</Border.Transitions-->
 									<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Height="{DynamicResource Double/TabItem.Header.ColorBar.Height}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}" VerticalAlignment="Top">
 										<Border.RenderTransform>
 											<ScaleTransform ScaleX="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
-												<ScaleTransform.Transitions>
+												<!--ScaleTransform.Transitions>
 													<Transitions>
 														<DoubleTransition Property="ScaleX" Delay="0:0:0.15" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
 													</Transitions>
-												</ScaleTransform.Transitions>
+												</ScaleTransform.Transitions-->
 											</ScaleTransform>
 										</Border.RenderTransform>
-										<Border.Transitions>
+										<!--Border.Transitions>
 											<Transitions>
 												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
-										</Border.Transitions>
+										</Border.Transitions-->
 									</Border>
 								</Border>
 								<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>

@@ -12,9 +12,13 @@ using CarinaStudio.Data.Converters;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Linq;
 using System.Collections;
 using System.ComponentModel;
 using CarinaStudio.AppSuite.ViewModels;
+using CarinaStudio.Collections;
+using CarinaStudio.Input;
+using TabControl = Avalonia.Controls.TabControl;
 
 namespace CarinaStudio.AppSuite.Tests
 {
@@ -24,6 +28,7 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         readonly ScheduledAction logAction;
+        private readonly ObservableList<TabItem> tabItems = new();
 
 
         public MainWindow()
@@ -35,6 +40,11 @@ namespace CarinaStudio.AppSuite.Tests
                 this.Logger.LogDebug($"Time: {DateTime.Now}");
                 this.logAction?.Schedule(500);
             });
+
+            var tabControl = this.FindControl<TabControl>("tabControl").AsNonNull();
+            this.tabItems.AddRange(tabControl.Items.Cast<TabItem>());
+            tabControl.Items = this.tabItems;
+
         }
 
 
@@ -79,15 +89,10 @@ namespace CarinaStudio.AppSuite.Tests
         {
             e.DragEffects = DragDropEffects.None;
 
-            var tabItems = (sender as Controls.TabControl)?.Items as IList;
-            if (tabItems == null)
-                return;
-
             //if (tabItems != null && e.ItemIndex < tabItems.Count - 1)
             //(sender as Controls.TabControl)?.Let(it => it.SelectedIndex = e.ItemIndex);
 
-            var tabItem = e.Data.Get(TabItemKey);
-            if (tabItem == null)
+            if (!e.Data.TryGetData<TabItem>(TabItemKey, out var tabItem) || tabItem == null)
                 return;
 
             if (tabItem == e.Item)
@@ -149,12 +154,7 @@ namespace CarinaStudio.AppSuite.Tests
             ItemInsertionIndicator.SetInsertingItemAfter(tabItem, false);
             ItemInsertionIndicator.SetInsertingItemBefore(tabItem, false);
 
-            var item = e.Data.Get(TabItemKey);
-            if (item == null || item == e.Item)
-                return;
-
-            var tabItems = (sender as Controls.TabControl)?.Items as IList;
-            if (tabItems == null)
+            if (!e.Data.TryGetData<TabItem>(TabItemKey, out var item) || item == null || item == tabItem)
                 return;
 
             var srcIndex = tabItems.IndexOf(item);
@@ -167,18 +167,10 @@ namespace CarinaStudio.AppSuite.Tests
 
             if (targetIndex != srcIndex && targetIndex != srcIndex + 1)
             {
-                (sender as Controls.TabControl)?.Let(it => it.SelectedIndex = e.ItemIndex);
-                tabItems.RemoveAt(srcIndex);
                 if (srcIndex < targetIndex)
-                {
-                    tabItems.Insert(targetIndex - 1, item);
-                    (sender as Controls.TabControl)?.Let(it => it.SelectedIndex = targetIndex - 1);
-                }
+                    this.tabItems.Move(srcIndex, targetIndex - 1);
                 else
-                {
-                    tabItems.Insert(targetIndex, item);
-                    (sender as Controls.TabControl)?.Let(it => it.SelectedIndex = targetIndex);
-                }
+                    this.tabItems.Move(srcIndex, targetIndex);
             }
         }
 
