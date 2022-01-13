@@ -843,12 +843,12 @@
 									<ItemsPresenter Name="PART_ItemsPresenter"
 												Items="{TemplateBinding Items}"
 												ItemsPanel="{TemplateBinding ItemsPanel}"
-												ItemTemplate="{TemplateBinding ItemTemplate}"/>
+												ItemTemplate="{TemplateBinding ItemTemplate}"
+												Margin="0"/>
 								</Border>
 							</controls:TabStripScrollViewer>
 							<ContentPresenter Name="PART_SelectedContentHost"
 											  Background="{TemplateBinding Background}"
-											  Margin="0,-3,0,0"
 											  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
 											  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
 											  Content="{TemplateBinding SelectedContent}"
@@ -911,11 +911,11 @@
 			<Setter.Value>
 				<ControlTemplate>
 					<Border Background="{x:Static Brushes.Transparent}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-						<Grid ColumnDefinitions="Auto,*,Auto">
+						<Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Stretch">
 
 							<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemBefore}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
 
-							<Panel Name="PART_ContentContainer" Grid.Column="1" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" MaxWidth="{DynamicResource Double/TabItem.Header.MaxWidth}">
+							<Panel Name="PART_ContentContainer" Grid.Column="1" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" MaxWidth="{DynamicResource Double/TabItem.Header.MaxWidth}" VerticalAlignment="Bottom">
 								<Border Background="{StaticResource Brush/TabItem.Header.Background}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"/>
 								<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsPointerOver, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
 									<Border.Transitions>
