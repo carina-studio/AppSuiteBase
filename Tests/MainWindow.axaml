@@ -218,6 +218,8 @@
 						<appControls:DateTimeTextBox Name="dateTimeTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
 						<TextBlock Margin="5" Text="{Binding #dateTimeTextBox.Value}"/>
 
+						<appControls:IntegerTextBox HorizontalAlignment="Left" Margin="5" Width="200"/>
+
 						<appControls:EnumComboBox EnumType="{x:Type app:ThemeMode}" HorizontalAlignment="Left" Margin="5" Width="200"/>
 
 						<TextBox Width="200" Margin="5" HorizontalAlignment="Left"/>
