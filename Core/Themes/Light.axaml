@@ -22,7 +22,7 @@
 		<Color x:Key="Color/Dialog.TextBlock.Foreground.Description">#7f000000</Color>
 
 		<!-- Icon -->
-		<Color x:Key="Color/Icon">#222222</Color>
+		<Color x:Key="Color/Icon">#333333</Color>
 
 		<!-- LinkTextBlock -->
 		<Color x:Key="Color/LinkTextBlock.Foreground">#0077cc</Color>
