@@ -14,7 +14,11 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public static Thickness ContentPadding { get; } = Global.Run(() =>
         {
-            return new Thickness(0, 6, 0, 0); // Windows 10
+            if (Platform.IsWindows)
+                return new Thickness(0, 6, 0, 0); // Windows 10
+            if (Platform.IsMacOS)
+                return new Thickness(0, 2, 0, 0);
+            return new Thickness();
         });
 
 
