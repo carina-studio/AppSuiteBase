@@ -505,7 +505,7 @@ namespace CarinaStudio.AppSuite.Controls
                     (change.NewValue as INotifyCollectionChanged)?.Let(it => it.CollectionChanged -= this.OnItemsChanged);
             }
             else if (property == SelectedIndexProperty)
-                this.scrollToSelectedItemAction.Schedule();
+                this.scrollToSelectedItemAction.Schedule(100);
         }
 
 
@@ -587,10 +587,12 @@ namespace CarinaStudio.AppSuite.Controls
                 left += parent.Bounds.Left;
                 parent = parent.Parent;
             }
-            if (left < 0)
-                this.tabStripScrollViewer.ScrollBy(left);
-            else if (left + tabItemHeaderBounds.Width > this.tabStripScrollViewer.Bounds.Width)
-                this.tabStripScrollViewer.ScrollBy(left + tabItemHeaderBounds.Width - this.tabStripScrollViewer.Bounds.Width);
+            var leftMargin = this.scrollTabStripLeftButton?.IsVisible == true ? this.scrollTabStripLeftButton.Bounds.Right : 0;
+            var rightMargin = this.scrollTabStripRightButton?.IsVisible == true ? this.scrollTabStripRightButton.Bounds.Left : 0;
+            if (left < leftMargin)
+                this.tabStripScrollViewer.ScrollBy(left - leftMargin);
+            else if (left + tabItemHeaderBounds.Width > rightMargin)
+                this.tabStripScrollViewer.ScrollBy(left + tabItemHeaderBounds.Width - rightMargin);
         }
 
 
