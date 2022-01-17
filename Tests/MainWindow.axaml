@@ -302,9 +302,9 @@
 
 			<TabItem Classes="Empty">
 				<TabItem.Header>
-					<Border Classes="AddTabItemButton">
+					<Button Classes="AddTabItem">
 						<Image Classes="Icon" Source="{DynamicResource Image/Icon.Add}"/>
-					</Border>
+					</Button>
 				</TabItem.Header>
 			</TabItem>
 
