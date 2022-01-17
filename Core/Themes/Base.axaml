@@ -241,7 +241,7 @@
 		<CornerRadius x:Key="CornerRadius/TabItem.Header">5,5,0,0</CornerRadius>
 		<sys:Double x:Key="Double/TabItem.Header.ColorBar.Height">3</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.Content.Height">20</sys:Double>
-		<sys:Double x:Key="Double/TabItem.Header.FontSize">14</sys:Double>
+		<sys:Double x:Key="Double/TabItem.Header.FontSize">13</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.Height">36</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.Icon.Size">16</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.InsertionIndicator.Width">20</sys:Double>
@@ -249,9 +249,9 @@
 		<Thickness x:Key="Thickness/TabItem.Header.Border">0,0,1,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">10,0,0,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">3</Thickness>
-		<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,8,0</Thickness>
+		<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Margin">1,2,1,0</Thickness>
-		<Thickness x:Key="Thickness/TabItem.Header.Padding">8</Thickness>
+		<Thickness x:Key="Thickness/TabItem.Header.Padding">10,8,10,8</Thickness>
 
 		<!-- TextBox -->
 		<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>
