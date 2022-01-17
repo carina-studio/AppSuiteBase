@@ -1417,7 +1417,10 @@ namespace CarinaStudio.AppSuite
             if (isActive)
             {
                 if (Platform.IsMacOS)
+                {
+                    this.UpdateCultureInfo(true);
                     this.UpdateSystemThemeMode(true);
+                }
                 if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value?.Window == mainWindow)
                     return;
                 if (this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
@@ -2282,7 +2285,7 @@ namespace CarinaStudio.AppSuite
         void UpdateCultureInfo(bool updateStringResources)
         {
             // get culture info
-            var cultureInfo = this.Settings.GetValueOrDefault(SettingKeys.Culture).ToCultureInfo();
+            var cultureInfo = this.Settings.GetValueOrDefault(SettingKeys.Culture).ToCultureInfo(true);
             cultureInfo.ClearCachedData();
             if (object.Equals(cultureInfo, this.cultureInfo))
                 return;

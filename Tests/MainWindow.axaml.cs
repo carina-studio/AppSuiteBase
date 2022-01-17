@@ -199,28 +199,26 @@ namespace CarinaStudio.AppSuite.Tests
         {
             //using var appInfo = new AppInfo();
             //await new ApplicationInfoDialog(appInfo).ShowDialog(this);
-            /*
             var result = await new Dialog().ShowDialog<ApplicationOptionsDialogResult>(this);
             if (result == ApplicationOptionsDialogResult.RestartMainWindowsNeeded)
                 this.Application.RestartMainWindows();
-            */
-            this.Application.Restart(AppSuiteApplication.RestoreMainWindowsArgument);
+            //this.Application.Restart(AppSuiteApplication.RestoreMainWindowsArgument);
         }
 
         void Test2()
         {
-            /*
             this.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, this.Settings.GetValueOrDefault(SettingKeys.Culture) switch
             {
                 ApplicationCulture.System => ApplicationCulture.EN_US,
                 ApplicationCulture.EN_US => ApplicationCulture.ZH_TW,
                 _ => ApplicationCulture.System,
             });
-            */
+            /*
             this.Application.ShowMainWindow(window =>
             {
                 System.Diagnostics.Debug.WriteLine("Window created");
             });
+            */
         }
     }
 }
