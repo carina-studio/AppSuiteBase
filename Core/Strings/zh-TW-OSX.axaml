@@ -4,5 +4,10 @@
 
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Administrator">Superuser</sys:String>
+	<sys:String x:Key="String/Common.CloseTab.WithGesture">關閉分頁 (⌘W)</sys:String>
+	<sys:String x:Key="String/Common.Copy.WithGesture">複製 (⌘C)</sys:String>
+	<sys:String x:Key="String/Common.CreateTab.WithGesture">建立新的分頁 (⌘T)</sys:String>
+	<sys:String x:Key="String/Common.Paste.WithGesture">貼上 (⌘V)</sys:String>
+	<sys:String x:Key="String/Common.Save.WithGesture">儲存 (⌘S)</sys:String>
 	
 </ResourceDictionary>

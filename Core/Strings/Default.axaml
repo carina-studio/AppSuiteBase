@@ -81,10 +81,13 @@
 	<sys:String x:Key="String/Common.Cancel">Cancel</sys:String>
 	<sys:String x:Key="String/Common.Close">Close</sys:String>
 	<sys:String x:Key="String/Common.CloseTab">Close tab</sys:String>
+	<sys:String x:Key="String/Common.CloseTab.WithGesture">Close tab (Ctrl+W)</sys:String>
 	<sys:String x:Key="String/Common.CloseWindow">Close window</sys:String>
 	<sys:String x:Key="String/Common.Copy">Copy</sys:String>
+	<sys:String x:Key="String/Common.Copy.WithGesture">Copy (Ctrl+C)</sys:String>
 	<sys:String x:Key="String/Common.Create">Create</sys:String>
 	<sys:String x:Key="String/Common.CreateTab">Create new tab</sys:String>
+	<sys:String x:Key="String/Common.CreateTab.WithGesture">Create new tab (Ctrl+T)</sys:String>
 	<sys:String x:Key="String/Common.CreateWindow">Create new window</sys:String>
 	<sys:String x:Key="String/Common.DebugMode">Debug Mode</sys:String>
 	<sys:String x:Key="String/Common.Decline">Decline</sys:String>
@@ -101,8 +104,10 @@
 	<sys:String x:Key="String/Common.OpenInNewTab">Open in new tab</sys:String>
 	<sys:String x:Key="String/Common.OpenInNewWindow">Open in new window</sys:String>
 	<sys:String x:Key="String/Common.Paste">Paste</sys:String>
+	<sys:String x:Key="String/Common.Paste.WithGesture">Paste (Ctrl+V)</sys:String>
 	<sys:String x:Key="String/Common.Remove">Remove</sys:String>
 	<sys:String x:Key="String/Common.Save">Save</sys:String>
+	<sys:String x:Key="String/Common.Save.WithGesture">Save (Ctrl+S)</sys:String>
 	<sys:String x:Key="String/Common.Yes">Yes</sys:String>
 	
 	<!-- DatePicker -->

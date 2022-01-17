@@ -4,5 +4,10 @@
 
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Administrator">Superuser</sys:String>
+	<sys:String x:Key="String/Common.CloseTab.WithGesture">Close tab (⌘W)</sys:String>
+	<sys:String x:Key="String/Common.Copy.WithGesture">Copy (⌘C)</sys:String>
+	<sys:String x:Key="String/Common.CreateTab.WithGesture">Create new tab (⌘T)</sys:String>
+	<sys:String x:Key="String/Common.Paste.WithGesture">Paste (⌘V)</sys:String>
+	<sys:String x:Key="String/Common.Save.WithGesture">Save (⌘S)</sys:String>
 	
 </ResourceDictionary>
