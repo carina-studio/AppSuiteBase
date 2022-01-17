@@ -2,6 +2,8 @@
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
@@ -705,6 +707,16 @@ namespace CarinaStudio.AppSuite
                     });
                 })));
             }));
+
+            // [Workaround] Prevent tooltip stays open after changing focus to another window
+            if (Platform.IsMacOS)
+            {
+                var handler = new EventHandler<RoutedEventArgs>((sender, e) =>
+                    Avalonia.Controls.ToolTip.SetIsOpen((Avalonia.Controls.Control)sender.AsNonNull(), false));
+                Avalonia.Controls.Button.ClickEvent.AddClassHandler(typeof(Avalonia.Controls.Button), handler);
+                Avalonia.Controls.Button.ClickEvent.AddClassHandler(typeof(Avalonia.Controls.RepeatButton), handler);
+                Avalonia.Controls.Button.ClickEvent.AddClassHandler(typeof(ToggleButton), handler);
+            }
 
             // add to top styles
             this.Styles.Add(this.extraStyles);
@@ -2690,7 +2702,7 @@ namespace CarinaStudio.AppSuite
             finally
             {
                 // close server stream
-                Global.RunWithoutError(() => this.multiInstancesServerStream.Close());
+                Global.RunWithoutError(() => this.multiInstancesServerStream?.Close());
                 this.multiInstancesServerStream = null;
 
                 // handle next connection

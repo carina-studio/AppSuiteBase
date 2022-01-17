@@ -140,9 +140,13 @@
 										<TextBox Classes="ToolBar_TextBox" Width="50"/>
 										<TextBox Classes="ToolBar_TextBox" Width="50" IsEnabled="False"/>
 
-										<ToggleButton Name="toolBarToggleButton" Classes="ToolBar_ToggleButton">
+										<ToggleButton Name="toolBarToggleButton" Classes="ToolBar_ToggleButton" ToolTip.Tip="This is tooltip">
 											<Image Classes="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
 										</ToggleButton>
+
+										<RepeatButton Classes="ToolBar_RepeatButton" ToolTip.Tip="This is tooltip">
+											<Image Classes="Icon" Source="{StaticResource Image/Icon.Add}"/>
+										</RepeatButton>
 
 										<Separator Classes="ToolBar_Separator"/>
 
