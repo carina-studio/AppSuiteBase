@@ -44,10 +44,10 @@
 			<TabItem>
 
 				<TabItem.Header>
-					<Grid ColumnDefinitions="Auto,*,Auto">
+					<Grid ColumnDefinitions="Auto,*,Auto" ToolTip.Tip="This is tooltip">
 						<Image Classes="TabItem_Icon" IsEnabled="{Binding $parent[TabItem].IsSelected}" Source="{DynamicResource Image/Icon.File}"/>
 						<TextBlock Classes="TabItem_TextBlock" Grid.Column="1" Text="Item 1 Item 1 Item 1 Item 1 kkkkkkkkkkkkkkkkk"/>
-						<Button Classes="TabItem_Button" Grid.Column="2">
+						<Button Classes="TabItem_Button" Command="{Binding $parent[Window].Test}" Grid.Column="2">
 							<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
 						</Button>
 					</Grid>

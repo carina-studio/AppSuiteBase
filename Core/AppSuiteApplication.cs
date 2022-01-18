@@ -2,12 +2,12 @@
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Animation;
 using CarinaStudio.AutoUpdate;
 using CarinaStudio.AutoUpdate.Resolvers;
@@ -711,11 +711,21 @@ namespace CarinaStudio.AppSuite
             // [Workaround] Prevent tooltip stays open after changing focus to another window
             if (Platform.IsMacOS)
             {
-                var handler = new EventHandler<RoutedEventArgs>((sender, e) =>
+                var clickHandler = new EventHandler<RoutedEventArgs>((sender, e) =>
                     Avalonia.Controls.ToolTip.SetIsOpen((Avalonia.Controls.Control)sender.AsNonNull(), false));
-                Avalonia.Controls.Button.ClickEvent.AddClassHandler(typeof(Avalonia.Controls.Button), handler);
-                Avalonia.Controls.Button.ClickEvent.AddClassHandler(typeof(Avalonia.Controls.RepeatButton), handler);
-                Avalonia.Controls.Button.ClickEvent.AddClassHandler(typeof(ToggleButton), handler);
+                var templateAppliedHandler = new EventHandler<RoutedEventArgs>((sender, e) =>
+                {
+                    if (sender is Avalonia.Controls.Control control)
+                    {
+                        control.GetObservable(Avalonia.Controls.ToolTip.IsOpenProperty).Subscribe(isOpen =>
+                        {
+                            if (isOpen && control.FindAncestorOfType<Window>()?.IsActive == false)
+                                Avalonia.Controls.ToolTip.SetIsOpen(control, false);
+                        });
+                    }
+                });
+                Avalonia.Controls.Button.ClickEvent.AddClassHandler(typeof(Avalonia.Controls.Button), clickHandler);
+                Avalonia.Controls.Button.TemplateAppliedEvent.AddClassHandler(typeof(Avalonia.Controls.Button), templateAppliedHandler);
             }
 
             // add to top styles
@@ -756,6 +766,19 @@ namespace CarinaStudio.AppSuite
         /// Get theme mode which is currently applied to application.
         /// </summary>
         public ThemeMode EffectiveThemeMode { get; private set; } = ThemeMode.Dark;
+
+
+        /// <summary>
+        /// [Workaround] Ensure that tooltip of given control will be closed if its window is inactive.
+        /// </summary>
+        /// <param name="control">Control.</param>
+        /// <remark>The method is designed for macOS.</remark>
+        public void EnsureClosingToolTipIfWindowIsInactive(Avalonia.Controls.Control control)
+        {
+            if (!Platform.IsMacOS || control is Avalonia.Controls.Button)
+                return;
+            new Controls.MacOSToolTipHelper(control);
+        }
 
 
         /// <summary>

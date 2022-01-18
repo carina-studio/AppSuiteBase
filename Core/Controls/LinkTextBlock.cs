@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Styling;
+using Avalonia.VisualTree;
 using CarinaStudio.Windows.Input;
 using System;
 using System.Windows.Input;
@@ -85,6 +86,11 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 if (change.NewValue.Value != null)
                     this.Uri = null;
+            }
+            else if (change.Property == ToolTip.IsOpenProperty)
+            {
+                if (Platform.IsMacOS && this.FindAncestorOfType<Avalonia.Controls.Window>()?.IsActive == false)
+                    ToolTip.SetIsOpen(this, false);
             }
             else if (change.Property == UriProperty)
             {
