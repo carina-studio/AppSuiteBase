@@ -1,6 +1,9 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+	<!-- Base styles -->
+	<StyleInclude Source="/Themes/Base-OSX.axaml"/>
+
 	<!-- Resources -->
 	<Styles.Resources>
 

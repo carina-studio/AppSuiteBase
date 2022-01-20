@@ -989,6 +989,14 @@
 	<!-- TextBox -->
 	<Style Selector="TextBox">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
+		<Setter Property="ContextFlyout" Value="{x:Null}"/>
+		<Setter Property="ContextMenu">
+			<ContextMenu PlacementAnchor="BottomRight" PlacementGravity="BottomRight" PlacementMode="AnchorAndGravity" PlacementRect="0 0 0 0">
+				<MenuItem Command="{Binding $parent[TextBox].Cut}" Header="{DynamicResource String/Common.Cut}" IsEnabled="{Binding $parent[TextBox].CanCut}" InputGesture="Ctrl+X"/>
+				<MenuItem Command="{Binding $parent[TextBox].Copy}" Header="{DynamicResource String/Common.Copy}" IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="Ctrl+C"/>
+				<MenuItem Command="{Binding $parent[TextBox].Paste}" Header="{DynamicResource String/Common.Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" InputGesture="Ctrl+V"/>
+			</ContextMenu>
+		</Setter>
 		<Setter Property="FontFamily" Value="{DynamicResource FontFamily/TextBox.FallbackFontFamilies}"/>
 	</Style>
 

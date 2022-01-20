@@ -3,21 +3,20 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.VisualTree;
-using CarinaStudio.AppSuite.Converters;
 using CarinaStudio.AppSuite.Controls;
+using CarinaStudio.AppSuite.Converters;
+using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
 using CarinaStudio.Data.Converters;
+using CarinaStudio.Input;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Collections;
 using System.ComponentModel;
-using CarinaStudio.AppSuite.ViewModels;
-using CarinaStudio.Collections;
-using CarinaStudio.Input;
+using System.Linq;
 using TabControl = Avalonia.Controls.TabControl;
 
 namespace CarinaStudio.AppSuite.Tests

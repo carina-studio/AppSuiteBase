@@ -1,0 +1,16 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+	<!-- TextBox -->
+	<Style Selector="TextBox">
+		<Setter Property="ContextMenu">
+			<ContextMenu PlacementAnchor="BottomRight" PlacementGravity="BottomRight" PlacementMode="AnchorAndGravity" PlacementRect="0 0 0 0">
+				<MenuItem Command="{Binding $parent[TextBox].Cut}" Header="{DynamicResource String/Common.Cut}" IsEnabled="{Binding $parent[TextBox].CanCut}" InputGesture="Cmd+X"/>
+				<MenuItem Command="{Binding $parent[TextBox].Copy}" Header="{DynamicResource String/Common.Copy}" IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="Cmd+C"/>
+				<MenuItem Command="{Binding $parent[TextBox].Paste}" Header="{DynamicResource String/Common.Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" InputGesture="Cmd+V"/>
+			</ContextMenu>
+		</Setter>
+	</Style>
+	
+</Styles>

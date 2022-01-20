@@ -35,6 +35,7 @@
 		<AvaloniaResource Include="Strings/zh-TW-OSX.axaml" />
 		<AvaloniaResource Include="Strings/zh-TW-Linux.axaml" />
 		<AvaloniaResource Include="Themes/Base.axaml" />
+		<AvaloniaResource Include="Themes/Base-OSX.axaml" />
 		<AvaloniaResource Include="Themes/Base-Windows7.axaml" />
 		<AvaloniaResource Include="Themes/Dark.axaml" />
 		<AvaloniaResource Include="Themes/Dark-OSX.axaml" />

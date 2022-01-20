@@ -89,6 +89,8 @@
 	<sys:String x:Key="String/Common.CreateTab">Create new tab</sys:String>
 	<sys:String x:Key="String/Common.CreateTab.WithGesture">Create new tab (Ctrl+T)</sys:String>
 	<sys:String x:Key="String/Common.CreateWindow">Create new window</sys:String>
+	<sys:String x:Key="String/Common.Cut">Cut</sys:String>
+	<sys:String x:Key="String/Common.Cut.WithGesture">Cut (Ctrl+X)</sys:String>
 	<sys:String x:Key="String/Common.DebugMode">Debug Mode</sys:String>
 	<sys:String x:Key="String/Common.Decline">Decline</sys:String>
 	<sys:String x:Key="String/Common.Delete">Delete</sys:String>
