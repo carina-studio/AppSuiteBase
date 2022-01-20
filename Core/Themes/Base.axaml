@@ -231,7 +231,8 @@
 		<SolidColorBrush x:Key="Brush/TabItem.Header.Border" Color="{DynamicResource Color/TabItem.Header.Border}"/>
 		<SolidColorBrush x:Key="Brush/TabItem.Header.Border.PointerOver" Color="{DynamicResource Color/TabItem.Header.Border.PointerOver}"/>
 		<SolidColorBrush x:Key="Brush/TabItem.Header.Border.Selected" Color="{DynamicResource Color/TabItem.Header.Border.Selected}"/>
-		<SolidColorBrush x:Key="Brush/TabItem.Header.InsertionIndicator.Background" Color="{DynamicResource Color/Accent}" Opacity="0.5"/>
+		<SolidColorBrush x:Key="Brush/TabItem.Header.InsertionIndicator.Background" Color="{DynamicResource Color/Accent}" Opacity="0.7"/>
+		<SolidColorBrush x:Key="Brush/TabItem.Header.InsertionIndicator.Border" Color="{DynamicResource Color/Accent}"/>
 		<Color x:Key="Color/TabItem.Header.Background">#ffffff</Color>
 		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#ffffff</Color>
 		<Color x:Key="Color/TabItem.Header.Background.Selected">#ffffff</Color>
@@ -250,6 +251,7 @@
 		<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">10,0,0,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">3</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
+		<Thickness x:Key="Thickness/TabItem.Header.InsertionIndicator.Border">1,1,1,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Margin">1,2,1,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Padding">10</Thickness>
 
@@ -925,7 +927,7 @@
 					<Border Background="{x:Static Brushes.Transparent}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 						<Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Stretch">
 
-							<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemBefore}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
+							<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" BorderBrush="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Border}" BorderThickness="{DynamicResource Thickness/TabItem.Header.InsertionIndicator.Border}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemBefore}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
 
 							<Panel Name="PART_ContentContainer" Grid.Column="1" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" MaxWidth="{DynamicResource Double/TabItem.Header.MaxWidth}" VerticalAlignment="Bottom">
 								<Border Background="{StaticResource Brush/TabItem.Header.Background}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"/>
@@ -962,7 +964,7 @@
 								<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
 							</Panel>
 
-							<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Grid.Column="2" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemAfter}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
+							<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" BorderBrush="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Border}" BorderThickness="{DynamicResource Thickness/TabItem.Header.InsertionIndicator.Border}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Grid.Column="2" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemAfter}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
 							
 						</Grid>
 					</Border>
