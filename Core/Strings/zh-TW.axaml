@@ -77,6 +77,7 @@
 	<sys:String x:Key="String/Common.Administrator">系統管理員</sys:String>
 	<sys:String x:Key="String/Common.Agree">同意</sys:String>
 	<sys:String x:Key="String/Common.Cancel">取消</sys:String>
+	<sys:String x:Key="String/Common.Clear">清除</sys:String>
 	<sys:String x:Key="String/Common.Close">關閉</sys:String>
 	<sys:String x:Key="String/Common.CloseTab">關閉分頁</sys:String>
 	<sys:String x:Key="String/Common.CloseTab.WithGesture">關閉分頁 (Ctrl+W)</sys:String>
@@ -108,6 +109,8 @@
 	<sys:String x:Key="String/Common.Remove">移除</sys:String>
 	<sys:String x:Key="String/Common.Save">儲存</sys:String>
 	<sys:String x:Key="String/Common.Save.WithGesture">儲存 (Ctrl+S)</sys:String>
+	<sys:String x:Key="String/Common.SelectAll">全選</sys:String>
+	<sys:String x:Key="String/Common.SelectAll.WithGesture">全選 (Ctrl+A)</sys:String>
 	<sys:String x:Key="String/Common.Yes">是</sys:String>
 
 	<!-- DatePicker -->

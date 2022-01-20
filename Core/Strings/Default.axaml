@@ -79,6 +79,7 @@
 	<sys:String x:Key="String/Common.Administrator">Administrator</sys:String>
 	<sys:String x:Key="String/Common.Agree">Agree</sys:String>
 	<sys:String x:Key="String/Common.Cancel">Cancel</sys:String>
+	<sys:String x:Key="String/Common.Clear">Clear</sys:String>
 	<sys:String x:Key="String/Common.Close">Close</sys:String>
 	<sys:String x:Key="String/Common.CloseTab">Close tab</sys:String>
 	<sys:String x:Key="String/Common.CloseTab.WithGesture">Close tab (Ctrl+W)</sys:String>
@@ -110,6 +111,8 @@
 	<sys:String x:Key="String/Common.Remove">Remove</sys:String>
 	<sys:String x:Key="String/Common.Save">Save</sys:String>
 	<sys:String x:Key="String/Common.Save.WithGesture">Save (Ctrl+S)</sys:String>
+	<sys:String x:Key="String/Common.SelectAll">Select all</sys:String>
+	<sys:String x:Key="String/Common.SelectAll.WithGesture">Select all (Ctrl+A)</sys:String>
 	<sys:String x:Key="String/Common.Yes">Yes</sys:String>
 	
 	<!-- DatePicker -->

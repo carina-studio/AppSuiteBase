@@ -997,6 +997,9 @@
 				<MenuItem Command="{Binding $parent[TextBox].Cut}" Header="{DynamicResource String/Common.Cut}" IsEnabled="{Binding $parent[TextBox].CanCut}" InputGesture="Ctrl+X"/>
 				<MenuItem Command="{Binding $parent[TextBox].Copy}" Header="{DynamicResource String/Common.Copy}" IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="Ctrl+C"/>
 				<MenuItem Command="{Binding $parent[TextBox].Paste}" Header="{DynamicResource String/Common.Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" InputGesture="Ctrl+V"/>
+				<Separator/>
+				<MenuItem Command="{Binding $parent[TextBox].SelectAll}" Header="{DynamicResource String/Common.SelectAll}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static converters:ValueToBooleanConverters.NonEmptyStringToTrue}}" InputGesture="Ctrl+A"/>
+				<MenuItem Command="{Binding $parent[TextBox].Clear}" Header="{DynamicResource String/Common.Clear}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static converters:ValueToBooleanConverters.NonEmptyStringToTrue}}"/>
 			</ContextMenu>
 		</Setter>
 		<Setter Property="FontFamily" Value="{DynamicResource FontFamily/TextBox.FallbackFontFamilies}"/>
