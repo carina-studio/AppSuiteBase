@@ -962,7 +962,7 @@ namespace CarinaStudio.AppSuite
 
             // confirm layouting lots of main windows
             if (activeMainWindow == null)
-                activeMainWindow = this.mainWindows[0];
+                activeMainWindow = this.LatestActiveMainWindow ?? this.mainWindows[0];
             if (mainWindowCount > 4)
             {
                 Controls.WindowExtensions.ActivateAndBringToFront(activeMainWindow);
@@ -1058,6 +1058,7 @@ namespace CarinaStudio.AppSuite
                         it.Width = bounds.Width / pixelDensity;
                         it.Height = bounds.Height / pixelDensity;
                     }
+                    (it as Controls.IMainWindow)?.CancelSavingSize();
                     Controls.WindowExtensions.ActivateAndBringToFront(it);
                 });
             }

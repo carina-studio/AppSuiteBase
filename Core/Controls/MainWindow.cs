@@ -20,7 +20,7 @@ namespace CarinaStudio.AppSuite.Controls
     /// Base class of main window pf application.
     /// </summary>
     /// <typeparam name="TViewModel">Type of view-model.</typeparam>
-    public abstract class MainWindow<TViewModel> : Window where TViewModel : MainWindowViewModel
+    public abstract class MainWindow<TViewModel> : Window, IMainWindow where TViewModel : MainWindowViewModel
     {
         /// <summary>
         /// Property of <see cref="HasMultipleMainWindows"/>.
