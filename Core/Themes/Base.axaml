@@ -259,6 +259,10 @@
 		<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>
 		<SolidColorBrush x:Key="Brush/TextBox.Foreground.Error" Color="{DynamicResource Color/TextBox.Foreground.Error}"/>
 		<Color x:Key="Color/TextBox.Foreground.Error">#ff0000</Color>
+		<sys:Double x:Key="Double/TextBox.InPlaceAction.Size">18</sys:Double>
+		<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction">10,6,27,5</Thickness>
+		<Thickness x:Key="Thickness/TextBox.InPlaceAction.Padding">3</Thickness>
+		<Thickness x:Key="Thickness/TextBox.InPlaceAction.Margin">0,0,5,0</Thickness>
 
 		<!-- TextInputDialog -->
 		<sys:Double x:Key="Double/TextInputDialog.Width">450</sys:Double>
@@ -989,6 +993,24 @@
 	</Style>
 
 	<!-- TextBox -->
+	<Style Selector="Button.TextBox_InPlaceAction">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Focusable" Value="False"/>
+		<Setter Property="Height" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/TextBox.InPlaceAction.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.InPlaceAction.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
+	</Style>
+	<Style Selector="Button.TextBox_InPlaceAction:disabled">
+		<Setter Property="IsHitTestVisible" Value="False"/>
+	</Style>
+	<Style Selector="Button.TextBox_InPlaceAction:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
 	<Style Selector="TextBox">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
 		<Setter Property="ContextFlyout" Value="{x:Null}"/>
@@ -1003,6 +1025,27 @@
 			</ContextMenu>
 		</Setter>
 		<Setter Property="FontFamily" Value="{DynamicResource FontFamily/TextBox.FallbackFontFamilies}"/>
+	</Style>
+	<Style Selector="TextBox.WithInPlaceAction">
+		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.Padding.WithInPlaceAction}"/>
+	</Style>
+	<Style Selector="ToggleButton.TextBox_InPlaceAction">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Focusable" Value="False"/>
+		<Setter Property="Height" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/TextBox.InPlaceAction.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.InPlaceAction.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
+	</Style>
+	<Style Selector="ToggleButton.TextBox_InPlaceAction:disabled">
+		<Setter Property="IsHitTestVisible" Value="False"/>
+	</Style>
+	<Style Selector="ToggleButton.TextBox_InPlaceAction:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
 	</Style>
 
 	<!-- TimePicker -->
@@ -1097,6 +1140,14 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="TextBox.ToolBar_TextBox:disabled">
+		<Setter Property="IsHitTestVisible" Value="False"/>
+	</Style>
+	<Style Selector="TextBox.ToolBar_TextBox_WithInPlaceAction">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.Padding.WithInPlaceAction}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="TextBox.ToolBar_TextBox_WithInPlaceAction:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
 	<Style Selector="ToggleButton.ToolBar_ToggleButton">

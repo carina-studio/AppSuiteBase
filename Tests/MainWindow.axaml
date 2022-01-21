@@ -137,7 +137,12 @@
 											<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
 										</Button>
 
-										<TextBox Classes="ToolBar_TextBox" Width="50"/>
+										<Panel>
+											<TextBox Classes="ToolBar_TextBox_WithInPlaceAction" Width="100"/>
+											<ToggleButton Classes="TextBox_InPlaceAction">
+												<Image Classes="Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
+											</ToggleButton>
+										</Panel>
 										<TextBox Classes="ToolBar_TextBox" Width="50" IsEnabled="False"/>
 
 										<ToggleButton Name="toolBarToggleButton" Classes="ToolBar_ToggleButton" ToolTip.Tip="This is tooltip">
@@ -173,7 +178,12 @@
 
 									</StackPanel>
 
-									<TextBox Classes="ToolBar_TextBox" Grid.Column="1" MinWidth="200"/>
+									<Panel Grid.Column="1">
+										<TextBox Classes="ToolBar_TextBox_WithInPlaceAction"/>
+										<Button Classes="TextBox_InPlaceAction">
+											<Image Classes="Icon" Source="{DynamicResource Image/Icon.Close}"/>
+										</Button>
+									</Panel>
 
 									<StackPanel Grid.Column="2" HorizontalAlignment="Stretch" Orientation="Horizontal">
 										<Button Classes="ToolBar_Button">
