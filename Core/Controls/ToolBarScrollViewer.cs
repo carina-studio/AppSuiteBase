@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Styling;
+using Avalonia.VisualTree;
 using CarinaStudio.Animation;
 using CarinaStudio.Threading;
 using System;
@@ -15,6 +17,8 @@ namespace CarinaStudio.AppSuite.Controls
         // Fields.
         readonly ScheduledAction correctOffsetAction;
         VectorAnimator? offsetAnimator;
+        Control? scrollLeftButton;
+        Control? scrollRightButton;
 
 
         /// <summary>
@@ -37,6 +41,15 @@ namespace CarinaStudio.AppSuite.Controls
                     this.Offset = new Vector(extent.Width - viewport.Width, 0);
                 }
             });
+        }
+
+
+         /// <inheritdoc/>
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+        {
+            base.OnApplyTemplate(e);
+            this.scrollLeftButton = e.NameScope.Find<Control>("PART_ScrollLeftButton");
+            this.scrollRightButton = e.NameScope.Find<Control>("PART_ScrollRightButton");
         }
 
 
@@ -93,6 +106,39 @@ namespace CarinaStudio.AppSuite.Controls
         /// Scroll to left.
         /// </summary>
         public void ScrollLeft() => ScrollBy(-100);
+
+
+        /// <summary>
+        /// Scroll given child visual into viewport.
+        /// </summary>
+        /// <param name="visual">Child visual.</param>
+        public void ScrollIntoView(IVisual visual)
+        {
+            // check state
+            this.VerifyAccess();
+            if (visual == this)
+                return;
+
+            // calculate relative bounds
+            var bounds = visual.Bounds;
+            var x = bounds.Left;
+            visual = visual.GetVisualParent();
+            while (visual != null && visual != this)
+            {
+                x += visual.Bounds.Left;
+                visual = visual.GetVisualParent();
+            }
+            if (visual == null)
+                return;
+
+            // scroll into view
+            var leftMargin = this.scrollLeftButton?.Bounds.Right ?? 0;
+            var rightMargin = this.scrollRightButton?.Bounds.Left ?? this.Bounds.Width;
+            if (x < leftMargin)
+                this.ScrollBy(x - leftMargin);
+            else if (x + bounds.Width > rightMargin)
+                this.ScrollBy(x + bounds.Width - rightMargin);
+        }
 
 
         /// <summary>

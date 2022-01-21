@@ -120,7 +120,7 @@
 						</Menu>
 
 						<Border Classes="ToolBar">
-							<appControls:ToolBarScrollViewer>
+							<appControls:ToolBarScrollViewer Name="toolBarScrollViewer">
 								<Grid Background="{x:Static Brushes.Transparent}" ColumnDefinitions="Auto,*,Auto">
 									<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
 
@@ -179,7 +179,7 @@
 									</StackPanel>
 
 									<Panel Grid.Column="1">
-										<TextBox Classes="ToolBar_TextBox_WithInPlaceAction"/>
+										<TextBox Name="toolBarTextBox" Classes="ToolBar_TextBox_WithInPlaceAction"/>
 										<Button Classes="TextBox_InPlaceAction">
 											<Image Classes="Icon" Source="{DynamicResource Image/Icon.Close}"/>
 										</Button>

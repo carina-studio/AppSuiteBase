@@ -204,7 +204,14 @@ namespace CarinaStudio.AppSuite.Tests
                 this.Application.RestartMainWindows();
             */
             //this.Application.Restart(AppSuiteApplication.RestoreMainWindowsArgument);
-            this.Application.ShowMainWindow();
+            this.FindControl<ToolBarScrollViewer>("toolBarScrollViewer")?.Let(scrollViewer =>
+            {
+                scrollViewer.FindControl<Control>("toolBarTextBox")?.Let(it =>
+                {
+                    it.Focus();
+                    scrollViewer.ScrollIntoView(it);
+                });
+            });
         }
 
         void Test2()

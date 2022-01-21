@@ -1206,7 +1206,7 @@
 							  CanVerticallyScroll="{TemplateBinding CanVerticallyScroll}" />
 						</ScrollContentPresenter.GestureRecognizers>
 					</ScrollContentPresenter>
-					<RepeatButton
+					<RepeatButton Name="PART_ScrollLeftButton"
 						Classes="ToolBarScrollViewer"
 						Command="{Binding ScrollLeft, RelativeSource={RelativeSource TemplatedParent}}"
                         HorizontalAlignment="Left">
@@ -1223,7 +1223,7 @@
 							Source="{DynamicResource Image/Icon.Backward.Light}"
 							Width="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
-					<RepeatButton
+					<RepeatButton Name="PART_ScrollRightButton"
 						Classes="ToolBarScrollViewer"
 						Command="{Binding ScrollRight, RelativeSource={RelativeSource TemplatedParent}}"
                         HorizontalAlignment="Right">
