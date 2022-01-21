@@ -47,6 +47,8 @@ namespace CarinaStudio.AppSuite.Controls
         bool isShowingInitialDialogs;
         long openedTime;
         readonly ScheduledAction restartingMainWindowsAction;
+        double restoredHeight;
+        double restoredWidth;
         readonly ScheduledAction saveWindowSizeAction;
         readonly ScheduledAction showInitDialogsAction;
         readonly ScheduledAction updateContentPaddingAction;
@@ -115,8 +117,10 @@ namespace CarinaStudio.AppSuite.Controls
             // restore window state
             this.PersistentState.Let(it =>
             {
-                this.Height = Math.Max(0, it.GetValueOrDefault(WindowHeightSettingKey));
-                this.Width = Math.Max(0, it.GetValueOrDefault(WindowWidthSettingKey));
+                this.restoredHeight = Math.Max(0, it.GetValueOrDefault(WindowHeightSettingKey));
+                this.restoredWidth = Math.Max(0, it.GetValueOrDefault(WindowWidthSettingKey));
+                this.Height = this.restoredHeight;
+                this.Width = this.restoredWidth;
                 this.WindowState = it.GetValueOrDefault(WindowStateSettingKey);
             });
 
@@ -130,6 +134,13 @@ namespace CarinaStudio.AppSuite.Controls
         /// Check whether all dialogs which need to be shown after showing main window are closed or not.
         /// </summary>
         protected bool AreInitialDialogsClosed { get; private set; }
+
+
+        /// <summary>
+        /// Cancel pending window size saving.
+        /// </summary>
+        public void CancelSavingSize() =>
+            this.saveWindowSizeAction.Cancel();
 
 
         /// <summary>
@@ -336,6 +347,9 @@ namespace CarinaStudio.AppSuite.Controls
             // keep time
             this.openedTime = Stopwatch.ElapsedMilliseconds;
 
+            // restore to saved size
+            this.RestoreToSavedSize();
+
             // call base
             base.OnOpened(e);
 
@@ -424,6 +438,7 @@ namespace CarinaStudio.AppSuite.Controls
                     this.updateContentPaddingAction.Reschedule();
                 else
                     this.updateContentPaddingAction.Reschedule(UpdateContentPaddingDelay);
+                this.RestoreToSavedSize();
                 this.InvalidateTransparencyLevelHint();
             }
         }
@@ -455,6 +470,24 @@ namespace CarinaStudio.AppSuite.Controls
                 return;
             if (e.PropertyName == nameof(MainWindowViewModel.Title))
                 this.Title = viewModel.Title;
+        }
+
+
+        // Restore to saved window size if available.
+        void RestoreToSavedSize()
+        {
+            if (this.WindowState == WindowState.Normal
+                && double.IsFinite(this.restoredWidth)
+                && double.IsFinite(this.restoredHeight))
+            {
+                var screen = Screens.ScreenFromVisual(this);
+                this.restoredWidth = Math.Min(this.restoredWidth, screen.WorkingArea.Width * 0.95);
+                this.restoredHeight = Math.Min(this.restoredHeight, screen.WorkingArea.Height * 0.95);
+                this.Width = this.restoredWidth;
+                this.Height = this.restoredHeight;
+                this.restoredWidth = double.NaN;
+                this.restoredHeight = double.NaN;
+            }
         }
 
 
