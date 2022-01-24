@@ -18,7 +18,7 @@ namespace CarinaStudio.AppSuite.Tests
         public override int DefaultLogOutputTargetPort => 5566;
 
 
-        //protected override bool ForceAcceptingUpdateInfo => true;
+        protected override bool ForceAcceptingUpdateInfo => true;
 
         public override void Initialize()
         {
@@ -69,7 +69,7 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        //public override Uri? PackageManifestUri => new Uri("https://raw.githubusercontent.com/carina-studio/PixelViewer/master/PackageManifest-Preview.json");
+        public override Uri? PackageManifestUri => new Uri("https://raw.githubusercontent.com/carina-studio/ULogViewer/master/PackageManifest-Preview.json");
 
 
         public override Version? PrivacyPolicyVersion => new Version(1, 2);
