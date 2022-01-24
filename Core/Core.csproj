@@ -50,11 +50,11 @@
 		<PackageReference Include="Avalonia.Desktop" Version="0.10.11" />
 		<PackageReference Include="Avalonia.Diagnostics" Version="0.10.11" />
 		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.11.5" />
-		<PackageReference Include="CarinaStudio.AppBase.Application.Avalonia" Version="0.34.1.112" />
-		<PackageReference Include="CarinaStudio.AppBase.Application" Version="0.34.1.112" />
-		<PackageReference Include="CarinaStudio.AppBase.AutoUpdate" Version="0.34.1.112" />
-		<PackageReference Include="CarinaStudio.AppBase.Configuration" Version="0.34.1.112" />
-		<PackageReference Include="CarinaStudio.AppBase.Core" Version="0.34.1.112" />
+		<PackageReference Include="CarinaStudio.AppBase.Application.Avalonia" Version="0.34.2.124" />
+		<PackageReference Include="CarinaStudio.AppBase.Application" Version="0.34.2.124" />
+		<PackageReference Include="CarinaStudio.AppBase.AutoUpdate" Version="0.34.2.124" />
+		<PackageReference Include="CarinaStudio.AppBase.Configuration" Version="0.34.2.124" />
+		<PackageReference Include="CarinaStudio.AppBase.Core" Version="0.34.2.124" />
 		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="6.0.0" />
 		<PackageReference Include="Mono.Posix" Version="7.1.0-final.1.21458.1" />
 		<PackageReference Include="NLog" Version="4.7.13" />
