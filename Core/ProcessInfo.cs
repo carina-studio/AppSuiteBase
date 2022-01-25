@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace CarinaStudio.AppSuite
@@ -42,46 +43,10 @@ namespace CarinaStudio.AppSuite
             // create scheduled actions
             this.updateProcessInfoAction = new ScheduledAction(this.processInfoCheckingSyncContext, () =>
             {
-				// get process info
-				var privateMemoryUsage = 0L;
-				var cpuUsagePercentage = double.NaN;
-				var updateTime = this.stopWatch.ElapsedMilliseconds;
-				try
-				{
-					this.process.Refresh();
-					var totalProcessorTime = this.process.TotalProcessorTime;
-					privateMemoryUsage = this.process.PrivateMemorySize64;
-					if (this.previousProcessInfoUpdateTime > 0)
-					{
-						var processorTime = (totalProcessorTime - this.previousTotalProcessorTime);
-						var updateInterval = (updateTime - this.previousProcessInfoUpdateTime);
-						cpuUsagePercentage = (processorTime.TotalMilliseconds * 100.0 / updateInterval / Environment.ProcessorCount);
-					}
-					this.previousTotalProcessorTime = totalProcessorTime;
-				}
-				catch (Exception ex)
-				{
-					this.logger.LogError(ex, "Unable to get process info");
-				}
-				finally
-				{
-					this.previousProcessInfoUpdateTime = updateTime;
-				}
-
-				// report state
-				if (!double.IsNaN(cpuUsagePercentage))
-				{
-					this.logger.LogTrace($"CPU usage: {cpuUsagePercentage:0.0}%");
-					this.CpuUsagePercentage = cpuUsagePercentage;
-					this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CpuUsagePercentage)));
-				}
-				if (privateMemoryUsage > 0)
-				{
-					this.logger.LogTrace($"Private memory usage: {privateMemoryUsage.ToFileSizeString()}");
-					this.PrivateMemoryUsage = privateMemoryUsage;
-					this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PrivateMemoryUsage)));
-				}
-				this.updateProcessInfoAction?.Schedule(ProcessInfoUpdateInterval);
+				if (Platform.IsMacOS)
+					this.UpdateByTop();
+				else
+					this.Update();
 			});
 
 			// start checking
@@ -182,5 +147,114 @@ namespace CarinaStudio.AppSuite
 		/// Get current duration of UI response.
 		/// </summary>
 		public TimeSpan? UIResponseDuration { get; private set; }
+
+
+		// Update process info.
+		void Update()
+		{
+			// get process info
+			var privateMemoryUsage = 0L;
+			var cpuUsagePercentage = double.NaN;
+			var updateTime = this.stopWatch.ElapsedMilliseconds;
+			try
+			{
+				this.process.Refresh();
+				var totalProcessorTime = this.process.TotalProcessorTime;
+				privateMemoryUsage = this.process.PrivateMemorySize64;
+				if (privateMemoryUsage <= 0)
+					privateMemoryUsage = this.process.WorkingSet64;
+				if (this.previousProcessInfoUpdateTime > 0)
+				{
+					var processorTime = (totalProcessorTime - this.previousTotalProcessorTime);
+					var updateInterval = (updateTime - this.previousProcessInfoUpdateTime);
+					cpuUsagePercentage = (processorTime.TotalMilliseconds * 100.0 / updateInterval / Environment.ProcessorCount);
+				}
+				this.previousTotalProcessorTime = totalProcessorTime;
+			}
+			catch (Exception ex)
+			{
+				this.logger.LogError(ex, "Unable to get process info");
+			}
+			finally
+			{
+				this.previousProcessInfoUpdateTime = updateTime;
+			}
+
+			// report state
+			if (!double.IsNaN(cpuUsagePercentage))
+			{
+				this.logger.LogTrace($"CPU usage: {cpuUsagePercentage:0.0}%");
+				this.CpuUsagePercentage = cpuUsagePercentage;
+				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CpuUsagePercentage)));
+			}
+			if (privateMemoryUsage > 0)
+			{
+				this.logger.LogTrace($"Private memory usage: {privateMemoryUsage.ToFileSizeString()}");
+				this.PrivateMemoryUsage = privateMemoryUsage;
+				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PrivateMemoryUsage)));
+			}
+			this.updateProcessInfoAction?.Schedule(ProcessInfoUpdateInterval);
+		}
+
+
+		// Update process info by "top".
+		void UpdateByTop()
+		{
+			var processInfoRegex = new Regex("^(?<CpuUsage>[\\d]+(\\.[\\d]+)?)[\\s]*$");
+			while (true)
+			{
+				// start process
+				using var topProcess = Process.Start(new ProcessStartInfo()
+				{
+					Arguments = $"-pid {Process.GetCurrentProcess().Id} -stats cpu -s {Math.Max(1, ProcessInfoUpdateInterval / 1000)}",
+					CreateNoWindow = true,
+					FileName = "top",
+					RedirectStandardOutput = true,
+					UseShellExecute = false,
+				});
+				if (topProcess == null)
+				{
+					this.Update();
+					return;
+				}
+
+				// update process info
+				try
+				{
+					using var reader = topProcess.StandardOutput;
+					var line = reader.ReadLine();
+					while(line != null)
+					{
+						var match = processInfoRegex.Match(line);
+						if (match.Success)
+						{
+							// report CPU usage
+							var cpuUsage = double.Parse(match.Groups["CpuUsage"].Value);
+							this.logger.LogTrace($"CPU usage: {cpuUsage:0.0}%");
+							this.CpuUsagePercentage = cpuUsage;
+							this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CpuUsagePercentage)));
+
+							// report memory usage
+							this.process.Refresh();
+							var privateMemoryUsage = this.process.PrivateMemorySize64;
+							if (privateMemoryUsage <= 0)
+								privateMemoryUsage = this.process.WorkingSet64;
+							this.logger.LogTrace($"Private memory usage: {privateMemoryUsage.ToFileSizeString()}");
+							this.PrivateMemoryUsage = privateMemoryUsage;
+							this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PrivateMemoryUsage)));
+						}
+						line = reader.ReadLine();
+					}
+				}
+				catch (Exception ex)
+				{
+					this.logger.LogError(ex, "Error occurred while getting process info by 'top'");
+				}
+				finally
+				{
+					Global.RunWithoutError(topProcess.Kill);
+				}
+			}
+		}
 	}
 }

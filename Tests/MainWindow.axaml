@@ -203,7 +203,8 @@
 						<NumericUpDown HorizontalAlignment="Left" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
 
 						<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5"/>
-						<TextBlock Text="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Total Memory:{0}}" Margin="5"/>
+						<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage, StringFormat={}CPU: {0:F2}%}" Margin="5"/>
+						<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Memory Usage: {0}}" Margin="5"/>
 
 						<TextBlock Text="{Binding $parent[Window].Application.EffectiveCustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5"/>
 						<NumericUpDown HorizontalAlignment="Left" Increment="0.1" Minimum="1.0" Maximum="2.0" Margin="5" Width="200" Value="{Binding $parent[Window].Application.CustomScreenScaleFactor, Mode=TwoWay}" FormatString="F2"/>
