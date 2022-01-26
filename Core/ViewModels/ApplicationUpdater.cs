@@ -148,7 +148,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 		/// <summary>
 		/// Check whether auto update is supported or not.
 		/// </summary>
-		public bool IsAutoUpdateSupported { get; } = Platform.IsWindows || Platform.IsLinux;
+		public bool IsAutoUpdateSupported { get; } = true;
 
 
 		/// <summary>
