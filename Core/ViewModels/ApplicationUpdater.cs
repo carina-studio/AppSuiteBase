@@ -310,9 +310,11 @@ namespace CarinaStudio.AppSuite.ViewModels
 			{
 				if (Platform.IsWindows)
 					return Path.Combine(it, "AutoUpdater.Avalonia.exe");
+				if (Platform.IsMacOS)
+					return Path.Combine(it, "AutoUpdater.Avalonia.app/Contents/MacOS/AutoUpdater.Avalonia");
 				return Path.Combine(it, "AutoUpdater.Avalonia");
 			});
-			if (!Platform.IsWindows)
+			if (Platform.IsLinux)
 			{
 				try
 				{
@@ -350,15 +352,30 @@ namespace CarinaStudio.AppSuite.ViewModels
 					// get screen scale factor
 					var screenScaleFactor = this.Application.CustomScreenScaleFactor;
 
+					// get application directory
+					var appDirectory = Global.Run(() =>
+					{
+						var directory = Path.GetDirectoryName(mainModule.FileName);
+						if (!Platform.IsMacOS || directory?.EndsWith(".app/Contents/MacOS") != true)
+							return directory;
+						return directory.Substring(0, directory.Length - 15);
+					});
+
 					// prepare arguments
 					var argsBuilder = new StringBuilder($"-culture {this.Application.CultureInfo}" +
 						$" {(useDarkMode ? "-dark-mode" : "")}" +
-						$" -directory \"{Path.GetDirectoryName(mainModule.FileName)}\"" +
-						$" -executable \"{mainModule.FileName}\"" +
-						$" -executable-args \"{AppSuiteApplication.RestoreMainWindowsArgument}\"" +
+						$" -directory \"{appDirectory}\"" +
 						$" -name \"{this.Application.Name}\"" +
 						$" -package-manifest {this.Application.PackageManifestUri}" +
 						$" -wait-for-process {currentProcess.Id}");
+					mainModule.FileName?.Let(it =>
+					{
+						if (!it.EndsWith("/dotnet") && !it.EndsWith("\\dotnet.exe"))
+						{
+							argsBuilder.AppendFormat(" -executable {0}", it);
+							argsBuilder.AppendFormat(" -executable-args \"{0}\"", AppSuiteApplication.RestoreMainWindowsArgument);
+						}
+					});
 					if (accentColor.A > 0)
 						argsBuilder.AppendFormat(" -accent-color #{0:x2}{1:x2}{2:x2}{3:x2}", accentColor.A, accentColor.R, accentColor.G, accentColor.B);
 					if (!double.IsNaN(screenScaleFactor))
