@@ -229,7 +229,7 @@ namespace CarinaStudio.AppSuite
 						if (match.Success)
 						{
 							// report CPU usage
-							var cpuUsage = double.Parse(match.Groups["CpuUsage"].Value);
+							var cpuUsage = double.Parse(match.Groups["CpuUsage"].Value) / Environment.ProcessorCount;
 							this.logger.LogTrace($"CPU usage: {cpuUsage:0.0}%");
 							this.CpuUsagePercentage = cpuUsage;
 							this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CpuUsagePercentage)));
