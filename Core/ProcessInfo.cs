@@ -43,10 +43,7 @@ namespace CarinaStudio.AppSuite
             // create scheduled actions
             this.updateProcessInfoAction = new ScheduledAction(this.processInfoCheckingSyncContext, () =>
             {
-				if (Platform.IsMacOS)
-					this.UpdateByTop();
-				else
-					this.Update();
+				this.Update();
 			});
 
 			// start checking
