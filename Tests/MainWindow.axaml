@@ -206,6 +206,8 @@
 						<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage, StringFormat={}CPU: {0:F2}%}" Margin="5"/>
 						<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Memory Usage: {0}}" Margin="5"/>
 
+						<appControls:RegexTextBox Name="regexTextBox" HorizontalAlignment="Left" Margin="5" Width="400"/>
+
 						<TextBlock Text="{Binding $parent[Window].Application.EffectiveCustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5"/>
 						<NumericUpDown HorizontalAlignment="Left" Increment="0.1" Minimum="1.0" Maximum="2.0" Margin="5" Width="200" Value="{Binding $parent[Window].Application.CustomScreenScaleFactor, Mode=TwoWay}" FormatString="F2"/>
 
@@ -259,7 +261,6 @@
 						</ComboBox>
 
 						<appControls:IPAddressTextBox Name="ipAddressTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
-						<appControls:RegexTextBox Name="regexTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
 						<appControls:UriTextBox Name="uriTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
 
 						<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" Height="50"/>
