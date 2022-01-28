@@ -46,10 +46,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Avalonia" Version="0.10.11" />
-		<PackageReference Include="Avalonia.Desktop" Version="0.10.11" />
-		<PackageReference Include="Avalonia.Diagnostics" Version="0.10.11" />
-		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.11.5" />
+		<PackageReference Include="Avalonia" Version="0.10.12" />
+		<PackageReference Include="Avalonia.Desktop" Version="0.10.12" />
+		<PackageReference Include="Avalonia.Diagnostics" Version="0.10.12" />
+		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.12" />
 		<PackageReference Include="CarinaStudio.AppBase.Application.Avalonia" Version="0.34.2.124" />
 		<PackageReference Include="CarinaStudio.AppBase.Application" Version="0.34.2.124" />
 		<PackageReference Include="CarinaStudio.AppBase.AutoUpdate" Version="0.34.2.124" />

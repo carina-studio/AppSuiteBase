@@ -198,20 +198,10 @@ namespace CarinaStudio.AppSuite.Tests
         {
             //using var appInfo = new AppInfo();
             //await new ApplicationInfoDialog(appInfo).ShowDialog(this);
-            /*
             var result = await new Dialog().ShowDialog<ApplicationOptionsDialogResult>(this);
             if (result == ApplicationOptionsDialogResult.RestartMainWindowsNeeded)
                 this.Application.RestartMainWindows();
-            */
             //this.Application.Restart(AppSuiteApplication.RestoreMainWindowsArgument);
-            this.FindControl<ToolBarScrollViewer>("toolBarScrollViewer")?.Let(scrollViewer =>
-            {
-                scrollViewer.FindControl<Control>("toolBarTextBox")?.Let(it =>
-                {
-                    it.Focus();
-                    scrollViewer.ScrollIntoView(it);
-                });
-            });
         }
 
         void Test2()
