@@ -2,14 +2,19 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.VisualTree;
+using Avalonia.Layout;
+using CarinaStudio.Collections;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Text.RegularExpressions;
-
+using System.Windows.Input;
 namespace CarinaStudio.AppSuite.Controls
 {
 	/// <summary>
@@ -43,6 +48,12 @@ namespace CarinaStudio.AppSuite.Controls
 		// Fields.
 		readonly ScheduledAction closeMenusIfNotFocusedAction;
 		ContextMenu? escapedCharactersMenu;
+		readonly ObservableList<MenuItem> filteredPredefinedGroupMenuItems = new ObservableList<MenuItem>();
+		readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new SortedObservableList<RegexGroup>((x, y) => string.Compare(x?.Name, y?.Name));
+		readonly ObservableList<RegexGroup> predefinedGroups = new ObservableList<RegexGroup>();
+		ContextMenu? predefinedGroupsMenu;
+		readonly Queue<MenuItem> recycledMenuItems = new Queue<MenuItem>();
+		readonly ScheduledAction showPredefinedGroupsMenuAction;
 		TextPresenter? textPresenter;
 
 
@@ -51,7 +62,11 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		public RegexTextBox()
 		{
-			this.MaxLength = 65536;
+			this.filteredPredefinedGroups.CollectionChanged += this.OnFilteredPredefinedGroupChanged;
+			this.predefinedGroups.CollectionChanged += this.OnPredefinedGroupChanged;
+			this.InputGroupNameCommand = new Command<string>(this.InputGroupName);
+			this.InputStringCommand = new Command<string>(this.InputString);
+			this.MaxLength = 1024;
 			this.Bind(WatermarkProperty, this.GetResourceObservable("String/RegexTextBox.Watermark"));
 			this.closeMenusIfNotFocusedAction = new ScheduledAction(() =>
 			{
@@ -59,6 +74,37 @@ namespace CarinaStudio.AppSuite.Controls
 				{
 					this.escapedCharactersMenu?.Close();
 				}
+			});
+			this.showPredefinedGroupsMenuAction = new ScheduledAction(() =>
+			{
+				if (this.predefinedGroups.IsEmpty() || this.SelectionStart != this.SelectionEnd)
+				{
+					this.predefinedGroupsMenu?.Close();
+					return;
+				}
+				var (start, end) = this.GetGroupNameSelection();
+				if (start >= 0)
+				{
+					var filterText = this.Text?.Substring(start, end - start)?.ToLower() ?? "";
+					this.filteredPredefinedGroups.Clear();
+					if (string.IsNullOrEmpty(filterText))
+						this.filteredPredefinedGroups.AddAll(this.predefinedGroups);
+					else
+						this.filteredPredefinedGroups.AddAll(this.predefinedGroups.Where(it => it.Name.ToLower().Contains(filterText)));
+					if (this.filteredPredefinedGroups.IsNotEmpty())
+					{
+						var menu = this.SetupPredefinedGroupsMenu();
+						menu.HorizontalOffset = this.textPresenter?.Let(it =>
+						{
+							return it.FormattedText.HitTestTextPosition(it.CaretIndex - 1).Left;
+						}) ?? 0;
+						menu.Open(this);
+					}
+					else
+						this.predefinedGroupsMenu?.Close();
+				}
+				else
+					this.predefinedGroupsMenu?.Close();
 			});
 		}
 
@@ -74,6 +120,58 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
+		// Create menu item for given predefined group.
+		MenuItem CreateMenuItem(RegexGroup group) =>
+			this.recycledMenuItems.Count > 0
+				? this.recycledMenuItems.Dequeue().Also(it => it.DataContext = group)
+				: new MenuItem().Also(it =>
+				{
+					it.Command = this.InputGroupNameCommand;
+					it.Bind(MenuItem.CommandParameterProperty, new Binding() { Path = nameof(RegexGroup.Name) });
+					it.DataContext = group;
+					it.Header = new StackPanel().Also(panel => 
+					{
+						panel.Children.Add(new TextBlock().Also(it =>
+						{
+							it.Bind(TextBlock.TextProperty, new Binding() { Path = nameof(RegexGroup.Name) });
+							it.VerticalAlignment = VerticalAlignment.Center;
+						}));
+						panel.Children.Add(new TextBlock().Also(it =>
+						{
+							it.Bind(TextBlock.IsVisibleProperty, new Binding() { Path = nameof(RegexGroup.DisplayName), Converter = Converters.ValueToBooleanConverters.NonEmptyStringToTrue });
+							it.Bind(TextBlock.TextProperty, new Binding() { Path = nameof(RegexGroup.DisplayName), StringFormat = " ({0})" });
+							it.VerticalAlignment = VerticalAlignment.Center;
+						}));
+						panel.Orientation = Orientation.Horizontal ;
+					});
+				});
+		
+
+		// Get selection range of group name.
+		(int, int) GetGroupNameSelection()
+		{
+			var text = this.Text ?? "";
+			var textLength = text.Length;
+			var selectionStart = Math.Min(this.SelectionStart, this.SelectionEnd) - 1;
+			if (selectionStart < 0)
+				return (-1, -1);
+			while (selectionStart >= 0 && text[selectionStart] != '<')
+			{
+				if (text[selectionStart] == '>')
+					return (-1, -1);
+				--selectionStart;
+			}
+			if (selectionStart < 0)
+				return (-1, -1);
+			for (var selectionEnd = selectionStart + 1; selectionEnd < textLength; ++selectionEnd)
+			{
+				if (text[selectionEnd] == '>')
+					return (selectionStart + 1, selectionEnd);
+			}
+			return (selectionStart + 1, textLength);
+		}
+
+
         /// <summary>
         /// Get or set whether case in <see cref="Regex"/> can be ignored or not.
         /// </summary>
@@ -84,12 +182,39 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		// Input escaped character.
-		void InputEscapedCharacter(char c)
+		// Input given group name.
+		void InputGroupName(string name)
+		{
+			this.predefinedGroupsMenu?.Close();
+			var (start, end) = this.GetGroupNameSelection();
+			if (start >= 0)
+			{
+				this.SelectionStart = start;
+				this.SelectionEnd = end;
+				this.SelectedText = name;
+				if (this.SelectionEnd < (this.Text?.Length ?? 0))
+				{
+					++this.SelectionEnd;
+					++this.SelectionStart;
+				}
+			}
+		}
+
+
+		// Command to input group name.
+		ICommand InputGroupNameCommand { get; }
+
+
+		// Input given string.
+		void InputString(string s)
 		{
 			this.escapedCharactersMenu?.Close();
-			this.SelectedText = c.ToString();
+			this.SelectedText = s;
 		}
+
+
+		// Command to input given string.
+		ICommand InputStringCommand { get; }
 
 
 		/// <summary>
@@ -108,6 +233,54 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			base.OnApplyTemplate(e);
 			this.textPresenter = e.NameScope.Find<TextPresenter>("PART_TextPresenter");
+		}
+
+
+		// Called when filtered groups changed.
+		void OnFilteredPredefinedGroupChanged(object? sender, NotifyCollectionChangedEventArgs e)
+		{
+			switch (e.Action)
+			{
+				case NotifyCollectionChangedAction.Add:
+					{
+						var index = e.NewStartingIndex;
+						foreach (var group in e.NewItems.AsNonNull().Cast<RegexGroup>())
+						{
+							var menuItem = this.CreateMenuItem(group);
+							this.filteredPredefinedGroupMenuItems.Insert(index++, menuItem);
+						}
+					}
+					break;
+				case NotifyCollectionChangedAction.Remove:
+					{
+						var count = e.OldItems.AsNonNull().Count;
+						for (var index = e.OldStartingIndex + count - 1; count > 0; --count, --index)
+						{
+							var menuItem = this.filteredPredefinedGroupMenuItems[index];
+							this.filteredPredefinedGroupMenuItems.RemoveAt(index);
+							menuItem.DataContext = null;
+							this.recycledMenuItems.Enqueue(menuItem);
+						}
+					}
+					break;
+				case NotifyCollectionChangedAction.Reset:
+					{
+						foreach (var menuItem in this.filteredPredefinedGroupMenuItems)
+						{
+							menuItem.DataContext = null;
+							this.recycledMenuItems.Enqueue(menuItem);
+						}
+						this.filteredPredefinedGroupMenuItems.Clear();
+						foreach (var group in this.filteredPredefinedGroups)
+						{
+							var menuItem = this.CreateMenuItem(group);
+							this.filteredPredefinedGroupMenuItems.Add(menuItem);
+						}
+					}
+					break;
+				default:
+					throw new NotSupportedException();
+			}
 		}
 
 
@@ -130,8 +303,11 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <inheritdoc/>
 		protected override void OnKeyDown(KeyEventArgs e)
 		{
+			// delete more characters
 			var isBackspace = e.Key == Key.Back;
 			var isDelete = e.Key == Key.Delete;
+			this.escapedCharactersMenu?.Close();
+			this.predefinedGroupsMenu?.Close();
 			if (isBackspace || isDelete)
 			{
 				var selectionStart = this.SelectionStart;
@@ -206,8 +382,21 @@ namespace CarinaStudio.AppSuite.Controls
 						break;
 				}
 			}
+
+			// call base
 			base.OnKeyDown(e);
+
+			// show/hide menu
+			if (e.Key == Key.Escape)
+				this.showPredefinedGroupsMenuAction.Cancel();
+			else
+				this.showPredefinedGroupsMenuAction.Reschedule(50);
 		}
+
+
+		// Called when predefined groups changed.
+		void OnPredefinedGroupChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
+			this.showPredefinedGroupsMenuAction.Schedule();
 
 
 		/// <inheritdoc/>
@@ -229,6 +418,11 @@ namespace CarinaStudio.AppSuite.Controls
 				if (!this.CheckObjectEquality(regex, this.Object))
 					this.SetValue<Regex?>(ObjectProperty, regex);
 			}
+			else if (property == SelectionStartProperty 
+				|| property == SelectionEndProperty)
+			{
+				this.showPredefinedGroupsMenuAction.Schedule();
+			}
 		}
 
 
@@ -245,6 +439,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 			// close context menu
 			this.escapedCharactersMenu?.Close();
+			this.predefinedGroupsMenu?.Close();
 
 			// assist input
 			var selectionStart = this.SelectionStart;
@@ -289,7 +484,18 @@ namespace CarinaStudio.AppSuite.Controls
 					break;
 				case '<':
 					if (prevChar1 == '?' && prevChar2 == '(')
+					{
 						e.Text = "<>";
+						if (this.filteredPredefinedGroups.IsNotEmpty())
+						{
+							var menu = this.SetupPredefinedGroupsMenu();
+							menu.HorizontalOffset = this.textPresenter?.Let(it =>
+							{
+								return it.FormattedText.HitTestTextPosition(it.CaretIndex).Left;
+							}) ?? 0;
+							menu.Open(this);
+						}
+					}
 					break;
 				case '>':
 					if (prevChar1 != '\\' && nextChar1 == '>')
@@ -319,7 +525,16 @@ namespace CarinaStudio.AppSuite.Controls
 			base.OnTextInput(e);
 			this.SelectionStart = selectionStart;
 			this.SelectionEnd = selectionStart;
+
+			// show menu
+			this.showPredefinedGroupsMenuAction.Reschedule();
 		}
+
+
+		/// <summary>
+		/// Predefined list of <see cref="RegexGroup"/> for input assistance.
+		/// </summary>
+		public IList<RegexGroup> PredefinedGroups { get => this.predefinedGroups; }
 
 
 		/// <summary>
@@ -342,45 +557,45 @@ namespace CarinaStudio.AppSuite.Controls
 				menu.Items = new object[] {
 					new MenuItem().Also(it =>
 					{
-						it.Command = new Command<char>(this.InputEscapedCharacter);
-						it.CommandParameter = 'd';
+						it.Command = this.InputStringCommand;
+						it.CommandParameter = "d";
 						it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/RegexTextBox.EscapedCharacter.d"));
 					}),
 					new MenuItem().Also(it =>
 					{
-						it.Command = new Command<char>(this.InputEscapedCharacter);
-						it.CommandParameter = 's';
+						it.Command = this.InputStringCommand;
+						it.CommandParameter = "s";
 						it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/RegexTextBox.EscapedCharacter.s"));
 					}),
 					new MenuItem().Also(it =>
 					{
-						it.Command = new Command<char>(this.InputEscapedCharacter);
-						it.CommandParameter = 'w';
+						it.Command = this.InputStringCommand;
+						it.CommandParameter = "w";
 						it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/RegexTextBox.EscapedCharacter.w"));
 					}),
 					new MenuItem().Also(it =>
 					{
-						it.Command = new Command<char>(this.InputEscapedCharacter);
-						it.CommandParameter = 't';
+						it.Command = this.InputStringCommand;
+						it.CommandParameter = "t";
 						it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/RegexTextBox.EscapedCharacter.t"));
 					}),
 					new Separator(),
 					new MenuItem().Also(it =>
 					{
-						it.Command = new Command<char>(this.InputEscapedCharacter);
-						it.CommandParameter = 'D';
+						it.Command = this.InputStringCommand;
+						it.CommandParameter = "D";
 						it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/RegexTextBox.EscapedCharacter.D"));
 					}),
 					new MenuItem().Also(it =>
 					{
-						it.Command = new Command<char>(this.InputEscapedCharacter);
-						it.CommandParameter = 'S';
+						it.Command = this.InputStringCommand;
+						it.CommandParameter = "S";
 						it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/RegexTextBox.EscapedCharacter.S"));
 					}),
 					new MenuItem().Also(it =>
 					{
-						it.Command = new Command<char>(this.InputEscapedCharacter);
-						it.CommandParameter = 'W';
+						it.Command = this.InputStringCommand;
+						it.CommandParameter = "W";
 						it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/RegexTextBox.EscapedCharacter.W"));
 					}),
 				};
@@ -405,6 +620,35 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
+		// Setup menu of predefined groups.
+		ContextMenu SetupPredefinedGroupsMenu()
+		{
+			if (this.predefinedGroupsMenu != null)
+				return this.predefinedGroupsMenu;
+			this.predefinedGroupsMenu = new ContextMenu().Also(menu =>
+			{
+				menu.Items = this.filteredPredefinedGroupMenuItems;
+				menu.AddHandler(KeyDownEvent, (_, e) =>
+				{
+					switch (e.Key)
+					{
+						case Key.Down:
+						case Key.Enter:
+						case Key.Up:
+							break;
+						default:
+							menu.Close();
+							this.OnKeyDown(e);
+							break;
+					}
+				}, RoutingStrategies.Tunnel);
+				menu.PlacementMode = PlacementMode.Bottom;
+				menu.PlacementTarget = this;
+			});
+			return this.predefinedGroupsMenu;
+		}
+
+
 		/// <inheritdoc/>
         protected override bool TryConvertToObject(string text, out Regex? obj)
         {
@@ -420,4 +664,40 @@ namespace CarinaStudio.AppSuite.Controls
             }
         }
     }
+
+
+	/// <summary>
+	/// Predefined group of regular expression for <see cref="RegexTextBox"/>.
+	/// </summary>
+	public class RegexGroup : AvaloniaObject
+	{
+		/// <summary>
+		/// Property of <see cref="DisplayName"/>.
+		/// </summary>
+		public static readonly AvaloniaProperty<string> DisplayNameProperty = AvaloniaProperty.Register<RegexGroup, string>(nameof(DisplayName), "");
+		/// <summary>
+		/// Property of <see cref="Name"/>.
+		/// </summary>
+		public static readonly AvaloniaProperty<string> NameProperty = AvaloniaProperty.Register<RegexGroup, string>(nameof(Name), "");
+
+
+		/// <summary>
+		/// Get or set display name of group.
+		/// </summary>
+		public string DisplayName
+		{
+			get => this.GetValue<string>(DisplayNameProperty);
+			set => this.SetValue<string>(DisplayNameProperty, value);
+		}
+
+
+		/// <summary>
+		/// Get or set name of group.
+		/// </summary>
+		public string Name
+		{
+			get => this.GetValue<string>(NameProperty);
+			set => this.SetValue<string>(NameProperty, value);
+		}
+	}
 }

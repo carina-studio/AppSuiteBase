@@ -206,7 +206,15 @@
 						<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage, StringFormat={}CPU: {0:F2}%}" Margin="5"/>
 						<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Memory Usage: {0}}" Margin="5"/>
 
-						<appControls:RegexTextBox Name="regexTextBox" HorizontalAlignment="Left" Margin="5" Width="400"/>
+						<appControls:RegexTextBox Name="regexTextBox" HorizontalAlignment="Left" Margin="5" Width="400">
+							<appControls:RegexTextBox.PredefinedGroups>
+								<appControls:RegexGroup Name="Group1"/>
+								<appControls:RegexGroup Name="Group2"/>
+								<appControls:RegexGroup Name="Hello" DisplayName="{DynamicResource String/Common.OK}"/>
+								<appControls:RegexGroup Name="World" DisplayName="{DynamicResource String/Common.Cancel}"/>
+							</appControls:RegexTextBox.PredefinedGroups>
+						</appControls:RegexTextBox>
+						<appControls:RegexTextBox HorizontalAlignment="Left" Margin="5" Width="400"/>
 
 						<TextBlock Text="{Binding $parent[Window].Application.EffectiveCustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5"/>
 						<NumericUpDown HorizontalAlignment="Left" Increment="0.1" Minimum="1.0" Maximum="2.0" Margin="5" Width="200" Value="{Binding $parent[Window].Application.CustomScreenScaleFactor, Mode=TwoWay}" FormatString="F2"/>
