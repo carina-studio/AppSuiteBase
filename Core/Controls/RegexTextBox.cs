@@ -50,10 +50,11 @@ namespace CarinaStudio.AppSuite.Controls
 		ContextMenu? escapedCharactersMenu;
 		readonly ObservableList<MenuItem> filteredPredefinedGroupMenuItems = new ObservableList<MenuItem>();
 		readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new SortedObservableList<RegexGroup>((x, y) => string.Compare(x?.Name, y?.Name));
+		bool isBackSlashPressed;
 		readonly ObservableList<RegexGroup> predefinedGroups = new ObservableList<RegexGroup>();
 		ContextMenu? predefinedGroupsMenu;
 		readonly Queue<MenuItem> recycledMenuItems = new Queue<MenuItem>();
-		readonly ScheduledAction showPredefinedGroupsMenuAction;
+		readonly ScheduledAction showAssistanceMenuAction;
 		TextPresenter? textPresenter;
 
 
@@ -75,36 +76,55 @@ namespace CarinaStudio.AppSuite.Controls
 					this.escapedCharactersMenu?.Close();
 				}
 			});
-			this.showPredefinedGroupsMenuAction = new ScheduledAction(() =>
+			this.showAssistanceMenuAction = new ScheduledAction(() =>
 			{
-				if (this.predefinedGroups.IsEmpty() || this.SelectionStart != this.SelectionEnd)
+				// close menu first
+				this.escapedCharactersMenu?.Close();
+				this.predefinedGroupsMenu?.Close();
+				var (start, end) = this.GetSelection();
+				if (!this.IsEffectivelyVisible || start != end)
 				{
-					this.predefinedGroupsMenu?.Close();
+					this.isBackSlashPressed = false;
 					return;
 				}
-				var (start, end) = this.GetGroupNameSelection();
-				if (start >= 0)
+
+				// show predefined groups menu
+				var text = this.Text ?? "";
+				var textLength = text.Length;
+				var menuToOpen = (ContextMenu?)null;
+				if (this.predefinedGroups.IsNotEmpty())
 				{
-					var filterText = this.Text?.Substring(start, end - start)?.ToLower() ?? "";
-					this.filteredPredefinedGroups.Clear();
-					if (string.IsNullOrEmpty(filterText))
-						this.filteredPredefinedGroups.AddAll(this.predefinedGroups);
-					else
-						this.filteredPredefinedGroups.AddAll(this.predefinedGroups.Where(it => it.Name.ToLower().Contains(filterText)));
-					if (this.filteredPredefinedGroups.IsNotEmpty())
+					var (groupStart, groupEnd) = this.GetGroupNameSelection(text);
+					if (groupStart >= 0)
 					{
-						var menu = this.SetupPredefinedGroupsMenu();
-						menu.HorizontalOffset = this.textPresenter?.Let(it =>
-						{
-							return it.FormattedText.HitTestTextPosition(it.CaretIndex - 1).Left;
-						}) ?? 0;
-						menu.Open(this);
+						var filterText = this.Text?.Substring(groupStart, groupEnd - groupStart)?.ToLower() ?? "";
+						this.filteredPredefinedGroups.Clear();
+						if (string.IsNullOrEmpty(filterText))
+							this.filteredPredefinedGroups.AddAll(this.predefinedGroups);
+						else
+							this.filteredPredefinedGroups.AddAll(this.predefinedGroups.Where(it => it.Name.ToLower().Contains(filterText)));
+						if (this.filteredPredefinedGroups.IsNotEmpty())
+							menuToOpen = this.SetupPredefinedGroupsMenu();
 					}
-					else
-						this.predefinedGroupsMenu?.Close();
 				}
-				else
-					this.predefinedGroupsMenu?.Close();
+
+				// show escaped characters menu
+				if (this.isBackSlashPressed)
+				{
+					this.isBackSlashPressed = false;
+					if (menuToOpen == null && start > 0 && text[start - 1] == '\\' && (start <= 1 || text[start - 2] != '\\'))
+						menuToOpen = this.SetupEscapedCharactersMenu();
+				}
+
+				// open menu
+				if (menuToOpen != null)
+				{
+					menuToOpen.HorizontalOffset = this.textPresenter?.Let(it =>
+					{
+						return it.FormattedText.HitTestTextPosition(it.CaretIndex - 1).Left;
+					}) ?? 0;
+					menuToOpen.Open(this);
+				}
 			});
 		}
 
@@ -148,9 +168,10 @@ namespace CarinaStudio.AppSuite.Controls
 		
 
 		// Get selection range of group name.
-		(int, int) GetGroupNameSelection()
+		(int, int) GetGroupNameSelection() =>
+			this.GetGroupNameSelection(this.Text ?? "");
+		(int, int) GetGroupNameSelection(string text)
 		{
-			var text = this.Text ?? "";
 			var textLength = text.Length;
 			var selectionStart = Math.Min(this.SelectionStart, this.SelectionEnd) - 1;
 			if (selectionStart < 0)
@@ -169,6 +190,17 @@ namespace CarinaStudio.AppSuite.Controls
 					return (selectionStart + 1, selectionEnd);
 			}
 			return (selectionStart + 1, textLength);
+		}
+
+
+		// Get current selection range
+		(int, int) GetSelection()
+		{
+			var start = this.SelectionStart;
+			var end = this.SelectionEnd;
+			if (start <= end)
+				return (start, end);
+			return (end, start);
 		}
 
 
@@ -306,8 +338,6 @@ namespace CarinaStudio.AppSuite.Controls
 			// delete more characters
 			var isBackspace = e.Key == Key.Back;
 			var isDelete = e.Key == Key.Delete;
-			this.escapedCharactersMenu?.Close();
-			this.predefinedGroupsMenu?.Close();
 			if (isBackspace || isDelete)
 			{
 				var selectionStart = this.SelectionStart;
@@ -388,15 +418,19 @@ namespace CarinaStudio.AppSuite.Controls
 
 			// show/hide menu
 			if (e.Key == Key.Escape)
-				this.showPredefinedGroupsMenuAction.Cancel();
+			{
+				this.escapedCharactersMenu?.Close();
+				this.predefinedGroupsMenu?.Close();
+				this.showAssistanceMenuAction.Cancel();
+			}
 			else
-				this.showPredefinedGroupsMenuAction.Reschedule(50);
+				this.showAssistanceMenuAction.Reschedule(50);
 		}
 
 
 		// Called when predefined groups changed.
 		void OnPredefinedGroupChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
-			this.showPredefinedGroupsMenuAction.Schedule();
+			this.showAssistanceMenuAction.Schedule();
 
 
 		/// <inheritdoc/>
@@ -421,7 +455,7 @@ namespace CarinaStudio.AppSuite.Controls
 			else if (property == SelectionStartProperty 
 				|| property == SelectionEndProperty)
 			{
-				this.showPredefinedGroupsMenuAction.Schedule();
+				this.showAssistanceMenuAction.Schedule();
 			}
 		}
 
@@ -436,10 +470,6 @@ namespace CarinaStudio.AppSuite.Controls
 				base.OnTextInput(e);
 				return;
 			}
-
-			// close context menu
-			this.escapedCharactersMenu?.Close();
-			this.predefinedGroupsMenu?.Close();
 
 			// assist input
 			var selectionStart = this.SelectionStart;
@@ -484,18 +514,7 @@ namespace CarinaStudio.AppSuite.Controls
 					break;
 				case '<':
 					if (prevChar1 == '?' && prevChar2 == '(')
-					{
 						e.Text = "<>";
-						if (this.filteredPredefinedGroups.IsNotEmpty())
-						{
-							var menu = this.SetupPredefinedGroupsMenu();
-							menu.HorizontalOffset = this.textPresenter?.Let(it =>
-							{
-								return it.FormattedText.HitTestTextPosition(it.CaretIndex).Left;
-							}) ?? 0;
-							menu.Open(this);
-						}
-					}
 					break;
 				case '>':
 					if (prevChar1 != '\\' && nextChar1 == '>')
@@ -509,15 +528,7 @@ namespace CarinaStudio.AppSuite.Controls
 					}
 					break;
 				case '\\':
-					if (prevChar1 != '\\' || prevChar2 == '\\')
-					{
-						var menu = this.SetupEscapedCharactersMenu();
-						menu.HorizontalOffset = this.textPresenter?.Let(it =>
-						{
-							return it.FormattedText.HitTestTextPosition(it.CaretIndex).Left;
-						}) ?? 0;
-						menu.Open(this);
-					}
+					this.isBackSlashPressed = true;
 					break;
 			}
 
@@ -526,8 +537,8 @@ namespace CarinaStudio.AppSuite.Controls
 			this.SelectionStart = selectionStart;
 			this.SelectionEnd = selectionStart;
 
-			// show menu
-			this.showPredefinedGroupsMenuAction.Reschedule();
+			// show assistance menu
+			this.showAssistanceMenuAction.Reschedule();
 		}
 
 
