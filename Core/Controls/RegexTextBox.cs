@@ -46,7 +46,6 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Fields.
-		readonly ScheduledAction closeMenusIfNotFocusedAction;
 		ContextMenu? escapedCharactersMenu;
 		readonly ObservableList<MenuItem> filteredPredefinedGroupMenuItems = new ObservableList<MenuItem>();
 		readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new SortedObservableList<RegexGroup>((x, y) => string.Compare(x?.Name, y?.Name));
@@ -69,20 +68,13 @@ namespace CarinaStudio.AppSuite.Controls
 			this.InputStringCommand = new Command<string>(this.InputString);
 			this.MaxLength = 1024;
 			this.Bind(WatermarkProperty, this.GetResourceObservable("String/RegexTextBox.Watermark"));
-			this.closeMenusIfNotFocusedAction = new ScheduledAction(() =>
-			{
-				if (!this.IsFocused)
-				{
-					this.escapedCharactersMenu?.Close();
-				}
-			});
 			this.showAssistanceMenuAction = new ScheduledAction(() =>
 			{
 				// close menu first
 				this.escapedCharactersMenu?.Close();
 				this.predefinedGroupsMenu?.Close();
 				var (start, end) = this.GetSelection();
-				if (!this.IsEffectivelyVisible || start != end)
+				if (!this.IsInputAssistanceEnabled || !this.IsEffectivelyVisible || start != end)
 				{
 					this.isBackSlashPressed = false;
 					return;
@@ -140,7 +132,41 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		// Create menu item for given predefined group.
+		// Create menu item for assistance menu.
+		MenuItem CreateMenuItem(char escapedChar) =>
+			new MenuItem().Also(it =>
+			{
+				it.Command = this.InputStringCommand;
+				it.CommandParameter = escapedChar.ToString();
+				it.Header = new StackPanel().Also(panel => 
+				{
+					var opacityObservable = this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity");
+					panel.Children.Add(new TextBlock().Also(it =>
+					{
+						it.Text = $"\\{escapedChar}";
+						it.VerticalAlignment = VerticalAlignment.Center;
+					}));
+					panel.Children.Add(new TextBlock().Also(it =>
+					{
+						it.Bind(TextBlock.OpacityProperty, opacityObservable);
+						it.Text = " (";
+						it.VerticalAlignment = VerticalAlignment.Center;
+					}));
+					panel.Children.Add(new TextBlock().Also(it =>
+					{
+						it.Bind(TextBlock.OpacityProperty, opacityObservable);
+						it.Bind(TextBlock.TextProperty, this.GetResourceObservable($"String/RegexTextBox.EscapedCharacter.{escapedChar}"));
+						it.VerticalAlignment = VerticalAlignment.Center;
+					}));
+					panel.Children.Add(new TextBlock().Also(it =>
+					{
+						it.Bind(TextBlock.OpacityProperty, opacityObservable);
+						it.Text = ")";
+						it.VerticalAlignment = VerticalAlignment.Center;
+					}));
+					panel.Orientation = Orientation.Horizontal ;
+				});
+			});
 		MenuItem CreateMenuItem(RegexGroup group) =>
 			this.recycledMenuItems.Count > 0
 				? this.recycledMenuItems.Dequeue().Also(it => it.DataContext = group)
@@ -159,6 +185,7 @@ namespace CarinaStudio.AppSuite.Controls
 						panel.Children.Add(new TextBlock().Also(it =>
 						{
 							it.Bind(TextBlock.IsVisibleProperty, new Binding() { Path = nameof(RegexGroup.DisplayName), Converter = Converters.ValueToBooleanConverters.NonEmptyStringToTrue });
+							it.Bind(TextBlock.OpacityProperty, this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity"));
 							it.Bind(TextBlock.TextProperty, new Binding() { Path = nameof(RegexGroup.DisplayName), StringFormat = " ({0})" });
 							it.VerticalAlignment = VerticalAlignment.Center;
 						}));
@@ -217,7 +244,6 @@ namespace CarinaStudio.AppSuite.Controls
 		// Input given group name.
 		void InputGroupName(string name)
 		{
-			this.predefinedGroupsMenu?.Close();
 			var (start, end) = this.GetGroupNameSelection();
 			if (start >= 0)
 			{
@@ -240,7 +266,6 @@ namespace CarinaStudio.AppSuite.Controls
 		// Input given string.
 		void InputString(string s)
 		{
-			this.escapedCharactersMenu?.Close();
 			this.SelectedText = s;
 		}
 
@@ -313,14 +338,6 @@ namespace CarinaStudio.AppSuite.Controls
 				default:
 					throw new NotSupportedException();
 			}
-		}
-
-
-		/// <inheritdoc/>
-		protected override void OnGotFocus(GotFocusEventArgs e)
-		{
-			base.OnGotFocus(e);
-			this.closeMenusIfNotFocusedAction.Cancel();
 		}
 
 
@@ -566,49 +583,14 @@ namespace CarinaStudio.AppSuite.Controls
 			this.escapedCharactersMenu = new ContextMenu().Also(menu =>
 			{
 				menu.Items = new object[] {
-					new MenuItem().Also(it =>
-					{
-						it.Command = this.InputStringCommand;
-						it.CommandParameter = "d";
-						it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/RegexTextBox.EscapedCharacter.d"));
-					}),
-					new MenuItem().Also(it =>
-					{
-						it.Command = this.InputStringCommand;
-						it.CommandParameter = "s";
-						it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/RegexTextBox.EscapedCharacter.s"));
-					}),
-					new MenuItem().Also(it =>
-					{
-						it.Command = this.InputStringCommand;
-						it.CommandParameter = "w";
-						it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/RegexTextBox.EscapedCharacter.w"));
-					}),
-					new MenuItem().Also(it =>
-					{
-						it.Command = this.InputStringCommand;
-						it.CommandParameter = "t";
-						it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/RegexTextBox.EscapedCharacter.t"));
-					}),
+					this.CreateMenuItem('d'),
+					this.CreateMenuItem('s'),
+					this.CreateMenuItem('w'),
+					this.CreateMenuItem('t'),
 					new Separator(),
-					new MenuItem().Also(it =>
-					{
-						it.Command = this.InputStringCommand;
-						it.CommandParameter = "D";
-						it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/RegexTextBox.EscapedCharacter.D"));
-					}),
-					new MenuItem().Also(it =>
-					{
-						it.Command = this.InputStringCommand;
-						it.CommandParameter = "S";
-						it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/RegexTextBox.EscapedCharacter.S"));
-					}),
-					new MenuItem().Also(it =>
-					{
-						it.Command = this.InputStringCommand;
-						it.CommandParameter = "W";
-						it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/RegexTextBox.EscapedCharacter.W"));
-					}),
+					this.CreateMenuItem('D'),
+					this.CreateMenuItem('S'),
+					this.CreateMenuItem('W'),
 				};
 				menu.AddHandler(KeyDownEvent, (_, e) =>
 				{

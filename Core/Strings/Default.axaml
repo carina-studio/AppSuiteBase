@@ -150,13 +150,13 @@
 	<sys:String x:Key="String/PrivacyPolicyDialog.Title">Privacy Policy</sys:String>
 
 	<!-- RegexTextBox -->
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.d">\d (Decimal digit)</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.D">\D (Non-decimal digit)</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.s">\s (White space characters)</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.S">\S (Non-white space characters)</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.t">\t (Tab character)</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.w">\w (Word characters)</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.W">\W (Non-word characters)</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.d">Decimal digit</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.D">Non-decimal digit</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.s">White space characters</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.S">Non-white space characters</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.t">Tab character</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.w">Word characters</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.W">Non-word characters</sys:String>
 	<sys:String x:Key="String/RegexTextBox.Watermark">Regular Expression</sys:String>
 
 	<!-- SplashWindow -->

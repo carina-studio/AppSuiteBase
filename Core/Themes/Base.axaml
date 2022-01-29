@@ -259,6 +259,7 @@
 		<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>
 		<SolidColorBrush x:Key="Brush/TextBox.Foreground.Error" Color="{DynamicResource Color/TextBox.Foreground.Error}"/>
 		<Color x:Key="Color/TextBox.Foreground.Error">#ff0000</Color>
+		<sys:Double x:Key="Double/TextBox.Assistance.MenuItem.Description.Opacity">0.5</sys:Double>
 		<sys:Double x:Key="Double/TextBox.InPlaceAction.Size">18</sys:Double>
 		<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction">10,6,27,5</Thickness>
 		<Thickness x:Key="Thickness/TextBox.InPlaceAction.Padding">3</Thickness>
