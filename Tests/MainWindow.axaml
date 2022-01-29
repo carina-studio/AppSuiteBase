@@ -216,6 +216,16 @@
 						</appControls:RegexTextBox>
 						<appControls:RegexTextBox HorizontalAlignment="Left" Margin="5" Width="400"/>
 
+						<appControls:StringInterpolationFormatTextBox HorizontalAlignment="Left" Margin="5" Watermark="String interpolation" Width="400">
+							<appControls:StringInterpolationFormatTextBox.PredefinedVariables>
+								<appControls:StringInterpolationVariable Name="Var1"/>
+								<appControls:StringInterpolationVariable Name="Var2"/>
+								<appControls:StringInterpolationVariable Name="Hello" DisplayName="{DynamicResource String/Common.OK}"/>
+								<appControls:StringInterpolationVariable Name="World" DisplayName="{DynamicResource String/Common.Cancel}"/>
+							</appControls:StringInterpolationFormatTextBox.PredefinedVariables>
+						</appControls:StringInterpolationFormatTextBox>
+						<appControls:StringInterpolationFormatTextBox HorizontalAlignment="Left" Margin="5" Watermark="String interpolation" Width="400"/>
+
 						<TextBlock Text="{Binding $parent[Window].Application.EffectiveCustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5"/>
 						<NumericUpDown HorizontalAlignment="Left" Increment="0.1" Minimum="1.0" Maximum="2.0" Margin="5" Width="200" Value="{Binding $parent[Window].Application.CustomScreenScaleFactor, Mode=TwoWay}" FormatString="F2"/>
 
