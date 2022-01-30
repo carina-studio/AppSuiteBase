@@ -1,5 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
 using System;
@@ -25,6 +27,7 @@ namespace CarinaStudio.AppSuite.Controls
 
         // Fields.
         readonly ScheduledAction checkSystemChromeVisibilityAction;
+        ContentPresenter? contentPresenter;
         readonly WindowContentFadingHelper contentFadingHelper;
         readonly ScheduledAction updateTransparencyLevelAction;
 
@@ -77,6 +80,22 @@ namespace CarinaStudio.AppSuite.Controls
         /// Check whether system chrome is visible in client area or not.
         /// </summary>
         public bool IsSystemChromeVisibleInClientArea { get => this.GetValue<bool>(IsSystemChromeVisibleInClientAreaProperty); }
+
+
+        /// <inheritdoc/>
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+        {
+            base.OnApplyTemplate(e);
+            this.contentPresenter = e.NameScope.Find<ContentPresenter>("PART_ContentPresenter")?.Also(it =>
+            {
+                // [Workaround] Force relayout content to make sure that layout will be correct after changing window size by code
+                it.GetObservable(BoundsProperty).Subscribe(_ =>
+                {
+                    if (it.Margin != new Thickness())
+                        this.SynchronizationContext.Post(() => it.Margin = new Thickness());
+                });
+            });
+        }
 
 
         /// <summary>
@@ -137,6 +156,11 @@ namespace CarinaStudio.AppSuite.Controls
             }
             else if (property == IsActiveProperty)
                 this.updateTransparencyLevelAction.Schedule();
+            else if (property == HeightProperty 
+                || property == WidthProperty)
+            {
+                this.SynchronizationContext.Post(() => this.contentPresenter?.Let(it => it.Margin = new Thickness(0, 0, 0, 1)));
+            }
         }
 
 
