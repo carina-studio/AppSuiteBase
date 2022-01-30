@@ -28,6 +28,8 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Fields.
+		readonly IObservable<object?> invalidSelectedTextBrush;
+		IDisposable? invalidSelectedTextBrushBinding;
 		readonly IObservable<object?> invalidTextBrush;
 		IDisposable? invalidTextBrushBinding;
 		readonly ScheduledAction validateAction;
@@ -38,6 +40,7 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		protected ObjectTextBox()
 		{
+			this.invalidSelectedTextBrush = this.GetResourceObservable("Brush/TextBox.SelectionForeground.Error");
 			this.invalidTextBrush = this.GetResourceObservable("Brush/TextBox.Foreground.Error");
 			this.validateAction = new ScheduledAction(() => this.Validate());
 		}
@@ -84,9 +87,15 @@ namespace CarinaStudio.AppSuite.Controls
 			if (property == IsTextValidProperty)
 			{
 				if (this.IsTextValid)
+				{
+					this.invalidSelectedTextBrushBinding = this.invalidSelectedTextBrushBinding.DisposeAndReturnNull();
 					this.invalidTextBrushBinding = this.invalidTextBrushBinding.DisposeAndReturnNull();
+				}
 				else
+				{
+					this.invalidSelectedTextBrushBinding = this.Bind(SelectionForegroundBrushProperty, this.invalidSelectedTextBrush);
 					this.invalidTextBrushBinding = this.Bind(ForegroundProperty, this.invalidTextBrush);
+				}
 			}
 			else if (property == TextProperty)
 			{
