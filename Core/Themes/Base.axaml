@@ -1287,6 +1287,9 @@
 	<Style Selector="Window[ActualTransparencyLevel=Blur]">
 		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Transparent}"/>
 	</Style>
+	<Style Selector="Window[ActualTransparencyLevel=Mica]">
+		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Transparent}"/>
+	</Style>
 	<Style Selector="Window[ActualTransparencyLevel=Transparent]">
 		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Transparent}"/>
 	</Style>
@@ -1300,6 +1303,9 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed.Transparent}"/>
 	</Style>
 	<Style Selector="Window.Tabbed[ActualTransparencyLevel=Blur]">
+		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed.Transparent}"/>
+	</Style>
+	<Style Selector="Window.Tabbed[ActualTransparencyLevel=Mica]">
 		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed.Transparent}"/>
 	</Style>
 	<Style Selector="Window.Tabbed[ActualTransparencyLevel=Transparent]">

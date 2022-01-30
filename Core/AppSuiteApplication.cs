@@ -438,6 +438,14 @@ namespace CarinaStudio.AppSuite
                 .UsePlatformDetect()
                 .LogToTrace().Also(it =>
                 {
+                    if (Platform.IsWindows11OrAbove)
+                    {
+                        // enable Mica effect
+                        it.With(new Win32PlatformOptions()
+                        {
+                            UseWindowsUIComposition = true,
+                        });
+                    }
                     if (Platform.IsLinux)
                         it.With(new X11PlatformOptions());
                     if (setupAction != null)

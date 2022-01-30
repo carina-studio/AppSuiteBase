@@ -7,6 +7,7 @@ using CarinaStudio.Threading;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -15,6 +16,17 @@ namespace CarinaStudio.AppSuite.Controls
     /// </summary>
     public abstract class Window : CarinaStudio.Controls.Window<IAppSuiteApplication>
     {
+        // Data for DwmExtendFrameIntoClientArea.
+        [StructLayout(LayoutKind.Sequential)]
+        struct MARGINS 
+        {
+            public int cxLeftWidth;
+            public int cxRightWidth;
+            public int cyTopHeight;
+            public int cyBottomHeight;
+        }
+
+
         /// <summary>
         /// Property of <see cref="IsSystemChromeVisibleInClientArea"/>.
         /// </summary>
@@ -68,6 +80,11 @@ namespace CarinaStudio.AppSuite.Controls
             this.checkSystemChromeVisibilityAction.Schedule();
             this.updateTransparencyLevelAction.Schedule();
         }
+
+
+        // DwmExtendFrameIntoClientArea.
+        [DllImport("Dwmapi")]
+        static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref MARGINS pMarInset);
 
 
         /// <summary>
@@ -148,7 +165,31 @@ namespace CarinaStudio.AppSuite.Controls
         {
             base.OnPropertyChanged(change);
             var property = change.Property;
-            if (property == ExtendClientAreaToDecorationsHintProperty
+            if (property == ActualTransparencyLevelProperty)
+            {
+                /*
+                if (Platform.IsWindows11OrAbove)
+                {
+                    if (this.ActualTransparencyLevel == WindowTransparencyLevel.None)
+                    {
+                        var margins = new MARGINS();
+                        DwmExtendFrameIntoClientArea(this.PlatformImpl.Handle.Handle, ref margins);
+                    }
+                    else
+                    {
+                        var margins = new MARGINS()
+                        {
+                            cxLeftWidth = -1,
+                            cyTopHeight = -1,
+                            cxRightWidth = -1,
+                            cyBottomHeight = -1,
+                        };
+                        DwmExtendFrameIntoClientArea(this.PlatformImpl.Handle.Handle, ref margins);
+                    }
+                }
+                */
+            }
+            else if (property == ExtendClientAreaToDecorationsHintProperty
                 || property == SystemDecorationsProperty
                 || property == WindowStateProperty)
             {
@@ -176,9 +217,11 @@ namespace CarinaStudio.AppSuite.Controls
                 return WindowTransparencyLevel.None;
             if (Platform.IsMacOS)
                 return WindowTransparencyLevel.AcrylicBlur;
-            if (this.Application.HardwareInfo.HasDedicatedGraphicsCard != true)
-                return WindowTransparencyLevel.None;
             if (!this.Settings.GetValueOrDefault(SettingKeys.EnableBlurryBackground))
+                return WindowTransparencyLevel.None;
+            if (Platform.IsWindows11OrAbove)
+                return WindowTransparencyLevel.Mica;
+            if (this.Application.HardwareInfo.HasDedicatedGraphicsCard != true)
                 return WindowTransparencyLevel.None;
             return WindowTransparencyLevel.AcrylicBlur;
         }
