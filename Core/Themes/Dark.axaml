@@ -22,6 +22,7 @@
 
 		<!-- LinkTextBlock -->
 		<Color x:Key="Color/LinkTextBlock.Foreground">#0085e5</Color>
+		<Color x:Key="Color/LinkTextBlock.Foreground.Disabled">#4d0085e5</Color>
 		<Color x:Key="Color/LinkTextBlock.Foreground.PointerOver">#32aaff</Color>
 		<Color x:Key="Color/LinkTextBlock.Foreground.Pressed">#0077cc</Color>
 

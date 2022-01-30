@@ -174,7 +174,7 @@
 											<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
 										</RepeatButton>
 
-										<TextBlock Classes="ToolBar_TextBlock" Text="test:"/>
+										<TextBlock Classes="ToolBar_TextBlock" IsEnabled="False" Text="test:"/>
 
 									</StackPanel>
 
@@ -247,7 +247,7 @@
 						<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5" ToolTip.Tip="{DynamicResource String/Common.Copy.WithGesture}"/>
 						<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
 
-						<appControls:LinkTextBlock HorizontalAlignment="Left" Margin="5" Text="Google" Uri="http://www.google.com/"/>
+						<appControls:LinkTextBlock HorizontalAlignment="Left" IsEnabled="False" Margin="5" Text="Google" Uri="http://www.google.com/"/>
 						<appControls:LinkTextBlock Command="{Binding $parent[Window].SwitchTheme}" HorizontalAlignment="Left" Margin="5" Text="Switch theme"/>
 
 						<appControls:DateTimeTextBox Name="dateTimeTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>

@@ -134,9 +134,11 @@
 
 		<!-- LinkTextBlock -->
 		<Color x:Key="Color/LinkTextBlock.Foreground">#0000ff</Color>
+		<Color x:Key="Color/LinkTextBlock.Foreground.Disabled">#4d0000ff</Color>
 		<Color x:Key="Color/LinkTextBlock.Foreground.PointerOver">#0000ff</Color>
 		<Color x:Key="Color/LinkTextBlock.Foreground.Pressed">#0000ff</Color>
 		<SolidColorBrush x:Key="Brush/LinkTextBlock.Foreground" Color="{DynamicResource Color/LinkTextBlock.Foreground}"/>
+		<SolidColorBrush x:Key="Brush/LinkTextBlock.Foreground.Disabled" Color="{DynamicResource Color/LinkTextBlock.Foreground.Disabled}"/>
 		<SolidColorBrush x:Key="Brush/LinkTextBlock.Foreground.PointerOver" Color="{DynamicResource Color/LinkTextBlock.Foreground.PointerOver}"/>
 		<SolidColorBrush x:Key="Brush/LinkTextBlock.Foreground.Pressed" Color="{DynamicResource Color/LinkTextBlock.Foreground.Pressed}"/>
 
@@ -574,6 +576,9 @@
 		<Setter Property="Cursor" Value="Hand"/>
 		<Setter Property="Foreground" Value="{StaticResource Brush/LinkTextBlock.Foreground}"/>
 		<Setter Property="ToolTip.Tip" Value="{Binding $self.Uri}"/>
+	</Style>
+	<Style Selector="controls|LinkTextBlock:disabled">
+		<Setter Property="Foreground" Value="{StaticResource Brush/LinkTextBlock.Foreground.Disabled}"/>
 	</Style>
 	<Style Selector="controls|LinkTextBlock:pointerover">
 		<Setter Property="Foreground" Value="{StaticResource Brush/LinkTextBlock.Foreground.PointerOver}"/>
@@ -1135,6 +1140,9 @@
 	<Style Selector="TextBlock.ToolBar_TextBlock">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.TextBlock.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="TextBlock.ToolBar_TextBlock:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="TextBox.ToolBar_TextBox">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
