@@ -481,8 +481,15 @@ namespace CarinaStudio.AppSuite.Controls
                 && double.IsFinite(this.restoredHeight))
             {
                 var screen = Screens.ScreenFromVisual(this);
-                this.restoredWidth = Math.Min(this.restoredWidth, screen.WorkingArea.Width * 0.95);
-                this.restoredHeight = Math.Min(this.restoredHeight, screen.WorkingArea.Height * 0.95);
+                var workingAreaWidth = (double)screen.WorkingArea.Width;
+                var workingAreaHeight = (double)screen.WorkingArea.Height;
+                if (!Platform.IsMacOS)
+                {
+                    workingAreaWidth /= screen.PixelDensity;
+                    workingAreaHeight /= screen.PixelDensity;
+                }
+                this.restoredWidth = Math.Min(this.restoredWidth, workingAreaWidth * 0.95);
+                this.restoredHeight = Math.Min(this.restoredHeight, workingAreaHeight * 0.95);
                 this.Width = this.restoredWidth;
                 this.Height = this.restoredHeight;
                 this.restoredWidth = double.NaN;
