@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -73,10 +74,11 @@ namespace CarinaStudio.AppSuite.Controls
 				// open menu
 				if (menuToOpen != null)
 				{
-					menuToOpen.HorizontalOffset = this.textPresenter?.Let(it =>
-					{
-						return it.FormattedText.HitTestTextPosition(it.CaretIndex - 1).Left;
-					}) ?? 0;
+					var padding = this.Padding;
+					var caretRect = this.textPresenter?.Let(it =>
+						it.FormattedText.HitTestTextPosition(Math.Max(0, it.CaretIndex - 1))
+					) ?? new Rect();
+					menuToOpen.PlacementRect = new Rect(caretRect.Left + padding.Left, caretRect.Top + padding.Top, caretRect.Width, caretRect.Height);
 					menuToOpen.Open(this);
 				}
 			});
@@ -370,8 +372,10 @@ namespace CarinaStudio.AppSuite.Controls
 							break;
 					}
 				}, RoutingStrategies.Tunnel);
-				menu.PlacementMode = PlacementMode.Bottom;
-				menu.PlacementTarget = this;
+				menu.PlacementAnchor = PopupAnchor.BottomLeft;
+				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.SlideX | PopupPositionerConstraintAdjustment.FlipY;
+				menu.PlacementGravity = PopupGravity.BottomRight;
+				menu.PlacementMode = PlacementMode.AnchorAndGravity;
 			});
 			return this.predefinedVarsMenu;
 		}
