@@ -212,6 +212,34 @@
 								<appControls:RegexGroup Name="Group2"/>
 								<appControls:RegexGroup Name="Hello" DisplayName="{DynamicResource String/Common.OK}"/>
 								<appControls:RegexGroup Name="World" DisplayName="{DynamicResource String/Common.Cancel}"/>
+								<appControls:RegexGroup Name="Group3"/>
+								<appControls:RegexGroup Name="Group4"/>
+								<appControls:RegexGroup Name="Group5"/>
+								<appControls:RegexGroup Name="Group6"/>
+								<appControls:RegexGroup Name="Group7"/>
+								<appControls:RegexGroup Name="Group8"/>
+								<appControls:RegexGroup Name="Group9"/>
+								<appControls:RegexGroup Name="Group10"/>
+								<appControls:RegexGroup Name="Group11"/>
+								<appControls:RegexGroup Name="Group12"/>
+								<appControls:RegexGroup Name="Group13"/>
+								<appControls:RegexGroup Name="Group14"/>
+								<appControls:RegexGroup Name="Group15"/>
+								<appControls:RegexGroup Name="Group16"/>
+								<appControls:RegexGroup Name="Group17"/>
+								<appControls:RegexGroup Name="Group18"/>
+								<appControls:RegexGroup Name="Group19"/>
+								<appControls:RegexGroup Name="Group20"/>
+								<appControls:RegexGroup Name="Group21"/>
+								<appControls:RegexGroup Name="Group22"/>
+								<appControls:RegexGroup Name="Group23"/>
+								<appControls:RegexGroup Name="Group24"/>
+								<appControls:RegexGroup Name="Group25"/>
+								<appControls:RegexGroup Name="Group26"/>
+								<appControls:RegexGroup Name="Group27"/>
+								<appControls:RegexGroup Name="Group28"/>
+								<appControls:RegexGroup Name="Group29"/>
+								<appControls:RegexGroup Name="Group30"/>
 							</appControls:RegexTextBox.PredefinedGroups>
 						</appControls:RegexTextBox>
 						<appControls:RegexTextBox HorizontalAlignment="Left" Margin="5" Width="400"/>

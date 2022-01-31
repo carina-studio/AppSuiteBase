@@ -16,6 +16,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
+
 namespace CarinaStudio.AppSuite.Controls
 {
 	/// <summary>
@@ -609,7 +610,7 @@ namespace CarinaStudio.AppSuite.Controls
 					}
 				}, RoutingStrategies.Tunnel);
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;
-				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.SlideX | PopupPositionerConstraintAdjustment.FlipY;
+				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
 				menu.PlacementGravity = PopupGravity.BottomRight;
 				menu.PlacementMode = PlacementMode.AnchorAndGravity;
 			});
@@ -640,7 +641,7 @@ namespace CarinaStudio.AppSuite.Controls
 					}
 				}, RoutingStrategies.Tunnel);
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;
-				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.SlideX | PopupPositionerConstraintAdjustment.FlipY;
+				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
 				menu.PlacementGravity = PopupGravity.BottomRight;
 				menu.PlacementMode = PlacementMode.AnchorAndGravity;
 			});
