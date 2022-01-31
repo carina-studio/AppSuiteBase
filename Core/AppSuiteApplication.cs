@@ -180,6 +180,7 @@ namespace CarinaStudio.AppSuite
         PersistentStateImpl? persistentState;
         readonly string persistentStateFilePath;
         ProcessInfo? processInfo;
+        IDisposable? processInfoHfUpdateToken;
         string? restartArgs;
         SettingsImpl? settings;
         readonly string settingsFilePath;
@@ -1217,6 +1218,12 @@ namespace CarinaStudio.AppSuite
             {
                 this.settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, this.FallbackThemeMode);
             }
+
+            // check settings
+            if (!this.settings.GetValueOrDefault(SettingKeys.ShowProcessInfo))
+                this.processInfoHfUpdateToken = this.processInfoHfUpdateToken.DisposeAndReturnNull();
+            else if (this.processInfoHfUpdateToken == null)
+                this.processInfoHfUpdateToken = this.processInfo?.RequestHighFrequencyUpdate();
         }
 
 
@@ -1366,10 +1373,6 @@ namespace CarinaStudio.AppSuite
                 }
             }
 
-            // create hardware and process information
-            this.hardwareInfo = new HardwareInfo(this);
-            this.processInfo = new ProcessInfo(this);
-
             // parse arguments
             if (desktopLifetime != null)
             {
@@ -1401,6 +1404,10 @@ namespace CarinaStudio.AppSuite
                     this.Logger.LogError(ex, "Failed to setup default NLog rule");
                 }
             }
+
+            // create hardware and process information
+            this.hardwareInfo = new HardwareInfo(this);
+            this.processInfo = new ProcessInfo(this);
 
             // attach to lifetime
             if (desktopLifetime != null)
@@ -1842,6 +1849,13 @@ namespace CarinaStudio.AppSuite
                 _ = this.CheckUpdateInfoAsync();
             else if (e.Key == SettingKeys.Culture)
                 this.UpdateCultureInfo(true);
+            else if (e.Key == SettingKeys.ShowProcessInfo)
+            {
+                if (!(bool)e.Value)
+                    this.processInfoHfUpdateToken = this.processInfoHfUpdateToken.DisposeAndReturnNull();
+                else if (this.processInfoHfUpdateToken == null)
+                    this.processInfoHfUpdateToken = this.processInfo?.RequestHighFrequencyUpdate();
+            }
             else if (e.Key == SettingKeys.ThemeMode)
             {
                 if (Platform.IsMacOS && (ThemeMode)e.Value == ThemeMode.System)

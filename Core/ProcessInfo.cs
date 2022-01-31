@@ -1,7 +1,9 @@
-﻿using CarinaStudio.IO;
+﻿using CarinaStudio.Collections;
+using CarinaStudio.IO;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
@@ -14,21 +16,39 @@ namespace CarinaStudio.AppSuite
     /// </summary>
     public class ProcessInfo : INotifyPropertyChanged
     {
+		// Token for high-frequency update.
+		class HighFrequencyUpdateToken : IDisposable
+		{
+			readonly ProcessInfo processInfo;
+			public HighFrequencyUpdateToken(ProcessInfo processInfo) =>
+				this.processInfo = processInfo;
+			public void Dispose() =>
+				this.processInfo.OnHfTokenDisposed(this);
+		}
+
+
         // Constants.
-        const int ProcessInfoUpdateInterval = 1000;
-		const int UIResponseCheckingInterval = 200;
-		const int UIResponseUpdateInterval = 1000;
+        const int ProcessInfoUpdateInterval = 3000;
+		const int ProcessInfoUpdateIntervalHF = 1000;
+		const int UIResponseCheckingInterval = 500;
+		const int UIResponseCheckingIntervalHF = 200;
+		const int UIResponseUpdateInterval = 3000;
+		const int UIResponseUpdateIntervalHF = 1000;
 
 
         // Fields.
         readonly IAppSuiteApplication app;
+		readonly List<HighFrequencyUpdateToken> hfUpdateTokens = new List<HighFrequencyUpdateToken>();
 		readonly ILogger logger;
 		long previousProcessInfoUpdateTime;
 		TimeSpan previousTotalProcessorTime;
 		readonly Process process = Process.GetCurrentProcess();
         readonly SingleThreadSynchronizationContext processInfoCheckingSyncContext = new SingleThreadSynchronizationContext("Process information updater");
 		readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
+		readonly int uiResponseCheckingInterval;
+		readonly int uiResponseUpdateInterval;
 		readonly Thread uiResponseCheckingThread;
+		int updateInterval;
         readonly ScheduledAction updateProcessInfoAction;
 
 
@@ -38,6 +58,9 @@ namespace CarinaStudio.AppSuite
             // setup fields and properties
             this.app = app;
 			this.logger = app.LoggerFactory.CreateLogger(nameof(ProcessInfo));
+			this.uiResponseCheckingInterval = app.IsDebugMode ? UIResponseCheckingIntervalHF : UIResponseCheckingInterval;
+			this.uiResponseUpdateInterval = app.IsDebugMode ? UIResponseUpdateIntervalHF : UIResponseUpdateInterval;
+			this.updateInterval = app.IsDebugMode ? ProcessInfoUpdateIntervalHF : ProcessInfoUpdateInterval;
             this.ProcessId = this.process.Id;
 
             // create scheduled actions
@@ -63,6 +86,20 @@ namespace CarinaStudio.AppSuite
 		public double? CpuUsagePercentage { get; private set; }
 
 
+		// Called after disposing high-frequency update token.
+		void OnHfTokenDisposed(HighFrequencyUpdateToken token)
+		{
+			lock (this.hfUpdateTokens)
+			{
+				if (!this.hfUpdateTokens.Remove(token))
+					return;
+				if (this.hfUpdateTokens.IsNotEmpty())
+					return;
+			}
+			this.updateInterval = this.app.IsDebugMode ? ProcessInfoUpdateIntervalHF : ProcessInfoUpdateInterval;
+		}
+
+
 		/// <summary>
 		/// Get private memory usage in bytes.
 		/// </summary>
@@ -79,6 +116,29 @@ namespace CarinaStudio.AppSuite
         /// Raised when property changed.
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
+
+
+		/// <summary>
+		/// Request updating in higher frequency.
+		/// </summary>
+		/// <returns>Token of request.</returns>
+		public IDisposable RequestHighFrequencyUpdate()
+		{
+			var isFirstToken = false;
+			var token = this.hfUpdateTokens.Lock(it =>
+			{
+				var token = new HighFrequencyUpdateToken(this);
+				it.Add(token);
+				isFirstToken = it.Count == 1;
+				return token;
+			});
+			if (isFirstToken)
+			{
+				this.updateInterval = ProcessInfoUpdateIntervalHF;
+				this.updateProcessInfoAction.Reschedule();
+			}
+			return token;
+		}
 
 
 		// Entry of UI response checking thread.
@@ -107,7 +167,7 @@ namespace CarinaStudio.AppSuite
 								Monitor.Pulse(syncLock);
 						}
 					});
-					if (!Monitor.Wait(syncLock, UIResponseUpdateInterval))
+					if (!Monitor.Wait(syncLock, this.uiResponseUpdateInterval))
 					{
 						this.logger.LogWarning("UI is not responding");
 						totalDuration = 0;
@@ -119,10 +179,10 @@ namespace CarinaStudio.AppSuite
 					++checkingCount;
 					++checkingId;
 				}
-				Thread.Sleep(UIResponseCheckingInterval);
+				Thread.Sleep(this.uiResponseCheckingInterval);
 
 				// report later
-				if ((stopWatch.ElapsedMilliseconds - lastReportTime) < UIResponseUpdateInterval)
+				if ((stopWatch.ElapsedMilliseconds - lastReportTime) < this.uiResponseUpdateInterval)
 					continue;
 
 				// report respone duration
@@ -130,7 +190,8 @@ namespace CarinaStudio.AppSuite
 				totalDuration = 0;
 				checkingCount = 0;
 				lastReportTime = stopWatch.ElapsedMilliseconds;
-				this.logger.LogTrace($"UI response duration: {responseDuration} ms");
+				if (this.app.IsDebugMode)
+					this.logger.LogTrace($"UI response duration: {responseDuration} ms");
 				this.app.SynchronizationContext.Post(() =>
 				{
 					this.UIResponseDuration = TimeSpan.FromMilliseconds(responseDuration);
@@ -180,17 +241,17 @@ namespace CarinaStudio.AppSuite
 			// report state
 			if (!double.IsNaN(cpuUsagePercentage))
 			{
-				this.logger.LogTrace($"CPU usage: {cpuUsagePercentage:0.0}%");
 				this.CpuUsagePercentage = cpuUsagePercentage;
 				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CpuUsagePercentage)));
 			}
 			if (privateMemoryUsage > 0)
 			{
-				this.logger.LogTrace($"Private memory usage: {privateMemoryUsage.ToFileSizeString()}");
 				this.PrivateMemoryUsage = privateMemoryUsage;
 				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PrivateMemoryUsage)));
 			}
-			this.updateProcessInfoAction?.Schedule(ProcessInfoUpdateInterval);
+			if (this.app.IsDebugMode)
+				this.logger.LogTrace($"CPU usage: {cpuUsagePercentage:0.0}%, memory usage: {privateMemoryUsage.ToFileSizeString()}");
+			this.updateProcessInfoAction?.Schedule(this.updateInterval);
 		}
 
 
@@ -200,7 +261,7 @@ namespace CarinaStudio.AppSuite
 			// start process
 			using var topProcess = Process.Start(new ProcessStartInfo()
 			{
-				Arguments = $"-l 10 -pid {Process.GetCurrentProcess().Id} -stats cpu -s {Math.Max(1, ProcessInfoUpdateInterval / 1000)}",
+				Arguments = $"-l 10 -pid {Process.GetCurrentProcess().Id} -stats cpu -s {Math.Max(1, this.updateInterval / 1000)}",
 				CreateNoWindow = true,
 				FileName = "top",
 				RedirectStandardOutput = true,
@@ -253,7 +314,7 @@ namespace CarinaStudio.AppSuite
 			finally
 			{
 				Global.RunWithoutError(topProcess.Kill);
-				this.updateProcessInfoAction.Reschedule(ProcessInfoUpdateInterval);
+				this.updateProcessInfoAction.Reschedule(this.updateInterval);
 			}
 		}
 	}

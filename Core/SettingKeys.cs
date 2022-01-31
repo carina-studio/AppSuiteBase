@@ -33,6 +33,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+		/// Show process info on UI or not.
+		/// </summary>
+		public static readonly SettingKey<bool> ShowProcessInfo = new SettingKey<bool>(nameof(ShowProcessInfo), false);
+
+
+        /// <summary>
         /// Theme mode.
         /// </summary>
         public static readonly SettingKey<ThemeMode> ThemeMode = new SettingKey<ThemeMode>(nameof(ThemeMode), AppSuite.ThemeMode.System);
