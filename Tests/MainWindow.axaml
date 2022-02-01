@@ -9,9 +9,21 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Tests.MainWindow"
 		Classes="Tabbed"
-		ExtendClientAreaTitleBarHeightHint="{Binding #tabControl.TabStripSize}"
 		Icon="/AppIcon.ico"
         Title="Main Window">
+	
+	<Window.Styles>
+		<Style Selector="CaptionButtons">
+			<Setter Property="MaxHeight" Value="{Binding $parent[Window].ExtendClientAreaTitleBarHeightHint}"/>
+		</Style>
+	</Window.Styles>
+
+	<Window.ExtendClientAreaTitleBarHeightHint>
+		<MultiBinding Converter="{x:Static appConverters:DoubleConverters.Add}">
+			<Binding ElementName="tabControl" Path="TabStripSize"/>
+			<Binding RelativeSource="{RelativeSource Mode=Self}" Path="ContentPadding.Top"/>
+		</MultiBinding>
+	</Window.ExtendClientAreaTitleBarHeightHint>
 
 	<DockPanel>
 

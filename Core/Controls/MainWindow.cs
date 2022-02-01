@@ -1,5 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Chrome;
+using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Platform;
 using CarinaStudio.Animation;
@@ -23,6 +26,10 @@ namespace CarinaStudio.AppSuite.Controls
     public abstract class MainWindow<TViewModel> : Window, IMainWindow where TViewModel : MainWindowViewModel
     {
         /// <summary>
+        /// Property of <see cref="ContentPadding"/>.
+        /// </summary>
+        public static readonly AvaloniaProperty<Thickness> ContentPaddingProperty = AvaloniaProperty.Register<MainWindow<TViewModel>, Thickness>(nameof(ContentPadding));
+        /// <summary>
         /// Property of <see cref="HasMultipleMainWindows"/>.
         /// </summary>
         public static readonly AvaloniaProperty<bool> HasMultipleMainWindowsProperty = AvaloniaProperty.Register<MainWindow<TViewModel>, bool>(nameof(HasMultipleMainWindows), true);
@@ -44,6 +51,7 @@ namespace CarinaStudio.AppSuite.Controls
 
         // Fields.
         ThicknessAnimator? contentPaddingAnimator;
+        ContentPresenter? contentPresenter;
         bool isShowingInitialDialogs;
         long openedTime;
         readonly ScheduledAction restartingMainWindowsAction;
@@ -51,6 +59,7 @@ namespace CarinaStudio.AppSuite.Controls
         double restoredWidth;
         readonly ScheduledAction saveWindowSizeAction;
         readonly ScheduledAction showInitDialogsAction;
+        TitleBar? titleBar;
         readonly ScheduledAction updateContentPaddingAction;
 
 
@@ -89,7 +98,7 @@ namespace CarinaStudio.AppSuite.Controls
                     return;
 
                 // check content
-                if (this.Content is not Control contentControl)
+                if (this.contentPresenter == null)
                     return;
 
                 // cancel current animation
@@ -103,13 +112,13 @@ namespace CarinaStudio.AppSuite.Controls
                     or WindowState.Maximized => ExtendedClientAreaWindowConfiguration.ContentPaddingInMaximized,
                     _ => ExtendedClientAreaWindowConfiguration.ContentPadding,
                 };
-                this.contentPaddingAnimator = new ThicknessAnimator(contentControl.Margin, margin).Also(it =>
+                this.contentPaddingAnimator = new ThicknessAnimator(this.contentPresenter.Padding, margin).Also(it =>
                 {
-                    it.Completed += (_, e) => contentControl.Margin = it.EndValue;
+                    it.Completed += (_, e) => this.contentPresenter.Padding = it.EndValue;
                     if (this.TryFindResource("TimeSpan/MainWindow.ContentPaddingTransition", out var res) && res is TimeSpan duration)
                         it.Duration = duration;
                     it.Interpolator = Interpolators.Deceleration;
-                    it.ProgressChanged += (_, e) => contentControl.Margin = it.Value;
+                    it.ProgressChanged += (_, e) => this.contentPresenter.Padding = it.Value;
                     it.Start();
                 });
             });
@@ -141,6 +150,12 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public void CancelSavingSize() =>
             this.saveWindowSizeAction.Cancel();
+
+        
+        /// <summary>
+        /// Get padding applied on content of Window automatically.
+        /// </summary>
+        public Thickness ContentPadding { get => this.GetValue<Thickness>(ContentPaddingProperty); }
 
 
         /// <summary>
@@ -256,6 +271,18 @@ namespace CarinaStudio.AppSuite.Controls
                         this.SynchronizationContext.Post(() => _ = this.NotifyApplicationUpdateFound());
                     break;
             }
+        }
+
+
+        /// <inheritdoc/>
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+        {
+            base.OnApplyTemplate(e);
+            this.contentPresenter = e.NameScope.Find<ContentPresenter>("PART_ContentPresenter").Also(it =>
+            {
+                it.GetObservable(PaddingProperty).Subscribe(padding =>
+                    this.SetValue<Thickness>(ContentPaddingProperty, padding));
+            });
         }
 
 

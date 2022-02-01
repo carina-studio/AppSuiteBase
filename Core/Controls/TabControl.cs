@@ -235,10 +235,10 @@ namespace CarinaStudio.AppSuite.Controls
             this.scrollTabStripLeftButton = null;
             this.scrollTabStripRightButton = null;
             this.tabItemsPresenter = e.NameScope.Find<ItemsPresenter>("PART_ItemsPresenter");
-            this.tabStripScrollViewer?.Let(it => it.PropertyChanged -= this.OnTabStripScrollViewerPropertyChanged);
             this.tabStripScrollViewer = e.NameScope.Find<TabStripScrollViewer>("PART_TabStripScrollViewer")?.Also(it =>
             {
-                it.PropertyChanged += this.OnTabStripScrollViewerPropertyChanged;
+                it.GetObservable(BoundsProperty).Subscribe(bounds =>
+                    this.SetValue<double>(TabStripSizeProperty, bounds.Height));
                 it.TemplateApplied += (_, e) =>
                 {
                     this.scrollTabStripLeftButton = e.NameScope.Find<RepeatButton>("PART_ScrollLeftButton");
@@ -506,14 +506,6 @@ namespace CarinaStudio.AppSuite.Controls
             }
             else if (property == SelectedIndexProperty)
                 this.scrollToSelectedItemAction.Schedule(100);
-        }
-
-
-        // Property of tab strip scroll viewer changed.
-        void OnTabStripScrollViewerPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
-        {
-            if (e.Property == BoundsProperty)
-                this.SetValue<double>(TabStripSizeProperty, this.tabStripScrollViewer?.Bounds.Height ?? -1);
         }
 
 
