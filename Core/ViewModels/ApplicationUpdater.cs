@@ -380,6 +380,8 @@ namespace CarinaStudio.AppSuite.ViewModels
 						argsBuilder.AppendFormat(" -accent-color #{0:x2}{1:x2}{2:x2}{3:x2}", accentColor.A, accentColor.R, accentColor.G, accentColor.B);
 					if (!double.IsNaN(screenScaleFactor))
 						argsBuilder.AppendFormat(" -screen-scale-factor {0:F2}", screenScaleFactor);
+					if (this.Application.IsDebugMode)
+						argsBuilder.Append(" -debug-mode");
 					it.Arguments = argsBuilder.ToString();
 					it.FileName = autoUpdaterPath;
 				}));

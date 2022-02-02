@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Chrome;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
@@ -59,7 +58,6 @@ namespace CarinaStudio.AppSuite.Controls
         double restoredWidth;
         readonly ScheduledAction saveWindowSizeAction;
         readonly ScheduledAction showInitDialogsAction;
-        TitleBar? titleBar;
         readonly ScheduledAction updateContentPaddingAction;
 
 
