@@ -47,6 +47,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 
         // Fields.
         readonly ApplicationChangeList appChangeList = new ApplicationChangeList();
+        IBitmap? icon;
 
 
         /// <summary>
@@ -140,12 +141,29 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Get application icon.
         /// </summary>
-        public virtual IBitmap Icon { get; } = AvaloniaLocator.Current.GetService<IAssetLoader>().Let(loader =>
+        public virtual IBitmap Icon
         {
-            if (loader == null)
-                throw new NotImplementedException("Cannot load default icon.");
-            return loader.Open(new Uri($"avares://{Assembly.GetEntryAssembly().AsNonNull().GetName().Name}/AppIcon.ico")).Use(stream => new Bitmap(stream));
-        });
+            get
+            {
+                if (this.icon != null)
+                    return this.icon;
+                this.icon = AvaloniaLocator.Current.GetService<IAssetLoader>().Let(loader =>
+                {
+                    if (loader != null)
+                    {
+                        var assembly = Assembly.GetEntryAssembly().AsNonNull();
+                        var uri = new Uri($"avares://{assembly.GetName().Name}/{this.Application.Name}.ico");
+                        if (loader.Exists(uri))
+                            return loader.Open(uri).Use(stream => new Bitmap(stream));
+                        uri = new Uri($"avares://{assembly.GetName().Name}/AppIcon.ico");
+                        if (loader.Exists(uri))
+                            return loader.Open(uri).Use(stream => new Bitmap(stream));
+                    }
+                    throw new NotImplementedException("Cannot load default icon.");
+                });
+                return this.icon;
+            }
+        }
 
 
         /// <summary>

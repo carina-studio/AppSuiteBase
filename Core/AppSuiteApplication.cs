@@ -6,6 +6,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
+using Avalonia.Platform;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Animation;
@@ -1713,7 +1714,19 @@ namespace CarinaStudio.AppSuite
         /// <returns>Parameters of splash window.</returns>
         protected virtual Controls.SplashWindowParams OnPrepareSplashWindow() => new Controls.SplashWindowParams()
         {
-            IconUri = new Uri($"avares://{this.Assembly.GetName().Name}/AppIcon.ico"),
+            IconUri = AvaloniaLocator.Current.GetService<IAssetLoader>().Let(loader =>
+            {
+                if (loader != null)
+                {
+                    var uri = new Uri($"avares://{this.Assembly.GetName().Name}/{this.Name}.ico");
+                    if (loader.Exists(uri))
+                        return uri;
+                    uri = new Uri($"avares://{this.Assembly.GetName().Name}/AppIcon.ico");
+                    if (loader.Exists(uri))
+                        return uri;
+                }
+                throw new NotImplementedException("Cannot get default icon.");
+            }),
         };
 
 
