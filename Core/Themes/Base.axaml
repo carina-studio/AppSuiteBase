@@ -55,10 +55,21 @@
 
 		<!-- Button -->
 		<SolidColorBrush x:Key="Brush/Button.Border" Color="{DynamicResource Color/Button.Border}"/>
-		<SolidColorBrush x:Key="ButtonBorderBrush" Color="{DynamicResource Color/Button.Border}"/>
-		<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{DynamicResource Color/Button.Border}"/>
-		<SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="{DynamicResource Color/Button.Border}"/>
+		<LinearGradientBrush x:Key="ButtonBorderBrush" EndPoint="0%,100%" StartPoint="0%,0%">
+			<GradientStop Offset="0" Color="{DynamicResource Color/Button.Border.Light}"/>
+			<GradientStop Offset="1" Color="{DynamicResource Color/Button.Border.Dark}"/>
+		</LinearGradientBrush>
+		<LinearGradientBrush x:Key="ButtonBorderBrushPointerOver" EndPoint="0%,100%" StartPoint="0%,0%">
+			<GradientStop Offset="0" Color="{DynamicResource Color/Button.Border.Light}"/>
+			<GradientStop Offset="1" Color="{DynamicResource Color/Button.Border.Dark}"/>
+		</LinearGradientBrush>
+		<LinearGradientBrush x:Key="ButtonBorderBrushPressed" EndPoint="0%,100%" StartPoint="0%,0%">
+			<GradientStop Offset="0" Color="{DynamicResource Color/Button.Border.Dark}"/>
+			<GradientStop Offset="1" Color="{DynamicResource Color/Button.Border.Light}"/>
+		</LinearGradientBrush>
 		<Color x:Key="Color/Button.Border">#000000</Color>
+		<Color x:Key="Color/Button.Border.Dark">#000000</Color>
+		<Color x:Key="Color/Button.Border.Light">#000000</Color>
 		<Thickness x:Key="Thickness/Button.Border">1</Thickness>
 
 		<!-- ComboBox -->
@@ -183,9 +194,18 @@
 		<Thickness x:Key="Thickness/MessageDialog.Icon.Margin">0,0,15,0</Thickness>
 
 		<!-- RepeatButton -->
-		<SolidColorBrush x:Key="RepeatButtonBorderBrush" Color="{DynamicResource Color/Button.Border}"/>
-		<SolidColorBrush x:Key="RepeatButtonBorderBrushPointerOver" Color="{DynamicResource Color/Button.Border}"/>
-		<SolidColorBrush x:Key="RepeatButtonBorderBrushPressed" Color="{DynamicResource Color/Button.Border}"/>
+		<LinearGradientBrush x:Key="RepeatButtonBorderBrush" EndPoint="0%,100%" StartPoint="0%,0%">
+			<GradientStop Offset="0" Color="{DynamicResource Color/Button.Border.Light}"/>
+			<GradientStop Offset="1" Color="{DynamicResource Color/Button.Border.Dark}"/>
+		</LinearGradientBrush>
+		<LinearGradientBrush x:Key="RepeatButtonBorderBrushPointerOver" EndPoint="0%,100%" StartPoint="0%,0%">
+			<GradientStop Offset="0" Color="{DynamicResource Color/Button.Border.Light}"/>
+			<GradientStop Offset="1" Color="{DynamicResource Color/Button.Border.Dark}"/>
+		</LinearGradientBrush>
+		<LinearGradientBrush x:Key="RepeatButtonBorderBrushPressed" EndPoint="0%,100%" StartPoint="0%,0%">
+			<GradientStop Offset="0" Color="{DynamicResource Color/Button.Border.Dark}"/>
+			<GradientStop Offset="1" Color="{DynamicResource Color/Button.Border.Light}"/>
+		</LinearGradientBrush>
 
 		<!-- Separator -->
 		<Color x:Key="Color/Separator.Background">#000000</Color>
@@ -287,12 +307,30 @@
 		<sys:Double x:Key="Double/TextInputDialog.Width">450</sys:Double>
 
 		<!-- ToggleButton -->
-		<SolidColorBrush x:Key="ToggleButtonBorderBrush" Color="{DynamicResource Color/Button.Border}"/>
-		<SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver" Color="{DynamicResource Color/Button.Border}"/>
-		<SolidColorBrush x:Key="ToggleButtonBorderBrushPressed" Color="{DynamicResource Color/Button.Border}"/>
-		<SolidColorBrush x:Key="ToggleButtonBorderBrushChecked" Color="{DynamicResource Color/Button.Border}"/>
-		<SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver" Color="{DynamicResource Color/Button.Border}"/>
-		<SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{DynamicResource Color/Button.Border}"/>
+		<LinearGradientBrush x:Key="ToggleButtonBorderBrush" EndPoint="0%,100%" StartPoint="0%,0%">
+			<GradientStop Offset="0" Color="{DynamicResource Color/Button.Border.Light}"/>
+			<GradientStop Offset="1" Color="{DynamicResource Color/Button.Border.Dark}"/>
+		</LinearGradientBrush>
+		<LinearGradientBrush x:Key="ToggleButtonBorderBrushPointerOver" EndPoint="0%,100%" StartPoint="0%,0%">
+			<GradientStop Offset="0" Color="{DynamicResource Color/Button.Border.Light}"/>
+			<GradientStop Offset="1" Color="{DynamicResource Color/Button.Border.Dark}"/>
+		</LinearGradientBrush>
+		<LinearGradientBrush x:Key="ToggleButtonBorderBrushPressed" EndPoint="0%,100%" StartPoint="0%,0%">
+			<GradientStop Offset="0" Color="{DynamicResource Color/Button.Border.Dark}"/>
+			<GradientStop Offset="1" Color="{DynamicResource Color/Button.Border.Light}"/>
+		</LinearGradientBrush>
+		<LinearGradientBrush x:Key="ToggleButtonBorderBrushChecked" EndPoint="0%,100%" StartPoint="0%,0%">
+			<GradientStop Offset="0" Color="{DynamicResource Color/Button.Border.Dark}"/>
+			<GradientStop Offset="1" Color="{DynamicResource Color/Button.Border.Light}"/>
+		</LinearGradientBrush>
+		<LinearGradientBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver" EndPoint="0%,100%" StartPoint="0%,0%">
+			<GradientStop Offset="0" Color="{DynamicResource Color/Button.Border.Dark}"/>
+			<GradientStop Offset="1" Color="{DynamicResource Color/Button.Border.Light}"/>
+		</LinearGradientBrush>
+		<LinearGradientBrush x:Key="ToggleButtonBorderBrushCheckedPressed" EndPoint="0%,100%" StartPoint="0%,0%">
+			<GradientStop Offset="0" Color="{DynamicResource Color/Button.Border.Dark}"/>
+			<GradientStop Offset="1" Color="{DynamicResource Color/Button.Border.Light}"/>
+		</LinearGradientBrush>
 
 		<!-- ToolBar -->
 		<Color x:Key="Color/ToolBar.Background">#ffffff</Color>
@@ -395,6 +433,8 @@
 	</Style>
 	<Style Selector="Border.Dialog_ControlButtonsPanel">
 		<Setter Property="Background" Value="{StaticResource Brush/Dialog.ControlButtonsPanel.Background}"/>
+		<Setter Property="BorderBrush" Value="{StaticResource Brush/Button.Border}"/>
+		<Setter Property="BorderThickness" Value="0,1,0,0"/>
 		<Setter Property="DockPanel.Dock" Value="Bottom"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ControlButtonsPanel.Padding}"/>
@@ -1097,7 +1137,9 @@
 
 	<!-- ToolBar -->
 	<Style Selector="Border.ToolBar">
-		<Setter Property="Background" Value="{StaticResource Brush/ToolBar.Background}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Background}"/>
+		<Setter Property="BorderBrush" Value="{StaticResource Brush/Button.Border}"/>
+		<Setter Property="BorderThickness" Value="0,0,0,1"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Padding}"/>
 	</Style>
 	<Style Selector="Border.ToolBar_NotificationIndicator">

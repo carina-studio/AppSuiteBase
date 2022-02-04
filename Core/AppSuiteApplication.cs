@@ -668,7 +668,7 @@ namespace CarinaStudio.AppSuite
             {
                 style.Setters.Add(new Setter(Animatable.TransitionsProperty, new Transitions().Also(transitions =>
                 {
-                    transitions.Add(new SolidColorBrushTransition()
+                    transitions.Add(new Animation.BrushTransition()
                     {
                         Duration = durationFast,
                         Easing = easing,
@@ -709,7 +709,7 @@ namespace CarinaStudio.AppSuite
             {
                 style.Setters.Add(new Setter(Animatable.TransitionsProperty, new Transitions().Also(transitions =>
                 {
-                    transitions.Add(new SolidColorBrushTransition()
+                    transitions.Add(new Animation.BrushTransition()
                     {
                         Duration = duration,
                         Easing = easing,
@@ -769,13 +769,13 @@ namespace CarinaStudio.AppSuite
             {
                 style.Setters.Add(new Setter(Animatable.TransitionsProperty, new Transitions().Also(transitions =>
                 {
-                    transitions.Add(new SolidColorBrushTransition()
+                    transitions.Add(new Animation.BrushTransition()
                     {
                         Duration = duration,
                         Easing = easing,
                         Property = Avalonia.Controls.Primitives.TemplatedControl.BackgroundProperty,
                     });
-                    transitions.Add(new SolidColorBrushTransition()
+                    transitions.Add(new Animation.BrushTransition()
                     {
                         Duration = duration,
                         Easing = easing,

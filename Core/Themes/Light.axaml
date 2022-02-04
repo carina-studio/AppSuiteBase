@@ -9,7 +9,9 @@
 	<Styles.Resources>
 
 		<!-- Button -->
-		<Color x:Key="Color/Button.Border">#11000000</Color>
+		<Color x:Key="Color/Button.Border">#22000000</Color>
+		<Color x:Key="Color/Button.Border.Dark">#33000000</Color>
+		<Color x:Key="Color/Button.Border.Light">#11000000</Color>
 		<SolidColorBrush x:Key="ButtonBackground" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.5"/>
 		<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource SystemBaseHighColor}" Opacity="0.2"/>
 		<SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.8"/>
