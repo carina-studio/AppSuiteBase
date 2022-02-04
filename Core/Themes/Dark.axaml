@@ -8,6 +8,11 @@
 	<!-- Resources -->
 	<Styles.Resources>
 
+		<!-- Button -->
+		<SolidColorBrush x:Key="ButtonBackground" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.7"/>
+		<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource SystemBaseHighColor}" Opacity="0.3"/>
+		<SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.5"/>
+
 		<!-- ComboBox -->
 		<SolidColorBrush x:Key="ComboBoxBorderBrush">#5f5f5f</SolidColorBrush>
 		<SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver">#afafaf</SolidColorBrush>
