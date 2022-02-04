@@ -53,6 +53,14 @@
 		<!-- BrowseButton -->
 		<Thickness x:Key="Thickness/BrowseButton.Margin">5,0,0,0</Thickness>
 
+		<!-- Button -->
+		<SolidColorBrush x:Key="Brush/Button.Border" Color="{DynamicResource Color/Button.Border}"/>
+		<SolidColorBrush x:Key="ButtonBorderBrush" Color="{DynamicResource Color/Button.Border}"/>
+		<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{DynamicResource Color/Button.Border}"/>
+		<SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="{DynamicResource Color/Button.Border}"/>
+		<Color x:Key="Color/Button.Border">#000000</Color>
+		<Thickness x:Key="Thickness/Button.Border">1</Thickness>
+
 		<!-- ComboBox -->
 		<Thickness x:Key="ComboBoxDropdownBorderPadding">4,3,4,3</Thickness>
 		<Thickness x:Key="ComboBoxDropdownContentMargin">0</Thickness>
@@ -63,6 +71,7 @@
 		<Thickness x:Key="Thickness/ComboBoxItem.Padding">6</Thickness>
 
 		<!-- Control -->
+		<CornerRadius x:Key="ControlCornerRadius">4</CornerRadius>
 		<Thickness x:Key="Thickness/Control.Border">0,0,0,1</Thickness>
 		<Thickness x:Key="Thickness/Control.Border.Focused">0,0,0,2</Thickness>
 
@@ -173,6 +182,11 @@
 		<sys:Double x:Key="Double/MessageDialog.MinWidth">200</sys:Double>
 		<Thickness x:Key="Thickness/MessageDialog.Icon.Margin">0,0,15,0</Thickness>
 
+		<!-- RepeatButton -->
+		<SolidColorBrush x:Key="RepeatButtonBorderBrush" Color="{DynamicResource Color/Button.Border}"/>
+		<SolidColorBrush x:Key="RepeatButtonBorderBrushPointerOver" Color="{DynamicResource Color/Button.Border}"/>
+		<SolidColorBrush x:Key="RepeatButtonBorderBrushPressed" Color="{DynamicResource Color/Button.Border}"/>
+
 		<!-- Separator -->
 		<Color x:Key="Color/Separator.Background">#000000</Color>
 		<SolidColorBrush x:Key="Brush/Separator.Background" Color="{DynamicResource Color/Separator.Background}"/>
@@ -272,6 +286,14 @@
 		<!-- TextInputDialog -->
 		<sys:Double x:Key="Double/TextInputDialog.Width">450</sys:Double>
 
+		<!-- ToggleButton -->
+		<SolidColorBrush x:Key="ToggleButtonBorderBrush" Color="{DynamicResource Color/Button.Border}"/>
+		<SolidColorBrush x:Key="ToggleButtonBorderBrushPointerOver" Color="{DynamicResource Color/Button.Border}"/>
+		<SolidColorBrush x:Key="ToggleButtonBorderBrushPressed" Color="{DynamicResource Color/Button.Border}"/>
+		<SolidColorBrush x:Key="ToggleButtonBorderBrushChecked" Color="{DynamicResource Color/Button.Border}"/>
+		<SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver" Color="{DynamicResource Color/Button.Border}"/>
+		<SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{DynamicResource Color/Button.Border}"/>
+
 		<!-- ToolBar -->
 		<Color x:Key="Color/ToolBar.Background">#ffffff</Color>
 		<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Size">8</sys:Double>
@@ -309,17 +331,11 @@
 
 	<!-- AddTabItemButton -->
 	<Style Selector="Button.AddTabItem">
-		<Setter Property="Background" Value="{DynamicResource Brush/TabItem.Header.Background.Selected}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/TabItem.Header.Background}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/AddTabItemButton.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
-		<Setter Property="Opacity" Value="0.7"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/AddTabItemButton.Padding}"/>
 		<Setter Property="ToolTip.Tip" Value="{DynamicResource String/Common.CreateTab.WithGesture}"/>
-		<Setter Property="Transitions">
-			<Transitions>
-				<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
-			</Transitions>
-		</Setter>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/AddTabItemButton.Size}"/>
 	</Style>
@@ -328,9 +344,6 @@
 	</Style>
 	<Style Selector="Button.AddTabItem:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
-	</Style>
-	<Style Selector="Button.AddTabItem:pointerover">
-		<Setter Property="Opacity" Value="1"/>
 	</Style>
 	<Style Selector="Button.AddTabItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/TabItem.Header.Background.Selected}"/>
@@ -349,6 +362,11 @@
 		<Setter Property="Content" Value="…"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/BrowseButton.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
+	</Style>
+
+	<!-- Button -->
+	<Style Selector="Button">
+		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
 	</Style>
 
 	<!-- ComboBox -->
@@ -553,6 +571,7 @@
 	</Style>
 	<Style Selector="Button.InPlaceAction_Button">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/InPlaceAction.Padding}"/>
@@ -647,6 +666,11 @@
 	<!-- NumericUpDown -->
 	<Style Selector="NumericUpDown">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
+	</Style>
+
+	<!-- RepeatButton -->
+	<Style Selector="RepeatButton">
+		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
 	</Style>
 
 	<!-- Separator -->
@@ -777,8 +801,6 @@
 	<!-- TabControl -->
 	<Style Selector="RepeatButton.TabStripScroller">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundChecked}"/>
-		<Setter Property="BorderThickness" Value="1"/>
-		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Light.1}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/TabControl.TabStrip.ScrollingButton.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/TabControl.TabStrip.ScrollingButton.Padding}"/>
@@ -787,11 +809,9 @@
 	</Style>
 	<Style Selector="RepeatButton.TabStripScroller:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
-		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Dark.1}"/>
 	</Style>
 	<Style Selector="RepeatButton.TabStripScroller:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
-		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Dark.1}"/>
 	</Style>
 	<Style Selector="controls|TabStripScrollViewer">
 		<Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
@@ -895,6 +915,7 @@
 	</Style>
 	<Style Selector="Button.TabItem_Button">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Content.Height}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Button.Margin}"/>
 		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
@@ -1003,6 +1024,7 @@
 	<!-- TextBox -->
 	<Style Selector="Button.TextBox_InPlaceAction">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Focusable" Value="False"/>
 		<Setter Property="Height" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Right"/>
@@ -1039,6 +1061,7 @@
 	</Style>
 	<Style Selector="ToggleButton.TextBox_InPlaceAction">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Focusable" Value="False"/>
 		<Setter Property="Height" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Right"/>
@@ -1061,6 +1084,11 @@
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
 	</Style>
 
+	<!-- ToggleButton -->
+	<Style Selector="ToggleButton">
+		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
+	</Style>
+
 	<!-- ToggleSwitch -->
 	<Style Selector="ToggleSwitch">
 		<Setter Property="OffContent" Value="{x:Null}"/>
@@ -1081,6 +1109,7 @@
 	</Style>
 	<Style Selector="Button.ToolBar_Button">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
@@ -1119,6 +1148,7 @@
 	</Style>
 	<Style Selector="RepeatButton.ToolBar_RepeatButton">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
@@ -1163,6 +1193,7 @@
 	</Style>
 	<Style Selector="ToggleButton.ToolBar_ToggleButton">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
@@ -1181,8 +1212,6 @@
 	<!-- ToolBarScrollViewer -->
 	<Style Selector="RepeatButton.ToolBarScrollViewer">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundChecked}"/>
-		<Setter Property="BorderThickness" Value="1"/>
-		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Light.1}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBarScrollViewer.ScrollingButton.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBarScrollViewer.ScrollingButton.Padding}"/>
@@ -1191,11 +1220,9 @@
 	</Style>
 	<Style Selector="RepeatButton.ToolBarScrollViewer:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
-		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Dark.1}"/>
 	</Style>
 	<Style Selector="RepeatButton.ToolBarScrollViewer:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
-		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Dark.1}"/>
 	</Style>
 	<Style Selector="controls|ToolBarScrollViewer">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>

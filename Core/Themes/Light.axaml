@@ -8,6 +8,12 @@
 	<!-- Resources -->
 	<Styles.Resources>
 
+		<!-- Button -->
+		<Color x:Key="Color/Button.Border">#11000000</Color>
+		<SolidColorBrush x:Key="ButtonBackground" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.5"/>
+		<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource SystemBaseHighColor}" Opacity="0.2"/>
+		<SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.8"/>
+
 		<!-- ComboBox -->
 		<SolidColorBrush x:Key="ComboBoxBackground" Color="{DynamicResource SystemAltMediumLowColor}"/>
 		<SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="{DynamicResource SystemAltMediumColor}"/>
@@ -33,6 +39,11 @@
 		<!-- Menu -->
 		<Color x:Key="Color/Menu.Background">#e0e0e0</Color>
 
+		<!-- Button -->
+		<SolidColorBrush x:Key="RepeatButtonBackground" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.5"/>
+		<SolidColorBrush x:Key="RepeatButtonBackgroundPointerOver" Color="{DynamicResource SystemBaseHighColor}" Opacity="0.2"/>
+		<SolidColorBrush x:Key="RepeatButtonBackgroundPressed" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.8"/>
+
 		<!-- Separator -->
 		<Color x:Key="Color/Separator.Background">#4f000000</Color>
 
@@ -55,6 +66,14 @@
 		<SolidColorBrush x:Key="TextControlBorderBrush">#9f9f9f</SolidColorBrush>
 		<SolidColorBrush x:Key="TextControlBorderBrushPointerOver">#7f7f7f</SolidColorBrush>
 
+		<!-- ToggleButton -->
+		<SolidColorBrush x:Key="ToggleButtonBackground" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.5"/>
+		<SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver" Color="{DynamicResource SystemBaseHighColor}" Opacity="0.2"/>
+		<SolidColorBrush x:Key="ToggleButtonBackgroundPressed" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.8"/>
+		<SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource SystemAccentColorDark1}" />
+		<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{DynamicResource SystemAccentColor}" />
+		<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
+
 		<!-- ToolBar -->
 		<Color x:Key="Color/ToolBar.Background">#e0e0e0</Color>
 
@@ -69,15 +88,5 @@
 		<Color x:Key="Color/WorkingArea.Panel.Background">#d8d8d8</Color>
 
 	</Styles.Resources>
-
-	<!-- TabControl -->
-	<Style Selector="RepeatButton.TabStripScroller">
-		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Dark.1}"/>
-	</Style>
-
-	<!-- ToolBarScrollViewer -->
-	<Style Selector="RepeatButton.ToolBarScrollViewer">
-		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent.Dark.1}"/>
-	</Style>
 	
 </Styles>

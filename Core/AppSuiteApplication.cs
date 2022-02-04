@@ -2655,9 +2655,6 @@ namespace CarinaStudio.AppSuite
                 this.accentColorResources["SliderThumbBackgroundPointerOver"] = new SolidColorBrush(sysAccentColorLight1);
                 this.accentColorResources["SliderThumbBackgroundPressed"] = new SolidColorBrush(sysAccentColorDark1);
 
-                // [Workaround] Brushes of ToggleButton
-                this.accentColorResources["ToggleButtonBackgroundCheckedPointerOver"] = new SolidColorBrush(sysAccentColorDark1);
-
                 // [Workaround] Brushes of ToggleSwitch
                 this.accentColorResources["ToggleSwitchFillOnPointerOver"] = new SolidColorBrush(sysAccentColorLight1);
                 this.accentColorResources["ToggleSwitchFillOnPressed"] = new SolidColorBrush(sysAccentColorDark1);

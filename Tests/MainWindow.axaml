@@ -284,6 +284,15 @@
 							</StackPanel>
 						</Expander>
 
+						<StackPanel Orientation="Horizontal">
+							<Button Content="Button" Margin="5"/>
+							<Button Content="Button" IsEnabled="False" Margin="5"/>
+							<ToggleButton Content="ToggleButton" Margin="5"/>
+							<ToggleButton Content="ToggleButton" IsEnabled="False" Margin="5"/>
+							<RepeatButton Content="RepeatButton" Margin="5"/>
+							<RepeatButton Content="RepeatButton" IsEnabled="False" Margin="5"/>
+						</StackPanel>
+
 						<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5" ToolTip.Tip="{DynamicResource String/Common.Copy.WithGesture}"/>
 						<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
 
