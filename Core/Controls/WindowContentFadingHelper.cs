@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using CarinaStudio.Animation;
 using CarinaStudio.Threading;
 using System;
@@ -40,6 +41,7 @@ namespace CarinaStudio.AppSuite.Controls
                 {
                     it.Completed += (_, e) =>
                     {
+                        this.content.Opacity = it.EndValue;
                         this.contentFadingAnimator = null;
                         this.IsFadingContent = false;
                         this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFadingContent)));
@@ -58,63 +60,61 @@ namespace CarinaStudio.AppSuite.Controls
 
             // attach to window
             window.Closed += (_, e) => this.fadeInContentAction.Cancel();
-            window.PropertyChanged += (_, e) =>
+            window.GetObservable(Window.ContentProperty).Subscribe(content =>
             {
-                if (e.Property == ContentControl.ContentProperty)
+                this.fadeInContentAction.Cancel();
+                if (this.contentFadingAnimator != null)
+                {
+                    this.contentFadingAnimator.Cancel();
+                    this.contentFadingAnimator = null;
+                }
+                if (this.IsFadingContent)
+                {
+                    this.IsFadingContent = false;
+                    this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFadingContent)));
+                }
+                this.content = content as Control;
+                if (this.content != null)
+                    this.content.Opacity = window.HasDialogs ? ContentFadeOutOpacity : 1.0;
+            });
+            window.GetObservable(CarinaStudio.Controls.Window.HasDialogsProperty).Subscribe(hasDialogs =>
+            {
+                if (this.content == null)
+                    return;
+                if (hasDialogs)
                 {
                     this.fadeInContentAction.Cancel();
-                    if (this.contentFadingAnimator != null)
+                    this.contentFadingAnimator?.Cancel();
+                    this.contentFadingAnimator = new DoubleAnimator(this.content.Opacity, ContentFadeOutOpacity).Also(it =>
                     {
-                        this.contentFadingAnimator.Cancel();
-                        this.contentFadingAnimator = null;
-                    }
-                    if (this.IsFadingContent)
+                        it.Completed += (_, e) =>
+                        {
+                            this.content.Opacity = it.EndValue;
+                            this.contentFadingAnimator = null;
+                            this.IsFadingContent = false;
+                            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFadingContent)));
+                        };
+                        it.Duration = ContentFadeOutDuration;
+                        it.Interpolator = Interpolators.Deceleration;
+                        it.ProgressChanged += (_, e) => this.content.Opacity = it.Value;
+                        it.Start();
+                    });
+                    if (!this.IsFadingContent)
                     {
-                        this.IsFadingContent = false;
+                        this.IsFadingContent = true;
                         this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFadingContent)));
                     }
-                    this.content = e.NewValue as Control;
-                    if (this.content != null)
-                        this.content.Opacity = window.HasDialogs ? ContentFadeOutOpacity : 1.0;
                 }
-                else if (e.Property == CarinaStudio.Controls.Window.HasDialogsProperty)
+                else
                 {
-                    if (this.content == null)
-                        return;
-                    if (window.HasDialogs)
+                    if (!this.IsFadingContent)
                     {
-                        this.fadeInContentAction.Cancel();
-                        this.contentFadingAnimator?.Cancel();
-                        this.contentFadingAnimator = new DoubleAnimator(this.content.Opacity, ContentFadeOutOpacity).Also(it =>
-                        {
-                            it.Completed += (_, e) =>
-                            {
-                                this.contentFadingAnimator = null;
-                                this.IsFadingContent = false;
-                                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFadingContent)));
-                            };
-                            it.Duration = ContentFadeOutDuration;
-                            it.Interpolator = Interpolators.Deceleration;
-                            it.ProgressChanged += (_, e) => this.content.Opacity = it.Value;
-                            it.Start();
-                        });
-                        if (!this.IsFadingContent)
-                        {
-                            this.IsFadingContent = true;
-                            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFadingContent)));
-                        }
+                        this.IsFadingContent = true;
+                        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFadingContent)));
                     }
-                    else
-                    {
-                        if (!this.IsFadingContent)
-                        {
-                            this.IsFadingContent = true;
-                            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFadingContent)));
-                        }
-                        this.fadeInContentAction.Schedule(ContentFadeInDelay);
-                    }
+                    this.fadeInContentAction.Schedule(ContentFadeInDelay);
                 }
-            };
+            });
         }
 
 
