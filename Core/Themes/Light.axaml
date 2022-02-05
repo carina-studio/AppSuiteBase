@@ -9,9 +9,6 @@
 	<Styles.Resources>
 
 		<!-- Button -->
-		<Color x:Key="Color/Button.Border">#22000000</Color>
-		<Color x:Key="Color/Button.Border.Dark">#33000000</Color>
-		<Color x:Key="Color/Button.Border.Light">#11000000</Color>
 		<SolidColorBrush x:Key="ButtonBackground" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.5"/>
 		<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource SystemBaseHighColor}" Opacity="0.2"/>
 		<SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.8"/>
@@ -23,6 +20,11 @@
 		<SolidColorBrush x:Key="ComboBoxBackgroundUnfocused" Color="{DynamicResource SystemAltMediumLowColor}"/>
 		<SolidColorBrush x:Key="ComboBoxBorderBrush">#9f9f9f</SolidColorBrush>
 		<SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver">#7f7f7f</SolidColorBrush>
+
+		<!-- Control -->
+		<Color x:Key="Color/Control.Border">#22000000</Color>
+		<Color x:Key="Color/Control.Border.Dark">#33000000</Color>
+		<Color x:Key="Color/Control.Border.Light">#11000000</Color>
 
 		<!-- Dialog -->
 		<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#e0e0e0</Color>
