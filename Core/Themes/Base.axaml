@@ -71,11 +71,13 @@
 		<StaticResourceExtension x:Key="ComboBoxBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
 		<StaticResourceExtension x:Key="ComboBoxBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
 		<StaticResourceExtension x:Key="ComboBoxBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
+		<SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="{DynamicResource Color/Control.Border}"/>
 		<Thickness x:Key="ComboBoxDropdownBorderPadding">4,3,4,3</Thickness>
+		<Thickness x:Key="ComboBoxDropdownBorderThickness">1,1,1,2</Thickness>
 		<Thickness x:Key="ComboBoxDropdownContentMargin">0</Thickness>
 
 		<!-- ComboBoxItem -->
-		<CornerRadius x:Key="CornerRadius/ComboBoxItem">3</CornerRadius>
+		<CornerRadius x:Key="CornerRadius/ComboBoxItem">5</CornerRadius>
 		<Thickness x:Key="Thickness/ComboBoxItem.Margin">0,1,0,1</Thickness>
 		<Thickness x:Key="Thickness/ComboBoxItem.Padding">6</Thickness>
 
@@ -89,6 +91,12 @@
 		<CornerRadius x:Key="ControlCornerRadius">4</CornerRadius>
 		<Thickness x:Key="Thickness/Control.Border">1</Thickness>
 		<Thickness x:Key="Thickness/Control.Border.Focused">1</Thickness>
+
+		<!-- DatePicker -->
+		<StaticResourceExtension x:Key="DatePickerButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
+		<StaticResourceExtension x:Key="DatePickerButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
+		<StaticResourceExtension x:Key="DatePickerButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
+		<StaticResourceExtension x:Key="DatePickerButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
 
 		<!-- Dialog -->
 		<SolidColorBrush x:Key="Brush/Dialog.ControlButtonsPanel.Background" Color="{DynamicResource Color/Dialog.ControlButtonsPanel.Background}"/>
@@ -126,6 +134,11 @@
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,3,0,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">0,0,0,15</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">0,0,0,10</Thickness>
+
+		<!-- Expander -->
+		<SolidColorBrush x:Key="ExpanderBackgroundDisabled" Color="{DynamicResource SystemAltMediumHighColor}" Opacity="0.5"/>
+		<SolidColorBrush x:Key="ExpanderDropDownBackground" Color="{DynamicResource ExpanderDropDownBackground}" Opacity="0.5"/>
+		<StaticResourceExtension x:Key="ExpanderBorderBrush" ResourceKey="Brush/Control.Border"/>
 
 		<!-- GridSplitter -->
 		<sys:Double x:Key="Double/GridSplitter.Thickness">5</sys:Double>
@@ -167,10 +180,10 @@
 		<SolidColorBrush x:Key="Brush/LinkTextBlock.Foreground.Pressed" Color="{DynamicResource Color/LinkTextBlock.Foreground.Pressed}"/>
 
 		<!-- ListBox -->
-		<Thickness x:Key="Thickness/ListBox.Padding">5</Thickness>
+		<Thickness x:Key="Thickness/ListBox.Padding">3</Thickness>
 
 		<!-- ListBoxItem -->
-		<CornerRadius x:Key="CornerRadius/ListBoxItem">3</CornerRadius>
+		<CornerRadius x:Key="CornerRadius/ListBoxItem">4</CornerRadius>
 		<Thickness x:Key="Thickness/ListBoxItem.Margin">0,1,0,1</Thickness>
 		<Thickness x:Key="Thickness/ListBoxItem.Padding">6</Thickness>
 
@@ -184,18 +197,22 @@
 		<Thickness x:Key="Thickness/Menu.Padding">3</Thickness>
 
 		<!-- MenuFlyout -->
+		<StaticResourceExtension x:Key="MenuFlyoutPresenterBorderBrush" ResourceKey="Brush/Control.Border"/>
 		<Thickness x:Key="MenuFlyoutPresenterThemePadding">4</Thickness>
 		<Thickness x:Key="MenuFlyoutScrollerMargin">0</Thickness>
 		<Thickness x:Key="Thickness/MenuFlyout.Separator.Margin">0,3,0,3</Thickness>
 
 		<!-- MenuItem -->
-		<CornerRadius x:Key="CornerRadius/MenuItem">3</CornerRadius>
+		<CornerRadius x:Key="CornerRadius/MenuItem">5</CornerRadius>
 		<Thickness x:Key="Thickness/MenuItem.Padding">6</Thickness>
 
 		<!-- MessageDialog -->
 		<sys:Double x:Key="Double/MessageDialog.Icon.Size">45</sys:Double>
 		<sys:Double x:Key="Double/MessageDialog.MinWidth">200</sys:Double>
 		<Thickness x:Key="Thickness/MessageDialog.Icon.Margin">0,0,15,0</Thickness>
+
+		<!-- Overlay -->
+		<CornerRadius x:Key="OverlayCornerRadius">8</CornerRadius>
 
 		<!-- RepeatButton -->
 		<StaticResourceExtension x:Key="RepeatButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
@@ -288,10 +305,12 @@
 		<Thickness x:Key="Thickness/TabItem.Header.Padding">10</Thickness>
 
 		<!-- TextBox -->
+		<SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.3"/>
 		<LinearGradientBrush x:Key="TextControlBorderBrush" EndPoint="0%,100%" StartPoint="0%,0%">
 			<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border.Dark}"/>
 			<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border}"/>
 		</LinearGradientBrush>
+		<StaticResourceExtension x:Key="TextControlBorderBrushDisabled" ResourceKey="TextControlBorderBrush"/>
 		<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>
 		<SolidColorBrush x:Key="Brush/TextBox.Foreground.Error" Color="{DynamicResource Color/TextBox.Foreground.Error}"/>
 		<SolidColorBrush x:Key="Brush/TextBox.SelectionForeground.Error" Color="{DynamicResource Color/TextBox.SelectionForeground.Error}"/>
@@ -305,6 +324,12 @@
 
 		<!-- TextInputDialog -->
 		<sys:Double x:Key="Double/TextInputDialog.Width">450</sys:Double>
+
+		<!-- TimePicker -->
+		<StaticResourceExtension x:Key="TimePickerButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
+		<StaticResourceExtension x:Key="TimePickerButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
+		<StaticResourceExtension x:Key="TimePickerButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
+		<StaticResourceExtension x:Key="TimePickerButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
 
 		<!-- ToggleButton -->
 		<StaticResourceExtension x:Key="ToggleButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
@@ -551,6 +576,11 @@
 		<Setter Property="ShowInTaskbar" Value="False"/>
 		<Setter Property="SizeToContent" Value="Height"/>
 		<Setter Property="WindowStartupLocation" Value="CenterOwner"/>
+	</Style>
+
+	<!-- Expander -->
+	<Style Selector="Expander:disabled /template/ ToggleButton#ExpanderHeader">
+		<Setter Property="Opacity" Value="0.5"/>
 	</Style>
 
 	<!-- GridSplitter -->
@@ -1118,11 +1148,14 @@
 		<Setter Property="OffContent" Value="{x:Null}"/>
 		<Setter Property="OnContent" Value="{x:Null}"/>
 	</Style>
+	<Style Selector="ToggleSwitch:disabled">
+		<Setter Property="Opacity" Value="0.5"/>
+	</Style>
 
 	<!-- ToolBar -->
 	<Style Selector="Border.ToolBar">
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Background}"/>
-		<Setter Property="BorderBrush" Value="{StaticResource Brush/Control.Border}"/>
+		<Setter Property="BorderBrush" Value="{StaticResource Brush/Control.Border.Dark}"/>
 		<Setter Property="BorderThickness" Value="0,0,0,1"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Padding}"/>
 	</Style>

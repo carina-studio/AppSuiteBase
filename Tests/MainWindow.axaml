@@ -273,16 +273,26 @@
 
 						<TextBlock Text="{Binding $parent[Window].Application.IsDebugMode, StringFormat={}IsDebugMode: {0}}" Margin="5"/>
 
-						<Expander HorizontalAlignment="Left" Header="Expander">
-							<StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<Expander HorizontalAlignment="Left" Header="Expander" Margin="5">
+								<StackPanel>
 
-								<appControls:DatePicker HorizontalAlignment="Left"/>
-								<appControls:TimePicker HorizontalAlignment="Left"/>
+									<appControls:DatePicker HorizontalAlignment="Left"/>
+									<appControls:TimePicker HorizontalAlignment="Left"/>
 
-								<Slider HorizontalAlignment="Left" Width="200"/>
+									<Slider HorizontalAlignment="Left" Width="200"/>
 
-							</StackPanel>
-						</Expander>
+								</StackPanel>
+							</Expander>
+							<Expander HorizontalAlignment="Left" IsExpanded="True" IsEnabled="False" Header="Expander" Margin="5">
+								<StackPanel>
+
+									<Slider HorizontalAlignment="Left" Width="200"/>
+
+								</StackPanel>
+							</Expander>
+						</StackPanel>
+						
 
 						<StackPanel Orientation="Horizontal">
 							<Button Content="Button" Margin="5"/>
@@ -292,6 +302,12 @@
 							<ToggleButton Content="ToggleButton" IsChecked="True" IsEnabled="False" Margin="5"/>
 							<RepeatButton Content="RepeatButton" Margin="5"/>
 							<RepeatButton Content="RepeatButton" IsEnabled="False" Margin="5"/>
+						</StackPanel>
+
+						<StackPanel Orientation="Horizontal">
+							<ToggleSwitch Margin="5"/>
+							<ToggleSwitch IsEnabled="False" Margin="5"/>
+							<ToggleSwitch IsChecked="True" IsEnabled="False" Margin="5"/>
 						</StackPanel>
 
 						<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5" ToolTip.Tip="{DynamicResource String/Common.Copy.WithGesture}"/>

@@ -25,6 +25,12 @@
 		<Color x:Key="Color/Control.Border.Dark">#11ffffff</Color>
 		<Color x:Key="Color/Control.Border.Light">#33ffffff</Color>
 
+		<!-- DatePicker -->
+		<StaticResourceExtension x:Key="DatePickerButtonBackground" ResourceKey="ButtonBackground"/>
+		<StaticResourceExtension x:Key="DatePickerButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+		<StaticResourceExtension x:Key="DatePickerButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+		<StaticResourceExtension x:Key="DatePickerButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
+
 		<!-- Dialog -->
 		<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#141414</Color>
 		<Color x:Key="Color/Dialog.TextBlock.Border.Header1">#55ffffff</Color>
@@ -67,6 +73,12 @@
 
 		<!-- TextBox -->
 		<SolidColorBrush x:Key="TextControlBorderBrushPointerOver">#7fafafaf</SolidColorBrush>
+
+		<!-- TimePicker -->
+		<StaticResourceExtension x:Key="TimePickerButtonBackground" ResourceKey="ButtonBackground"/>
+		<StaticResourceExtension x:Key="TimePickerButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+		<StaticResourceExtension x:Key="TimePickerButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+		<StaticResourceExtension x:Key="TimePickerButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
 
 		<!-- ToggleButton -->
 		<StaticResourceExtension x:Key="ToggleButtonBackground" ResourceKey="ButtonBackground"/>
