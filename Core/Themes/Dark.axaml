@@ -10,12 +10,15 @@
 
 		<!-- Button -->
 		<SolidColorBrush x:Key="ButtonBackground" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.7"/>
+		<SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.3"/>
 		<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource SystemBaseHighColor}" Opacity="0.3"/>
 		<SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.5"/>
 
 		<!-- ComboBox -->
-		<SolidColorBrush x:Key="ComboBoxBorderBrush">#5f5f5f</SolidColorBrush>
-		<SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver">#afafaf</SolidColorBrush>
+		<StaticResourceExtension x:Key="ComboBoxBackground" ResourceKey="ButtonBackground"/>
+		<StaticResourceExtension x:Key="ComboBoxBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+		<StaticResourceExtension x:Key="ComboBoxBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+		<StaticResourceExtension x:Key="ComboBoxBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
 
 		<!-- Control -->
 		<Color x:Key="Color/Control.Border">#22ffffff</Color>
@@ -40,9 +43,10 @@
 		<Color x:Key="Color/Menu.Background">#1e1e1e</Color>
 
 		<!-- RepeatButton -->
-		<SolidColorBrush x:Key="RepeatButtonBackground" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.7"/>
-		<SolidColorBrush x:Key="RepeatButtonBackgroundPointerOver" Color="{DynamicResource SystemBaseHighColor}" Opacity="0.3"/>
-		<SolidColorBrush x:Key="RepeatButtonBackgroundPressed" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.5"/>
+		<StaticResourceExtension x:Key="RepeatButtonBackground" ResourceKey="ButtonBackground"/>
+		<StaticResourceExtension x:Key="RepeatButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+		<StaticResourceExtension x:Key="RepeatButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+		<StaticResourceExtension x:Key="RepeatButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
 
 		<!-- Separator -->
 		<Color x:Key="Color/Separator.Background">#4fffffff</Color>
@@ -62,14 +66,15 @@
 		<Color x:Key="Color/TabItem.Header.Border.Selected">#101010</Color>
 
 		<!-- TextBox -->
-		<SolidColorBrush x:Key="TextControlBorderBrush">#5f5f5f</SolidColorBrush>
-		<SolidColorBrush x:Key="TextControlBorderBrushPointerOver">#afafaf</SolidColorBrush>
+		<SolidColorBrush x:Key="TextControlBorderBrushPointerOver">#7fafafaf</SolidColorBrush>
 
 		<!-- ToggleButton -->
-		<SolidColorBrush x:Key="ToggleButtonBackground" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.7"/>
-		<SolidColorBrush x:Key="ToggleButtonBackgroundPointerOver" Color="{DynamicResource SystemBaseHighColor}" Opacity="0.3"/>
-		<SolidColorBrush x:Key="ToggleButtonBackgroundPressed" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.5"/>
+		<StaticResourceExtension x:Key="ToggleButtonBackground" ResourceKey="ButtonBackground"/>
+		<StaticResourceExtension x:Key="ToggleButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+		<StaticResourceExtension x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+		<StaticResourceExtension x:Key="ToggleButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
 		<SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource SystemAccentColorDark1}" />
+		<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedDisabled" Color="{DynamicResource SystemAccentColorDark1}" Opacity="0.5"/>
 		<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{DynamicResource SystemAccentColor}" />
 		<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
 
