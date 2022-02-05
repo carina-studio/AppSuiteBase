@@ -21,9 +21,9 @@
 		<StaticResourceExtension x:Key="ComboBoxBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
 
 		<!-- Control -->
-		<Color x:Key="Color/Control.Border">#22ffffff</Color>
-		<Color x:Key="Color/Control.Border.Dark">#11ffffff</Color>
-		<Color x:Key="Color/Control.Border.Light">#33ffffff</Color>
+		<Color x:Key="Color/Control.Border">#17ffffff</Color>
+		<Color x:Key="Color/Control.Border.Dark">#10ffffff</Color>
+		<Color x:Key="Color/Control.Border.Light">#20ffffff</Color>
 
 		<!-- DatePicker -->
 		<StaticResourceExtension x:Key="DatePickerButtonBackground" ResourceKey="ButtonBackground"/>
