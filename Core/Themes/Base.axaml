@@ -54,6 +54,9 @@
 		<Thickness x:Key="Thickness/BrowseButton.Margin">5,0,0,0</Thickness>
 
 		<!-- Button -->
+		<SolidColorBrush x:Key="AccentButtonBackground" Color="{DynamicResource SystemAccentColor}" />
+		<SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="{DynamicResource SystemAccentColorLight1}" />
+		<SolidColorBrush x:Key="AccentButtonBackgroundPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
 		<LinearGradientBrush x:Key="ButtonBorderBrush" EndPoint="0%,100%" StartPoint="0%,0%">
 			<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border.Light}"/>
 			<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border.Dark}"/>
@@ -335,6 +338,10 @@
 		<StaticResourceExtension x:Key="TimePickerButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
 
 		<!-- ToggleButton -->
+		<SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource SystemAccentColor}" />
+		<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedDisabled" Color="{DynamicResource SystemAccentColor}" Opacity="0.5"/>
+		<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{DynamicResource SystemAccentColorLight1}" />
+		<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
 		<StaticResourceExtension x:Key="ToggleButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
 		<StaticResourceExtension x:Key="ToggleButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
 		<StaticResourceExtension x:Key="ToggleButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>

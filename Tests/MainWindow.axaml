@@ -297,6 +297,8 @@
 						<StackPanel Orientation="Horizontal">
 							<Button Content="Button" Margin="5"/>
 							<Button Content="Button" IsEnabled="False" Margin="5"/>
+							<Button Classes="accent" Content="Button" Margin="5"/>
+							<Button Classes="accent" Content="Button" IsEnabled="False" Margin="5"/>
 							<ToggleButton Content="ToggleButton" Margin="5"/>
 							<ToggleButton Content="ToggleButton" IsEnabled="False" Margin="5"/>
 							<ToggleButton Content="ToggleButton" IsChecked="True" IsEnabled="False" Margin="5"/>
