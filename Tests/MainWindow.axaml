@@ -214,9 +214,17 @@
 						<TextBlock Text="{DynamicResource String/ApplicationOptions.LogOutputTargetPort}" Margin="5,5,5,0"/>
 						<NumericUpDown HorizontalAlignment="Left" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
 
-						<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5"/>
-						<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage, StringFormat={}CPU: {0:F2}%}" Margin="5"/>
-						<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Memory Usage: {0}}" Margin="5"/>
+						<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" CornerRadius="5" HorizontalAlignment="Left" Margin="5" Padding="5">
+							<StackPanel>
+								<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5"/>
+								<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage, StringFormat={}CPU: {0:F2}%}" Margin="5"/>
+								<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Memory Usage: {0}}" Margin="5"/>
+								<TextBlock Text="{Binding $parent[Window].Application.EffectiveCustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5"/>
+								<NumericUpDown HorizontalAlignment="Left" Increment="0.1" Minimum="1.0" Maximum="2.0" Margin="5" Width="200" Value="{Binding $parent[Window].Application.CustomScreenScaleFactor, Mode=TwoWay}" FormatString="F2"/>
+								<TextBlock Text="{Binding $parent[Window].ActualTransparencyLevel}" Margin="5"/>
+								<TextBlock Text="{Binding $parent[Window].Application.IsDebugMode, StringFormat={}IsDebugMode: {0}}" Margin="5"/>
+							</StackPanel>
+						</Border>
 
 						<appControls:RegexTextBox Name="regexTextBox" Height="60" HorizontalAlignment="Left" Margin="5" TextWrapping="Wrap" Width="200">
 							<appControls:RegexTextBox.PredefinedGroups>
@@ -266,13 +274,6 @@
 						</appControls:StringInterpolationFormatTextBox>
 						<appControls:StringInterpolationFormatTextBox HorizontalAlignment="Left" Margin="5" Watermark="String interpolation" Width="400"/>
 
-						<TextBlock Text="{Binding $parent[Window].Application.EffectiveCustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5"/>
-						<NumericUpDown HorizontalAlignment="Left" Increment="0.1" Minimum="1.0" Maximum="2.0" Margin="5" Width="200" Value="{Binding $parent[Window].Application.CustomScreenScaleFactor, Mode=TwoWay}" FormatString="F2"/>
-
-						<TextBlock Text="{Binding $parent[Window].ActualTransparencyLevel}" Margin="5"/>
-
-						<TextBlock Text="{Binding $parent[Window].Application.IsDebugMode, StringFormat={}IsDebugMode: {0}}" Margin="5"/>
-
 						<StackPanel Orientation="Horizontal">
 							<Expander HorizontalAlignment="Left" Header="Expander" Margin="5">
 								<StackPanel>
@@ -293,7 +294,6 @@
 							</Expander>
 						</StackPanel>
 						
-
 						<StackPanel Orientation="Horizontal">
 							<Button Content="Button" Margin="5"/>
 							<Button Content="Button" IsEnabled="False" Margin="5"/>
@@ -308,6 +308,12 @@
 							<ToggleSwitch Margin="5"/>
 							<ToggleSwitch IsEnabled="False" Margin="5"/>
 							<ToggleSwitch IsChecked="True" IsEnabled="False" Margin="5"/>
+						</StackPanel>
+
+						<StackPanel Orientation="Horizontal">
+							<Button Command="{Binding $parent[Window].ShowAppInfoDialog}" Content="Show App Info" Margin="5"/>
+							<Button Command="{Binding $parent[Window].ShowTestDialog}" Content="Show Test Dialog" Margin="5"/>
+							<Button Command="{Binding $parent[Window].RestartApp}" Content="Restart App" Margin="5"/>
 						</StackPanel>
 
 						<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5" ToolTip.Tip="{DynamicResource String/Common.Copy.WithGesture}"/>

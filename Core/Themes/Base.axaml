@@ -308,7 +308,7 @@
 		<SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.3"/>
 		<LinearGradientBrush x:Key="TextControlBorderBrush" EndPoint="0%,100%" StartPoint="0%,0%">
 			<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border.Dark}"/>
-			<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border}"/>
+			<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border.Light}"/>
 		</LinearGradientBrush>
 		<StaticResourceExtension x:Key="TextControlBorderBrushDisabled" ResourceKey="TextControlBorderBrush"/>
 		<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>
@@ -342,14 +342,18 @@
 		<StaticResourceExtension x:Key="ToggleButtonBorderBrushCheckedPressed" ResourceKey="ButtonBorderBrushPressed"/>
 
 		<!-- ToolBar -->
-		<Color x:Key="Color/ToolBar.Background">#ffffff</Color>
-		<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Size">8</sys:Double>
-		<sys:Double x:Key="Double/ToolBar.Button.Icon.Size">24</sys:Double>
-		<sys:Double x:Key="Double/ToolBar.Button.Size">34</sys:Double>
 		<SolidColorBrush x:Key="Brush/ToolBar.Background" Color="{DynamicResource Color/ToolBar.Background}"/>
-		<Thickness x:Key="Thickness/ToolBar.Button.Padding">5</Thickness>
+		<SolidColorBrush x:Key="Brush/ToolBar.Button.Background.PointerOver" Color="{DynamicResource Color/ToolBar.Button.Background.PointerOver}"/>
+		<SolidColorBrush x:Key="Brush/ToolBar.Button.Background.Pressed" Color="{DynamicResource Color/ToolBar.Button.Background.Pressed}"/>
+		<Color x:Key="Color/ToolBar.Background">#ffffff</Color>
+		<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#ffffff</Color>
+		<Color x:Key="Color/ToolBar.Button.Background.Pressed">#ffffff</Color>
+		<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Size">8</sys:Double>
+		<sys:Double x:Key="Double/ToolBar.Button.Icon.Size">22</sys:Double>
+		<sys:Double x:Key="Double/ToolBar.Button.Size">34</sys:Double>
+		<Thickness x:Key="Thickness/ToolBar.Button.Padding">6</Thickness>
 		<Thickness x:Key="Thickness/ToolBar.Item.Margin">1,0,1,0</Thickness>
-		<Thickness x:Key="Thickness/ToolBar.Padding">3</Thickness>
+		<Thickness x:Key="Thickness/ToolBar.Padding">4</Thickness>
 		<Thickness x:Key="Thickness/ToolBar.Separator.Margin">2,3,2,3</Thickness>
 		<Thickness x:Key="Thickness/ToolBar.TextBlock.Margin">3,0,2,0</Thickness>
 
@@ -443,7 +447,7 @@
 	</Style>
 	<Style Selector="Border.Dialog_ControlButtonsPanel">
 		<Setter Property="Background" Value="{StaticResource Brush/Dialog.ControlButtonsPanel.Background}"/>
-		<Setter Property="BorderBrush" Value="{StaticResource Brush/Control.Border}"/>
+		<Setter Property="BorderBrush" Value="{StaticResource Brush/Control.Border.Light}"/>
 		<Setter Property="BorderThickness" Value="0,1,0,0"/>
 		<Setter Property="DockPanel.Dock" Value="Bottom"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -1183,6 +1187,12 @@
 	<Style Selector="Button.ToolBar_Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
 	</Style>
+	<Style Selector="Button.ToolBar_Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.PointerOver}"/>
+	</Style>
+	<Style Selector="Button.ToolBar_Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Pressed}"/>
+	</Style>
 	<Style Selector="ComboBox.ToolBar_ComboBox">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
@@ -1221,6 +1231,12 @@
 	</Style>
 	<Style Selector="RepeatButton.ToolBar_RepeatButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="RepeatButton.ToolBar_RepeatButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.PointerOver}"/>
+	</Style>
+	<Style Selector="RepeatButton.ToolBar_RepeatButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Pressed}"/>
 	</Style>
 	<Style Selector="Separator.ToolBar_Separator">
 		<Setter Property="Background" Value="{StaticResource Brush/Separator.Background}"/>
@@ -1266,6 +1282,18 @@
 	</Style>
 	<Style Selector="ToggleButton.ToolBar_ToggleButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.PointerOver}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Pressed}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton:checked:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPressed}"/>
 	</Style>
 
 	<!-- ToolBarScrollViewer -->
