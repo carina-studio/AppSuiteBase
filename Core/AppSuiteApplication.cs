@@ -1059,9 +1059,9 @@ namespace CarinaStudio.AppSuite
                 this.mainWindows[i].Let(it =>
                 {
                     var bounds = windowBounds[i];
-                    var sysDecorSizes = it.IsExtendedIntoWindowDecorations 
-                        ? new Thickness() 
-                        : Controls.ExtendedClientAreaWindowConfiguration.GetSystemDecorationSizes(screen);
+                    var sysDecorSizes = it.IsExtendedIntoWindowDecorations
+                        ? new Thickness()
+                        : Controls.WindowExtensions.GetSystemDecorationSizes(it);
                     it.WindowState = Avalonia.Controls.WindowState.Normal;
                     it.Position = new PixelPoint(bounds.X, bounds.Y);
                     if (Platform.IsLinux)

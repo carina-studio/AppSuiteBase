@@ -16,10 +16,6 @@
 		<PackageProjectUrl>https://github.com/carina-studio/AppSuiteBase/</PackageProjectUrl>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="$(TargetFramework.Contains('windows'))">
-		<UseWindowsForms>True</UseWindowsForms>
-	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DocumentationFile>CarinaStudio.AppSuite.Core.xml</DocumentationFile>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>

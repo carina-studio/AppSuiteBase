@@ -1,9 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using System;
-#if WINDOWS
-using System.Windows.Forms;
-#endif
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -38,32 +35,6 @@ namespace CarinaStudio.AppSuite.Controls
                 return new Thickness(7); // Windows 8
             return new Thickness(0);
         });
-
-
-        /// <summary>
-        /// Get size of system decorations.
-        /// </summary>
-        /// <param name="screen">Screen.</param>
-        /// <returns>Size of system decorations.</returns>
-        public static Thickness GetSystemDecorationSizes(Avalonia.Platform.Screen screen)
-        {
-            var pixelDensity = screen.PixelDensity;
-            if (Platform.IsGnome)
-                return new Thickness(0, 75 / pixelDensity, 0, 0); // Ubuntu
-            if (Platform.IsWindows)
-            {
-#if WINDOWS
-                var borderSize = SystemInformation.Border3DSize;
-                return new Thickness(
-                    borderSize.Width / pixelDensity,
-                    (Math.Max(SystemInformation.CaptionHeight, SystemInformation.CaptionButtonSize.Height) + borderSize.Height) / pixelDensity,
-                    borderSize.Width / pixelDensity,
-                    borderSize.Height / pixelDensity
-                );
-#endif
-            }
-            return new Thickness();
-        }
 
 
         /// <summary>

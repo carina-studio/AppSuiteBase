@@ -17,6 +17,7 @@ using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using TabControl = Avalonia.Controls.TabControl;
 
 namespace CarinaStudio.AppSuite.Tests
@@ -51,6 +52,9 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
+
+
+        //public override bool IsExtendingClientAreaAllowed => false;
 
 
         protected override void OnApplicationPropertyChanged(PropertyChangedEventArgs e)
@@ -216,9 +220,10 @@ namespace CarinaStudio.AppSuite.Tests
 
         void Test()
         {
-            var sysDecorSizes = ExtendedClientAreaWindowConfiguration.GetSystemDecorationSizes(Screens.ScreenFromVisual(this));
+            var sysDecorSizes = this.GetSystemDecorationSizes();
             //this.Settings.SetValue<bool>(SettingKeys.ShowProcessInfo, !this.Settings.GetValueOrDefault(SettingKeys.ShowProcessInfo));
         }
+
 
         void Test2()
         {
