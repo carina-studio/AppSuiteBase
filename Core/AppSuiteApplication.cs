@@ -512,7 +512,7 @@ namespace CarinaStudio.AppSuite
 
             // check update by package manifest
             var stopWatch = new Stopwatch().Also(it => it.Start());
-            var packageResolver = new JsonPackageResolver() { Source = new WebRequestStreamProvider(packageManifestUri) };
+            var packageResolver = new JsonPackageResolver(this) { Source = new WebRequestStreamProvider(packageManifestUri) };
             this.Logger.LogInformation("Start checking update");
             try
             {

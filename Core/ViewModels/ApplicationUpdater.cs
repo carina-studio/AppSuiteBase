@@ -475,7 +475,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 			// resolve info of auto updater
 			this.updatePreparationCancellationTokenSource = new CancellationTokenSource();
-			var auPackageResolver = new JsonPackageResolver() { Source = new WebRequestStreamProvider(AutoUpdaterPackageManifestUri) };
+			var auPackageResolver = new JsonPackageResolver(this.Application) { Source = new WebRequestStreamProvider(AutoUpdaterPackageManifestUri) };
 			try
 			{
 				await auPackageResolver.StartAndWaitAsync(this.updatePreparationCancellationTokenSource.Token);
@@ -566,11 +566,11 @@ namespace CarinaStudio.AppSuite.ViewModels
 			}
 
 			// download auto updater
-			this.auUpdater = new Updater()
+			this.auUpdater = new Updater(this.Application)
 			{
 				ApplicationDirectoryPath = tempAutoUpdaterDirectory,
-				PackageInstaller = new ZipPackageInstaller(),
-				PackageResolver = new JsonPackageResolver() { Source = new WebRequestStreamProvider(AutoUpdaterPackageManifestUri) },
+				PackageInstaller = new ZipPackageInstaller(this.Application),
+				PackageResolver = new JsonPackageResolver(this.Application) { Source = new WebRequestStreamProvider(AutoUpdaterPackageManifestUri) },
 			};
 			this.Logger.LogWarning($"Start downloading auto updater to '{tempAutoUpdaterDirectory}'");
 			this.auUpdater.PropertyChanged += this.OnAuUpdaterPropertyChanged;
