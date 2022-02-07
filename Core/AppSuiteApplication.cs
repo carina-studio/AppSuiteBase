@@ -1059,17 +1059,28 @@ namespace CarinaStudio.AppSuite
                 this.mainWindows[i].Let(it =>
                 {
                     var bounds = windowBounds[i];
+                    var titleBarHeight = it.IsExtendedIntoWindowDecorations ? 0 : Controls.ExtendedClientAreaWindowConfiguration.GetTitleBarSize(screen);
                     it.WindowState = Avalonia.Controls.WindowState.Normal;
                     it.Position = new PixelPoint(bounds.X, bounds.Y);
+                    if (Platform.IsLinux)
+                    {
+                        // [Workaround] Sometimes the first position setting won't be applied
+                        this.SynchronizationContext.PostDelayed(() =>
+                            it.Position = new PixelPoint(bounds.X, bounds.Y), 100);
+                        
+                        // [Workaround] Height of window may be changed automatically later after setting size of window
+                        this.SynchronizationContext.PostDelayed(() =>
+                            (it as Controls.IMainWindow)?.CancelSavingSize(), 300);
+                    }
                     if (Platform.IsMacOS)
                     {
                         it.Width = bounds.Width;
-                        it.Height = bounds.Height;
+                        it.Height = bounds.Height - titleBarHeight;
                     }
                     else
                     {
                         it.Width = bounds.Width / pixelDensity;
-                        it.Height = bounds.Height / pixelDensity;
+                        it.Height = (bounds.Height / pixelDensity) - titleBarHeight;
                     }
                     (it as Controls.IMainWindow)?.CancelSavingSize();
                     Controls.WindowExtensions.ActivateAndBringToFront(it);

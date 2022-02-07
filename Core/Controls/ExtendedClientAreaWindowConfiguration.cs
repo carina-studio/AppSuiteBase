@@ -38,6 +38,19 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
+        /// Get default size of title bar.
+        /// </summary>
+        /// <param name="screen">Screen.</param>
+        /// <returns>Size of title bar.</returns>
+        public static double GetTitleBarSize(Avalonia.Platform.Screen screen)
+        {
+            if (Platform.IsGnome)
+                return 75 / screen.PixelDensity; // Ubuntu
+            return 0;
+        }
+
+
+        /// <summary>
         /// Check whether extending client area is supported on current platform or not.
         /// </summary>
         public static bool IsExtendedClientAreaSupported { get; } = Global.Run(() =>
