@@ -774,6 +774,7 @@
 	</Style>
 	<Style Selector="Button.StatusBar_Button">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
 		<Setter Property="CornerRadius" Value="0"/>
 		<Setter Property="Margin" Value="0"/>
@@ -831,6 +832,28 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 	</Style>
+	<Style Selector="RepeatButton.StatusBar_RepeatButton">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
+		<Setter Property="CornerRadius" Value="0"/>
+		<Setter Property="Margin" Value="0"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/StatusBar.Button.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="RepeatButton.StatusBar_RepeatButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground.Disabled}"/>
+	</Style>
+	<Style Selector="RepeatButton.StatusBar_RepeatButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.PointerOver}"/>
+		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
+	</Style>
+	<Style Selector="RepeatButton.StatusBar_RepeatButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
+		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
+	</Style>
 	<Style Selector="Separator.StatusBar_Separator">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="Width" Value="20"/>
@@ -841,6 +864,7 @@
 	</Style>
 	<Style Selector="ToggleButton.StatusBar_ToggleButton">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
 		<Setter Property="CornerRadius" Value="0"/>
 		<Setter Property="Margin" Value="0"/>

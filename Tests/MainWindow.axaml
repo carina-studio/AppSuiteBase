@@ -46,8 +46,13 @@
 				<Button Classes="StatusBar_Button" IsEnabled="False">Button</Button>
 
 				<Separator Classes="StatusBar_Separator"/>
-				<ToggleButton Classes="StatusBar_ToggleButton">Button</ToggleButton>
-				<ToggleButton Classes="StatusBar_ToggleButton" IsEnabled="False">Button</ToggleButton>
+				<ToggleButton Classes="StatusBar_ToggleButton">ToggleButton</ToggleButton>
+				<ToggleButton Classes="StatusBar_ToggleButton" IsEnabled="False">ToggleButton</ToggleButton>
+				<ToggleButton Classes="StatusBar_ToggleButton" IsChecked="True" IsEnabled="False">ToggleButton</ToggleButton>
+
+				<Separator Classes="StatusBar_Separator"/>
+				<RepeatButton Classes="StatusBar_RepeatButton">RepeatButton</RepeatButton>
+				<RepeatButton Classes="StatusBar_RepeatButton" IsEnabled="False">RepeatButton</RepeatButton>
 			</StackPanel>
 		</Border>
 
