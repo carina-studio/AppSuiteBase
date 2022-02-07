@@ -214,8 +214,9 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        async void Test()
+        void Test()
         {
+            var sysDecorSizes = ExtendedClientAreaWindowConfiguration.GetSystemDecorationSizes(Screens.ScreenFromVisual(this));
             //this.Settings.SetValue<bool>(SettingKeys.ShowProcessInfo, !this.Settings.GetValueOrDefault(SettingKeys.ShowProcessInfo));
         }
 

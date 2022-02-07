@@ -1059,7 +1059,9 @@ namespace CarinaStudio.AppSuite
                 this.mainWindows[i].Let(it =>
                 {
                     var bounds = windowBounds[i];
-                    var titleBarHeight = it.IsExtendedIntoWindowDecorations ? 0 : Controls.ExtendedClientAreaWindowConfiguration.GetTitleBarSize(screen);
+                    var sysDecorSizes = it.IsExtendedIntoWindowDecorations 
+                        ? new Thickness() 
+                        : Controls.ExtendedClientAreaWindowConfiguration.GetSystemDecorationSizes(screen);
                     it.WindowState = Avalonia.Controls.WindowState.Normal;
                     it.Position = new PixelPoint(bounds.X, bounds.Y);
                     if (Platform.IsLinux)
@@ -1067,20 +1069,22 @@ namespace CarinaStudio.AppSuite
                         // [Workaround] Sometimes the first position setting won't be applied
                         this.SynchronizationContext.PostDelayed(() =>
                             it.Position = new PixelPoint(bounds.X, bounds.Y), 100);
-                        
+                    }
+                    if (!it.IsExtendedIntoWindowDecorations)
+                    {
                         // [Workaround] Height of window may be changed automatically later after setting size of window
                         this.SynchronizationContext.PostDelayed(() =>
                             (it as Controls.IMainWindow)?.CancelSavingSize(), 300);
                     }
                     if (Platform.IsMacOS)
                     {
-                        it.Width = bounds.Width;
-                        it.Height = bounds.Height - titleBarHeight;
+                        it.Width = bounds.Width - sysDecorSizes.Left - sysDecorSizes.Right;
+                        it.Height = bounds.Height - sysDecorSizes.Top - sysDecorSizes.Bottom;
                     }
                     else
                     {
-                        it.Width = bounds.Width / pixelDensity;
-                        it.Height = (bounds.Height / pixelDensity) - titleBarHeight;
+                        it.Width = (bounds.Width / pixelDensity) - sysDecorSizes.Left - sysDecorSizes.Right;
+                        it.Height = (bounds.Height / pixelDensity) - sysDecorSizes.Top - sysDecorSizes.Bottom;
                     }
                     (it as Controls.IMainWindow)?.CancelSavingSize();
                     Controls.WindowExtensions.ActivateAndBringToFront(it);
