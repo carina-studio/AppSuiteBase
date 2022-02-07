@@ -93,7 +93,7 @@
 		<Color x:Key="Color/Control.Border.Light">#000000</Color>
 		<CornerRadius x:Key="ControlCornerRadius">4</CornerRadius>
 		<Thickness x:Key="Thickness/Control.Border">1</Thickness>
-		<Thickness x:Key="Thickness/Control.Border.Focused">1</Thickness>
+		<Thickness x:Key="Thickness/Control.Border.Focused">2</Thickness>
 
 		<!-- DatePicker -->
 		<StaticResourceExtension x:Key="DatePickerButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
