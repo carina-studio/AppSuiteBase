@@ -53,7 +53,12 @@ namespace CarinaStudio.AppSuite.Controls
         public Uri? Uri
 		{
 			get => this.GetValue<Uri?>(UriProperty);
-			set => this.SetValue<Uri?>(UriProperty, value);
+			set 
+			{
+				if (this.IsValidationScheduled)
+                    this.Validate();
+				this.SetValue<Uri?>(UriProperty, value);
+			}
 		}
 
 

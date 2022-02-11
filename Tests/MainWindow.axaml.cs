@@ -1,3 +1,4 @@
+using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -27,6 +28,8 @@ namespace CarinaStudio.AppSuite.Tests
         const string TabItemKey = "TabItem";
 
 
+        readonly IntegerTextBox integerTextBox;
+        readonly IPAddressTextBox ipAddressTextBox;
         readonly ScheduledAction logAction;
         private readonly ObservableList<TabItem> tabItems = new();
 
@@ -40,6 +43,9 @@ namespace CarinaStudio.AppSuite.Tests
                 this.Logger.LogDebug($"Time: {DateTime.Now}");
                 this.logAction?.Schedule(500);
             });
+
+            this.integerTextBox = this.FindControl<IntegerTextBox>(nameof(integerTextBox)).AsNonNull();
+            this.ipAddressTextBox = this.FindControl<IPAddressTextBox>(nameof(ipAddressTextBox)).AsNonNull();
 
             var tabControl = this.FindControl<TabControl>("tabControl").AsNonNull();
             this.tabItems.AddRange(tabControl.Items.Cast<TabItem>());
@@ -220,7 +226,16 @@ namespace CarinaStudio.AppSuite.Tests
 
         void Test()
         {
-            var sysDecorSizes = this.GetSystemDecorationSizes();
+            //this.integerTextBox.Value = 0;
+            //this.integerTextBox.Text = "0";
+            //this.integerTextBox.Value = 1234;
+            //this.integerTextBox.Text = "1234";
+
+            //this.ipAddressTextBox.Text = "127.0.0.1";
+            //this.ipAddressTextBox.IPAddress = System.Net.IPAddress.Parse("127.0.0.1");
+            //this.ipAddressTextBox.Text = "192.168.0.1";
+            //this.ipAddressTextBox.IPAddress = System.Net.IPAddress.Parse("192.168.0.1");
+
             //this.Settings.SetValue<bool>(SettingKeys.ShowProcessInfo, !this.Settings.GetValueOrDefault(SettingKeys.ShowProcessInfo));
         }
 

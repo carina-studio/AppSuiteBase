@@ -32,7 +32,12 @@ namespace CarinaStudio.AppSuite.Controls
         public IPAddress? IPAddress
         {
             get => this.GetValue<IPAddress?>(IPAddressProperty);
-            set => this.SetValue<IPAddress?>(IPAddressProperty, value);
+            set
+            {
+                if (this.IsValidationScheduled)
+                    this.Validate();
+                this.SetValue<IPAddress?>(IPAddressProperty, value);
+            }
         }
 
 

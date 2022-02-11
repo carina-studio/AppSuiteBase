@@ -104,7 +104,7 @@ namespace CarinaStudio.AppSuite.Controls
 				var value = (T?)(object?)change.NewValue.Value;
 				if (value != null)
 				{
-					if (!this.Validate() || !this.CheckValueEquality(this.Value, value))
+					if (!this.Validate(false, out var currentValue) || !this.CheckValueEquality(currentValue, value))
 						this.Text = this.ConvertToText(value.Value);
 				}
 				else if (this.Text != null)
@@ -139,13 +139,19 @@ namespace CarinaStudio.AppSuite.Controls
 		/// Validate input <see cref="TextBox.Text"/> and generate corresponding value.
 		/// </summary>
 		/// <returns>True if input <see cref="TextBox.Text"/> generates a valid value.</returns>
-		public bool Validate()
+		public bool Validate() =>
+			this.Validate(true, out var value);
+
+
+		// Validate text.
+		bool Validate(bool updateValueAndText, out T? value)
 		{
 			// check state
 			this.VerifyAccess();
 
 			// cancel scheduled validation
-			this.validateAction.Cancel();
+			if (updateValueAndText)
+				this.validateAction.Cancel();
 
 			// trim spaces
 			var text = this.Text ?? "";
@@ -153,29 +159,40 @@ namespace CarinaStudio.AppSuite.Controls
 			if (text != trimmedText)
 			{
 				text = trimmedText;
-				this.Text = trimmedText;
-				this.validateAction.Cancel();
+				if (updateValueAndText)
+				{
+					this.Text = trimmedText;
+					this.validateAction.Cancel();
+				}
 			}
 
 			// clear object
 			if (text.Length == 0)
 			{
-				this.SetValue<T?>(ValueProperty, null);
-				this.SetValue<bool>(IsTextValidProperty, true);
+				if (updateValueAndText)
+				{
+					this.SetValue<T?>(ValueProperty, null);
+					this.SetValue<bool>(IsTextValidProperty, true);
+				}
+				value = null;
 				return true;
 			}
 
 			// try convert to object
-			if (!this.TryConvertToValue(text, out var value) || value == null)
+			if (!this.TryConvertToValue(text, out value) || value == null)
 			{
-				this.SetValue<bool>(IsTextValidProperty, false);
+				if (updateValueAndText)
+					this.SetValue<bool>(IsTextValidProperty, false);
 				return false;
 			}
 
 			// complete
-			if (!this.CheckValueEquality(value, this.Value))
-				this.SetValue<T?>(ValueProperty, value);
-			this.SetValue<bool>(IsTextValidProperty, true);
+			if (updateValueAndText)
+			{
+				if (!this.CheckValueEquality(value, this.Value))
+					this.SetValue<T?>(ValueProperty, value);
+				this.SetValue<bool>(IsTextValidProperty, true);
+			}
 			return true;
 		}
 
@@ -196,7 +213,11 @@ namespace CarinaStudio.AppSuite.Controls
 		public T? Value
 		{
 			get => this.GetValue<T?>(ValueProperty);
-			set => this.SetValue<T?>(ValueProperty, value);
+			set
+			{
+				this.validateAction.ExecuteIfScheduled();
+				this.SetValue<T?>(ValueProperty, value);
+			}
 		}
 
 

@@ -70,12 +70,22 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		/// <summary>
+		/// Check whether text validation is scheduled or not.
+		/// </summary>
+		protected bool IsValidationScheduled { get => this.validateAction.IsScheduled; }
+
+
+		/// <summary>
 		/// Get or set object.
 		/// </summary>
 		protected T? Object
 		{
 			get => this.GetValue<T?>(ObjectProperty);
-			set => this.SetValue<T?>(ObjectProperty, value);
+			set
+			{
+				this.validateAction.ExecuteIfScheduled();
+				this.SetValue<T?>(ObjectProperty, value);
+			}
 		}
 
 
@@ -109,7 +119,7 @@ namespace CarinaStudio.AppSuite.Controls
 				var obj = (change.NewValue.Value as T);
 				if (obj != null)
 				{
-					if (!this.Validate() || !this.CheckObjectEquality(this.Object, obj))
+					if (!this.Validate(false, out var currentObj) || !this.CheckObjectEquality(currentObj, obj))
 						this.Text = this.ConvertToText(obj);
 				}
 				else if (this.Text != null)
@@ -149,13 +159,19 @@ namespace CarinaStudio.AppSuite.Controls
 		/// Validate input <see cref="TextBox.Text"/> and generate corresponding object.
 		/// </summary>
 		/// <returns>True if input <see cref="TextBox.Text"/> generates a valid object.</returns>
-		public bool Validate()
+		public bool Validate() =>
+			this.Validate(true, out var value);
+
+
+		// Validate text.
+		bool Validate(bool updateObjectAndText, out T? obj)
 		{
 			// check state
 			this.VerifyAccess();
 
 			// cancel scheduled validation
-			this.validateAction.Cancel();
+			if (updateObjectAndText)
+				this.validateAction.Cancel();
 
 			// trim spaces
 			var text = this.Text ?? "";
@@ -163,29 +179,40 @@ namespace CarinaStudio.AppSuite.Controls
 			if (text != trimmedText)
 			{
 				text = trimmedText;
-				this.Text = trimmedText;
-				this.validateAction.Cancel();
+				if (updateObjectAndText)
+				{
+					this.Text = trimmedText;
+					this.validateAction.Cancel();
+				}
 			}
 
 			// clear object
 			if (text.Length == 0)
 			{
-				this.SetValue<T?>(ObjectProperty, null);
-				this.SetValue<bool>(IsTextValidProperty, true);
+				if (updateObjectAndText)
+				{
+					this.SetValue<T?>(ObjectProperty, null);
+					this.SetValue<bool>(IsTextValidProperty, true);
+				}
+				obj = null;
 				return true;
 			}
 
 			// try convert to object
-			if (!this.TryConvertToObject(text, out var obj) || obj == null)
+			if (!this.TryConvertToObject(text, out obj) || obj == null)
 			{
-				this.SetValue<bool>(IsTextValidProperty, false);
+				if (updateObjectAndText)
+					this.SetValue<bool>(IsTextValidProperty, false);
 				return false;
 			}
 
 			// complete
-			if (!this.CheckObjectEquality(obj, this.Object))
-				this.SetValue<T?>(ObjectProperty, obj);
-			this.SetValue<bool>(IsTextValidProperty, true);
+			if (updateObjectAndText)
+			{
+				if (!this.CheckObjectEquality(obj, this.Object))
+					this.SetValue<T?>(ObjectProperty, obj);
+				this.SetValue<bool>(IsTextValidProperty, true);
+			}
 			return true;
 		}
 

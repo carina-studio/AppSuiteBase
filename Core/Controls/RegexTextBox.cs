@@ -574,7 +574,12 @@ namespace CarinaStudio.AppSuite.Controls
 		public Regex? Regex
 		{
 			get => this.GetValue<Regex?>(RegexProperty);
-			set => this.SetValue<Regex?>(RegexProperty, value);
+			set 
+			{
+				if (this.IsValidationScheduled)
+                    this.Validate();
+				this.SetValue<Regex?>(RegexProperty, value);
+			}
 		}
 
 
