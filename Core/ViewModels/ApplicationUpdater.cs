@@ -228,17 +228,35 @@ namespace CarinaStudio.AppSuite.ViewModels
 							var finalDirectory = Path.Combine(this.Application.RootPrivateDirectoryPath, $"AutoUpdater-{this.auVersion}");
 							var success = await Task.Run(() =>
 							{
-								this.Logger.LogDebug($"Rename auto updater directory from '{tempDirectory}' to '{finalDirectory}'");
-								try
+								var retryCount = 20;
+								while (true)
 								{
-									Directory.Move(tempDirectory, finalDirectory);
-									return true;
-								}
-								catch (Exception ex)
-								{
-									this.Logger.LogError(ex, $"Unable to rename auto updater directory from '{tempDirectory}' to '{finalDirectory}'");
-									Global.RunWithoutError(() => Directory.Delete(tempDirectory, true));
-									return false;
+									try
+									{
+										this.Logger.LogDebug($"Rename auto updater directory from '{tempDirectory}' to '{finalDirectory}'");
+										Directory.Move(tempDirectory, finalDirectory);
+										return true;
+									}
+									catch (Exception ex)
+									{
+										if (this.updatePreparationCancellationTokenSource?.IsCancellationRequested == true)
+										{
+											Global.RunWithoutError(() => Directory.Delete(tempDirectory, true));
+											return false;
+										}
+										if (retryCount > 0)
+										{
+											--retryCount;
+											this.Logger.LogError(ex, $"Unable to rename auto updater directory from '{tempDirectory}' to '{finalDirectory}', try again");
+											Thread.Sleep(500);
+										}
+										else
+										{
+											this.Logger.LogError(ex, $"Unable to rename auto updater directory from '{tempDirectory}' to '{finalDirectory}'");
+											Global.RunWithoutError(() => Directory.Delete(tempDirectory, true));
+											return false;
+										}
+									}
 								}
 							});
 
