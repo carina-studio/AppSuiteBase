@@ -9,27 +9,15 @@
 	<Styles.Resources>
 
 		<!-- Button -->
-		<SolidColorBrush x:Key="ButtonBackground" Color="#fbfbfb"/>
-		<SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="#e7e7e7"/>
-		<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#f0f0f0"/>
-		<SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#e0e0e0"/>
-
-		<!-- ComboBox -->
-		<StaticResourceExtension x:Key="ComboBoxBackground" ResourceKey="ButtonBackground"/>
-		<StaticResourceExtension x:Key="ComboBoxBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
-		<StaticResourceExtension x:Key="ComboBoxBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
-		<StaticResourceExtension x:Key="ComboBoxBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
+		<Color x:Key="Color/Button.Background">#fbfbfb</Color>
+		<Color x:Key="Color/Button.Background.Disabled">#e7e7e7</Color>
+		<Color x:Key="Color/Button.Background.PointerOver">#f0f0f0</Color>
+		<Color x:Key="Color/Button.Background.Pressed">#e0e0e0</Color>
 
 		<!-- Control -->
 		<Color x:Key="Color/Control.Border">#37000000</Color>
 		<Color x:Key="Color/Control.Border.Dark">#50000000</Color>
 		<Color x:Key="Color/Control.Border.Light">#20000000</Color>
-
-		<!-- DatePicker -->
-		<StaticResourceExtension x:Key="DatePickerButtonBackground" ResourceKey="ButtonBackground"/>
-		<StaticResourceExtension x:Key="DatePickerButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
-		<StaticResourceExtension x:Key="DatePickerButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
-		<StaticResourceExtension x:Key="DatePickerButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
 
 		<!-- Dialog -->
 		<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#e0e0e0</Color>
@@ -47,12 +35,6 @@
 
 		<!-- Menu -->
 		<Color x:Key="Color/Menu.Background">#e0e0e0</Color>
-
-		<!-- RepeatButton -->
-		<StaticResourceExtension x:Key="RepeatButtonBackground" ResourceKey="ButtonBackground"/>
-		<StaticResourceExtension x:Key="RepeatButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
-		<StaticResourceExtension x:Key="RepeatButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
-		<StaticResourceExtension x:Key="RepeatButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
 
 		<!-- Separator -->
 		<Color x:Key="Color/Separator.Background">#4f000000</Color>
@@ -73,22 +55,7 @@
 		<Color x:Key="Color/TabItem.Header.Border.Selected">#b0b0b0</Color>
 
 		<!-- TextBox -->
-		<StaticResourceExtension x:Key="TextControlBackground" ResourceKey="ButtonBackground"/>
-		<StaticResourceExtension x:Key="TextControlBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
-		<StaticResourceExtension x:Key="TextControlBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
 		<SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{StaticResource Color/Control.Border.Dark}"/>
-
-		<!-- TimePicker -->
-		<StaticResourceExtension x:Key="TimePickerButtonBackground" ResourceKey="ButtonBackground"/>
-		<StaticResourceExtension x:Key="TimePickerButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
-		<StaticResourceExtension x:Key="TimePickerButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
-		<StaticResourceExtension x:Key="TimePickerButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
-
-		<!-- ToggleButton -->
-		<StaticResourceExtension x:Key="ToggleButtonBackground" ResourceKey="ButtonBackground"/>
-		<StaticResourceExtension x:Key="ToggleButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
-		<StaticResourceExtension x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
-		<StaticResourceExtension x:Key="ToggleButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
 
 		<!-- ToolBar -->
 		<Color x:Key="Color/ToolBar.Background">#e0e0e0</Color>
@@ -96,7 +63,7 @@
 		<Color x:Key="Color/ToolBar.Button.Background.Pressed">#b7b7b7</Color>
 
 		<!-- ToolTip -->
-		<Color x:Key="Color/ToolTip.Background">#fbfbfb</Color>
+		<StaticResourceExtension x:Key="Color/ToolTip.Background" ResourceKey="Color/Button.Background"/>
 		<Color x:Key="Color/ToolTip.Border">#50000000</Color>
 
 		<!-- Window -->

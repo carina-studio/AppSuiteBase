@@ -57,6 +57,10 @@
 		<SolidColorBrush x:Key="AccentButtonBackground" Color="{DynamicResource SystemAccentColor}" />
 		<SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="{DynamicResource SystemAccentColorLight1}" />
 		<SolidColorBrush x:Key="AccentButtonBackgroundPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
+		<SolidColorBrush x:Key="ButtonBackground" Color="{DynamicResource Color/Button.Background}"/>
+		<SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{DynamicResource Color/Button.Background.Disabled}"/>
+		<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource Color/Button.Background.PointerOver}"/>
+		<SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource Color/Button.Background.Pressed}"/>
 		<LinearGradientBrush x:Key="ButtonBorderBrush" EndPoint="0%,100%" StartPoint="0%,0%">
 			<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border.Light}"/>
 			<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border.Dark}"/>
@@ -67,9 +71,17 @@
 			<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border.Dark}"/>
 			<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border.Light}"/>
 		</LinearGradientBrush>
+		<Color x:Key="Color/Button.Background">#ffffff</Color>
+		<Color x:Key="Color/Button.Background.Disabled">#ffffff</Color>
+		<Color x:Key="Color/Button.Background.PointerOver">#ffffff</Color>
+		<Color x:Key="Color/Button.Background.Pressed">#ffffff</Color>
 		<Thickness x:Key="Thickness/Button.Border">1</Thickness>
 
 		<!-- ComboBox -->
+		<StaticResourceExtension x:Key="ComboBoxBackground" ResourceKey="ButtonBackground"/>
+		<StaticResourceExtension x:Key="ComboBoxBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+		<StaticResourceExtension x:Key="ComboBoxBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+		<StaticResourceExtension x:Key="ComboBoxBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
 		<StaticResourceExtension x:Key="ComboBoxBorderBrush" ResourceKey="ButtonBorderBrush"/>
 		<StaticResourceExtension x:Key="ComboBoxBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
 		<StaticResourceExtension x:Key="ComboBoxBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
@@ -100,6 +112,10 @@
 		<Thickness x:Key="Thickness/Control.Border.Focused">2</Thickness>
 
 		<!-- DatePicker -->
+		<StaticResourceExtension x:Key="DatePickerButtonBackground" ResourceKey="ButtonBackground"/>
+		<StaticResourceExtension x:Key="DatePickerButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+		<StaticResourceExtension x:Key="DatePickerButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+		<StaticResourceExtension x:Key="DatePickerButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
 		<StaticResourceExtension x:Key="DatePickerButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
 		<StaticResourceExtension x:Key="DatePickerButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
 		<StaticResourceExtension x:Key="DatePickerButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
@@ -226,6 +242,10 @@
 		<CornerRadius x:Key="OverlayCornerRadius">8</CornerRadius>
 
 		<!-- RepeatButton -->
+		<StaticResourceExtension x:Key="RepeatButtonBackground" ResourceKey="ButtonBackground"/>
+		<StaticResourceExtension x:Key="RepeatButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+		<StaticResourceExtension x:Key="RepeatButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+		<StaticResourceExtension x:Key="RepeatButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
 		<StaticResourceExtension x:Key="RepeatButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
 		<StaticResourceExtension x:Key="RepeatButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
 		<StaticResourceExtension x:Key="RepeatButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
@@ -319,7 +339,9 @@
 		<Thickness x:Key="Thickness/TabItem.Header.Padding">10</Thickness>
 
 		<!-- TextBox -->
-		<SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="{DynamicResource SystemBaseLowColor}" Opacity="0.3"/>
+		<StaticResourceExtension x:Key="TextControlBackground" ResourceKey="ButtonBackground"/>
+		<StaticResourceExtension x:Key="TextControlBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+		<StaticResourceExtension x:Key="TextControlBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
 		<LinearGradientBrush x:Key="TextControlBorderBrush" EndPoint="0%,100%" StartPoint="0%,0%">
 			<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border.Dark}"/>
 			<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border.Light}"/>
@@ -340,12 +362,20 @@
 		<sys:Double x:Key="Double/TextInputDialog.Width">450</sys:Double>
 
 		<!-- TimePicker -->
+		<StaticResourceExtension x:Key="TimePickerButtonBackground" ResourceKey="ButtonBackground"/>
+		<StaticResourceExtension x:Key="TimePickerButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+		<StaticResourceExtension x:Key="TimePickerButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+		<StaticResourceExtension x:Key="TimePickerButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
 		<StaticResourceExtension x:Key="TimePickerButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
 		<StaticResourceExtension x:Key="TimePickerButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
 		<StaticResourceExtension x:Key="TimePickerButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
 		<StaticResourceExtension x:Key="TimePickerButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
 
 		<!-- ToggleButton -->
+		<StaticResourceExtension x:Key="ToggleButtonBackground" ResourceKey="ButtonBackground"/>
+		<StaticResourceExtension x:Key="ToggleButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+		<StaticResourceExtension x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+		<StaticResourceExtension x:Key="ToggleButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
 		<SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource SystemAccentColor}" />
 		<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedDisabled" Color="{DynamicResource SystemAccentColor}" Opacity="0.5"/>
 		<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{DynamicResource SystemAccentColorLight1}" />
