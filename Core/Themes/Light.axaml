@@ -95,6 +95,10 @@
 		<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#c7c7c7</Color>
 		<Color x:Key="Color/ToolBar.Button.Background.Pressed">#b7b7b7</Color>
 
+		<!-- ToolTip -->
+		<Color x:Key="Color/ToolTip.Background">#fbfbfb</Color>
+		<Color x:Key="Color/ToolTip.Border">#50000000</Color>
+
 		<!-- Window -->
 		<Color x:Key="Color/Window.Background">#f0f0f0</Color>
 		<Color x:Key="Color/Window.Background.Tabbed">#c0c0c0</Color>

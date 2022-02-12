@@ -380,6 +380,13 @@
 		<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Margin">0</Thickness>
 		<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Padding">5</Thickness>
 
+		<!-- ToolTip -->
+		<Color x:Key="Color/ToolTip.Background">#ffffff</Color>
+		<Color x:Key="Color/ToolTip.Border">#000000</Color>
+		<CornerRadius x:Key="CornerRadius/ToolTip">4</CornerRadius>
+		<SolidColorBrush x:Key="ToolTipBackground" Color="{DynamicResource Color/ToolTip.Background}"/>
+		<SolidColorBrush x:Key="ToolTipBorderBrush" Color="{DynamicResource Color/ToolTip.Border}"/>
+
 		<!-- Window -->
 		<SolidColorBrush x:Key="Brush/Window.Background" Color="{DynamicResource Color/Window.Background}"/>
 		<SolidColorBrush x:Key="Brush/Window.Background.Tabbed" Color="{DynamicResource Color/Window.Background.Tabbed}"/>
@@ -1433,6 +1440,11 @@
 			</ControlTemplate>
 		</Setter>
 		<Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
+	</Style>
+
+	<!-- ToolTip -->
+	<Style Selector="ToolTip">
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ToolTip}"/>
 	</Style>
 
 	<!-- Window -->
