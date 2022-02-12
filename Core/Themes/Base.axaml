@@ -92,6 +92,10 @@
 		<Color x:Key="Color/Control.Border.Dark">#000000</Color>
 		<Color x:Key="Color/Control.Border.Light">#000000</Color>
 		<CornerRadius x:Key="ControlCornerRadius">4</CornerRadius>
+		<CornerRadius x:Key="ControlCornerRadiusBottom">0,0,4,4</CornerRadius>
+		<CornerRadius x:Key="ControlCornerRadiusLeft">4,0,0,4</CornerRadius>
+		<CornerRadius x:Key="ControlCornerRadiusRight">0,4,4,0</CornerRadius>
+		<CornerRadius x:Key="ControlCornerRadiusTop">4,4,0,0</CornerRadius>
 		<Thickness x:Key="Thickness/Control.Border">1</Thickness>
 		<Thickness x:Key="Thickness/Control.Border.Focused">2</Thickness>
 
@@ -735,6 +739,19 @@
 	<!-- NumericUpDown -->
 	<Style Selector="NumericUpDown">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
+	</Style>
+	<Style Selector="NumericUpDown /template/ ButtonSpinner#PART_Spinner /template/ RepeatButton#PART_DecreaseButton">
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadiusRight}"/>
+	</Style>
+	<Style Selector="NumericUpDown /template/ ButtonSpinner#PART_Spinner /template/ RepeatButton#PART_IncreaseButton">
+		<Setter Property="CornerRadius" Value="0"/>
+	</Style>
+	<Style Selector="NumericUpDown /template/ TextBox#PART_TextBox">
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadiusLeft}"/>
+	</Style>
+	<Style Selector="RepeatButton.ButtonSpinnerRepeatButton /template/ ContentPresenter">
+		<Setter Property="BorderBrush" Value="{TemplateBinding BorderBrush}" />
+		<Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius}" />
 	</Style>
 
 	<!-- RepeatButton -->

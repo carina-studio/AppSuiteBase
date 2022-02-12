@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
@@ -13,12 +14,14 @@ using CarinaStudio.Controls;
 using CarinaStudio.Data.Converters;
 using CarinaStudio.Input;
 using CarinaStudio.Threading;
+using CarinaStudio.Windows.Input;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows.Input;
 using TabControl = Avalonia.Controls.TabControl;
 
 namespace CarinaStudio.AppSuite.Tests
@@ -28,6 +31,7 @@ namespace CarinaStudio.AppSuite.Tests
         const string TabItemKey = "TabItem";
 
 
+        readonly MutableObservableBoolean canShowAppInfo = new MutableObservableBoolean(true);
         readonly IntegerTextBox integerTextBox;
         readonly IPAddressTextBox ipAddressTextBox;
         readonly ScheduledAction logAction;
@@ -36,6 +40,8 @@ namespace CarinaStudio.AppSuite.Tests
 
         public MainWindow()
         {
+            this.ShowAppInfoDialogCommand = new Command(() => this.ShowAppInfoDialog(), this.canShowAppInfo);
+
             InitializeComponent();
 
             this.logAction = new ScheduledAction(() =>
@@ -201,9 +207,13 @@ namespace CarinaStudio.AppSuite.Tests
 
         async void ShowAppInfoDialog()
         {
+            this.canShowAppInfo.Update(false);
             using var appInfo = new AppInfo();
             await new ApplicationInfoDialog(appInfo).ShowDialog(this);
+            this.canShowAppInfo.Update(true);
         }
+
+        ICommand ShowAppInfoDialogCommand { get; }
 
         async void ShowTestDialog()
         {

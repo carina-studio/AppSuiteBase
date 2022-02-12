@@ -141,7 +141,7 @@
 								<Grid Background="{x:Static Brushes.Transparent}" ColumnDefinitions="Auto,*,Auto">
 									<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
 
-										<Button Classes="ToolBar_Button">
+										<Button Classes="ToolBar_Button" Command="{Binding $parent[Window].ShowAppInfoDialogCommand}">
 											<Image Classes="Icon" Source="{StaticResource Image/Icon.SidePanel}"/>
 										</Button>
 										<Button Classes="ToolBar_Button">
