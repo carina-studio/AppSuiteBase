@@ -171,6 +171,10 @@
 		<sys:Double x:Key="Double/Icon.Opacity.Disabled">0.3</sys:Double>
 
 		<!-- InPlaceAction -->
+		<SolidColorBrush x:Key="Brush/InPlaceAction.Background.PointerOver" Color="{DynamicResource Color/InPlaceAction.Background.PointerOver}"/>
+		<SolidColorBrush x:Key="Brush/InPlaceAction.Background.Pressed" Color="{DynamicResource Color/InPlaceAction.Background.Pressed}"/>
+		<Color x:Key="Color/InPlaceAction.Background.PointerOver">#30ffffff</Color>
+		<Color x:Key="Color/InPlaceAction.Background.Pressed">#20000000</Color>
 		<sys:Double x:Key="Double/InPlaceAction.IconSize">10</sys:Double>
 		<sys:Double x:Key="Double/InPlaceAction.ReservedHeight">18</sys:Double>
 		<Thickness x:Key="Thickness/InPlaceAction.Margin">3,0,0,0</Thickness>
@@ -650,6 +654,15 @@
 		<Setter Property="Padding" Value="{DynamicResource Thickness/InPlaceAction.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="Button.InPlaceAction_Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="Button.InPlaceAction_Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.PointerOver}"/>
+	</Style>
+	<Style Selector="Button.InPlaceAction_Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Pressed}"/>
 	</Style>
 	<Style Selector="Image.InPlaceAction_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/InPlaceAction.IconSize}"/>

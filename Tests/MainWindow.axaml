@@ -279,6 +279,23 @@
 						</appControls:StringInterpolationFormatTextBox>
 						<appControls:StringInterpolationFormatTextBox HorizontalAlignment="Left" Margin="5" Watermark="String interpolation" Width="400"/>
 
+						<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
+							<StackPanel Orientation="Horizontal">
+								<Button Classes="InPlaceAction_Button">
+									<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.File}"/>
+								</Button>
+								<Button Classes="InPlaceAction_Button">
+									<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
+								</Button>
+								<Button Classes="InPlaceAction_Button">
+									<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.Save}"/>
+								</Button>
+								<Button Classes="InPlaceAction_Button" IsEnabled="False">
+									<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.SaveAll}"/>
+								</Button>
+							</StackPanel>
+						</Border>
+
 						<StackPanel Orientation="Horizontal">
 							<Expander HorizontalAlignment="Left" Header="Expander" Margin="5">
 								<StackPanel>
