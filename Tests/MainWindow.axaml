@@ -392,6 +392,9 @@
 				<TabItem.Header>
 					<TextBlock Text="12345"/>
 				</TabItem.Header>
+				<StackPanel>
+					<Border Background="{DynamicResource Brush/ToolBar.Background}" Height="10"/>
+				</StackPanel>
 			</TabItem>
 
 			<TabItem>
