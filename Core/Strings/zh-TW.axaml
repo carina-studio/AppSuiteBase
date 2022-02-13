@@ -107,6 +107,7 @@
 	<sys:String x:Key="String/Common.Paste">貼上</sys:String>
 	<sys:String x:Key="String/Common.Paste.WithGesture">貼上 (Ctrl+V)</sys:String>
 	<sys:String x:Key="String/Common.Remove">移除</sys:String>
+	<sys:String x:Key="String/Common.Reset">重設</sys:String>
 	<sys:String x:Key="String/Common.Save">儲存</sys:String>
 	<sys:String x:Key="String/Common.Save.WithGesture">儲存 (Ctrl+S)</sys:String>
 	<sys:String x:Key="String/Common.SelectAll">全選</sys:String>

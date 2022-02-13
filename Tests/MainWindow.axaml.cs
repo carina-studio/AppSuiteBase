@@ -236,6 +236,11 @@ namespace CarinaStudio.AppSuite.Tests
 
         void Test()
         {
+            _ = new SettingsEditorDialog()
+            {
+                SettingKeys = SettingKey.GetDefinedKeys<SettingKeys>(),
+                Settings = this.Settings,
+            }.ShowDialog(this);
             //this.integerTextBox.Value = 0;
             //this.integerTextBox.Text = "0";
             //this.integerTextBox.Value = 1234;

@@ -109,6 +109,7 @@
 	<sys:String x:Key="String/Common.Paste">Paste</sys:String>
 	<sys:String x:Key="String/Common.Paste.WithGesture">Paste (Ctrl+V)</sys:String>
 	<sys:String x:Key="String/Common.Remove">Remove</sys:String>
+	<sys:String x:Key="String/Common.Reset">Reset</sys:String>
 	<sys:String x:Key="String/Common.Save">Save</sys:String>
 	<sys:String x:Key="String/Common.Save.WithGesture">Save (Ctrl+S)</sys:String>
 	<sys:String x:Key="String/Common.SelectAll">Select all</sys:String>

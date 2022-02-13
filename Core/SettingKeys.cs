@@ -6,7 +6,7 @@ namespace CarinaStudio.AppSuite
     /// <summary>
     /// Default keys of setting.
     /// </summary>
-    public static class SettingKeys
+    public sealed class SettingKeys
     {
         /// <summary>
         /// Accept application update with non-stable version.
@@ -42,5 +42,10 @@ namespace CarinaStudio.AppSuite
         /// Theme mode.
         /// </summary>
         public static readonly SettingKey<ThemeMode> ThemeMode = new SettingKey<ThemeMode>(nameof(ThemeMode), AppSuite.ThemeMode.System);
+
+
+        // Constructor.
+        SettingKeys()
+        { }
     }
 }

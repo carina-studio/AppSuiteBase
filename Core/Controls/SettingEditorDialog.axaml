@@ -1,0 +1,35 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="CarinaStudio.AppSuite.Controls.SettingEditorDialog"
+        Classes="Dialog"
+        SizeToContent="Height"
+        Width="350">
+
+	<DockPanel>
+
+		<!-- Control buttons -->
+		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
+			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].ResetValue}" Content="{DynamicResource String/Common.Reset}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].UpdateValue}" Content="{DynamicResource String/Common.OK}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.Cancel}"/>
+			</StackPanel>
+		</Border>
+
+		<!-- Content -->
+		<StackPanel Classes="Dialog_ContentPanel" Orientation="Vertical">
+			<TextBlock Classes="Dialog_TextBlock" Text="{Binding $parent[Window].SettingKey.Name}"/>
+			<controls:EnumComboBox Name="enumComboBox" Classes="Dialog_ComboBox" IsVisible="False"/>
+			<controls:IntegerTextBox Name="integerTextBox" Classes="Dialog_TextBox" IsVisible="False"/>
+			<NumericUpDown Name="numericUpDown" Classes="Dialog_NumericUpDown" IsVisible="False"/>
+			<TextBox Name="textBox" AcceptsReturn="True" Classes="Dialog_TextBox" Height="100" IsVisible="False" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
+			<ToggleSwitch Name="toggleSwitch" Classes="Dialog_ToggleSwitch" IsVisible="False"/>
+		</StackPanel>
+		
+	</DockPanel>
+  
+</Window>
