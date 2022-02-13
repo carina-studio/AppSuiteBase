@@ -49,9 +49,6 @@
 		<Color x:Key="Color/TabItem.Header.Background">#101010</Color>
 		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#171717</Color>
 		<Color x:Key="Color/TabItem.Header.Background.Selected">#1e1e1e</Color>
-		<Color x:Key="Color/TabItem.Header.Border">#101010</Color>
-		<Color x:Key="Color/TabItem.Header.Border.PointerOver">#171717</Color>
-		<Color x:Key="Color/TabItem.Header.Border.Selected">#101010</Color>
 
 		<!-- TextBox -->
 		<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#1f1f1f"/>
@@ -68,8 +65,8 @@
 
 		<!-- Window -->
 		<Color x:Key="Color/Window.Background">#1e1e1e</Color>
-		<Color x:Key="Color/Window.Background.Tabbed">#000000</Color>
-		<Color x:Key="Color/Window.Background.Tabbed.Transparent">#c0000000</Color>
+		<Color x:Key="Color/Window.Background.Tabbed">#101010</Color>
+		<Color x:Key="Color/Window.Background.Tabbed.Transparent">#e0101010</Color>
 		<Color x:Key="Color/Window.Background.Transparent">#e51e1e1e</Color>
 
 		<!-- WorkingArea -->
