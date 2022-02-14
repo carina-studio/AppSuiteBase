@@ -467,6 +467,13 @@ namespace CarinaStudio.AppSuite
                             UseWindowsUIComposition = true,
                         });
                     }
+                    if (Platform.IsMacOS)
+                    {
+                        it.With(new MacOSPlatformOptions()
+                        {
+                            DisableDefaultApplicationMenuItems = true,
+                        });
+                    }
                     if (Platform.IsLinux)
                         it.With(new X11PlatformOptions());
                     if (setupAction != null)
