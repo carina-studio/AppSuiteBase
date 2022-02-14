@@ -194,14 +194,16 @@ namespace CarinaStudio.AppSuite.Controls
         /// <returns>Transparency level.</returns>
         protected virtual WindowTransparencyLevel OnSelectTransparentLevelHint()
         {
-            if (!this.IsActive || this.contentFadingHelper.IsFadingContent)
+            if (!this.IsActive 
+                || this.contentFadingHelper.IsFadingContent
+                || !this.Settings.GetValueOrDefault(SettingKeys.EnableBlurryBackground))
+            {
                 return WindowTransparencyLevel.None;
+            }
             if (Platform.IsLinux)
                 return WindowTransparencyLevel.None;
             if (Platform.IsMacOS)
                 return WindowTransparencyLevel.AcrylicBlur;
-            if (!this.Settings.GetValueOrDefault(SettingKeys.EnableBlurryBackground))
-                return WindowTransparencyLevel.None;
             if (Platform.IsWindows11OrAbove)
                 return WindowTransparencyLevel.Mica;
             if (this.Application.HardwareInfo.HasDedicatedGraphicsCard != true)
