@@ -1109,34 +1109,33 @@ namespace CarinaStudio.AppSuite
 
 
         // Load configuration.
-#if DEBUG
         async Task LoadConfigurationAsync()
         {
-            // create instance
-            var config = new ConfigurationImpl();
-            this.configuration = config;
-            this.configuration.SettingChanged += this.OnConfigurationChanged;
+            if (this.IsDebugMode)
+            {
+                // create instance
+                var config = new ConfigurationImpl();
+                this.configuration = config;
+                this.configuration.SettingChanged += this.OnConfigurationChanged;
 
-            // load from file
-            this.Logger.LogDebug("Start loading configuration");
-            try
-            {
-                await config.LoadAsync(this.configurationFilePath);
-                this.Logger.LogDebug("Complete loading configuration");
+                // load from file
+                this.Logger.LogDebug("Start loading configuration");
+                try
+                {
+                    await config.LoadAsync(this.configurationFilePath);
+                    this.Logger.LogDebug("Complete loading configuration");
+                }
+                catch (Exception ex)
+                {
+                    this.Logger.LogError(ex, $"Failed to load configuration from '{this.configurationFilePath}'");
+                }
             }
-            catch (Exception ex)
+            else
             {
-                this.Logger.LogError(ex, $"Failed to load configuration from '{this.configurationFilePath}'");
+                this.configuration = new CarinaStudio.Configuration.MemorySettings();
+                this.configuration.SettingChanged += this.OnConfigurationChanged;
             }
         }
-#else
-        Task LoadConfigurationAsync()
-        {
-            this.configuration = new CarinaStudio.Configuration.MemorySettings();
-            this.configuration.SettingChanged += this.OnConfigurationChanged;
-            return Task.CompletedTask;
-        }
-#endif
 
 
         /// <summary>
