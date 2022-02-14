@@ -67,6 +67,10 @@ namespace CarinaStudio.AppSuite
         public virtual Task<ApplicationUpdateInfo?> CheckUpdateInfoAsync() => Task.FromResult((ApplicationUpdateInfo?)null);
 
 
+        /// <inheritdoc/>
+        public ISettings Configuration { get; } = new MemorySettings();
+
+
         /// <summary>
         /// Get current culture info of application.
         /// </summary>

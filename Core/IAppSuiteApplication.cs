@@ -30,6 +30,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get application configuration.
+        /// </summary>
+        Configuration.ISettings Configuration { get; }
+
+
+        /// <summary>
         /// Get or set custom screen scale factor for Linux.
         /// </summary>
         double CustomScreenScaleFactor { get; set; }

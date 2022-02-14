@@ -50,6 +50,20 @@ namespace CarinaStudio.AppSuite
     /// </summary>
     public abstract class AppSuiteApplication : Application, IAppSuiteApplication
     {
+        // Implementation of Configuration.
+        class ConfigurationImpl : PersistentSettings
+        {
+            // Constructor.
+            public ConfigurationImpl() : base(JsonSettingsSerializer.Default)
+            { }
+
+            // Implementations.
+            protected override void OnUpgrade(int oldVersion)
+            { }
+            public override int Version { get; } = 1;
+        }
+
+
         // Holder of main window.
         class MainWindowHolder
         {
@@ -167,6 +181,8 @@ namespace CarinaStudio.AppSuite
         });
 #endif
         ScheduledAction? checkUpdateInfoAction;
+        ISettings? configuration;
+        readonly string configurationFilePath;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
         readonly Styles extraStyles = new Styles();
         HardwareInfo? hardwareInfo;
@@ -243,6 +259,7 @@ namespace CarinaStudio.AppSuite
             };
 
             // get file paths
+            this.configurationFilePath = Path.Combine(this.RootPrivateDirectoryPath, "ConfigOverride.json");
             this.persistentStateFilePath = Path.Combine(this.RootPrivateDirectoryPath, "PersistentState.json");
             this.settingsFilePath = Path.Combine(this.RootPrivateDirectoryPath, "Settings.json");
 
@@ -557,6 +574,10 @@ namespace CarinaStudio.AppSuite
             }
             return this.UpdateInfo;
         }
+
+
+        /// <inheritdoc/>
+        public ISettings Configuration { get => this.configuration ?? throw new InvalidOperationException("Application is not initialized yet."); }
 
 
         // Create server stream for multi-instances.
@@ -1094,6 +1115,37 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        // Load configuration.
+#if DEBUG
+        async Task LoadConfigurationAsync()
+        {
+            // create instance
+            var config = new ConfigurationImpl();
+            this.configuration = config;
+            this.configuration.SettingChanged += this.OnConfigurationChanged;
+
+            // load from file
+            this.Logger.LogDebug("Start loading configuration");
+            try
+            {
+                await config.LoadAsync(this.configurationFilePath);
+                this.Logger.LogDebug("Complete loading configuration");
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, $"Failed to load configuration from '{this.configurationFilePath}'");
+            }
+        }
+#else
+        Task LoadConfigurationAsync()
+        {
+            this.configuration = new CarinaStudio.Configuration.MemorySettings();
+            this.configuration.SettingChanged += this.OnConfigurationChanged;
+            return Task.CompletedTask;
+        }
+#endif
+
+
         /// <summary>
         /// Load <see cref="PersistentState"/> from file.
         /// </summary>
@@ -1313,6 +1365,19 @@ namespace CarinaStudio.AppSuite
         public IList<Window> MainWindows { get; }
 
 
+        // Called when one of configuration has been changed.
+        void OnConfigurationChanged(object? sender, SettingChangedEventArgs e) =>
+            this.OnConfigurationChanged(e);
+
+
+        /// <summary>
+        /// Called when one of configuration has been changed.
+        /// </summary>
+        /// <param name="e">Event data.</param>
+        protected virtual void OnConfigurationChanged(SettingChangedEventArgs e)
+        { }
+
+
         /// <summary>
         /// Called to create <see cref="ILoggerProvider"/> for <see cref="LogFactory"/>.
         /// </summary>
@@ -1465,6 +1530,9 @@ namespace CarinaStudio.AppSuite
                 // check state
                 if (this.IsShutdownStarted)
                     return;
+
+                // load configuration
+                await this.LoadConfigurationAsync();
 
                 // prepare
                 await this.OnPrepareStartingAsync();
@@ -1681,6 +1749,9 @@ namespace CarinaStudio.AppSuite
                 Global.RunWithoutError(() => this.multiInstancesServerStream.Close());
                 this.multiInstancesServerStream = null;
             }
+
+            // save configuration
+            await this.SaveConfigurationAsync();
 
             // save persistent state
             await this.SavePersistentStateAsync();
@@ -2091,6 +2162,27 @@ namespace CarinaStudio.AppSuite
 
         /// <inheritdoc/>
         public override string RootPrivateDirectoryPath { get => AppDirectoryPath; }
+
+
+        // Save configuration.
+        async Task SaveConfigurationAsync()
+        {
+            // check state
+            if (this.configuration is not ConfigurationImpl config)
+                return;
+
+            // save
+            this.Logger.LogDebug("Start saving configuration");
+            try
+            {
+                await config.SaveAsync(this.configurationFilePath);
+                this.Logger.LogDebug("Complete saving configuration");
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, $"Failed to save configuration to '{this.configurationFilePath}'");
+            }
+        }
 
 
         /// <summary>

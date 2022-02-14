@@ -305,6 +305,7 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnClosed(EventArgs e)
         {
             this.DataContext = null;
+            this.Application.Configuration.SettingChanged -= this.OnConfigurationChanged;
             ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged -= this.OnMainWindowsChanged;
             this.Application.PropertyChanged -= this.OnApplicationPropertyChanged;
             this.RemoveHandler(DragDrop.DragEnterEvent, this.OnDragEnter);
@@ -313,6 +314,18 @@ namespace CarinaStudio.AppSuite.Controls
             base.OnClosed(e);
         }
 
+
+        // Called when one of configuration has been changed.
+        void OnConfigurationChanged(object? sender, SettingChangedEventArgs e) =>
+            this.OnConfigurationChanged(e);
+
+
+        /// <summary>
+        /// Called when one of application configuration has been changed.
+        /// </summary>
+        /// <param name="e">Event data.</param>
+        protected virtual void OnConfigurationChanged(SettingChangedEventArgs e)
+        { }
 
 
         /// <summary>
@@ -379,6 +392,7 @@ namespace CarinaStudio.AppSuite.Controls
             base.OnOpened(e);
 
             // add event handlers
+            this.Application.Configuration.SettingChanged += this.OnConfigurationChanged;
             ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged += this.OnMainWindowsChanged;
             this.Application.PropertyChanged += this.OnApplicationPropertyChanged;
             this.AddHandler(DragDrop.DragEnterEvent, this.OnDragEnter);
