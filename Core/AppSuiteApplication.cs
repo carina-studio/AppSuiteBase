@@ -136,7 +136,6 @@ namespace CarinaStudio.AppSuite
         const string RestoreMainWindowsRequestedKey = "IsRestoringMainWindowsRequested";
         const int MinSplashWindowDuration = 2000;
         const int SplashWindowShowingDuration = 1400;
-        const int UpdateCheckingInterval = 3600000; // 1 hr
 
 
         // Static fields.
@@ -525,7 +524,7 @@ namespace CarinaStudio.AppSuite
             }
 
             // schedule next checking
-            this.checkUpdateInfoAction?.Reschedule(UpdateCheckingInterval);
+            this.checkUpdateInfoAction?.Reschedule(Math.Max(1000, this.Configuration.GetValueOrDefault(ConfigurationKeys.AppUpdateInfoCheckingInterval)));
 
             // check update by package manifest
             var stopWatch = new Stopwatch().Also(it => it.Start());
@@ -553,7 +552,7 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogError("No application version gotten from package manifest");
                 return null;
             }
-            if (!this.ForceAcceptingUpdateInfo && packageVersion <= this.Assembly.GetName().Version)
+            if (!this.Configuration.GetValueOrDefault(ConfigurationKeys.ForceAcceptingAppUpdateInfo) && packageVersion <= this.Assembly.GetName().Version)
             {
                 this.Logger.LogInformation("This is the latest application");
                 if (this.UpdateInfo != null)
@@ -837,12 +836,6 @@ namespace CarinaStudio.AppSuite
         /// Get fall-back theme mode if <see cref="IsSystemThemeModeSupported"/> is false.
         /// </summary>
         public virtual ThemeMode FallbackThemeMode { get; } = Platform.IsMacOS ? ThemeMode.Light : ThemeMode.Dark;
-
-
-        /// <summary>
-        /// Check whether retrieved application update info should be always accepted or not. This is designed for debugging purpose.
-        /// </summary>
-        protected virtual bool ForceAcceptingUpdateInfo { get; } = false;
 
 
         // Transform RGB color values.
@@ -1375,7 +1368,13 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="e">Event data.</param>
         protected virtual void OnConfigurationChanged(SettingChangedEventArgs e)
-        { }
+        {
+            if (e.Key == ConfigurationKeys.AppUpdateInfoCheckingInterval 
+                || e.Key == ConfigurationKeys.ForceAcceptingAppUpdateInfo)
+            {
+                _ = this.CheckUpdateInfoAsync();
+            }
+        }
 
 
         /// <summary>

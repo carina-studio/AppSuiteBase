@@ -339,6 +339,7 @@
 							<Button Command="{Binding $parent[Window].ShowTestDialog}" Content="Show Test Dialog" Margin="5"/>
 							<Button Command="{Binding $parent[Window].Application.ShowMainWindow}" Content="Open New Window" Margin="5"/>
 							<Button Command="{Binding $parent[Window].RestartApp}" Content="Restart App" Margin="5"/>
+							<Button Command="{Binding $parent[Window].EditConfiguration}" Content="Edit Configuration" Margin="5"/>
 						</StackPanel>
 
 						<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5" ToolTip.Tip="{DynamicResource String/Common.Copy.WithGesture}"/>

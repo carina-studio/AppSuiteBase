@@ -149,6 +149,12 @@ namespace CarinaStudio.AppSuite.Controls
         public void CancelSavingSize() =>
             this.saveWindowSizeAction.Cancel();
 
+
+        /// <summary>
+        /// Get application configuration.
+        /// </summary>
+        protected ISettings Configuration { get => this.Application.Configuration; }
+
         
         /// <summary>
         /// Get padding applied on content of Window automatically.

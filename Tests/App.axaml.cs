@@ -14,11 +14,7 @@ namespace CarinaStudio.AppSuite.Tests
     {
         protected override bool AllowMultipleMainWindows => true;
 
-
         public override int DefaultLogOutputTargetPort => 5566;
-
-
-        //protected override bool ForceAcceptingUpdateInfo => true;
 
         public override void Initialize()
         {
