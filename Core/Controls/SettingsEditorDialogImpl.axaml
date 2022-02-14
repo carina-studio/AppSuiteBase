@@ -20,7 +20,7 @@
 		</Border>
 
 		<!-- Content -->
-		<ListBox Name="settingsListBox" Background="{x:Static Brushes.Transparent}" BorderThickness="0" DoubleTapped="OnSettingsListBoxDoubleTapped" Height="400" Items="{Binding $parent[Window].SettingKeyValues}">
+		<ListBox Name="settingsListBox" Background="{x:Static Brushes.Transparent}" BorderThickness="0" DoubleTapped="OnSettingsListBoxDoubleTapped" Height="400" Items="{Binding $parent[Window].SettingKeyValues}" PointerReleased="OnSettingsListBoxPointerReleased">
 			<ListBox.DataTemplates>
 				<DataTemplate>
 					<StackPanel>
