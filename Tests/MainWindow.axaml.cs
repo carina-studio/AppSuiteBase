@@ -200,6 +200,15 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
+        void OnListBoxDoubleClickOnItem(object? sender, ListBoxItemEventArgs e)
+        {
+            _ = new MessageDialog()
+            {
+                Message = $"Double-clicked on {e.Item} at position {e.ItemIndex}",
+            }.ShowDialog(this);
+        }
+
+
         void OnTabItemDragged(object? sender, TabItemDraggedEventArgs e)
         {
             var data = new DataObject();
