@@ -366,12 +366,12 @@
 							<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
 						</Border>
 
-						<ListBox HorizontalAlignment="Left" Width="200" Margin="5">
+						<appControls:ListBox DoubleClickOnItem="OnListBoxDoubleClickOnItem" HorizontalAlignment="Left" Width="200" Margin="5">
 							<ListBoxItem>Item 1</ListBoxItem>
 							<ListBoxItem>Item 2</ListBoxItem>
 							<ListBoxItem>Item 3</ListBoxItem>
 							<ListBoxItem>Item 4</ListBoxItem>
-						</ListBox>
+						</appControls:ListBox>
 
 						<ComboBox HorizontalAlignment="Left" Width="200" Margin="5">
 							1234567890123456789012345678901234567890
