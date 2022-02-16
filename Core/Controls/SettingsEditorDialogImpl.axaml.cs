@@ -1,21 +1,16 @@
 using Avalonia.Controls;
-using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace CarinaStudio.AppSuite.Controls
 {
 	partial class SettingsEditorDialogImpl : Dialog
 	{
 		// Fields.
-		long settingsListBoxDoubleTappedTime;
-		readonly Stopwatch stopwatch = new Stopwatch();
 		readonly SortedObservableList<Tuple<SettingKey, object>> settingKeyValues = new SortedObservableList<Tuple<SettingKey, object>>((x, y) => string.Compare(x?.Item1?.Name, y?.Item1?.Name));
 		readonly ListBox settingsListBox;
 
@@ -38,41 +33,15 @@ namespace CarinaStudio.AppSuite.Controls
 		protected override void OnClosed(EventArgs e)
 		{
 			this.Settings.SettingChanged -= this.OnSettingChanged;
-			this.stopwatch.Stop();
 			base.OnClosed(e);
 		}
 
 
 		// Called when double click on list box.
-		void OnSettingsListBoxDoubleTapped(object? sender, RoutedEventArgs e)
+		async void OnSettingsListBoxDoubleClickOnItem(object? sender, ListBoxItemEventArgs e)
 		{
-			if (this.settingsListBox.SelectedItem != null && settingsListBox.IsPointerOver)
-			{
-				this.settingsListBoxDoubleTappedTime = this.stopwatch.ElapsedMilliseconds;
-				e.Handled = true;
-			}
-		}
-
-
-		// Called when pointer released on list box.
-		async void OnSettingsListBoxPointerReleased(object? sender, PointerReleasedEventArgs e)
-		{
-			// check state
-			if (this.settingsListBoxDoubleTappedTime <= 0)
-				return;
-			if ((this.stopwatch.ElapsedMilliseconds - this.settingsListBoxDoubleTappedTime) > 500)
-			{
-				this.settingsListBoxDoubleTappedTime = 0;
-				return;
-			}
-			this.settingsListBoxDoubleTappedTime = 0;
-			if (e.InitialPressMouseButton != MouseButton.Left)
-				return;
-
 			// find setting
-			var selectedIndex = this.settingsListBox.SelectedIndex;
-			var selectedItem = this.settingsListBox.SelectedItem;
-			if (selectedItem is not Tuple<SettingKey, object> setting || !settingsListBox.IsPointerOver)
+			if (e.Item is not Tuple<SettingKey, object> setting)
 				return;
 			e.Handled = true;
 
@@ -85,8 +54,8 @@ namespace CarinaStudio.AppSuite.Controls
 
 			// select item again
 			this.settingsListBox.Focus();
-			if (selectedIndex >= 0)
-				this.settingsListBox.SelectedIndex = selectedIndex;
+			if (e.ItemIndex >= 0)
+				this.settingsListBox.SelectedIndex = e.ItemIndex;
 		}
 
 
@@ -106,7 +75,6 @@ namespace CarinaStudio.AppSuite.Controls
 				this.SynchronizationContext.Post(this.Close);
 				return;
 			}
-			this.stopwatch.Start();
 			settings.SettingChanged += this.OnSettingChanged;
 			this.SynchronizationContext.Post(this.settingsListBox.Focus);
 		}

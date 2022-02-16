@@ -20,7 +20,7 @@
 		</Border>
 
 		<!-- Content -->
-		<ListBox Name="settingsListBox" Background="{x:Static Brushes.Transparent}" BorderThickness="0" DoubleTapped="OnSettingsListBoxDoubleTapped" Height="400" Items="{Binding $parent[Window].SettingKeyValues}" PointerReleased="OnSettingsListBoxPointerReleased">
+		<controls:ListBox Name="settingsListBox" Background="{x:Static Brushes.Transparent}" BorderThickness="0" DoubleClickOnItem="OnSettingsListBoxDoubleClickOnItem" Height="400" Items="{Binding $parent[Window].SettingKeyValues}">
 			<ListBox.DataTemplates>
 				<DataTemplate>
 					<StackPanel>
@@ -29,7 +29,7 @@
 					</StackPanel>
 				</DataTemplate>
 			</ListBox.DataTemplates>
-		</ListBox>
+		</controls:ListBox>
 		
 	</DockPanel>
   
