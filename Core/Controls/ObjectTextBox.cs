@@ -120,7 +120,12 @@ namespace CarinaStudio.AppSuite.Controls
 				if (obj != null)
 				{
 					if (!this.Validate(false, out var currentObj) || !this.CheckObjectEquality(currentObj, obj))
+					{
+						var fromEmptyString = string.IsNullOrEmpty(this.Text);
 						this.Text = this.ConvertToText(obj);
+						if (this.IsFocused && fromEmptyString && !string.IsNullOrEmpty(this.Text))
+							this.SelectAll();
+					}
 				}
 				else if (this.Text != null)
 					this.Text = "";

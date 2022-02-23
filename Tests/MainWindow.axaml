@@ -351,8 +351,11 @@
 						<appControls:DateTimeTextBox Name="dateTimeTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
 						<TextBlock Margin="5,0,0,5" Text="{Binding #dateTimeTextBox.Value, StringFormat={}Value: {0}}"/>
 
-						<appControls:IntegerTextBox Name="integerTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200" Watermark="Integer"/>
+						<appControls:IntegerTextBox Name="integerTextBox" HorizontalAlignment="Left" IsNullValueAllowed="False" Margin="5,5,0,0" Minimum="-1" Value="{Binding $parent[Window].Int32, Mode=TwoWay}" Width="200" Watermark="Integer"/>
 						<TextBlock Text="{Binding #integerTextBox.Value, StringFormat={}Value: {0}}" HorizontalAlignment="Left" Margin="5,0,0,5"/>
+
+						<appControls:IntegerTextBox Name="integerTextBox2" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200" Watermark="Integer"/>
+						<TextBlock Text="{Binding #integerTextBox2.Value, StringFormat={}Value: {0}}" HorizontalAlignment="Left" Margin="5,0,0,5"/>
 
 						<appControls:EnumComboBox EnumType="{x:Type app:ThemeMode}" HorizontalAlignment="Left" Margin="5" Width="200"/>
 

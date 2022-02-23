@@ -14,6 +14,10 @@ namespace CarinaStudio.AppSuite.Controls
     public abstract class ValueTextBox<T> : TextBox, IStyleable where T : struct
 	{
 		/// <summary>
+		/// Property of <see cref="IsNullValueAllowed"/>.
+		/// </summary>
+		public static readonly AvaloniaProperty<bool> IsNullValueAllowedProperty = AvaloniaProperty.Register<ValueTextBox<T>, bool>(nameof(IsNullValueAllowed), true);
+		/// <summary>
 		/// Property of <see cref="IsTextValid"/>.
 		/// </summary>
 		public static readonly AvaloniaProperty<bool> IsTextValidProperty = AvaloniaProperty.Register<ValueTextBox<T>, bool>(nameof(IsTextValid), true);
@@ -64,6 +68,16 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		/// <summary>
+		/// Get or set whether <see cref="Value"/> can be Null or not.
+		/// </summary>
+		public bool IsNullValueAllowed
+		{
+			get => this.GetValue<bool>(IsNullValueAllowedProperty);
+			set => this.SetValue<bool>(IsNullValueAllowedProperty, value);
+		}
+
+
+		/// <summary>
 		/// Get whether input <see cref="TextBox.Text"/> represent a valid value or not.
 		/// </summary>
 		public bool IsTextValid { get => this.GetValue<bool>(IsTextValidProperty); }
@@ -74,7 +88,15 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			base.OnPropertyChanged(change);
 			var property = change.Property;
-			if (property == IsTextValidProperty)
+			if (property == IsNullValueAllowedProperty)
+			{
+				if (!(bool)((object?)change.NewValue.Value).AsNonNull())
+				{
+					if (!this.validateAction.ExecuteIfScheduled() && this.Value == null)
+						this.ResetToDefaultValue();
+				}
+			}
+			else if (property == IsTextValidProperty)
 			{
 				if (this.IsTextValid)
 				{
@@ -102,10 +124,17 @@ namespace CarinaStudio.AppSuite.Controls
 			else if (property == ValueProperty)
 			{
 				var value = (T?)(object?)change.NewValue.Value;
+				if (value == null && !this.IsNullValueAllowed)
+					value = value.GetValueOrDefault();
 				if (value != null)
 				{
 					if (!this.Validate(false, out var currentValue) || !this.CheckValueEquality(currentValue, value))
+					{
+						var fromEmptyString = string.IsNullOrEmpty(this.Text);
 						this.Text = this.ConvertToText(value.Value);
+						if (this.IsFocused && fromEmptyString && !string.IsNullOrEmpty(this.Text))
+							this.SelectAll();
+					}
 				}
 				else if (this.Text != null)
 					this.Text = "";
@@ -125,6 +154,17 @@ namespace CarinaStudio.AppSuite.Controls
 			base.OnTextInput(e);
 		}
 
+
+		// Reset to default value.
+		void ResetToDefaultValue()
+		{
+			this.SetValue<T?>(ValueProperty, default(T));
+			this.Text = this.ConvertToText(default(T));
+			this.SetValue<bool>(IsTextValidProperty, true);
+			this.validateAction.Cancel();
+			if (this.IsFocused)
+				this.SelectAll();
+		}
 
 		/// <summary>
 		/// Try converting text to value.
@@ -166,15 +206,24 @@ namespace CarinaStudio.AppSuite.Controls
 				}
 			}
 
-			// clear object
+			// clear value
 			if (text.Length == 0)
 			{
-				if (updateValueAndText)
+				if (this.IsNullValueAllowed)
 				{
-					this.SetValue<T?>(ValueProperty, null);
-					this.SetValue<bool>(IsTextValidProperty, true);
+					value = null;
+					if (updateValueAndText)
+					{
+						this.SetValue<T?>(ValueProperty, null);
+						this.SetValue<bool>(IsTextValidProperty, true);
+					}
 				}
-				value = null;
+				else
+				{
+					value = default(T);
+					if (updateValueAndText)
+						this.ResetToDefaultValue();
+				}
 				return true;
 			}
 

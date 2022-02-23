@@ -31,8 +31,12 @@ namespace CarinaStudio.AppSuite.Tests
         const string TabItemKey = "TabItem";
 
 
+        static readonly AvaloniaProperty<int> Int32Property = AvaloniaProperty.Register<MainWindow, int>("Int32", 1);
+
+
         readonly MutableObservableBoolean canShowAppInfo = new MutableObservableBoolean(true);
         readonly IntegerTextBox integerTextBox;
+        readonly IntegerTextBox integerTextBox2;
         readonly IPAddressTextBox ipAddressTextBox;
         readonly ScheduledAction logAction;
         private readonly ObservableList<TabItem> tabItems = new();
@@ -41,6 +45,11 @@ namespace CarinaStudio.AppSuite.Tests
         public MainWindow()
         {
             this.ShowAppInfoDialogCommand = new Command(() => this.ShowAppInfoDialog(), this.canShowAppInfo);
+
+            this.GetObservable(Int32Property).Subscribe(value =>
+            {
+                ;
+            });
 
             InitializeComponent();
 
@@ -51,6 +60,7 @@ namespace CarinaStudio.AppSuite.Tests
             });
 
             this.integerTextBox = this.FindControl<IntegerTextBox>(nameof(integerTextBox)).AsNonNull();
+            this.integerTextBox2 = this.FindControl<IntegerTextBox>(nameof(integerTextBox2)).AsNonNull();
             this.ipAddressTextBox = this.FindControl<IPAddressTextBox>(nameof(ipAddressTextBox)).AsNonNull();
 
             var tabControl = this.FindControl<TabControl>("tabControl").AsNonNull();
@@ -255,6 +265,8 @@ namespace CarinaStudio.AppSuite.Tests
 
         void Test()
         {
+            this.integerTextBox2.IsNullValueAllowed = !this.integerTextBox2.IsNullValueAllowed;
+
             //this.integerTextBox.Value = 0;
             //this.integerTextBox.Text = "0";
             //this.integerTextBox.Value = 1234;
