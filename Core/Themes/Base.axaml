@@ -251,6 +251,22 @@
 		<StaticResourceExtension x:Key="RepeatButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
 		<StaticResourceExtension x:Key="RepeatButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
 
+		<!-- ScrollBar -->
+		<CornerRadius x:Key="CornerRadius/ScrollBar">7</CornerRadius>
+		<CornerRadius x:Key="CornerRadius/ScrollBar.Button.Bottom">0,0,7,7</CornerRadius>
+		<CornerRadius x:Key="CornerRadius/ScrollBar.Button.Left">7,0,0,7</CornerRadius>
+		<CornerRadius x:Key="CornerRadius/ScrollBar.Button.Right">0,7,7,0</CornerRadius>
+		<CornerRadius x:Key="CornerRadius/ScrollBar.Button.Top">7,7,0,0</CornerRadius>
+		<CornerRadius x:Key="CornerRadius/ScrollBar.Thumb">4</CornerRadius>
+		<sys:Double x:Key="Double/ScrollBar.Thumb.Size">8</sys:Double>
+		<sys:Double x:Key="ScrollBarSize">14</sys:Double>
+		<Thickness x:Key="Thickness/ScrollBar.Button.Margin.Bottom">0,3,0,0</Thickness>
+		<Thickness x:Key="Thickness/ScrollBar.Button.Margin.Left">0,0,3,0</Thickness>
+		<Thickness x:Key="Thickness/ScrollBar.Button.Margin.Right">3,0,0,0</Thickness>
+		<Thickness x:Key="Thickness/ScrollBar.Button.Margin.Top">0,0,0,3</Thickness>
+		<Thickness x:Key="Thickness/ScrollBar.Button.Padding.Horizontal">5,0,5,0</Thickness>
+		<Thickness x:Key="Thickness/ScrollBar.Button.Padding.Vertical">0,5,0,5</Thickness>
+
 		<!-- Separator -->
 		<Color x:Key="Color/Separator.Background">#000000</Color>
 		<SolidColorBrush x:Key="Brush/Separator.Background" Color="{DynamicResource Color/Separator.Background}"/>
@@ -800,6 +816,170 @@
 	<!-- RepeatButton -->
 	<Style Selector="RepeatButton">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
+	</Style>
+
+	<!-- ScrollBar -->
+	<Style Selector="ScrollBar">
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ScrollBar}"/>
+	</Style>
+	<Style Selector="ScrollBar:horizontal">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Grid x:Name="Root">
+					<Border x:Name="HorizontalRoot"
+							Background="{TemplateBinding Background}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}">
+						<Grid ColumnDefinitions="Auto,*,Auto">
+							<Border Name="TrackBorder" CornerRadius="{TemplateBinding CornerRadius}" Grid.ColumnSpan="3" Margin="0" />
+							<RepeatButton Name="PART_LineUpButton"
+											VerticalAlignment="Center"
+											Classes="line up"
+											Grid.Column="0"
+											Focusable="False"
+											MinHeight="{DynamicResource ScrollBarSize}"/>
+							<Track Grid.Column="1"
+									Minimum="{TemplateBinding Minimum}"
+									Maximum="{TemplateBinding Maximum}"
+									Value="{TemplateBinding Value, Mode=TwoWay}"
+									ViewportSize="{TemplateBinding ViewportSize}"
+									Orientation="{TemplateBinding Orientation}">
+								<Track.DecreaseButton>
+								<RepeatButton Name="PART_PageUpButton"
+												Classes="largeIncrease"
+												Focusable="False" />
+								</Track.DecreaseButton>
+								<Track.IncreaseButton>
+								<RepeatButton Name="PART_PageDownButton"
+												Classes="largeIncrease"
+												Focusable="False" />
+								</Track.IncreaseButton>
+								<Thumb Classes="thumb"
+									Opacity="1"
+									Height="{DynamicResource Double/ScrollBar.Thumb.Size}"
+									MinWidth="{DynamicResource ScrollBarSize}"
+									RenderTransformOrigin="50%,100%"
+									VerticalAlignment="Center" />
+							</Track>
+							<RepeatButton Name="PART_LineDownButton"
+											VerticalAlignment="Center"
+											Classes="line down"
+											Grid.Column="2"
+											Focusable="False"
+											MinHeight="{DynamicResource ScrollBarSize}"/>
+						</Grid>
+					</Border>
+				</Grid>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="ScrollBar:vertical">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Grid x:Name="Root">
+					<Border x:Name="VerticalRoot"
+							Background="{TemplateBinding Background}"
+							BorderBrush="{TemplateBinding BorderBrush}"
+							BorderThickness="{TemplateBinding BorderThickness}">
+						<Grid RowDefinitions="Auto,*,Auto">
+							<Border Name="TrackBorder" CornerRadius="{TemplateBinding CornerRadius}" Grid.RowSpan="3" Margin="0" />
+							<RepeatButton Name="PART_LineUpButton"
+											HorizontalAlignment="Stretch"
+											Classes="line up"
+											Grid.Row="0"
+											Focusable="False"/>
+							<Track Grid.Row="1"
+									Minimum="{TemplateBinding Minimum}"
+									Maximum="{TemplateBinding Maximum}"
+									Value="{TemplateBinding Value, Mode=TwoWay}"
+									ViewportSize="{TemplateBinding ViewportSize}"
+									Orientation="{TemplateBinding Orientation}"
+									IsDirectionReversed="True">
+								<Track.DecreaseButton>
+								<RepeatButton Name="PART_PageUpButton"
+												Classes="largeIncrease"
+												Focusable="False" />
+								</Track.DecreaseButton>
+								<Track.IncreaseButton>
+								<RepeatButton Name="PART_PageDownButton"
+												Classes="largeIncrease"
+												Focusable="False" />
+								</Track.IncreaseButton>
+								<Thumb Classes="thumb"
+									HorizontalAlignment="Center"
+									Opacity="1"
+									Width="{DynamicResource Double/ScrollBar.Thumb.Size}"
+									MinHeight="{DynamicResource ScrollBarSize}"
+									RenderTransformOrigin="100%,50%" />
+							</Track>
+							<RepeatButton Name="PART_LineDownButton"
+											HorizontalAlignment="Center"
+											Classes="line down"
+											Grid.Row="2"
+											Focusable="False"
+											MinWidth="{DynamicResource ScrollBarSize}" />
+						</Grid>
+					</Border>
+				</Grid>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="ScrollBar:horizontal /template/ RepeatButton#PART_LineUpButton">
+    	<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ScrollBar.Button.Left}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ScrollBar.Button.Margin.Left}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ScrollBar.Button.Padding.Horizontal}"/>
+  	</Style>
+	<Style Selector="ScrollBar:horizontal /template/ RepeatButton#PART_LineDownButton">
+    	<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ScrollBar.Button.Right}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ScrollBar.Button.Margin.Right}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ScrollBar.Button.Padding.Horizontal}"/>
+  	</Style>
+	  <Style Selector="ScrollBar:vertical /template/ RepeatButton#PART_LineUpButton">
+    	<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ScrollBar.Button.Top}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ScrollBar.Button.Margin.Top}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ScrollBar.Button.Padding.Vertical}"/>
+  	</Style>
+	<Style Selector="ScrollBar:vertical /template/ RepeatButton#PART_LineDownButton">
+    	<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ScrollBar.Button.Bottom}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ScrollBar.Button.Margin.Bottom}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ScrollBar.Button.Padding.Vertical}"/>
+  	</Style>
+	<Style Selector="ScrollBar /template/ RepeatButton.line">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border x:Name="Root" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+					<Viewbox Width="{DynamicResource ScrollBarButtonArrowIconFontSize}"
+							Height="{DynamicResource ScrollBarButtonArrowIconFontSize}">
+						<Path x:Name="Arrow"
+							VerticalAlignment="Center"
+							HorizontalAlignment="Center"
+							Width="18" Height="18" />
+					</Viewbox>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="ScrollBar[IsExpanded=true] /template/ Thumb.thumb /template/ Border#ThumbVisual">
+    	<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ScrollBar.Thumb}" />
+  	</Style>
+	<Style Selector="ScrollBar /template/ Border#TrackBorder">
+		<Setter Property="Background" Value="{DynamicResource ScrollBarTrackFill}" />
+		<Setter Property="Opacity" Value="0" />
+		<Setter Property="Transitions">
+		<Transitions>
+			<DoubleTransition Property="Opacity" Duration="0:0:0.1" />
+		</Transitions>
+		</Setter>
+	</Style>
+	<Style Selector="ScrollBar[IsExpanded=true] /template/ Border#TrackBorder">
+		<Setter Property="Background" Value="{DynamicResource ScrollBarTrackFillPointerOver}" />
+		<Setter Property="Opacity" Value="1" />
+	</Style>
+	<Style Selector="ScrollBar:vertical /template/ RepeatButton.line.down /template/ Path">
+		<Setter Property="Data" Value="F1M3.60450005531311,3.375L14.3955001831055,3.375C14.837233543396,3.37462115287781,15.2383098602295,3.63279128074646,15.4208812713623,4.03502941131592C15.6034526824951,4.43726778030396,15.533727645874,4.90912866592407,15.2426252365112,5.24137496948242L9.84712505340576,11.4063749313354C9.63349151611328,11.6508436203003,9.3246603012085,11.7911014556885,9,11.7911014556885C8.6753396987915,11.7911014556885,8.36650848388672,11.6508436203003,8.15287494659424,11.4063749313354L8.15287494659424,11.4075002670288 2.75737500190735,5.24025011062622C2.12062501907349,4.51462507247925,2.63812494277954,3.375,3.60450005531311,3.375z" />
+	</Style>
+	<Style Selector="ScrollBar:vertical /template/ RepeatButton.line.up /template/ Path">
+		<Setter Property="Data" Value="F1M9,3.95889806747437C9.3246603012085,3.95889806747437,9.63349151611328,4.09915590286255,9.84712505340576,4.34362506866455L15.2426252365112,10.5086250305176C15.533727645874,10.8408708572388,15.6034526824951,11.3127317428589,15.4208812713623,11.7149696350098C15.2383098602295,12.117208480835,14.837233543396,12.3753786087036,14.3955001831055,12.375L3.60450005531311,12.375C2.63812494277954,12.375,2.12062501907349,11.236499786377,2.75737500190735,10.5086250305176L8.15287494659424,4.34250020980835 8.15287494659424,4.34362506866455C8.36650848388672,4.09915590286255,8.6753396987915,3.95889806747437,9,3.95889806747437z" />
 	</Style>
 
 	<!-- Separator -->

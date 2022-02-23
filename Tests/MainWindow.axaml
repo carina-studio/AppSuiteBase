@@ -216,6 +216,8 @@
 							</appControls:ToolBarScrollViewer>
 						</Border>
 
+						<ScrollBar AllowAutoHide="False" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" ViewportSize="10" Width="300"/>
+
 						<TextBlock Text="{DynamicResource String/ApplicationOptions.LogOutputTargetPort}" Margin="5,5,5,0"/>
 						<NumericUpDown HorizontalAlignment="Left" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
 
