@@ -207,7 +207,7 @@
 											<Panel Classes="Icon">
 												<Image Classes="Icon" Source="{DynamicResource Image/Icon.More}"/>
 												<Border Classes="ToolBar_NotificationIndicator" IsVisible="{Binding $parent[Window].Application.UpdateInfo, Converter={x:Static appConverters:ValueToBooleanConverters.NonNullToTrue}}">
-													<Image Classes="ToolBar_NotificationIndicator" Source="{DynamicResource Image/Icon.Information.Colored}"/>
+													<Image Classes="ToolBar_NotificationIndicator" Source="{DynamicResource Image/Icon.Update.Colored}"/>
 												</Border>
 											</Panel>
 										</Button>

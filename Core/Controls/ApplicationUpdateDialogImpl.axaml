@@ -8,6 +8,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.ApplicationUpdateDialogImpl"
         Classes="Dialog"
+		ShowInTaskbar="True"
         Title="{DynamicResource String/ApplicationUpdateDialog.Title}"
         Width="{DynamicResource Double/ApplicationUpdateDialog.Width}">
 
