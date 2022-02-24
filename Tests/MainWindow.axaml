@@ -70,7 +70,7 @@
 					</Grid>
 				</TabItem.Header>
 
-				<ScrollViewer HorizontalAlignment="Stretch">
+				<ScrollViewer HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Auto">
 					<StackPanel Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalAlignment="Stretch" Orientation="Vertical">
 
 						<StackPanel.ContextMenu>
