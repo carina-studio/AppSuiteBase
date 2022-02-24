@@ -866,7 +866,6 @@
 									Opacity="1"
 									Height="{DynamicResource Double/ScrollBar.Thumb.Size}"
 									MinWidth="{DynamicResource ScrollBarSize}"
-									RenderTransformOrigin="50%,100%"
 									VerticalAlignment="Center" />
 							</Track>
 							<RepeatButton Name="PART_LineDownButton"
@@ -917,8 +916,7 @@
 									HorizontalAlignment="Center"
 									Opacity="1"
 									Width="{DynamicResource Double/ScrollBar.Thumb.Size}"
-									MinHeight="{DynamicResource ScrollBarSize}"
-									RenderTransformOrigin="100%,50%" />
+									MinHeight="{DynamicResource ScrollBarSize}" />
 							</Track>
 							<RepeatButton Name="PART_LineDownButton"
 											HorizontalAlignment="Center"
@@ -955,13 +953,15 @@
 	<Style Selector="ScrollBar /template/ RepeatButton.line">
 		<Setter Property="Template">
 			<ControlTemplate>
-				<Border x:Name="Root" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
+				<Border Name="Root" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
 					<Viewbox Width="{DynamicResource ScrollBarButtonArrowIconFontSize}"
-							Height="{DynamicResource ScrollBarButtonArrowIconFontSize}">
+							 Height="{DynamicResource ScrollBarButtonArrowIconFontSize}"
+							 HorizontalAlignment="Center"
+							 VerticalAlignment="Center">
 						<Path x:Name="Arrow"
 							VerticalAlignment="Center"
 							HorizontalAlignment="Center"
-							Width="18" Height="18" />
+							Width="18" Height="16" />
 					</Viewbox>
 				</Border>
 			</ControlTemplate>
@@ -1005,6 +1005,9 @@
 	</Style>
 	<Style Selector="ScrollViewer /template/ ScrollBar#PART_VerticalScrollBar">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ScrollViewer.ScrollBar.Margin.Vertical}"/>
+	</Style>
+	<Style Selector="ScrollViewer /template/ ScrollBar /template/ Thumb.thumb">
+		<Setter Property="RenderTransformOrigin" Value="100%,100%"/>
 	</Style>
 
 	<!-- Separator -->
