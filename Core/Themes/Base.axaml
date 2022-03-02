@@ -88,7 +88,7 @@
 		<StaticResourceExtension x:Key="ComboBoxBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
 		<SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="{DynamicResource Color/Control.Border}"/>
 		<Thickness x:Key="ComboBoxDropdownBorderPadding">4,3,4,3</Thickness>
-		<Thickness x:Key="ComboBoxDropdownBorderThickness">1,1,1,2</Thickness>
+		<Thickness x:Key="ComboBoxDropdownBorderThickness">1,2,1,2</Thickness>
 		<Thickness x:Key="ComboBoxDropdownContentMargin">0</Thickness>
 
 		<!-- ComboBoxItem -->
