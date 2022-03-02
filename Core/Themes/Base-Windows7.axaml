@@ -5,6 +5,9 @@
 	<!-- Resources -->
 	<Styles.Resources>
 
+		<!-- ComboBoxItem -->
+		<Thickness x:Key="Thickness/ComboBoxItem.Padding">6,6,18,6</Thickness>
+
 		<!-- Overlay -->
 		<CornerRadius x:Key="OverlayCornerRadius">0</CornerRadius>
 

@@ -371,15 +371,34 @@
 							<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
 						</Border>
 
-						<appControls:ListBox DoubleClickOnItem="OnListBoxDoubleClickOnItem" HorizontalAlignment="Left" Width="200" Margin="5">
+						<appControls:ListBox DoubleClickOnItem="OnListBoxDoubleClickOnItem" HorizontalAlignment="Left" Width="150" Margin="5">
 							<ListBoxItem>Item 1</ListBoxItem>
-							<ListBoxItem>Item 2</ListBoxItem>
+							<ListBoxItem>Item 2 Item 2 Item 2 Item 2 Item 2</ListBoxItem>
 							<ListBoxItem>Item 3</ListBoxItem>
-							<ListBoxItem>Item 4</ListBoxItem>
+							<ListBoxItem>Item 4 Item 4 Item 4 Item 4 Item 4</ListBoxItem>
 						</appControls:ListBox>
 
 						<ComboBox HorizontalAlignment="Left" Width="200" Margin="5">
-							1234567890123456789012345678901234567890
+							<ComboBoxItem>1</ComboBoxItem>
+							<ComboBoxItem>2</ComboBoxItem>
+							<ComboBoxItem>3</ComboBoxItem>
+							<ComboBoxItem>4</ComboBoxItem>
+							<ComboBoxItem>5</ComboBoxItem>
+							<ComboBoxItem>6</ComboBoxItem>
+							<ComboBoxItem>7</ComboBoxItem>
+							<ComboBoxItem>8</ComboBoxItem>
+							<ComboBoxItem>9</ComboBoxItem>
+							<ComboBoxItem>10 looooooooooooooooooooog content</ComboBoxItem>
+							<ComboBoxItem>11</ComboBoxItem>
+							<ComboBoxItem>12</ComboBoxItem>
+							<ComboBoxItem>13</ComboBoxItem>
+							<ComboBoxItem>14</ComboBoxItem>
+							<ComboBoxItem>15</ComboBoxItem>
+							<ComboBoxItem>16</ComboBoxItem>
+							<ComboBoxItem>17</ComboBoxItem>
+							<ComboBoxItem>18</ComboBoxItem>
+							<ComboBoxItem>19</ComboBoxItem>
+							<ComboBoxItem>20</ComboBoxItem>
 						</ComboBox>
 
 						<appControls:IPAddressTextBox Name="ipAddressTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>

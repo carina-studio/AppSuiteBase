@@ -94,7 +94,7 @@
 		<!-- ComboBoxItem -->
 		<CornerRadius x:Key="CornerRadius/ComboBoxItem">5</CornerRadius>
 		<Thickness x:Key="Thickness/ComboBoxItem.Margin">0,1,0,1</Thickness>
-		<Thickness x:Key="Thickness/ComboBoxItem.Padding">6</Thickness>
+		<Thickness x:Key="Thickness/ComboBoxItem.Padding">6,6,15,6</Thickness>
 
 		<!-- Control -->
 		<SolidColorBrush x:Key="Brush/Control.Border" Color="{DynamicResource Color/Control.Border}"/>
@@ -212,7 +212,7 @@
 		<!-- ListBoxItem -->
 		<CornerRadius x:Key="CornerRadius/ListBoxItem">4</CornerRadius>
 		<Thickness x:Key="Thickness/ListBoxItem.Margin">0,1,0,1</Thickness>
-		<Thickness x:Key="Thickness/ListBoxItem.Padding">6</Thickness>
+		<Thickness x:Key="Thickness/ListBoxItem.Padding">6,6,15,6</Thickness>
 
 		<!-- MainWindow -->
 		<sys:TimeSpan x:Key="TimeSpan/MainWindow.ContentPaddingTransition">0:0:0.8</sys:TimeSpan>
@@ -272,8 +272,8 @@
 
 		<!-- ScrollViewer -->
 		<SolidColorBrush x:Key="ScrollViewerScrollBarsSeparatorBackground" Color="Transparent"/>
-		<Thickness x:Key="Thickness/ScrollViewer.ScrollBar.Margin.Horizontal">3,0,3,3</Thickness>
-		<Thickness x:Key="Thickness/ScrollViewer.ScrollBar.Margin.Vertical">0,3,3,3</Thickness>
+		<Thickness x:Key="Thickness/ScrollViewer.ScrollBar.Margin.Horizontal">2,0,2,2</Thickness>
+		<Thickness x:Key="Thickness/ScrollViewer.ScrollBar.Margin.Vertical">0,2,2,2</Thickness>
 
 		<!-- Separator -->
 		<Color x:Key="Color/Separator.Background">#000000</Color>
@@ -350,7 +350,7 @@
 		<sys:Double x:Key="Double/TabItem.Header.MaxWidth">250</sys:Double>
 		<Thickness x:Key="Thickness/TabItem.Header.Border">1,1,1,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">10,0,0,0</Thickness>
-		<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">3</Thickness>
+		<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">4</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.InsertionIndicator.Border">1,1,1,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Margin">1,2,1,0</Thickness>
@@ -1007,7 +1007,7 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ScrollViewer.ScrollBar.Margin.Vertical}"/>
 	</Style>
 	<Style Selector="ScrollViewer /template/ ScrollBar /template/ Thumb.thumb">
-		<Setter Property="RenderTransformOrigin" Value="100%,100%"/>
+		<Setter Property="RenderTransformOrigin" Value="120%,120%"/>
 	</Style>
 
 	<!-- Separator -->
