@@ -40,13 +40,45 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
+        /// <inheritdoc/>
+        protected override long CoerceValue(long value)
+        {
+            if (value < this.Minimum)
+                return Minimum;
+            else if (value > this.Maximum)
+                return this.Maximum;
+            return value;
+        }
+
+
+        /// <inheritdoc/>
+        protected override long DefaultValue 
+        { 
+            get
+            {
+                if (this.Minimum < 0)
+                {
+                    if (this.Maximum > 0)
+                        return 0;
+                    return this.Maximum;
+                }
+                return this.Minimum;
+            }
+        }
+
+
         /// <summary>
         /// Get or set maximum value.
         /// </summary>
         public long Maximum
         {
             get => this.GetValue<long>(MaximumProperty);
-            set => this.SetValue<long>(MaximumProperty, value);
+            set
+            {
+                if (value < this.Minimum)
+                    value = this.Minimum;
+                this.SetValue<long>(MaximumProperty, value);
+            }
         }
 
 
@@ -56,7 +88,12 @@ namespace CarinaStudio.AppSuite.Controls
         public long Minimum
         {
             get => this.GetValue<long>(MinimumProperty);
-            set => this.SetValue<long>(MinimumProperty, value);
+            set
+            {
+                if (value > this.Maximum)
+                    value = this.Maximum;
+                this.SetValue<long>(MinimumProperty, value);
+            }
         }
 
 
@@ -112,7 +149,11 @@ namespace CarinaStudio.AppSuite.Controls
                 }
             }
             else if (property == MaximumProperty || property == MinimumProperty)
+            {
                 this.Validate();
+                if (!this.IsNullValueAllowed)
+                    this.Value = this.CoerceValue(this.Value.GetValueOrDefault());
+            }
             else if (property == TextProperty)
             {
                 var s = (change.NewValue.Value as string);

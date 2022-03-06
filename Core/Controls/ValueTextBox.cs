@@ -60,11 +60,25 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		/// <summary>
+		/// Coerce the set value.
+		/// </summary>
+		/// <param name="value">Set value.</param>
+		/// <returns>Coerced value.</returns>
+		protected virtual T CoerceValue(T value) => value;
+
+
+		/// <summary>
 		/// Convert value to text.
 		/// </summary>
 		/// <param name="value">Value.</param>
 		/// <returns>Converted text.</returns>
 		protected virtual string? ConvertToText(T value) => value.ToString();
+
+
+		/// <summary>
+		/// Default value for <see cref="IsNullValueAllowed"/> is False and <see cref="Avalonia.Controls.TextBox.Text"/> is empty.
+		/// </summary>
+		protected virtual T DefaultValue { get => default(T); }
 
 
 		/// <summary>
@@ -132,6 +146,7 @@ namespace CarinaStudio.AppSuite.Controls
 					{
 						var fromEmptyString = string.IsNullOrEmpty(this.Text);
 						this.Text = this.ConvertToText(value.Value);
+						this.validateAction.ExecuteIfScheduled();
 						if (this.IsFocused && fromEmptyString && !string.IsNullOrEmpty(this.Text))
 							this.SelectAll();
 					}
@@ -158,8 +173,9 @@ namespace CarinaStudio.AppSuite.Controls
 		// Reset to default value.
 		void ResetToDefaultValue()
 		{
-			this.SetValue<T?>(ValueProperty, default(T));
-			this.Text = this.ConvertToText(default(T));
+			var value = this.DefaultValue;
+			this.SetValue<T?>(ValueProperty, value);
+			this.Text = this.ConvertToText(value);
 			this.SetValue<bool>(IsTextValidProperty, true);
 			this.validateAction.Cancel();
 			if (this.IsFocused)
@@ -220,7 +236,7 @@ namespace CarinaStudio.AppSuite.Controls
 				}
 				else
 				{
-					value = default(T);
+					value = this.DefaultValue;
 					if (updateValueAndText)
 						this.ResetToDefaultValue();
 				}
@@ -259,13 +275,15 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <summary>
 		/// Get or set value.
 		/// </summary>
-		public T? Value
+		public virtual T? Value
 		{
 			get => this.GetValue<T?>(ValueProperty);
 			set
 			{
 				this.validateAction.ExecuteIfScheduled();
-				this.SetValue<T?>(ValueProperty, value);
+				if (value == null && !this.IsNullValueAllowed)
+					value = value.GetValueOrDefault();
+				this.SetValue<T?>(ValueProperty, value != null ? this.CoerceValue(value.GetValueOrDefault()) : null);
 			}
 		}
 

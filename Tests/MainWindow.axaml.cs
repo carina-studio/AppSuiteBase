@@ -265,12 +265,12 @@ namespace CarinaStudio.AppSuite.Tests
 
         void Test()
         {
-            this.integerTextBox2.IsNullValueAllowed = !this.integerTextBox2.IsNullValueAllowed;
+            //this.integerTextBox2.IsNullValueAllowed = !this.integerTextBox2.IsNullValueAllowed;
 
-            //this.integerTextBox.Value = 0;
-            //this.integerTextBox.Text = "0";
-            //this.integerTextBox.Value = 1234;
-            //this.integerTextBox.Text = "1234";
+            this.integerTextBox.Value = 321;
+            this.integerTextBox.Text = "321";
+            this.integerTextBox.Value = 1234;
+            this.integerTextBox.Text = "1234";
 
             //this.ipAddressTextBox.Text = "127.0.0.1";
             //this.ipAddressTextBox.IPAddress = System.Net.IPAddress.Parse("127.0.0.1");

@@ -123,6 +123,7 @@ namespace CarinaStudio.AppSuite.Controls
 					{
 						var fromEmptyString = string.IsNullOrEmpty(this.Text);
 						this.Text = this.ConvertToText(obj);
+						this.validateAction.ExecuteIfScheduled();
 						if (this.IsFocused && fromEmptyString && !string.IsNullOrEmpty(this.Text))
 							this.SelectAll();
 					}
