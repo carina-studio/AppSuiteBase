@@ -748,6 +748,24 @@ namespace CarinaStudio.AppSuite
                 })));
             }));
 
+            // disable pointer wheel on ComboBox/NumericUpDown
+            Avalonia.Controls.TextBox.PointerWheelChangedEvent.AddClassHandler(typeof(Avalonia.Controls.ComboBox), (s, e) =>
+            {
+                var comboBox = (Avalonia.Controls.ComboBox)s.AsNonNull();
+                if (!comboBox.IsDropDownOpen)
+                {
+                    comboBox.Parent?.Let(parent =>
+                        parent.RaiseEvent(e));
+                    e.Handled = true;
+                }
+            }, RoutingStrategies.Tunnel);
+            Avalonia.Controls.TextBox.PointerWheelChangedEvent.AddClassHandler(typeof(Avalonia.Controls.NumericUpDown), (s, e) =>
+            {
+                ((Avalonia.Controls.NumericUpDown)s.AsNonNull()).Parent?.Let(parent =>
+                    parent.RaiseEvent(e));
+                e.Handled = true;
+            }, RoutingStrategies.Tunnel);
+
             // [Workaround] Prevent menu flicker in Avalonia 0.10.11
             var pointerReleasedHandler = new EventHandler<RoutedEventArgs>((sender, e) =>
             {
