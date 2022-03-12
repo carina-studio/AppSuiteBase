@@ -366,6 +366,7 @@
 		</LinearGradientBrush>
 		<StaticResourceExtension x:Key="TextControlBorderBrushDisabled" ResourceKey="TextControlBorderBrush"/>
 		<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>
+		<StaticResourceExtension x:Key="TextControlForegroundDisabled" ResourceKey="SystemControlDisabledBaseMediumLowBrush" />
 		<SolidColorBrush x:Key="Brush/TextBox.Foreground.Error" Color="{DynamicResource Color/TextBox.Foreground.Error}"/>
 		<SolidColorBrush x:Key="Brush/TextBox.SelectionForeground.Error" Color="{DynamicResource Color/TextBox.SelectionForeground.Error}"/>
 		<Color x:Key="Color/TextBox.Foreground.Error">#ff0000</Color>
@@ -1434,6 +1435,10 @@
 			</ContextMenu>
 		</Setter>
 		<Setter Property="FontFamily" Value="{DynamicResource FontFamily/TextBox.FallbackFontFamilies}"/>
+	</Style>
+	<Style Selector="TextBox:disabled">
+		<!-- [Workaround] -->
+		<Setter Property="Foreground" Value="{DynamicResource TextControlForegroundDisabled}" />
 	</Style>
 	<Style Selector="TextBox.WithInPlaceAction">
 		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.Padding.WithInPlaceAction}"/>
