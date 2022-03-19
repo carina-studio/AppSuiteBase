@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Platform;
 using CarinaStudio.Animation;
 using CarinaStudio.AppSuite.ViewModels;
+using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
@@ -607,9 +608,17 @@ namespace CarinaStudio.AppSuite.Controls
                     this.isShowingInitialDialogs = false;
                     return;
                 }
-                await new ApplicationChangeListDialog(appChangeList).ShowDialog(this);
-                this.isShowingInitialDialogs = false;
-                return;
+                if (appChangeList.ChangeList.IsNotEmpty())
+                {
+                    await new ApplicationChangeListDialog(appChangeList).ShowDialog(this);
+                    this.isShowingInitialDialogs = false;
+                    return;
+                }
+                else
+                {
+                    this.Logger.LogDebug("No application change list to show");
+                    this.isShowingInitialDialogs = false;
+                }
             }
 
             // notify application update found
