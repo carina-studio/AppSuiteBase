@@ -77,6 +77,19 @@
 		<Color x:Key="Color/Button.Background.Pressed">#ffffff</Color>
 		<Thickness x:Key="Thickness/Button.Border">1</Thickness>
 
+		<!-- CheckBox -->
+		<SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeIndeterminatePointerOver" Color="{DynamicResource SystemAccentColorLight1}"/>
+		<SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeIndeterminatePressed" Color="{DynamicResource SystemAccentColorDark1}"/>
+		<SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="{DynamicResource SystemAccentColorLight1}"/>
+		<SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
+		<StaticResourceExtension x:Key="CheckBoxCheckBackgroundFillCheckedDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+		<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="{DynamicResource SystemAccentColorLight1}"/>
+		<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
+		<StaticResourceExtension x:Key="CheckBoxCheckBackgroundFillIndeterminateDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+		<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillIndeterminatePointerOver" Color="{DynamicResource SystemAccentColorLight1}"/>
+		<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillIndeterminatePressed" Color="{DynamicResource SystemAccentColorDark1}"/>
+		<StaticResourceExtension x:Key="CheckBoxCheckBackgroundFillUncheckedDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+
 		<!-- ComboBox -->
 		<StaticResourceExtension x:Key="ComboBoxBackground" ResourceKey="ButtonBackground"/>
 		<StaticResourceExtension x:Key="ComboBoxBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
