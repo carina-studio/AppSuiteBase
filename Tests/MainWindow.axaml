@@ -303,26 +303,6 @@
 								</Button>
 							</StackPanel>
 						</Border>
-
-						<StackPanel Orientation="Horizontal">
-							<Expander HorizontalAlignment="Left" Header="Expander" Margin="5">
-								<StackPanel>
-
-									<appControls:DatePicker HorizontalAlignment="Left"/>
-									<appControls:TimePicker HorizontalAlignment="Left"/>
-
-									<Slider HorizontalAlignment="Left" Width="200"/>
-
-								</StackPanel>
-							</Expander>
-							<Expander HorizontalAlignment="Left" IsExpanded="True" IsEnabled="False" Header="Expander" Margin="5">
-								<StackPanel>
-
-									<Slider HorizontalAlignment="Left" Width="200"/>
-
-								</StackPanel>
-							</Expander>
-						</StackPanel>
 						
 						<StackPanel Orientation="Horizontal">
 							<Button Content="Button" Margin="5"/>
@@ -416,10 +396,18 @@
 
 			<TabItem>
 				<TabItem.Header>
-					<TextBlock Text="12345"/>
+					<TextBlock Text="Expander"/>
 				</TabItem.Header>
-				<StackPanel>
-					<Border Background="{DynamicResource Brush/ToolBar.Background}" Height="10"/>
+				<StackPanel Background="{DynamicResource Brush/ToolBar.Background}">
+					<Expander Header="Expander" HorizontalAlignment="Left" Margin="10" Width="200">
+						<Button Content="Button" Margin="30"/>
+					</Expander>
+					<Expander Header="Disabled" HorizontalAlignment="Left" IsEnabled="False" Margin="10" Width="200">
+						<Button Content="Button" Margin="30"/>
+					</Expander>
+					<Expander Header="Disabled" HorizontalAlignment="Left" IsEnabled="False" IsExpanded="True" Margin="10" Width="200">
+						<Button Content="Button" Margin="30"/>
+					</Expander>
 				</StackPanel>
 			</TabItem>
 

@@ -162,6 +162,10 @@
 		<SolidColorBrush x:Key="ExpanderBackgroundDisabled" Color="{DynamicResource SystemAltMediumHighColor}" Opacity="0.5"/>
 		<SolidColorBrush x:Key="ExpanderDropDownBackground" Color="{DynamicResource ExpanderDropDownBackground}" Opacity="0.5"/>
 		<StaticResourceExtension x:Key="ExpanderBorderBrush" ResourceKey="Brush/Control.Border"/>
+		<Thickness x:Key="ExpanderDropdownDownBorderThickness">0</Thickness>
+		<Thickness x:Key="ExpanderDropdownLeftBorderThickness">0</Thickness>
+		<Thickness x:Key="ExpanderDropdownRightBorderThickness">0</Thickness>
+		<Thickness x:Key="ExpanderDropdownUpBorderThickness">0</Thickness>
 
 		<!-- GridSplitter -->
 		<sys:Double x:Key="Double/GridSplitter.Thickness">5</sys:Double>
@@ -656,8 +660,48 @@
 	</Style>
 
 	<!-- Expander -->
-	<Style Selector="Expander:disabled /template/ ToggleButton#ExpanderHeader">
-		<Setter Property="Opacity" Value="0.5"/>
+	<Style Selector="Expander">
+		<Setter Property="BorderThickness" Value="0"/>
+	</Style>
+	<Style Selector="Expander:left /template/ ToggleButton#ExpanderHeader">
+		<Setter Property="HorizontalAlignment" Value="Left" />
+		<Setter Property="VerticalAlignment" Value="Stretch" />
+	</Style>
+	<Style Selector="Expander:expanded:left /template/ ToggleButton#ExpanderHeader">
+		<Setter Property="Margin" Value="0,0,1,0" />
+	</Style>
+	<Style Selector="Expander:up /template/ ToggleButton#ExpanderHeader">
+		<Setter Property="HorizontalAlignment" Value="Stretch" />
+		<Setter Property="VerticalAlignment" Value="Bottom" />
+	</Style>
+	<Style Selector="Expander:expanded:up /template/ ToggleButton#ExpanderHeader">
+		<Setter Property="Margin" Value="0,1,0,0" />
+	</Style>
+	<Style Selector="Expander:right /template/ ToggleButton#ExpanderHeader">
+		<Setter Property="HorizontalAlignment" Value="Right" />
+		<Setter Property="VerticalAlignment" Value="Stretch" />
+	</Style>
+	<Style Selector="Expander:expanded:right /template/ ToggleButton#ExpanderHeader">
+		<Setter Property="Margin" Value="1,0,0,0" />
+	</Style>
+	<Style Selector="Expander:down /template/ ToggleButton#ExpanderHeader">
+		<Setter Property="HorizontalAlignment" Value="Stretch" />
+		<Setter Property="VerticalAlignment" Value="Top" />
+	</Style>
+	<Style Selector="Expander:expanded:down /template/ ToggleButton#ExpanderHeader">
+		<Setter Property="Margin" Value="0,0,0,1" />
+	</Style>
+	<Style Selector="Expander /template/ ToggleButton#ExpanderHeader:disabled /template/ Border#ToggleButtonBackground">
+		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundDisabled}" />
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
+	</Style>
+	<Style Selector="Expander /template/ ToggleButton#ExpanderHeader:pointerover /template/ Border#ToggleButtonBackground">
+		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundPointerOver}" />
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource ButtonForegroundPointerOver}" />
+	</Style>
+	<Style Selector="Expander /template/ ToggleButton#ExpanderHeader:pressed /template/ Border#ToggleButtonBackground">
+		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundPressed}" />
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource ButtonForegroundPressed}" />
 	</Style>
 
 	<!-- GridSplitter -->
