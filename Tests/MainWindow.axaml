@@ -355,7 +355,7 @@
 						<appControls:ListBox DoubleClickOnItem="OnListBoxDoubleClickOnItem" HorizontalAlignment="Left" Width="150" Margin="5">
 							<ListBoxItem>Item 1</ListBoxItem>
 							<ListBoxItem>Item 2 Item 2 Item 2 Item 2 Item 2</ListBoxItem>
-							<ListBoxItem>Item 3</ListBoxItem>
+							<ListBoxItem IsEnabled="False">Item 3</ListBoxItem>
 							<ListBoxItem>Item 4 Item 4 Item 4 Item 4 Item 4</ListBoxItem>
 						</appControls:ListBox>
 
@@ -413,8 +413,24 @@
 
 			<TabItem>
 				<TabItem.Header>
-					<TextBlock Text="Tab"/>
+					<TextBlock Text="TreeView"/>
 				</TabItem.Header>
+				<StackPanel Background="{DynamicResource Brush/ToolBar.Background}" Orientation="Horizontal">
+					<TreeView Margin="10" Width="200">
+						<TreeViewItem Header="Item 1-1">
+							<TreeViewItem Header="Item 2-1"/>
+							<TreeViewItem Header="Item 2-2"/>
+						</TreeViewItem>
+						<TreeViewItem Header="Item 1-2">
+							<TreeViewItem Header="Item 2-1"/>
+							<TreeViewItem Header="Item 2-2">
+								<TreeViewItem Header="Item 3-1"/>
+								<TreeViewItem Header="Item 3-2"/>
+							</TreeViewItem>
+							<TreeViewItem Header="Item 2-3" IsEnabled="False"/>
+						</TreeViewItem>
+					</TreeView>
+				</StackPanel>
 			</TabItem>
 
 			<TabItem>
