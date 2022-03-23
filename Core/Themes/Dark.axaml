@@ -50,8 +50,8 @@
 		<Color x:Key="Color/StatusBar.Background.Inactive">#303030</Color>
 
 		<!-- TabItem -->
-		<Color x:Key="Color/TabItem.Header.Background">#101010</Color>
-		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#171717</Color>
+		<Color x:Key="Color/TabItem.Header.Background">#00000000</Color>
+		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#1e1e1e</Color>
 		<Color x:Key="Color/TabItem.Header.Background.Selected">#1e1e1e</Color>
 
 		<!-- TextBox -->

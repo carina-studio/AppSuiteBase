@@ -354,7 +354,6 @@
 		<SolidColorBrush x:Key="Brush/TabItem.Header.Background.PointerOver" Color="{DynamicResource Color/TabItem.Header.Background.PointerOver}"/>
 		<SolidColorBrush x:Key="Brush/TabItem.Header.Background.Selected" Color="{DynamicResource Color/TabItem.Header.Background.Selected}"/>
 		<SolidColorBrush x:Key="Brush/TabItem.Header.InsertionIndicator.Background" Color="{DynamicResource Color/Accent}" Opacity="0.7"/>
-		<SolidColorBrush x:Key="Brush/TabItem.Header.InsertionIndicator.Border" Color="{DynamicResource Color/Accent}"/>
 		<Color x:Key="Color/TabItem.Header.Background">#ffffff</Color>
 		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#ffffff</Color>
 		<Color x:Key="Color/TabItem.Header.Background.Selected">#ffffff</Color>
@@ -366,13 +365,11 @@
 		<sys:Double x:Key="Double/TabItem.Header.Icon.Size">16</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.InsertionIndicator.Width">20</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.MaxWidth">250</sys:Double>
-		<Thickness x:Key="Thickness/TabItem.Header.Border">1,1,1,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">10,0,0,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">4</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
-		<Thickness x:Key="Thickness/TabItem.Header.InsertionIndicator.Border">1,1,1,0</Thickness>
 		<Thickness x:Key="Thickness/TabItem.Header.Margin">1,2,1,0</Thickness>
-		<Thickness x:Key="Thickness/TabItem.Header.Padding">10</Thickness>
+		<Thickness x:Key="Thickness/TabItem.Header.Padding">15,10,15,10</Thickness>
 
 		<!-- TextBox -->
 		<StaticResourceExtension x:Key="TextControlBackground" ResourceKey="ButtonBackground"/>
@@ -493,6 +490,7 @@
 	<!-- AddTabItemButton -->
 	<Style Selector="Button.AddTabItem">
 		<Setter Property="Background" Value="{DynamicResource Brush/TabItem.Header.Background}"/>
+		<Setter Property="BorderBrush" Value="{x:Null}"/>
 		<Setter Property="Height" Value="{StaticResource Double/AddTabItemButton.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="Padding" Value="{StaticResource Thickness/AddTabItemButton.Padding}"/>
@@ -507,10 +505,10 @@
 		<Setter Property="Background" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="Button.AddTabItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Background" Value="{DynamicResource Brush/TabItem.Header.Background.Selected}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/TabItem.Header.Background.PointerOver}"/>
 	</Style>
 	<Style Selector="Button.AddTabItem:pressed /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Background" Value="{DynamicResource Brush/TabItem.Header.Background}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/TabItem.Header.Background.Selected}"/>
 	</Style>
 
 	<!-- BrowseButton -->
@@ -1329,8 +1327,6 @@
 							VerticalAlignment="{TemplateBinding VerticalAlignment}">
 						<DockPanel>
 							<Panel DockPanel.Dock="Top">
-								<Line EndPoint="1,0" HorizontalAlignment="Stretch" IsHitTestVisible="False" StartPoint="0,0" Stretch="Fill" Stroke="{DynamicResource Brush/TabItem.Header.Backgrund.Selected}" StrokeThickness="1" VerticalAlignment="Bottom"/>
-								<Line EndPoint="1,0" HorizontalAlignment="Stretch" IsHitTestVisible="False" StartPoint="0,0" Stretch="Fill" Stroke="{DynamicResource Brush/Control.Border.Dark}" StrokeThickness="1" VerticalAlignment="Bottom"/>
 								<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" Background="{x:Null}">
 									<Border Padding="{StaticResource Thickness/TabControl.TabStrip.Padding}">
 										<ItemsPresenter Name="PART_ItemsPresenter"
@@ -1409,21 +1405,20 @@
 						<Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Stretch">
 
 							<Border IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemBefore}" Margin="0,0,0,1">
-								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" BorderBrush="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Border}" BorderThickness="{StaticResource Thickness/TabItem.Header.InsertionIndicator.Border}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" Margin="{StaticResource Thickness/TabItem.Header.Margin}" Width="{StaticResource Double/TabItem.Header.InsertionIndicator.Width}"/>
+								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" Margin="{StaticResource Thickness/TabItem.Header.Margin}" Width="{StaticResource Double/TabItem.Header.InsertionIndicator.Width}"/>
 							</Border>
 
 							<Border Name="PART_ContentContainer" Grid.Column="1" Margin="{StaticResource Thickness/TabItem.Header.Margin}" MaxWidth="{StaticResource Double/TabItem.Header.MaxWidth}" VerticalAlignment="Bottom">
 								<Panel>
-									<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" Margin="0,0,0,1"/>
-									<Border Background="{StaticResource Brush/TabItem.Header.Background}" BorderThickness="{StaticResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource ButtonBorderBrush}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding !$parent[TabItem].IsSelected}" Margin="0,0,0,1"/>
-									<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" BorderThickness="{StaticResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource ButtonBorderBrushPointerOver}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsPointerOver}" Margin="0,0,0,1">
+									<Border Background="{StaticResource Brush/TabItem.Header.Background}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding !$parent[TabItem].IsSelected}" Margin="0,0,0,1"/>
+									<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsPointerOver}" Margin="0,0,0,1">
 										<!--Border.Transitions>
 											<Transitions>
 												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Border.Transitions-->
 									</Border>
-									<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" BorderThickness="{StaticResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource ButtonBorderBrush}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsSelected}">
+									<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsSelected}">
 										<!--Border.Transitions>
 											<Transitions>
 												<DoubleTransition Property="Opacity" Delay="0:0:0.15" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
@@ -1459,7 +1454,7 @@
 							</Border>
 
 							<Border Grid.Column="2" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemAfter}" Margin="0,0,0,1">
-								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" BorderBrush="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Border}" BorderThickness="{StaticResource Thickness/TabItem.Header.InsertionIndicator.Border}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" Margin="{StaticResource Thickness/TabItem.Header.Margin}" Width="{StaticResource Double/TabItem.Header.InsertionIndicator.Width}"/>
+								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" Margin="{StaticResource Thickness/TabItem.Header.Margin}" Width="{StaticResource Double/TabItem.Header.InsertionIndicator.Width}"/>
 							</Border>
 							
 						</Grid>
