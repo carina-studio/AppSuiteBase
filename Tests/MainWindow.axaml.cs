@@ -35,9 +35,9 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         readonly MutableObservableBoolean canShowAppInfo = new MutableObservableBoolean(true);
-        readonly IntegerTextBox integerTextBox;
-        readonly IntegerTextBox integerTextBox2;
-        readonly IPAddressTextBox ipAddressTextBox;
+        readonly Controls.IntegerTextBox integerTextBox;
+        readonly Controls.IntegerTextBox integerTextBox2;
+        readonly Controls.IPAddressTextBox ipAddressTextBox;
         readonly ScheduledAction logAction;
         private readonly ObservableList<TabItem> tabItems = new();
 
@@ -59,9 +59,9 @@ namespace CarinaStudio.AppSuite.Tests
                 this.logAction?.Schedule(500);
             });
 
-            this.integerTextBox = this.FindControl<IntegerTextBox>(nameof(integerTextBox)).AsNonNull();
-            this.integerTextBox2 = this.FindControl<IntegerTextBox>(nameof(integerTextBox2)).AsNonNull();
-            this.ipAddressTextBox = this.FindControl<IPAddressTextBox>(nameof(ipAddressTextBox)).AsNonNull();
+            this.integerTextBox = this.FindControl<Controls.IntegerTextBox>(nameof(integerTextBox)).AsNonNull();
+            this.integerTextBox2 = this.FindControl<Controls.IntegerTextBox>(nameof(integerTextBox2)).AsNonNull();
+            this.ipAddressTextBox = this.FindControl<Controls.IPAddressTextBox>(nameof(ipAddressTextBox)).AsNonNull();
 
             var tabControl = this.FindControl<TabControl>("tabControl").AsNonNull();
             this.tabItems.AddRange(tabControl.Items.Cast<TabItem>());
