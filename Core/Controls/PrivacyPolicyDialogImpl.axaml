@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:abControls="using:CarinaStudio.Controls"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.PrivacyPolicyDialogImpl"
@@ -36,7 +37,7 @@
 			<!-- Message -->
 			<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
 				<TextBlock Text="{Binding $parent[Window].Message1}"/>
-				<controls:LinkTextBlock Text="{DynamicResource String/PrivacyPolicyDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
+				<abControls:LinkTextBlock Text="{DynamicResource String/PrivacyPolicyDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
 				<TextBlock Text="{Binding $parent[Window].Message2}"/>
 			</StackPanel>
 			

@@ -3,6 +3,7 @@
 
 	<!-- Base styles -->
 	<FluentTheme Mode="Dark"/>
+	<StyleInclude Source="avares://CarinaStudio.AppBase.Avalonia/Theme/Dark.axaml"/>
 	<StyleInclude Source="/Themes/Base.axaml"/>
 
 	<!-- Resources -->
@@ -30,12 +31,6 @@
 
 		<!-- Icon -->
 		<Color x:Key="Color/Icon">#ffffff</Color>
-
-		<!-- LinkTextBlock -->
-		<Color x:Key="Color/LinkTextBlock.Foreground">#0085e5</Color>
-		<Color x:Key="Color/LinkTextBlock.Foreground.Disabled">#4d0085e5</Color>
-		<Color x:Key="Color/LinkTextBlock.Foreground.PointerOver">#32aaff</Color>
-		<Color x:Key="Color/LinkTextBlock.Foreground.Pressed">#0077cc</Color>
 
 		<!-- Menu -->
 		<Color x:Key="Color/Menu.Background">#1e1e1e</Color>

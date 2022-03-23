@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:abControls="using:CarinaStudio.Controls"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
 		xmlns:ia="using:Avalonia.Xaml.Interactivity"
@@ -43,7 +44,7 @@
 								<TextBlock Text="{Binding $parent[Window].VersionString}" VerticalAlignment="Center"/>
 								<Separator Classes="Dialog_Separator_Small"/>
 								<TextBlock Text="(" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
-								<controls:LinkTextBlock Command="{Binding $parent[Window].ShowApplicationChangeList}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{DynamicResource String/ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
+								<abControls:LinkTextBlock Command="{Binding $parent[Window].ShowApplicationChangeList}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{DynamicResource String/ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
 								<TextBlock Text=")" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
 							</StackPanel>
 							<TextBlock Text="©2021 Carina Studio"/>
@@ -56,9 +57,9 @@
 				<!-- Framework attribution -->
 				<StackPanel Orientation="Horizontal">
 					<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section1}" VerticalAlignment="Center"/>
-					<controls:LinkTextBlock Text=" .NET " Uri="https://dotnet.microsoft.com/" VerticalAlignment="Center"/>
+					<abControls:LinkTextBlock Text=" .NET " Uri="https://dotnet.microsoft.com/" VerticalAlignment="Center"/>
 					<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section2}" VerticalAlignment="Center"/>
-					<controls:LinkTextBlock Text=" Avalonia " Uri="http://avaloniaui.net/" VerticalAlignment="Center"/>
+					<abControls:LinkTextBlock Text=" Avalonia " Uri="http://avaloniaui.net/" VerticalAlignment="Center"/>
 					<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section3}" VerticalAlignment="Center"/>
 				</StackPanel>
 				<Separator Classes="Dialog_Separator_Small"/>
@@ -71,15 +72,15 @@
 						</iaCore:DataTriggerBehavior>
 					</ia:Interaction.Behaviors>
 					<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon}" VerticalAlignment="Center"/>
-					<controls:LinkTextBlock IsVisible="False" Text=" Freepik " Uri="https://www.freepik.com/" VerticalAlignment="Center">
+					<abControls:LinkTextBlock IsVisible="False" Text=" Freepik " Uri="https://www.freepik.com/" VerticalAlignment="Center">
 						<ia:Interaction.Behaviors>
 							<iaCore:DataTriggerBehavior Binding="{Binding IconCreator}" Value="Freepik">
 								<iaCore:ChangePropertyAction PropertyName="IsVisible" Value="True"/>
 							</iaCore:DataTriggerBehavior>
 						</ia:Interaction.Behaviors>
-					</controls:LinkTextBlock>
+					</abControls:LinkTextBlock>
 					<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon}" VerticalAlignment="Center"/>
-					<controls:LinkTextBlock Text=" Flaticon " Uri="https://www.flaticon.com/" VerticalAlignment="Center"/>
+					<abControls:LinkTextBlock Text=" Flaticon " Uri="https://www.flaticon.com/" VerticalAlignment="Center"/>
 					<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon}" VerticalAlignment="Center"/>
 				</StackPanel>
 				<Separator Classes="Dialog_Separator_Large"/>
@@ -132,24 +133,24 @@
 
 				<!-- User agreement -->
 				<StackPanel IsVisible="{Binding $parent[Window].HasUserAgreement}" Orientation="Vertical">
-					<controls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.UserAgreement}" Uri="{Binding UserAgreementUri}"/>
+					<abControls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.UserAgreement}" Uri="{Binding UserAgreementUri}"/>
 					<Separator Classes="Dialog_Separator_Small"/>
 				</StackPanel>
 
 				<!-- Privacy policy -->
 				<StackPanel IsVisible="{Binding $parent[Window].HasPrivacyPolicy}" Orientation="Vertical">
-					<controls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
+					<abControls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
 					<Separator Classes="Dialog_Separator_Small"/>
 				</StackPanel>
 
 				<!-- Source code -->
 				<StackPanel IsVisible="{Binding $parent[Window].HasGitHubProject}" Orientation="Vertical">
-					<controls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.GitHubProject}" Uri="{Binding GitHubProjectUri}"/>
+					<abControls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.GitHubProject}" Uri="{Binding GitHubProjectUri}"/>
 					<Separator Classes="Dialog_Separator_Small"/>
 				</StackPanel>
 
 				<!-- Export logs -->
-				<controls:LinkTextBlock Command="{Binding $parent[Window].ExportLogs}" HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}"/>
+				<abControls:LinkTextBlock Command="{Binding $parent[Window].ExportLogs}" HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}"/>
 
 			</StackPanel>
 		</ScrollViewer>
