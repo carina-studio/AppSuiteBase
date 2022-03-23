@@ -8,6 +8,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using CarinaStudio.Collections;
+using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
@@ -32,19 +33,6 @@ namespace CarinaStudio.AppSuite.Controls
 		/// Property of <see cref="IsInputAssistanceEnabled"/>.
 		/// </summary>
 		public static readonly AvaloniaProperty<bool> IsInputAssistanceEnabledProperty = AvaloniaProperty.Register<RegexTextBox, bool>(nameof(IsInputAssistanceEnabled), true);
-		/// <summary>
-		/// Property of <see cref="Regex"/>.
-		/// </summary>
-		public static readonly AvaloniaProperty<Regex?> RegexProperty = AvaloniaProperty.Register<RegexTextBox, Regex?>(nameof(Regex), coerce: (textBox, regex) =>
-		{
-			if (regex == null)
-				return null;
-			var ignoreCase = ((RegexTextBox)textBox).IgnoreCase;
-			var options = ignoreCase ? RegexOptions.IgnoreCase : RegexOptions.None;
-			if (regex.Options != options)
-				return new Regex(regex.ToString(), options);
-			return regex;
-		});
 
 
 		// Fields.
@@ -463,14 +451,16 @@ namespace CarinaStudio.AppSuite.Controls
 			else if (property == ObjectProperty)
 			{
 				var regex = change.NewValue.Value as Regex;
-				if (!this.CheckObjectEquality(regex, this.Regex))
-					this.SetValue<Regex?>(RegexProperty, regex);
-			}
-			else if (property == RegexProperty)
-			{
-				var regex = change.NewValue.Value as Regex;
-				if (!this.CheckObjectEquality(regex, this.Object))
-					this.SetValue<Regex?>(ObjectProperty, regex);
+				if (regex != null && ((regex.Options & RegexOptions.IgnoreCase) != 0) != this.IgnoreCase)
+				{
+					var options = regex.Options;
+					if (this.IgnoreCase)
+						options |= RegexOptions.IgnoreCase;
+					else
+						options &= ~RegexOptions.IgnoreCase;
+					regex = new Regex(regex.ToString(), options);
+					this.Object = regex;
+				}
 			}
 			else if (property == SelectionStartProperty 
 				|| property == SelectionEndProperty)
@@ -566,21 +556,6 @@ namespace CarinaStudio.AppSuite.Controls
 		/// Predefined list of <see cref="RegexGroup"/> for input assistance.
 		/// </summary>
 		public IList<RegexGroup> PredefinedGroups { get => this.predefinedGroups; }
-
-
-		/// <summary>
-		/// Get or set <see cref="Regex"/>.
-		/// </summary>
-		public Regex? Regex
-		{
-			get => this.GetValue<Regex?>(RegexProperty);
-			set 
-			{
-				if (this.IsValidationScheduled)
-                    this.Validate();
-				this.SetValue<Regex?>(RegexProperty, value);
-			}
-		}
 
 
 		// Setup menu for escaped characters.

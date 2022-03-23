@@ -869,6 +869,11 @@
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 
+	<!-- IPAddressTextBox -->
+	<Style Selector="TextBox:ipAddressTextBox">
+		<Setter Property="Watermark" Value="{DynamicResource String/IPAddressTextBox.Watermark}"/>
+	</Style>
+
 	<!-- ListBox -->
 	<Style Selector="ListBox">
 		<Setter Property="Background" Value="{DynamicResource TextControlBackground}"/>
@@ -1868,6 +1873,11 @@
 	</Style>
 	<Style Selector="TreeViewItem:disabled /template/ ContentPresenter#PART_HeaderPresenter">
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource TreeViewItemForegroundDisabled}" />
+	</Style>
+
+	<!-- UriTextBox -->
+	<Style Selector="TextBox:uriTextBox">
+		<Setter Property="Watermark" Value="{DynamicResource String/UriTextBox.Watermark}"/>
 	</Style>
 
 	<!-- Window -->

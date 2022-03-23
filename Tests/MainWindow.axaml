@@ -397,10 +397,10 @@
 							<ComboBoxItem>20</ComboBoxItem>
 						</ComboBox>
 
-						<appControls:IPAddressTextBox Name="ipAddressTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
-						<TextBlock Margin="5,0,0,5" Text="{Binding #ipAddressTextBox.IPAddress, StringFormat={}IPAddress: {0}}"/>
+						<abControls:IPAddressTextBox Name="ipAddressTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
+						<TextBlock Margin="5,0,0,5" Text="{Binding #ipAddressTextBox.Object, StringFormat={}IPAddress: {0}}"/>
 
-						<appControls:UriTextBox Name="uriTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
+						<abControls:UriTextBox Name="uriTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
 
 						<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" Height="50"/>
 
