@@ -442,8 +442,16 @@
 
 			<TabItem>
 				<TabItem.Header>
-					<TextBlock Text="Tab"/>
+					<TextBlock Text="GroupBox"/>
 				</TabItem.Header>
+				<StackPanel Background="{DynamicResource Brush/ToolBar.Background}">
+					<appControls:GroupBox Header="GroupBox" HorizontalAlignment="Left" Margin="10" Width="200">
+						<Button Content="Button"/>
+					</appControls:GroupBox>
+					<appControls:GroupBox Header="Disabled" HorizontalAlignment="Left" IsEnabled="False" Margin="10" Width="200">
+						<Button Content="Button"/>
+					</appControls:GroupBox>
+				</StackPanel>
 			</TabItem>
 
 			<TabItem>
