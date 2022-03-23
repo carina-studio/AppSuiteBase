@@ -554,6 +554,11 @@
 		<Setter Property="YearFormat" Value="{DynamicResource String/DatePicker.YearFormat}"/>
 	</Style>
 
+	<!-- DateTimeTextBox -->
+	<Style Selector="TextBox:dateTimeTextBox">
+		<Setter Property="Watermark" Value="{DynamicResource String/DateTimeTextBox.Watermark}"/>
+	</Style>
+
 	<!-- Dialog -->
 	<Style Selector="Border.Dialog_ContentPanel">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>

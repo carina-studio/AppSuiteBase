@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:abControls="using:CarinaStudio.Controls"
 		xmlns:app="using:CarinaStudio.AppSuite"
 		xmlns:appControls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:appConverters="using:CarinaStudio.AppSuite.Converters"
@@ -236,7 +237,7 @@
 							</StackPanel>
 						</Border>
 
-						<appControls:IntegerTextBox Name="integerTextBox" HorizontalAlignment="Left" IsNullValueAllowed="False" Margin="5,5,0,0" Minimum="1" Width="200" Watermark="Integer"/>
+						<abControls:IntegerTextBox Name="integerTextBox" HorizontalAlignment="Left" IsNullValueAllowed="False" Margin="5,5,0,0" Minimum="1" Width="200" Watermark="Integer"/>
 						<TextBlock Text="{Binding #integerTextBox.Value, StringFormat={}Value: {0}}" HorizontalAlignment="Left" Margin="5,0,0,5"/>
 
 						<appControls:RegexTextBox Name="regexTextBox" Height="60" HorizontalAlignment="Left" Margin="5" TextWrapping="Wrap" Width="200">
@@ -347,10 +348,10 @@
 						<appControls:LinkTextBlock HorizontalAlignment="Left" IsEnabled="False" Margin="5" Text="Google" Uri="http://www.google.com/"/>
 						<appControls:LinkTextBlock Command="{Binding $parent[Window].SwitchTheme}" HorizontalAlignment="Left" Margin="5" Text="Switch theme"/>
 
-						<appControls:DateTimeTextBox Name="dateTimeTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
+						<abControls:DateTimeTextBox Name="dateTimeTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
 						<TextBlock Margin="5,0,0,5" Text="{Binding #dateTimeTextBox.Value, StringFormat={}Value: {0}}"/>
 
-						<appControls:IntegerTextBox Name="integerTextBox2" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200" Watermark="Integer"/>
+						<abControls:IntegerTextBox Name="integerTextBox2" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200" Watermark="Integer"/>
 						<TextBlock Text="{Binding #integerTextBox2.Value, StringFormat={}Value: {0}}" HorizontalAlignment="Left" Margin="5,0,0,5"/>
 
 						<appControls:EnumComboBox EnumType="{x:Type app:ThemeMode}" HorizontalAlignment="Left" Margin="5" Width="200"/>

@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:abControls="using:CarinaStudio.Controls"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.SettingEditorDialog"
@@ -24,7 +25,7 @@
 		<StackPanel Classes="Dialog_ContentPanel" Orientation="Vertical">
 			<TextBlock Classes="Dialog_TextBlock" Text="{Binding $parent[Window].SettingKey.Name}"/>
 			<controls:EnumComboBox Name="enumComboBox" Classes="Dialog_ComboBox" IsVisible="False"/>
-			<controls:IntegerTextBox Name="integerTextBox" Classes="Dialog_TextBox" IsVisible="False"/>
+			<abControls:IntegerTextBox Name="integerTextBox" Classes="Dialog_TextBox" IsVisible="False"/>
 			<NumericUpDown Name="numericUpDown" Classes="Dialog_NumericUpDown" IsVisible="False"/>
 			<TextBox Name="textBox" AcceptsReturn="True" Classes="Dialog_TextBox" Height="100" IsVisible="False" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
 			<ToggleSwitch Name="toggleSwitch" Classes="Dialog_ToggleSwitch" IsVisible="False"/>
