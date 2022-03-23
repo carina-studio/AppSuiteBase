@@ -23,18 +23,22 @@
 		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="500" VerticalScrollBarVisibility="Auto">
 			<StackPanel Classes="Dialog_ContentPanel">
 
-				<TextBlock Classes="Dialog_TextBlock" Text="Theme"/>
-				<ComboBox Classes="Dialog_ComboBox" Items="{Binding ThemeModes}" SelectedItem="{Binding ThemeMode, Mode=TwoWay}"/>
-				<Separator Classes="Dialog_Separator"/>
+				<appControls:GroupBox Header="Header" HorizontalContentAlignment="Stretch">
+					<StackPanel>
+						<TextBlock Classes="Dialog_TextBlock" Text="Theme"/>
+						<ComboBox Classes="Dialog_ComboBox" Items="{Binding ThemeModes}" SelectedItem="{Binding ThemeMode, Mode=TwoWay}"/>
+						<Separator Classes="Dialog_Separator"/>
+
+						<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+						<TextBox Classes="Dialog_TextBox"/>
+					</StackPanel>
+				</appControls:GroupBox>
+				<Separator Classes="Dialog_Separator_Large"/>
 
 				<Border Classes="Dialog_TextBlock_Header1">
 					<TextBlock Classes="Dialog_TextBlock_Header1" Text="Header1"/>
 				</Border>
 				<TextBlock Classes="Dialog_TextBlock_Header2" Text="Header2"/>
-				
-				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
-				<TextBox Classes="Dialog_TextBox"/>
-				<Separator Classes="Dialog_Separator"/>
 
 				<appControls:DatePicker HorizontalAlignment="Stretch"/>
 				<Separator Classes="Dialog_Separator"/>
