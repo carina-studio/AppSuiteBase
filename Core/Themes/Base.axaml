@@ -248,6 +248,7 @@
 
 		<!-- MenuItem -->
 		<CornerRadius x:Key="CornerRadius/MenuItem">5</CornerRadius>
+		<sys:Double x:Key="Double/MenuItem.Icon.Size">16</sys:Double>
 		<Thickness x:Key="Thickness/MenuItem.Padding">6</Thickness>
 
 		<!-- MessageDialog -->
@@ -492,12 +493,12 @@
 	<!-- AddTabItemButton -->
 	<Style Selector="Button.AddTabItem">
 		<Setter Property="Background" Value="{DynamicResource Brush/TabItem.Header.Background}"/>
-		<Setter Property="Height" Value="{DynamicResource Double/AddTabItemButton.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/AddTabItemButton.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/AddTabItemButton.Padding}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/AddTabItemButton.Padding}"/>
 		<Setter Property="ToolTip.Tip" Value="{DynamicResource String/Common.CreateTab.WithGesture}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/AddTabItemButton.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/AddTabItemButton.Size}"/>
 	</Style>
 	<Style Selector="Button.AddTabItem:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -515,35 +516,35 @@
 	<!-- BrowseButton -->
 	<Style Selector="Button.BrowseButton">
 		<Setter Property="Content" Value="…"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/BrowseButton.Margin}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/BrowseButton.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 	</Style>
 	<Style Selector="ToggleButton.BrowseButton">
 		<Setter Property="Content" Value="…"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/BrowseButton.Margin}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/BrowseButton.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 	</Style>
 
 	<!-- Button -->
 	<Style Selector="Button">
-		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
+		<Setter Property="BorderThickness" Value="{StaticResource Thickness/Button.Border}"/>
 	</Style>
 
 	<!-- ComboBox -->
 	<Style Selector="ComboBox">
-		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
+		<Setter Property="BorderThickness" Value="{StaticResource Thickness/Control.Border}"/>
 	</Style>
 
 	<!-- ComboBoxItem -->
 	<Style Selector="ComboBoxItem">
-		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ComboBoxItem}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ComboBoxItem.Margin}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/ComboBoxItem.Padding}"/>
+		<Setter Property="CornerRadius" Value="{StaticResource CornerRadius/ComboBoxItem}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ComboBoxItem.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/ComboBoxItem.Padding}"/>
 	</Style>
 
 	<!-- DatePicker -->
 	<Style Selector="DatePicker">
-		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
+		<Setter Property="BorderThickness" Value="{StaticResource Thickness/Control.Border}"/>
 		<Setter Property="DayFormat" Value="{DynamicResource String/DatePicker.DayFormat}"/>
 		<Setter Property="MonthFormat" Value="{DynamicResource String/DatePicker.MonthFormat}"/>
 		<Setter Property="YearFormat" Value="{DynamicResource String/DatePicker.YearFormat}"/>
@@ -559,29 +560,29 @@
 		<Setter Property="BorderThickness" Value="0,1,0,0"/>
 		<Setter Property="DockPanel.Dock" Value="Bottom"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ControlButtonsPanel.Padding}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/Dialog.ControlButtonsPanel.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 	</Style>
 	<Style Selector="Border.Dialog_TextBlock_Header1">
 		<Setter Property="BorderBrush" Value="{StaticResource Brush/Dialog.TextBlock.Border.Header1}"/>
-		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Dialog.TextBlock.Border.Header1}"/>
+		<Setter Property="BorderThickness" Value="{StaticResource Thickness/Dialog.TextBlock.Border.Header1}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Header1}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Header1}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.TextBlock.Margin.Header1}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/Dialog.TextBlock.Padding.Header1}"/>
 	</Style>
 	<Style Selector="Button.Dialog_ControlButton">
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ControlButton.Margin}"/>
-		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.ControlButton.MinWidth}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ControlButton.Padding}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ControlButton.Margin}"/>
+		<Setter Property="MinWidth" Value="{StaticResource Double/Dialog.ControlButton.MinWidth}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/Dialog.ControlButton.Padding}"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="Button.Dialog_ListActionButton">
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ListActionButton.Margin}"/>
-		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.ListActionButton.MinWidth}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ListActionButton.Padding}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ListActionButton.Margin}"/>
+		<Setter Property="MinWidth" Value="{StaticResource Double/Dialog.ListActionButton.MinWidth}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/Dialog.ListActionButton.Padding}"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="ComboBox.Dialog_ComboBox">
@@ -590,13 +591,16 @@
 	<Style Selector="DatePicker.Dialog_DatePicker">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 	</Style>
+	<Style Selector="Expander.Dialog_Expander">
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+	</Style>
 	<Style Selector="Grid.Dialog_ContentPanel">
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Padding}"/>
 	</Style>
 	<Style Selector="controls|LinkTextBlock.Dialog_LinkTextBlock_Description">
-		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
+		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
 	<Style Selector="ListBox.Dialog_ListBox">
@@ -606,7 +610,7 @@
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 	</Style>
 	<Style Selector="Panel.Dialog_ContentPanel">
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Padding}"/>
 	</Style>
 	<Style Selector="ScrollViewer.Dialog_ContentPanel">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -615,29 +619,29 @@
 	</Style>
 	<Style Selector="Separator.Dialog_ControlButton_Separator">
 		<Setter Property="Background" Value="{x:Null}"/>
-		<Setter Property="Width" Value="{DynamicResource Double/Dialog.ControlButton.Separator.Width}"/>
+		<Setter Property="Width" Value="{StaticResource Double/Dialog.ControlButton.Separator.Width}"/>
 	</Style>
 	<Style Selector="Separator.Dialog_Separator">
 		<Setter Property="Background" Value="{x:Null}"/>
-		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height}"/>
-		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width}"/>
+		<Setter Property="Height" Value="{StaticResource Double/Dialog.Separator.Height}"/>
+		<Setter Property="Width" Value="{StaticResource Double/Dialog.Separator.Width}"/>
 	</Style>
 	<Style Selector="Separator.Dialog_Separator_Large">
 		<Setter Property="Background" Value="{x:Null}"/>
-		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height.Large}"/>
-		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width.Large}"/>
+		<Setter Property="Height" Value="{StaticResource Double/Dialog.Separator.Height.Large}"/>
+		<Setter Property="Width" Value="{StaticResource Double/Dialog.Separator.Width.Large}"/>
 	</Style>
 	<Style Selector="Separator.Dialog_Separator_Small">
 		<Setter Property="Background" Value="{x:Null}"/>
-		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height.Small}"/>
-		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width.Small}"/>
+		<Setter Property="Height" Value="{StaticResource Double/Dialog.Separator.Height.Small}"/>
+		<Setter Property="Width" Value="{StaticResource Double/Dialog.Separator.Width.Small}"/>
 	</Style>
 	<Style Selector="Slider.Dialog_Slider">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="TickPlacement" Value="Outside"/>
 	</Style>
 	<Style Selector="StackPanel.Dialog_ContentPanel">
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Padding}"/>
 		<Setter Property="Orientation" Value="Vertical"/>
 	</Style>
 	<Style Selector="StackPanel.Dialog_ControlButtonsPanel">
@@ -645,34 +649,34 @@
 		<Setter Property="Orientation" Value="Horizontal"/>
 	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock">
-		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin}"/>
+		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.TextBlock.Margin}"/>
 	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock_Description">
-		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
+		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{StaticResource Brush/Dialog.TextBlock.Foreground.Description}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock_Description_Error">
-		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
+		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{StaticResource Brush/Dialog.TextBlock.Foreground.Error}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock_Description_Warning">
-		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
+		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{StaticResource Brush/Dialog.TextBlock.Foreground.Warning}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock_Header1">
-		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Header1}"/>
+		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Header1}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
 	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock_Header2">
-		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Header2}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Header2}"/>
+		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Header2}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.TextBlock.Margin.Header2}"/>
 	</Style>
 	<Style Selector="TextBox.Dialog_TextBox">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -741,10 +745,10 @@
 	<!-- GridSplitter -->
 	<Style Selector="GridSplitter.Splitter_Horizontal">
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
-		<Setter Property="Width" Value="{DynamicResource Thickness/GridSplitter.Thickness}"/>
+		<Setter Property="Width" Value="{StaticResource Double/GridSplitter.Thickness}"/>
 	</Style>
 	<Style Selector="GridSplitter.Splitter_Vertical">
-		<Setter Property="Height" Value="{DynamicResource Thickness/GridSplitter.Thickness}"/>
+		<Setter Property="Height" Value="{StaticResource Double/GridSplitter.Thickness}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 	</Style>
 
@@ -756,7 +760,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="DrawingPresenter.Icon:disabled">
-		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="Image.Icon">
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -766,16 +770,16 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="Image.Icon:disabled">
-		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 
 	<!-- InPlaceAction -->
 	<Style Selector="Border.InPlaceAction_Icon">
-		<Setter Property="Height" Value="{DynamicResource Double/InPlaceAction.IconSize}"/>
-		<Setter Property="Width" Value="{DynamicResource Double/InPlaceAction.IconSize}"/>
+		<Setter Property="Height" Value="{StaticResource Double/InPlaceAction.IconSize}"/>
+		<Setter Property="Width" Value="{StaticResource Double/InPlaceAction.IconSize}"/>
 	</Style>
 	<Style Selector="Border.InPlaceAction_Reserved">
-		<Setter Property="Height" Value="{DynamicResource Double/InPlaceAction.ReservedHeight}"/>
+		<Setter Property="Height" Value="{StaticResource Double/InPlaceAction.ReservedHeight}"/>
 		<Setter Property="Opacity" Value="0"/>
 		<Setter Property="Width" Value="1"/>
 	</Style>
@@ -783,8 +787,8 @@
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/InPlaceAction.Padding}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/InPlaceAction.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/InPlaceAction.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
@@ -798,16 +802,16 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Pressed}"/>
 	</Style>
 	<Style Selector="Image.InPlaceAction_Icon">
-		<Setter Property="Height" Value="{DynamicResource Double/InPlaceAction.IconSize}"/>
+		<Setter Property="Height" Value="{StaticResource Double/InPlaceAction.IconSize}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Stretch" Value="Uniform"/>
 		<Setter Property="StretchDirection" Value="Both"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/InPlaceAction.IconSize}"/>
+		<Setter Property="Width" Value="{StaticResource Double/InPlaceAction.IconSize}"/>
 	</Style>
 	<Style Selector="Image.InPlaceAction_Icon:disabled">
-		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 
 	<!-- LinkTextBlock -->
@@ -831,9 +835,9 @@
 	<Style Selector="ListBox">
 		<Setter Property="Background" Value="{DynamicResource TextControlBackground}"/>
 		<Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrush}"/>
-		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
-		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/ListBox.Padding}"/>
+		<Setter Property="BorderThickness" Value="{StaticResource Thickness/Control.Border}"/>
+		<Setter Property="CornerRadius" Value="{StaticResource ControlCornerRadius}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/ListBox.Padding}"/>
 	</Style>
 	<Style Selector="ListBox:focused">
 		<Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushFocused}"/>
@@ -853,47 +857,47 @@
 	<Style Selector="Menu">
 		<Setter Property="Background" Value="{DynamicResource Brush/Menu.Background}"/>
 		<Setter Property="Height" Value="NaN"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/Menu.Padding}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/Menu.Padding}"/>
 	</Style>
 
 	<!-- MenuItem -->
 	<Style Selector="Border.MenuItem_Icon">
-		<Setter Property="Height" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
-		<Setter Property="Width" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/MenuItem.Icon.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/MenuItem.Icon.Size}"/>
 	</Style>
 	<Style Selector="Image.MenuItem_Icon">
-		<Setter Property="Height" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/MenuItem.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Stretch" Value="Uniform"/>
 		<Setter Property="StretchDirection" Value="Both"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/MenuItem.Icon.Size}"/>
 	</Style>
 	<Style Selector="Image.MenuItem_Icon:disabled">
-		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="MenuItem">
-		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/MenuItem}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/MenuItem.Padding}"/>
+		<Setter Property="CornerRadius" Value="{StaticResource CornerRadius/MenuItem}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/MenuItem.Padding}"/>
 	</Style>
 	<Style Selector="Panel.MenuItem_Icon">
-		<Setter Property="Height" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
-		<Setter Property="Width" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/MenuItem.Icon.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/MenuItem.Icon.Size}"/>
 	</Style>
 
 	<!-- NumericUpDown -->
 	<Style Selector="NumericUpDown">
-		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
+		<Setter Property="BorderThickness" Value="{StaticResource Thickness/Control.Border}"/>
 	</Style>
 	<Style Selector="NumericUpDown /template/ ButtonSpinner#PART_Spinner /template/ RepeatButton#PART_DecreaseButton">
-		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadiusRight}"/>
+		<Setter Property="CornerRadius" Value="{StaticResource ControlCornerRadiusRight}"/>
 	</Style>
 	<Style Selector="NumericUpDown /template/ ButtonSpinner#PART_Spinner /template/ RepeatButton#PART_IncreaseButton">
 		<Setter Property="CornerRadius" Value="0"/>
 	</Style>
 	<Style Selector="NumericUpDown /template/ TextBox#PART_TextBox">
-		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadiusLeft}"/>
+		<Setter Property="CornerRadius" Value="{StaticResource ControlCornerRadiusLeft}"/>
 	</Style>
 	<Style Selector="RepeatButton.ButtonSpinnerRepeatButton /template/ ContentPresenter">
 		<Setter Property="BorderBrush" Value="{TemplateBinding BorderBrush}" />
@@ -902,12 +906,12 @@
 
 	<!-- RepeatButton -->
 	<Style Selector="RepeatButton">
-		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
+		<Setter Property="BorderThickness" Value="{StaticResource Thickness/Button.Border}"/>
 	</Style>
 
 	<!-- ScrollBar -->
 	<Style Selector="ScrollBar">
-		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ScrollBar}"/>
+		<Setter Property="CornerRadius" Value="{StaticResource CornerRadius/ScrollBar}"/>
 	</Style>
 	<Style Selector="ScrollBar:horizontal">
 		<Setter Property="Template">
@@ -943,8 +947,8 @@
 								</Track.IncreaseButton>
 								<Thumb Classes="thumb"
 									Opacity="1"
-									Height="{DynamicResource Double/ScrollBar.Thumb.Size}"
-									MinWidth="{DynamicResource ScrollBarSize}"
+									Height="{StaticResource Double/ScrollBar.Thumb.Size}"
+									MinWidth="{StaticResource ScrollBarSize}"
 									VerticalAlignment="Center" />
 							</Track>
 							<RepeatButton Name="PART_LineDownButton"
@@ -952,7 +956,7 @@
 											Classes="line down"
 											Grid.Column="2"
 											Focusable="False"
-											MinHeight="{DynamicResource ScrollBarSize}"/>
+											MinHeight="{StaticResource ScrollBarSize}"/>
 						</Grid>
 					</Border>
 				</Grid>
@@ -994,7 +998,7 @@
 								<Thumb Classes="thumb"
 									HorizontalAlignment="Center"
 									Opacity="1"
-									Width="{DynamicResource Double/ScrollBar.Thumb.Size}"
+									Width="{StaticResource Double/ScrollBar.Thumb.Size}"
 									MinHeight="{DynamicResource ScrollBarSize}" />
 							</Track>
 							<RepeatButton Name="PART_LineDownButton"
@@ -1002,7 +1006,7 @@
 											Classes="line down"
 											Grid.Row="2"
 											Focusable="False"
-											MinWidth="{DynamicResource ScrollBarSize}" />
+											MinWidth="{StaticResource ScrollBarSize}" />
 						</Grid>
 					</Border>
 				</Grid>
@@ -1010,31 +1014,31 @@
 		</Setter>
 	</Style>
 	<Style Selector="ScrollBar:horizontal /template/ RepeatButton#PART_LineUpButton">
-    	<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ScrollBar.Button.Left}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ScrollBar.Button.Margin.Left}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/ScrollBar.Button.Padding.Horizontal}"/>
+    	<Setter Property="CornerRadius" Value="{StaticResource CornerRadius/ScrollBar.Button.Left}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ScrollBar.Button.Margin.Left}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/ScrollBar.Button.Padding.Horizontal}"/>
   	</Style>
 	<Style Selector="ScrollBar:horizontal /template/ RepeatButton#PART_LineDownButton">
-    	<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ScrollBar.Button.Right}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ScrollBar.Button.Margin.Right}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/ScrollBar.Button.Padding.Horizontal}"/>
+    	<Setter Property="CornerRadius" Value="{StaticResource CornerRadius/ScrollBar.Button.Right}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ScrollBar.Button.Margin.Right}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/ScrollBar.Button.Padding.Horizontal}"/>
   	</Style>
 	  <Style Selector="ScrollBar:vertical /template/ RepeatButton#PART_LineUpButton">
-    	<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ScrollBar.Button.Top}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ScrollBar.Button.Margin.Top}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/ScrollBar.Button.Padding.Vertical}"/>
+    	<Setter Property="CornerRadius" Value="{StaticResource CornerRadius/ScrollBar.Button.Top}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ScrollBar.Button.Margin.Top}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/ScrollBar.Button.Padding.Vertical}"/>
   	</Style>
 	<Style Selector="ScrollBar:vertical /template/ RepeatButton#PART_LineDownButton">
-    	<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ScrollBar.Button.Bottom}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ScrollBar.Button.Margin.Bottom}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/ScrollBar.Button.Padding.Vertical}"/>
+    	<Setter Property="CornerRadius" Value="{StaticResource CornerRadius/ScrollBar.Button.Bottom}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ScrollBar.Button.Margin.Bottom}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/ScrollBar.Button.Padding.Vertical}"/>
   	</Style>
 	<Style Selector="ScrollBar /template/ RepeatButton.line">
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Border Name="Root" CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}">
-					<Viewbox Width="{DynamicResource ScrollBarButtonArrowIconFontSize}"
-							 Height="{DynamicResource ScrollBarButtonArrowIconFontSize}"
+					<Viewbox Width="{StaticResource ScrollBarButtonArrowIconFontSize}"
+							 Height="{StaticResource ScrollBarButtonArrowIconFontSize}"
 							 HorizontalAlignment="Center"
 							 VerticalAlignment="Center">
 						<Path x:Name="Arrow"
@@ -1047,11 +1051,11 @@
 		</Setter>
 	</Style>
 	<Style Selector="ScrollBar /template/ Thumb.thumb /template/ Border#ThumbVisual">
-		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ScrollBar.Thumb}" />
+		<Setter Property="CornerRadius" Value="{StaticResource CornerRadius/ScrollBar.Thumb}" />
 		<Setter Property="Transitions" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="ScrollBar[IsExpanded=true] /template/ Thumb.thumb /template/ Border#ThumbVisual">
-		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ScrollBar.Thumb.Expanded}" />
+		<Setter Property="CornerRadius" Value="{StaticResource CornerRadius/ScrollBar.Thumb.Expanded}" />
   	</Style>
 	<Style Selector="ScrollBar /template/ Border#TrackBorder">
 		<Setter Property="Background" Value="{DynamicResource ScrollBarTrackFill}" />
@@ -1080,10 +1084,10 @@
 
 	<!-- ScrollViewer -->
 	<Style Selector="ScrollViewer /template/ ScrollBar#PART_HorizontalScrollBar">
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ScrollViewer.ScrollBar.Margin.Horizontal}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ScrollViewer.ScrollBar.Margin.Horizontal}"/>
 	</Style>
 	<Style Selector="ScrollViewer /template/ ScrollBar#PART_VerticalScrollBar">
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ScrollViewer.ScrollBar.Margin.Vertical}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ScrollViewer.ScrollBar.Margin.Vertical}"/>
 	</Style>
 	<Style Selector="ScrollViewer /template/ ScrollBar /template/ Thumb.thumb">
 		<Setter Property="RenderTransformOrigin" Value="120%,120%"/>
@@ -1095,7 +1099,7 @@
 	</Style>
 	<Style Selector="MenuItem > Separator, ContextMenu > Separator">
 		<Setter Property="Background" Value="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" />
-		<Setter Property="Margin" Value="{DynamicResource Thickness/MenuFlyout.Separator.Margin}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/MenuFlyout.Separator.Margin}"/>
 	</Style>
 
 	<!-- StatusBar -->
@@ -1103,21 +1107,21 @@
 		<Setter Property="Background" Value="{StaticResource Brush/StatusBar.Background}"/>
 		<Setter Property="DockPanel.Dock" Value="Bottom"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/StatusBar.Padding}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/StatusBar.Padding}"/>
 		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 	</Style>
 	<Style Selector="Border.StatusBar_DropDownIcon">
-		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.DropDownIcon.Margin}"/>
+		<Setter Property="Height" Value="{StaticResource Double/StatusBar.DropDownIcon.Size}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/StatusBar.DropDownIcon.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/StatusBar.DropDownIcon.Size}"/>
 	</Style>
 	<Style Selector="Border.StatusBar_Icon">
-		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin}"/>
+		<Setter Property="Height" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/StatusBar.Icon.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
 	</Style>
 	<Style Selector="Button.StatusBar_Button">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
@@ -1125,7 +1129,7 @@
 		<Setter Property="Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
 		<Setter Property="CornerRadius" Value="0"/>
 		<Setter Property="Margin" Value="0"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/StatusBar.Button.Padding}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/StatusBar.Button.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
@@ -1134,7 +1138,7 @@
 		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground.Disabled}"/>
 	</Style>
 	<Style Selector="Button.StatusBar_Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.PointerOver}"/>
+		<Setter Property="Background" Value="{StaticResource Brush/StatusBar.Button.Background.PointerOver}"/>
 		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
 	</Style>
 	<Style Selector="Button.StatusBar_Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
@@ -1142,42 +1146,42 @@
 		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
 	</Style>
 	<Style Selector="Image.StatusBar_DropDownIcon">
-		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/StatusBar.DropDownIcon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.DropDownIcon.Margin}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/StatusBar.DropDownIcon.Margin}"/>
 		<Setter Property="Stretch" Value="Uniform"/>
 		<Setter Property="StretchDirection" Value="Both"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/StatusBar.DropDownIcon.Size}"/>
 	</Style>
 	<Style Selector="Image.StatusBar_DropDownIcon:disabled">
-		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="Image.StatusBar_Icon">
-		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/StatusBar.Icon.Margin}"/>
 		<Setter Property="Stretch" Value="Uniform"/>
 		<Setter Property="StretchDirection" Value="Both"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
 	</Style>
 	<Style Selector="Image.StatusBar_Icon:disabled">
-		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="Panel.StatusBar_DropDownIcon">
-		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.DropDownIcon.Margin}"/>
+		<Setter Property="Height" Value="{StaticResource Double/StatusBar.DropDownIcon.Size}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/StatusBar.DropDownIcon.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/StatusBar.DropDownIcon.Size}"/>
 	</Style>
 	<Style Selector="Panel.StatusBar_Icon">
-		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin}"/>
+		<Setter Property="Height" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/StatusBar.Icon.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
 	</Style>
 	<Style Selector="RepeatButton.StatusBar_RepeatButton">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
@@ -1185,7 +1189,7 @@
 		<Setter Property="Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
 		<Setter Property="CornerRadius" Value="0"/>
 		<Setter Property="Margin" Value="0"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/StatusBar.Button.Padding}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/StatusBar.Button.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
@@ -1206,7 +1210,7 @@
 		<Setter Property="Width" Value="20"/>
 	</Style>
 	<Style Selector="TextBlock.StatusBar_TextBlock">
-		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Item.Margin}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/StatusBar.Item.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="ToggleButton.StatusBar_ToggleButton">
@@ -1215,7 +1219,7 @@
 		<Setter Property="Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
 		<Setter Property="CornerRadius" Value="0"/>
 		<Setter Property="Margin" Value="0"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/StatusBar.Button.Padding}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/StatusBar.Button.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
@@ -1242,8 +1246,8 @@
 	<Style Selector="RepeatButton.TabStripScroller">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundChecked}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/TabControl.TabStrip.ScrollingButton.Margin}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/TabControl.TabStrip.ScrollingButton.Padding}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/TabControl.TabStrip.ScrollingButton.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/TabControl.TabStrip.ScrollingButton.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
@@ -1286,9 +1290,9 @@
 						</RepeatButton.IsVisible>
 						<Image 
 							Classes="Icon" 
-							Height="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"
+							Height="{StaticResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"
 							Source="{DynamicResource Image/Icon.Backward.Light}"
-							Width="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
+							Width="{StaticResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton
 						Name="PART_ScrollRightButton"
@@ -1304,9 +1308,9 @@
 						</RepeatButton.IsVisible>
 						<Image
 							Classes="Icon"
-							Height="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"
+							Height="{StaticResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"
 							Source="{DynamicResource Image/Icon.Forward.Light}"
-							Width="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
+							Width="{StaticResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 				</Panel>
 			</ControlTemplate>
@@ -1328,7 +1332,7 @@
 								<Line EndPoint="1,0" HorizontalAlignment="Stretch" IsHitTestVisible="False" StartPoint="0,0" Stretch="Fill" Stroke="{DynamicResource Brush/TabItem.Header.Backgrund.Selected}" StrokeThickness="1" VerticalAlignment="Bottom"/>
 								<Line EndPoint="1,0" HorizontalAlignment="Stretch" IsHitTestVisible="False" StartPoint="0,0" Stretch="Fill" Stroke="{DynamicResource Brush/Control.Border.Dark}" StrokeThickness="1" VerticalAlignment="Bottom"/>
 								<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" Background="{x:Null}">
-									<Border Padding="{DynamicResource Thickness/TabControl.TabStrip.Padding}">
+									<Border Padding="{StaticResource Thickness/TabControl.TabStrip.Padding}">
 										<ItemsPresenter Name="PART_ItemsPresenter"
 													Items="{TemplateBinding Items}"
 													ItemsPanel="{TemplateBinding ItemsPanel}"
@@ -1352,51 +1356,51 @@
 
 	<!-- TabItem -->
 	<Style Selector="Border.TabItem_Icon">
-		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Icon.Margin}"/>
+		<Setter Property="Height" Value="{StaticResource Double/TabItem.Header.Icon.Size}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/TabItem.Header.Icon.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/TabItem.Header.Icon.Size}"/>
 	</Style>
 	<Style Selector="Button.TabItem_Button">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
-		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Content.Height}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Button.Margin}"/>
-		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/TabItem.Header.Button.Padding}"/>
+		<Setter Property="Height" Value="{StaticResource Double/TabItem.Header.Content.Height}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/TabItem.Header.Button.Margin}"/>
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/TabItem.Header.Button.Padding}"/>
 		<Setter Property="Transitions">
 			<Transitions>
 				<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
 			</Transitions>
 		</Setter>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Content.Height}"/>
+		<Setter Property="Width" Value="{StaticResource Double/TabItem.Header.Content.Height}"/>
 	</Style>
 	<Style Selector="Button.TabItem_Button:pointerover">
 		<Setter Property="Opacity" Value="1"/>
 	</Style>
 	<Style Selector="Image.TabItem_Icon">
-		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/TabItem.Header.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Icon.Margin}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/TabItem.Header.Icon.Margin}"/>
 		<Setter Property="Stretch" Value="Uniform"/>
 		<Setter Property="StretchDirection" Value="Both"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/TabItem.Header.Icon.Size}"/>
 	</Style>
 	<Style Selector="Image.TabItem_Icon:disabled">
-		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="Panel.TabItem_Icon">
-		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Icon.Margin}"/>
+		<Setter Property="Height" Value="{StaticResource Double/TabItem.Header.Icon.Size}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/TabItem.Header.Icon.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/TabItem.Header.Icon.Size}"/>
 	</Style>
 	<Style Selector="TabItem">
-		<Setter Property="MaxHeight" Value="{DynamicResource Double/TabItem.Header.Height}"/>
-		<Setter Property="MinHeight" Value="{DynamicResource Double/TabItem.Header.Height}"/>
+		<Setter Property="MaxHeight" Value="{StaticResource Double/TabItem.Header.Height}"/>
+		<Setter Property="MinHeight" Value="{StaticResource Double/TabItem.Header.Height}"/>
 		<Setter Property="Padding" Value="0"/>
 		<Setter Property="Template">
 			<Setter.Value>
@@ -1405,27 +1409,27 @@
 						<Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Stretch">
 
 							<Border IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemBefore}" Margin="0,0,0,1">
-								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" BorderBrush="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Border}" BorderThickness="{DynamicResource Thickness/TabItem.Header.InsertionIndicator.Border}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
+								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" BorderBrush="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Border}" BorderThickness="{StaticResource Thickness/TabItem.Header.InsertionIndicator.Border}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" Margin="{StaticResource Thickness/TabItem.Header.Margin}" Width="{StaticResource Double/TabItem.Header.InsertionIndicator.Width}"/>
 							</Border>
 
-							<Border Name="PART_ContentContainer" Grid.Column="1" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" MaxWidth="{DynamicResource Double/TabItem.Header.MaxWidth}" VerticalAlignment="Bottom">
+							<Border Name="PART_ContentContainer" Grid.Column="1" Margin="{StaticResource Thickness/TabItem.Header.Margin}" MaxWidth="{StaticResource Double/TabItem.Header.MaxWidth}" VerticalAlignment="Bottom">
 								<Panel>
-									<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Margin="0,0,0,1"/>
-									<Border Background="{StaticResource Brush/TabItem.Header.Background}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource ButtonBorderBrush}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding !$parent[TabItem].IsSelected}" Margin="0,0,0,1"/>
-									<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource ButtonBorderBrushPointerOver}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsPointerOver}" Margin="0,0,0,1">
+									<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" Margin="0,0,0,1"/>
+									<Border Background="{StaticResource Brush/TabItem.Header.Background}" BorderThickness="{StaticResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource ButtonBorderBrush}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding !$parent[TabItem].IsSelected}" Margin="0,0,0,1"/>
+									<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" BorderThickness="{StaticResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource ButtonBorderBrushPointerOver}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsPointerOver}" Margin="0,0,0,1">
 										<!--Border.Transitions>
 											<Transitions>
 												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Border.Transitions-->
 									</Border>
-									<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" BorderThickness="{DynamicResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource ButtonBorderBrush}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsSelected}">
+									<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" BorderThickness="{StaticResource Thickness/TabItem.Header.Border}" BorderBrush="{DynamicResource ButtonBorderBrush}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsSelected}">
 										<!--Border.Transitions>
 											<Transitions>
 												<DoubleTransition Property="Opacity" Delay="0:0:0.15" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Border.Transitions-->
-										<Border CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Height="{DynamicResource Double/TabItem.Header.ColorBar.Height}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}" VerticalAlignment="Top">
+										<Border CornerRadius="{StaticResource CornerRadius/TabItem.Header}" Height="{StaticResource Double/TabItem.Header.ColorBar.Height}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}" VerticalAlignment="Top">
 											<Border.Background>
 												<LinearGradientBrush EndPoint="0%,100%" StartPoint="0%,0%">
 													<GradientStop Color="{DynamicResource Color/Accent}" Offset="0"/>
@@ -1450,12 +1454,12 @@
 											</Border.Transitions-->
 										</Border>
 									</Border>
-									<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
+									<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{StaticResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{StaticResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
 								</Panel>
 							</Border>
 
 							<Border Grid.Column="2" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemAfter}" Margin="0,0,0,1">
-								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" BorderBrush="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Border}" BorderThickness="{DynamicResource Thickness/TabItem.Header.InsertionIndicator.Border}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
+								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" BorderBrush="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Border}" BorderThickness="{StaticResource Thickness/TabItem.Header.InsertionIndicator.Border}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" Margin="{StaticResource Thickness/TabItem.Header.Margin}" Width="{StaticResource Double/TabItem.Header.InsertionIndicator.Width}"/>
 							</Border>
 							
 						</Grid>
@@ -1463,13 +1467,13 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
-		<Setter Property="TextBlock.FontSize" Value="{DynamicResource Double/TabItem.Header.FontSize}"/>
+		<Setter Property="TextBlock.FontSize" Value="{StaticResource Double/TabItem.Header.FontSize}"/>
 	</Style>
 	<Style Selector="TabItem.Empty">
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate>
-					<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
+					<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{StaticResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{StaticResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
@@ -1485,14 +1489,14 @@
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Focusable" Value="False"/>
-		<Setter Property="Height" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/TextBox.InPlaceAction.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/TextBox.InPlaceAction.Margin}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.InPlaceAction.Padding}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/TextBox.InPlaceAction.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/TextBox.InPlaceAction.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/TextBox.InPlaceAction.Size}"/>
 	</Style>
 	<Style Selector="Button.TextBox_InPlaceAction:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1519,20 +1523,20 @@
 		<Setter Property="Foreground" Value="{DynamicResource TextControlForegroundDisabled}" />
 	</Style>
 	<Style Selector="TextBox.WithInPlaceAction">
-		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.Padding.WithInPlaceAction}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/TextBox.Padding.WithInPlaceAction}"/>
 	</Style>
 	<Style Selector="ToggleButton.TextBox_InPlaceAction">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Focusable" Value="False"/>
-		<Setter Property="Height" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/TextBox.InPlaceAction.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/TextBox.InPlaceAction.Margin}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.InPlaceAction.Padding}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/TextBox.InPlaceAction.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/TextBox.InPlaceAction.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/TextBox.InPlaceAction.Size}"/>
 	</Style>
 	<Style Selector="ToggleButton.TextBox_InPlaceAction:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1543,12 +1547,12 @@
 
 	<!-- TimePicker -->
 	<Style Selector="TimePicker">
-		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
+		<Setter Property="BorderThickness" Value="{StaticResource Thickness/Control.Border}"/>
 	</Style>
 
 	<!-- ToggleButton -->
 	<Style Selector="ToggleButton">
-		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
+		<Setter Property="BorderThickness" Value="{StaticResource Thickness/Button.Border}"/>
 	</Style>
 
 	<!-- ToggleSwitch -->
@@ -1565,25 +1569,25 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Background}"/>
 		<Setter Property="BorderBrush" Value="{StaticResource Brush/Control.Border.Dark}"/>
 		<Setter Property="BorderThickness" Value="0,0,0,1"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Padding}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/ToolBar.Padding}"/>
 	</Style>
 	<Style Selector="Border.ToolBar_NotificationIndicator">
-		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/ToolBar.Button.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/ToolBar.Button.Icon.Size}"/>
 	</Style>
 	<Style Selector="Button.ToolBar_Button">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
-		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/ToolBar.Button.Size}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Button.Padding}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ToolBar.Item.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/ToolBar.Button.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/ToolBar.Button.Size}"/>
 	</Style>
 	<Style Selector="Button.ToolBar_Button:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1598,37 +1602,37 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Pressed}"/>
 	</Style>
 	<Style Selector="ComboBox.ToolBar_ComboBox">
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ToolBar.Item.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="ComboBox.ToolBar_ComboBox:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
 	<Style Selector="Image.ToolBar_NotificationIndicator">
-		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/ToolBar.NotificationIndicator.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Stretch" Value="Fill"/>
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
-		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/ToolBar.NotificationIndicator.Size}"/>
 	</Style>
 	<Style Selector="Panel.ToolBar_NotificationIndicator">
-		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/ToolBar.Button.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/ToolBar.Button.Icon.Size}"/>
 	</Style>
 	<Style Selector="RepeatButton.ToolBar_RepeatButton">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
-		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/ToolBar.Button.Size}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Button.Padding}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ToolBar.Item.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/ToolBar.Button.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/ToolBar.Button.Size}"/>
 	</Style>
 	<Style Selector="RepeatButton.ToolBar_RepeatButton:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1644,27 +1648,27 @@
 	</Style>
 	<Style Selector="Separator.ToolBar_Separator">
 		<Setter Property="Background" Value="{StaticResource Brush/Separator.Background}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Separator.Margin}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ToolBar.Separator.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="1"/>
 	</Style>
 	<Style Selector="TextBlock.ToolBar_TextBlock">
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.TextBlock.Margin}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ToolBar.TextBlock.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="TextBlock.ToolBar_TextBlock:disabled">
-		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="TextBox.ToolBar_TextBox">
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ToolBar.Item.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="TextBox.ToolBar_TextBox:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
 	<Style Selector="TextBox.ToolBar_TextBox_WithInPlaceAction">
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.Padding.WithInPlaceAction}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ToolBar.Item.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/TextBox.Padding.WithInPlaceAction}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="TextBox.ToolBar_TextBox_WithInPlaceAction:disabled">
@@ -1673,13 +1677,13 @@
 	<Style Selector="ToggleButton.ToolBar_ToggleButton">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
-		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+		<Setter Property="Height" Value="{StaticResource Double/ToolBar.Button.Size}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Button.Padding}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ToolBar.Item.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/ToolBar.Button.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+		<Setter Property="Width" Value="{StaticResource Double/ToolBar.Button.Size}"/>
 	</Style>
 	<Style Selector="ToggleButton.ToolBar_ToggleButton:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1704,8 +1708,8 @@
 	<Style Selector="RepeatButton.ToolBarScrollViewer">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundChecked}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBarScrollViewer.ScrollingButton.Margin}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBarScrollViewer.ScrollingButton.Padding}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ToolBarScrollViewer.ScrollingButton.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/ToolBarScrollViewer.ScrollingButton.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
@@ -1748,9 +1752,9 @@
 						</RepeatButton.IsVisible>
 						<Image
 							Classes="Icon"
-							Height="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
+							Height="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
 							Source="{DynamicResource Image/Icon.Backward.Light}"
-							Width="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
+							Width="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton Name="PART_ScrollRightButton"
 						Classes="ToolBarScrollViewer"
@@ -1765,9 +1769,9 @@
 						</RepeatButton.IsVisible>
 						<Image
 							Classes="Icon"
-							Height="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
+							Height="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
 							Source="{DynamicResource Image/Icon.Forward.Light}"
-							Width="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
+							Width="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 				</Panel>
 			</ControlTemplate>
@@ -1777,16 +1781,16 @@
 
 	<!-- ToolTip -->
 	<Style Selector="ToolTip">
-		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ToolTip}"/>
+		<Setter Property="CornerRadius" Value="{StaticResource CornerRadius/ToolTip}"/>
 	</Style>
 
 	<!-- TreeView -->
 	<Style Selector="TreeView">
 		<Setter Property="Background" Value="{DynamicResource TextControlBackground}"/>
 		<Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrush}"/>
-		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
-		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/TreeView.Padding}"/>
+		<Setter Property="BorderThickness" Value="{StaticResource Thickness/Control.Border}"/>
+		<Setter Property="CornerRadius" Value="{StaticResource ControlCornerRadius}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/TreeView.Padding}"/>
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Border Background="{TemplateBinding Background}"
