@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:abControls="using:CarinaStudio.Controls"
+		xmlns:abConverters="using:CarinaStudio.Data.Converters"
 		xmlns:app="using:CarinaStudio.AppSuite"
 		xmlns:appControls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:appConverters="using:CarinaStudio.AppSuite.Converters"
@@ -20,7 +21,7 @@
 	</Window.Styles>
 
 	<Window.ExtendClientAreaTitleBarHeightHint>
-		<MultiBinding Converter="{x:Static appConverters:DoubleConverters.Add}">
+		<MultiBinding Converter="{x:Static abConverters:DoubleConverters.Addition}">
 			<Binding ElementName="tabControl" Path="TabStripSize"/>
 			<Binding RelativeSource="{RelativeSource Mode=Self}" Path="ContentPadding.Top"/>
 		</MultiBinding>
@@ -207,7 +208,7 @@
 										<Button Classes="ToolBar_Button">
 											<Panel Classes="Icon">
 												<Image Classes="Icon" Source="{DynamicResource Image/Icon.More}"/>
-												<Border Classes="ToolBar_NotificationIndicator" IsVisible="{Binding $parent[Window].Application.UpdateInfo, Converter={x:Static appConverters:ValueToBooleanConverters.NonNullToTrue}}">
+												<Border Classes="ToolBar_NotificationIndicator" IsVisible="{Binding $parent[Window].Application.UpdateInfo, Converter={x:Static abConverters:ValueToBooleanConverters.NonNullToTrue}}">
 													<Image Classes="ToolBar_NotificationIndicator" Source="{DynamicResource Image/Icon.Update.Colored}"/>
 												</Border>
 											</Panel>

@@ -1,6 +1,6 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
+		xmlns:abConverters="using:CarinaStudio.Data.Converters"
 		xmlns:sys="clr-namespace:System;assembly=System.Runtime">
 
 	<!-- TextBox -->
@@ -11,8 +11,8 @@
 				<MenuItem Command="{Binding $parent[TextBox].Copy}" Header="{DynamicResource String/Common.Copy}" IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="Cmd+C"/>
 				<MenuItem Command="{Binding $parent[TextBox].Paste}" Header="{DynamicResource String/Common.Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" InputGesture="Cmd+V"/>
 				<Separator/>
-				<MenuItem Command="{Binding $parent[TextBox].SelectAll}" Header="{DynamicResource String/Common.SelectAll}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static converters:ValueToBooleanConverters.NonEmptyStringToTrue}}" InputGesture="Cmd+A"/>
-				<MenuItem Command="{Binding $parent[TextBox].Clear}" Header="{DynamicResource String/Common.Clear}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static converters:ValueToBooleanConverters.NonEmptyStringToTrue}}"/>
+				<MenuItem Command="{Binding $parent[TextBox].SelectAll}" Header="{DynamicResource String/Common.SelectAll}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static abConverters:ValueToBooleanConverters.NonEmptyStringToTrue}}" InputGesture="Cmd+A"/>
+				<MenuItem Command="{Binding $parent[TextBox].Clear}" Header="{DynamicResource String/Common.Clear}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static abConverters:ValueToBooleanConverters.NonEmptyStringToTrue}}"/>
 			</ContextMenu>
 		</Setter>
 	</Style>

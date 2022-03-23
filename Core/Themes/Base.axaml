@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:sys="using:System"
 		xmlns:abControls="using:CarinaStudio.Controls"
+		xmlns:abConverters="using:CarinaStudio.Data.Converters"
 		xmlns:aConverters="using:Avalonia.Data.Converters"
 		xmlns:appSuite="using:CarinaStudio.AppSuite"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
@@ -1473,7 +1474,7 @@
 												<DoubleTransition Property="Opacity" Delay="0:0:0.15" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Border.Transitions-->
-										<Border CornerRadius="{StaticResource CornerRadius/TabItem.Header}" Height="{StaticResource Double/TabItem.Header.ColorBar.Height}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}" VerticalAlignment="Top">
+										<Border CornerRadius="{StaticResource CornerRadius/TabItem.Header}" Height="{StaticResource Double/TabItem.Header.ColorBar.Height}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacity}}" VerticalAlignment="Top">
 											<Border.Background>
 												<LinearGradientBrush EndPoint="0%,100%" StartPoint="0%,0%">
 													<GradientStop Color="{DynamicResource Color/Accent}" Offset="0"/>
@@ -1483,7 +1484,7 @@
 												</LinearGradientBrush>
 											</Border.Background>
 											<Border.RenderTransform>
-												<ScaleTransform ScaleX="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:BooleanToValueConverters.BooleanToOpacity}}">
+												<ScaleTransform ScaleX="{Binding $parent[TabItem].IsSelected, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacity}}">
 													<!--ScaleTransform.Transitions>
 														<Transitions>
 															<DoubleTransition Property="ScaleX" Delay="0:0:0.15" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
@@ -1556,8 +1557,8 @@
 				<MenuItem Command="{Binding $parent[TextBox].Copy}" Header="{DynamicResource String/Common.Copy}" IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="Ctrl+C"/>
 				<MenuItem Command="{Binding $parent[TextBox].Paste}" Header="{DynamicResource String/Common.Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" InputGesture="Ctrl+V"/>
 				<Separator/>
-				<MenuItem Command="{Binding $parent[TextBox].SelectAll}" Header="{DynamicResource String/Common.SelectAll}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static converters:ValueToBooleanConverters.NonEmptyStringToTrue}}" InputGesture="Ctrl+A"/>
-				<MenuItem Command="{Binding $parent[TextBox].Clear}" Header="{DynamicResource String/Common.Clear}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static converters:ValueToBooleanConverters.NonEmptyStringToTrue}}"/>
+				<MenuItem Command="{Binding $parent[TextBox].SelectAll}" Header="{DynamicResource String/Common.SelectAll}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static abConverters:ValueToBooleanConverters.NonEmptyStringToTrue}}" InputGesture="Ctrl+A"/>
+				<MenuItem Command="{Binding $parent[TextBox].Clear}" Header="{DynamicResource String/Common.Clear}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static abConverters:ValueToBooleanConverters.NonEmptyStringToTrue}}"/>
 			</ContextMenu>
 		</Setter>
 		<Setter Property="FontFamily" Value="{DynamicResource FontFamily/TextBox.FallbackFontFamilies}"/>

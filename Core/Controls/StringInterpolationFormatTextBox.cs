@@ -103,7 +103,7 @@ namespace CarinaStudio.AppSuite.Controls
 						}));
 						panel.Children.Add(new TextBlock().Also(it =>
 						{
-							it.Bind(TextBlock.IsVisibleProperty, new Binding() { Path = nameof(StringInterpolationVariable.DisplayName), Converter = Converters.ValueToBooleanConverters.NonEmptyStringToTrue });
+							it.Bind(TextBlock.IsVisibleProperty, new Binding() { Path = nameof(StringInterpolationVariable.DisplayName), Converter = CarinaStudio.Data.Converters.ValueToBooleanConverters.NonEmptyStringToTrue });
                             it.Bind(TextBlock.OpacityProperty, this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity"));
 							it.Bind(TextBlock.TextProperty, new Binding() { Path = nameof(StringInterpolationVariable.DisplayName), StringFormat = " ({0})" });
 							it.VerticalAlignment = VerticalAlignment.Center;
