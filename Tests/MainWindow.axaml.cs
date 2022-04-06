@@ -4,6 +4,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using Avalonia.Markup.Xaml.MarkupExtensions;
+using Avalonia.Media;
 using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.AppSuite.Converters;
@@ -17,7 +19,7 @@ using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -32,6 +34,8 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         static readonly AvaloniaProperty<int> Int32Property = AvaloniaProperty.Register<MainWindow, int>("Int32", 1);
+         static readonly AvaloniaProperty<IImage?> SelectedImageProperty = AvaloniaProperty.RegisterDirect<MainWindow, IImage?>(nameof(SelectedImage), window => window.selectedImage);
+        static readonly AvaloniaProperty<string?> SelectedImageIdProperty = AvaloniaProperty.RegisterDirect<MainWindow, string?>(nameof(SelectedImageId), window => window.selectedImageId);
 
 
         readonly MutableObservableBoolean canShowAppInfo = new MutableObservableBoolean(true);
@@ -39,6 +43,8 @@ namespace CarinaStudio.AppSuite.Tests
         readonly IntegerTextBox integerTextBox2;
         readonly IPAddressTextBox ipAddressTextBox;
         readonly ScheduledAction logAction;
+        IImage? selectedImage;
+        string? selectedImageId;
         private readonly ObservableList<TabItem> tabItems = new();
 
 
@@ -46,9 +52,19 @@ namespace CarinaStudio.AppSuite.Tests
         {
             this.ShowAppInfoDialogCommand = new Command(() => this.ShowAppInfoDialog(), this.canShowAppInfo);
 
-            this.GetObservable(Int32Property).Subscribe(value =>
+            var iconResources = new ResourceInclude().Let(it =>
             {
-                ;
+                it.Source = new Uri("avares://CarinaStudio.AppSuite.Core/Resources/Icons.axaml");
+                return it.Loaded;
+            });
+            this.ImageIdList = iconResources.Keys.Where(it => iconResources[it] is IImage).Cast<string>().ToArray().Also(it => 
+            {
+                for (var i = it.Length - 1; i >= 0; --i)
+                {
+                    if (it[i].StartsWith("Image/"))
+                        it[i] = it[i].Substring(6);
+                }
+                Array.Sort(it, string.Compare);
             });
 
             InitializeComponent();
@@ -81,6 +97,9 @@ namespace CarinaStudio.AppSuite.Tests
                 Settings = this.Configuration,
             }.ShowDialog(this);
         }
+
+
+        public IList<string> ImageIdList { get; }
 
 
         private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
@@ -210,6 +229,18 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
+        void OnImageIdListBoxSelectionChanged(object? sender, SelectionChangedEventArgs e) =>
+            this.SynchronizationContext.Post(() =>
+            {
+                var imageId = (sender as Avalonia.Controls.ListBox)?.SelectedItem as string;
+                this.SetAndRaise<string?>(SelectedImageIdProperty, ref this.selectedImageId, imageId);
+                if (imageId != null && this.Application.TryFindResource<IImage>($"Image/{imageId}", out var image) && image != null)
+                    this.SetAndRaise<IImage?>(SelectedImageProperty, ref this.selectedImage, image);
+                else
+                    this.SetAndRaise<IImage?>(SelectedImageProperty, ref this.selectedImage, null);
+            });
+
+
         void OnListBoxDoubleClickOnItem(object? sender, ListBoxItemEventArgs e)
         {
             _ = new MessageDialog()
@@ -232,6 +263,12 @@ namespace CarinaStudio.AppSuite.Tests
         {
             this.Application.Restart(AppSuiteApplication.RestoreMainWindowsArgument);
         }
+
+
+        public IImage? SelectedImage { get => this.selectedImage; }
+
+
+        public string? SelectedImageId { get => this.selectedImageId; }
 
 
         async void ShowAppInfoDialog()

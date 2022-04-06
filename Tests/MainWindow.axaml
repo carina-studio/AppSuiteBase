@@ -466,8 +466,18 @@
 
 			<TabItem>
 				<TabItem.Header>
-					<TextBlock Text="Tab"/>
+					<TextBlock Text="Images"/>
 				</TabItem.Header>
+				<Grid ColumnDefinitions="Auto,5,*" Margin="5" RowDefinitions="Auto,5,*">
+					<ListBox Grid.RowSpan="3" Items="{Binding $parent[Window].ImageIdList}" SelectionChanged="OnImageIdListBoxSelectionChanged" Width="200"/>
+					<TextBox Grid.Column="2" IsReadOnly="True" Text="{Binding $parent[Window].SelectedImageId}"/>
+					<WrapPanel Grid.Column="2" Grid.Row="2">
+						<Image Classes="Icon" Height="100" Margin="10" Source="{Binding $parent[Window].SelectedImage}" Width="100"/>
+						<Image Classes="Icon" Height="{StaticResource Double/ToolBar.Button.Icon.Size}" Margin="10" Source="{Binding $parent[Window].SelectedImage}" Width="{StaticResource Double/ToolBar.Button.Icon.Size}"/>
+						<Image Classes="Icon" Height="{StaticResource Double/MenuItem.Icon.Size}" Margin="10" Source="{Binding $parent[Window].SelectedImage}" Width="{StaticResource Double/MenuItem.Icon.Size}"/>
+						<Image Classes="Icon" Height="{StaticResource Double/InPlaceAction.IconSize}" Margin="10" Source="{Binding $parent[Window].SelectedImage}" Width="{StaticResource Double/InPlaceAction.IconSize}"/>
+					</WrapPanel>
+				</Grid>
 			</TabItem>
 
 			<TabItem>
