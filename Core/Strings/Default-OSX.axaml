@@ -9,6 +9,7 @@
 	<sys:String x:Key="String/Common.CreateTab.WithGesture">Create new tab (⌘T)</sys:String>
 	<sys:String x:Key="String/Common.Cut.WithGesture">Cut (⌘X)</sys:String>
 	<sys:String x:Key="String/Common.Paste.WithGesture">Paste (⌘V)</sys:String>
+	<sys:String x:Key="String/Common.Save.WithDialogAndGesture">Save… (⌘+S)</sys:String>
 	<sys:String x:Key="String/Common.Save.WithGesture">Save (⌘S)</sys:String>
 	<sys:String x:Key="String/Common.SelectAll.WithGesture">Select all (⌘A)</sys:String>
 	

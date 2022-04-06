@@ -9,6 +9,7 @@
 	<sys:String x:Key="String/Common.CreateTab.WithGesture">建立新的分頁 (⌘T)</sys:String>
 	<sys:String x:Key="String/Common.Cut.WithGesture">剪下 (⌘X)</sys:String>
 	<sys:String x:Key="String/Common.Paste.WithGesture">貼上 (⌘V)</sys:String>
+	<sys:String x:Key="String/Common.Save.WithDialogAndGesture">儲存… (⌘+S)</sys:String>
 	<sys:String x:Key="String/Common.Save.WithGesture">儲存 (⌘S)</sys:String>
 	<sys:String x:Key="String/Common.SelectAll.WithGesture">全選 (⌘A)</sys:String>
 	
