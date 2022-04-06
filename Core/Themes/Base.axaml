@@ -253,9 +253,9 @@
 
 		<!-- RadioButton -->
 		<SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPointerOver" Color="{DynamicResource SystemAccentColorLight1}" />
-    	<SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPressed" Color="{DynamicResource SystemAccentColorDark1}" />
+		<SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPressed" Color="{DynamicResource SystemAccentColorDark1}" />
 		<SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePointerOver" Color="{DynamicResource SystemAccentColorLight1}" />
-    	<SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePressed" Color="{DynamicResource SystemAccentColorDark1}" />
+		<SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePressed" Color="{DynamicResource SystemAccentColorDark1}" />
 
 		<!-- RepeatButton -->
 		<StaticResourceExtension x:Key="RepeatButtonBackground" ResourceKey="ButtonBackground"/>
@@ -340,6 +340,8 @@
 		<Thickness x:Key="Thickness/StatusBar.Padding">5,0,5,0</Thickness>
 
 		<!-- TabControl -->
+		<SolidColorBrush x:Key="Brush/TabControl.TabStrip.Border" Color="{DynamicResource Color/TabControl.TabStrip.Border}"/>
+		<Color x:Key="Color/TabControl.TabStrip.Border">#00000000</Color>
 		<sys:Double x:Key="Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace">40</sys:Double>
 		<sys:Double x:Key="Double/TabControl.TabStrip.ScrollingButton.Icon.Size">10</sys:Double>
 		<Thickness x:Key="Thickness/TabControl.TabStrip.Padding">6,0,6,0</Thickness>
@@ -1376,6 +1378,7 @@
 							VerticalAlignment="{TemplateBinding VerticalAlignment}">
 						<DockPanel>
 							<Panel DockPanel.Dock="Top">
+								<Border BorderBrush="{DynamicResource Brush/TabControl.TabStrip.Border}" BorderThickness="0,0,0,1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 								<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" Background="{x:Null}">
 									<Border Padding="{StaticResource Thickness/TabControl.TabStrip.Padding}">
 										<ItemsPresenter Name="PART_ItemsPresenter"
@@ -1473,7 +1476,7 @@
 												<DoubleTransition Property="Opacity" Delay="0:0:0.15" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Border.Transitions-->
-										<Border CornerRadius="{StaticResource CornerRadius/TabItem.Header}" Height="{StaticResource Double/TabItem.Header.ColorBar.Height}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacity}}" VerticalAlignment="Top">
+										<Border CornerRadius="{StaticResource CornerRadius/TabItem.Header}" Height="{StaticResource Double/TabItem.Header.ColorBar.Height}" VerticalAlignment="Top">
 											<Border.Background>
 												<LinearGradientBrush EndPoint="0%,100%" StartPoint="0%,0%">
 													<GradientStop Color="{DynamicResource Color/Accent}" Offset="0"/>

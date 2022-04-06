@@ -45,6 +45,9 @@
 		<!-- StatusBar -->
 		<Color x:Key="Color/StatusBar.Background.Inactive">#8a8a8a</Color>
 
+		<!-- TabControl -->
+		<Color x:Key="Color/TabControl.TabStrip.Border">#20000000</Color>
+
 		<!-- TabItem -->
 		<Color x:Key="Color/TabItem.Header.Background">#00000000</Color>
 		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#e0e0e0</Color>
@@ -64,7 +67,7 @@
 
 		<!-- Window -->
 		<Color x:Key="Color/Window.Background">#f0f0f0</Color>
-		<Color x:Key="Color/Window.Background.Tabbed">#e7e7e7</Color>
+		<Color x:Key="Color/Window.Background.Tabbed">#f7f7f7</Color>
 		<Color x:Key="Color/Window.Background.Tabbed.Transparent">#d0e7e7e7</Color>
 		<Color x:Key="Color/Window.Background.Transparent">#e5f0f0f0</Color>
 
