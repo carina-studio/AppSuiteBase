@@ -1461,7 +1461,7 @@ namespace CarinaStudio.AppSuite
                     }
                     return nameBuilder.ToString();
                 });
-                if (Platform.IsLinux)
+                if (Platform.IsNotWindows)
                 {
                     // [workaround] treat process as client first becase limitation of max server instance seems not working on Linux
                     if (this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args))
