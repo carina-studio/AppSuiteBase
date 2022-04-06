@@ -252,6 +252,17 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
+        void SwitchAppCulture()
+        {
+            this.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, this.Settings.GetValueOrDefault(SettingKeys.Culture) switch
+            {
+                ApplicationCulture.System => ApplicationCulture.EN_US,
+                ApplicationCulture.EN_US => ApplicationCulture.ZH_TW,
+                _ => ApplicationCulture.System,
+            });
+        }
+
+
         void SwitchTheme()
         {
             this.Settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, this.Settings.GetValueOrDefault(SettingKeys.ThemeMode) switch

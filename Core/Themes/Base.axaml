@@ -673,7 +673,6 @@
 	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock_Header1">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Header1}"/>
-		<Setter Property="FontWeight" Value="Bold"/>
 	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock_Header2">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Header2}"/>

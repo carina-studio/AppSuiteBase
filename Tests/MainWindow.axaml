@@ -348,6 +348,7 @@
 
 						<abControls:LinkTextBlock HorizontalAlignment="Left" IsEnabled="False" Margin="5" Text="Google" Uri="http://www.google.com/"/>
 						<abControls:LinkTextBlock Command="{Binding $parent[Window].SwitchTheme}" HorizontalAlignment="Left" Margin="5" Text="Switch theme"/>
+						<abControls:LinkTextBlock Command="{Binding $parent[Window].SwitchAppCulture}" HorizontalAlignment="Left" Margin="5" Text="Switch application culture"/>
 
 						<abControls:DateTimeTextBox Name="dateTimeTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
 						<TextBlock Margin="5,0,0,5" Text="{Binding #dateTimeTextBox.Value, StringFormat={}Value: {0}}"/>
