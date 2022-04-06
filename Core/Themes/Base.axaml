@@ -189,10 +189,10 @@
 		<Color x:Key="Color/Icon">#000000</Color>
 		<Color x:Key="Color/Icon.Dark">#000000</Color>
 		<Color x:Key="Color/Icon.Error">#ff3232</Color>
-		<Color x:Key="Color/Icon.Information">#007acc</Color>
+		<Color x:Key="Color/Icon.Information">#288acc</Color>
 		<Color x:Key="Color/Icon.Light">#ffffff</Color>
-		<Color x:Key="Color/Icon.OK">#329932</Color>
-		<Color x:Key="Color/Icon.Question">#007acc</Color>
+		<Color x:Key="Color/Icon.OK">#59b259</Color>
+		<Color x:Key="Color/Icon.Question">#009999</Color>
 		<Color x:Key="Color/Icon.Warning">#ff8432</Color>
 		<SolidColorBrush x:Key="Brush/Icon" Color="{DynamicResource Color/Icon}"/>
 		<SolidColorBrush x:Key="Brush/Icon.Active" Color="{DynamicResource Color/Accent}"/>
