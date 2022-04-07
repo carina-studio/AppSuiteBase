@@ -353,10 +353,16 @@
 		<SolidColorBrush x:Key="Brush/TabItem.Header.Background" Color="{DynamicResource Color/TabItem.Header.Background}"/>
 		<SolidColorBrush x:Key="Brush/TabItem.Header.Background.PointerOver" Color="{DynamicResource Color/TabItem.Header.Background.PointerOver}"/>
 		<SolidColorBrush x:Key="Brush/TabItem.Header.Background.Selected" Color="{DynamicResource Color/TabItem.Header.Background.Selected}"/>
+		<SolidColorBrush x:Key="Brush/TabItem.Header.Border" Color="{DynamicResource Color/TabItem.Header.Border}"/>
+		<SolidColorBrush x:Key="Brush/TabItem.Header.Border.PointerOver" Color="{DynamicResource Color/TabItem.Header.Border.PointerOver}"/>
+		<SolidColorBrush x:Key="Brush/TabItem.Header.Border.Selected" Color="{DynamicResource Color/TabItem.Header.Border.Selected}"/>
 		<SolidColorBrush x:Key="Brush/TabItem.Header.InsertionIndicator.Background" Color="{DynamicResource Color/Accent}" Opacity="0.7"/>
 		<Color x:Key="Color/TabItem.Header.Background">#ffffff</Color>
 		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#ffffff</Color>
 		<Color x:Key="Color/TabItem.Header.Background.Selected">#ffffff</Color>
+		<Color x:Key="Color/TabItem.Header.Border">#00000000</Color>
+		<Color x:Key="Color/TabItem.Header.Border.PointerOver">#00000000</Color>
+		<Color x:Key="Color/TabItem.Header.Border.Selected">#00000000</Color>
 		<CornerRadius x:Key="CornerRadius/TabItem.Header">5,5,0,0</CornerRadius>
 		<sys:Double x:Key="Double/TabItem.Header.ColorBar.Height">6</sys:Double>
 		<sys:Double x:Key="Double/TabItem.Header.Content.Height">20</sys:Double>
@@ -1462,15 +1468,15 @@
 
 							<Border Name="PART_ContentContainer" Grid.Column="1" Margin="{StaticResource Thickness/TabItem.Header.Margin}" MaxWidth="{StaticResource Double/TabItem.Header.MaxWidth}" VerticalAlignment="Bottom">
 								<Panel>
-									<Border Background="{StaticResource Brush/TabItem.Header.Background}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding !$parent[TabItem].IsSelected}" Margin="0,0,0,1"/>
-									<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsPointerOver}" Margin="0,0,0,1">
+									<Border Background="{StaticResource Brush/TabItem.Header.Background}" BorderBrush="{StaticResource Brush/TabItem.Header.Border}" BorderThickness="1,1,1,0" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding !$parent[TabItem].IsSelected}" Margin="0,0,0,1"/>
+									<Border Background="{StaticResource Brush/TabItem.Header.Background.PointerOver}" BorderBrush="{StaticResource Brush/TabItem.Header.Border.PointerOver}" BorderThickness="1,1,1,0" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsPointerOver}" Margin="0,0,0,1">
 										<!--Border.Transitions>
 											<Transitions>
 												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Border.Transitions-->
 									</Border>
-									<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsSelected}">
+									<Border Background="{StaticResource Brush/TabItem.Header.Background.Selected}" BorderBrush="{StaticResource Brush/TabItem.Header.Border.Selected}" BorderThickness="1,1,1,0" CornerRadius="{StaticResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsSelected}">
 										<!--Border.Transitions>
 											<Transitions>
 												<DoubleTransition Property="Opacity" Delay="0:0:0.15" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>

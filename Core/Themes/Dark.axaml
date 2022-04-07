@@ -44,10 +44,15 @@
 		<!-- StatusBar -->
 		<Color x:Key="Color/StatusBar.Background.Inactive">#303030</Color>
 
+		<!-- TabControl -->
+		<Color x:Key="Color/TabControl.TabStrip.Border">#20808080</Color>
+
 		<!-- TabItem -->
 		<Color x:Key="Color/TabItem.Header.Background">#00000000</Color>
 		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#1e1e1e</Color>
 		<Color x:Key="Color/TabItem.Header.Background.Selected">#1e1e1e</Color>
+		<Color x:Key="Color/TabItem.Header.Border.PointerOver">#17808080</Color>
+		<Color x:Key="Color/TabItem.Header.Border.Selected">#20808080</Color>
 
 		<!-- TextBox -->
 		<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#1f1f1f"/>
