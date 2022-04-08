@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.Threading;
 using System;
@@ -80,6 +81,8 @@ namespace CarinaStudio.AppSuite.Controls
                     appInfo.UserAgreementUri?.Let(uri => Platform.OpenLink(uri));
                     this.SynchronizationContext.Post(this.Agree);
                 }
+                else
+                    this.FindControl<Button>("agreeButton")?.Focus();
             }
             else
                 this.SynchronizationContext.Post(this.Decline);
