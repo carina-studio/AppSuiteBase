@@ -19,10 +19,7 @@
 			<TextBlock Grid.Column="1" Text="{Binding $parent[Window].Message}" TextWrapping="Wrap" VerticalAlignment="Center"/>
 			<StackPanel Name="doNotAskAgainPanel" Grid.Column="1" Grid.Row="1" IsVisible="False">
 				<Separator Classes="Dialog_Separator"/>
-				<StackPanel Orientation="Horizontal">
-					<ToggleSwitch Name="doNotAskAgainSwitch" Classes="Dialog_ToggleSwitch" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-					<TextBlock Text="{DynamicResource String/Common.DoNotAskAgain}" VerticalAlignment="Center"/>
-				</StackPanel>
+				<CheckBox Name="doNotAskAgainCheckBox" Content="{DynamicResource String/Common.DoNotAskAgain}" HorizontalAlignment="Left"/>
 			</StackPanel>
 		</Grid>
 

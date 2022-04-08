@@ -29,7 +29,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 		// Fields.
 		readonly Panel doNotAskAgainPanel;
-		readonly ToggleSwitch doNotAskAgainSwitch;
+		readonly CheckBox doNotAskAgainCheckBox;
 		MessageDialogResult? result;
 
 
@@ -38,7 +38,7 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			InitializeComponent();
 			this.doNotAskAgainPanel = this.FindControl<Panel>(nameof(doNotAskAgainPanel)).AsNonNull();
-			this.doNotAskAgainSwitch = this.doNotAskAgainPanel.FindControl<ToggleSwitch>(nameof(doNotAskAgainSwitch)).AsNonNull();
+			this.doNotAskAgainCheckBox = this.doNotAskAgainPanel.FindControl<CheckBox>(nameof(doNotAskAgainCheckBox)).AsNonNull();
 		}
 
 
@@ -133,7 +133,7 @@ namespace CarinaStudio.AppSuite.Controls
 			if (this.DoNotAskAgain.HasValue)
 			{
 				this.doNotAskAgainPanel.IsVisible = true;
-				this.doNotAskAgainSwitch.IsChecked = this.DoNotAskAgain.GetValueOrDefault();
+				this.doNotAskAgainCheckBox.IsChecked = this.DoNotAskAgain.GetValueOrDefault();
 			}
 
 			// setup buttons
@@ -187,7 +187,7 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				this.result = result;
 				if (this.doNotAskAgainPanel.IsVisible)
-					this.DoNotAskAgain = this.doNotAskAgainSwitch.IsChecked;
+					this.DoNotAskAgain = this.doNotAskAgainCheckBox.IsChecked;
 				this.Close(result);
 			}
 		}
