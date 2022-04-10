@@ -26,133 +26,147 @@
 
 		<!-- Content -->
 		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="{DynamicResource Double/ApplicationInfoDialog.Content.MaxHeight}">
-			<StackPanel Classes="Dialog_ContentPanel">
+			<Panel>
 
-				<!-- Icon and title -->
-				<DockPanel HorizontalAlignment="Stretch">
+				<!-- Background -->
+				<Border Height="{StaticResource Double/ApplicationInfoDialog.Header.Background.Height}" VerticalAlignment="Top">
+					<Border.Background>
+						<LinearGradientBrush EndPoint="0%,100%" StartPoint="0%,0%">
+							<GradientStop Color="{DynamicResource Color/Accent.WithOpacity.0.25}" Offset="0"/>
+							<GradientStop Color="{DynamicResource Color/Accent.Transparent}" Offset="1"/>
+						</LinearGradientBrush>
+					</Border.Background>
+				</Border>
 
-					<!-- Icon -->
-					<Border DockPanel.Dock="Left">
-						<Image Height="{DynamicResource Double/ApplicationInfoDialog.AppIcon.Size}" Margin="{DynamicResource Thickness/ApplicationInfoDialog.AppIcon.Margin}" Source="{Binding Icon}" VerticalAlignment="Center" Width="{DynamicResource Double/ApplicationInfoDialog.AppIcon.Size}"/>
-					</Border>
+				<!-- Content -->
+				<StackPanel Classes="Dialog_ContentPanel">
 
-					<!-- Title and version -->
-					<Border>
-						<StackPanel Orientation="Vertical" VerticalAlignment="Center">
-							<TextBlock FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Margin="{DynamicResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Text="{Binding Name}"/>
-							<StackPanel Orientation="Horizontal">
-								<TextBlock Text="{Binding $parent[Window].VersionString}" VerticalAlignment="Center"/>
-								<Separator Classes="Dialog_Separator_Small"/>
-								<TextBlock Text="(" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
-								<abControls:LinkTextBlock Command="{Binding $parent[Window].ShowApplicationChangeList}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{DynamicResource String/ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
-								<TextBlock Text=")" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
+					<!-- Icon and title -->
+					<DockPanel HorizontalAlignment="Stretch">
+
+						<!-- Icon -->
+						<Border DockPanel.Dock="Left">
+							<Image Height="{DynamicResource Double/ApplicationInfoDialog.AppIcon.Size}" Margin="{DynamicResource Thickness/ApplicationInfoDialog.AppIcon.Margin}" Source="{Binding Icon}" VerticalAlignment="Center" Width="{DynamicResource Double/ApplicationInfoDialog.AppIcon.Size}"/>
+						</Border>
+
+						<!-- Title and version -->
+						<Border>
+							<StackPanel Orientation="Vertical" VerticalAlignment="Center">
+								<TextBlock FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Margin="{DynamicResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Text="{Binding Name}"/>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="{Binding $parent[Window].VersionString}" VerticalAlignment="Center"/>
+									<Separator Classes="Dialog_Separator_Small"/>
+									<TextBlock Text="(" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
+									<abControls:LinkTextBlock Command="{Binding $parent[Window].ShowApplicationChangeList}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{DynamicResource String/ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
+									<TextBlock Text=")" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
+								</StackPanel>
+								<TextBlock Text="©2021 Carina Studio"/>
 							</StackPanel>
-							<TextBlock Text="©2021 Carina Studio"/>
-						</StackPanel>
-					</Border>
+						</Border>
 
-				</DockPanel>
-				<Separator Classes="Dialog_Separator_Large"/>
+					</DockPanel>
+					<Separator Classes="Dialog_Separator_Large"/>
 
-				<!-- Framework attribution -->
-				<StackPanel Orientation="Horizontal">
-					<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section1}" VerticalAlignment="Center"/>
-					<abControls:LinkTextBlock Text=" .NET " Uri="https://dotnet.microsoft.com/" VerticalAlignment="Center"/>
-					<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section2}" VerticalAlignment="Center"/>
-					<abControls:LinkTextBlock Text=" Avalonia " Uri="http://avaloniaui.net/" VerticalAlignment="Center"/>
-					<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section3}" VerticalAlignment="Center"/>
-				</StackPanel>
-				<Separator Classes="Dialog_Separator_Small"/>
+					<!-- Framework attribution -->
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section1}" VerticalAlignment="Center"/>
+						<abControls:LinkTextBlock Text=" .NET " Uri="https://dotnet.microsoft.com/" VerticalAlignment="Center"/>
+						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section2}" VerticalAlignment="Center"/>
+						<abControls:LinkTextBlock Text=" Avalonia " Uri="http://avaloniaui.net/" VerticalAlignment="Center"/>
+						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section3}" VerticalAlignment="Center"/>
+					</StackPanel>
+					<Separator Classes="Dialog_Separator_Small"/>
 
-				<!-- App icon attribution (Flaticon) -->
-				<StackPanel Orientation="Horizontal" IsVisible="False">
-					<ia:Interaction.Behaviors>
-						<iaCore:DataTriggerBehavior Binding="{Binding IconWebSite}" Value="Flaticon">
-							<iaCore:ChangePropertyAction PropertyName="IsVisible" Value="True"/>
-						</iaCore:DataTriggerBehavior>
-					</ia:Interaction.Behaviors>
-					<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon}" VerticalAlignment="Center"/>
-					<abControls:LinkTextBlock IsVisible="False" Text=" Freepik " Uri="https://www.freepik.com/" VerticalAlignment="Center">
+					<!-- App icon attribution (Flaticon) -->
+					<StackPanel Orientation="Horizontal" IsVisible="False">
 						<ia:Interaction.Behaviors>
-							<iaCore:DataTriggerBehavior Binding="{Binding IconCreator}" Value="Freepik">
+							<iaCore:DataTriggerBehavior Binding="{Binding IconWebSite}" Value="Flaticon">
 								<iaCore:ChangePropertyAction PropertyName="IsVisible" Value="True"/>
 							</iaCore:DataTriggerBehavior>
 						</ia:Interaction.Behaviors>
-					</abControls:LinkTextBlock>
-					<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon}" VerticalAlignment="Center"/>
-					<abControls:LinkTextBlock Text=" Flaticon " Uri="https://www.flaticon.com/" VerticalAlignment="Center"/>
-					<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon}" VerticalAlignment="Center"/>
-				</StackPanel>
-				<Separator Classes="Dialog_Separator_Large"/>
-
-				<!-- System info (Header) -->
-				<Border Classes="Dialog_TextBlock_Header1">
-					<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.SystemInformation}"/>
-				</Border>
-
-				<!-- Operating system -->
-				<StackPanel Orientation="Horizontal">
-					<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.OperatingSystem}" VerticalAlignment="Center"/>
-					<TextBlock Text="{Binding OperatingSystemDescription}" VerticalAlignment="Center"/>
-				</StackPanel>
-				<Separator Classes="Dialog_Separator_Small"/>
-
-				<!-- Framework version -->
-				<StackPanel Orientation="Horizontal">
-					<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.FrameworkVersion}" VerticalAlignment="Center"/>
-					<TextBlock Text="{Binding FrameworkVersion}" VerticalAlignment="Center"/>
-					<Separator Classes="Dialog_Separator_Small"/>
-					<TextBlock IsVisible="{Binding IsFrameworkInstalled}" VerticalAlignment="Center">
-						<TextBlock.Text>
-							<MultiBinding StringFormat="{}({0}{1})">
-								<DynamicResourceExtension ResourceKey="String/ApplicationInfoDialog.InstalledFrameworkVersion"/>
-								<Binding Path="InstalledFrameworkVersion"/>
-							</MultiBinding>
-						</TextBlock.Text>
-					</TextBlock>
-				</StackPanel>
-
-				<!-- Total physical memory -->
-				<StackPanel IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}">
-					<Separator Classes="Dialog_Separator_Small"/>
-					<StackPanel Orientation="Horizontal">
-						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.TotalPhysicalMemory}" VerticalAlignment="Center"/>
-						<TextBlock Text="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" VerticalAlignment="Center"/>
+						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon}" VerticalAlignment="Center"/>
+						<abControls:LinkTextBlock IsVisible="False" Text=" Freepik " Uri="https://www.freepik.com/" VerticalAlignment="Center">
+							<ia:Interaction.Behaviors>
+								<iaCore:DataTriggerBehavior Binding="{Binding IconCreator}" Value="Freepik">
+									<iaCore:ChangePropertyAction PropertyName="IsVisible" Value="True"/>
+								</iaCore:DataTriggerBehavior>
+							</ia:Interaction.Behaviors>
+						</abControls:LinkTextBlock>
+						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon}" VerticalAlignment="Center"/>
+						<abControls:LinkTextBlock Text=" Flaticon " Uri="https://www.flaticon.com/" VerticalAlignment="Center"/>
+						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon}" VerticalAlignment="Center"/>
 					</StackPanel>
-				</StackPanel>
-				<Separator Classes="Dialog_Separator_Large"/>
+					<Separator Classes="Dialog_Separator_Large"/>
 
-				<!-- Assemblies (Header) -->
-				<Border Classes="Dialog_TextBlock_Header1">
-					<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Assemblies}"/>
-				</Border>
+					<!-- System info (Header) -->
+					<Border Classes="Dialog_TextBlock_Header1">
+						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.SystemInformation}"/>
+					</Border>
 
-				<!-- Assemblies -->
-				<StackPanel Name="assembliesPanel"/>
-				<Separator Classes="Dialog_Separator_Large"/>
-
-				<!-- User agreement -->
-				<StackPanel IsVisible="{Binding $parent[Window].HasUserAgreement}" Orientation="Vertical">
-					<abControls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.UserAgreement}" Uri="{Binding UserAgreementUri}"/>
+					<!-- Operating system -->
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.OperatingSystem}" VerticalAlignment="Center"/>
+						<TextBlock Text="{Binding OperatingSystemDescription}" VerticalAlignment="Center"/>
+					</StackPanel>
 					<Separator Classes="Dialog_Separator_Small"/>
+
+					<!-- Framework version -->
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.FrameworkVersion}" VerticalAlignment="Center"/>
+						<TextBlock Text="{Binding FrameworkVersion}" VerticalAlignment="Center"/>
+						<Separator Classes="Dialog_Separator_Small"/>
+						<TextBlock IsVisible="{Binding IsFrameworkInstalled}" VerticalAlignment="Center">
+							<TextBlock.Text>
+								<MultiBinding StringFormat="{}({0}{1})">
+									<DynamicResourceExtension ResourceKey="String/ApplicationInfoDialog.InstalledFrameworkVersion"/>
+									<Binding Path="InstalledFrameworkVersion"/>
+								</MultiBinding>
+							</TextBlock.Text>
+						</TextBlock>
+					</StackPanel>
+
+					<!-- Total physical memory -->
+					<StackPanel IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}">
+						<Separator Classes="Dialog_Separator_Small"/>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.TotalPhysicalMemory}" VerticalAlignment="Center"/>
+							<TextBlock Text="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" VerticalAlignment="Center"/>
+						</StackPanel>
+					</StackPanel>
+					<Separator Classes="Dialog_Separator_Large"/>
+
+					<!-- Assemblies (Header) -->
+					<Border Classes="Dialog_TextBlock_Header1">
+						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Assemblies}"/>
+					</Border>
+
+					<!-- Assemblies -->
+					<StackPanel Name="assembliesPanel"/>
+					<Separator Classes="Dialog_Separator_Large"/>
+
+					<!-- User agreement -->
+					<StackPanel IsVisible="{Binding $parent[Window].HasUserAgreement}" Orientation="Vertical">
+						<abControls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.UserAgreement}" Uri="{Binding UserAgreementUri}"/>
+						<Separator Classes="Dialog_Separator_Small"/>
+					</StackPanel>
+
+					<!-- Privacy policy -->
+					<StackPanel IsVisible="{Binding $parent[Window].HasPrivacyPolicy}" Orientation="Vertical">
+						<abControls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
+						<Separator Classes="Dialog_Separator_Small"/>
+					</StackPanel>
+
+					<!-- Source code -->
+					<StackPanel IsVisible="{Binding $parent[Window].HasGitHubProject}" Orientation="Vertical">
+						<abControls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.GitHubProject}" Uri="{Binding GitHubProjectUri}"/>
+						<Separator Classes="Dialog_Separator_Small"/>
+					</StackPanel>
+
+					<!-- Export logs -->
+					<abControls:LinkTextBlock Command="{Binding $parent[Window].ExportLogs}" HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}"/>
+
 				</StackPanel>
-
-				<!-- Privacy policy -->
-				<StackPanel IsVisible="{Binding $parent[Window].HasPrivacyPolicy}" Orientation="Vertical">
-					<abControls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
-					<Separator Classes="Dialog_Separator_Small"/>
-				</StackPanel>
-
-				<!-- Source code -->
-				<StackPanel IsVisible="{Binding $parent[Window].HasGitHubProject}" Orientation="Vertical">
-					<abControls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.GitHubProject}" Uri="{Binding GitHubProjectUri}"/>
-					<Separator Classes="Dialog_Separator_Small"/>
-				</StackPanel>
-
-				<!-- Export logs -->
-				<abControls:LinkTextBlock Command="{Binding $parent[Window].ExportLogs}" HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}"/>
-
-			</StackPanel>
+			</Panel>
 		</ScrollViewer>
 
 	</DockPanel>
