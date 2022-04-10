@@ -21,106 +21,130 @@
 	</Window.Styles>
 
 	<!-- Content -->
-	<Border Background="{DynamicResource Brush/SplashWindow.Background}" BorderBrush="{DynamicResource Brush/SplashWindow.Border}" BorderThickness="{DynamicResource Thickness/SplashWindow.Border}" CornerRadius="{DynamicResource CornerRadius/SplashWindow}" Opacity="0">
+	<Border Opacity="0">
 		
 		<Border.Transitions>
 			<Transitions>
 				<DoubleTransition Property="Opacity" Duration="0:0:1" Easing="ExponentialEaseOut"/>
 			</Transitions>
 		</Border.Transitions>
-		
-		<Grid ColumnDefinitions="Auto,Auto" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/SplashWindow.Padding}" RowDefinitions="Auto,Auto" VerticalAlignment="Center">
 
-			<!-- Icon -->
-			<Image Name="iconImage" Height="{DynamicResource Double/SplashWindow.Icon.Size}" Margin="{DynamicResource Thickness/SplashWindow.Icon.Margin}" Opacity="0" Source="{Binding $parent[Window].IconBitmap}" Width="{DynamicResource Double/SplashWindow.Icon.Size}" VerticalAlignment="Center">
-				<Image.RenderTransform>
-					<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
-						<TranslateTransform.Transitions>
-							<Transitions>
-								<DoubleTransition Property="X" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
-							</Transitions>
-						</TranslateTransform.Transitions>
-					</TranslateTransform>
-				</Image.RenderTransform>
-				<Image.Transitions>
+		<Panel>
+
+			<!-- Background -->
+			<Border Background="{DynamicResource Brush/SplashWindow.Background}" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{DynamicResource Thickness/SplashWindow.Border}" CornerRadius="{DynamicResource CornerRadius/SplashWindow}"/>
+			<Border Name="backgroundOverlayBorder" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{DynamicResource Thickness/SplashWindow.Border}" CornerRadius="{DynamicResource CornerRadius/SplashWindow}" Opacity="0">
+				<Border.Background>
+					<LinearGradientBrush EndPoint="0%,50%" StartPoint="0%,0%">
+						<GradientStop Color="{DynamicResource Color/Accent.WithOpacity.0.25}" Offset="0"/>
+						<GradientStop Color="{DynamicResource Color/Accent.Transparent}" Offset="1"/>
+					</LinearGradientBrush>
+				</Border.Background>
+				<Border.Transitions>
 					<Transitions>
 						<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
 					</Transitions>
-				</Image.Transitions>
-			</Image>
+				</Border.Transitions>
+			</Border>
+			
+			<!-- Content -->
+			<Grid ColumnDefinitions="Auto,Auto" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/SplashWindow.Padding}" RowDefinitions="Auto,Auto" VerticalAlignment="Center">
 
-			<!-- Title and version -->
-			<StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
-				<TextBlock Name="titleTextBlock" FontSize="{DynamicResource Double/SplashWindow.Title.FontSize}}" FontWeight="Bold" Margin="{DynamicResource Thickness/SplashWindow.Title.Margin}" Opacity="0" Text="{Binding $parent[Window].ApplicationName}">
-					<TextBlock.RenderTransform>
+				<!-- Icon -->
+				<Image Name="iconImage" Height="{DynamicResource Double/SplashWindow.Icon.Size}" Margin="{DynamicResource Thickness/SplashWindow.Icon.Margin}" Opacity="0" Source="{Binding $parent[Window].IconBitmap}" Width="{DynamicResource Double/SplashWindow.Icon.Size}" VerticalAlignment="Center">
+					<Image.RenderTransform>
 						<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 							<TranslateTransform.Transitions>
 								<Transitions>
-									<DoubleTransition Property="X" Delay="0:0:0.1" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+									<DoubleTransition Property="X" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
 								</Transitions>
 							</TranslateTransform.Transitions>
 						</TranslateTransform>
-					</TextBlock.RenderTransform>
-					<TextBlock.Transitions>
+					</Image.RenderTransform>
+					<Image.Transitions>
 						<Transitions>
-							<DoubleTransition Property="Opacity" Delay="0:0:0.1" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+							<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
 						</Transitions>
-					</TextBlock.Transitions>
-				</TextBlock>
-				<TextBlock Name="versionTextBlock" Opacity="0" Text="{Binding $parent[Window].Version}">
-					<TextBlock.RenderTransform>
-						<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
-							<TranslateTransform.Transitions>
-								<Transitions>
-									<DoubleTransition Property="X" Delay="0:0:0.2" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
-								</Transitions>
-							</TranslateTransform.Transitions>
-						</TranslateTransform>
-					</TextBlock.RenderTransform>
-					<TextBlock.Transitions>
-						<Transitions>
-							<DoubleTransition Property="Opacity" Delay="0:0:0.2" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
-						</Transitions>
-					</TextBlock.Transitions>
-				</TextBlock>
-				<TextBlock Name="copyrightTextBlock" Opacity="0" Text="©2021 Carina Studio">
-					<TextBlock.RenderTransform>
-						<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
-							<TranslateTransform.Transitions>
-								<Transitions>
-									<DoubleTransition Property="X" Delay="0:0:0.3" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
-								</Transitions>
-							</TranslateTransform.Transitions>
-						</TranslateTransform>
-					</TextBlock.RenderTransform>
-					<TextBlock.Transitions>
-						<Transitions>
-							<DoubleTransition Property="Opacity" Delay="0:0:0.3" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
-						</Transitions>
-					</TextBlock.Transitions>
-				</TextBlock>
-			</StackPanel>
+					</Image.Transitions>
+				</Image>
 
-			<!-- Message -->
-			<Border Grid.ColumnSpan="2" Grid.Row="1" Height="{DynamicResource Double/SplashWindow.Message.ReservedSpace}" HorizontalAlignment="Stretch"/>
-			<TextBlock Name="messageTextBlock" FontSize="{DynamicResource Double/SplashWindow.Message.FontSize}" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/SplashWindow.Message.Margin}" Opacity="0" Text="{Binding $parent[Window].Message}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" VerticalAlignment="Center">
-				<TextBlock.RenderTransform>
-					<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
-						<TranslateTransform.Transitions>
+				<!-- Title and version -->
+				<StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
+					<TextBlock Name="titleTextBlock" FontSize="{DynamicResource Double/SplashWindow.Title.FontSize}}" FontWeight="Bold" Margin="{DynamicResource Thickness/SplashWindow.Title.Margin}" Opacity="0" Text="{Binding $parent[Window].ApplicationName}">
+						<TextBlock.RenderTransform>
+							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
+								<TranslateTransform.Transitions>
+									<Transitions>
+										<DoubleTransition Property="X" Delay="0:0:0.1" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+									</Transitions>
+								</TranslateTransform.Transitions>
+							</TranslateTransform>
+						</TextBlock.RenderTransform>
+						<TextBlock.Transitions>
 							<Transitions>
-								<DoubleTransition Property="X" Delay="0:0:0.4" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+								<DoubleTransition Property="Opacity" Delay="0:0:0.1" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
 							</Transitions>
-						</TranslateTransform.Transitions>
-					</TranslateTransform>
-				</TextBlock.RenderTransform>
-				<TextBlock.Transitions>
-					<Transitions>
-						<DoubleTransition Property="Opacity" Delay="0:0:0.4" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
-					</Transitions>
-				</TextBlock.Transitions>
-			</TextBlock>
+						</TextBlock.Transitions>
+					</TextBlock>
+					<TextBlock Name="versionTextBlock" Opacity="0" Text="{Binding $parent[Window].Version}">
+						<TextBlock.RenderTransform>
+							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
+								<TranslateTransform.Transitions>
+									<Transitions>
+										<DoubleTransition Property="X" Delay="0:0:0.2" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+									</Transitions>
+								</TranslateTransform.Transitions>
+							</TranslateTransform>
+						</TextBlock.RenderTransform>
+						<TextBlock.Transitions>
+							<Transitions>
+								<DoubleTransition Property="Opacity" Delay="0:0:0.2" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+							</Transitions>
+						</TextBlock.Transitions>
+					</TextBlock>
+					<TextBlock Name="copyrightTextBlock" Opacity="0" Text="©2021 Carina Studio">
+						<TextBlock.RenderTransform>
+							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
+								<TranslateTransform.Transitions>
+									<Transitions>
+										<DoubleTransition Property="X" Delay="0:0:0.3" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+									</Transitions>
+								</TranslateTransform.Transitions>
+							</TranslateTransform>
+						</TextBlock.RenderTransform>
+						<TextBlock.Transitions>
+							<Transitions>
+								<DoubleTransition Property="Opacity" Delay="0:0:0.3" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+							</Transitions>
+						</TextBlock.Transitions>
+					</TextBlock>
+				</StackPanel>
 
-		</Grid>
+				<!-- Message -->
+				<Border Grid.ColumnSpan="2" Grid.Row="1" Height="{DynamicResource Double/SplashWindow.Message.ReservedSpace}" HorizontalAlignment="Stretch"/>
+				<TextBlock Name="messageTextBlock" FontSize="{DynamicResource Double/SplashWindow.Message.FontSize}" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/SplashWindow.Message.Margin}" Opacity="0" Text="{Binding $parent[Window].Message}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" VerticalAlignment="Center">
+					<TextBlock.RenderTransform>
+						<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
+							<TranslateTransform.Transitions>
+								<Transitions>
+									<DoubleTransition Property="X" Delay="0:0:0.4" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+								</Transitions>
+							</TranslateTransform.Transitions>
+						</TranslateTransform>
+					</TextBlock.RenderTransform>
+					<TextBlock.Transitions>
+						<Transitions>
+							<DoubleTransition Property="Opacity" Delay="0:0:0.4" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+						</Transitions>
+					</TextBlock.Transitions>
+				</TextBlock>
+
+			</Grid>
+
+			<!-- Border -->
+			<Border BorderBrush="{DynamicResource Brush/SplashWindow.Border}" BorderThickness="{DynamicResource Thickness/SplashWindow.Border}" CornerRadius="{DynamicResource CornerRadius/SplashWindow}"/>
+
+		</Panel>
 	</Border>
 
 </Window>

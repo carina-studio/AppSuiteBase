@@ -106,6 +106,10 @@ namespace CarinaStudio.AppSuite.Controls
 
             // show content
             ((Control)(this.Content)).Opacity = 1;
+			this.FindControl<Border>("backgroundOverlayBorder").AsNonNull().Let(border =>
+			{
+				border.Opacity = 1;
+			});
 			this.FindControl<Image>("iconImage").AsNonNull().Let(image =>
 			{
 				image.Opacity = 1;
