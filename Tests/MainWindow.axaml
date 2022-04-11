@@ -144,7 +144,7 @@
 									<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
 
 										<Button Classes="ToolBar_Button" Command="{Binding $parent[Window].ShowAppInfoDialogCommand}">
-											<Image Classes="Icon" Source="{StaticResource Image/Icon.SidePanel}"/>
+											<Image Classes="Icon" Source="{StaticResource Image/Icon.Panel.Right}"/>
 										</Button>
 										<Button Classes="ToolBar_Button">
 											<Image Classes="Icon" Source="{StaticResource Image/Icon.Sliders}"/>
