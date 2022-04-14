@@ -20,8 +20,8 @@
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
 				<Button Classes="Dialog_ControlButton" Command="{Binding CheckForUpdateCommand}" Content="{DynamicResource String/ApplicationUpdateDialog.CheckForUpdate}" IsEnabled="{Binding !IsPreparingForUpdate}"/>
 				<Panel IsVisible="{Binding !IsLatestVersion}">
-					<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].DownloadUpdatePackage}" Content="{DynamicResource String/ApplicationUpdateDialog.DownloadUpdatePackage}" IsVisible="{Binding !IsAutoUpdateSupported}"/>
-					<Button Classes="Dialog_ControlButton" Command="{Binding StartUpdatingCommand}" Content="{DynamicResource String/ApplicationUpdateDialog.StartUpdating}" IsVisible="{Binding IsAutoUpdateSupported}"/>
+					<Button Name="downloadUpdatePackageButton" Classes="Dialog_ControlButton accent" Command="{Binding $parent[Window].DownloadUpdatePackage}" Content="{DynamicResource String/ApplicationUpdateDialog.DownloadUpdatePackage}" IsVisible="{Binding !IsAutoUpdateSupported}"/>
+					<Button Name="startUpdatingButton" Classes="Dialog_ControlButton accent" Command="{Binding StartUpdatingCommand}" Content="{DynamicResource String/ApplicationUpdateDialog.StartUpdating}" IsVisible="{Binding IsAutoUpdateSupported}"/>
 				</Panel>
 				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.Cancel}"/>
 			</StackPanel>

@@ -1,7 +1,9 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Configuration;
+using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
 using System.ComponentModel;
@@ -108,11 +110,36 @@ namespace CarinaStudio.AppSuite.Controls
 		// Called when opened.
 		protected override void OnOpened(EventArgs e)
 		{
+			// add handlers
 			this.Application.StringsUpdated += this.OnApplicationStringsUpdated;
+
+			// setup UI
 			this.UpdateLatestNotifiedInfo();
 			this.UpdateMessages();
+
+			// check for update
 			if (this.CheckForUpdateWhenOpening && this.DataContext is ApplicationUpdater updater)
 				updater.CheckForUpdateCommand.TryExecute();
+			
+			// setup default button
+			this.SynchronizationContext.Post(() =>
+			{
+				if ((this.DataContext as ApplicationUpdater)?.IsLatestVersion == false)
+				{
+					this.FindControl<Button>("startUpdatingButton")?.Let(it =>
+					{
+						if (it.IsEffectivelyVisible)
+							it.Focus();
+					});
+					this.FindControl<Button>("downloadUpdatePackageButton")?.Let(it =>
+					{
+						if (it.IsEffectivelyVisible)
+							it.Focus();
+					});
+				}
+			});
+			
+			// call base
 			base.OnOpened(e);
 		}
 
@@ -147,6 +174,25 @@ namespace CarinaStudio.AppSuite.Controls
 				&& this.isClosingRequested)
 			{
 				this.Close(ApplicationUpdateDialogResult.UpdatingCancelled);
+			}
+			else if (e.PropertyName == nameof(ApplicationUpdater.IsLatestVersion))
+			{
+				this.SynchronizationContext.Post(() =>
+				{
+					if (!updater.IsLatestVersion)
+					{
+						this.FindControl<Button>("startUpdatingButton")?.Let(it =>
+						{
+							if (it.IsEffectivelyVisible)
+								it.Focus();
+						});
+						this.FindControl<Button>("downloadUpdatePackageButton")?.Let(it =>
+						{
+							if (it.IsEffectivelyVisible)
+								it.Focus();
+						});
+					}
+				});
 			}
 			else if (e.PropertyName == nameof(ApplicationUpdater.IsShutdownNeededToContinueUpdate))
 			{
