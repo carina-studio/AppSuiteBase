@@ -4,6 +4,7 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Data;
+using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -175,7 +176,7 @@ namespace CarinaStudio.AppSuite.Controls
 						}));
 						panel.Children.Add(new TextBlock().Also(it =>
 						{
-							it.Bind(TextBlock.IsVisibleProperty, new Binding() { Path = nameof(RegexGroup.DisplayName), Converter = CarinaStudio.Data.Converters.ValueToBooleanConverters.NonEmptyStringToTrue });
+							it.Bind(TextBlock.IsVisibleProperty, new Binding() { Path = nameof(RegexGroup.DisplayName), Converter = StringConverters.IsNotNullOrEmpty });
 							it.Bind(TextBlock.OpacityProperty, this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity"));
 							it.Bind(TextBlock.TextProperty, new Binding() { Path = nameof(RegexGroup.DisplayName), StringFormat = " ({0})" });
 							it.VerticalAlignment = VerticalAlignment.Center;
