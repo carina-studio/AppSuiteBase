@@ -25,11 +25,18 @@
 
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" Grid.Row="1">
-			<StackPanel Classes="Dialog_ControlButtonsPanel">
-				<Button Name="button1" Classes="Dialog_ControlButton" Command="{Binding $parent[Window].SelectResult}" CommandParameter="{Binding $parent[Window].Button1Result}" Content="{Binding $parent[Window].Button1Text}" IsVisible="{Binding $parent[Window].IsButton1Visible}"/>
-				<Button Name="button2" Classes="Dialog_ControlButton" Command="{Binding $parent[Window].SelectResult}" CommandParameter="{Binding $parent[Window].Button2Result}" Content="{Binding $parent[Window].Button2Text}" IsVisible="{Binding $parent[Window].IsButton2Visible}"/>
-				<Button Name="button3" Classes="Dialog_ControlButton" Command="{Binding $parent[Window].SelectResult}" CommandParameter="{Binding $parent[Window].Button3Result}" Content="{Binding $parent[Window].Button3Text}" IsVisible="{Binding $parent[Window].IsButton3Visible}"/>
-			</StackPanel>
+			<Panel>
+				<StackPanel Classes="Dialog_ControlButtonsPanel" Opacity="0">
+					<Button Classes="Dialog_ControlButton"/>
+					<Button Classes="Dialog_ControlButton"/>
+					<Button Classes="Dialog_ControlButton"/>
+				</StackPanel>
+				<StackPanel Classes="Dialog_ControlButtonsPanel">
+					<Button Name="button1" Classes="Dialog_ControlButton" Command="{Binding $parent[Window].SelectResult}" CommandParameter="{Binding $parent[Window].Button1Result}" Content="{Binding $parent[Window].Button1Text}" IsVisible="{Binding $parent[Window].IsButton1Visible}"/>
+					<Button Name="button2" Classes="Dialog_ControlButton" Command="{Binding $parent[Window].SelectResult}" CommandParameter="{Binding $parent[Window].Button2Result}" Content="{Binding $parent[Window].Button2Text}" IsVisible="{Binding $parent[Window].IsButton2Visible}"/>
+					<Button Name="button3" Classes="Dialog_ControlButton" Command="{Binding $parent[Window].SelectResult}" CommandParameter="{Binding $parent[Window].Button3Result}" Content="{Binding $parent[Window].Button3Text}" IsVisible="{Binding $parent[Window].IsButton3Visible}"/>
+				</StackPanel>
+			</Panel>
 		</Border>
 
 	</Grid>
