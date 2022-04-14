@@ -11,6 +11,7 @@ namespace CarinaStudio.AppSuite.Controls
 	{
 		// Fields.
 		MessageDialogButtons buttons = MessageDialogButtons.OK;
+		MessageDialogResult? defaultResult;
 		bool? doNotAskAgain;
 		MessageDialogIcon icon = MessageDialogIcon.Information;
 		string? message;
@@ -27,6 +28,21 @@ namespace CarinaStudio.AppSuite.Controls
 				this.VerifyAccess();
 				this.VerifyShowing();
 				this.buttons = value;
+			}
+		}
+
+
+		/// <summary>
+		/// Get or set default result of dialog.
+		/// </summary>
+		public MessageDialogResult? DefaultResult
+		{
+			get => this.defaultResult;
+			set
+			{
+				this.VerifyAccess();
+				this.VerifyShowing();
+				this.defaultResult = value;
 			}
 		}
 
@@ -85,6 +101,7 @@ namespace CarinaStudio.AppSuite.Controls
         {
 			var dialog = new MessageDialogImpl();
 			dialog.Buttons = this.buttons;
+			dialog.DefaultResult = this.defaultResult;
 			dialog.DoNotAskAgain = this.doNotAskAgain;
 			dialog.Icon = this.icon;
 			dialog.Message = this.message;

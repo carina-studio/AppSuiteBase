@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using CarinaStudio.Controls;
+using CarinaStudio.Threading;
 using System;
 using System.ComponentModel;
 
@@ -72,6 +73,12 @@ namespace CarinaStudio.AppSuite.Controls
 		public MessageDialogButtons Buttons { get; set; } = MessageDialogButtons.OK;
 
 
+		/// <summary>
+		/// Default dialog result.
+		/// </summary>
+		public MessageDialogResult? DefaultResult { get; set; }
+
+
 		// Do not ask again or not.
 		public bool? DoNotAskAgain { get; set; }
 
@@ -137,12 +144,15 @@ namespace CarinaStudio.AppSuite.Controls
 			}
 
 			// setup buttons
+			var defaultButton = (Button?)null;
+			var defaultResult = this.DefaultResult;
 			switch (this.Buttons)
 			{
 				case MessageDialogButtons.OK:
 					this.SetValue<MessageDialogResult?>(Button1ResultProperty, MessageDialogResult.OK);
 					this.SetValue<string?>(Button1TextProperty, app.GetString("Common.OK"));
 					this.SetValue<bool>(IsButton1VisibleProperty, true);
+					defaultButton = defaultResult == MessageDialogResult.OK ? this.FindControl<Button>("button1") : null;
 					break;
 				case MessageDialogButtons.OKCancel:
 					this.SetValue<MessageDialogResult?>(Button1ResultProperty, MessageDialogResult.OK);
@@ -151,6 +161,12 @@ namespace CarinaStudio.AppSuite.Controls
 					this.SetValue<string?>(Button2TextProperty, app.GetString("Common.Cancel"));
 					this.SetValue<bool>(IsButton1VisibleProperty, true);
 					this.SetValue<bool>(IsButton2VisibleProperty, true);
+					defaultButton = defaultResult switch
+					{
+						MessageDialogResult.OK => this.FindControl<Button>("button1"),
+						MessageDialogResult.Cancel => this.FindControl<Button>("button2"),
+						_ => null,
+					};
 					break;
 				case MessageDialogButtons.YesNo:
 					this.SetValue<MessageDialogResult?>(Button1ResultProperty, MessageDialogResult.Yes);
@@ -159,6 +175,12 @@ namespace CarinaStudio.AppSuite.Controls
 					this.SetValue<string?>(Button2TextProperty, app.GetString("Common.No"));
 					this.SetValue<bool>(IsButton1VisibleProperty, true);
 					this.SetValue<bool>(IsButton2VisibleProperty, true);
+					defaultButton = defaultResult switch
+					{
+						MessageDialogResult.Yes => this.FindControl<Button>("button1"),
+						MessageDialogResult.No => this.FindControl<Button>("button2"),
+						_ => null,
+					};
 					break;
 				case MessageDialogButtons.YesNoCancel:
 					this.SetValue<MessageDialogResult?>(Button1ResultProperty, MessageDialogResult.Yes);
@@ -170,9 +192,21 @@ namespace CarinaStudio.AppSuite.Controls
 					this.SetValue<bool>(IsButton1VisibleProperty, true);
 					this.SetValue<bool>(IsButton2VisibleProperty, true);
 					this.SetValue<bool>(IsButton3VisibleProperty, true);
+					defaultButton = defaultResult switch
+					{
+						MessageDialogResult.Yes => this.FindControl<Button>("button1"),
+						MessageDialogResult.No => this.FindControl<Button>("button2"),
+						MessageDialogResult.Cancel => this.FindControl<Button>("button3"),
+						_ => null,
+					};
 					break;
 				default:
 					throw new ArgumentException();
+			}
+			if (defaultButton != null)
+			{
+				defaultButton.Classes.Add("accent");
+				this.SynchronizationContext.Post(defaultButton.Focus);
 			}
 
 			// call base
