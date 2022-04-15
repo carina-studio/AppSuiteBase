@@ -58,6 +58,26 @@
 				<Separator Classes="Dialog_Separator"/>
 
 				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<RadioButton Classes="Dialog_RadioButton" Content="RadioButton"/>
+				<StackPanel Classes="Dialog_ContentPanel_Indented">
+					<TextBlock Classes="Dialog_TextBlock" Text="Indented content"/>
+					<StackPanel Classes="Dialog_ContentPanel_Indented">
+						<TextBlock Classes="Dialog_TextBlock" Text="Indented content"/>
+					</StackPanel>
+				</StackPanel>
+				<Separator Classes="Dialog_Separator"/>
+
+				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<CheckBox Classes="Dialog_RadioButton" Content="CheckBox"/>
+				<StackPanel Classes="Dialog_ContentPanel_Indented">
+					<TextBlock Classes="Dialog_TextBlock" Text="Indented content"/>
+					<StackPanel Classes="Dialog_ContentPanel_Indented">
+						<TextBlock Classes="Dialog_TextBlock" Text="Indented content"/>
+					</StackPanel>
+				</StackPanel>
+				<Separator Classes="Dialog_Separator"/>
+
+				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
 				<NumericUpDown Classes="Dialog_NumericUpDown"/>
 				<Separator Classes="Dialog_Separator"/>
 

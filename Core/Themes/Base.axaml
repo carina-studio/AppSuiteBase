@@ -161,6 +161,7 @@
 		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Description">13</sys:Double>
 		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Header1">26</sys:Double>
 		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Header2">20</sys:Double>
+		<Thickness x:Key="Thickness/Dialog.ContentPanel.Margin.Indented">28,0,0,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding">20,15,20,15</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Margin">3,0,3,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Padding">10,5,10,5</Thickness>
@@ -564,6 +565,10 @@
 	<Style Selector="Border.Dialog_ContentPanel">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 	</Style>
+	<Style Selector="Border.Dialog_ContentPanel_Indented">
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Margin.Indented}"/>
+	</Style>
 	<Style Selector="Border.Dialog_ControlButtonsPanel">
 		<Setter Property="Background" Value="{StaticResource Brush/Dialog.ControlButtonsPanel.Background}"/>
 		<Setter Property="DockPanel.Dock" Value="Bottom"/>
@@ -627,6 +632,9 @@
 	<Style Selector="Grid.Dialog_ContentPanel">
 		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Padding}"/>
 	</Style>
+	<Style Selector="Grid.Dialog_ContentPanel_Indented">
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Margin.Indented}"/>
+	</Style>
 	<Style Selector="abControls|LinkTextBlock.Dialog_LinkTextBlock_Description">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
@@ -672,7 +680,9 @@
 	</Style>
 	<Style Selector="StackPanel.Dialog_ContentPanel">
 		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Padding}"/>
-		<Setter Property="Orientation" Value="Vertical"/>
+	</Style>
+	<Style Selector="StackPanel.Dialog_ContentPanel_Indented">
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Margin.Indented}"/>
 	</Style>
 	<Style Selector="StackPanel.Dialog_ControlButtonsPanel">
 		<Setter Property="HorizontalAlignment" Value="Center"/>
