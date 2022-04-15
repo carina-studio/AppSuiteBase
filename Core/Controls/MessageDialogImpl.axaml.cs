@@ -204,10 +204,7 @@ namespace CarinaStudio.AppSuite.Controls
 					throw new ArgumentException();
 			}
 			if (defaultButton != null)
-			{
-				defaultButton.Classes.Add("accent");
 				this.SynchronizationContext.Post(defaultButton.Focus);
-			}
 
 			// call base
 			base.OnOpened(e);

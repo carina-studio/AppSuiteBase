@@ -15,8 +15,8 @@
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
 			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-				<Button Name="agreeButton" Classes="Dialog_ControlButton accent" Command="{Binding $parent[Window].Agree}" Content="{DynamicResource String/Common.Agree}"/>
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Decline}" Content="{DynamicResource String/Common.Decline}"/>
+				<Button Name="agreeButton" Classes="Dialog_AccentControlButton" Command="{Binding $parent[Window].Agree}" Content="{DynamicResource String/Common.Agree}"/>
+				<Button Classes="Dialog_AccentControlButton" Command="{Binding $parent[Window].Decline}" Content="{DynamicResource String/Common.Decline}"/>
 			</StackPanel>
 		</Border>
 

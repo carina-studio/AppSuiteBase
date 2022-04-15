@@ -279,6 +279,20 @@ namespace CarinaStudio.AppSuite.Tests
             this.canShowAppInfo.Update(true);
         }
 
+        async void ShowMessageDialog()
+        {
+            var result = await new MessageDialog()
+            {
+                Buttons = Enum.GetValues<MessageDialogButtons>().SelectRandomElement(),
+                Icon = Enum.GetValues<MessageDialogIcon>().SelectRandomElement(),
+                Message = "This is a message dialog!",
+            }.ShowDialog(this);
+            _ = new MessageDialog()
+            {
+                Message = $"The result is {result}",
+            }.ShowDialog(this);
+        }
+
         ICommand ShowAppInfoDialogCommand { get; }
 
         async void ShowTestDialog()
