@@ -167,7 +167,7 @@
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Margin">3,0,3,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Padding">10,5,10,5</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButtonsPanel.Padding">15</Thickness>
-		<Thickness x:Key="Thickness/Dialog.Icon.Margin">0,0,10,0</Thickness>
+		<Thickness x:Key="Thickness/Dialog.Icon.Margin">0,0,12,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ListActionButton.Padding">10,5,10,5</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ListActionButton.Margin">5,5,0,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Border.Header1">0,0,0,1</Thickness>
@@ -654,14 +654,14 @@
 	<Style Selector="abControls|LinkTextBlock.Dialog_Icon_LinkTextBlock">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
-		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="abControls|LinkTextBlock.Dialog_LinkTextBlock">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
 		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.TextBlock.Margin}"/>
-		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
 	<Style Selector="abControls|LinkTextBlock.Dialog_LinkTextBlock_Description">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Description}"/>
@@ -722,13 +722,13 @@
 	</Style>
 	<Style Selector="TextBlock.Dialog_Icon_TextBlock">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize}"/>
-		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize}"/>
 		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.TextBlock.Margin}"/>
-		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock_Description">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Description}"/>
