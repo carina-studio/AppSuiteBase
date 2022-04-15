@@ -143,6 +143,11 @@
 	<sys:String x:Key="String/DatePicker.YearFormat">yyyy 年</sys:String>
 
 	<!-- DateTimeTextBox -->
+	<sys:String x:Key="String/DateTimeTextBox.FormatDescription">支援的格式：
+1.英語慣用的日期時間格式。
+2.目前語系慣用的日期時間格式。
+3.Unix 時間戳記，單位可以為秒、毫秒或微秒。
+4.格式為 'yyyyMMdd_HH:mm:ss.ffffff' 的文字，其中年份、秒、毫微秒以及 ':' 可以省略。</sys:String>
 	<sys:String x:Key="String/DateTimeTextBox.Watermark">日期與時間</sys:String>
 
 	<!-- FallbackFontFamilies -->
@@ -203,6 +208,15 @@
 	<sys:String x:Key="String/TimeSpanConverter.Milliseconds">{0} 毫秒</sys:String>
 	<sys:String x:Key="String/TimeSpanConverter.Minutes">{0} 分 {1} 秒</sys:String>
 	<sys:String x:Key="String/TimeSpanConverter.Seconds">{0} 秒</sys:String>
+
+	<!-- TimeSpanTextBox -->
+	<sys:String x:Key="String/TimeSpanTextBox.FormatDescription">支援的格式：
+1.HH:mm:ss。例如 01:12:30 表示 1 小時 12 分又 30 秒。您也可以使用 '-' 或 ' ' 取代 ':'。
+2.d.HH:mm:ss.ffffff。例如 2.05:12:30.5 表示 2 天 5 小時 12 分又 30.5 秒。您也可以使用 '-' 或 ' ' 取代 ':'。
+3.奈秒。例如 10000ns。
+4.微秒。例如 20000us。
+5.毫秒。例如 30000ms。</sys:String>
+	<sys:String x:Key="String/TimeSpanTextBox.Watermark">時間間距</sys:String>
 
 	<!-- UriTextBox -->
 	<sys:String x:Key="String/UriTextBox.Watermark">網址 (URI)</sys:String>

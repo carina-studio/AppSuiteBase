@@ -401,6 +401,9 @@
 							<ComboBoxItem>20</ComboBoxItem>
 						</ComboBox>
 
+						<abControls:TimeSpanTextBox Name="timeSpanTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
+						<TextBlock Margin="5,0,0,5" Text="{Binding #timeSpanTextBox.Value, StringFormat={}Time span: {0}}"/>
+
 						<abControls:IPAddressTextBox Name="ipAddressTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
 						<TextBlock Margin="5,0,0,5" Text="{Binding #ipAddressTextBox.Object, StringFormat={}IPAddress: {0}}"/>
 

@@ -145,6 +145,11 @@
 	<sys:String x:Key="String/DatePicker.YearFormat">yyyy</sys:String>
 
 	<!-- DateTimeTextBox -->
+	<sys:String x:Key="String/DateTimeTextBox.FormatDescription">Supported formats:
+1.Common date and time format in English.
+2.Common date and time format in current language.
+3.Unix timestamp in seconds/milliseconds/microseconds.
+4.Text in format 'yyyyMMdd_HH:mm:ss.ffffff'. Year, seconds, sub seconds and ':' can be eliminated.</sys:String>
 	<sys:String x:Key="String/DateTimeTextBox.Watermark">Date and Time</sys:String>
 
 	<!-- FileFormat -->
@@ -202,6 +207,15 @@
 	<sys:String x:Key="String/TimeSpanConverter.Milliseconds">{0} ms</sys:String>
 	<sys:String x:Key="String/TimeSpanConverter.Minutes">{0} min {1} sec</sys:String>
 	<sys:String x:Key="String/TimeSpanConverter.Seconds">{0} sec</sys:String>
+
+	<!-- TimeSpanTextBox -->
+	<sys:String x:Key="String/TimeSpanTextBox.FormatDescription">Supported formats:
+1.HH:mm:ss. For ex, 01:12:30 means 1 hour 12 minutes and 30 seconds. You can replace ':' by '-' or ' '.
+2.d.HH:mm:ss.ffffff. For ex, 2.05:12:30.5 means 2 days 5 hours 12 minutes and 30.5 seconds. You can replace ':' by '-' or ' '.
+3.Nanoseconds. For ex, 10000ns.
+4.Microseconds. For ex, 20000us.
+5.Milliseconds. For ex, 30000ms.</sys:String>
+	<sys:String x:Key="String/TimeSpanTextBox.Watermark">Time span</sys:String>
 
 	<!-- UriTextBox -->
 	<sys:String x:Key="String/UriTextBox.Watermark">URI</sys:String>

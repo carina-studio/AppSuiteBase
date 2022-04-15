@@ -1624,6 +1624,11 @@
 		<Setter Property="BorderThickness" Value="{StaticResource Thickness/Control.Border}"/>
 	</Style>
 
+	<!-- TimeSpanTextBox -->
+	<Style Selector="TextBox:timeSpanTextBox">
+		<Setter Property="Watermark" Value="{DynamicResource String/TimeSpanTextBox.Watermark}"/>
+	</Style>
+
 	<!-- ToggleButton -->
 	<Style Selector="ToggleButton">
 		<Setter Property="BorderThickness" Value="{StaticResource Thickness/Button.Border}"/>
