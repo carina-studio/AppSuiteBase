@@ -68,12 +68,23 @@
 				<Separator Classes="Dialog_Separator"/>
 
 				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
-				<CheckBox Classes="Dialog_RadioButton" Content="CheckBox"/>
+				<CheckBox Classes="Dialog_CheckBox" Content="CheckBox"/>
 				<StackPanel Classes="Dialog_ContentPanel_Indented">
 					<TextBlock Classes="Dialog_TextBlock" Text="Indented content"/>
 					<StackPanel Classes="Dialog_ContentPanel_Indented">
 						<TextBlock Classes="Dialog_TextBlock" Text="Indented content"/>
 					</StackPanel>
+				</StackPanel>
+				<Separator Classes="Dialog_Separator"/>
+
+				<StackPanel Orientation="Horizontal">
+					<Image Classes="Dialog_Icon" Source="{DynamicResource Image/Icon.Information}"/>
+					<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="Icon" Uri="https://github.com/carina-studio" VerticalAlignment="Center"/>
+				</StackPanel>
+				<Separator Classes="Dialog_Separator"/>
+				<StackPanel Orientation="Horizontal">
+					<Image Classes="Dialog_Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
+					<TextBlock Classes="Dialog_Icon_TextBlock" Text="Icon"/>
 				</StackPanel>
 				<Separator Classes="Dialog_Separator"/>
 

@@ -147,38 +147,34 @@
 					<!-- User agreement -->
 					<StackPanel IsVisible="{Binding $parent[Window].HasUserAgreement}">
 						<StackPanel Orientation="Horizontal">
-							<Image Classes="Icon" Height="{StaticResource Double/MenuItem.Icon.Size}" Source="{StaticResource Image/Icon.UserAgreement}" VerticalAlignment="Center" Width="{StaticResource Double/MenuItem.Icon.Size}"/>
-							<Separator Classes="Dialog_Separator_Small"/>
-							<abControls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.UserAgreement}" Uri="{Binding UserAgreementUri}" VerticalAlignment="Center"/>
+							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.UserAgreement}"/>
+							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.UserAgreement}" Uri="{Binding UserAgreementUri}"/>
 						</StackPanel>
-						<Separator Classes="Dialog_Separator_Small"/>
+						<Separator Classes="Dialog_Separator"/>
 					</StackPanel>
 
 					<!-- Privacy policy -->
 					<StackPanel IsVisible="{Binding $parent[Window].HasPrivacyPolicy}">
 						<StackPanel Orientation="Horizontal">
-							<Image Classes="Icon" Height="{StaticResource Double/MenuItem.Icon.Size}" Source="{StaticResource Image/Icon.PrivacyPolicy}" VerticalAlignment="Center" Width="{StaticResource Double/MenuItem.Icon.Size}"/>
-							<Separator Classes="Dialog_Separator_Small"/>
-							<abControls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}" VerticalAlignment="Center"/>
+							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PrivacyPolicy}"/>
+							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
 						</StackPanel>
-						<Separator Classes="Dialog_Separator_Small"/>
+						<Separator Classes="Dialog_Separator"/>
 					</StackPanel>
 
 					<!-- Source code -->
 					<StackPanel IsVisible="{Binding $parent[Window].HasGitHubProject}">
 						<StackPanel Orientation="Horizontal">
-							<Image Classes="Icon" Height="{StaticResource Double/MenuItem.Icon.Size}" Source="{StaticResource Image/Icon.GitHub}" VerticalAlignment="Center" Width="{StaticResource Double/MenuItem.Icon.Size}"/>
-							<Separator Classes="Dialog_Separator_Small"/>
-							<abControls:LinkTextBlock HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.GitHubProject}" Uri="{Binding GitHubProjectUri}" VerticalAlignment="Center"/>
+							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.GitHub}"/>
+							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.GitHubProject}" Uri="{Binding GitHubProjectUri}"/>
 						</StackPanel>
-						<Separator Classes="Dialog_Separator_Small"/>
+						<Separator Classes="Dialog_Separator"/>
 					</StackPanel>
 
 					<!-- Export logs -->
 					<StackPanel Orientation="Horizontal">
-						<Image Classes="Icon" Height="{StaticResource Double/MenuItem.Icon.Size}" Source="{StaticResource Image/Icon.Export}" VerticalAlignment="Center" Width="{StaticResource Double/MenuItem.Icon.Size}"/>
-						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:LinkTextBlock Command="{Binding $parent[Window].ExportLogs}" HorizontalAlignment="Left" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}" VerticalAlignment="Center"/>
+						<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Export}"/>
+						<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ExportLogs}" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}"/>
 					</StackPanel>
 
 				</StackPanel>

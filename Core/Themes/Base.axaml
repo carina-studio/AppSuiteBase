@@ -150,6 +150,7 @@
 		<Color x:Key="Color/Dialog.TextBlock.Foreground.Warning">#ff6a00</Color>
 		<sys:Double x:Key="Double/Dialog.ControlButton.MinWidth">100</sys:Double>
 		<sys:Double x:Key="Double/Dialog.ControlButton.Separator.Width">15</sys:Double>
+		<sys:Double x:Key="Double/Dialog.Icon.Size">16</sys:Double>
 		<sys:Double x:Key="Double/Dialog.ListActionButton.MinWidth">80</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height">15</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height.Large">40</sys:Double>
@@ -166,12 +167,13 @@
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Margin">3,0,3,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Padding">10,5,10,5</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButtonsPanel.Padding">15</Thickness>
+		<Thickness x:Key="Thickness/Dialog.Icon.Margin">0,0,10,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ListActionButton.Padding">10,5,10,5</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ListActionButton.Margin">5,5,0,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Border.Header1">0,0,0,1</Thickness>
-		<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">0,0,0,3</Thickness>
-		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin">0,0,0,3</Thickness>
-		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,3,0,0</Thickness>
+		<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">0,0,0,5</Thickness>
+		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin">0,0,0,5</Thickness>
+		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,5,0,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">0,0,0,15</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">0,0,0,10</Thickness>
 
@@ -620,6 +622,10 @@
 		<Setter Property="Padding" Value="{StaticResource Thickness/Dialog.ListActionButton.Padding}"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="CheckBox.Dialog_CheckBox">
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="TextBlock.FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize}"/>
+	</Style>
 	<Style Selector="ComboBox.Dialog_ComboBox">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 	</Style>
@@ -635,6 +641,28 @@
 	<Style Selector="Grid.Dialog_ContentPanel_Indented">
 		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Margin.Indented}"/>
 	</Style>
+	<Style Selector="Image.Dialog_Icon">
+		<Setter Property="Height" Value="{StaticResource Double/Dialog.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.Icon.Margin}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/Dialog.Icon.Size}"/>
+	</Style>
+	<Style Selector="abControls|LinkTextBlock.Dialog_Icon_LinkTextBlock">
+		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize}"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="abControls|LinkTextBlock.Dialog_LinkTextBlock">
+		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize}"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.TextBlock.Margin}"/>
+		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+	</Style>
 	<Style Selector="abControls|LinkTextBlock.Dialog_LinkTextBlock_Description">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
@@ -649,6 +677,10 @@
 	</Style>
 	<Style Selector="Panel.Dialog_ContentPanel">
 		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Padding}"/>
+	</Style>
+	<Style Selector="RadioButton.Dialog_RadioButton">
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="TextBlock.FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize}"/>
 	</Style>
 	<Style Selector="ScrollViewer.Dialog_ContentPanel">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -688,9 +720,15 @@
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="Orientation" Value="Horizontal"/>
 	</Style>
+	<Style Selector="TextBlock.Dialog_Icon_TextBlock">
+		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize}"/>
+		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize}"/>
 		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.TextBlock.Margin}"/>
+		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
 	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock_Description">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Description}"/>
