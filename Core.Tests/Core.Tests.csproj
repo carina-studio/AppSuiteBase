@@ -4,7 +4,7 @@
 		<AssemblyVersion>1.2.0.414</AssemblyVersion>
 		<Version>1.2.0.414</Version>
 		<PackageVersion>1.2.0.414-preview</PackageVersion>
-		<TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+		<TargetFrameworks>net6.0</TargetFrameworks>
 		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Core.Tests</AssemblyName>
 		<Nullable>enable</Nullable>
