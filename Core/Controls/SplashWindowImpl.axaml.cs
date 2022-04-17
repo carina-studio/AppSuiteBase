@@ -6,7 +6,9 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CarinaStudio.Data.Converters;
+using CarinaStudio.Threading;
 using System;
+using System.Diagnostics;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -15,6 +17,11 @@ namespace CarinaStudio.AppSuite.Controls
 	/// </summary>
 	partial class SplashWindowImpl : Avalonia.Controls.Window
 	{
+		// Constants.
+		const int MaxShowingRetryingDuration = 1000;
+		const int RetryShowingDelay = 100;
+
+
 		// Static fields.
 		static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
 		static readonly AvaloniaProperty<IBitmap?> IconBitmapProperty = AvaloniaProperty.Register<SplashWindowImpl, IBitmap?>(nameof(IconBitmap));
@@ -23,6 +30,8 @@ namespace CarinaStudio.AppSuite.Controls
 
 		// Fields.
 		Uri? iconUri;
+		readonly ScheduledAction showAction;
+		readonly Stopwatch stopwatch = new Stopwatch();
 
 
 		/// <summary>
@@ -33,6 +42,63 @@ namespace CarinaStudio.AppSuite.Controls
 			var app = AppSuiteApplication.Current;
 			this.ApplicationName = app.Name ?? "";
 			this.Message = app.GetStringNonNull("SplashWindow.Launching");
+			this.showAction = new(() =>
+			{
+				// get screen info
+				var screen = this.Screens.ScreenFromVisual(this);
+				if (screen == null && this.stopwatch.ElapsedMilliseconds < MaxShowingRetryingDuration)
+				{
+					this.showAction?.Schedule(RetryShowingDelay);
+					return;
+				}
+
+				// move to center of screen
+				if (screen != null)
+				{
+					var screenBounds = screen.WorkingArea;
+					var pixelDensity = screen.PixelDensity;
+					var width = this.Width;
+					var height = this.Height;
+					if (!Platform.IsMacOS)
+					{
+						width *= pixelDensity;
+						height *= pixelDensity;
+					}
+					this.Position = new PixelPoint((int)((screenBounds.Width - width) / 2), (int)((screenBounds.Height - height) / 2));
+				}
+				
+				// show content
+				((Control)(this.Content)).Opacity = 1;
+				this.FindControl<Border>("backgroundOverlayBorder").AsNonNull().Let(border =>
+				{
+					border.Opacity = 1;
+				});
+				this.FindControl<Image>("iconImage").AsNonNull().Let(image =>
+				{
+					image.Opacity = 1;
+					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+				});
+				this.FindControl<TextBlock>("titleTextBlock").AsNonNull().Let(image =>
+				{
+					image.Opacity = 1;
+					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+				});
+				this.FindControl<TextBlock>("versionTextBlock").AsNonNull().Let(image =>
+				{
+					image.Opacity = 1;
+					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+				});
+				this.FindControl<TextBlock>("copyrightTextBlock").AsNonNull().Let(image =>
+				{
+					image.Opacity = 1;
+					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+				});
+				this.FindControl<TextBlock>("messageTextBlock").AsNonNull().Let(image =>
+				{
+					image.Opacity = 1;
+					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+				});
+			});
 			this.Version = app.GetFormattedString("ApplicationInfoDialog.Version", app.Assembly.GetName().Version).AsNonNull();
 			if (app.ReleasingType != ApplicationReleasingType.Stable)
 				this.Version += $" ({AppReleasingTypeConverter.Convert<string?>(app.ReleasingType)})";
@@ -85,56 +151,24 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
+		// Called when closed.
+		protected override void OnClosed(EventArgs e)
+		{
+			this.showAction.Cancel();
+			this.stopwatch.Stop();
+			base.OnClosed(e);
+		}
+
+
 		// Called when opened.
 		protected override void OnOpened(EventArgs e)
 		{
 			// call base
 			base.OnOpened(e);
 
-			// move to center of screen
-			var screen = this.Screens.ScreenFromVisual(this);
-			var screenBounds = screen.WorkingArea;
-			var pixelDensity = screen.PixelDensity;
-			var width = this.Width;
-			var height = this.Height;
-			if (!Platform.IsMacOS)
-			{
-				width *= pixelDensity;
-				height *= pixelDensity;
-			}
-			this.Position = new PixelPoint((int)((screenBounds.Width - width) / 2), (int)((screenBounds.Height - height) / 2));
-
-            // show content
-            ((Control)(this.Content)).Opacity = 1;
-			this.FindControl<Border>("backgroundOverlayBorder").AsNonNull().Let(border =>
-			{
-				border.Opacity = 1;
-			});
-			this.FindControl<Image>("iconImage").AsNonNull().Let(image =>
-			{
-				image.Opacity = 1;
-				(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
-			});
-			this.FindControl<TextBlock>("titleTextBlock").AsNonNull().Let(image =>
-			{
-				image.Opacity = 1;
-				(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
-			});
-			this.FindControl<TextBlock>("versionTextBlock").AsNonNull().Let(image =>
-			{
-				image.Opacity = 1;
-				(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
-			});
-			this.FindControl<TextBlock>("copyrightTextBlock").AsNonNull().Let(image =>
-			{
-				image.Opacity = 1;
-				(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
-			});
-			this.FindControl<TextBlock>("messageTextBlock").AsNonNull().Let(image =>
-			{
-				image.Opacity = 1;
-				(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
-			});
+			// show window
+			this.stopwatch.Start();
+			this.showAction.Schedule();
 		}
 
 
