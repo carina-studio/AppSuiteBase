@@ -531,13 +531,6 @@ namespace CarinaStudio.AppSuite.Controls
 					if (prevChar1 != '\\' && nextChar1 == '>')
 						e.Text = "";
 					break;
-				case '?':
-					if (prevChar1 == '(' && prevChar2 != '\\')
-					{
-						e.Text = "?<>";
-						++selectionStart;
-					}
-					break;
 				case '\\':
 					this.isBackSlashPressed = true;
 					break;
