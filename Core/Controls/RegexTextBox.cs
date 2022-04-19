@@ -41,6 +41,7 @@ namespace CarinaStudio.AppSuite.Controls
 		readonly ObservableList<MenuItem> filteredPredefinedGroupMenuItems = new ObservableList<MenuItem>();
 		readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new SortedObservableList<RegexGroup>((x, y) => string.Compare(x?.Name, y?.Name));
 		bool isBackSlashPressed;
+		bool isEscapeKeyHandled;
 		readonly ObservableList<RegexGroup> predefinedGroups = new ObservableList<RegexGroup>();
 		ContextMenu? predefinedGroupsMenu;
 		readonly Queue<MenuItem> recycledMenuItems = new Queue<MenuItem>();
@@ -437,6 +438,17 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
+		/// <inheritdoc/>
+		protected override void OnKeyUp(KeyEventArgs e)
+		{
+			if (e.Key == Key.Escape && this.isEscapeKeyHandled)
+			{
+				this.isEscapeKeyHandled = false;
+				e.Handled = true;
+			}
+		}
+
+
 		// Called when predefined groups changed.
 		void OnPredefinedGroupChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
 			this.showAssistanceMenuAction.Schedule();
@@ -577,6 +589,9 @@ namespace CarinaStudio.AppSuite.Controls
 						case Key.Enter:
 						case Key.Up:
 							break;
+						case Key.Escape:
+							this.isEscapeKeyHandled = true;
+							goto default;
 						default:
 							menu.Close();
 							this.OnKeyDown(e);
@@ -608,6 +623,9 @@ namespace CarinaStudio.AppSuite.Controls
 						case Key.Enter:
 						case Key.Up:
 							break;
+						case Key.Escape:
+							this.isEscapeKeyHandled = true;
+							goto default;
 						default:
 							menu.Close();
 							this.OnKeyDown(e);

@@ -53,6 +53,11 @@
 				<Separator Classes="Dialog_Separator"/>
 
 				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<appControls:RegexTextBox Classes="Dialog_TextBox"/>
+				<appControls:StringInterpolationFormatTextBox Classes="Dialog_TextBox"/>
+				<Separator Classes="Dialog_Separator"/>
+
+				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
 				<ComboBox Classes="Dialog_ComboBox"/>
 				<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" Text="Google" Uri="http://www.google.com/"/>
 				<Separator Classes="Dialog_Separator"/>

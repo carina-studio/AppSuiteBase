@@ -28,6 +28,7 @@ namespace CarinaStudio.AppSuite.Controls
         // Fields.
         readonly ObservableList<MenuItem> filteredPredefinedVarMenuItems = new ObservableList<MenuItem>();
         readonly SortedObservableList<StringInterpolationVariable> filteredPredefinedVars = new SortedObservableList<StringInterpolationVariable>((x, y) => string.Compare(x?.Name, y?.Name));
+		bool isEscapeKeyHandled;
         readonly ObservableList<StringInterpolationVariable> predefinedVars = new ObservableList<StringInterpolationVariable>();
         ContextMenu? predefinedVarsMenu;
         readonly Queue<MenuItem> recycledMenuItems = new Queue<MenuItem>();
@@ -287,6 +288,17 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
+		/// <inheritdoc/>
+		protected override void OnKeyUp(KeyEventArgs e)
+		{
+			if (e.Key == Key.Escape && this.isEscapeKeyHandled)
+			{
+				this.isEscapeKeyHandled = false;
+				e.Handled = true;
+			}
+		}
+
+
         // Called when predefined variables changed.
 		void OnPredefinedVarsChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
 			this.showAssistanceMenuAction.Schedule();
@@ -367,6 +379,9 @@ namespace CarinaStudio.AppSuite.Controls
 						case Key.Enter:
 						case Key.Up:
 							break;
+						case Key.Escape:
+							this.isEscapeKeyHandled = true;
+							goto default;
 						default:
 							menu.Close();
 							this.OnKeyDown(e);
