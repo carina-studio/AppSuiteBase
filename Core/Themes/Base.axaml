@@ -210,14 +210,22 @@
 		<sys:Double x:Key="Double/Icon.Opacity.Disabled">0.3</sys:Double>
 
 		<!-- InPlaceAction -->
+		<SolidColorBrush x:Key="Brush/InPlaceAction.Background.Checked" Color="{DynamicResource Color/InPlaceAction.Background.Checked}"/>
 		<SolidColorBrush x:Key="Brush/InPlaceAction.Background.PointerOver" Color="{DynamicResource Color/InPlaceAction.Background.PointerOver}"/>
 		<SolidColorBrush x:Key="Brush/InPlaceAction.Background.Pressed" Color="{DynamicResource Color/InPlaceAction.Background.Pressed}"/>
+		<Color x:Key="Color/InPlaceAction.Background.Checked">#20000000</Color>
 		<Color x:Key="Color/InPlaceAction.Background.PointerOver">#30ffffff</Color>
-		<Color x:Key="Color/InPlaceAction.Background.Pressed">#20000000</Color>
+		<Color x:Key="Color/InPlaceAction.Background.Pressed">#30000000</Color>
 		<sys:Double x:Key="Double/InPlaceAction.IconSize">10</sys:Double>
+		<sys:Double x:Key="Double/InPlaceAction.IconSize.Large">16</sys:Double>
+		<sys:Double x:Key="Double/InPlaceAction.IconSize.Medium">13</sys:Double>
 		<sys:Double x:Key="Double/InPlaceAction.ReservedHeight">18</sys:Double>
+		<sys:Double x:Key="Double/InPlaceAction.ReservedHeight.Large">24</sys:Double>
+		<sys:Double x:Key="Double/InPlaceAction.ReservedHeight.Medium">21</sys:Double>
 		<Thickness x:Key="Thickness/InPlaceAction.Margin">3,0,0,0</Thickness>
 		<Thickness x:Key="Thickness/InPlaceAction.Padding">3</Thickness>
+		<Thickness x:Key="Thickness/InPlaceAction.Padding.Large">5</Thickness>
+		<Thickness x:Key="Thickness/InPlaceAction.Padding.Medium">4</Thickness>
 
 		<!-- ListBox -->
 		<Thickness x:Key="Thickness/ListBox.Padding">3</Thickness>
@@ -915,6 +923,16 @@
 		<Setter Property="Opacity" Value="0"/>
 		<Setter Property="Width" Value="1"/>
 	</Style>
+	<Style Selector="Border.InPlaceAction_Reserved_Large">
+		<Setter Property="Height" Value="{StaticResource Double/InPlaceAction.ReservedHeight.Large}"/>
+		<Setter Property="Opacity" Value="0"/>
+		<Setter Property="Width" Value="1"/>
+	</Style>
+	<Style Selector="Border.InPlaceAction_Reserved_Medium">
+		<Setter Property="Height" Value="{StaticResource Double/InPlaceAction.ReservedHeight.Medium}"/>
+		<Setter Property="Opacity" Value="0"/>
+		<Setter Property="Width" Value="1"/>
+	</Style>
 	<Style Selector="Button.InPlaceAction_Button">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
@@ -933,6 +951,42 @@
 	<Style Selector="Button.InPlaceAction_Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Pressed}"/>
 	</Style>
+	<Style Selector="Button.InPlaceAction_Button_Large">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/InPlaceAction.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/InPlaceAction.Padding.Large}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="Button.InPlaceAction_Button_Large:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="Button.InPlaceAction_Button_Large:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.PointerOver}"/>
+	</Style>
+	<Style Selector="Button.InPlaceAction_Button_Large:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Pressed}"/>
+	</Style>
+	<Style Selector="Button.InPlaceAction_Button_Medium">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/InPlaceAction.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/InPlaceAction.Padding.Medium}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="Button.InPlaceAction_Button_Medium:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="Button.InPlaceAction_Button_Medium:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.PointerOver}"/>
+	</Style>
+	<Style Selector="Button.InPlaceAction_Button_Medium:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Pressed}"/>
+	</Style>
 	<Style Selector="Image.InPlaceAction_Icon">
 		<Setter Property="Height" Value="{StaticResource Double/InPlaceAction.IconSize}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -944,6 +998,93 @@
 	</Style>
 	<Style Selector="Image.InPlaceAction_Icon:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<Style Selector="Image.InPlaceAction_Icon_Large">
+		<Setter Property="Height" Value="{StaticResource Double/InPlaceAction.IconSize.Large}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/InPlaceAction.IconSize.Large}"/>
+	</Style>
+	<Style Selector="Image.InPlaceAction_Icon_Large:disabled">
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<Style Selector="Image.InPlaceAction_Icon_Medium">
+		<Setter Property="Height" Value="{StaticResource Double/InPlaceAction.IconSize.Medium}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/InPlaceAction.IconSize.Medium}"/>
+	</Style>
+	<Style Selector="Image.InPlaceAction_Icon_Medium:disabled">
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/InPlaceAction.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/InPlaceAction.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Checked}"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.PointerOver}"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Pressed}"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Large">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/InPlaceAction.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/InPlaceAction.Padding.Large}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Large:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Large:checked /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Checked}"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Large:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.PointerOver}"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Large:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Pressed}"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Medium">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/InPlaceAction.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/InPlaceAction.Padding.Medium}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Medium:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Medium:checked /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Checked}"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Medium:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.PointerOver}"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Medium:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Pressed}"/>
 	</Style>
 
 	<!-- IPAddressTextBox -->

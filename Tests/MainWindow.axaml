@@ -304,6 +304,67 @@
 								<Button Classes="InPlaceAction_Button" IsEnabled="False">
 									<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.SaveAll}"/>
 								</Button>
+								<ToggleButton Classes="InPlaceAction_ToggleButton" IsEnabled="False">
+									<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.More}"/>
+								</ToggleButton>
+								<ToggleButton Classes="InPlaceAction_ToggleButton" IsChecked="True" IsEnabled="False">
+									<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.More}"/>
+								</ToggleButton>
+								<ToggleButton Classes="InPlaceAction_ToggleButton">
+									<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.More}"/>
+								</ToggleButton>
+							</StackPanel>
+						</Border>
+
+						<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
+							<StackPanel Orientation="Horizontal">
+								<Button Classes="InPlaceAction_Button_Medium">
+									<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.File}"/>
+								</Button>
+								<Button Classes="InPlaceAction_Button_Medium">
+									<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.OpenFile}"/>
+								</Button>
+								<Button Classes="InPlaceAction_Button_Medium">
+									<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.Save}"/>
+								</Button>
+								<Button Classes="InPlaceAction_Button_Medium" IsEnabled="False">
+									<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.SaveAll}"/>
+								</Button>
+								<ToggleButton Classes="InPlaceAction_ToggleButton_Medium" IsEnabled="False">
+									<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.More}"/>
+								</ToggleButton>
+								<ToggleButton Classes="InPlaceAction_ToggleButton_Medium" IsChecked="True" IsEnabled="False">
+									<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.More}"/>
+								</ToggleButton>
+								<ToggleButton Classes="InPlaceAction_ToggleButton_Medium">
+									<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.More}"/>
+								</ToggleButton>
+							</StackPanel>
+						</Border>
+
+						<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
+							<StackPanel Orientation="Horizontal">
+								<Button Classes="InPlaceAction_Button_Large">
+									<Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.File}"/>
+								</Button>
+								<Button Classes="InPlaceAction_Button_Large">
+									<Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.OpenFile}"/>
+								</Button>
+								<Button Classes="InPlaceAction_Button_Large">
+									<Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.Save}"/>
+								</Button>
+								<Button Classes="InPlaceAction_Button_Large" IsEnabled="False">
+									<Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.SaveAll}"/>
+								</Button>
+								<ToggleButton Classes="InPlaceAction_ToggleButton_Large" IsEnabled="False">
+									<Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
+								</ToggleButton>
+								<ToggleButton Classes="InPlaceAction_ToggleButton_Large" IsChecked="True" IsEnabled="False">
+									<Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
+								</ToggleButton>
+								<ToggleButton Classes="InPlaceAction_ToggleButton_Large">
+									<Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
+								</ToggleButton>
 							</StackPanel>
 						</Border>
 						
