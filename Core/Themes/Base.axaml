@@ -248,12 +248,12 @@
 		<StaticResourceExtension x:Key="MenuFlyoutPresenterBorderBrush" ResourceKey="Brush/Control.Border"/>
 		<Thickness x:Key="MenuFlyoutPresenterThemePadding">4</Thickness>
 		<Thickness x:Key="MenuFlyoutScrollerMargin">0</Thickness>
-		<Thickness x:Key="Thickness/MenuFlyout.Separator.Margin">0,3,0,3</Thickness>
+		<Thickness x:Key="Thickness/MenuFlyout.Separator.Margin">5</Thickness>
 
 		<!-- MenuItem -->
 		<CornerRadius x:Key="CornerRadius/MenuItem">5</CornerRadius>
 		<sys:Double x:Key="Double/MenuItem.Icon.Size">16</sys:Double>
-		<Thickness x:Key="Thickness/MenuItem.Padding">6</Thickness>
+		<Thickness x:Key="Thickness/MenuItem.Padding">12,8,12,8</Thickness>
 
 		<!-- MessageDialog -->
 		<sys:Double x:Key="Double/MessageDialog.Icon.Size">45</sys:Double>
@@ -1365,6 +1365,7 @@
 	<Style Selector="MenuItem > Separator, ContextMenu > Separator">
 		<Setter Property="Background" Value="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" />
 		<Setter Property="Margin" Value="{StaticResource Thickness/MenuFlyout.Separator.Margin}"/>
+		<Setter Property="Opacity" Value="0.5"/>
 	</Style>
 
 	<!-- StatusBar -->
