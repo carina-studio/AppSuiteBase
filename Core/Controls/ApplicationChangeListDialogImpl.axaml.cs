@@ -43,10 +43,10 @@ namespace CarinaStudio.AppSuite.Controls
                         this.app.TryGetResource<IImage>($"Image/Icon.Update", out image);
                         break;
                     case ApplicationChangeType.NewFeature:
-                        this.app.TryGetResource<IImage>($"Image/Icon.Star.Filled", out image);
+                        this.app.TryGetResource<IImage>($"Image/Icon.Star", out image);
                         break;
                     default:
-                        this.app.TryGetResource<IImage>($"Image/Icon.Circle.Filled", out image);
+                        this.app.TryGetResource<IImage>($"Image/Icon.Circle", out image);
                         break;
                 }
                 return image;
