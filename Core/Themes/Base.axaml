@@ -1849,6 +1849,7 @@
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Height" Value="{StaticResource Double/ToolBar.Button.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{StaticResource Thickness/ToolBar.Item.Margin}"/>
 		<Setter Property="Padding" Value="{StaticResource Thickness/ToolBar.Button.Padding}"/>
@@ -1894,6 +1895,7 @@
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Height" Value="{StaticResource Double/ToolBar.Button.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{StaticResource Thickness/ToolBar.Item.Margin}"/>
 		<Setter Property="Padding" Value="{StaticResource Thickness/ToolBar.Button.Padding}"/>
@@ -1951,6 +1953,7 @@
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Height" Value="{StaticResource Double/ToolBar.Button.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{StaticResource Thickness/ToolBar.Item.Margin}"/>
 		<Setter Property="Padding" Value="{StaticResource Thickness/ToolBar.Button.Padding}"/>
