@@ -452,10 +452,10 @@
 		<sys:Double x:Key="Double/ToolBar.Button.Icon.Size">18</sys:Double>
 		<sys:Double x:Key="Double/ToolBar.Button.Size">32</sys:Double>
 		<Thickness x:Key="Thickness/ToolBar.Button.Padding">7</Thickness>
-		<Thickness x:Key="Thickness/ToolBar.Item.Margin">2,0,2,0</Thickness>
-		<Thickness x:Key="Thickness/ToolBar.Padding">5</Thickness>
+		<Thickness x:Key="Thickness/ToolBar.Item.Margin">2</Thickness>
+		<Thickness x:Key="Thickness/ToolBar.Padding">3</Thickness>
 		<Thickness x:Key="Thickness/ToolBar.Separator.Margin">3</Thickness>
-		<Thickness x:Key="Thickness/ToolBar.TextBlock.Margin">4,0,2,0</Thickness>
+		<Thickness x:Key="Thickness/ToolBar.TextBlock.Margin">4,2,2,2</Thickness>
 
 		<!-- ToolBarScrollViewer -->
 		<sys:Double x:Key="Double/ToolBarScrollViewer.ScrollingButton.Icon.Size">10</sys:Double>
@@ -1557,7 +1557,7 @@
 						<Image 
 							Classes="Icon" 
 							Height="{StaticResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.Backward.Light}"
+							Source="{DynamicResource Image/Icon.MoveLeft}"
 							Width="{StaticResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton
@@ -1575,7 +1575,7 @@
 						<Image
 							Classes="Icon"
 							Height="{StaticResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.Forward.Light}"
+							Source="{DynamicResource Image/Icon.MoveRight}"
 							Width="{StaticResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 				</Panel>
@@ -1919,6 +1919,12 @@
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="1"/>
 	</Style>
+	<Style Selector="Separator.ToolBar_Separator_Horizontal">
+		<Setter Property="Background" Value="{StaticResource Brush/Separator.Background}"/>
+		<Setter Property="Height" Value="1"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ToolBar.Separator.Margin}"/>
+	</Style>
 	<Style Selector="TextBlock.ToolBar_TextBlock">
 		<Setter Property="Margin" Value="{StaticResource Thickness/ToolBar.TextBlock.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
@@ -2020,7 +2026,7 @@
 						<Image
 							Classes="Icon"
 							Height="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.Backward.Light}"
+							Source="{DynamicResource Image/Icon.MoveLeft}"
 							Width="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton Name="PART_ScrollRightButton"
@@ -2037,7 +2043,43 @@
 						<Image
 							Classes="Icon"
 							Height="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.Forward.Light}"
+							Source="{DynamicResource Image/Icon.MoveRight}"
+							Width="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
+					</RepeatButton>
+					<RepeatButton Name="PART_ScrollUpButton"
+						Classes="ToolBarScrollViewer"
+						Command="{Binding ScrollUp, RelativeSource={RelativeSource TemplatedParent}}"
+						HorizontalAlignment="Stretch"
+                        VerticalAlignment="Top">
+						<RepeatButton.IsVisible>
+							<MultiBinding Converter="{x:Static converters:ScrollingButtonVisibilityConverter.Default}" ConverterParameter="Up">
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Offset.Y"/>
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Extent.Height"/>
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Viewport.Height"/>
+							</MultiBinding>
+						</RepeatButton.IsVisible>
+						<Image
+							Classes="Icon"
+							Height="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
+							Source="{DynamicResource Image/Icon.MoveUp}"
+							Width="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
+					</RepeatButton>
+					<RepeatButton Name="PART_ScrollDownButton"
+						Classes="ToolBarScrollViewer"
+						Command="{Binding ScrollDown, RelativeSource={RelativeSource TemplatedParent}}"
+						HorizontalAlignment="Stretch"
+                        VerticalAlignment="Bottom">
+						<RepeatButton.IsVisible>
+							<MultiBinding Converter="{x:Static converters:ScrollingButtonVisibilityConverter.Default}" ConverterParameter="Down">
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Offset.Y"/>
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Extent.Height"/>
+								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Viewport.Height"/>
+							</MultiBinding>
+						</RepeatButton.IsVisible>
+						<Image
+							Classes="Icon"
+							Height="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
+							Source="{DynamicResource Image/Icon.MoveDown}"
 							Width="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 				</Panel>

@@ -73,7 +73,7 @@
 					</Grid>
 				</TabItem.Header>
 
-				<ScrollViewer HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Auto">
+				<ScrollViewer HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Disabled">
 					<StackPanel Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalAlignment="Stretch" Orientation="Vertical">
 
 						<StackPanel.ContextMenu>
@@ -528,6 +528,34 @@
 						<Button Content="Button"/>
 					</appControls:GroupBox>
 				</StackPanel>
+			</TabItem>
+
+			<TabItem>
+				<TabItem.Header>
+					<TextBlock Text="ToolBar"/>
+				</TabItem.Header>
+				<Border Classes="ToolBar" HorizontalAlignment="Left">
+					<appControls:ToolBarScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+						<StackPanel Background="{x:Static Brushes.Transparent}">
+							<Button Classes="ToolBar_Button">
+								<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
+							</Button>
+							<Button Classes="ToolBar_Button">
+								<Image Classes="Icon" Source="{StaticResource Image/Icon.OpenFile}"/>
+							</Button>
+							<Button Classes="ToolBar_Button">
+								<Image Classes="Icon" Source="{StaticResource Image/Icon.Save}"/>
+							</Button>
+							<Button Classes="ToolBar_Button">
+								<Image Classes="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
+							</Button>
+							<Separator Classes="ToolBar_Separator_Horizontal"/>
+							<Button Classes="ToolBar_Button">
+								<Image Classes="Icon" Source="{StaticResource Image/Icon.More}"/>
+							</Button>
+						</StackPanel>
+					</appControls:ToolBarScrollViewer>
+				</Border>
 			</TabItem>
 
 			<TabItem>

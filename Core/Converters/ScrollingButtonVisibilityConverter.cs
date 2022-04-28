@@ -23,7 +23,7 @@ namespace CarinaStudio.AppSuite.Converters
             {
                 return (parameter as string) switch
                 {
-                    "Right" or "Bottom" => (extentSize > viewportSize && (offset + viewportSize) < extentSize - 1),
+                    "Right" or "Down" => (extentSize > viewportSize && (offset + viewportSize) < extentSize - 1),
                     _ => (extentSize > viewportSize && offset > 1),
                 };
             }
