@@ -155,6 +155,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public virtual bool IsFirstLaunch { get; } = true;
+
+
+        /// <inheritdoc/>
         public virtual bool IsPrivacyPolicyAgreed { get; } = false;
 
 

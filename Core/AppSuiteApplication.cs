@@ -900,6 +900,10 @@ namespace CarinaStudio.AppSuite
         public bool IsDebugMode { get; private set; }
 
 
+        /// <inheritdoc/>
+        public bool IsFirstLaunch { get; private set; }
+
+
         /// <summary>
         /// Check whether multiple application processes is supported or not.
         /// </summary>
@@ -1180,8 +1184,16 @@ namespace CarinaStudio.AppSuite
             this.Logger.LogDebug("Start loading persistent state");
             try
             {
+                // load from file
                 await this.persistentState.LoadAsync(this.persistentStateFilePath);
                 this.Logger.LogDebug("Complete loading persistent state");
+
+                // save immediately for first launch
+                if (this.IsFirstLaunch && this.IsMultipleProcessesSupported)
+                {
+                    this.Logger.LogDebug("Save persistent state for first launch");
+                    await this.persistentState.SaveAsync(this.persistentStateFilePath);
+                }
             }
             catch (Exception ex)
             {
@@ -1529,6 +1541,33 @@ namespace CarinaStudio.AppSuite
                         this.OnPropertyChanged(nameof(IsShutdownStarted));
                     }
                 };
+            }
+
+            // check first launch
+            try
+            {
+                var isFirstLaunch = false;
+                var syncLock = new object();
+                lock (syncLock)
+                {
+                    ThreadPool.QueueUserWorkItem(_ =>
+                    {
+                        isFirstLaunch = !File.Exists(this.persistentStateFilePath);
+                        lock (syncLock)
+                            Monitor.Pulse(syncLock);
+                    });
+                    if (!Monitor.Wait(syncLock, 5000))
+                        throw new TimeoutException("Timeout waiting for checking first launch");
+                }
+                this.IsFirstLaunch = isFirstLaunch;
+                if (isFirstLaunch)
+                    this.Logger.LogWarning("This is the first launch");
+                else
+                    this.Logger.LogTrace("This is not the first launch");
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Error occurred while checking first launch");
             }
 
             // check privacy policy version

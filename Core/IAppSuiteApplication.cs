@@ -66,6 +66,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Check whether this is the first time application launch or not.
+        /// </summary>
+        bool IsFirstLaunch { get; }
+
+
+        /// <summary>
         /// Check whether the current Privacy Policy has been agreed by user or not.
         /// </summary>
         bool IsPrivacyPolicyAgreed { get; }
