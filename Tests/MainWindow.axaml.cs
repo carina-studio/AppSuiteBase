@@ -257,7 +257,7 @@ namespace CarinaStudio.AppSuite.Tests
                     {
                         ;
                     };
-                    it.Bind(Tutorial.IconProperty, this.GetResourceObservable("Image/Icon.Information"));
+                    it.Bind(Tutorial.IconProperty, this.GetResourceObservable("Image/Icon.Lightbulb"));
                     it.SkippingAllTutorialRequested += (_, e) => 
                     {
                         ;
