@@ -621,9 +621,9 @@
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource AccentButtonForegroundPointerOver}" />
 	</Style>
 	<Style Selector="Button.Dialog_AccentControlButton:focus:pressed /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Background" Value="{DynamicResource AccentButtonBackgroundPressed}" />
-		<Setter Property="BorderBrush" Value="{DynamicResource AccentButtonBorderBrushPressed}" />
-		<Setter Property="TextBlock.Foreground" Value="{DynamicResource AccentButtonForegroundPressed}" />
+		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundPressed}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushPressed}" />
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource ButtonForegroundPressed}" />
 	</Style>
 	<Style Selector="Button.Dialog_ControlButton">
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
