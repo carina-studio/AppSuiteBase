@@ -45,7 +45,8 @@ namespace CarinaStudio.AppSuite.Tests
         readonly ScheduledAction logAction;
         IImage? selectedImage;
         string? selectedImageId;
-        private readonly ObservableList<TabItem> tabItems = new();
+        readonly ObservableList<TabItem> tabItems = new();
+        readonly TutorialPresenter tutorialPresenter;
 
 
         public MainWindow()
@@ -83,6 +84,8 @@ namespace CarinaStudio.AppSuite.Tests
             this.tabItems.AddRange(tabControl.Items.Cast<TabItem>());
             tabControl.Items = this.tabItems;
             (this.tabItems[0].Header as Control)?.Let(it => this.Application.EnsureClosingToolTipIfWindowIsInactive(it));
+
+            this.tutorialPresenter = this.FindControl<TutorialPresenter>(nameof(tutorialPresenter)).AsNonNull();
         }
 
 
@@ -239,6 +242,30 @@ namespace CarinaStudio.AppSuite.Tests
                 else
                     this.SetAndRaise<IImage?>(SelectedImageProperty, ref this.selectedImage, null);
             });
+
+
+        protected override void OnInitialDialogsClosed()
+        {
+            base.OnInitialDialogsClosed();
+            if (false)
+            {
+                var tutorial = new Tutorial().Also(it =>
+                {
+                    it.Anchor = this.integerTextBox;
+                    it.Description = "This is description of the tutorial.";
+                    it.Dismissed += (_, e) => 
+                    {
+                        ;
+                    };
+                    it.Bind(Tutorial.IconProperty, this.GetResourceObservable("Image/Icon.Information"));
+                    it.SkippingAllTutorialRequested += (_, e) => 
+                    {
+                        ;
+                    };
+                });
+                this.tutorialPresenter.ShowTutorial(tutorial);
+            }
+        }
 
 
         void OnListBoxDoubleClickOnItem(object? sender, ListBoxItemEventArgs e)

@@ -29,6 +29,9 @@
 		<StaticResourceExtension x:Key="ExpanderBackground" ResourceKey="Color/Button.Background"/>
 		<SolidColorBrush x:Key="ExpanderDropDownBackground" Color="#f7f7f7"/>
 
+		<!-- FullWindowTutorialPresenter -->
+		<Color x:Key="Color/FullWindowTutorialPresenter.Background">#cfffffff</Color>
+
 		<!-- Icon -->
 		<Color x:Key="Color/Icon">#333333</Color>
 

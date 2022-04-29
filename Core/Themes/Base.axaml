@@ -186,6 +186,16 @@
 		<Thickness x:Key="ExpanderDropdownRightBorderThickness">0</Thickness>
 		<Thickness x:Key="ExpanderDropdownUpBorderThickness">0</Thickness>
 
+		<!-- FullWindowTutorialPresenter -->
+		<Color x:Key="Color/FullWindowTutorialPresenter.Background">#cf000000</Color>
+		<SolidColorBrush x:Key="Brush/FullWindowTutorialPresenter.Background" Color="{DynamicResource Color/FullWindowTutorialPresenter.Background}"/>
+		<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize">14</sys:Double>
+		<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth">300</sys:Double>
+		<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Icon.Size">30</sys:Double>
+		<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Icon.Margin">0,0,15,0</Thickness>
+		<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Tutorial.Margin">20</Thickness>
+		<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Tutorial.Padding">20,20,20,0</Thickness>
+
 		<!-- GridSplitter -->
 		<sys:Double x:Key="Double/GridSplitter.Thickness">5</sys:Double>
 
@@ -824,6 +834,32 @@
 	<Style Selector="Expander /template/ ToggleButton#ExpanderHeader:pressed /template/ Border#ToggleButtonBackground">
 		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundPressed}" />
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource ButtonForegroundPressed}" />
+	</Style>
+
+	<!-- FullWindowTutorialPresenter -->
+	<Style Selector="controls|FullWindowTutorialPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/FullWindowTutorialPresenter.Background}"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Panel Name="PART_Root">
+					<DrawingPresenter Name="PART_BackgroundPresenter"/>
+					<Border Name="PART_TutorialContainer" Padding="{StaticResource Thickness/FullWindowTutorialPresenter.Tutorial.Margin}">
+						<Border Background="{DynamicResource ToolTipBackground}" BorderBrush="{DynamicResource ToolTipBorderBrush}" BorderThickness="1" ClipToBounds="True" CornerRadius="{DynamicResource ControlCornerRadius}" Padding="{StaticResource Thickness/FullWindowTutorialPresenter.Tutorial.Padding}">
+							<Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto">
+								<Image Classes="Icon" Height="{StaticResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}" IsVisible="{Binding Icon, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Margin="{StaticResource Thickness/FullWindowTutorialPresenter.Icon.Margin}" Source="{Binding Icon}" VerticalAlignment="Center" Width="{StaticResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}"/>
+								<TextBlock Grid.Column="1" FontSize="{StaticResource Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize}" MaxWidth="{StaticResource Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth}" Text="{Binding Description}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+								<Border Classes="Dialog_ControlButtonsPanel" Background="{x:Null}" Grid.ColumnSpan="2" Grid.Row="1">
+									<StackPanel Classes="Dialog_ControlButtonsPanel" Orientation="Horizontal">
+										<Button Name="PART_DismissButton" Classes="Dialog_AccentControlButton" Command="{Binding Presenter.DismissCurrentTutorial}" Content="{DynamicResource String/TutorialPresenter.Dismiss}"/>
+										<Button Name="PART_SkipAllTutorialsButton" Classes="Dialog_AccentControlButton" Command="{Binding Presenter.RequestSkippingAllTutorials}" Content="{DynamicResource String/TutorialPresenter.SkipAllTutorials}" IsVisible="{Binding IsSkippingAllTutorialsAllowed}"/>
+									</StackPanel>
+								</Border>
+							</Grid>
+						</Border>
+					</Border>
+				</Panel>
+			</ControlTemplate>
+		</Setter>
 	</Style>
 
 	<!-- GridSplitter -->
