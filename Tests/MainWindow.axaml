@@ -187,9 +187,9 @@
 												6789
 											</ComboBox>
 
-											<RepeatButton Classes="ToolBar_RepeatButton">
-												<Image Classes="Icon" Source="{StaticResource Image/Icon.File}"/>
-											</RepeatButton>
+											<Button Classes="ToolBar_Button" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}">
+												<Image Classes="Icon" Source="{StaticResource Image/Icon.Lightbulb}"/>
+											</Button>
 
 											<RepeatButton Classes="ToolBar_RepeatButton" IsEnabled="False">
 												<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
@@ -561,6 +561,23 @@
 
 				<TabItem>
 					<TabItem.Header>
+						<TextBlock Text="Tutorial"/>
+					</TabItem.Header>
+					<Panel>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Left" Margin="10,10,10,80" VerticalAlignment="Center"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Bottom"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="10,10,20,10" VerticalAlignment="Top"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="20,10,10,10" VerticalAlignment="Bottom"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Top"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10,80,10,10" VerticalAlignment="Center"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom"/>
+					</Panel>
+				</TabItem>
+
+				<TabItem>
+					<TabItem.Header>
 						<TextBlock Text="Images"/>
 					</TabItem.Header>
 					<Grid ColumnDefinitions="Auto,5,*" Margin="5" RowDefinitions="Auto,5,*">
@@ -573,12 +590,6 @@
 							<Image Classes="Icon" Height="{StaticResource Double/InPlaceAction.IconSize}" Margin="10" Source="{Binding $parent[Window].SelectedImage}" Width="{StaticResource Double/InPlaceAction.IconSize}"/>
 						</WrapPanel>
 					</Grid>
-				</TabItem>
-
-				<TabItem>
-					<TabItem.Header>
-						<TextBlock Text="Tab"/>
-					</TabItem.Header>
 				</TabItem>
 
 				<TabItem>

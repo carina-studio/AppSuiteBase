@@ -247,24 +247,6 @@ namespace CarinaStudio.AppSuite.Tests
         protected override void OnInitialDialogsClosed()
         {
             base.OnInitialDialogsClosed();
-            if (false)
-            {
-                var tutorial = new Tutorial().Also(it =>
-                {
-                    it.Anchor = this.integerTextBox;
-                    it.Description = "This is description of the tutorial.";
-                    it.Dismissed += (_, e) => 
-                    {
-                        ;
-                    };
-                    it.Bind(Tutorial.IconProperty, this.GetResourceObservable("Image/Icon.Lightbulb"));
-                    it.SkippingAllTutorialRequested += (_, e) => 
-                    {
-                        ;
-                    };
-                });
-                this.tutorialPresenter.ShowTutorial(tutorial);
-            }
         }
 
 
@@ -327,6 +309,26 @@ namespace CarinaStudio.AppSuite.Tests
             var result = await new Dialog().ShowDialog<ApplicationOptionsDialogResult>(this);
             if (result == ApplicationOptionsDialogResult.RestartMainWindowsNeeded)
                 this.Application.RestartMainWindows();
+        }
+
+
+        void ShowTutorial(IVisual anchor)
+        {
+            var tutorial = new Tutorial().Also(it =>
+            {
+                it.Anchor = anchor;
+                it.Description = "This is a tutorial with long long long long description.";
+                it.Dismissed += (_, e) => 
+                {
+                    ;
+                };
+                it.Bind(Tutorial.IconProperty, this.GetResourceObservable("Image/Icon.Lightbulb"));
+                it.SkippingAllTutorialRequested += (_, e) => 
+                {
+                    ;
+                };
+            });
+            this.tutorialPresenter.ShowTutorial(tutorial);
         }
 
 

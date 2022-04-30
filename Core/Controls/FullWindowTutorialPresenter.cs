@@ -6,6 +6,7 @@ using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
 using CarinaStudio.Animation;
+using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using System;
 
@@ -280,33 +281,57 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                     return;
                 }
                 anchorBounds = new(anchorBounds.X - selfBounds.X, anchorBounds.Y - selfBounds.Y, anchorBounds.Width, anchorBounds.Height);
+                selfBounds = new(0, 0, selfBounds.Width, selfBounds.Height);
 
                 // setup horizontal position
+                var offset = this.TryFindResource<double>("Double/FullWindowTutorialPresenter.Tutorial.Offset", out var res) ? res.Value : 0.0;
                 var anchorCenter = anchorBounds.Center;
+                var selfCenter = selfBounds.Center;
                 var marginLeft = 0.0;
                 var marginTop = 0.0;
                 var marginRight = 0.0;
                 var marginBottom = 0.0;
-                if (anchorCenter.X <= selfBounds.Width / 2)
+                var placeVertically = false;
+                if (anchorBounds.Left < selfCenter.X && anchorBounds.Right > selfCenter.X)
                 {
-                    marginLeft = anchorBounds.Right;
+                    placeVertically = true;
+                    if ((selfCenter.X - anchorBounds.Left + 1) >= (anchorBounds.Right - selfCenter.X))
+                    {
+                        marginLeft = Math.Max(offset, anchorBounds.Left);
+                        it.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left;
+                    }
+                    else
+                    {
+                        marginRight = Math.Max(offset, selfBounds.Width - anchorBounds.Right);
+                        it.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Right;
+                    }
+                }
+                else if (anchorBounds.Right <= selfCenter.X)
+                {
+                    marginLeft = Math.Max(offset, anchorBounds.Right + offset);
                     it.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Left;
                 }
                 else
                 {
-                    marginRight = (selfBounds.Width - anchorBounds.X);
+                    marginRight = Math.Max(offset, selfBounds.Width - anchorBounds.Left + offset);
                     it.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Right;
                 }
 
                 // setup vertical position
-                if (anchorCenter.Y <= selfBounds.Height / 2)
+                if (anchorCenter.Y <= selfCenter.Y)
                 {
-                    marginTop = anchorBounds.Bottom;
+                    if (placeVertically)
+                        marginTop = anchorBounds.Bottom + offset;
+                    else
+                        marginTop = Math.Max(offset, anchorBounds.Y);
                     it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Top;
                 }
                 else
                 {
-                    marginBottom = (selfBounds.Height - anchorBounds.Y);
+                    if (placeVertically)
+                        marginBottom = (selfBounds.Height - anchorBounds.Y + offset);
+                    else
+                        marginBottom = Math.Max(offset, selfBounds.Height - anchorBounds.Bottom);
                     it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Bottom;
                 }
                 it.Margin = new(marginLeft, marginTop, marginRight, marginBottom);
