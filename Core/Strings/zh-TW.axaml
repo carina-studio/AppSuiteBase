@@ -219,7 +219,6 @@
 	<sys:String x:Key="String/TimeSpanTextBox.Watermark">時間間距</sys:String>
 
 	<!-- TutorialPresenter -->
-	<sys:String x:Key="String/TutorialPresenter.Dismiss">瞭解了</sys:String>
 	<sys:String x:Key="String/TutorialPresenter.SkipAllTutorials">跳過所有提示</sys:String>
 
 	<!-- UriTextBox -->

@@ -191,11 +191,16 @@
 		<BoxShadows x:Key="BoxShadows/FullWindowTutorialPresenter.Tutorial">0 0 10 0 #5f000000</BoxShadows>
 		<SolidColorBrush x:Key="Brush/FullWindowTutorialPresenter.Background" Color="{DynamicResource Color/FullWindowTutorialPresenter.Background}"/>
 		<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize">14</sys:Double>
-		<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth">300</sys:Double>
-		<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Icon.Size">30</sys:Double>
+		<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth">250</sys:Double>
+		<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size">24</sys:Double>
+		<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Icon.Size">20</sys:Double>
 		<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Offset">20</sys:Double>
+		<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.SkipAllTutorials.FontSize">13</sys:Double>
 		<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Icon.Margin">0,0,15,0</Thickness>
-		<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Tutorial.Padding">20,20,20,0</Thickness>
+		<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Dismiss.Margin">15,0,0,0</Thickness>
+		<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Dismiss.Padding">5</Thickness>
+		<Thickness x:Key="Thickness/FullWindowTutorialPresenter.SkipAllTutorials.Margin">5,15,0,0</Thickness>
+		<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Tutorial.Padding">15</Thickness>
 
 		<!-- GridSplitter -->
 		<sys:Double x:Key="Double/GridSplitter.Thickness">5</sys:Double>
@@ -845,15 +850,13 @@
 				<Panel Name="PART_Root">
 					<DrawingPresenter Name="PART_BackgroundPresenter"/>
 					<Border Name="PART_TutorialContainer" Background="{DynamicResource ToolTipBackground}" BorderBrush="{DynamicResource ToolTipBorderBrush}" BorderThickness="1" BoxShadow="{StaticResource BoxShadows/FullWindowTutorialPresenter.Tutorial}" CornerRadius="{DynamicResource ControlCornerRadius}" Padding="{StaticResource Thickness/FullWindowTutorialPresenter.Tutorial.Padding}">
-						<Grid ClipToBounds="True" ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto">
+						<Grid ClipToBounds="True" ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto">
 							<Image Classes="Icon" Height="{StaticResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}" IsVisible="{Binding Icon, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Margin="{StaticResource Thickness/FullWindowTutorialPresenter.Icon.Margin}" Source="{Binding Icon}" VerticalAlignment="Center" Width="{StaticResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}"/>
 							<TextBlock Grid.Column="1" FontSize="{StaticResource Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize}" MaxWidth="{StaticResource Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth}" Text="{Binding Description}" TextWrapping="Wrap" VerticalAlignment="Center"/>
-							<Border Classes="Dialog_ControlButtonsPanel" Background="{x:Null}" Grid.ColumnSpan="2" Grid.Row="1">
-								<StackPanel Classes="Dialog_ControlButtonsPanel" Orientation="Horizontal">
-									<Button Name="PART_DismissButton" Classes="Dialog_AccentControlButton" Command="{Binding Presenter.DismissCurrentTutorial}" Content="{DynamicResource String/TutorialPresenter.Dismiss}"/>
-									<Button Name="PART_SkipAllTutorialsButton" Classes="Dialog_AccentControlButton" Command="{Binding Presenter.RequestSkippingAllTutorials}" Content="{DynamicResource String/TutorialPresenter.SkipAllTutorials}" IsVisible="{Binding IsSkippingAllTutorialsAllowed}"/>
-								</StackPanel>
-							</Border>
+							<abControls:LinkTextBlock Name="PART_SkipAllTutorials" Command="{Binding Presenter.RequestSkippingAllTutorials}" FontSize="{StaticResource Double/FullWindowTutorialPresenter.Tutorial.SkipAllTutorials.FontSize}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Margin="{StaticResource Thickness/FullWindowTutorialPresenter.SkipAllTutorials.Margin}" Text="{DynamicResource String/TutorialPresenter.SkipAllTutorials}"/>
+							<Button Name="PART_Dismiss" Background="{x:Static Brushes.Transparent}" BorderThickness="0" Command="{Binding Presenter.DismissTutorial}" Grid.Column="2" Height="{StaticResource Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size}" Margin="{StaticResource Thickness/FullWindowTutorialPresenter.Dismiss.Margin}" Padding="{StaticResource Thickness/FullWindowTutorialPresenter.Dismiss.Padding}" VerticalAlignment="Top" Width="{StaticResource Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size}">
+								<Image Classes="Icon" Source="{StaticResource Image/Icon.Close}"/>
+							</Button>
 						</Grid>
 					</Border>
 				</Panel>

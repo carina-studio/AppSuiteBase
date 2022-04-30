@@ -51,6 +51,29 @@ public class Tutorial : AvaloniaObject
     }
 
 
+    // Cancel
+    internal void Cancel()
+    {
+        // check state
+        this.VerifyAccess();
+        if (!this.isVisible)
+            return;
+        
+        // update state
+        this.SetAndRaise<bool>(IsVisibleProperty, ref this.isVisible, false);
+        this.SetAndRaise<TutorialPresenter?>(PresenterProperty, ref this.presenter, null);
+        
+        // raise event
+        this.Cancelled?.Invoke(this, EventArgs.Empty);
+    }
+
+
+    /// <summary>
+    /// Raised when tutorial has been cancelled.
+    /// </summary>
+    public event EventHandler? Cancelled;
+
+
     /// <summary>
     /// Get or set description of tutorial.
     /// </summary>

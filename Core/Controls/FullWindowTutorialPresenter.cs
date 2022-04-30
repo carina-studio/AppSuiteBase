@@ -71,9 +71,9 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
 #pragma warning disable CS0618
     DrawingPresenter? backgroundPresenter;
 #pragma warning restore CS0618
-    Button? dismissButton;
+    Control? dismissControl;
     Control? root;
-    Button? skipAllTutorialsButton;
+    Control? skipAllTutorialsControl;
     Control? tutorialContainer;
     readonly ScheduledAction updateTutorialPositionAction;
 
@@ -102,13 +102,13 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
             it.Drawing = new BackgroundDrawing(this);
         });
 #pragma warning restore CS0618
-        this.dismissButton = e.NameScope.Find<Button>("PART_DismissButton");
+        this.dismissControl = e.NameScope.Find<Control>("PART_Dismiss");
         this.root = e.NameScope.Find<Control>("PART_Root").Also(it =>
         {
             it.IsVisible = false;
             it.Opacity = 0;
         });
-        this.skipAllTutorialsButton = e.NameScope.Find<Button>("PART_SkipAllTutorialsButton");
+        this.skipAllTutorialsControl = e.NameScope.Find<Control>("PART_SkipAllTutorials");
         this.tutorialContainer = e.NameScope.Find<Control>("PART_TutorialContainer");
     }
 
@@ -153,18 +153,18 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
         {
             Global.Run(() =>
             {
-                if (this.dismissButton?.IsFocused == true)
+                if (this.dismissControl?.IsFocused == true)
                 {
-                    if (this.skipAllTutorialsButton?.IsEffectivelyVisible == true
-                        && this.skipAllTutorialsButton.IsEffectivelyEnabled)
+                    if (this.skipAllTutorialsControl?.IsEffectivelyVisible == true
+                        && this.skipAllTutorialsControl.IsEffectivelyEnabled)
                     {
-                        return this.skipAllTutorialsButton;
+                        return this.skipAllTutorialsControl;
                     }
                 }
-                else if (this.dismissButton?.IsEffectivelyVisible == true
-                    && this.dismissButton.IsEffectivelyEnabled)
+                else if (this.dismissControl?.IsEffectivelyVisible == true
+                    && this.dismissControl.IsEffectivelyEnabled)
                 {
-                    return this.dismissButton;
+                    return this.dismissControl;
                 }
                 return this.tutorialContainer ?? this;
             }).Focus();
@@ -211,15 +211,15 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
         {
             if (this.CurrentTutorial == null)
                 return;
-            if (this.dismissButton?.IsEffectivelyVisible == true 
-                && this.dismissButton.IsEffectivelyEnabled)
+            if (this.dismissControl?.IsEffectivelyVisible == true 
+                && this.dismissControl.IsEffectivelyEnabled)
             {
-                this.dismissButton.Focus();
+                this.dismissControl.Focus();
             }
-            else if (this.skipAllTutorialsButton?.IsEffectivelyVisible == true 
-                && this.skipAllTutorialsButton.IsEffectivelyEnabled)
+            else if (this.skipAllTutorialsControl?.IsEffectivelyVisible == true 
+                && this.skipAllTutorialsControl.IsEffectivelyEnabled)
             {
-                this.skipAllTutorialsButton.Focus();
+                this.skipAllTutorialsControl.Focus();
             }
             else if (this.tutorialContainer != null)
                 this.tutorialContainer.Focus();

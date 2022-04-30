@@ -218,7 +218,6 @@
 	<sys:String x:Key="String/TimeSpanTextBox.Watermark">Time span</sys:String>
 
 	<!-- TutorialPresenter -->
-	<sys:String x:Key="String/TutorialPresenter.Dismiss">Got it</sys:String>
 	<sys:String x:Key="String/TutorialPresenter.SkipAllTutorials">Skip all tips</sys:String>
 
 	<!-- UriTextBox -->
