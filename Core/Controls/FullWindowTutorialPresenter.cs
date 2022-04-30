@@ -284,7 +284,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                 selfBounds = new(0, 0, selfBounds.Width, selfBounds.Height);
 
                 // setup horizontal position
-                var offset = this.TryFindResource<double>("Double/FullWindowTutorialPresenter.Tutorial.Offset", out var res) ? res.Value : 0.0;
+                var offset = this.TryFindResource<double>("Double/FullWindowTutorialPresenter.Tutorial.Offset", out var res) ? res.GetValueOrDefault() : 0.0;
                 var anchorCenter = anchorBounds.Center;
                 var selfCenter = selfBounds.Center;
                 var marginLeft = 0.0;
