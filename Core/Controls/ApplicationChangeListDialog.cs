@@ -27,10 +27,34 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
+        /// Get latest version of application which change list has been shown to user before.
+        /// </summary>
+        /// <param name="app">Application.</param>
+        public static Version? GetLatestShownVersion(IApplication app)
+        {
+            if (Version.TryParse(app.PersistentState.GetValueOrDefault(LatestShownVersionKey), out var version)
+                && version != null)
+            {
+                return new Version(version.Major, version.Minor);
+            }
+            return null;
+        }
+
+
+        /// <summary>
+        /// Check whether dialog is shown before for current version or not.
+        /// </summary>
+        /// <param name="app">Application.</param>
+        public static bool IsShownBeforeForCurrentVersion(IApplication app) =>
+            GetLatestShownVersion(app)?.Let(latestVersion => latestVersion >= app.Assembly.GetName().Version?.Let(it => new Version(it.Major, it.Minor))) ?? false;
+
+
+        /// <summary>
         /// Reset all internal states which are related to showing dialog.
         /// </summary>
-        public static void ResetShownState() =>
-            AppSuiteApplication.CurrentOrNull?.PersistentState?.ResetValue(LatestShownVersionKey);
+        /// <param name="app">Application.</param>
+        public static void ResetShownState(IApplication app) =>
+            app.PersistentState.ResetValue(LatestShownVersionKey);
 
 
         /// <summary>
@@ -53,25 +77,6 @@ namespace CarinaStudio.AppSuite.Controls
             if (this.changeList.ChangeList.IsNotEmpty())
                 return dialog.ShowDialog<object?>(owner);
             return Task.FromResult((object?)null); // skip showing because there is no change
-        }
-
-
-        /// <summary>
-        /// Check whether dialog is shown before for current version.
-        /// </summary>
-        public static bool ShownBeforeForCurrentVersion
-        {
-            get
-            {
-                var app = AppSuiteApplication.CurrentOrNull;
-                if (app != null
-                    && Version.TryParse(app.PersistentState.GetValueOrDefault(LatestShownVersionKey), out var version)
-                    && version != null)
-                {
-                    return new Version(version.Major, version.Minor) >= app.Assembly.GetName().Version?.Let(it => new Version(it.Major, it.Minor));
-                }
-                return false;
-            }
         }
     }
 }

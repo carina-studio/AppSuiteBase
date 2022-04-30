@@ -4,7 +4,7 @@
 
 	<!-- ApplicationChangeListDialog -->
 	<sys:String x:Key="String/ApplicationChangeListDialog.Details">詳細資訊</sys:String>
-	<sys:String x:Key="String/ApplicationChangeListDialog.Header">在 {0} 中的變更</sys:String>
+	<sys:String x:Key="String/ApplicationChangeListDialog.Header">{0} {1} 的變更</sys:String>
 	<sys:String x:Key="String/ApplicationChangeListDialog.IconSpaceReservationChar">中</sys:String>
 	<sys:String x:Key="String/ApplicationChangeListDialog.Title">變更列表</sys:String>
 	

@@ -15,12 +15,7 @@
 	<Window.DataTemplates>
 		<DataTemplate DataType="{x:Type viewModels:ApplicationChange}">
 			<Grid ColumnDefinitions="Auto,*">
-				<Panel VerticalAlignment="Top">
-					<TextBlock Text="{DynamicResource String/ApplicationChangeListDialog.IconSpaceReservationChar}" Opacity="0" VerticalAlignment="Center"/>
-					<Border Height="{DynamicResource Double/ApplicationChangeListDialog.Icon.Size}" Margin="{DynamicResource Thickness/ApplicationChangeListDialog.Icon.Margin}" VerticalAlignment="Center" Width="{DynamicResource Double/ApplicationChangeListDialog.Icon.Size}">
-						<Image Classes="Icon" Source="{Binding Type, Converter={x:Static controls:ApplicationChangeListDialogImpl.ApplicationChangeTypeConverter}}"/>
-					</Border>
-				</Panel>
+				<Image Classes="Dialog_Icon" Source="{Binding Type, Converter={x:Static controls:ApplicationChangeListDialogImpl.ApplicationChangeTypeConverter}}" VerticalAlignment="Top"/>
 				<StackPanel Grid.Column="1" VerticalAlignment="Center">
 					<TextBlock FontSize="{DynamicResource Double/Dialog.TextBlock.FontSize}" Text="{Binding Description}" TextWrapping="Wrap"/>
 					<abControls:LinkTextBlock FontSize="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}" HorizontalAlignment="Left" IsVisible="{Binding HasDetailsPageUri}" Text="{DynamicResource String/ApplicationChangeListDialog.Details}" Uri="{Binding DetailsPageUri}"/>

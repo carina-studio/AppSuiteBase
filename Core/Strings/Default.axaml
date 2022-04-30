@@ -4,7 +4,7 @@
 
 	<!-- ApplicationChangeListDialog -->
 	<sys:String x:Key="String/ApplicationChangeListDialog.Details">Details</sys:String>
-	<sys:String x:Key="String/ApplicationChangeListDialog.Header">What's change in {0}</sys:String>
+	<sys:String x:Key="String/ApplicationChangeListDialog.Header">What's change in {0} {1}</sys:String>
 	<sys:String x:Key="String/ApplicationChangeListDialog.IconSpaceReservationChar">A</sys:String>
 	<sys:String x:Key="String/ApplicationChangeListDialog.Title">Change list</sys:String>
 

@@ -123,7 +123,7 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 (change.NewValue.Value as ApplicationChangeList)?.Let(it =>
                 {
-                    this.SetValue<string?>(HeaderProperty, this.Application.GetFormattedString("ApplicationChangeListDialog.Header", it.Version));
+                    this.SetValue<string?>(HeaderProperty, this.Application.GetFormattedString("ApplicationChangeListDialog.Header", this.Application.Name, $"{it.Version.Major}.{it.Version.Minor}"));
                     this.BuildChangeListViews();
                 });
             }

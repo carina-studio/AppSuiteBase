@@ -594,7 +594,7 @@ namespace CarinaStudio.AppSuite.Controls
             }
 
             // show application change list
-            if (!ApplicationChangeListDialog.ShownBeforeForCurrentVersion)
+            if (!ApplicationChangeListDialog.IsShownBeforeForCurrentVersion(this.Application))
             {
                 this.Logger.LogDebug("Show application change list dialog");
 

@@ -33,9 +33,7 @@
 
 		<!-- ApplicationChangeListDialog -->
 		<sys:Double x:Key="Double/ApplicationChangeListDialog.Content.MaxHeight">500</sys:Double>
-		<sys:Double x:Key="Double/ApplicationChangeListDialog.Icon.Size">14</sys:Double>
 		<sys:Double x:Key="Double/ApplicationChangeListDialog.Width">500</sys:Double>
-		<Thickness x:Key="Thickness/ApplicationChangeListDialog.Icon.Margin">0,0,10,0</Thickness>
 
 		<!-- ApplicationInfoDialog -->
 		<sys:Double x:Key="Double/ApplicationInfoDialog.AppIcon.Size">80</sys:Double>
@@ -150,7 +148,7 @@
 		<Color x:Key="Color/Dialog.TextBlock.Foreground.Warning">#ff6a00</Color>
 		<sys:Double x:Key="Double/Dialog.ControlButton.MinWidth">100</sys:Double>
 		<sys:Double x:Key="Double/Dialog.ControlButton.Separator.Width">15</sys:Double>
-		<sys:Double x:Key="Double/Dialog.Icon.Size">16</sys:Double>
+		<sys:Double x:Key="Double/Dialog.Icon.Size">20</sys:Double>
 		<sys:Double x:Key="Double/Dialog.ListActionButton.MinWidth">80</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height">15</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height.Large">40</sys:Double>
