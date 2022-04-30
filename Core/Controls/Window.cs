@@ -13,8 +13,12 @@ namespace CarinaStudio.AppSuite.Controls
     /// <summary>
     /// Base class of window of AppSuite.
     /// </summary>
-    public abstract class Window : CarinaStudio.Controls.Window<IAppSuiteApplication>
+    public abstract class Window : CarinaStudio.Controls.Window<IAppSuiteApplication>, ITutorialPresenter
     {
+        /// <summary>
+        /// Property of <see cref="CurrentTutorial"/>.
+        /// </summary>
+        public static readonly AvaloniaProperty<Tutorial?> CurrentTutorialProperty = AvaloniaProperty.RegisterDirect<Window, Tutorial?>(nameof(CurrentTutorial), w => w.currentTutorial);
         /// <summary>
         /// Property of <see cref="IsSystemChromeVisibleInClientArea"/>.
         /// </summary>
@@ -29,6 +33,9 @@ namespace CarinaStudio.AppSuite.Controls
         readonly ScheduledAction checkSystemChromeVisibilityAction;
         ContentPresenter? contentPresenter;
         readonly WindowContentFadingHelper contentFadingHelper;
+        Tutorial? currentTutorial;
+        IDisposable? currentTutorialObserverToken;
+        TutorialPresenter? tutorialPresenter;
         readonly ScheduledAction updateTransparencyLevelAction;
 
 
@@ -70,6 +77,20 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
+        /// <inheritdoc/>
+        public void CancelTutorial() =>
+            this.tutorialPresenter?.CancelTutorial();
+
+
+        /// <inheritdoc/>
+        public Tutorial? CurrentTutorial { get => this.currentTutorial; }
+
+
+        /// <inheritdoc/>
+        public void DismissTutorial() =>
+            this.tutorialPresenter?.DismissTutorial();
+
+
         /// <summary>
         /// Invalidate and update <see cref="TopLevel.TransparencyLevelHint"/>.
         /// </summary>
@@ -94,6 +115,17 @@ namespace CarinaStudio.AppSuite.Controls
                     if (it.Margin != new Thickness())
                         this.SynchronizationContext.Post(() => it.Margin = new Thickness());
                 });
+            });
+            this.tutorialPresenter = e.NameScope.Find<TutorialPresenter>("PART_TutorialPresenter").Also(it =>
+            {
+                this.currentTutorialObserverToken = this.currentTutorialObserverToken.DisposeAndReturnNull();
+                if (it != null)
+                {
+                    this.currentTutorialObserverToken = it.GetObservable(TutorialPresenter.CurrentTutorialProperty).Subscribe(tutorial =>
+                        this.SetAndRaise<Tutorial?>(CurrentTutorialProperty, ref this.currentTutorial, tutorial));
+                }
+                else
+                    this.SetAndRaise<Tutorial?>(CurrentTutorialProperty, ref this.currentTutorial, null);
             });
         }
 
@@ -172,14 +204,17 @@ namespace CarinaStudio.AppSuite.Controls
                 }
                 */
             }
+            else if (property == CurrentTutorialProperty
+                || property == IsActiveProperty)
+            {
+                this.updateTransparencyLevelAction.Schedule();
+            }
             else if (property == ExtendClientAreaToDecorationsHintProperty
                 || property == SystemDecorationsProperty
                 || property == WindowStateProperty)
             {
                 this.checkSystemChromeVisibilityAction.Schedule();
             }
-            else if (property == IsActiveProperty)
-                this.updateTransparencyLevelAction.Schedule();
             else if (property == HeightProperty 
                 || property == WidthProperty)
             {
@@ -196,7 +231,8 @@ namespace CarinaStudio.AppSuite.Controls
         {
             if (!this.IsActive 
                 || this.contentFadingHelper.IsFadingContent
-                || !this.Settings.GetValueOrDefault(SettingKeys.EnableBlurryBackground))
+                || !this.Settings.GetValueOrDefault(SettingKeys.EnableBlurryBackground)
+                || this.currentTutorial != null)
             {
                 return WindowTransparencyLevel.None;
             }
@@ -225,6 +261,16 @@ namespace CarinaStudio.AppSuite.Controls
             if (e.Key == SettingKeys.EnableBlurryBackground)
                 this.InvalidateTransparencyLevelHint();
         }
+
+
+        /// <inheritdoc/>
+        public void RequestSkippingAllTutorials() =>
+            this.tutorialPresenter?.RequestSkippingAllTutorials();
+        
+
+        /// <inheritdoc/>
+        public bool ShowTutorial(Tutorial tutorial) =>
+            this.tutorialPresenter?.ShowTutorial(tutorial) ?? false;
     }
 
 

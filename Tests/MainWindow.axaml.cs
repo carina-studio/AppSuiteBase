@@ -46,7 +46,6 @@ namespace CarinaStudio.AppSuite.Tests
         IImage? selectedImage;
         string? selectedImageId;
         readonly ObservableList<TabItem> tabItems = new();
-        readonly TutorialPresenter tutorialPresenter;
 
 
         public MainWindow()
@@ -84,8 +83,6 @@ namespace CarinaStudio.AppSuite.Tests
             this.tabItems.AddRange(tabControl.Items.Cast<TabItem>());
             tabControl.Items = this.tabItems;
             (this.tabItems[0].Header as Control)?.Let(it => this.Application.EnsureClosingToolTipIfWindowIsInactive(it));
-
-            this.tutorialPresenter = this.FindControl<TutorialPresenter>(nameof(tutorialPresenter)).AsNonNull();
         }
 
 
@@ -328,7 +325,7 @@ namespace CarinaStudio.AppSuite.Tests
                     ;
                 };
             });
-            this.tutorialPresenter.ShowTutorial(tutorial);
+            this.ShowTutorial(tutorial);
         }
 
 

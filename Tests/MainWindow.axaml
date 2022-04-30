@@ -613,8 +613,6 @@
 				</TabItem>
 
 			</appControls:TabControl>
-
-			<appControls:FullWindowTutorialPresenter Name="tutorialPresenter"/>
 		</Panel>
 		
 	</DockPanel>
