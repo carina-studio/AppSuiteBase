@@ -26,6 +26,10 @@ namespace CarinaStudio.AppSuite.Controls
     public abstract class MainWindow<TViewModel> : Window, IMainWindow where TViewModel : MainWindowViewModel
     {
         /// <summary>
+        /// Property of <see cref="AreInitialDialogsClosed"/>.
+        /// </summary>
+        public static readonly AvaloniaProperty<bool> AreInitialDialogsClosedProperty = AvaloniaProperty.RegisterDirect<MainWindow<TViewModel>, bool>(nameof(AreInitialDialogsClosed), w => w.areInitialDialogsClosed);
+        /// <summary>
         /// Property of <see cref="ContentPadding"/>.
         /// </summary>
         public static readonly AvaloniaProperty<Thickness> ContentPaddingProperty = AvaloniaProperty.RegisterDirect<MainWindow<TViewModel>, Thickness>(nameof(ContentPadding), w => w.contentPadding);
@@ -50,6 +54,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Fields.
+        bool areInitialDialogsClosed;
         Thickness contentPadding;
         ThicknessAnimator? contentPaddingAnimator;
         ContentPresenter? contentPresenter;
@@ -143,7 +148,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Check whether all dialogs which need to be shown after showing main window are closed or not.
         /// </summary>
-        protected bool AreInitialDialogsClosed { get; private set; }
+        public bool AreInitialDialogsClosed { get => this.areInitialDialogsClosed; }
 
 
         /// <summary>
@@ -638,7 +643,7 @@ namespace CarinaStudio.AppSuite.Controls
 
             // all dialogs closed
             this.Logger.LogWarning("All initial dialogs closed");
-            this.AreInitialDialogsClosed = true;
+            this.SetAndRaise<bool>(AreInitialDialogsClosedProperty, ref this.areInitialDialogsClosed, true);
             this.OnInitialDialogsClosed();
         }
 
