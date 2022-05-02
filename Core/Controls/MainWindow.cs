@@ -28,11 +28,11 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Property of <see cref="ContentPadding"/>.
         /// </summary>
-        public static readonly AvaloniaProperty<Thickness> ContentPaddingProperty = AvaloniaProperty.Register<MainWindow<TViewModel>, Thickness>(nameof(ContentPadding));
+        public static readonly AvaloniaProperty<Thickness> ContentPaddingProperty = AvaloniaProperty.RegisterDirect<MainWindow<TViewModel>, Thickness>(nameof(ContentPadding), w => w.contentPadding);
         /// <summary>
         /// Property of <see cref="HasMultipleMainWindows"/>.
         /// </summary>
-        public static readonly AvaloniaProperty<bool> HasMultipleMainWindowsProperty = AvaloniaProperty.Register<MainWindow<TViewModel>, bool>(nameof(HasMultipleMainWindows), true);
+        public static readonly AvaloniaProperty<bool> HasMultipleMainWindowsProperty = AvaloniaProperty.RegisterDirect<MainWindow<TViewModel>, bool>(nameof(HasMultipleMainWindows), w => w.hasMultipleMainWindows);
 
 
         // Constants.
@@ -50,8 +50,10 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Fields.
+        Thickness contentPadding;
         ThicknessAnimator? contentPaddingAnimator;
         ContentPresenter? contentPresenter;
+        bool hasMultipleMainWindows;
         bool isShowingInitialDialogs;
         long openedTime;
         readonly ScheduledAction restartingMainWindowsAction;
@@ -160,13 +162,13 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Get padding applied on content of Window automatically.
         /// </summary>
-        public Thickness ContentPadding { get => this.GetValue<Thickness>(ContentPaddingProperty); }
+        public Thickness ContentPadding { get => this.contentPadding; }
 
 
         /// <summary>
         /// Check whether multiple main windows were opened or not.
         /// </summary>
-        public bool HasMultipleMainWindows { get => this.GetValue<bool>(HasMultipleMainWindowsProperty); }
+        public bool HasMultipleMainWindows { get => this.hasMultipleMainWindows; }
 
 
         /// <summary>
@@ -286,7 +288,7 @@ namespace CarinaStudio.AppSuite.Controls
             this.contentPresenter = e.NameScope.Find<ContentPresenter>("PART_ContentPresenter").Also(it =>
             {
                 it.GetObservable(PaddingProperty).Subscribe(padding =>
-                    this.SetValue<Thickness>(ContentPaddingProperty, padding));
+                    this.SetAndRaise<Thickness>(ContentPaddingProperty, ref this.contentPadding, padding));
             });
         }
 
@@ -380,7 +382,7 @@ namespace CarinaStudio.AppSuite.Controls
 
         // Called when list of main window changed.
         void OnMainWindowsChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
-            this.SetValue<bool>(HasMultipleMainWindowsProperty, this.Application.MainWindows.Count > 1);
+            this.SetAndRaise<bool>(HasMultipleMainWindowsProperty, ref this.hasMultipleMainWindows, this.Application.MainWindows.Count > 1);
 
 
         /// <summary>
@@ -405,7 +407,7 @@ namespace CarinaStudio.AppSuite.Controls
             this.AddHandler(DragDrop.DragEnterEvent, this.OnDragEnter);
 
             // check main window count
-            this.SetValue<bool>(HasMultipleMainWindowsProperty, this.Application.MainWindows.Count > 1);
+            this.SetAndRaise<bool>(HasMultipleMainWindowsProperty, ref this.hasMultipleMainWindows, this.Application.MainWindows.Count > 1);
 
             // update content padding
             this.updateContentPaddingAction.Schedule();
