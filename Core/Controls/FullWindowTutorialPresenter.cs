@@ -238,7 +238,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
         this.tutorialContainer?.Let(it =>
         {
             var anchor = tutorial.Anchor;
-            if (anchor != null)
+            if (anchor != null && anchor.IsEffectivelyVisible)
             {
                 // find self bounds on window
                 var selfBounds = this.Bounds;
@@ -274,10 +274,11 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                 // show tutorial at center if anchor is not visible in bounds
                 if (!selfBounds.Intersects(anchorBounds))
                 {
-                    this.anchorBounds = new();
                     it.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center;
                     it.Margin = new();
                     it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
+                    this.anchorBounds = new();
+                    this.backgroundPresenter?.InvalidateVisual();
                     return;
                 }
                 anchorBounds = new(anchorBounds.X - selfBounds.X, anchorBounds.Y - selfBounds.Y, anchorBounds.Width, anchorBounds.Height);
@@ -336,15 +337,17 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                 }
                 it.Margin = new(marginLeft, marginTop, marginRight, marginBottom);
 
-                // keep anchor bounds
+                // update background
                 this.anchorBounds = anchorBounds;
+                this.backgroundPresenter?.InvalidateVisual();
             }
             else
             {
-                this.anchorBounds = new();
                 it.HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center;
                 it.Margin = new();
                 it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
+                this.anchorBounds = new();
+                this.backgroundPresenter?.InvalidateVisual();
             }
         });
     }

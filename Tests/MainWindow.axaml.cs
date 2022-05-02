@@ -316,14 +316,19 @@ namespace CarinaStudio.AppSuite.Tests
                 it.Anchor = anchor;
                 it.Description = "This is a tutorial with long long long long description.";
                 it.Dismissed += (_, e) => 
-                {
-                    ;
+                { 
+                    var nextTutorial = new Tutorial().Also(it =>
+                    {
+                        it.Anchor = this.FindControl<Control>("tutorialAnchorTextBlock");
+                        it.Description = "This is the 2nd tutorial.";
+                        it.Bind(Tutorial.IconProperty, this.GetResourceObservable("Image/Icon.Information"));
+                        it.IsSkippingAllTutorialsAllowed = false;
+                    });
+                    this.ShowTutorial(nextTutorial);
                 };
                 it.Bind(Tutorial.IconProperty, this.GetResourceObservable("Image/Icon.Lightbulb"));
                 it.SkippingAllTutorialRequested += (_, e) => 
-                {
-                    ;
-                };
+                { };
             });
             this.ShowTutorial(tutorial);
         }

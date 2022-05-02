@@ -564,7 +564,10 @@
 						<TextBlock Text="Tutorial"/>
 					</TabItem.Header>
 					<Panel>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top"/>
+						<StackPanel HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Top">
+							<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" Margin="10" VerticalAlignment="Center"/>
+							<TextBlock Name="tutorialAnchorTextBlock" Margin="20,10,10,10" Text="Anchor" VerticalAlignment="Center"/>
+						</StackPanel>
 						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Left" Margin="10,10,10,80" VerticalAlignment="Center"/>
 						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Bottom"/>
 						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="10,10,20,10" VerticalAlignment="Top"/>
