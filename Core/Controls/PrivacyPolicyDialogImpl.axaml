@@ -25,13 +25,7 @@
 
 			<!-- Icon -->
 			<Border Height="{DynamicResource Double/MessageDialog.Icon.Size}" Margin="{DynamicResource Thickness/MessageDialog.Icon.Margin}" Width="{DynamicResource Double/MessageDialog.Icon.Size}">
-				<Image Classes="Icon">
-					<Image.Source>
-						<DrawingImage>
-							<GeometryDrawing Brush="{DynamicResource Brush/Icon.Warning}" Geometry="{DynamicResource Geometry/Icon.PrivacyPolicy}"/>
-						</DrawingImage>
-					</Image.Source>
-				</Image>
+				<Image Classes="Icon" Source="{StaticResource Image/Icon.PrivacyPolicy.Colored}"/>
 			</Border>
 			
 			<!-- Message -->

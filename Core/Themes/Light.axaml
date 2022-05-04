@@ -34,6 +34,7 @@
 
 		<!-- Icon -->
 		<Color x:Key="Color/Icon">#333333</Color>
+		<Color x:Key="Color/Icon.Lightbulb">#e5bf00</Color>
 
 		<!-- Menu -->
 		<Color x:Key="Color/Menu.Background">#e0e0e0</Color>

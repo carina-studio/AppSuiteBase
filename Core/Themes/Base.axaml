@@ -209,6 +209,7 @@
 		<Color x:Key="Color/Icon.Error">#ff3232</Color>
 		<Color x:Key="Color/Icon.Information">#288acc</Color>
 		<Color x:Key="Color/Icon.Light">#ffffff</Color>
+		<Color x:Key="Color/Icon.Lightbulb">#ffd800</Color>
 		<Color x:Key="Color/Icon.OK">#59b259</Color>
 		<Color x:Key="Color/Icon.Question">#009999</Color>
 		<Color x:Key="Color/Icon.Warning">#ff8432</Color>
@@ -218,6 +219,7 @@
 		<SolidColorBrush x:Key="Brush/Icon.Error" Color="{DynamicResource Color/Icon.Error}"/>
 		<SolidColorBrush x:Key="Brush/Icon.Information" Color="{DynamicResource Color/Icon.Information}"/>
 		<SolidColorBrush x:Key="Brush/Icon.Light" Color="{DynamicResource Color/Icon.Light}"/>
+		<SolidColorBrush x:Key="Brush/Icon.Lightbulb" Color="{DynamicResource Color/Icon.Lightbulb}"/>
 		<SolidColorBrush x:Key="Brush/Icon.OK" Color="{DynamicResource Color/Icon.OK}"/>
 		<SolidColorBrush x:Key="Brush/Icon.Question" Color="{DynamicResource Color/Icon.Question}"/>
 		<SolidColorBrush x:Key="Brush/Icon.Warning" Color="{DynamicResource Color/Icon.Warning}"/>
@@ -1593,7 +1595,7 @@
 						<Image 
 							Classes="Icon" 
 							Height="{StaticResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveLeft}"
+							Source="{DynamicResource Image/Icon.MoveLeft.Light}"
 							Width="{StaticResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton
@@ -1611,7 +1613,7 @@
 						<Image
 							Classes="Icon"
 							Height="{StaticResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveRight}"
+							Source="{DynamicResource Image/Icon.MoveRight.Light}"
 							Width="{StaticResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 				</Panel>
@@ -2065,7 +2067,7 @@
 						<Image
 							Classes="Icon"
 							Height="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveLeft}"
+							Source="{DynamicResource Image/Icon.MoveLeft.Light}"
 							Width="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton Name="PART_ScrollRightButton"
@@ -2082,7 +2084,7 @@
 						<Image
 							Classes="Icon"
 							Height="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveRight}"
+							Source="{DynamicResource Image/Icon.MoveRight.Light}"
 							Width="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton Name="PART_ScrollUpButton"
@@ -2100,7 +2102,7 @@
 						<Image
 							Classes="Icon"
 							Height="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveUp}"
+							Source="{DynamicResource Image/Icon.MoveUp.Light}"
 							Width="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton Name="PART_ScrollDownButton"
@@ -2118,7 +2120,7 @@
 						<Image
 							Classes="Icon"
 							Height="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveDown}"
+							Source="{DynamicResource Image/Icon.MoveDown.Light}"
 							Width="{StaticResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 				</Panel>

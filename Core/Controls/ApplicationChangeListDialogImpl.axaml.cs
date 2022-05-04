@@ -34,19 +34,19 @@ namespace CarinaStudio.AppSuite.Controls
                 switch (type)
                 {
                     case ApplicationChangeType.BehaviorChange:
-                        this.app.TryGetResource<IImage>($"Image/Icon.Information", out image);
+                        this.app.TryGetResource<IImage>($"Image/Icon.Information.Outline", out image);
                         break;
                     case ApplicationChangeType.BugFixing:
-                        this.app.TryGetResource<IImage>($"Image/Icon.Debug", out image);
+                        this.app.TryGetResource<IImage>($"Image/Icon.Debug.Outline", out image);
                         break;
                     case ApplicationChangeType.Improvement:
-                        this.app.TryGetResource<IImage>($"Image/Icon.Update", out image);
+                        this.app.TryGetResource<IImage>($"Image/Icon.Update.Outline", out image);
                         break;
                     case ApplicationChangeType.NewFeature:
-                        this.app.TryGetResource<IImage>($"Image/Icon.Star", out image);
+                        this.app.TryGetResource<IImage>($"Image/Icon.Star.Outline", out image);
                         break;
                     default:
-                        this.app.TryGetResource<IImage>($"Image/Icon.Circle", out image);
+                        this.app.TryGetResource<IImage>($"Image/Icon.Circle.Outline", out image);
                         break;
                 }
                 return image;

@@ -147,7 +147,7 @@
 					<!-- User agreement -->
 					<StackPanel IsVisible="{Binding $parent[Window].HasUserAgreement}">
 						<StackPanel Orientation="Horizontal">
-							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.UserAgreement}"/>
+							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.UserAgreement.Colored}"/>
 							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.UserAgreement}" Uri="{Binding UserAgreementUri}"/>
 						</StackPanel>
 						<Separator Classes="Dialog_Separator"/>
@@ -156,7 +156,7 @@
 					<!-- Privacy policy -->
 					<StackPanel IsVisible="{Binding $parent[Window].HasPrivacyPolicy}">
 						<StackPanel Orientation="Horizontal">
-							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PrivacyPolicy}"/>
+							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PrivacyPolicy.Colored}"/>
 							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
 						</StackPanel>
 						<Separator Classes="Dialog_Separator"/>
