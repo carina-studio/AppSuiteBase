@@ -39,10 +39,25 @@
 				<Separator Classes="StatusBar_Separator"/>
 				<Image Classes="StatusBar_Icon">
 					<DrawingImage>
-						<GeometryDrawing Brush="{DynamicResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.Folder}"/>
+						<GeometryDrawing Brush="{StaticResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.File.Text.Outline}"/>
 					</DrawingImage>
 				</Image>
-				<TextBlock Classes="StatusBar_TextBlock" Text="Test"/>
+
+				<Separator Classes="StatusBar_Separator"/>
+				<Image Classes="StatusBar_IconWithText">
+					<DrawingImage>
+						<GeometryDrawing Brush="{StaticResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.Folder.Outline}"/>
+					</DrawingImage>
+				</Image>
+				<TextBlock Classes="StatusBar_TextBlock" Text="Text of icon"/>
+
+				<Separator Classes="StatusBar_Separator"/>
+				<TextBlock Classes="StatusBar_TextBlock" Text="Text with arrow"/>
+				<Image Classes="StatusBar_DropDownIcon">
+					<DrawingImage>
+						<GeometryDrawing Brush="{StaticResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.MoveUp}"/>
+					</DrawingImage>
+				</Image>
 
 				<Separator Classes="StatusBar_Separator"/>
 				<Button Classes="StatusBar_Button">Button</Button>

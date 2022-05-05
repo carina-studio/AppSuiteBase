@@ -353,7 +353,7 @@
 		<Color x:Key="Color/StatusBar.Foreground.Disabled">#7fffffff</Color>
 		<Color x:Key="Color/StatusBar.ToggleButton.Background.Checked">#7f000000</Color>
 		<sys:Double x:Key="Double/StatusBar.DropDownIcon.Size">8</sys:Double>
-		<sys:Double x:Key="Double/StatusBar.Icon.Size">16</sys:Double>
+		<sys:Double x:Key="Double/StatusBar.Icon.Size">14</sys:Double>
 		<SolidColorBrush x:Key="Brush/StatusBar.Background" Color="{DynamicResource SystemAccentColorDark1}"/>
 		<SolidColorBrush x:Key="Brush/StatusBar.Background.Inactive" Color="{DynamicResource Color/StatusBar.Background.Inactive}"/>
 		<SolidColorBrush x:Key="Brush/StatusBar.Button.Background.PointerOver" Color="{DynamicResource Color/StatusBar.Button.Background.PointerOver}"/>
@@ -362,8 +362,9 @@
 		<SolidColorBrush x:Key="Brush/StatusBar.Foreground.Disabled" Color="{DynamicResource Color/StatusBar.Foreground.Disabled}"/>
 		<SolidColorBrush x:Key="Brush/StatusBar.ToggleButton.Background.Checked" Color="{DynamicResource Color/StatusBar.ToggleButton.Background.Checked}"/>
 		<Thickness x:Key="Thickness/StatusBar.Button.Padding">5,0,5,0</Thickness>
-		<Thickness x:Key="Thickness/StatusBar.DropDownIcon.Margin">8,0,0,0</Thickness>
-		<Thickness x:Key="Thickness/StatusBar.Icon.Margin">2,0,2,0</Thickness>
+		<Thickness x:Key="Thickness/StatusBar.DropDownIcon.Margin">5,0,1,0</Thickness>
+		<Thickness x:Key="Thickness/StatusBar.Icon.Margin">1,0,1,0</Thickness>
+		<Thickness x:Key="Thickness/StatusBar.Icon.Margin.WithText">1,0,5,0</Thickness>
 		<Thickness x:Key="Thickness/StatusBar.Item.Margin">1,5,1,5</Thickness>
 		<Thickness x:Key="Thickness/StatusBar.Padding">5,0,5,0</Thickness>
 
@@ -1421,12 +1422,6 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{StaticResource Double/StatusBar.DropDownIcon.Size}"/>
 	</Style>
-	<Style Selector="Border.StatusBar_Icon">
-		<Setter Property="Height" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
-		<Setter Property="Margin" Value="{StaticResource Thickness/StatusBar.Icon.Margin}"/>
-		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
-	</Style>
 	<Style Selector="Button.StatusBar_Button">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
@@ -1475,6 +1470,19 @@
 	<Style Selector="Image.StatusBar_Icon:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
+	<Style Selector="Image.StatusBar_IconWithText">
+		<Setter Property="Height" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/StatusBar.Icon.Margin.WithText}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
+	</Style>
+	<Style Selector="Image.StatusBar_IconIconWithText:disabled">
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
 	<Style Selector="Panel.StatusBar_DropDownIcon">
 		<Setter Property="Height" Value="{StaticResource Double/StatusBar.DropDownIcon.Size}"/>
 		<Setter Property="Margin" Value="{StaticResource Thickness/StatusBar.DropDownIcon.Margin}"/>
@@ -1484,6 +1492,12 @@
 	<Style Selector="Panel.StatusBar_Icon">
 		<Setter Property="Height" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
 		<Setter Property="Margin" Value="{StaticResource Thickness/StatusBar.Icon.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
+	</Style>
+	<Style Selector="Panel.StatusBar_IconIconWithText">
+		<Setter Property="Height" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/StatusBar.Icon.Margin.WithText}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
 	</Style>
