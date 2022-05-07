@@ -485,7 +485,7 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			// no need to handle
 			var s = e.Text;
-			if (!this.IsInputAssistanceEnabled || string.IsNullOrEmpty(s))
+			if (this.IsReadOnly || !this.IsInputAssistanceEnabled || string.IsNullOrEmpty(s))
 			{
 				base.OnTextInput(e);
 				return;

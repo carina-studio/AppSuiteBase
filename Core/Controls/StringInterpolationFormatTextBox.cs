@@ -309,7 +309,7 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			// no need to handle
 			var s = e.Text;
-			if (string.IsNullOrEmpty(s))
+			if (this.IsReadOnly || string.IsNullOrEmpty(s))
 			{
 				base.OnTextInput(e);
 				return;
