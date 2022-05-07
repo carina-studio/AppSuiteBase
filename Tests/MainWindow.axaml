@@ -438,6 +438,7 @@
 							<appControls:EnumComboBox EnumType="{x:Type app:ThemeMode}" HorizontalAlignment="Left" Margin="5" Width="200"/>
 
 							<TextBox Width="200" Margin="5" HorizontalAlignment="Left"/>
+							<TextBox IsReadOnly="True" Text="Read-Only" Width="200" Margin="5" HorizontalAlignment="Left"/>
 							<TextBox IsEnabled="False" Text="Disabled" Width="200" Margin="5" HorizontalAlignment="Left"/>
 
 							<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left">

@@ -7,12 +7,12 @@
 	<Style Selector="TextBox">
 		<Setter Property="ContextMenu">
 			<ContextMenu PlacementAnchor="BottomRight" PlacementGravity="BottomRight" PlacementMode="AnchorAndGravity" PlacementRect="0 0 0 0">
-				<MenuItem Command="{Binding $parent[TextBox].Cut}" Header="{DynamicResource String/Common.Cut}" IsEnabled="{Binding $parent[TextBox].CanCut}" InputGesture="Cmd+X"/>
+				<MenuItem Command="{Binding $parent[TextBox].Cut}" Header="{DynamicResource String/Common.Cut}" IsEnabled="{Binding $parent[TextBox].CanCut}" IsVisible="{Binding !$parent[TextBox].IsReadOnly}" InputGesture="Cmd+X"/>
 				<MenuItem Command="{Binding $parent[TextBox].Copy}" Header="{DynamicResource String/Common.Copy}" IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="Cmd+C"/>
-				<MenuItem Command="{Binding $parent[TextBox].Paste}" Header="{DynamicResource String/Common.Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" InputGesture="Cmd+V"/>
+				<MenuItem Command="{Binding $parent[TextBox].Paste}" Header="{DynamicResource String/Common.Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" IsVisible="{Binding !$parent[TextBox].IsReadOnly}" InputGesture="Cmd+V"/>
 				<Separator/>
 				<MenuItem Command="{Binding $parent[TextBox].SelectAll}" Header="{DynamicResource String/Common.SelectAll}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" InputGesture="Cmd+A"/>
-				<MenuItem Command="{Binding $parent[TextBox].Clear}" Header="{DynamicResource String/Common.Clear}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}"/>
+				<MenuItem Command="{Binding $parent[TextBox].Clear}" Header="{DynamicResource String/Common.Clear}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" IsVisible="{Binding !$parent[TextBox].IsReadOnly}"/>
 			</ContextMenu>
 		</Setter>
 	</Style>
