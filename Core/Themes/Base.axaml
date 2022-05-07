@@ -1426,12 +1426,12 @@
 		<Setter Property="ContextFlyout" Value="{x:Null}"/>
 		<Setter Property="ContextMenu">
 			<ContextMenu PlacementAnchor="BottomRight" PlacementGravity="BottomRight" PlacementMode="AnchorAndGravity" PlacementRect="0 0 0 0">
-				<MenuItem Command="{Binding $parent[TextBox].Cut}" Header="{DynamicResource String/Common.Cut}" IsEnabled="{Binding $parent[TextBox].CanCut}" InputGesture="Ctrl+X"/>
+				<MenuItem Command="{Binding $parent[TextBox].Cut}" Header="{DynamicResource String/Common.Cut}" IsEnabled="{Binding $parent[TextBox].CanCut}" IsVisible="{Binding !$parent[TextBox].IsReadOnly}" InputGesture="Ctrl+X"/>
 				<MenuItem Command="{Binding $parent[TextBox].Copy}" Header="{DynamicResource String/Common.Copy}" IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="Ctrl+C"/>
-				<MenuItem Command="{Binding $parent[TextBox].Paste}" Header="{DynamicResource String/Common.Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" InputGesture="Ctrl+V"/>
+				<MenuItem Command="{Binding $parent[TextBox].Paste}" Header="{DynamicResource String/Common.Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" IsVisible="{Binding !$parent[TextBox].IsReadOnly}" InputGesture="Ctrl+V"/>
 				<Separator/>
 				<MenuItem Command="{Binding $parent[TextBox].SelectAll}" Header="{DynamicResource String/Common.SelectAll}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static converters:ValueToBooleanConverters.NonEmptyStringToTrue}}" InputGesture="Ctrl+A"/>
-				<MenuItem Command="{Binding $parent[TextBox].Clear}" Header="{DynamicResource String/Common.Clear}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static converters:ValueToBooleanConverters.NonEmptyStringToTrue}}"/>
+				<MenuItem Command="{Binding $parent[TextBox].Clear}" Header="{DynamicResource String/Common.Clear}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static converters:ValueToBooleanConverters.NonEmptyStringToTrue}}" IsVisible="{Binding !$parent[TextBox].IsReadOnly}"/>
 			</ContextMenu>
 		</Setter>
 		<Setter Property="FontFamily" Value="{DynamicResource FontFamily/TextBox.FallbackFontFamilies}"/>
