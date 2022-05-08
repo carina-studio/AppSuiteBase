@@ -125,8 +125,12 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     /// </summary>
     /// <param name="profile">Profile.</param>
     /// <param name="e">Event data.</param>
-    protected virtual void OnProfilePropertyChanged(TProfile profile, PropertyChangedEventArgs e) =>
+    protected virtual void OnProfilePropertyChanged(TProfile profile, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(IProfile<TApp>.Name))
+            this.SortProfile(profile);
         this.ScheduleSavingProfile(profile);
+    }
 
 
     /// <inheritdoc/>
@@ -215,6 +219,17 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         if (!this.profilesToSave.Add(profile))
             return;
         this.saveProfilesAction.Schedule(SavingProfilesDelay);
+    }
+
+
+    /// <summary>
+    /// Move given profile to correct position in <see cref="Profiles"/> if needed.
+    /// </summary>
+    /// <param name="profile">Profile.</param>
+    protected void SortProfile(TProfile profile)
+    {
+        this.VerifyAccess();
+        this.profiles.Sort(profile);
     }
 
 
