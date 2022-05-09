@@ -236,7 +236,7 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         this.VerifyAccess();
         if (!object.ReferenceEquals(profile.Manager, this))
             throw new ArgumentException();
-        if (!this.profilesToSave.Add(profile))
+        if (profile.IsBuiltIn || !this.profilesToSave.Add(profile))
             return;
         this.saveProfilesAction.Schedule(SavingProfilesDelay);
     }
