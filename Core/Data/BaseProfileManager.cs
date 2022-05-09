@@ -22,6 +22,7 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     // Fields.
     readonly Dictionary<string, TProfile> profilesById = new();
     readonly SortedObservableList<TProfile> profiles;
+    int profilesSavingCounter;
     readonly HashSet<TProfile> profilesToSave = new();
     readonly ScheduledAction saveProfilesAction;
 
@@ -190,20 +191,39 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     {
         if (this.profilesToSave.IsEmpty())
             return;
+        ++this.profilesSavingCounter;
+        this.Logger.LogTrace($"Start saving profiles, counter: {this.profilesSavingCounter}");
         var profiles = this.profilesToSave.ToArray().Also(_ =>
             this.profilesToSave.Clear());
+        await ProfileExtensions.IOTaskFactory.StartNew(() =>
+        {
+            try
+            {
+                if (!Directory.Exists(this.ProfilesDirectory))
+                {
+                    this.Logger.LogWarning("Create profiles directory");
+                    Directory.CreateDirectory(this.ProfilesDirectory);
+                }
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Failed to create profiles directory");
+            }
+        });
         foreach (var profile in profiles)
         {
             try
             {
                 this.Logger.LogTrace($"Save profile '{profile.Id}'");
-                await profile.SaveAsync(Path.Combine(this.ProfilesDirectory, $"{profile.Id}.json"));
+                await profile.SaveAsync(Path.Combine(this.ProfilesDirectory, $"{profile.Id}.json"), true);
             }
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, $"Failed to save profile '{profile.Id}'");
             }
         }
+        --this.profilesSavingCounter;
+        this.Logger.LogTrace($"Complete saving profiles, counter: {this.profilesSavingCounter}");
     }
 
 
@@ -247,6 +267,11 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         if (this.profiles.IsEmpty())
             return;
         this.Logger.LogInformation("Start waiting for I/O tasks");
+        while (this.profilesSavingCounter > 0)
+        {
+            this.Logger.LogTrace($"Wait for profile saving counter: {this.profilesSavingCounter}");
+            await Task.Delay(200);
+        }
         await this.profiles[0].IOTaskFactory.StartNew(() => this.Logger.LogInformation("I/O tasks completed"));
     }
 }

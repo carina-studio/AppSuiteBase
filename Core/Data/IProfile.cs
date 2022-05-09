@@ -46,9 +46,10 @@ public interface IProfile<TApp> : IApplicationObject<TApp>, IEquatable<IProfile<
     /// Save profile asynchronously.
     /// </summary>
     /// <param name="stream">Stream to write data of profile.</param>
+    /// <param name="includeId">True to save <see cref="Id"/> also.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Task of saving profile.</returns>
-    Task SaveAsync(Stream stream, CancellationToken cancellationToken = default);
+    Task SaveAsync(Stream stream, bool includeId, CancellationToken cancellationToken = default);
 }
 
 
@@ -57,8 +58,10 @@ public interface IProfile<TApp> : IApplicationObject<TApp>, IEquatable<IProfile<
 /// </summary>
 public static class ProfileExtensions
 {
-    // Static fields.
-    internal static readonly TaskFactory IOTaskFactory = new(new FixedThreadsTaskScheduler(1));
+    /// <summary>
+    /// Default <see cref="TaskFactory"/> for I/O tasks of profile.
+    /// </summary>
+    public static readonly TaskFactory IOTaskFactory = new(new FixedThreadsTaskScheduler(1));
 
 
     /// <summary>
@@ -66,9 +69,10 @@ public static class ProfileExtensions
     /// </summary>
     /// <param name="profile">Profile.</param>
     /// <param name="fileName">Name of file to write data of profile.</param>
+    /// <param name="includeId">True to save <see cref="IProfile{TApp}.Id"/> also.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Task of saving profile.</returns>
-    public static async Task SaveAsync<TApp>(this IProfile<TApp> profile, string fileName, CancellationToken cancellationToken = default) where TApp : class, IAppSuiteApplication
+    public static async Task SaveAsync<TApp>(this IProfile<TApp> profile, string fileName, bool includeId, CancellationToken cancellationToken = default) where TApp : class, IAppSuiteApplication
     {
         // open file
         if (cancellationToken.IsCancellationRequested)
@@ -88,7 +92,7 @@ public static class ProfileExtensions
         // save
         try
         {
-            await profile.SaveAsync(stream, cancellationToken);
+            await profile.SaveAsync(stream, includeId, cancellationToken);
         }
         finally
         {

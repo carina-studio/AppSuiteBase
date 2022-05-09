@@ -15,6 +15,7 @@ namespace CarinaStudio.AppSuite.Data;
 public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<TApp> where TApp : class, IAppSuiteApplication
 {
     // Fields.
+    string id;
     volatile ILogger? logger;
     string? name;
 
@@ -27,7 +28,7 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
     /// <param name="isBuiltIn">True if profile is built-in.</param>
     protected BaseProfile(TApp app, string id, bool isBuiltIn) : base(app)
     {
-        this.Id = id;
+        this.id = id;
         this.IsBuiltIn = isBuiltIn;
     }
 
@@ -47,7 +48,19 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
 
 
     /// <inheritdoc/>
-    public string Id { get; }
+    public virtual string Id 
+    { 
+        get => this.id;
+        protected set
+        {
+            this.VerifyAccess();
+            this.VerifyBuiltIn();
+            if (this.id == value)
+                return;
+            this.id = value;
+            this.OnPropertyChanged(nameof(Id));
+        }
+    }
 
 
     /// <inheritdoc/>
@@ -125,7 +138,8 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
     /// Called to save profile in JSON format data.
     /// </summary>
     /// <param name="writer">JSON data writer.</param>
-    protected abstract void OnSave(Utf8JsonWriter writer);
+    /// <param name="includeId">True to save <see cref="Id"/> also.</param>
+    protected abstract void OnSave(Utf8JsonWriter writer, bool includeId);
 
 
     /// <inheritdoc/>
@@ -133,13 +147,13 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
 
 
     /// <inheritdoc/>
-    public async Task SaveAsync(Stream stream, CancellationToken cancellationToken = default)
+    public async Task SaveAsync(Stream stream, bool includeId, CancellationToken cancellationToken = default)
     {
         // save to memory
         var data = new MemoryStream().Use(memoryStream =>
         {
             using (var writer = new Utf8JsonWriter(memoryStream, new JsonWriterOptions() { Indented = true }))
-                this.OnSave(writer);
+                this.OnSave(writer, includeId);
             return memoryStream.ToArray();
         });
 
