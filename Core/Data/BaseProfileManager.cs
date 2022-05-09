@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Data;
@@ -20,6 +21,8 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
 
 
     // Fields.
+    bool isInitialized;
+    Task? initializationTask;
     readonly Dictionary<string, TProfile> profilesById = new();
     readonly SortedObservableList<TProfile> profiles;
     int profilesSavingCounter;
@@ -37,6 +40,7 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         this.profiles = new(this.CompareProfiles);
         this.Profiles = (IReadOnlyList<TProfile>)this.profiles.AsReadOnly();
         this.saveProfilesAction = new(() => _ = this.SaveProfiles());
+        this.SynchronizationContext.Post(this.Initialize);
     }
 
 
@@ -82,11 +86,25 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     }
 
 
-    /// <inheritdoc/>
-    public TProfile? GetProfileOrDefault(string id)
+    /// <summary>
+    /// Get profile by ID, or Null if profile cannot be found.
+    /// </summary>
+    /// <param name="id">ID of profile.</param>
+    /// <returns>Profile or Null if profile cannot be found.</returns>
+    protected TProfile? GetProfileOrDefault(string id)
     {
         this.profilesById.TryGetValue(id, out var profile);
         return profile;
+    }
+
+
+    // Initialize.
+    void Initialize()
+    {
+        if (this.isInitialized)
+            return;
+        this.isInitialized = true;
+        this.initializationTask = this.OnInitializeAsync();
     }
 
 
@@ -116,6 +134,91 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     }
 
 
+    /// <summary>
+    /// Called to initialize the manager instance asynchronously.
+    /// </summary>
+    /// <returns>Task of initialization.</returns>
+    protected virtual async Task OnInitializeAsync()
+    {
+        this.Logger.LogTrace("Start initialization (default)");
+
+        // load built-in profiles
+        var builtInProfiles = await this.OnLoadBuiltInProfilesAsync();
+        if (builtInProfiles.IsNotEmpty())
+        {
+            foreach (var profile in builtInProfiles)
+            {
+                this.Logger.LogTrace($"Add built-in profile '{profile.Name}' ({profile.Id})");
+                this.AddProfile(profile, false);
+            }
+            this.Logger.LogDebug($"{builtInProfiles.Count} built-in profile(s) loaded");
+        }
+
+        // get profile files
+        var profileFileNames = await ProfileExtensions.IOTaskFactory.StartNew(() =>
+        {
+            try
+            {
+                if (Directory.Exists(this.ProfilesDirectory))
+                    return Directory.GetFiles(this.ProfilesDirectory, "*.json");
+                return new string[0];
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, $"Failed to get files in '{this.ProfilesDirectory}'");
+                return new string[0];
+            }
+        });
+        this.Logger.LogDebug($"{profileFileNames.Length} profile file(s) found");
+
+        // load profiles
+        var profileCount = 0;
+        foreach (var fileName in profileFileNames)
+        {
+            try
+            {
+                this.Logger.LogTrace($"Load profile from '{fileName}'");
+                var profile = await this.OnLoadProfileAsync(fileName);
+                this.Logger.LogTrace($"Add profile '{profile.Name}' ({profile.Id})");
+                if (Path.GetFileNameWithoutExtension(fileName) == profile.Id)
+                    this.AddProfile(profile, false);
+                else
+                {
+                    this.Logger.LogWarning($"Correct file name of profile '{profile.Name}' ({profile.Id})");
+                    this.AddProfile(profile, true);
+                    Global.RunWithoutErrorAsync(() => File.Delete(fileName));
+                }
+                ++profileCount;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, $"Failed to load profile from '{fileName}'");
+            }
+        }
+        this.Logger.LogDebug($"{profileCount} profile(s) loaded");
+
+        this.Logger.LogTrace("Complete initialization (default)");
+    }
+
+
+    /// <summary>
+    /// Called to load built-in profiles asynchronously
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Task of loading built-in profiles.</returns>
+    protected virtual Task<ICollection<TProfile>> OnLoadBuiltInProfilesAsync(CancellationToken cancellationToken = default) =>
+        Task.FromResult<ICollection<TProfile>>(new TProfile[0]);
+    
+
+    /// <summary>
+    /// Called to load profile from file asynchronously.
+    /// </summary>
+    /// <param name="fileName">Name of file to load profile from.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Task of loading profile.</returns>
+    protected abstract Task<TProfile> OnLoadProfileAsync(string fileName, CancellationToken cancellationToken = default);
+
+
     // Called when property of profile changed.
     void OnProfilePropertyChanged(object? sender, PropertyChangedEventArgs e) =>
         this.OnProfilePropertyChanged((TProfile)sender!, e);
@@ -134,8 +237,10 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     }
 
 
-    /// <inheritdoc/>
-    public IReadOnlyList<TProfile> Profiles { get; }
+    /// <summary>
+    /// Get all profiles managed by this instance.
+    /// </summary>
+    protected IReadOnlyList<TProfile> Profiles { get; }
 
 
     /// <summary>
@@ -253,6 +358,22 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     }
 
 
+    /// <summary>
+    /// Wait for completion of initialization.
+    /// </summary>
+    /// <returns>Task of waiting for completion.</returns>
+    public async Task WaitForInitialization()
+    {
+        this.VerifyAccess();
+        this.Initialize();
+        if (this.initializationTask != null)
+        {
+            await this.initializationTask;
+            this.initializationTask = null;
+        }
+    }
+
+
     /// <inheritdoc/>
     public virtual async Task WaitForIOTaskCompletion()
     {
@@ -274,4 +395,9 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         }
         await this.profiles[0].IOTaskFactory.StartNew(() => this.Logger.LogInformation("I/O tasks completed"));
     }
+
+
+    // Interface implementations.
+    TProfile? IProfileManager<TApp, TProfile>.GetProfileOrDefault(string id) => this.GetProfileOrDefault(id);
+    IReadOnlyList<TProfile> IProfileManager<TApp, TProfile>.Profiles => this.Profiles;
 }
