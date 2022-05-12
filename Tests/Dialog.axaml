@@ -24,22 +24,30 @@
 		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="500" VerticalScrollBarVisibility="Auto">
 			<StackPanel Classes="Dialog_ContentPanel">
 
-				<appControls:GroupBox Header="Header" HorizontalContentAlignment="Stretch">
-					<StackPanel>
-						<TextBlock Classes="Dialog_TextBlock" Text="Theme"/>
-						<ComboBox Classes="Dialog_ComboBox" Items="{Binding ThemeModes}" SelectedItem="{Binding ThemeMode, Mode=TwoWay}"/>
-						<Separator Classes="Dialog_Separator"/>
+				<Border Classes="Dialog_TextBlock_Header1">
+					<TextBlock Classes="Dialog_TextBlock_Header1" Text="Header1"/>
+				</Border>
 
-						<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
-						<TextBox Classes="Dialog_TextBox"/>
-					</StackPanel>
-				</appControls:GroupBox>
-				<Separator Classes="Dialog_Separator_Large"/>
+				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<TextBox Classes="Dialog_TextBox"/>
+				<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+				<Separator Classes="Dialog_Separator"/>
+
+				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<ComboBox Classes="Dialog_ComboBox"/>
+				<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" Text="Google" Uri="http://www.google.com/"/>
+				<Separator Classes="Dialog_Separator"/>
+
+				<TextBlock Classes="Dialog_TextBlock_Header2" Text="Header2"/>
+
+				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<TextBox Classes="Dialog_TextBox"/>
+				<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+				<Separator Classes="Dialog_Separator"/>
 
 				<Border Classes="Dialog_TextBlock_Header1">
 					<TextBlock Classes="Dialog_TextBlock_Header1" Text="Header1"/>
 				</Border>
-				<TextBlock Classes="Dialog_TextBlock_Header2" Text="Header2"/>
 
 				<appControls:DatePicker HorizontalAlignment="Stretch"/>
 				<Separator Classes="Dialog_Separator"/>
@@ -48,18 +56,8 @@
 				<Button Classes="Dialog_ListActionButton" Content="{DynamicResource String/Common.OK}"/>
 
 				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
-				<TextBox Classes="Dialog_TextBox"/>
-				<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
-				<Separator Classes="Dialog_Separator"/>
-
-				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
 				<appControls:RegexTextBox Classes="Dialog_TextBox"/>
 				<appControls:StringInterpolationFormatTextBox Classes="Dialog_TextBox"/>
-				<Separator Classes="Dialog_Separator"/>
-
-				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
-				<ComboBox Classes="Dialog_ComboBox"/>
-				<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" Text="Google" Uri="http://www.google.com/"/>
 				<Separator Classes="Dialog_Separator"/>
 
 				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
@@ -104,6 +102,18 @@
 				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
 				<ToggleSwitch Classes="Dialog_ToggleSwitch"/>
 				<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+
+				<appControls:GroupBox Header="Header" HorizontalContentAlignment="Stretch">
+					<StackPanel>
+						<TextBlock Classes="Dialog_TextBlock" Text="Theme"/>
+						<ComboBox Classes="Dialog_ComboBox" Items="{Binding ThemeModes}" SelectedItem="{Binding ThemeMode, Mode=TwoWay}"/>
+						<Separator Classes="Dialog_Separator"/>
+
+						<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+						<TextBox Classes="Dialog_TextBox"/>
+					</StackPanel>
+				</appControls:GroupBox>
+				<Separator Classes="Dialog_Separator_Large"/>
 				
 			</StackPanel>
 		</ScrollViewer>
