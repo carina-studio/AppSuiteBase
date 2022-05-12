@@ -22,6 +22,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.Framework.Section1" xml:space="preserve">Powered by</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.Framework.Section2" xml:space="preserve">and</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.Framework.Section3" xml:space="preserve">.</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">Application will generate more runtime information to application log in Debug Mode, even provides options to enable or adjustment some internal functions. It will leave Debug Mode automatically when you launch application next time.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DonateWithPayPal">Donate with PayPal</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">Export application logs…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">Failed to export application logs.</sys:String>
@@ -32,6 +33,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">Operating system:</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">Other information</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">《Privacy Policy》</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.RestartInDebugMode">Restart in Debug Mode</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">Application logs exported.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">System information</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">About {0}</sys:String>

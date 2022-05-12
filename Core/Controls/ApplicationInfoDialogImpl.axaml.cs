@@ -4,6 +4,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Collections;
+using CarinaStudio.Configuration;
 using CarinaStudio.Data.Converters;
 using CarinaStudio.Threading;
 using System;
@@ -19,6 +20,7 @@ namespace CarinaStudio.AppSuite.Controls
 		static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
 		static readonly AvaloniaProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
 		static readonly AvaloniaProperty<bool> HasTotalPhysicalMemoryProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasTotalPhysicalMemory));
+		static readonly SettingKey<bool> IsRestartingInDebugModeConfirmationShownKey = new("ApplicationInfoDialog.IsRestartingInDebugModeConfirmationShown");
 		static readonly AvaloniaProperty<string?> VersionStringProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, string?>(nameof(VersionString));
 
 
@@ -131,6 +133,29 @@ namespace CarinaStudio.AppSuite.Controls
 				}
 			}
         }
+
+
+		// Restart in debug mode.
+		async void RestartInDebugMode()
+		{
+			// check state
+			if (this.Application.IsDebugMode)
+				return;
+			
+			// show message
+			if (!this.PersistentState.GetValueOrDefault(IsRestartingInDebugModeConfirmationShownKey))
+			{
+				await new MessageDialog()
+				{
+					Icon = MessageDialogIcon.Information,
+					Message = this.Application.GetString("ApplicationInfoDialog.ConfirmRestartingInDebugMode"),
+				}.ShowDialog(this);
+				this.PersistentState.SetValue<bool>(IsRestartingInDebugModeConfirmationShownKey, true);
+			}
+
+			// restart
+			this.Application.Restart($"{AppSuiteApplication.RestoreMainWindowsArgument} {AppSuiteApplication.DebugArgument}", this.Application.IsRunningAsAdministrator);
+		}
 
 
 		// Show change list of application.

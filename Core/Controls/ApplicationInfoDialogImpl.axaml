@@ -159,6 +159,15 @@
 						<Separator Classes="Dialog_Separator"/>
 					</StackPanel>
 
+					<!-- Restart in debug mode -->
+					<StackPanel IsVisible="{Binding !$parent[Window].Application.IsDebugMode}">
+						<StackPanel Orientation="Horizontal">
+							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Debug.Outline}"/>
+							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].RestartInDebugMode}" Text="{DynamicResource String/ApplicationInfoDialog.RestartInDebugMode}"/>
+						</StackPanel>
+						<Separator Classes="Dialog_Separator"/>
+					</StackPanel>
+
 					<!-- Export logs -->
 					<StackPanel Orientation="Horizontal">
 						<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Export}"/>
