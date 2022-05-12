@@ -243,11 +243,11 @@ namespace CarinaStudio.AppSuite.Controls
                 return WindowTransparencyLevel.None;
             if (Platform.IsMacOS)
                 return WindowTransparencyLevel.AcrylicBlur;
+            if (this.Application.HardwareInfo.HasDedicatedGraphicsCard == true)
+                return WindowTransparencyLevel.AcrylicBlur;
             if (Platform.IsWindows11OrAbove)
                 return WindowTransparencyLevel.Mica;
-            if (this.Application.HardwareInfo.HasDedicatedGraphicsCard != true)
-                return WindowTransparencyLevel.None;
-            return WindowTransparencyLevel.AcrylicBlur;
+            return WindowTransparencyLevel.None;
         }
 
 
