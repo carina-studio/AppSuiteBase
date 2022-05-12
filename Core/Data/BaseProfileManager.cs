@@ -27,6 +27,7 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     readonly SortedObservableList<TProfile> profiles;
     int profilesSavingCounter;
     readonly HashSet<TProfile> profilesToSave = new();
+    EventHandler<IProfileManager<TApp, TProfile>, TProfile>? removingProfileHandlers;
     readonly ScheduledAction saveProfilesAction;
 
 
@@ -263,6 +264,7 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         if (!object.ReferenceEquals(profile.Manager, this) || !this.profilesById.Remove(profile.Id))
             return false;
         this.Logger.LogTrace($"Remove profile '{profile.Id}'");
+        this.removingProfileHandlers?.Invoke(this, profile);
         this.profiles.Remove(profile);
         this.profilesToSave.Remove(profile);
         this.OnDetachFromProfile(profile);
@@ -288,6 +290,16 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
 
         // complete
         return true;
+    }
+
+
+    /// <summary>
+    /// Raised before removing profile.
+    /// </summary>
+    protected event EventHandler<IProfileManager<TApp, TProfile>, TProfile>? RemovingProfile
+    {
+        add => this.removingProfileHandlers += value;
+        remove => this.removingProfileHandlers -= value;
     }
 
 
@@ -400,4 +412,9 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     // Interface implementations.
     TProfile? IProfileManager<TApp, TProfile>.GetProfileOrDefault(string id) => this.GetProfileOrDefault(id);
     IReadOnlyList<TProfile> IProfileManager<TApp, TProfile>.Profiles => this.Profiles;
+    event EventHandler<IProfileManager<TApp, TProfile>, TProfile>? IProfileManager<TApp, TProfile>.RemovingProfile
+    {
+        add => this.RemovingProfile += value;
+        remove => this.RemovingProfile -= value;
+    }
 }

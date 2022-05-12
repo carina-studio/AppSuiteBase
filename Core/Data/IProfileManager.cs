@@ -24,6 +24,12 @@ public interface IProfileManager<out TApp, out TProfile> : IApplicationObject<TA
 
 
     /// <summary>
+    /// Raised before removing profile.
+    /// </summary>
+    event EventHandler<IProfileManager<TApp, TProfile>, TProfile>? RemovingProfile;
+
+
+    /// <summary>
     /// Wait for completion of all I/O tasks.
     /// </summary>
     /// <returns>Task of waiting for tasks.</returns>
