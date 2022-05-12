@@ -26,6 +26,9 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Static fields.
+        static readonly Version? AvaloniaVersion = typeof(Avalonia.Application).Assembly.GetName().Version;
+        static readonly bool IsAvalonia_0_10_14_OrAbove = AvaloniaVersion?.Let(version =>
+            version.Major >= 1 || version.Minor >= 11 || version.Build >= 14) ?? false;
         internal static readonly Stopwatch Stopwatch = new Stopwatch().Also(it => it.Start());
 
 
@@ -244,7 +247,10 @@ namespace CarinaStudio.AppSuite.Controls
             if (Platform.IsMacOS)
                 return WindowTransparencyLevel.AcrylicBlur;
             if (this.Application.HardwareInfo.HasDedicatedGraphicsCard == true)
-                return WindowTransparencyLevel.AcrylicBlur;
+            {
+                if (IsAvalonia_0_10_14_OrAbove || !Platform.IsWindows11OrAbove)
+                    return WindowTransparencyLevel.AcrylicBlur;
+            }
             if (Platform.IsWindows11OrAbove)
                 return WindowTransparencyLevel.Mica;
             return WindowTransparencyLevel.None;
