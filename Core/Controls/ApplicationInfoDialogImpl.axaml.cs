@@ -18,10 +18,7 @@ namespace CarinaStudio.AppSuite.Controls
 		// Static fields.
 		static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
 		static readonly AvaloniaProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
-		static readonly AvaloniaProperty<bool> HasGitHubProjectProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasGitHubProject));
-		static readonly AvaloniaProperty<bool> HasPrivacyPolicyProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasPrivacyPolicy));
 		static readonly AvaloniaProperty<bool> HasTotalPhysicalMemoryProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasTotalPhysicalMemory));
-		static readonly AvaloniaProperty<bool> HasUserAgreementProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasUserAgreement));
 		static readonly AvaloniaProperty<string?> VersionStringProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, string?>(nameof(VersionString));
 
 
@@ -83,20 +80,8 @@ namespace CarinaStudio.AppSuite.Controls
 		public bool HasApplicationChangeList { get => this.GetValue<bool>(HasApplicationChangeListProperty); }
 
 
-		// Check whether GitHub exists or not.
-		public bool HasGitHubProject { get => this.GetValue<bool>(HasGitHubProjectProperty); }
-
-
-		// Check whether Privacy Policy exists or not.
-		public bool HasPrivacyPolicy { get => this.GetValue<bool>(HasPrivacyPolicyProperty); }
-
-
 		// Check whether total physical memory info is valid or not.
 		public bool HasTotalPhysicalMemory { get => this.GetValue<bool>(HasTotalPhysicalMemoryProperty); }
-
-
-		// Check whether User Agreement exists or not.
-		public bool HasUserAgreement { get => this.GetValue<bool>(HasUserAgreementProperty); }
 
 
 		// Initialize.
@@ -113,9 +98,6 @@ namespace CarinaStudio.AppSuite.Controls
 				{
 					// sync state
 					this.Title = this.Application.GetFormattedString("ApplicationInfoDialog.Title", appInfo.Name);
-					this.SetValue<bool>(HasGitHubProjectProperty, appInfo.GitHubProjectUri != null);
-					this.SetValue<bool>(HasPrivacyPolicyProperty, appInfo.PrivacyPolicyUri != null);
-					this.SetValue<bool>(HasUserAgreementProperty, appInfo.UserAgreementUri != null);
 					this.SetValue<string?>(VersionStringProperty, Global.Run(() =>
 					{
 						var str = this.Application.GetFormattedString("ApplicationInfoDialog.Version", appInfo.Version);

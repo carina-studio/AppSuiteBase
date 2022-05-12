@@ -175,7 +175,7 @@
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">10,13,10,13</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin">0,0,0,5</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,5,0,0</Thickness>
-		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">-10,0,-10,10</Thickness>
+		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">-10,0,-10,15</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">0,0,0,10</Thickness>
 
 		<!-- Expander -->

@@ -231,6 +231,12 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
+        /// Get URI of PayPal for donation.
+        /// </summary>
+        public virtual Uri? PayPalUri { get; }
+
+
+        /// <summary>
         /// Get URI of Privacy Policy.
         /// </summary>
         public virtual Uri? PrivacyPolicyUri { get; }

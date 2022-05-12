@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:abControls="using:CarinaStudio.Controls"
+		xmlns:aConverters="using:Avalonia.Data.Converters"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
 		xmlns:ia="using:Avalonia.Xaml.Interactivity"
@@ -135,38 +136,25 @@
 					</StackPanel>
 					<Separator Classes="Dialog_Separator_Large"/>
 
-					<!-- Assemblies (Header) -->
+					<!-- Make APP better -->
 					<Border Classes="Dialog_TextBlock_Header1">
-						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Assemblies}"/>
+						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.MakeApplicationBetter}"/>
 					</Border>
 
-					<!-- Assemblies -->
-					<StackPanel Name="assembliesPanel"/>
-					<Separator Classes="Dialog_Separator_Large"/>
-
-					<!-- User agreement -->
-					<StackPanel IsVisible="{Binding $parent[Window].HasUserAgreement}">
-						<StackPanel Orientation="Horizontal">
-							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.UserAgreement.Colored}"/>
-							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.UserAgreement}" Uri="{Binding UserAgreementUri}"/>
-						</StackPanel>
-						<Separator Classes="Dialog_Separator"/>
-					</StackPanel>
-
-					<!-- Privacy policy -->
-					<StackPanel IsVisible="{Binding $parent[Window].HasPrivacyPolicy}">
-						<StackPanel Orientation="Horizontal">
-							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PrivacyPolicy.Colored}"/>
-							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
-						</StackPanel>
-						<Separator Classes="Dialog_Separator"/>
-					</StackPanel>
-
 					<!-- Source code -->
-					<StackPanel IsVisible="{Binding $parent[Window].HasGitHubProject}">
+					<StackPanel IsVisible="{Binding GitHubProjectUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
 						<StackPanel Orientation="Horizontal">
 							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.GitHub}"/>
 							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.GitHubProject}" Uri="{Binding GitHubProjectUri}"/>
+						</StackPanel>
+						<Separator Classes="Dialog_Separator"/>
+					</StackPanel>
+
+					<!-- Donate -->
+					<StackPanel IsVisible="{Binding PayPalUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
+						<StackPanel Orientation="Horizontal">
+							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PayPal.Outline}"/>
+							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.DonateWithPayPal}" Uri="{Binding PayPalUri}"/>
 						</StackPanel>
 						<Separator Classes="Dialog_Separator"/>
 					</StackPanel>
@@ -175,6 +163,43 @@
 					<StackPanel Orientation="Horizontal">
 						<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Export}"/>
 						<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ExportLogs}" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}"/>
+					</StackPanel>
+					<Separator Classes="Dialog_Separator_Large"/>
+
+					<!-- Assemblies (Header) -->
+					<Border Classes="Dialog_TextBlock_Header1">
+						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Assemblies}"/>
+					</Border>
+
+					<!-- Assemblies -->
+					<StackPanel Name="assembliesPanel"/>
+					<Separator Classes="Dialog_Separator_Large"/>
+					
+					<!-- Other information -->
+					<StackPanel>
+
+						<!-- Header -->
+						<Border Classes="Dialog_TextBlock_Header1">
+							<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Other}"/>
+						</Border>
+
+					</StackPanel>
+
+					<!-- User agreement -->
+					<StackPanel IsVisible="{Binding UserAgreementUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
+						<StackPanel Orientation="Horizontal">
+							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.UserAgreement.Outline}"/>
+							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.UserAgreement}" Uri="{Binding UserAgreementUri}"/>
+						</StackPanel>
+						<Separator Classes="Dialog_Separator"/>
+					</StackPanel>
+
+					<!-- Privacy policy -->
+					<StackPanel IsVisible="{Binding PrivacyPolicyUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
+						<StackPanel Orientation="Horizontal">
+							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PrivacyPolicy.Outline}"/>
+							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
+						</StackPanel>
 					</StackPanel>
 
 				</StackPanel>
