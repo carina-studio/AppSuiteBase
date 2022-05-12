@@ -2523,8 +2523,12 @@ namespace CarinaStudio.AppSuite
                     {
                         process.StartInfo.Let(it =>
                         {
-                            it.Arguments = this.restartArgs ?? "";
-                            it.FileName = (Process.GetCurrentProcess().MainModule?.FileName).AsNonNull();
+                            var exeName = Process.GetCurrentProcess().MainModule?.FileName ?? "";
+                            if (exeName.EndsWith("/dotnet") || exeName.EndsWith("\\dotnet.exe", true, null))
+                                it.Arguments = $"{Environment.CommandLine} {this.restartArgs}";
+                            else
+                                it.Arguments = this.restartArgs ?? "";
+                            it.FileName = exeName;
                             if (this.isRestartAsAdminRequested && Platform.IsWindows)
                             {
                                 it.UseShellExecute = true;
