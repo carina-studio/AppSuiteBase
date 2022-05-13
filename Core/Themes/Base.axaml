@@ -138,31 +138,38 @@
 		<!-- Dialog -->
 		<SolidColorBrush x:Key="Brush/Dialog.ControlButtonsPanel.Background" Color="{DynamicResource Color/Dialog.ControlButtonsPanel.Background}"/>
 		<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Background.Header1" Color="{DynamicResource Color/Dialog.TextBlock.Background.Header1}"/>
+		<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Background.Header2" Color="{DynamicResource Color/Dialog.TextBlock.Background.Header2}"/>
 		<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Border.Header1" Color="{DynamicResource Color/Dialog.TextBlock.Border.Header1}"/>
+		<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Border.Header2" Color="{DynamicResource Color/Dialog.TextBlock.Border.Header2}"/>
 		<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Foreground.Description" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Description}"/>
 		<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Foreground.Error" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Error}"/>
 		<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Foreground.Warning" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Warning}"/>
 		<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#ffffff</Color>
 		<Color x:Key="Color/Dialog.TextBlock.Background.Header1">#000000</Color>
-		<Color x:Key="Color/Dialog.TextBlock.Border.Header1">#000000</Color>
+		<Color x:Key="Color/Dialog.TextBlock.Background.Header2">#000000</Color>
+		<Color x:Key="Color/Dialog.TextBlock.Border.Header1">#ffffff</Color>
+		<Color x:Key="Color/Dialog.TextBlock.Border.Header2">#ffffff</Color>
 		<Color x:Key="Color/Dialog.TextBlock.Foreground.Description">#000000</Color>
 		<Color x:Key="Color/Dialog.TextBlock.Foreground.Error">#ff0000</Color>
 		<Color x:Key="Color/Dialog.TextBlock.Foreground.Warning">#ff6a00</Color>
 		<CornerRadius x:Key="CornerRadius/Dialog.TextBlock.Header1">5</CornerRadius>
+		<CornerRadius x:Key="CornerRadius/Dialog.TextBlock.Header2">5</CornerRadius>
 		<sys:Double x:Key="Double/Dialog.ControlButton.MinWidth">100</sys:Double>
 		<sys:Double x:Key="Double/Dialog.ControlButton.Separator.Width">15</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Icon.Size">16</sys:Double>
 		<sys:Double x:Key="Double/Dialog.ListActionButton.MinWidth">80</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height">15</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height.Large">40</sys:Double>
+		<sys:Double x:Key="Double/Dialog.Separator.Height.Micro">3</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height.Small">5</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Width">15</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Width.Large">40</sys:Double>
+		<sys:Double x:Key="Double/Dialog.Separator.Width.Micro">3</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Width.Small">5</sys:Double>
 		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize">14</sys:Double>
 		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Description">13</sys:Double>
 		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Header1">15</sys:Double>
-		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Header2">15</sys:Double>
+		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Header2">14</sys:Double>
 		<Thickness x:Key="Thickness/Dialog.ContentPanel.Margin.Indented">28,0,0,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding">30,15,30,15</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Margin">3,0,3,0</Thickness>
@@ -171,12 +178,14 @@
 		<Thickness x:Key="Thickness/Dialog.Icon.Margin">2,0,14,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ListActionButton.Padding">10,5,10,5</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ListActionButton.Margin">5,5,0,0</Thickness>
-		<Thickness x:Key="Thickness/Dialog.TextBlock.Border.Header1">0</Thickness>
+		<Thickness x:Key="Thickness/Dialog.TextBlock.Border.Header1">1</Thickness>
+		<Thickness x:Key="Thickness/Dialog.TextBlock.Border.Header2">1</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">20,10,20,10</Thickness>
+		<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">20,5,20,5</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin">0,0,0,5</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,5,0,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">-20,0,-20,13</Thickness>
-		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">0,0,0,10</Thickness>
+		<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">-20,0,-20,10</Thickness>
 
 		<!-- Expander -->
 		<SolidColorBrush x:Key="ExpanderBackgroundDisabled" Color="{DynamicResource SystemAltMediumHighColor}" Opacity="0.5"/>
@@ -615,6 +624,15 @@
 		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.TextBlock.Margin.Header1}"/>
 		<Setter Property="Padding" Value="{StaticResource Thickness/Dialog.TextBlock.Padding.Header1}"/>
 	</Style>
+	<Style Selector="Border.Dialog_TextBlock_Header2">
+		<Setter Property="Background" Value="{StaticResource Brush/Dialog.TextBlock.Background.Header2}"/>
+		<Setter Property="BorderBrush" Value="{StaticResource Brush/Dialog.TextBlock.Border.Header2}"/>
+		<Setter Property="BorderThickness" Value="{StaticResource Thickness/Dialog.TextBlock.Border.Header2}"/>
+		<Setter Property="CornerRadius" Value="{StaticResource CornerRadius/Dialog.TextBlock.Header2}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.TextBlock.Margin.Header2}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/Dialog.TextBlock.Padding.Header2}"/>
+	</Style>
 	<Style Selector="Button.Dialog_AccentControlButton">
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ControlButton.Margin}"/>
@@ -731,6 +749,11 @@
 		<Setter Property="Height" Value="{StaticResource Double/Dialog.Separator.Height.Large}"/>
 		<Setter Property="Width" Value="{StaticResource Double/Dialog.Separator.Width.Large}"/>
 	</Style>
+	<Style Selector="Separator.Dialog_Separator_Micro">
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="Height" Value="{StaticResource Double/Dialog.Separator.Height.Micro}"/>
+		<Setter Property="Width" Value="{StaticResource Double/Dialog.Separator.Width.Micro}"/>
+	</Style>
 	<Style Selector="Separator.Dialog_Separator_Small">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="Height" Value="{StaticResource Double/Dialog.Separator.Height.Small}"/>
@@ -780,10 +803,11 @@
 	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock_Header1">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Header1}"/>
+		<Setter Property="FontWeight" Value="Bold"/>
 	</Style>
 	<Style Selector="TextBlock.Dialog_TextBlock_Header2">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize.Header2}"/>
-		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.TextBlock.Margin.Header2}"/>
+		<Setter Property="FontWeight" Value="Bold"/>
 	</Style>
 	<Style Selector="TextBox.Dialog_TextBox">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>

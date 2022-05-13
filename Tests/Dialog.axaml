@@ -36,14 +36,16 @@
 				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
 				<ComboBox Classes="Dialog_ComboBox"/>
 				<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" Text="Google" Uri="http://www.google.com/"/>
-				<Separator Classes="Dialog_Separator"/>
+				<Separator Classes="Dialog_Separator_Large"/>
 
-				<TextBlock Classes="Dialog_TextBlock_Header2" Text="Header2"/>
+				<Border Classes="Dialog_TextBlock_Header2">
+					<TextBlock Classes="Dialog_TextBlock_Header2" Text="Header2"/>
+				</Border>
 
 				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
 				<TextBox Classes="Dialog_TextBox"/>
 				<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
-				<Separator Classes="Dialog_Separator"/>
+				<Separator Classes="Dialog_Separator_Large"/>
 
 				<Border Classes="Dialog_TextBlock_Header1">
 					<TextBlock Classes="Dialog_TextBlock_Header1" Text="Header1"/>

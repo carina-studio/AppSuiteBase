@@ -147,16 +147,16 @@
 							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.GitHub}"/>
 							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.GitHubProject}" Uri="{Binding GitHubProjectUri}"/>
 						</StackPanel>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Separator_Small"/>
 					</StackPanel>
 
 					<!-- Donate -->
 					<StackPanel IsVisible="{Binding PayPalUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
 						<StackPanel Orientation="Horizontal">
-							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PayPal.Outline}"/>
+							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PayPal.Outline.Colored}"/>
 							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.DonateWithPayPal}" Uri="{Binding PayPalUri}"/>
 						</StackPanel>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Separator_Small"/>
 					</StackPanel>
 
 					<!-- Restart in debug mode -->
@@ -165,7 +165,7 @@
 							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Debug.Outline}"/>
 							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].RestartInDebugMode}" Text="{DynamicResource String/ApplicationInfoDialog.RestartInDebugMode}"/>
 						</StackPanel>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Separator_Small"/>
 					</StackPanel>
 
 					<!-- Export logs -->
@@ -200,7 +200,7 @@
 							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.UserAgreement.Outline}"/>
 							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.UserAgreement}" Uri="{Binding UserAgreementUri}"/>
 						</StackPanel>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Separator_Small"/>
 					</StackPanel>
 
 					<!-- Privacy policy -->
