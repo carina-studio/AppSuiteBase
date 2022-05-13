@@ -36,7 +36,7 @@
 
 		<!-- Content -->
 		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="{DynamicResource Double/ApplicationChangeListDialog.Content.MaxHeight}">
-			<StackPanel Name="contentPanel" Classes="Dialog_ContentPanel">
+			<StackPanel Name="contentPanel" Classes="Dialog_ContentPanel_WithHeader">
 
 				<!-- Header -->
 				<Border Classes="Dialog_TextBlock_Header1">

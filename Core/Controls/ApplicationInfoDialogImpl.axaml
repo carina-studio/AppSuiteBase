@@ -40,7 +40,7 @@
 				</Border>
 
 				<!-- Content -->
-				<StackPanel Classes="Dialog_ContentPanel">
+				<StackPanel Classes="Dialog_ContentPanel_WithHeader">
 
 					<!-- Icon and title -->
 					<DockPanel HorizontalAlignment="Stretch">

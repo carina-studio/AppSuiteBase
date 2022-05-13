@@ -171,7 +171,8 @@
 		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Header1">15</sys:Double>
 		<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Header2">14</sys:Double>
 		<Thickness x:Key="Thickness/Dialog.ContentPanel.Margin.Indented">28,0,0,0</Thickness>
-		<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding">30,15,30,15</Thickness>
+		<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding">20,15,20,15</Thickness>
+		<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding.WithHeader">30,15,30,15</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Margin">3,0,3,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Padding">10,5,10,5</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButtonsPanel.Padding">15</Thickness>
@@ -689,6 +690,9 @@
 	<Style Selector="Grid.Dialog_ContentPanel_Indented">
 		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Margin.Indented}"/>
 	</Style>
+	<Style Selector="Grid.Dialog_ContentPanel_WithHeader">
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Padding.WithHeader}"/>
+	</Style>
 	<Style Selector="Image.Dialog_Icon">
 		<Setter Property="Height" Value="{StaticResource Double/Dialog.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -725,6 +729,9 @@
 	</Style>
 	<Style Selector="Panel.Dialog_ContentPanel">
 		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Padding}"/>
+	</Style>
+	<Style Selector="Panel.Dialog_ContentPanel_WithHeader">
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Padding.WithHeader}"/>
 	</Style>
 	<Style Selector="RadioButton.Dialog_RadioButton">
 		<Setter Property="HorizontalAlignment" Value="Left"/>
@@ -768,6 +775,9 @@
 	</Style>
 	<Style Selector="StackPanel.Dialog_ContentPanel_Indented">
 		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Margin.Indented}"/>
+	</Style>
+	<Style Selector="StackPanel.Dialog_ContentPanel_WithHeader">
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Padding.WithHeader}"/>
 	</Style>
 	<Style Selector="StackPanel.Dialog_ControlButtonsPanel">
 		<Setter Property="HorizontalAlignment" Value="Center"/>

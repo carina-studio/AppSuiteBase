@@ -22,7 +22,7 @@
 		</Border>
 
 		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="500" VerticalScrollBarVisibility="Auto">
-			<StackPanel Classes="Dialog_ContentPanel">
+			<StackPanel Classes="Dialog_ContentPanel_WithHeader">
 
 				<Border Classes="Dialog_TextBlock_Header1">
 					<TextBlock Classes="Dialog_TextBlock_Header1" Text="Header1"/>
