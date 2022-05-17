@@ -1,0 +1,16 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:sys="using:System">
+
+	<!-- Common -->
+	<sys:String x:Key="String/Common.Administrator">超级管理员</sys:String>
+	<sys:String x:Key="String/Common.CloseTab.WithGesture">关闭页面 (⌘W)</sys:String>
+	<sys:String x:Key="String/Common.Copy.WithGesture">复制 (⌘C)</sys:String>
+	<sys:String x:Key="String/Common.CreateTab.WithGesture">建立新的页面 (⌘T)</sys:String>
+	<sys:String x:Key="String/Common.Cut.WithGesture">剪切 (⌘X)</sys:String>
+	<sys:String x:Key="String/Common.Paste.WithGesture">粘贴 (⌘V)</sys:String>
+	<sys:String x:Key="String/Common.Save.WithDialogAndGesture">储存… (⌘+S)</sys:String>
+	<sys:String x:Key="String/Common.Save.WithGesture">储存 (⌘S)</sys:String>
+	<sys:String x:Key="String/Common.SelectAll.WithGesture">全选 (⌘A)</sys:String>
+	
+</ResourceDictionary>

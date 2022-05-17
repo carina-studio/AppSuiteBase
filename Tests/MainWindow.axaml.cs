@@ -359,6 +359,7 @@ namespace CarinaStudio.AppSuite.Tests
             {
                 ApplicationCulture.System => ApplicationCulture.EN_US,
                 ApplicationCulture.EN_US => ApplicationCulture.ZH_TW,
+                ApplicationCulture.ZH_TW => ApplicationCulture.ZH_CN,
                 _ => ApplicationCulture.System,
             });
         }
@@ -399,6 +400,7 @@ namespace CarinaStudio.AppSuite.Tests
             {
                 ApplicationCulture.System => ApplicationCulture.EN_US,
                 ApplicationCulture.EN_US => ApplicationCulture.ZH_TW,
+                ApplicationCulture.ZH_TW => ApplicationCulture.ZH_CN,
                 _ => ApplicationCulture.System,
             });
             /*
