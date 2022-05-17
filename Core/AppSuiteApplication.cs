@@ -64,6 +64,26 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        // Token of custom resources.
+        class CustomResourceToken : IDisposable
+        {
+            // Fields.
+            readonly AppSuiteApplication app;
+            readonly Avalonia.Controls.IResourceProvider resource;
+
+            // Constructor.
+            public CustomResourceToken(AppSuiteApplication app, Avalonia.Controls.IResourceProvider resources)
+            {
+                this.app = app;
+                this.resource = resources;
+            }
+
+            // Dispose.
+            public void Dispose() =>
+                this.app.RemoveCustomResource(this.resource);
+        }
+
+
         // Holder of main window.
         class MainWindowHolder
         {
@@ -183,6 +203,7 @@ namespace CarinaStudio.AppSuite
         ISettings? configuration;
         readonly string configurationFilePath;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
+        Avalonia.Controls.ResourceDictionary? customResources;
         readonly Styles extraStyles = new Styles();
         HardwareInfo? hardwareInfo;
         bool isRestartAsAdminRequested;
@@ -288,6 +309,16 @@ namespace CarinaStudio.AppSuite
             CultureInfo.CurrentUICulture = this.cultureInfo;
             CultureInfo.DefaultThreadCurrentCulture = this.cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = this.cultureInfo;
+        }
+
+
+        /// <inheritdoc/>
+        public IDisposable AddCustomResource(Avalonia.Controls.IResourceProvider resource)
+        {
+            this.VerifyAccess();
+            var res = this.customResources ?? throw new InvalidOperationException("Resource is not setup yet.");
+            res.MergedDictionaries.Add(resource);
+            return new CustomResourceToken(this, resource);
         }
 
 
@@ -1167,6 +1198,10 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <inheritdoc/>
+        public virtual event EventHandler<IAppSuiteApplication, CultureInfo>? LoadingStrings;
+
+
         /// <summary>
         /// Load <see cref="PersistentState"/> from file.
         /// </summary>
@@ -1595,6 +1630,10 @@ namespace CarinaStudio.AppSuite
 
                 // load configuration
                 await this.LoadConfigurationAsync();
+
+                // prepare overlay resources container
+                this.customResources = new();
+                this.Resources.MergedDictionaries.Add(this.customResources);
 
                 // prepare
                 await this.OnPrepareStartingAsync();
@@ -2120,6 +2159,14 @@ namespace CarinaStudio.AppSuite
         /// Get type of application releasing.
         /// </summary>
         public virtual ApplicationReleasingType ReleasingType { get; } = ApplicationReleasingType.Development;
+
+
+        // Remove custom resource.
+        void RemoveCustomResource(Avalonia.Controls.IResourceProvider resource)
+        {
+            this.VerifyAccess();
+            this.customResources?.MergedDictionaries?.Remove(resource);
+        }
 
 
         /// <inheritdoc/>
@@ -2725,6 +2772,7 @@ namespace CarinaStudio.AppSuite
             // update fall-back font families
             if (resourceUpdated)
             {
+                this.LoadingStrings?.Invoke(this, cultureInfo);
                 if (this.Resources.TryGetResource("String/TextBox.FallbackFontFamilies", out var res) && res is string fontFamilies)
                     this.Resources["FontFamily/TextBox.FallbackFontFamilies"] = new FontFamily(fontFamilies);
                 else

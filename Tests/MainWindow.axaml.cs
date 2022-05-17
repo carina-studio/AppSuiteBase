@@ -43,6 +43,7 @@ namespace CarinaStudio.AppSuite.Tests
         readonly IntegerTextBox integerTextBox2;
         readonly IPAddressTextBox ipAddressTextBox;
         readonly ScheduledAction logAction;
+        IDisposable? overlayResourcesToken;
         IImage? selectedImage;
         string? selectedImageId;
         readonly ObservableList<TabItem> tabItems = new();
@@ -66,6 +67,9 @@ namespace CarinaStudio.AppSuite.Tests
                 }
                 Array.Sort(it, string.Compare);
             });
+
+            this.Application.LoadingStrings += this.OnAppLoadingStrings;
+            this.SetupCustomResource(this.Application.CultureInfo);
 
             InitializeComponent();
 
@@ -114,9 +118,14 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
+        void OnAppLoadingStrings(IAppSuiteApplication? app, CultureInfo cultureInfo) =>
+            this.SetupCustomResource(cultureInfo);
+
+
         protected override void OnClosed(EventArgs e)
         {
             this.logAction.Cancel();
+            this.Application.LoadingStrings -= this.OnAppLoadingStrings;
             base.OnClosed(e);
         }
 
@@ -275,6 +284,16 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         public string? SelectedImageId { get => this.selectedImageId; }
+
+
+        void SetupCustomResource(CultureInfo cultureInfo)
+        {
+            this.overlayResourcesToken?.Dispose();
+            this.overlayResourcesToken = this.Application.AddCustomResource(new ResourceDictionary().Also(it=>
+            {
+                it["String/TestMainWIndow.Title"] = $"Title ({cultureInfo.Name})";
+            }));
+        }
 
 
         async void ShowAppInfoDialog()

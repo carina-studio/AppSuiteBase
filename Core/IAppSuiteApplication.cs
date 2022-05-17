@@ -1,6 +1,7 @@
-﻿using CarinaStudio.Controls;
+﻿using Avalonia.Controls;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite
@@ -10,6 +11,14 @@ namespace CarinaStudio.AppSuite
     /// </summary>
     public interface IAppSuiteApplication : IAvaloniaApplication
     {
+        /// <summary>
+        /// Add custom resource to aplication resource dictionary.
+        /// </summary>
+        /// <param name="resource">Resource.</param>
+        /// <returns><see cref="IDisposable"/> which represents token of added resource.</returns>
+        IDisposable AddCustomResource(IResourceProvider resource);
+
+
         /// <summary>
         /// Called when user agree the Privacy Policy.
         /// </summary>
@@ -116,7 +125,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get latest active main window.
         /// </summary>
-        Window? LatestActiveMainWindow { get; }
+        CarinaStudio.Controls.Window? LatestActiveMainWindow { get; }
 
 
         /// <summary>
@@ -131,7 +140,13 @@ namespace CarinaStudio.AppSuite
         /// <param name="screen"><see cref="Avalonia.Platform.Screen"/> to layout main windows.</param>
         /// <param name="layout">Layout.</param>
         /// <param name="activeMainWindow">Main window which should be active one after layout.</param>
-        void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, Window? activeMainWindow);
+        void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, CarinaStudio.Controls.Window? activeMainWindow);
+
+
+        /// <summary>
+        /// Raised when start loading string resources for given culture.
+        /// </summary>
+        event EventHandler<IAppSuiteApplication, CultureInfo> LoadingStrings;
 
 
         /// <summary>
@@ -151,7 +166,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get list of main windows.
         /// </summary>
-        IList<Window> MainWindows { get; }
+        IList<CarinaStudio.Controls.Window> MainWindows { get; }
 
 
         /// <summary>
@@ -198,7 +213,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="mainWindow">Main window to restart.</param>
         /// <returns>True if restarting has been accepted.</returns>
-        bool RestartMainWindow(Window mainWindow);
+        bool RestartMainWindow(CarinaStudio.Controls.Window mainWindow);
 
 
         /// <summary>
@@ -227,7 +242,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="windowCreatedAction">Action to perform when window created.</param>
         /// <returns>True if main window created and shown successfully.</returns>
-        bool ShowMainWindow(Action<Window>? windowCreatedAction = null);
+        bool ShowMainWindow(Action<CarinaStudio.Controls.Window>? windowCreatedAction = null);
 
 
         /// <summary>

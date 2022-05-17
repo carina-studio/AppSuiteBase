@@ -13,7 +13,7 @@
         x:Class="CarinaStudio.AppSuite.Tests.MainWindow"
 		Classes="Tabbed"
 		Icon="/AppIcon.ico"
-        Title="Main Window">
+        Title="{DynamicResource String/TestMainWIndow.Title}">
 	
 	<Window.Styles>
 		<Style Selector="CaptionButtons">

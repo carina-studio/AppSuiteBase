@@ -19,6 +19,14 @@ namespace CarinaStudio.AppSuite
     /// </summary>
     public class MockAppSuiteApplication : IAppSuiteApplication
     {
+        // Empty implementation of IDIsposable.
+        class EmptyDisposable : IDisposable
+        {
+            public void Dispose()
+            { }
+        }
+
+
         // Static fields.
         static volatile MockAppSuiteApplication? current;
         static readonly object initSyncLock = new object();
@@ -35,6 +43,11 @@ namespace CarinaStudio.AppSuite
             this.RootPrivateDirectoryPath = Path.Combine(Path.GetTempPath(), $"AppSuiteTest-{DateTime.Now.ToBinary()}");
             Directory.CreateDirectory(this.RootPrivateDirectoryPath);
         }
+
+
+        /// <inheritdoc/>
+        public virtual IDisposable AddCustomResource(Avalonia.Controls.IResourceProvider resource) =>
+            new EmptyDisposable();
 
 
         /// <inheritdoc/>
@@ -209,6 +222,10 @@ namespace CarinaStudio.AppSuite
         /// <inheritdoc/>
         public virtual void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, Window? activeMainWindow)
         { }
+
+
+        /// <inheritdoc/>
+        public virtual event EventHandler<IAppSuiteApplication, CultureInfo>? LoadingStrings;
 
 
         /// <summary>
