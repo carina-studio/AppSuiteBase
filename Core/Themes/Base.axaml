@@ -350,9 +350,10 @@
 		<sys:Double x:Key="Double/SplashWindow.Icon.Size">80</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Message.FontSize">12</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Message.ReservedSpace">50</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Title.FontSize">30</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.Title.FontSize">24</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.Title.MaxWidth">230</sys:Double>
 		<Thickness x:Key="Thickness/SplashWindow.Border">2</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">0,0,10,0</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">0,0,20,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Padding">20</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Title.Margin">0,0,0,5</Thickness>

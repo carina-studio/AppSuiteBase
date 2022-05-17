@@ -69,8 +69,8 @@
 				</Image>
 
 				<!-- Title and version -->
-				<StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
-					<TextBlock Name="titleTextBlock" FontSize="{DynamicResource Double/SplashWindow.Title.FontSize}}" FontWeight="Bold" Margin="{DynamicResource Thickness/SplashWindow.Title.Margin}" Opacity="0" Text="{Binding $parent[Window].ApplicationName}">
+				<Grid Grid.Column="1" RowDefinitions="Auto,Auto,*" VerticalAlignment="Center">
+					<TextBlock Name="titleTextBlock" FontSize="{DynamicResource Double/SplashWindow.Title.FontSize}}" FontWeight="Bold" Margin="{DynamicResource Thickness/SplashWindow.Title.Margin}" MaxWidth="{StaticResource Double/SplashWindow.Title.MaxWidth}" Opacity="0" Text="{Binding $parent[Window].ApplicationName}" TextTrimming="CharacterEllipsis">
 						<TextBlock.RenderTransform>
 							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 								<TranslateTransform.Transitions>
@@ -86,7 +86,7 @@
 							</Transitions>
 						</TextBlock.Transitions>
 					</TextBlock>
-					<TextBlock Name="versionTextBlock" Opacity="0" Text="{Binding $parent[Window].Version}">
+					<TextBlock Name="versionTextBlock" Grid.Row="1" Opacity="0" Text="{Binding $parent[Window].Version}" TextTrimming="CharacterEllipsis">
 						<TextBlock.RenderTransform>
 							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 								<TranslateTransform.Transitions>
@@ -102,7 +102,7 @@
 							</Transitions>
 						</TextBlock.Transitions>
 					</TextBlock>
-					<TextBlock Name="copyrightTextBlock" Opacity="0" Text="©2021 Carina Studio">
+					<TextBlock Name="copyrightTextBlock" Grid.Row="2" Opacity="0" Text="©2021 Carina Studio" TextTrimming="CharacterEllipsis">
 						<TextBlock.RenderTransform>
 							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 								<TranslateTransform.Transitions>
@@ -118,10 +118,10 @@
 							</Transitions>
 						</TextBlock.Transitions>
 					</TextBlock>
-				</StackPanel>
+				</Grid>
 
 				<!-- Message -->
-				<Border Grid.ColumnSpan="2" Grid.Row="1" Height="{DynamicResource Double/SplashWindow.Message.ReservedSpace}" HorizontalAlignment="Stretch"/>
+				<Border Grid.ColumnSpan="2" Grid.Row="1" Height="{DynamicResource Double/SplashWindow.Message.ReservedSpace}" HorizontalAlignment="Center"/>
 				<TextBlock Name="messageTextBlock" FontSize="{DynamicResource Double/SplashWindow.Message.FontSize}" Grid.ColumnSpan="2" Grid.Row="1" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/SplashWindow.Message.Margin}" Opacity="0" Text="{Binding $parent[Window].Message}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" VerticalAlignment="Center">
 					<TextBlock.RenderTransform>
 						<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
