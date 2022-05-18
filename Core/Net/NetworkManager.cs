@@ -35,6 +35,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
 
     // Fields.
     readonly ScheduledAction checkNetworkConnectionAction;
+    bool isWirelessInterfaceUp;
     readonly ILogger logger;
     readonly ObservableList<IPAddress> ipAddresses = new();
     readonly ScheduledAction updateNetworkAddressesAction;
@@ -105,6 +106,19 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
             this.IsNetworkConnected = isConnected;
             this.PropertyChanged?.Invoke(this, new(nameof(IsNetworkConnected)));
         }
+        if (isConnected && this.isWirelessInterfaceUp)
+        {
+            if (!this.IsWirelessNetworkConnected)
+            {
+                this.IsWirelessNetworkConnected = true;
+                this.PropertyChanged?.Invoke(this, new(nameof(IsWirelessNetworkConnected)));
+            }
+        }
+        else if (this.IsWirelessNetworkConnected)
+        {
+            this.IsWirelessNetworkConnected = false;
+            this.PropertyChanged?.Invoke(this, new(nameof(IsWirelessNetworkConnected)));
+        }
 
         // schedule next checking
         this.checkNetworkConnectionAction.Schedule(NetworkConnectionCheckingInterval);
@@ -147,6 +161,12 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
     public bool IsNetworkConnected { get; private set; }
 
 
+    /// <summary>
+    /// Check whether wireless network is connected and being used or not.
+    /// </summary>
+    public bool IsWirelessNetworkConnected { get; private set; }
+
+
     // Called when network address changed.
     void OnNetworkAddressChanged(object? sender, EventArgs e) =>
         this.updateNetworkAddressesAction.Schedule(NetworkAddressesUpdateDelay);
@@ -181,10 +201,13 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
             var addresses = new HashSet<IPAddress>();
             var primaryPhysicalAddress = (PhysicalAddress?)null;
             var primaryInterfaceType = NetworkInterfaceType.Ethernet;
+            var isWirelessInterfaceUp = false;
             foreach (var networkInterface in NetworkInterface.GetAllNetworkInterfaces())
             {
                 if (networkInterface.OperationalStatus == OperationalStatus.Up)
                 {
+                    if (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
+                        isWirelessInterfaceUp = true;
                     foreach (var addressInfo in networkInterface.GetIPProperties().UnicastAddresses)
                     {
                         var address = addressInfo.Address;
@@ -239,6 +262,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
             }
 
             // check network connection
+            this.isWirelessInterfaceUp = isWirelessInterfaceUp;
             if (NetworkInterface.GetIsNetworkAvailable())
                 this.checkNetworkConnectionAction.Reschedule();
         }
