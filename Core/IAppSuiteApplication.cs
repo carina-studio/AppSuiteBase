@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Styling;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,6 +18,14 @@ namespace CarinaStudio.AppSuite
         /// <param name="resource">Resource.</param>
         /// <returns><see cref="IDisposable"/> which represents token of added resource.</returns>
         IDisposable AddCustomResource(IResourceProvider resource);
+
+
+        /// <summary>
+        /// Add custom style to aplication styles.
+        /// </summary>
+        /// <param name="style">Resource.</param>
+        /// <returns><see cref="IDisposable"/> which represents token of added style.</returns>
+        IDisposable AddCustomStyle(IStyle style);
 
 
         /// <summary>

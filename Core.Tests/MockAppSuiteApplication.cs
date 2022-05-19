@@ -1,4 +1,5 @@
-﻿using CarinaStudio.Collections;
+﻿using Avalonia.Styling;
+using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
@@ -47,6 +48,11 @@ namespace CarinaStudio.AppSuite
 
         /// <inheritdoc/>
         public virtual IDisposable AddCustomResource(Avalonia.Controls.IResourceProvider resource) =>
+            new EmptyDisposable();
+        
+
+        /// <inheritdoc/>
+        public virtual IDisposable AddCustomStyle(IStyle style) =>
             new EmptyDisposable();
 
 

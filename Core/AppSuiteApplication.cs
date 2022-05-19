@@ -84,6 +84,26 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        // Token of custom style.
+        class CustomStyleToken : IDisposable
+        {
+            // Fields.
+            readonly AppSuiteApplication app;
+            readonly IStyle style;
+
+            // Constructor.
+            public CustomStyleToken(AppSuiteApplication app, IStyle style)
+            {
+                this.app = app;
+                this.style = style;
+            }
+
+            // Dispose.
+            public void Dispose() =>
+                this.app.RemoveCustomStyle(this.style);
+        }
+
+
         // Holder of main window.
         class MainWindowHolder
         {
@@ -203,7 +223,6 @@ namespace CarinaStudio.AppSuite
         ISettings? configuration;
         readonly string configurationFilePath;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
-        Avalonia.Controls.ResourceDictionary? customResources;
         readonly Styles extraStyles = new Styles();
         HardwareInfo? hardwareInfo;
         bool isRestartAsAdminRequested;
@@ -316,9 +335,17 @@ namespace CarinaStudio.AppSuite
         public IDisposable AddCustomResource(Avalonia.Controls.IResourceProvider resource)
         {
             this.VerifyAccess();
-            var res = this.customResources ?? throw new InvalidOperationException("Resource is not setup yet.");
-            res.MergedDictionaries.Add(resource);
+            this.Resources.MergedDictionaries.Add(resource);
             return new CustomResourceToken(this, resource);
+        }
+
+
+        /// <inheritdoc/>
+        public IDisposable AddCustomStyle(IStyle style) 
+        {
+            this.VerifyAccess();
+            this.Styles.Add(style);
+            return new CustomStyleToken(this, style);
         }
 
 
@@ -1631,10 +1658,6 @@ namespace CarinaStudio.AppSuite
                 // load configuration
                 await this.LoadConfigurationAsync();
 
-                // prepare overlay resources container
-                this.customResources = new();
-                this.Resources.MergedDictionaries.Add(this.customResources);
-
                 // prepare
                 await this.OnPrepareStartingAsync();
 
@@ -2165,7 +2188,15 @@ namespace CarinaStudio.AppSuite
         void RemoveCustomResource(Avalonia.Controls.IResourceProvider resource)
         {
             this.VerifyAccess();
-            this.customResources?.MergedDictionaries?.Remove(resource);
+            this.Resources.MergedDictionaries.Remove(resource);
+        }
+
+
+        // Remove custom style.
+        void RemoveCustomStyle(IStyle style)
+        {
+            this.VerifyAccess();
+            this.Styles.Remove(style);
         }
 
 
