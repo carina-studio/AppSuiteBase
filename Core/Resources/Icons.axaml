@@ -431,8 +431,14 @@
 	<DrawingImage x:Key="Image/Icon.Key">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Key}"/>
 	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Key.Colored">
+		<GeometryDrawing Brush="#ccaa00" Geometry="{StaticResource Geometry/Icon.Key}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Key.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Key.Outline}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Key.Outline.Colored">
+		<GeometryDrawing Brush="#ccaa00" Geometry="{StaticResource Geometry/Icon.Key.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Lab" Drawing="{StaticResource Drawing/Icon.Lab}"/>
 	<DrawingImage x:Key="Image/Icon.Layout.Horizontal">
