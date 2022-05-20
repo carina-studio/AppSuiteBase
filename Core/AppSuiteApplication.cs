@@ -1394,7 +1394,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="uri">URI of string resource.</param>
         /// <returns>Loaded string resource, or Null if failed to load.</returns>
-        protected Avalonia.Controls.IResourceProvider? LoadStringResource(Uri uri)
+        public Avalonia.Controls.IResourceProvider? LoadStringResource(Uri uri)
         {
             try
             {

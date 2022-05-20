@@ -256,6 +256,10 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <inheritdoc/>
+        public virtual Avalonia.Controls.IResourceProvider? LoadStringResource(Uri uri) => null;
+
+
         /// <summary>
         /// Get logger factory.
         /// </summary>

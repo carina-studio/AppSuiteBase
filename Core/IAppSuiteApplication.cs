@@ -173,6 +173,14 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Load string resource in XAML format.
+        /// </summary>
+        /// <param name="uri">URI of string resource.</param>
+        /// <returns>Loaded string resource, or Null if failed to load.</returns>
+        Avalonia.Controls.IResourceProvider? LoadStringResource(Uri uri);
+
+
+        /// <summary>
         /// Get list of main windows.
         /// </summary>
         IList<CarinaStudio.Controls.Window> MainWindows { get; }
