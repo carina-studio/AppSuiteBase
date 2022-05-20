@@ -9,6 +9,8 @@
 	<sys:String x:Key="String/ApplicationChangeListDialog.Title">变更列表</sys:String>
 	
 	<!-- ApplicationCulture -->
+	<sys:String x:Key="String/ApplicationCulture.ZH_TW">中文 (繁體)</sys:String>
+	<sys:String x:Key="String/ApplicationCulture.ZH_CN">中文 (简体)</sys:String>
 	<sys:String x:Key="String/ApplicationCulture.System">系统设定</sys:String>
 
 	<!-- ApplicationInfoDialog -->
