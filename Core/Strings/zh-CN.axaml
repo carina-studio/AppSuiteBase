@@ -1,0 +1,242 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:sys="using:System">
+
+	<!-- ApplicationChangeListDialog -->
+	<sys:String x:Key="String/ApplicationChangeListDialog.Details">详细资讯</sys:String>
+	<sys:String x:Key="String/ApplicationChangeListDialog.Header">{0} {1} 的变更</sys:String>
+	<sys:String x:Key="String/ApplicationChangeListDialog.IconSpaceReservationChar">中</sys:String>
+	<sys:String x:Key="String/ApplicationChangeListDialog.Title">变更列表</sys:String>
+	
+	<!-- ApplicationCulture -->
+	<sys:String x:Key="String/ApplicationCulture.ZH_TW">中文 (繁體)</sys:String>
+	<sys:String x:Key="String/ApplicationCulture.ZH_CN">中文 (简体)</sys:String>
+	<sys:String x:Key="String/ApplicationCulture.System">系统设定</sys:String>
+
+	<!-- ApplicationInfoDialog -->
+	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">变更列表</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">组件列表</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">应用程序图标由</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">提供，并发布于</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon" xml:space="preserve">。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.Framework.Section1" xml:space="preserve">基于</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.Framework.Section2" xml:space="preserve">以及</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.Framework.Section3" xml:space="preserve">开发完成。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">调试模式可以让应用程序输出更多的执行期间信息至日志，甚至提供应用程序内部功能调整。下次您自行启动应用程序时将自动退出调试模式。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.DonateWithPayPal">使用 PayPal 赞助</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">导出应用程序日志…</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">无法导出应用程序日志。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET 版本：</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">GitHub 上的项目页面</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">已安裝：</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.MakeApplicationBetter">协助让应用程序变得更好</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作业系统：</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Other">其他资讯</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">《隐私权政策》</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.RestartInDebugMode">以调试模式重新启动</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">应用程序日志导出完成。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">系统资讯</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Title">关于 {0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">物理内存：</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">《使用者协议》</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Version">版本：{0}</sys:String>
+
+	<!-- ApplicationOptions -->
+	<sys:String x:Key="String/ApplicationOptions">应用程序选项</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">接收非正式版本的应用程序更新</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.Culture">语言</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">使用者界面缩放比例</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">系统支持情况下使用模糊玻璃窗口背景</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">日志输出目标连接端口</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">需要重新启动应用程序以开启</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.NotifyApplicationUpdate">应用程序有更新时显示通知</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.Others">其他设定</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.ThemeMode">主题模式</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.UserInterface">使用者界面</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">将重新启动应用程序以开启</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.WillRestartMainWindowsToTakeEffect">将重新启动窗口以开启</sys:String>
+
+	<!-- ApplicationReleasingType -->
+	<sys:String x:Key="String/ApplicationReleasingType.Development">开发版</sys:String>
+	<sys:String x:Key="String/ApplicationReleasingType.Preview">预览版</sys:String>
+	<sys:String x:Key="String/ApplicationReleasingType.ReleaseCandidate">RC 版</sys:String>
+	<sys:String x:Key="String/ApplicationReleasingType.Stable">正式版</sys:String>
+
+	<!-- ApplicationUpdateDialog -->
+	<sys:String x:Key="String/ApplicationUpdateDialog.CheckForUpdate">检查更新</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.CheckingForUpdate">正在检查更新…</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.DownloadUpdatePackage">下载更新</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.LatestVersion">{0} 已经是最新版本。</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.NewVersionFound">已经有新的 {0} 版本：{1}</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.ReleasePage">此更新的详细资讯</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.StartUpdating">更新</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.Title">应用程序更新</sys:String>
+
+	<!-- ApplicationUpdater -->
+	<sys:String x:Key="String/ApplicationUpdater.DownloadingAutoUpdater">正在下载并自动更新组件 ({0})…</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.FailedToPrepareForUpdate">自动升级准备失败。</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.FailedToStartAutoUpdater">无法启动自动更新组件。</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.PreparingForUpdate">正在准备更新…</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.ReleasePage">新版本中的变更</sys:String>
+	
+	<!-- Common -->
+	<sys:String x:Key="String/Common.Add">加入</sys:String>
+	<sys:String x:Key="String/Common.Add.WithDialog">加入…</sys:String>
+	<sys:String x:Key="String/Common.Administrator">系统管理员</sys:String>
+	<sys:String x:Key="String/Common.Agree">同意</sys:String>
+	<sys:String x:Key="String/Common.Cancel">取消</sys:String>
+	<sys:String x:Key="String/Common.Clear">清除</sys:String>
+	<sys:String x:Key="String/Common.Close">关闭</sys:String>
+	<sys:String x:Key="String/Common.CloseTab">关闭页面</sys:String>
+	<sys:String x:Key="String/Common.CloseTab.WithGesture">关闭页面 (Ctrl+W)</sys:String>
+	<sys:String x:Key="String/Common.CloseWindow">关闭窗口</sys:String>
+	<sys:String x:Key="String/Common.Copy">复制</sys:String>
+	<sys:String x:Key="String/Common.Copy.WithGesture">复制 (Ctrl+C)</sys:String>
+	<sys:String x:Key="String/Common.Create">建立</sys:String>
+	<sys:String x:Key="String/Common.Create.WithDialog">建立…</sys:String>
+	<sys:String x:Key="String/Common.CreateTab">建立新的页面</sys:String>
+	<sys:String x:Key="String/Common.CreateTab.WithGesture">建立新的页面 (Ctrl+T)</sys:String>
+	<sys:String x:Key="String/Common.CreateWindow">建立新的窗口</sys:String>
+	<sys:String x:Key="String/Common.Custom">自定义</sys:String>
+	<sys:String x:Key="String/Common.Cut">剪切</sys:String>
+	<sys:String x:Key="String/Common.Cut.WithGesture">剪切 (Ctrl+X)</sys:String>
+	<sys:String x:Key="String/Common.DebugMode">调试模式</sys:String>
+	<sys:String x:Key="String/Common.Decline">不同意</sys:String>
+	<sys:String x:Key="String/Common.Delete">删除</sys:String>
+	<sys:String x:Key="String/Common.Details">详细资讯</sys:String>
+	<sys:String x:Key="String/Common.Details.WithDialog">详细资讯…</sys:String>
+	<sys:String x:Key="String/Common.DoNotAskAgain">不要再询问</sys:String>
+	<sys:String x:Key="String/Common.DoNotShowAgain">不要再显示</sys:String>
+	<sys:String x:Key="String/Common.Edit">编辑</sys:String>
+	<sys:String x:Key="String/Common.Edit.WithDialog">编辑…</sys:String>
+	<sys:String x:Key="String/Common.Empty">空</sys:String>
+	<sys:String x:Key="String/Common.Export">导出</sys:String>
+	<sys:String x:Key="String/Common.Export.WithDialog">导出…</sys:String>
+	<sys:String x:Key="String/Common.Import">导入</sys:String>
+	<sys:String x:Key="String/Common.Import.WithDialog">导入…</sys:String>
+	<sys:String x:Key="String/Common.KnowMoreAbout">了解更多</sys:String>
+	<sys:String x:Key="String/Common.KnowMoreAbout.WithDialog">了解更多…</sys:String>
+	<sys:String x:Key="String/Common.Load">加载</sys:String>
+	<sys:String x:Key="String/Common.Load.WithDialog">加载…</sys:String>
+	<sys:String x:Key="String/Common.No">否</sys:String>
+	<sys:String x:Key="String/Common.None">无</sys:String>
+	<sys:String x:Key="String/Common.OK">确定</sys:String>
+	<sys:String x:Key="String/Common.Open">打开</sys:String>
+	<sys:String x:Key="String/Common.Open.WithDialog">打开…</sys:String>
+	<sys:String x:Key="String/Common.OpenInNewTab">在新页面中开启</sys:String>
+	<sys:String x:Key="String/Common.OpenInNewWindow">在新窗口中开启</sys:String>
+	<sys:String x:Key="String/Common.Options">选项</sys:String>
+	<sys:String x:Key="String/Common.Options.WithDialog">选项…</sys:String>
+	<sys:String x:Key="String/Common.Paste">粘贴</sys:String>
+	<sys:String x:Key="String/Common.Paste.WithGesture">粘贴 (Ctrl+V)</sys:String>
+	<sys:String x:Key="String/Common.Remove">移除</sys:String>
+	<sys:String x:Key="String/Common.Rename">重新命名</sys:String>
+	<sys:String x:Key="String/Common.Rename.WithDialog">重新命名…</sys:String>
+	<sys:String x:Key="String/Common.Reset">重置</sys:String>
+	<sys:String x:Key="String/Common.Save">储存</sys:String>
+	<sys:String x:Key="String/Common.Save.WithDialog">储存…</sys:String>
+	<sys:String x:Key="String/Common.Save.WithDialogAndGesture">储存… (Ctrl+S)</sys:String>
+	<sys:String x:Key="String/Common.Save.WithGesture">储存 (Ctrl+S)</sys:String>
+	<sys:String x:Key="String/Common.SelectAll">全选</sys:String>
+	<sys:String x:Key="String/Common.SelectAll.WithGesture">全选 (Ctrl+A)</sys:String>
+	<sys:String x:Key="String/Common.Yes">是</sys:String>
+
+	<!-- DatePicker -->
+	<sys:String x:Key="String/DatePicker.Day">日</sys:String>
+	<sys:String x:Key="String/DatePicker.DayFormat">d 日 (ddd)</sys:String>
+	<sys:String x:Key="String/DatePicker.Month">月份</sys:String>
+	<sys:String x:Key="String/DatePicker.MonthFormat">M 月</sys:String>
+	<sys:String x:Key="String/DatePicker.Year">年份</sys:String>
+	<sys:String x:Key="String/DatePicker.YearFormat">yyyy 年</sys:String>
+
+	<!-- DateTimeTextBox -->
+	<sys:String x:Key="String/DateTimeTextBox.FormatDescription">支持的格式：
+1.英语常用的日志时间格式。
+2.目前语言惯用的日期时间格式。
+3.Unix 时间戳，单位可以为秒、毫秒、微秒。
+4.格式为 'yyyyMMdd_HH:mm:ss.ffffff' 的文字，其中年份、秒、毫微秒以及 ':' 可以省略。</sys:String>
+	<sys:String x:Key="String/DateTimeTextBox.Watermark">日期与时间</sys:String>
+
+	<!-- FallbackFontFamilies -->
+	<sys:String x:Key="String/TextBox.FallbackFontFamilies">Microsoft JhengHei,Noto Sans CJK TC,蘋方-繁,宋体,sans-serif</sys:String>
+
+	<!-- FileFormat -->
+	<sys:String x:Key="String/FileFormat.All">所有档案</sys:String>
+	<sys:String x:Key="String/FileFormat.Text">文字文件</sys:String>
+	<sys:String x:Key="String/FileFormat.Zip">ZIP 压缩档案</sys:String>
+
+	<!-- IPAddressTextBox -->
+	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 或 IPv6</sys:String>
+
+	<!-- MainWindow -->
+	<sys:String x:Key="String/MainWindow.ConfirmLayoutingLotsOfMainWindows">排列较多数量的窗口导致不适合的排列结果，是否仍要进行排列？</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows">排列窗口</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">水平排列窗口</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">网格排列窗口</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">垂直排列窗口</sys:String>
+
+	<!-- PrivacyPolicyDialog -->
+	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Section1">在您使用 {0} 之前，您必须阅读且同意</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Section2">。</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Updated.Section1">在您使用 {0} 之前，您必须阅读且同意新的</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Updated.Section2">。</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.PrivacyPolicy">《隐私权政策》</sys:String>
+	<sys:String x:Key="String/PrivacyPolicyDialog.Title">隐私权政策</sys:String>
+
+	<!-- RegexTextBox -->
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.d">十进制数字</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.D">非十进制数字</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.s">空白字符</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.S">非空白字符</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.t">Tab 字符</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.w">一般文字字符</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.W">非一般文字字符</sys:String>
+	<sys:String x:Key="String/RegexTextBox.Watermark">正则表达式</sys:String>
+
+	<!-- SplashWindow -->
+	<sys:String x:Key="String/SplashWindow.Launching">启动中</sys:String>
+	<sys:String x:Key="String/SplashWindow.ShowingMainWindow">显示主窗口</sys:String>
+
+	<!-- ThemeMode -->
+	<sys:String x:Key="String/ThemeMode.Dark">深色</sys:String>
+	<sys:String x:Key="String/ThemeMode.Light">浅色</sys:String>
+	<sys:String x:Key="String/ThemeMode.System">系统设定</sys:String>
+
+	<!-- TimePicker -->
+	<sys:String x:Key="String/TimePicker.Hour">小时</sys:String>
+	<sys:String x:Key="String/TimePicker.HourFormat">{0:D2} 时</sys:String>
+	<sys:String x:Key="String/TimePicker.Minute">分钟</sys:String>
+	<sys:String x:Key="String/TimePicker.MinuteFormat">{0:D2} 分 </sys:String>
+
+	<!-- TimeSpanConverter -->
+	<sys:String x:Key="String/TimeSpanConverter.Days">{0} 天 {1} 小时 {2} 分 {3} 秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Hours">{0} 小时 {1} 分 {2} 秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Microseconds">{0} 微秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Milliseconds">{0} 毫秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Minutes">{0} 分 {1} 秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Seconds">{0} 秒</sys:String>
+
+	<!-- TimeSpanTextBox -->
+	<sys:String x:Key="String/TimeSpanTextBox.FormatDescription">支持的格式：
+1.HH:mm:ss。例如 01:12:30 表示 1 小时 12 分又 30 秒。您也可以使用 '-' 或 ' ' 取代 ':'。
+2.d.HH:mm:ss.ffffff。例如 2.05:12:30.5 表示 2 天 5 小时 12 分又 30.5 秒。您也可以使用 '-' 或 ' ' 取代 ':'。
+3.纳秒。例如 10000ns。
+4.微秒。例如 20000us。
+5.毫秒。例如 30000ms。</sys:String>
+	<sys:String x:Key="String/TimeSpanTextBox.Watermark">时间间距</sys:String>
+
+	<!-- TutorialPresenter -->
+	<sys:String x:Key="String/TutorialPresenter.SkipAllTutorials">跳过所有提示</sys:String>
+
+	<!-- UriTextBox -->
+	<sys:String x:Key="String/UriTextBox.Watermark">网址 (URI)</sys:String>
+
+	<!-- UserAgreementDialog -->
+	<sys:String x:Key="String/UserAgreementDialog.Message.Section1">在您使用 {0} 之前，您必须阅读且同意</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.Message.Section2">。</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.Message.Updated.Section1">在您使用 {0} 之前，您必须阅读且同意新的</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.Message.Updated.Section2">。</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.Title">使用者协议</sys:String>
+	<sys:String x:Key="String/UserAgreementDialog.UserAgreement">《使用者协议》</sys:String>
+	
+</ResourceDictionary>

@@ -9,6 +9,7 @@
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="ChangeList-zh-CN.json" />
 	  <None Remove="ChangeList-zh-TW.json" />
 	  <None Remove="ChangeList.json" />
 	</ItemGroup>
@@ -18,6 +19,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+	  <EmbeddedResource Include="ChangeList-zh-CN.json" />
 	  <EmbeddedResource Include="ChangeList-zh-TW.json" />
 	  <EmbeddedResource Include="ChangeList.json" />
 	</ItemGroup>
