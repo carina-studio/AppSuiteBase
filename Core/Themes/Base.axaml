@@ -285,9 +285,9 @@
 		<Thickness x:Key="Thickness/MenuItem.Padding">12,8,12,8</Thickness>
 
 		<!-- MessageDialog -->
-		<sys:Double x:Key="Double/MessageDialog.Icon.Size">45</sys:Double>
+		<sys:Double x:Key="Double/MessageDialog.Icon.Size">48</sys:Double>
 		<sys:Double x:Key="Double/MessageDialog.MinWidth">200</sys:Double>
-		<Thickness x:Key="Thickness/MessageDialog.Icon.Margin">0,0,15,0</Thickness>
+		<Thickness x:Key="Thickness/MessageDialog.Icon.Margin">5,0,20,0</Thickness>
 
 		<!-- Overlay -->
 		<CornerRadius x:Key="OverlayCornerRadius">8</CornerRadius>
