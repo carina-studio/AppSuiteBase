@@ -33,6 +33,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作业系统：</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">其他资讯</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">《隐私权政策》</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Products">相关产品</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.RestartInDebugMode">以调试模式重新启动</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">应用程序日志导出完成。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">系统资讯</sys:String>
@@ -182,6 +183,11 @@
 	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Updated.Section2">。</sys:String>
 	<sys:String x:Key="String/PrivacyPolicyDialog.PrivacyPolicy">《隐私权政策》</sys:String>
 	<sys:String x:Key="String/PrivacyPolicyDialog.Title">隐私权政策</sys:String>
+
+	<!-- ProductState -->
+	<sys:String x:Key="String/ProductState.Activated">已启用</sys:String>
+	<sys:String x:Key="String/ProductState.Activating">启用中</sys:String>
+	<sys:String x:Key="String/ProductState.Deactivated">已停用</sys:String>
 
 	<!-- RegexTextBox -->
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.d">十进制数字</sys:String>

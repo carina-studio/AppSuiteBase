@@ -139,6 +139,14 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
+        /// Get display name of specific product.
+        /// </summary>
+        /// <param name="productId">ID of product.</param>
+        /// <returns>Display name of product.</returns>
+        public virtual string GetProductName(string productId) => productId;
+
+
+        /// <summary>
         /// Get application icon.
         /// </summary>
         public virtual IBitmap Icon
@@ -240,6 +248,12 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// Get URI of Privacy Policy.
         /// </summary>
         public virtual Uri? PrivacyPolicyUri { get; }
+
+
+        /// <summary>
+        /// Get all ID of products.
+        /// </summary>
+        public virtual IList<string> Products { get; } = new string[0];
 
 
         /// <summary>

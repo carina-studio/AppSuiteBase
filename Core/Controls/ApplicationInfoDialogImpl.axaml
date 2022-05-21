@@ -136,6 +136,15 @@
 					</StackPanel>
 					<Separator Classes="Dialog_Separator_Large"/>
 
+					<!-- Activated products -->
+					<StackPanel Name="productListSectionPanel">
+						<Border Classes="Dialog_TextBlock_Header1">
+							<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Products}"/>
+						</Border>
+						<StackPanel Name="productListPanel"/>
+						<Separator Classes="Dialog_Separator_Large"/>
+					</StackPanel>
+
 					<!-- Make APP better -->
 					<Border Classes="Dialog_TextBlock_Header1">
 						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.MakeApplicationBetter}"/>
@@ -185,14 +194,9 @@
 					<Separator Classes="Dialog_Separator_Large"/>
 					
 					<!-- Other information -->
-					<StackPanel>
-
-						<!-- Header -->
-						<Border Classes="Dialog_TextBlock_Header1">
-							<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Other}"/>
-						</Border>
-
-					</StackPanel>
+					<Border Classes="Dialog_TextBlock_Header1">
+						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Other}"/>
+					</Border>
 
 					<!-- User agreement -->
 					<StackPanel IsVisible="{Binding UserAgreementUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">

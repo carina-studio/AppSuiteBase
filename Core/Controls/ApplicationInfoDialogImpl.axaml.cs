@@ -2,6 +2,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
+using CarinaStudio.AppSuite.Converters;
+using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
@@ -24,10 +26,17 @@ namespace CarinaStudio.AppSuite.Controls
 		static readonly AvaloniaProperty<string?> VersionStringProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, string?>(nameof(VersionString));
 
 
+		// Fields.
+		readonly Panel productListPanel;
+		readonly EnumConverter productStateConverter;
+
+
 		// Constructor.
 		public ApplicationInfoDialogImpl()
 		{
-			InitializeComponent();
+			AvaloniaXamlLoader.Load(this);
+			this.productListPanel = this.FindControl<Panel>(nameof(productListPanel));
+			this.productStateConverter = new(this.Application, typeof(ProductState));
 			this.SetValue(HasTotalPhysicalMemoryProperty, this.Application.HardwareInfo.TotalPhysicalMemory.HasValue);
 		}
 
@@ -86,10 +95,6 @@ namespace CarinaStudio.AppSuite.Controls
 		public bool HasTotalPhysicalMemory { get => this.GetValue<bool>(HasTotalPhysicalMemoryProperty); }
 
 
-		// Initialize.
-		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
-
-
 		// Property changed.
         protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
         {
@@ -117,6 +122,38 @@ namespace CarinaStudio.AppSuite.Controls
 						if (this.DataContext != appInfo)
 							return;
 						this.SetValue(HasApplicationChangeListProperty, appInfo.ApplicationChangeList.ChangeList.IsNotEmpty());
+					});
+
+					// show products
+					this.productListPanel.Let(panel =>
+					{
+						panel.Children.Clear();
+						if (appInfo.Products.IsNotEmpty() && !this.Application.ProductManager.IsMock)
+						{
+							foreach (var productId in appInfo.Products)
+							{
+								if (panel.Children.Count > 0)
+								{
+									panel.Children.Add(new Separator().Also(it => 
+										it.Classes.Add("Dialog_Separator_Small")));
+								}
+								panel.Children.Add(new StackPanel().Also(itemPanel => 
+								{ 
+									itemPanel.DataContext = productId;
+									itemPanel.Orientation = Avalonia.Layout.Orientation.Horizontal;
+									itemPanel.Children.Add(new TextBlock().Also(it =>
+										it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center));
+									itemPanel.Children.Add(new Separator().Also(it =>
+										it.Classes.Add("Dialog_Separator_Small")));
+									itemPanel.Children.Add(new TextBlock().Also(it =>
+										it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center));
+									this.ShowProductInfo(itemPanel);
+								}));
+							}
+							this.FindControl<Panel>("productListSectionPanel")!.IsVisible = true;
+						}
+						else
+							this.FindControl<Panel>("productListSectionPanel")!.IsVisible = false;
 					});
 
 					// show assemblies
@@ -169,6 +206,35 @@ namespace CarinaStudio.AppSuite.Controls
 
 			// show dialog
 			_ = new ApplicationChangeListDialog(appInfo.ApplicationChangeList).ShowDialog(this);
+		}
+
+
+		// Show product information on given view.
+		void ShowProductInfo(Panel view)
+		{
+			// check state
+			var productManager = this.Application.ProductManager;
+			if (productManager.IsMock)
+				return;
+			if (this.DataContext is not ApplicationInfo appInfo)
+				return;
+			if (view.DataContext is not string productId)
+				return;
+			
+			// show name
+			var name = appInfo.GetProductName(productId);
+			(view.Children[0] as TextBlock)?.Let(it => it.Text = name);
+
+			// show state
+			if (productManager.TryGetProductState(productId, out var state) || true)
+			{
+				state = ProductState.Deactivated;
+				(view.Children[2] as TextBlock)?.Let(it => 
+					it.Text = this.productStateConverter.Convert<string?>(state)?.Let(s =>
+						$"({s})"));
+			}
+			else
+				(view.Children[2] as TextBlock)?.Let(it => it.Text = null);
 		}
 
 
