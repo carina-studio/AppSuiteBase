@@ -21,6 +21,16 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
 
 
     /// <summary>
+    /// Show related UI to activate given product.
+    /// </summary>
+    /// <param name="id">ID of product.</param>
+    /// <param name="name">Display name of product.</param>
+    /// <param name="window">Window to show dialog.</param>
+    /// <returns>Task of activating product.</returns>
+    Task ActivateProductAsync(string id, string name, Avalonia.Controls.Window window);
+
+
+    /// <summary>
     /// Check whether at least one product need to be activated online or not.
     /// </summary>
     bool HasPendingOnlineProductActivation { get; }
@@ -128,6 +138,10 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
     // Constructor.
     public MockProductManager(IAppSuiteApplication app) : base(app)
     { }
+
+
+    /// <inheritdoc/>
+    public Task ActivateProductAsync(string id, string name, Avalonia.Controls.Window window) => Task.CompletedTask;
 
 
     /// <inheritdoc/>

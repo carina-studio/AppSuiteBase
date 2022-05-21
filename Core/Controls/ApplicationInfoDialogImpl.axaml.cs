@@ -95,6 +95,49 @@ namespace CarinaStudio.AppSuite.Controls
 		public bool HasTotalPhysicalMemory { get => this.GetValue<bool>(HasTotalPhysicalMemoryProperty); }
 
 
+		/// <inheritdoc/>
+		protected override void OnClosed(EventArgs e)
+		{
+			this.Application.StringsUpdated -= this.OnAppStringsUpdated;
+			this.Application.ProductManager.ProductStateChanged -= this.OnProductStateChanged;
+			base.OnClosed(e);
+		}
+
+
+		// Called when application string resources updated.
+		void OnAppStringsUpdated(object? sender, EventArgs e)
+		{
+			foreach (var child in this.productListPanel.Children)
+			{
+				if (child is Panel itemView)
+					this.ShowProductInfo(itemView);
+			}
+		}
+
+
+		/// <inheritdoc/>
+		protected override void OnOpened(EventArgs e)
+		{
+			base.OnOpened(e);
+			this.Application.StringsUpdated += this.OnAppStringsUpdated;
+			this.Application.ProductManager.ProductStateChanged += this.OnProductStateChanged;
+		}
+
+
+		// Called when product state changed.
+		void OnProductStateChanged(IProductManager? productManager, string productId)
+		{
+			foreach (var child in this.productListPanel.Children)
+			{
+				if (child is Panel itemView && itemView.DataContext as string == productId)
+				{
+					this.ShowProductInfo(itemView);
+					break;
+				}
+			}
+		}
+
+
 		// Property changed.
         protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
         {

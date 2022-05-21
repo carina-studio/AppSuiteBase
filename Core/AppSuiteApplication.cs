@@ -2031,6 +2031,8 @@ namespace CarinaStudio.AppSuite
                     var assembly = Assembly.LoadFile(Path.Combine(this.RootPrivateDirectoryPath, "CarinaStudio.AppSuite.Product.dll"));
                     pmType = assembly.GetType("CarinaStudio.AppSuite.Product.ProductManager") ?? throw new Exception();
                 }
+                if (!pmType.Assembly.GetName().FullName.StartsWith("CarinaStudio.AppSuite.Product,"))
+                    throw new Exception();
 
                 // initialize
                 await (Task)pmType.GetMethod("InitializeAsync", BindingFlags.Public | BindingFlags.Static, new Type[]{ typeof(IAppSuiteApplication) })!.Invoke(null, new object?[] { this })!;
