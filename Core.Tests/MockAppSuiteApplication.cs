@@ -41,6 +41,7 @@ namespace CarinaStudio.AppSuite
         {
             this.HardwareInfo = new HardwareInfo(this);
             this.ProcessInfo = new ProcessInfo(this);
+            this.ProductManager = new Product.MockProductManager(this);
             this.RootPrivateDirectoryPath = Path.Combine(Path.GetTempPath(), $"AppSuiteTest-{DateTime.Now.ToBinary()}");
             Directory.CreateDirectory(this.RootPrivateDirectoryPath);
         }
@@ -306,6 +307,10 @@ namespace CarinaStudio.AppSuite
         /// Get information of current process.
         /// </summary>
         public ProcessInfo ProcessInfo { get; }
+
+
+        /// <inheritdoc/>
+        public virtual Product.IProductManager ProductManager { get; }
 
 
         /// <summary>

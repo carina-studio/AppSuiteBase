@@ -211,6 +211,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get <see cref="Product.IProductManager"/> for product management.
+        /// </summary>
+        Product.IProductManager ProductManager { get; }
+
+
+        /// <summary>
         /// Get type of application releasing.
         /// </summary>
         ApplicationReleasingType ReleasingType { get; }

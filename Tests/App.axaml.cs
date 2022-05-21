@@ -47,8 +47,6 @@ namespace CarinaStudio.AppSuite.Tests
         {
             await base.OnPrepareStartingAsync();
 
-            await Net.NetworkManager.InitializeAsync(this);
-
             if (!this.IsRestoringMainWindowsRequested)
             {
                 for (var i = 0; i < 1; ++i)

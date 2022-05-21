@@ -13,6 +13,7 @@ using Avalonia.Platform;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Animation;
+using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AutoUpdate;
 using CarinaStudio.AutoUpdate.Resolvers;
 using CarinaStudio.Collections;
@@ -32,6 +33,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
@@ -240,6 +242,7 @@ namespace CarinaStudio.AppSuite
         readonly string persistentStateFilePath;
         ProcessInfo? processInfo;
         IDisposable? processInfoHfUpdateToken;
+        IProductManager? productManager;
         string? restartArgs;
         SettingsImpl? settings;
         readonly string settingsFilePath;
@@ -2014,6 +2017,32 @@ namespace CarinaStudio.AppSuite
                     this.uiSettings.ColorValuesChanged += this.OnWindowsUIColorValueChanged;
 #endif
             }
+
+            // initialize network manager
+            await Net.NetworkManager.InitializeAsync(this);
+
+            // initialize product manager
+            try
+            {
+                // load assembly and type
+                var pmType = Type.GetType("CarinaStudio.AppSuite.Product.ProductManager");
+                if (pmType == null)
+                {
+                    var assembly = Assembly.LoadFile(Path.Combine(this.RootPrivateDirectoryPath, "CarinaStudio.AppSuite.Product.dll"));
+                    pmType = assembly.GetType("CarinaStudio.AppSuite.Product.ProductManager") ?? throw new Exception();
+                }
+
+                // initialize
+                await (Task)pmType.GetMethod("InitializeAsync", BindingFlags.Public | BindingFlags.Static, new Type[]{ typeof(IAppSuiteApplication) })!.Invoke(null, new object?[] { this })!;
+
+                // get instance
+                this.productManager = (IProductManager)pmType.GetProperty("Default", BindingFlags.Public | BindingFlags.Static)!.GetGetMethod()!.Invoke(null, new object?[0])!;
+            }
+            catch
+            {
+                this.Logger.LogDebug("Use mock product manager");
+                this.productManager = new MockProductManager(this);
+            }
         }
 
 
@@ -2176,6 +2205,10 @@ namespace CarinaStudio.AppSuite
         /// Get information of current process.
         /// </summary>
         public ProcessInfo ProcessInfo { get => this.processInfo ?? throw new InvalidOperationException("Application is not initialized yet."); }
+
+
+        /// <inheritdoc/>
+        public IProductManager ProductManager { get => this.productManager ?? throw new InvalidOperationException("Application is not initialized yet."); }
 
 
         /// <summary>

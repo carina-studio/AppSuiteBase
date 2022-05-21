@@ -136,7 +136,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
     /// </summary>
     /// <param name="app">Application.</param>
     /// <returns>Task of initialization.</returns>
-    public static Task InitializeAsync(IAppSuiteApplication app)
+    internal static Task InitializeAsync(IAppSuiteApplication app)
     {
         // check state
         app.VerifyAccess();
