@@ -116,6 +116,16 @@
 					</StackPanel>
 				</appControls:GroupBox>
 				<Separator Classes="Dialog_Separator_Large"/>
+
+				<Grid ColumnDefinitions="Auto,*">
+					<Image Classes="Dialog_Icon_Large" Source="{StaticResource Image/Icon.Information.Colored}" VerticalAlignment="Top"/>
+					<StackPanel Grid.Column="1">
+						<TextBlock Classes="Dialog_TextBlock" Text="Line1"/>
+						<TextBlock Classes="Dialog_TextBlock" Text="Line2"/>
+						<TextBlock Classes="Dialog_TextBlock" Text="Line3"/>
+						<TextBlock Classes="Dialog_TextBlock" Text="Line4"/>
+					</StackPanel>
+				</Grid>
 				
 			</StackPanel>
 		</ScrollViewer>

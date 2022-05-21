@@ -157,6 +157,7 @@
 		<sys:Double x:Key="Double/Dialog.ControlButton.MinWidth">100</sys:Double>
 		<sys:Double x:Key="Double/Dialog.ControlButton.Separator.Width">15</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Icon.Size">16</sys:Double>
+		<sys:Double x:Key="Double/Dialog.Icon.Size.Large">40</sys:Double>
 		<sys:Double x:Key="Double/Dialog.ListActionButton.MinWidth">80</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height">15</sys:Double>
 		<sys:Double x:Key="Double/Dialog.Separator.Height.Large">40</sys:Double>
@@ -177,6 +178,7 @@
 		<Thickness x:Key="Thickness/Dialog.ControlButton.Padding">10,5,10,5</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ControlButtonsPanel.Padding">15</Thickness>
 		<Thickness x:Key="Thickness/Dialog.Icon.Margin">2,0,14,0</Thickness>
+		<Thickness x:Key="Thickness/Dialog.Icon.Margin.Large">2,0,20,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ListActionButton.Padding">10,5,10,5</Thickness>
 		<Thickness x:Key="Thickness/Dialog.ListActionButton.Margin">5,5,0,0</Thickness>
 		<Thickness x:Key="Thickness/Dialog.TextBlock.Border.Header1">1</Thickness>
@@ -285,9 +287,7 @@
 		<Thickness x:Key="Thickness/MenuItem.Padding">12,8,12,8</Thickness>
 
 		<!-- MessageDialog -->
-		<sys:Double x:Key="Double/MessageDialog.Icon.Size">48</sys:Double>
 		<sys:Double x:Key="Double/MessageDialog.MinWidth">200</sys:Double>
-		<Thickness x:Key="Thickness/MessageDialog.Icon.Margin">5,0,20,0</Thickness>
 
 		<!-- Overlay -->
 		<CornerRadius x:Key="OverlayCornerRadius">8</CornerRadius>
@@ -703,6 +703,16 @@
 		<Setter Property="StretchDirection" Value="Both"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{StaticResource Double/Dialog.Icon.Size}"/>
+	</Style>
+	<Style Selector="Image.Dialog_Icon_Large">
+		<Setter Property="Height" Value="{StaticResource Double/Dialog.Icon.Size.Large}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.Icon.Margin.Large}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/Dialog.Icon.Size.Large}"/>
 	</Style>
 	<Style Selector="abControls|LinkTextBlock.Dialog_Icon_LinkTextBlock">
 		<Setter Property="FontSize" Value="{StaticResource Double/Dialog.TextBlock.FontSize}"/>

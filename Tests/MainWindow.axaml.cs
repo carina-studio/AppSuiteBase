@@ -304,6 +304,12 @@ namespace CarinaStudio.AppSuite.Tests
             this.canShowAppInfo.Update(true);
         }
 
+        async void ShowAppUpdateDialog()
+        {
+            using var appUpdater = this.OnCreateApplicationUpdater();
+            await new ApplicationUpdateDialog(appUpdater).ShowDialog(this);
+        }
+
         async void ShowMessageDialog()
         {
             var result = await new MessageDialog()

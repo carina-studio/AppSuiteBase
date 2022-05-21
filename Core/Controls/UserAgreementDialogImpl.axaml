@@ -24,9 +24,7 @@
 		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,Auto">
 
 			<!-- Icon -->
-			<Border Height="{DynamicResource Double/MessageDialog.Icon.Size}" Margin="{DynamicResource Thickness/MessageDialog.Icon.Margin}" Width="{DynamicResource Double/MessageDialog.Icon.Size}">
-				<Image Classes="Icon" Source="{StaticResource Image/Icon.UserAgreement.Colored}"/>
-			</Border>
+			<Image Classes="Dialog_Icon_Large" Source="{StaticResource Image/Icon.UserAgreement.Colored}"/>
 			
 			<!-- Message -->
 			<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">

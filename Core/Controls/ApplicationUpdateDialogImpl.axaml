@@ -31,13 +31,11 @@
 		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*">
 
 			<!-- Icon -->
-			<Panel Height="{DynamicResource Double/MessageDialog.Icon.Size}" IsVisible="{Binding !IsCheckingForUpdate}" Margin="{DynamicResource Thickness/MessageDialog.Icon.Margin}" VerticalAlignment="Center" Width="{DynamicResource Double/MessageDialog.Icon.Size}">
-				<Image Classes="Icon" Source="{DynamicResource Image/Icon.OK.Colored}" IsVisible="{Binding IsLatestVersion}"/>
-				<Image Classes="Icon" Source="{DynamicResource Image/Icon.Update.Colored}" IsVisible="{Binding !IsLatestVersion}"/>
+			<Panel IsVisible="{Binding !IsCheckingForUpdate}" VerticalAlignment="Center">
+				<Image Classes="Dialog_Icon_Large" Source="{DynamicResource Image/Icon.OK.Colored}" IsVisible="{Binding IsLatestVersion}"/>
+				<Image Classes="Dialog_Icon_Large" Source="{DynamicResource Image/Icon.Update.Colored}" IsVisible="{Binding !IsLatestVersion}"/>
 			</Panel>
-			<Border Height="{DynamicResource Double.MessageDialog.Icon.Size}" IsVisible="{Binding IsCheckingForUpdate}" Margin="{DynamicResource Thickness/MessageDialog.Icon.Margin}" VerticalAlignment="Center" Width="{DynamicResource Double/MessageDialog.Icon.Size}">
-				<Image Classes="Icon" Source="{DynamicResource Image/Icon.CheckingForUpdateInfo}"/>
-			</Border>
+			<abControls:ProgressRing Height="{StaticResource Double/Dialog.Icon.Size.Large}" IsIndeterminate="True" IsVisible="{Binding IsCheckingForUpdate}" Margin="{StaticResource Thickness/Dialog.Icon.Margin.Large}" VerticalAlignment="Center" Width="{StaticResource Double/Dialog.Icon.Size.Large}"/>
 
 			<!-- Message and progress -->
 			<StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">

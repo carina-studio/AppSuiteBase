@@ -13,9 +13,7 @@
 
 		<!-- Content -->
 		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
-			<Border Height="{DynamicResource Double/MessageDialog.Icon.Size}" Margin="{DynamicResource Thickness/MessageDialog.Icon.Margin}" VerticalAlignment="Top" Width="{DynamicResource Double/MessageDialog.Icon.Size}">
-				<Image Classes="Icon" Source="{Binding $parent[Window].IconImage}"/>
-			</Border>
+			<Image Classes="Dialog_Icon_Large" Source="{Binding $parent[Window].IconImage}" VerticalAlignment="Top"/>
 			<TextBlock Grid.Column="1" Text="{Binding $parent[Window].Message}" TextWrapping="Wrap" VerticalAlignment="Center"/>
 			<StackPanel Name="doNotAskAgainPanel" Grid.Column="1" Grid.Row="1" IsVisible="False">
 				<Separator Classes="Dialog_Separator"/>
