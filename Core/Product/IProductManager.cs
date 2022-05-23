@@ -78,6 +78,14 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
 
 
     /// <summary>
+    /// Show UI to purchase given product.
+    /// </summary>
+    /// <param name="id">ID of product.</param>
+    /// <param name="window">Window for showing UI.</param>
+    void PurchaseProduct(string id, Avalonia.Controls.Window window);
+
+
+    /// <summary>
     /// Try getting last known reason of failure of specific product activation.
     /// </summary>
     /// <param name="id">ID of product.</param>
@@ -96,6 +104,15 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
 
 
     /// <summary>
+    /// Try getting description of specific product.
+    /// </summary>
+    /// <param name="id">ID of product.</param>
+    /// <param name="description">Description of product.</param>
+    /// <returns>True if description got successfully.</returns>
+    bool TryGetProductDescription(string id, out string description);
+
+
+    /// <summary>
     /// Try getting e-mail address of specific product.
     /// </summary>
     /// <param name="id">ID of product.</param>
@@ -111,6 +128,15 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
     /// <param name="deviceCount">Maximum number of allowed devices.</param>
     /// <returns>True if maximum number of allowed devices got successfully.</returns>
     bool TryGetProductMaxDeviceCount(string id, out int deviceCount);
+
+
+    /// <summary>
+    /// Try getting display name of specific product.
+    /// </summary>
+    /// <param name="id">ID of product.</param>
+    /// <param name="name">Name of product.</param>
+    /// <returns>True if name got successfully.</returns>
+    bool TryGetProductName(string id, out string name);
 
 
     /// <summary>
@@ -196,9 +222,22 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
 
 
     /// <inheritdoc/>
+    public void PurchaseProduct(string id, Avalonia.Controls.Window window)
+    { }
+
+
+    /// <inheritdoc/>
     public bool TryGetProductActivationFailure(string id, out ProductActivationFailure failure)
     {
         failure = default;
+        return false;
+    }
+
+
+    /// <inheritdoc/>
+    public bool TryGetProductDescription(string id, out string description)
+    {
+        description = "";
         return false;
     }
 
@@ -238,6 +277,14 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
     public bool TryGetProductMaxDeviceCount(string id, out int deviceCount)
     {
         deviceCount = default;
+        return false;
+    }
+
+
+    /// <inheritdoc/>
+    public bool TryGetProductName(string id, out string name)
+    {
+        name = "";
         return false;
     }
 

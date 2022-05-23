@@ -139,15 +139,6 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
-        /// Get display name of specific product.
-        /// </summary>
-        /// <param name="productId">ID of product.</param>
-        /// <returns>Display name of product.</returns>
-        public virtual string GetProductName(string productId) =>
-            this.Application.GetStringNonNull($"Product.{productId}", productId);
-
-
-        /// <summary>
         /// Get application icon.
         /// </summary>
         public virtual IBitmap Icon

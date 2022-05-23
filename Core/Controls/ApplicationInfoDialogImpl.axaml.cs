@@ -265,7 +265,8 @@ namespace CarinaStudio.AppSuite.Controls
 				return;
 			
 			// show name
-			var name = appInfo.GetProductName(productId);
+			if (!productManager.TryGetProductName(productId, out var name))
+				name = productId;
 			(view.Children[0] as TextBlock)?.Let(it => it.Text = name);
 
 			// show state
