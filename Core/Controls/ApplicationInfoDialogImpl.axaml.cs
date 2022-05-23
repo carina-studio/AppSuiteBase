@@ -269,7 +269,7 @@ namespace CarinaStudio.AppSuite.Controls
 			(view.Children[0] as TextBlock)?.Let(it => it.Text = name);
 
 			// show state
-			if (productManager.TryGetProductState(productId, out var state) || true)
+			if (productManager.TryGetProductState(productId, out var state))
 			{
 				state = ProductState.Deactivated;
 				(view.Children[2] as TextBlock)?.Let(it => 
