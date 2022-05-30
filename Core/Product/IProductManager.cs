@@ -24,10 +24,9 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
     /// Show related UI to activate given product.
     /// </summary>
     /// <param name="id">ID of product.</param>
-    /// <param name="name">Display name of product.</param>
     /// <param name="window">Window to show dialog.</param>
     /// <returns>Task of activating product.</returns>
-    Task ActivateProductAsync(string id, string name, Avalonia.Controls.Window window);
+    Task ActivateProductAsync(string id, Avalonia.Controls.Window window);
 
 
     /// <summary>
@@ -167,7 +166,7 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
 
 
     /// <inheritdoc/>
-    public Task ActivateProductAsync(string id, string name, Avalonia.Controls.Window window) => Task.CompletedTask;
+    public Task ActivateProductAsync(string id, Avalonia.Controls.Window window) => Task.CompletedTask;
 
 
     /// <inheritdoc/>
