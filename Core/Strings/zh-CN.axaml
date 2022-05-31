@@ -32,15 +32,15 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.MakeApplicationBetter">协助让应用程序变得更好</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作业系统：</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">其他资讯</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">《隐私权政策》</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">隐私权政策</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Products">相关产品</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ProprietaryVersion">(Carina Studio 建置)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.RestartInDebugMode">以调试模式重新启动</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">应用程序日志导出完成。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">系统资讯</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">关于 {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">物理内存：</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">《使用者协议》</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Version">版本：{0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">使用者协议</sys:String>
 
 	<!-- ApplicationOptions -->
 	<sys:String x:Key="String/ApplicationOptions">应用程序选项</sys:String>

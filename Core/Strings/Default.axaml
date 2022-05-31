@@ -6,7 +6,7 @@
 	<sys:String x:Key="String/ApplicationChangeListDialog.Details">Details</sys:String>
 	<sys:String x:Key="String/ApplicationChangeListDialog.Header">What's change in {0} {1}</sys:String>
 	<sys:String x:Key="String/ApplicationChangeListDialog.IconSpaceReservationChar">A</sys:String>
-	<sys:String x:Key="String/ApplicationChangeListDialog.Title">Change list</sys:String>
+	<sys:String x:Key="String/ApplicationChangeListDialog.Title">Changelist</sys:String>
 
 	<!-- ApplicationCulture -->
 	<sys:String x:Key="String/ApplicationCulture.EN_US">English (United States)</sys:String>
@@ -15,7 +15,7 @@
 	<sys:String x:Key="String/ApplicationCulture.ZH_CN">简体中文</sys:String>
 
 	<!-- ApplicationInfoDialog -->
-	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">Change list</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">Changelist</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">List of assemblies</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">Application icon is made by</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">from</sys:String>
@@ -33,15 +33,16 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.MakeApplicationBetter">Help to make application better</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">Operating system:</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">Other information</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">《Privacy Policy》</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">Privacy Policy</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Products">Products</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ProprietaryVersion">(Built by Carina Studio)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.RestartInDebugMode">Restart in Debug Mode</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">Application logs exported.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">System information</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">About {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">RAM:</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">《User Agreement》</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Version">Version: {0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">User Agreement</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Version">{0}</sys:String>
 
 	<!-- ApplicationOptions -->
 	<sys:String x:Key="String/ApplicationOptions">Application options</sys:String>
@@ -59,7 +60,7 @@
 	<sys:String x:Key="String/ApplicationOptions.WillRestartMainWindowsToTakeEffect">Will restart windows to take effect</sys:String>
 
 	<!-- ApplicationReleasingType -->
-	<sys:String x:Key="String/ApplicationReleasingType.Development">Development</sys:String>
+	<sys:String x:Key="String/ApplicationReleasingType.Development">Dev</sys:String>
 	<sys:String x:Key="String/ApplicationReleasingType.Preview">Preview</sys:String>
 	<sys:String x:Key="String/ApplicationReleasingType.ReleaseCandidate">RC</sys:String>
 	<sys:String x:Key="String/ApplicationReleasingType.Stable">Stable</sys:String>

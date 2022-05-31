@@ -60,9 +60,9 @@
 								<StackPanel Orientation="Horizontal">
 									<TextBlock Text="{Binding $parent[Window].VersionString}" VerticalAlignment="Center"/>
 									<Separator Classes="Dialog_Separator_Small"/>
-									<TextBlock Text="(" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
+									<TextBlock Text="[" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
 									<abControls:LinkTextBlock Command="{Binding $parent[Window].ShowApplicationChangeList}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{DynamicResource String/ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
-									<TextBlock Text=")" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
+									<TextBlock Text="]" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
 								</StackPanel>
 								<TextBlock Text="©2021 Carina Studio"/>
 							</StackPanel>

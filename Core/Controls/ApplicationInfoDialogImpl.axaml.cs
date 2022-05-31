@@ -11,6 +11,7 @@ using CarinaStudio.Controls;
 using CarinaStudio.Data.Converters;
 using CarinaStudio.Threading;
 using System;
+using System.Text;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -153,10 +154,18 @@ namespace CarinaStudio.AppSuite.Controls
 					this.Title = this.Application.GetFormattedString("ApplicationInfoDialog.Title", appInfo.Name);
 					this.SetValue<string?>(VersionStringProperty, Global.Run(() =>
 					{
-						var str = this.Application.GetFormattedString("ApplicationInfoDialog.Version", appInfo.Version);
-						if (appInfo.ReleasingType == ApplicationReleasingType.Stable)
-							return str;
-						return str + $" ({AppReleasingTypeConverter.Convert<string?>(appInfo.ReleasingType)})";
+						var buffer = new StringBuilder(this.Application.GetFormattedString("ApplicationInfoDialog.Version", appInfo.Version));
+						if (appInfo.ReleasingType != ApplicationReleasingType.Stable)
+						{
+							buffer.Append(' ');
+							buffer.Append(AppReleasingTypeConverter.Convert<string?>(appInfo.ReleasingType));
+						}
+						if (false)
+						{
+							buffer.Append(' ');
+							buffer.Append(this.Application.GetString("ApplicationInfoDialog.ProprietaryVersion"));
+						}
+						return buffer.ToString();
 					}));
 
 					// show badges
