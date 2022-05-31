@@ -83,19 +83,18 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         {
             try
             {
-                await Task.Run(() =>
+                var success = await Task.Run(() =>
+                    ping.Send(server, 5000, pingData)?.Status == IPStatus.Success);
+                if (success)
                 {
-                    if (ping.Send(server, 5000, pingData)?.Status != IPStatus.Success)
-                        throw new Exception();
-                });
-                this.logger.LogTrace($"Network connection checked by '{server}'");
-                isConnected = true;
-                break;
+                    this.logger.LogTrace($"Network connection checked by '{server}'");
+                    isConnected = true;
+                    break;
+                }
             }
             catch
-            {
-                this.logger.LogWarning($"Failed to ping '{server}'");
-            }
+            { }
+            this.logger.LogWarning($"Failed to ping '{server}'");
         }
 
         // update state
