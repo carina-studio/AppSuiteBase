@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CarinaStudio.Collections;
@@ -94,6 +95,12 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// Get assemblies of this application.
         /// </summary>
         public IList<Assembly> Assemblies { get; }
+
+
+        /// <summary>
+        /// Get list of badge of application.
+        /// </summary>
+        public virtual IList<IImage> Badges { get; } = new IImage[0];
 
 
         /// <inheritdoc/>

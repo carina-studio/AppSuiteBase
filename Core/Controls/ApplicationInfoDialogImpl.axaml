@@ -53,7 +53,10 @@
 						<!-- Title and version -->
 						<Border>
 							<StackPanel Orientation="Vertical" VerticalAlignment="Center">
-								<TextBlock FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Margin="{DynamicResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Text="{Binding Name}"/>
+								<StackPanel Margin="{DynamicResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Orientation="Horizontal">
+									<TextBlock FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Text="{Binding Name}" VerticalAlignment="Center"/>
+									<StackPanel Name="badgesPanel" Height="{StaticResource Double/ApplicationInfoDialog.AppBadge.Size}" Orientation="Horizontal" VerticalAlignment="Center"/>
+								</StackPanel>
 								<StackPanel Orientation="Horizontal">
 									<TextBlock Text="{Binding $parent[Window].VersionString}" VerticalAlignment="Center"/>
 									<Separator Classes="Dialog_Separator_Small"/>

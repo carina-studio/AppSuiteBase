@@ -7,6 +7,7 @@ using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
+using CarinaStudio.Controls;
 using CarinaStudio.Data.Converters;
 using CarinaStudio.Threading;
 using System;
@@ -27,6 +28,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Fields.
+		readonly Panel badgesPanel;
 		readonly Panel productListPanel;
 		readonly EnumConverter productStateConverter;
 
@@ -35,7 +37,8 @@ namespace CarinaStudio.AppSuite.Controls
 		public ApplicationInfoDialogImpl()
 		{
 			AvaloniaXamlLoader.Load(this);
-			this.productListPanel = this.FindControl<Panel>(nameof(productListPanel));
+			this.badgesPanel = this.Get<Panel>(nameof(badgesPanel)).AsNonNull();
+			this.productListPanel = this.Get<Panel>(nameof(productListPanel)).AsNonNull();
 			this.productStateConverter = new(this.Application, typeof(ProductState));
 			this.SetValue(HasTotalPhysicalMemoryProperty, this.Application.HardwareInfo.TotalPhysicalMemory.HasValue);
 		}
@@ -155,6 +158,22 @@ namespace CarinaStudio.AppSuite.Controls
 							return str;
 						return str + $" ({AppReleasingTypeConverter.Convert<string?>(appInfo.ReleasingType)})";
 					}));
+
+					// show badges
+					this.badgesPanel.Children.Clear();
+					this.TryFindResource<double>("Double/ApplicationInfoDialog.AppBadge.Size", out var badgeSize);
+					this.TryFindResource<Thickness>("Thickness/ApplicationInfoDialog.AppBadge.Margin", out var badgeMargin);
+					foreach (var badge in appInfo.Badges)
+					{
+						this.badgesPanel.Children.Add(new Image()
+						{
+							Height = badgeSize.GetValueOrDefault(),
+							Margin = badgeMargin.GetValueOrDefault(),
+							Source = badge,
+							Stretch = Avalonia.Media.Stretch.Uniform,
+							Width = badgeSize.GetValueOrDefault(),
+						});
+					}
 
 					// check change list
 					this.SynchronizationContext.Post(async () =>
