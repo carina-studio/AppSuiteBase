@@ -184,7 +184,7 @@
 
 	<!-- ProductState -->
 	<sys:String x:Key="String/ProductState.Activated">Activated</sys:String>
-	<sys:String x:Key="String/ProductState.Activating">Activating</sys:String>
+	<sys:String x:Key="String/ProductState.Activating">Activating…</sys:String>
 	<sys:String x:Key="String/ProductState.Deactivated">Deactivated</sys:String>
 
 	<!-- RegexTextBox -->

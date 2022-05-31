@@ -186,8 +186,8 @@
 
 	<!-- ProductState -->
 	<sys:String x:Key="String/ProductState.Activated">已启用</sys:String>
-	<sys:String x:Key="String/ProductState.Activating">启用中</sys:String>
-	<sys:String x:Key="String/ProductState.Deactivated">已停用</sys:String>
+	<sys:String x:Key="String/ProductState.Activating">正在启用…</sys:String>
+	<sys:String x:Key="String/ProductState.Deactivated">停用</sys:String>
 
 	<!-- RegexTextBox -->
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.d">十进制数字</sys:String>

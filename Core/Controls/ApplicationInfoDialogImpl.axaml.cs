@@ -291,7 +291,6 @@ namespace CarinaStudio.AppSuite.Controls
 			// show state
 			if (productManager.TryGetProductState(productId, out var state))
 			{
-				state = ProductState.Deactivated;
 				(view.Children[2] as TextBlock)?.Let(it => 
 					it.Text = this.productStateConverter.Convert<string?>(state)?.Let(s =>
 						$"({s})"));
