@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using CarinaStudio.Controls;
 using CarinaStudio.Data.Converters;
 using CarinaStudio.Threading;
 using System;
@@ -85,12 +86,14 @@ namespace CarinaStudio.AppSuite.Controls
 				});
 				this.FindControl<TextBlock>("versionTextBlock").AsNonNull().Let(image =>
 				{
-					image.Opacity = 1;
+					this.TryFindResource<double>("Double/ApplicationInfoDialog.AppVersion.Opacity", out var opacity);
+					image.Opacity = opacity ?? 1;
 					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
 				this.FindControl<TextBlock>("copyrightTextBlock").AsNonNull().Let(image =>
 				{
-					image.Opacity = 1;
+					this.TryFindResource<double>("Double/ApplicationInfoDialog.AppVersion.Opacity", out var opacity);
+					image.Opacity = opacity ?? 1;
 					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
 				this.FindControl<TextBlock>("messageTextBlock").AsNonNull().Let(image =>
@@ -101,7 +104,7 @@ namespace CarinaStudio.AppSuite.Controls
 			});
 			this.Version = app.GetFormattedString("ApplicationInfoDialog.Version", app.Assembly.GetName().Version).AsNonNull();
 			if (app.ReleasingType != ApplicationReleasingType.Stable)
-				this.Version += $" ({AppReleasingTypeConverter.Convert<string?>(app.ReleasingType)})";
+				this.Version += $" {AppReleasingTypeConverter.Convert<string?>(app.ReleasingType)}";
 			InitializeComponent();
 		}
 
