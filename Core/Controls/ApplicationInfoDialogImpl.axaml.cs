@@ -160,7 +160,17 @@ namespace CarinaStudio.AppSuite.Controls
 							buffer.Append(' ');
 							buffer.Append(AppReleasingTypeConverter.Convert<string?>(appInfo.ReleasingType));
 						}
-						if (false)
+						var isProprietaryApp = false;
+						foreach (var itf in this.Application.GetType().GetInterfaces())
+						{
+							if (itf.FullName == "CarinaStudio.AppSuite.IProprietaryApplication"
+								&& itf.Assembly.FullName?.StartsWith("CarinaStudio.AppSuite.Proprietary,") == true)
+							{
+								isProprietaryApp = true;
+								break;
+							}
+						}
+						if (isProprietaryApp)
 						{
 							buffer.Append(' ');
 							buffer.Append(this.Application.GetString("ApplicationInfoDialog.ProprietaryVersion"));
