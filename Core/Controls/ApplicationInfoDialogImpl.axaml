@@ -64,22 +64,29 @@
 									<abControls:LinkTextBlock Command="{Binding $parent[Window].ShowApplicationChangeList}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{DynamicResource String/ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
 									<TextBlock Text="]" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
 								</StackPanel>
-								<TextBlock Text="©2021 Carina Studio"/>
 							</StackPanel>
 						</Border>
 
 					</DockPanel>
 					<Separator Classes="Dialog_Separator_Large"/>
 
-					<!-- Framework attribution -->
-					<StackPanel Orientation="Horizontal">
-						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section1}" VerticalAlignment="Center"/>
-						<abControls:LinkTextBlock Text=" .NET " Uri="https://dotnet.microsoft.com/" VerticalAlignment="Center"/>
-						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section2}" VerticalAlignment="Center"/>
-						<abControls:LinkTextBlock Text=" Avalonia " Uri="http://avaloniaui.net/" VerticalAlignment="Center"/>
-						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.Framework.Section3}" VerticalAlignment="Center"/>
+					<!-- Open source attribution -->
+					<StackPanel Name="openSourceAttrPanel" Orientation="Horizontal">
+						<StackPanel.IsVisible>
+							<MultiBinding Converter="{x:Static aConverters:BoolConverters.And}">
+								<Binding Path="IsOpenSourceBased"/>
+								<Binding Path="GitHubProjectUri" Converter="{x:Static aConverters:ObjectConverters.IsNotNull}"/>
+							</MultiBinding>
+						</StackPanel.IsVisible>
+						<TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+						<Separator Classes="Dialog_Separator_Small"/>
+						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section1}" VerticalAlignment="Center"/>
+						<Separator Classes="Dialog_Separator_Small"/>
+						<abControls:LinkTextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section2}" Uri="{Binding GitHubProjectUri}" VerticalAlignment="Center"/>
+						<Separator Classes="Dialog_Separator_Small"/>
+						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section3}" VerticalAlignment="Center"/>
 					</StackPanel>
-					<Separator Classes="Dialog_Separator_Small"/>
+					<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #openSourceAttrPanel.IsVisible}"/>
 
 					<!-- App icon attribution (Flaticon) -->
 					<StackPanel Orientation="Horizontal" IsVisible="False">
@@ -100,6 +107,10 @@
 						<abControls:LinkTextBlock Text=" Flaticon " Uri="https://www.flaticon.com/" VerticalAlignment="Center"/>
 						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon}" VerticalAlignment="Center"/>
 					</StackPanel>
+					<Separator Classes="Dialog_Separator"/>
+
+					<!-- Copyright -->
+					<TextBlock Text="©2021 Carina Studio"/>
 					<Separator Classes="Dialog_Separator_Large"/>
 
 					<!-- System info (Header) -->
@@ -148,25 +159,43 @@
 						<Separator Classes="Dialog_Separator_Large"/>
 					</StackPanel>
 
-					<!-- Make APP better -->
+					<!-- Assemblies (Header) -->
 					<Border Classes="Dialog_TextBlock_Header1">
-						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.MakeApplicationBetter}"/>
+						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Assemblies}"/>
 					</Border>
 
-					<!-- Source code -->
-					<StackPanel IsVisible="{Binding GitHubProjectUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
-						<StackPanel Orientation="Horizontal">
-							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.GitHub}"/>
-							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.GitHubProject}" Uri="{Binding GitHubProjectUri}"/>
-						</StackPanel>
-						<Separator Classes="Dialog_Separator_Small"/>
-					</StackPanel>
+					<!-- Assemblies -->
+					<StackPanel Name="assembliesPanel"/>
+					<Separator Classes="Dialog_Separator_Large"/>
+					
+					<!-- Other information -->
+					<Border Classes="Dialog_TextBlock_Header1">
+						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Other}"/>
+					</Border>
 
 					<!-- Donate -->
 					<StackPanel IsVisible="{Binding PayPalUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
 						<StackPanel Orientation="Horizontal">
 							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PayPal.Outline.Colored}"/>
 							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.DonateWithPayPal}" Uri="{Binding PayPalUri}"/>
+						</StackPanel>
+						<Separator Classes="Dialog_Separator_Small"/>
+					</StackPanel>
+
+					<!-- User agreement -->
+					<StackPanel IsVisible="{Binding UserAgreementUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
+						<StackPanel Orientation="Horizontal">
+							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.UserAgreement.Outline}"/>
+							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.UserAgreement}" Uri="{Binding UserAgreementUri}"/>
+						</StackPanel>
+						<Separator Classes="Dialog_Separator_Small"/>
+					</StackPanel>
+
+					<!-- Privacy policy -->
+					<StackPanel IsVisible="{Binding PrivacyPolicyUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
+						<StackPanel Orientation="Horizontal">
+							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PrivacyPolicy.Outline}"/>
+							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
 						</StackPanel>
 						<Separator Classes="Dialog_Separator_Small"/>
 					</StackPanel>
@@ -184,38 +213,6 @@
 					<StackPanel Orientation="Horizontal">
 						<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Export}"/>
 						<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ExportLogs}" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}"/>
-					</StackPanel>
-					<Separator Classes="Dialog_Separator_Large"/>
-
-					<!-- Assemblies (Header) -->
-					<Border Classes="Dialog_TextBlock_Header1">
-						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Assemblies}"/>
-					</Border>
-
-					<!-- Assemblies -->
-					<StackPanel Name="assembliesPanel"/>
-					<Separator Classes="Dialog_Separator_Large"/>
-					
-					<!-- Other information -->
-					<Border Classes="Dialog_TextBlock_Header1">
-						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Other}"/>
-					</Border>
-
-					<!-- User agreement -->
-					<StackPanel IsVisible="{Binding UserAgreementUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
-						<StackPanel Orientation="Horizontal">
-							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.UserAgreement.Outline}"/>
-							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.UserAgreement}" Uri="{Binding UserAgreementUri}"/>
-						</StackPanel>
-						<Separator Classes="Dialog_Separator_Small"/>
-					</StackPanel>
-
-					<!-- Privacy policy -->
-					<StackPanel IsVisible="{Binding PrivacyPolicyUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
-						<StackPanel Orientation="Horizontal">
-							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PrivacyPolicy.Outline}"/>
-							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
-						</StackPanel>
 					</StackPanel>
 
 				</StackPanel>

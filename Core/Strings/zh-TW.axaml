@@ -17,9 +17,9 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">應用程式圖示由</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">提供，並發布於</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon" xml:space="preserve">。</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.Framework.Section1" xml:space="preserve">基於</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.Framework.Section2" xml:space="preserve">以及</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.Framework.Section3" xml:space="preserve">開發完成。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section1">是基於</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section2">開放原始碼專案</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section3">所開發的的應用程式。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">偵錯模式可以讓應用程式輸出更多的執行期間資訊至日誌，甚至提供應用程式內部功能調整。下次您自行啟動應用程式時將自動離開偵錯模式。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DonateWithPayPal">使用 PayPal 贊助</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">匯出應用程式日誌…</sys:String>
@@ -27,7 +27,6 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET 版本：</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">GitHub 上的專案頁面</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">已安裝：</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.MakeApplicationBetter">協助讓應用程式變得更好</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作業系統：</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">其他資訊</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">隱私權政策</sys:String>

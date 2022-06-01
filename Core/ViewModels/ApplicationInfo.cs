@@ -198,6 +198,12 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
+        /// CHeck whether application is open source based or not.
+        /// </summary>
+        public virtual bool IsOpenSourceBased { get => true; }
+
+
+        /// <summary>
         /// Get name of application.
         /// </summary>
         public string Name { get => this.Application.Name; }
