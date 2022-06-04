@@ -232,7 +232,9 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+#pragma warning disable CS0067
         public virtual event EventHandler<IAppSuiteApplication, CultureInfo>? LoadingStrings;
+#pragma warning restore CS0067
 
 
         /// <summary>
