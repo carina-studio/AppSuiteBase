@@ -7,7 +7,7 @@
 		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Core</AssemblyName>
 		<Nullable>enable</Nullable>
-		<TargetFrameworks>net6.0;net6.0-windows10.0.17763.0</TargetFrameworks>
+		<TargetFrameworks>net6.0</TargetFrameworks>
 		<Authors>Carina Studio</Authors>
 		<Company>Carina Studio</Company>
 		<Copyright>©2021 Carina Studio</Copyright>
