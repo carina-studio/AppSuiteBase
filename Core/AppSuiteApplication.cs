@@ -965,6 +965,10 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <inheritdoc/>
+        public virtual IEnumerable<ExternalDependency> ExternalDependencies { get; } = new ExternalDependency[0];
+
+
         /// <summary>
         /// Get fall-back theme mode if <see cref="IsSystemThemeModeSupported"/> is false.
         /// </summary>

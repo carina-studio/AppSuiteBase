@@ -123,6 +123,10 @@ namespace CarinaStudio.AppSuite
         public virtual ThemeMode EffectiveThemeMode { get; } = ThemeMode.Dark;
 
 
+        /// <inheritdoc/>
+        public virtual IEnumerable<ExternalDependency> ExternalDependencies { get; } = new ExternalDependency[0];
+
+
         /// <summary>
         /// Get string from resources.
         /// </summary>

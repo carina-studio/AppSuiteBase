@@ -12,9 +12,13 @@ namespace CarinaStudio.AppSuite.Tests
 {
     public class App : AppSuiteApplication
     {
+        readonly List<ExternalDependency> externalDependencies = new();
+
         protected override bool AllowMultipleMainWindows => true;
 
         public override int DefaultLogOutputTargetPort => 5566;
+
+        public override IEnumerable<ExternalDependency> ExternalDependencies { get => this.externalDependencies; }
 
         public override void Initialize()
         {
@@ -45,6 +49,8 @@ namespace CarinaStudio.AppSuite.Tests
 
         protected override async Task OnPrepareStartingAsync()
         {
+            this.externalDependencies.Add(new ExecutableExternalDependency(this, "dotnet", ExternalDependencyPriority.Required, "dotnet", new Uri("https://dotnet.microsoft.com/"), new Uri("https://dotnet.microsoft.com/download")));
+            
             await base.OnPrepareStartingAsync();
 
             if (!this.IsRestoringMainWindowsRequested)

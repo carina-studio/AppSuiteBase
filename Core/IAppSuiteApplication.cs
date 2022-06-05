@@ -72,6 +72,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get all external dependencies of application.
+        /// </summary>
+        IEnumerable<ExternalDependency> ExternalDependencies { get; }
+
+
+        /// <summary>
         /// Get information of hardware.iapsu
         /// </summary>
         HardwareInfo HardwareInfo { get; }
