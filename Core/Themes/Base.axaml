@@ -55,7 +55,9 @@
 		<sys:Double x:Key="Double/ApplicationUpdateDialog.Width">500</sys:Double>
 
 		<!-- BrowseButton -->
+		<sys:Double x:Key="Double/BrowseButton.Icon.Size">16</sys:Double>
 		<Thickness x:Key="Thickness/BrowseButton.Margin">5,0,0,0</Thickness>
+		<Thickness x:Key="Thickness/BrowseButton.Padding">8</Thickness>
 
 		<!-- Button -->
 		<SolidColorBrush x:Key="AccentButtonBackground" Color="{DynamicResource SystemAccentColor}" />
@@ -567,11 +569,25 @@
 	<Style Selector="Button.BrowseButton">
 		<Setter Property="Content" Value="…"/>
 		<Setter Property="Margin" Value="{StaticResource Thickness/BrowseButton.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/BrowseButton.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
+	</Style>
+	<Style Selector="Image.BrowseButtonIcon">
+		<Setter Property="Height" Value="{StaticResource Double/BrowseButton.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/BrowseButton.Icon.Size}"/>
+	</Style>
+	<Style Selector="Image.BrowseButtonIcon:disabled">
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="ToggleButton.BrowseButton">
 		<Setter Property="Content" Value="…"/>
 		<Setter Property="Margin" Value="{StaticResource Thickness/BrowseButton.Margin}"/>
+		<Setter Property="Padding" Value="{StaticResource Thickness/BrowseButton.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 	</Style>
 
