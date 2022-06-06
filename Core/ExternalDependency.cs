@@ -11,6 +11,7 @@ namespace CarinaStudio.AppSuite;
 public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplication>, INotifyPropertyChanged
 {
     // Fields.
+    Task? availabilityCheckTask;
     readonly ScheduledAction checkAvailabilityAction;
     string? description;
     bool isFirstAvailabilityCheck = true;
@@ -31,26 +32,37 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
         {
             if (this.state == ExternalDependencyState.CheckingForAvailability)
                 return;
-            this.State = ExternalDependencyState.CheckingForAvailability;
-            if (!isFirstAvailabilityCheck)
-                await Task.Delay(500);
-            else
-                isFirstAvailabilityCheck = false;
-            try
-            {
-                this.State = (await this.OnCheckAvailabilityAsync())
-                    ? ExternalDependencyState.Available
-                    : ExternalDependencyState.Unavailable;
-            }
-            catch
-            { 
-                this.State = ExternalDependencyState.Unavailable;
-            }
+            this.availabilityCheckTask = this.CheckForAvailabilityAsync();
+            await this.availabilityCheckTask;
+            this.availabilityCheckTask = null;
         });
         this.Id = id;
         this.Priority = priority;
         app.AddWeakEventHandler(nameof(IApplication.StringsUpdated), this.OnAppStringsUpdated);
         this.InvalidateAvailability();
+    }
+
+
+    // Check for availability asynchronously.
+    async Task CheckForAvailabilityAsync()
+    {
+        if (this.state == ExternalDependencyState.CheckingForAvailability)
+            return;
+        this.State = ExternalDependencyState.CheckingForAvailability;
+        if (!this.isFirstAvailabilityCheck)
+            await Task.Delay(500);
+        else
+            this.isFirstAvailabilityCheck = false;
+        try
+        {
+            this.State = (await this.OnCheckAvailabilityAsync())
+                ? ExternalDependencyState.Available
+                : ExternalDependencyState.Unavailable;
+        }
+        catch
+        { 
+            this.State = ExternalDependencyState.Unavailable;
+        }
     }
 
 
@@ -173,6 +185,17 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
             this.state = value;
             this.PropertyChanged?.Invoke(this, new(nameof(State)));
         }
+    }
+
+
+    /// <summary>
+    /// Wait for availability check completed.
+    /// </summary>
+    /// <returns>Task of waiting.</returns>
+    public Task WaitForCheckingAcailability()
+    {
+        this.VerifyAccess();
+        return this.availabilityCheckTask ?? Task.CompletedTask;
     }
 }
 

@@ -2109,6 +2109,10 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogDebug("Use mock product manager");
                 this.productManager = new MockProductManager(this);
             }
+
+            // check for external dependencies
+            foreach (var externalDependency in this.ExternalDependencies)
+                await externalDependency.WaitForCheckingAcailability();
         }
 
 
