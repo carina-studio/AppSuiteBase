@@ -19,7 +19,7 @@
 				<Border Classes="Dialog_TextBlock_Header1">
 					<TextBlock Classes="Dialog_TextBlock_Header1" Text="{Binding Name}"/>
 				</Border>
-				<TextBlock Classes="Dialog_TextBlock" Grid.Row="1" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" MaxLines="5" Text="{Binding Description}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
+				<TextBlock Classes="Dialog_TextBlock" Grid.Row="1" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" Text="{Binding Description}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
 				<Separator Classes="Dialog_Separator" Grid.Row="2" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}"/>
 				<TextBlock Classes="Dialog_TextBlock" Grid.Row="3" Text="{Binding Priority, Converter={x:Static controls:ExternalDependenciesDialogImpl.PriorityConverter}}"/>
 				<TextBlock Classes="Dialog_TextBlock" Foreground="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateBrushConverter}}" Grid.Row="4" Text="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateConverter}}"/>
