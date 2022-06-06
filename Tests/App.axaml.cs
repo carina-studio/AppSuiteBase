@@ -20,6 +20,8 @@ namespace CarinaStudio.AppSuite.Tests
 
         public override IEnumerable<ExternalDependency> ExternalDependencies { get => this.externalDependencies; }
 
+        public override int ExternalDependenciesVersion { get; } = 2;
+
         public override void Initialize()
         {
             this.Name = "AppSuite";

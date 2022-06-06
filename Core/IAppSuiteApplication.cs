@@ -78,6 +78,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get version to identify the collection of external dependencies.
+        /// </summary>
+        int ExternalDependenciesVersion { get; }
+
+
+        /// <summary>
         /// Get information of hardware.iapsu
         /// </summary>
         HardwareInfo HardwareInfo { get; }

@@ -47,6 +47,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Static fields.
+        static readonly SettingKey<int> ExtDepDialogShownVersionKey = new SettingKey<int>("MainWindow.ExternalDependenciesDialogShownVersion", -1);
         static bool IsNotifyingAppUpdateFound;
         static readonly SettingKey<int> WindowHeightSettingKey = new SettingKey<int>("MainWindow.Height", 600);
         static readonly SettingKey<WindowState> WindowStateSettingKey = new SettingKey<WindowState>("MainWindow.State", WindowState.Maximized);
@@ -638,7 +639,36 @@ namespace CarinaStudio.AppSuite.Controls
                     this.isShowingInitialDialogs = true;
                     await this.NotifyApplicationUpdateFound();
                     this.isShowingInitialDialogs = false;
+                    return;
                 }
+            }
+
+            // show external dependencies dialog
+            var hasExtDep = false;
+            var hasUnavailableRequiredExtDep = false;
+            foreach (var extDep in this.Application.ExternalDependencies)
+            {
+                hasExtDep = true;
+                if (extDep.Priority == ExternalDependencyPriority.Required 
+                    && extDep.State != ExternalDependencyState.Available)
+                {
+                    hasUnavailableRequiredExtDep = true;
+                    break;
+                }
+            }
+            if (hasUnavailableRequiredExtDep || this.PersistentState.GetValueOrDefault(ExtDepDialogShownVersionKey) != this.Application.ExternalDependenciesVersion)
+            {
+                if (hasExtDep)
+                {
+                    this.Logger.LogDebug("Show external dependencies dialog");
+                    this.PersistentState.SetValue<int>(ExtDepDialogShownVersionKey, this.Application.ExternalDependenciesVersion);
+                    this.isShowingInitialDialogs = true;
+                    await new ExternalDependenciesDialog().ShowDialog(this);
+                    this.isShowingInitialDialogs = false;
+                    return;
+                }
+                else
+                    this.PersistentState.SetValue<int>(ExtDepDialogShownVersionKey, this.Application.ExternalDependenciesVersion);
             }
 
             // all dialogs closed

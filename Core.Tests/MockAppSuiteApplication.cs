@@ -127,6 +127,10 @@ namespace CarinaStudio.AppSuite
         public virtual IEnumerable<ExternalDependency> ExternalDependencies { get; } = new ExternalDependency[0];
 
 
+        /// <inheritdoc/>
+        public virtual int ExternalDependenciesVersion { get; } = 1;
+
+
         /// <summary>
         /// Get string from resources.
         /// </summary>
