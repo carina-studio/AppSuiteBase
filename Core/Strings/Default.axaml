@@ -26,6 +26,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">Application will generate more runtime information to application log in Debug Mode, even provides options to enable or adjustment some internal functions. It will leave Debug Mode automatically when you launch application next time.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DonateWithPayPal">Donate with PayPal</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">Export application logs…</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ExternalDependencies">External dependencies…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">Failed to export application logs.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET version:</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">Project page on GitHub</sys:String>

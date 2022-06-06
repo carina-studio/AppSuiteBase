@@ -25,6 +25,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">调试模式可以让应用程序输出更多的执行期间信息至日志，甚至提供应用程序内部功能调整。下次您自行启动应用程序时将自动退出调试模式。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DonateWithPayPal">使用 PayPal 赞助</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">导出应用程序日志…</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ExternalDependencies">外部依赖…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">无法导出应用程序日志。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET 版本：</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">GitHub 上的项目页面</sys:String>

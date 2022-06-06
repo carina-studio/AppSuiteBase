@@ -11,6 +11,7 @@ using CarinaStudio.Controls;
 using CarinaStudio.Data.Converters;
 using CarinaStudio.Threading;
 using System;
+using System.Linq;
 using System.Text;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -23,6 +24,7 @@ namespace CarinaStudio.AppSuite.Controls
 		// Static fields.
 		static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
 		static readonly AvaloniaProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
+		static readonly AvaloniaProperty<bool> HasExternalDependenciesProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasExternalDependencies");
 		static readonly AvaloniaProperty<bool> HasTotalPhysicalMemoryProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasTotalPhysicalMemory));
 		static readonly SettingKey<bool> IsRestartingInDebugModeConfirmationShownKey = new("ApplicationInfoDialog.IsRestartingInDebugModeConfirmationShown");
 		static readonly AvaloniaProperty<string?> VersionStringProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, string?>(nameof(VersionString));
@@ -41,7 +43,8 @@ namespace CarinaStudio.AppSuite.Controls
 			this.badgesPanel = this.Get<Panel>(nameof(badgesPanel)).AsNonNull();
 			this.productListPanel = this.Get<Panel>(nameof(productListPanel)).AsNonNull();
 			this.productStateConverter = new(this.Application, typeof(ProductState));
-			this.SetValue(HasTotalPhysicalMemoryProperty, this.Application.HardwareInfo.TotalPhysicalMemory.HasValue);
+			this.SetValue<bool>(HasExternalDependenciesProperty, this.Application.ExternalDependencies.ToArray().IsNotEmpty());
+			this.SetValue<bool>(HasTotalPhysicalMemoryProperty, this.Application.HardwareInfo.TotalPhysicalMemory.HasValue);
 		}
 
 
@@ -288,6 +291,11 @@ namespace CarinaStudio.AppSuite.Controls
 			// show dialog
 			_ = new ApplicationChangeListDialog(appInfo.ApplicationChangeList).ShowDialog(this);
 		}
+
+
+		// Show external dependencies.
+		void ShowExternalDependencies() =>
+			new ExternalDependenciesDialog().ShowDialog(this);
 
 
 		// Show product information on given view.
