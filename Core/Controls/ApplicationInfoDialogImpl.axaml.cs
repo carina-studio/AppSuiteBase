@@ -56,7 +56,7 @@ namespace CarinaStudio.AppSuite.Controls
 			var fileName = await new SaveFileDialog().Also(it =>
 			{
 				var dateTime = DateTime.Now;
-				it.Filters.Add(new FileDialogFilter().Also(filter =>
+				it.Filters!.Add(new FileDialogFilter().Also(filter =>
 				{
 					filter.Extensions.Add("zip");
 					filter.Name = this.Application.GetString("FileFormat.Zip");
