@@ -644,21 +644,20 @@ namespace CarinaStudio.AppSuite.Controls
             }
 
             // show external dependencies dialog
-            var hasExtDep = false;
+            var hasUnavailableExtDep = false;
             var hasUnavailableRequiredExtDep = false;
             foreach (var extDep in this.Application.ExternalDependencies)
             {
-                hasExtDep = true;
-                if (extDep.Priority == ExternalDependencyPriority.Required 
-                    && extDep.State != ExternalDependencyState.Available)
+                if (extDep.State != ExternalDependencyState.Available)
                 {
-                    hasUnavailableRequiredExtDep = true;
-                    break;
+                    hasUnavailableExtDep = true;
+                    if (extDep.Priority == ExternalDependencyPriority.Required)
+                        hasUnavailableRequiredExtDep = true;
                 }
             }
             if (hasUnavailableRequiredExtDep || this.PersistentState.GetValueOrDefault(ExtDepDialogShownVersionKey) != this.Application.ExternalDependenciesVersion)
             {
-                if (hasExtDep)
+                if (hasUnavailableExtDep)
                 {
                     this.Logger.LogDebug("Show external dependencies dialog");
                     this.PersistentState.SetValue<int>(ExtDepDialogShownVersionKey, this.Application.ExternalDependenciesVersion);
