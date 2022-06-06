@@ -129,6 +129,7 @@
 	<sys:String x:Key="String/Common.Options.WithDialog">选项…</sys:String>
 	<sys:String x:Key="String/Common.Paste">粘贴</sys:String>
 	<sys:String x:Key="String/Common.Paste.WithGesture">粘贴 (Ctrl+V)</sys:String>
+	<sys:String x:Key="String/Common.Refresh">重新整理</sys:String>
 	<sys:String x:Key="String/Common.Remove">移除</sys:String>
 	<sys:String x:Key="String/Common.Rename">重新命名</sys:String>
 	<sys:String x:Key="String/Common.Rename.WithDialog">重新命名…</sys:String>
@@ -156,6 +157,21 @@
 3.Unix 时间戳，单位可以为秒、毫秒、微秒。
 4.格式为 'yyyyMMdd_HH:mm:ss.ffffff' 的文字，其中年份、秒、毫微秒以及 ':' 可以省略。</sys:String>
 	<sys:String x:Key="String/DateTimeTextBox.Watermark">日期与时间</sys:String>
+
+	<!-- ExternalDependenciesDialog -->
+	<sys:String x:Key="String/ExternalDependenciesDialog.ExternalDependency.Install">下载及安装</sys:String>
+	<sys:String x:Key="String/ExternalDependenciesDialog.Title">外部依赖</sys:String>
+
+	<!-- ExternalDependencyPriority -->
+	<sys:String x:Key="String/ExternalDependencyPriority.Optional">这是可选择 (非必要) 的依赖</sys:String>
+	<sys:String x:Key="String/ExternalDependencyPriority.Required">这是应用程序必要的依赖</sys:String>
+	<sys:String x:Key="String/ExternalDependencyPriority.RequiredByFeatures">对部分功能为必要依赖</sys:String>
+
+	<!-- ExternalDependencyState -->
+	<sys:String x:Key="String/ExternalDependencyState.Available">已安装</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.CheckingForAvailability">正在确认安装状态…</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Unavailable">尚未安装</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Unknown">未知</sys:String>
 
 	<!-- FallbackFontFamilies -->
 	<sys:String x:Key="String/TextBox.FallbackFontFamilies">Microsoft JhengHei,Noto Sans CJK TC,蘋方-繁,宋体,sans-serif</sys:String>

@@ -204,6 +204,10 @@
 		<Thickness x:Key="ExpanderDropdownRightBorderThickness">0</Thickness>
 		<Thickness x:Key="ExpanderDropdownUpBorderThickness">0</Thickness>
 
+		<!-- ExternalDependenciesDialog -->
+		<sys:Double x:Key="Double/ExternalDependenciesDialog.Content.MaxHeight">500</sys:Double>
+		<sys:Double x:Key="Double/ExternalDependenciesDialog.Width">500</sys:Double>
+
 		<!-- FullWindowTutorialPresenter -->
 		<Color x:Key="Color/FullWindowTutorialPresenter.Background">#cf000000</Color>
 		<BoxShadows x:Key="BoxShadows/FullWindowTutorialPresenter.Tutorial">0 0 10 0 #5f000000</BoxShadows>

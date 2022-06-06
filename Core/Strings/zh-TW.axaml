@@ -127,6 +127,7 @@
 	<sys:String x:Key="String/Common.Options.WithDialog">選項…</sys:String>
 	<sys:String x:Key="String/Common.Paste">貼上</sys:String>
 	<sys:String x:Key="String/Common.Paste.WithGesture">貼上 (Ctrl+V)</sys:String>
+	<sys:String x:Key="String/Common.Refresh">重新整理</sys:String>
 	<sys:String x:Key="String/Common.Remove">移除</sys:String>
 	<sys:String x:Key="String/Common.Rename">重新命名</sys:String>
 	<sys:String x:Key="String/Common.Rename.WithDialog">重新命名…</sys:String>
@@ -154,6 +155,21 @@
 3.Unix 時間戳記，單位可以為秒、毫秒或微秒。
 4.格式為 'yyyyMMdd_HH:mm:ss.ffffff' 的文字，其中年份、秒、毫微秒以及 ':' 可以省略。</sys:String>
 	<sys:String x:Key="String/DateTimeTextBox.Watermark">日期與時間</sys:String>
+
+	<!-- ExternalDependenciesDialog -->
+	<sys:String x:Key="String/ExternalDependenciesDialog.ExternalDependency.Install">下載及安裝</sys:String>
+	<sys:String x:Key="String/ExternalDependenciesDialog.Title">外部相依性</sys:String>
+
+	<!-- ExternalDependencyPriority -->
+	<sys:String x:Key="String/ExternalDependencyPriority.Optional">這是可選擇 (非必要) 的相依性</sys:String>
+	<sys:String x:Key="String/ExternalDependencyPriority.Required">這是應用程式必要的相依性</sys:String>
+	<sys:String x:Key="String/ExternalDependencyPriority.RequiredByFeatures">對部分功能為必要相依性</sys:String>
+
+	<!-- ExternalDependencyState -->
+	<sys:String x:Key="String/ExternalDependencyState.Available">已安裝</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.CheckingForAvailability">正在確認安裝狀態…</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Unavailable">尚未安裝</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Unknown">未知</sys:String>
 
 	<!-- FallbackFontFamilies -->
 	<sys:String x:Key="String/TextBox.FallbackFontFamilies">Microsoft JhengHei,Noto Sans CJK TC,蘋方-繁</sys:String>

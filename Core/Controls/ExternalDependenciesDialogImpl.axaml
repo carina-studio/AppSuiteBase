@@ -1,0 +1,53 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:abControls="using:CarinaStudio.Controls"
+		xmlns:aConverters="using:Avalonia.Data.Converters"
+		xmlns:as="using:CarinaStudio.AppSuite"
+		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="CarinaStudio.AppSuite.Controls.ExternalDependenciesDialogImpl"
+		Classes="Dialog"
+        Title="{DynamicResource String/ExternalDependenciesDialog.Title}"
+		Width="{DynamicResource Double/ExternalDependenciesDialog.Width}">
+	
+	<!-- DataTemplate -->
+	<Window.DataTemplates>
+		<DataTemplate DataType="{x:Type as:ExternalDependency}">
+			<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+				<Border Classes="Dialog_TextBlock_Header1">
+					<TextBlock Classes="Dialog_TextBlock_Header1" Text="{Binding Name}"/>
+				</Border>
+				<TextBlock Classes="Dialog_TextBlock" Grid.Row="1" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" MaxLines="5" Text="{Binding Description}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
+				<Separator Classes="Dialog_Separator" Grid.Row="2" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}"/>
+				<TextBlock Classes="Dialog_TextBlock" Grid.Row="3" Text="{Binding Priority, Converter={x:Static controls:ExternalDependenciesDialogImpl.PriorityConverter}}"/>
+				<TextBlock Classes="Dialog_TextBlock" Foreground="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateBrushConverter}}" Grid.Row="4" Text="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateConverter}}"/>
+				<StackPanel Grid.Row="5" Orientation="Horizontal">
+					<abControls:LinkTextBlock Name="detailsLink" IsVisible="{Binding DetailsUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Text="{DynamicResource String/Common.Details}" Uri="{Binding DetailsUri}"/>
+					<Separator Classes="Dialog_Separator" IsVisible="{Binding detailsLink.IsVisible}"/>
+					<abControls:LinkTextBlock IsVisible="{Binding InstallationUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Text="{DynamicResource String/ExternalDependenciesDialog.ExternalDependency.Install}" Uri="{Binding InstallationUri}"/>
+				</StackPanel>
+			</Grid>
+		</DataTemplate>
+	</Window.DataTemplates>
+	
+	<!-- Content -->
+	<DockPanel>
+
+		<!-- Control buttons -->
+		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
+			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Refresh}" Content="{DynamicResource String/Common.Refresh}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.OK}" IsEnabled="{Binding $parent[Window].CanClose}"/>
+			</StackPanel>
+		</Border>
+
+		<!-- Content -->
+		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="{StaticResource Double/ExternalDependenciesDialog.Content.MaxHeight}">
+			<StackPanel Name="externalDependenciesPanel" Classes="Dialog_ContentPanel_WithHeader"/>
+		</ScrollViewer>
+
+	</DockPanel>
+	
+</Window>

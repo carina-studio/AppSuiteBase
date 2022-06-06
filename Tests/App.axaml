@@ -1,5 +1,11 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="using:System"
              x:Class="CarinaStudio.AppSuite.Tests.App">
+    
+    <Application.Resources>
+        <sys:String x:Key="String/ExternalDependency.dotnet">.NET</sys:String>
+        <sys:String x:Key="String/ExternalDependency.dotnet.Description">Free. Cross-platform. Open source. A developer platform for building all your apps.</sys:String>
+    </Application.Resources>
 
 </Application>

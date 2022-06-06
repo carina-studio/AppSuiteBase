@@ -49,7 +49,8 @@ namespace CarinaStudio.AppSuite.Tests
 
         protected override async Task OnPrepareStartingAsync()
         {
-            this.externalDependencies.Add(new ExecutableExternalDependency(this, "dotnet", ExternalDependencyPriority.Required, "dotnet", new Uri("https://dotnet.microsoft.com/"), new Uri("https://dotnet.microsoft.com/download")));
+            this.externalDependencies.Add(new ExecutableExternalDependency(this, "dotnet", ExternalDependencyPriority.Optional, "dotnet", new Uri("https://dotnet.microsoft.com/"), new Uri("https://dotnet.microsoft.com/download")));
+            this.externalDependencies.Add(new ExecutableExternalDependency(this, "bash", ExternalDependencyPriority.RequiredByFeatures, "bash", new Uri("https://www.gnu.org/software/bash/"), null));
             
             await base.OnPrepareStartingAsync();
 
