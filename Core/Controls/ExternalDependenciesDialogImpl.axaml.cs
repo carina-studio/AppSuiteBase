@@ -48,6 +48,35 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	});
 
 
+	// Converter to convert from state to icon.
+	public static readonly IValueConverter StateIconConverter = new FuncValueConverter<ExternalDependencyState, IImage?>(state =>
+	{
+		var app = AppSuiteApplication.CurrentOrNull;
+		if (app == null)
+			return null;
+		var icon = (IImage?)null;
+		switch (state)
+		{
+			case ExternalDependencyState.Available:
+				app.TryFindResource<IImage>("Image/Icon.OK.Outline.Colored", out icon);
+				break;
+			case ExternalDependencyState.CheckingForAvailability:
+				app.TryFindResource<IImage>("Image/Icon.Waiting.Outline", out icon);
+				break;
+			case ExternalDependencyState.Unavailable:
+				app.TryFindResource<IImage>("Image/Icon.Warning.Outline.Colored", out icon);
+				break;
+			case ExternalDependencyState.Unknown:
+				app.TryFindResource<IImage>("Image/Icon.Question.Outline", out icon);
+				break;
+			default: 
+				app.TryFindResource<IImage>("Image/Icon.Information.Outline", out icon);
+				break;
+		}
+		return icon;
+	});
+
+
 	// Converter to convert from state to string.
 	public static readonly IValueConverter StateConverter = new AppSuite.Converters.EnumConverter(AppSuiteApplication.CurrentOrNull, typeof(ExternalDependencyState));
 

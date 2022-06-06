@@ -57,6 +57,8 @@
 	<Geometry x:Key="Geometry/Icon.File.Video.Outline">M14,2L20,8V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V4A2,2 0 0,1 6,2H14M18,20V9H13V4H6V20H18M16,18L13.5,16.3V18H8V13H13.5V14.7L16,13V18Z</Geometry>
 	<Geometry x:Key="Geometry/Icon.FileManager">M16.5,12C19,12 21,14 21,16.5C21,17.38 20.75,18.21 20.31,18.9L23.39,22L22,23.39L18.88,20.32C18.19,20.75 17.37,21 16.5,21C14,21 12,19 12,16.5C12,14 14,12 16.5,12M16.5,14A2.5,2.5 0 0,0 14,16.5A2.5,2.5 0 0,0 16.5,19A2.5,2.5 0 0,0 19,16.5A2.5,2.5 0 0,0 16.5,14M9,4L11,6H19A2,2 0 0,1 21,8V11.81C19.83,10.69 18.25,10 16.5,10A6.5,6.5 0 0,0 10,16.5C10,17.79 10.37,19 11,20H3C1.89,20 1,19.1 1,18V6C1,4.89 1.89,4 3,4H9Z</Geometry>
 	<Geometry x:Key="Geometry/Icon.FileManager.Outline">M16.5,12C19,12 21,14 21,16.5C21,17.38 20.75,18.21 20.31,18.9L23.39,22L22,23.39L18.88,20.32C18.19,20.75 17.37,21 16.5,21C14,21 12,19 12,16.5C12,14 14,12 16.5,12M16.5,14A2.5,2.5 0 0,0 14,16.5A2.5,2.5 0 0,0 16.5,19A2.5,2.5 0 0,0 19,16.5A2.5,2.5 0 0,0 16.5,14M19,8H3V18H10.17C10.34,18.72 10.63,19.39 11,20H3C1.89,20 1,19.1 1,18V6C1,4.89 1.89,4 3,4H9L11,6H19A2,2 0 0,1 21,8V11.81C20.42,11.26 19.75,10.81 19,10.5V8Z</Geometry>
+	<Geometry x:Key="Geometry/Icon.Flag">M13.57,1.493 A1.591,-1.591 0 0 0 12.15,1.271 A6.693,-6.693 0 0 1 10.22,1.52 A7.591,-7.591 0 0 1 7.44,0.8267 A9.022,-9.022 0 0 0 4,0 C1.431,0 0.4445,0.8889 0.2667,1.013 A0.8889,-0.8889 0 0 0 1.519E-05,1.653 L1.519E-05,15.11 A0.8889,-0.8889 0 0 0 1.778,15.11 L1.778,11.29 A5.582,-5.582 0 0 1 4,10.92 A7.591,-7.591 0 0 1 6.782,11.62 A9.022,-9.022 0 0 0 10.22,12.44 A6.809,-6.809 0 0 0 13.33,11.82 A1.547,-1.547 0 0 0 14.22,10.44 L14.22,2.764 A1.573,-1.573 0 0 0 13.57,1.493 z</Geometry>
+	<Geometry x:Key="Geometry/Icon.Flag.Outline">M13.57,1.493 A1.591,-1.591 0 0 0 12.15,1.271 A6.693,-6.693 0 0 1 10.22,1.52 A7.591,-7.591 0 0 1 7.44,0.8267 A9.022,-9.022 0 0 0 4,0 C1.431,0 0.4445,0.8889 0.2667,1.013 A0.8889,-0.8889 0 0 0 1.519E-05,1.653 L1.519E-05,15.11 A0.8889,-0.8889 0 0 0 1.778,15.11 L1.778,11.29 A5.582,-5.582 0 0 1 4,10.92 A7.591,-7.591 0 0 1 6.782,11.62 A9.022,-9.022 0 0 0 10.22,12.44 A6.809,-6.809 0 0 0 13.33,11.82 A1.547,-1.547 0 0 0 14.22,10.44 L14.22,2.764 A1.573,-1.573 0 0 0 13.57,1.493 z M12.44,10.3 A5.618,-5.618 0 0 1 10.22,10.67 A7.431,-7.431 0 0 1 7.44,9.964 A9.191,-9.191 0 0 0 4,9.147 A8.453,-8.453 0 0 0 1.778,9.404 L1.778,2.151 A5.449,-5.449 0 0 1 4,1.778 A7.431,-7.431 0 0 1 6.782,2.48 A9.191,-9.191 0 0 0 10.22,3.298 A8.364,-8.364 0 0 0 12.44,3.031 z</Geometry>
 	<Geometry x:Key="Geometry/Icon.Folder">F1M85,-427L213,-427 256,-384 427,-384C450,-384,469,-364,469,-341L469,-128C469,-105,450,-85,427,-85L85,-85C62,-85,43,-105,42.9999961853027,-128L42.9999961853027,-384C43,-407,62,-427,85,-427z</Geometry>
 	<Geometry x:Key="Geometry/Icon.Folder.Outline">F1M85,-341L85,-128 427,-128 427,-341 85,-341z M85,-427L213,-427 256,-384 427,-384C450,-384,469,-364,469,-341L469,-128C469,-105,450,-85,427,-85L85,-85C62,-85,43,-105,42.9999961853027,-128L42.9999961853027,-384C43,-407,62,-427,85,-427z</Geometry>
 	<Geometry x:Key="Geometry/Icon.Folders">M22,4H14L12,2H6A2,2 0 0,0 4,4V16A2,2 0 0,0 6,18H22A2,2 0 0,0 24,16V6A2,2 0 0,0 22,4M2,6H0V11H0V20A2,2 0 0,0 2,22H20V20H2V6Z</Geometry>
@@ -406,6 +408,12 @@
 	<DrawingImage x:Key="Image/Icon.FileManager" Drawing="{StaticResource Drawing/Icon.FileManager}"/>
 	<DrawingImage x:Key="Image/Icon.FileManager.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.FileManager.Outline}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Flag">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Flag}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Flag.Outline">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Flag.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Folder" Drawing="{StaticResource Drawing/Icon.Folder}"/>
 	<DrawingImage x:Key="Image/Icon.Folder.Outline">

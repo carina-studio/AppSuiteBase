@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:abControls="using:CarinaStudio.Controls"
+		xmlns:abConverters="using:CarinaStudio.Data.Converters"
 		xmlns:aConverters="using:Avalonia.Data.Converters"
 		xmlns:as="using:CarinaStudio.AppSuite"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
@@ -15,18 +16,30 @@
 	<!-- DataTemplate -->
 	<Window.DataTemplates>
 		<DataTemplate DataType="{x:Type as:ExternalDependency}">
-			<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+			<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
 				<Border Classes="Dialog_TextBlock_Header1">
 					<TextBlock Classes="Dialog_TextBlock_Header1" Text="{Binding Name}"/>
 				</Border>
 				<TextBlock Classes="Dialog_TextBlock" Grid.Row="1" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" Text="{Binding Description}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
 				<Separator Classes="Dialog_Separator" Grid.Row="2" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}"/>
-				<TextBlock Classes="Dialog_TextBlock" Grid.Row="3" Text="{Binding Priority, Converter={x:Static controls:ExternalDependenciesDialogImpl.PriorityConverter}}"/>
-				<TextBlock Classes="Dialog_TextBlock" Foreground="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateBrushConverter}}" Grid.Row="4" Text="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateConverter}}"/>
+				<StackPanel Grid.Row="3" Orientation="Horizontal">
+					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Dependencies}"/>
+					<TextBlock Classes="Dialog_Icon_TextBlock" Text="{Binding Priority, Converter={x:Static controls:ExternalDependenciesDialogImpl.PriorityConverter}}"/>
+				</StackPanel>
+				<Separator Classes="Dialog_Separator_Small" Grid.Row="4"/>
 				<StackPanel Grid.Row="5" Orientation="Horizontal">
-					<abControls:LinkTextBlock Name="detailsLink" IsVisible="{Binding DetailsUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Text="{DynamicResource String/Common.Details}" Uri="{Binding DetailsUri}"/>
-					<Separator Classes="Dialog_Separator" IsVisible="{Binding detailsLink.IsVisible}"/>
-					<abControls:LinkTextBlock IsVisible="{Binding InstallationUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Text="{DynamicResource String/ExternalDependenciesDialog.ExternalDependency.Install}" Uri="{Binding InstallationUri}"/>
+					<Image Classes="Dialog_Icon" Source="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateIconConverter}}"/>
+					<TextBlock Classes="Dialog_Icon_TextBlock" Foreground="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateBrushConverter}}" Text="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateConverter}}"/>
+				</StackPanel>
+				<Separator Classes="Dialog_Separator_Small" Grid.Row="6"/>
+				<StackPanel Name="detailsPanel" Grid.Row="7" IsVisible="{Binding DetailsUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Orientation="Horizontal">
+					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Details.Outline}"/>
+					<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/Common.Details}" Uri="{Binding DetailsUri}"/>
+				</StackPanel>
+				<Separator Classes="Dialog_Separator_Small" Grid.Row="8" IsVisible="{Binding #detailsPanel.IsVisible}"/>
+				<StackPanel Grid.Row="9" IsVisible="{Binding InstallationUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Orientation="Horizontal">
+					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Import}"/>
+					<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" IsEnabled="{Binding State, Converter={x:Static abConverters:ObjectConverters.IsEquivalentTo}, ConverterParameter={x:Static as:ExternalDependencyState.Unavailable}}" Text="{DynamicResource String/ExternalDependenciesDialog.ExternalDependency.Install}" Uri="{Binding InstallationUri}"/>
 				</StackPanel>
 			</Grid>
 		</DataTemplate>
