@@ -60,6 +60,7 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	readonly ScheduledAction checkCanCloseAction;
 	readonly ExternalDependency[] externalDependencies;
 	readonly Panel externalDependenciesPanel;
+	bool isFirstActivation = true;
 
 
 	// Constructor.
@@ -107,7 +108,12 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 		this.GetObservable(IsActiveProperty).Subscribe(isActive =>
 		{
 			if (isActive)
-				this.Refresh(false);
+			{
+				if (!isFirstActivation)
+					this.Refresh(false);
+				else
+					isFirstActivation = false;
+			}
 		});
 	}
 

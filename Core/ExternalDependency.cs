@@ -13,6 +13,7 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
     // Fields.
     readonly ScheduledAction checkAvailabilityAction;
     string? description;
+    bool isFirstAvailabilityCheck = true;
     bool isDescriptionValid;
     string? name;
     ExternalDependencyState state = ExternalDependencyState.Unknown;
@@ -31,6 +32,10 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
             if (this.state == ExternalDependencyState.CheckingForAvailability)
                 return;
             this.State = ExternalDependencyState.CheckingForAvailability;
+            if (!isFirstAvailabilityCheck)
+                await Task.Delay(500);
+            else
+                isFirstAvailabilityCheck = false;
             try
             {
                 this.State = (await this.OnCheckAvailabilityAsync())
