@@ -47,9 +47,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Avalonia" Version="0.10.15" />
-		<PackageReference Include="Avalonia.Desktop" Version="0.10.15" />
-		<PackageReference Include="Avalonia.Diagnostics" Version="0.10.15" />
+		<PackageReference Include="Avalonia" Version="0.10.14" />
+		<PackageReference Include="Avalonia.Desktop" Version="0.10.14" />
+		<PackageReference Include="Avalonia.Diagnostics" Version="0.10.14" />
 		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="0.10.14" />
 		<PackageReference Include="CarinaStudio.AppBase.Application.Avalonia" Version="1.6.4.607-preview" />
 		<PackageReference Include="CarinaStudio.AppBase.AutoUpdate" Version="1.6.4.607-preview" />

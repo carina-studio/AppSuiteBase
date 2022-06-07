@@ -326,11 +326,12 @@ namespace CarinaStudio.AppSuite.Tests
 
         ICommand ShowAppInfoDialogCommand { get; }
 
-        async void ShowTestDialog()
+        void ShowTestDialog()
         {
-            var result = await new Dialog().ShowDialog<ApplicationOptionsDialogResult>(this);
-            if (result == ApplicationOptionsDialogResult.RestartMainWindowsNeeded)
-                this.Application.RestartMainWindows();
+            new Dialog().Show(this);
+            //var result = await new Dialog().ShowDialog<ApplicationOptionsDialogResult>(this);
+            //if (result == ApplicationOptionsDialogResult.RestartMainWindowsNeeded)
+                //this.Application.RestartMainWindows();
         }
 
 

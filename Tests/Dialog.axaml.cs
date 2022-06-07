@@ -18,5 +18,11 @@ namespace CarinaStudio.AppSuite.Tests
         {
             AvaloniaXamlLoader.Load(this);
         }
+
+        void Test()
+        {
+            using var appInfo = new AppInfo();
+            new AppSuite.Controls.ApplicationInfoDialog(appInfo).ShowDialog(this);
+        }
     }
 }
