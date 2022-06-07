@@ -251,11 +251,12 @@ namespace CarinaStudio.AppSuite
         ThemeMode systemThemeMode = ThemeMode.Dark;
         readonly object? uiColorTypeBackground;
         readonly object? uiSettings;
+        Delegate? uiSettingsColorValueChangedHandler;
         readonly MethodInfo? uiSettingsGetColorValueMethod;
         readonly Type? uiSettingsType;
-        readonly FieldInfo? windowsColorBField;
-        readonly FieldInfo? windowsColorGField;
-        readonly FieldInfo? windowsColorRField;
+        readonly PropertyInfo? windowsColorBProperty;
+        readonly PropertyInfo? windowsColorGProperty;
+        readonly PropertyInfo? windowsColorRProperty;
         readonly Type? windowsColorType;
 
 
@@ -308,21 +309,36 @@ namespace CarinaStudio.AppSuite
             // create UISettings to monitor system UI change
             if (this.canUseWindows10Features)
             {
-                this.uiSettingsType = Type.GetType("Windows.UI.ViewManagement.UISettings");
-                this.windowsColorType = Type.GetType("Windows.UI.Color");
-                var uiColorType = Type.GetType("Windows.UI.ViewManagement.UIColorType");
+                var assembly = AppDomain.CurrentDomain.GetAssemblies().Let(assemblies =>
+                {
+                    foreach (var assembly in assemblies)
+                    {
+                        System.Diagnostics.Debug.WriteLine(assembly.FullName);
+                        if (assembly.FullName?.StartsWith("Microsoft.Windows.SDK.NET,") == true)
+                            return assembly;
+                    }
+                    return null;
+                });
+                if (assembly != null)
+                {
+                    this.uiSettingsType = assembly.GetType("Windows.UI.ViewManagement.UISettings");
+                    this.windowsColorType = assembly.GetType("Windows.UI.Color");
+                }
+                else
+                    this.Logger.LogWarning("Cannot find Windows SDK assembly");
+                var uiColorType = assembly?.GetType("Windows.UI.ViewManagement.UIColorType");
                 if (this.uiSettingsType != null 
                     && this.windowsColorType != null 
                     && uiColorType != null)
                 {
                     this.uiSettingsGetColorValueMethod = this.uiSettingsType.GetMethod("GetColorValue", new Type[] { uiColorType });
-                    this.windowsColorRField = this.windowsColorType.GetField("R");
-                    this.windowsColorGField = this.windowsColorType.GetField("G");
-                    this.windowsColorBField = this.windowsColorType.GetField("B");
+                    this.windowsColorRProperty = this.windowsColorType.GetProperty("R");
+                    this.windowsColorGProperty = this.windowsColorType.GetProperty("G");
+                    this.windowsColorBProperty = this.windowsColorType.GetProperty("B");
                     if (this.uiSettingsGetColorValueMethod != null 
-                        && this.windowsColorRField != null
-                        && this.windowsColorGField != null
-                        && this.windowsColorBField != null)
+                        && this.windowsColorRProperty != null
+                        && this.windowsColorGProperty != null
+                        && this.windowsColorBProperty != null)
                     {
                         try
                         {
@@ -337,11 +353,11 @@ namespace CarinaStudio.AppSuite
                     {
                         if (this.uiSettingsGetColorValueMethod == null)
                             this.Logger.LogError("Cannot find UISettings.GetColorValue() for Windows 10 to monitor theme change");
-                        if (this.windowsColorRField == null)
+                        if (this.windowsColorRProperty == null)
                             this.Logger.LogError("Cannot find Color.R for Windows 10 to monitor theme change");
-                        if (this.windowsColorGField == null)
+                        if (this.windowsColorGProperty == null)
                             this.Logger.LogError("Cannot find Color.G for Windows 10 to monitor theme change");
-                        if (this.windowsColorBField == null)
+                        if (this.windowsColorBProperty == null)
                             this.Logger.LogError("Cannot find Color.B for Windows 10 to monitor theme change");
                     }
                 }
@@ -1915,8 +1931,8 @@ namespace CarinaStudio.AppSuite
                 if (this.uiSettings != null)
                 {
                     var colorValuesChangedEvent = this.uiSettings.GetType().GetEvent("ColorValuesChanged");
-                    if (colorValuesChangedEvent != null)
-                        Global.RunWithoutError(() => colorValuesChangedEvent.RemoveEventHandler(this.uiSettings, this.OnWindowsUIColorValueChanged));
+                    if (colorValuesChangedEvent != null && this.uiSettingsColorValueChangedHandler != null)
+                        Global.RunWithoutError(() => colorValuesChangedEvent.RemoveEventHandler(this.uiSettings, this.uiSettingsColorValueChangedHandler));
                 }
             }
 
@@ -2074,7 +2090,8 @@ namespace CarinaStudio.AppSuite
                     {
                         try
                         {
-                            colorValuesChangedEvent.AddEventHandler(this.uiSettings, this.OnWindowsUIColorValueChanged);
+                            this.uiSettingsColorValueChangedHandler = Delegate.CreateDelegate(colorValuesChangedEvent.EventHandlerType!, this, typeof(AppSuiteApplication).GetMethod("OnWindowsUIColorValueChanged", BindingFlags.Instance | BindingFlags.NonPublic).AsNonNull());
+                            colorValuesChangedEvent.AddEventHandler(this.uiSettings, this.uiSettingsColorValueChangedHandler);
                         }
                         catch (Exception ex)
                         {
@@ -3046,14 +3063,14 @@ namespace CarinaStudio.AppSuite
             if (this.uiSettings != null 
                 && this.windowsColorType != null 
                 && this.uiSettingsGetColorValueMethod != null
-                && this.windowsColorRField != null
-                && this.windowsColorGField != null
-                && this.windowsColorBField != null)
+                && this.windowsColorRProperty != null
+                && this.windowsColorGProperty != null
+                && this.windowsColorBProperty != null)
             {
                 var backgroundColor = this.uiSettingsGetColorValueMethod.Invoke(this.uiSettings, new object?[] { this.uiColorTypeBackground }).AsNonNull();
-                var r = (byte)this.windowsColorRField.GetValue(backgroundColor).AsNonNull();
-                var g = (byte)this.windowsColorGField.GetValue(backgroundColor).AsNonNull();
-                var b = (byte)this.windowsColorBField.GetValue(backgroundColor).AsNonNull();
+                var r = (byte)this.windowsColorRProperty.GetValue(backgroundColor).AsNonNull();
+                var g = (byte)this.windowsColorGProperty.GetValue(backgroundColor).AsNonNull();
+                var b = (byte)this.windowsColorBProperty.GetValue(backgroundColor).AsNonNull();
                 themeMode = (r + g + b) / 3 < 128
                     ? ThemeMode.Dark
                     : ThemeMode.Light;
