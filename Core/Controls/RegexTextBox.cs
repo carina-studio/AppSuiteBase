@@ -508,15 +508,16 @@ namespace CarinaStudio.AppSuite.Controls
 			var prevChar1 = selectionStart > 0 ? text[selectionStart - 1] : '\0';
 			var prevChar2 = selectionStart > 1 ? text[selectionStart - 2] : '\0';
 			var nextChar1 = selectionEnd < textLength ? text[selectionEnd] : '\0';
+			var nextChar2 = selectionEnd < textLength - 1 ? text[selectionEnd + 1] : '\0';
 			++selectionStart;
 			switch (s[0])
 			{
 				case '(':
-					if (prevChar1 != '\\')
+					if (prevChar1 != '\\' && nextChar1 == '\0')
 						e.Text = "()";
 					break;
 				case ')':
-					if (prevChar1 != '\\' && nextChar1 == ')')
+					if (prevChar1 != '\\' && nextChar1 == ')' && nextChar2 == '\0')
 						e.Text = "";
 					break;
 				case '[':
