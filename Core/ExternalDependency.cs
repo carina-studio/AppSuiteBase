@@ -192,7 +192,7 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
     /// Wait for availability check completed.
     /// </summary>
     /// <returns>Task of waiting.</returns>
-    public Task WaitForCheckingAcailability()
+    public Task WaitForCheckingAvailability()
     {
         this.VerifyAccess();
         return this.availabilityCheckTask ?? Task.CompletedTask;

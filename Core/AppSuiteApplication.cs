@@ -2133,7 +2133,7 @@ namespace CarinaStudio.AppSuite
 
             // check for external dependencies
             foreach (var externalDependency in this.ExternalDependencies)
-                await externalDependency.WaitForCheckingAcailability();
+                await externalDependency.WaitForCheckingAvailability();
         }
 
 
