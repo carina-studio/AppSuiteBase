@@ -9,13 +9,16 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Styling;
+using Avalonia.VisualTree;
 using CarinaStudio.Collections;
+using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading;
 using System.Windows.Input;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -26,12 +29,12 @@ namespace CarinaStudio.AppSuite.Controls
     public class StringInterpolationFormatTextBox : TextBox, IStyleable
     {
         // Fields.
-        readonly ObservableList<MenuItem> filteredPredefinedVarMenuItems = new ObservableList<MenuItem>();
+        readonly ObservableList<ListBoxItem> filteredPredefinedVarListBoxItems = new ObservableList<ListBoxItem>();
         readonly SortedObservableList<StringInterpolationVariable> filteredPredefinedVars = new SortedObservableList<StringInterpolationVariable>((x, y) => string.Compare(x?.Name, y?.Name));
 		bool isEscapeKeyHandled;
         readonly ObservableList<StringInterpolationVariable> predefinedVars = new ObservableList<StringInterpolationVariable>();
-        ContextMenu? predefinedVarsMenu;
-        readonly Queue<MenuItem> recycledMenuItems = new Queue<MenuItem>();
+        InputAssistancePopup? predefinedVarsPopup;
+        readonly Queue<ListBoxItem> recycledListBoxItems = new Queue<ListBoxItem>();
         readonly ScheduledAction showAssistanceMenuAction;
         TextPresenter? textPresenter;
 
@@ -48,7 +51,13 @@ namespace CarinaStudio.AppSuite.Controls
             this.showAssistanceMenuAction = new ScheduledAction(() =>
 			{
 				// close menu first
-				this.predefinedVarsMenu?.Close();
+				if (this.predefinedVarsPopup?.IsOpen == true)
+				{
+					this.predefinedVarsPopup?.Close();
+					this.showAssistanceMenuAction!.Schedule();
+					return;
+				}
+				this.predefinedVarsPopup?.Close();
 				var (start, end) = this.GetSelection();
 				if (!this.IsEffectivelyVisible || start != end)
 					return;
@@ -56,7 +65,7 @@ namespace CarinaStudio.AppSuite.Controls
 				// show predefined variable menu
 				var text = this.Text ?? "";
 				var textLength = text.Length;
-				var menuToOpen = (ContextMenu?)null;
+				var popupToOpen = (Popup?)null;
 				if (this.predefinedVars.IsNotEmpty())
 				{
 					var (varStart, varEnd) = this.GetVariableNameSelection(text);
@@ -69,34 +78,32 @@ namespace CarinaStudio.AppSuite.Controls
 						else
 							this.filteredPredefinedVars.AddAll(this.predefinedVars.Where(it => it.Name.ToLower().Contains(filterText)));
 						if (this.filteredPredefinedVars.IsNotEmpty())
-							menuToOpen = this.SetupPredefinedVarsMenu();
+							popupToOpen = this.SetupPredefinedVarsPopup();
 					}
 				}
 
 				// open menu
-				if (menuToOpen != null)
+				if (popupToOpen != null)
 				{
 					var padding = this.Padding;
 					var caretRect = this.textPresenter?.Let(it =>
 						it.FormattedText.HitTestTextPosition(Math.Max(0, it.CaretIndex - 1))
 					) ?? new Rect();
-					menuToOpen.PlacementRect = new Rect(caretRect.Left + padding.Left, caretRect.Top + padding.Top, caretRect.Width, caretRect.Height);
-					menuToOpen.Open(this);
+					popupToOpen.PlacementRect = new Rect(caretRect.Left + padding.Left, caretRect.Top + padding.Top, caretRect.Width, caretRect.Height);
+					popupToOpen.PlacementTarget = this;
+					popupToOpen.Open();
 				}
 			});
         }
 
 
-        // Create menu item for given variable.
-		MenuItem CreateMenuItem(StringInterpolationVariable variable) =>
-			this.recycledMenuItems.Count > 0
-				? this.recycledMenuItems.Dequeue().Also(it => it.DataContext = variable)
-				: new MenuItem().Also(it =>
+        // Create listbox item for given variable.
+		ListBoxItem CreateListBoxItem(StringInterpolationVariable variable) =>
+			this.recycledListBoxItems.Count > 0
+				? this.recycledListBoxItems.Dequeue().Also(it => it.DataContext = variable)
+				: new ListBoxItem().Also(it =>
 				{
-					it.Command = this.InputVariableNameCommand;
-					it.Bind(MenuItem.CommandParameterProperty, new Binding() { Path = nameof(StringInterpolationVariable.Name) });
-					it.DataContext = variable;
-					it.Header = new StackPanel().Also(panel => 
+					it.Content = new StackPanel().Also(panel => 
 					{
 						panel.Children.Add(new TextBlock().Also(it =>
 						{
@@ -112,6 +119,7 @@ namespace CarinaStudio.AppSuite.Controls
 						}));
 						panel.Orientation = Orientation.Horizontal ;
 					});
+					it.DataContext = variable;
 				});
 
 
@@ -194,8 +202,8 @@ namespace CarinaStudio.AppSuite.Controls
 						var index = e.NewStartingIndex;
 						foreach (var variable in e.NewItems.AsNonNull().Cast<StringInterpolationVariable>())
 						{
-							var menuItem = this.CreateMenuItem(variable);
-							this.filteredPredefinedVarMenuItems.Insert(index++, menuItem);
+							var menuItem = this.CreateListBoxItem(variable);
+							this.filteredPredefinedVarListBoxItems.Insert(index++, menuItem);
 						}
 					}
 					break;
@@ -204,25 +212,25 @@ namespace CarinaStudio.AppSuite.Controls
 						var count = e.OldItems.AsNonNull().Count;
 						for (var index = e.OldStartingIndex + count - 1; count > 0; --count, --index)
 						{
-							var menuItem = this.filteredPredefinedVarMenuItems[index];
-							this.filteredPredefinedVarMenuItems.RemoveAt(index);
+							var menuItem = this.filteredPredefinedVarListBoxItems[index];
+							this.filteredPredefinedVarListBoxItems.RemoveAt(index);
 							menuItem.DataContext = null;
-							this.recycledMenuItems.Enqueue(menuItem);
+							this.recycledListBoxItems.Enqueue(menuItem);
 						}
 					}
 					break;
 				case NotifyCollectionChangedAction.Reset:
 					{
-						foreach (var menuItem in this.filteredPredefinedVarMenuItems)
+						foreach (var menuItem in this.filteredPredefinedVarListBoxItems)
 						{
 							menuItem.DataContext = null;
-							this.recycledMenuItems.Enqueue(menuItem);
+							this.recycledListBoxItems.Enqueue(menuItem);
 						}
-						this.filteredPredefinedVarMenuItems.Clear();
+						this.filteredPredefinedVarListBoxItems.Clear();
 						foreach (var variable in this.filteredPredefinedVars)
 						{
-							var menuItem = this.CreateMenuItem(variable);
-							this.filteredPredefinedVarMenuItems.Add(menuItem);
+							var menuItem = this.CreateListBoxItem(variable);
+							this.filteredPredefinedVarListBoxItems.Add(menuItem);
 						}
 					}
 					break;
@@ -238,6 +246,7 @@ namespace CarinaStudio.AppSuite.Controls
 			// delete more characters
 			var isBackspace = e.Key == Key.Back;
 			var isDelete = e.Key == Key.Delete;
+			var isKeyForAssistentPopup = false;
 			if (isBackspace || isDelete)
 			{
 				var (selectionStart, selectionEnd) = this.GetSelection();
@@ -273,6 +282,37 @@ namespace CarinaStudio.AppSuite.Controls
                     e.Handled = true;
 				}
 			}
+			else
+			{
+				switch (e.Key)
+				{
+					case Key.Down:
+					case Key.FnDownArrow:
+						if (this.predefinedVarsPopup?.IsOpen == true)
+						{
+							this.predefinedVarsPopup.ItemListBox?.SelectNextItem();
+							isKeyForAssistentPopup = true;
+							e.Handled = true;
+						}
+						break;
+					case Key.Enter:
+						if (this.predefinedVarsPopup?.IsOpen == true)
+						{
+							isKeyForAssistentPopup = true;
+							e.Handled = true;
+						}
+						break;
+					case Key.FnUpArrow:
+					case Key.Up:
+						if (this.predefinedVarsPopup?.IsOpen == true)
+						{
+							this.predefinedVarsPopup.ItemListBox?.SelectPreviousItem();
+							isKeyForAssistentPopup = true;
+							e.Handled = true;
+						}
+						break;
+				}
+			}
 
 			// call base
 			base.OnKeyDown(e);
@@ -280,10 +320,10 @@ namespace CarinaStudio.AppSuite.Controls
 			// show/hide menu
 			if (e.Key == Key.Escape)
 			{
-				this.predefinedVarsMenu?.Close();
+				this.predefinedVarsPopup?.Close();
 				this.showAssistanceMenuAction.Cancel();
 			}
-			else
+			else if (!isKeyForAssistentPopup)
 				this.showAssistanceMenuAction.Reschedule(50);
 		}
 
@@ -296,6 +336,33 @@ namespace CarinaStudio.AppSuite.Controls
 				this.isEscapeKeyHandled = false;
 				e.Handled = true;
 			}
+			else if (e.Key == Key.Enter)
+			{
+				if (this.predefinedVarsPopup?.IsOpen == true)
+				{
+					(this.predefinedVarsPopup.ItemListBox?.SelectedItem as ListBoxItem)?.Let(item =>
+					{
+						if (item.DataContext is StringInterpolationVariable variable)
+							this.InputVariableName(variable.Name);
+					});
+					this.predefinedVarsPopup?.Close();
+				}
+			}
+		}
+
+
+		/// <inheritdoc/>
+		protected override void OnLostFocus(RoutedEventArgs e)
+		{
+			SynchronizationContext.Current?.PostDelayed(() =>
+			{
+				if (!this.IsFocused)
+				{
+					this.predefinedVarsPopup?.Close();
+					this.showAssistanceMenuAction.Cancel();
+				}
+			}, 200);
+			base.OnLostFocus(e);
 		}
 
 
@@ -363,37 +430,35 @@ namespace CarinaStudio.AppSuite.Controls
 		public IList<StringInterpolationVariable> PredefinedVariables { get => this.predefinedVars; }
 
 
-        // Setup menu of predefined variables.
-		ContextMenu SetupPredefinedVarsMenu()
+        // Setup popup of predefined variables.
+		InputAssistancePopup SetupPredefinedVarsPopup()
 		{
-			if (this.predefinedVarsMenu != null)
-				return this.predefinedVarsMenu;
-			this.predefinedVarsMenu = new ContextMenu().Also(menu =>
+			if (this.predefinedVarsPopup != null)
+				return this.predefinedVarsPopup;
+			var rootPanel = this.FindDescendantOfType<Panel>().AsNonNull();
+			this.predefinedVarsPopup = new InputAssistancePopup().Also(menu =>
 			{
-				menu.Items = this.filteredPredefinedVarMenuItems;
-				menu.AddHandler(KeyDownEvent, (_, e) =>
+				menu.ItemListBox.Let(it =>
 				{
-					switch (e.Key)
+					it.DoubleClickOnItem += (_, e) =>
 					{
-						case Key.Down:
-						case Key.Enter:
-						case Key.Up:
-							break;
-						case Key.Escape:
-							this.isEscapeKeyHandled = true;
-							goto default;
-						default:
-							menu.Close();
-							this.OnKeyDown(e);
-							break;
-					}
-				}, RoutingStrategies.Tunnel);
+						menu.Close();
+						if (e.Item is ListBoxItem item && item.DataContext is StringInterpolationVariable variable)
+							this.InputVariableName(variable.Name);
+					};
+					it.Items = this.filteredPredefinedVarListBoxItems;
+					it.AddHandler(Control.PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
+					{
+						SynchronizationContext.Current?.Post(this.Focus);
+					}), RoutingStrategies.Tunnel);
+				});
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;
 				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
 				menu.PlacementGravity = PopupGravity.BottomRight;
 				menu.PlacementMode = PlacementMode.AnchorAndGravity;
 			});
-			return this.predefinedVarsMenu;
+			rootPanel.Children.Insert(0, this.predefinedVarsPopup);
+			return this.predefinedVarsPopup;
 		}
 
 

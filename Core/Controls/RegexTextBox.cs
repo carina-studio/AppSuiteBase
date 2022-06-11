@@ -8,6 +8,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.VisualTree;
 using CarinaStudio.Collections;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
@@ -17,6 +18,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Input;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -37,14 +39,14 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Fields.
-		ContextMenu? escapedCharactersMenu;
-		readonly ObservableList<MenuItem> filteredPredefinedGroupMenuItems = new ObservableList<MenuItem>();
+		InputAssistancePopup? escapedCharactersPopup;
+		readonly ObservableList<ListBoxItem> filteredPredefinedGroupListBoxItems = new ObservableList<ListBoxItem>();
 		readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new SortedObservableList<RegexGroup>((x, y) => string.Compare(x?.Name, y?.Name));
 		bool isBackSlashPressed;
 		bool isEscapeKeyHandled;
 		readonly ObservableList<RegexGroup> predefinedGroups = new ObservableList<RegexGroup>();
-		ContextMenu? predefinedGroupsMenu;
-		readonly Queue<MenuItem> recycledMenuItems = new Queue<MenuItem>();
+		InputAssistancePopup? predefinedGroupsPopup;
+		readonly Queue<ListBoxItem> recycledListBoxItems = new Queue<ListBoxItem>();
 		readonly ScheduledAction showAssistanceMenuAction;
 		TextPresenter? textPresenter;
 
@@ -63,8 +65,14 @@ namespace CarinaStudio.AppSuite.Controls
 			this.showAssistanceMenuAction = new ScheduledAction(() =>
 			{
 				// close menu first
-				this.escapedCharactersMenu?.Close();
-				this.predefinedGroupsMenu?.Close();
+				if (this.escapedCharactersPopup?.IsOpen == true
+					|| this.predefinedGroupsPopup?.IsOpen == true)
+				{
+					this.escapedCharactersPopup?.Close();
+					this.predefinedGroupsPopup?.Close();
+					this.showAssistanceMenuAction!.Schedule();
+					return;
+				}
 				var (start, end) = this.GetSelection();
 				if (!this.IsInputAssistanceEnabled || !this.IsEffectivelyVisible || start != end)
 				{
@@ -75,7 +83,7 @@ namespace CarinaStudio.AppSuite.Controls
 				// show predefined groups menu
 				var text = this.Text ?? "";
 				var textLength = text.Length;
-				var menuToOpen = (ContextMenu?)null;
+				var popupToOpen = (Popup?)null;
 				if (this.predefinedGroups.IsNotEmpty())
 				{
 					var (groupStart, groupEnd) = this.GetGroupNameSelection(text);
@@ -88,7 +96,7 @@ namespace CarinaStudio.AppSuite.Controls
 						else
 							this.filteredPredefinedGroups.AddAll(this.predefinedGroups.Where(it => it.Name.ToLower().Contains(filterText)));
 						if (this.filteredPredefinedGroups.IsNotEmpty())
-							menuToOpen = this.SetupPredefinedGroupsMenu();
+							popupToOpen = this.SetupPredefinedGroupsPopup();
 					}
 				}
 
@@ -96,19 +104,20 @@ namespace CarinaStudio.AppSuite.Controls
 				if (this.isBackSlashPressed)
 				{
 					this.isBackSlashPressed = false;
-					if (menuToOpen == null && start > 0 && text[start - 1] == '\\' && (start <= 1 || text[start - 2] != '\\'))
-						menuToOpen = this.SetupEscapedCharactersMenu();
+					if (popupToOpen == null && start > 0 && text[start - 1] == '\\' && (start <= 1 || text[start - 2] != '\\'))
+						popupToOpen = this.SetupEscapedCharactersPopup();
 				}
 
 				// open menu
-				if (menuToOpen != null)
+				if (popupToOpen != null)
 				{
 					var padding = this.Padding;
 					var caretRect = this.textPresenter?.Let(it =>
 						it.FormattedText.HitTestTextPosition(Math.Max(0, it.CaretIndex - 1))
 					) ?? new Rect();
-					menuToOpen.PlacementRect = new Rect(caretRect.Left + padding.Left, caretRect.Top + padding.Top, caretRect.Width, caretRect.Height);
-					menuToOpen.Open(this);
+					popupToOpen.PlacementRect = new Rect(caretRect.Left + padding.Left, caretRect.Top + padding.Top, caretRect.Width, caretRect.Height);
+					popupToOpen.PlacementTarget = this;
+					popupToOpen.Open();
 				}
 			});
 		}
@@ -125,13 +134,11 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		// Create menu item for assistance menu.
-		MenuItem CreateMenuItem(char escapedChar) =>
-			new MenuItem().Also(it =>
+		// Create listbox item for assistance menu.
+		ListBoxItem CreateListBoxItem(char escapedChar) =>
+			new ListBoxItem().Also(it =>
 			{
-				it.Command = this.InputStringCommand;
-				it.CommandParameter = escapedChar.ToString();
-				it.Header = new StackPanel().Also(panel => 
+				it.Content = new StackPanel().Also(panel => 
 				{
 					var opacityObservable = this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity");
 					panel.Children.Add(new TextBlock().Also(it =>
@@ -159,16 +166,14 @@ namespace CarinaStudio.AppSuite.Controls
 					}));
 					panel.Orientation = Orientation.Horizontal ;
 				});
+				it.DataContext = escapedChar;
 			});
-		MenuItem CreateMenuItem(RegexGroup group) =>
-			this.recycledMenuItems.Count > 0
-				? this.recycledMenuItems.Dequeue().Also(it => it.DataContext = group)
-				: new MenuItem().Also(it =>
+		ListBoxItem CreateListBoxItem(RegexGroup group) =>
+			this.recycledListBoxItems.Count > 0
+				? this.recycledListBoxItems.Dequeue().Also(it => it.DataContext = group)
+				: new ListBoxItem().Also(it =>
 				{
-					it.Command = this.InputGroupNameCommand;
-					it.Bind(MenuItem.CommandParameterProperty, new Binding() { Path = nameof(RegexGroup.Name) });
-					it.DataContext = group;
-					it.Header = new StackPanel().Also(panel => 
+					it.Content = new StackPanel().Also(panel => 
 					{
 						panel.Children.Add(new TextBlock().Also(it =>
 						{
@@ -184,6 +189,7 @@ namespace CarinaStudio.AppSuite.Controls
 						}));
 						panel.Orientation = Orientation.Horizontal ;
 					});
+					it.DataContext = group;
 				});
 		
 
@@ -296,8 +302,8 @@ namespace CarinaStudio.AppSuite.Controls
 						var index = e.NewStartingIndex;
 						foreach (var group in e.NewItems.AsNonNull().Cast<RegexGroup>())
 						{
-							var menuItem = this.CreateMenuItem(group);
-							this.filteredPredefinedGroupMenuItems.Insert(index++, menuItem);
+							var listBoxItem = this.CreateListBoxItem(group);
+							this.filteredPredefinedGroupListBoxItems.Insert(index++, listBoxItem);
 						}
 					}
 					break;
@@ -306,25 +312,25 @@ namespace CarinaStudio.AppSuite.Controls
 						var count = e.OldItems.AsNonNull().Count;
 						for (var index = e.OldStartingIndex + count - 1; count > 0; --count, --index)
 						{
-							var menuItem = this.filteredPredefinedGroupMenuItems[index];
-							this.filteredPredefinedGroupMenuItems.RemoveAt(index);
-							menuItem.DataContext = null;
-							this.recycledMenuItems.Enqueue(menuItem);
+							var listBoxItem = this.filteredPredefinedGroupListBoxItems[index];
+							this.filteredPredefinedGroupListBoxItems.RemoveAt(index);
+							listBoxItem.DataContext = null;
+							this.recycledListBoxItems.Enqueue(listBoxItem);
 						}
 					}
 					break;
 				case NotifyCollectionChangedAction.Reset:
 					{
-						foreach (var menuItem in this.filteredPredefinedGroupMenuItems)
+						foreach (var listBoxItem in this.filteredPredefinedGroupListBoxItems)
 						{
-							menuItem.DataContext = null;
-							this.recycledMenuItems.Enqueue(menuItem);
+							listBoxItem.DataContext = null;
+							this.recycledListBoxItems.Enqueue(listBoxItem);
 						}
-						this.filteredPredefinedGroupMenuItems.Clear();
+						this.filteredPredefinedGroupListBoxItems.Clear();
 						foreach (var group in this.filteredPredefinedGroups)
 						{
-							var menuItem = this.CreateMenuItem(group);
-							this.filteredPredefinedGroupMenuItems.Add(menuItem);
+							var listBoxItem = this.CreateListBoxItem(group);
+							this.filteredPredefinedGroupListBoxItems.Add(listBoxItem);
 						}
 					}
 					break;
@@ -337,7 +343,15 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <inheritdoc/>
 		protected override void OnLostFocus(RoutedEventArgs e)
 		{
-			//this.closeMenusIfNotFocusedAction.Reschedule(100);
+			SynchronizationContext.Current?.PostDelayed(() =>
+			{
+				if (!this.IsFocused)
+				{
+					this.escapedCharactersPopup?.Close();
+					this.predefinedGroupsPopup?.Close();
+					this.showAssistanceMenuAction.Cancel();
+				}
+			}, 200);
 			base.OnLostFocus(e);
 		}
 
@@ -348,6 +362,7 @@ namespace CarinaStudio.AppSuite.Controls
 			// delete more characters
 			var isBackspace = e.Key == Key.Back;
 			var isDelete = e.Key == Key.Delete;
+			var isKeyForAssistentPopup = false;
 			if (isBackspace || isDelete)
 			{
 				var selectionStart = this.SelectionStart;
@@ -422,6 +437,50 @@ namespace CarinaStudio.AppSuite.Controls
 						break;
 				}
 			}
+			else
+			{
+				switch (e.Key)
+				{
+					case Key.Down:
+					case Key.FnDownArrow:
+						if (this.escapedCharactersPopup?.IsOpen == true)
+						{
+							this.escapedCharactersPopup.ItemListBox?.SelectNextItem();
+							isKeyForAssistentPopup = true;
+							e.Handled = true;
+						}
+						else if (this.predefinedGroupsPopup?.IsOpen == true)
+						{
+							this.predefinedGroupsPopup.ItemListBox?.SelectNextItem();
+							isKeyForAssistentPopup = true;
+							e.Handled = true;
+						}
+						break;
+					case Key.Enter:
+						if (this.escapedCharactersPopup?.IsOpen == true
+							|| this.predefinedGroupsPopup?.IsOpen == true)
+						{
+							isKeyForAssistentPopup = true;
+							e.Handled = true;
+						}
+						break;
+					case Key.FnUpArrow:
+					case Key.Up:
+						if (this.escapedCharactersPopup?.IsOpen == true)
+						{
+							this.escapedCharactersPopup.ItemListBox?.SelectPreviousItem();
+							isKeyForAssistentPopup = true;
+							e.Handled = true;
+						}
+						else if (this.predefinedGroupsPopup?.IsOpen == true)
+						{
+							this.predefinedGroupsPopup.ItemListBox?.SelectPreviousItem();
+							isKeyForAssistentPopup = true;
+							e.Handled = true;
+						}
+						break;
+				}
+			}
 
 			// call base
 			base.OnKeyDown(e);
@@ -429,11 +488,11 @@ namespace CarinaStudio.AppSuite.Controls
 			// show/hide menu
 			if (e.Key == Key.Escape)
 			{
-				this.escapedCharactersMenu?.Close();
-				this.predefinedGroupsMenu?.Close();
+				this.escapedCharactersPopup?.Close();
+				this.predefinedGroupsPopup?.Close();
 				this.showAssistanceMenuAction.Cancel();
 			}
-			else
+			else if (!isKeyForAssistentPopup)
 				this.showAssistanceMenuAction.Reschedule(50);
 		}
 
@@ -445,6 +504,27 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				this.isEscapeKeyHandled = false;
 				e.Handled = true;
+			}
+			else if (e.Key == Key.Enter)
+			{
+				if (this.escapedCharactersPopup?.IsOpen == true)
+				{
+					(this.escapedCharactersPopup.ItemListBox?.SelectedItem as ListBoxItem)?.Let(item =>
+					{
+						if (item.DataContext is char c)
+							this.InputString(c.ToString());
+					});
+					this.escapedCharactersPopup?.Close();
+				}
+				else if (this.predefinedGroupsPopup?.IsOpen == true)
+				{
+					(this.predefinedGroupsPopup.ItemListBox?.SelectedItem as ListBoxItem)?.Let(item =>
+					{
+						if (item.DataContext is RegexGroup group)
+							this.InputGroupName(group.Name);
+					});
+					this.predefinedGroupsPopup?.Close();
+				}
 			}
 		}
 
@@ -566,79 +646,74 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Setup menu for escaped characters.
-		ContextMenu SetupEscapedCharactersMenu()
+		InputAssistancePopup SetupEscapedCharactersPopup()
 		{
-			if (this.escapedCharactersMenu != null)
-				return this.escapedCharactersMenu;
-			this.escapedCharactersMenu = new ContextMenu().Also(menu =>
+			if (this.escapedCharactersPopup != null)
+				return this.escapedCharactersPopup;
+			var rootPanel = this.FindDescendantOfType<Panel>().AsNonNull();
+			this.escapedCharactersPopup = new InputAssistancePopup().Also(menu =>
 			{
-				menu.Items = new object[] {
-					this.CreateMenuItem('d'),
-					this.CreateMenuItem('s'),
-					this.CreateMenuItem('w'),
-					this.CreateMenuItem('t'),
-					new Separator(),
-					this.CreateMenuItem('D'),
-					this.CreateMenuItem('S'),
-					this.CreateMenuItem('W'),
-				};
-				menu.AddHandler(KeyDownEvent, (_, e) =>
+				menu.ItemListBox.Let(it =>
 				{
-					switch (e.Key)
+					it.DoubleClickOnItem += (_, e) =>
 					{
-						case Key.Down:
-						case Key.Enter:
-						case Key.Up:
-							break;
-						case Key.Escape:
-							this.isEscapeKeyHandled = true;
-							goto default;
-						default:
-							menu.Close();
-							this.OnKeyDown(e);
-							break;
-					}
-				}, RoutingStrategies.Tunnel);
+						menu.Close();
+						if (e.Item is ListBoxItem item && item.DataContext is char c)
+							this.InputString(c.ToString());
+					};
+					it.Items = new ListBoxItem[] {
+						this.CreateListBoxItem('d'),
+						this.CreateListBoxItem('s'),
+						this.CreateListBoxItem('w'),
+						this.CreateListBoxItem('t'),
+						this.CreateListBoxItem('D'),
+						this.CreateListBoxItem('S'),
+						this.CreateListBoxItem('W'),
+					};
+					it.AddHandler(Control.PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
+					{
+						SynchronizationContext.Current?.Post(this.Focus);
+					}), RoutingStrategies.Tunnel);
+				});
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;
 				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
 				menu.PlacementGravity = PopupGravity.BottomRight;
 				menu.PlacementMode = PlacementMode.AnchorAndGravity;
 			});
-			return this.escapedCharactersMenu;
+			rootPanel.Children.Insert(0, this.escapedCharactersPopup);
+			return this.escapedCharactersPopup;
 		}
 
 
 		// Setup menu of predefined groups.
-		ContextMenu SetupPredefinedGroupsMenu()
+		InputAssistancePopup SetupPredefinedGroupsPopup()
 		{
-			if (this.predefinedGroupsMenu != null)
-				return this.predefinedGroupsMenu;
-			this.predefinedGroupsMenu = new ContextMenu().Also(menu =>
+			if (this.predefinedGroupsPopup != null)
+				return this.predefinedGroupsPopup;
+			var rootPanel = this.FindDescendantOfType<Panel>().AsNonNull();
+			this.predefinedGroupsPopup = new InputAssistancePopup().Also(menu =>
 			{
-				menu.Items = this.filteredPredefinedGroupMenuItems;
-				menu.AddHandler(KeyDownEvent, (_, e) =>
+				menu.ItemListBox.Let(it =>
 				{
-					switch (e.Key)
+					it.DoubleClickOnItem += (_, e) =>
 					{
-						case Key.Down:
-						case Key.Enter:
-						case Key.Up:
-							break;
-						case Key.Escape:
-							this.isEscapeKeyHandled = true;
-							goto default;
-						default:
-							menu.Close();
-							this.OnKeyDown(e);
-							break;
-					}
-				}, RoutingStrategies.Tunnel);
+						menu.Close();
+						if (e.Item is ListBoxItem item && item.DataContext is RegexGroup group)
+							this.InputGroupName(group.Name);
+					};
+					it.Items = this.filteredPredefinedGroupListBoxItems;
+					it.AddHandler(Control.PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
+					{
+						SynchronizationContext.Current?.Post(this.Focus);
+					}), RoutingStrategies.Tunnel);
+				});
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;
 				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
 				menu.PlacementGravity = PopupGravity.BottomRight;
 				menu.PlacementMode = PlacementMode.AnchorAndGravity;
 			});
-			return this.predefinedGroupsMenu;
+			rootPanel.Children.Insert(0, this.predefinedGroupsPopup);
+			return this.predefinedGroupsPopup;
 		}
 
 
