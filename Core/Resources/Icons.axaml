@@ -502,6 +502,9 @@
 	<DrawingImage x:Key="Image/Icon.Lightbulb.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Lightbulb.Outline}"/>
 	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Lightbulb.Outline.Colored">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Lightbulb}" Geometry="{StaticResource Geometry/Icon.Lightbulb.Outline}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Link" Drawing="{StaticResource Drawing/Icon.Link}"/>
 	<DrawingImage x:Key="Image/Icon.Lock">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Lock}"/>

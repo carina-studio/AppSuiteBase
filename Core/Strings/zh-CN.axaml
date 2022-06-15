@@ -6,7 +6,6 @@
 	<sys:String x:Key="String/ApplicationChangeListDialog.Details">详细资讯</sys:String>
 	<sys:String x:Key="String/ApplicationChangeListDialog.Header">{0} {1} 的变更</sys:String>
 	<sys:String x:Key="String/ApplicationChangeListDialog.IconSpaceReservationChar">中</sys:String>
-	<sys:String x:Key="String/ApplicationChangeListDialog.Title">变更列表</sys:String>
 	
 	<!-- ApplicationCulture -->
 	<sys:String x:Key="String/ApplicationCulture.ZH_TW">中文 (繁體)</sys:String>
