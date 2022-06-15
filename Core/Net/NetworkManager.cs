@@ -1,3 +1,4 @@
+using System.IO;
 using CarinaStudio.Collections;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
@@ -5,8 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net;
+using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Net;
@@ -23,6 +27,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
 
     // Static fields.
     static NetworkManager? DefaultInstance;
+    static readonly Regex IPv4Regex = new("(?<Address>\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})");
     static readonly string[] PingTargetAddresses = new []{
         "208.67.222.222", // OpenDNS
         "208.67.220.220", // OpenDNS
@@ -30,6 +35,10 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         "1.0.0.1", // Cloudflare
         "8.8.8.8", // Google DNS
         "8.8.4.4", // Google DNS
+    };
+    static readonly string[] PublicIPCheckingServers = new []{
+        "https://ipv4.icanhazip.com/",
+        "http://checkip.dyndns.org/",
     };
 
 
@@ -97,7 +106,72 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
             this.logger.LogWarning($"Failed to ping '{server}'");
         }
 
+        // get IP addresses
+        var ipAddress = (IPAddress?)null;
+        var publicIPAddress = (IPAddress?)null;
+        if (isConnected)
+        {
+            ipAddress = await Task.Run(() =>
+            {
+                try
+                {
+                    using var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                    socket.Connect(new IPAddress(new byte[]{ 8, 8, 8, 8}), 65530);
+                    return (socket.LocalEndPoint as IPEndPoint)?.Address;
+                }
+                catch (Exception ex)
+                {
+                    this.logger.LogError(ex, "Error occurred while getting active IPv4 address");
+                    return null;
+                }
+            });
+            if (ipAddress == null)
+            {
+                this.logger.LogError("Unable to get active IPv4 address");
+                ipAddress = this.IPAddress;
+            }
+            using var httpClient = new HttpClient();
+            foreach (var server in PublicIPCheckingServers)
+            {
+                try
+                {
+                    using var stream = await httpClient.GetStreamAsync(server);
+                    using var reader = new StreamReader(stream, Encoding.UTF8);
+                    var match = IPv4Regex.Match(await reader.ReadToEndAsync());
+                    if (match.Success)
+                    {
+                        publicIPAddress = IPAddress.Parse(match.Groups["Address"].Value);
+                        break;
+                    }
+                }
+                catch
+                { }
+            }
+            if (publicIPAddress == null)
+            {
+                this.logger.LogError("Unable to get active IPv4 address for connection to internet");
+                publicIPAddress = this.PublicIPAddress;
+            }
+        }
+        else
+        {
+            ipAddress = this.IPAddress;
+            publicIPAddress = this.PublicIPAddress;
+        }
+
         // update state
+        if (ipAddress != this.IPAddress)
+        {
+            this.logger.LogTrace($"IPv4 address: {ipAddress}");
+            this.IPAddress = ipAddress;
+            this.PropertyChanged?.Invoke(this, new(nameof(IPAddress)));
+        }
+        if (publicIPAddress != this.PublicIPAddress)
+        {
+            this.logger.LogTrace($"Public IPv4 address: {publicIPAddress}");
+            this.PublicIPAddress = publicIPAddress;
+            this.PropertyChanged?.Invoke(this, new(nameof(PublicIPAddress)));
+        }
         if (this.IsNetworkConnected != isConnected)
         {
             if (!isConnected)
@@ -149,6 +223,12 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
 
 
     /// <summary>
+    /// Get active IPv4 address for outgoing connection.
+    /// </summary>
+    public IPAddress? IPAddress { get; private set; }
+
+
+    /// <summary>
     /// Get all available IPv4 and IPv6 addresses of current device.
     /// </summary>
     public IList<IPAddress> IPAddresses { get; }
@@ -189,6 +269,12 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
 
     /// <inheritdoc/>
     public event PropertyChangedEventHandler? PropertyChanged;
+
+
+    /// <summary>
+    /// Get active IPv4 address for outgoing connection to internet.
+    /// </summary>
+    public IPAddress? PublicIPAddress { get; private set; }
 
 
     // Update network addresses.
