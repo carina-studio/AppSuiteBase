@@ -11,7 +11,7 @@ namespace CarinaStudio.AppSuite.Controls
 	partial class SettingsEditorDialogImpl : Dialog
 	{
 		// Fields.
-		readonly SortedObservableList<Tuple<SettingKey, object>> settingKeyValues = new SortedObservableList<Tuple<SettingKey, object>>((x, y) => string.Compare(x?.Item1?.Name, y?.Item1?.Name));
+		readonly SortedObservableList<Tuple<SettingKey, object>> settingKeyValues = new SortedObservableList<Tuple<SettingKey, object>>((x, y) => string.CompareOrdinal(x?.Item1?.Name, y?.Item1?.Name));
 		readonly ListBox settingsListBox;
 
 
