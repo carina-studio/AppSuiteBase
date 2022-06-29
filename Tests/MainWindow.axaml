@@ -362,25 +362,25 @@
 							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
 								<StackPanel Orientation="Horizontal">
 									<Button Classes="InPlaceAction_Button_Large">
-										<Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.File}"/>
+										<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.File}"/>
 									</Button>
 									<Button Classes="InPlaceAction_Button_Large">
-										<Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.OpenFile}"/>
+										<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.OpenFile}"/>
 									</Button>
 									<Button Classes="InPlaceAction_Button_Large">
-										<Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.Save}"/>
+										<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.Save}"/>
 									</Button>
 									<Button Classes="InPlaceAction_Button_Large" IsEnabled="False">
-										<Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.SaveAll}"/>
+										<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.SaveAll}"/>
 									</Button>
 									<ToggleButton Classes="InPlaceAction_ToggleButton_Large" IsEnabled="False">
-										<Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
+										<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
 									</ToggleButton>
 									<ToggleButton Classes="InPlaceAction_ToggleButton_Large" IsChecked="True" IsEnabled="False">
-										<Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
+										<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
 									</ToggleButton>
 									<ToggleButton Classes="InPlaceAction_ToggleButton_Large">
-										<Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
+										<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
 									</ToggleButton>
 								</StackPanel>
 							</Border>

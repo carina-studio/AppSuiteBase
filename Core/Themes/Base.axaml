@@ -581,7 +581,7 @@
 		<Setter Property="Padding" Value="{StaticResource Thickness/BrowseButton.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
-	<Style Selector="Image.BrowseButtonIcon">
+	<Style Selector=":is(Image).BrowseButtonIcon">
 		<Setter Property="Height" Value="{StaticResource Double/BrowseButton.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -590,7 +590,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{StaticResource Double/BrowseButton.Icon.Size}"/>
 	</Style>
-	<Style Selector="Image.BrowseButtonIcon:disabled">
+	<Style Selector=":is(Image).BrowseButtonIcon:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="ToggleButton.BrowseButton">
@@ -722,7 +722,7 @@
 	<Style Selector="Grid.Dialog_ContentPanel_WithHeader">
 		<Setter Property="Margin" Value="{StaticResource Thickness/Dialog.ContentPanel.Padding.WithHeader}"/>
 	</Style>
-	<Style Selector="Image.Dialog_Icon">
+	<Style Selector=":is(Image).Dialog_Icon">
 		<Setter Property="Height" Value="{StaticResource Double/Dialog.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -732,7 +732,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{StaticResource Double/Dialog.Icon.Size}"/>
 	</Style>
-	<Style Selector="Image.Dialog_Icon_Large">
+	<Style Selector=":is(Image).Dialog_Icon_Large">
 		<Setter Property="Height" Value="{StaticResource Double/Dialog.Icon.Size.Large}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1019,14 +1019,14 @@
 	<Style Selector="DrawingPresenter.Icon:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
-	<Style Selector="Image.Icon">
+	<Style Selector=":is(Image).Icon">
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Stretch" Value="Uniform"/>
 		<Setter Property="StretchDirection" Value="Both"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
-	<Style Selector="Image.Icon:disabled">
+	<Style Selector=":is(Image).Icon:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 
@@ -1104,7 +1104,7 @@
 	<Style Selector="Button.InPlaceAction_Button_Medium:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Pressed}"/>
 	</Style>
-	<Style Selector="Image.InPlaceAction_Icon">
+	<Style Selector=":is(Image).InPlaceAction_Icon">
 		<Setter Property="Height" Value="{StaticResource Double/InPlaceAction.IconSize}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1113,10 +1113,10 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{StaticResource Double/InPlaceAction.IconSize}"/>
 	</Style>
-	<Style Selector="Image.InPlaceAction_Icon:disabled">
+	<Style Selector=":is(Image).InPlaceAction_Icon:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
-	<Style Selector="Image.InPlaceAction_Icon_Large">
+	<Style Selector=":is(Image).InPlaceAction_Icon_Large">
 		<Setter Property="Height" Value="{StaticResource Double/InPlaceAction.IconSize.Large}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1125,10 +1125,10 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{StaticResource Double/InPlaceAction.IconSize.Large}"/>
 	</Style>
-	<Style Selector="Image.InPlaceAction_Icon_Large:disabled">
+	<Style Selector=":is(Image).InPlaceAction_Icon_Large:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
-	<Style Selector="Image.InPlaceAction_Icon_Medium">
+	<Style Selector=":is(Image).InPlaceAction_Icon_Medium">
 		<Setter Property="Height" Value="{StaticResource Double/InPlaceAction.IconSize.Medium}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1137,7 +1137,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{StaticResource Double/InPlaceAction.IconSize.Medium}"/>
 	</Style>
-	<Style Selector="Image.InPlaceAction_Icon_Medium:disabled">
+	<Style Selector=":is(Image).InPlaceAction_Icon_Medium:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="ToggleButton.InPlaceAction_ToggleButton">
@@ -1243,7 +1243,7 @@
 		<Setter Property="Height" Value="{StaticResource Double/MenuItem.Icon.Size}"/>
 		<Setter Property="Width" Value="{StaticResource Double/MenuItem.Icon.Size}"/>
 	</Style>
-	<Style Selector="Image.MenuItem_Icon">
+	<Style Selector=":is(Image).MenuItem_Icon">
 		<Setter Property="Height" Value="{StaticResource Double/MenuItem.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1252,7 +1252,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{StaticResource Double/MenuItem.Icon.Size}"/>
 	</Style>
-	<Style Selector="Image.MenuItem_Icon:disabled">
+	<Style Selector=":is(Image).MenuItem_Icon:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="MenuItem">
@@ -1522,7 +1522,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
 		<Setter Property="TextBlock.Foreground" Value="{StaticResource Brush/StatusBar.Foreground}"/>
 	</Style>
-	<Style Selector="Image.StatusBar_DropDownIcon">
+	<Style Selector=":is(Image).StatusBar_DropDownIcon">
 		<Setter Property="Height" Value="{StaticResource Double/StatusBar.DropDownIcon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1532,10 +1532,10 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{StaticResource Double/StatusBar.DropDownIcon.Size}"/>
 	</Style>
-	<Style Selector="Image.StatusBar_DropDownIcon:disabled">
+	<Style Selector=":is(Image).StatusBar_DropDownIcon:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
-	<Style Selector="Image.StatusBar_Icon">
+	<Style Selector=":is(Image).StatusBar_Icon">
 		<Setter Property="Height" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1545,10 +1545,10 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
 	</Style>
-	<Style Selector="Image.StatusBar_Icon:disabled">
+	<Style Selector=":is(Image).StatusBar_Icon:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
-	<Style Selector="Image.StatusBar_IconWithText">
+	<Style Selector=":is(Image).StatusBar_IconWithText">
 		<Setter Property="Height" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1558,7 +1558,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{StaticResource Double/StatusBar.Icon.Size}"/>
 	</Style>
-	<Style Selector="Image.StatusBar_IconIconWithText:disabled">
+	<Style Selector=":is(Image).StatusBar_IconIconWithText:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="Panel.StatusBar_DropDownIcon">
@@ -1774,7 +1774,7 @@
 	<Style Selector="Button.TabItem_Button:pointerover">
 		<Setter Property="Opacity" Value="1"/>
 	</Style>
-	<Style Selector="Image.TabItem_Icon">
+	<Style Selector=":is(Image).TabItem_Icon">
 		<Setter Property="Height" Value="{StaticResource Double/TabItem.Header.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1784,7 +1784,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{StaticResource Double/TabItem.Header.Icon.Size}"/>
 	</Style>
-	<Style Selector="Image.TabItem_Icon:disabled">
+	<Style Selector=":is(Image).TabItem_Icon:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="Panel.TabItem_Icon">
@@ -2006,7 +2006,7 @@
 	<Style Selector="ComboBox.ToolBar_ComboBox:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
-	<Style Selector="Image.ToolBar_NotificationIndicator">
+	<Style Selector=":is(Image).ToolBar_NotificationIndicator">
 		<Setter Property="Height" Value="{StaticResource Double/ToolBar.NotificationIndicator.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
