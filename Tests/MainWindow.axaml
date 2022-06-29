@@ -452,7 +452,16 @@
 							</Border>
 
 							<appControls:ListBox DoubleClickOnItem="OnListBoxDoubleClickOnItem" HorizontalAlignment="Left" Width="150" Margin="5">
-								<ListBoxItem>Item 1</ListBoxItem>
+								<ListBoxItem>
+									<Grid ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch">
+										<TextBlock Text="Item 1" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+										<appControls:Image Classes="Icon" Grid.Column="1" Height="14" VerticalAlignment="Center" Width="14">
+											<DrawingImage>
+												<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Star}"/>
+											</DrawingImage>
+										</appControls:Image>
+									</Grid>
+								</ListBoxItem>
 								<ListBoxItem>Item 2 Item 2 Item 2 Item 2 Item 2</ListBoxItem>
 								<ListBoxItem IsEnabled="False">Item 3</ListBoxItem>
 								<ListBoxItem>Item 4 Item 4 Item 4 Item 4 Item 4</ListBoxItem>

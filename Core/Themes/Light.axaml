@@ -15,6 +15,9 @@
 		<Color x:Key="Color/Button.Background.PointerOver">#f0f0f0</Color>
 		<Color x:Key="Color/Button.Background.Pressed">#e7e7e7</Color>
 
+		<!-- ComboBoxItem -->
+		<SolidColorBrush x:Key="Brush/ComboBoxItem.Foreground.Selected" Color="#ffffff"/>
+
 		<!-- Control -->
 		<Color x:Key="Color/Control.Border">#37000000</Color>
 		<Color x:Key="Color/Control.Border.Dark">#40000000</Color>
@@ -38,6 +41,9 @@
 		<!-- Icon -->
 		<Color x:Key="Color/Icon">#333333</Color>
 		<Color x:Key="Color/Icon.Lightbulb">#e5bf00</Color>
+
+		<!-- ListBoxItem -->
+		<SolidColorBrush x:Key="Brush/ListBoxItem.Foreground.Selected" Color="#ffffff"/>
 
 		<!-- Menu -->
 		<Color x:Key="Color/Menu.Background">#e0e0e0</Color>
@@ -74,6 +80,9 @@
 		<StaticResourceExtension x:Key="Color/ToolTip.Background" ResourceKey="Color/Button.Background"/>
 		<Color x:Key="Color/ToolTip.Border">#50000000</Color>
 
+		<!-- TreeViewItem -->
+		<SolidColorBrush x:Key="Brush/TreeViewItem.Foreground.Selected" Color="#ffffff"/>
+
 		<!-- Window -->
 		<Color x:Key="Color/Window.Background">#f0f0f0</Color>
 		<Color x:Key="Color/Window.Background.Tabbed">#f7f7f7</Color>
@@ -85,5 +94,68 @@
 		<Color x:Key="Color/WorkingArea.Panel.Background">#d8d8d8</Color>
 
 	</Styles.Resources>
+
+	<!-- ComboBoxItem -->
+	<Style Selector="ComboBoxItem:selected:pointerover">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ComboBoxItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="ComboBoxItem:selected:pointerover /template/ ContentPresenter">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ComboBoxItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="ComboBoxItem:selected:pressed">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ComboBoxItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="ComboBoxItem:selected:pressed /template/ ContentPresenter">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ComboBoxItem.Foreground.Selected}" />
+	</Style>
+
+	<!-- ListBoxItem -->
+	<Style Selector="ListBoxItem:pressed">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="ListBoxItem:pressed /template/ ContentPresenter">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="ListBoxItem:selected:not(:focus)">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="ListBoxItem:selected:not(:focus) /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="ListBoxItem:selected:pointerover">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="ListBoxItem:selected:pointerover /template/ ContentPresenter">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="ListBoxItem:selected:pressed">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="ListBoxItem:selected:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />
+	</Style>
+
+	<!-- TreeViewItem -->
+	<Style Selector="TreeViewItem:pressed /template/ Border#PART_LayoutRoot:pointerover">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/TreeViewItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="TreeViewItem:pressed /template/ Border#PART_LayoutRoot:pointerover > ContentPresenter#PART_HeaderPresenter">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/TreeViewItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot > ContentPresenter#PART_HeaderPresenter">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/TreeViewItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot:pointerover">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/TreeViewItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot:pointerover > ContentPresenter#PART_HeaderPresenter">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/TreeViewItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="TreeViewItem:pressed:selected">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/TreeViewItem.Foreground.Selected}" />
+	</Style>
+	<Style Selector="TreeViewItem:pressed:selected /template/ Border#PART_LayoutRoot:pointerover > ContentPresenter#PART_HeaderPresenter">
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/TreeViewItem.Foreground.Selected}" />
+	</Style>
 	
 </Styles>

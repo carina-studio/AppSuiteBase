@@ -74,7 +74,7 @@ namespace CarinaStudio.AppSuite.Controls
 				{
 					border.Opacity = 1;
 				});
-				this.FindControl<Image>("iconImage").AsNonNull().Let(image =>
+				this.FindControl<Avalonia.Controls.Image>("iconImage").AsNonNull().Let(image =>
 				{
 					image.Opacity = 1;
 					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
