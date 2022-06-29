@@ -309,16 +309,7 @@ namespace CarinaStudio.AppSuite
             // create UISettings to monitor system UI change
             if (this.canUseWindows10Features)
             {
-                var assembly = AppDomain.CurrentDomain.GetAssemblies().Let(assemblies =>
-                {
-                    foreach (var assembly in assemblies)
-                    {
-                        System.Diagnostics.Debug.WriteLine(assembly.FullName);
-                        if (assembly.FullName?.StartsWith("Microsoft.Windows.SDK.NET,") == true)
-                            return assembly;
-                    }
-                    return null;
-                });
+                var assembly = this.WindowsSdkAssembly;
                 if (assembly != null)
                 {
                     this.uiSettingsType = assembly.GetType("Windows.UI.ViewManagement.UISettings");
@@ -3187,6 +3178,12 @@ namespace CarinaStudio.AppSuite
                 }
             }
         }
+
+
+        /// <summary>
+        /// Get assembly of Windows SDK.
+        /// </summary>
+        protected virtual Assembly? WindowsSdkAssembly { get; }
 
 
         // Interface implementations.
