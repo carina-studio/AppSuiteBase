@@ -2109,23 +2109,28 @@ namespace CarinaStudio.AppSuite
             // initialize product manager
             try
             {
-                // load assembly and type
-                var pmType = Type.GetType("CarinaStudio.AppSuite.Product.ProductManager");
-                if (pmType == null)
+                var pmType = this.ProductManagerImplType;
+                if (pmType != null)
                 {
-                    var assembly = Assembly.LoadFile(Path.Combine(this.RootPrivateDirectoryPath, "CarinaStudio.AppSuite.Product.dll"));
-                    pmType = assembly.GetType("CarinaStudio.AppSuite.Product.ProductManager") ?? throw new Exception();
+                    if (pmType.Assembly.GetName().FullName.StartsWith("CarinaStudio.AppSuite.Product,"))
+                    {
+                        // initialize
+                        await (Task)pmType.GetMethod("InitializeAsync", BindingFlags.Public | BindingFlags.Static, new Type[]{ typeof(IAppSuiteApplication) })!.Invoke(null, new object?[] { this })!;
+
+                        // get instance
+                        this.productManager = (IProductManager)pmType.GetProperty("Default", BindingFlags.Public | BindingFlags.Static)!.GetGetMethod()!.Invoke(null, new object?[0])!;
+                    }
+                    else
+                        this.Logger.LogError("Unexpected type of implementation of product manager");
                 }
-                if (!pmType.Assembly.GetName().FullName.StartsWith("CarinaStudio.AppSuite.Product,"))
-                    throw new Exception();
-
-                // initialize
-                await (Task)pmType.GetMethod("InitializeAsync", BindingFlags.Public | BindingFlags.Static, new Type[]{ typeof(IAppSuiteApplication) })!.Invoke(null, new object?[] { this })!;
-
-                // get instance
-                this.productManager = (IProductManager)pmType.GetProperty("Default", BindingFlags.Public | BindingFlags.Static)!.GetGetMethod()!.Invoke(null, new object?[0])!;
+                else
+                    this.Logger.LogWarning("No implementation of product manager");
             }
-            catch
+            catch (Exception ex)
+            { 
+                this.Logger.LogError(ex, "Failed to create implementation of product manager");
+            }
+            if (this.productManager == null)
             {
                 this.Logger.LogDebug("Use mock product manager");
                 this.productManager = new MockProductManager(this);
@@ -2298,6 +2303,12 @@ namespace CarinaStudio.AppSuite
 
         /// <inheritdoc/>
         public IProductManager ProductManager { get => this.productManager ?? throw new InvalidOperationException("Application is not initialized yet."); }
+
+
+        /// <summary>
+        /// Get type of implementation of <see cref="IProductManager"/>.
+        /// </summary>
+        protected virtual Type? ProductManagerImplType { get; }
 
 
         /// <summary>
