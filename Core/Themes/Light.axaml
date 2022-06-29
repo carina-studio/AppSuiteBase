@@ -116,12 +116,6 @@
 	<Style Selector="ListBoxItem:pressed /template/ ContentPresenter">
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />
 	</Style>
-	<Style Selector="ListBoxItem:selected:not(:focus)">
-		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />
-	</Style>
-	<Style Selector="ListBoxItem:selected:not(:focus) /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />
-	</Style>
 	<Style Selector="ListBoxItem:selected:pointerover">
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />
 	</Style>
@@ -136,9 +130,6 @@
 	</Style>
 
 	<!-- TreeViewItem -->
-	<Style Selector="TreeViewItem:pressed /template/ Border#PART_LayoutRoot:pointerover">
-		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/TreeViewItem.Foreground.Selected}" />
-	</Style>
 	<Style Selector="TreeViewItem:pressed /template/ Border#PART_LayoutRoot:pointerover > ContentPresenter#PART_HeaderPresenter">
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/TreeViewItem.Foreground.Selected}" />
 	</Style>
@@ -149,9 +140,6 @@
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/TreeViewItem.Foreground.Selected}" />
 	</Style>
 	<Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot:pointerover > ContentPresenter#PART_HeaderPresenter">
-		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/TreeViewItem.Foreground.Selected}" />
-	</Style>
-	<Style Selector="TreeViewItem:pressed:selected">
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/TreeViewItem.Foreground.Selected}" />
 	</Style>
 	<Style Selector="TreeViewItem:pressed:selected /template/ Border#PART_LayoutRoot:pointerover > ContentPresenter#PART_HeaderPresenter">

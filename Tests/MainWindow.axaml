@@ -451,7 +451,7 @@
 								<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
 							</Border>
 
-							<appControls:ListBox DoubleClickOnItem="OnListBoxDoubleClickOnItem" HorizontalAlignment="Left" Width="150" Margin="5">
+							<appControls:ListBox DoubleClickOnItem="OnListBoxDoubleClickOnItem" HorizontalAlignment="Left" Width="150" Margin="5" SelectionMode="Multiple">
 								<ListBoxItem>
 									<Grid ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch">
 										<TextBlock Text="Item 1" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
