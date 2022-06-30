@@ -50,6 +50,7 @@ public class ExecutableExternalDependency : ExternalDependency
         {
             exeNames.Add($"{this.ExecutableName}.exe");
             exeNames.Add($"{this.ExecutableName}.bat");
+            exeNames.Add($"{this.ExecutableName}.cmd");
         }
         else
         {
