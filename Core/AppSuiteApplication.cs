@@ -1596,6 +1596,8 @@ namespace CarinaStudio.AppSuite
                         if (!char.IsLetterOrDigit(nameBuilder[i]))
                             nameBuilder[i] = '_';
                     }
+                    nameBuilder.Append('-');
+                    nameBuilder.Append(Math.Abs(this.RootPrivateDirectoryPath.GetHashCode()));
                     return nameBuilder.ToString();
                 });
                 if (Platform.IsNotWindows)
