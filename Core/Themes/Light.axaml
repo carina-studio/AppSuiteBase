@@ -69,6 +69,7 @@
 		<Color x:Key="Color/TabItem.Header.Border.Selected">#20000000</Color>
 
 		<!-- TextBox -->
+		<SolidColorBrush x:Key="Brush/TextBox.Foreground.Selected" Color="#ffffff"/>
 		<SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{StaticResource Color/Control.Border.Dark}"/>
 
 		<!-- ToolBar -->
@@ -127,6 +128,11 @@
 	</Style>
 	<Style Selector="ListBoxItem:selected:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />
+	</Style>
+
+	<!-- TextBox -->
+	<Style Selector="TextBox">
+		<Setter Property="SelectionForegroundBrush" Value="{DynamicResource Brush/TextBox.Foreground.Selected}" />
 	</Style>
 
 	<!-- TreeViewItem -->
