@@ -265,6 +265,17 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         protected AppSuiteApplication()
         {
+            /* 
+             * Prevent using Avalonia with version >= 0.10.15 because some control styles are not compatible.
+             * Need to update control styles if upgrading to Avalonia with version >= 0.10.15:
+             * - Use Foreground property for ContentPresenter instead of TextBlock.Foreground.
+             */
+            typeof(AvaloniaObject).Assembly.GetName().Version?.Let(version =>
+            {
+                if (version.Major > 0 || version.Minor > 10 || version.Build > 14)
+                    throw new NotSupportedException($"Incompatible Avalonia version: {version}");
+            });
+
             // create logger
             LogManager.Configuration = new NLog.Config.LoggingConfiguration().Also(it =>
             {
