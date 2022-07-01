@@ -79,24 +79,24 @@ namespace CarinaStudio.AppSuite.Controls
 					image.Opacity = 1;
 					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
-				this.FindControl<TextBlock>("titleTextBlock").AsNonNull().Let(image =>
+				this.FindControl<Avalonia.Controls.TextBlock>("titleTextBlock").AsNonNull().Let(image =>
 				{
 					image.Opacity = 1;
 					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
-				this.FindControl<TextBlock>("versionTextBlock").AsNonNull().Let(image =>
+				this.FindControl<Avalonia.Controls.TextBlock>("versionTextBlock").AsNonNull().Let(image =>
 				{
 					this.TryFindResource<double>("Double/ApplicationInfoDialog.AppVersion.Opacity", out var opacity);
 					image.Opacity = opacity ?? 1;
 					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
-				this.FindControl<TextBlock>("copyrightTextBlock").AsNonNull().Let(image =>
+				this.FindControl<Avalonia.Controls.TextBlock>("copyrightTextBlock").AsNonNull().Let(image =>
 				{
 					this.TryFindResource<double>("Double/ApplicationInfoDialog.AppVersion.Opacity", out var opacity);
 					image.Opacity = opacity ?? 1;
 					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
-				this.FindControl<TextBlock>("messageTextBlock").AsNonNull().Let(image =>
+				this.FindControl<Avalonia.Controls.TextBlock>("messageTextBlock").AsNonNull().Let(image =>
 				{
 					image.Opacity = 1;
 					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);

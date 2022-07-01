@@ -225,11 +225,11 @@ namespace CarinaStudio.AppSuite.Controls
 								{ 
 									itemPanel.DataContext = productId;
 									itemPanel.Orientation = Avalonia.Layout.Orientation.Horizontal;
-									itemPanel.Children.Add(new TextBlock().Also(it =>
+									itemPanel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 										it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center));
 									itemPanel.Children.Add(new Separator().Also(it =>
 										it.Classes.Add("Dialog_Separator_Small")));
-									itemPanel.Children.Add(new TextBlock().Also(it =>
+									itemPanel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 										it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center));
 									this.ShowProductInfo(itemPanel);
 								}));
@@ -248,7 +248,7 @@ namespace CarinaStudio.AppSuite.Controls
 						{
 							if (panel.Children.Count > 0)
 								panel.Children.Add(new Separator().Also(it => it.Classes.Add("Dialog_Separator_Small")));
-							panel.Children.Add(new TextBlock() { Text = $"{assembly.GetName().Name} {assembly.GetName().Version}" });
+							panel.Children.Add(new Avalonia.Controls.TextBlock() { Text = $"{assembly.GetName().Name} {assembly.GetName().Version}" });
 						}
 					});
 				}
@@ -313,17 +313,17 @@ namespace CarinaStudio.AppSuite.Controls
 			// show name
 			if (!productManager.TryGetProductName(productId, out var name))
 				name = productId;
-			(view.Children[0] as TextBlock)?.Let(it => it.Text = name);
+			(view.Children[0] as Avalonia.Controls.TextBlock)?.Let(it => it.Text = name);
 
 			// show state
 			if (productManager.TryGetProductState(productId, out var state))
 			{
-				(view.Children[2] as TextBlock)?.Let(it => 
+				(view.Children[2] as Avalonia.Controls.TextBlock)?.Let(it => 
 					it.Text = this.productStateConverter.Convert<string?>(state)?.Let(s =>
 						$"({s})"));
 			}
 			else
-				(view.Children[2] as TextBlock)?.Let(it => it.Text = null);
+				(view.Children[2] as Avalonia.Controls.TextBlock)?.Let(it => it.Text = null);
 		}
 
 

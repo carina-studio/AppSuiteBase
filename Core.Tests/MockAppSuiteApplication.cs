@@ -1,7 +1,7 @@
-﻿using Avalonia.Styling;
+﻿using Avalonia.Controls;
+using Avalonia.Styling;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
-using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
@@ -225,7 +225,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public virtual Window? LatestActiveMainWindow { get; }
+        public virtual CarinaStudio.Controls.Window? LatestActiveMainWindow { get; }
 
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public virtual void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, Window? activeMainWindow)
+        public virtual void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, CarinaStudio.Controls.Window? activeMainWindow)
         { }
 
 
@@ -280,7 +280,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get list of main windows.
         /// </summary>
-        public IList<Window> MainWindows { get; } = new Window[0];
+        public IList<CarinaStudio.Controls.Window> MainWindows { get; } = new CarinaStudio.Controls.Window[0];
 
 
         /// <summary>
@@ -336,6 +336,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public event EventHandler<ResourcesChangedEventArgs>? ResourcesChanged;
+
+
+        /// <inheritdoc/>
         public bool Restart(string? args, bool asAdministrator) => false;
 
 
@@ -344,7 +348,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="mainWindow">Main window to restart.</param>
         /// <returns>True if restarting has been accepted.</returns>
-        public bool RestartMainWindow(Window mainWindow) => false;
+        public bool RestartMainWindow(CarinaStudio.Controls.Window mainWindow) => false;
 
 
         /// <summary>
@@ -381,7 +385,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public bool ShowMainWindow(Action<Window>? windowCreatedAction = null) => false;
+        public bool ShowMainWindow(Action<CarinaStudio.Controls.Window>? windowCreatedAction = null) => false;
 
 
         /// <summary>
@@ -422,8 +426,10 @@ namespace CarinaStudio.AppSuite
 
 
         // Interface implementations.
-        bool Avalonia.Controls.IResourceNode.HasResources => false;
-        bool Avalonia.Controls.IResourceNode.TryGetResource(object key, out object? value)
+        void IResourceHost.NotifyHostedResourcesChanged(ResourcesChangedEventArgs e)
+        { }
+        bool IResourceNode.HasResources => false;
+        bool IResourceNode.TryGetResource(object key, out object? value)
         {
             value = null;
             return false;

@@ -105,16 +105,16 @@ namespace CarinaStudio.AppSuite.Controls
 				{
 					it.Content = new StackPanel().Also(panel => 
 					{
-						panel.Children.Add(new TextBlock().Also(it =>
+						panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 						{
-							it.Bind(TextBlock.TextProperty, new Binding() { Path = nameof(StringInterpolationVariable.Name) });
+							it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding() { Path = nameof(StringInterpolationVariable.Name) });
 							it.VerticalAlignment = VerticalAlignment.Center;
 						}));
-						panel.Children.Add(new TextBlock().Also(it =>
+						panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 						{
-							it.Bind(TextBlock.IsVisibleProperty, new Binding() { Path = nameof(StringInterpolationVariable.DisplayName), Converter = StringConverters.IsNotNullOrEmpty });
-                            it.Bind(TextBlock.OpacityProperty, this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity"));
-							it.Bind(TextBlock.TextProperty, new Binding() { Path = nameof(StringInterpolationVariable.DisplayName), StringFormat = " ({0})" });
+							it.Bind(Avalonia.Controls.TextBlock.IsVisibleProperty, new Binding() { Path = nameof(StringInterpolationVariable.DisplayName), Converter = StringConverters.IsNotNullOrEmpty });
+                            it.Bind(Avalonia.Controls.TextBlock.OpacityProperty, this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity"));
+							it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding() { Path = nameof(StringInterpolationVariable.DisplayName), StringFormat = " ({0})" });
 							it.VerticalAlignment = VerticalAlignment.Center;
 						}));
 						panel.Orientation = Orientation.Horizontal ;

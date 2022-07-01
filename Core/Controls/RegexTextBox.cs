@@ -141,26 +141,26 @@ namespace CarinaStudio.AppSuite.Controls
 				it.Content = new StackPanel().Also(panel => 
 				{
 					var opacityObservable = this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity");
-					panel.Children.Add(new TextBlock().Also(it =>
+					panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 					{
 						it.Text = $"\\{escapedChar}";
 						it.VerticalAlignment = VerticalAlignment.Center;
 					}));
-					panel.Children.Add(new TextBlock().Also(it =>
+					panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 					{
-						it.Bind(TextBlock.OpacityProperty, opacityObservable);
+						it.Bind(Avalonia.Controls.TextBlock.OpacityProperty, opacityObservable);
 						it.Text = " (";
 						it.VerticalAlignment = VerticalAlignment.Center;
 					}));
-					panel.Children.Add(new TextBlock().Also(it =>
+					panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 					{
-						it.Bind(TextBlock.OpacityProperty, opacityObservable);
-						it.Bind(TextBlock.TextProperty, this.GetResourceObservable($"String/RegexTextBox.EscapedCharacter.{escapedChar}"));
+						it.Bind(Avalonia.Controls.TextBlock.OpacityProperty, opacityObservable);
+						it.Bind(Avalonia.Controls.TextBlock.TextProperty, this.GetResourceObservable($"String/RegexTextBox.EscapedCharacter.{escapedChar}"));
 						it.VerticalAlignment = VerticalAlignment.Center;
 					}));
-					panel.Children.Add(new TextBlock().Also(it =>
+					panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 					{
-						it.Bind(TextBlock.OpacityProperty, opacityObservable);
+						it.Bind(Avalonia.Controls.TextBlock.OpacityProperty, opacityObservable);
 						it.Text = ")";
 						it.VerticalAlignment = VerticalAlignment.Center;
 					}));
@@ -175,16 +175,16 @@ namespace CarinaStudio.AppSuite.Controls
 				{
 					it.Content = new StackPanel().Also(panel => 
 					{
-						panel.Children.Add(new TextBlock().Also(it =>
+						panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 						{
-							it.Bind(TextBlock.TextProperty, new Binding() { Path = nameof(RegexGroup.Name) });
+							it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding() { Path = nameof(RegexGroup.Name) });
 							it.VerticalAlignment = VerticalAlignment.Center;
 						}));
-						panel.Children.Add(new TextBlock().Also(it =>
+						panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 						{
-							it.Bind(TextBlock.IsVisibleProperty, new Binding() { Path = nameof(RegexGroup.DisplayName), Converter = StringConverters.IsNotNullOrEmpty });
-							it.Bind(TextBlock.OpacityProperty, this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity"));
-							it.Bind(TextBlock.TextProperty, new Binding() { Path = nameof(RegexGroup.DisplayName), StringFormat = " ({0})" });
+							it.Bind(Avalonia.Controls.TextBlock.IsVisibleProperty, new Binding() { Path = nameof(RegexGroup.DisplayName), Converter = StringConverters.IsNotNullOrEmpty });
+							it.Bind(Avalonia.Controls.TextBlock.OpacityProperty, this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity"));
+							it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding() { Path = nameof(RegexGroup.DisplayName), StringFormat = " ({0})" });
 							it.VerticalAlignment = VerticalAlignment.Center;
 						}));
 						panel.Orientation = Orientation.Horizontal ;
