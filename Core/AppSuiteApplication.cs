@@ -1017,7 +1017,7 @@ namespace CarinaStudio.AppSuite
         {
             if (this.TryFindResource<string>($"String/{key}", out var str))
                 return str;
-            return null;
+            return defaultValue;
         }
 
 
