@@ -336,7 +336,9 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+#pragma warning disable CS0067
         public event EventHandler<ResourcesChangedEventArgs>? ResourcesChanged;
+#pragma warning restore CS0067
 
 
         /// <inheritdoc/>
