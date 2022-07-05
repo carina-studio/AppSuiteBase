@@ -281,6 +281,8 @@
 
 		<!-- ListBoxItem -->
 		<CornerRadius x:Key="CornerRadius/ListBoxItem">4</CornerRadius>
+		<sys:Double x:Key="Double/ComboBoxItem.Icon.Size">16</sys:Double>
+		<Thickness x:Key="Thickness/ListBoxItem.Icon.Margin">0,0,9,0</Thickness>
 		<Thickness x:Key="Thickness/ListBoxItem.Margin">0,1,0,1</Thickness>
 		<Thickness x:Key="Thickness/ListBoxItem.Padding">6,6,15,6</Thickness>
 
@@ -620,6 +622,14 @@
 		<Setter Property="Margin" Value="{StaticResource Thickness/ComboBoxItem.Margin}"/>
 		<Setter Property="Padding" Value="{StaticResource Thickness/ComboBoxItem.Padding}"/>
 	</Style>
+	<Style Selector="Border.ComboBoxItem_Icon">
+		<Setter Property="Height" Value="{StaticResource Double/ComboBoxItem.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ComboBoxItem.Icon.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/ComboBoxItem.Icon.Size}"/>
+	</Style>
 	<Style Selector=":is(Image).ComboBoxItem_Icon">
 		<Setter Property="Height" Value="{StaticResource Double/ComboBoxItem.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -632,6 +642,14 @@
 	</Style>
 	<Style Selector=":is(Image).ComboBoxItem_Icon:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<Style Selector="Panel.ComboBoxItem_Icon">
+		<Setter Property="Height" Value="{StaticResource Double/ComboBoxItem.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ComboBoxItem.Icon.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/ComboBoxItem.Icon.Size}"/>
 	</Style>
 	<Style Selector="TextBlock.ComboBoxItem_TextBlock">
 		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
@@ -1283,6 +1301,40 @@
 		<Setter Property="CornerRadius" Value="{StaticResource CornerRadius/ListBoxItem}"/>
 		<Setter Property="Margin" Value="{StaticResource Thickness/ListBoxItem.Margin}"/>
 		<Setter Property="Padding" Value="{StaticResource Thickness/ListBoxItem.Padding}"/>
+	</Style>
+	<Style Selector="Border.ListBoxItem_Icon">
+		<Setter Property="Height" Value="{StaticResource Double/ListBoxItem.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ListBoxItem.Icon.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/ListBoxItem.Icon.Size}"/>
+	</Style>
+	<Style Selector=":is(Image).ListBoxItem_Icon">
+		<Setter Property="Height" Value="{StaticResource Double/ListBoxItem.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ListBoxItem.Icon.Margin}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/ListBoxItem.Icon.Size}"/>
+	</Style>
+	<Style Selector=":is(Image).ListBoxItem_Icon:disabled">
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<Style Selector="Panel.ListBoxItem_Icon">
+		<Setter Property="Height" Value="{StaticResource Double/ListBoxItem.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/ListBoxItem.Icon.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/ListBoxItem.Icon.Size}"/>
+	</Style>
+	<Style Selector="TextBlock.ListBoxItem_TextBlock">
+		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+		<Setter Property="TextWrapping" Value="NoWrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 
 	<!-- Menu -->
