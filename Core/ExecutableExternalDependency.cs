@@ -2,6 +2,7 @@ using CarinaStudio.Collections;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite;
@@ -79,8 +80,15 @@ public class ExecutableExternalDependency : ExternalDependency
                     return new string[0];
                 }
             }
-            else
-                return Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator) ?? new string[0];
+            else if (Platform.IsWindows)
+            {
+                return new HashSet<string>(IO.PathEqualityComparer.Default).Also(pathSet =>
+                {
+                    Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User)?.Split(Path.PathSeparator)?.Let(it => pathSet.AddAll(it));
+                    Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine)?.Split(Path.PathSeparator)?.Let(it => pathSet.AddAll(it));
+                }).ToArray();
+            }
+            return Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator) ?? new string[0];
         });
         foreach (var directoryPath in paths)
         {
