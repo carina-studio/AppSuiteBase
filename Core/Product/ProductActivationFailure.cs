@@ -10,6 +10,10 @@ public enum ProductActivationFailure
     /// </summary>
     Unknown,
     /// <summary>
+    /// Networn connection is unavailable.
+    /// </summary>
+    NoNetworkConnection,
+    /// <summary>
     /// Product cannot be found.
     /// </summary>
     ProductNotFound,
