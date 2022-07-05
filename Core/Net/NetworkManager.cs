@@ -57,24 +57,18 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         this.logger = app.LoggerFactory.CreateLogger(nameof(NetworkManager));
 
         // monitor network change
-        NetworkChange.NetworkAddressChanged += this.OnNetworkAddressChanged;
-        NetworkChange.NetworkAvailabilityChanged += this.OnNetworkAvailabilityChanged;
+        Task.Run(() =>
+        {
+            NetworkChange.NetworkAddressChanged += this.OnNetworkAddressChanged;
+            NetworkChange.NetworkAvailabilityChanged += this.OnNetworkAvailabilityChanged;
+        });
 
         // setup scheduled actions
         this.checkNetworkConnectionAction = new(this.CheckNetworkConnection);
         this.updateNetworkAddressesAction = new(this.UpdateNetworkAddresses);
 
         // check network state
-        try
-        {
-            this.UpdateNetworkAddresses();
-            if (NetworkInterface.GetIsNetworkAvailable())
-                this.checkNetworkConnectionAction.Execute();
-        }
-        catch (Exception ex)
-        {
-            this.logger.LogError(ex, "Error occurred while checking network state");
-        }
+        this.UpdateNetworkAddresses();
 
         // setup properties
         this.IPAddresses = this.ipAddresses.AsReadOnly();
@@ -278,7 +272,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
 
 
     // Update network addresses.
-    void UpdateNetworkAddresses()
+    async void UpdateNetworkAddresses()
     {
         try
         {
@@ -287,49 +281,54 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
             var primaryPhysicalAddress = (PhysicalAddress?)null;
             var primaryInterfaceType = NetworkInterfaceType.Ethernet;
             var isWirelessInterfaceUp = false;
-            foreach (var networkInterface in NetworkInterface.GetAllNetworkInterfaces())
+            var isNetworkAvailable = false;
+            await Task.Run(() =>
             {
-                if (networkInterface.OperationalStatus == OperationalStatus.Up)
+                foreach (var networkInterface in NetworkInterface.GetAllNetworkInterfaces())
                 {
-                    if (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
-                        isWirelessInterfaceUp = true;
-                    foreach (var addressInfo in networkInterface.GetIPProperties().UnicastAddresses)
+                    if (networkInterface.OperationalStatus == OperationalStatus.Up)
                     {
-                        var address = addressInfo.Address;
-                        if (address.AddressFamily == AddressFamily.InterNetwork || address.AddressFamily == AddressFamily.InterNetworkV6)
+                        if (networkInterface.NetworkInterfaceType == NetworkInterfaceType.Wireless80211)
+                            isWirelessInterfaceUp = true;
+                        foreach (var addressInfo in networkInterface.GetIPProperties().UnicastAddresses)
                         {
-                            if (!address.Equals(IPAddress.Loopback) && !address.Equals(IPAddress.IPv6Loopback))
-                                addresses.Add(address);
+                            var address = addressInfo.Address;
+                            if (address.AddressFamily == AddressFamily.InterNetwork || address.AddressFamily == AddressFamily.InterNetworkV6)
+                            {
+                                if (!address.Equals(IPAddress.Loopback) && !address.Equals(IPAddress.IPv6Loopback))
+                                    addresses.Add(address);
+                            }
+                        }
+                    }
+                    if (primaryPhysicalAddress == null)
+                    {
+                        primaryInterfaceType = networkInterface.NetworkInterfaceType;
+                        primaryPhysicalAddress = networkInterface.GetPhysicalAddress();
+                    }
+                    else
+                    {
+                        switch (networkInterface.NetworkInterfaceType)
+                        {
+                            case NetworkInterfaceType.Ethernet:
+                                if (primaryInterfaceType != NetworkInterfaceType.Ethernet)
+                                {
+                                    primaryInterfaceType = NetworkInterfaceType.Ethernet;
+                                    primaryPhysicalAddress = networkInterface.GetPhysicalAddress();
+                                }
+                                break;
+                            case NetworkInterfaceType.Wireless80211:
+                                if (primaryInterfaceType != NetworkInterfaceType.Ethernet
+                                    && primaryInterfaceType != NetworkInterfaceType.Wireless80211)
+                                {
+                                    primaryInterfaceType = NetworkInterfaceType.Wireless80211;
+                                    primaryPhysicalAddress = networkInterface.GetPhysicalAddress();
+                                }
+                                break;
                         }
                     }
                 }
-                if (primaryPhysicalAddress == null)
-                {
-                    primaryInterfaceType = networkInterface.NetworkInterfaceType;
-                    primaryPhysicalAddress = networkInterface.GetPhysicalAddress();
-                }
-                else
-                {
-                    switch (networkInterface.NetworkInterfaceType)
-                    {
-                        case NetworkInterfaceType.Ethernet:
-                            if (primaryInterfaceType != NetworkInterfaceType.Ethernet)
-                            {
-                                primaryInterfaceType = NetworkInterfaceType.Ethernet;
-                                primaryPhysicalAddress = networkInterface.GetPhysicalAddress();
-                            }
-                            break;
-                        case NetworkInterfaceType.Wireless80211:
-                            if (primaryInterfaceType != NetworkInterfaceType.Ethernet
-                                && primaryInterfaceType != NetworkInterfaceType.Wireless80211)
-                            {
-                                primaryInterfaceType = NetworkInterfaceType.Wireless80211;
-                                primaryPhysicalAddress = networkInterface.GetPhysicalAddress();
-                            }
-                            break;
-                    }
-                }
-            }
+                isNetworkAvailable = NetworkInterface.GetIsNetworkAvailable();
+            });
 
             // report physical address
             if (this.PrimaryPhysicalAddress?.Equals(primaryPhysicalAddress) != true)
@@ -348,7 +347,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
 
             // check network connection
             this.isWirelessInterfaceUp = isWirelessInterfaceUp;
-            if (NetworkInterface.GetIsNetworkAvailable())
+            if (isNetworkAvailable)
                 this.checkNetworkConnectionAction.Reschedule();
         }
         catch (Exception ex)
