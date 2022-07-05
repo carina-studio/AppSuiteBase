@@ -468,7 +468,16 @@
 							</appControls:ListBox>
 
 							<ComboBox HorizontalAlignment="Left" Width="200" Margin="5">
-								<ComboBoxItem>1</ComboBoxItem>
+								<ComboBoxItem HorizontalAlignment="Stretch">
+									<Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Left" VerticalAlignment="Center">
+										<appControls:Image Classes="ComboBoxItem_Icon">
+											<DrawingImage>
+												<GeometryDrawing Brush="{Binding $parent[ComboBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.OK}"/>
+											</DrawingImage>
+										</appControls:Image>
+										<TextBlock Classes="ComboBoxItem_TextBlock" Grid.Column="1" Text="Item"/>
+									</Grid>
+								</ComboBoxItem>
 								<ComboBoxItem>2</ComboBoxItem>
 								<ComboBoxItem>3</ComboBoxItem>
 								<ComboBoxItem>4</ComboBoxItem>
@@ -477,7 +486,16 @@
 								<ComboBoxItem>7</ComboBoxItem>
 								<ComboBoxItem>8</ComboBoxItem>
 								<ComboBoxItem>9</ComboBoxItem>
-								<ComboBoxItem>10 looooooooooooooooooooog content</ComboBoxItem>
+								<ComboBoxItem HorizontalAlignment="Stretch">
+									<Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Left" VerticalAlignment="Center">
+										<appControls:Image Classes="ComboBoxItem_Icon">
+											<DrawingImage>
+												<GeometryDrawing Brush="{Binding $parent[ComboBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.OK}"/>
+											</DrawingImage>
+										</appControls:Image>
+										<TextBlock Classes="ComboBoxItem_TextBlock" Grid.Column="1" Text="10 looooooooooooooooooooog content"/>
+									</Grid>
+								</ComboBoxItem>
 								<ComboBoxItem>11</ComboBoxItem>
 								<ComboBoxItem>12</ComboBoxItem>
 								<ComboBoxItem>13</ComboBoxItem>
