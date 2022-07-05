@@ -281,7 +281,7 @@
 
 		<!-- ListBoxItem -->
 		<CornerRadius x:Key="CornerRadius/ListBoxItem">4</CornerRadius>
-		<sys:Double x:Key="Double/ComboBoxItem.Icon.Size">16</sys:Double>
+		<sys:Double x:Key="Double/ListBoxItem.Icon.Size">16</sys:Double>
 		<Thickness x:Key="Thickness/ListBoxItem.Icon.Margin">0,0,9,0</Thickness>
 		<Thickness x:Key="Thickness/ListBoxItem.Margin">0,1,0,1</Thickness>
 		<Thickness x:Key="Thickness/ListBoxItem.Padding">6,6,15,6</Thickness>
