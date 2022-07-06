@@ -105,6 +105,7 @@
 	<sys:String x:Key="String/Common.Delete">删除</sys:String>
 	<sys:String x:Key="String/Common.Details">详细资讯</sys:String>
 	<sys:String x:Key="String/Common.Details.WithDialog">详细资讯…</sys:String>
+	<sys:String x:Key="String/Common.Documentation">说明文件</sys:String>
 	<sys:String x:Key="String/Common.DoNotAskAgain">不要再询问</sys:String>
 	<sys:String x:Key="String/Common.DoNotShowAgain">不要再显示</sys:String>
 	<sys:String x:Key="String/Common.Edit">编辑</sys:String>
@@ -112,6 +113,7 @@
 	<sys:String x:Key="String/Common.Empty">空</sys:String>
 	<sys:String x:Key="String/Common.Export">导出</sys:String>
 	<sys:String x:Key="String/Common.Export.WithDialog">导出…</sys:String>
+	<sys:String x:Key="String/Common.Help">说明</sys:String>
 	<sys:String x:Key="String/Common.Import">导入</sys:String>
 	<sys:String x:Key="String/Common.Import.WithDialog">导入…</sys:String>
 	<sys:String x:Key="String/Common.KnowMoreAbout">了解更多</sys:String>
