@@ -1,0 +1,78 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:aConverters="using:Avalonia.Data.Converters"
+		xmlns:as="using:CarinaStudio.AppSuite"
+		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="CarinaStudio.AppSuite.Controls.PathEnvVarEditorDialogImpl"
+		Name="window"
+		CanResize="True"
+		Classes="Dialog"
+		Height="{DynamicResource Double/PathEnvVarEditorDialog.Height}"
+		MinHeight="{DynamicResource Double/PathEnvVarEditorDialog.MinHeight}"
+		MinWidth="{DynamicResource Double/PathEnvVarEditorDialog.MinWidth}"
+		SizeToContent="Manual"
+        Title="{DynamicResource String/PathEnvVarEditorDialog.Title}"
+		Width="{DynamicResource Double/PathEnvVarEditorDialog.Width}">
+	
+	<DockPanel>
+
+		<!-- Control buttons -->
+		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
+			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].SaveAndClose}" Content="{DynamicResource String/Common.OK}">
+					<Button.IsEnabled>
+						<MultiBinding Converter="{x:Static aConverters:BoolConverters.And}">
+							<Binding Path="!IsRefreshingPaths" ElementName="window"/>
+							<Binding Path="!IsSavingPaths" ElementName="window"/>
+						</MultiBinding>
+					</Button.IsEnabled>
+				</Button>
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.Cancel}" IsEnabled="{Binding !$parent[Window].IsSavingPaths}"/>
+			</StackPanel>
+		</Border>
+
+		<!-- Content -->
+		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="*,Auto">
+			<controls:ListBox Name="pathListBox" Items="{Binding $parent[Window].Paths}" VirtualizationMode="None">
+				<controls:ListBox.ItemTemplate>
+					<DataTemplate>
+						<Grid ColumnDefinitions="*,Auto">
+							<TextBlock Classes="ListBoxItem_TextBlock" Text="{Binding}"/>
+							<Border Classes="InPlaceAction_Reserved" Grid.ColumnSpan="2"/>
+							<StackPanel Grid.Column="1" IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}" Orientation="Horizontal">
+								<Button Classes="InPlaceAction_Button" Command="{Binding $parent[Window].RemovePath}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{DynamicResource String/Common.Delete}">
+									<controls:Image Classes="InPlaceAction_Icon">
+										<DrawingImage>
+											<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Delete}"/>
+										</DrawingImage>
+									</controls:Image>
+								</Button>
+								<Button Classes="InPlaceAction_Button" Command="{Binding $parent[Window].EditPath}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{DynamicResource String/Common.Edit}">
+									<controls:Image Classes="InPlaceAction_Icon">
+										<DrawingImage>
+											<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Edit}"/>
+										</DrawingImage>
+									</controls:Image>
+								</Button>
+							</StackPanel>
+						</Grid>
+					</DataTemplate>
+				</controls:ListBox.ItemTemplate>
+			</controls:ListBox>
+			<Button Classes="BrowseButton" Command="{Binding $parent[Window].AddPath}" Grid.Column="1" ToolTip.Tip="{DynamicResource String/PathEnvVarEditorDialog.AddPath.WithDialog}" VerticalAlignment="Top">
+				<Button.IsEnabled>
+					<MultiBinding Converter="{x:Static aConverters:BoolConverters.And}">
+						<Binding Path="!IsRefreshingPaths" ElementName="window"/>
+						<Binding Path="!IsSavingPaths" ElementName="window"/>
+					</MultiBinding>
+				</Button.IsEnabled>
+				<Image Classes="BrowseButtonIcon" Source="{StaticResource Image/Icon.AddFolder}"/>
+			</Button>
+		</Grid>
+
+	</DockPanel>
+	
+</Window>

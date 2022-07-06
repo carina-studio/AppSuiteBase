@@ -328,6 +328,12 @@
 		<StaticResourceExtension x:Key="RepeatButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
 		<StaticResourceExtension x:Key="RepeatButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
 
+		<!-- PathEnvVarEditorDialog -->
+		<sys:Double x:Key="Double/PathEnvVarEditorDialog.Height">400</sys:Double>
+		<sys:Double x:Key="Double/PathEnvVarEditorDialog.MinHeight">200</sys:Double>
+		<sys:Double x:Key="Double/PathEnvVarEditorDialog.MinWidth">200</sys:Double>
+		<sys:Double x:Key="Double/PathEnvVarEditorDialog.Width">400</sys:Double>
+
 		<!-- ScrollBar -->
 		<CornerRadius x:Key="CornerRadius/ScrollBar">7</CornerRadius>
 		<CornerRadius x:Key="CornerRadius/ScrollBar.Button.Bottom">0,0,7,7</CornerRadius>

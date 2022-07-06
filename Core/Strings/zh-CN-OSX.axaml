@@ -12,5 +12,8 @@
 	<sys:String x:Key="String/Common.Save.WithDialogAndGesture">储存… (⌘+S)</sys:String>
 	<sys:String x:Key="String/Common.Save.WithGesture">储存 (⌘S)</sys:String>
 	<sys:String x:Key="String/Common.SelectAll.WithGesture">全选 (⌘A)</sys:String>
+
+	<!-- PathEnvVarEditorDialog -->
+	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">编辑 /etc/paths</sys:String>
 	
 </ResourceDictionary>

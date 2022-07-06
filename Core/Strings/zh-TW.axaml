@@ -189,6 +189,12 @@
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">網格排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">垂直排列視窗</sys:String>
 
+	<!-- PathEnvVarEditorDialog -->
+	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath">新增目錄路徑</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath.WithDialog">新增目錄路徑…</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.EditPath">編輯目錄路徑</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">編輯 PATH 環境變數</sys:String>
+
 	<!-- PrivacyPolicyDialog -->
 	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Section1">在您使用 {0} 之前，您必須閱讀且同意</sys:String>
 	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Section2">。</sys:String>
