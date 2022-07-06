@@ -17,6 +17,7 @@ using CarinaStudio.Windows.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Windows.Input;
@@ -30,7 +31,7 @@ namespace CarinaStudio.AppSuite.Controls
     {
         // Fields.
         readonly ObservableList<ListBoxItem> filteredPredefinedVarListBoxItems = new ObservableList<ListBoxItem>();
-        readonly SortedObservableList<StringInterpolationVariable> filteredPredefinedVars = new SortedObservableList<StringInterpolationVariable>((x, y) => string.CompareOrdinal(x?.Name, y?.Name));
+        readonly SortedObservableList<StringInterpolationVariable> filteredPredefinedVars = new SortedObservableList<StringInterpolationVariable>((x, y) => string.Compare(x?.Name, y?.Name, true, CultureInfo.InvariantCulture));
 		bool isEscapeKeyHandled;
         readonly ObservableList<StringInterpolationVariable> predefinedVars = new ObservableList<StringInterpolationVariable>();
         InputAssistancePopup? predefinedVarsPopup;

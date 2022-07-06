@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -80,7 +81,7 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     /// <returns>Comparison result.</returns>
     protected virtual int CompareProfiles(TProfile lhs, TProfile rhs)
     {
-        var result = string.CompareOrdinal(lhs.Name, rhs.Name);
+        var result = string.Compare(lhs.Name, rhs.Name, true, CultureInfo.InvariantCulture);
         if (result != 0)
             return result;
         return lhs.Id.CompareTo(rhs.Id);

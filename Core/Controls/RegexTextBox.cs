@@ -16,6 +16,7 @@ using CarinaStudio.Windows.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -41,7 +42,7 @@ namespace CarinaStudio.AppSuite.Controls
 		// Fields.
 		InputAssistancePopup? escapedCharactersPopup;
 		readonly ObservableList<ListBoxItem> filteredPredefinedGroupListBoxItems = new ObservableList<ListBoxItem>();
-		readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new SortedObservableList<RegexGroup>((x, y) => string.CompareOrdinal(x?.Name, y?.Name));
+		readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new SortedObservableList<RegexGroup>((x, y) => string.Compare(x?.Name, y?.Name, true, CultureInfo.InvariantCulture));
 		bool isBackSlashPressed;
 		bool isEscapeKeyHandled;
 		readonly ObservableList<RegexGroup> predefinedGroups = new ObservableList<RegexGroup>();
