@@ -19,7 +19,7 @@ public class PathEnvVarEditorDialog : CommonDialog<bool>
     /// </summary>
     public static bool IsSupported 
     { 
-        get => Platform.IsMacOS;
+        get => Platform.IsMacOS || Platform.IsWindows;
     }
 
 

@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
+using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -56,6 +57,7 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		if (index < 0)
 			index = this.paths.Add(path);
 		this.pathListBox.SelectedIndex = index;
+		this.pathListBox.ScrollIntoView(index);
 		this.pathListBox.Focus();
 	}
 
@@ -85,6 +87,7 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		if (index < 0)
 			index = this.paths.Add(path);
 		this.pathListBox.SelectedIndex = index;
+		this.pathListBox.ScrollIntoView(index);
 		this.pathListBox.Focus();
 	}
 
@@ -111,9 +114,27 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 			{ }
 		}
 		else if (Platform.IsWindows)
-			pathSet.AddAll(Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine)?.Split(Path.PathSeparator) ?? new string[0]);
+		{
+			Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine)?.Split(Path.PathSeparator)?.Let(it =>
+			{
+				foreach (var path in it)
+				{
+					if (!string.IsNullOrWhiteSpace(path))
+						pathSet.Add(path);
+				}
+			});
+		}
 		else
-			pathSet.AddAll(Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator) ?? new string[0]);
+		{
+			Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator)?.Let(it =>
+			{
+				foreach (var path in it)
+				{
+					if (!string.IsNullOrWhiteSpace(path))
+						pathSet.Add(path);
+				}
+			});
+		}
 		return pathSet;
 	});
 
@@ -131,7 +152,7 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	protected override void OnOpened(EventArgs e)
 	{
 		base.OnOpened(e);
-		//
+		this.SynchronizationContext.Post(this.pathListBox.Focus);
 	}
 
 
@@ -216,11 +237,6 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 						});
 						if (process != null)
 						{
-							var line = process.StandardError.ReadLine();
-							while (line != null)
-							{
-								line = process.StandardError.ReadLine();
-							}
 							await process.WaitForExitAsync();
 							return process.ExitCode == 0;
 						}
@@ -232,9 +248,37 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 					}
 					else
 					{
-						//
+						var pathBuffer = new StringBuilder();
+						for (int i = 0, count = paths.Length; i < count; ++i)
+						{
+							if (i > 0)
+								pathBuffer.Append(Path.PathSeparator);
+							pathBuffer.Append(paths[i]);
+						}
+						if (Platform.IsWindows)
+						{
+							using var process = Process.Start(new ProcessStartInfo()
+							{
+								Arguments = $"/c setx /M Path \"{pathBuffer}\"",
+								CreateNoWindow = true,
+								FileName = "cmd",
+								UseShellExecute = true,
+								Verb = "runas",
+							});
+							if (process != null)
+							{
+								await process.WaitForExitAsync();
+								return process.ExitCode == 0;
+							}
+							else
+							{
+								this.Logger.LogError("Unable to start cmd to save paths to system");
+								return false;
+							}
+						}
+						else
+							return false;
 					}
-					return true;
 				}
 				catch (Exception ex)
 				{

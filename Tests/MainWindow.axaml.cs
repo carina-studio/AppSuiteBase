@@ -385,6 +385,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         void Test()
         {
+            _ = new PathEnvVarEditorDialog().ShowDialog(this);
             //this.integerTextBox2.IsNullValueAllowed = !this.integerTextBox2.IsNullValueAllowed;
 
             this.integerTextBox.Value = 321;
