@@ -11,6 +11,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -57,8 +58,8 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		if (index < 0)
 			index = this.paths.Add(path);
 		this.pathListBox.SelectedIndex = index;
-		this.pathListBox.ScrollIntoView(index);
 		this.pathListBox.Focus();
+		this.SynchronizationContext.Post(() => this.pathListBox.ScrollIntoView(index));
 	}
 
 
@@ -87,42 +88,59 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		if (index < 0)
 			index = this.paths.Add(path);
 		this.pathListBox.SelectedIndex = index;
-		this.pathListBox.ScrollIntoView(index);
 		this.pathListBox.Focus();
+		this.SynchronizationContext.Post(() => this.pathListBox.ScrollIntoView(index));
 	}
 
 
 	// Get path list from system.
-	Task<HashSet<string>> GetPathsAsync() => Task.Run(() =>
+	Task<HashSet<string>> GetPathsAsync(bool includeGlobal = true, bool includeUser = true) => Task.Run(() =>
 	{
 		var pathSet = new HashSet<string>(CarinaStudio.IO.PathEqualityComparer.Default);
 		if (Platform.IsMacOS)
 		{
-			try
+			if (includeGlobal)
 			{
-				using var reader = new StreamReader("/etc/paths");
-				var paths = new List<string>();
-				var path = reader.ReadLine();
-				while (path != null)
+				try
 				{
-					if (!string.IsNullOrWhiteSpace(path))
-						pathSet.Add(path);
-					path = reader.ReadLine();
+					using var reader = new StreamReader("/etc/paths");
+					var paths = new List<string>();
+					var path = reader.ReadLine();
+					while (path != null)
+					{
+						if (!string.IsNullOrWhiteSpace(path))
+							pathSet.Add(path);
+						path = reader.ReadLine();
+					}
 				}
+				catch
+				{ }
 			}
-			catch
-			{ }
 		}
 		else if (Platform.IsWindows)
 		{
-			Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine)?.Split(Path.PathSeparator)?.Let(it =>
+			if (includeGlobal)
 			{
-				foreach (var path in it)
+				Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine)?.Split(Path.PathSeparator)?.Let(it =>
 				{
-					if (!string.IsNullOrWhiteSpace(path))
-						pathSet.Add(path);
-				}
-			});
+					foreach (var path in it)
+					{
+						if (!string.IsNullOrWhiteSpace(path))
+							pathSet.Add(path);
+					}
+				});
+			}
+			if (includeUser)
+			{
+				Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.User)?.Split(Path.PathSeparator)?.Let(it =>
+				{
+					foreach (var path in it)
+					{
+						if (!string.IsNullOrWhiteSpace(path))
+							pathSet.Add(path);
+					}
+				});
+			}
 		}
 		else
 		{
@@ -137,6 +155,20 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		}
 		return pathSet;
 	});
+
+
+	// Generate value for PATH environment.
+	static string GetPathValue(IEnumerable<string> paths)
+	{
+		var pathBuffer = new StringBuilder();
+		foreach (var path in paths)
+		{
+			if (pathBuffer.Length > 0)
+				pathBuffer.Append(Path.PathSeparator);
+			pathBuffer.Append(path);
+		}
+		return pathBuffer.ToString();
+	}
 
 
 	/// <inheritdoc/>
@@ -194,7 +226,7 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		var success = true;
 		if (!currentPaths.SetEquals(this.paths))
 		{
-			var paths = this.paths.ToArray();
+			var paths = new SortedObservableList<string>(CarinaStudio.IO.PathComparer.Default, this.paths);
 			success = await Task.Run(async () =>
 			{
 				var tempFilePaths = new List<string>();
@@ -207,7 +239,7 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 						using (var stream = new FileStream(tempPathsFile, FileMode.Create, FileAccess.ReadWrite))
 						{
 							using var writer = new StreamWriter(stream, Encoding.UTF8);
-							for (int i = 0, count = paths.Length; i < count; ++i)
+							for (int i = 0, count = paths.Count; i < count; ++i)
 							{
 								if (i > 0)
 									writer.WriteLine();
@@ -246,20 +278,38 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 							return false;
 						}
 					}
-					else
+					else if (Platform.IsWindows)
 					{
-						var pathBuffer = new StringBuilder();
-						for (int i = 0, count = paths.Length; i < count; ++i)
+						// separate into machine and user paths
+						var currentMachinePaths = await this.GetPathsAsync(true, false);
+						var currentUserPaths = await this.GetPathsAsync(false, true);
+						var machinePaths = new HashSet<string>(currentMachinePaths, CarinaStudio.IO.PathEqualityComparer.Default).Also(it =>
 						{
-							if (i > 0)
-								pathBuffer.Append(Path.PathSeparator);
-							pathBuffer.Append(paths[i]);
-						}
-						if (Platform.IsWindows)
+							foreach (var path in it.ToArray())
+							{
+								if (!paths.Contains(path))
+									it.Remove(path);
+							}
+						});
+						var userPaths = new HashSet<string>(CarinaStudio.IO.PathEqualityComparer.Default).Also(it =>
+						{
+							foreach (var path in paths)
+							{
+								if (!machinePaths.Contains(path))
+									it.Add(path);
+							}
+						});
+
+						// change user paths
+						if (!currentUserPaths.SetEquals(userPaths))
+							Environment.SetEnvironmentVariable("Path", GetPathValue(userPaths), EnvironmentVariableTarget.User);
+
+						// change machine paths
+						if (!currentMachinePaths.SetEquals(machinePaths))
 						{
 							using var process = Process.Start(new ProcessStartInfo()
 							{
-								Arguments = $"/c setx /M Path \"{pathBuffer}\"",
+								Arguments = $"/c setx /M Path \"{GetPathValue(machinePaths)}\"",
 								CreateNoWindow = true,
 								FileName = "cmd",
 								UseShellExecute = true,
@@ -268,7 +318,8 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 							if (process != null)
 							{
 								await process.WaitForExitAsync();
-								return process.ExitCode == 0;
+								if (process.ExitCode != 0)
+									return false;
 							}
 							else
 							{
@@ -276,8 +327,11 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 								return false;
 							}
 						}
-						else
-							return false;
+						return true;
+					}
+					else
+					{
+						return false;
 					}
 				}
 				catch (Exception ex)
