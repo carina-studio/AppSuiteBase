@@ -546,7 +546,17 @@
 					</TabItem.Header>
 					<StackPanel Background="{DynamicResource Brush/ToolBar.Background}" Orientation="Horizontal">
 						<TreeView Margin="10" Width="200">
-							<TreeViewItem Header="Item 1-1">
+							<TreeViewItem>
+								<TreeViewItem.Header>
+									<Grid ColumnDefinitions="Auto,*">
+										<appControls:Image Classes="TreeViewItem_Icon" Grid.Column="0">
+											<DrawingImage>
+												<GeometryDrawing Brush="{Binding $parent[TreeViewItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Information.Outline}"/>
+											</DrawingImage>
+										</appControls:Image>
+										<TextBlock Classes="TreeViewItem_TextBlock" Grid.Column="1" Text="Item 1-1"/>
+									</Grid>
+								</TreeViewItem.Header>
 								<TreeViewItem Header="Item 2-1"/>
 								<TreeViewItem Header="Item 2-2"/>
 							</TreeViewItem>

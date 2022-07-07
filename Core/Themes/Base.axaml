@@ -532,6 +532,8 @@
 		<!-- TreeViewItem -->
 		<CornerRadius x:Key="CornerRadius/TreeViewItem">4</CornerRadius>
 		<sys:Double x:Key="Double/TreeViewItem.Chevron.Width">10</sys:Double>
+		<sys:Double x:Key="Double/TreeViewItem.Icon.Size">16</sys:Double>
+		<Thickness x:Key="Thickness/TreeViewItem.Icon.Margin">0,0,9,0</Thickness>
 		<Thickness x:Key="Thickness/TreeViewItem.Margin">0,1,0,1</Thickness>
 		<Thickness x:Key="Thickness/TreeViewItem.Padding">0,6,15,6</Thickness>
 		<SolidColorBrush x:Key="TreeViewItemBackgroundPointerOver" Color="{DynamicResource SystemListLowColor}"/>
@@ -2377,14 +2379,48 @@
 		<Setter Property="Margin" Value="{StaticResource Thickness/TreeViewItem.Margin}"/>
 		<Setter Property="Padding" Value="{StaticResource Thickness/TreeViewItem.Padding}"/>
 	</Style>
-	<Style Selector="ToggleButton.ExpandCollapseChevron">
-		<Setter Property="Width" Value="{StaticResource Double/TreeViewItem.Chevron.Width}" />
-	</Style>
 	<Style Selector="TreeViewItem:empty /template/ Panel#PART_ExpandCollapseChevronContainer">
 		<Setter Property="Width" Value="{StaticResource Double/TreeViewItem.Chevron.Width}" />
 	</Style>
 	<Style Selector="TreeViewItem:disabled /template/ ContentPresenter#PART_HeaderPresenter">
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource TreeViewItemForegroundDisabled}" />
+	</Style>
+	<Style Selector="Border.TreeViewItem_Icon">
+		<Setter Property="Height" Value="{StaticResource Double/TreeViewItem.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/TreeViewItem.Icon.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/TreeViewItem.Icon.Size}"/>
+	</Style>
+	<Style Selector=":is(Image).TreeViewItem_Icon">
+		<Setter Property="Height" Value="{StaticResource Double/TreeViewItem.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/TreeViewItem.Icon.Margin}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/TreeViewItem.Icon.Size}"/>
+	</Style>
+	<Style Selector=":is(Image).TreeViewItem_Icon:disabled">
+		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<Style Selector="Panel.TreeViewItem_Icon">
+		<Setter Property="Height" Value="{StaticResource Double/TreeViewItem.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/TreeViewItem.Icon.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/TreeViewItem.Icon.Size}"/>
+	</Style>
+	<Style Selector="TextBlock.TreeViewItem_TextBlock">
+		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+		<Setter Property="TextWrapping" Value="NoWrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="ToggleButton.ExpandCollapseChevron">
+		<Setter Property="Width" Value="{StaticResource Double/TreeViewItem.Chevron.Width}" />
 	</Style>
 
 	<!-- UriTextBox -->
