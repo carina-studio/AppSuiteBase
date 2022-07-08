@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:abControls="using:CarinaStudio.Controls"
 		xmlns:aConverters="using:Avalonia.Data.Converters"
 		xmlns:as="using:CarinaStudio.AppSuite"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
@@ -40,7 +41,7 @@
 				<controls:ListBox.ItemTemplate>
 					<DataTemplate>
 						<Grid ColumnDefinitions="*,Auto">
-							<TextBlock Classes="ListBoxItem_TextBlock" Text="{Binding}"/>
+							<abControls:TextBlock Classes="ListBoxItem_TextBlock" Text="{Binding}"/>
 							<Border Classes="InPlaceAction_Reserved" Grid.ColumnSpan="2"/>
 							<StackPanel Grid.Column="1" IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}" Orientation="Horizontal">
 								<Button Classes="InPlaceAction_Button" Command="{Binding $parent[Window].RemovePath}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{DynamicResource String/Common.Delete}">
