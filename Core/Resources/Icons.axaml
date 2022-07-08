@@ -245,19 +245,34 @@
 
 	<!-- Images -->
 	<DrawingImage x:Key="Image/Icon.Add" Drawing="{StaticResource Drawing/Icon.Add}"/>
+	<DrawingImage x:Key="Image/Icon.Add.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Add}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.AddFile" Drawing="{StaticResource Drawing/Icon.AddFile}"/>
+	<DrawingImage x:Key="Image/Icon.AddFile.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.AddFile}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.AddFile.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.AddFile.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.AddFolder" Drawing="{StaticResource Drawing/Icon.AddFolder}"/>
+	<DrawingImage x:Key="Image/Icon.AddFolder.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.AddFolder}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.AddFolder.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.AddFolder.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.AddTab">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.AddTab}"/>
 	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.AddTab.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.AddTab}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.AddWindow">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.AddWindow}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.AddWindow.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.AddWindow}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Administrator" Drawing="{StaticResource Drawing/Icon.Administrator}"/>
 	<DrawingImage x:Key="Image/Icon.Analysis">
@@ -301,6 +316,9 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.CloseWindow}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Copy" Drawing="{StaticResource Drawing/Icon.Copy}"/>
+	<DrawingImage x:Key="Image/Icon.Copy.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Copy}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Copy.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Copy.Outline}"/>
 	</DrawingImage>
@@ -315,6 +333,9 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.CSharp}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Cut" Drawing="{StaticResource Drawing/Icon.Cut}"/>
+	<DrawingImage x:Key="Image/Icon.Cut.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Cut}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Debug" Drawing="{StaticResource Drawing/Icon.Debug}"/>
 	<DrawingImage x:Key="Image/Icon.Debug.Colored">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Question}" Geometry="{StaticResource Geometry/Icon.Debug}"/>
@@ -347,6 +368,9 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.DotNet}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Edit" Drawing="{StaticResource Drawing/Icon.Edit}"/>
+	<DrawingImage x:Key="Image/Icon.Edit.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Edit}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Enter">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Enter}"/>
 	</DrawingImage>
@@ -377,6 +401,9 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.ExitFullScreen}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Export" Drawing="{StaticResource Drawing/Icon.Export}"/>
+	<DrawingImage x:Key="Image/Icon.Export.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Export}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.FastBackward" Drawing="{StaticResource Drawing/Icon.FastBackward}"/>
 	<DrawingImage x:Key="Image/Icon.FastBackward.Light">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.FastBackward}"/>
@@ -386,6 +413,9 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.FastForward}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.File" Drawing="{StaticResource Drawing/Icon.File}"/>
+	<DrawingImage x:Key="Image/Icon.File.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.File}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.File.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.File.Outline}"/>
 	</DrawingImage>
@@ -433,8 +463,14 @@
 	<DrawingImage x:Key="Image/Icon.Folder.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Folder.Outline}"/>
 	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Folder.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Folder}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Folders">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Folders}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Folders.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Folders}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Folders.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Folders.Outline}"/>
@@ -462,6 +498,9 @@
 		<GeometryDrawing Brush="#ff006e" Geometry="{StaticResource Geometry/Icon.Heart.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Import" Drawing="{StaticResource Drawing/Icon.Import}"/>
+	<DrawingImage x:Key="Image/Icon.Import.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Import}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Information" Drawing="{StaticResource Drawing/Icon.Information}"/>
 	<DrawingImage x:Key="Image/Icon.Information.Colored" Drawing="{StaticResource Drawing/Icon.Information.Colored}"/>
 	<DrawingImage x:Key="Image/Icon.Information.Light">
@@ -522,6 +561,9 @@
 	<DrawingImage x:Key="Image/Icon.Link" Drawing="{StaticResource Drawing/Icon.Link}"/>
 	<DrawingImage x:Key="Image/Icon.Lock">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Lock}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Lock.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Lock}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Lock.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Lock.Outline}"/>
@@ -588,6 +630,9 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.OK}" Geometry="{StaticResource Geometry/Icon.OK.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.OpenFile" Drawing="{StaticResource Drawing/Icon.OpenFile}"/>
+	<DrawingImage x:Key="Image/Icon.OpenFile.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.OpenFile}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.OpenFile.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.OpenFile.Outline}"/>
 	</DrawingImage>
@@ -619,10 +664,16 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Panel.Top}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Paste" Drawing="{StaticResource Drawing/Icon.Paste}"/>
+	<DrawingImage x:Key="Image/Icon.Paste.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Paste}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Paste.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Paste.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.PauseMedia" Drawing="{StaticResource Drawing/Icon.PauseMedia}"/>
+	<DrawingImage x:Key="Image/Icon.PauseMedia.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.PauseMedia}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.PauseMedia.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.PauseMedia.Outline}"/>
 	</DrawingImage>
@@ -639,10 +690,16 @@
 		<GeometryDrawing Brush="#165e8b" Geometry="{StaticResource Geometry/Icon.PayPal.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.PlayMedia" Drawing="{StaticResource Drawing/Icon.PlayMedia}"/>
+	<DrawingImage x:Key="Image/Icon.PlayMedia.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.PlayMedia}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.PlayMedia.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.PlayMedia.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Pin" Drawing="{StaticResource Drawing/Icon.Pin}"/>
+	<DrawingImage x:Key="Image/Icon.Pin.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Pin}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Pin.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Pin.Outline}"/>
 	</DrawingImage>
@@ -695,14 +752,23 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.RemoveFolder.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Save" Drawing="{StaticResource Drawing/Icon.Save}"/>
+	<DrawingImage x:Key="Image/Icon.Save.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Save}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Save.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Save.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.SaveAll" Drawing="{StaticResource Drawing/Icon.SaveAll}"/>
+	<DrawingImage x:Key="Image/Icon.SaveAll.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.SaveAll}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.SaveAll.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.SaveAll.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Search" Drawing="{StaticResource Drawing/Icon.Search}"/>
+	<DrawingImage x:Key="Image/Icon.Search.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Search}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.SearchInFile">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.SearchInFile}"/>
 	</DrawingImage>
@@ -716,6 +782,9 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.SearchInFolder.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Settings" Drawing="{StaticResource Drawing/Icon.Settings}"/>
+	<DrawingImage x:Key="Image/Icon.Settings.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Settings}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Settings.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Settings.Outline}"/>
 	</DrawingImage>
@@ -743,6 +812,9 @@
 	<DrawingImage x:Key="Image/Icon.Star.Outline" Drawing="{StaticResource Drawing/Icon.Star.Outline}"/>
 	<DrawingImage x:Key="Image/Icon.Star.Outline.Active" Drawing="{StaticResource Drawing/Icon.Star.Outline.Active}"/>
 	<DrawingImage x:Key="Image/Icon.StopMedia" Drawing="{StaticResource Drawing/Icon.StopMedia}"/>
+	<DrawingImage x:Key="Image/Icon.StopMedia.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.StopMedia}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.StopMedia.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.StopMedia.Outline}"/>
 	</DrawingImage>
@@ -767,6 +839,9 @@
 	<DrawingImage x:Key="Image/Icon.Undo" Drawing="{StaticResource Drawing/Icon.Undo}"/>
 	<DrawingImage x:Key="Image/Icon.Unlock">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Unlock}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Unlock.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Unlock}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Unlock.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Unlock.Outline}"/>
@@ -815,10 +890,22 @@
 	<DrawingImage x:Key="Image/Icon.Wifi">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Wifi}"/>
 	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Wifi.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Wifi}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Window">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Window}"/>
 	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Window.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Window}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.ZoomIn" Drawing="{StaticResource Drawing/Icon.ZoomIn}"/>
+	<DrawingImage x:Key="Image/Icon.ZoomIn.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.ZoomIn}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.ZoomOut" Drawing="{StaticResource Drawing/Icon.ZoomOut}"/>
+	<DrawingImage x:Key="Image/Icon.ZoomOut.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.ZoomOut}"/>
+	</DrawingImage>
 	
 </ResourceDictionary>
