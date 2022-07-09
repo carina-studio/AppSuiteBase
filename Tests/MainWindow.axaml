@@ -551,10 +551,10 @@
 									<Grid ColumnDefinitions="Auto,*">
 										<appControls:Image Classes="TreeViewItem_Icon" Grid.Column="0">
 											<DrawingImage>
-												<GeometryDrawing Brush="{Binding $parent[TreeViewItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Information.Outline}"/>
+												<GeometryDrawing Brush="{Binding #text.Foreground}" Geometry="{StaticResource Geometry/Icon.Information.Outline}"/>
 											</DrawingImage>
 										</appControls:Image>
-										<TextBlock Classes="TreeViewItem_TextBlock" Grid.Column="1" Text="Item 1-1"/>
+										<TextBlock Name="text" Classes="TreeViewItem_TextBlock" Grid.Column="1" Text="Item 1-1"/>
 									</Grid>
 								</TreeViewItem.Header>
 								<TreeViewItem Header="Item 2-1"/>
