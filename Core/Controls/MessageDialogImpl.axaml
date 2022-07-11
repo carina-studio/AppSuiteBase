@@ -15,9 +15,9 @@
 		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
 			<Image Classes="Dialog_Icon_Large" Source="{Binding $parent[Window].IconImage}" VerticalAlignment="Top"/>
 			<TextBlock Grid.Column="1" Text="{Binding $parent[Window].Message}" TextWrapping="Wrap" VerticalAlignment="Center"/>
-			<StackPanel Name="doNotAskAgainPanel" Grid.Column="1" Grid.Row="1" IsVisible="False">
+			<StackPanel Name="doNotAskOrShowAgainPanel" Grid.Column="1" Grid.Row="1" IsVisible="False">
 				<Separator Classes="Dialog_Separator"/>
-				<CheckBox Name="doNotAskAgainCheckBox" Content="{DynamicResource String/Common.DoNotAskAgain}" HorizontalAlignment="Left"/>
+				<CheckBox Name="doNotAskOrShowAgainCheckBox" Content=" " HorizontalAlignment="Left"/>
 			</StackPanel>
 		</Grid>
 

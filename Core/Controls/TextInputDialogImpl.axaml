@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:aConverters="using:Avalonia.Data.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.TextInputDialogImpl"
         Classes="Dialog"
@@ -22,6 +23,17 @@
 		<StackPanel Classes="Dialog_ContentPanel" Orientation="Vertical">
 			<TextBlock Classes="Dialog_TextBlock" Text="{Binding $parent[Window].Message}"/>
 			<TextBox Name="textBox" MaxLength="{Binding $parent[Window].MaxTextLength}" Text="{Binding $parent[Window].Text, Mode=TwoWay}"/>
+			<Separator Classes="Dialog_Separator">
+				<Separator.IsVisible>
+					<MultiBinding Converter="{x:Static aConverters:BoolConverters.Or}">
+						<Binding Path="IsVisible" ElementName="doNotAskAgainCheckBox"/>
+						<Binding Path="IsVisible" ElementName="doNotShowAgainCheckBox"/>
+					</MultiBinding>
+				</Separator.IsVisible>
+			</Separator>
+			<CheckBox Name="doNotAskAgainCheckBox" Content="{DynamicResource String/Common.DoNotAskAgain}" HorizontalAlignment="Left" IsVisible="False"/>
+			<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #doNotAskAgainCheckBox.IsVisible}"/>
+			<CheckBox Name="doNotShowAgainCheckBox" Content="{DynamicResource String/Common.DoNotShowAgain}" HorizontalAlignment="Left" IsVisible="False"/>
 		</StackPanel>
 		
 	</DockPanel>
