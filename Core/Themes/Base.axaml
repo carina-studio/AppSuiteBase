@@ -62,6 +62,7 @@
 
 		<!-- Button -->
 		<SolidColorBrush x:Key="AccentButtonBackground" Color="{DynamicResource SystemAccentColor}" />
+		<SolidColorBrush x:Key="AccentButtonBackgroundDisabled" Color="{DynamicResource SystemAccentColor}" Opacity="0.5"/>
 		<SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="{DynamicResource SystemAccentColorLight1}" />
 		<SolidColorBrush x:Key="AccentButtonBackgroundPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
 		<SolidColorBrush x:Key="ButtonBackground" Color="{DynamicResource Color/Button.Background}"/>
@@ -720,6 +721,11 @@
 	</Style>
 	<Style Selector="Button.Dialog_AccentControlButton:focus /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource AccentButtonBackground}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource AccentButtonBorderBrush}" />
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource AccentButtonForeground}" />
+	</Style>
+	<Style Selector="Button.Dialog_AccentControlButton:focus:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource AccentButtonBackgroundDisabled}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource AccentButtonBorderBrush}" />
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource AccentButtonForeground}" />
 	</Style>
