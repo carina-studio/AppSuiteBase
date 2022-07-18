@@ -219,8 +219,10 @@ namespace CarinaStudio.AppSuite
         ScheduledAction? checkUpdateInfoAction;
         ISettings? configuration;
         readonly string configurationFilePath;
+        readonly long creationTime;
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
         readonly Styles extraStyles = new Styles();
+        long frameworkInitializedTime;
         HardwareInfo? hardwareInfo;
         bool isRestartAsAdminRequested;
         bool isRestartingMainWindowsRequested;
@@ -235,6 +237,7 @@ namespace CarinaStudio.AppSuite
         readonly List<MainWindowHolder> pendingMainWindowHolders = new List<MainWindowHolder>();
         PersistentStateImpl? persistentState;
         readonly string persistentStateFilePath;
+        long prepareStartingTime;
         ProcessInfo? processInfo;
         IDisposable? processInfoHfUpdateToken;
         IProductManager? productManager;
@@ -265,6 +268,9 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         protected AppSuiteApplication()
         {
+            // get time for performance check
+            this.creationTime = this.stopWatch.ElapsedMilliseconds;
+
             /* 
              * Prevent using Avalonia with version >= 0.11.0 because some control styles are not compatible.
              * Need to update control styles if upgrading to Avalonia with version >= 0.11.0:
@@ -1309,6 +1315,9 @@ namespace CarinaStudio.AppSuite
         /// <returns>Task of loading.</returns>
         public async Task LoadPersistentStateAsync()
         {
+            // check performance
+            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+
             // check state
             this.VerifyAccess();
 
@@ -1413,6 +1422,13 @@ namespace CarinaStudio.AppSuite
                     this.OnPropertyChanged(nameof(IsUserAgreementAgreed));
                 }
             });
+
+            // check performance
+            if (time > 0)
+            {
+                time = this.stopWatch.ElapsedMilliseconds - time;
+                this.Logger.LogTrace($"[Performance] Took {time} ms to load persistent state");
+            }
         }
 
 
@@ -1422,6 +1438,9 @@ namespace CarinaStudio.AppSuite
         /// <returns>Task of loading.</returns>
         public async Task LoadSettingsAsync()
         {
+            // check performance
+            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+
             // check state
             this.VerifyAccess();
 
@@ -1460,6 +1479,13 @@ namespace CarinaStudio.AppSuite
                 this.processInfoHfUpdateToken = this.processInfoHfUpdateToken.DisposeAndReturnNull();
             else if (this.processInfoHfUpdateToken == null)
                 this.processInfoHfUpdateToken = this.processInfo?.RequestHighFrequencyUpdate();
+            
+            // check performance
+            if (time > 0)
+            {
+                time = this.stopWatch.ElapsedMilliseconds - time;
+                this.Logger.LogTrace($"[Performance] Took {time} ms to load persistent state");
+            }
         }
 
 
@@ -1592,6 +1618,10 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         public override void OnFrameworkInitializationCompleted()
         {
+            // check performance
+            this.frameworkInitializedTime = this.stopWatch.ElapsedMilliseconds;
+            this.Logger.LogTrace($"[Performance] Took {this.frameworkInitializedTime - this.creationTime} ms to initialize Avalonia framework");
+            
             // call base
             base.OnFrameworkInitializationCompleted();
 
@@ -1644,7 +1674,7 @@ namespace CarinaStudio.AppSuite
             }
 
             // enter debug mode
-            if (this.OnSelectEnteringDebugMode())
+            if (this.OnSelectEnteringDebugMode() || true)
             {
                 this.Logger.LogWarning("Enter debug mode");
                 this.IsDebugMode = true;
@@ -1730,9 +1760,16 @@ namespace CarinaStudio.AppSuite
                 // check state
                 if (this.IsShutdownStarted)
                     return;
+                
+                // check performance
+                this.prepareStartingTime = this.stopWatch.ElapsedMilliseconds;
+                this.Logger.LogTrace($"[Performance] Took {this.prepareStartingTime - this.frameworkInitializedTime} ms to perform actions before starting");
 
                 // load configuration
+                var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
                 await this.LoadConfigurationAsync();
+                if (time > 0)
+                    this.Logger.LogTrace($"[Performance] Took {this.stopWatch.ElapsedMilliseconds - time} ms to load configuration");
 
                 // prepare
                 await this.OnPrepareStartingAsync();
@@ -2073,11 +2110,24 @@ namespace CarinaStudio.AppSuite
             // show splash window
             if (this.IsSplashWindowNeeded)
             {
+                var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
                 var splashWindowParams = this.OnPrepareSplashWindow();
+                if (time > 0)
+                {
+                    var currentTime = this.stopWatch.ElapsedMilliseconds;
+                    this.Logger.LogTrace($"[Performance] Took {currentTime - time} ms to prepare parameters of splash window");
+                    time = currentTime;
+                }
                 this.splashWindow = new Controls.SplashWindowImpl()
                 {
                     IconUri = splashWindowParams.IconUri,
                 };
+                if (time > 0)
+                {
+                    var currentTime = this.stopWatch.ElapsedMilliseconds;
+                    this.Logger.LogTrace($"[Performance] Took {currentTime - time} ms to create splash window");
+                    time = currentTime;
+                }
                 this.splashWindow.Show();
                 this.splashWindowShownTime = this.stopWatch.ElapsedMilliseconds;
                 await Task.Delay(SplashWindowShowingDuration);
@@ -2633,7 +2683,9 @@ namespace CarinaStudio.AppSuite
             }
             if (this.splashWindow != null)
             {
-                var delay = MinSplashWindowDuration - (this.stopWatch.ElapsedMilliseconds - this.splashWindowShownTime);
+                var duration = (this.stopWatch.ElapsedMilliseconds - this.splashWindowShownTime);
+                this.Logger.LogTrace($"[Performance] Took {duration} ms between showing splash window and main window");
+                var delay = MinSplashWindowDuration - duration;
                 if (delay > 0)
                 {
                     this.Logger.LogDebug("Delay for showing splash window");
@@ -2799,6 +2851,9 @@ namespace CarinaStudio.AppSuite
         // Update log output.
         void UpdateLogOutputToLocalhost()
         {
+            // check performance
+            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+
             // get port
             var port = this.PersistentState.GetValueOrDefault(LogOutputTargetPortKey);
             var config = LogManager.Configuration;
@@ -2836,6 +2891,13 @@ namespace CarinaStudio.AppSuite
 
             // update loggers
             LogManager.ReconfigExistingLoggers();
+
+            // check performance
+            if (time > 0)
+            {
+                time = this.stopWatch.ElapsedMilliseconds - time;
+                this.Logger.LogTrace($"[Performance] Took {time} ms to update log output to localhost");
+            }
         }
 
 
@@ -2853,6 +2915,9 @@ namespace CarinaStudio.AppSuite
         // Update string resource according to current culture.
         void UpdateStringResources()
         {
+            // check performance
+            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+
             // update string resources
             var resourceUpdated = false;
             if (this.cultureInfo.Name != "en-US")
@@ -2950,12 +3015,22 @@ namespace CarinaStudio.AppSuite
             // raise event
             if (resourceUpdated)
                 this.OnStringUpdated(EventArgs.Empty);
+            
+            // check performance
+            if (time > 0)
+            {
+                time = this.stopWatch.ElapsedMilliseconds - time;
+                this.Logger.LogTrace($"[Performance] Took {time} ms to update string resources");
+            }
         }
 
 
         // Update styles.
         void UpdateStyles()
         {
+            // check performance
+            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+
             // get theme mode
             var themeMode = this.Settings.GetValueOrDefault(SettingKeys.ThemeMode).Let(it =>
             {
@@ -2975,6 +3050,7 @@ namespace CarinaStudio.AppSuite
                 }
 
                 // load styles
+                var subTime = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
                 this.styles = new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
                 {
                     Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}.axaml"),
@@ -3001,6 +3077,12 @@ namespace CarinaStudio.AppSuite
                         });
                     });
                 }
+                if (subTime > 0)
+                {
+                    var currentTime = this.stopWatch.ElapsedMilliseconds;
+                    this.Logger.LogTrace($"[Performance] Took {currentTime - subTime} ms to load default theme");
+                    subTime = currentTime;
+                }
                 this.styles = this.OnLoadTheme(themeMode)?.Let(it =>
                 {
                     var styles = new Styles();
@@ -3012,6 +3094,12 @@ namespace CarinaStudio.AppSuite
                 // apply styles
                 this.Styles.Add(this.styles);
                 this.stylesThemeMode = themeMode;
+                if (subTime > 0)
+                {
+                    var currentTime = this.stopWatch.ElapsedMilliseconds;
+                    this.Logger.LogTrace($"[Performance] Took {currentTime - subTime} ms to apply theme");
+                    subTime = currentTime;
+                }
             }
             else if (!this.Styles.Contains(this.styles))
                 this.Styles.Add(this.styles);
@@ -3067,12 +3155,22 @@ namespace CarinaStudio.AppSuite
 
             // check state
             this.CheckRestartingMainWindowsNeeded();
+
+            // check performance
+            if (time > 0)
+            {
+                time = this.stopWatch.ElapsedMilliseconds - time;
+                this.Logger.LogTrace($"[Performance] Took {time} ms to update styles");
+            }
         }
 
 
         // Update system theme mode.
         void UpdateSystemThemeMode(bool checkRestartingMainWindows)
         {
+            // check performance
+            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+
             // get current theme
             var themeMode = ThemeMode.Dark;
             if (this.uiSettings != null 
@@ -3134,6 +3232,13 @@ namespace CarinaStudio.AppSuite
             this.systemThemeMode = themeMode;
             if (checkRestartingMainWindows)
                 this.CheckRestartingMainWindowsNeeded();
+            
+            // check performance
+            if (time > 0)
+            {
+                time = this.stopWatch.ElapsedMilliseconds - time;
+                this.Logger.LogTrace($"[Performance] Took {time} ms to update system theme mode");
+            }
         }
 
 
