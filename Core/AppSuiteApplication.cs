@@ -3088,6 +3088,12 @@ namespace CarinaStudio.AppSuite
                     var styles = new Styles();
                     styles.Add(this.styles);
                     styles.Add(it);
+                    if (subTime > 0)
+                    {
+                        var currentTime = this.stopWatch.ElapsedMilliseconds;
+                        this.Logger.LogTrace($"[Performance] Took {currentTime - subTime} ms to load theme");
+                        subTime = currentTime;
+                    }
                     return (IStyle)styles;
                 }) ?? this.styles;
 
