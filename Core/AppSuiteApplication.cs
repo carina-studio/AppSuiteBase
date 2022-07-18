@@ -174,7 +174,7 @@ namespace CarinaStudio.AppSuite
         const string DebugModeRequestedKey = "IsDebugModeRequested";
         const string RestoreMainWindowsRequestedKey = "IsRestoringMainWindowsRequested";
         const int MinSplashWindowDuration = 2000;
-        const int SplashWindowShowingDuration = 1400;
+        const int SplashWindowShowingDuration = 1500;
 
 
         // Static fields.
@@ -1674,7 +1674,7 @@ namespace CarinaStudio.AppSuite
             }
 
             // enter debug mode
-            if (this.OnSelectEnteringDebugMode() || true)
+            if (this.OnSelectEnteringDebugMode())
             {
                 this.Logger.LogWarning("Enter debug mode");
                 this.IsDebugMode = true;
