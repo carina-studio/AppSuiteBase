@@ -78,6 +78,9 @@
 	<sys:String x:Key="String/ApplicationUpdater.FailedToStartAutoUpdater">无法启动自动更新组件。</sys:String>
 	<sys:String x:Key="String/ApplicationUpdater.PreparingForUpdate">正在准备更新…</sys:String>
 	<sys:String x:Key="String/ApplicationUpdater.ReleasePage">新版本中的变更</sys:String>
+
+	<!-- AppSuiteApplication -->
+	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">载入布景主题</sys:String>
 	
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Add">加入</sys:String>

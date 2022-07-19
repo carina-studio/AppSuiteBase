@@ -8,4 +8,8 @@
         <sys:String x:Key="String/ExternalDependency.dotnet.Description">Free. Cross-platform. Open source. A developer platform for building all your apps.</sys:String>
     </Application.Resources>
 
+    <Application.Styles>
+        <FluentTheme Mode="Dark"/>
+    </Application.Styles>
+
 </Application>

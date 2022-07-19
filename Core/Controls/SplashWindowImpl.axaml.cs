@@ -105,7 +105,12 @@ namespace CarinaStudio.AppSuite.Controls
 			this.Version = app.GetFormattedString("ApplicationInfoDialog.Version", app.Assembly.GetName().Version).AsNonNull();
 			if (app.ReleasingType != ApplicationReleasingType.Stable)
 				this.Version += $" {AppReleasingTypeConverter.Convert<string?>(app.ReleasingType)}";
-			InitializeComponent();
+			AvaloniaXamlLoader.Load(this);
+			this.Styles.Add((Avalonia.Styling.IStyle)(app.EffectiveThemeMode switch
+			{
+				ThemeMode.Light => this.Resources["lightTheme"].AsNonNull(),
+				_ => this.Resources["darkTheme"].AsNonNull(),
+			}));
 		}
 
 
@@ -138,10 +143,6 @@ namespace CarinaStudio.AppSuite.Controls
 				}));
 			}
         }
-
-
-		// Initialize.
-		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
 
 		/// <summary>

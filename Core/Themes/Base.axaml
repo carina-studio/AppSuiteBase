@@ -363,29 +363,6 @@
 		<Color x:Key="Color/Separator.Background">#000000</Color>
 		<SolidColorBrush x:Key="Brush/Separator.Background" Color="{DynamicResource Color/Separator.Background}"/>
 
-		<!-- SplashWindow -->
-		<SolidColorBrush x:Key="Brush/SplashWindow.Background" Color="{DynamicResource Color/SplashWindow.Background}"/>
-		<LinearGradientBrush x:Key="Brush/SplashWindow.Border" EndPoint="0%,150%" StartPoint="0%,-50%">
-			<GradientStop Offset="0" Color="{DynamicResource SystemAccentColor}"/>
-			<GradientStop Offset="1" Color="{DynamicResource SystemAccentColorDark1}"/>
-		</LinearGradientBrush>
-		<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="{DynamicResource Color/SplashWindow.Foreground}"/>
-		<Color x:Key="Color/SplashWindow.Background">#000000</Color>
-		<Color x:Key="Color/SplashWindow.Foreground">#ffffff</Color>
-		<CornerRadius x:Key="CornerRadius/SplashWindow">10</CornerRadius>
-		<sys:Double x:Key="Double/SplashWindow.ContentAnimation.Translation">50</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Icon.Size">80</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Message.FontSize">12</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Message.ReservedSpace">50</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Title.FontSize">24</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Title.MaxWidth">230</sys:Double>
-		<Thickness x:Key="Thickness/SplashWindow.Border">2</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">0,0,20,0</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Padding">20</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Title.Margin">0,0,0,5</Thickness>
-		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1.5</sys:TimeSpan>
-
 		<!-- StatusBar -->
 		<Color x:Key="Color/StatusBar.Background.Inactive">#ffffff</Color>
 		<Color x:Key="Color/StatusBar.Button.Background.PointerOver">#3fffffff</Color>

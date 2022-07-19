@@ -173,8 +173,9 @@ namespace CarinaStudio.AppSuite
         // Constants.
         const string DebugModeRequestedKey = "IsDebugModeRequested";
         const string RestoreMainWindowsRequestedKey = "IsRestoringMainWindowsRequested";
-        const int MinSplashWindowDuration = 2000;
-        const int SplashWindowShowingDuration = 1500;
+        const int MinSplashWindowDuration = 1800;
+        const int SplashWindowShowingDuration = 1000;
+        const int SplashWindowLoadingThemeDuration = 400;
 
 
         // Static fields.
@@ -210,6 +211,7 @@ namespace CarinaStudio.AppSuite
         // Fields.
         Avalonia.Controls.ResourceDictionary? accentColorResources;
         readonly LinkedList<MainWindowHolder> activeMainWindowList = new LinkedList<MainWindowHolder>();
+        Avalonia.Themes.Fluent.FluentTheme? baseTheme;
         readonly bool canUseWindows10Features = Environment.OSVersion.Version.Let(version =>
         {
             if (!Platform.IsWindows)
@@ -2097,16 +2099,6 @@ namespace CarinaStudio.AppSuite
             this.OnLoadDefaultStringResource()?.Let(it => this.Resources.MergedDictionaries.Add(it));
             this.UpdateStringResources();
 
-            // load built-in resources
-            this.Resources.MergedDictionaries.Add(new ResourceInclude()
-            {
-                Source = new Uri("avares://CarinaStudio.AppSuite.Core/Resources/Icons.axaml")
-            });
-
-            // setup styles
-            this.UpdateSystemThemeMode(false);
-            this.UpdateStyles();
-
             // show splash window
             if (this.IsSplashWindowNeeded)
             {
@@ -2132,6 +2124,18 @@ namespace CarinaStudio.AppSuite
                 this.splashWindowShownTime = this.stopWatch.ElapsedMilliseconds;
                 await Task.Delay(SplashWindowShowingDuration);
             }
+
+            // load built-in resources
+            this.UpdateSplashWindowMessage(this.GetStringNonNull("AppSuiteApplication.LoadingTheme", ""));
+            await Task.Delay(SplashWindowLoadingThemeDuration);
+            this.Resources.MergedDictionaries.Add(new ResourceInclude()
+            {
+                Source = new Uri("avares://CarinaStudio.AppSuite.Core/Resources/Icons.axaml")
+            });
+
+            // setup styles
+            this.UpdateSystemThemeMode(false);
+            this.UpdateStyles();
 
             // attach to system event
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -2636,8 +2640,13 @@ namespace CarinaStudio.AppSuite
                 this.UpdateStyles();
 
             // create view-model
+            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
             if (viewModel == null)
+            {
                 viewModel = this.OnCreateMainWindowViewModel(null);
+                if (time > 0)
+                    this.Logger.LogTrace($"[Performance] Took {this.stopWatch.ElapsedMilliseconds - time} ms to create view-model of main window");
+            }
 
             // creat and show window later if restarting main windows
             if (this.isRestartingMainWindowsRequested)
@@ -2648,12 +2657,15 @@ namespace CarinaStudio.AppSuite
             }
 
             // create main window
+            time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
             var mainWindow = this.OnCreateMainWindow();
             if (mainWindowCount != this.mainWindows.Count)
             {
                 viewModel.Dispose();
                 throw new InternalStateCorruptedException("Nested main window showing found.");
             }
+            if (time > 0)
+                this.Logger.LogTrace($"[Performance] Took {this.stopWatch.ElapsedMilliseconds - time} ms to create main window");
 
             // attach to main window
             var mainWindowHolder = new MainWindowHolder(viewModel, mainWindow, windowCreatedAction);
@@ -3028,9 +3040,6 @@ namespace CarinaStudio.AppSuite
         // Update styles.
         void UpdateStyles()
         {
-            // check performance
-            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
-
             // get theme mode
             var themeMode = this.Settings.GetValueOrDefault(SettingKeys.ThemeMode).Let(it =>
             {
@@ -3040,8 +3049,24 @@ namespace CarinaStudio.AppSuite
             });
 
             // update styles
+            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
             if (this.styles == null || this.stylesThemeMode != themeMode)
             {
+                // setup base theme
+                if (this.baseTheme == null)
+                    this.baseTheme = (Avalonia.Themes.Fluent.FluentTheme)this.Styles[0];
+                this.baseTheme.Mode = themeMode switch
+                {
+                    ThemeMode.Light => Avalonia.Themes.Fluent.FluentThemeMode.Light,
+                    _ => Avalonia.Themes.Fluent.FluentThemeMode.Dark,
+                };
+                if (time > 0)
+                {
+                    var currentTime = this.stopWatch.ElapsedMilliseconds;
+                    this.Logger.LogTrace($"[Performance] Took {currentTime - time} ms to setup base theme");
+                    time = currentTime;
+                }
+                
                 // remove current styles
                 if (this.styles != null)
                 {

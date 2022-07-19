@@ -2,7 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 	<!-- Base styles -->
-	<FluentTheme Mode="Light"/>
 	<StyleInclude Source="avares://CarinaStudio.AppBase.Avalonia/Theme/Light.axaml"/>
 	<StyleInclude Source="/Themes/Base.axaml"/>
 
@@ -50,10 +49,6 @@
 
 		<!-- Separator -->
 		<Color x:Key="Color/Separator.Background">#4f000000</Color>
-
-		<!-- SplashWindow -->
-		<Color x:Key="Color/SplashWindow.Background">#eeeeee</Color>
-		<Color x:Key="Color/SplashWindow.Foreground">#222222</Color>
 
 		<!-- StatusBar -->
 		<Color x:Key="Color/StatusBar.Background.Inactive">#8a8a8a</Color>
