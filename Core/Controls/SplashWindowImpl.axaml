@@ -51,7 +51,7 @@
 		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Padding">20</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Title.Margin">0,0,0,5</Thickness>
-		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1.5</sys:TimeSpan>
+		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1</sys:TimeSpan>
 
 	</Window.Resources>
 
@@ -67,7 +67,7 @@
 		
 		<Border.Transitions>
 			<Transitions>
-				<DoubleTransition Property="Opacity" Duration="0:0:1" Easing="ExponentialEaseOut"/>
+				<DoubleTransition Property="Opacity" Duration="0:0:1.4" Easing="ExponentialEaseOut"/>
 			</Transitions>
 		</Border.Transitions>
 
@@ -90,7 +90,7 @@
 			</Border>
 			
 			<!-- Content -->
-			<Grid ColumnDefinitions="*,Auto,Auto,*" HorizontalAlignment="Center" Margin="{StaticResource Thickness/SplashWindow.Padding}" RowDefinitions="Auto,Auto" VerticalAlignment="Center">
+			<Grid ColumnDefinitions="*,Auto,Auto,*" HorizontalAlignment="Stretch" Margin="{StaticResource Thickness/SplashWindow.Padding}" RowDefinitions="Auto,Auto" VerticalAlignment="Center">
 
 				<!-- Icon -->
 				<Image Name="iconImage" Grid.Column="1" Height="{StaticResource Double/SplashWindow.Icon.Size}" HorizontalAlignment="Right" Margin="{StaticResource Thickness/SplashWindow.Icon.Margin}" Opacity="0" Source="{Binding $parent[Window].IconBitmap}" Width="{DynamicResource Double/SplashWindow.Icon.Size}" VerticalAlignment="Center">
