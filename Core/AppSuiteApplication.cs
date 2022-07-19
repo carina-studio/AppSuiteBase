@@ -2099,10 +2099,30 @@ namespace CarinaStudio.AppSuite
             this.OnLoadDefaultStringResource()?.Let(it => this.Resources.MergedDictionaries.Add(it));
             this.UpdateStringResources();
 
+            // get current system theme mode
+            this.UpdateSystemThemeMode(false);
+
+            // create base theme
+            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+            this.baseTheme = new Avalonia.Themes.Fluent.FluentTheme(new Uri("avares://Avalonia.Themes.Fluent/"));
+            this.Styles.Add(this.baseTheme);
+            if (time > 0)
+                this.Logger.LogTrace($"[Performance] Took {this.stopWatch.ElapsedMilliseconds - time} ms to create base theme");
+            
+            // setup effective theme mode
+            this.SelectCurrentThemeMode().Let(themeMode =>
+            {
+                if (this.EffectiveThemeMode != themeMode)
+                {
+                    this.EffectiveThemeMode = themeMode;
+                    this.OnPropertyChanged(nameof(EffectiveThemeMode));
+                }
+            });
+
             // show splash window
             if (this.IsSplashWindowNeeded)
             {
-                var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+                time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
                 var splashWindowParams = this.OnPrepareSplashWindow();
                 if (time > 0)
                 {
@@ -2134,7 +2154,6 @@ namespace CarinaStudio.AppSuite
             });
 
             // setup styles
-            this.UpdateSystemThemeMode(false);
             this.UpdateStyles();
 
             // attach to system event
@@ -2564,6 +2583,15 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogError(ex, $"Failed to save settings to '{this.settingsFilePath}'");
             }
         }
+
+
+        // Select current theme mode.
+        ThemeMode SelectCurrentThemeMode() => this.Settings.GetValueOrDefault(SettingKeys.ThemeMode).Let(it =>
+        {
+            if (it == ThemeMode.System)
+                return this.systemThemeMode;
+            return it;
+        });
 
 
         // Try sending arguments to multi-instances server.
@@ -3041,12 +3069,7 @@ namespace CarinaStudio.AppSuite
         void UpdateStyles()
         {
             // get theme mode
-            var themeMode = this.Settings.GetValueOrDefault(SettingKeys.ThemeMode).Let(it =>
-            {
-                if (it == ThemeMode.System)
-                    return this.systemThemeMode;
-                return it;
-            });
+            var themeMode = this.SelectCurrentThemeMode();
 
             // update styles
             var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
