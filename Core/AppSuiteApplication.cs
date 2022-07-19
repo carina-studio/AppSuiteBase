@@ -230,6 +230,8 @@ namespace CarinaStudio.AppSuite
         bool isRestartingMainWindowsRequested;
         bool isRestartRequested;
         bool isShutdownStarted;
+        Task? loadingInitPersistentStateTask;
+        Task? loadingInitSettingsTask;
         int logOutputTargetPort;
         readonly Dictionary<Window, MainWindowHolder> mainWindowHolders = new Dictionary<Window, MainWindowHolder>();
         readonly ObservableList<Window> mainWindows = new ObservableList<Window>();
@@ -1486,7 +1488,7 @@ namespace CarinaStudio.AppSuite
             if (time > 0)
             {
                 time = this.stopWatch.ElapsedMilliseconds - time;
-                this.Logger.LogTrace($"[Performance] Took {time} ms to load persistent state");
+                this.Logger.LogTrace($"[Performance] Took {time} ms to load settings");
             }
         }
 
@@ -1693,6 +1695,10 @@ namespace CarinaStudio.AppSuite
                     this.Logger.LogError(ex, "Failed to setup default NLog rule");
                 }
             }
+
+            // start loading persistent state and settings
+            this.loadingInitPersistentStateTask = this.LoadPersistentStateAsync();
+            this.loadingInitSettingsTask = this.LoadSettingsAsync();
 
             // create hardware and process information
             this.hardwareInfo = new HardwareInfo(this);
@@ -2066,11 +2072,6 @@ namespace CarinaStudio.AppSuite
         /// <returns>Task of preparation.</returns>
         protected virtual async Task OnPrepareStartingAsync()
         {
-            // load persistent state and settings
-            await this.LoadPersistentStateAsync();
-            await this.LoadSettingsAsync();
-            this.Settings.SettingChanged += this.OnSettingChanged;
-
             // start log output to localhost
             this.logOutputTargetPort = this.PersistentState.GetValueOrDefault(LogOutputTargetPortKey);
             if (this.logOutputTargetPort == 0)
@@ -2087,6 +2088,19 @@ namespace CarinaStudio.AppSuite
                 this.checkUpdateInfoAction?.Schedule();
             });
 
+            // complete loading persistent state and settings
+            if (this.loadingInitPersistentStateTask != null)
+            {
+                await this.loadingInitPersistentStateTask;
+                this.loadingInitPersistentStateTask = null;
+            }
+            if (this.loadingInitSettingsTask != null)
+            {
+                await this.loadingInitSettingsTask!;
+                this.loadingInitSettingsTask = null;
+                this.Settings.SettingChanged += this.OnSettingChanged;
+            }
+
             // setup culture info
             this.UpdateCultureInfo(false);
 
@@ -2101,13 +2115,6 @@ namespace CarinaStudio.AppSuite
 
             // get current system theme mode
             this.UpdateSystemThemeMode(false);
-
-            // create base theme
-            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
-            this.baseTheme = new Avalonia.Themes.Fluent.FluentTheme(new Uri("avares://Avalonia.Themes.Fluent/"));
-            this.Styles.Add(this.baseTheme);
-            if (time > 0)
-                this.Logger.LogTrace($"[Performance] Took {this.stopWatch.ElapsedMilliseconds - time} ms to create base theme");
             
             // setup effective theme mode
             this.SelectCurrentThemeMode().Let(themeMode =>
@@ -2118,6 +2125,20 @@ namespace CarinaStudio.AppSuite
                     this.OnPropertyChanged(nameof(EffectiveThemeMode));
                 }
             });
+
+            // create base theme
+            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+            this.baseTheme = new Avalonia.Themes.Fluent.FluentTheme(new Uri("avares://Avalonia.Themes.Fluent/"))
+            {
+                Mode = this.EffectiveThemeMode switch
+                {
+                    ThemeMode.Light => Avalonia.Themes.Fluent.FluentThemeMode.Light,
+                    _ => Avalonia.Themes.Fluent.FluentThemeMode.Dark,
+                }
+            };
+            this.Styles.Add(this.baseTheme);
+            if (time > 0)
+                this.Logger.LogTrace($"[Performance] Took {this.stopWatch.ElapsedMilliseconds - time} ms to create base theme");
 
             // show splash window
             if (this.IsSplashWindowNeeded)
@@ -3076,13 +3097,15 @@ namespace CarinaStudio.AppSuite
             if (this.styles == null || this.stylesThemeMode != themeMode)
             {
                 // setup base theme
-                if (this.baseTheme == null)
-                    this.baseTheme = (Avalonia.Themes.Fluent.FluentTheme)this.Styles[0];
-                this.baseTheme.Mode = themeMode switch
+                (themeMode switch
                 {
                     ThemeMode.Light => Avalonia.Themes.Fluent.FluentThemeMode.Light,
                     _ => Avalonia.Themes.Fluent.FluentThemeMode.Dark,
-                };
+                }).Let(it =>
+                {
+                    if (this.baseTheme != null && this.baseTheme.Mode != it)
+                        this.baseTheme.Mode = it;
+                });
                 if (time > 0)
                 {
                     var currentTime = this.stopWatch.ElapsedMilliseconds;
