@@ -27,6 +27,8 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET 版本：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">GitHub 上的專案頁面</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">(已安裝：{0})</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Connected">網路：已連線 ({0})</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Disconnected">網路：未連線</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作業系統：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">其他資訊</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">隱私權政策</sys:String>
