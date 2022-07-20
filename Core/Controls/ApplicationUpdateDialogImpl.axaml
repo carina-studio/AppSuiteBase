@@ -43,6 +43,7 @@
 				<!-- Message -->
 				<Panel IsVisible="{Binding !IsPreparingForUpdate}">
 					<Panel IsVisible="{Binding !IsCheckingForUpdate}">
+						<TextBlock Opacity="0" Text=" "/> <!-- [Workaround] Reserve space to prevent unexpected layout -->
 						<TextBlock IsVisible="{Binding IsLatestVersion}" Text="{Binding $parent[Window].LatestVersionMessage}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
 						<StackPanel IsVisible="{Binding !IsLatestVersion}" Orientation="Vertical">
 							<TextBlock Text="{Binding $parent[Window].NewVersionFoundMessage}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
