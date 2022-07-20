@@ -119,35 +119,19 @@
 					</Border>
 
 					<!-- Operating system -->
-					<StackPanel Orientation="Horizontal">
-						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.OperatingSystem}" VerticalAlignment="Center"/>
-						<TextBlock Text="{Binding OperatingSystemDescription}" VerticalAlignment="Center"/>
-					</StackPanel>
+					<abControls:FormattedTextBlock Arg1="{Binding OperatingSystemDescription}" Format="{DynamicResource String/ApplicationInfoDialog.OperatingSystem}" TextTrimming="CharacterEllipsis"/>
 					<Separator Classes="Dialog_Separator_Small"/>
 
 					<!-- Framework version -->
 					<StackPanel Orientation="Horizontal">
-						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.FrameworkVersion}" VerticalAlignment="Center"/>
-						<TextBlock Text="{Binding FrameworkVersion}" VerticalAlignment="Center"/>
-						<Separator Classes="Dialog_Separator_Small"/>
-						<TextBlock IsVisible="{Binding IsFrameworkInstalled}" VerticalAlignment="Center">
-							<TextBlock.Text>
-								<MultiBinding StringFormat="{}({0}{1})">
-									<DynamicResourceExtension ResourceKey="String/ApplicationInfoDialog.InstalledFrameworkVersion"/>
-									<Binding Path="InstalledFrameworkVersion"/>
-								</MultiBinding>
-							</TextBlock.Text>
-						</TextBlock>
+						<abControls:FormattedTextBlock Arg1="{Binding FrameworkVersion}" Format="{DynamicResource String/ApplicationInfoDialog.FrameworkVersion}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+						<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding IsFrameworkInstalled}"/>
+						<abControls:FormattedTextBlock Arg1="{Binding InstalledFrameworkVersion}" Format="{DynamicResource String/ApplicationInfoDialog.InstalledFrameworkVersion}" IsVisible="{Binding IsFrameworkInstalled}" TextTrimming="CharacterEllipsis"/>
 					</StackPanel>
+					<Separator Classes="Dialog_Separator_Small"/>
 
 					<!-- Total physical memory -->
-					<StackPanel IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}">
-						<Separator Classes="Dialog_Separator_Small"/>
-						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.TotalPhysicalMemory}" VerticalAlignment="Center"/>
-							<TextBlock Text="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" VerticalAlignment="Center"/>
-						</StackPanel>
-					</StackPanel>
+					<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.TotalPhysicalMemory}" IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}" TextTrimming="CharacterEllipsis"/>
 					<Separator Classes="Dialog_Separator_Large"/>
 
 					<!-- Activated products -->

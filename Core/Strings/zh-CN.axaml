@@ -26,10 +26,10 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">导出应用程序日志…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExternalDependencies">外部依赖…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">无法导出应用程序日志。</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET 版本：</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET 版本：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">GitHub 上的项目页面</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">已安裝：</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作业系统：</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">(已安裝：{0})</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作业系统：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">其他资讯</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">隐私权政策</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Products">相关产品</sys:String>
@@ -38,7 +38,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">应用程序日志导出完成。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">系统资讯</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">关于 {0}</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">物理内存：</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">物理内存：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">使用者协议</sys:String>
 
 	<!-- ApplicationOptions -->

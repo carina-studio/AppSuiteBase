@@ -44,9 +44,9 @@
 				<Panel IsVisible="{Binding !IsPreparingForUpdate}">
 					<Panel IsVisible="{Binding !IsCheckingForUpdate}">
 						<TextBlock Opacity="0" Text=" "/> <!-- [Workaround] Reserve space to prevent unexpected layout -->
-						<TextBlock IsVisible="{Binding IsLatestVersion}" Text="{Binding $parent[Window].LatestVersionMessage}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.Name}" Format="{DynamicResource String/ApplicationUpdateDialog.LatestVersion}" IsVisible="{Binding IsLatestVersion}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
 						<StackPanel IsVisible="{Binding !IsLatestVersion}" Orientation="Vertical">
-							<TextBlock Text="{Binding $parent[Window].NewVersionFoundMessage}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+							<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.Name}" Arg2="{Binding UpdateVersion}" Format="{DynamicResource String/ApplicationUpdateDialog.NewVersionFound}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
 							<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" IsVisible="{Binding HasReleasePageUri}" Text="{DynamicResource String/ApplicationUpdateDialog.ReleasePage}" Uri="{Binding ReleasePageUri}"/>
 						</StackPanel>
 					</Panel>

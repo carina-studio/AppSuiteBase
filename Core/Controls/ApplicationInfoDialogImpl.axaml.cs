@@ -119,6 +119,8 @@ namespace CarinaStudio.AppSuite.Controls
 				if (child is Panel itemView)
 					this.ShowProductInfo(itemView);
 			}
+			this.UpdateTitle();
+			this.UpdateVersionString();
 		}
 
 
@@ -154,32 +156,8 @@ namespace CarinaStudio.AppSuite.Controls
 				if (change.NewValue.Value is ApplicationInfo appInfo)
 				{
 					// sync state
-					this.Title = this.Application.GetFormattedString("ApplicationInfoDialog.Title", appInfo.Name);
-					this.SetValue<string?>(VersionStringProperty, Global.Run(() =>
-					{
-						var buffer = new StringBuilder(this.Application.GetFormattedString("ApplicationInfoDialog.Version", appInfo.Version));
-						if (appInfo.ReleasingType != ApplicationReleasingType.Stable)
-						{
-							buffer.Append(' ');
-							buffer.Append(AppReleasingTypeConverter.Convert<string?>(appInfo.ReleasingType));
-						}
-						var isProprietaryApp = false;
-						foreach (var itf in this.Application.GetType().GetInterfaces())
-						{
-							if (itf.FullName == "CarinaStudio.AppSuite.IProprietaryApplication"
-								&& itf.Assembly.FullName?.StartsWith("CarinaStudio.AppSuite.Proprietary,") == true)
-							{
-								isProprietaryApp = true;
-								break;
-							}
-						}
-						if (isProprietaryApp)
-						{
-							buffer.Append(' ');
-							buffer.Append(this.Application.GetString("ApplicationInfoDialog.ProprietaryVersion"));
-						}
-						return buffer.ToString();
-					}));
+					this.UpdateTitle();
+					this.UpdateVersionString();
 
 					// show badges
 					this.badgesPanel.Children.Clear();
@@ -324,6 +302,48 @@ namespace CarinaStudio.AppSuite.Controls
 			}
 			else
 				(view.Children[2] as Avalonia.Controls.TextBlock)?.Let(it => it.Text = null);
+		}
+
+
+		// Update title of window.
+		void UpdateTitle()
+		{
+			if (this.DataContext is not ApplicationInfo appInfo)
+				return;
+			this.Title = this.Application.GetFormattedString("ApplicationInfoDialog.Title", appInfo.Name);
+		}
+
+
+		// Update version string.
+		void UpdateVersionString()
+		{
+			if (this.DataContext is not ApplicationInfo appInfo)
+				return;
+			this.SetValue<string?>(VersionStringProperty, Global.Run(() =>
+			{
+				var buffer = new StringBuilder(this.Application.GetFormattedString("ApplicationInfoDialog.Version", appInfo.Version));
+				if (appInfo.ReleasingType != ApplicationReleasingType.Stable)
+				{
+					buffer.Append(' ');
+					buffer.Append(AppReleasingTypeConverter.Convert<string?>(appInfo.ReleasingType));
+				}
+				var isProprietaryApp = false;
+				foreach (var itf in this.Application.GetType().GetInterfaces())
+				{
+					if (itf.FullName == "CarinaStudio.AppSuite.IProprietaryApplication"
+						&& itf.Assembly.FullName?.StartsWith("CarinaStudio.AppSuite.Proprietary,") == true)
+					{
+						isProprietaryApp = true;
+						break;
+					}
+				}
+				if (isProprietaryApp)
+				{
+					buffer.Append(' ');
+					buffer.Append(this.Application.GetString("ApplicationInfoDialog.ProprietaryVersion"));
+				}
+				return buffer.ToString();
+			}));
 		}
 
 

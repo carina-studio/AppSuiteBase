@@ -64,18 +64,10 @@ namespace CarinaStudio.AppSuite.Controls
 		string? NewVersionFoundMessage { get => this.GetValue<string?>(NewVersionFoundMessageProperty); }
 
 
-		// String resources updated.
-		void OnApplicationStringsUpdated(object? sender, EventArgs e)
-		{
-			this.UpdateMessages();
-		}
-
-
 		// Called when closed.
 		protected override void OnClosed(EventArgs e)
 		{
 			this.DataContext = null;
-			this.Application.StringsUpdated -= this.OnApplicationStringsUpdated;
 			base.OnClosed(e);
 		}
 
@@ -110,12 +102,8 @@ namespace CarinaStudio.AppSuite.Controls
 		// Called when opened.
 		protected override void OnOpened(EventArgs e)
 		{
-			// add handlers
-			this.Application.StringsUpdated += this.OnApplicationStringsUpdated;
-
 			// setup UI
 			this.UpdateLatestNotifiedInfo();
-			this.UpdateMessages();
 
 			// check for update
 			if (this.CheckForUpdateWhenOpening && this.DataContext is ApplicationUpdater updater)
@@ -200,10 +188,7 @@ namespace CarinaStudio.AppSuite.Controls
 					this.Close(ApplicationUpdateDialogResult.ShutdownNeeded);
 			}
 			else if (e.PropertyName == nameof(ApplicationUpdater.UpdateVersion))
-			{
 				this.UpdateLatestNotifiedInfo();
-				this.UpdateMessages();
-			}
 		}
 
 
@@ -224,16 +209,5 @@ namespace CarinaStudio.AppSuite.Controls
 				this.PersistentState.ResetValue(LatestNotifiedVersionKey);
 			}
 		}
-
-
-		// Update messages.
-		void UpdateMessages()
-        {
-			this.SetValue<string?>(LatestVersionMessageProperty, this.Application.GetFormattedString("ApplicationUpdateDialog.LatestVersion", this.Application.Name));
-			if (this.DataContext is ApplicationUpdater updater)
-				this.SetValue<string?>(NewVersionFoundMessageProperty, this.Application.GetFormattedString("ApplicationUpdateDialog.NewVersionFound", this.Application.Name, updater.UpdateVersion));
-			else
-				this.SetValue<string?>(NewVersionFoundMessageProperty, null);
-        }
     }
 }

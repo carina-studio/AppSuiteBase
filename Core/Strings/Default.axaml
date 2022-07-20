@@ -27,10 +27,10 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">Export application logs…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExternalDependencies">External dependencies…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">Failed to export application logs.</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET version:</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET version: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">Project page on GitHub</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">Installed:</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">Operating system:</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">(Installed: {0})</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">Operating system: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">Other information</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">Privacy Policy</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Products">Products</sys:String>
@@ -39,7 +39,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">Application logs exported.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">System information</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">About {0}</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">RAM:</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">RAM: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">User Agreement</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Version">{0}</sys:String>
 
