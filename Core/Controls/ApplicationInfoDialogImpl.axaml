@@ -119,6 +119,10 @@
 						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.SystemInformation}"/>
 					</Border>
 
+					<!-- Device name -->
+					<abControls:FormattedTextBlock Arg1="{x:Static sys:Environment.MachineName}" Format="{DynamicResource String/ApplicationInfoDialog.DeviceName}" TextTrimming="CharacterEllipsis"/>
+					<Separator Classes="Dialog_Separator_Small"/>
+
 					<!-- Operating system -->
 					<abControls:FormattedTextBlock Arg1="{Binding OperatingSystemDescription}" Format="{DynamicResource String/ApplicationInfoDialog.OperatingSystem}" TextTrimming="CharacterEllipsis"/>
 					<Separator Classes="Dialog_Separator_Small"/>
@@ -170,6 +174,15 @@
 						<StackPanel Orientation="Horizontal">
 							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PayPal.Outline.Colored}"/>
 							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.DonateWithPayPal}" Uri="{Binding PayPalUri}"/>
+						</StackPanel>
+						<Separator Classes="Dialog_Separator_Small"/>
+					</StackPanel>
+
+					<!-- Website -->
+					<StackPanel IsVisible="{Binding WebsiteUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
+						<StackPanel Orientation="Horizontal">
+							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Website}"/>
+							<abControls:FormattedLinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Arg1="{Binding Application.Name}" Format="{DynamicResource String/ApplicationInfoDialog.Website}" Uri="{Binding WebsiteUri}"/>
 						</StackPanel>
 						<Separator Classes="Dialog_Separator_Small"/>
 					</StackPanel>

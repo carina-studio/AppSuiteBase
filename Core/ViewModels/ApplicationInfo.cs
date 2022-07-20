@@ -277,5 +277,11 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// Get application version.
         /// </summary>
         public Version Version { get; } = Assembly.GetEntryAssembly().AsNonNull().GetName().Version.AsNonNull();
+
+
+        /// <summary>
+        /// Get URI of application website.
+        /// </summary>
+        public virtual Uri? WebsiteUri { get; }
     }
 }

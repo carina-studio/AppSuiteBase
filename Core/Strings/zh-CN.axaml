@@ -22,6 +22,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section2">开源项目</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section3">所开发的的应用程序。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">调试模式可以让应用程序输出更多的执行期间信息至日志，甚至提供应用程序内部功能调整。下次您自行启动应用程序时将自动退出调试模式。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.DeviceName">设备名称：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DonateWithPayPal">使用 PayPal 赞助</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">导出应用程序日志…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExternalDependencies">外部依赖…</sys:String>
@@ -42,6 +43,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">关于 {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">物理内存：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">使用者协议</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Website">{0} 网站</sys:String>
 
 	<!-- ApplicationOptions -->
 	<sys:String x:Key="String/ApplicationOptions">应用程序选项</sys:String>
