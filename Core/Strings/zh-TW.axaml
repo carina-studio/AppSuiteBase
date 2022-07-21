@@ -49,6 +49,7 @@
 	<sys:String x:Key="String/ApplicationOptions.Culture">語言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">使用者介面縮放比例</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">系統支援時使用模糊玻璃視窗背景</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">啟動應用程式時顯示啟動畫面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">日誌輸出目標連接埠</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">需要重新啟動應用程式以套用</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NotifyApplicationUpdate">有應用程式更新時顯示通知</sys:String>

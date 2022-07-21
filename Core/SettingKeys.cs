@@ -27,6 +27,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Whether splash window should be shown when launching application or not.
+        /// </summary>
+        public static readonly SettingKey<bool> LaunchWithSplashWindow = new SettingKey<bool>(nameof(LaunchWithSplashWindow), true);
+
+
+        /// <summary>
         /// Notify user when application update found.
         /// </summary>
         public static readonly SettingKey<bool> NotifyApplicationUpdate = new SettingKey<bool>(nameof(NotifyApplicationUpdate), true);

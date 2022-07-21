@@ -2141,7 +2141,8 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogTrace($"[Performance] Took {this.stopWatch.ElapsedMilliseconds - time} ms to create base theme");
 
             // show splash window
-            if (this.IsSplashWindowNeeded)
+            var showSplashWindow = this.IsSplashWindowNeeded && this.Settings.GetValueOrDefault(SettingKeys.LaunchWithSplashWindow);
+            if (showSplashWindow)
             {
                 time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
                 var splashWindowParams = this.OnPrepareSplashWindow();
@@ -2167,8 +2168,11 @@ namespace CarinaStudio.AppSuite
             }
 
             // load built-in resources
-            this.UpdateSplashWindowMessage(this.GetStringNonNull("AppSuiteApplication.LoadingTheme", ""));
-            await Task.Delay(SplashWindowLoadingThemeDuration);
+            if (showSplashWindow)
+            {
+                this.UpdateSplashWindowMessage(this.GetStringNonNull("AppSuiteApplication.LoadingTheme", ""));
+                await Task.Delay(SplashWindowLoadingThemeDuration);
+            }
             this.Resources.MergedDictionaries.Add(new ResourceInclude()
             {
                 Source = new Uri("avares://CarinaStudio.AppSuite.Core/Resources/Icons.axaml")

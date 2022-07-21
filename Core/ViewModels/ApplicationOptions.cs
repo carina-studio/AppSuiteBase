@@ -118,6 +118,16 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
+        /// Whether splash window should be shown when launching application or not.
+        /// </summary>
+        public bool LaunchWithSplashWindow
+        {
+            get => this.Settings.GetValueOrDefault(SettingKeys.LaunchWithSplashWindow);
+            set => this.Settings.SetValue<bool>(SettingKeys.LaunchWithSplashWindow, value);
+        }
+
+
+        /// <summary>
         /// Get or set port of localhost to receive log output.
         /// </summary>
         public int LogOutputTargetPort
@@ -175,6 +185,8 @@ namespace CarinaStudio.AppSuite.ViewModels
                 this.OnPropertyChanged(nameof(Culture));
             else if (key == SettingKeys.EnableBlurryBackground)
                 this.OnPropertyChanged(nameof(EnableBlurryBackground));
+            else if (key == SettingKeys.LaunchWithSplashWindow)
+                this.OnPropertyChanged(nameof(LaunchWithSplashWindow));
             else if (key == SettingKeys.NotifyApplicationUpdate)
                 this.OnPropertyChanged(nameof(NotifyApplicationUpdate));
             else if (key == SettingKeys.ThemeMode)
