@@ -60,6 +60,7 @@ namespace CarinaStudio.AppSuite.Controls
         ThicknessAnimator? contentPaddingAnimator;
         ContentPresenter? contentPresenter;
         bool hasMultipleMainWindows;
+        bool isFirstContentPaddingUpdate = true;
         bool isShowingInitialDialogs;
         long openedTime;
         readonly ScheduledAction restartingMainWindowsAction;
@@ -119,15 +120,23 @@ namespace CarinaStudio.AppSuite.Controls
                     or WindowState.Maximized => ExtendedClientAreaWindowConfiguration.ContentPaddingInMaximized,
                     _ => ExtendedClientAreaWindowConfiguration.ContentPadding,
                 };
-                this.contentPaddingAnimator = new ThicknessAnimator(this.contentPresenter.Padding, margin).Also(it =>
+                if (this.isFirstContentPaddingUpdate)
                 {
-                    it.Completed += (_, e) => this.contentPresenter.Padding = it.EndValue;
-                    if (this.TryFindResource("TimeSpan/MainWindow.ContentPaddingTransition", out var res) && res is TimeSpan duration)
-                        it.Duration = duration;
-                    it.Interpolator = Interpolators.Deceleration;
-                    it.ProgressChanged += (_, e) => this.contentPresenter.Padding = it.Value;
-                    it.Start();
-                });
+                    this.isFirstContentPaddingUpdate = false;
+                    this.contentPresenter.Padding = margin;
+                }
+                else
+                {
+                    this.contentPaddingAnimator = new ThicknessAnimator(this.contentPresenter.Padding, margin).Also(it =>
+                    {
+                        it.Completed += (_, e) => this.contentPresenter.Padding = it.EndValue;
+                        if (this.TryFindResource("TimeSpan/MainWindow.ContentPaddingTransition", out var res) && res is TimeSpan duration)
+                            it.Duration = duration;
+                        it.Interpolator = Interpolators.Deceleration;
+                        it.ProgressChanged += (_, e) => this.contentPresenter.Padding = it.Value;
+                        it.Start();
+                    });
+                }
             });
 
             // restore window state
@@ -416,7 +425,7 @@ namespace CarinaStudio.AppSuite.Controls
             this.SetAndRaise<bool>(HasMultipleMainWindowsProperty, ref this.hasMultipleMainWindows, this.Application.MainWindows.Count > 1);
 
             // update content padding
-            this.updateContentPaddingAction.Schedule();
+            this.updateContentPaddingAction.Execute();
 
             // notify application update found
             if (this.Application.MainWindows.Count == 1)
@@ -488,10 +497,13 @@ namespace CarinaStudio.AppSuite.Controls
                     windowState = WindowState.Maximized; // [Workaround] Prevent launching in FullScreen mode because that layout may be incorrect on macOS
                 if (windowState != WindowState.Minimized)
                     this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, windowState);
-                if (windowState == WindowState.FullScreen)
-                    this.updateContentPaddingAction.Reschedule();
-                else
-                    this.updateContentPaddingAction.Reschedule(UpdateContentPaddingDelay);
+                if (this.IsOpened)
+                {
+                    if (windowState == WindowState.FullScreen)
+                        this.updateContentPaddingAction.Reschedule();
+                    else
+                        this.updateContentPaddingAction.Reschedule(UpdateContentPaddingDelay);
+                }
                 this.RestoreToSavedSize();
                 this.InvalidateTransparencyLevelHint();
             }
