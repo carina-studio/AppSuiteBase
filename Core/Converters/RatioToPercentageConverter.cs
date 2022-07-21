@@ -60,7 +60,7 @@ namespace CarinaStudio.AppSuite.Converters
 				return null;
 			return targetType.Let(_ =>
 			{
-				if (targetType == typeof(string))
+				if (targetType == typeof(string) || targetType == typeof(object))
 				{
 					if (this.stringFormat != null)
 						return (object)string.Format(this.stringFormat, ratio * 100);

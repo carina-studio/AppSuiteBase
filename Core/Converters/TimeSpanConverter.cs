@@ -33,7 +33,7 @@ namespace CarinaStudio.AppSuite.Converters
 		/// <returns>Converted string.</returns>
 		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 		{
-			if (targetType != typeof(string))
+			if (targetType != typeof(string) && targetType != typeof(object))
 				return null;
 			if (value is TimeSpan timeSpan)
 			{

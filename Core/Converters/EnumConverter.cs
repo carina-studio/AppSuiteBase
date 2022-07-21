@@ -33,7 +33,9 @@ namespace CarinaStudio.AppSuite.Converters
         /// <inheritdoc/>
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            if (targetType != typeof(string) || value == null)
+            if (targetType != typeof(string) && targetType != typeof(object))
+                return null;
+            if (value == null)
                 return null;
             if (value.GetType() == this.enumType)
             {
