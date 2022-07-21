@@ -2154,6 +2154,7 @@ namespace CarinaStudio.AppSuite
                 }
                 this.splashWindow = new Controls.SplashWindowImpl()
                 {
+                    AccentColor = splashWindowParams.AccentColor,
                     IconUri = splashWindowParams.IconUri,
                 };
                 if (time > 0)

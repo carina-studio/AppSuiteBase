@@ -30,6 +30,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Fields.
+		Color accentColor;
 		Uri? iconUri;
 		readonly ScheduledAction showAction;
 		readonly Stopwatch stopwatch = new Stopwatch();
@@ -111,6 +112,19 @@ namespace CarinaStudio.AppSuite.Controls
 				ThemeMode.Light => this.Resources["lightTheme"].AsNonNull(),
 				_ => this.Resources["darkTheme"].AsNonNull(),
 			}));
+		}
+
+
+		// Accent color.
+		public Color AccentColor
+		{
+			get => this.accentColor;
+			set
+			{
+				this.accentColor = value;
+				this.Resources["AccentColor30"] = Color.FromArgb((byte)(value.A * 0.3 + 0.5), value.R, value.G, value.B);
+				this.Resources["AccentColor00"] = Color.FromArgb(0, value.R, value.G, value.B);
+			}
 		}
 
 

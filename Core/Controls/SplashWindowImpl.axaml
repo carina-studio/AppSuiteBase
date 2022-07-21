@@ -20,7 +20,11 @@
 		<!-- Dark theme -->
 		<Styles x:Key="darkTheme">
 			<Styles.Resources>
-				<SolidColorBrush x:Key="Brush/SplashWindow.Background" Color="#000000"/>
+				<SolidColorBrush x:Key="Brush/SplashWindow.Background" Color="#111111"/>
+				<LinearGradientBrush x:Key="Brush/SplashWindow.Border" EndPoint="0%,100%" StartPoint="0%,0%">
+					<GradientStop Offset="0" Color="#444444"/>
+					<GradientStop Offset="1" Color="#070707"/>
+				</LinearGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#ffffff"/>
 			</Styles.Resources>
 		</Styles>
@@ -29,15 +33,15 @@
 		<Styles x:Key="lightTheme">
 			<Styles.Resources>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Background" Color="#eeeeee"/>
+				<LinearGradientBrush x:Key="Brush/SplashWindow.Border" EndPoint="0%,100%" StartPoint="0%,0%">
+					<GradientStop Offset="0" Color="#f0f0f0"/>
+					<GradientStop Offset="1" Color="#e0e0e0"/>
+				</LinearGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#222222"/>
 			</Styles.Resources>
 		</Styles>
 
 		<!-- Other resources -->
-		<LinearGradientBrush x:Key="Brush/SplashWindow.Border" EndPoint="0%,150%" StartPoint="0%,-50%">
-			<GradientStop Offset="0" Color="#912fbf"/>
-			<GradientStop Offset="1" Color="#611f80"/>
-		</LinearGradientBrush>
 		<CornerRadius x:Key="CornerRadius/SplashWindow">10</CornerRadius>
 		<sys:Double x:Key="Double/ApplicationInfoDialog.AppVersion.Opacity">0.6</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.ContentAnimation.Translation">50</sys:Double>
@@ -78,8 +82,8 @@
 			<Border Name="backgroundOverlayBorder" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" CornerRadius="{StaticResource CornerRadius/SplashWindow}" Opacity="0">
 				<Border.Background>
 					<LinearGradientBrush EndPoint="0%,50%" StartPoint="0%,0%">
-						<GradientStop Color="#50912fbf" Offset="0"/>
-						<GradientStop Color="#00912fbf" Offset="1"/>
+						<GradientStop Color="{DynamicResource AccentColor30}" Offset="0"/>
+						<GradientStop Color="{DynamicResource AccentColor00}" Offset="1"/>
 					</LinearGradientBrush>
 				</Border.Background>
 				<Border.Transitions>
@@ -184,7 +188,7 @@
 			</Grid>
 
 			<!-- Border -->
-			<Border BorderBrush="{StaticResource Brush/SplashWindow.Border}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
+			<Border BorderBrush="{DynamicResource Brush/SplashWindow.Border}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
 
 		</Panel>
 	</Border>

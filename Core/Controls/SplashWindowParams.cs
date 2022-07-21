@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalonia.Media;
+using System;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -7,6 +8,12 @@ namespace CarinaStudio.AppSuite.Controls
     /// </summary>
     public struct SplashWindowParams
     {
+        /// <summary>
+        /// Accent color of application.
+        /// </summary>
+        public Color AccentColor { get; set; }
+
+
         /// <summary>
         /// URI of application icon.
         /// </summary>
