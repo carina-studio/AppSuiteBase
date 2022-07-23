@@ -2179,6 +2179,9 @@ namespace CarinaStudio.AppSuite
                 Source = new Uri("avares://CarinaStudio.AppSuite.Core/Resources/Icons.axaml")
             });
 
+            // start initializing network manager
+            var initNetworkManagerTask = Net.NetworkManager.InitializeAsync(this);
+
             // setup styles
             this.UpdateStyles();
 
@@ -2206,8 +2209,13 @@ namespace CarinaStudio.AppSuite
                 }
             }
 
-            // initialize network manager
-            await Net.NetworkManager.InitializeAsync(this);
+            // start checking external dependencies
+            var checkExtDepTasks = new List<Task>();
+            foreach (var externalDependency in this.ExternalDependencies)
+                checkExtDepTasks.Add(externalDependency.WaitForCheckingAvailability());
+
+            // complete initializing network manager
+            await initNetworkManagerTask;
 
             // initialize product manager
             try
@@ -2239,9 +2247,8 @@ namespace CarinaStudio.AppSuite
                 this.productManager = new MockProductManager(this);
             }
 
-            // check for external dependencies
-            foreach (var externalDependency in this.ExternalDependencies)
-                await externalDependency.WaitForCheckingAvailability();
+            // complete checking external dependencies
+            await Task.WhenAll(checkExtDepTasks);
         }
 
 

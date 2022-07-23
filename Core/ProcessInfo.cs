@@ -39,6 +39,7 @@ namespace CarinaStudio.AppSuite
         // Fields.
         readonly IAppSuiteApplication app;
 		readonly List<HighFrequencyUpdateToken> hfUpdateTokens = new List<HighFrequencyUpdateToken>();
+		bool isFirstUpdate = true;
 		readonly ILogger logger;
 		long previousProcessInfoUpdateTime;
 		TimeSpan previousTotalProcessorTime;
@@ -66,6 +67,7 @@ namespace CarinaStudio.AppSuite
             // create scheduled actions
             this.updateProcessInfoAction = new ScheduledAction(this.processInfoCheckingSyncContext, () =>
             {
+				this.isFirstUpdate = false;
 				this.Update();
 			});
 
@@ -76,7 +78,7 @@ namespace CarinaStudio.AppSuite
 				it.Name = "UI response checking thread";
 				it.Start();
 			});
-			this.updateProcessInfoAction.Schedule();
+			this.updateProcessInfoAction.Schedule(3000);
         }
 
 
@@ -135,7 +137,8 @@ namespace CarinaStudio.AppSuite
 			if (isFirstToken)
 			{
 				this.updateInterval = ProcessInfoUpdateIntervalHF;
-				this.updateProcessInfoAction.Reschedule();
+				if (!this.isFirstUpdate)
+					this.updateProcessInfoAction.Reschedule();
 			}
 			return token;
 		}
