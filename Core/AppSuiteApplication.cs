@@ -173,8 +173,8 @@ namespace CarinaStudio.AppSuite
         // Constants.
         const string DebugModeRequestedKey = "IsDebugModeRequested";
         const string RestoreMainWindowsRequestedKey = "IsRestoringMainWindowsRequested";
-        const int MinSplashWindowDuration = 1800;
-        const int SplashWindowShowingDuration = 1000;
+        const int MinSplashWindowDuration = 2000;
+        const int SplashWindowShowingDuration = 1500;
         const int SplashWindowLoadingThemeDuration = 400;
 
 

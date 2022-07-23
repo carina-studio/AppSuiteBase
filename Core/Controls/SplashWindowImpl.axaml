@@ -8,7 +8,7 @@
         Background="{x:Null}"
         CanResize="False"
         HasSystemDecorations="False"
-        Height="200"
+        Height="220"
         Title="{Binding $parent[Window].ApplicationName}"
         TransparencyLevelHint="Transparent"
         Width="400"
@@ -42,6 +42,7 @@
 		</Styles>
 
 		<!-- Other resources -->
+		<BoxShadows x:Key="BoxShadows/SplashWindow">0 0 10 0 #9f000000</BoxShadows>
 		<CornerRadius x:Key="CornerRadius/SplashWindow">10</CornerRadius>
 		<sys:Double x:Key="Double/ApplicationInfoDialog.AppVersion.Opacity">0.6</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.ContentAnimation.Translation">50</sys:Double>
@@ -50,12 +51,13 @@
 		<sys:Double x:Key="Double/SplashWindow.Message.ReservedSpace">50</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Title.FontSize">24</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Title.MaxWidth">230</sys:Double>
-		<Thickness x:Key="Thickness/SplashWindow.Border">2</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Border">1</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">0,0,20,0</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Margin">10</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Padding">20</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Title.Margin">0,0,0,5</Thickness>
-		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1</sys:TimeSpan>
+		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1.4</sys:TimeSpan>
 
 	</Window.Resources>
 
@@ -71,14 +73,14 @@
 		
 		<Border.Transitions>
 			<Transitions>
-				<DoubleTransition Property="Opacity" Duration="0:0:1.4" Easing="ExponentialEaseOut"/>
+				<DoubleTransition Property="Opacity" Duration="0:0:0.8"/>
 			</Transitions>
 		</Border.Transitions>
 
-		<Panel>
+		<Panel Margin="{StaticResource Thickness/SplashWindow.Margin}">
 
 			<!-- Background -->
-			<Border Background="{DynamicResource Brush/SplashWindow.Background}" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
+			<Border Background="{DynamicResource Brush/SplashWindow.Background}" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" BoxShadow="{StaticResource BoxShadows/SplashWindow}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
 			<Border Name="backgroundOverlayBorder" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" CornerRadius="{StaticResource CornerRadius/SplashWindow}" Opacity="0">
 				<Border.Background>
 					<LinearGradientBrush EndPoint="0%,50%" StartPoint="0%,0%">
