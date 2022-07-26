@@ -319,11 +319,15 @@ namespace CarinaStudio.AppSuite.Tests
             {
                 Buttons = Enum.GetValues<MessageDialogButtons>().SelectRandomElement(),
                 Icon = Enum.GetValues<MessageDialogIcon>().SelectRandomElement(),
-                Message = "This is a message dialog!",
+                Message = this.GetResourceObservable("String/MessageDialog.Message"),
             }.ShowDialog(this);
             _ = new MessageDialog()
             {
-                Message = $"The result is {result}",
+                Message = new FormattedString().Also(it =>
+                {
+                    it.Arg1 = result;
+                    it.Bind(FormattedString.FormatProperty, this.GetResourceObservable("String/MessageDialog.Result"));
+                })
             }.ShowDialog(this);
         }
 
@@ -388,7 +392,13 @@ namespace CarinaStudio.AppSuite.Tests
 
         void Test()
         {
-            _ = new PathEnvVarEditorDialog().ShowDialog(this);
+            _ = new TextInputDialog()
+            {
+                Message = new FormattedString()
+                {
+                    Format = "Message of text input dialog"
+                }
+            }.ShowDialog(this);
             //this.integerTextBox2.IsNullValueAllowed = !this.integerTextBox2.IsNullValueAllowed;
 
             this.integerTextBox.Value = 321;

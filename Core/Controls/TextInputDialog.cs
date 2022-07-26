@@ -1,4 +1,6 @@
-﻿using CarinaStudio.Threading;
+﻿using Avalonia;
+using CarinaStudio.Threading;
+using System;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -13,7 +15,7 @@ public class TextInputDialog : CommonDialog<string?>
     bool? doNotShowAgain;
     string? initialText;
     int maxTextLength = -1;
-    string? message;
+    object? message;
 
 
     /// <summary>
@@ -79,7 +81,7 @@ public class TextInputDialog : CommonDialog<string?>
     /// <summary>
     /// Get or set message shown in dialog.
     /// </summary>
-    public string? Message
+    public object? Message
     {
         get => this.message;
         set
@@ -102,9 +104,9 @@ public class TextInputDialog : CommonDialog<string?>
         dialog.DoNotAskAgain = this.doNotAskAgain;
         dialog.DoNotShowAgain = this.doNotShowAgain;
         dialog.MaxTextLength = this.maxTextLength;
-        dialog.Message = this.message;
+        using var messageBindingToken = this.BindValueToDialog(dialog, TextInputDialogImpl.MessageProperty, this.message);
         dialog.Text = this.initialText;
-        dialog.Title = this.Title ?? Avalonia.Application.Current?.Name;
+        using var titleBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
         var result = await dialog.ShowDialog<string?>(owner);
         this.doNotAskAgain = dialog.DoNotAskAgain;
         this.doNotShowAgain = dialog.DoNotShowAgain;

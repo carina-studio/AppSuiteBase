@@ -1,4 +1,5 @@
-﻿using CarinaStudio.Threading;
+﻿using Avalonia;
+using CarinaStudio.Threading;
 using System;
 using System.Threading.Tasks;
 
@@ -14,7 +15,7 @@ public class MessageDialog:CommonDialog<MessageDialogResult>
 	MessageDialogResult? defaultResult;
 	bool? doNotAskOrShowAgain;
 	MessageDialogIcon icon = MessageDialogIcon.Information;
-	string? message;
+	object? message;
 
 
 	/// <summary>
@@ -80,7 +81,7 @@ public class MessageDialog:CommonDialog<MessageDialogResult>
 	/// <summary>
 	/// Get or set message shown in dialog.
 	/// </summary>
-	public string? Message
+	public object? Message
 	{
 		get => this.message;
 		set
@@ -104,8 +105,8 @@ public class MessageDialog:CommonDialog<MessageDialogResult>
 		dialog.DefaultResult = this.defaultResult;
 		dialog.DoNotAskOrShowAgain = this.doNotAskOrShowAgain;
 		dialog.Icon = this.icon;
-		dialog.Message = this.message;
-		dialog.Title = this.Title ?? Avalonia.Application.Current?.Name;
+		using var messageBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.MessageProperty, this.message);
+		using var titleBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
 		var result = await dialog.ShowDialog<MessageDialogResult>(owner);
 		this.doNotAskOrShowAgain = dialog.DoNotAskOrShowAgain;
 		return result;

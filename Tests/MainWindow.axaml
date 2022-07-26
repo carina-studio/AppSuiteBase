@@ -15,6 +15,11 @@
 		Icon="/AppIcon.ico"
         Title="{DynamicResource String/TestMainWIndow.Title}">
 	
+	<Window.Resources>
+		<sys:String x:Key="String/MessageDialog.Message">This is a message dialog!</sys:String>
+		<sys:String x:Key="String/MessageDialog.Result">The result is {0}</sys:String>
+	</Window.Resources>
+	
 	<Window.Styles>
 		<Style Selector="CaptionButtons">
 			<Setter Property="MaxHeight" Value="{Binding $parent[Window].ExtendClientAreaTitleBarHeightHint}"/>

@@ -1,4 +1,5 @@
-﻿using CarinaStudio.Threading;
+﻿using Avalonia;
+using CarinaStudio.Threading;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,37 @@ namespace CarinaStudio.AppSuite.Controls
     {
         // Fields.
         readonly Thread thread = Thread.CurrentThread;
-        string? title;
+        object? title;
+
+
+        /// <summary>
+        /// Bind given value to property of dialog.
+        /// </summary>
+        /// <param name="dialog">Dialog.</param>
+        /// <param name="property">Property.</param>
+        /// <param name="value">Value.</param>
+        /// <returns><see cref="IDisposable"/> represents bound value.</returns>
+        protected IDisposable BindValueToDialog(CarinaStudio.Controls.Window dialog, AvaloniaProperty<string?> property, object? value)
+        {
+            if (value == null)
+                return EmptyDisposable.Default;
+            if (value is string stringValue)
+            {
+                dialog.SetValue<string?>(property, stringValue);
+                return EmptyDisposable.Default;
+            }
+            if (value is IObservable<string?> stringObservable)
+                return dialog.Bind(property, stringObservable);
+            if (value is IObservable<object?> observable)
+            {
+                return observable.Subscribe(it =>
+                {
+                    dialog.SetValue<string?>(property, it?.ToString());
+                });
+            }
+            dialog.SetValue<string?>(property, value.ToString());
+            return EmptyDisposable.Default;
+        }
 
 
         /// <summary>
@@ -71,7 +102,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
 		/// Get or set title of dialog.
 		/// </summary>
-		public string? Title
+		public object? Title
         {
             get => this.title;
             set
