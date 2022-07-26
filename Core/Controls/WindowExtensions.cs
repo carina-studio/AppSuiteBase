@@ -29,7 +29,9 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <returns>Size of system decorations.</returns>
 		public static Thickness GetSystemDecorationSizes(this Avalonia.Controls.Window window)
         {
-			var screen = window.Screens.ScreenFromVisual(window);
+			var screen = window.Screens.ScreenFromWindow(window.PlatformImpl) ?? window.Screens.Primary;
+			if (screen == null)
+				return default;
 			var pixelDensity = screen.PixelDensity;
 			if (Platform.IsGnome)
 				return new Thickness(0, 75 / pixelDensity, 0, 0); // Ubuntu
@@ -44,7 +46,7 @@ namespace CarinaStudio.AppSuite.Controls
 					return new Thickness(borderWidth, Math.Max(0, windowHeight - clientSize.Height - borderWidth), borderWidth, borderWidth);
 				}
             }
-			return new Thickness();
+			return default;
 		}
 	}
 }

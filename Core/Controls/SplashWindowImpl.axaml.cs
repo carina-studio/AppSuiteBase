@@ -47,7 +47,7 @@ namespace CarinaStudio.AppSuite.Controls
 			this.showAction = new(() =>
 			{
 				// get screen info
-				var screen = this.Screens.ScreenFromVisual(this);
+				var screen = this.Screens.ScreenFromWindow(this.PlatformImpl);
 				if (screen == null && this.stopwatch.ElapsedMilliseconds < MaxShowingRetryingDuration)
 				{
 					this.showAction?.Schedule(RetryShowingDelay);

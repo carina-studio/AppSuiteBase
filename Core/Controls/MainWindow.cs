@@ -201,7 +201,7 @@ namespace CarinaStudio.AppSuite.Controls
                 return;
 
             // layout
-            this.Application.LayoutMainWindows(Screens.ScreenFromVisual(this), layout, this);
+            this.Application.LayoutMainWindows(this.Screens.ScreenFromWindow(this.PlatformImpl) ?? this.Screens.Primary, layout, this);
         }
 
 
@@ -546,7 +546,12 @@ namespace CarinaStudio.AppSuite.Controls
                 && double.IsFinite(this.restoredWidth)
                 && double.IsFinite(this.restoredHeight))
             {
-                var screen = Screens.ScreenFromVisual(this);
+                var screen = this.Screens.ScreenFromWindow(this.PlatformImpl) ?? this.Screens.Primary;
+                if (screen == null)
+                {
+                    this.Logger.LogWarning("Cannot find screen for restoring size of window");
+                    return;
+                }
                 var workingAreaWidth = (double)screen.WorkingArea.Width;
                 var workingAreaHeight = (double)screen.WorkingArea.Height;
                 if (!Platform.IsMacOS)

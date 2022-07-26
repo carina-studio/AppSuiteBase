@@ -1132,6 +1132,11 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogError("Cannot layout main windows when shutting down");
                 return;
             }
+            if (screen == null)
+            {
+                this.Logger.LogError("No screen to layout main windows");
+                return;
+            }
             var mainWindowCount = this.mainWindows.Count;
             if (mainWindowCount <= 0)
             {
