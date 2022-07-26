@@ -1929,15 +1929,6 @@
 													<GradientStop Color="{DynamicResource Color/TabItem.Header.Background.Selected}" Offset="1"/>
 												</LinearGradientBrush>
 											</Border.Background>
-											<Border.RenderTransform>
-												<ScaleTransform ScaleX="{Binding $parent[TabItem].IsSelected, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacity}}">
-													<!--ScaleTransform.Transitions>
-														<Transitions>
-															<DoubleTransition Property="ScaleX" Delay="0:0:0.15" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
-														</Transitions>
-													</ScaleTransform.Transitions-->
-												</ScaleTransform>
-											</Border.RenderTransform>
 											<!--Border.Transitions>
 												<Transitions>
 													<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
