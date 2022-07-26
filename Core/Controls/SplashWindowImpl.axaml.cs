@@ -107,6 +107,17 @@ namespace CarinaStudio.AppSuite.Controls
 			if (app.ReleasingType != ApplicationReleasingType.Stable)
 				this.Version += $" {AppReleasingTypeConverter.Convert<string?>(app.ReleasingType)}";
 			AvaloniaXamlLoader.Load(this);
+			if (Platform.IsWindows && !Platform.IsWindows8OrAbove)
+			{
+				this.Get<Panel>("rootPanel").Margin = default;
+				this.Get<Border>("backgroundBorder").Let(it =>
+				{
+					it.BoxShadow = default;
+					it.CornerRadius = default;
+				});
+				this.Get<Border>("backgroundOverlayBorder").CornerRadius = default;
+				this.Get<Border>("border").CornerRadius = default;
+			}
 			this.Styles.Add((Avalonia.Styling.IStyle)(app.EffectiveThemeMode switch
 			{
 				ThemeMode.Light => this.Resources["lightTheme"].AsNonNull(),

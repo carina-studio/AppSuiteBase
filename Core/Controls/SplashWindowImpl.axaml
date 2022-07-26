@@ -20,10 +20,10 @@
 		<!-- Dark theme -->
 		<Styles x:Key="darkTheme">
 			<Styles.Resources>
-				<SolidColorBrush x:Key="Brush/SplashWindow.Background" Color="#111111"/>
+				<SolidColorBrush x:Key="Brush/SplashWindow.Background" Color="#1e1e1e"/>
 				<LinearGradientBrush x:Key="Brush/SplashWindow.Border" EndPoint="0%,100%" StartPoint="0%,0%">
 					<GradientStop Offset="0" Color="#444444"/>
-					<GradientStop Offset="1" Color="#070707"/>
+					<GradientStop Offset="1" Color="#171717"/>
 				</LinearGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#ffffff"/>
 			</Styles.Resources>
@@ -77,10 +77,10 @@
 			</Transitions>
 		</Border.Transitions>
 
-		<Panel Margin="{StaticResource Thickness/SplashWindow.Margin}">
+		<Panel Name="rootPanel" Margin="{StaticResource Thickness/SplashWindow.Margin}">
 
 			<!-- Background -->
-			<Border Background="{DynamicResource Brush/SplashWindow.Background}" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" BoxShadow="{StaticResource BoxShadows/SplashWindow}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
+			<Border Name="backgroundBorder" Background="{DynamicResource Brush/SplashWindow.Background}" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" BoxShadow="{StaticResource BoxShadows/SplashWindow}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
 			<Border Name="backgroundOverlayBorder" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" CornerRadius="{StaticResource CornerRadius/SplashWindow}" Opacity="0">
 				<Border.Background>
 					<LinearGradientBrush EndPoint="0%,50%" StartPoint="0%,0%">
@@ -190,7 +190,7 @@
 			</Grid>
 
 			<!-- Border -->
-			<Border BorderBrush="{DynamicResource Brush/SplashWindow.Border}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
+			<Border Name="border" BorderBrush="{DynamicResource Brush/SplashWindow.Border}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
 
 		</Panel>
 	</Border>

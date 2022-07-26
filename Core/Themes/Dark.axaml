@@ -39,9 +39,6 @@
 
 		<!-- Separator -->
 		<Color x:Key="Color/Separator.Background">#4fffffff</Color>
-
-		<!-- SplashWindow -->
-		<Color x:Key="Color/SplashWindow.Background">#1e1e1e</Color>
 		
 		<!-- StatusBar -->
 		<Color x:Key="Color/StatusBar.Background.Inactive">#303030</Color>
