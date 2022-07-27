@@ -1,4 +1,5 @@
 ﻿using Avalonia.Data.Converters;
+using CarinaStudio.AppSuite.Scripting;
 using CarinaStudio.Configuration;
 using CarinaStudio.ViewModels;
 using System;
@@ -75,6 +76,16 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
+        /// Get or set default language of script.
+        /// </summary>
+        public ScriptLanguage DefaultScriptLanguage
+        {
+            get => this.Settings.GetValueOrDefault(SettingKeys.DefaultScriptLanguage);
+            set => this.Settings.SetValue<ScriptLanguage>(SettingKeys.DefaultScriptLanguage, value);
+        }
+
+
+        /// <summary>
         /// Get effective custom screen scale factor.
         /// </summary>
         public double EffectiveCustomScreenScaleFactor { get => this.Application.EffectiveCustomScreenScaleFactor; }
@@ -87,6 +98,26 @@ namespace CarinaStudio.AppSuite.ViewModels
         {
             get => this.Settings.GetValueOrDefault(SettingKeys.EnableBlurryBackground);
             set => this.Settings.SetValue<bool>(SettingKeys.EnableBlurryBackground, value);
+        }
+
+
+        /// <summary>
+        /// Get or set whether script running is enabled or not.
+        /// </summary>
+        public bool EnableRunningScript
+        {
+            get => this.Settings.GetValueOrDefault(SettingKeys.EnableRunningScript);
+            set => this.Settings.SetValue<bool>(SettingKeys.EnableRunningScript, value);
+        }
+
+
+        /// <summary>
+        /// Get or set indentation size in source code of script.
+        /// </summary>
+        public int IndentationSizeInScript
+        {
+            get => this.Settings.GetValueOrDefault(SettingKeys.IndentationSizeInScript);
+            set => this.Settings.SetValue<int>(SettingKeys.IndentationSizeInScript, value);
         }
 
 
@@ -183,14 +214,22 @@ namespace CarinaStudio.AppSuite.ViewModels
                 this.OnPropertyChanged(nameof(AcceptNonStableApplicationUpdate));
             else if (key == SettingKeys.Culture)
                 this.OnPropertyChanged(nameof(Culture));
+            else if (key == SettingKeys.DefaultScriptLanguage)
+                this.OnPropertyChanged(nameof(DefaultScriptLanguage));
             else if (key == SettingKeys.EnableBlurryBackground)
                 this.OnPropertyChanged(nameof(EnableBlurryBackground));
+            else if (key == SettingKeys.EnableRunningScript)
+                this.OnPropertyChanged(nameof(EnableRunningScript));
+            else if (key == SettingKeys.IndentationSizeInScript)
+                this.OnPropertyChanged(nameof(IndentationSizeInScript));
             else if (key == SettingKeys.LaunchWithSplashWindow)
                 this.OnPropertyChanged(nameof(LaunchWithSplashWindow));
             else if (key == SettingKeys.NotifyApplicationUpdate)
                 this.OnPropertyChanged(nameof(NotifyApplicationUpdate));
             else if (key == SettingKeys.ThemeMode)
                 this.OnPropertyChanged(nameof(ThemeMode));
+            else if (key == SettingKeys.UseSpacesForIndentationInScript)
+                this.OnPropertyChanged(nameof(UseSpacesForIndentationInScript));
         }
 
 
@@ -213,5 +252,15 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// Get available values of <see cref="ThemeMode"/>.
         /// </summary>
         public IList<ThemeMode> ThemeModes { get; } 
+
+
+        /// <summary>
+        /// Get or set whether using spaces in source code of script or not.
+        /// </summary>
+        public bool UseSpacesForIndentationInScript
+        {
+            get => this.Settings.GetValueOrDefault(SettingKeys.UseSpacesForIndentationInScript);
+            set => this.Settings.SetValue<bool>(SettingKeys.UseSpacesForIndentationInScript, value);
+        }
     }
 }

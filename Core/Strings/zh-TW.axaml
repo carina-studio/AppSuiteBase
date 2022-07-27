@@ -51,14 +51,20 @@
 	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">接收非正式版本的應用程式更新</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">語言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">使用者介面縮放比例</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">預設腳本語言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">系統支援時使用模糊玻璃視窗背景</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">啟用腳本執行</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript.ConfirmEnabling">執行腳本可能會修改或損壞您的電腦，在執行腳本之前您必須仔細確認您所撰寫或匯入的腳本。是否確定要啟用腳本執行？</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">縮排空白字元數</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">啟動應用程式時顯示啟動畫面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">日誌輸出目標連接埠</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">需要重新啟動應用程式以套用</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NotifyApplicationUpdate">有應用程式更新時顯示通知</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Others">其他設定</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.Scripting">腳本</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">佈景</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UserInterface">使用者介面</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">使用空白字元進行縮排</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">將重新啟動應用程式以套用</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartMainWindowsToTakeEffect">將重新啟動視窗以套用</sys:String>
 

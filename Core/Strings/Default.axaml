@@ -52,14 +52,20 @@
 	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">Accept non-stable application update</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">Language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">User interface scale factor</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">Default language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">Use blurry window background if supported by system</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">Enable scripting</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript.ConfirmEnabling">Your computer may be modified or damaged by running script. You need to review the script you wrote or imported carefully before running it. Are you sure to enable scripting?</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">Size of indentation</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">Show splash screen when launching</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">Target port of log output</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">Need to restart application to take effect</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NotifyApplicationUpdate">Notify when application update found</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Others">Other Settings</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.Scripting">Scripting</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">Theme</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UserInterface">User Interface</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">Use spaces for indentation</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">Will restart application to take effect</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartMainWindowsToTakeEffect">Will restart windows to take effect</sys:String>
 

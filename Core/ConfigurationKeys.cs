@@ -16,6 +16,10 @@ namespace CarinaStudio.AppSuite
         /// Whether retrieved application update info should be always accepted or not.
         /// </summary>
         public static readonly SettingKey<bool> ForceAcceptingAppUpdateInfo = new(nameof(ForceAcceptingAppUpdateInfo), false);
+        /// <summary>
+        /// Interval of checking whether script running is completed or not.
+        /// </summary>
+        public static readonly SettingKey<int> ScriptCompletionCheckingInterval = new(nameof(ScriptCompletionCheckingInterval), 3000);
 
 
         // Constructor.
