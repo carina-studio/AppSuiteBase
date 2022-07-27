@@ -10,19 +10,25 @@ namespace CarinaStudio.AppSuite.Scripting;
 public struct ScriptOptions
 {
     /// <summary>
+    /// Get or set type of context.
+    /// </summary>
+    public Type? ContextType { get; set; }
+
+
+    /// <summary>
     /// Get or set types which provide extension methods.
     /// </summary>
-    ISet<Type>? ExtensionTypes { get; set; }
+    public ISet<Type>? ExtensionTypes { get; set; }
 
 
     /// <summary>
     /// Get or set default imported namespaces.
     /// </summary>
-    ISet<string>? ImportedNamespaces { get; set; }
+    public ISet<string>? ImportedNamespaces { get; set; }
 
 
     /// <summary>
     /// Get or set assemblies referenced by script.
     /// </summary>
-    ISet<Assembly>? ReferencedAssemblies { get; set; }
+    public ISet<Assembly>? ReferencedAssemblies { get; set; }
 }

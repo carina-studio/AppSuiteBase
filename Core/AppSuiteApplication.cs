@@ -14,6 +14,7 @@ using Avalonia.Styling;
 using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Animation;
 using CarinaStudio.AppSuite.Product;
+using CarinaStudio.AppSuite.Scripting;
 using CarinaStudio.AutoUpdate;
 using CarinaStudio.AutoUpdate.Resolvers;
 using CarinaStudio.Collections;
@@ -2254,6 +2255,9 @@ namespace CarinaStudio.AppSuite
 
             // complete checking external dependencies
             await Task.WhenAll(checkExtDepTasks);
+
+            // initialize script manager
+            await ScriptManager.InitializeAsync(this, this.ScriptManagerImplType);
         }
 
 
@@ -2621,6 +2625,12 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogError(ex, $"Failed to save settings to '{this.settingsFilePath}'");
             }
         }
+
+
+        /// <summary>
+        /// Get type of implementation of <see cref="IScriptManager"/>.
+        /// </summary>
+        protected virtual Type? ScriptManagerImplType { get; }
 
 
         // Select current theme mode.

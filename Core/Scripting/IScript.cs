@@ -1,6 +1,7 @@
 using CarinaStudio.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -64,6 +65,14 @@ public interface IScript : IShareableDisposable<IScript>
     /// <typeparam name="R">Type of returned value.</typeparam>
     /// <returns>Task of running script.</returns>
     Task<R> RunAsync<TContext, R>(TContext context, CancellationToken cancellationToken = default) where TContext : IContext;
+
+
+    /// <summary>
+    /// Save script asynchronously.
+    /// </summary>
+    /// <param name="stream">Stream to save script.</param>
+    /// <returns>Task of saving script.</returns>
+    Task SaveAsync(Stream stream);
 
 
     /// <summary>
@@ -171,4 +180,41 @@ public static class ScriptExtensions
     /// <returns>Task of running script.</returns>
     public static Task RunAsync<TContext>(this IScript script, TContext context, CancellationToken cancellationToken = default) where TContext : IContext =>
         script.RunAsync<TContext, object?>(context, cancellationToken);
+    
+
+    /// <summary>
+    /// Save script asynchronously.
+    /// </summary>
+    /// <param name="script">Script.</param>
+    /// <param name="fileName">Name of file to save script.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Task of saving script.</returns>
+    public static async Task SaveAsync(this IScript script, string fileName, CancellationToken cancellationToken = default)
+    {
+        // open file
+        if (cancellationToken.IsCancellationRequested)
+            throw new TaskCanceledException();
+        var stream = await ScriptManager.Default.IOTaskFactory.StartNew(() =>
+        {
+            for (var i = 0; i < 5; ++i)
+            {
+                if (CarinaStudio.IO.File.TryOpenReadWrite(fileName, 1000, out var stream))
+                    return stream;
+                if (cancellationToken.IsCancellationRequested)
+                    throw new TaskCanceledException();
+            }
+            return null;
+        });
+        if (stream == null)
+            throw new IOException($"Unable to open file '{fileName}' to save script.");
+        if (cancellationToken.IsCancellationRequested)
+        {
+            Global.RunWithoutErrorAsync(stream.Close);
+            throw new TaskCanceledException();
+        }
+        
+        // save to file
+        using (stream)
+            await script.SaveAsync(stream);
+    }
 }
