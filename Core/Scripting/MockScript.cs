@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,18 +10,16 @@ namespace CarinaStudio.AppSuite.Scripting;
 /// </summary>
 class MockScript : IScript
 {
-    /// <summary>
-    /// Initialize new <see cref="MockScript"/> instance.
-    /// </summary>
-    /// <param name="app">Application.</param>
-    /// <param name="options">Options.</param>
-    public MockScript(IAppSuiteApplication app, ScriptOptions options)
+    // Constructor.
+    public MockScript(IAppSuiteApplication app, ScriptLanguage language, string source, ScriptOptions options)
     {
         if (options.ContextType == null)
             throw new ArgumentException("No context type specified.");
         this.Application = app;
         this.CompilationResults = new ICompilationResult[0];
+        this.Language = language;
         this.Options = options;
+        this.Source = source;
     }
 
 
@@ -53,7 +50,7 @@ class MockScript : IScript
 
 
     /// <inheritdoc/>
-    public ScriptLanguage Language { get => ScriptLanguage.JavaScript; }
+    public ScriptLanguage Language { get; }
 
 
     /// <inheritdoc/>
@@ -66,15 +63,10 @@ class MockScript : IScript
     
 
     /// <inheritdoc/>
-    public Task SaveAsync(Stream stream) =>
-        Task.CompletedTask;
-    
-
-    /// <inheritdoc/>
     public IScript Share() =>
-        new MockScript(this.Application, this.Options);
+        new MockScript(this.Application, this.Language, this.Source, this.Options);
 
 
     /// <inheritdoc/>
-    public string Source { get => ""; }
+    public string Source { get; }
 }

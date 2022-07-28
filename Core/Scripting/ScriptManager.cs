@@ -1,6 +1,8 @@
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Scripting;
@@ -29,7 +31,7 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
 
     /// <inheritdoc/>
     public IScript CreateScript(ScriptLanguage language, string source, ScriptOptions options) =>
-        this.implementation?.CreateScript(language, source, options) ?? new MockScript(this.Application, options);
+        this.implementation?.CreateScript(language, source, options) ?? new MockScript(this.Application, language, source, options);
     
 
     /// <summary>
@@ -103,6 +105,16 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
 
     /// <inheritdoc/>
     public TaskFactory IOTaskFactory { get; }
+
+
+    /// <inheritdoc/>
+    public Task<IScript> LoadScriptAsync(Stream stream, ScriptOptions options, CancellationToken cancellationToken) =>
+        this.implementation?.LoadScriptAsync(stream, options, cancellationToken) ?? throw new NotSupportedException();
+    
+
+    /// <inheritdoc/>
+    public Task SaveScriptAsync(IScript script, Stream stream, CancellationToken cancellationToken) =>
+        this.implementation?.SaveScriptAsync(script, stream, cancellationToken) ?? Task.CompletedTask;
 
 
     /// <inheritdoc/>
