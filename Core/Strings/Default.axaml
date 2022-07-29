@@ -235,6 +235,10 @@
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.W">Non-word characters</sys:String>
 	<sys:String x:Key="String/RegexTextBox.Watermark">Regular Expression</sys:String>
 
+	<!-- ScriptLanguage -->
+	<sys:String x:Key="String/ScriptLanguage.CSharp">C# Script</sys:String>
+	<sys:String x:Key="String/ScriptLanguage.JavaScript">JavaScript (ECMAScript 5.1)</sys:String>
+
 	<!-- SplashWindow -->
 	<sys:String x:Key="String/SplashWindow.Launching">Launching</sys:String>
 	<sys:String x:Key="String/SplashWindow.ShowingMainWindow">Showing main window</sys:String>

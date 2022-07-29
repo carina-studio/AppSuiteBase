@@ -237,6 +237,9 @@
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.W">非一般文字字元</sys:String>
 	<sys:String x:Key="String/RegexTextBox.Watermark">正規表示式</sys:String>
 
+	<!-- ScriptLanguage -->
+	<sys:String x:Key="String/ScriptLanguage.CSharp">C# 腳本語言</sys:String>
+
 	<!-- SplashWindow -->
 	<sys:String x:Key="String/SplashWindow.Launching">啟動中</sys:String>
 	<sys:String x:Key="String/SplashWindow.ShowingMainWindow">顯示主視窗</sys:String>
