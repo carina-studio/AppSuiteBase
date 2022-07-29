@@ -42,6 +42,23 @@ class MockScript : IScript
 
 
     /// <inheritdoc/>
+    public bool Equals(IScript? script) =>
+        script != null
+        && script.Language == this.Language
+        && script.Source == this.Source;
+    
+
+    /// <inheritdoc/>
+    public override bool Equals(object? obj) =>
+        obj is IScript script && this.Equals(script);
+
+
+    /// <inheritdoc/>
+    public override int GetHashCode() =>
+        this.Source.GetHashCode();
+
+
+    /// <inheritdoc/>
     public bool HasCompilationError { get => false; }
     
 
@@ -58,7 +75,7 @@ class MockScript : IScript
 
 
     /// <inheritdoc/>
-    public Task<R> RunAsync<TContext, R>(TContext context, CancellationToken cancellationToken = default) where TContext : IContext =>
+    public Task<R> RunAsync<R>(IContext context, CancellationToken cancellationToken = default) =>
         throw new ScriptException("Cannot run mock script.");
     
 

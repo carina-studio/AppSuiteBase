@@ -3,10 +3,10 @@ using System.Threading;
 namespace CarinaStudio.AppSuite.Scripting;
 
 /// <summary>
-/// Default implementation of <see cref="IScriptGlobals{TContext}"/>
+/// Globals for Roslyn-based script.
 /// </summary>
 /// <typeparam name="TContext">Type of context.</typeparam>
-public class ScriptGlobals<TContext> : IScriptGlobals<TContext> where TContext : IContext
+public class ScriptGlobals<TContext> where TContext : IContext
 {
     /// <summary>
     /// Initialize new <see cref="ScriptGlobals{TContext}"/> instance.

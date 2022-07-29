@@ -9,7 +9,7 @@ namespace CarinaStudio.AppSuite.Scripting;
 /// <summary>
 /// Represent a runnable script.
 /// </summary>
-public interface IScript : IShareableDisposable<IScript>
+public interface IScript : IShareableDisposable<IScript>, IEquatable<IScript>
 {
     /// <summary>
     /// Get application.
@@ -60,10 +60,9 @@ public interface IScript : IShareableDisposable<IScript>
     /// </summary>
     /// <param name="context">Context.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <typeparam name="TContext">Type of context.</typeparam>
     /// <typeparam name="R">Type of returned value.</typeparam>
     /// <returns>Task of running script.</returns>
-    Task<R> RunAsync<TContext, R>(TContext context, CancellationToken cancellationToken = default) where TContext : IContext;
+    Task<R> RunAsync<R>(IContext context, CancellationToken cancellationToken = default);
 
 
     /// <summary>
@@ -109,14 +108,13 @@ public static class ScriptExtensions
     /// <param name="script">Script.</param>
     /// <param name="context">Context.</param>
     /// <param name="cancellationCheck">Function to check whether script running should be cancelled or not.</param>
-    /// <typeparam name="TContext">Type of context.</typeparam>
-    public static void Run<TContext>(this IScript script, TContext context, Func<bool>? cancellationCheck = null) where TContext : IContext
+    public static void Run(this IScript script, IContext context, Func<bool>? cancellationCheck = null)
     {
         if (cancellationCheck?.Invoke() == true)
             return;
         using var cancellationTokenSource = new CancellationTokenSource();
         var checkingInternal = Math.Max(1000, script.Application.Configuration.GetValueOrDefault(ConfigurationKeys.ScriptCompletionCheckingInterval));
-        var runningTask = script.RunAsync<TContext, object?>(context, cancellationTokenSource.Token);
+        var runningTask = script.RunAsync<object?>(context, cancellationTokenSource.Token);
         while (runningTask.IsCompleted)
         {
             if (runningTask.Wait(checkingInternal))
@@ -137,16 +135,15 @@ public static class ScriptExtensions
     /// <param name="script">Script.</param>
     /// <param name="context">Context.</param>
     /// <param name="cancellationCheck">Function to check whether script running should be cancelled or not.</param>
-    /// <typeparam name="TContext">Type of context.</typeparam>
     /// <typeparam name="R">Type of returned value.</typeparam>
     /// <returns>Returned value from script.</returns>
-    public static R? Run<TContext, R>(this IScript script, TContext context, Func<bool>? cancellationCheck = null) where TContext : IContext
+    public static R? Run<R>(this IScript script, IContext context, Func<bool>? cancellationCheck = null)
     {
         if (cancellationCheck?.Invoke() == true)
             return default;
         using var cancellationTokenSource = new CancellationTokenSource();
         var checkingInternal = Math.Max(1000, script.Application.Configuration.GetValueOrDefault(ConfigurationKeys.ScriptCompletionCheckingInterval));
-        var runningTask = script.RunAsync<TContext, R>(context, cancellationTokenSource.Token);
+        var runningTask = script.RunAsync<R>(context, cancellationTokenSource.Token);
         while (runningTask.IsCompleted)
         {
             if (runningTask.Wait(checkingInternal))
@@ -167,8 +164,7 @@ public static class ScriptExtensions
     /// <param name="script">Script.</param>
     /// <param name="context">Context.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <typeparam name="TContext">Type of context.</typeparam>
     /// <returns>Task of running script.</returns>
-    public static Task RunAsync<TContext>(this IScript script, TContext context, CancellationToken cancellationToken = default) where TContext : IContext =>
-        script.RunAsync<TContext, object?>(context, cancellationToken);
+    public static Task RunAsync(this IScript script, IContext context, CancellationToken cancellationToken = default) =>
+        script.RunAsync<object?>(context, cancellationToken);
 }
