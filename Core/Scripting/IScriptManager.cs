@@ -1,5 +1,6 @@
 using System.Threading;
 using System.IO;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Scripting;
@@ -26,23 +27,20 @@ public interface IScriptManager : IApplicationObject<IAppSuiteApplication>
 
 
     /// <summary>
-    /// Load script asynchronously.
+    /// Load script from JSON data.
     /// </summary>
-    /// <param name="stream">Stream to load script.</param>
+    /// <param name="json">Root json element.</param>
     /// <param name="options">Script options.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Task of loading script.</returns>
-    Task<IScript> LoadScriptAsync(Stream stream, ScriptOptions options, CancellationToken cancellationToken = default);
+    /// <returns>Loaded script.</returns>
+    IScript LoadScript(JsonElement json, ScriptOptions options);
 
 
     /// <summary>
-    /// Save script asynchronously.
+    /// Save script as JSON data.
     /// </summary>
     /// <param name="script">Script to save.</param>
-    /// <param name="stream">Stream to save script.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Task of saving script.</returns>
-    Task SaveScriptAsync(IScript script, Stream stream, CancellationToken cancellationToken = default);
+    /// <param name="writer">Writer to write JSON data.</param>
+    void SaveScript(IScript script, Utf8JsonWriter writer);
 
 
     /// <summary>
@@ -90,9 +88,42 @@ public static class ScriptManagerExtensions
             throw new TaskCanceledException();
         }
 
+        // get JSON element
+        var jsonDocument = (JsonDocument?)null;
+        var json = await scriptManager.IOTaskFactory.StartNew(() =>
+        {
+            try
+            {
+                using (stream)
+                {
+                    jsonDocument = JsonDocument.Parse(stream);
+                    var root = jsonDocument.RootElement;
+                    if (root.ValueKind != JsonValueKind.Object)
+                        throw new JsonException("Root element must be an object.");
+                    if (!root.TryGetProperty("TypeId", out var jsonValue)
+                        || jsonValue.ValueKind != JsonValueKind.String
+                        || jsonValue.GetString() != "Script")
+                    {
+                        throw new JsonException("Invalid type identifier.");
+                    }
+                    return root.GetProperty("Script");
+                }
+            }
+            catch
+            {
+                jsonDocument?.Dispose();
+                throw;
+            }
+        });
+        if (cancellationToken.IsCancellationRequested)
+        {
+            jsonDocument?.Dispose();
+            throw new TaskCanceledException();
+        }
+
         // load script
-        using (stream)
-            return await scriptManager.LoadScriptAsync(stream, options, cancellationToken);
+        using (jsonDocument)
+            return scriptManager.LoadScript(json, options);
     }
 
 
@@ -129,7 +160,17 @@ public static class ScriptManagerExtensions
         }
 
         // save script
-        using (stream)
-            await scriptManager.SaveScriptAsync(script, stream, cancellationToken);
+        await scriptManager.IOTaskFactory.StartNew(() =>
+        {
+            using (stream)
+            {
+                using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions() { Indented = true });
+                writer.WriteStartObject();
+                writer.WriteString("TypeId", "Script");
+                writer.WritePropertyName("Script");
+                scriptManager.SaveScript(script, writer);
+                writer.WriteEndObject();
+            }
+        });
     }
 }

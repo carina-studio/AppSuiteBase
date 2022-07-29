@@ -12,7 +12,7 @@ namespace CarinaStudio.AppSuite.Scripting
 
 
         /// <summary>
-        /// Get linw of end of related source code starting from 1.
+        /// Get line of end of related source code starting from 1.
         /// </summary>
         int EndLine { get; }
 
@@ -30,7 +30,7 @@ namespace CarinaStudio.AppSuite.Scripting
 
 
         /// <summary>
-        /// Get linw of start of related source code starting from 1.
+        /// Get line of start of related source code starting from 1.
         /// </summary>
         int StartLine { get; }
         

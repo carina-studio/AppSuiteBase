@@ -2,7 +2,7 @@ using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
-using System.Threading;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Scripting;
@@ -108,13 +108,21 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
 
 
     /// <inheritdoc/>
-    public Task<IScript> LoadScriptAsync(Stream stream, ScriptOptions options, CancellationToken cancellationToken) =>
-        this.implementation?.LoadScriptAsync(stream, options, cancellationToken) ?? throw new NotSupportedException();
+    public IScript LoadScript(JsonElement json, ScriptOptions options) =>
+        this.implementation?.LoadScript(json, options) ?? throw new NotSupportedException();
     
 
     /// <inheritdoc/>
-    public Task SaveScriptAsync(IScript script, Stream stream, CancellationToken cancellationToken) =>
-        this.implementation?.SaveScriptAsync(script, stream, cancellationToken) ?? Task.CompletedTask;
+    public void SaveScript(IScript script, Utf8JsonWriter writer)
+    {
+        if (this.implementation != null)
+            this.implementation?.SaveScript(script, writer);
+        else
+        {
+            writer.WriteStartObject();
+            writer.WriteEndObject();
+        }
+    }
 
 
     /// <inheritdoc/>

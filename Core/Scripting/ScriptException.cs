@@ -24,11 +24,11 @@ public class ScriptException : Exception
     /// <summary>
     /// Get column of related source code of script starting from 0.
     /// </summary>
-    int Column { get; }
+    public int Column { get; }
 
 
     /// <summary>
     /// Get line of related source code of script starting from 1.
     /// </summary>
-    int Line { get; }
+    public int Line { get; }
 }
