@@ -1,9 +1,11 @@
 using CarinaStudio.AppSuite.Controls;
+using CarinaStudio.Collections;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,6 +30,25 @@ public class Context : IContext
 
     /// <inheritdoc/>
     public IAppSuiteApplication Application { get; }
+
+
+    /// <summary>
+    /// Dispose and clear all values from <see cref="Data"/>.
+    /// </summary>
+    public void ClearAndDisposeData()
+    {
+        if (this.Data.IsEmpty())
+            return;
+        var values = this.Data.Values.ToArray();
+        this.Data.Clear();
+        foreach (var value in values)
+        {
+            if (value is IDisposable disposable)
+                disposable.Dispose();
+            else if (value is IAsyncDisposable asyncDisposable)
+                _ = asyncDisposable.DisposeAsync();
+        }
+    }
 
 
     /// <inheritdoc/>
