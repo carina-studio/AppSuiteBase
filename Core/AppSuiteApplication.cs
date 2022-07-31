@@ -1174,7 +1174,7 @@ namespace CarinaStudio.AppSuite
                 {
                     Buttons = Controls.MessageDialogButtons.YesNo,
                     Icon = Controls.MessageDialogIcon.Question,
-                    Message = this.GetString("MainWindow.ConfirmLayoutingLotsOfMainWindows"),
+                    Message = Avalonia.Controls.ResourceNodeExtensions.GetResourceObservable(this, "String/MainWindow.ConfirmLayoutingLotsOfMainWindows"),
                 }.ShowDialog(activeMainWindow);
                 if (result != Controls.MessageDialogResult.Yes)
                     return;

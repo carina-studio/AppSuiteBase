@@ -132,6 +132,19 @@ partial class MessageDialogImpl : Dialog
 	}
 
 
+	// Called when application string resources updated.
+	void OnAppStringsUpdated(object? sender, EventArgs e) =>
+		this.UpdateButtonText();
+	
+
+	// Called when closed.
+	protected override void OnClosed(EventArgs e)
+	{
+		this.Application.StringsUpdated -= this.OnAppStringsUpdated;
+		base.OnClosed(e);
+	}
+
+
 	// Called when closing.
 	protected override void OnClosing(CancelEventArgs e)
 	{
@@ -144,6 +157,9 @@ partial class MessageDialogImpl : Dialog
 	// Called when opened.
 	protected override void OnOpened(EventArgs e)
 	{
+		// attach to application
+		this.Application.StringsUpdated += this.OnAppStringsUpdated;
+
 		// setup icon
 		var app = this.Application;
 		if (((Avalonia.Application)app).TryFindResource<IImage>($"Image/Icon.{this.Icon}.Colored", out var image))
@@ -170,15 +186,12 @@ partial class MessageDialogImpl : Dialog
 		{
 			case MessageDialogButtons.OK:
 				this.SetValue<MessageDialogResult?>(Button1ResultProperty, MessageDialogResult.OK);
-				this.SetValue<string?>(Button1TextProperty, app.GetString("Common.OK"));
 				this.SetValue<bool>(IsButton1VisibleProperty, true);
 				defaultButton = defaultResult == MessageDialogResult.OK ? this.FindControl<Button>("button1") : null;
 				break;
 			case MessageDialogButtons.OKCancel:
 				this.SetValue<MessageDialogResult?>(Button1ResultProperty, MessageDialogResult.OK);
 				this.SetValue<MessageDialogResult?>(Button2ResultProperty, MessageDialogResult.Cancel);
-				this.SetValue<string?>(Button1TextProperty, app.GetString("Common.OK"));
-				this.SetValue<string?>(Button2TextProperty, app.GetString("Common.Cancel"));
 				this.SetValue<bool>(IsButton1VisibleProperty, true);
 				this.SetValue<bool>(IsButton2VisibleProperty, true);
 				defaultButton = defaultResult switch
@@ -191,8 +204,6 @@ partial class MessageDialogImpl : Dialog
 			case MessageDialogButtons.YesNo:
 				this.SetValue<MessageDialogResult?>(Button1ResultProperty, MessageDialogResult.Yes);
 				this.SetValue<MessageDialogResult?>(Button2ResultProperty, MessageDialogResult.No);
-				this.SetValue<string?>(Button1TextProperty, app.GetString("Common.Yes"));
-				this.SetValue<string?>(Button2TextProperty, app.GetString("Common.No"));
 				this.SetValue<bool>(IsButton1VisibleProperty, true);
 				this.SetValue<bool>(IsButton2VisibleProperty, true);
 				defaultButton = defaultResult switch
@@ -206,9 +217,6 @@ partial class MessageDialogImpl : Dialog
 				this.SetValue<MessageDialogResult?>(Button1ResultProperty, MessageDialogResult.Yes);
 				this.SetValue<MessageDialogResult?>(Button2ResultProperty, MessageDialogResult.No);
 				this.SetValue<MessageDialogResult?>(Button3ResultProperty, MessageDialogResult.Cancel);
-				this.SetValue<string?>(Button1TextProperty, app.GetString("Common.Yes"));
-				this.SetValue<string?>(Button2TextProperty, app.GetString("Common.No"));
-				this.SetValue<string?>(Button3TextProperty, app.GetString("Common.Cancel"));
 				this.SetValue<bool>(IsButton1VisibleProperty, true);
 				this.SetValue<bool>(IsButton2VisibleProperty, true);
 				this.SetValue<bool>(IsButton3VisibleProperty, true);
@@ -223,6 +231,7 @@ partial class MessageDialogImpl : Dialog
 			default:
 				throw new ArgumentException();
 		}
+		this.UpdateButtonText();
 		if (defaultButton != null)
 			this.SynchronizationContext.Post(defaultButton.Focus);
 
@@ -240,6 +249,34 @@ partial class MessageDialogImpl : Dialog
 			if (this.doNotAskOrShowAgainPanel.IsVisible)
 				this.DoNotAskOrShowAgain = this.doNotAskOrShowAgainCheckBox.IsChecked;
 			this.Close(result);
+		}
+	}
+
+
+	// Update text of buttons.
+	void UpdateButtonText()
+	{
+		var app = this.Application;
+		switch (this.Buttons)
+		{
+			case MessageDialogButtons.OK:
+				this.SetValue<string?>(Button1TextProperty, app.GetString("Common.OK"));
+				break;
+			case MessageDialogButtons.OKCancel:
+				this.SetValue<string?>(Button1TextProperty, app.GetString("Common.OK"));
+				this.SetValue<string?>(Button2TextProperty, app.GetString("Common.Cancel"));
+				break;
+			case MessageDialogButtons.YesNo:
+				this.SetValue<string?>(Button1TextProperty, app.GetString("Common.Yes"));
+				this.SetValue<string?>(Button2TextProperty, app.GetString("Common.No"));
+				break;
+			case MessageDialogButtons.YesNoCancel:
+				this.SetValue<string?>(Button1TextProperty, app.GetString("Common.Yes"));
+				this.SetValue<string?>(Button2TextProperty, app.GetString("Common.No"));
+				this.SetValue<string?>(Button3TextProperty, app.GetString("Common.Cancel"));
+				break;
+			default:
+				throw new ArgumentException();
 		}
 	}
 }
