@@ -567,6 +567,13 @@
 	</Style>
 
 	<!-- BrowseButton -->
+	<Style Selector="Border.BrowseButtonIcon">
+		<Setter Property="Height" Value="{StaticResource Double/BrowseButton.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/BrowseButton.Icon.Size}"/>
+	</Style>
 	<Style Selector="Button.BrowseButton">
 		<Setter Property="Content" Value="…"/>
 		<Setter Property="Margin" Value="{StaticResource Thickness/BrowseButton.Margin}"/>
@@ -584,6 +591,13 @@
 	</Style>
 	<Style Selector=":is(Image).BrowseButtonIcon:disabled">
 		<Setter Property="Opacity" Value="{StaticResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<Style Selector="Panel.BrowseButtonIcon">
+		<Setter Property="Height" Value="{StaticResource Double/BrowseButton.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{StaticResource Double/BrowseButton.Icon.Size}"/>
 	</Style>
 	<Style Selector="ToggleButton.BrowseButton">
 		<Setter Property="Content" Value="…"/>
