@@ -125,7 +125,18 @@ public static class ScriptExtensions
                 return;
             }
         }
-        _ = runningTask.Result;
+        try
+        {
+            _ = runningTask.Result;
+        }
+        catch (Exception ex)
+        {
+            if (ex is AggregateException && ex.InnerException != null)
+                ex = ex.InnerException;
+            if (ex is ScriptException)
+                throw ex;
+            throw new ScriptException(ex.Message, -1, -1, ex);
+        }
     }
 
 
@@ -154,7 +165,18 @@ public static class ScriptExtensions
                 return default;
             }
         }
-        return runningTask.Result;
+        try
+        {
+            return runningTask.Result;
+        }
+        catch (Exception ex)
+        {
+            if (ex is AggregateException && ex.InnerException != null)
+                ex = ex.InnerException;
+            if (ex is ScriptException)
+                throw ex;
+            throw new ScriptException(ex.Message, -1, -1, ex);
+        }
     }
 
 
