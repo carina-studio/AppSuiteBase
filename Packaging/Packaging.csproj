@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<AssemblyVersion>1.0.0.802</AssemblyVersion>
+		<Version>1.0.0.802</Version>
+		<PackageVersion>1.0.0.802</PackageVersion>
+		<RootNamespace>CarinaStudio.AppSuite.Packaging</RootNamespace>
+		<AssemblyName>CarinaStudio.AppSuite.Packaging</AssemblyName>
+		<Nullable>enable</Nullable>
+		<DocumentationFile>CarinaStudio.AppSuite.Packaging.xml</DocumentationFile>
+		<TargetFrameworks>net6.0</TargetFrameworks>
+		<Authors>Carina Studio</Authors>
+		<Company>Carina Studio</Company>
+		<Copyright>©2022 Carina Studio</Copyright>
+		<PackageId>CarinaStudio.AppSuite.Packaging</PackageId>
+		<Description>Tool to package application of Carina Studio based-on AppSuite.</Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/carina-studio/AppSuiteBase/</PackageProjectUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CarinaStudio.AppBase.Core" Version="1.6.13.727-preview" />
+	</ItemGroup>
+
+</Project>

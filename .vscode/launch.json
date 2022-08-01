@@ -27,6 +27,17 @@
             "stopAtEntry": false
         },
         {
+            "name": "Packaging Tests",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build-packaging-tests",
+            "program": "${workspaceFolder}/Packaging.Tests/bin/Debug/net6.0/CarinaStudio.AppSuite.Packaging.Tests.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/Tests",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
             "name": ".NET Core Attach",
             "type": "coreclr",
             "request": "attach"

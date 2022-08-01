@@ -2,7 +2,8 @@
 obj
 bin
 PublishProfiles
-/Core/CarinaStudio.AppSuite.Core.xml
-/Core.Tests/CarinaStudio.AppSuite.Core.Tests.xml
-/Packages
-/Tests/Properties/launchSettings.json
+Core/CarinaStudio.AppSuite.Core.xml
+Core.Tests/CarinaStudio.AppSuite.Core.Tests.xml
+Packaging/CarinaStudio.AppSuite.Packaging.xml
+Packages
+Tests/Properties/launchSettings.json
