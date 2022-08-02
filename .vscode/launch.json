@@ -32,8 +32,13 @@
             "request": "launch",
             "preLaunchTask": "build-packaging-tests",
             "program": "${workspaceFolder}/Packaging.Tests/bin/Debug/net6.0/CarinaStudio.AppSuite.Packaging.Tests.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/Tests",
+            "args": [
+                "create-package-manifest",
+                "linux",
+                "ULogViewer",
+                "2.0.1.801"
+            ],
+            "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "stopAtEntry": false
         },

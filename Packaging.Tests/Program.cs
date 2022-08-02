@@ -1,10 +1,7 @@
-﻿namespace CarinaStudio.AppSuite.Packaging
+﻿namespace CarinaStudio.AppSuite.Packaging;
+
+static class Program
 {
-    static class Program
-    {
-        static void Main(string[] args)
-        {
-            //
-        }
-    }
+    static int Main(string[] args) =>
+        (int)new PackagingTool().Run(args);
 }
