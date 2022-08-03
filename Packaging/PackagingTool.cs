@@ -357,7 +357,7 @@ public class PackagingTool
         version = null;
         try
         {
-            var regex = new Regex("^\\s*\\<Version\\>(?<Version>[^\\<]+)\\<");
+            var regex = new Regex("^\\s*\\<AssemblyVersion\\>(?<Version>[^\\<]+)\\<");
             using var reader = new StreamReader(projectFile, Encoding.UTF8);
             var line = reader.ReadLine();
             while (line != null)
