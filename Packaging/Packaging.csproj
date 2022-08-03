@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<AssemblyVersion>1.0.1.803</AssemblyVersion>
 		<Version>1.0.1.803</Version>
-		<PackageVersion>1.0.0.802</PackageVersion>
+		<PackageVersion>1.0.1.803</PackageVersion>
 		<RootNamespace>CarinaStudio.AppSuite.Packaging</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Packaging</AssemblyName>
 		<Nullable>enable</Nullable>
