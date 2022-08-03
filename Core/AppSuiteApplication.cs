@@ -2264,7 +2264,8 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Called to restore main windows when starting application.
         /// </summary>
-        protected virtual void OnRestoreMainWindows()
+        /// <returns>True if main windows have been restored successfully.</returns>
+        protected virtual bool OnRestoreMainWindows()
         {
             // load saved states
             using var stateStream = new MemoryStream(this.PersistentState.GetValueOrDefault(MainWindowViewModelStatesKey));
@@ -2278,18 +2279,30 @@ namespace CarinaStudio.AppSuite
             if (jsonDocument == null)
             {
                 this.Logger.LogWarning("No main windows to restore");
-                return;
+                return false;
             }
 
             // restore
-            this.Logger.LogWarning("Restore main windows");
             using (jsonDocument)
             {
                 if (jsonDocument.RootElement.ValueKind != JsonValueKind.Array)
-                    return;
+                {
+                    this.Logger.LogWarning("Invalid root JSON element to restore main windows");
+                    return false;
+                }
+                if (jsonDocument.RootElement.GetArrayLength() <= 0)
+                {
+                    this.Logger.LogWarning("Empty root JSON element to restore main windows");
+                    return false;
+                }
+                this.Logger.LogWarning("Restore main windows");
                 foreach (var stateElement in jsonDocument.RootElement.EnumerateArray())
                     this.ShowMainWindow(this.OnCreateMainWindowViewModel(stateElement), null);
             }
+            if (this.mainWindows.IsNotEmpty())
+                return true;
+            this.Logger.LogWarning("No main windows restored");
+            return false;
         }
 
 
