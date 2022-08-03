@@ -258,7 +258,7 @@ namespace CarinaStudio.AppSuite.Controls
                 this.Logger.LogWarning("Prepare shutting down to update application");
                 await this.OnPrepareShuttingDownForApplicationUpdate();
                 this.Logger.LogWarning("Shut down to update application");
-                this.Application.Shutdown();
+                this.SynchronizationContext.PostDelayed(this.Application.Shutdown, 300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
             }
         }
 
