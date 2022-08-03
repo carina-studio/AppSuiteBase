@@ -289,7 +289,7 @@ namespace CarinaStudio.AppSuite.Controls
 				return;
 			
 			// show name
-			if (!productManager.TryGetProductName(productId, out var name))
+			if (!productManager.TryGetProductName(productId, out string name))
 				name = productId;
 			(view.Children[0] as Avalonia.Controls.TextBlock)?.Let(it => it.Text = name);
 

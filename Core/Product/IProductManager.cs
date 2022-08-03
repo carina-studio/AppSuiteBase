@@ -112,6 +112,15 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
 
 
     /// <summary>
+    /// Try getting description of specific product.
+    /// </summary>
+    /// <param name="id">ID of product.</param>
+    /// <param name="description">Description of product.</param>
+    /// <returns>True if description got successfully.</returns>
+    bool TryGetProductDescription(string id, out IObservable<string> description);
+
+
+    /// <summary>
     /// Try getting e-mail address of specific product.
     /// </summary>
     /// <param name="id">ID of product.</param>
@@ -136,6 +145,15 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
     /// <param name="name">Name of product.</param>
     /// <returns>True if name got successfully.</returns>
     bool TryGetProductName(string id, out string name);
+
+
+    /// <summary>
+    /// Try getting display name of specific product.
+    /// </summary>
+    /// <param name="id">ID of product.</param>
+    /// <param name="name">Name of product.</param>
+    /// <returns>True if name got successfully.</returns>
+    bool TryGetProductName(string id, out IObservable<string> name);
 
 
     /// <summary>
@@ -241,6 +259,14 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
     }
 
 
+    /// <inheritdoc/>
+    public bool TryGetProductDescription(string id, out IObservable<string> description)
+    {
+        description = new FixedObservableValue<string>("");
+        return false;
+    }
+
+
     /// <summary>
     /// Try getting active devices of specified product.
     /// </summary>
@@ -284,6 +310,14 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
     public bool TryGetProductName(string id, out string name)
     {
         name = "";
+        return false;
+    }
+
+
+    /// <inheritdoc/>
+    public bool TryGetProductName(string id, out IObservable<string> name)
+    {
+        name = new FixedObservableValue<string>("");
         return false;
     }
 
