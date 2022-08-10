@@ -1011,10 +1011,16 @@ namespace CarinaStudio.AppSuite
         // Transform RGB color values.
         static Color GammaTransform(Color color, double gamma)
         {
-            double r = (color.R / 255.0);
-            double g = (color.G / 255.0);
-            double b = (color.B / 255.0);
-            return Color.FromArgb(color.A, (byte)(Math.Pow(r, gamma) * 255 + 0.5), (byte)(Math.Pow(g, gamma) * 255 + 0.5), (byte)(Math.Pow(b, gamma) * 255 + 0.5));
+            var r = (color.R / 255.0);
+            var g = (color.G / 255.0);
+            var b = (color.B / 255.0);
+            var l = (r + g + b) / 3;
+            var scale = Math.Pow(l, gamma) / l;
+            return Color.FromArgb(color.A, 
+                (byte)(Math.Min(255, r * scale * 255) + 0.5), 
+                (byte)(Math.Min(255, g * scale * 255) + 0.5), 
+                (byte)(Math.Min(255, b * scale * 255) + 0.5)
+            );
         }
 
 
@@ -3235,15 +3241,18 @@ namespace CarinaStudio.AppSuite
                 }
 
                 // accent colors
-                var sysAccentColorDark1 = GammaTransform(accentColor, 2.8);
-                var sysAccentColorLight1 = GammaTransform(accentColor, 0.682);
+                var gammaLight1 = 0.8;
+                var gammaLight2 = 0.65;
+                var gammaLight3 = 0.5;
+                var sysAccentColorDark1 = GammaTransform(accentColor, 1 / gammaLight1);
+                var sysAccentColorLight1 = GammaTransform(accentColor, gammaLight1);
                 this.accentColorResources["SystemAccentColor"] = accentColor;
                 this.accentColorResources["SystemAccentColorDark1"] = sysAccentColorDark1;
-                this.accentColorResources["SystemAccentColorDark2"] = GammaTransform(accentColor, 4.56);
-                this.accentColorResources["SystemAccentColorDark3"] = GammaTransform(accentColor, 5.365);
+                this.accentColorResources["SystemAccentColorDark2"] = GammaTransform(accentColor, 1 / gammaLight2);
+                this.accentColorResources["SystemAccentColorDark3"] = GammaTransform(accentColor, 1 / gammaLight3);
                 this.accentColorResources["SystemAccentColorLight1"] = sysAccentColorLight1;
-                this.accentColorResources["SystemAccentColorLight2"] = GammaTransform(accentColor, 0.431);
-                this.accentColorResources["SystemAccentColorLight3"] = GammaTransform(accentColor, 0.006);
+                this.accentColorResources["SystemAccentColorLight2"] = GammaTransform(accentColor, gammaLight2);
+                this.accentColorResources["SystemAccentColorLight3"] = GammaTransform(accentColor, gammaLight3);
                 this.accentColorResources["Color/Accent.WithOpacity.0.75"] = Color.FromArgb((byte)(accentColor.A * 0.75 + 0.5), accentColor.R, accentColor.G, accentColor.B);
                 this.accentColorResources["Color/Accent.WithOpacity.0.5"] = Color.FromArgb((byte)(accentColor.A * 0.5 + 0.5), accentColor.R, accentColor.G, accentColor.B);
                 this.accentColorResources["Color/Accent.WithOpacity.0.25"] = Color.FromArgb((byte)(accentColor.A * 0.25 + 0.5), accentColor.R, accentColor.G, accentColor.B);

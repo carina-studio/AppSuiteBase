@@ -240,6 +240,44 @@
 								</appControls:ToolBarScrollViewer>
 							</Border>
 
+							<StackPanel Height="30" Margin="5" Orientation="Horizontal">
+								<Border Width="30">
+									<Border.Background>
+										<SolidColorBrush Color="{DynamicResource SystemAccentColorLight3}"/>
+									</Border.Background>
+								</Border>
+								<Border Width="30">
+									<Border.Background>
+										<SolidColorBrush Color="{DynamicResource SystemAccentColorLight2}"/>
+									</Border.Background>
+								</Border>
+								<Border Width="30">
+									<Border.Background>
+										<SolidColorBrush Color="{DynamicResource SystemAccentColorLight1}"/>
+									</Border.Background>
+								</Border>
+								<Border Width="30">
+									<Border.Background>
+										<SolidColorBrush Color="{DynamicResource SystemAccentColor}"/>
+									</Border.Background>
+								</Border>
+								<Border Width="30">
+									<Border.Background>
+										<SolidColorBrush Color="{DynamicResource SystemAccentColorDark1}"/>
+									</Border.Background>
+								</Border>
+								<Border Width="30">
+									<Border.Background>
+										<SolidColorBrush Color="{DynamicResource SystemAccentColorDark2}"/>
+									</Border.Background>
+								</Border>
+								<Border Width="30">
+									<Border.Background>
+										<SolidColorBrush Color="{DynamicResource SystemAccentColorDark3}"/>
+									</Border.Background>
+								</Border>
+							</StackPanel>
+
 							<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5" ToolTip.Tip="{DynamicResource String/Common.Copy.WithGesture}"/>
 							<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
 
