@@ -566,6 +566,20 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
+        /// <summary>
+        /// Show dialog of appliation information.
+        /// </summary>
+        /// <returns>Task of showing dialog.</returns>
+        public async Task ShowApplicationInfoDialogAsync()
+        {
+            this.VerifyAccess();
+            if (!this.IsOpened)
+                return;
+            using var appInfo = this.OnCreateApplicationInfo();
+            await new ApplicationInfoDialog(appInfo).ShowDialog(this);
+        }
+
+
         // Show application update dialog.
         async Task<bool> ShowAppUpdateDialog(bool checkAppUpdateWhenOpening)
         {
