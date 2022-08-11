@@ -166,6 +166,19 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public void CancelSavingSize() =>
             this.saveWindowSizeAction.Cancel();
+        
+
+        /// <summary>
+		/// Check for application update asynchronously.
+		/// </summary>
+        /// <returns>True if application update has been found and update has been started.</returns>      
+		public Task<bool> CheckForApplicationUpdateAsync()
+        {
+            this.VerifyAccess();
+            if (!this.IsOpened)
+                return Task.FromResult(false);
+            return this.ShowAppUpdateDialog(true);
+        }
 
 
         /// <summary>
@@ -235,30 +248,14 @@ namespace CarinaStudio.AppSuite.Controls
                 return;
 
             // show dialog
-            using var updater = this.OnCreateApplicationUpdater();
-            var dialogResult = ApplicationUpdateDialogResult.None;
             IsNotifyingAppUpdateFound = true;
             try
             {
-                dialogResult = await new ApplicationUpdateDialog(updater)
-                {
-                    CheckForUpdateWhenShowing = false
-                }.ShowDialog(this);
+                await this.ShowAppUpdateDialog(false);
             }
             finally
             {
                 IsNotifyingAppUpdateFound = false;
-            }
-            if (this.IsClosed)
-                return;
-
-            // shutdown to update
-            if (dialogResult == ApplicationUpdateDialogResult.ShutdownNeeded)
-            {
-                this.Logger.LogWarning("Prepare shutting down to update application");
-                await this.OnPrepareShuttingDownForApplicationUpdate();
-                this.Logger.LogWarning("Shut down to update application");
-                this.SynchronizationContext.PostDelayed(this.Application.Shutdown, 300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
             }
         }
 
@@ -566,6 +563,31 @@ namespace CarinaStudio.AppSuite.Controls
                 this.restoredWidth = double.NaN;
                 this.restoredHeight = double.NaN;
             }
+        }
+
+
+        // Show application update dialog.
+        async Task<bool> ShowAppUpdateDialog(bool checkAppUpdateWhenOpening)
+        {
+            // check for update
+			using var appUpdater = new AppSuite.ViewModels.ApplicationUpdater();
+			var result = await new AppSuite.Controls.ApplicationUpdateDialog(appUpdater)
+			{
+				CheckForUpdateWhenShowing = checkAppUpdateWhenOpening
+			}.ShowDialog(this);
+            if (this.IsClosed)
+                return false;
+
+			// shutdown to update
+			if (result == AppSuite.Controls.ApplicationUpdateDialogResult.ShutdownNeeded)
+			{
+				this.Logger.LogWarning("Prepare shutting down to update application");
+                await this.OnPrepareShuttingDownForApplicationUpdate();
+                this.Logger.LogWarning("Shut down to update application");
+                this.SynchronizationContext.PostDelayed(this.Application.Shutdown, 300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
+                return true;
+			}
+            return false;
         }
 
 

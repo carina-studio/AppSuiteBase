@@ -304,14 +304,8 @@ namespace CarinaStudio.AppSuite.Tests
             this.canShowAppInfo.Update(true);
         }
 
-        async void ShowAppUpdateDialog()
-        {
-            using var appUpdater = this.OnCreateApplicationUpdater();
-            await new ApplicationUpdateDialog(appUpdater)
-            {
-                CheckForUpdateWhenShowing = true,
-            }.ShowDialog(this);
-        }
+        void ShowAppUpdateDialog() =>
+            this.CheckForApplicationUpdateAsync();
 
         async void ShowMessageDialog()
         {
