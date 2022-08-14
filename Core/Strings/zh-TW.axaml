@@ -182,7 +182,7 @@
 	
 	<!-- ExternalDependency-->
 	<sys:String x:Key="String/ExternalDependency.XRandR">X 視窗系統調整及旋轉延伸工具 (XRandR)</sys:String>
-	<sys:String x:Key="String/ExternalDependency.XRandR.Description">用以偵測顯示設定及套用使用者介面縮放比例。</sys:String>
+	<sys:String x:Key="String/ExternalDependency.XRandR.Description">用以偵測顯示設定及套用使用者介面縮放比例。安裝完成後需重新啟動應用程式。</sys:String>
 
 	<!-- ExternalDependencyPriority -->
 	<sys:String x:Key="String/ExternalDependencyPriority.Optional">這是可選擇 (非必要) 的相依性</sys:String>

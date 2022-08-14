@@ -183,7 +183,7 @@
 
 	<!-- ExternalDependency-->
 	<sys:String x:Key="String/ExternalDependency.XRandR">Resize and Rotate Extension for X Window System (XRandR)</sys:String>
-	<sys:String x:Key="String/ExternalDependency.XRandR.Description">To detect display settings and apply user interface scale factor.</sys:String>
+	<sys:String x:Key="String/ExternalDependency.XRandR.Description">To detect display settings and apply user interface scale factor. Need to restart application to take effect after installation.</sys:String>
 
 	<!-- ExternalDependencyPriority -->
 	<sys:String x:Key="String/ExternalDependencyPriority.Optional">It is an optional dependency</sys:String>
