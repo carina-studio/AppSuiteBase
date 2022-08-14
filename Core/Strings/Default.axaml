@@ -52,6 +52,7 @@
 	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">Accept non-stable application update</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">Language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">User interface scale factor</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR tool is not installed yet.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">Default language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">Use blurry window background if supported by system</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">Enable scripting</sys:String>
@@ -179,6 +180,10 @@
 	<!-- ExternalDependenciesDialog -->
 	<sys:String x:Key="String/ExternalDependenciesDialog.ExternalDependency.Install">Download and install</sys:String>
 	<sys:String x:Key="String/ExternalDependenciesDialog.Title">External dependencies</sys:String>
+
+	<!-- ExternalDependency-->
+	<sys:String x:Key="String/ExternalDependency.XRandR">Resize and Rotate Extension for X Window System (XRandR)</sys:String>
+	<sys:String x:Key="String/ExternalDependency.XRandR.Description">To detect display settings and apply user interface scale factor.</sys:String>
 
 	<!-- ExternalDependencyPriority -->
 	<sys:String x:Key="String/ExternalDependencyPriority.Optional">It is an optional dependency</sys:String>

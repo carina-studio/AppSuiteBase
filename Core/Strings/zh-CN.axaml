@@ -50,7 +50,8 @@
 	<sys:String x:Key="String/ApplicationOptions">应用程序选项</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">接收非正式版本的应用程序更新</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">语言</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">使用者界面缩放比例</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">用户界面缩放比例</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR 工具尚未安装。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">默认脚本语言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">系统支持情况下使用模糊玻璃窗口背景</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">启用脚本执行</sys:String>
@@ -63,7 +64,7 @@
 	<sys:String x:Key="String/ApplicationOptions.Others">其他设定</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Scripting">脚本</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">主题模式</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.UserInterface">使用者界面</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.UserInterface">用户界面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">使用空白字符进行缩排</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">将重新启动应用程序以开启</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartMainWindowsToTakeEffect">将重新启动窗口以开启</sys:String>
@@ -178,6 +179,10 @@
 	<!-- ExternalDependenciesDialog -->
 	<sys:String x:Key="String/ExternalDependenciesDialog.ExternalDependency.Install">下载及安装</sys:String>
 	<sys:String x:Key="String/ExternalDependenciesDialog.Title">外部依赖</sys:String>
+
+	<!-- ExternalDependency-->
+	<sys:String x:Key="String/ExternalDependency.XRandR">X 窗口系统调整及旋转扩展工具 (XRandR)</sys:String>
+	<sys:String x:Key="String/ExternalDependency.XRandR.Description">用以侦测显示设定及套用用户介面缩放比例。</sys:String>
 
 	<!-- ExternalDependencyPriority -->
 	<sys:String x:Key="String/ExternalDependencyPriority.Optional">这是可选择 (非必要) 的依赖</sys:String>
