@@ -141,7 +141,10 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 				if (!isFirstActivation)
 					this.Refresh(false);
 				else
+				{
+					this.Refresh(true);
 					isFirstActivation = false;
+				}
 			}
 		});
 	}

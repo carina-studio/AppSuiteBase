@@ -160,6 +160,7 @@
 
 							</Menu>
 
+							<!-- Toolbar -->
 							<Border Classes="ToolBar">
 								<appControls:ToolBarScrollViewer Name="toolBarScrollViewer">
 									<Grid Background="{x:Static Brushes.Transparent}" ColumnDefinitions="Auto,*,Auto">
@@ -240,6 +241,7 @@
 								</appControls:ToolBarScrollViewer>
 							</Border>
 
+							<!-- Accent colors -->
 							<StackPanel Height="30" Margin="5" Orientation="Horizontal">
 								<Border Width="30">
 									<Border.Background>
@@ -376,6 +378,7 @@
 								</StackPanel>
 							</Border>
 
+							<!-- In-place actions -->
 							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
 								<StackPanel Orientation="Horizontal">
 									<Button Classes="InPlaceAction_Button_Medium">
@@ -401,7 +404,6 @@
 									</ToggleButton>
 								</StackPanel>
 							</Border>
-
 							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
 								<StackPanel Orientation="Horizontal">
 									<Button Classes="InPlaceAction_Button_Large">
@@ -428,7 +430,7 @@
 								</StackPanel>
 							</Border>
 							
-							<StackPanel Orientation="Horizontal">
+							<WrapPanel Orientation="Horizontal">
 								<Button Content="Button" Margin="5"/>
 								<Button Content="Button" IsEnabled="False" Margin="5"/>
 								<Button Classes="accent" Content="Button" Margin="5"/>
@@ -438,37 +440,39 @@
 								<ToggleButton Content="ToggleButton" IsChecked="True" IsEnabled="False" Margin="5"/>
 								<RepeatButton Content="RepeatButton" Margin="5"/>
 								<RepeatButton Content="RepeatButton" IsEnabled="False" Margin="5"/>
-							</StackPanel>
+							</WrapPanel>
 
-							<StackPanel Orientation="Horizontal">
+							<WrapPanel Orientation="Horizontal">
 								<ToggleSwitch Margin="5"/>
 								<ToggleSwitch IsEnabled="False" Margin="5"/>
 								<ToggleSwitch IsChecked="True" IsEnabled="False" Margin="5"/>
-							</StackPanel>
+							</WrapPanel>
 
-							<StackPanel Orientation="Horizontal">
+							<WrapPanel Orientation="Horizontal">
 								<CheckBox Content="CheckBox" Margin="5"/>
 								<CheckBox Content="Disabled" IsEnabled="False" Margin="5"/>
 								<CheckBox Content="Disabled" IsChecked="True" IsEnabled="False" Margin="5"/>
 								<CheckBox Content="Indeternimate" IsChecked="{x:Null}" Margin="5"/>
-							</StackPanel>
+							</WrapPanel>
 
-							<StackPanel Orientation="Horizontal">
+							<WrapPanel Orientation="Horizontal">
 								<RadioButton Content="RadioButton" Margin="5"/>
 								<RadioButton Content="Disabled" IsEnabled="False" Margin="5"/>
 								<RadioButton Content="Disabled" IsChecked="True" IsEnabled="False" Margin="5"/>
 								<RadioButton Content="Indeternimate" IsChecked="{x:Null}" Margin="5"/>
-							</StackPanel>
+							</WrapPanel>
 
-							<StackPanel Orientation="Horizontal">
-								<Button Command="{Binding $parent[Window].ShowAppInfoDialog}" Content="Show App Info" Margin="5"/>
-								<Button Command="{Binding $parent[Window].ShowAppUpdateDialog}" Content="Show App Update" Margin="5"/>
-								<Button Command="{Binding $parent[Window].ShowMessageDialog}" Content="Show MessageDialog" Margin="5"/>
-								<Button Command="{Binding $parent[Window].ShowTestDialog}" Content="Show Test Dialog" Margin="5"/>
+							<!-- Test actions -->
+							<WrapPanel Orientation="Horizontal">
+								<Button Command="{Binding $parent[Window].ShowAppInfoDialog}" Content="App Info" Margin="5"/>
+								<Button Command="{Binding $parent[Window].ShowAppUpdateDialog}" Content="App Update" Margin="5"/>
+								<Button Command="{Binding $parent[Window].ShowMessageDialog}" Content="MessageDialog" Margin="5"/>
+								<Button Command="{Binding $parent[Window].ShowExternalDependenciesDialog}" Content="External Dependencies" Margin="5"/>
+								<Button Command="{Binding $parent[Window].ShowTestDialog}" Content="Test Dialog" Margin="5"/>
 								<Button Command="{Binding $parent[Window].Application.ShowMainWindow}" Content="Open New Window" Margin="5"/>
 								<Button Command="{Binding $parent[Window].RestartApp}" Content="Restart App" Margin="5"/>
 								<Button Command="{Binding $parent[Window].EditConfiguration}" Content="Edit Configuration" Margin="5"/>
-							</StackPanel>
+							</WrapPanel>
 
 							<abControls:LinkTextBlock HorizontalAlignment="Left" IsEnabled="False" Margin="5" Text="Google" Uri="http://www.google.com/"/>
 							<abControls:LinkTextBlock Command="{Binding $parent[Window].SwitchTheme}" HorizontalAlignment="Left" Margin="5" Text="Switch theme"/>
