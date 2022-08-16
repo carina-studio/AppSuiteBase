@@ -15,7 +15,7 @@
 
 	<!-- ApplicationInfoDialog -->
 	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">变更列表</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">组件列表</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">已载入组件列表</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">应用程序图标由</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">提供，并发布于</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon" xml:space="preserve">。</sys:String>
