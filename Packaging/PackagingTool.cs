@@ -127,38 +127,42 @@ public class PackagingTool
                 ZipFile.ExtractToDirectory(Path.Combine(currentVersionDir, currentVersionPackageName), tempCurrentVersionDir);
 
                 // filter and keep diff files
-                foreach (var currentFile in new DirectoryInfo(tempCurrentVersionDir).GetFiles())
+                var tempCurrentVersionSubDirQueue = new Queue<string>().Also(it => it.Enqueue(tempCurrentVersionDir));
+                while (tempCurrentVersionSubDirQueue.TryDequeue(out var tempCurrentVersionSubDir))
                 {
-                    var prevFile = new FileInfo(Path.Combine(tempPrevVersionDir, currentFile.Name));
-                    if (!prevFile.Exists || prevFile.Length != currentFile.Length)
-                        continue;
-                    using var prevFileStream = new FileStream(prevFile.FullName, FileMode.Open, FileAccess.Read);
-                    using var currentFileStream = new FileStream(currentFile.FullName, FileMode.Open, FileAccess.Read);
-                    var areSameFiles = true;
-                    var readCount = prevFileStream.Read(buffer1, 0, buffer1.Length);
-                    while (readCount > 0)
+                    foreach (var currentFile in new DirectoryInfo(tempCurrentVersionSubDir).GetFiles())
                     {
-                        if (currentFileStream.Read(buffer2, 0, buffer2.Length) != readCount)
+                        var prevFile = new FileInfo(Path.Combine(tempPrevVersionDir, Path.GetRelativePath(tempCurrentVersionSubDir, currentFile.FullName)));
+                        if (!prevFile.Exists || prevFile.Length != currentFile.Length)
+                            continue;
+                        using var prevFileStream = new FileStream(prevFile.FullName, FileMode.Open, FileAccess.Read);
+                        using var currentFileStream = new FileStream(currentFile.FullName, FileMode.Open, FileAccess.Read);
+                        var areSameFiles = true;
+                        var readCount = prevFileStream.Read(buffer1, 0, buffer1.Length);
+                        while (readCount > 0)
                         {
-                            areSameFiles = false;
-                            break;
-                        }
-                        for (var i = readCount - 1; i >= 0; --i)
-                        {
-                            if (buffer1[i] != buffer2[i])
+                            if (currentFileStream.Read(buffer2, 0, buffer2.Length) != readCount)
                             {
                                 areSameFiles = false;
                                 break;
                             }
+                            for (var i = readCount - 1; i >= 0; --i)
+                            {
+                                if (buffer1[i] != buffer2[i])
+                                {
+                                    areSameFiles = false;
+                                    break;
+                                }
+                            }
+                            if (!areSameFiles)
+                                break;
+                            readCount = prevFileStream.Read(buffer1, 0, buffer1.Length);
                         }
-                        if (!areSameFiles)
-                            break;
-                        readCount = prevFileStream.Read(buffer1, 0, buffer1.Length);
-                    }
-                    if (areSameFiles)
-                    {
-                        currentFileStream.Close();
-                        currentFile.Delete();
+                        if (areSameFiles)
+                        {
+                            currentFileStream.Close();
+                            currentFile.Delete();
+                        }
                     }
                 }
 
