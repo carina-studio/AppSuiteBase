@@ -395,7 +395,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 					{
 						if (!it.EndsWith("/dotnet") && !it.EndsWith("\\dotnet.exe"))
 						{
-							argsBuilder.AppendFormat(" -executable {0}", it);
+							argsBuilder.AppendFormat(" -executable \"{0}\"", it);
 							argsBuilder.AppendFormat(" -executable-args \"{0}\"", AppSuiteApplication.RestoreMainWindowsArgument);
 						}
 					});
