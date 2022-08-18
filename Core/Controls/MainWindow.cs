@@ -60,6 +60,7 @@ namespace CarinaStudio.AppSuite.Controls
         ThicknessAnimator? contentPaddingAnimator;
         ContentPresenter? contentPresenter;
         bool hasMultipleMainWindows;
+        bool isClosingScheduled;
         bool isFirstContentPaddingUpdate = true;
         bool isShowingInitialDialogs;
         long openedTime;
@@ -325,6 +326,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// <param name="e"></param>
         protected override void OnClosed(EventArgs e)
         {
+            this.isClosingScheduled = false;
             this.DataContext = null;
             this.Application.Configuration.SettingChanged -= this.OnConfigurationChanged;
             ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged -= this.OnMainWindowsChanged;
@@ -598,6 +600,7 @@ namespace CarinaStudio.AppSuite.Controls
 				this.Logger.LogWarning("Prepare shutting down to update application");
                 await this.OnPrepareShuttingDownForApplicationUpdate();
                 this.Logger.LogWarning("Shut down to update application");
+                this.isClosingScheduled = true;
                 this.SynchronizationContext.PostDelayed(this.Application.Shutdown, 300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
                 return true;
 			}
@@ -611,7 +614,7 @@ namespace CarinaStudio.AppSuite.Controls
             // check state
             if (this.AreInitialDialogsClosed)
                 return;
-            if (!this.IsOpened || !this.IsActive)
+            if (!this.IsOpened || !this.IsActive || this.isClosingScheduled)
                 return;
             if (this.HasDialogs || this.isShowingInitialDialogs)
                 return;
@@ -633,7 +636,8 @@ namespace CarinaStudio.AppSuite.Controls
                 if (!await new UserAgreementDialog(appInfo).ShowDialog(this))
                 {
                     this.Logger.LogWarning("User decline the current User Agreement");
-                    this.Close();
+                    this.isClosingScheduled = true;
+                    this.SynchronizationContext.PostDelayed(this.Close, 300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
                 }
                 this.isShowingInitialDialogs = false;
                 return;
@@ -648,7 +652,8 @@ namespace CarinaStudio.AppSuite.Controls
                 if (!await new PrivacyPolicyDialog(appInfo).ShowDialog(this))
                 {
                     this.Logger.LogWarning("User decline the current Privacy Policy");
-                    this.Close();
+                    this.isClosingScheduled = true;
+                    this.SynchronizationContext.PostDelayed(this.Close, 300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
                 }
                 this.isShowingInitialDialogs = false;
                 return;
@@ -724,9 +729,12 @@ namespace CarinaStudio.AppSuite.Controls
             }
 
             // all dialogs closed
-            this.Logger.LogWarning("All initial dialogs closed");
-            this.SetAndRaise<bool>(AreInitialDialogsClosedProperty, ref this.areInitialDialogsClosed, true);
-            this.OnInitialDialogsClosed();
+            if (!this.isClosingScheduled)
+            {
+                this.Logger.LogWarning("All initial dialogs closed");
+                this.SetAndRaise<bool>(AreInitialDialogsClosedProperty, ref this.areInitialDialogsClosed, true);
+                this.OnInitialDialogsClosed();
+            }
         }
 
 
