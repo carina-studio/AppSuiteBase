@@ -73,7 +73,7 @@ public class PackagingTool
             }
 
             // find all packages of current version
-            var packageFileNameRegex = new Regex("^(?<AppName>[\\w\\d]+)\\-(?<Version>[\\d\\.]+)\\-(?<PlatformId>[\\w]+\\-[\\w\\d]+)(?<FxDependent>\\-fx\\-dependent)?\\.zip$", RegexOptions.IgnoreCase);
+            var packageFileNameRegex = new Regex("^(?<AppName>[\\w\\d\\.]+)\\-(?<Version>[\\d\\.]+)\\-(?<PlatformId>[\\w]+\\-[\\w\\d]+)(?<FxDependent>\\-fx\\-dependent)?\\.zip$", RegexOptions.IgnoreCase);
             var currentVersionPackageNames = new HashSet<string>(CarinaStudio.IO.PathEqualityComparer.Default).Also(it =>
             {
                 foreach (var path in Directory.EnumerateFiles(currentVersionDir, "*.zip"))
@@ -217,7 +217,7 @@ public class PackagingTool
         try
         {
             // check directory
-            var packageFileNameRegex = new Regex("^(?<AppName>[\\w\\d]+)(\\-(?<PrevVersion>[\\d\\.]+))?-(?<Version>[\\d\\.]+)\\-(?<PlatformId>[\\w]+\\-[\\w\\d]+)(?<FxDependent>\\-fx\\-dependent)?\\.zip$", RegexOptions.IgnoreCase);
+            var packageFileNameRegex = new Regex("^(?<AppName>[\\w\\d\\.]+)(\\-(?<PrevVersion>[\\d\\.]+))?-(?<Version>[\\d\\.]+)\\-(?<PlatformId>[\\w]+\\-[\\w\\d]+)(?<FxDependent>\\-fx\\-dependent)?\\.zip$", RegexOptions.IgnoreCase);
             var packagesDir = Path.Combine(PackagesFolderName, version.ToString());
             if (!Directory.Exists(packagesDir))
             {
