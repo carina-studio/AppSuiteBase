@@ -74,6 +74,17 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
 
 
     /// <summary>
+    /// Cancel all scheduled profiles to be saved.
+    /// </summary>
+    protected void CancelSavingProfiles()
+    {
+        this.VerifyAccess();
+        this.profilesToSave.Clear();
+        this.saveProfilesAction.Cancel();
+    }
+
+
+    /// <summary>
     /// Compare profiles for sorting profiles.
     /// </summary>
     /// <param name="lhs">Profile at left hand side.</param>
@@ -240,6 +251,16 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
 
 
     /// <summary>
+    /// Called to save profile to file asynchronously.
+    /// </summary>
+    /// <param name="profile">Profile to be saved.</param>
+    /// <param name="fileName">File name.</param>
+    /// <returns>Task of saving profile.</returns>
+    protected virtual Task OnSaveProfileAsync(TProfile profile, string fileName) =>
+        profile.SaveAsync(fileName, true);
+
+
+    /// <summary>
     /// Get all profiles managed by this instance.
     /// </summary>
     protected IReadOnlyList<TProfile> Profiles { get; }
@@ -333,7 +354,7 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
             try
             {
                 this.Logger.LogTrace($"Save profile '{profile.Id}'");
-                await profile.SaveAsync(Path.Combine(this.ProfilesDirectory, $"{profile.Id}.json"), true);
+                await this.OnSaveProfileAsync(profile, Path.Combine(this.ProfilesDirectory, $"{profile.Id}.json"));
             }
             catch (Exception ex)
             {
@@ -357,6 +378,22 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         if (profile.IsBuiltIn || !this.profilesToSave.Add(profile))
             return;
         this.saveProfilesAction.Schedule(SavingProfilesDelay);
+    }
+
+
+    /// <summary>
+    /// Schedule saving all profiles to files.
+    /// </summary>
+    protected void ScheduleSavingProfiles()
+    {
+        this.VerifyAccess();
+        foreach (var profile in this.profiles)
+        {
+            if (!profile.IsBuiltIn)
+                this.profilesToSave.Add(profile);
+        }
+        if (this.profilesToSave.IsNotEmpty())
+            this.saveProfilesAction.Schedule(SavingProfilesDelay);
     }
 
 
