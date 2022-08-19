@@ -23,6 +23,10 @@ namespace CarinaStudio.AppSuite.ViewModels
         public static readonly IValueConverter ThemeModeConverter = new Converters.EnumConverter(AppSuiteApplication.CurrentOrNull, typeof(ThemeMode));
 
 
+        // Fields.
+        readonly List<ExternalDependency> attachedExternalDependencies = new();
+
+
         /// <summary>
         /// Initialize new <see cref="ApplicationOptions"/> instance.
         /// </summary>
@@ -36,6 +40,17 @@ namespace CarinaStudio.AppSuite.ViewModels
                 if (!this.Application.IsSystemThemeModeSupported)
                     it.Remove(ThemeMode.System);
             }).AsReadOnly();
+            foreach (var externalDependency in this.Application.ExternalDependencies)
+            {
+                switch (externalDependency.Id)
+                {
+                    case "XRandR":
+                        this.attachedExternalDependencies.Add(externalDependency);
+                        externalDependency.PropertyChanged += this.OnExternalDependencyPropertyChanged;
+                        this.OnExternalDependencyPropertyChanged(externalDependency, new(nameof(ExternalDependency.State)));
+                        break;
+                }
+            }
         }
 
 
@@ -82,6 +97,15 @@ namespace CarinaStudio.AppSuite.ViewModels
         {
             get => this.Settings.GetValueOrDefault(SettingKeys.DefaultScriptLanguage);
             set => this.Settings.SetValue<ScriptLanguage>(SettingKeys.DefaultScriptLanguage, value);
+        }
+
+
+        /// <inheritdoc/>
+        protected override void Dispose(bool disposing)
+        {
+            foreach (var externalDependency in this.attachedExternalDependencies)
+                externalDependency.PropertyChanged -= this.OnExternalDependencyPropertyChanged;
+            base.Dispose(disposing);
         }
 
 
@@ -149,6 +173,12 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
+        /// Check whether XRandR tool is installed or not.
+        /// </summary>
+        public bool IsXRandRInstalled { get; private set; }
+
+
+        /// <summary>
         /// Whether splash window should be shown when launching application or not.
         /// </summary>
         public bool LaunchWithSplashWindow
@@ -199,6 +229,36 @@ namespace CarinaStudio.AppSuite.ViewModels
                 this.OnPropertyChanged(nameof(IsRestartingMainWindowsNeeded));
             else if (e.PropertyName == nameof(AppSuiteApplication.LogOutputTargetPort))
                 this.OnPropertyChanged(nameof(LogOutputTargetPort));
+        }
+
+
+        // Called when property of external dependency changed.
+        void OnExternalDependencyPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (sender is not ExternalDependency externalDependency)
+                return;
+            switch (externalDependency.Id)
+            {
+                case "XRandR":
+                    switch (externalDependency.State)
+                    {
+                        case ExternalDependencyState.Available:
+                            if (!this.IsXRandRInstalled)
+                            {
+                                this.IsXRandRInstalled = true;
+                                this.OnPropertyChanged(nameof(IsXRandRInstalled));
+                            }
+                            break;
+                        case ExternalDependencyState.Unavailable:
+                            if (this.IsXRandRInstalled)
+                            {
+                                this.IsXRandRInstalled = false;
+                                this.OnPropertyChanged(nameof(IsXRandRInstalled));
+                            }
+                            break;
+                    }
+                    break;
+            }
         }
 
 

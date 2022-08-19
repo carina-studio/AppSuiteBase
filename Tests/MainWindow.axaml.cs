@@ -305,6 +305,9 @@ namespace CarinaStudio.AppSuite.Tests
 
         void ShowAppUpdateDialog() =>
             this.CheckForApplicationUpdateAsync();
+        
+        void ShowExternalDependenciesDialog() =>
+            _ = new ExternalDependenciesDialog().ShowDialog(this);
 
         async void ShowMessageDialog()
         {

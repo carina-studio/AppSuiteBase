@@ -15,7 +15,7 @@
 
 	<!-- ApplicationInfoDialog -->
 	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">變更列表</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">組件列表</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">已載入組件列表</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">應用程式圖示由</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">提供，並發布於</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon" xml:space="preserve">。</sys:String>
@@ -51,6 +51,7 @@
 	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">接收非正式版本的應用程式更新</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">語言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">使用者介面縮放比例</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR 工具尚未安裝。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">預設腳本語言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">系統支援時使用模糊玻璃視窗背景</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">啟用腳本執行</sys:String>
@@ -178,6 +179,10 @@
 	<!-- ExternalDependenciesDialog -->
 	<sys:String x:Key="String/ExternalDependenciesDialog.ExternalDependency.Install">下載及安裝</sys:String>
 	<sys:String x:Key="String/ExternalDependenciesDialog.Title">外部相依性</sys:String>
+	
+	<!-- ExternalDependency-->
+	<sys:String x:Key="String/ExternalDependency.XRandR">X 視窗系統調整及旋轉延伸工具 (XRandR)</sys:String>
+	<sys:String x:Key="String/ExternalDependency.XRandR.Description">用以偵測顯示設定及套用使用者介面縮放比例。安裝完成後需重新啟動應用程式。</sys:String>
 
 	<!-- ExternalDependencyPriority -->
 	<sys:String x:Key="String/ExternalDependencyPriority.Optional">這是可選擇 (非必要) 的相依性</sys:String>

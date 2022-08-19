@@ -59,6 +59,8 @@ namespace CarinaStudio.AppSuite.Tests
         {
             this.externalDependencies.Add(new ExecutableExternalDependency(this, "dotnet", ExternalDependencyPriority.Optional, "dotnet", new Uri("https://dotnet.microsoft.com/"), new Uri("https://dotnet.microsoft.com/download")));
             this.externalDependencies.Add(new ExecutableExternalDependency(this, "bash", ExternalDependencyPriority.RequiredByFeatures, "bash", null, new Uri("https://www.gnu.org/software/bash/")));
+            if (Platform.IsLinux)
+				this.externalDependencies.Add(new ExecutableExternalDependency(this, "XRandR", ExternalDependencyPriority.Optional, "xrandr", new Uri("https://www.x.org/wiki/Projects/XRandR/"), new Uri("https://command-not-found.com/xrandr")));
             
             await base.OnPrepareStartingAsync();
 
