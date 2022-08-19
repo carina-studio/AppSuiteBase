@@ -155,6 +155,13 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     {
         this.Logger.LogTrace("Start initialization (default)");
 
+        // attach to product manager
+        this.Application.ProductManager.ProductStateChanged += (Product.IProductManager? pm, string productId) =>
+        {
+            if (pm != null)
+                this.OnProductStateChanged(pm, productId);
+        };
+
         // load built-in profiles
         var builtInProfiles = await this.OnLoadBuiltInProfilesAsync();
         if (builtInProfiles.IsNotEmpty())
@@ -230,6 +237,15 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Task of loading profile.</returns>
     protected abstract Task<TProfile> OnLoadProfileAsync(string fileName, CancellationToken cancellationToken = default);
+
+
+    /// <summary>
+    /// Called when product state changed.
+    /// </summary>
+    /// <param name="productManager">Product manager.</param>
+    /// <param name="productId">ID of product.</param>
+    protected virtual void OnProductStateChanged(Product.IProductManager productManager, string productId)
+    { }
 
 
     // Called when property of profile changed.
