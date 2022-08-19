@@ -228,7 +228,7 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
                 if (pm != null)
                     this.OnProductStateChanged(pm, productId);
             };
-            (pm as INotifyCollectionChanged)?.Let(it =>
+            (pm.Products as INotifyCollectionChanged)?.Let(it =>
             {
                 it.CollectionChanged += (_, e) =>
                 {
