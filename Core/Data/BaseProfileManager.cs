@@ -61,7 +61,7 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
                 throw new InvalidOperationException("The profile is already added to this manager.");
             throw new InvalidOperationException("The profile is already added to another manager.");
         }
-        this.Logger.LogTrace($"Add profile '{profile.Id}' ({profile.Name})");
+        this.Logger.LogTrace($"Add profile '{profile.Name}' ({profile.Id})");
         this.profilesById[profile.Id] = profile;
         this.profiles.Add(profile);
         profile.Manager = this;
@@ -122,6 +122,50 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
 
 
     /// <summary>
+    /// Load profiles from files asynchronously.
+    /// </summary>
+    /// <returns>Task of loading profiles.</returns>
+    protected async Task LoadProfilesAsync()
+    {
+        // get profile files
+        this.VerifyAccess();
+        var profileFileNames = await this.OnGetProfileFilesAsync();
+        this.Logger.LogDebug($"{profileFileNames.Count} profile file(s) found");
+
+        // load profiles
+        var profileCount = 0;
+        foreach (var fileName in profileFileNames)
+        {
+            try
+            {
+                this.Logger.LogTrace($"Load profile from '{fileName}'");
+                var profile = await this.OnLoadProfileAsync(fileName);
+                if (this.profilesById.ContainsKey(profile.Id))
+                {
+                    this.Logger.LogWarning($"Skip duplicate profile '{profile.Name}' ({profile.Id})");
+                    continue;
+                }
+                this.Logger.LogTrace($"Add profile '{profile.Name}' ({profile.Id})");
+                if (Path.GetFileNameWithoutExtension(fileName) == profile.Id)
+                    this.AddProfile(profile, false);
+                else
+                {
+                    this.Logger.LogWarning($"Correct file name of profile '{profile.Name}' ({profile.Id})");
+                    this.AddProfile(profile, true);
+                    Global.RunWithoutErrorAsync(() => File.Delete(fileName));
+                }
+                ++profileCount;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, $"Failed to load profile from '{fileName}'");
+            }
+        }
+        this.Logger.LogDebug($"{profileCount} profile(s) loaded");
+    }
+
+
+    /// <summary>
     /// Get logger.
     /// </summary>
     protected ILogger Logger { get; }
@@ -145,6 +189,26 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     {
         profile.PropertyChanged -= this.OnProfilePropertyChanged;
     }
+
+
+    /// <summary>
+    /// Called to get list of name of profile files asynchronously.
+    /// </summary>
+    /// <returns>Task of getting list of files.</returns>
+    protected virtual Task<IList<string>> OnGetProfileFilesAsync() => ProfileExtensions.IOTaskFactory.StartNew(() =>
+    {
+        try
+        {
+            if (Directory.Exists(this.ProfilesDirectory))
+                return Directory.GetFiles(this.ProfilesDirectory, "*.json");
+            return (IList<string>)new string[0];
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, $"Failed to get files in '{this.ProfilesDirectory}'");
+            return new string[0];
+        }
+    });
 
 
     /// <summary>
@@ -174,48 +238,8 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
             this.Logger.LogDebug($"{builtInProfiles.Count} built-in profile(s) loaded");
         }
 
-        // get profile files
-        var profileFileNames = await ProfileExtensions.IOTaskFactory.StartNew(() =>
-        {
-            try
-            {
-                if (Directory.Exists(this.ProfilesDirectory))
-                    return Directory.GetFiles(this.ProfilesDirectory, "*.json");
-                return new string[0];
-            }
-            catch (Exception ex)
-            {
-                this.Logger.LogError(ex, $"Failed to get files in '{this.ProfilesDirectory}'");
-                return new string[0];
-            }
-        });
-        this.Logger.LogDebug($"{profileFileNames.Length} profile file(s) found");
-
-        // load profiles
-        var profileCount = 0;
-        foreach (var fileName in profileFileNames)
-        {
-            try
-            {
-                this.Logger.LogTrace($"Load profile from '{fileName}'");
-                var profile = await this.OnLoadProfileAsync(fileName);
-                this.Logger.LogTrace($"Add profile '{profile.Name}' ({profile.Id})");
-                if (Path.GetFileNameWithoutExtension(fileName) == profile.Id)
-                    this.AddProfile(profile, false);
-                else
-                {
-                    this.Logger.LogWarning($"Correct file name of profile '{profile.Name}' ({profile.Id})");
-                    this.AddProfile(profile, true);
-                    Global.RunWithoutErrorAsync(() => File.Delete(fileName));
-                }
-                ++profileCount;
-            }
-            catch (Exception ex)
-            {
-                this.Logger.LogError(ex, $"Failed to load profile from '{fileName}'");
-            }
-        }
-        this.Logger.LogDebug($"{profileCount} profile(s) loaded");
+        // load profiles from files
+        await this.LoadProfilesAsync();
 
         this.Logger.LogTrace("Complete initialization (default)");
     }
@@ -292,8 +316,9 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     /// Remove given profile from this manager.
     /// </summary>
     /// <param name="profile">Profile to remove.</param>
+    /// <param name="deleteFile">True to delete file of profile.</param>
     /// <returns>True if profile has been removed successfully.</returns>
-    protected bool RemoveProfile(TProfile profile)
+    protected bool RemoveProfile(TProfile profile, bool deleteFile = true)
     {
         // check state
         this.VerifyAccess();
@@ -301,7 +326,10 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         // remove profile
         if (!object.ReferenceEquals(profile.Manager, this) || !this.profilesById.Remove(profile.Id))
             return false;
-        this.Logger.LogTrace($"Remove profile '{profile.Id}'");
+        if (deleteFile)
+            this.Logger.LogTrace($"Remove profile '{profile.Name}' ({profile.Id})");
+        else
+            this.Logger.LogTrace($"Remove profile '{profile.Name}' ({profile.Id}) without deleting file");
         this.removingProfileHandlers?.Invoke(this, profile);
         this.profiles.Remove(profile);
         this.profilesToSave.Remove(profile);
@@ -309,22 +337,25 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         profile.Manager = null;
 
         // delete file
-        var fileName = Path.Combine(this.ProfilesDirectory, $"{profile.Id}.json");
-        profile.IOTaskFactory.StartNew(() =>
+        if (deleteFile)
         {
-            try
+            var fileName = Path.Combine(this.ProfilesDirectory, $"{profile.Id}.json");
+            profile.IOTaskFactory.StartNew(() =>
             {
-                if (File.Exists(fileName))
+                try
                 {
-                    this.Logger.LogTrace($"Delete file of profile '{profile.Id}'");
-                    File.Delete(fileName);
+                    if (File.Exists(fileName))
+                    {
+                        this.Logger.LogTrace($"Delete file of profile '{profile.Name}' ({profile.Id})");
+                        File.Delete(fileName);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                this.Logger.LogError(ex, $"Failed to delete file of profile '{profile.Id}'");
-            }
-        });
+                catch (Exception ex)
+                {
+                    this.Logger.LogError(ex, $"Failed to delete file of profile '{profile.Name}' ({profile.Id})");
+                }
+            });
+        }
 
         // complete
         return true;
