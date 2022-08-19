@@ -3,7 +3,6 @@ using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -221,25 +220,8 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         this.Logger.LogTrace("Start initialization (default)");
 
         // attach to product manager
-        this.Application.ProductManager.Let(pm =>
-        {
-            pm.ProductStateChanged += (Product.IProductManager? pm, string productId) =>
-            {
-                if (pm != null)
-                    this.OnProductStateChanged(pm, productId);
-            };
-            (pm.Products as INotifyCollectionChanged)?.Let(it =>
-            {
-                it.CollectionChanged += (_, e) =>
-                {
-                    if (e.Action == NotifyCollectionChangedAction.Remove)
-                    {
-                        foreach (var productId in e.OldItems!.Cast<string>())
-                            this.OnProductDeactivatedOrRemoved(productId);
-                    }
-                };
-            });
-        });
+        this.Application.ProductManager.ProductActivationChanged += (_, productId, isActivated) =>
+            this.OnProductActivationChanged(productId, isActivated);
 
         // load built-in profiles
         var builtInProfiles = await this.OnLoadBuiltInProfilesAsync();
@@ -279,36 +261,12 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
 
 
     /// <summary>
-    /// Called when product activated.
+    /// Called when activation state of product has been changed.
     /// </summary>
     /// <param name="productId">ID of product.</param>
-    protected virtual void OnProductActivated(string productId)
+    /// <param name="isActivated">Whether product is activated or not.</param>
+    protected virtual void OnProductActivationChanged(string productId, bool isActivated)
     { }
-
-
-    /// <summary>
-    /// Called when product deactivated or removed.
-    /// </summary>
-    /// <param name="productId">ID of product.</param>
-    protected virtual void OnProductDeactivatedOrRemoved(string productId)
-    { }
-
-
-    /// <summary>
-    /// Called when product state changed.
-    /// </summary>
-    /// <param name="productManager">Product manager.</param>
-    /// <param name="productId">ID of product.</param>
-    protected virtual void OnProductStateChanged(Product.IProductManager productManager, string productId)
-    { 
-        if (productManager.TryGetProductState(productId, out var state))
-        {
-            if (state == Product.ProductState.Activated)
-                this.OnProductActivated(productId);
-            else if (state == Product.ProductState.Deactivated)
-                this.OnProductDeactivatedOrRemoved(productId);
-        }
-    }
 
 
     // Called when property of profile changed.
