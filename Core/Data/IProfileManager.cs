@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Data;
@@ -7,7 +8,7 @@ namespace CarinaStudio.AppSuite.Data;
 /// <summary>
 /// Manager of <see cref="IProfile{TApp}"/>.
 /// </summary>
-public interface IProfileManager<out TApp, out TProfile> : IApplicationObject<TApp> where TApp : class, IAppSuiteApplication where TProfile : IProfile<TApp>
+public interface IProfileManager<out TApp, out TProfile> : IApplicationObject<TApp>, INotifyPropertyChanged where TApp : class, IAppSuiteApplication where TProfile : IProfile<TApp>
 {
     /// <summary>
     /// Get profile by ID, or Null if profile cannot be found.
