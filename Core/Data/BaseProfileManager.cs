@@ -291,6 +291,14 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
 
 
     /// <summary>
+    /// Raise <see cref="PropertyChanged"/> event.
+    /// </summary>
+    /// <param name="propertyName">Property name.</param>
+    protected void OnPropertyChanged(string propertyName) =>
+        this.PropertyChanged?.Invoke(this, new(propertyName));
+
+
+    /// <summary>
     /// Called to save profile to file asynchronously.
     /// </summary>
     /// <param name="profile">Profile to be saved.</param>
@@ -360,6 +368,10 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         // complete
         return true;
     }
+
+
+    /// <inheritdoc/>
+    public event PropertyChangedEventHandler? PropertyChanged;
 
 
     /// <summary>
