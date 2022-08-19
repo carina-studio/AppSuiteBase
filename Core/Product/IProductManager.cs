@@ -71,9 +71,15 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
 
 
     /// <summary>
+    /// Raised when activation state of product has changed.
+    /// </summary>
+    event Action<IProductManager, string, bool> ProductActivationChanged;
+
+
+    /// <summary>
     /// Raised when state of product has changed.
     /// </summary>
-    event EventHandler<IProductManager, string>? ProductStateChanged;
+    event Action<IProductManager, string>? ProductStateChanged;
 
 
     /// <summary>
@@ -219,7 +225,17 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
 
 
     /// <inheritdoc/>
-    event EventHandler<IProductManager, string>? IProductManager.ProductStateChanged
+    event Action<IProductManager, string, bool>? IProductManager.ProductActivationChanged
+    {
+        add
+        { }
+        remove
+        { }
+    }
+
+
+    /// <inheritdoc/>
+    event Action<IProductManager, string>? IProductManager.ProductStateChanged
     {
         add
         { }
