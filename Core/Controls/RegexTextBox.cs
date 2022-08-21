@@ -32,11 +32,11 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <summary>
 		/// Property of <see cref="IgnoreCase"/>.
 		/// </summary>
-		public static readonly AvaloniaProperty<bool> IgnoreCaseProperty = AvaloniaProperty.Register<RegexTextBox, bool>(nameof(IgnoreCase), true);
+		public static readonly StyledProperty<bool> IgnoreCaseProperty = AvaloniaProperty.Register<RegexTextBox, bool>(nameof(IgnoreCase), true);
 		/// <summary>
 		/// Property of <see cref="IsInputAssistanceEnabled"/>.
 		/// </summary>
-		public static readonly AvaloniaProperty<bool> IsInputAssistanceEnabledProperty = AvaloniaProperty.Register<RegexTextBox, bool>(nameof(IsInputAssistanceEnabled), true);
+		public static readonly StyledProperty<bool> IsInputAssistanceEnabledProperty = AvaloniaProperty.Register<RegexTextBox, bool>(nameof(IsInputAssistanceEnabled), true);
 
 
 		// Fields.

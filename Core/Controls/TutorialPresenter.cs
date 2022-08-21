@@ -15,7 +15,7 @@ public abstract class TutorialPresenter : TemplatedControl, ITutorialPresenter
     /// <summary>
     /// Property of <see cref="CurrentTutorial"/>.
     /// </summary>
-    public static readonly AvaloniaProperty<Tutorial?> CurrentTutorialProperty = AvaloniaProperty.RegisterDirect<TutorialPresenter, Tutorial?>(nameof(CurrentTutorial), o => o.currentTutorial);
+    public static readonly DirectProperty<TutorialPresenter, Tutorial?> CurrentTutorialProperty = AvaloniaProperty.RegisterDirect<TutorialPresenter, Tutorial?>(nameof(CurrentTutorial), o => o.currentTutorial);
 
 
     // Fields.

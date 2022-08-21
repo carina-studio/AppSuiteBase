@@ -18,11 +18,11 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Property of <see cref="CurrentTutorial"/>.
         /// </summary>
-        public static readonly AvaloniaProperty<Tutorial?> CurrentTutorialProperty = AvaloniaProperty.RegisterDirect<Window, Tutorial?>(nameof(CurrentTutorial), w => w.currentTutorial);
+        public static readonly DirectProperty<Window, Tutorial?> CurrentTutorialProperty = AvaloniaProperty.RegisterDirect<Window, Tutorial?>(nameof(CurrentTutorial), w => w.currentTutorial);
         /// <summary>
         /// Property of <see cref="IsSystemChromeVisibleInClientArea"/>.
         /// </summary>
-        public static readonly AvaloniaProperty<bool> IsSystemChromeVisibleInClientAreaProperty = AvaloniaProperty.RegisterDirect<Window, bool>(nameof(IsSystemChromeVisibleInClientArea), w => w.isSystemChromeVisibleInClientArea);
+        public static readonly DirectProperty<Window, bool> IsSystemChromeVisibleInClientAreaProperty = AvaloniaProperty.RegisterDirect<Window, bool>(nameof(IsSystemChromeVisibleInClientArea), w => w.isSystemChromeVisibleInClientArea);
 
 
         // Static fields.
