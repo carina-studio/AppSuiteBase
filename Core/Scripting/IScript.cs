@@ -115,7 +115,7 @@ public static class ScriptExtensions
         using var cancellationTokenSource = new CancellationTokenSource();
         var checkingInternal = Math.Max(1000, script.Application.Configuration.GetValueOrDefault(ConfigurationKeys.ScriptCompletionCheckingInterval));
         var runningTask = script.RunAsync<object?>(context, cancellationTokenSource.Token);
-        while (runningTask.IsCompleted)
+        while (!runningTask.IsCompleted)
         {
             if (runningTask.Wait(checkingInternal))
                 break;
@@ -155,7 +155,7 @@ public static class ScriptExtensions
         using var cancellationTokenSource = new CancellationTokenSource();
         var checkingInternal = Math.Max(1000, script.Application.Configuration.GetValueOrDefault(ConfigurationKeys.ScriptCompletionCheckingInterval));
         var runningTask = script.RunAsync<R>(context, cancellationTokenSource.Token);
-        while (runningTask.IsCompleted)
+        while (!runningTask.IsCompleted)
         {
             if (runningTask.Wait(checkingInternal))
                 break;
