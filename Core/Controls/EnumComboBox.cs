@@ -18,7 +18,7 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <summary>
 		/// Property of <see cref="EnumType"/>.
 		/// </summary>
-		public static readonly AvaloniaProperty<Type> EnumTypeProperty = AvaloniaProperty.Register<EnumComboBox, Type>(nameof(EnumType), validate: it => it == null || it.IsEnum);
+		public static readonly StyledProperty<Type> EnumTypeProperty = AvaloniaProperty.Register<EnumComboBox, Type>(nameof(EnumType), validate: it => it == null || it.IsEnum);
 
 
 		// Fields.

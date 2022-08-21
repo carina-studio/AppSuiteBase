@@ -26,11 +26,11 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Property of <see cref="IsFullWindowMode"/>.
         /// </summary>
-        public static readonly AvaloniaProperty<bool> IsFullWindowModeProperty = AvaloniaProperty.Register<TabControl, bool>(nameof(IsFullWindowMode), true);
+        public static readonly StyledProperty<bool> IsFullWindowModeProperty = AvaloniaProperty.Register<TabControl, bool>(nameof(IsFullWindowMode), true);
         /// <summary>
         /// Property of <see cref="TabStripSize"/>.
         /// </summary>
-        public static readonly AvaloniaProperty<double> TabStripSizeProperty = AvaloniaProperty.Register<TabControl, double>(nameof(TabStripSize), -1);
+        public static readonly DirectProperty<TabControl, double> TabStripSizeProperty = AvaloniaProperty.RegisterDirect<TabControl, double>(nameof(TabStripSize), t => t.tabStripSize);
 
 
         // Constants.
@@ -53,6 +53,7 @@ namespace CarinaStudio.AppSuite.Controls
         readonly ScheduledAction scrollToSelectedItemAction;
         ItemsPresenter? tabItemsPresenter;
         TabStripScrollViewer? tabStripScrollViewer;
+        double tabStripSize = -1;
         ThicknessAnimator? tabStripScrollViewerMarginAnimator;
         readonly ScheduledAction updateTabStripScrollViewerMarginAction;
 
@@ -238,14 +239,14 @@ namespace CarinaStudio.AppSuite.Controls
             this.tabStripScrollViewer = e.NameScope.Find<TabStripScrollViewer>("PART_TabStripScrollViewer")?.Also(it =>
             {
                 it.GetObservable(BoundsProperty).Subscribe(bounds =>
-                    this.SetValue<double>(TabStripSizeProperty, bounds.Height));
+                    this.SetAndRaise<double>(TabStripSizeProperty, ref this.tabStripSize, bounds.Height));
                 it.TemplateApplied += (_, e) =>
                 {
                     this.scrollTabStripLeftButton = e.NameScope.Find<RepeatButton>("PART_ScrollLeftButton");
                     this.scrollTabStripRightButton = e.NameScope.Find<RepeatButton>("PART_ScrollRightButton");
                 };
             });
-            this.SetValue<double>(TabStripSizeProperty, this.tabStripScrollViewer?.Bounds.Height ?? -1);
+            this.SetAndRaise<double>(TabStripSizeProperty, ref this.tabStripSize, this.tabStripScrollViewer?.Bounds.Height ?? -1);
             this.updateTabStripScrollViewerMarginAction.Cancel();
             this.UpdateTabStripScrollViewerMargin(false);
         }
@@ -591,7 +592,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Get width or height of tab strip.
         /// </summary>
-        public double TabStripSize { get => this.GetValue<double>(TabStripSizeProperty); }
+        public double TabStripSize { get => this.tabStripSize; }
 
 
         // Update margin of tab strip.

@@ -13,27 +13,27 @@ public class Tutorial : AvaloniaObject
     /// <summary>
     /// Property of <see cref="Anchor"/>.
     /// </summary>
-    public static readonly AvaloniaProperty<IVisual?> AnchorProperty = AvaloniaProperty.Register<Tutorial, IVisual?>(nameof(Anchor));
+    public static readonly StyledProperty<IVisual?> AnchorProperty = AvaloniaProperty.Register<Tutorial, IVisual?>(nameof(Anchor));
     /// <summary>
     /// Property of <see cref="Description"/>.
     /// </summary>
-    public static readonly AvaloniaProperty<string?> DescriptionProperty = AvaloniaProperty.Register<Tutorial, string?>(nameof(Description));
+    public static readonly StyledProperty<string?> DescriptionProperty = AvaloniaProperty.Register<Tutorial, string?>(nameof(Description));
     /// <summary>
     /// Property of <see cref="Icon"/>.
     /// </summary>
-    public static readonly AvaloniaProperty<IImage?> IconProperty = AvaloniaProperty.Register<Tutorial, IImage?>(nameof(Icon));
+    public static readonly StyledProperty<IImage?> IconProperty = AvaloniaProperty.Register<Tutorial, IImage?>(nameof(Icon));
     /// <summary>
     /// Property of <see cref="IsSkippingAllTutorialsAllowed"/>.
     /// </summary>
-    public static readonly AvaloniaProperty<bool> IsSkippingAllTutorialsAllowedProperty = AvaloniaProperty.Register<Tutorial, bool>(nameof(IsSkippingAllTutorialsAllowed), true);
+    public static readonly StyledProperty<bool> IsSkippingAllTutorialsAllowedProperty = AvaloniaProperty.Register<Tutorial, bool>(nameof(IsSkippingAllTutorialsAllowed), true);
     /// <summary>
     /// Property of <see cref="IsVisible"/>.
     /// </summary>
-    public static readonly AvaloniaProperty<bool> IsVisibleProperty = AvaloniaProperty.RegisterDirect<Tutorial, bool>(nameof(IsVisible), o => o.isVisible);
+    public static readonly DirectProperty<Tutorial, bool> IsVisibleProperty = AvaloniaProperty.RegisterDirect<Tutorial, bool>(nameof(IsVisible), o => o.isVisible);
     /// <summary>
     /// Property of <see cref="Presenter"/>.
     /// </summary>
-    public static readonly AvaloniaProperty<TutorialPresenter?> PresenterProperty = AvaloniaProperty.RegisterDirect<Tutorial, TutorialPresenter?>(nameof(Presenter), o => o.presenter);
+    public static readonly DirectProperty<Tutorial, TutorialPresenter?> PresenterProperty = AvaloniaProperty.RegisterDirect<Tutorial, TutorialPresenter?>(nameof(Presenter), o => o.presenter);
 
 
     // Fields.
