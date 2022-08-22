@@ -85,6 +85,10 @@ public enum ScriptLanguage
     /// C# script.
     /// </summary>
     CSharp,
+    /// <summary>
+    /// Python 3.4.
+    /// </summary>
+    Python,
 }
 
 
