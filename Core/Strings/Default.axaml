@@ -243,6 +243,7 @@
 	<!-- ScriptLanguage -->
 	<sys:String x:Key="String/ScriptLanguage.CSharp">C# Script</sys:String>
 	<sys:String x:Key="String/ScriptLanguage.JavaScript">JavaScript (ECMAScript 5.1)</sys:String>
+	<sys:String x:Key="String/ScriptLanguage.Python">Python 3.4</sys:String>
 
 	<!-- SplashWindow -->
 	<sys:String x:Key="String/SplashWindow.Launching">Launching</sys:String>
