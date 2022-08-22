@@ -1024,6 +1024,11 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <inheritdoc/>
+        public override IObservable<string?> GetObservableString(string key) =>
+            Avalonia.Controls.ResourceNodeExtensions.GetResourceObservable(this, $"String/{key}").Cast<object?, string?>();
+
+
         /// <summary>
         /// Get string from resources.
         /// </summary>
