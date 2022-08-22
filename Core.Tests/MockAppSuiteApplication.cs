@@ -131,6 +131,11 @@ namespace CarinaStudio.AppSuite
         public virtual int ExternalDependenciesVersion { get; } = 1;
 
 
+        /// <inheritdoc/>
+        public virtual IObservable<string?> GetObservableString(string key) =>
+            new FixedObservableValue<string?>(null);
+
+
         /// <summary>
         /// Get string from resources.
         /// </summary>
