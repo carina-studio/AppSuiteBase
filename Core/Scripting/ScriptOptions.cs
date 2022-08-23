@@ -28,6 +28,12 @@ public struct ScriptOptions
 
 
     /// <summary>
+    /// Get or set default imported types.
+    /// </summary>
+    public ISet<Type>? ImportedTypes { get; set; }
+
+
+    /// <summary>
     /// Get or set assemblies referenced by script.
     /// </summary>
     public ISet<Assembly>? ReferencedAssemblies { get; set; }
