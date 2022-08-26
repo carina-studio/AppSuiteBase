@@ -64,6 +64,7 @@
 	<sys:String x:Key="String/ApplicationOptions.Others">其他设定</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Scripting">脚本</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">主题模式</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface">使用紧密版面配置</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UserInterface">用户界面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">使用空白字符进行缩排</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">将重新启动应用程序以开启</sys:String>
