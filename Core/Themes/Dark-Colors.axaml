@@ -1,0 +1,72 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<!-- Button -->
+	<Color x:Key="Color/Button.Background">#2d2d2d</Color>
+	<Color x:Key="Color/Button.Background.Disabled">#373737</Color>
+	<Color x:Key="Color/Button.Background.PointerOver">#404040</Color>
+	<Color x:Key="Color/Button.Background.Pressed">#202020</Color>
+
+	<!-- Control -->
+	<Color x:Key="Color/Control.Border">#1effffff</Color>
+	<Color x:Key="Color/Control.Border.Dark">#11ffffff</Color>
+	<Color x:Key="Color/Control.Border.Light">#22ffffff</Color>
+
+	<!-- Dialog -->
+	<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#141414</Color>
+	<Color x:Key="Color/Dialog.TextBlock.Background.Header1">#7f000000</Color>
+	<Color x:Key="Color/Dialog.TextBlock.Background.Header2">#7f000000</Color>
+	<Color x:Key="Color/Dialog.TextBlock.Border.Header1">#10ffffff</Color>
+	<Color x:Key="Color/Dialog.TextBlock.Border.Header2">#10ffffff</Color>
+	<Color x:Key="Color/Dialog.TextBlock.Foreground.Description">#7fffffff</Color>
+
+	<!-- Expander -->
+	<StaticResourceExtension x:Key="ExpanderBackground" ResourceKey="Color/Button.Background"/>
+	<SolidColorBrush x:Key="ExpanderDropDownBackground" Color="#272727"/>
+
+	<!-- Icon -->
+	<Color x:Key="Color/Icon">#ffffff</Color>
+
+	<!-- Menu -->
+	<Color x:Key="Color/Menu.Background">#1e1e1e</Color>
+
+	<!-- Separator -->
+	<Color x:Key="Color/Separator.Background">#4fffffff</Color>
+	
+	<!-- StatusBar -->
+	<Color x:Key="Color/StatusBar.Background.Inactive">#303030</Color>
+
+	<!-- TabControl -->
+	<Color x:Key="Color/TabControl.TabStrip.Border">#20808080</Color>
+
+	<!-- TabItem -->
+	<Color x:Key="Color/TabItem.Header.Background">#00000000</Color>
+	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#1e1e1e</Color>
+	<Color x:Key="Color/TabItem.Header.Background.Selected">#1e1e1e</Color>
+	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#17808080</Color>
+	<Color x:Key="Color/TabItem.Header.Border.Selected">#20808080</Color>
+
+	<!-- TextBox -->
+	<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#1f1f1f"/>
+	<SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{StaticResource Color/Control.Border.Light}"/>
+
+	<!-- ToolBar -->
+	<Color x:Key="Color/ToolBar.Background">#1e1e1e</Color>
+	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#373737</Color>
+	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#101010</Color>
+
+	<!-- ToolTip -->
+	<StaticResourceExtension x:Key="Color/ToolTip.Background" ResourceKey="Color/Button.Background"/>
+	<Color x:Key="Color/ToolTip.Border">#1c1c1c</Color>
+
+	<!-- Window -->
+	<Color x:Key="Color/Window.Background">#1e1e1e</Color>
+	<Color x:Key="Color/Window.Background.Tabbed">#101010</Color>
+	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#d7101010</Color>
+	<Color x:Key="Color/Window.Background.Transparent">#d71e1e1e</Color>
+
+	<!-- WorkingArea -->
+	<Color x:Key="Color/WorkingArea.Background">#101010</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Background">#191919</Color>
+	
+</ResourceDictionary>

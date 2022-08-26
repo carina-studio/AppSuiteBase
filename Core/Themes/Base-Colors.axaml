@@ -1,0 +1,290 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<!-- Accent -->
+	<Color x:Key="Color/Accent">#912fbf</Color>
+	<SolidColorBrush x:Key="Brush/Accent" Color="{DynamicResource Color/Accent}"/>
+	<SolidColorBrush x:Key="Brush/Accent.Dark.1" Color="{DynamicResource SystemAccentColorDark1}"/>
+	<SolidColorBrush x:Key="Brush/Accent.Dark.2" Color="{DynamicResource SystemAccentColorDark2}"/>
+	<SolidColorBrush x:Key="Brush/Accent.Dark.3" Color="{DynamicResource SystemAccentColorDark3}"/>
+	<SolidColorBrush x:Key="Brush/Accent.Light.1" Color="{DynamicResource SystemAccentColorLight1}"/>
+	<SolidColorBrush x:Key="Brush/Accent.Light.2" Color="{DynamicResource SystemAccentColorLight2}"/>
+	<SolidColorBrush x:Key="Brush/Accent.Light.3" Color="{DynamicResource SystemAccentColorLight3}"/>
+
+	<!-- Button -->
+	<SolidColorBrush x:Key="AccentButtonBackground" Color="{DynamicResource SystemAccentColor}" />
+	<SolidColorBrush x:Key="AccentButtonBackgroundDisabled" Color="{DynamicResource SystemAccentColor}" Opacity="0.5"/>
+	<SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="{DynamicResource SystemAccentColorLight1}" />
+	<SolidColorBrush x:Key="AccentButtonBackgroundPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
+	<SolidColorBrush x:Key="ButtonBackground" Color="{DynamicResource Color/Button.Background}"/>
+	<SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{DynamicResource Color/Button.Background.Disabled}"/>
+	<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource Color/Button.Background.PointerOver}"/>
+	<SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource Color/Button.Background.Pressed}"/>
+	<LinearGradientBrush x:Key="ButtonBorderBrush" EndPoint="0%,100%" StartPoint="0%,0%">
+		<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border.Light}"/>
+		<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border.Dark}"/>
+	</LinearGradientBrush>
+	<StaticResourceExtension x:Key="ButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrush"/>
+	<StaticResourceExtension x:Key="ButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
+	<LinearGradientBrush x:Key="ButtonBorderBrushPressed" EndPoint="0%,100%" StartPoint="0%,0%">
+		<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border.Dark}"/>
+		<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border.Light}"/>
+	</LinearGradientBrush>
+	<Color x:Key="Color/Button.Background">#ffffff</Color>
+	<Color x:Key="Color/Button.Background.Disabled">#ffffff</Color>
+	<Color x:Key="Color/Button.Background.PointerOver">#ffffff</Color>
+	<Color x:Key="Color/Button.Background.Pressed">#ffffff</Color>
+	
+	<!-- CheckBox -->
+	<SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeIndeterminatePointerOver" Color="{DynamicResource SystemAccentColorLight1}"/>
+	<SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeIndeterminatePressed" Color="{DynamicResource SystemAccentColorDark1}"/>
+	<SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="{DynamicResource SystemAccentColorLight1}"/>
+	<SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
+	<StaticResourceExtension x:Key="CheckBoxCheckBackgroundFillCheckedDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+	<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="{DynamicResource SystemAccentColorLight1}"/>
+	<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
+	<StaticResourceExtension x:Key="CheckBoxCheckBackgroundFillIndeterminateDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+	<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillIndeterminatePointerOver" Color="{DynamicResource SystemAccentColorLight1}"/>
+	<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillIndeterminatePressed" Color="{DynamicResource SystemAccentColorDark1}"/>
+	<StaticResourceExtension x:Key="CheckBoxCheckBackgroundFillUncheckedDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+
+	<!-- ComboBox -->
+	<StaticResourceExtension x:Key="ComboBoxBackground" ResourceKey="ButtonBackground"/>
+	<StaticResourceExtension x:Key="ComboBoxBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+	<StaticResourceExtension x:Key="ComboBoxBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+	<StaticResourceExtension x:Key="ComboBoxBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
+	<StaticResourceExtension x:Key="ComboBoxBorderBrush" ResourceKey="ButtonBorderBrush"/>
+	<StaticResourceExtension x:Key="ComboBoxBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
+	<StaticResourceExtension x:Key="ComboBoxBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
+	<StaticResourceExtension x:Key="ComboBoxBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
+	<SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="{DynamicResource Color/Control.Border}"/>
+
+	<!-- Control -->
+	<SolidColorBrush x:Key="Brush/Control.Border" Color="{DynamicResource Color/Control.Border}"/>
+	<SolidColorBrush x:Key="Brush/Control.Border.Dark" Color="{DynamicResource Color/Control.Border.Dark}"/>
+	<SolidColorBrush x:Key="Brush/Control.Border.Light" Color="{DynamicResource Color/Control.Border.Light}"/>
+	<Color x:Key="Color/Control.Border">#000000</Color>
+	<Color x:Key="Color/Control.Border.Dark">#000000</Color>
+	<Color x:Key="Color/Control.Border.Light">#000000</Color>
+	
+	<!-- DatePicker -->
+	<StaticResourceExtension x:Key="DatePickerButtonBackground" ResourceKey="ButtonBackground"/>
+	<StaticResourceExtension x:Key="DatePickerButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+	<StaticResourceExtension x:Key="DatePickerButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+	<StaticResourceExtension x:Key="DatePickerButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
+	<StaticResourceExtension x:Key="DatePickerButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
+	<StaticResourceExtension x:Key="DatePickerButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
+	<StaticResourceExtension x:Key="DatePickerButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
+	<StaticResourceExtension x:Key="DatePickerButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
+
+	<!-- Dialog -->
+	<SolidColorBrush x:Key="Brush/Dialog.ControlButtonsPanel.Background" Color="{DynamicResource Color/Dialog.ControlButtonsPanel.Background}"/>
+	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Background.Header1" Color="{DynamicResource Color/Dialog.TextBlock.Background.Header1}"/>
+	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Background.Header2" Color="{DynamicResource Color/Dialog.TextBlock.Background.Header2}"/>
+	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Border.Header1" Color="{DynamicResource Color/Dialog.TextBlock.Border.Header1}"/>
+	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Border.Header2" Color="{DynamicResource Color/Dialog.TextBlock.Border.Header2}"/>
+	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Foreground.Description" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Description}"/>
+	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Foreground.Error" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Error}"/>
+	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Foreground.Warning" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Warning}"/>
+	<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#ffffff</Color>
+	<Color x:Key="Color/Dialog.TextBlock.Background.Header1">#000000</Color>
+	<Color x:Key="Color/Dialog.TextBlock.Background.Header2">#000000</Color>
+	<Color x:Key="Color/Dialog.TextBlock.Border.Header1">#ffffff</Color>
+	<Color x:Key="Color/Dialog.TextBlock.Border.Header2">#ffffff</Color>
+	<Color x:Key="Color/Dialog.TextBlock.Foreground.Description">#000000</Color>
+	<Color x:Key="Color/Dialog.TextBlock.Foreground.Error">#ff0000</Color>
+	<Color x:Key="Color/Dialog.TextBlock.Foreground.Warning">#ff6a00</Color>
+	
+	<!-- Expander -->
+	<SolidColorBrush x:Key="ExpanderBackgroundDisabled" Color="{DynamicResource SystemAltMediumHighColor}" Opacity="0.5"/>
+	<SolidColorBrush x:Key="ExpanderDropDownBackground" Color="{DynamicResource ExpanderDropDownBackground}" Opacity="0.5"/>
+	<StaticResourceExtension x:Key="ExpanderBorderBrush" ResourceKey="Brush/Control.Border"/>
+	
+	<!-- FullWindowTutorialPresenter -->
+	<Color x:Key="Color/FullWindowTutorialPresenter.Background">#cf000000</Color>
+	<SolidColorBrush x:Key="Brush/FullWindowTutorialPresenter.Background" Color="{DynamicResource Color/FullWindowTutorialPresenter.Background}"/>
+	
+	<!-- Icon -->
+	<Color x:Key="Color/Icon">#000000</Color>
+	<Color x:Key="Color/Icon.Dark">#000000</Color>
+	<Color x:Key="Color/Icon.Error">#ff3232</Color>
+	<Color x:Key="Color/Icon.Information">#288acc</Color>
+	<Color x:Key="Color/Icon.Light">#ffffff</Color>
+	<Color x:Key="Color/Icon.Lightbulb">#ffd800</Color>
+	<Color x:Key="Color/Icon.OK">#59b259</Color>
+	<Color x:Key="Color/Icon.Question">#009999</Color>
+	<Color x:Key="Color/Icon.Warning">#ff8432</Color>
+	<SolidColorBrush x:Key="Brush/Icon" Color="{DynamicResource Color/Icon}"/>
+	<SolidColorBrush x:Key="Brush/Icon.Active" Color="{DynamicResource Color/Accent}"/>
+	<SolidColorBrush x:Key="Brush/Icon.Dark" Color="{DynamicResource Color/Icon.Dark}"/>
+	<SolidColorBrush x:Key="Brush/Icon.Error" Color="{DynamicResource Color/Icon.Error}"/>
+	<SolidColorBrush x:Key="Brush/Icon.Information" Color="{DynamicResource Color/Icon.Information}"/>
+	<SolidColorBrush x:Key="Brush/Icon.Light" Color="{DynamicResource Color/Icon.Light}"/>
+	<SolidColorBrush x:Key="Brush/Icon.Lightbulb" Color="{DynamicResource Color/Icon.Lightbulb}"/>
+	<SolidColorBrush x:Key="Brush/Icon.OK" Color="{DynamicResource Color/Icon.OK}"/>
+	<SolidColorBrush x:Key="Brush/Icon.Question" Color="{DynamicResource Color/Icon.Question}"/>
+	<SolidColorBrush x:Key="Brush/Icon.Warning" Color="{DynamicResource Color/Icon.Warning}"/>
+
+	<!-- InPlaceAction -->
+	<SolidColorBrush x:Key="Brush/InPlaceAction.Background.Checked" Color="{DynamicResource Color/InPlaceAction.Background.Checked}"/>
+	<SolidColorBrush x:Key="Brush/InPlaceAction.Background.PointerOver" Color="{DynamicResource Color/InPlaceAction.Background.PointerOver}"/>
+	<SolidColorBrush x:Key="Brush/InPlaceAction.Background.Pressed" Color="{DynamicResource Color/InPlaceAction.Background.Pressed}"/>
+	<Color x:Key="Color/InPlaceAction.Background.Checked">#20000000</Color>
+	<Color x:Key="Color/InPlaceAction.Background.PointerOver">#30ffffff</Color>
+	<Color x:Key="Color/InPlaceAction.Background.Pressed">#30000000</Color>
+	
+	<!-- Menu -->
+	<Color x:Key="Color/Menu.Background">#ffffff</Color>
+	<SolidColorBrush x:Key="Brush/Menu.Background" Color="{DynamicResource Color/Menu.Background}"/>
+	
+	<!-- MenuFlyout -->
+	<StaticResourceExtension x:Key="MenuFlyoutPresenterBorderBrush" ResourceKey="Brush/Control.Border"/>
+	
+	<!-- RadioButton -->
+	<SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPointerOver" Color="{DynamicResource SystemAccentColorLight1}" />
+	<SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPressed" Color="{DynamicResource SystemAccentColorDark1}" />
+	<SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePointerOver" Color="{DynamicResource SystemAccentColorLight1}" />
+	<SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePressed" Color="{DynamicResource SystemAccentColorDark1}" />
+
+	<!-- RepeatButton -->
+	<StaticResourceExtension x:Key="RepeatButtonBackground" ResourceKey="ButtonBackground"/>
+	<StaticResourceExtension x:Key="RepeatButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+	<StaticResourceExtension x:Key="RepeatButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+	<StaticResourceExtension x:Key="RepeatButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
+	<StaticResourceExtension x:Key="RepeatButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
+	<StaticResourceExtension x:Key="RepeatButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
+	<StaticResourceExtension x:Key="RepeatButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
+	<StaticResourceExtension x:Key="RepeatButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
+
+	<!-- ScrollViewer -->
+	<SolidColorBrush x:Key="ScrollViewerScrollBarsSeparatorBackground" Color="Transparent"/>
+
+	<!-- Separator -->
+	<Color x:Key="Color/Separator.Background">#000000</Color>
+	<SolidColorBrush x:Key="Brush/Separator.Background" Color="{DynamicResource Color/Separator.Background}"/>
+
+	<!-- StatusBar -->
+	<Color x:Key="Color/StatusBar.Background.Inactive">#ffffff</Color>
+	<Color x:Key="Color/StatusBar.Button.Background.PointerOver">#3fffffff</Color>
+	<Color x:Key="Color/StatusBar.Button.Background.Pressed">#3f000000</Color>
+	<Color x:Key="Color/StatusBar.Foreground">#ffffff</Color>
+	<Color x:Key="Color/StatusBar.Foreground.Disabled">#7fffffff</Color>
+	<Color x:Key="Color/StatusBar.ToggleButton.Background.Checked">#7f000000</Color>
+	<SolidColorBrush x:Key="Brush/StatusBar.Background" Color="{DynamicResource SystemAccentColorDark1}"/>
+	<SolidColorBrush x:Key="Brush/StatusBar.Background.Inactive" Color="{DynamicResource Color/StatusBar.Background.Inactive}"/>
+	<SolidColorBrush x:Key="Brush/StatusBar.Button.Background.PointerOver" Color="{DynamicResource Color/StatusBar.Button.Background.PointerOver}"/>
+	<SolidColorBrush x:Key="Brush/StatusBar.Button.Background.Pressed" Color="{DynamicResource Color/StatusBar.Button.Background.Pressed}"/>
+	<SolidColorBrush x:Key="Brush/StatusBar.Foreground" Color="{DynamicResource Color/StatusBar.Foreground}"/>
+	<SolidColorBrush x:Key="Brush/StatusBar.Foreground.Disabled" Color="{DynamicResource Color/StatusBar.Foreground.Disabled}"/>
+	<SolidColorBrush x:Key="Brush/StatusBar.ToggleButton.Background.Checked" Color="{DynamicResource Color/StatusBar.ToggleButton.Background.Checked}"/>
+	
+	<!-- TabControl -->
+	<SolidColorBrush x:Key="Brush/TabControl.TabStrip.Border" Color="{DynamicResource Color/TabControl.TabStrip.Border}"/>
+	<Color x:Key="Color/TabControl.TabStrip.Border">#00000000</Color>
+	
+	<!-- TabItem -->
+	<SolidColorBrush x:Key="TabItemHeaderSelectedPipeFill">#00000000</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/TabItem.Header.Background" Color="{DynamicResource Color/TabItem.Header.Background}"/>
+	<SolidColorBrush x:Key="Brush/TabItem.Header.Background.PointerOver" Color="{DynamicResource Color/TabItem.Header.Background.PointerOver}"/>
+	<SolidColorBrush x:Key="Brush/TabItem.Header.Background.Selected" Color="{DynamicResource Color/TabItem.Header.Background.Selected}"/>
+	<SolidColorBrush x:Key="Brush/TabItem.Header.Border" Color="{DynamicResource Color/TabItem.Header.Border}"/>
+	<SolidColorBrush x:Key="Brush/TabItem.Header.Border.PointerOver" Color="{DynamicResource Color/TabItem.Header.Border.PointerOver}"/>
+	<SolidColorBrush x:Key="Brush/TabItem.Header.Border.Selected" Color="{DynamicResource Color/TabItem.Header.Border.Selected}"/>
+	<SolidColorBrush x:Key="Brush/TabItem.Header.InsertionIndicator.Background" Color="{DynamicResource Color/Accent}" Opacity="0.7"/>
+	<Color x:Key="Color/TabItem.Header.Background">#ffffff</Color>
+	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#ffffff</Color>
+	<Color x:Key="Color/TabItem.Header.Background.Selected">#ffffff</Color>
+	<Color x:Key="Color/TabItem.Header.Border">#00000000</Color>
+	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#00000000</Color>
+	<Color x:Key="Color/TabItem.Header.Border.Selected">#00000000</Color>
+	
+	<!-- TextBox -->
+	<StaticResourceExtension x:Key="TextControlBackground" ResourceKey="ButtonBackground"/>
+	<StaticResourceExtension x:Key="TextControlBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+	<StaticResourceExtension x:Key="TextControlBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+	<LinearGradientBrush x:Key="TextControlBorderBrush" EndPoint="0%,100%" StartPoint="0%,0%">
+		<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border.Dark}"/>
+		<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border.Light}"/>
+	</LinearGradientBrush>
+	<StaticResourceExtension x:Key="TextControlBorderBrushDisabled" ResourceKey="TextControlBorderBrush"/>
+	<StaticResourceExtension x:Key="TextControlForegroundDisabled" ResourceKey="SystemControlDisabledBaseMediumLowBrush" />
+	<SolidColorBrush x:Key="Brush/TextBox.Foreground.Error" Color="{DynamicResource Color/TextBox.Foreground.Error}"/>
+	<SolidColorBrush x:Key="Brush/TextBox.SelectionForeground.Error" Color="{DynamicResource Color/TextBox.SelectionForeground.Error}"/>
+	<Color x:Key="Color/TextBox.Foreground.Error">#ff0000</Color>
+	<Color x:Key="Color/TextBox.SelectionForeground.Error">#ffbfbf</Color>
+	
+	<!-- TimePicker -->
+	<StaticResourceExtension x:Key="TimePickerButtonBackground" ResourceKey="ButtonBackground"/>
+	<StaticResourceExtension x:Key="TimePickerButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+	<StaticResourceExtension x:Key="TimePickerButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+	<StaticResourceExtension x:Key="TimePickerButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
+	<StaticResourceExtension x:Key="TimePickerButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
+	<StaticResourceExtension x:Key="TimePickerButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
+	<StaticResourceExtension x:Key="TimePickerButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
+	<StaticResourceExtension x:Key="TimePickerButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
+
+	<!-- ToggleButton -->
+	<StaticResourceExtension x:Key="ToggleButtonBackground" ResourceKey="ButtonBackground"/>
+	<StaticResourceExtension x:Key="ToggleButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+	<StaticResourceExtension x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+	<StaticResourceExtension x:Key="ToggleButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
+	<SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource SystemAccentColor}" />
+	<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedDisabled" Color="{DynamicResource SystemAccentColor}" Opacity="0.5"/>
+	<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{DynamicResource SystemAccentColorLight1}" />
+	<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
+	<StaticResourceExtension x:Key="ToggleButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
+	<StaticResourceExtension x:Key="ToggleButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
+	<StaticResourceExtension x:Key="ToggleButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
+	<StaticResourceExtension x:Key="ToggleButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
+	<StaticResourceExtension x:Key="ToggleButtonBorderBrushChecked" ResourceKey="ButtonBorderBrushPressed"/>
+	<StaticResourceExtension x:Key="ToggleButtonBorderBrushCheckedDisabled" ResourceKey="ButtonBorderBrushPressed"/>
+	<StaticResourceExtension x:Key="ToggleButtonBorderBrushCheckedPointerOver" ResourceKey="ButtonBorderBrushPressed"/>
+	<StaticResourceExtension x:Key="ToggleButtonBorderBrushCheckedPressed" ResourceKey="ButtonBorderBrushPressed"/>
+
+	<!-- ToolBar -->
+	<SolidColorBrush x:Key="Brush/ToolBar.Background" Color="{DynamicResource Color/ToolBar.Background}"/>
+	<SolidColorBrush x:Key="Brush/ToolBar.Button.Background.PointerOver" Color="{DynamicResource Color/ToolBar.Button.Background.PointerOver}"/>
+	<SolidColorBrush x:Key="Brush/ToolBar.Button.Background.Pressed" Color="{DynamicResource Color/ToolBar.Button.Background.Pressed}"/>
+	<Color x:Key="Color/ToolBar.Background">#ffffff</Color>
+	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#ffffff</Color>
+	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#ffffff</Color>
+	
+	<!-- ToolTip -->
+	<Color x:Key="Color/ToolTip.Background">#ffffff</Color>
+	<Color x:Key="Color/ToolTip.Border">#000000</Color>
+	<CornerRadius x:Key="CornerRadius/ToolTip">4</CornerRadius>
+	<SolidColorBrush x:Key="ToolTipBackground" Color="{DynamicResource Color/ToolTip.Background}"/>
+	<SolidColorBrush x:Key="ToolTipBorderBrush" Color="{DynamicResource Color/ToolTip.Border}"/>
+
+	<!-- TreeViewItem -->
+	<CornerRadius x:Key="CornerRadius/TreeViewItem">4</CornerRadius>
+	<Thickness x:Key="Thickness/TreeViewItem.Icon.Margin">0,0,9,0</Thickness>
+	<Thickness x:Key="Thickness/TreeViewItem.Margin">0,1,0,1</Thickness>
+	<Thickness x:Key="Thickness/TreeViewItem.Padding">0,6,15,6</Thickness>
+	<SolidColorBrush x:Key="TreeViewItemBackgroundPointerOver" Color="{DynamicResource SystemListLowColor}"/>
+	<SolidColorBrush x:Key="TreeViewItemBackgroundPressed" Color="{DynamicResource SystemListMediumColor}"/>
+	<SolidColorBrush x:Key="TreeViewItemBackgroundSelectedPointerOver" Color="{DynamicResource SystemAccentColor}" Opacity="0.8" />
+	<SolidColorBrush x:Key="TreeViewItemBackgroundSelectedPressed" Color="{DynamicResource SystemAccentColor}" Opacity="0.9" />
+	<SolidColorBrush x:Key="TreeViewItemForegroundDisabled" Color="{DynamicResource SystemBaseMediumLowColor}"/>
+	<SolidColorBrush x:Key="TreeViewItemForegroundPointerOver" Color="{DynamicResource SystemBaseHighColor}"/>
+	<SolidColorBrush x:Key="TreeViewItemForegroundPressed" Color="{DynamicResource SystemBaseHighColor}"/>
+	<SolidColorBrush x:Key="TreeViewItemForegroundSelectedPointerOver" Color="{DynamicResource SystemBaseHighColor}"/>
+	<SolidColorBrush x:Key="TreeViewItemForegroundSelectedPressed" Color="{DynamicResource SystemBaseHighColor}"/>
+
+	<!-- Window -->
+	<SolidColorBrush x:Key="Brush/Window.Background" Color="{DynamicResource Color/Window.Background}"/>
+	<SolidColorBrush x:Key="Brush/Window.Background.Tabbed" Color="{DynamicResource Color/Window.Background.Tabbed}"/>
+	<SolidColorBrush x:Key="Brush/Window.Background.Tabbed.Transparent" Color="{DynamicResource Color/Window.Background.Tabbed.Transparent}"/>
+	<SolidColorBrush x:Key="Brush/Window.Background.Transparent" Color="{DynamicResource Color/Window.Background.Transparent}"/>
+	<Color x:Key="Color/Window.Background">#ffffff</Color>
+	<Color x:Key="Color/Window.Background.Tabbed">#ffffff</Color>
+	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#ffffff</Color>
+	<Color x:Key="Color/Window.Background.Transparent">#ffffff</Color>
+
+	<!-- WorkingArea -->
+	<SolidColorBrush x:Key="Brush/WorkingArea.Background" Color="{DynamicResource Color/WorkingArea.Background}"/>
+	<SolidColorBrush x:Key="Brush/WorkingArea.Panel.Background" Color="{DynamicResource Color/WorkingArea.Panel.Background}"/>
+	<Color x:Key="Color/WorkingArea.Background">#ffffff</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Background">#ffffff</Color>
+
+</ResourceDictionary>

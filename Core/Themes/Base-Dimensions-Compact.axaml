@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:sys="using:System"
+		xmlns:abControls="using:CarinaStudio.Controls"
+		xmlns:abConverters="using:CarinaStudio.Data.Converters"
+		xmlns:aConverters="using:Avalonia.Data.Converters"
+		xmlns:appSuite="using:CarinaStudio.AppSuite"
+		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
+		xmlns:converters="using:CarinaStudio.AppSuite.Converters">
+	
+	<!-- Base -->
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceInclude Source="/Themes/Base-Dimensions.axaml"/>
+	</ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>
