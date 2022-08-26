@@ -25,6 +25,8 @@ namespace CarinaStudio.AppSuite.ViewModels
 
         // Fields.
         readonly List<ExternalDependency> attachedExternalDependencies = new();
+        readonly ThemeMode originalThemeMode;
+        readonly bool originalUsingCompactUI;
 
 
         /// <summary>
@@ -51,6 +53,8 @@ namespace CarinaStudio.AppSuite.ViewModels
                         break;
                 }
             }
+            this.originalThemeMode = this.ThemeMode;
+            this.originalUsingCompactUI = this.UseCompactUserInterface;
         }
 
 
@@ -173,6 +177,18 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
+        /// Check whether <see cref="ThemeMode"/> has been changed before restarting main windows or not.
+        /// </summary>
+        public bool IsThemeModeChanged { get; private set;}
+
+
+        /// <summary>
+        /// Check whether <see cref="UseCompactUserInterface"/> has been changed before restarting main windows or not.
+        /// </summary>
+        public bool IsUseCompactUserInterfaceChanged { get; private set;}
+
+
+        /// <summary>
         /// Check whether XRandR tool is installed or not.
         /// </summary>
         public bool IsXRandRInstalled { get; private set; }
@@ -287,7 +303,25 @@ namespace CarinaStudio.AppSuite.ViewModels
             else if (key == SettingKeys.NotifyApplicationUpdate)
                 this.OnPropertyChanged(nameof(NotifyApplicationUpdate));
             else if (key == SettingKeys.ThemeMode)
+            {
                 this.OnPropertyChanged(nameof(ThemeMode));
+                var changed = (this.originalThemeMode != (ThemeMode)e.Value);
+                if (this.IsThemeModeChanged != changed)
+                {
+                    this.IsThemeModeChanged = changed;
+                    this.OnPropertyChanged(nameof(IsThemeModeChanged));
+                }
+            }
+            else if (key == SettingKeys.UseCompactUserInterface)
+            {
+                this.OnPropertyChanged(nameof(UseCompactUserInterface));
+                var changed = (this.originalUsingCompactUI != (bool)e.Value);
+                if (this.IsUseCompactUserInterfaceChanged != changed)
+                {
+                    this.IsUseCompactUserInterfaceChanged = changed;
+                    this.OnPropertyChanged(nameof(IsUseCompactUserInterfaceChanged));
+                }
+            }
             else if (key == SettingKeys.UseSpacesForIndentationInScript)
                 this.OnPropertyChanged(nameof(UseSpacesForIndentationInScript));
         }
@@ -312,6 +346,16 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// Get available values of <see cref="ThemeMode"/>.
         /// </summary>
         public IList<ThemeMode> ThemeModes { get; } 
+
+
+        /// <summary>
+        /// Get or set to use compact layout for user interface.
+        /// </summary>
+        public bool UseCompactUserInterface
+        {
+            get => this.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface);
+            set => this.Settings.SetValue<bool>(SettingKeys.UseCompactUserInterface, value);
+        }
 
 
         /// <summary>

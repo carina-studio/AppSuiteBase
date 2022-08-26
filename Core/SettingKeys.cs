@@ -69,6 +69,12 @@ public sealed class SettingKeys
 
 
     /// <summary>
+    /// Use compact layout for user interface.
+    /// </summary>
+    public static readonly SettingKey<bool> UseCompactUserInterface = new(nameof(UseCompactUserInterface), false);
+
+
+    /// <summary>
     /// Use spaces instead of tab for indentation in script.
     /// </summary>
     public static readonly SettingKey<bool> UseSpacesForIndentationInScript = new(nameof(UseSpacesForIndentationInScript), true);

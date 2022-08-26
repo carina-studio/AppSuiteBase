@@ -65,6 +65,7 @@
 	<sys:String x:Key="String/ApplicationOptions.Others">Other Settings</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Scripting">Scripting</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">Theme</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface">Use compact layout</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UserInterface">User Interface</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">Use spaces for indentation</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">Will restart application to take effect</sys:String>
