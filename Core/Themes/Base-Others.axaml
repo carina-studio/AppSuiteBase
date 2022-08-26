@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:sys="using:System">
+
+	<!-- Animation -->
+	<Easing x:Key="Easing/Animation">ExponentialEaseOut</Easing>
+	<sys:TimeSpan x:Key="TimeSpan/Animation">0:0:0.5</sys:TimeSpan>
+	<sys:TimeSpan x:Key="TimeSpan/Animation.Fast">0:0:0.2</sys:TimeSpan>
+	<sys:TimeSpan x:Key="TimeSpan/Animation.Slow">0:0:0.8</sys:TimeSpan>
+
+	<!-- MainWindow -->
+	<sys:TimeSpan x:Key="TimeSpan/MainWindow.ContentPaddingTransition">0:0:0.8</sys:TimeSpan>
+
+</ResourceDictionary>

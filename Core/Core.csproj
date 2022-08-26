@@ -36,12 +36,21 @@
 		<AvaloniaResource Include="Strings/zh-TW-OSX.axaml" />
 		<AvaloniaResource Include="Strings/zh-TW-Linux.axaml" />
 		<AvaloniaResource Include="Themes/Base.axaml" />
+		<AvaloniaResource Include="Themes/Base-Colors.axaml" />
+		<AvaloniaResource Include="Themes/Base-Compact.axaml" />
+		<AvaloniaResource Include="Themes/Base-Dimensions.axaml" />
+		<AvaloniaResource Include="Themes/Base-Dimensions-Compact.axaml" />
 		<AvaloniaResource Include="Themes/Base-OSX.axaml" />
+		<AvaloniaResource Include="Themes/Base-Others.axaml" />
 		<AvaloniaResource Include="Themes/Base-Windows7.axaml" />
 		<AvaloniaResource Include="Themes/Dark.axaml" />
+		<AvaloniaResource Include="Themes/Dark-Colors.axaml" />
+		<AvaloniaResource Include="Themes/Dark-Compact.axaml" />
 		<AvaloniaResource Include="Themes/Dark-OSX.axaml" />
 		<AvaloniaResource Include="Themes/Dark-Windows7.axaml" />
 		<AvaloniaResource Include="Themes/Light.axaml" />
+		<AvaloniaResource Include="Themes/Light-Colors.axaml" />
+		<AvaloniaResource Include="Themes/Light-Compact.axaml" />
 		<AvaloniaResource Include="Themes/Light-OSX.axaml" />
 		<AvaloniaResource Include="Themes/Light-Windows7.axaml" />
 	</ItemGroup>

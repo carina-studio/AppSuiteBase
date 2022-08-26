@@ -227,6 +227,7 @@ namespace CarinaStudio.AppSuite
         readonly Styles extraStyles = new Styles();
         long frameworkInitializedTime;
         HardwareInfo? hardwareInfo;
+        bool isCompactStyles;
         bool isRestartAsAdminRequested;
         bool isRestartingMainWindowsRequested;
         bool isRestartRequested;
@@ -634,7 +635,9 @@ namespace CarinaStudio.AppSuite
                         return this.systemThemeMode;
                     return it;
                 });
-                return themeMode != this.stylesThemeMode;
+                var useCompactUI = this.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface);
+                return themeMode != this.stylesThemeMode
+                    || useCompactUI != this.isCompactStyles;
             });
             if (this.IsRestartingMainWindowsNeeded != isRestartingNeeded)
             {
@@ -2356,6 +2359,8 @@ namespace CarinaStudio.AppSuite
                     this.UpdateSystemThemeMode(false);
                 this.CheckRestartingMainWindowsNeeded();
             }
+            else if (e.Key == SettingKeys.UseCompactUserInterface)
+                this.CheckRestartingMainWindowsNeeded();
         }
 
 
@@ -3142,10 +3147,13 @@ namespace CarinaStudio.AppSuite
         {
             // get theme mode
             var themeMode = this.SelectCurrentThemeMode();
+            var useCompactUI = this.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface);
 
             // update styles
             var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
-            if (this.styles == null || this.stylesThemeMode != themeMode)
+            if (this.styles == null 
+                || this.stylesThemeMode != themeMode
+                || this.isCompactStyles != useCompactUI)
             {
                 // setup base theme
                 (themeMode switch
@@ -3175,7 +3183,9 @@ namespace CarinaStudio.AppSuite
                 var subTime = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
                 this.styles = new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
                 {
-                    Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}.axaml"),
+                    Source = useCompactUI
+                        ? new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}-Compact.axaml")
+                        : new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}.axaml"),
                 };
                 if (Platform.WindowsVersion == WindowsVersion.Windows7) // Windows 7 specific styles
                 {
@@ -3221,6 +3231,7 @@ namespace CarinaStudio.AppSuite
 
                 // apply styles
                 this.Styles.Add(this.styles);
+                this.isCompactStyles = useCompactUI;
                 this.stylesThemeMode = themeMode;
                 if (subTime > 0)
                 {

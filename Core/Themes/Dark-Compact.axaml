@@ -3,7 +3,7 @@
 
 	<!-- Base styles -->
 	<StyleInclude Source="avares://CarinaStudio.AppBase.Avalonia/Theme/Dark.axaml"/>
-	<StyleInclude Source="/Themes/Base.axaml"/>
+	<StyleInclude Source="/Themes/Base-Compact.axaml"/>
 
 	<!-- Resources -->
 	<Styles.Resources>

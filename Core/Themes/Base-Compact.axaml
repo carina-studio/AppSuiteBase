@@ -13,7 +13,7 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceInclude Source="/Themes/Base-Colors.axaml"/>
-				<ResourceInclude Source="/Themes/Base-Dimensions.axaml"/>
+				<ResourceInclude Source="/Themes/Base-Dimensions-Compact.axaml"/>
 				<ResourceInclude Source="/Themes/Base-Others.axaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
