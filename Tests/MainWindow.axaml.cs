@@ -386,6 +386,10 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
+        public void SwitchUsingCompactUI() =>
+            this.Settings.SetValue<bool>(SettingKeys.UseCompactUserInterface, !this.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface));
+
+
         void Test()
         {
             _ = new TextInputDialog()
