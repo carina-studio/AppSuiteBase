@@ -150,6 +150,11 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	}
 
 
+	// Edit path environment variable.
+	public void EditPathEnvironmentVariable() =>
+		_ = new PathEnvVarEditorDialog().ShowDialog(this);
+
+
 	/// <inheritdoc/>
 	protected override void OnClosed(EventArgs e)
 	{
