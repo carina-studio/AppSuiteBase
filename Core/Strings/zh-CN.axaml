@@ -178,6 +178,7 @@
 	<sys:String x:Key="String/DateTimeTextBox.Watermark">日期与时间</sys:String>
 
 	<!-- ExternalDependenciesDialog -->
+	<sys:String x:Key="String/ExternalDependenciesDialog.EditPathEnvVar">编辑 PATH 环境变量…</sys:String>
 	<sys:String x:Key="String/ExternalDependenciesDialog.ExternalDependency.Install">下载及安装</sys:String>
 	<sys:String x:Key="String/ExternalDependenciesDialog.Title">外部依赖</sys:String>
 
