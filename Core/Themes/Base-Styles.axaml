@@ -550,7 +550,7 @@
 							Height="{DynamicResource Double/Expander.Chevron.Size}"
 							Margin="{DynamicResource Thickness/Expander.Chevron.Margin}"
 							RenderTransformOrigin="50%,50%">
-						<Viewbox>
+						<Viewbox StretchDirection="DownOnly">
 							<Path x:Name="ExpandCollapseChevron"
 								HorizontalAlignment="Center"
 								VerticalAlignment="Center"
