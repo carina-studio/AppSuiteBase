@@ -13,4 +13,161 @@
 		<ResourceInclude Source="/Themes/Base-Dimensions.axaml"/>
 	</ResourceDictionary.MergedDictionaries>
 
+	<!-- BrowseButton -->
+	<sys:Double x:Key="Double/BrowseButton.Icon.Size">12</sys:Double>
+	<Thickness x:Key="Thickness/BrowseButton.Margin">3,0,0,0</Thickness>
+	<Thickness x:Key="Thickness/BrowseButton.Padding">6</Thickness>
+
+	<!-- Button -->
+	<Thickness x:Key="ButtonPadding">4,2,4,2</Thickness>
+	<CornerRadius x:Key="CornerRadius/Button">3</CornerRadius>
+
+	<!-- ComboBox -->
+	<Thickness x:Key="ComboBoxDropdownBorderPadding">0</Thickness>
+	<Thickness x:Key="ComboBoxPadding">4,2,4,2</Thickness>
+	<sys:Double x:Key="Double/ComboBox.MinHeight">26</sys:Double>
+
+	<!-- ComboBoxItem -->
+	<CornerRadius x:Key="CornerRadius/ComboBoxItem">0</CornerRadius>
+	<sys:Double x:Key="Double/ComboBoxItem.Icon.Size">16</sys:Double>
+	<Thickness x:Key="Thickness/ComboBoxItem.Icon.Margin">0,0,5,0</Thickness>
+	<Thickness x:Key="Thickness/ComboBoxItem.Margin">0</Thickness>
+	<Thickness x:Key="Thickness/ComboBoxItem.Padding">6,4,15,4</Thickness>
+
+	<!-- Control -->
+	<CornerRadius x:Key="ControlCornerRadius">0</CornerRadius>
+	<CornerRadius x:Key="ControlCornerRadiusBottom">0</CornerRadius>
+	<CornerRadius x:Key="ControlCornerRadiusLeft">0</CornerRadius>
+	<CornerRadius x:Key="ControlCornerRadiusRight">0</CornerRadius>
+	<CornerRadius x:Key="ControlCornerRadiusTop">0</CornerRadius>
+	<Thickness x:Key="Thickness/Control.Border.Focused">1</Thickness>
+
+	<!-- Dialog -->
+	<CornerRadius x:Key="CornerRadius/Dialog.TextBlock.Header1">0</CornerRadius>
+	<CornerRadius x:Key="CornerRadius/Dialog.TextBlock.Header2">0</CornerRadius>
+	<sys:Double x:Key="Double/Dialog.ControlButton.MinWidth">80</sys:Double>
+	<sys:Double x:Key="Double/Dialog.ListActionButton.MinWidth">80</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Separator.Height">10</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Separator.Height.Large">30</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Separator.Height.Micro">2</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Separator.Height.Small">3</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Separator.Width">10</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Separator.Width.Large">30</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Separator.Width.Micro">2</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Separator.Width.Small">3</sys:Double>
+	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding">18,10,18,10</Thickness>
+	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding.WithHeader">18,10,18,10</Thickness>
+	<Thickness x:Key="Thickness/Dialog.ControlButton.Margin">2,0,2,0</Thickness>
+	<Thickness x:Key="Thickness/Dialog.ControlButton.Padding">5,2,5,2</Thickness>
+	<Thickness x:Key="Thickness/Dialog.ControlButtonsPanel.Padding">18,10,18,10</Thickness>
+	<Thickness x:Key="Thickness/Dialog.IconControlButton.Padding">5</Thickness>
+	<Thickness x:Key="Thickness/Dialog.ListActionButton.Padding">5,2,5,2</Thickness>
+	<Thickness x:Key="Thickness/Dialog.ListActionButton.Margin">3,3,0,0</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">10,5,10,5</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">10,5,10,5</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin">0,0,0,3</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,3,0,0</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">-10,0,-10,5</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">-10,0,-10,4</Thickness>
+
+	<!-- Expander -->
+	<sys:Double x:Key="Double/Expander.Chevron.Size">10</sys:Double>
+	<Thickness x:Key="ExpanderHeaderPadding">5</Thickness>
+
+	<!-- FullWindowTutorialPresenter -->
+	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize">14</sys:Double>
+	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth">200</sys:Double>
+	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size">20</sys:Double>
+	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Icon.Size">16</sys:Double>
+	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Offset">15</sys:Double>
+	<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Icon.Margin">0,0,10,0</Thickness>
+	<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Dismiss.Margin">10,0,0,0</Thickness>
+	<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Dismiss.Padding">5</Thickness>
+	<Thickness x:Key="Thickness/FullWindowTutorialPresenter.SkipAllTutorials.Margin">3,10,0,0</Thickness>
+	<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Tutorial.Padding">10</Thickness>
+
+	<!-- ListBox -->
+	<Thickness x:Key="Thickness/ListBox.Padding">0</Thickness>
+
+	<!-- ListBoxItem -->
+	<CornerRadius x:Key="CornerRadius/ListBoxItem">0</CornerRadius>
+	<sys:Double x:Key="Double/ListBoxItem.Icon.Size">16</sys:Double>
+	<Thickness x:Key="Thickness/ListBoxItem.Icon.Margin">0,0,5,0</Thickness>
+	<Thickness x:Key="Thickness/ListBoxItem.Margin">0</Thickness>
+	<Thickness x:Key="Thickness/ListBoxItem.Padding">6,4,15,4</Thickness>
+
+	<!-- Menu -->
+	<Thickness x:Key="Thickness/Menu.MenuItem.Padding">7,2,7,2</Thickness>
+	<Thickness x:Key="Thickness/Menu.Padding">4,2,4,2</Thickness>
+
+	<!-- MenuFlyout -->
+	<Thickness x:Key="MenuFlyoutPresenterThemePadding">0</Thickness>
+	<Thickness x:Key="Thickness/MenuFlyout.Separator.Margin">2</Thickness>
+
+	<!-- MenuItem -->
+	<CornerRadius x:Key="CornerRadius/MenuItem">0</CornerRadius>
+	<Thickness x:Key="Thickness/MenuItem.Padding">6,4,6,4</Thickness>
+
+	<!-- Overlay -->
+	<CornerRadius x:Key="OverlayCornerRadius">0</CornerRadius>
+
+	<!-- ScrollViewer -->
+	<Thickness x:Key="Thickness/ScrollViewer.ScrollBar.Margin.Horizontal">0</Thickness>
+	<Thickness x:Key="Thickness/ScrollViewer.ScrollBar.Margin.Vertical">0</Thickness>
+
+	<!-- StatusBar -->
+	<Thickness x:Key="Thickness/StatusBar.Item.Margin">1,3,1,3</Thickness>
+
+	<!-- TabControl -->
+	<sys:Double x:Key="Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace">40</sys:Double>
+	<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Margin">1,3,1,2</Thickness>
+	<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Padding">5,2,5,2</Thickness>
+
+	<!-- TabItem -->
+	<CornerRadius x:Key="CornerRadius/TabItem.Header">0</CornerRadius>
+	<sys:Double x:Key="Double/TabItem.Header.ColorBar.Height">3</sys:Double>
+	<sys:Double x:Key="Double/TabItem.Header.FontSize">14</sys:Double>
+	<sys:Double x:Key="Double/TabItem.Header.Height">35</sys:Double>
+	<sys:Double x:Key="Double/TabItem.Header.InsertionIndicator.Width">20</sys:Double>
+	<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">8,0,0,0</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">4</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,8,0</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Padding">10,5,10,5</Thickness>
+
+	<!-- TextBox -->
+	<sys:Double x:Key="TextControlThemeMinHeight">0</sys:Double>
+	<Thickness x:Key="TextControlThemePadding">4,2,4,2</Thickness>
+	<sys:Double x:Key="Double/TextBox.InPlaceAction.Size">20</sys:Double>
+	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction">4,2,27,2</Thickness>
+	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Padding">5</Thickness>
+	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Margin">0,0,4,0</Thickness>
+
+	<!-- TextInputDialog -->
+	<sys:Double x:Key="Double/TextInputDialog.Width">400</sys:Double>
+
+	<!-- ToolBar -->
+	<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Size">8</sys:Double>
+	<sys:Double x:Key="Double/ToolBar.Button.Icon.Size">16</sys:Double>
+	<sys:Double x:Key="Double/ToolBar.Button.Size">26</sys:Double>
+	<Thickness x:Key="Thickness/ToolBar.Button.Padding">5</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Item.Margin">1</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Padding">2</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Separator.Margin">2</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.TextBlock.Margin">4,2,2,2</Thickness>
+
+	<!-- ToolTip -->
+	<CornerRadius x:Key="CornerRadius/ToolTip">0</CornerRadius>
+
+	<!-- TreeView -->
+	<Thickness x:Key="Thickness/TreeView.Padding">0</Thickness>
+
+	<!-- TreeViewItem -->
+	<CornerRadius x:Key="CornerRadius/TreeViewItem">0</CornerRadius>
+	<sys:Double x:Key="Double/TreeViewItem.Chevron.Width">10</sys:Double>
+	<sys:Double x:Key="Double/TreeViewItem.Icon.Size">16</sys:Double>
+	<sys:Double x:Key="TreeViewItemMinHeight">0</sys:Double>
+	<Thickness x:Key="Thickness/TreeViewItem.Icon.Margin">0,0,5,0</Thickness>
+	<Thickness x:Key="Thickness/TreeViewItem.Margin">0</Thickness>
+	<Thickness x:Key="Thickness/TreeViewItem.Padding">0,4,15,4</Thickness>
+
 </ResourceDictionary>

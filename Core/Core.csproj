@@ -42,6 +42,7 @@
 		<AvaloniaResource Include="Themes/Base-Dimensions-Compact.axaml" />
 		<AvaloniaResource Include="Themes/Base-OSX.axaml" />
 		<AvaloniaResource Include="Themes/Base-Others.axaml" />
+		<AvaloniaResource Include="Themes/Base-Styles.axaml" />
 		<AvaloniaResource Include="Themes/Base-Windows7.axaml" />
 		<AvaloniaResource Include="Themes/Dark.axaml" />
 		<AvaloniaResource Include="Themes/Dark-Colors.axaml" />

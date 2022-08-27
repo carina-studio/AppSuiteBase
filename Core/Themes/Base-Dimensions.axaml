@@ -21,7 +21,6 @@
 	<sys:Double x:Key="Double/ApplicationInfoDialog.AppBadge.Size">20</sys:Double>
 	<sys:Double x:Key="Double/ApplicationInfoDialog.AppIcon.Size">60</sys:Double>
 	<sys:Double x:Key="Double/ApplicationInfoDialog.AppTitle.FontSize">25</sys:Double>
-	<sys:Double x:Key="Double/ApplicationInfoDialog.AppVersion.Opacity">0.6</sys:Double>
 	<sys:Double x:Key="Double/ApplicationInfoDialog.Content.MaxHeight">500</sys:Double>
 	<sys:Double x:Key="Double/ApplicationInfoDialog.Header.Background.Height">120</sys:Double>
 	<sys:Double x:Key="Double/ApplicationInfoDialog.MinWidth">500</sys:Double>
@@ -48,6 +47,7 @@
 	<Thickness x:Key="ComboBoxDropdownBorderPadding">4,3,4,3</Thickness>
 	<Thickness x:Key="ComboBoxDropdownBorderThickness">1,2,1,2</Thickness>
 	<Thickness x:Key="ComboBoxDropdownContentMargin">0</Thickness>
+	<sys:Double x:Key="Double/ComboBox.MinHeight">32</sys:Double>
 
 	<!-- ComboBoxItem -->
 	<CornerRadius x:Key="CornerRadius/ComboBoxItem">5</CornerRadius>
@@ -107,10 +107,12 @@
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">-12,0,-12,8</Thickness>
 
 	<!-- Expander -->
+	<sys:Double x:Key="Double/Expander.Chevron.Size">32</sys:Double>
 	<Thickness x:Key="ExpanderDropdownDownBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderDropdownLeftBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderDropdownRightBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderDropdownUpBorderThickness">0</Thickness>
+	<Thickness x:Key="Thickness/Expander.Chevron.Margin">7</Thickness>
 
 	<!-- ExternalDependenciesDialog -->
 	<sys:Double x:Key="Double/ExternalDependenciesDialog.Content.MaxHeight">500</sys:Double>
@@ -132,9 +134,6 @@
 
 	<!-- GridSplitter -->
 	<sys:Double x:Key="Double/GridSplitter.Thickness">5</sys:Double>
-
-	<!-- Icon -->
-	<sys:Double x:Key="Double/Icon.Opacity.Disabled">0.3</sys:Double>
 
 	<!-- InPlaceAction -->
 	<sys:Double x:Key="Double/InPlaceAction.IconSize">10</sys:Double>
@@ -211,9 +210,6 @@
 	<Thickness x:Key="Thickness/ScrollViewer.ScrollBar.Margin.Horizontal">2,0,2,2</Thickness>
 	<Thickness x:Key="Thickness/ScrollViewer.ScrollBar.Margin.Vertical">0,2,2,2</Thickness>
 
-	<!-- Separator -->
-	<SolidColorBrush x:Key="Brush/Separator.Background" Color="{DynamicResource Color/Separator.Background}"/>
-
 	<!-- StatusBar -->
 	<sys:Double x:Key="Double/StatusBar.DropDownIcon.Size">8</sys:Double>
 	<sys:Double x:Key="Double/StatusBar.Icon.Size">14</sys:Double>
@@ -245,10 +241,10 @@
 	<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Margin">1,2,1,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Padding">15,10,15,10</Thickness>
+	<Thickness x:Key="Thickness/TabItem.InsertionIndicator.Margin">0,2,0,0</Thickness>
 
 	<!-- TextBox -->
 	<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>
-	<sys:Double x:Key="Double/TextBox.Assistance.MenuItem.Description.Opacity">0.5</sys:Double>
 	<sys:Double x:Key="Double/TextBox.InPlaceAction.Size">18</sys:Double>
 	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction">10,6,27,5</Thickness>
 	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Padding">3</Thickness>
@@ -274,8 +270,6 @@
 
 	<!-- ToolTip -->
 	<CornerRadius x:Key="CornerRadius/ToolTip">4</CornerRadius>
-	<SolidColorBrush x:Key="ToolTipBackground" Color="{DynamicResource Color/ToolTip.Background}"/>
-	<SolidColorBrush x:Key="ToolTipBorderBrush" Color="{DynamicResource Color/ToolTip.Border}"/>
 
 	<!-- TreeView -->
 	<Thickness x:Key="Thickness/TreeView.Padding">3</Thickness>
