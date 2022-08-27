@@ -1828,8 +1828,9 @@ namespace CarinaStudio.AppSuite
         /// Called to load <see cref="IStyle"/> for given theme mode.
         /// </summary>
         /// <param name="themeMode">Theme mode.</param>
+        /// <param name="useCompactUI">True to use compact user interface.</param>
         /// <returns><see cref="IStyle"/>.</returns>
-        protected virtual IStyle? OnLoadTheme(ThemeMode themeMode) => null;
+        protected virtual IStyle? OnLoadTheme(ThemeMode themeMode, bool useCompactUI) => null;
 
 
         // Called when IsActive of main window changed.
@@ -3215,7 +3216,7 @@ namespace CarinaStudio.AppSuite
                     this.Logger.LogTrace($"[Performance] Took {currentTime - subTime} ms to load default theme");
                     subTime = currentTime;
                 }
-                this.styles = this.OnLoadTheme(themeMode)?.Let(it =>
+                this.styles = this.OnLoadTheme(themeMode, useCompactUI)?.Let(it =>
                 {
                     var styles = new Styles();
                     styles.Add(this.styles);
