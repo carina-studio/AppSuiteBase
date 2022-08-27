@@ -13,6 +13,9 @@
 	<sys:String x:Key="String/Common.Save.WithGesture">Save (⌘S)</sys:String>
 	<sys:String x:Key="String/Common.SelectAll.WithGesture">Select all (⌘A)</sys:String>
 
+	<!-- ExternalDependenciesDialog -->
+	<sys:String x:Key="String/ExternalDependenciesDialog.EditPathEnvVar">Edit /etc/paths…</sys:String>
+
 	<!-- PathEnvVarEditorDialog -->
 	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">Edit /etc/paths</sys:String>
 	

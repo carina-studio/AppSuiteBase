@@ -179,6 +179,7 @@
 	<sys:String x:Key="String/DateTimeTextBox.Watermark">Date and Time</sys:String>
 
 	<!-- ExternalDependenciesDialog -->
+	<sys:String x:Key="String/ExternalDependenciesDialog.EditPathEnvVar">Edit PATH environment variable…</sys:String>
 	<sys:String x:Key="String/ExternalDependenciesDialog.ExternalDependency.Install">Download and install</sys:String>
 	<sys:String x:Key="String/ExternalDependenciesDialog.Title">External dependencies</sys:String>
 
