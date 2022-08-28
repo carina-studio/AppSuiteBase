@@ -63,6 +63,7 @@ namespace CarinaStudio.AppSuite
 			this.uiResponseUpdateInterval = app.IsDebugMode ? UIResponseUpdateIntervalHF : UIResponseUpdateInterval;
 			this.updateInterval = app.IsDebugMode ? ProcessInfoUpdateIntervalHF : ProcessInfoUpdateInterval;
             this.ProcessId = this.process.Id;
+			this.ThreadCount = 1;
 
             // create scheduled actions
             this.updateProcessInfoAction = new ScheduledAction(this.processInfoCheckingSyncContext, () =>
@@ -144,6 +145,12 @@ namespace CarinaStudio.AppSuite
 		}
 
 
+		/// <summary>
+		/// Get number of threads.
+		/// </summary>
+		public int ThreadCount { get; private set; }
+
+
 		// Entry of UI response checking thread.
 		void UIResponseCheckingThreadEntry()
 		{
@@ -216,10 +223,12 @@ namespace CarinaStudio.AppSuite
 			// get process info
 			var privateMemoryUsage = 0L;
 			var cpuUsagePercentage = double.NaN;
+			var threadCount = this.ThreadCount;
 			var updateTime = this.stopWatch.ElapsedMilliseconds;
 			try
 			{
 				this.process.Refresh();
+				threadCount = this.process.Threads.Count;
 				var totalProcessorTime = this.process.TotalProcessorTime;
 				privateMemoryUsage = this.process.PrivateMemorySize64;
 				if (privateMemoryUsage <= 0)
@@ -242,16 +251,24 @@ namespace CarinaStudio.AppSuite
 			}
 
 			// report state
-			if (!double.IsNaN(cpuUsagePercentage))
+			this.app.SynchronizationContext.Post(() =>
 			{
-				this.CpuUsagePercentage = cpuUsagePercentage;
-				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CpuUsagePercentage)));
-			}
-			if (privateMemoryUsage > 0)
-			{
-				this.PrivateMemoryUsage = privateMemoryUsage;
-				this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PrivateMemoryUsage)));
-			}
+				if (!double.IsNaN(cpuUsagePercentage))
+				{
+					this.CpuUsagePercentage = cpuUsagePercentage;
+					this.PropertyChanged?.Invoke(this, new(nameof(CpuUsagePercentage)));
+				}
+				if (privateMemoryUsage > 0)
+				{
+					this.PrivateMemoryUsage = privateMemoryUsage;
+					this.PropertyChanged?.Invoke(this, new(nameof(PrivateMemoryUsage)));
+				}
+				if (threadCount != this.ThreadCount)
+				{
+					this.ThreadCount = threadCount;
+					this.PropertyChanged?.Invoke(this, new(nameof(ThreadCount)));
+				}
+			});
 			if (this.app.IsDebugMode)
 				this.logger.LogTrace($"CPU usage: {cpuUsagePercentage:0.0}%, memory usage: {privateMemoryUsage.ToFileSizeString()}");
 			this.updateProcessInfoAction?.Schedule(this.updateInterval);

@@ -23,6 +23,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section2">open source project based</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section3">application.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">Application will generate more runtime information to application log in Debug Mode, even provides options to enable or adjustment some internal functions. It will leave Debug Mode automatically when you launch application next time.</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.CpuUsage">CPU usage: {0:F2}%</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DeviceName">Device name: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DonateWithPayPal">Donate with PayPal</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">Export application logs…</sys:String>
@@ -36,6 +37,9 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">Operating system: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">Other information</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">Privacy Policy</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrivateMemoryUsage">Private memory usage: {0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ProcessId">ID: {0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ProcessInformation">Process information</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessorCount">Number of processors: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Products">Products</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProprietaryVersion">(Built by Carina Studio)</sys:String>
@@ -45,6 +49,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.Screen.WorkingArea">Working area of screen: {0} ({1} dip)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">Application logs exported.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">System information</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ThreadCount">Number of threads: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">About {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">RAM: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">User Agreement</sys:String>
