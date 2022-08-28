@@ -220,6 +220,7 @@
 
 	<!-- MainWindow -->
 	<sys:String x:Key="String/MainWindow.ConfirmLayoutingLotsOfMainWindows">排列較多數量的視窗可能導致不適合的排列結果，是否仍要進行排列？</sys:String>
+	<sys:String x:Key="String/MainWindow.ConfirmUsingCompactUI">您正在使用較小螢幕的裝置，是否要啟用緊密版面配置？您也可以在應用程式選項中變更此設定。</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows">排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">水平排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">網格排列視窗</sys:String>
