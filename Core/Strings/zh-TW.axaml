@@ -36,9 +36,13 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作業系統：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">其他資訊</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">隱私權政策</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ProcessorCount">處理器個數：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Products">相關產品</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProprietaryVersion">(Carina Studio 建置)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.RestartInDebugMode">以偵錯模式重新啟動</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Screen.PixelDensity">螢幕縮放係數：{0:F2}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Screen.Size">螢幕大小：{0} ({1} dip)</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Screen.WorkingArea">螢幕工作區大小：{0} ({1} dip)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">應用程式日誌匯出完成。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">系統資訊</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">關於 {0}</sys:String>
