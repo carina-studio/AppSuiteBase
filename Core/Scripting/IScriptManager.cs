@@ -1,6 +1,7 @@
-using System.Threading;
+using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Scripting;
@@ -8,7 +9,7 @@ namespace CarinaStudio.AppSuite.Scripting;
 /// <summary>
 /// Script manager.
 /// </summary>
-public interface IScriptManager : IApplicationObject<IAppSuiteApplication>
+public interface IScriptManager : IApplicationObject<IAppSuiteApplication>, INotifyPropertyChanged
 {
     /// <summary>
     /// Create script instance.
@@ -36,11 +37,23 @@ public interface IScriptManager : IApplicationObject<IAppSuiteApplication>
 
 
     /// <summary>
+    /// Number of running script instances.
+    /// </summary>
+    int RunningScriptCount { get; }
+
+
+    /// <summary>
     /// Save script as JSON data.
     /// </summary>
     /// <param name="script">Script to save.</param>
     /// <param name="writer">Writer to write JSON data.</param>
     void SaveScript(IScript script, Utf8JsonWriter writer);
+
+
+    /// <summary>
+    /// Loading of script running. The range is [0.0, 1.0].
+    /// </summary>
+    double ScriptRunningLoading { get; }
 
 
     /// <summary>

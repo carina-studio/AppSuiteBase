@@ -10,6 +10,7 @@
         xmlns:iaCore="using:Avalonia.Xaml.Interactions.Core"
 		xmlns:interop="using:System.Runtime.InteropServices"
 		xmlns:net="using:CarinaStudio.AppSuite.Net"
+		xmlns:scripting="using:CarinaStudio.AppSuite.Scripting"
 		xmlns:sys="using:System"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.ApplicationInfoDialogImpl"
@@ -188,6 +189,19 @@
 
 					<!-- Private memory usage -->
 					<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.PrivateMemoryUsage}" TextTrimming="CharacterEllipsis"/>
+					
+					<!-- Script info -->
+					<StackPanel Name="scriptInfoPanel" IsVisible="False">
+
+						<!-- Running script count -->
+						<Separator Classes="Dialog_Separator_Small"/>
+						<abControls:FormattedTextBlock Arg1="{Binding RunningScriptCount, Source={x:Static scripting:ScriptManager.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.RunningScriptCount}" TextTrimming="CharacterEllipsis"/>
+
+						<!-- Script running loading -->
+						<Separator Classes="Dialog_Separator_Small"/>
+						<abControls:FormattedTextBlock Arg1="{Binding ScriptRunningLoading, Source={x:Static scripting:ScriptManager.Default}, Converter={x:Static converters:RatioToPercentageConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.ScriptRunningLoading}" TextTrimming="CharacterEllipsis"/>
+
+					</StackPanel>
 					<Separator Classes="Dialog_Separator_Large"/>
 
 					<!-- Activated products -->

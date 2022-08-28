@@ -53,6 +53,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 		// Fields.
 		readonly Panel badgesPanel;
+		readonly bool isProprietaryApp;
 		PixelSize physicalScreenSize;
 		PixelRect physicalScreenWorkingArea;
 		IDisposable processInfoHfuToken = EmptyDisposable.Default;
@@ -67,6 +68,17 @@ namespace CarinaStudio.AppSuite.Controls
 		// Constructor.
 		public ApplicationInfoDialogImpl()
 		{
+			// check proprietary application
+			foreach (var itf in this.Application.GetType().GetInterfaces())
+			{
+				if (itf.FullName == "CarinaStudio.AppSuite.IProprietaryApplication"
+					&& itf.Assembly.FullName?.StartsWith("CarinaStudio.AppSuite.Proprietary,") == true)
+				{
+					this.isProprietaryApp = true;
+					break;
+				}
+			}
+			
 			// setup controls
 			AvaloniaXamlLoader.Load(this);
 			this.badgesPanel = this.Get<Panel>(nameof(badgesPanel)).AsNonNull();
@@ -203,6 +215,8 @@ namespace CarinaStudio.AppSuite.Controls
 		protected override void OnOpened(EventArgs e)
 		{
 			base.OnOpened(e);
+			if (this.isProprietaryApp)
+				this.Get<Panel>("scriptInfoPanel").IsVisible = true;
 			this.processInfoHfuToken = this.Application.ProcessInfo.RequestHighFrequencyUpdate();
 			this.Application.StringsUpdated += this.OnAppStringsUpdated;
 			this.Application.ProductManager.ProductStateChanged += this.OnProductStateChanged;
@@ -404,17 +418,7 @@ namespace CarinaStudio.AppSuite.Controls
 					buffer.Append(' ');
 					buffer.Append(AppReleasingTypeConverter.Convert<string?>(appInfo.ReleasingType));
 				}
-				var isProprietaryApp = false;
-				foreach (var itf in this.Application.GetType().GetInterfaces())
-				{
-					if (itf.FullName == "CarinaStudio.AppSuite.IProprietaryApplication"
-						&& itf.Assembly.FullName?.StartsWith("CarinaStudio.AppSuite.Proprietary,") == true)
-					{
-						isProprietaryApp = true;
-						break;
-					}
-				}
-				if (isProprietaryApp)
+				if (this.isProprietaryApp)
 				{
 					buffer.Append(' ');
 					buffer.Append(this.Application.GetString("ApplicationInfoDialog.ProprietaryVersion"));

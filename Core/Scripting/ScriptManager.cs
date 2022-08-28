@@ -1,7 +1,7 @@
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
+using System.ComponentModel;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -26,6 +26,8 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
     {
         this.implementation = implementation;
         this.IOTaskFactory = implementation?.IOTaskFactory ?? new();
+        implementation?.Let(it => it.PropertyChanged += (_, e) =>
+            this.PropertyChanged?.Invoke(this, e));
     }
 
 
@@ -113,6 +115,14 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
     
 
     /// <inheritdoc/>
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+
+    /// <inheritdoc/>
+    public int RunningScriptCount { get => this.implementation?.RunningScriptCount ?? 0; }
+    
+
+    /// <inheritdoc/>
     public void SaveScript(IScript script, Utf8JsonWriter writer)
     {
         if (this.implementation != null)
@@ -123,6 +133,10 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
             writer.WriteEndObject();
         }
     }
+
+
+    /// <inheritdoc/>
+    public double ScriptRunningLoading { get => this.implementation?.ScriptRunningLoading ?? 0; }
 
 
     /// <inheritdoc/>
