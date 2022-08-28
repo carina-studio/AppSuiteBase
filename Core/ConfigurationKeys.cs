@@ -20,6 +20,10 @@ namespace CarinaStudio.AppSuite
         /// Interval of checking whether script running is completed or not.
         /// </summary>
         public static readonly SettingKey<int> ScriptCompletionCheckingInterval = new(nameof(ScriptCompletionCheckingInterval), 3000);
+        /// <summary>
+        /// Size of working area in logical pixels to suggest using compact user interface.
+        /// </summary>
+        public static readonly SettingKey<int> WorkingAreaSizeToSuggestUsingCompactUI = new(nameof(WorkingAreaSizeToSuggestUsingCompactUI), 768);
 
 
         // Constructor.

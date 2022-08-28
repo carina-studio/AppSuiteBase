@@ -47,11 +47,12 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Static fields.
-        static readonly SettingKey<int> ExtDepDialogShownVersionKey = new SettingKey<int>("MainWindow.ExternalDependenciesDialogShownVersion", -1);
+        static readonly SettingKey<int> ExtDepDialogShownVersionKey = new("MainWindow.ExternalDependenciesDialogShownVersion", -1);
         static bool IsNotifyingAppUpdateFound;
-        static readonly SettingKey<int> WindowHeightSettingKey = new SettingKey<int>("MainWindow.Height", 600);
-        static readonly SettingKey<WindowState> WindowStateSettingKey = new SettingKey<WindowState>("MainWindow.State", WindowState.Maximized);
-        static readonly SettingKey<int> WindowWidthSettingKey = new SettingKey<int>("MainWindow.Width", 800);
+        static readonly SettingKey<bool> IsUsingCompactUIConfirmedKey = new("MainWindow.IsUsingCompactUIConfirmed", false);
+        static readonly SettingKey<int> WindowHeightSettingKey = new("MainWindow.Height", 600);
+        static readonly SettingKey<WindowState> WindowStateSettingKey = new("MainWindow.State", WindowState.Maximized);
+        static readonly SettingKey<int> WindowWidthSettingKey = new("MainWindow.Width", 800);
 
 
         // Fields.
@@ -625,6 +626,46 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 this.showInitDialogsAction.Reschedule((int)delay);
                 return;
+            }
+
+            // use compact UI
+            if (!this.PersistentState.GetValueOrDefault(IsUsingCompactUIConfirmedKey))
+            {
+                var screen = this.Screens.ScreenFromWindow(this.PlatformImpl) ?? this.Screens.ScreenFromVisual(this) ?? this.Screens.Primary;
+                if (screen != null)
+                {
+                    var pixelDensity = screen.PixelDensity;
+                    var sizeToUseCompactUI = this.Configuration.GetValueOrDefault(ConfigurationKeys.WorkingAreaSizeToSuggestUsingCompactUI);
+                    var workingSize = screen.WorkingArea.Size.Let(it =>
+                    {
+                        if (Platform.IsMacOS)
+                            return it;
+                        return new PixelSize((int)(it.Width / pixelDensity + 0.5), (int)(it.Height / pixelDensity + 0.5));
+                    });
+                    if (workingSize.Width < sizeToUseCompactUI || workingSize.Height < sizeToUseCompactUI)
+                    {
+                        this.isShowingInitialDialogs = true;
+                        var result = await new MessageDialog()
+                        {
+                            Buttons = MessageDialogButtons.YesNo,
+                            DefaultResult = MessageDialogResult.Yes,
+                            Icon = MessageDialogIcon.Question,
+                            Message = this.Application.GetObservableString("MainWindow.ConfirmUsingCompactUI"),
+                        }.ShowDialog(this);
+                        this.isShowingInitialDialogs = false;
+                        this.PersistentState.SetValue<bool>(IsUsingCompactUIConfirmedKey, true);
+                        if (result == MessageDialogResult.Yes
+                            && !this.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface))
+                        {
+                            this.Settings.SetValue<bool>(SettingKeys.UseCompactUserInterface, true);
+                            this.isClosingScheduled = true;
+                            return;
+                        }
+                    }
+                }
+                else
+                    this.Logger.LogWarning("No screen to check using compact UI");
+                this.PersistentState.SetValue<bool>(IsUsingCompactUIConfirmedKey, true);
             }
 
             // show user agreement
