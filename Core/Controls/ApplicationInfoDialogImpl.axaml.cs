@@ -28,7 +28,7 @@ namespace CarinaStudio.AppSuite.Controls
 		static readonly AvaloniaProperty<bool> HasTotalPhysicalMemoryProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasTotalPhysicalMemory));
 		static readonly SettingKey<bool> IsRestartingInDebugModeConfirmationShownKey = new("ApplicationInfoDialog.IsRestartingInDebugModeConfirmationShown");
 		static readonly DirectProperty<ApplicationInfoDialogImpl, PixelSize> PhysicalScreenSizeProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelSize>("PhysicalScreenSize", w => w.physicalScreenSize);
-		static readonly DirectProperty<ApplicationInfoDialogImpl, PixelRect> PhysicalScreenWorkingAreaProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelRect>("PhysicalScreenWorkingArea", w => w.PhysicalScreenWorkingArea);
+		static readonly DirectProperty<ApplicationInfoDialogImpl, PixelRect> PhysicalScreenWorkingAreaProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelRect>("PhysicalScreenWorkingArea", w => w.physicalScreenWorkingArea);
 		public static readonly IValueConverter RectToStringConverter = new FuncValueConverter<object?, string?>(value =>
 		{
 			if (value is PixelRect pixelRect)
@@ -54,7 +54,8 @@ namespace CarinaStudio.AppSuite.Controls
 		// Fields.
 		readonly Panel badgesPanel;
 		PixelSize physicalScreenSize;
-		PixelRect PhysicalScreenWorkingArea;
+		PixelRect physicalScreenWorkingArea;
+		IDisposable processInfoHfuToken = EmptyDisposable.Default;
 		readonly Panel productListPanel;
 		readonly EnumConverter productStateConverter;
 		double screenPixelDensity = 1;
@@ -106,7 +107,7 @@ namespace CarinaStudio.AppSuite.Controls
 						: new Rect(it.X / pixelDensity, it.Y / pixelDensity, it.Width / pixelDensity, it.Height / pixelDensity);
 				});
 				this.SetAndRaise<PixelSize>(PhysicalScreenSizeProperty, ref this.physicalScreenSize, screenSizePx);
-				this.SetAndRaise<PixelRect>(PhysicalScreenWorkingAreaProperty, ref this.PhysicalScreenWorkingArea, workingAreaPx);
+				this.SetAndRaise<PixelRect>(PhysicalScreenWorkingAreaProperty, ref this.physicalScreenWorkingArea, workingAreaPx);
 				this.SetAndRaise<double>(ScreenPixelDensityProperty, ref this.screenPixelDensity, pixelDensity);
 				this.SetAndRaise<Size>(ScreenSizeProperty, ref this.screenSize, screenSizeDip);
 				this.SetAndRaise<Rect>(ScreenWorkingAreaProperty, ref this.screenWorkingArea, workingAreaDip);
@@ -178,6 +179,7 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <inheritdoc/>
 		protected override void OnClosed(EventArgs e)
 		{
+			this.processInfoHfuToken.Dispose();
 			this.Application.StringsUpdated -= this.OnAppStringsUpdated;
 			this.Application.ProductManager.ProductStateChanged -= this.OnProductStateChanged;
 			base.OnClosed(e);
@@ -201,6 +203,7 @@ namespace CarinaStudio.AppSuite.Controls
 		protected override void OnOpened(EventArgs e)
 		{
 			base.OnOpened(e);
+			this.processInfoHfuToken = this.Application.ProcessInfo.RequestHighFrequencyUpdate();
 			this.Application.StringsUpdated += this.OnAppStringsUpdated;
 			this.Application.ProductManager.ProductStateChanged += this.OnProductStateChanged;
 			this.updateScreenInfoAction.Execute();

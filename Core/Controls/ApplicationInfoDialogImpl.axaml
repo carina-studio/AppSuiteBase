@@ -169,6 +169,27 @@
 					</StackPanel>
 					<Separator Classes="Dialog_Separator_Large"/>
 
+					<!-- Process info (Header) -->
+					<Border Classes="Dialog_TextBlock_Header1">
+						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.ProcessInformation}"/>
+					</Border>
+
+					<!-- Process ID -->
+					<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ProcessId, Mode=OneTime}" Format="{DynamicResource String/ApplicationInfoDialog.ProcessId}" TextTrimming="CharacterEllipsis"/>
+					<Separator Classes="Dialog_Separator_Small"/>
+
+					<!-- Thread count -->
+					<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ThreadCount}" Format="{DynamicResource String/ApplicationInfoDialog.ThreadCount}" TextTrimming="CharacterEllipsis"/>
+					<Separator Classes="Dialog_Separator_Small"/>
+
+					<!-- CPU usage -->
+					<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage}" Format="{DynamicResource String/ApplicationInfoDialog.CpuUsage}" TextTrimming="CharacterEllipsis"/>
+					<Separator Classes="Dialog_Separator_Small"/>
+
+					<!-- Private memory usage -->
+					<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.PrivateMemoryUsage}" TextTrimming="CharacterEllipsis"/>
+					<Separator Classes="Dialog_Separator_Large"/>
+
 					<!-- Activated products -->
 					<StackPanel Name="productListSectionPanel">
 						<Border Classes="Dialog_TextBlock_Header1">
