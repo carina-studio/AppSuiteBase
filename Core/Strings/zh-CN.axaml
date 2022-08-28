@@ -79,8 +79,8 @@
 	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface.Description">当您使用较小屏幕的设备时建议使用。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UserInterface">用户界面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">使用空白字符进行缩排</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">将重新启动应用程序以开启</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.WillRestartMainWindowsToTakeEffect">将重新启动窗口以开启</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">将重新启动应用程序以开启。</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.WillRestartMainWindowsToTakeEffect">将重新启动窗口以开启。</sys:String>
 
 	<!-- ApplicationReleasingType -->
 	<sys:String x:Key="String/ApplicationReleasingType.Development">开发版</sys:String>
