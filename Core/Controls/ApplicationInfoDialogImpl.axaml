@@ -135,6 +135,12 @@
 					</StackPanel>
 					<Separator Classes="Dialog_Separator_Small"/>
 
+					<!-- Processor count -->
+					<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
+						<abControls:FormattedTextBlock Arg1="{x:Static sys:Environment.ProcessorCount}" Format="{DynamicResource String/ApplicationInfoDialog.ProcessorCount}" TextTrimming="CharacterEllipsis"/>
+						<Separator Classes="Dialog_Separator_Small"/>
+					</StackPanel>
+
 					<!-- Total physical memory -->
 					<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.TotalPhysicalMemory}" IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}" TextTrimming="CharacterEllipsis"/>
 					<Separator Classes="Dialog_Separator_Small"/>
@@ -144,6 +150,23 @@
 						<abControls:FormattedTextBlock Arg1="{Binding PublicIPAddress, Source={x:Static net:NetworkManager.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Connected}" IsVisible="{Binding IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" TextTrimming="CharacterEllipsis"/>
 						<TextBlock IsVisible="{Binding !IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" Text="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Disconnected}" TextTrimming="CharacterEllipsis"/>
 					</Panel>
+
+					<!-- Screen info -->
+					<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
+
+						<!-- Screen pixel density -->
+						<Separator Classes="Dialog_Separator_Small"/>
+						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].ScreenPixelDensity}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.PixelDensity}" TextTrimming="CharacterEllipsis"/>
+
+						<!-- Screen size -->
+						<Separator Classes="Dialog_Separator_Small"/>
+						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].PhysicalScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" Arg2="{Binding $parent[Window].ScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.Size}" TextTrimming="CharacterEllipsis"/>
+
+						<!-- Working area -->
+						<Separator Classes="Dialog_Separator_Small"/>
+						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].PhysicalScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" Arg2="{Binding $parent[Window].ScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.WorkingArea}" TextTrimming="CharacterEllipsis"/>
+
+					</StackPanel>
 					<Separator Classes="Dialog_Separator_Large"/>
 
 					<!-- Activated products -->
