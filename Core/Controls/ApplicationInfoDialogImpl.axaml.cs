@@ -253,7 +253,10 @@ namespace CarinaStudio.AppSuite.Controls
 			}
 
 			// restart
-			this.Application.Restart($"{AppSuiteApplication.RestoreMainWindowsArgument} {AppSuiteApplication.DebugArgument}", this.Application.IsRunningAsAdministrator);
+			this.Close();
+			this.SynchronizationContext.PostDelayed(() => // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
+				this.Application.Restart($"{AppSuiteApplication.RestoreMainWindowsArgument} {AppSuiteApplication.DebugArgument}", this.Application.IsRunningAsAdministrator),
+				300);
 		}
 
 
