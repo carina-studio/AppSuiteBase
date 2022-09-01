@@ -43,7 +43,6 @@ namespace CarinaStudio.AppSuite.Controls
         Window? attachedWindow;
         object? draggingOverItem;
         int draggingOverItemIndex = -1;
-        bool isAttachedToVisualTree;
         object? pointerPressedItem;
         int pointerPressedItemIndex = -1;
         Point? pointerPressedPosition;
@@ -299,7 +298,6 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 it.PropertyChanged += this.OnWindowPropertyChanged;
             });
-            this.isAttachedToVisualTree = true;
             (this.Items as INotifyCollectionChanged)?.Let(it => it.CollectionChanged += this.OnItemsChanged);
             this.UpdateTabStripScrollViewerMargin(false);
         }
@@ -327,7 +325,6 @@ namespace CarinaStudio.AppSuite.Controls
                 it.PropertyChanged -= this.OnWindowPropertyChanged;
                 this.attachedWindow = null;
             });
-            this.isAttachedToVisualTree = false;
             (this.Items as INotifyCollectionChanged)?.Let(it => it.CollectionChanged -= this.OnItemsChanged);
             this.updateTabStripScrollViewerMarginAction.Cancel();
             base.OnDetachedFromVisualTree(e);
