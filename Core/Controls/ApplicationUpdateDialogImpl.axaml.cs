@@ -23,6 +23,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Fields.
+		ApplicationUpdater? attachedAppUpdater;
 		bool isClosingRequested;
 
 
@@ -31,7 +32,7 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		public ApplicationUpdateDialogImpl()
 		{
-			InitializeComponent();
+			AvaloniaXamlLoader.Load(this);
 		}
 
 
@@ -44,16 +45,12 @@ namespace CarinaStudio.AppSuite.Controls
 		// Download update package.
 		void DownloadUpdatePackage()
 		{
-			if (this.DataContext is ApplicationUpdater updater && updater.UpdatePackageUri != null)
+			if (this.attachedAppUpdater != null && this.attachedAppUpdater.UpdatePackageUri != null)
 			{
-				Platform.OpenLink(updater.UpdatePackageUri);
+				Platform.OpenLink(this.attachedAppUpdater.UpdatePackageUri);
 				this.Close();
 			}
 		}
-
-
-		// Initialize.
-		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
 
 		// Message of latest application version.
@@ -75,13 +72,13 @@ namespace CarinaStudio.AppSuite.Controls
 		// Called when closing.
 		protected override void OnClosing(CancelEventArgs e)
 		{
-			if (this.DataContext is ApplicationUpdater updater)
+			if (this.attachedAppUpdater != null)
 			{
-				if (updater.IsPreparingForUpdate)
+				if (this.attachedAppUpdater.IsPreparingForUpdate)
 				{
 					e.Cancel = true;
 					this.isClosingRequested = true;
-					updater.CancelUpdatingCommand.TryExecute();
+					this.attachedAppUpdater.CancelUpdatingCommand.TryExecute();
 				}
 			}
 			base.OnClosing(e);
@@ -99,6 +96,24 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
+		/// <inheritdoc/>
+		protected override void OnDataContextChanged(EventArgs e)
+		{
+			base.OnDataContextChanged(e);
+			if (this.attachedAppUpdater != null)
+			{
+				this.attachedAppUpdater.ErrorMessageGenerated -= this.OnErrorMessageGenerated;
+				this.attachedAppUpdater.PropertyChanged -= this.OnUpdaterPropertyChanged;
+			}
+			this.attachedAppUpdater = this.DataContext as ApplicationUpdater;
+			if (this.attachedAppUpdater != null)
+			{
+				this.attachedAppUpdater.ErrorMessageGenerated += this.OnErrorMessageGenerated;
+				this.attachedAppUpdater.PropertyChanged += this.OnUpdaterPropertyChanged;
+			}
+		}
+
+
 		// Called when opened.
 		protected override void OnOpened(EventArgs e)
 		{
@@ -106,13 +121,13 @@ namespace CarinaStudio.AppSuite.Controls
 			this.UpdateLatestNotifiedInfo();
 
 			// check for update
-			if (this.CheckForUpdateWhenOpening && this.DataContext is ApplicationUpdater updater)
-				updater.CheckForUpdateCommand.TryExecute();
+			if (this.CheckForUpdateWhenOpening && this.attachedAppUpdater != null)
+				this.attachedAppUpdater.CheckForUpdateCommand.TryExecute();
 			
 			// setup default button
 			this.SynchronizationContext.Post(() =>
 			{
-				if ((this.DataContext as ApplicationUpdater)?.IsLatestVersion == false)
+				if (this.attachedAppUpdater?.IsLatestVersion == false)
 				{
 					this.FindControl<Button>("startUpdatingButton")?.Let(it =>
 					{
@@ -130,26 +145,6 @@ namespace CarinaStudio.AppSuite.Controls
 			// call base
 			base.OnOpened(e);
 		}
-
-
-		// Property changed.
-        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-        {
-            base.OnPropertyChanged(change);
-			if(change.Property == DataContextProperty)
-            {
-				(change.OldValue.Value as ApplicationUpdater)?.Let(updater =>
-				{
-					updater.ErrorMessageGenerated -= this.OnErrorMessageGenerated;
-					updater.PropertyChanged -= this.OnUpdaterPropertyChanged;
-				});
-				(change.NewValue.Value as ApplicationUpdater)?.Let(updater =>
-				{
-					updater.ErrorMessageGenerated += this.OnErrorMessageGenerated;
-					updater.PropertyChanged += this.OnUpdaterPropertyChanged;
-				});
-			}
-        }
 
 
 		// Property of updater changed.
@@ -195,9 +190,9 @@ namespace CarinaStudio.AppSuite.Controls
 		// Update latest info shown to user.
 		void UpdateLatestNotifiedInfo()
         {
-			if (this.DataContext is not ApplicationUpdater updater)
+			if (this.attachedAppUpdater == null)
 				return;
-			var version = updater.UpdateVersion;
+			var version = this.attachedAppUpdater.UpdateVersion;
 			if (version != null)
 			{
 				this.PersistentState.SetValue<DateTime>(LatestNotifiedTimeKey, DateTime.Now);

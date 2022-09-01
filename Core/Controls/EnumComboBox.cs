@@ -27,6 +27,27 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		/// <summary>
+		/// Initialize new <see cref="EnumComboBox"/> instance.
+		/// </summary>
+		public EnumComboBox()
+		{
+			this.GetObservable(EnumTypeProperty).Subscribe(type =>
+			{
+				this.enumConverter = null;
+				this.enumValues = null;
+				this.Items = null;
+				if (type != null)
+				{
+					this.enumConverter = new EnumConverter(AppSuiteApplication.Current, type);
+					this.enumValues = Enum.GetValues(type);
+					this.Items = this.enumValues;
+				}
+				this.UpdateItemTemplate();
+			});
+		}
+
+
+		/// <summary>
 		/// Get or set type of enumeration.
 		/// </summary>
 		public Type EnumType
@@ -55,30 +76,6 @@ namespace CarinaStudio.AppSuite.Controls
 			Application.CurrentOrNull?.Let(it => it.StringsUpdated -= this.OnApplicationStringsUpdated);
 			base.OnDetachedFromLogicalTree(e);
         }
-
-
-        /// <summary>
-        /// Called when property changed.
-        /// </summary>
-        /// <typeparam name="T">Type of property.</typeparam>
-        /// <param name="change">Change data.</param>
-        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-		{
-			base.OnPropertyChanged(change);
-			if (change.Property == EnumTypeProperty)
-			{
-				this.enumConverter = null;
-				this.enumValues = null;
-				this.Items = null;
-				if (change.NewValue.Value is Type type)
-				{
-					this.enumConverter = new EnumConverter(AppSuiteApplication.Current, type);
-					this.enumValues = Enum.GetValues(type);
-					this.Items = this.enumValues;
-				}
-				this.UpdateItemTemplate();
-			}
-		}
 
 
 		// Interface implementations.

@@ -53,6 +53,8 @@ namespace CarinaStudio.AppSuite.Controls
                     this.Offset = new Vector(offset.X, extent.Height - viewport.Height);
                 }
             });
+            this.GetObservable(ExtentProperty).Subscribe(_ => this.correctOffsetAction.Schedule());
+            this.GetObservable(ViewportProperty).Subscribe(_ => this.correctOffsetAction.Schedule());
         }
 
 
@@ -64,15 +66,6 @@ namespace CarinaStudio.AppSuite.Controls
             this.scrollLeftButton = e.NameScope.Find<Control>("PART_ScrollLeftButton");
             this.scrollRightButton = e.NameScope.Find<Control>("PART_ScrollRightButton");
             this.scrollUpButton = e.NameScope.Find<Control>("PART_ScrollUpButton");
-        }
-
-
-        /// <inheritdoc/>
-        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-        {
-            base.OnPropertyChanged(change);
-            if (change.Property == ExtentProperty || change.Property == ViewportProperty)
-                this.correctOffsetAction.Schedule();
         }
 
 

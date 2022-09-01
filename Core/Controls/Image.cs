@@ -8,25 +8,31 @@ namespace CarinaStudio.AppSuite.Controls;
 /// </summary>
 public class Image : Avalonia.Controls.Image
 {
-    /// <inheritdoc/>
-    protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
+    // Fields.
+    AvaloniaObject? attachedSource;
+
+
+    /// <summary>
+    /// Initialize new <see cref="Image"/> instance.
+    /// </summary>
+    public Image()
     {
-        base.OnPropertyChanged(change);
-        if (change.Property == SourceProperty)
+        this.GetObservable(SourceProperty).Subscribe(source =>
         {
-            (change.OldValue.Value as AvaloniaObject)?.Let(it => 
+            if (this.attachedSource != null)
             {
-                it.PropertyChanged -= this.OnSourcePropertyChanged;
-                if (it is DrawingImage drawingImage)
+                this.attachedSource.PropertyChanged -= this.OnSourcePropertyChanged;
+                if (this.attachedSource is DrawingImage drawingImage)
                     drawingImage.Drawing.PropertyChanged -= this.OnSourcePropertyChanged;
-            });
-            (change.NewValue.Value as AvaloniaObject)?.Let(it => 
+            }
+            this.attachedSource = (source as AvaloniaObject);
+            if (this.attachedSource != null)
             {
-                it.PropertyChanged += this.OnSourcePropertyChanged;
-                if (it is DrawingImage drawingImage)
+                this.attachedSource.PropertyChanged += this.OnSourcePropertyChanged;
+                if (this.attachedSource is DrawingImage drawingImage)
                     drawingImage.Drawing.PropertyChanged += this.OnSourcePropertyChanged;
-            });
-        }
+            }
+        });
     }
 
 
