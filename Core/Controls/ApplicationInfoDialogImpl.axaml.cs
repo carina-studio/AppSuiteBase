@@ -188,16 +188,6 @@ namespace CarinaStudio.AppSuite.Controls
 		public bool HasTotalPhysicalMemory { get => this.GetValue<bool>(HasTotalPhysicalMemoryProperty); }
 
 
-		/// <inheritdoc/>
-		protected override void OnClosed(EventArgs e)
-		{
-			this.processInfoHfuToken.Dispose();
-			this.Application.StringsUpdated -= this.OnAppStringsUpdated;
-			this.Application.ProductManager.ProductStateChanged -= this.OnProductStateChanged;
-			base.OnClosed(e);
-		}
-
-
 		// Called when application string resources updated.
 		void OnAppStringsUpdated(object? sender, EventArgs e)
 		{
@@ -208,6 +198,100 @@ namespace CarinaStudio.AppSuite.Controls
 			}
 			this.UpdateTitle();
 			this.UpdateVersionString();
+		}
+
+
+		/// <inheritdoc/>
+		protected override void OnClosed(EventArgs e)
+		{
+			this.processInfoHfuToken.Dispose();
+			this.Application.StringsUpdated -= this.OnAppStringsUpdated;
+			this.Application.ProductManager.ProductStateChanged -= this.OnProductStateChanged;
+			base.OnClosed(e);
+		}
+
+
+		/// <inheritdoc/>
+		protected override void OnDataContextChanged(EventArgs e)
+		{
+			base.OnDataContextChanged(e);
+			if (this.DataContext is ApplicationInfo appInfo)
+			{
+				// sync state
+				this.UpdateTitle();
+				this.UpdateVersionString();
+
+				// show badges
+				this.badgesPanel.Children.Clear();
+				this.TryFindResource<double>("Double/ApplicationInfoDialog.AppBadge.Size", out var badgeSize);
+				this.TryFindResource<Thickness>("Thickness/ApplicationInfoDialog.AppBadge.Margin", out var badgeMargin);
+				foreach (var badge in appInfo.Badges)
+				{
+					this.badgesPanel.Children.Add(new Image()
+					{
+						Height = badgeSize.GetValueOrDefault(),
+						Margin = badgeMargin.GetValueOrDefault(),
+						Source = badge,
+						Stretch = Avalonia.Media.Stretch.Uniform,
+						Width = badgeSize.GetValueOrDefault(),
+					});
+				}
+
+				// check change list
+				this.SynchronizationContext.Post(async () =>
+				{
+					if (this.DataContext is not ApplicationInfo appInfo)
+						return;
+					await appInfo.ApplicationChangeList.WaitForChangeListReadyAsync();
+					if (this.DataContext != appInfo)
+						return;
+					this.SetValue(HasApplicationChangeListProperty, appInfo.ApplicationChangeList.ChangeList.IsNotEmpty());
+				});
+
+				// show products
+				this.productListPanel.Let(panel =>
+				{
+					panel.Children.Clear();
+					if (appInfo.Products.IsNotEmpty() && !this.Application.ProductManager.IsMock)
+					{
+						foreach (var productId in appInfo.Products)
+						{
+							if (panel.Children.Count > 0)
+							{
+								panel.Children.Add(new Separator().Also(it => 
+									it.Classes.Add("Dialog_Separator_Small")));
+							}
+							panel.Children.Add(new StackPanel().Also(itemPanel => 
+							{ 
+								itemPanel.DataContext = productId;
+								itemPanel.Orientation = Avalonia.Layout.Orientation.Horizontal;
+								itemPanel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
+									it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center));
+								itemPanel.Children.Add(new Separator().Also(it =>
+									it.Classes.Add("Dialog_Separator_Small")));
+								itemPanel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
+									it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center));
+								this.ShowProductInfo(itemPanel);
+							}));
+						}
+						this.FindControl<Panel>("productListSectionPanel")!.IsVisible = true;
+					}
+					else
+						this.FindControl<Panel>("productListSectionPanel")!.IsVisible = false;
+				});
+
+				// show assemblies
+				this.FindControl<Panel>("assembliesPanel")?.Let(panel =>
+				{
+					panel.Children.Clear();
+					foreach (var assembly in appInfo.Assemblies)
+					{
+						if (panel.Children.Count > 0)
+							panel.Children.Add(new Separator().Also(it => it.Classes.Add("Dialog_Separator_Small")));
+						panel.Children.Add(new Avalonia.Controls.TextBlock() { Text = $"{assembly.GetName().Name} {assembly.GetName().Version}" });
+					}
+				});
+			}
 		}
 
 
@@ -236,93 +320,6 @@ namespace CarinaStudio.AppSuite.Controls
 				}
 			}
 		}
-
-
-		// Property changed.
-        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-        {
-            base.OnPropertyChanged(change);
-			if (change.Property == DataContextProperty)
-			{
-				if (change.NewValue.Value is ApplicationInfo appInfo)
-				{
-					// sync state
-					this.UpdateTitle();
-					this.UpdateVersionString();
-
-					// show badges
-					this.badgesPanel.Children.Clear();
-					this.TryFindResource<double>("Double/ApplicationInfoDialog.AppBadge.Size", out var badgeSize);
-					this.TryFindResource<Thickness>("Thickness/ApplicationInfoDialog.AppBadge.Margin", out var badgeMargin);
-					foreach (var badge in appInfo.Badges)
-					{
-						this.badgesPanel.Children.Add(new Image()
-						{
-							Height = badgeSize.GetValueOrDefault(),
-							Margin = badgeMargin.GetValueOrDefault(),
-							Source = badge,
-							Stretch = Avalonia.Media.Stretch.Uniform,
-							Width = badgeSize.GetValueOrDefault(),
-						});
-					}
-
-					// check change list
-					this.SynchronizationContext.Post(async () =>
-					{
-						if (this.DataContext is not ApplicationInfo appInfo)
-							return;
-						await appInfo.ApplicationChangeList.WaitForChangeListReadyAsync();
-						if (this.DataContext != appInfo)
-							return;
-						this.SetValue(HasApplicationChangeListProperty, appInfo.ApplicationChangeList.ChangeList.IsNotEmpty());
-					});
-
-					// show products
-					this.productListPanel.Let(panel =>
-					{
-						panel.Children.Clear();
-						if (appInfo.Products.IsNotEmpty() && !this.Application.ProductManager.IsMock)
-						{
-							foreach (var productId in appInfo.Products)
-							{
-								if (panel.Children.Count > 0)
-								{
-									panel.Children.Add(new Separator().Also(it => 
-										it.Classes.Add("Dialog_Separator_Small")));
-								}
-								panel.Children.Add(new StackPanel().Also(itemPanel => 
-								{ 
-									itemPanel.DataContext = productId;
-									itemPanel.Orientation = Avalonia.Layout.Orientation.Horizontal;
-									itemPanel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
-										it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center));
-									itemPanel.Children.Add(new Separator().Also(it =>
-										it.Classes.Add("Dialog_Separator_Small")));
-									itemPanel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
-										it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center));
-									this.ShowProductInfo(itemPanel);
-								}));
-							}
-							this.FindControl<Panel>("productListSectionPanel")!.IsVisible = true;
-						}
-						else
-							this.FindControl<Panel>("productListSectionPanel")!.IsVisible = false;
-					});
-
-					// show assemblies
-					this.FindControl<Panel>("assembliesPanel")?.Let(panel =>
-					{
-						panel.Children.Clear();
-						foreach (var assembly in appInfo.Assemblies)
-						{
-							if (panel.Children.Count > 0)
-								panel.Children.Add(new Separator().Also(it => it.Classes.Add("Dialog_Separator_Small")));
-							panel.Children.Add(new Avalonia.Controls.TextBlock() { Text = $"{assembly.GetName().Name} {assembly.GetName().Version}" });
-						}
-					});
-				}
-			}
-        }
 
 
 		// Restart in debug mode.

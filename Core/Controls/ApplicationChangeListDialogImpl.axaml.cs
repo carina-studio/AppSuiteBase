@@ -69,7 +69,7 @@ namespace CarinaStudio.AppSuite.Controls
         // Constructor.
         public ApplicationChangeListDialogImpl()
         {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
             this.contentPanel = this.FindControl<Panel>(nameof(contentPanel));
         }
 
@@ -111,22 +111,15 @@ namespace CarinaStudio.AppSuite.Controls
         public string? Header { get => this.GetValue<string?>(HeaderProperty); }
 
 
-        // Initialize.
-        private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
-
-
-        // Property changed.
-        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
+        /// <inheritdoc/>
+        protected override void OnDataContextChanged(EventArgs e)
         {
-            base.OnPropertyChanged(change);
-            if (change.Property == DataContextProperty)
+            base.OnDataContextChanged(e);
+            (this.DataContext as ApplicationChangeList)?.Let(it =>
             {
-                (change.NewValue.Value as ApplicationChangeList)?.Let(it =>
-                {
-                    this.SetValue<string?>(HeaderProperty, this.Application.GetFormattedString("ApplicationChangeListDialog.Header", this.Application.Name, $"{it.Version.Major}.{it.Version.Minor}"));
-                    this.BuildChangeListViews();
-                });
-            }
+                this.SetValue<string?>(HeaderProperty, this.Application.GetFormattedString("ApplicationChangeListDialog.Header", this.Application.Name, $"{it.Version.Major}.{it.Version.Minor}"));
+                this.BuildChangeListViews();
+            });
         }
     }
 }

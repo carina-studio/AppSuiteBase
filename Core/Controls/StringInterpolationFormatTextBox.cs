@@ -95,6 +95,20 @@ namespace CarinaStudio.AppSuite.Controls
 					popupToOpen.Open();
 				}
 			});
+
+			// onserve self properties
+			var isSubscribed = false;
+			this.GetObservable(SelectionEndProperty).Subscribe(_ =>
+			{
+				if (isSubscribed)
+					this.showAssistanceMenuAction.Schedule();
+			});
+			this.GetObservable(SelectionStartProperty).Subscribe(_ =>
+			{
+				if (isSubscribed)
+					this.showAssistanceMenuAction.Schedule();
+			});
+			isSubscribed = true;
         }
 
 
@@ -370,19 +384,6 @@ namespace CarinaStudio.AppSuite.Controls
         // Called when predefined variables changed.
 		void OnPredefinedVarsChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
 			this.showAssistanceMenuAction.Schedule();
-
-
-        /// <inheritdoc/>
-		protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-		{
-			base.OnPropertyChanged(change);
-			var property = change.Property;
-			if (property == SelectionStartProperty 
-				|| property == SelectionEndProperty)
-			{
-				this.showAssistanceMenuAction.Schedule();
-			}
-		}
 
 
         /// <inheritdoc/>

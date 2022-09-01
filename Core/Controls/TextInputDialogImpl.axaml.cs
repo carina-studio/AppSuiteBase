@@ -45,6 +45,7 @@ partial class TextInputDialogImpl : InputDialog
 		this.doNotAskAgainCheckBox = this.Get<CheckBox>(nameof(doNotAskAgainCheckBox));
 		this.doNotShowAgainCheckBox = this.Get<CheckBox>(nameof(doNotShowAgainCheckBox));
 		this.textBox = this.Get<TextBox>(nameof(textBox));
+		this.GetObservable(TextProperty).Subscribe(_ => this.InvalidateInput());
 	}
 
 
@@ -118,15 +119,6 @@ partial class TextInputDialogImpl : InputDialog
 		base.OnOpened(e);
 		this.textBox.SelectAll();
 		this.textBox.Focus();
-	}
-
-
-	// Called when property changed.
-	protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-	{
-		base.OnPropertyChanged(change);
-		if (change.Property == TextProperty)
-			this.InvalidateInput();
 	}
 
 
