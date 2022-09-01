@@ -409,8 +409,16 @@ namespace CarinaStudio.AppSuite.Controls
             // keep time
             this.openedTime = Stopwatch.ElapsedMilliseconds;
 
-            // restore to saved size
-            this.RestoreToSavedSize();
+            // restore to saved state and size
+            this.PersistentState.GetValueOrDefault(WindowStateSettingKey).Let(it =>
+            {
+                if (it == WindowState.FullScreen)
+                    it = WindowState.Maximized; // [Workaround] Prevent launching in FullScreen mode because that layout may be incorrect on macOS
+                if (this.WindowState != it)
+                    this.WindowState = it; // Size will also be restored in OnPropertyChanged()
+                else
+                    this.RestoreToSavedSize();
+            });
 
             // call base
             base.OnOpened(e);
@@ -495,10 +503,10 @@ namespace CarinaStudio.AppSuite.Controls
                 var windowState = this.WindowState;
                 if (windowState == WindowState.FullScreen)
                     windowState = WindowState.Maximized; // [Workaround] Prevent launching in FullScreen mode because that layout may be incorrect on macOS
-                if (windowState != WindowState.Minimized)
-                    this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, windowState);
                 if (this.IsOpened)
                 {
+                    if (windowState != WindowState.Minimized)
+                        this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, windowState);
                     if (windowState == WindowState.FullScreen)
                         this.updateContentPaddingAction.Reschedule();
                     else
