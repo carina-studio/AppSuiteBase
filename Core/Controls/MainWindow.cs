@@ -57,6 +57,7 @@ namespace CarinaStudio.AppSuite.Controls
 
         // Fields.
         bool areInitialDialogsClosed;
+        TViewModel? attachedViewModel;
         Thickness contentPadding;
         ThicknessAnimator? contentPaddingAnimator;
         ContentPresenter? contentPresenter;
@@ -154,6 +155,81 @@ namespace CarinaStudio.AppSuite.Controls
             // extend client area if needed
             this.UpdateExtendingClientArea();
             this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.OSXThickTitleBar | ExtendClientAreaChromeHints.NoChrome; // show system chrome when opened
+
+            // observe self properties
+            var isSubscribing = true;
+            this.GetObservable(ContentProperty).Subscribe(content =>
+            {
+                if (!this.Application.IsPrivacyPolicyAgreed || !this.Application.IsUserAgreementAgreed)
+                    (content as Control)?.Let(it => it.IsEnabled = false);
+            });
+            this.GetObservable(DataContextProperty).Subscribe(dataContext =>
+            {
+                if (this.attachedViewModel != null)
+                {
+                    this.OnDetachFromViewModel(this.attachedViewModel);
+                    this.attachedViewModel = null;
+                }
+                this.attachedViewModel = dataContext as TViewModel;
+                if (this.attachedViewModel != null)
+                    this.OnAttachToViewModel(this.attachedViewModel);
+            });
+            this.GetObservable(ExtendClientAreaToDecorationsHintProperty).Subscribe(_ =>
+            {
+                if (this.IsOpened && this.ExtendClientAreaToDecorationsHint)
+                    this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.OSXThickTitleBar | ExtendClientAreaChromeHints.PreferSystemChrome;
+            });
+            this.GetObservable(HasDialogsProperty).Subscribe(hasDialogs =>
+            {
+                if (!isSubscribing && !hasDialogs)
+                {
+                    if (this.Application.IsRestartingMainWindowsNeeded)
+                        this.restartingMainWindowsAction.Reschedule(RestartingMainWindowsDelay);
+                    if (!this.AreInitialDialogsClosed)
+                        this.showInitDialogsAction.Schedule();
+                }
+            });
+            this.GetObservable(HeightProperty).Subscribe(_ => 
+            {
+                if (isSubscribing)
+                    return;
+                this.saveWindowSizeAction.Reschedule(SaveWindowSizeDelay);
+            });
+            this.GetObservable(IsActiveProperty).Subscribe(isActive =>
+            {
+                if (isActive)
+                {
+                    if (!this.AreInitialDialogsClosed)
+                        this.showInitDialogsAction.Schedule();
+                    else if (this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate))
+                        this.SynchronizationContext.Post(() => _ = this.NotifyApplicationUpdateFound());
+                }
+            });
+            this.GetObservable(WidthProperty).Subscribe(_ => 
+            {
+                if (isSubscribing)
+                    return;
+                this.saveWindowSizeAction.Reschedule(SaveWindowSizeDelay);
+            });
+            this.GetObservable(WindowStateProperty).Subscribe(windowState =>
+            {
+                if (isSubscribing)
+                    return;
+                if (windowState == WindowState.FullScreen)
+                    windowState = WindowState.Maximized; // [Workaround] Prevent launching in FullScreen mode because that layout may be incorrect on macOS
+                if (this.IsOpened)
+                {
+                    if (windowState != WindowState.Minimized)
+                        this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, windowState);
+                    if (windowState == WindowState.FullScreen)
+                        this.updateContentPaddingAction.Reschedule();
+                    else
+                        this.updateContentPaddingAction.Reschedule(UpdateContentPaddingDelay);
+                }
+                this.RestoreToSavedSize();
+                this.InvalidateTransparencyLevelHint();
+            });
+            isSubscribing = false;
         }
 
 
@@ -451,71 +527,6 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         /// <returns>Task of preparation.</returns>
         protected virtual Task OnPrepareShuttingDownForApplicationUpdate() => Task.CompletedTask;
-
-
-        /// <summary>
-        /// Called when property changed.
-        /// </summary>
-        /// <param name="change">Data of change property.</param>
-        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-        {
-            base.OnPropertyChanged(change);
-            var property = change.Property;
-            if (property == ContentProperty)
-            {
-                if (!this.Application.IsPrivacyPolicyAgreed || !this.Application.IsUserAgreementAgreed)
-                    (change.NewValue.Value as Control)?.Let(content => content.IsEnabled = false);
-            }
-            else if (property == DataContextProperty)
-            {
-                (change.OldValue.Value as TViewModel)?.Let(it => this.OnDetachFromViewModel(it));
-                (change.NewValue.Value as TViewModel)?.Let(it => this.OnAttachToViewModel(it));
-            }
-            else if (property == ExtendClientAreaToDecorationsHintProperty)
-            {
-                if (this.IsOpened && this.ExtendClientAreaToDecorationsHint)
-                    this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.OSXThickTitleBar | ExtendClientAreaChromeHints.PreferSystemChrome;
-            }
-            else if (property == HasDialogsProperty)
-            {
-                if (!this.HasDialogs)
-                {
-                    if (this.Application.IsRestartingMainWindowsNeeded)
-                        this.restartingMainWindowsAction.Reschedule(RestartingMainWindowsDelay);
-                    if (!this.AreInitialDialogsClosed)
-                        this.showInitDialogsAction.Schedule();
-                }
-            }
-            else if (property == HeightProperty || property == WidthProperty)
-                this.saveWindowSizeAction.Reschedule(SaveWindowSizeDelay);
-            else if (property == IsActiveProperty)
-            {
-                if (this.IsActive)
-                {
-                    if (!this.AreInitialDialogsClosed)
-                        this.showInitDialogsAction.Schedule();
-                    else if (this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate))
-                        this.SynchronizationContext.Post(() => _ = this.NotifyApplicationUpdateFound());
-                }
-            }
-            else if (property == WindowStateProperty)
-            {
-                var windowState = this.WindowState;
-                if (windowState == WindowState.FullScreen)
-                    windowState = WindowState.Maximized; // [Workaround] Prevent launching in FullScreen mode because that layout may be incorrect on macOS
-                if (this.IsOpened)
-                {
-                    if (windowState != WindowState.Minimized)
-                        this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, windowState);
-                    if (windowState == WindowState.FullScreen)
-                        this.updateContentPaddingAction.Reschedule();
-                    else
-                        this.updateContentPaddingAction.Reschedule(UpdateContentPaddingDelay);
-                }
-                this.RestoreToSavedSize();
-                this.InvalidateTransparencyLevelHint();
-            }
-        }
 
 
         /// <summary>
