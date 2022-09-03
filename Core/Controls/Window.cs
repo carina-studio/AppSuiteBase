@@ -80,6 +80,45 @@ namespace CarinaStudio.AppSuite.Controls
             });
             this.checkSystemChromeVisibilityAction.Schedule();
             this.updateTransparencyLevelAction.Schedule();
+
+            // observe self properties
+            var isSubscribed = false;
+            this.GetObservable(CurrentTutorialProperty).Subscribe(_ =>
+            {
+                if (isSubscribed)
+                    this.updateTransparencyLevelAction.Schedule();
+            });
+            this.GetObservable(ExtendClientAreaToDecorationsHintProperty).Subscribe(_ =>
+            {
+                if (isSubscribed)
+                    this.checkSystemChromeVisibilityAction.Schedule();
+            });
+            this.GetObservable(HeightProperty).Subscribe(_ =>
+            {
+                if (isSubscribed)
+                    this.SynchronizationContext.Post(() => this.contentPresenter?.Let(it => it.Margin = new Thickness(0, 0, 0, 1)));
+            });
+            this.GetObservable(IsActiveProperty).Subscribe(_ =>
+            {
+                if (isSubscribed)
+                    this.updateTransparencyLevelAction.Schedule();
+            });
+            this.GetObservable(SystemDecorationsProperty).Subscribe(_ =>
+            {
+                if (isSubscribed)
+                    this.checkSystemChromeVisibilityAction.Schedule();
+            });
+            this.GetObservable(WidthProperty).Subscribe(_ =>
+            {
+                if (isSubscribed)
+                    this.SynchronizationContext.Post(() => this.contentPresenter?.Let(it => it.Margin = new Thickness(0, 0, 0, 1)));
+            });
+            this.GetObservable(WindowStateProperty).Subscribe(_ =>
+            {
+                if (isSubscribed)
+                    this.checkSystemChromeVisibilityAction.Schedule();
+            });
+            isSubscribed = true;
         }
 
 
@@ -174,58 +213,6 @@ namespace CarinaStudio.AppSuite.Controls
             base.OnOpened(e);
             this.checkSystemChromeVisibilityAction.Execute();
             this.updateTransparencyLevelAction.ExecuteIfScheduled();
-        }
-
-
-        /// <summary>
-        /// Called when property changed.
-        /// </summary>
-        /// <typeparam name="T">Type of property.</typeparam>
-        /// <param name="change">Change data.</param>
-        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-        {
-            base.OnPropertyChanged(change);
-            var property = change.Property;
-            if (property == ActualTransparencyLevelProperty)
-            {
-                /*
-                if (Platform.IsWindows11OrAbove)
-                {
-                    if (this.ActualTransparencyLevel == WindowTransparencyLevel.None)
-                    {
-                        var margins = new MARGINS();
-                        DwmExtendFrameIntoClientArea(this.PlatformImpl.Handle.Handle, ref margins);
-                    }
-                    else
-                    {
-                        var margins = new MARGINS()
-                        {
-                            cxLeftWidth = -1,
-                            cyTopHeight = -1,
-                            cxRightWidth = -1,
-                            cyBottomHeight = -1,
-                        };
-                        DwmExtendFrameIntoClientArea(this.PlatformImpl.Handle.Handle, ref margins);
-                    }
-                }
-                */
-            }
-            else if (property == CurrentTutorialProperty
-                || property == IsActiveProperty)
-            {
-                this.updateTransparencyLevelAction.Schedule();
-            }
-            else if (property == ExtendClientAreaToDecorationsHintProperty
-                || property == SystemDecorationsProperty
-                || property == WindowStateProperty)
-            {
-                this.checkSystemChromeVisibilityAction.Schedule();
-            }
-            else if (property == HeightProperty 
-                || property == WidthProperty)
-            {
-                this.SynchronizationContext.Post(() => this.contentPresenter?.Let(it => it.Margin = new Thickness(0, 0, 0, 1)));
-            }
         }
 
 

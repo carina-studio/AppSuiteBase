@@ -121,6 +121,39 @@ namespace CarinaStudio.AppSuite.Controls
 					popupToOpen.Open();
 				}
 			});
+
+			// onserve self properties
+			var isSubscribed = false;
+			this.GetObservable(IgnoreCaseProperty).Subscribe(_ =>
+			{
+				if (isSubscribed)
+					this.Validate();
+			});
+			this.GetObservable(ObjectProperty).Subscribe(o =>
+			{
+				var regex = o as Regex;
+				if (regex != null && ((regex.Options & RegexOptions.IgnoreCase) != 0) != this.IgnoreCase)
+				{
+					var options = regex.Options;
+					if (this.IgnoreCase)
+						options |= RegexOptions.IgnoreCase;
+					else
+						options &= ~RegexOptions.IgnoreCase;
+					regex = new Regex(regex.ToString(), options);
+						
+				}
+			});
+			this.GetObservable(SelectionEndProperty).Subscribe(_ =>
+			{
+				if (isSubscribed)
+					this.showAssistanceMenuAction.Schedule();
+			});
+			this.GetObservable(SelectionStartProperty).Subscribe(_ =>
+			{
+				if (isSubscribed)
+					this.showAssistanceMenuAction.Schedule();
+			});
+			isSubscribed = true;
 		}
 
 
@@ -533,35 +566,6 @@ namespace CarinaStudio.AppSuite.Controls
 		// Called when predefined groups changed.
 		void OnPredefinedGroupChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
 			this.showAssistanceMenuAction.Schedule();
-
-
-		/// <inheritdoc/>
-		protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-		{
-			base.OnPropertyChanged(change);
-			var property = change.Property;
-			if (property == IgnoreCaseProperty)
-				this.Validate();
-			else if (property == ObjectProperty)
-			{
-				var regex = change.NewValue.Value as Regex;
-				if (regex != null && ((regex.Options & RegexOptions.IgnoreCase) != 0) != this.IgnoreCase)
-				{
-					var options = regex.Options;
-					if (this.IgnoreCase)
-						options |= RegexOptions.IgnoreCase;
-					else
-						options &= ~RegexOptions.IgnoreCase;
-					regex = new Regex(regex.ToString(), options);
-					this.Object = regex;
-				}
-			}
-			else if (property == SelectionStartProperty 
-				|| property == SelectionEndProperty)
-			{
-				this.showAssistanceMenuAction.Schedule();
-			}
-		}
 
 
 		/// <inheritdoc/>

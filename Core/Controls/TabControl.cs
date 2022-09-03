@@ -39,10 +39,10 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Fields.
+        INotifyCollectionChanged? attachedItems;
         Window? attachedWindow;
         object? draggingOverItem;
         int draggingOverItemIndex = -1;
-        bool isAttachedToVisualTree;
         object? pointerPressedItem;
         int pointerPressedItemIndex = -1;
         Point? pointerPressedPosition;
@@ -87,6 +87,30 @@ namespace CarinaStudio.AppSuite.Controls
                 this.ScrollHeaderIntoViewCore(index);
             });
             this.updateTabStripScrollViewerMarginAction = new ScheduledAction(() => this.UpdateTabStripScrollViewerMargin(true));
+
+            // observe self properties
+            var isSubscribed = false;
+            this.GetObservable(IsFullWindowModeProperty).Subscribe(_ =>
+            {
+                if (isSubscribed)
+                    this.updateTabStripScrollViewerMarginAction.Schedule();
+            });
+            this.GetObservable(ItemsProperty).Subscribe(items =>
+            {
+                if (this.attachedItems != null)
+                {
+                    this.attachedItems.CollectionChanged -= this.OnItemsChanged;
+                    this.attachedItems = null;
+                }
+                this.attachedItems = (items as INotifyCollectionChanged)?.Also(it =>
+                    it.CollectionChanged += this.OnItemsChanged);
+            });
+            this.GetObservable(SelectedIndexProperty).Subscribe(_ =>
+            {
+                if (isSubscribed)
+                    this.scrollToSelectedItemAction.Schedule();
+            });
+            isSubscribed = true;
         }
 
 
@@ -274,7 +298,6 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 it.PropertyChanged += this.OnWindowPropertyChanged;
             });
-            this.isAttachedToVisualTree = true;
             (this.Items as INotifyCollectionChanged)?.Let(it => it.CollectionChanged += this.OnItemsChanged);
             this.UpdateTabStripScrollViewerMargin(false);
         }
@@ -302,7 +325,6 @@ namespace CarinaStudio.AppSuite.Controls
                 it.PropertyChanged -= this.OnWindowPropertyChanged;
                 this.attachedWindow = null;
             });
-            this.isAttachedToVisualTree = false;
             (this.Items as INotifyCollectionChanged)?.Let(it => it.CollectionChanged -= this.OnItemsChanged);
             this.updateTabStripScrollViewerMarginAction.Cancel();
             base.OnDetachedFromVisualTree(e);
@@ -489,24 +511,6 @@ namespace CarinaStudio.AppSuite.Controls
             this.pointerPressedItem = null;
             this.pointerPressedItemIndex = -1;
             this.pointerPressedPosition = null;
-        }
-
-
-        /// <inheritdoc/>
-        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-        {
-            base.OnPropertyChanged(change);
-            var property = change.Property;
-            if (property == IsFullWindowModeProperty)
-                this.updateTabStripScrollViewerMarginAction.Schedule();
-            else if (property == ItemsProperty)
-            {
-                (change.OldValue as INotifyCollectionChanged)?.Let(it => it.CollectionChanged -= this.OnItemsChanged);
-                if (this.isAttachedToVisualTree)
-                    (change.NewValue as INotifyCollectionChanged)?.Let(it => it.CollectionChanged -= this.OnItemsChanged);
-            }
-            else if (property == SelectedIndexProperty)
-                this.scrollToSelectedItemAction.Schedule(100);
         }
 
 

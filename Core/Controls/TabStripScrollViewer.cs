@@ -31,15 +31,8 @@ namespace CarinaStudio.AppSuite.Controls
                     this.Offset = new Vector(extent.Width - viewport.Width, 0);
                 }
             });
-        }
-
-
-        // Property changed.
-        protected override void OnPropertyChanged<T>(AvaloniaPropertyChangedEventArgs<T> change)
-        {
-            base.OnPropertyChanged(change);
-            if (change.Property == ExtentProperty || change.Property == ViewportProperty)
-                this.correctOffsetAction.Schedule();
+            this.GetObservable(ExtentProperty).Subscribe(_ => this.correctOffsetAction.Schedule());
+            this.GetObservable(ViewportProperty).Subscribe(_ => this.correctOffsetAction.Schedule());
         }
 
 
