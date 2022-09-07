@@ -254,10 +254,15 @@
 	<sys:Double x:Key="Double/TextInputDialog.Width">450</sys:Double>
 
 	<!-- ToolBar -->
-	<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Size">8</sys:Double>
+	<sys:Double x:Key="Double/ToolBar.DropDownButton.Icon.Size">8</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.Button.Icon.Size">18</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.Button.Size">32</sys:Double>
+	<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Size">8</sys:Double>
+	<Thickness x:Key="Thickness/ToolBar.Button.Margin">2</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Button.Margin.WithDropDownButton">2,2,0,2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Button.Padding">7</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.DropDownButton.Margin">0,2,2,2</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.DropDownButton.Padding">4</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Item.Margin">2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Padding">3</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Separator.Margin">3</Thickness>
