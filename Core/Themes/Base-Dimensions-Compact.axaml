@@ -149,7 +149,11 @@
 	<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Size">8</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.Button.Icon.Size">16</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.Button.Size">26</sys:Double>
+	<Thickness x:Key="Thickness/ToolBar.Button.Margin">1</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Button.Margin.WithDropDownButton">1,1,0,1</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Button.Padding">5</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.DropDownButton.Margin">0,1,1,1</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.DropDownButton.Padding">2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Item.Margin">1</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Padding">2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Separator.Margin">2</Thickness>

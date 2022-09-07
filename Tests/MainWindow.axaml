@@ -179,6 +179,16 @@
 												<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
 											</Button>
 
+											<Button Classes="ToolBar_Button_WithDropDownButton">
+												<Image Classes="Icon" Source="{StaticResource Image/Icon.Star}"/>
+											</Button>
+											<ToggleButton Classes="ToolBar_DropDownButton">
+												<Panel>
+													<Image Classes="ToolBar_DropDownButtonIcon" IsVisible="{Binding !$parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.MoveDown}"/>
+													<Image Classes="ToolBar_DropDownButtonIcon" IsVisible="{Binding $parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.MoveDown.Light}"/>
+												</Panel>
+											</ToggleButton>
+
 											<Panel>
 												<TextBox Classes="ToolBar_TextBox_WithInPlaceAction" Width="100"/>
 												<ToggleButton Classes="TextBox_InPlaceAction">
