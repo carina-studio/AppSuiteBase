@@ -52,6 +52,7 @@ namespace CarinaStudio.AppSuite.Tests
         protected override Controls.SplashWindowParams OnPrepareSplashWindow() => base.OnPrepareSplashWindow().Also((ref Controls.SplashWindowParams param) =>
         {
             param.AccentColor = Avalonia.Media.Color.FromArgb(0xff, 0x91, 0x2f, 0xbf);
+            param.BackgroundImageUri = null;
         });
 
 

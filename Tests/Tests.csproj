@@ -10,14 +10,10 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 	</PropertyGroup>
-	<ItemGroup>
-	  <None Remove="ChangeList-zh-CN.json" />
-	  <None Remove="ChangeList-zh-TW.json" />
-	  <None Remove="ChangeList.json" />
-	</ItemGroup>
 	
 	<ItemGroup>
 	  <AvaloniaResource Include="AppIcon.ico" />
+	  <AvaloniaResource Include="SplashWindowBackground.jpg" />
 	</ItemGroup>
 	
 	<ItemGroup>

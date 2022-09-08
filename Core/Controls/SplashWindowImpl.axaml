@@ -25,7 +25,13 @@
 					<GradientStop Offset="0" Color="#444444"/>
 					<GradientStop Offset="1" Color="#171717"/>
 				</LinearGradientBrush>
+				<LinearGradientBrush x:Key="Brush/SplashWindow.BackgroundImage.OpacityMask" EndPoint="0%,100%" StartPoint="0%,0%">
+					<GradientStop Color="#00ffffff" Offset="0"/>
+					<GradientStop Color="#10ffffff" Offset="0.6"/>
+					<GradientStop Color="#10ffffff" Offset="1"/>
+				</LinearGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#ffffff"/>
+				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground.Shadow" Color="#000000"/>
 			</Styles.Resources>
 		</Styles>
 
@@ -37,7 +43,13 @@
 					<GradientStop Offset="0" Color="#f0f0f0"/>
 					<GradientStop Offset="1" Color="#e0e0e0"/>
 				</LinearGradientBrush>
+				<LinearGradientBrush x:Key="Brush/SplashWindow.BackgroundImage.OpacityMask" EndPoint="0%,100%" StartPoint="0%,0%">
+					<GradientStop Color="#00ffffff" Offset="0"/>
+					<GradientStop Color="#0fffffff" Offset="0.5"/>
+					<GradientStop Color="#2fffffff" Offset="1"/>
+				</LinearGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#222222"/>
+				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground.Shadow" Color="#ffffff"/>
 			</Styles.Resources>
 		</Styles>
 
@@ -94,6 +106,7 @@
 					</Transitions>
 				</Border.Transitions>
 			</Border>
+			<Image OpacityMask="{DynamicResource Brush/SplashWindow.BackgroundImage.OpacityMask}" Source="{Binding $parent[Window].BackgroundImage}" Stretch="UniformToFill" StretchDirection="Both"/>
 			
 			<!-- Content -->
 			<Grid ColumnDefinitions="*,Auto,Auto,*" HorizontalAlignment="Stretch" Margin="{StaticResource Thickness/SplashWindow.Padding}" RowDefinitions="Auto,Auto" VerticalAlignment="Center">
@@ -170,8 +183,8 @@
 
 				<!-- Message -->
 				<Border Grid.ColumnSpan="4" Grid.Row="1" Height="{StaticResource Double/SplashWindow.Message.ReservedSpace}" HorizontalAlignment="Center"/>
-				<TextBlock Name="messageTextBlock" FontSize="{StaticResource Double/SplashWindow.Message.FontSize}" Grid.ColumnSpan="4" Grid.Row="1" HorizontalAlignment="Center" Margin="{StaticResource Thickness/SplashWindow.Message.Margin}" Opacity="0" Text="{Binding $parent[Window].Message}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" VerticalAlignment="Center">
-					<TextBlock.RenderTransform>
+				<Grid Name="messagePanel" ClipToBounds="False" Grid.ColumnSpan="4" Grid.Row="1" HorizontalAlignment="Center"  Margin="{StaticResource Thickness/SplashWindow.Message.Margin}" Opacity="0">
+					<Grid.RenderTransform>
 						<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 							<TranslateTransform.Transitions>
 								<Transitions>
@@ -179,13 +192,24 @@
 								</Transitions>
 							</TranslateTransform.Transitions>
 						</TranslateTransform>
-					</TextBlock.RenderTransform>
-					<TextBlock.Transitions>
+					</Grid.RenderTransform>
+					<Grid.Transitions>
 						<Transitions>
 							<DoubleTransition Property="Opacity" Delay="0:0:0.4" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
 						</Transitions>
-					</TextBlock.Transitions>
-				</TextBlock>
+					</Grid.Transitions>
+					<TextBlock FontSize="{StaticResource Double/SplashWindow.Message.FontSize}" Foreground="{DynamicResource Brush/SplashWindow.Foreground.Shadow}" Text="{Binding $parent[Window].Message}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" VerticalAlignment="Center">
+						<TextBlock.RenderTransform>
+							<TranslateTransform X="1" Y="1"/>
+						</TextBlock.RenderTransform>
+					</TextBlock>
+					<TextBlock FontSize="{StaticResource Double/SplashWindow.Message.FontSize}" Foreground="{DynamicResource Brush/SplashWindow.Foreground.Shadow}" Text="{Binding $parent[Window].Message}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" VerticalAlignment="Center">
+						<TextBlock.RenderTransform>
+							<TranslateTransform X="-1" Y="-1"/>
+						</TextBlock.RenderTransform>
+					</TextBlock>
+					<TextBlock FontSize="{StaticResource Double/SplashWindow.Message.FontSize}" Text="{Binding $parent[Window].Message}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" VerticalAlignment="Center"/>
+				</Grid>
 
 			</Grid>
 
