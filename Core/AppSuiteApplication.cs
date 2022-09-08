@@ -2069,22 +2069,30 @@ namespace CarinaStudio.AppSuite
         /// Called to prepare showing splash window when launching application.
         /// </summary>
         /// <returns>Parameters of splash window.</returns>
-        protected virtual Controls.SplashWindowParams OnPrepareSplashWindow() => new Controls.SplashWindowParams()
+        protected virtual Controls.SplashWindowParams OnPrepareSplashWindow() => new Controls.SplashWindowParams().Also((ref Controls.SplashWindowParams it) =>
         {
-            IconUri = AvaloniaLocator.Current.GetService<IAssetLoader>().Let(loader =>
+            var assetLoader = AvaloniaLocator.Current.GetService<IAssetLoader>().AsNonNull();
+            it.BackgroundImageUri = Global.Run(() =>
             {
-                if (loader != null)
-                {
-                    var uri = new Uri($"avares://{this.Assembly.GetName().Name}/{this.Name}.ico");
-                    if (loader.Exists(uri))
-                        return uri;
-                    uri = new Uri($"avares://{this.Assembly.GetName().Name}/AppIcon.ico");
-                    if (loader.Exists(uri))
-                        return uri;
-                }
+                var uri = new Uri($"avares://{this.Assembly.GetName().Name}/SplashWindowBackground.jpg");
+                if (assetLoader.Exists(uri))
+                    return uri;
+                uri = new Uri($"avares://{this.Assembly.GetName().Name}/SplashWindowBackground.png");
+                if (assetLoader.Exists(uri))
+                    return uri;
+                return null;
+            });
+            it.IconUri = Global.Run(() =>
+            {
+                var uri = new Uri($"avares://{this.Assembly.GetName().Name}/{this.Name}.ico");
+                if (assetLoader.Exists(uri))
+                    return uri;
+                uri = new Uri($"avares://{this.Assembly.GetName().Name}/AppIcon.ico");
+                if (assetLoader.Exists(uri))
+                    return uri;
                 throw new NotImplementedException("Cannot get default icon.");
-            }),
-        };
+            });
+        });
 
 
         /// <summary>
@@ -2176,6 +2184,7 @@ namespace CarinaStudio.AppSuite
                 this.splashWindow = new Controls.SplashWindowImpl()
                 {
                     AccentColor = splashWindowParams.AccentColor,
+                    BackgroundImageUri = splashWindowParams.BackgroundImageUri,
                     IconUri = splashWindowParams.IconUri,
                 };
                 if (time > 0)

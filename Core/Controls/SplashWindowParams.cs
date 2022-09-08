@@ -15,6 +15,12 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
+        /// URI of background image.
+        /// </summary>
+        public Uri? BackgroundImageUri { get; set; }
+
+
+        /// <summary>
         /// URI of application icon.
         /// </summary>
         public Uri? IconUri { get; set; }

@@ -25,12 +25,14 @@ namespace CarinaStudio.AppSuite.Controls
 
 		// Static fields.
 		static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
+		static readonly AvaloniaProperty<IImage?> BackgroundImageProperty = AvaloniaProperty.Register<SplashWindowImpl, IImage?>(nameof(BackgroundImage));
 		static readonly AvaloniaProperty<IBitmap?> IconBitmapProperty = AvaloniaProperty.Register<SplashWindowImpl, IBitmap?>(nameof(IconBitmap));
 		static readonly AvaloniaProperty<string> MessageProperty = AvaloniaProperty.Register<SplashWindowImpl, string>(nameof(Message), " ", coerce: ((_, it) => string.IsNullOrEmpty(it) ? " " : it));
 
 
 		// Fields.
 		Color accentColor;
+		Uri? backgroundImageUri;
 		Uri? iconUri;
 		readonly ScheduledAction showAction;
 		readonly Stopwatch stopwatch = new Stopwatch();
@@ -71,36 +73,36 @@ namespace CarinaStudio.AppSuite.Controls
 				
 				// show content
 				((Control)(this.Content)).Opacity = 1;
-				this.FindControl<Border>("backgroundOverlayBorder").AsNonNull().Let(border =>
+				this.Get<Avalonia.Controls.Control>("backgroundOverlayBorder").Let(control =>
 				{
-					border.Opacity = 1;
+					control.Opacity = 1;
 				});
-				this.FindControl<Avalonia.Controls.Image>("iconImage").AsNonNull().Let(image =>
+				this.Get<Avalonia.Controls.Control>("iconImage").Let(control =>
 				{
-					image.Opacity = 1;
-					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+					control.Opacity = 1;
+					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
-				this.FindControl<Avalonia.Controls.TextBlock>("titleTextBlock").AsNonNull().Let(image =>
+				this.Get<Avalonia.Controls.Control>("titleTextBlock").Let(control =>
 				{
-					image.Opacity = 1;
-					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+					control.Opacity = 1;
+					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
-				this.FindControl<Avalonia.Controls.TextBlock>("versionTextBlock").AsNonNull().Let(image =>
+				this.Get<Avalonia.Controls.Control>("versionTextBlock").Let(control =>
 				{
 					this.TryFindResource<double>("Double/ApplicationInfoDialog.AppVersion.Opacity", out var opacity);
-					image.Opacity = opacity ?? 1;
-					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+					control.Opacity = opacity ?? 1;
+					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
-				this.FindControl<Avalonia.Controls.TextBlock>("copyrightTextBlock").AsNonNull().Let(image =>
+				this.Get<Avalonia.Controls.Control>("copyrightTextBlock").Let(control =>
 				{
 					this.TryFindResource<double>("Double/ApplicationInfoDialog.AppVersion.Opacity", out var opacity);
-					image.Opacity = opacity ?? 1;
-					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+					control.Opacity = opacity ?? 1;
+					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
-				this.FindControl<Avalonia.Controls.TextBlock>("messageTextBlock").AsNonNull().Let(image =>
+				this.Get<Avalonia.Controls.Control>("messagePanel").Let(control =>
 				{
-					image.Opacity = 1;
-					(image.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+					control.Opacity = 1;
+					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
 			});
 			this.Version = app.GetFormattedString("ApplicationInfoDialog.Version", app.Assembly.GetName().Version).AsNonNull();
@@ -141,6 +143,33 @@ namespace CarinaStudio.AppSuite.Controls
 
 		// Name of application.
 		public string ApplicationName { get; }
+
+
+		// Background image.
+		public IImage? BackgroundImage { get => this.GetValue<IImage?>(BackgroundImageProperty); }
+
+
+		// Get or set URI of background image.
+		public Uri? BackgroundImageUri
+		{
+			get => this.backgroundImageUri;
+			set
+			{
+				this.VerifyAccess();
+				if (this.backgroundImageUri == value)
+					return;
+				this.backgroundImageUri = value;
+				if (value != null)
+				{
+					this.SetValue<IImage?>(BackgroundImageProperty, AvaloniaLocator.Current.GetService<IAssetLoader>()?.Let(loader =>
+					{
+						return loader.Open(value).Use(stream => new Bitmap(stream));
+					}));
+				}
+				else
+					this.SetValue<IImage?>(BackgroundImageProperty, null);
+			}
+		}
 
 
 		// Get icon as IBitmap.
