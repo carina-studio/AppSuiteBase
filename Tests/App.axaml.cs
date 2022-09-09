@@ -52,7 +52,7 @@ namespace CarinaStudio.AppSuite.Tests
         protected override Controls.SplashWindowParams OnPrepareSplashWindow() => base.OnPrepareSplashWindow().Also((ref Controls.SplashWindowParams param) =>
         {
             param.AccentColor = Avalonia.Media.Color.FromArgb(0xff, 0x91, 0x2f, 0xbf);
-            param.BackgroundImageUri = null;
+            //param.BackgroundImageUri = null;
         });
 
 
@@ -64,6 +64,10 @@ namespace CarinaStudio.AppSuite.Tests
 				this.externalDependencies.Add(new ExecutableExternalDependency(this, "XRandR", ExternalDependencyPriority.Optional, "xrandr", new Uri("https://www.x.org/wiki/Projects/XRandR/"), new Uri("https://command-not-found.com/xrandr")));
             
             await base.OnPrepareStartingAsync();
+
+            this.UpdateSplashWindowProgress(0.5);
+
+            await Task.Delay(500);
 
             if (!this.IsRestoringMainWindowsRequested)
             {
