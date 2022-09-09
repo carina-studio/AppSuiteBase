@@ -2749,6 +2749,11 @@ namespace CarinaStudio.AppSuite
 
             // update message on splash window
             this.UpdateSplashWindowMessage(this.GetStringNonNull("SplashWindow.ShowingMainWindow"));
+            this.splashWindow?.Let(it =>
+            {
+                if (!double.IsNaN(it.Progress))
+                    it.Progress = 1.0;
+            });
 
             // update styles and culture
             if (mainWindowCount == 0)
@@ -3036,6 +3041,17 @@ namespace CarinaStudio.AppSuite
         {
             this.VerifyAccess();
             this.splashWindow?.Let(it => it.Message = message);
+        }
+
+
+        /// <summary>
+        /// Update progress shown on splash window.
+        /// </summary>
+        /// <param name="progress">Progress, the range is [0.0, 1.0].</param>
+        protected void UpdateSplashWindowProgress(double progress)
+        {
+            this.VerifyAccess();
+            this.splashWindow?.Let(it => it.Progress = progress);
         }
 
 

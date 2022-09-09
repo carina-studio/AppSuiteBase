@@ -8,10 +8,10 @@
         Background="{x:Null}"
         CanResize="False"
         HasSystemDecorations="False"
-        Height="220"
+        Height="300"
         Title="{Binding $parent[Window].ApplicationName}"
         TransparencyLevelHint="Transparent"
-        Width="400"
+        Width="500"
         WindowStartupLocation="CenterScreen">
 	
 	<!-- Resources -->
@@ -25,11 +25,10 @@
 					<GradientStop Offset="0" Color="#444444"/>
 					<GradientStop Offset="1" Color="#171717"/>
 				</LinearGradientBrush>
-				<LinearGradientBrush x:Key="Brush/SplashWindow.BackgroundImage.OpacityMask" EndPoint="0%,100%" StartPoint="0%,0%">
-					<GradientStop Color="#00ffffff" Offset="0"/>
-					<GradientStop Color="#10ffffff" Offset="0.6"/>
-					<GradientStop Color="#10ffffff" Offset="1"/>
-				</LinearGradientBrush>
+				<RadialGradientBrush x:Key="Brush/SplashWindow.BackgroundImage.OpacityMask" Center="50%,100%" GradientOrigin="50%,100%" Radius="0.6">
+					<GradientStop Color="#1fffffff" Offset="0"/>
+					<GradientStop Color="#00ffffff" Offset="1"/>
+				</RadialGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#ffffff"/>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground.Shadow" Color="#000000"/>
 			</Styles.Resources>
@@ -43,11 +42,10 @@
 					<GradientStop Offset="0" Color="#f0f0f0"/>
 					<GradientStop Offset="1" Color="#e0e0e0"/>
 				</LinearGradientBrush>
-				<LinearGradientBrush x:Key="Brush/SplashWindow.BackgroundImage.OpacityMask" EndPoint="0%,100%" StartPoint="0%,0%">
-					<GradientStop Color="#00ffffff" Offset="0"/>
-					<GradientStop Color="#0fffffff" Offset="0.5"/>
-					<GradientStop Color="#2fffffff" Offset="1"/>
-				</LinearGradientBrush>
+				<RadialGradientBrush x:Key="Brush/SplashWindow.BackgroundImage.OpacityMask" Center="50%,100%" GradientOrigin="50%,100%" Radius="0.6">
+					<GradientStop Color="#2fffffff" Offset="0"/>
+					<GradientStop Color="#00ffffff" Offset="1"/>
+				</RadialGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#222222"/>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground.Shadow" Color="#ffffff"/>
 			</Styles.Resources>
@@ -56,18 +54,20 @@
 		<!-- Other resources -->
 		<BoxShadows x:Key="BoxShadows/SplashWindow">0 0 10 0 #9f000000</BoxShadows>
 		<CornerRadius x:Key="CornerRadius/SplashWindow">10</CornerRadius>
-		<sys:Double x:Key="Double/ApplicationInfoDialog.AppVersion.Opacity">0.6</sys:Double>
+		<sys:Double x:Key="Double/ApplicationInfoDialog.AppVersion.Opacity">0.75</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.ContentAnimation.Translation">50</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Icon.Size">80</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.Copyright.FontSize">12</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.Icon.Size">65</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Message.FontSize">12</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Message.ReservedSpace">50</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Title.FontSize">24</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Title.MaxWidth">230</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.Title.FontSize">20</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.Title.MaxWidth">355</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.Version.FontSize">12</sys:Double>
+		<Thickness x:Key="Thickness/SplashWindow.BackgroundImage.Margin">0,0,0,-70</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Border">1</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">0,0,20,0</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">0,0,15,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Margin">10</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Padding">20</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Padding">30</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Title.Margin">0,0,0,5</Thickness>
 		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1.4</sys:TimeSpan>
 
@@ -106,13 +106,15 @@
 					</Transitions>
 				</Border.Transitions>
 			</Border>
-			<Image OpacityMask="{DynamicResource Brush/SplashWindow.BackgroundImage.OpacityMask}" Source="{Binding $parent[Window].BackgroundImage}" Stretch="UniformToFill" StretchDirection="Both"/>
+			<Border BorderBrush="{x:Null}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{StaticResource CornerRadius/SplashWindow}">
+				<Image Margin="{StaticResource Thickness/SplashWindow.BackgroundImage.Margin}" OpacityMask="{DynamicResource Brush/SplashWindow.BackgroundImage.OpacityMask}" Source="{Binding $parent[Window].BackgroundImage}" Stretch="UniformToFill" StretchDirection="Both"/>
+			</Border>
 			
 			<!-- Content -->
-			<Grid ColumnDefinitions="*,Auto,Auto,*" HorizontalAlignment="Stretch" Margin="{StaticResource Thickness/SplashWindow.Padding}" RowDefinitions="Auto,Auto" VerticalAlignment="Center">
+			<Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Stretch" Margin="{StaticResource Thickness/SplashWindow.Padding}" RowDefinitions="Auto,*" VerticalAlignment="Stretch">
 
 				<!-- Icon -->
-				<Image Name="iconImage" Grid.Column="1" Height="{StaticResource Double/SplashWindow.Icon.Size}" HorizontalAlignment="Right" Margin="{StaticResource Thickness/SplashWindow.Icon.Margin}" Opacity="0" Source="{Binding $parent[Window].IconBitmap}" Width="{DynamicResource Double/SplashWindow.Icon.Size}" VerticalAlignment="Center">
+				<Image Name="iconImage" Grid.Column="0" Height="{StaticResource Double/SplashWindow.Icon.Size}" Margin="{StaticResource Thickness/SplashWindow.Icon.Margin}" Opacity="0" Source="{Binding $parent[Window].IconBitmap}" Width="{DynamicResource Double/SplashWindow.Icon.Size}" VerticalAlignment="Center">
 					<Image.RenderTransform>
 						<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 							<TranslateTransform.Transitions>
@@ -130,7 +132,7 @@
 				</Image>
 
 				<!-- Title and version -->
-				<Grid Grid.Column="2" HorizontalAlignment="Left" RowDefinitions="Auto,Auto,*" VerticalAlignment="Center">
+				<Grid Grid.Column="1" HorizontalAlignment="Left" RowDefinitions="Auto,Auto,*" VerticalAlignment="Center">
 					<TextBlock Name="titleTextBlock" FontSize="{DynamicResource Double/SplashWindow.Title.FontSize}}" FontWeight="Bold" Margin="{StaticResource Thickness/SplashWindow.Title.Margin}" MaxWidth="{StaticResource Double/SplashWindow.Title.MaxWidth}" Opacity="0" Text="{Binding $parent[Window].ApplicationName}" TextTrimming="CharacterEllipsis">
 						<TextBlock.RenderTransform>
 							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
@@ -147,7 +149,7 @@
 							</Transitions>
 						</TextBlock.Transitions>
 					</TextBlock>
-					<TextBlock Name="versionTextBlock" Grid.Row="1" Opacity="0" Text="{Binding $parent[Window].Version}" TextTrimming="CharacterEllipsis">
+					<TextBlock Name="versionTextBlock" FontSize="{StaticResource Double/SplashWindow.Version.FontSize}" Grid.Row="1" Opacity="0" Text="{Binding $parent[Window].Version}" TextTrimming="CharacterEllipsis">
 						<TextBlock.RenderTransform>
 							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 								<TranslateTransform.Transitions>
@@ -163,7 +165,7 @@
 							</Transitions>
 						</TextBlock.Transitions>
 					</TextBlock>
-					<TextBlock Name="copyrightTextBlock" Grid.Row="2" Opacity="0" Text="©2021 Carina Studio" TextTrimming="CharacterEllipsis">
+					<TextBlock Name="copyrightTextBlock" FontSize="{StaticResource Double/SplashWindow.Copyright.FontSize}" Grid.Row="2" Opacity="0" Text="©2021 Carina Studio" TextTrimming="CharacterEllipsis">
 						<TextBlock.RenderTransform>
 							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 								<TranslateTransform.Transitions>
@@ -182,8 +184,7 @@
 				</Grid>
 
 				<!-- Message -->
-				<Border Grid.ColumnSpan="4" Grid.Row="1" Height="{StaticResource Double/SplashWindow.Message.ReservedSpace}" HorizontalAlignment="Center"/>
-				<Grid Name="messagePanel" ClipToBounds="False" Grid.ColumnSpan="4" Grid.Row="1" HorizontalAlignment="Center"  Margin="{StaticResource Thickness/SplashWindow.Message.Margin}" Opacity="0">
+				<Grid Name="messagePanel" ClipToBounds="False" Grid.ColumnSpan="4" Grid.Row="1" HorizontalAlignment="Center" Margin="{StaticResource Thickness/SplashWindow.Message.Margin}" Opacity="0" VerticalAlignment="Bottom">
 					<Grid.RenderTransform>
 						<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 							<TranslateTransform.Transitions>
@@ -212,6 +213,11 @@
 				</Grid>
 
 			</Grid>
+
+			<!-- Progress -->
+			<Border BorderBrush="{x:Null}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{StaticResource CornerRadius/SplashWindow}" Height="50" VerticalAlignment="Bottom">
+				<ProgressBar Name="progressBar" Background="{x:Null}" Maximum="1" Value="0" VerticalAlignment="Bottom"/>
+			</Border>
 
 			<!-- Border -->
 			<Border Name="border" BorderBrush="{DynamicResource Brush/SplashWindow.Border}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>

@@ -34,6 +34,7 @@ namespace CarinaStudio.AppSuite.Controls
 		Color accentColor;
 		Uri? backgroundImageUri;
 		Uri? iconUri;
+		readonly ProgressBar progressBar;
 		readonly ScheduledAction showAction;
 		readonly Stopwatch stopwatch = new Stopwatch();
 
@@ -109,6 +110,7 @@ namespace CarinaStudio.AppSuite.Controls
 			if (app.ReleasingType != ApplicationReleasingType.Stable)
 				this.Version += $" {AppReleasingTypeConverter.Convert<string?>(app.ReleasingType)}";
 			AvaloniaXamlLoader.Load(this);
+			this.progressBar = this.Get<ProgressBar>(nameof(progressBar));
 			if (Platform.IsWindows && !Platform.IsWindows8OrAbove)
 			{
 				this.Get<Panel>("rootPanel").Margin = default;
@@ -137,6 +139,7 @@ namespace CarinaStudio.AppSuite.Controls
 				this.accentColor = value;
 				this.Resources["AccentColor30"] = Color.FromArgb((byte)(value.A * 0.3 + 0.5), value.R, value.G, value.B);
 				this.Resources["AccentColor00"] = Color.FromArgb(0, value.R, value.G, value.B);
+				this.progressBar.Foreground = new SolidColorBrush(value);
 			}
 		}
 
@@ -227,6 +230,24 @@ namespace CarinaStudio.AppSuite.Controls
 			// show window
 			this.stopwatch.Start();
 			this.showAction.Schedule();
+		}
+
+
+		// Get or set progress.
+		public double Progress
+		{
+			get => this.progressBar.IsIndeterminate ? double.NaN : this.progressBar.Value;
+			set
+			{
+				this.VerifyAccess();
+				if (double.IsNaN(value))
+					this.progressBar.IsIndeterminate = true;
+				else
+				{
+					this.progressBar.IsIndeterminate = false;
+					this.progressBar.Value = Math.Max(0, Math.Min(1, value));
+				}
+			}
 		}
 
 
