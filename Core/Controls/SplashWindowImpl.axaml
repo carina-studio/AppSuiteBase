@@ -55,7 +55,7 @@
 		<BoxShadows x:Key="BoxShadows/SplashWindow">0 0 10 0 #9f000000</BoxShadows>
 		<CornerRadius x:Key="CornerRadius/SplashWindow">10</CornerRadius>
 		<sys:Double x:Key="Double/ApplicationInfoDialog.AppVersion.Opacity">0.75</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.ContentAnimation.Translation">50</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.ContentAnimation.Translation">30</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Copyright.FontSize">12</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Icon.Size">65</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Message.FontSize">12</sys:Double>
@@ -185,7 +185,7 @@
 
 				<!-- Message -->
 				<Grid Name="messagePanel" ClipToBounds="False" Grid.ColumnSpan="4" Grid.Row="1" HorizontalAlignment="Center" Margin="{StaticResource Thickness/SplashWindow.Message.Margin}" Opacity="0" VerticalAlignment="Bottom">
-					<Grid.RenderTransform>
+					<!--Grid.RenderTransform>
 						<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 							<TranslateTransform.Transitions>
 								<Transitions>
@@ -193,7 +193,7 @@
 								</Transitions>
 							</TranslateTransform.Transitions>
 						</TranslateTransform>
-					</Grid.RenderTransform>
+					</Grid.RenderTransform-->
 					<Grid.Transitions>
 						<Transitions>
 							<DoubleTransition Property="Opacity" Delay="0:0:0.4" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
