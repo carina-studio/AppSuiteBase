@@ -88,6 +88,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public virtual Avalonia.Input.Platform.IClipboard? Clipboard { get => null; }
+
+
+        /// <inheritdoc/>
         public ISettings Configuration { get; } = new MemorySettings();
 
 
