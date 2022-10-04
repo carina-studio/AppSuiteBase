@@ -436,7 +436,7 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.CSharp}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.CSharp.Colored">
-		<GeometryDrawing Brush="#974c90" Geometry="{StaticResource Geometry/Icon.CSharp}"/>
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.CSharp}" Geometry="{StaticResource Geometry/Icon.CSharp}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.CSharp.Light">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.CSharp}"/>
@@ -660,7 +660,7 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.JavaScript}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.JavaScript.Colored">
-		<GeometryDrawing Brush="#e6bb00" Geometry="{StaticResource Geometry/Icon.JavaScript}"/>
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.JavaScript}" Geometry="{StaticResource Geometry/Icon.JavaScript}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.JavaScript.Light">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.JavaScript}"/>
@@ -894,8 +894,8 @@
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Python.Colored">
 		<DrawingGroup>
-			<GeometryDrawing Brush="#376c9a" Geometry="F1 M3 12L1.5 12C0.671573 12 0 11.3284 0 10.5L0 5.5C0 4.67157 0.671573 4 1.5 4L8 4L8 3L7 3L7 2L6 2L6 3L4 3L4 1.5C4 0.671573 4.67157 0 5.5 0L9.5 0C10.3284 0 11 0.671573 11 1.5L11 6.5C11 6.77614 10.7761 7 10.5 7L4.5 7C3.67157 7 3 7.67157 3 8.5L3 12Z"/>
-			<GeometryDrawing Brush="#e6bb00" Geometry="F1 M12 3L12 6.5C12 7.32843 11.3284 8 10.5 8L4.5 8C4.22386 8 4 8.22386 4 8.5L4 13.5C4 14.3284 4.67157 15 5.5 15L9.5 15C10.3284 15 11 14.3284 11 13.5L11 12L9 12L9 13L8 13L8 12L7 12L7 11L13.5 11C14.3284 11 15 10.3284 15 9.5L15 4.5C15 3.67157 14.3284 3 13.5 3L12 3Z"/>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Python.Blue}" Geometry="F1 M3 12L1.5 12C0.671573 12 0 11.3284 0 10.5L0 5.5C0 4.67157 0.671573 4 1.5 4L8 4L8 3L7 3L7 2L6 2L6 3L4 3L4 1.5C4 0.671573 4.67157 0 5.5 0L9.5 0C10.3284 0 11 0.671573 11 1.5L11 6.5C11 6.77614 10.7761 7 10.5 7L4.5 7C3.67157 7 3 7.67157 3 8.5L3 12Z"/>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Python.Yellow}" Geometry="F1 M12 3L12 6.5C12 7.32843 11.3284 8 10.5 8L4.5 8C4.22386 8 4 8.22386 4 8.5L4 13.5C4 14.3284 4.67157 15 5.5 15L9.5 15C10.3284 15 11 14.3284 11 13.5L11 12L9 12L9 13L8 13L8 12L7 12L7 11L13.5 11C14.3284 11 15 10.3284 15 9.5L15 4.5C15 3.67157 14.3284 3 13.5 3L12 3Z"/>
 		</DrawingGroup>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Python.Light">
