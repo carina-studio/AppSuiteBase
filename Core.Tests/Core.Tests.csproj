@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<AssemblyVersion>2.0.4.1004</AssemblyVersion>
 		<Version>2.0.4.1004</Version>
-		<PackageVersion>2.0.3.1004-preview</PackageVersion>
+		<PackageVersion>2.0.4.1004-preview</PackageVersion>
 		<TargetFrameworks>net6.0</TargetFrameworks>
 		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Core.Tests</AssemblyName>
