@@ -138,6 +138,22 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         {
             try
             {
+                var fileInfo = new FileInfo(fileName);
+                if (!fileInfo.Exists)
+                    continue;
+                if (fileInfo.Length == 0)
+                {
+                    this.Logger.LogWarning($"Delete empty file '{fileName}'.");
+                    try
+                    {
+                        fileInfo.Delete();
+                    }
+                    catch (Exception ex)
+                    {
+                        this.Logger.LogError(ex, $"Failed to delete empty file '{fileName}'.");
+                    }
+                    continue;
+                }
                 this.Logger.LogTrace($"Load profile from '{fileName}'");
                 var profile = await this.OnLoadProfileAsync(fileName);
                 if (this.profilesById.ContainsKey(profile.Id))
