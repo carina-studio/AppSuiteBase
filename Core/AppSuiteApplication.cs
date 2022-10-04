@@ -1189,7 +1189,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Check whether application can can running in background mode or not.
         /// </summary>
-        protected virtual bool IsBackgroundModeSupported { get => Platform.IsMacOS; }
+        protected bool IsBackgroundModeSupported { get => Platform.IsMacOS; }
 
 
         /// <summary>
