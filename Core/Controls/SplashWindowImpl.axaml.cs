@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using CarinaStudio.Animation;
 using CarinaStudio.Controls;
 using CarinaStudio.Data.Converters;
 using CarinaStudio.Threading;
@@ -34,6 +35,7 @@ namespace CarinaStudio.AppSuite.Controls
 		Color accentColor;
 		Uri? backgroundImageUri;
 		Uri? iconUri;
+		DoubleAnimator? progressAnimator;
 		readonly ProgressBar progressBar;
 		readonly ScheduledAction showAction;
 		readonly Stopwatch stopwatch = new Stopwatch();
@@ -215,6 +217,7 @@ namespace CarinaStudio.AppSuite.Controls
 		// Called when closed.
 		protected override void OnClosed(EventArgs e)
 		{
+			this.progressAnimator?.Cancel();
 			this.showAction.Cancel();
 			this.stopwatch.Stop();
 			base.OnClosed(e);
@@ -236,16 +239,32 @@ namespace CarinaStudio.AppSuite.Controls
 		// Get or set progress.
 		public double Progress
 		{
-			get => this.progressBar.IsIndeterminate ? double.NaN : this.progressBar.Value;
+			get 
+			{
+				if (this.progressAnimator != null)
+					return progressAnimator.EndValue;
+				return this.progressBar.IsIndeterminate ? double.NaN : this.progressBar.Value;
+			}
 			set
 			{
 				this.VerifyAccess();
+				this.progressAnimator?.Cancel();
 				if (double.IsNaN(value))
+				{
 					this.progressBar.IsIndeterminate = true;
+					this.progressAnimator = null;
+				}
 				else
 				{
 					this.progressBar.IsIndeterminate = false;
-					this.progressBar.Value = Math.Max(0, Math.Min(1, value));
+					this.progressAnimator = new DoubleAnimator(this.progressBar.Value, Math.Max(0, Math.Min(1, value))).Also(it =>
+					{
+						it.Completed += (_, e) => this.progressBar.Value = it.EndValue;
+						it.Duration = TimeSpan.FromMilliseconds(300);
+						it.Interpolator = Interpolators.Deceleration;
+						it.ProgressChanged += (_, e) => this.progressBar.Value = it.Value;
+						it.Start();
+					});
 				}
 			}
 		}

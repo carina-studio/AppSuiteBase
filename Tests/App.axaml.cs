@@ -70,6 +70,10 @@ namespace CarinaStudio.AppSuite.Tests
 
             await Task.Delay(500);
 
+            this.UpdateSplashWindowProgress(1);
+
+            await Task.Delay(300);
+
             if (!this.IsRestoringMainWindowsRequested)
             {
                 for (var i = 0; i < 1; ++i)
