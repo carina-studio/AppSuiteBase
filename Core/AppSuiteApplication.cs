@@ -20,6 +20,9 @@ using CarinaStudio.AutoUpdate.Resolvers;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
+using CarinaStudio.MacOS.AppKit;
+using CarinaStudio.MacOS.ObjectiveC;
+using ObjCSelector = CarinaStudio.MacOS.ObjectiveC.Selector;
 using CarinaStudio.Net;
 using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
@@ -50,6 +53,87 @@ namespace CarinaStudio.AppSuite
     /// </summary>
     public abstract class AppSuiteApplication : Application, IAppSuiteApplication
     {
+        // Application call-back for macOS.
+        class AppSuiteAppDelegate : NSObject
+        {
+            // Static fields.
+            static readonly Class? AppSuiteAppDelegateClass;
+
+            // Fields.
+            readonly AppSuiteApplication app;
+            readonly NSObject? baseAppDelegate;
+
+            // Static initializer.
+            static AppSuiteAppDelegate()
+            {
+                if (Platform.IsNotMacOS)
+                    return;
+                AppSuiteAppDelegateClass = Class.DefineClass(nameof(AppSuiteAppDelegate), cls =>
+                {
+                    Class.GetProtocol("NSApplicationDelegate")?.Let(p => cls.AddProtocol(p));
+                    cls.DefineMethod<IntPtr, IntPtr>(ObjCSelector.FromName("application:openFiles:"), (self, cmd, app, fileName) =>
+                    {
+                        if (AppSuiteAppDelegateClass!.TryGetClrObject<AppSuiteAppDelegate>(self, out var obj))
+                            obj.SendMessageToBaseAppDelegate(self, cmd, app, fileName);
+                    });
+                    cls.DefineMethod<IntPtr, IntPtr>(ObjCSelector.FromName("application:openURLs:"), (self, cmd, app, urls) =>
+                    {
+                        if (AppSuiteAppDelegateClass!.TryGetClrObject<AppSuiteAppDelegate>(self, out var obj))
+                            obj.SendMessageToBaseAppDelegate(self, cmd, app, urls);
+                    });
+                    cls.DefineMethod<IntPtr>(ObjCSelector.FromName("applicationDidFinishLaunching:"), (self, cmd, notification) =>
+                    {
+                        if (AppSuiteAppDelegateClass!.TryGetClrObject<AppSuiteAppDelegate>(self, out var obj))
+                            obj.SendMessageToBaseAppDelegate(self, cmd, notification);
+                    });
+                    cls.DefineMethod<IntPtr, NSApplication.TerminateReply>(ObjCSelector.FromName("applicationShouldTerminate:"), (self, cmd, app) =>
+                    {
+                        if (AppSuiteAppDelegateClass!.TryGetClrObject<AppSuiteAppDelegate>(self, out var obj))
+                            return obj.SendMessageToBaseAppDelegateWithResult(self, cmd, NSApplication.TerminateReply.TerminateNow, app);
+                        return NSApplication.TerminateReply.TerminateNow;
+                    });
+                    cls.DefineMethod<IntPtr, bool, bool>(ObjCSelector.FromName("applicationShouldHandleReopen:hasVisibleWindows:"), (self, cmd, app, flag) =>
+                    {
+                        if (AppSuiteAppDelegateClass!.TryGetClrObject<AppSuiteAppDelegate>(self, out var obj))
+                        {
+                            obj.SendMessageToBaseAppDelegate(self, cmd, app, flag);
+                            if (obj.app.IsBackgroundMode)
+                                obj.app.OnTryExitingBackgroundMode();
+                            return true;
+                        }
+                        return false;
+                    });
+                    cls.DefineMethod<IntPtr>(ObjCSelector.FromName("applicationWillFinishLaunching:"), (self, cmd, notification) =>
+                    {
+                        if (AppSuiteAppDelegateClass!.TryGetClrObject<AppSuiteAppDelegate>(self, out var obj))
+                            obj.SendMessageToBaseAppDelegate(self, cmd, notification);
+                    });
+                });
+            }
+
+            // Constructor.
+            public AppSuiteAppDelegate(AppSuiteApplication app, NSObject? baseAppDelegate) : base(Initialize(AppSuiteAppDelegateClass!.Allocate()), true)
+            { 
+                AppSuiteAppDelegateClass.TrySetClrObject(this.Handle, this);
+                this.app = app;
+                this.baseAppDelegate = baseAppDelegate;
+            }
+
+            // Send message to base delegate.
+            void SendMessageToBaseAppDelegate(IntPtr self, ObjCSelector cmd, params object?[] args)
+            {
+                if (this.baseAppDelegate?.Class?.HasMethod(cmd) == true)
+                    this.baseAppDelegate.SendMessage(cmd, args);
+            }
+            T SendMessageToBaseAppDelegateWithResult<T>(IntPtr self, ObjCSelector cmd, T defaultResult, params object?[] args)
+            {
+                if (this.baseAppDelegate?.Class?.HasMethod(cmd) == true)
+                    return this.baseAppDelegate.SendMessage<T>(cmd, args);
+                return defaultResult;
+            }
+        }
+
+
         // Implementation of Configuration.
         class ConfigurationImpl : PersistentSettings
         {
@@ -212,6 +296,7 @@ namespace CarinaStudio.AppSuite
         // Fields.
         Avalonia.Controls.ResourceDictionary? accentColorResources;
         readonly LinkedList<MainWindowHolder> activeMainWindowList = new LinkedList<MainWindowHolder>();
+        AppSuiteAppDelegate? appSuiteAppDelegate;
         Avalonia.Themes.Fluent.FluentTheme? baseTheme;
         readonly bool canUseWindows10Features = Environment.OSVersion.Version.Let(version =>
         {
@@ -950,7 +1035,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Define style for brush transitions of control.
-        Style DefineBrushTransitionsStyle(Func<Selector?, Selector> selector, TimeSpan duration)
+        Style DefineBrushTransitionsStyle(Func<Avalonia.Styling.Selector?, Avalonia.Styling.Selector> selector, TimeSpan duration)
         {
             var easing = this.TryFindResource<Easing>("Easing/Animation", out var easingRes) ? easingRes : null;
             return new Style(selector).Also(style =>
@@ -994,6 +1079,51 @@ namespace CarinaStudio.AppSuite
             if (!Platform.IsMacOS || control is Avalonia.Controls.Button)
                 return;
             new Controls.MacOSToolTipHelper(control);
+        }
+
+
+        // Enter background mode.
+        bool EnterBackgroundMode()
+        {
+            // check state
+            if (!this.IsBackgroundModeSupported
+                || this.isShutdownStarted 
+                || this.isRestartRequested 
+                || this.mainWindows.IsNotEmpty())
+            {
+                return false;
+            }
+            if (this.IsBackgroundMode)
+                return true;
+            
+            this.Logger.LogDebug("Enter background mode");
+            
+            // enter background mode
+            this.IsBackgroundMode = true;
+            this.OnPropertyChanged(nameof(IsBackgroundMode));
+            if (this.IsBackgroundMode)
+                this.OnBackgroundModeEntered();
+            return this.IsBackgroundMode;
+        }
+
+
+        // Exit background mode.
+        void ExitBackgroundMode()
+        {
+            // check state
+            if (!this.IsBackgroundModeSupported
+                || !this.IsBackgroundMode)
+            {
+                return;
+            }
+
+            this.Logger.LogDebug("Exit background mode");
+
+            // exit background mode
+            this.IsBackgroundMode = false;
+            this.OnPropertyChanged(nameof(IsBackgroundMode));
+            if (!this.IsBackgroundMode)
+                this.OnBackgroundModeExited();
         }
 
 
@@ -1051,6 +1181,15 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         public HardwareInfo HardwareInfo { get => this.hardwareInfo ?? throw new InvalidOperationException("Application is not initialized yet."); }
 
+
+        /// <inheritdoc/>
+        public bool IsBackgroundMode { get; private set; }
+
+
+        /// <summary>
+        /// Check whether application can can running in background mode or not.
+        /// </summary>
+        protected virtual bool IsBackgroundModeSupported { get => Platform.IsMacOS; }
 
 
         /// <summary>
@@ -1580,6 +1719,20 @@ namespace CarinaStudio.AppSuite
         public IList<Window> MainWindows { get; }
 
 
+        /// <summary>
+        /// Called after entering background mode.
+        /// </summary>
+        protected virtual void OnBackgroundModeEntered()
+        { }
+
+
+        /// <summary>
+        /// Called after exiting background mode.
+        /// </summary>
+        protected virtual void OnBackgroundModeExited()
+        { }
+
+
         // Called when one of configuration has been changed.
         void OnConfigurationChanged(object? sender, SettingChangedEventArgs e) =>
             this.OnConfigurationChanged(e);
@@ -1714,6 +1867,16 @@ namespace CarinaStudio.AppSuite
                 {
                     this.Logger.LogError(ex, "Failed to setup default NLog rule");
                 }
+            }
+
+            // setup NSApplication on macOS
+            if (Platform.IsMacOS)
+            {
+                NSApplication.Current?.Let(app =>
+                {
+                    this.appSuiteAppDelegate = new(this, app.Delegate);
+                    app.Delegate = this.appSuiteAppDelegate;
+                });
             }
 
             // start loading persistent state and settings
@@ -1925,9 +2088,11 @@ namespace CarinaStudio.AppSuite
             // dispose view model
             await this.OnDisposeMainWindowViewModelAsync(mainWindowHolder.ViewModel);
 
-            // shut down
+            // remove from window list
             this.mainWindowHolders.Remove(mainWindow);
-            if (this.mainWindowHolders.IsEmpty())
+
+            // enter background mode or shut down
+            if (!this.EnterBackgroundMode() && this.mainWindowHolders.IsEmpty())
                 this.Shutdown();
         }
 
@@ -2372,6 +2537,13 @@ namespace CarinaStudio.AppSuite
             else if (e.Key == SettingKeys.UseCompactUserInterface)
                 this.CheckRestartingMainWindowsNeeded();
         }
+
+
+        /// <summary>
+        /// Called when user trying to exit background mode.
+        /// </summary>
+        protected virtual void OnTryExitingBackgroundMode()
+        { }
 
 
         /// <summary>
@@ -2826,6 +2998,9 @@ namespace CarinaStudio.AppSuite
             }
             this.SynchronizationContext.Post(() =>
             {
+                // exit background mode
+                this.ExitBackgroundMode();
+
                 // [Workaround] sync culture back to system because it may be resetted
                 CultureInfo.CurrentCulture = this.cultureInfo;
                 CultureInfo.CurrentUICulture = this.cultureInfo;

@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Markup.Xaml;
+using CarinaStudio.Collections;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
@@ -84,6 +85,14 @@ namespace CarinaStudio.AppSuite.Tests
 #else
             return base.OnSelectEnteringDebugMode();
 #endif
+        }
+
+
+        protected override void OnTryExitingBackgroundMode()
+        {
+            base.OnTryExitingBackgroundMode();
+            if (this.MainWindows.IsEmpty())
+                this.ShowMainWindow();
         }
 
 

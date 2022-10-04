@@ -185,6 +185,10 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <inheritdoc/>
+        public virtual bool IsBackgroundMode { get => false; }
+
+
         /// <summary>
         /// Check whether application is running in debug mode or not.
         /// </summary>

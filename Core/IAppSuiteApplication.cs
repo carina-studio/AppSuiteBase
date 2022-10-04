@@ -90,6 +90,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Check whether application is running in background mode or not.
+        /// </summary>
+        bool IsBackgroundMode { get; }
+
+
+        /// <summary>
         /// Check whether application is running in debug mode or not.
         /// </summary>
         bool IsDebugMode { get; }
