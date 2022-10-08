@@ -388,6 +388,11 @@ namespace CarinaStudio.AppSuite.Tests
 
         public void SwitchUsingCompactUI() =>
             this.Settings.SetValue<bool>(SettingKeys.UseCompactUserInterface, !this.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface));
+        
+
+#if WINDOWS
+        protected override Type? TaskbarManagerType => typeof(Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager);
+#endif
 
 
         void Test()
@@ -430,6 +435,33 @@ namespace CarinaStudio.AppSuite.Tests
                 System.Diagnostics.Debug.WriteLine("Window created");
             });
             */
+        }
+
+
+        public void UpdateTaskbarIconProgressState()
+        {
+            switch (this.TaskbarIconProgressState)
+            {
+                case TaskbarIconProgressState.None:
+                    this.TaskbarIconProgress = 0.5;
+                    this.TaskbarIconProgressState = TaskbarIconProgressState.Normal;
+                    break;
+                case TaskbarIconProgressState.Normal:
+                    this.TaskbarIconProgress = 0.6;
+                    this.TaskbarIconProgressState = TaskbarIconProgressState.Paused;
+                    break;
+                case TaskbarIconProgressState.Paused:
+                    this.TaskbarIconProgress = 0.7;
+                    this.TaskbarIconProgressState = TaskbarIconProgressState.Error;
+                    break;
+                case TaskbarIconProgressState.Error:
+                    this.TaskbarIconProgress = 0.1;
+                    this.TaskbarIconProgressState = TaskbarIconProgressState.Indeterminate;
+                    break;
+                default:
+                    this.TaskbarIconProgressState = TaskbarIconProgressState.None;
+                    break;
+            }
         }
     }
 }
