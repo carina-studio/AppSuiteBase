@@ -106,7 +106,7 @@
 	
 	<!-- Icon -->
 	<Color x:Key="Color/Icon">#000000</Color>
-	<Color x:Key="Color/Icon.CSharp">#974c90</Color>
+	<Color x:Key="Color/Icon.CSharp">#bf61b7</Color>
 	<Color x:Key="Color/Icon.Dark">#000000</Color>
 	<Color x:Key="Color/Icon.Error">#ff3232</Color>
 	<Color x:Key="Color/Icon.Information">#288acc</Color>
