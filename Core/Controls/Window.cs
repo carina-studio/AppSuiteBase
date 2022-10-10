@@ -4,9 +4,11 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
+using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -29,7 +31,11 @@ namespace CarinaStudio.AppSuite.Controls
         static readonly Version? AvaloniaVersion = typeof(Avalonia.Application).Assembly.GetName().Version;
         static readonly bool IsAvalonia_0_10_14_OrAbove = AvaloniaVersion?.Let(version =>
             version.Major >= 1 || version.Minor >= 11 || version.Build >= 14) ?? false;
+        static MethodInfo? SetWindowsTaskbarProgressStateMethod;
+        static MethodInfo? SetWindowsTaskbarProgressValueMethod;
         internal static readonly Stopwatch Stopwatch = new Stopwatch().Also(it => it.Start());
+        static object? WindowsTaskbarManager;
+        static Type? WindowsTaskbarProgressBarStateType;
 
 
         // Fields.
@@ -39,6 +45,8 @@ namespace CarinaStudio.AppSuite.Controls
         Tutorial? currentTutorial;
         IDisposable? currentTutorialObserverToken;
         bool isSystemChromeVisibleInClientArea;
+        double taskbarIconProgress;
+        TaskbarIconProgressState taskbarIconProgressState = TaskbarIconProgressState.None;
         TutorialPresenter? tutorialPresenter;
         readonly ScheduledAction updateTransparencyLevelAction;
 
@@ -264,9 +272,117 @@ namespace CarinaStudio.AppSuite.Controls
             this.tutorialPresenter?.RequestSkippingAllTutorials();
         
 
+        // Setup TaskbarManager for Windows is available.
+        bool SetupWindowsTaskbarManager()
+        {
+            // check state
+            if (Platform.IsNotWindows)
+                return false;
+            if (WindowsTaskbarManager != null)
+                return true;
+            var tbmType = this.TaskbarManagerType;
+            if (tbmType == null)
+                return false;
+            
+            // find type
+            WindowsTaskbarProgressBarStateType = tbmType.Assembly.GetType("Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState");
+            if (WindowsTaskbarProgressBarStateType == null)
+            {
+                this.Logger.LogError("Unable to find TaskbarProgressBarState type on Windows");
+                return false;
+            }
+            
+            // create taskbar manager
+            var taskbarManager = (object?)null;
+            try
+            {
+                taskbarManager = tbmType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static).AsNonNull().GetValue(null).AsNonNull();
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Unable to get TaskbarManager on Windows");
+                return false;
+            }
+
+            // find methods
+            SetWindowsTaskbarProgressStateMethod = taskbarManager.GetType().GetMethod("SetProgressState", new Type[]{ WindowsTaskbarProgressBarStateType, typeof(IntPtr) });
+            if (SetWindowsTaskbarProgressStateMethod == null)
+            {
+                this.Logger.LogError("Unable to find TaskbarManager.SetProgressState() on Windows");
+                return false;
+            }
+            SetWindowsTaskbarProgressValueMethod = taskbarManager.GetType().GetMethod("SetProgressValue", new Type[]{ typeof(int), typeof(int), typeof(IntPtr) });
+            if (SetWindowsTaskbarProgressValueMethod == null)
+            {
+                this.Logger.LogError("Unable to find TaskbarManager.SetProgressValue() on Windows");
+                return false;
+            }
+
+            // complete
+            WindowsTaskbarManager = taskbarManager;
+            return true;
+        }
+        
+
         /// <inheritdoc/>
         public bool ShowTutorial(Tutorial tutorial) =>
             this.tutorialPresenter?.ShowTutorial(tutorial) ?? false;
+        
+
+        /// <summary>
+        /// Get or set progress shown on taskbar icon. The range is [0.0, 1.0].
+        /// </summary>
+        internal protected double TaskbarIconProgress
+        {
+            get => this.taskbarIconProgress;
+            set
+            {
+                this.VerifyAccess();
+                if (!double.IsFinite(value))
+                    throw new ArgumentOutOfRangeException();
+                if (value < 0)
+                    value = 0;
+                else if (value > 1)
+                    value = 1;
+                this.taskbarIconProgress = value;
+                if (Platform.IsWindows)
+                {
+                    if (this.SetupWindowsTaskbarManager())
+                        SetWindowsTaskbarProgressValueMethod!.Invoke(WindowsTaskbarManager, new object?[]{ (int)(value * 100 + 0.5), 100, this.PlatformImpl.Handle.Handle });
+                }
+                else if (Platform.IsMacOS)
+                    AppSuiteApplication.CurrentOrNull?.UpdateMacOSDockTileProgressState();
+            }
+        }
+
+
+        /// <summary>
+        /// Get or set progress state of taskbar icon.
+        /// </summary>
+        internal protected TaskbarIconProgressState TaskbarIconProgressState
+        {
+            get => this.taskbarIconProgressState;
+            set
+            {
+                this.VerifyAccess();
+                if (this.taskbarIconProgressState == value)
+                    return;
+                this.taskbarIconProgressState = value;
+                if (Platform.IsWindows)
+                {
+                    if (this.SetupWindowsTaskbarManager())
+                        SetWindowsTaskbarProgressStateMethod!.Invoke(WindowsTaskbarManager, new object?[]{ (int)value, this.PlatformImpl.Handle.Handle });
+                }
+                else if (Platform.IsMacOS)
+                    AppSuiteApplication.CurrentOrNull?.UpdateMacOSDockTileProgressState();
+            }
+        }
+        
+
+        /// <summary>
+        /// Get type of Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.
+        /// </summary>
+        protected virtual Type? TaskbarManagerType { get => null; }
     }
 
 

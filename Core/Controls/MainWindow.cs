@@ -71,14 +71,8 @@ namespace CarinaStudio.AppSuite.Controls
         double restoredHeight;
         double restoredWidth;
         readonly ScheduledAction saveWindowSizeAction;
-        MethodInfo? setWindowsTaskbarProgressStateMethod;
-        MethodInfo? setWindowsTaskbarProgressValueMethod;
         readonly ScheduledAction showInitDialogsAction;
-        double taskbarIconProgress;
-        TaskbarIconProgressState taskbarIconProgressState = TaskbarIconProgressState.None;
         readonly ScheduledAction updateContentPaddingAction;
-        object? windowsTaskbarManager;
-        Type? windowsTaskbarProgressBarStateType;
 
 
         /// <summary>
@@ -595,58 +589,6 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
-        // Setup TaskbarManager for Windows is available.
-        bool SetupWindowsTaskbarManager()
-        {
-            // check state
-            if (Platform.IsNotWindows)
-                return false;
-            if (this.windowsTaskbarManager != null)
-                return true;
-            var tbmType = this.TaskbarManagerType;
-            if (tbmType == null)
-                return false;
-            
-            // find type
-            this.windowsTaskbarProgressBarStateType = tbmType.Assembly.GetType("Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState");
-            if (this.windowsTaskbarProgressBarStateType == null)
-            {
-                this.Logger.LogError("Unable to find TaskbarProgressBarState type on Windows");
-                return false;
-            }
-            
-            // create taskbar manager
-            var taskbarManager = (object?)null;
-            try
-            {
-                taskbarManager = tbmType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static).AsNonNull().GetValue(null).AsNonNull();
-            }
-            catch (Exception ex)
-            {
-                this.Logger.LogError(ex, "Unable to get TaskbarManager on Windows");
-                return false;
-            }
-
-            // find methods
-            this.setWindowsTaskbarProgressStateMethod = taskbarManager.GetType().GetMethod("SetProgressState", new Type[]{ this.windowsTaskbarProgressBarStateType, typeof(IntPtr) });
-            if (this.setWindowsTaskbarProgressStateMethod == null)
-            {
-                this.Logger.LogError("Unable to find TaskbarManager.SetProgressState() on Windows");
-                return false;
-            }
-            this.setWindowsTaskbarProgressValueMethod = taskbarManager.GetType().GetMethod("SetProgressValue", new Type[]{ typeof(int), typeof(int), typeof(IntPtr) });
-            if (this.setWindowsTaskbarProgressValueMethod == null)
-            {
-                this.Logger.LogError("Unable to find TaskbarManager.SetProgressValue() on Windows");
-                return false;
-            }
-
-            // complete
-            this.windowsTaskbarManager = taskbarManager;
-            return true;
-        }
-
-
         /// <summary>
         /// Show dialog of appliation information.
         /// </summary>
@@ -855,62 +797,6 @@ namespace CarinaStudio.AppSuite.Controls
                 this.OnInitialDialogsClosed();
             }
         }
-
-
-        /// <summary>
-        /// Get or set progress shown on taskbar icon. The range is [0.0, 1.0].
-        /// </summary>
-        internal protected double TaskbarIconProgress
-        {
-            get => this.taskbarIconProgress;
-            set
-            {
-                this.VerifyAccess();
-                if (!double.IsFinite(value))
-                    throw new ArgumentOutOfRangeException();
-                if (value < 0)
-                    value = 0;
-                else if (value > 1)
-                    value = 1;
-                this.taskbarIconProgress = value;
-                if (Platform.IsWindows)
-                {
-                    if (this.SetupWindowsTaskbarManager())
-                        this.setWindowsTaskbarProgressValueMethod!.Invoke(this.windowsTaskbarManager, new object?[]{ (int)(value * 100 + 0.5), 100, this.PlatformImpl.Handle.Handle });
-                }
-                else if (Platform.IsMacOS)
-                    ;
-            }
-        }
-
-
-        /// <summary>
-        /// Get or set progress state of taskbar icon.
-        /// </summary>
-        internal protected TaskbarIconProgressState TaskbarIconProgressState
-        {
-            get => this.taskbarIconProgressState;
-            set
-            {
-                this.VerifyAccess();
-                if (this.taskbarIconProgressState == value)
-                    return;
-                this.taskbarIconProgressState = value;
-                if (Platform.IsWindows)
-                {
-                    if (this.SetupWindowsTaskbarManager())
-                        this.setWindowsTaskbarProgressStateMethod!.Invoke(this.windowsTaskbarManager, new object?[]{ (int)value, this.PlatformImpl.Handle.Handle });
-                }
-                else if (Platform.IsMacOS)
-                    ;
-            }
-        }
-
-
-        /// <summary>
-        /// Get type of Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.
-        /// </summary>
-        protected virtual Type? TaskbarManagerType { get => null; }
 
 
         // Update client area extending state.

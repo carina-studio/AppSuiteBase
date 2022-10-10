@@ -454,10 +454,12 @@ namespace CarinaStudio.AppSuite.Tests
                     this.TaskbarIconProgress = 0.7;
                     this.TaskbarIconProgressState = TaskbarIconProgressState.Error;
                     break;
+                /*
                 case TaskbarIconProgressState.Error:
                     this.TaskbarIconProgress = 0.1;
                     this.TaskbarIconProgressState = TaskbarIconProgressState.Indeterminate;
                     break;
+                */
                 default:
                     this.TaskbarIconProgressState = TaskbarIconProgressState.None;
                     break;

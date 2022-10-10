@@ -70,43 +70,38 @@ namespace CarinaStudio.AppSuite
                     return;
                 AppSuiteAppDelegateClass = Class.DefineClass(nameof(AppSuiteAppDelegate), cls =>
                 {
-                    Class.GetProtocol("NSApplicationDelegate")?.Let(p => cls.AddProtocol(p));
-                    cls.DefineMethod<IntPtr, IntPtr>(ObjCSelector.FromName("application:openFiles:"), (self, cmd, app, fileName) =>
+                    cls.DefineMethod<IntPtr, IntPtr>("application:openFiles:", (self, cmd, app, fileName) =>
                     {
-                        if (AppSuiteAppDelegateClass!.TryGetClrObject<AppSuiteAppDelegate>(self, out var obj))
-                            obj.SendMessageToBaseAppDelegate(self, cmd, app, fileName);
+                        AppSuiteApplication.Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(self, cmd, app, fileName);
                     });
-                    cls.DefineMethod<IntPtr, IntPtr>(ObjCSelector.FromName("application:openURLs:"), (self, cmd, app, urls) =>
+                    cls.DefineMethod<IntPtr, IntPtr>("application:openURLs:", (self, cmd, app, urls) =>
                     {
-                        if (AppSuiteAppDelegateClass!.TryGetClrObject<AppSuiteAppDelegate>(self, out var obj))
-                            obj.SendMessageToBaseAppDelegate(self, cmd, app, urls);
+                        AppSuiteApplication.Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(self, cmd, app, urls);
                     });
-                    cls.DefineMethod<IntPtr>(ObjCSelector.FromName("applicationDidFinishLaunching:"), (self, cmd, notification) =>
+                    cls.DefineMethod<IntPtr>("applicationDidFinishLaunching:", (self, cmd, notification) =>
                     {
-                        if (AppSuiteAppDelegateClass!.TryGetClrObject<AppSuiteAppDelegate>(self, out var obj))
-                            obj.SendMessageToBaseAppDelegate(self, cmd, notification);
+                        AppSuiteApplication.Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(self, cmd, notification);
                     });
-                    cls.DefineMethod<IntPtr, NSApplication.TerminateReply>(ObjCSelector.FromName("applicationShouldTerminate:"), (self, cmd, app) =>
+                    cls.DefineMethod<IntPtr, NSApplication.TerminateReply>("applicationShouldTerminate:", (self, cmd, app) =>
                     {
-                        if (AppSuiteAppDelegateClass!.TryGetClrObject<AppSuiteAppDelegate>(self, out var obj))
-                            return obj.SendMessageToBaseAppDelegateWithResult(self, cmd, NSApplication.TerminateReply.TerminateNow, app);
-                        return NSApplication.TerminateReply.TerminateNow;
-                    });
-                    cls.DefineMethod<IntPtr, bool, bool>(ObjCSelector.FromName("applicationShouldHandleReopen:hasVisibleWindows:"), (self, cmd, app, flag) =>
-                    {
-                        if (AppSuiteAppDelegateClass!.TryGetClrObject<AppSuiteAppDelegate>(self, out var obj))
+                        return AppSuiteApplication.Current.macOSAppDelegate.Let(it =>
                         {
-                            obj.SendMessageToBaseAppDelegate(self, cmd, app, flag);
-                            if (obj.app.IsBackgroundMode)
-                                obj.app.OnTryExitingBackgroundMode();
-                            return true;
-                        }
-                        return false;
+                            if (it != null)
+                                return it.SendMessageToBaseAppDelegateWithResult(self, cmd, NSApplication.TerminateReply.TerminateNow, app);
+                            return NSApplication.TerminateReply.TerminateNow;
+                        });
                     });
-                    cls.DefineMethod<IntPtr>(ObjCSelector.FromName("applicationWillFinishLaunching:"), (self, cmd, notification) =>
+                    cls.DefineMethod<IntPtr, bool, bool>("applicationShouldHandleReopen:hasVisibleWindows:", (self, cmd, app, flag) =>
                     {
-                        if (AppSuiteAppDelegateClass!.TryGetClrObject<AppSuiteAppDelegate>(self, out var obj))
-                            obj.SendMessageToBaseAppDelegate(self, cmd, notification);
+                        var asApp = AppSuiteApplication.Current;
+                        asApp.macOSAppDelegate?.SendMessageToBaseAppDelegate(self, cmd, app, flag);
+                        if (asApp.IsBackgroundMode)
+                            asApp.OnTryExitingBackgroundMode();
+                        return true;
+                    });
+                    cls.DefineMethod<IntPtr>("applicationWillFinishLaunching:", (self, cmd, notification) =>
+                    {
+                        AppSuiteApplication.Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(self, cmd, notification);
                     });
                 });
             }
@@ -114,7 +109,6 @@ namespace CarinaStudio.AppSuite
             // Constructor.
             public AppSuiteAppDelegate(AppSuiteApplication app, NSObject? baseAppDelegate) : base(Initialize(AppSuiteAppDelegateClass!.Allocate()), true)
             { 
-                AppSuiteAppDelegateClass.TrySetClrObject(this.Handle, this);
                 this.app = app;
                 this.baseAppDelegate = baseAppDelegate;
             }
@@ -128,7 +122,16 @@ namespace CarinaStudio.AppSuite
             T SendMessageToBaseAppDelegateWithResult<T>(IntPtr self, ObjCSelector cmd, T defaultResult, params object?[] args)
             {
                 if (this.baseAppDelegate?.Class?.HasMethod(cmd) == true)
-                    return this.baseAppDelegate.SendMessage<T>(cmd, args);
+                {
+                    try
+                    {
+                        return this.baseAppDelegate.SendMessage<T>(cmd, args);
+                    }
+                    catch (Exception ex)
+                    {
+                        AppSuiteApplication.Current.Logger.LogError(ex, $"Error occurred while calling base delegate by '{cmd.Name}'");
+                    }
+                }
                 return defaultResult;
             }
         }
@@ -258,6 +261,7 @@ namespace CarinaStudio.AppSuite
         // Constants.
         const string DebugModeRequestedKey = "IsDebugModeRequested";
         const string RestoreMainWindowsRequestedKey = "IsRestoringMainWindowsRequested";
+        const int MacOSDockTileAnimationInterval = 30;
         const int MinSplashWindowDuration = 2000;
         const int SplashWindowShowingDuration = 1500;
         const int SplashWindowLoadingThemeDuration = 400;
@@ -296,7 +300,6 @@ namespace CarinaStudio.AppSuite
         // Fields.
         Avalonia.Controls.ResourceDictionary? accentColorResources;
         readonly LinkedList<MainWindowHolder> activeMainWindowList = new LinkedList<MainWindowHolder>();
-        AppSuiteAppDelegate? appSuiteAppDelegate;
         Avalonia.Themes.Fluent.FluentTheme? baseTheme;
         readonly bool canUseWindows10Features = Environment.OSVersion.Version.Let(version =>
         {
@@ -320,6 +323,9 @@ namespace CarinaStudio.AppSuite
         Task? loadingInitPersistentStateTask;
         Task? loadingInitSettingsTask;
         int logOutputTargetPort;
+        AppSuiteAppDelegate? macOSAppDelegate;
+        NSDockTile? macOSAppDockTile;
+        NSProgressIndicator? macOSAppDockTileProgressBar;
         readonly Dictionary<Window, MainWindowHolder> mainWindowHolders = new Dictionary<Window, MainWindowHolder>();
         readonly ObservableList<Window> mainWindows = new ObservableList<Window>();
         readonly CancellationTokenSource multiInstancesServerCancellationTokenSource = new CancellationTokenSource();
@@ -348,6 +354,7 @@ namespace CarinaStudio.AppSuite
         Delegate? uiSettingsColorValueChangedHandler;
         readonly MethodInfo? uiSettingsGetColorValueMethod;
         readonly Type? uiSettingsType;
+        ScheduledAction? updateMacOSAppDockTileProgressAction;
         readonly PropertyInfo? windowsColorBProperty;
         readonly PropertyInfo? windowsColorGProperty;
         readonly PropertyInfo? windowsColorRProperty;
@@ -1869,13 +1876,56 @@ namespace CarinaStudio.AppSuite
                 }
             }
 
-            // setup NSApplication on macOS
+            // setup NSApplication and dock tile on macOS
             if (Platform.IsMacOS)
             {
                 NSApplication.Current?.Let(app =>
                 {
-                    this.appSuiteAppDelegate = new(this, app.Delegate);
-                    app.Delegate = this.appSuiteAppDelegate;
+                    this.macOSAppDelegate = new(this, app.Delegate);
+                    app.Delegate = this.macOSAppDelegate;
+                });
+                this.updateMacOSAppDockTileProgressAction = new(() =>
+                {
+                    this.SetupMacOSAppDockTile();
+                    var window = this.mainWindows.IsNotEmpty() ? this.LatestActiveMainWindow as Controls.Window : null;
+                    var state = window?.TaskbarIconProgressState ?? Controls.TaskbarIconProgressState.None;
+                    switch (state)
+                    {
+                        case Controls.TaskbarIconProgressState.Indeterminate:
+                            // Usupported
+                            goto default;
+                        case Controls.TaskbarIconProgressState.Normal:
+                        case Controls.TaskbarIconProgressState.Error:
+                        case Controls.TaskbarIconProgressState.Paused:
+                            this.macOSAppDockTileProgressBar?.Let(it =>
+                            {
+                                var value = it.MaxValue * (window?.TaskbarIconProgress ?? 0);
+                                it.IsHidden = state != Controls.TaskbarIconProgressState.Normal && value < 0.1;
+                                it.DoubleValue = value;
+                                this.macOSAppDockTile?.Let(it =>
+                                {
+                                    it.BadgeLabel = state switch
+                                    {
+                                        Controls.TaskbarIconProgressState.Error => "✖",
+                                        //Controls.TaskbarIconProgressState.Paused => "‖",
+                                        _ => null,
+                                    };
+                                });
+                            });
+                            break;
+                        default:
+                            this.macOSAppDockTileProgressBar?.Let(it =>
+                            {
+                                it.IsHidden = true;
+                                it.DoubleValue = 0;
+                            });
+                            this.macOSAppDockTile?.Let(it =>
+                                it.BadgeLabel = null);
+                            break;
+                    }
+                    this.macOSAppDockTile?.Display();
+                    this.SynchronizationContext.PostDelayed(() => // [Workaround] Make sure that dock tile redraws as expected
+                        this.macOSAppDockTile?.Display(), 100);
                 });
             }
 
@@ -2005,6 +2055,7 @@ namespace CarinaStudio.AppSuite
                 {
                     this.UpdateCultureInfo(true);
                     this.UpdateSystemThemeMode(true);
+                    this.updateMacOSAppDockTileProgressAction?.Schedule();
                 }
                 if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value?.Window == mainWindow)
                     return;
@@ -2031,6 +2082,7 @@ namespace CarinaStudio.AppSuite
             {
                 this.activeMainWindowList.RemoveFirst();
                 this.OnPropertyChanged(nameof(LatestActiveMainWindow));
+                this.updateMacOSAppDockTileProgressAction?.Schedule();
             }
             else if (mainWindowHolder.ActiveListNode.List != null)
                 this.activeMainWindowList.Remove(mainWindowHolder.ActiveListNode);
@@ -2896,6 +2948,45 @@ namespace CarinaStudio.AppSuite
         protected virtual int SettingsVersion { get; } = 2;
 
 
+        // Perform necessary setup for dock tile on macOS.
+        void SetupMacOSAppDockTile()
+        {
+            if (Platform.IsNotMacOS || this.macOSAppDockTile != null)
+                return;
+            var app = NSApplication.Shared;
+            this.macOSAppDockTile = app.DockTile.Also(dockTile =>
+            {
+                // prepare icon
+                var iconImage = app.ApplicationIconImage;
+                if (Path.GetFileName(Process.GetCurrentProcess().MainModule?.FileName) == "dotnet")
+                {
+                    using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("CarinaStudio.AppSuite.Resources.AppIcon_macOS_256.png");
+                    if (stream != null)
+                        iconImage = NSImage.FromStream(stream);
+                }
+
+                // setup dock tile
+                var dockTileSize = dockTile.Size;
+                dockTile.ContentView = new NSImageView(new(default, dockTileSize)).Also(imageView =>
+                {
+                    imageView.Image = iconImage;
+                    imageView.ImageAlignment = NSImageAlignment.Bottom;
+                    imageView.ImageScaling = NSImageScaling.ProportionallyUpOrDown;
+                    this.macOSAppDockTileProgressBar = new NSProgressIndicator(default).Also(it =>
+                    {
+                        var width = (dockTileSize.Width * 0.58);
+                        var bottom = dockTileSize.Height * 0.11;
+                        it.Frame = new((dockTileSize.Width - width) / 2, bottom, width, it.IntrinsicContentSize.Height);
+                        it.IsHidden = true;
+                        it.IsIndeterminate = false;
+                        imageView.AddSubView(it);
+                    });
+                });
+                dockTile.Display();
+            });
+        }
+
+
         /// <inheritdoc/>
         public bool ShowMainWindow(Action<Window>? windowCreatedAction = null) => this.ShowMainWindow(null, windowCreatedAction);
 
@@ -3206,6 +3297,11 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogTrace($"[Performance] Took {time} ms to update log output to localhost");
             }
         }
+
+
+        // Update progress state of dock tile on macOS.
+        internal void UpdateMacOSDockTileProgressState() =>
+            this.updateMacOSAppDockTileProgressAction?.Schedule();
 
 
         /// <summary>
