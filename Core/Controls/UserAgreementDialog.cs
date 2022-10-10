@@ -1,5 +1,5 @@
 ﻿using CarinaStudio.AppSuite.ViewModels;
-using System;
+using CarinaStudio.Controls;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -21,17 +21,20 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <inheritdoc/>
-        protected override async Task<bool> ShowDialogCore(Avalonia.Controls.Window owner)
+        protected override Task<bool> ShowDialogCore(Avalonia.Controls.Window? owner)
         {
             // check state
             if (this.appInfo.Application.IsUserAgreementAgreed)
-                return true;
+                return Task.FromResult(true);
 
             // show dialog
-            return await new UserAgreementDialogImpl()
+            var dialog = new UserAgreementDialogImpl()
             {
                 DataContext = this.appInfo,
-            }.ShowDialog<bool>(owner);
+            };
+            return owner != null
+                ? dialog.ShowDialog<bool>(owner)
+                : dialog.ShowDialog<bool>();
         }
     }
 }

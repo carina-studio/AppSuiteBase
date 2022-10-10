@@ -1,6 +1,5 @@
-﻿using Avalonia;
-using CarinaStudio.Threading;
-using System;
+﻿using CarinaStudio.Threading;
+using CarinaStudio.Controls;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -98,7 +97,7 @@ public class TextInputDialog : CommonDialog<string?>
     /// </summary>
     /// <param name="owner">Owner window.</param>
     /// <returns>Task to get result.</returns>
-    protected override async Task<string?> ShowDialogCore(Avalonia.Controls.Window owner)
+    protected override async Task<string?> ShowDialogCore(Avalonia.Controls.Window? owner)
     {
         var dialog = new TextInputDialogImpl();
         dialog.DoNotAskAgain = this.doNotAskAgain;
@@ -107,7 +106,9 @@ public class TextInputDialog : CommonDialog<string?>
         using var messageBindingToken = this.BindValueToDialog(dialog, TextInputDialogImpl.MessageProperty, this.message);
         dialog.Text = this.initialText;
         using var titleBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
-        var result = await dialog.ShowDialog<string?>(owner);
+        var result = await (owner != null
+            ? dialog.ShowDialog<string?>(owner)
+            : dialog.ShowDialog<string?>());
         this.doNotAskAgain = dialog.DoNotAskAgain;
         this.doNotShowAgain = dialog.DoNotShowAgain;
         return result;

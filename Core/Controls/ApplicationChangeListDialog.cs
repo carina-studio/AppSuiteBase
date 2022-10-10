@@ -1,6 +1,7 @@
 ﻿using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
+using CarinaStudio.Controls;
 using System;
 using System.Threading.Tasks;
 
@@ -62,11 +63,11 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		/// <param name="owner">Owner window.</param>
 		/// <returns>Task to showing dialog.</returns>
-        public new Task ShowDialog(Avalonia.Controls.Window owner) => base.ShowDialog(owner);
+        public new Task ShowDialog(Avalonia.Controls.Window? owner) => base.ShowDialog(owner);
 
 
         /// <inheritdoc/>
-        protected override Task<object?> ShowDialogCore(Avalonia.Controls.Window owner)
+        protected override Task<object?> ShowDialogCore(Avalonia.Controls.Window? owner)
         {
             var dialog = new ApplicationChangeListDialogImpl()
             {
@@ -75,7 +76,11 @@ namespace CarinaStudio.AppSuite.Controls
             var showVersion = this.changeList.Version.Let(it => new Version(it.Major, it.Minor));
             this.changeList.Application.PersistentState.SetValue<string>(LatestShownVersionKey, showVersion.ToString());
             if (this.changeList.ChangeList.IsNotEmpty())
-                return dialog.ShowDialog<object?>(owner);
+            {
+                if (owner != null)
+                    return dialog.ShowDialog<object?>(owner);
+                return dialog.ShowDialog<object?>();
+            }
             return Task.FromResult((object?)null); // skip showing because there is no change
         }
     }

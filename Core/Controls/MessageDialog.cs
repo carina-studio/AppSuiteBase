@@ -1,6 +1,5 @@
-﻿using Avalonia;
+﻿using CarinaStudio.Controls;
 using CarinaStudio.Threading;
-using System;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -98,7 +97,7 @@ public class MessageDialog:CommonDialog<MessageDialogResult>
 	/// </summary>
 	/// <param name="owner">Owner window.</param>
 	/// <returns>Task to get result of dialog.</returns>
-	protected override async Task<MessageDialogResult> ShowDialogCore(Avalonia.Controls.Window owner)
+	protected override async Task<MessageDialogResult> ShowDialogCore(Avalonia.Controls.Window? owner)
 	{
 		var dialog = new MessageDialogImpl();
 		dialog.Buttons = this.buttons;
@@ -107,7 +106,9 @@ public class MessageDialog:CommonDialog<MessageDialogResult>
 		dialog.Icon = this.icon;
 		using var messageBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.MessageProperty, this.message);
 		using var titleBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
-		var result = await dialog.ShowDialog<MessageDialogResult>(owner);
+		var result = owner != null
+			? await dialog.ShowDialog<MessageDialogResult>(owner)
+			: await dialog.ShowDialog<MessageDialogResult>();
 		this.doNotAskOrShowAgain = dialog.DoNotAskOrShowAgain;
 		return result;
 	}

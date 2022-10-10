@@ -1,5 +1,6 @@
 ﻿using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Configuration;
+using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using System;
 using System.Threading.Tasks;
@@ -80,13 +81,16 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         /// <param name="owner">Owner window.</param>
         /// <returns>Task to get result.</returns>
-        protected override async Task<ApplicationUpdateDialogResult> ShowDialogCore(Avalonia.Controls.Window owner)
+        protected override async Task<ApplicationUpdateDialogResult> ShowDialogCore(Avalonia.Controls.Window? owner)
         {
-            var result = await new ApplicationUpdateDialogImpl()
+            var dialog = new ApplicationUpdateDialogImpl()
             {
                 CheckForUpdateWhenOpening = this.checkForUpdateWhenShowing,
                 DataContext = this.appUpdater,
-            }.ShowDialog<ApplicationUpdateDialogResult?>(owner);
+            };
+            var result = await (owner != null 
+                ? dialog.ShowDialog<ApplicationUpdateDialogResult?>(owner)
+                : dialog.ShowDialog<ApplicationUpdateDialogResult?>());
             return result ?? ApplicationUpdateDialogResult.None;
         }
     }

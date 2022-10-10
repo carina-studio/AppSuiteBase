@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using CarinaStudio.Controls;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls;
 
@@ -28,11 +29,12 @@ public class PathEnvVarEditorDialog : CommonDialog<bool>
     /// </summary>
     /// <param name="owner">Owner window.</param>
     /// <returns>Task to get result.</returns>
-    protected override async Task<bool> ShowDialogCore(Avalonia.Controls.Window owner)
+    protected override async Task<bool> ShowDialogCore(Avalonia.Controls.Window? owner)
     {
         if (IsSupported)
         {
-            var result = await new PathEnvVarEditorDialogImpl().ShowDialog<bool?>(owner);
+            var dialog = new PathEnvVarEditorDialogImpl();
+            var result = await (owner != null ? dialog.ShowDialog<bool?>(owner) : dialog.ShowDialog<bool?>());
             return result.GetValueOrDefault();
         }
         return false;

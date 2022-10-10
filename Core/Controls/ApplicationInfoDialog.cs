@@ -1,5 +1,5 @@
 ﻿using CarinaStudio.AppSuite.ViewModels;
-using System;
+using CarinaStudio.Controls;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -25,7 +25,7 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		/// <param name="owner">Owner window.</param>
 		/// <returns>Task to showing dialog.</returns>
-        public new Task ShowDialog(Avalonia.Controls.Window owner) => base.ShowDialog(owner);
+        public new Task ShowDialog(Avalonia.Controls.Window? owner) => base.ShowDialog(owner);
 
 
         /// <summary>
@@ -33,13 +33,15 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         /// <param name="owner">Owner window.</param>
         /// <returns>Task to get result.</returns>
-        protected override Task<object?> ShowDialogCore(Avalonia.Controls.Window owner)
+        protected override Task<object?> ShowDialogCore(Avalonia.Controls.Window? owner)
         {
             var dialog = new ApplicationInfoDialogImpl()
             {
                 DataContext = this.appInfo
             };
-            return dialog.ShowDialog<object?>(owner);
+            if (owner != null)
+                return dialog.ShowDialog<object?>(owner);
+            return dialog.ShowDialog<object?>();
         }
     }
 }

@@ -1,5 +1,6 @@
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
+using CarinaStudio.Controls;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -60,11 +61,11 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		/// <param name="owner">Owner window.</param>
 		/// <returns>Task to showing dialog.</returns>
-        public new Task ShowDialog(Avalonia.Controls.Window owner) => base.ShowDialog(owner);
+        public new Task ShowDialog(Avalonia.Controls.Window? owner) => base.ShowDialog(owner);
 
 
         /// <inheritdoc/>
-        protected override Task<object?> ShowDialogCore(Avalonia.Controls.Window owner)
+        protected override Task<object?> ShowDialogCore(Avalonia.Controls.Window? owner)
         {
             if (this.settings == null)
                 throw new InvalidOperationException("No Settings instance specified.");
@@ -75,7 +76,9 @@ namespace CarinaStudio.AppSuite.Controls
                 SettingKeys = new HashSet<SettingKey>(this.settingKeys),
                 Settings = this.settings,
             };
-            return dialog.ShowDialog<object?>(owner);
+            return owner != null 
+                ? dialog.ShowDialog<object?>(owner)
+                : dialog.ShowDialog<object?>();
         }
     }
 }

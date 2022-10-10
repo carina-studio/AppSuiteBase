@@ -1,4 +1,4 @@
-﻿using System;
+﻿using CarinaStudio.Controls;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -13,10 +13,15 @@ public class ExternalDependenciesDialog : CommonDialog<object?>
     /// </summary>
     /// <param name="owner">Owner window.</param>
     /// <returns>Task to showing dialog.</returns>
-    public new Task ShowDialog(Avalonia.Controls.Window owner) => base.ShowDialog(owner);
+    public new Task ShowDialog(Avalonia.Controls.Window? owner) => base.ShowDialog(owner);
 
 
     /// <inheritdoc/>
-    protected override Task<object?> ShowDialogCore(Avalonia.Controls.Window owner) =>
-        new ExternalDependenciesDialogImpl().ShowDialog<object?>(owner);
+    protected override Task<object?> ShowDialogCore(Avalonia.Controls.Window? owner)
+    {
+        var dialog = new ExternalDependenciesDialogImpl();
+        return owner != null
+            ? dialog.ShowDialog<object?>(owner)
+            : dialog.ShowDialog<object?>();
+    }
 }
