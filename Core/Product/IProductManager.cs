@@ -26,7 +26,7 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
     /// <param name="id">ID of product.</param>
     /// <param name="window">Window to show dialog.</param>
     /// <returns>Task of activating product.</returns>
-    Task ActivateProductAsync(string id, Avalonia.Controls.Window window);
+    Task ActivateProductAsync(string id, Avalonia.Controls.Window? window);
 
 
     /// <summary>
@@ -87,7 +87,7 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
     /// </summary>
     /// <param name="id">ID of product.</param>
     /// <param name="window">Window for showing UI.</param>
-    void PurchaseProduct(string id, Avalonia.Controls.Window window);
+    void PurchaseProduct(string id, Avalonia.Controls.Window? window);
 
 
     /// <summary>
@@ -190,7 +190,7 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
 
 
     /// <inheritdoc/>
-    public Task ActivateProductAsync(string id, Avalonia.Controls.Window window) => Task.CompletedTask;
+    public Task ActivateProductAsync(string id, Avalonia.Controls.Window? window) => Task.CompletedTask;
 
 
     /// <inheritdoc/>
@@ -255,7 +255,7 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
 
 
     /// <inheritdoc/>
-    public void PurchaseProduct(string id, Avalonia.Controls.Window window)
+    public void PurchaseProduct(string id, Avalonia.Controls.Window? window)
     { }
 
 
