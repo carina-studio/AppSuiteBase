@@ -111,6 +111,9 @@ namespace CarinaStudio.AppSuite.Tests
         public override Version? PrivacyPolicyVersion => new Version(1, 3);
 
 
+        //protected override string? ProVersionProductId => "Test";
+
+
         public override Task ShowApplicationOptionsDialogAsync(Avalonia.Controls.Window? owner, string? section = null) =>
             Task.CompletedTask;
 

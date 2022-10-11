@@ -12,7 +12,10 @@ using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
+#if APPLY_CONTROL_BRUSH_ANIMATIONS || APPLY_ITEM_BRUSH_ANIMATIONS
 using CarinaStudio.AppSuite.Animation;
+#endif
+using CarinaStudio.AppSuite.Net;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.Scripting;
 using CarinaStudio.AutoUpdate;
@@ -32,6 +35,7 @@ using NLog;
 using NLog.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -315,7 +319,11 @@ namespace CarinaStudio.AppSuite
         readonly Styles extraStyles = new Styles();
         long frameworkInitializedTime;
         HardwareInfo? hardwareInfo;
+        bool isActivatingProVersion;
         bool isCompactStyles;
+        bool isNetworkConnForProductActivationNotified;
+        bool isReActivatingProVersion;
+		bool isReActivatingProVersionNeeded;
         bool isRestartAsAdminRequested;
         bool isRestartingMainWindowsRequested;
         bool isRestartRequested;
@@ -331,6 +339,7 @@ namespace CarinaStudio.AppSuite
         readonly CancellationTokenSource multiInstancesServerCancellationTokenSource = new CancellationTokenSource();
         NamedPipeServerStream? multiInstancesServerStream;
         string multiInstancesServerStreamName = "";
+        ScheduledAction? notifyNetworkConnForProductActivationAction;
         readonly List<MainWindowHolder> pendingMainWindowHolders = new List<MainWindowHolder>();
         PersistentStateImpl? persistentState;
         readonly string persistentStateFilePath;
@@ -338,6 +347,7 @@ namespace CarinaStudio.AppSuite
         ProcessInfo? processInfo;
         IDisposable? processInfoHfUpdateToken;
         IProductManager? productManager;
+        ScheduledAction? reActivateProVersionAction;
         string? restartArgs;
         SettingsImpl? settings;
         readonly string settingsFilePath;
@@ -501,6 +511,28 @@ namespace CarinaStudio.AppSuite
             CultureInfo.DefaultThreadCurrentCulture = this.cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = this.cultureInfo;
         }
+
+
+        /// <summary>
+		/// Activate Pro version.
+		/// </summary>
+		public void ActivateProVersion() =>
+			_ = this.ActivateProVersionAsync(this.LatestActiveMainWindow);
+
+
+        /// <inheritdoc/>
+        public async Task ActivateProVersionAsync(Avalonia.Controls.Window? window)
+		{
+			this.VerifyAccess();
+			if (this.isActivatingProVersion)
+				return;
+            var productId = this.ProVersionProductId;
+            if (productId == null)
+                return;
+			this.isActivatingProVersion = true;
+			await this.ProductManager.ActivateProductAsync(productId, window);
+			this.isActivatingProVersion = false;
+		}
 
 
         /// <inheritdoc/>
@@ -741,6 +773,13 @@ namespace CarinaStudio.AppSuite
                 this.OnPropertyChanged(nameof(IsRestartingMainWindowsNeeded));
             }
         }
+
+
+        /// <summary>
+        /// Check for application update.
+        /// </summary>
+        public void CheckForApplicationUpdate() =>
+			_ = this.CheckForApplicationUpdateAsync(this.LatestActiveMainWindow, true);
 
 
         /// <inheritdoc/>
@@ -2080,6 +2119,18 @@ namespace CarinaStudio.AppSuite
                     this.UpdateSystemThemeMode(true);
                     this.updateMacOSAppDockTileProgressAction?.Schedule();
                 }
+                this.ProVersionProductId?.Let(productId =>
+                {
+                    if (this.notifyNetworkConnForProductActivationAction?.IsScheduled == false
+                        && !this.ProductManager.IsProductActivated(productId, true)
+                        && !NetworkManager.Default.IsNetworkConnected
+                        && !this.isNetworkConnForProductActivationNotified)
+                    {
+                        this.notifyNetworkConnForProductActivationAction?.Schedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.TimeoutToNotifyNetworkConnectionForProductActivation));
+                    }
+                    if (this.isReActivatingProVersionNeeded)
+                        this.reActivateProVersionAction?.Schedule();
+                });
                 if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value?.Window == mainWindow)
                     return;
                 if (this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
@@ -2180,8 +2231,25 @@ namespace CarinaStudio.AppSuite
         /// <returns>Task of performing operations.</returns>
         protected virtual async Task OnMainWindowClosedAsync(Window mainWindow, ViewModel viewModel)
         {
+            // cancel notification for network connection
+			if (this.MainWindows.IsEmpty())
+				this.notifyNetworkConnForProductActivationAction?.Cancel();
+            
             // save settings
             await this.SaveSettingsAsync();
+        }
+
+
+        // Called when HasDialogs of main window changed.
+        void OnMainWindowDialogsChanged(Window mainWindow, bool hasDialogs)
+        {
+            if (!hasDialogs && this.ProVersionProductId != null)
+            {
+                if (!this.isNetworkConnForProductActivationNotified)
+                    this.notifyNetworkConnForProductActivationAction?.Schedule();
+                if (this.isReActivatingProVersionNeeded)
+                    this.reActivateProVersionAction?.Schedule();
+            }
         }
 
 
@@ -2192,6 +2260,25 @@ namespace CarinaStudio.AppSuite
         /// <param name="launchOptions">Options to launch new instance.</param>
         protected virtual void OnNewInstanceLaunched(IDictionary<string, object> launchOptions)
         { }
+
+
+        // Called when property of network manager changed.
+		void OnNetworkManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
+		{
+            var productId = this.ProVersionProductId;
+			if (productId != null 
+                && sender is NetworkManager networkManager 
+				&& e.PropertyName == nameof(NetworkManager.IsNetworkConnected))
+			{
+				if (networkManager.IsNetworkConnected)
+					this.notifyNetworkConnForProductActivationAction?.Cancel();
+				else if (!this.ProductManager.IsProductActivated(productId, true)
+					&& !this.isNetworkConnForProductActivationNotified)
+				{
+					this.notifyNetworkConnForProductActivationAction?.Reschedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.TimeoutToNotifyNetworkConnectionForProductActivation));
+				}
+			}
+		}
 
 
         /// <summary>
@@ -2347,6 +2434,65 @@ namespace CarinaStudio.AppSuite
                 this.logOutputTargetPort = this.DefaultLogOutputTargetPort;
             this.UpdateLogOutputToLocalhost();
 
+            // setup scheduled actions
+			this.notifyNetworkConnForProductActivationAction = new(() =>
+			{
+                var productId = this.ProVersionProductId;
+				var window = this.LatestActiveMainWindow;
+				if (productId == null 
+                    || window == null 
+					|| !window.IsActive
+					|| window.HasDialogs
+					|| this.isNetworkConnForProductActivationNotified
+					|| NetworkManager.Default.IsNetworkConnected
+					|| this.ProductManager.IsProductActivated(productId, true))
+				{
+					return;
+				}
+				this.isNetworkConnForProductActivationNotified = true;
+				_ = new Controls.MessageDialog()
+				{
+					Icon = Controls.MessageDialogIcon.Information,
+					Message = new FormattedString().Also(it =>
+					{
+						it.Bind(FormattedString.Arg1Property, Avalonia.Controls.ResourceNodeExtensions.GetResourceObservable(this, $"String/Product.{productId}"));
+						it.Bind(FormattedString.FormatProperty, Avalonia.Controls.ResourceNodeExtensions.GetResourceObservable(this, "String/AppSuiteApplication.NetworkConnectionNeededForProductActivation"));
+					}),
+				}.ShowDialog(window);
+			});
+			this.reActivateProVersionAction = new(async () =>
+			{
+                var productId = this.ProVersionProductId;
+				var window = this.LatestActiveMainWindow;
+				if (productId == null 
+                    || !this.isReActivatingProVersionNeeded 
+					|| window == null 
+					|| window.HasDialogs 
+					|| !window.IsActive 
+					|| this.isActivatingProVersion
+					|| this.isReActivatingProVersion)
+				{
+					return;
+				}
+				this.isReActivatingProVersionNeeded = false;
+				if (this.ProductManager.TryGetProductState(productId, out var state)
+					&& state == ProductState.Deactivated)
+				{
+					await new Controls.MessageDialog()
+					{
+						Icon = Controls.MessageDialogIcon.Warning,
+						Message = new FormattedString().Also(it =>
+						{
+							it.Bind(FormattedString.Arg1Property, Avalonia.Controls.ResourceNodeExtensions.GetResourceObservable(this, $"String/Product.{productId}"));
+							it.Bind(FormattedString.FormatProperty, Avalonia.Controls.ResourceNodeExtensions.GetResourceObservable(this, "String/AppSuiteApplication.ReActivateProductNeeded"));
+						}),
+					}.ShowDialog(this.LatestActiveMainWindow);
+					this.isReActivatingProVersion = true;
+					await this.ActivateProVersionAsync(this.LatestActiveMainWindow);
+					this.isReActivatingProVersion = false;
+				}
+			});
+
             // start checking update
             this.PackageManifestUri?.Let(it =>
             {
@@ -2486,6 +2632,7 @@ namespace CarinaStudio.AppSuite
 
             // complete initializing network manager
             await initNetworkManagerTask;
+            NetworkManager.Default.PropertyChanged += this.OnNetworkManagerPropertyChanged;
 
             // initialize product manager
             try
@@ -2516,6 +2663,12 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogDebug("Use mock product manager");
                 this.productManager = new MockProductManager(this);
             }
+            else
+            {
+                this.productManager.ProductStateChanged += this.OnProductStateChanged;
+                this.ProVersionProductId?.Let(it =>
+                    this.OnProductStateChanged(this.productManager, it));
+            }
 
             // complete checking external dependencies
             await Task.WhenAll(checkExtDepTasks);
@@ -2523,6 +2676,37 @@ namespace CarinaStudio.AppSuite
             // initialize script manager
             await ScriptManager.InitializeAsync(this, this.ScriptManagerImplType);
         }
+
+
+        // Called when product state changed.
+		void OnProductStateChanged(IProductManager productManager, string productId)
+		{
+			if (productId != this.ProVersionProductId
+				|| !productManager.TryGetProductState(productId, out var state))
+			{
+				return;
+			}
+			switch (state)
+			{
+				case ProductState.Activated:
+					this.notifyNetworkConnForProductActivationAction?.Cancel();
+					goto default;
+				case ProductState.Deactivated:
+					if (productManager.TryGetProductActivationFailure(productId, out var failure)
+						&& failure != ProductActivationFailure.NoNetworkConnection
+						&& !this.isReActivatingProVersion)
+					{
+						this.Logger.LogWarning($"Need to reactivate Pro-version because of {failure}");
+						this.isReActivatingProVersionNeeded = true;
+						this.reActivateProVersionAction?.Schedule();
+					}
+					break;
+				default:
+					this.isReActivatingProVersionNeeded = false;
+					this.reActivateProVersionAction?.Cancel();
+					break;
+			}
+		}
 
 
         /// <summary>
@@ -2701,6 +2885,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Product ID of Pro-version.
+        /// </summary>
+        protected virtual string? ProVersionProductId { get => null; }
+
+
+        /// <summary>
         /// Get information of current process.
         /// </summary>
         public ProcessInfo ProcessInfo { get => this.processInfo ?? throw new InvalidOperationException("Application is not initialized yet."); }
@@ -2714,6 +2904,23 @@ namespace CarinaStudio.AppSuite
         /// Get type of implementation of <see cref="IProductManager"/>.
         /// </summary>
         protected virtual Type? ProductManagerImplType { get; }
+
+
+        /// <summary>
+        /// Start purchasing Pro version.
+        /// </summary>
+        public void PurchaseProVersion() =>
+            this.PurchaseProVersionAsync(this.LatestActiveMainWindow);
+
+
+        /// <inheritdoc/>
+        public void PurchaseProVersionAsync(Avalonia.Controls.Window? window)
+        {
+            this.VerifyAccess();
+            var productId = this.ProVersionProductId;
+            if (productId != null)
+                this.ProductManager.PurchaseProduct(productId, window);
+        }
 
 
         /// <summary>
@@ -3010,6 +3217,13 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <summary>
+		/// Show application info dialog.
+		/// </summary>
+		public void ShowApplicationInfoDialog() =>
+			_ = this.ShowApplicationInfoDialogAsync(this.LatestActiveMainWindow);
+
+
         /// <inheritdoc/>
         public async Task ShowApplicationInfoDialogAsync(Avalonia.Controls.Window? owner)
         {
@@ -3017,6 +3231,13 @@ namespace CarinaStudio.AppSuite
             using var appInfo = this.CreateApplicationInfoViewModel();
             await new Controls.ApplicationInfoDialog(appInfo).ShowDialog(owner);
         }
+
+
+        /// <summary>
+		/// Show application options dialog.
+		/// </summary>
+		public void ShowApplicationOptionsDialog() =>
+			_ = this.ShowApplicationOptionsDialogAsync(this.LatestActiveMainWindow);
 
 
         /// <inheritdoc/>
@@ -3112,6 +3333,10 @@ namespace CarinaStudio.AppSuite
             this.mainWindowHolders[mainWindow] = mainWindowHolder;
             this.mainWindows.Add(mainWindow);
             mainWindow.Closed += this.OnMainWindowClosed;
+            mainWindow.GetObservable(Window.HasDialogsProperty).Subscribe(new Observer<bool>(value =>
+            {
+                this.OnMainWindowDialogsChanged(mainWindow, value);
+            }));
             mainWindow.GetObservable(Window.IsActiveProperty).Subscribe(new Observer<bool>(value =>
             {
                 this.OnMainWindowActivationChanged(mainWindow, value);

@@ -48,6 +48,11 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public virtual Task ActivateProVersionAsync(Avalonia.Controls.Window? window) =>
+            Task.CompletedTask;
+
+
+        /// <inheritdoc/>
         public virtual IDisposable AddCustomResource(Avalonia.Controls.IResourceProvider resource) =>
             new EmptyDisposable();
         
@@ -355,6 +360,11 @@ namespace CarinaStudio.AppSuite
         /// Raised when property changed.
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
+
+
+        /// <inheritdoc/>
+        public virtual void PurchaseProVersionAsync(Avalonia.Controls.Window? window)
+        { }
 
 
         /// <summary>

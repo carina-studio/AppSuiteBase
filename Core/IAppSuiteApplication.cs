@@ -13,6 +13,14 @@ namespace CarinaStudio.AppSuite
     public interface IAppSuiteApplication : IAvaloniaApplication
     {
         /// <summary>
+        /// Activate Pro version.
+        /// </summary>
+        /// <param name="window">Window.</param>
+        /// <returns>Task of Pro version activation.</returns>
+		Task ActivateProVersionAsync(Avalonia.Controls.Window? window);
+
+
+        /// <summary>
         /// Add custom resource to aplication resource dictionary.
         /// </summary>
         /// <param name="resource">Resource.</param>
@@ -255,6 +263,13 @@ namespace CarinaStudio.AppSuite
         /// Get <see cref="Product.IProductManager"/> for product management.
         /// </summary>
         Product.IProductManager ProductManager { get; }
+
+
+        /// <summary>
+        /// Start purchasing Pro version asynchronously.
+        /// </summary>
+        /// <param name="window">Window.</param>
+        void PurchaseProVersionAsync(Avalonia.Controls.Window? window);
 
 
         /// <summary>

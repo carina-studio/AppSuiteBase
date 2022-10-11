@@ -107,6 +107,8 @@
 
 	<!-- AppSuiteApplication -->
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">载入布景主题</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.NetworkConnectionNeededForProductActivation">请连接至互联网以启用「{0}」，否则「{0}」将会在一段时间后暂时被停用。</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.ReActivateProductNeeded">无法启用「{0}」，请尝试再次启用。</sys:String>
 	
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Add">加入</sys:String>

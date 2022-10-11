@@ -108,6 +108,8 @@
 
 	<!-- AppSuiteApplication -->
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">Loading theme</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.NetworkConnectionNeededForProductActivation">In order to activate '{0}', please connect to internet or it will be deactivated temporarily after a while.</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.ReActivateProductNeeded">Unable to activate '{0}', please try activating it again.</sys:String>
 
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Add">Add</sys:String>
