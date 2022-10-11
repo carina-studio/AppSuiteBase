@@ -743,11 +743,26 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <inheritdoc/>
+		public Task<bool> CheckForApplicationUpdateAsync(Avalonia.Controls.Window? owner, bool forceShowingDialog)
+        {
+            this.VerifyAccess();
+            if (!forceShowingDialog)
+            {
+                var updateInfo = this.UpdateInfo;
+                if (updateInfo == null || updateInfo.Version <= Controls.ApplicationUpdateDialog.LatestShownVersion)
+                    return Task.FromResult(false);
+            }
+            this.Logger.LogDebug("Show application update dialog");
+            return this.ShowAppUpdateDialog(owner, forceShowingDialog);
+        }
+
+
         /// <summary>
         /// Check application update information asynchronously.
         /// </summary>
         /// <returns>Task to wait for checking.</returns>
-        public async Task<ApplicationUpdateInfo?> CheckUpdateInfoAsync()
+        public async Task<ApplicationUpdateInfo?> CheckForApplicationUpdateAsync()
         {
             // check state
             this.VerifyAccess();
@@ -816,6 +831,14 @@ namespace CarinaStudio.AppSuite
 
         /// <inheritdoc/>
         public ISettings Configuration { get => this.configuration ?? throw new InvalidOperationException("Application is not initialized yet."); }
+
+
+        /// <inheritdoc/>
+        public virtual ViewModels.ApplicationInfo CreateApplicationInfoViewModel() => new ViewModels.ApplicationInfo();
+
+
+        /// <inheritdoc/>
+        public abstract ViewModels.ApplicationOptions CreateApplicationOptionsViewModel();
 
 
         // Create server stream for multi-instances.
@@ -1754,7 +1777,7 @@ namespace CarinaStudio.AppSuite
             if (e.Key == ConfigurationKeys.AppUpdateInfoCheckingInterval 
                 || e.Key == ConfigurationKeys.ForceAcceptingAppUpdateInfo)
             {
-                _ = this.CheckUpdateInfoAsync();
+                _ = this.CheckForApplicationUpdateAsync();
             }
         }
 
@@ -2329,7 +2352,7 @@ namespace CarinaStudio.AppSuite
             {
                 this.checkUpdateInfoAction = new ScheduledAction(() =>
                 {
-                    _ = this.CheckUpdateInfoAsync();
+                    _ = this.CheckForApplicationUpdateAsync();
                 });
                 this.checkUpdateInfoAction?.Schedule();
             });
@@ -2570,7 +2593,7 @@ namespace CarinaStudio.AppSuite
         protected virtual void OnSettingChanged(SettingChangedEventArgs e)
         {
             if (e.Key == SettingKeys.AcceptNonStableApplicationUpdate)
-                _ = this.CheckUpdateInfoAsync();
+                _ = this.CheckForApplicationUpdateAsync();
             else if (e.Key == SettingKeys.Culture)
                 this.UpdateCultureInfo(true);
             else if (e.Key == SettingKeys.ShowProcessInfo)
@@ -2988,6 +3011,40 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public async Task ShowApplicationInfoDialogAsync(Avalonia.Controls.Window? owner)
+        {
+            this.VerifyAccess();
+            using var appInfo = this.CreateApplicationInfoViewModel();
+            await new Controls.ApplicationInfoDialog(appInfo).ShowDialog(owner);
+        }
+
+
+        /// <inheritdoc/>
+        public abstract Task ShowApplicationOptionsDialogAsync(Avalonia.Controls.Window? owner, string? section = null);
+
+
+        // Show application update dialog.
+        async Task<bool> ShowAppUpdateDialog(Avalonia.Controls.Window? owner, bool checkAppUpdateWhenOpening)
+        {
+            // check for update
+			using var appUpdater = new AppSuite.ViewModels.ApplicationUpdater();
+			var result = await new AppSuite.Controls.ApplicationUpdateDialog(appUpdater)
+			{
+				CheckForUpdateWhenShowing = checkAppUpdateWhenOpening
+			}.ShowDialog(owner);
+
+			// shutdown to update
+			if (result == AppSuite.Controls.ApplicationUpdateDialogResult.ShutdownNeeded)
+			{
+                this.Logger.LogWarning("Shut down to update application");
+                this.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
+                return true;
+			}
+            return false;
+        }
+
+
+        /// <inheritdoc/>
         public bool ShowMainWindow(Action<Window>? windowCreatedAction = null) => this.ShowMainWindow(null, windowCreatedAction);
 
 
@@ -3125,7 +3182,8 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Close all main windows and shut down application.
         /// </summary>
-        public async void Shutdown()
+        /// <param name="delay">Delay to start shutting down process in milliseconds.</param>
+        public async void Shutdown(int delay = 0)
         {
             // check state
             this.VerifyAccess();
@@ -3136,6 +3194,13 @@ namespace CarinaStudio.AppSuite
             {
                 this.isShutdownStarted = true;
                 this.OnPropertyChanged(nameof(IsShutdownStarted));
+            }
+
+            // delay
+            if (isFirstCall && delay > 0)
+            {
+                this.Logger.LogWarning($"Delay {delay} ms before starting shutting down process");
+                await Task.Delay(delay);
             }
 
             // close all main windows

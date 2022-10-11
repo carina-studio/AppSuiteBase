@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Markup.Xaml;
+using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Collections;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
@@ -16,6 +17,10 @@ namespace CarinaStudio.AppSuite.Tests
         readonly List<ExternalDependency> externalDependencies = new();
 
         protected override bool AllowMultipleMainWindows => true;
+
+        public override ApplicationInfo CreateApplicationInfoViewModel() => new AppInfo();
+
+        public override ApplicationOptions CreateApplicationOptionsViewModel() => new ApplicationOptions();
 
         public override int DefaultLogOutputTargetPort => 5566;
 
@@ -103,9 +108,13 @@ namespace CarinaStudio.AppSuite.Tests
         //public override Uri? PackageManifestUri => new Uri("https://raw.githubusercontent.com/carina-studio/ULogViewer/master/PackageManifest-Preview.json");
 
 
-        public override Version? PrivacyPolicyVersion => new Version(1, 2);
+        public override Version? PrivacyPolicyVersion => new Version(1, 3);
 
 
-        public override Version? UserAgreementVersion => new Version(1, 3);
+        public override Task ShowApplicationOptionsDialogAsync(Avalonia.Controls.Window? owner, string? section = null) =>
+            Task.CompletedTask;
+
+
+        public override Version? UserAgreementVersion => new Version(1, 5);
     }
 }

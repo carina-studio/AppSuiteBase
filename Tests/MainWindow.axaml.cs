@@ -130,9 +130,6 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        protected override ApplicationInfo OnCreateApplicationInfo() => new AppInfo();
-
-
         void OnDragEnterTabItem(object? sender, DragOnTabItemEventArgs e)
         {
             (sender as Controls.TabControl)?.ScrollHeaderIntoView(e.ItemIndex);
@@ -295,16 +292,15 @@ namespace CarinaStudio.AppSuite.Tests
             }));
         }
 
-
         async void ShowAppInfoDialog()
         {
             this.canShowAppInfo.Update(false);
-            await this.ShowApplicationInfoDialogAsync();
+            await this.Application.ShowApplicationInfoDialogAsync(this);
             this.canShowAppInfo.Update(true);
         }
 
         void ShowAppUpdateDialog() =>
-            this.CheckForApplicationUpdateAsync();
+            this.Application.CheckForApplicationUpdateAsync(this, true);
         
         void ShowExternalDependenciesDialog() =>
             _ = new ExternalDependenciesDialog().ShowDialog(this);

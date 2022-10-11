@@ -41,16 +41,39 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+		/// Check for application update asynchronously.
+		/// </summary>
+        /// <param name="owner">Owner window.</param>
+        /// <param name="forceShowingDialog">True to show dialog no matter application update is available or not.</param> 
+        /// <returns>True if application update has been found and update has been started.</returns>     
+		Task<bool> CheckForApplicationUpdateAsync(Avalonia.Controls.Window? owner, bool forceShowingDialog);
+
+
+        /// <summary>
         /// Check application update information asynchronously.
         /// </summary>
         /// <returns>Task to wait for checking.</returns>
-        Task<ApplicationUpdateInfo?> CheckUpdateInfoAsync();
+        Task<ApplicationUpdateInfo?> CheckForApplicationUpdateAsync();
 
 
         /// <summary>
         /// Get application configuration.
         /// </summary>
         Configuration.ISettings Configuration { get; }
+
+
+        /// <summary>
+        /// Create view-model of application info.
+        /// </summary>
+        /// <returns>View-model of application info.</returns>
+        ViewModels.ApplicationInfo CreateApplicationInfoViewModel();
+
+
+        /// <summary>
+        /// Create view-model of application options.
+        /// </summary>
+        /// <returns>View-model of application options.</returns>
+        ViewModels.ApplicationOptions CreateApplicationOptionsViewModel();
 
 
         /// <summary>
@@ -279,6 +302,23 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Show dialog of appliation information.
+        /// </summary>
+        /// <param name="owner">Owner window.</param>
+        /// <returns>Task of showing dialog.</returns>
+        Task ShowApplicationInfoDialogAsync(Avalonia.Controls.Window? owner);
+
+
+        /// <summary>
+        /// Show dialog of appliation options.
+        /// </summary>
+        /// <param name="owner">Owner window.</param>
+        /// <param name="section">Section of options to show.</param>
+        /// <returns>Task of showing dialog.</returns>
+        Task ShowApplicationOptionsDialogAsync(Avalonia.Controls.Window? owner, string? section = null);
+
+
+        /// <summary>
         /// Create and show main window.
         /// </summary>
         /// <param name="windowCreatedAction">Action to perform when window created.</param>
@@ -289,7 +329,8 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Close all main windows and shut down application.
         /// </summary>
-        void Shutdown();
+        /// <param name="delay">Delay before start process of shutting down in milliseconds.</param>
+        void Shutdown(int delay = 0);
 
 
         /// <summary>

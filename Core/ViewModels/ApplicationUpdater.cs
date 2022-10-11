@@ -104,7 +104,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 			this.canCheckForUpdate.Update(false);
 			this.canStartUpdating.Update(false);
 			this.SetValue(IsCheckingForUpdateProperty, true);
-			await this.Application.CheckUpdateInfoAsync();
+			await this.Application.CheckForApplicationUpdateAsync();
 			if (!this.IsDisposed)
 			{
 				this.SetValue(IsCheckingForUpdateProperty, false);

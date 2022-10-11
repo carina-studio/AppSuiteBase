@@ -80,11 +80,16 @@ namespace CarinaStudio.AppSuite
         public bool CheckAccess() => Thread.CurrentThread == synchronizationContext?.ExecutionThread;
 
 
+        /// <inheritdoc/>
+        public virtual Task<bool> CheckForApplicationUpdateAsync(Avalonia.Controls.Window? owner, bool forceShowingDialog) =>
+            Task.FromResult(false);
+
+
         /// <summary>
         /// Check application update information asynchronously.
         /// </summary>
         /// <returns>Task to wait for checking.</returns>
-        public virtual Task<ApplicationUpdateInfo?> CheckUpdateInfoAsync() => Task.FromResult((ApplicationUpdateInfo?)null);
+        public virtual Task<ApplicationUpdateInfo?> CheckForApplicationUpdateAsync() => Task.FromResult((ApplicationUpdateInfo?)null);
 
 
         /// <inheritdoc/>
@@ -93,6 +98,16 @@ namespace CarinaStudio.AppSuite
 
         /// <inheritdoc/>
         public ISettings Configuration { get; } = new MemorySettings();
+
+
+        /// <inheritdoc/>
+        public virtual ViewModels.ApplicationInfo CreateApplicationInfoViewModel() =>
+            new ViewModels.ApplicationInfo();
+        
+
+        /// <inheritdoc/>
+        public virtual ViewModels.ApplicationOptions CreateApplicationOptionsViewModel() =>
+            new ViewModels.ApplicationOptions();
 
 
         /// <summary>
@@ -400,13 +415,23 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public virtual Task ShowApplicationInfoDialogAsync(Avalonia.Controls.Window? owner) =>
+            Task.CompletedTask;
+        
+
+        /// <inheritdoc/>
+        public virtual Task ShowApplicationOptionsDialogAsync(Avalonia.Controls.Window? owner, string? section = null) =>
+            Task.CompletedTask;
+
+
+        /// <inheritdoc/>
         public bool ShowMainWindow(Action<CarinaStudio.Controls.Window>? windowCreatedAction = null) => false;
 
 
         /// <summary>
         /// Close all main windows and shut down application.
         /// </summary>
-        public void Shutdown()
+        public void Shutdown(int delay)
         { }
 
 

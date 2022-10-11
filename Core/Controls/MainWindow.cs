@@ -203,7 +203,17 @@ namespace CarinaStudio.AppSuite.Controls
                     if (!this.AreInitialDialogsClosed)
                         this.showInitDialogsAction.Schedule();
                     else if (this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate))
-                        this.SynchronizationContext.Post(() => _ = this.NotifyApplicationUpdateFound());
+                    {
+                        this.SynchronizationContext.Post(async () =>
+                        {
+                            if (!IsNotifyingAppUpdateFound)
+                            {
+                                IsNotifyingAppUpdateFound = true;
+                                await this.Application.CheckForApplicationUpdateAsync(this, false);
+                                IsNotifyingAppUpdateFound = false;
+                            }
+                        });
+                    }
                 }
             });
             this.GetObservable(WidthProperty).Subscribe(_ => 
@@ -245,19 +255,6 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public void CancelSavingSize() =>
             this.saveWindowSizeAction.Cancel();
-        
-
-        /// <summary>
-		/// Check for application update asynchronously.
-		/// </summary>
-        /// <returns>True if application update has been found and update has been started.</returns>      
-		public Task<bool> CheckForApplicationUpdateAsync()
-        {
-            this.VerifyAccess();
-            if (!this.IsOpened)
-                return Task.FromResult(false);
-            return this.ShowAppUpdateDialog(true);
-        }
 
 
         /// <summary>
@@ -304,41 +301,6 @@ namespace CarinaStudio.AppSuite.Controls
         public ICommand LayoutMainWindowsCommand { get; }
 
 
-        /// <summary>
-        /// Show dialog if it is needed to notify user that application update has been found.
-        /// </summary>
-        /// <returns>Task of notifying user.</returns>
-        protected async Task NotifyApplicationUpdateFound()
-        {
-            // check state
-            this.VerifyAccess();
-            if (!this.IsOpened || !this.IsActive)
-                return;
-            if (IsNotifyingAppUpdateFound)
-                return;
-            if (this.HasDialogs)
-                return;
-
-            // check version
-            var updateInfo = this.Application.UpdateInfo;
-            if (updateInfo == null)
-                return;
-            if (updateInfo.Version == ApplicationUpdateDialog.LatestShownVersion)
-                return;
-
-            // show dialog
-            IsNotifyingAppUpdateFound = true;
-            try
-            {
-                await this.ShowAppUpdateDialog(false);
-            }
-            finally
-            {
-                IsNotifyingAppUpdateFound = false;
-            }
-        }
-
-
         // Called when property of application changed.
         void OnApplicationPropertyChanged(object? sender, PropertyChangedEventArgs e) => this.OnApplicationPropertyChanged(e);
 
@@ -365,8 +327,17 @@ namespace CarinaStudio.AppSuite.Controls
                         this.restartingMainWindowsAction.Cancel();
                     break;
                 case nameof(IAppSuiteApplication.UpdateInfo):
-                    if (this.AreInitialDialogsClosed && this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate))
-                        this.SynchronizationContext.Post(() => _ = this.NotifyApplicationUpdateFound());
+                    this.SynchronizationContext.Post(async () =>
+                    {
+                        if (this.AreInitialDialogsClosed 
+                            && this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate)
+                            && !IsNotifyingAppUpdateFound)
+                        {
+                            IsNotifyingAppUpdateFound = true;
+                            await this.Application.CheckForApplicationUpdateAsync(this, false);
+                            IsNotifyingAppUpdateFound = false;
+                        }
+                    });
                     break;
             }
         }
@@ -434,13 +405,6 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         /// <returns>View-model for application change list dialog.</returns>
         protected virtual ApplicationChangeList OnCreateApplicationChangeList() => new ApplicationChangeList();
-
-
-        /// <summary>
-        /// Called to create view-model of application info.
-        /// </summary>
-        /// <returns>View-model of application info.</returns>
-        protected virtual ApplicationInfo OnCreateApplicationInfo() => new ApplicationInfo();
 
 
         /// <summary>
@@ -524,13 +488,6 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
-        /// Called to prepare before shutting down application to update.
-        /// </summary>
-        /// <returns>Task of preparation.</returns>
-        protected virtual Task OnPrepareShuttingDownForApplicationUpdate() => Task.CompletedTask;
-
-
-        /// <summary>
         /// Called to select transparency level.
         /// </summary>
         /// <returns>Transparency level.</returns>
@@ -589,53 +546,13 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
-        /// <summary>
-        /// Show dialog of appliation information.
-        /// </summary>
-        /// <returns>Task of showing dialog.</returns>
-        public async Task ShowApplicationInfoDialogAsync()
-        {
-            this.VerifyAccess();
-            if (!this.IsOpened)
-                return;
-            using var appInfo = this.OnCreateApplicationInfo();
-            await new ApplicationInfoDialog(appInfo).ShowDialog(this);
-        }
-
-
-        // Show application update dialog.
-        async Task<bool> ShowAppUpdateDialog(bool checkAppUpdateWhenOpening)
-        {
-            // check for update
-			using var appUpdater = new AppSuite.ViewModels.ApplicationUpdater();
-			var result = await new AppSuite.Controls.ApplicationUpdateDialog(appUpdater)
-			{
-				CheckForUpdateWhenShowing = checkAppUpdateWhenOpening
-			}.ShowDialog(this);
-            if (this.IsClosed)
-                return false;
-
-			// shutdown to update
-			if (result == AppSuite.Controls.ApplicationUpdateDialogResult.ShutdownNeeded)
-			{
-				this.Logger.LogWarning("Prepare shutting down to update application");
-                await this.OnPrepareShuttingDownForApplicationUpdate();
-                this.Logger.LogWarning("Shut down to update application");
-                this.isClosingScheduled = true;
-                this.SynchronizationContext.PostDelayed(this.Application.Shutdown, 300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
-                return true;
-			}
-            return false;
-        }
-
-
         // Show dialogs which are needed to be shown after showing main window.
         async void ShowInitialDialogs()
         {
             // check state
             if (this.AreInitialDialogsClosed)
                 return;
-            if (!this.IsOpened || !this.IsActive || this.isClosingScheduled)
+            if (!this.IsOpened || !this.IsActive || this.isClosingScheduled || this.Application.IsShutdownStarted)
                 return;
             if (this.HasDialogs || this.isShowingInitialDialogs)
                 return;
@@ -692,13 +609,12 @@ namespace CarinaStudio.AppSuite.Controls
             if (!this.Application.IsUserAgreementAgreed)
             {
                 this.Logger.LogDebug("Show User Agreement dialog");
-                using var appInfo = this.OnCreateApplicationInfo();
+                using var appInfo = this.Application.CreateApplicationInfoViewModel();
                 this.isShowingInitialDialogs = true;
                 if (!await new UserAgreementDialog(appInfo).ShowDialog(this))
                 {
                     this.Logger.LogWarning("User decline the current User Agreement");
-                    this.isClosingScheduled = true;
-                    this.SynchronizationContext.PostDelayed(this.Close, 300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
+                    this.Application.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
                 }
                 this.isShowingInitialDialogs = false;
                 return;
@@ -708,13 +624,12 @@ namespace CarinaStudio.AppSuite.Controls
             if (!this.Application.IsPrivacyPolicyAgreed)
             {
                 this.Logger.LogDebug("Show Privacy Policy dialog");
-                using var appInfo = this.OnCreateApplicationInfo();
+                using var appInfo = this.Application.CreateApplicationInfoViewModel();
                 this.isShowingInitialDialogs = true;
                 if (!await new PrivacyPolicyDialog(appInfo).ShowDialog(this))
                 {
                     this.Logger.LogWarning("User decline the current Privacy Policy");
-                    this.isClosingScheduled = true;
-                    this.SynchronizationContext.PostDelayed(this.Close, 300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
+                    this.Application.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
                 }
                 this.isShowingInitialDialogs = false;
                 return;
@@ -749,14 +664,16 @@ namespace CarinaStudio.AppSuite.Controls
             }
 
             // notify application update found
-            if (this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate))
+            if (this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate)
+                && !IsNotifyingAppUpdateFound)
             {
-                var updateInfo = this.Application.UpdateInfo;
-                if (updateInfo != null && updateInfo.Version > ApplicationUpdateDialog.LatestShownVersion)
+                var task = this.Application.CheckForApplicationUpdateAsync(this, false);
+                if (!task.IsCompleted)
                 {
-                    this.Logger.LogDebug("Show application update dialog");
+                    IsNotifyingAppUpdateFound = true;
                     this.isShowingInitialDialogs = true;
-                    await this.NotifyApplicationUpdateFound();
+                    await task;
+                    IsNotifyingAppUpdateFound = false;
                     this.isShowingInitialDialogs = false;
                     return;
                 }
@@ -790,7 +707,7 @@ namespace CarinaStudio.AppSuite.Controls
             }
 
             // all dialogs closed
-            if (!this.isClosingScheduled)
+            if (!this.isClosingScheduled && !this.Application.IsShutdownStarted)
             {
                 this.Logger.LogWarning("All initial dialogs closed");
                 this.SetAndRaise<bool>(AreInitialDialogsClosedProperty, ref this.areInitialDialogsClosed, true);
