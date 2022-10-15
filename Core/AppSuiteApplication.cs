@@ -3335,6 +3335,9 @@ namespace CarinaStudio.AppSuite
 				CheckForUpdateWhenShowing = checkAppUpdateWhenOpening
 			}.ShowDialog(owner);
 
+            // save settings
+            _ = this.SaveSettingsAsync();
+
 			// shutdown to update
 			if (result == AppSuite.Controls.ApplicationUpdateDialogResult.ShutdownNeeded)
 			{
