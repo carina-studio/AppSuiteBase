@@ -51,7 +51,7 @@ namespace CarinaStudio.AppSuite.Tests
         protected override void OnNewInstanceLaunched(IDictionary<string, object> launchOptions)
         {
             base.OnNewInstanceLaunched(launchOptions);
-            this.ShowMainWindow();
+            _ = this.ShowMainWindowAsync();
         }
 
 
@@ -72,17 +72,12 @@ namespace CarinaStudio.AppSuite.Tests
             await base.OnPrepareStartingAsync();
 
             this.UpdateSplashWindowProgress(0.5);
-
-            await Task.Delay(500);
-
-            this.UpdateSplashWindowProgress(1);
-
-            await Task.Delay(300);
+            await this.WaitForSplashWindowAnimationAsync();
 
             if (!this.IsRestoringMainWindowsRequested)
             {
                 for (var i = 0; i < 1; ++i)
-                    this.ShowMainWindow();
+                    await this.ShowMainWindowAsync();
             }
         }
 
@@ -101,7 +96,7 @@ namespace CarinaStudio.AppSuite.Tests
         {
             base.OnTryExitingBackgroundMode();
             if (this.MainWindows.IsEmpty())
-                this.ShowMainWindow();
+                _ = this.ShowMainWindowAsync();
         }
 
 

@@ -2079,7 +2079,7 @@ namespace CarinaStudio.AppSuite
 
                 // restore main windows
                 if (this.IsRestoringMainWindowsRequested)
-                    this.OnRestoreMainWindows();
+                    _ = this.OnRestoreMainWindowsAsync();
             });
         }
 
@@ -2187,7 +2187,7 @@ namespace CarinaStudio.AppSuite
                             });
                             foreach (var pendingMainWindowHolder in pendingMainWindowHolders)
                             {
-                                if (!this.ShowMainWindow(pendingMainWindowHolder.ViewModel, pendingMainWindowHolder.WindowCreatedAction))
+                                if (!await this.ShowMainWindowAsync(pendingMainWindowHolder.ViewModel, pendingMainWindowHolder.WindowCreatedAction))
                                 {
                                     this.Logger.LogError("Unable to restart main window");
                                     await this.OnDisposeMainWindowViewModelAsync(pendingMainWindowHolder.ViewModel);
@@ -2202,7 +2202,7 @@ namespace CarinaStudio.AppSuite
                     {
                         this.Logger.LogWarning("Restart single main window requested");
                         this.mainWindowHolders.Remove(mainWindow);
-                        if (this.ShowMainWindow(mainWindowHolder.ViewModel, mainWindowHolder.WindowCreatedAction))
+                        if (await this.ShowMainWindowAsync(mainWindowHolder.ViewModel, mainWindowHolder.WindowCreatedAction))
                             return;
                         this.Logger.LogError("Unable to restart single main window");
                     }
@@ -2710,10 +2710,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Called to restore main windows when starting application.
+        /// Called to restore main windows asynchronously when starting application.
         /// </summary>
-        /// <returns>True if main windows have been restored successfully.</returns>
-        protected virtual bool OnRestoreMainWindows()
+        /// <returns>Task of restoring main windows. The result will be True if main windows have been restored successfully.</returns>
+        protected virtual async Task<bool> OnRestoreMainWindowsAsync()
         {
             // load saved states
             using var stateStream = new MemoryStream(this.PersistentState.GetValueOrDefault(MainWindowViewModelStatesKey));
@@ -2745,7 +2745,7 @@ namespace CarinaStudio.AppSuite
                 }
                 this.Logger.LogWarning("Restore main windows");
                 foreach (var stateElement in jsonDocument.RootElement.EnumerateArray())
-                    this.ShowMainWindow(this.OnCreateMainWindowViewModel(stateElement), null);
+                    await this.ShowMainWindowAsync(this.OnCreateMainWindowViewModel(stateElement), null);
             }
             if (this.mainWindows.IsNotEmpty())
                 return true;
@@ -2973,27 +2973,23 @@ namespace CarinaStudio.AppSuite
         }
 
 
-        /// <summary>
-        /// Request restarting given main window.
-        /// </summary>
-        /// <param name="mainWindow">Main window to restart.</param>
-        /// <returns>True if restarting has been accepted.</returns>
-        public bool RestartMainWindow(Window mainWindow)
+        /// <inheritdoc/>
+        public Task<bool> RestartMainWindowAsync(Window mainWindow)
         {
             // check state
             this.VerifyAccess();
             if (this.IsShutdownStarted)
             {
                 this.Logger.LogWarning("Cannot restart main window when shutting down");
-                return false;
+                return Task.FromResult(false);
             }
             if (!this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
             {
                 this.Logger.LogError("Unknown main window to restart");
-                return false;
+                return Task.FromResult(false);
             }
             if (mainWindowHolder.IsRestartingRequested)
-                return true;
+                return Task.FromResult(true);
 
             // restart
             this.Logger.LogWarning("Request restarting main window");
@@ -3003,30 +2999,27 @@ namespace CarinaStudio.AppSuite
                 if (!mainWindow.IsClosed)
                     mainWindow.Close();
             });
-            return true;
+            return Task.FromResult(true);
         }
 
 
-        /// <summary>
-        /// Request restarting all main windows.
-        /// </summary>
-        /// <returns>True if restarting has been accepted.</returns>
-        public bool RestartMainWindows()
+        /// <inheritdoc/>
+        public Task<bool> RestartMainWindowsAsync()
         {
             // check state
             this.VerifyAccess();
             if (this.IsShutdownStarted)
             {
                 this.Logger.LogWarning("Cannot restart main windows when shutting down");
-                return false;
+                return Task.FromResult(false);
             }
             if (this.mainWindowHolders.IsEmpty())
             {
                 this.Logger.LogWarning("No main window to restart");
-                return false;
+                return Task.FromResult(false);
             }
             if (this.isRestartingMainWindowsRequested)
-                return true;
+                return Task.FromResult(true);
 
             // restart
             this.Logger.LogWarning($"Request restarting all {this.mainWindowHolders.Count} main window(s)");
@@ -3041,7 +3034,7 @@ namespace CarinaStudio.AppSuite
                         mainWindow.Close();
                 }
             });
-            return true;
+            return Task.FromResult(true);
         }
 
 
@@ -3266,11 +3259,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public bool ShowMainWindow(Action<Window>? windowCreatedAction = null) => this.ShowMainWindow(null, windowCreatedAction);
+        public Task<bool> ShowMainWindowAsync(Action<Window>? windowCreatedAction = null) => 
+            this.ShowMainWindowAsync(null, windowCreatedAction);
 
 
         // Create and show main window.
-        bool ShowMainWindow(ViewModel? viewModel, Action<Window>? windowCreatedAction)
+        async Task<bool> ShowMainWindowAsync(ViewModel? viewModel, Action<Window>? windowCreatedAction)
         {
             // check state
             this.VerifyAccess();
@@ -3290,11 +3284,12 @@ namespace CarinaStudio.AppSuite
 
             // update message on splash window
             this.UpdateSplashWindowMessage(this.GetStringNonNull("SplashWindow.ShowingMainWindow"));
-            this.splashWindow?.Let(it =>
+            if (this.splashWindow != null)
             {
-                if (!double.IsNaN(it.Progress))
-                    it.Progress = 1.0;
-            });
+                if (!double.IsNaN(this.splashWindow.Progress) && this.splashWindow.Progress < 0.99)
+                    this.splashWindow.Progress = 1.0;
+                await this.splashWindow.WaitForAnimationAsync();
+            }
 
             // update styles and culture
             if (mainWindowCount == 0)
@@ -3345,13 +3340,13 @@ namespace CarinaStudio.AppSuite
             this.Logger.LogDebug($"Show main window, {this.mainWindows.Count} created");
 
             // show main window
-            this.ShowMainWindow(mainWindowHolder);
+            await this.ShowMainWindowAsync(mainWindowHolder);
             return true;
         }
 
 
         // Show given main window.
-        async void ShowMainWindow(MainWindowHolder mainWindowHolder)
+        async Task ShowMainWindowAsync(MainWindowHolder mainWindowHolder)
         {
             if (mainWindowHolder.Window == null)
             {
@@ -4025,6 +4020,14 @@ namespace CarinaStudio.AppSuite
                 }
             }
         }
+
+
+        /// <summary>
+        /// Wait for completion of animation of splash window.
+        /// </summary>
+        /// <returns>Task of waiting for completion.</returns>
+        protected Task WaitForSplashWindowAnimationAsync() =>
+            this.splashWindow?.WaitForAnimationAsync() ?? Task.CompletedTask;
 
 
         /// <summary>

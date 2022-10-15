@@ -89,7 +89,7 @@ namespace CarinaStudio.AppSuite.Controls
                 if (!this.IsOpened || this.HasDialogs || !this.Application.IsRestartingMainWindowsNeeded)
                     return;
                 this.Logger.LogWarning("Restart main windows");
-                this.Application.RestartMainWindows();
+                this.Application.RestartMainWindowsAsync();
             });
             this.saveWindowSizeAction = new ScheduledAction(() =>
             {

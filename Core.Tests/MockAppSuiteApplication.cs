@@ -383,19 +383,14 @@ namespace CarinaStudio.AppSuite
         public bool Restart(string? args, bool asAdministrator) => false;
 
 
-        /// <summary>
-        /// Request restarting given main window.
-        /// </summary>
-        /// <param name="mainWindow">Main window to restart.</param>
-        /// <returns>True if restarting has been accepted.</returns>
-        public bool RestartMainWindow(CarinaStudio.Controls.Window mainWindow) => false;
+        /// <inheritdoc/>
+        public Task<bool> RestartMainWindowAsync(CarinaStudio.Controls.Window mainWindow) => 
+            Task.FromResult(false);
 
 
-        /// <summary>
-        /// Request restarting all main windows.
-        /// </summary>
-        /// <returns>True if restarting has been accepted.</returns>
-        public bool RestartMainWindows() => false;
+        /// <inheritdoc/>
+        public Task<bool> RestartMainWindowsAsync() => 
+            Task.FromResult(false);
 
 
         /// <summary>
@@ -435,7 +430,8 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public bool ShowMainWindow(Action<CarinaStudio.Controls.Window>? windowCreatedAction = null) => false;
+        public Task<bool> ShowMainWindowAsync(Action<CarinaStudio.Controls.Window>? windowCreatedAction = null) => 
+            Task.FromResult(false);
 
 
         /// <summary>

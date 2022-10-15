@@ -5,12 +5,14 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using CarinaStudio.Animation;
 using CarinaStudio.Controls;
 using CarinaStudio.Data.Converters;
 using CarinaStudio.Threading;
 using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -35,6 +37,7 @@ namespace CarinaStudio.AppSuite.Controls
 		Color accentColor;
 		Uri? backgroundImageUri;
 		Uri? iconUri;
+		TaskCompletionSource? progressAnimationTaskSource;
 		DoubleAnimator? progressAnimator;
 		readonly ProgressBar progressBar;
 		readonly ScheduledAction showAction;
@@ -253,14 +256,36 @@ namespace CarinaStudio.AppSuite.Controls
 				{
 					this.progressBar.IsIndeterminate = true;
 					this.progressAnimator = null;
+					if (this.progressAnimationTaskSource != null)
+					{
+						this.progressAnimationTaskSource.SetResult();
+						this.progressAnimationTaskSource = null;
+					}
 				}
 				else
 				{
 					this.progressBar.IsIndeterminate = false;
+					this.progressAnimationTaskSource ??= new();
 					this.progressAnimator = new DoubleAnimator(this.progressBar.Value, Math.Max(0, Math.Min(1, value))).Also(it =>
 					{
-						it.Completed += (_, e) => this.progressBar.Value = it.EndValue;
-						it.Duration = TimeSpan.FromMilliseconds(300);
+						it.Completed += (_, e) => 
+						{
+							this.progressBar.Value = it.EndValue;
+							Dispatcher.UIThread.Post(async () =>
+							{
+								await Task.Delay(50);
+								if (this.progressAnimator != it)
+									return;
+								this.progressAnimator = null;
+								var taskSource = this.progressAnimationTaskSource;
+								if (taskSource != null)
+								{
+									this.progressAnimationTaskSource = null;
+									taskSource.SetResult();
+								}
+							}, DispatcherPriority.Normal);
+						};
+						it.Duration = TimeSpan.FromMilliseconds(250);
 						it.Interpolator = Interpolators.Deceleration;
 						it.ProgressChanged += (_, e) => this.progressBar.Value = it.Value;
 						it.Start();
@@ -272,5 +297,14 @@ namespace CarinaStudio.AppSuite.Controls
 
         // String represents version.
         string Version { get; }
+
+
+		// Wait for completion of animation.
+		public Task WaitForAnimationAsync()
+		{
+			if (this.progressAnimationTaskSource == null)
+				return Task.CompletedTask;
+			return this.progressAnimationTaskSource.Task;
+		}
 	}
 }

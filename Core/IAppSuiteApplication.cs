@@ -288,18 +288,18 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Request restarting given main window.
+        /// Request restarting given main window asynchronously.
         /// </summary>
         /// <param name="mainWindow">Main window to restart.</param>
-        /// <returns>True if restarting has been accepted.</returns>
-        bool RestartMainWindow(CarinaStudio.Controls.Window mainWindow);
+        /// <returns>Task of restarting main window. The result will be True if restarting has been accepted.</returns>
+        Task<bool> RestartMainWindowAsync(CarinaStudio.Controls.Window mainWindow);
 
 
         /// <summary>
-        /// Request restarting all main windows.
+        /// Request restarting all main windows asynchronously.
         /// </summary>
-        /// <returns>True if restarting has been accepted.</returns>
-        bool RestartMainWindows();
+        /// <returns>Task of restarting all main windows. The result will be True if restarting has been accepted.</returns>
+        Task<bool> RestartMainWindowsAsync();
 
 
         /// <summary>
@@ -334,11 +334,11 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Create and show main window.
+        /// Create and show main window asynchronously.
         /// </summary>
         /// <param name="windowCreatedAction">Action to perform when window created.</param>
-        /// <returns>True if main window created and shown successfully.</returns>
-        bool ShowMainWindow(Action<CarinaStudio.Controls.Window>? windowCreatedAction = null);
+        /// <returns>Task of showing main window. The result will be True if main window created and shown successfully.</returns>
+        Task<bool> ShowMainWindowAsync(Action<CarinaStudio.Controls.Window>? windowCreatedAction = null);
 
 
         /// <summary>
