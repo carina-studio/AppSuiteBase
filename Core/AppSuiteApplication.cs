@@ -2427,6 +2427,7 @@ namespace CarinaStudio.AppSuite
         protected virtual Controls.SplashWindowParams OnPrepareSplashWindow() => new Controls.SplashWindowParams().Also((ref Controls.SplashWindowParams it) =>
         {
             var assetLoader = AvaloniaLocator.Current.GetService<IAssetLoader>().AsNonNull();
+            it.BackgroundImageOpacity = 0.2;
             it.BackgroundImageUri = Global.Run(() =>
             {
                 var uri = new Uri($"avares://{this.Assembly.GetName().Name}/SplashWindowBackground.jpg");
@@ -2598,6 +2599,7 @@ namespace CarinaStudio.AppSuite
                 this.splashWindow = new Controls.SplashWindowImpl()
                 {
                     AccentColor = splashWindowParams.AccentColor,
+                    BackgroundImageOpacity = splashWindowParams.BackgroundImageOpacity,
                     BackgroundImageUri = splashWindowParams.BackgroundImageUri,
                     IconUri = splashWindowParams.IconUri,
                 };

@@ -25,10 +25,6 @@
 					<GradientStop Offset="0" Color="#444444"/>
 					<GradientStop Offset="1" Color="#171717"/>
 				</LinearGradientBrush>
-				<RadialGradientBrush x:Key="Brush/SplashWindow.BackgroundImage.OpacityMask" Center="50%,100%" GradientOrigin="50%,100%" Radius="0.6">
-					<GradientStop Color="#1fffffff" Offset="0"/>
-					<GradientStop Color="#00ffffff" Offset="1"/>
-				</RadialGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#ffffff"/>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground.Shadow" Color="#000000"/>
 			</Styles.Resources>
@@ -42,10 +38,6 @@
 					<GradientStop Offset="0" Color="#f0f0f0"/>
 					<GradientStop Offset="1" Color="#e0e0e0"/>
 				</LinearGradientBrush>
-				<RadialGradientBrush x:Key="Brush/SplashWindow.BackgroundImage.OpacityMask" Center="50%,100%" GradientOrigin="50%,100%" Radius="0.6">
-					<GradientStop Color="#2fffffff" Offset="0"/>
-					<GradientStop Color="#00ffffff" Offset="1"/>
-				</RadialGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#222222"/>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground.Shadow" Color="#ffffff"/>
 			</Styles.Resources>
@@ -107,7 +99,7 @@
 				</Border.Transitions>
 			</Border>
 			<Border BorderBrush="{x:Null}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{StaticResource CornerRadius/SplashWindow}">
-				<Image Margin="{StaticResource Thickness/SplashWindow.BackgroundImage.Margin}" OpacityMask="{DynamicResource Brush/SplashWindow.BackgroundImage.OpacityMask}" Source="{Binding $parent[Window].BackgroundImage}" Stretch="UniformToFill" StretchDirection="Both"/>
+				<Image Margin="{StaticResource Thickness/SplashWindow.BackgroundImage.Margin}" OpacityMask="{Binding $parent[Window].BackgroundImageOpacityMask}" Source="{Binding $parent[Window].BackgroundImage}" Stretch="UniformToFill" StretchDirection="Both"/>
 			</Border>
 			
 			<!-- Content -->

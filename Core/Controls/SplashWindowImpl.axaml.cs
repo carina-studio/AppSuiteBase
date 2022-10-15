@@ -28,6 +28,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 		// Static fields.
 		static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
+		static readonly AvaloniaProperty<IBrush?> BackgroundImageOpacityMaskProperty = AvaloniaProperty.Register<SplashWindowImpl, IBrush?>(nameof(BackgroundImageOpacityMask));
 		static readonly AvaloniaProperty<IImage?> BackgroundImageProperty = AvaloniaProperty.Register<SplashWindowImpl, IImage?>(nameof(BackgroundImage));
 		static readonly AvaloniaProperty<IBitmap?> IconBitmapProperty = AvaloniaProperty.Register<SplashWindowImpl, IBitmap?>(nameof(IconBitmap));
 		static readonly AvaloniaProperty<string> MessageProperty = AvaloniaProperty.Register<SplashWindowImpl, string>(nameof(Message), " ", coerce: ((_, it) => string.IsNullOrEmpty(it) ? " " : it));
@@ -35,6 +36,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 		// Fields.
 		Color accentColor;
+		double backgroundImageOpacity = 1.0;
 		Uri? backgroundImageUri;
 		Uri? iconUri;
 		TaskCompletionSource? progressAnimationTaskSource;
@@ -155,6 +157,33 @@ namespace CarinaStudio.AppSuite.Controls
 
 		// Background image.
 		public IImage? BackgroundImage { get => this.GetValue<IImage?>(BackgroundImageProperty); }
+
+
+		// Opacity of background image.
+		public double BackgroundImageOpacity 
+		{ 
+			get => this.backgroundImageOpacity;
+			set
+			{
+				if (value < 0)
+					value = 0;
+				else if (value > 1)
+					value = 1;
+				this.backgroundImageOpacity = value;
+				this.SetValue<IBrush?>(BackgroundImageOpacityMaskProperty, new RadialGradientBrush().Also(it =>
+				{
+					it.Center = new(0.5, 1.0, RelativeUnit.Relative);
+					it.GradientOrigin = it.Center;
+					it.GradientStops.Add(new(Color.FromArgb((byte)(255 * value + 0.5), 255, 255, 255), 0));
+					it.GradientStops.Add(new(Color.FromArgb(0, 255, 255, 255), 1));
+					it.Radius = 0.6;
+				}));
+			}
+		}
+
+
+		// Opacity mask of background image.
+		public IBrush? BackgroundImageOpacityMask { get => this.GetValue<IBrush?>(BackgroundImageOpacityMaskProperty); }
 
 
 		// Get or set URI of background image.

@@ -15,6 +15,12 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
+        /// Opacity of background image.
+        /// </summary>
+        public double BackgroundImageOpacity { get; set; }
+
+
+        /// <summary>
         /// URI of background image.
         /// </summary>
         public Uri? BackgroundImageUri { get; set; }
