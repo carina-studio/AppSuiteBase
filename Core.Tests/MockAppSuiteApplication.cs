@@ -261,6 +261,10 @@ namespace CarinaStudio.AppSuite
         public virtual CarinaStudio.Controls.Window? LatestActiveMainWindow { get; }
 
 
+        /// <inheritdoc/>
+        public virtual Avalonia.Controls.Window? LatestActiveWindow { get; }
+
+
         /// <summary>
         /// Get options to launch application which is converted by arguments passed to application.
         /// </summary>
@@ -467,8 +471,12 @@ namespace CarinaStudio.AppSuite
         public virtual ApplicationUpdateInfo? UpdateInfo { get; } = null;
 
 
-        /// <inheritdoc/>.
+        /// <inheritdoc/>
         public virtual Version? UserAgreementVersion { get; } = null;
+
+
+        /// <inheritdoc/>
+        public virtual IList<Avalonia.Controls.Window> Windows { get; } = new Avalonia.Controls.Window[0];
 
 
         // Interface implementations.

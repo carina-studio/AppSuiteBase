@@ -327,7 +327,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         void ShowTestDialog()
         {
-            new Dialog().Show(this);
+            new Dialog().Show();
             //var result = await new Dialog().ShowDialog<ApplicationOptionsDialogResult>(this);
             //if (result == ApplicationOptionsDialogResult.RestartMainWindowsNeeded)
                 //this.Application.RestartMainWindows();

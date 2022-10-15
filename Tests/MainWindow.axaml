@@ -480,7 +480,7 @@
 								<Button Command="{Binding $parent[Window].ShowExternalDependenciesDialog}" Content="External Dependencies" Margin="5"/>
 								<Button Command="{Binding $parent[Window].ShowTestDialog}" Content="Test Dialog" Margin="5"/>
 								<Button Command="{Binding $parent[Window].UpdateTaskbarIconProgressState}" Content="Update Taskbar icon progress" Margin="5"/>
-								<Button Command="{Binding $parent[Window].Application.ShowMainWindow}" Content="Open New Window" Margin="5"/>
+								<Button Command="{Binding $parent[Window].Application.ShowMainWindowAsync}" Content="Open New Window" Margin="5"/>
 								<Button Command="{Binding $parent[Window].RestartApp}" Content="Restart App" Margin="5"/>
 								<Button Command="{Binding $parent[Window].EditConfiguration}" Content="Edit Configuration" Margin="5"/>
 							</WrapPanel>

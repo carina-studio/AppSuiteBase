@@ -92,11 +92,12 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        protected override void OnTryExitingBackgroundMode()
+        protected override bool OnTryExitingBackgroundMode()
         {
-            base.OnTryExitingBackgroundMode();
-            if (this.MainWindows.IsEmpty())
-                _ = this.ShowMainWindowAsync();
+            if (base.OnTryExitingBackgroundMode())
+                return true;
+            _ = this.ShowMainWindowAsync();
+            return true;
         }
 
 

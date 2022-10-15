@@ -187,6 +187,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get latest active window.
+        /// </summary>
+        Avalonia.Controls.Window? LatestActiveWindow { get; }
+
+
+        /// <summary>
         /// Get options to launch application which is converted by arguments passed to application.
         /// </summary>
         IDictionary<string, object> LaunchOptions { get; }
@@ -358,5 +364,11 @@ namespace CarinaStudio.AppSuite
         /// Get version of the User Agreement. Null means there is no User Agreement.
         /// </summary>
         Version? UserAgreementVersion { get; }
+
+
+        /// <summary>
+        /// Get all windows of application.
+        /// </summary>
+        IList<Avalonia.Controls.Window> Windows { get; }
     }
 }

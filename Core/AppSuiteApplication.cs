@@ -365,6 +365,8 @@ namespace CarinaStudio.AppSuite
         readonly MethodInfo? uiSettingsGetColorValueMethod;
         readonly Type? uiSettingsType;
         ScheduledAction? updateMacOSAppDockTileProgressAction;
+        readonly Dictionary<Avalonia.Controls.Window, List<IDisposable>> windowObserverTokens = new();
+        readonly ObservableList<Avalonia.Controls.Window> windows = new();
         readonly PropertyInfo? windowsColorBProperty;
         readonly PropertyInfo? windowsColorGProperty;
         readonly PropertyInfo? windowsColorRProperty;
@@ -504,6 +506,7 @@ namespace CarinaStudio.AppSuite
 
             // setup properties
             this.MainWindows = this.mainWindows.AsReadOnly();
+            this.Windows = this.windows.AsReadOnly();
 
             // setup default culture
             CultureInfo.CurrentCulture = this.cultureInfo;
@@ -1158,7 +1161,7 @@ namespace CarinaStudio.AppSuite
             if (!this.IsBackgroundModeSupported
                 || this.isShutdownStarted 
                 || this.isRestartRequested 
-                || this.mainWindows.IsNotEmpty())
+                || this.windows.IsNotEmpty())
             {
                 return false;
             }
@@ -1337,6 +1340,10 @@ namespace CarinaStudio.AppSuite
 
         /// <inheritdoc/>
         public Window? LatestActiveMainWindow { get => this.activeMainWindowList.IsNotEmpty() ? this.activeMainWindowList.First?.Value?.Window : null; }
+
+
+        /// <inheritdoc/>
+        public Avalonia.Controls.Window? LatestActiveWindow { get; private set; }
 
 
         /// <summary>
@@ -1991,6 +1998,24 @@ namespace CarinaStudio.AppSuite
                 });
             }
 
+            // start monitoring windows.
+            Avalonia.Controls.Window.WindowClosedEvent.AddClassHandler(typeof(Avalonia.Controls.Window), (sender, _) =>
+            {
+                if (sender is Avalonia.Controls.Window window)
+                {
+                    this.windows.Remove(window);
+                    this.OnWindowClosed(window);
+                }
+            }, RoutingStrategies.Direct);
+            Avalonia.Controls.Window.WindowOpenedEvent.AddClassHandler(typeof(Avalonia.Controls.Window), (sender, _) =>
+            {
+                if (sender is Avalonia.Controls.Window window)
+                {
+                    this.windows.Add(window);
+                    this.OnWindowOpened(window);
+                }
+            }, RoutingStrategies.Direct);
+
             // start loading persistent state and settings
             this.loadingInitPersistentStateTask = this.LoadPersistentStateAsync();
             this.loadingInitSettingsTask = this.LoadSettingsAsync();
@@ -2218,8 +2243,11 @@ namespace CarinaStudio.AppSuite
             this.mainWindowHolders.Remove(mainWindow);
 
             // enter background mode or shut down
-            if (!this.EnterBackgroundMode() && this.mainWindowHolders.IsEmpty())
+            if (!this.EnterBackgroundMode() && this.mainWindowHolders.IsEmpty() && this.windows.IsEmpty())
+            {
+                this.Logger.LogWarning("All main windows were closed, start shutting down");
                 this.Shutdown();
+            }
         }
 
 
@@ -2801,8 +2829,16 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Called when user trying to exit background mode.
         /// </summary>
-        protected virtual void OnTryExitingBackgroundMode()
-        { }
+        /// <returns>True if background mode has been exited successfully.</returns>
+        protected virtual bool OnTryExitingBackgroundMode()
+        { 
+            if (this.LatestActiveWindow != null)
+            {
+                Controls.WindowExtensions.ActivateAndBringToFront(this.LatestActiveWindow);
+                return true;
+            }
+            return false;
+        }
 
 
         /// <summary>
@@ -2823,6 +2859,56 @@ namespace CarinaStudio.AppSuite
         /// <param name="newVersion">New version.</param>
         protected virtual void OnUpgradeSettings(ISettings settings, int oldVersion, int newVersion)
         { }
+
+
+        /// <summary>
+        /// Called when window closed.
+        /// </summary>
+        /// <param name="window">Closed window.</param>
+        protected virtual void OnWindowClosed(Avalonia.Controls.Window window)
+        {
+            // detach from window
+            if (this.windowObserverTokens.Remove(window, out var tokens))
+            {
+                foreach (var token in tokens)
+                    token.Dispose();
+            }
+
+            // update property
+            if (this.LatestActiveWindow == window)
+            {
+                this.LatestActiveWindow = null;
+                this.OnPropertyChanged(nameof(LatestActiveWindow));
+            }
+
+            // enter background mode or shut down
+            if (!this.EnterBackgroundMode() && this.windows.IsEmpty())
+            {
+                this.Logger.LogWarning("All windows were closed, start shutting down");
+                this.Shutdown();
+            }
+        }
+
+
+        /// <summary>
+        /// Called when window opened.
+        /// </summary>
+        /// <param name="window">Opened window.</param>
+        protected virtual void OnWindowOpened(Avalonia.Controls.Window window)
+        {
+            // attach to window
+            var tokens = new List<IDisposable>() {
+                window.GetObservable(Avalonia.Controls.Window.IsActiveProperty).Subscribe(isActive =>
+                {
+                    if (isActive && this.LatestActiveWindow != window)
+                    {
+                        this.LatestActiveWindow = window;
+                        this.OnPropertyChanged(nameof(LatestActiveWindow));
+                    }
+                }),
+            };
+            this.windowObserverTokens.Add(window, tokens);
+        }
 
 
         // Called when Windows UI color changed.
@@ -3366,9 +3452,6 @@ namespace CarinaStudio.AppSuite
             }
             this.SynchronizationContext.Post(() =>
             {
-                // exit background mode
-                this.ExitBackgroundMode();
-
                 // [Workaround] sync culture back to system because it may be resetted
                 CultureInfo.CurrentCulture = this.cultureInfo;
                 CultureInfo.CurrentUICulture = this.cultureInfo;
@@ -4028,6 +4111,10 @@ namespace CarinaStudio.AppSuite
         /// <returns>Task of waiting for completion.</returns>
         protected Task WaitForSplashWindowAnimationAsync() =>
             this.splashWindow?.WaitForAnimationAsync() ?? Task.CompletedTask;
+
+
+        /// <inheritdoc/>
+        public IList<Avalonia.Controls.Window> Windows { get; }
 
 
         /// <summary>
