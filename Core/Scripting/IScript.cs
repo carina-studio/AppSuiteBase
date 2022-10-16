@@ -133,7 +133,7 @@ public static class ScriptExtensions
     /// </summary>
     /// <param name="script"><see cref="IScript"/>.</param>
     /// <returns>True if given <see cref="IScript"/> is either Null or empty.</returns>
-    public static bool IsNullOrEmpty(this IScript? script) =>
+    public static bool IsNullOrEmpty([NotNullWhen(false)] this IScript? script) =>
         script == null || script.IsEmpty;
 
 
