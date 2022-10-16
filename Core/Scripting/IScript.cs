@@ -1,6 +1,7 @@
 using CarinaStudio.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,6 +42,18 @@ public interface IScript : IShareableDisposable<IScript>, IEquatable<IScript>
     /// Check whether at least one runtime error had occurred or not.
     /// </summary>
     bool HasRuntimeError { get; }
+
+
+    /// <summary>
+    /// Check whether the script is empty or not.
+    /// </summary>
+    bool IsEmpty { get; }
+
+
+    /// <summary>
+    /// Check whether the script is a template script or not.
+    /// </summary>
+    bool IsTemplate { get; }
 
 
     /// <summary>
@@ -104,6 +117,24 @@ public static class ScriptExtensions
     /// <returns>True if error has occurred before.</returns>
     public static bool HasError(this IScript script) =>
         script.HasCompilationError || script.HasRuntimeError;
+    
+
+    /// <summary>
+    /// Check whether given <see cref="IScript"/> is neither Null nor empty.
+    /// </summary>
+    /// <param name="script"><see cref="IScript"/>.</param>
+    /// <returns>True if given <see cref="IScript"/> is neither Null nor empty.</returns>
+    public static bool IsNotEmpty([NotNullWhen(true)] this IScript? script) =>
+        script != null && !script.IsEmpty;
+    
+
+    /// <summary>
+    /// Check whether given <see cref="IScript"/> is either Null or empty.
+    /// </summary>
+    /// <param name="script"><see cref="IScript"/>.</param>
+    /// <returns>True if given <see cref="IScript"/> is either Null or empty.</returns>
+    public static bool IsNullOrEmpty(this IScript? script) =>
+        script == null || script.IsEmpty;
 
 
     /// <summary>

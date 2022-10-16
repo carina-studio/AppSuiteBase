@@ -22,6 +22,16 @@ public interface IScriptManager : IApplicationObject<IAppSuiteApplication>, INot
 
 
     /// <summary>
+    /// Create template script instance.
+    /// </summary>
+    /// <param name="language">Language of script.</param>
+    /// <param name="source">Source code of script.</param>
+    /// <param name="options">Script options.</param>
+    /// <returns>Script instance.</returns>
+    IScript CreateTemplateScript(ScriptLanguage language, string source, ScriptOptions options);
+
+
+    /// <summary>
     /// <see cref="TaskFactory"/> for I/O related tasks.
     /// </summary>
     TaskFactory IOTaskFactory { get; }
@@ -69,6 +79,16 @@ public interface IScriptManager : IApplicationObject<IAppSuiteApplication>, INot
 /// </summary>
 public static class ScriptManagerExtensions
 {
+    /// <summary>
+    /// Create empty script.
+    /// </summary>
+    /// <param name="scriptManager"><see cref="IScriptManager"/>.</param>
+    /// <param name="language">Language.</param>
+    /// <returns>Empty script.</returns>
+    public static IScript CreateEmptyScript(this IScriptManager scriptManager, ScriptLanguage language) =>
+        new EmptyScript(scriptManager.Application, language);
+
+
     /// <summary>
     /// Load script asynchronously.
     /// </summary>

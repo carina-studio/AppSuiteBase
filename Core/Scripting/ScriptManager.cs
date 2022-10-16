@@ -33,7 +33,12 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
 
     /// <inheritdoc/>
     public IScript CreateScript(ScriptLanguage language, string source, ScriptOptions options) =>
-        this.implementation?.CreateScript(language, source, options) ?? new MockScript(this.Application, language, source, options);
+        this.implementation?.CreateScript(language, source, options) ?? new MockScript(this.Application, language, source, false, options);
+    
+
+    /// <inheritdoc/>
+    public IScript CreateTemplateScript(ScriptLanguage language, string source, ScriptOptions options) =>
+        this.implementation?.CreateScript(language, source, options) ?? new MockScript(this.Application, language, source, true, options);
     
 
     /// <summary>

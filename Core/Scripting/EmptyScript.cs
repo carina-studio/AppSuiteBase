@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,22 +5,20 @@ using System.Threading.Tasks;
 namespace CarinaStudio.AppSuite.Scripting;
 
 /// <summary>
-/// Mock implementation of <see cref="IScript"/>.
+/// Empty script.
 /// </summary>
-class MockScript : IScript
+class EmptyScript : IScript
 {
+    // Static fields.
+    static readonly IList<ICompilationResult> EmptyCompilationResults = new ICompilationResult[0];
+
+
     // Constructor.
-    public MockScript(IAppSuiteApplication app, ScriptLanguage language, string source, bool isTemplate, ScriptOptions options)
+    public EmptyScript(IAppSuiteApplication app, ScriptLanguage language)
     {
-        if (options.ContextType == null)
-            throw new ArgumentException("No context type specified.");
         this.Application = app;
-        this.CompilationResults = new ICompilationResult[0];
-        this.IsEmpty = string.IsNullOrWhiteSpace(source);
-        this.IsTemplate = isTemplate;
         this.Language = language;
-        this.Options = options;
-        this.Source = source;
+        this.Source = "";
     }
 
 
@@ -35,7 +32,7 @@ class MockScript : IScript
 
 
     /// <inheritdoc/>
-    public IList<ICompilationResult> CompilationResults { get; }
+    public IList<ICompilationResult> CompilationResults { get => EmptyCompilationResults; }
 
 
     /// <inheritdoc/>
@@ -46,8 +43,8 @@ class MockScript : IScript
     /// <inheritdoc/>
     public bool Equals(IScript? script) =>
         script != null
-        && script.Language == this.Language
-        && script.Source == this.Source;
+        && script.IsEmpty
+        && script.Language == this.Language;
     
 
     /// <inheritdoc/>
@@ -57,7 +54,7 @@ class MockScript : IScript
 
     /// <inheritdoc/>
     public override int GetHashCode() =>
-        this.Source.GetHashCode();
+        this.Language.GetHashCode();
 
 
     /// <inheritdoc/>
@@ -69,11 +66,11 @@ class MockScript : IScript
 
 
     /// <inheritdoc/>
-    public bool IsEmpty { get; }
+    public bool IsEmpty { get => true; }
 
 
     /// <inheritdoc/>
-    public bool IsTemplate { get; }
+    public bool IsTemplate { get => false; }
 
 
     /// <inheritdoc/>
@@ -91,7 +88,7 @@ class MockScript : IScript
 
     /// <inheritdoc/>
     public IScript Share() =>
-        new MockScript(this.Application, this.Language, this.Source, this.IsTemplate, this.Options);
+        new EmptyScript(this.Application, this.Language);
 
 
     /// <inheritdoc/>
