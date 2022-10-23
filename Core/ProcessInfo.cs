@@ -29,7 +29,8 @@ namespace CarinaStudio.AppSuite
 
         // Constants.
         const int ProcessInfoUpdateInterval = 3000;
-		const int ProcessInfoUpdateIntervalHF = 1000;
+		const int ProcessInfoUpdateIntervalHF = 1500;
+		const int ProcessInfoUpdateIntervalHFInDebugMode = 1000;
 		const int UIResponseCheckingInterval = 500;
 		const int UIResponseCheckingIntervalHF = 200;
 		const int UIResponseUpdateInterval = 3000;
@@ -49,7 +50,7 @@ namespace CarinaStudio.AppSuite
 		readonly int uiResponseCheckingInterval;
 		readonly int uiResponseUpdateInterval;
 		readonly Thread uiResponseCheckingThread;
-		int updateInterval;
+		int updateInterval = ProcessInfoUpdateInterval;
         readonly ScheduledAction updateProcessInfoAction;
 
 
@@ -61,8 +62,7 @@ namespace CarinaStudio.AppSuite
 			this.logger = app.LoggerFactory.CreateLogger(nameof(ProcessInfo));
 			this.uiResponseCheckingInterval = app.IsDebugMode ? UIResponseCheckingIntervalHF : UIResponseCheckingInterval;
 			this.uiResponseUpdateInterval = app.IsDebugMode ? UIResponseUpdateIntervalHF : UIResponseUpdateInterval;
-			this.updateInterval = app.IsDebugMode ? ProcessInfoUpdateIntervalHF : ProcessInfoUpdateInterval;
-            this.ProcessId = this.process.Id;
+			this.ProcessId = this.process.Id;
 
             // create scheduled actions
             this.updateProcessInfoAction = new ScheduledAction(this.processInfoCheckingSyncContext, () =>
@@ -98,7 +98,7 @@ namespace CarinaStudio.AppSuite
 				if (this.hfUpdateTokens.IsNotEmpty())
 					return;
 			}
-			this.updateInterval = this.app.IsDebugMode ? ProcessInfoUpdateIntervalHF : ProcessInfoUpdateInterval;
+			this.updateInterval = ProcessInfoUpdateInterval;
 		}
 
 
@@ -136,7 +136,7 @@ namespace CarinaStudio.AppSuite
 			});
 			if (isFirstToken)
 			{
-				this.updateInterval = ProcessInfoUpdateIntervalHF;
+				this.updateInterval = this.app.IsDebugMode ? ProcessInfoUpdateIntervalHFInDebugMode : ProcessInfoUpdateIntervalHF;
 				if (!this.isFirstUpdate)
 					this.updateProcessInfoAction.Reschedule();
 			}
@@ -223,12 +223,18 @@ namespace CarinaStudio.AppSuite
 				var totalProcessorTime = this.process.TotalProcessorTime;
 				privateMemoryUsage = this.process.PrivateMemorySize64;
 				if (privateMemoryUsage <= 0)
+				{
 					privateMemoryUsage = this.process.WorkingSet64;
+					var gcMemoryInfo = GC.GetGCMemoryInfo(GCKind.Any);
+					privateMemoryUsage = Math.Max(privateMemoryUsage, gcMemoryInfo.TotalCommittedBytes);
+				}
 				if (this.previousProcessInfoUpdateTime > 0)
 				{
 					var processorTime = (totalProcessorTime - this.previousTotalProcessorTime);
 					var updateInterval = (updateTime - this.previousProcessInfoUpdateTime);
-					cpuUsagePercentage = (processorTime.TotalMilliseconds * 100.0 / updateInterval / Environment.ProcessorCount);
+					cpuUsagePercentage = (processorTime.TotalMilliseconds * 100.0 / updateInterval);
+					if (Platform.IsNotMacOS)
+						cpuUsagePercentage /= Environment.ProcessorCount;
 				}
 				this.previousTotalProcessorTime = totalProcessorTime;
 			}
