@@ -33,8 +33,6 @@ namespace CarinaStudio.AppSuite
 		const int ProcessInfoUpdateIntervalHFInDebugMode = 1000;
 		const int UIResponseCheckingInterval = 500;
 		const int UIResponseCheckingIntervalHF = 200;
-		const int UIResponseUpdateInterval = 3000;
-		const int UIResponseUpdateIntervalHF = 1000;
 
 
         // Fields.
@@ -48,7 +46,6 @@ namespace CarinaStudio.AppSuite
         readonly SingleThreadSynchronizationContext processInfoCheckingSyncContext = new SingleThreadSynchronizationContext("Process information updater");
 		readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
 		readonly int uiResponseCheckingInterval;
-		readonly int uiResponseUpdateInterval;
 		readonly Thread uiResponseCheckingThread;
 		int updateInterval = ProcessInfoUpdateInterval;
         readonly ScheduledAction updateProcessInfoAction;
@@ -61,7 +58,6 @@ namespace CarinaStudio.AppSuite
             this.app = app;
 			this.logger = app.LoggerFactory.CreateLogger(nameof(ProcessInfo));
 			this.uiResponseCheckingInterval = app.IsDebugMode ? UIResponseCheckingIntervalHF : UIResponseCheckingInterval;
-			this.uiResponseUpdateInterval = app.IsDebugMode ? UIResponseUpdateIntervalHF : UIResponseUpdateInterval;
 			this.ProcessId = this.process.Id;
 
             // create scheduled actions
@@ -170,7 +166,7 @@ namespace CarinaStudio.AppSuite
 								Monitor.Pulse(syncLock);
 						}
 					});
-					if (!Monitor.Wait(syncLock, this.uiResponseUpdateInterval))
+					if (!Monitor.Wait(syncLock, this.updateInterval))
 					{
 						this.logger.LogWarning("UI is not responding");
 						totalDuration = 0;
@@ -185,7 +181,7 @@ namespace CarinaStudio.AppSuite
 				Thread.Sleep(this.uiResponseCheckingInterval);
 
 				// report later
-				if ((stopWatch.ElapsedMilliseconds - lastReportTime) < this.uiResponseUpdateInterval)
+				if ((stopWatch.ElapsedMilliseconds - lastReportTime) < this.updateInterval)
 					continue;
 
 				// report respone duration
@@ -197,8 +193,11 @@ namespace CarinaStudio.AppSuite
 					this.logger.LogTrace($"UI response duration: {responseDuration} ms");
 				this.app.SynchronizationContext.Post(() =>
 				{
-					this.UIResponseDuration = TimeSpan.FromMilliseconds(responseDuration);
-					this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UIResponseDuration)));
+					if (!this.UIResponseDuration.HasValue || Math.Abs(this.UIResponseDuration.Value.TotalMilliseconds - responseDuration) >= 0.5)
+					{
+						this.UIResponseDuration = TimeSpan.FromMilliseconds(responseDuration);
+						this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(UIResponseDuration)));
+					}
 				});
 			}
 		}
