@@ -29,7 +29,7 @@ namespace CarinaStudio.AppSuite
 
         // Constants.
         const int ProcessInfoUpdateInterval = 3000;
-		const int ProcessInfoUpdateIntervalHF = 1500;
+		const int ProcessInfoUpdateIntervalHF = 1200;
 		const int ProcessInfoUpdateIntervalHFInDebugMode = 1000;
 		const int UIResponseCheckingInterval = 500;
 		const int UIResponseCheckingIntervalHF = 200;
@@ -87,6 +87,12 @@ namespace CarinaStudio.AppSuite
 		/// Get CPU usage in percentage.
 		/// </summary>
 		public double? CpuUsagePercentage { get; private set; }
+
+
+		/// <summary>
+		/// Get number of pending objects to be finalized.
+		/// </summary>
+		public long FinalizationPendingCount { get; private set; }
 
 
 		// Called after disposing high-frequency update token.
@@ -222,6 +228,7 @@ namespace CarinaStudio.AppSuite
 		{
 			// get process info
 			var privateMemoryUsage = 0L;
+			var finalizationPendingCount = 0L;
 			var cpuUsagePercentage = double.NaN;
 			var threadCount = this.ThreadCount;
 			var updateTime = this.stopWatch.ElapsedMilliseconds;
@@ -230,20 +237,21 @@ namespace CarinaStudio.AppSuite
 				this.process.Refresh();
 				threadCount = this.process.Threads.Count;
 				var totalProcessorTime = this.process.TotalProcessorTime;
+				var gcMemoryInfo = GC.GetGCMemoryInfo(GCKind.Any);
 				privateMemoryUsage = this.process.PrivateMemorySize64;
 				if (privateMemoryUsage <= 0)
 				{
 					privateMemoryUsage = this.process.WorkingSet64;
-					var gcMemoryInfo = GC.GetGCMemoryInfo(GCKind.Any);
 					privateMemoryUsage = Math.Max(privateMemoryUsage, gcMemoryInfo.TotalCommittedBytes);
 				}
+				finalizationPendingCount = gcMemoryInfo.FinalizationPendingCount;
 				if (this.previousProcessInfoUpdateTime > 0)
 				{
 					var processorTime = (totalProcessorTime - this.previousTotalProcessorTime);
 					var updateInterval = (updateTime - this.previousProcessInfoUpdateTime);
-					cpuUsagePercentage = (processorTime.TotalMilliseconds * 100.0 / updateInterval);
-					if (Platform.IsNotMacOS)
-						cpuUsagePercentage /= Environment.ProcessorCount;
+					if (Platform.IsMacOS) // [Workaround] Based-on discussion of https://github.com/dotnet/runtime/issues/29527
+						processorTime *= 100;
+					cpuUsagePercentage = (processorTime.TotalMilliseconds * 100.0 / updateInterval / Environment.ProcessorCount);
 				}
 				this.previousTotalProcessorTime = totalProcessorTime;
 			}
@@ -268,6 +276,11 @@ namespace CarinaStudio.AppSuite
 				{
 					this.PrivateMemoryUsage = privateMemoryUsage;
 					this.PropertyChanged?.Invoke(this, new(nameof(PrivateMemoryUsage)));
+				}
+				if (finalizationPendingCount != this.FinalizationPendingCount)
+				{
+					this.FinalizationPendingCount = finalizationPendingCount;
+					this.PropertyChanged?.Invoke(this, new(nameof(FinalizationPendingCount)));
 				}
 				if (threadCount != this.ThreadCount)
 				{

@@ -39,6 +39,7 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         readonly MutableObservableBoolean canShowAppInfo = new MutableObservableBoolean(true);
+        readonly IDisposable hfProcessInfoUpdateToken;
         readonly IntegerTextBox integerTextBox;
         readonly IntegerTextBox integerTextBox2;
         readonly IPAddressTextBox ipAddressTextBox;
@@ -52,6 +53,8 @@ namespace CarinaStudio.AppSuite.Tests
         public MainWindow()
         {
             this.ShowAppInfoDialogCommand = new Command(() => this.ShowAppInfoDialog(), this.canShowAppInfo);
+
+            this.hfProcessInfoUpdateToken = this.Application.ProcessInfo.RequestHighFrequencyUpdate();
 
             var iconResources = new ResourceInclude().Let(it =>
             {
@@ -124,6 +127,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         protected override void OnClosed(EventArgs e)
         {
+            this.hfProcessInfoUpdateToken.Dispose();
             this.logAction.Cancel();
             this.Application.LoadingStrings -= this.OnAppLoadingStrings;
             base.OnClosed(e);
