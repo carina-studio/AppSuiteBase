@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -16,6 +17,11 @@ namespace CarinaStudio.AppSuite
     /// </summary>
     public class ProcessInfo : INotifyPropertyChanged
     {
+		// Native symbols.
+		[DllImport("/usr/lib/libSystem.dylib")]
+        static extern int mach_timebase_info(out mach_timebase_info_t info);
+
+
 		// Token for high-frequency update.
 		class HighFrequencyUpdateToken : IDisposable
 		{
@@ -25,6 +31,15 @@ namespace CarinaStudio.AppSuite
 			public void Dispose() =>
 				this.processInfo.OnHfTokenDisposed(this);
 		}
+
+
+		// Time-base information for macOS.
+		[StructLayout(LayoutKind.Sequential)]
+        struct mach_timebase_info_t
+        {
+            public uint numer;
+            public uint denom;
+        }
 
 
         // Constants.
@@ -40,6 +55,7 @@ namespace CarinaStudio.AppSuite
 		readonly List<HighFrequencyUpdateToken> hfUpdateTokens = new List<HighFrequencyUpdateToken>();
 		bool isFirstUpdate = true;
 		readonly ILogger logger;
+		mach_timebase_info_t macOSTimebaseInfo;
 		long previousProcessInfoUpdateTime;
 		TimeSpan previousTotalProcessorTime;
 		readonly Process process = Process.GetCurrentProcess();
@@ -248,9 +264,21 @@ namespace CarinaStudio.AppSuite
 				{
 					var processorTime = (totalProcessorTime - this.previousTotalProcessorTime);
 					var updateInterval = (updateTime - this.previousProcessInfoUpdateTime);
-					if (Platform.IsMacOS) // [Workaround] Based-on discussion of https://github.com/dotnet/runtime/issues/29527
-						processorTime *= 100;
-					cpuUsagePercentage = (processorTime.TotalMilliseconds * 100.0 / updateInterval / Environment.ProcessorCount);
+					/* [Workaround] Fix CPU time on macOS
+					 * Please refer to 'Apply Timebase Information to Mach Absolute Time Values' section in https://developer.apple.com/documentation/apple-silicon/addressing-architectural-differences-in-your-macos-code
+					 * (Issue still exists on .NET 7 RC2)
+					 */
+					if (Platform.IsMacOS)
+					{
+						ref var timebaseInfo = ref this.macOSTimebaseInfo;
+						if (timebaseInfo.denom == 0)
+							mach_timebase_info(out timebaseInfo);
+						if (timebaseInfo.denom > 0)
+							processorTime = processorTime * timebaseInfo.numer / timebaseInfo.denom;
+					}
+					cpuUsagePercentage = (processorTime.TotalMilliseconds * 100.0 / updateInterval);
+					if (Platform.IsNotMacOS)
+						cpuUsagePercentage /= Environment.ProcessorCount;
 				}
 				this.previousTotalProcessorTime = totalProcessorTime;
 			}
