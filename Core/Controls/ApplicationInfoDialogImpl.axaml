@@ -189,6 +189,12 @@
 
 					<!-- Private memory usage -->
 					<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.PrivateMemoryUsage}" TextTrimming="CharacterEllipsis"/>
+
+					<!-- Finalization pending count -->
+					<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
+						<Separator Classes="Dialog_Separator_Small"/>
+						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.FinalizationPendingCount}" Format="{DynamicResource String/ApplicationInfoDialog.FinalizationPendingCount}" TextTrimming="CharacterEllipsis"/>
+					</StackPanel>
 					
 					<!-- Script info -->
 					<StackPanel Name="scriptInfoPanel" IsVisible="False">

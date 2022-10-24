@@ -29,6 +29,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">导出应用程序日志…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExternalDependencies">外部依赖…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">无法导出应用程序日志。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.FinalizationPendingCount">等待解构之物件数量：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET 版本：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">GitHub 上的项目页面</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">(已安裝：{0})</sys:String>

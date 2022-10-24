@@ -29,6 +29,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">Export application logs…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExternalDependencies">External dependencies…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">Failed to export application logs.</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.FinalizationPendingCount">Pending objects to finalize: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET version: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">Project page on GitHub</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">(Installed: {0})</sys:String>
