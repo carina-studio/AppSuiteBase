@@ -279,7 +279,9 @@ namespace CarinaStudio.AppSuite
             var mainModule = Process.GetCurrentProcess().MainModule;
             if (mainModule != null && Path.GetFileNameWithoutExtension(mainModule.FileName) != "dotnet")
                 return Path.GetDirectoryName(mainModule.FileName) ?? "";
+#pragma warning disable SYSLIB0044
             var codeBase = System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.CodeBase;
+#pragma warning restore SYSLIB0044
             if (codeBase != null && codeBase.StartsWith("file://") && codeBase.Length > 7)
             {
                 if (Platform.IsWindows)
@@ -505,8 +507,8 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogWarning("Application is running as administrator/superuser");
 
             // setup properties
-            this.MainWindows = this.mainWindows.AsReadOnly();
-            this.Windows = this.windows.AsReadOnly();
+            this.MainWindows = ListExtensions.AsReadOnly(this.mainWindows);
+            this.Windows = ListExtensions.AsReadOnly(this.windows);
 
             // setup default culture
             CultureInfo.CurrentCulture = this.cultureInfo;
@@ -1349,7 +1351,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get options to launch application which is converted by arguments passed to application.
         /// </summary>
-        public IDictionary<string, object> LaunchOptions { get; private set; } = new Dictionary<string, object>().AsReadOnly();
+        public IDictionary<string, object> LaunchOptions { get; private set; } = DictionaryExtensions.AsReadOnly(new Dictionary<string, object>());
 
 
         /// <inheritdoc/>
@@ -2952,7 +2954,7 @@ namespace CarinaStudio.AppSuite
                 else
                     ++index;
             }
-            return launchOptions.AsReadOnly();
+            return DictionaryExtensions.AsReadOnly(launchOptions);
         }
 
 

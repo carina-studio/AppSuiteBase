@@ -71,7 +71,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         this.UpdateNetworkAddresses();
 
         // setup properties
-        this.IPAddresses = this.ipAddresses.AsReadOnly();
+        this.IPAddresses = ListExtensions.AsReadOnly(this.ipAddresses);
     }
 
 

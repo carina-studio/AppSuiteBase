@@ -40,7 +40,7 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     {
         this.Logger = app.LoggerFactory.CreateLogger(this.GetType().Name);
         this.profiles = new(this.CompareProfiles);
-        this.Profiles = (IReadOnlyList<TProfile>)this.profiles.AsReadOnly();
+        this.Profiles = (IReadOnlyList<TProfile>)ListExtensions.AsReadOnly(this.profiles);
         this.saveProfilesAction = new(() => _ = this.SaveProfiles());
         this.SynchronizationContext.Post(this.Initialize);
     }

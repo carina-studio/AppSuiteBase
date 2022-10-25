@@ -19,7 +19,7 @@ namespace CarinaStudio.AppSuite.Controls
 		// Constructor.
 		public SettingsEditorDialogImpl()
 		{
-			this.SettingKeyValues = this.settingKeyValues.AsReadOnly();
+			this.SettingKeyValues = ListExtensions.AsReadOnly(this.settingKeyValues);
 			this.Settings = base.Settings;
 			InitializeComponent();
 			this.settingsListBox = this.FindControl<ListBox>(nameof(settingsListBox));
@@ -108,7 +108,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// List of key of setting.
-		public ISet<SettingKey> SettingKeys { get; set; } = new HashSet<SettingKey>().AsReadOnly();
+		public ISet<SettingKey> SettingKeys { get; set; } = SetExtensions.AsReadOnly(new HashSet<SettingKey>());
 
 
 		// Key-value of settings.

@@ -27,7 +27,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// </summary>
         public ApplicationChangeList() : base(AppSuiteApplication.Current)
         {
-            this.ChangeList = this.changeList.AsReadOnly();
+            this.ChangeList = ListExtensions.AsReadOnly(this.changeList);
             this.SynchronizationContext.Post(this.LoadChangeList);
         }
 
@@ -244,7 +244,7 @@ namespace CarinaStudio.AppSuite.ViewModels
                     changes.Add(new ApplicationChange(type, descriptionProperty.GetString().AsNonNull(), detailsPageUri));
                 }
             }
-            return changes.AsReadOnly();
+            return ListExtensions.AsReadOnly(changes);
         }
 
 

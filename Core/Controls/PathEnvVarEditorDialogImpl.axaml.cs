@@ -35,7 +35,7 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	// Constructor.
 	public PathEnvVarEditorDialogImpl()
 	{
-		this.Paths = this.paths.AsReadOnly();
+		this.Paths = ListExtensions.AsReadOnly(this.paths);
 		AvaloniaXamlLoader.Load(this);
 		this.pathListBox = this.Get<CarinaStudio.AppSuite.Controls.ListBox>(nameof(pathListBox)).Also(it =>
 		{

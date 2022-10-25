@@ -7,7 +7,7 @@
 		<RootNamespace>CarinaStudio.AppSuite.Tests</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Tests</AssemblyName>
 		<StartupObject>CarinaStudio.AppSuite.Tests.App</StartupObject>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 	</PropertyGroup>
 	
