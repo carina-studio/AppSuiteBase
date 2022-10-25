@@ -90,9 +90,15 @@ namespace CarinaStudio.AppSuite
                     {
                         return AppSuiteApplication.Current.macOSAppDelegate.Let(it =>
                         {
-                            if (it != null)
-                                return it.SendMessageToBaseAppDelegateWithResult(self, cmd, NSApplication.TerminateReply.TerminateNow, app);
-                            return NSApplication.TerminateReply.TerminateNow;
+                            if (it == null)
+                                return NSApplication.TerminateReply.TerminateNow;
+                            it.SendMessageToBaseAppDelegateWithResult(self, cmd, NSApplication.TerminateReply.TerminateNow, app);
+                            if (!it.app.isShutdownStarted)
+                            {
+                                it.app.Logger.LogWarning("Shutting down has been requested by system");
+                                it.app.Shutdown();
+                            }
+                            return NSApplication.TerminateReply.TerminateLater;
                         });
                     });
                     cls.DefineMethod<IntPtr, bool, bool>("applicationShouldHandleReopen:hasVisibleWindows:", (self, cmd, app, flag) =>
@@ -2032,7 +2038,7 @@ namespace CarinaStudio.AppSuite
                 desktopLifetime.ShutdownMode = Avalonia.Controls.ShutdownMode.OnExplicitShutdown;
                 desktopLifetime.ShutdownRequested += (_, e) =>
                 {
-                    if (!this.isShutdownStarted)
+                    if (!this.isShutdownStarted && Platform.IsNotMacOS)
                     {
                         this.Logger.LogWarning("Application has been shut down unexpectedly");
                         this.isShutdownStarted = true;
@@ -3514,9 +3520,9 @@ namespace CarinaStudio.AppSuite
             }
 
             // close all main windows
-            if (this.mainWindows.IsNotEmpty())
+            if (this.mainWindowHolders.IsNotEmpty()) // check 'mainWindowHolders' becuse it will be updated after all tasks of closing main window are completed
             {
-                if (isFirstCall)
+                if (isFirstCall && this.mainWindows.IsNotEmpty())
                 {
                     this.Logger.LogWarning($"Close {this.mainWindows.Count} main window(s) to shut down");
                     using var stateStream = new MemoryStream();
@@ -3582,6 +3588,13 @@ namespace CarinaStudio.AppSuite
                 {
                     this.Logger.LogError(ex, "Unable to restart");
                 }
+            }
+
+            // reply to system that application can be shutted down now
+            if (Platform.IsMacOS)
+            {
+                var selector = ObjCSelector.FromName("replyToApplicationShouldTerminate:");
+                NSApplication.Current?.SendMessage(selector, true);
             }
         }
 
