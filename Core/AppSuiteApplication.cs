@@ -10,6 +10,7 @@ using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.Platform;
+using Avalonia.Rendering;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
 #if APPLY_CONTROL_BRUSH_ANIMATIONS || APPLY_ITEM_BRUSH_ANIMATIONS
@@ -745,6 +746,17 @@ namespace CarinaStudio.AppSuite
                         it.With(new MacOSPlatformOptions()
                         {
                             DisableDefaultApplicationMenuItems = true,
+                        });
+
+                        /* [Workaround]
+                         * Reduce UI frame rate to lower the CPU usage
+                         * Please refer to https://github.com/AvaloniaUI/Avalonia/issues/4500
+                         */
+                        var initWindowingSubSystem = it.WindowingSubsystemInitializer;
+                        it.UseWindowingSubsystem(() =>
+                        {
+                            initWindowingSubSystem();
+                            AvaloniaLocator.CurrentMutable.Bind<IRenderTimer>().ToConstant(new DefaultRenderTimer(30));
                         });
                     }
                     if (Platform.IsLinux)
