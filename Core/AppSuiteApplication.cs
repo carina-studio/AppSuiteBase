@@ -2904,7 +2904,7 @@ namespace CarinaStudio.AppSuite
             }
 
             // enter background mode or shut down
-            if (!this.EnterBackgroundMode() && this.mainWindows.IsEmpty() && this.windows.IsEmpty())
+            if (!this.EnterBackgroundMode() && this.windows.IsEmpty())
             {
                 this.Logger.LogWarning("All windows were closed, start shutting down");
                 this.Shutdown();
@@ -3303,11 +3303,10 @@ namespace CarinaStudio.AppSuite
                     imageView.Image = iconImage;
                     imageView.ImageAlignment = NSImageAlignment.Bottom;
                     imageView.ImageScaling = NSImageScaling.ProportionallyUpOrDown;
-                    this.macOSAppDockTileProgressBar = new NSProgressIndicator(default).Also(it =>
+                    var progressBarWidth = (dockTileSize.Width * 0.58);
+                    var progressBarBottom = dockTileSize.Height * 0.11;
+                    this.macOSAppDockTileProgressBar = new NSProgressIndicator(new((dockTileSize.Width - progressBarWidth) / 2, progressBarBottom, progressBarWidth, 20)).Also(it =>
                     {
-                        var width = (dockTileSize.Width * 0.58);
-                        var bottom = dockTileSize.Height * 0.11;
-                        it.Frame = new((dockTileSize.Width - width) / 2, bottom, width, it.IntrinsicContentSize.Height);
                         it.IsHidden = true;
                         it.IsIndeterminate = false;
                         imageView.AddSubView(it);
