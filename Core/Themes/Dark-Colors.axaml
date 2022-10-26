@@ -62,8 +62,8 @@
 	<!-- Window -->
 	<Color x:Key="Color/Window.Background">#1e1e1e</Color>
 	<Color x:Key="Color/Window.Background.Tabbed">#101010</Color>
-	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#d7101010</Color>
-	<Color x:Key="Color/Window.Background.Transparent">#d71e1e1e</Color>
+	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#b7101010</Color>
+	<Color x:Key="Color/Window.Background.Transparent">#b71e1e1e</Color>
 
 	<!-- WorkingArea -->
 	<Color x:Key="Color/WorkingArea.Background">#101010</Color>

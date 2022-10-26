@@ -79,8 +79,8 @@
 	<!-- Window -->
 	<Color x:Key="Color/Window.Background">#f0f0f0</Color>
 	<Color x:Key="Color/Window.Background.Tabbed">#f7f7f7</Color>
-	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#c7e7e7e7</Color>
-	<Color x:Key="Color/Window.Background.Transparent">#c7f0f0f0</Color>
+	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#a7e7e7e7</Color>
+	<Color x:Key="Color/Window.Background.Transparent">#a7f0f0f0</Color>
 
 	<!-- WorkingArea -->
 	<Color x:Key="Color/WorkingArea.Background">#e7e7e7</Color>
