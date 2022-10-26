@@ -2904,7 +2904,7 @@ namespace CarinaStudio.AppSuite
             }
 
             // enter background mode or shut down
-            if (!this.EnterBackgroundMode() && this.windows.IsEmpty())
+            if (!this.EnterBackgroundMode() && this.mainWindows.IsEmpty() && this.windows.IsEmpty())
             {
                 this.Logger.LogWarning("All windows were closed, start shutting down");
                 this.Shutdown();
