@@ -268,7 +268,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get options to launch application which is converted by arguments passed to application.
         /// </summary>
-        public virtual IDictionary<string, object> LaunchOptions { get; } = new Dictionary<string, object>().AsReadOnly();
+        public virtual IDictionary<string, object> LaunchOptions { get; } = DictionaryExtensions.AsReadOnly(new Dictionary<string, object>());
 
 
         /// <inheritdoc/>
