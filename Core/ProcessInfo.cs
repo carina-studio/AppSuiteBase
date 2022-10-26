@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace CarinaStudio.AppSuite
@@ -320,70 +319,6 @@ namespace CarinaStudio.AppSuite
 			if (this.app.IsDebugMode)
 				this.logger.LogTrace($"CPU usage: {cpuUsagePercentage:0.0}%, memory usage: {privateMemoryUsage.ToFileSizeString()}");
 			this.updateProcessInfoAction?.Schedule(this.updateInterval);
-		}
-
-
-		// Update process info by "top".
-		void UpdateByTop()
-		{
-			// start process
-			using var topProcess = Process.Start(new ProcessStartInfo()
-			{
-				Arguments = $"-l 10 -pid {Process.GetCurrentProcess().Id} -stats cpu -s {Math.Max(1, this.updateInterval / 1000)}",
-				CreateNoWindow = true,
-				FileName = "top",
-				RedirectStandardOutput = true,
-				UseShellExecute = false,
-			});
-			if (topProcess == null)
-			{
-				this.Update();
-				return;
-			}
-
-			// update process info
-			try
-			{
-				var processInfoRegex = new Regex("^(?<CpuUsage>[\\d]+(\\.[\\d]+)?)[\\s]*$");
-				using var reader = topProcess.StandardOutput;
-				var line = reader.ReadLine();
-				while(line != null)
-				{
-					var match = processInfoRegex.Match(line);
-					if (match.Success)
-					{
-						// report CPU usage
-						var cpuUsage = double.Parse(match.Groups["CpuUsage"].Value) / Environment.ProcessorCount;
-						if (cpuUsage == 0)
-						{
-							line = reader.ReadLine();
-							continue;
-						}
-						this.logger.LogTrace($"CPU usage: {cpuUsage:0.0}%");
-						this.CpuUsagePercentage = cpuUsage;
-						this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CpuUsagePercentage)));
-
-						// report memory usage
-						this.process.Refresh();
-						var privateMemoryUsage = this.process.PrivateMemorySize64;
-						if (privateMemoryUsage <= 0)
-							privateMemoryUsage = this.process.WorkingSet64;
-						this.logger.LogTrace($"Private memory usage: {privateMemoryUsage.ToFileSizeString()}");
-						this.PrivateMemoryUsage = privateMemoryUsage;
-						this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PrivateMemoryUsage)));
-					}
-					line = reader.ReadLine();
-				}
-			}
-			catch (Exception ex)
-			{
-				this.logger.LogError(ex, "Error occurred while getting process info by 'top'");
-			}
-			finally
-			{
-				Global.RunWithoutError(topProcess.Kill);
-				this.updateProcessInfoAction.Reschedule(this.updateInterval);
-			}
 		}
 	}
 }
