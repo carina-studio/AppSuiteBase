@@ -2930,6 +2930,9 @@ namespace CarinaStudio.AppSuite
                 }),
             };
             this.windowObserverTokens.Add(window, tokens);
+
+            // exit background mode
+            this.ExitBackgroundMode();
         }
 
 
