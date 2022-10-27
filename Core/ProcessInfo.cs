@@ -53,6 +53,7 @@ namespace CarinaStudio.AppSuite
         readonly IAppSuiteApplication app;
 		readonly List<HighFrequencyUpdateToken> hfUpdateTokens = new List<HighFrequencyUpdateToken>();
 		bool isFirstUpdate = true;
+		long latestGCCount;
 		readonly ILogger logger;
 		mach_timebase_info_t macOSTimebaseInfo;
 		long previousProcessInfoUpdateTime;
@@ -104,6 +105,13 @@ namespace CarinaStudio.AppSuite
 		/// Get number of pending objects to be finalized.
 		/// </summary>
 		public long FinalizationPendingCount { get; private set; }
+
+
+		/// <summary>
+		/// Get average number of GC performed per second.
+		/// </summary>
+		/// <remarks>The property is available only in debug mode.</remarks>
+		public double? GCFrequency { get; private set; }
 
 
 		// Called after disposing high-frequency update token.
@@ -255,6 +263,7 @@ namespace CarinaStudio.AppSuite
 		void Update()
 		{
 			// get process info
+			var gcFrequency = double.NaN;
 			var privateMemoryUsage = 0L;
 			var managedHeapSize = 0L;
 			var managedHeapUsage = 0L;
@@ -274,8 +283,24 @@ namespace CarinaStudio.AppSuite
 					privateMemoryUsage = this.process.WorkingSet64;
 					privateMemoryUsage = Math.Max(privateMemoryUsage, gcMemoryInfo.TotalCommittedBytes);
 				}
-				managedHeapSize = gcMemoryInfo.TotalCommittedBytes;
-				managedHeapUsage = gcMemoryInfo.HeapSizeBytes;
+				if (this.app.IsDebugMode)
+				{
+					managedHeapSize = gcMemoryInfo.TotalCommittedBytes;
+					managedHeapUsage = gcMemoryInfo.HeapSizeBytes;
+					var gcCount = 0L;
+					var latestGCCount = this.latestGCCount;
+					for (var i = GC.MaxGeneration; i >= 0; --i)
+						gcCount += GC.CollectionCount(i);
+					this.latestGCCount = gcCount;
+					gcCount -= latestGCCount;
+					if (this.previousProcessInfoUpdateTime > 0)
+					{
+						if (gcCount > 0)
+							gcFrequency = (gcCount * 1000.0 / (updateTime - this.previousProcessInfoUpdateTime));
+						else
+							gcFrequency = 0;
+					}
+				}
 				finalizationPendingCount = gcMemoryInfo.FinalizationPendingCount;
 				if (this.previousProcessInfoUpdateTime > 0)
 				{
@@ -317,20 +342,23 @@ namespace CarinaStudio.AppSuite
 					this.CpuUsagePercentage = cpuUsagePercentage;
 					this.PropertyChanged?.Invoke(this, new(nameof(CpuUsagePercentage)));
 				}
-				if (this.app.IsDebugMode)
+				if (double.IsFinite(gcFrequency) 
+					&& Math.Abs(this.GCFrequency.GetValueOrDefault() - gcFrequency) >= 0.1)
 				{
-					if (managedHeapSize > 0
-						&& this.ManagedHeapSize.GetValueOrDefault() != managedHeapSize)
-					{
-						this.ManagedHeapSize = managedHeapSize;
-						this.PropertyChanged?.Invoke(this, new(nameof(ManagedHeapSize)));
-					}
-					if (managedHeapUsage > 0
-						&& this.ManagedHeapUsage.GetValueOrDefault() != managedHeapUsage)
-					{
-						this.ManagedHeapUsage = managedHeapUsage;
-						this.PropertyChanged?.Invoke(this, new(nameof(ManagedHeapUsage)));
-					}
+					this.GCFrequency = gcFrequency;
+					this.PropertyChanged?.Invoke(this, new(nameof(GCFrequency)));
+				}
+				if (managedHeapSize > 0
+					&& this.ManagedHeapSize.GetValueOrDefault() != managedHeapSize)
+				{
+					this.ManagedHeapSize = managedHeapSize;
+					this.PropertyChanged?.Invoke(this, new(nameof(ManagedHeapSize)));
+				}
+				if (managedHeapUsage > 0
+					&& this.ManagedHeapUsage.GetValueOrDefault() != managedHeapUsage)
+				{
+					this.ManagedHeapUsage = managedHeapUsage;
+					this.PropertyChanged?.Invoke(this, new(nameof(ManagedHeapUsage)));
 				}
 				if (privateMemoryUsage > 0
 					&& this.PrivateMemoryUsage.GetValueOrDefault() != privateMemoryUsage)
