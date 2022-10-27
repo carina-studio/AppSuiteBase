@@ -304,6 +304,8 @@
 									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ProcessId, StringFormat={}PID: {0}}" Margin="5,5,0,0"/>
 									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage, StringFormat={}CPU: {0:F2}%}" Margin="5,5,0,0"/>
 									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Memory Usage: {0}}" Margin="5,5,0,0"/>
+									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapSize, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Size: {0}}" Margin="5,5,0,0"/>
+									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Usage: {0}}" Margin="5,5,0,0"/>
 									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.FinalizationPendingCount, StringFormat={}Finalization Pending Count: {0}}" Margin="5,5,0,0"/>
 									<TextBlock Text="{Binding $parent[Window].Application.EffectiveCustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5,5,0,0"/>
 									<NumericUpDown HorizontalAlignment="Left" Increment="0.1" Minimum="1.0" Maximum="2.0" Margin="5,5,0,0" Width="200" Value="{Binding $parent[Window].Application.CustomScreenScaleFactor, Mode=TwoWay}" FormatString="F2"/>

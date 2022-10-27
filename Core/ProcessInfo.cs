@@ -121,6 +121,20 @@ namespace CarinaStudio.AppSuite
 
 
 		/// <summary>
+		/// Size of managed heap in bytes.
+		/// </summary>
+		/// <remarks>The property is available only in debug mode.</remarks>
+		public long? ManagedHeapSize { get; private set; }
+
+
+		/// <summary>
+		/// Memory usage on managed heap in bytes.
+		/// </summary>
+		/// <remarks>The property is available only in debug mode.</remarks>
+		public long? ManagedHeapUsage { get; private set; }
+
+
+		/// <summary>
 		/// Get private memory usage in bytes.
 		/// </summary>
 		public long? PrivateMemoryUsage { get; private set; }
@@ -242,6 +256,8 @@ namespace CarinaStudio.AppSuite
 		{
 			// get process info
 			var privateMemoryUsage = 0L;
+			var managedHeapSize = 0L;
+			var managedHeapUsage = 0L;
 			var finalizationPendingCount = 0L;
 			var cpuUsagePercentage = double.NaN;
 			var threadCount = this.ThreadCount;
@@ -258,6 +274,8 @@ namespace CarinaStudio.AppSuite
 					privateMemoryUsage = this.process.WorkingSet64;
 					privateMemoryUsage = Math.Max(privateMemoryUsage, gcMemoryInfo.TotalCommittedBytes);
 				}
+				managedHeapSize = gcMemoryInfo.TotalCommittedBytes;
+				managedHeapUsage = gcMemoryInfo.HeapSizeBytes;
 				finalizationPendingCount = gcMemoryInfo.FinalizationPendingCount;
 				if (this.previousProcessInfoUpdateTime > 0)
 				{
@@ -298,6 +316,21 @@ namespace CarinaStudio.AppSuite
 				{
 					this.CpuUsagePercentage = cpuUsagePercentage;
 					this.PropertyChanged?.Invoke(this, new(nameof(CpuUsagePercentage)));
+				}
+				if (this.app.IsDebugMode)
+				{
+					if (managedHeapSize > 0
+						&& this.ManagedHeapSize.GetValueOrDefault() != managedHeapSize)
+					{
+						this.ManagedHeapSize = managedHeapSize;
+						this.PropertyChanged?.Invoke(this, new(nameof(ManagedHeapSize)));
+					}
+					if (managedHeapUsage > 0
+						&& this.ManagedHeapUsage.GetValueOrDefault() != managedHeapUsage)
+					{
+						this.ManagedHeapUsage = managedHeapUsage;
+						this.PropertyChanged?.Invoke(this, new(nameof(ManagedHeapUsage)));
+					}
 				}
 				if (privateMemoryUsage > 0
 					&& this.PrivateMemoryUsage.GetValueOrDefault() != privateMemoryUsage)
