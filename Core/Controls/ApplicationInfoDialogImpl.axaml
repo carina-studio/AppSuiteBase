@@ -190,10 +190,25 @@
 					<!-- Private memory usage -->
 					<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.PrivateMemoryUsage}" TextTrimming="CharacterEllipsis"/>
 
-					<!-- Finalization pending count -->
+					<!-- Managed environment information -->
 					<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
+
+						<!-- Managed heap size -->
+						<Separator Classes="Dialog_Separator_Small"/>
+						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapSize, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.ManagedHeapSize}" TextTrimming="CharacterEllipsis"/>
+
+						<!-- Managed heap usage -->
+						<Separator Classes="Dialog_Separator_Small"/>
+						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.ManagedHeapUsage}" TextTrimming="CharacterEllipsis"/>
+
+						<!-- GC frequency -->
+						<Separator Classes="Dialog_Separator_Small"/>
+						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.GCFrequency}" Format="{DynamicResource String/ApplicationInfoDialog.GCFrequency}" TextTrimming="CharacterEllipsis"/>
+
+						<!-- Finalization pending count -->
 						<Separator Classes="Dialog_Separator_Small"/>
 						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.FinalizationPendingCount}" Format="{DynamicResource String/ApplicationInfoDialog.FinalizationPendingCount}" TextTrimming="CharacterEllipsis"/>
+
 					</StackPanel>
 					
 					<!-- Script info -->

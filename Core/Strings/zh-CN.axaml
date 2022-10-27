@@ -31,8 +31,11 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">无法导出应用程序日志。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FinalizationPendingCount">等待解构之物件数量：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET 版本：{0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.GCFrequency">垃圾收集 (GC) 每秒次数：{0:F1}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">GitHub 上的项目页面</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">(已安裝：{0})</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ManagedHeapSize">受控内存堆大小：{0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ManagedHeapUsage">受控内存堆使用量：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Connected">网络：已连线 ({0})</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Disconnected">网络：未连线</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作业系统：{0}</sys:String>
