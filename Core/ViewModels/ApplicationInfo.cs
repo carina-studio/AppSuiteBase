@@ -119,16 +119,59 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <returns>Task to export logs and get whether logs are exported successfully or not.</returns>
         public virtual Task<bool> ExportLogs(string outputFileName) => Task.Run(() =>
         {
+            // create directory for log files to export
+            var random = new Random();
+            var rootLogDirectory = Path.Combine(this.Application.RootPrivateDirectoryPath, "Log");
+            var exportLogDirectory = Path.Combine(rootLogDirectory, $"Export-{DateTime.UtcNow.Ticks}-{random.Next()}");
             try
             {
-                var srcDirectory = Path.Combine(this.Application.RootPrivateDirectoryPath, "Log");
-                ZipFile.CreateFromDirectory(srcDirectory, outputFileName, CompressionLevel.Optimal, false);
+                if (this.Application.IsDebugMode)
+                    this.Logger.LogDebug($"Create directory '{exportLogDirectory}' for log files to export");
+                Directory.CreateDirectory(exportLogDirectory);
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, $"Failed to create directory '{exportLogDirectory}' for log files to export");
+                return false;
+            }
+
+            // copy logs files
+            try
+            {
+                foreach (var filePath in Directory.EnumerateFiles(rootLogDirectory))
+                {
+                    var fileName = Path.GetFileName(filePath);
+                    if (this.Application.IsDebugMode)
+                        this.Logger.LogDebug($"Copy '{fileName}' to export directory");
+                    File.Copy(filePath, Path.Combine(exportLogDirectory, fileName));
+                }
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, $"Failed to copy log files to directory '{exportLogDirectory}'");
+                Global.RunWithoutError(() => Directory.Delete(exportLogDirectory, true));
+                return false;
+            }
+
+            // archive log files
+            try
+            {
+                if (File.Exists(outputFileName))
+                {
+                    this.Logger.LogWarning($"Delete '{outputFileName}' before archiving log file");
+                    File.Delete(outputFileName);
+                }
+                ZipFile.CreateFromDirectory(exportLogDirectory, outputFileName, CompressionLevel.Optimal, false);
                 return true;
             }
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, $"Failed to export logs to '{outputFileName}'");
                 return false;
+            }
+            finally 
+            {
+                Global.RunWithoutError(() => Directory.Delete(exportLogDirectory, true));
             }
         });
 
