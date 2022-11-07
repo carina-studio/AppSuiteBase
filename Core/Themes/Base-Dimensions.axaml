@@ -107,12 +107,12 @@
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">-12,0,-12,8</Thickness>
 
 	<!-- Expander -->
-	<sys:Double x:Key="Double/Expander.Chevron.Size">32</sys:Double>
+	<sys:Double x:Key="Double/Expander.Chevron.Size">10</sys:Double>
 	<Thickness x:Key="ExpanderDropdownDownBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderDropdownLeftBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderDropdownRightBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderDropdownUpBorderThickness">0</Thickness>
-	<Thickness x:Key="Thickness/Expander.Chevron.Margin">7</Thickness>
+	<Thickness x:Key="Thickness/Expander.Chevron.Margin">10</Thickness>
 
 	<!-- ExternalDependenciesDialog -->
 	<sys:Double x:Key="Double/ExternalDependenciesDialog.Content.MaxHeight">500</sys:Double>
@@ -285,6 +285,6 @@
 	<sys:Double x:Key="Double/TreeViewItem.Icon.Size">16</sys:Double>
 	<Thickness x:Key="Thickness/TreeViewItem.Icon.Margin">0,0,9,0</Thickness>
 	<Thickness x:Key="Thickness/TreeViewItem.Margin">0,1,0,1</Thickness>
-	<Thickness x:Key="Thickness/TreeViewItem.Padding">0,6,15,6</Thickness>
+	<Thickness x:Key="Thickness/TreeViewItem.Padding">0,5,15,5</Thickness>
 
 </ResourceDictionary>
