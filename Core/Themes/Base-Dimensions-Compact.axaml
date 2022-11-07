@@ -29,8 +29,7 @@
 
 	<!-- ComboBoxItem -->
 	<CornerRadius x:Key="CornerRadius/ComboBoxItem">0</CornerRadius>
-	<sys:Double x:Key="Double/ComboBoxItem.Icon.Size">16</sys:Double>
-	<Thickness x:Key="Thickness/ComboBoxItem.Icon.Margin">0,0,5,0</Thickness>
+	<Thickness x:Key="Thickness/ComboBoxItem.Icon.Margin">0,0,8,0</Thickness>
 	<Thickness x:Key="Thickness/ComboBoxItem.Margin">0</Thickness>
 	<Thickness x:Key="Thickness/ComboBoxItem.Padding">6,4,15,4</Thickness>
 
@@ -91,8 +90,7 @@
 
 	<!-- ListBoxItem -->
 	<CornerRadius x:Key="CornerRadius/ListBoxItem">0</CornerRadius>
-	<sys:Double x:Key="Double/ListBoxItem.Icon.Size">16</sys:Double>
-	<Thickness x:Key="Thickness/ListBoxItem.Icon.Margin">0,0,5,0</Thickness>
+	<Thickness x:Key="Thickness/ListBoxItem.Icon.Margin">0,0,7,0</Thickness>
 	<Thickness x:Key="Thickness/ListBoxItem.Margin">0</Thickness>
 	<Thickness x:Key="Thickness/ListBoxItem.Padding">6,4,15,4</Thickness>
 
@@ -168,7 +166,6 @@
 	<!-- TreeViewItem -->
 	<CornerRadius x:Key="CornerRadius/TreeViewItem">0</CornerRadius>
 	<sys:Double x:Key="Double/TreeViewItem.Chevron.Width">10</sys:Double>
-	<sys:Double x:Key="Double/TreeViewItem.Icon.Size">16</sys:Double>
 	<sys:Double x:Key="TreeViewItemMinHeight">0</sys:Double>
 	<Thickness x:Key="Thickness/TreeViewItem.Icon.Margin">0,0,5,0</Thickness>
 	<Thickness x:Key="Thickness/TreeViewItem.Margin">0</Thickness>

@@ -10,7 +10,7 @@
 
 	<!-- AddTabItemButton -->
 	<sys:Double x:Key="Double/AddTabItemButton.Size">32</sys:Double>
-	<Thickness x:Key="Thickness/AddTabItemButton.Padding">7</Thickness>
+	<Thickness x:Key="Thickness/AddTabItemButton.Padding">8</Thickness>
 
 	<!-- ApplicationChangeListDialog -->
 	<sys:Double x:Key="Double/ApplicationChangeListDialog.Content.MaxHeight">500</sys:Double>
@@ -51,7 +51,7 @@
 
 	<!-- ComboBoxItem -->
 	<CornerRadius x:Key="CornerRadius/ComboBoxItem">5</CornerRadius>
-	<sys:Double x:Key="Double/ComboBoxItem.Icon.Size">16</sys:Double>
+	<sys:Double x:Key="Double/ComboBoxItem.Icon.Size">14</sys:Double>
 	<Thickness x:Key="Thickness/ComboBoxItem.Icon.Margin">0,0,10,0</Thickness>
 	<Thickness x:Key="Thickness/ComboBoxItem.Margin">0,1,0,1</Thickness>
 	<Thickness x:Key="Thickness/ComboBoxItem.Padding">6,6,15,6</Thickness>
@@ -112,6 +112,7 @@
 	<Thickness x:Key="ExpanderDropdownLeftBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderDropdownRightBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderDropdownUpBorderThickness">0</Thickness>
+	<Thickness x:Key="ExpanderHeaderPadding">8</Thickness>
 	<Thickness x:Key="Thickness/Expander.Chevron.Margin">10</Thickness>
 
 	<!-- ExternalDependenciesDialog -->
@@ -156,7 +157,7 @@
 
 	<!-- ListBoxItem -->
 	<CornerRadius x:Key="CornerRadius/ListBoxItem">4</CornerRadius>
-	<sys:Double x:Key="Double/ListBoxItem.Icon.Size">16</sys:Double>
+	<sys:Double x:Key="Double/ListBoxItem.Icon.Size">14</sys:Double>
 	<Thickness x:Key="Thickness/ListBoxItem.Icon.Margin">0,0,9,0</Thickness>
 	<Thickness x:Key="Thickness/ListBoxItem.Margin">0,1,0,1</Thickness>
 	<Thickness x:Key="Thickness/ListBoxItem.Padding">6,5,15,5</Thickness>
@@ -172,8 +173,8 @@
 
 	<!-- MenuItem -->
 	<CornerRadius x:Key="CornerRadius/MenuItem">5</CornerRadius>
-	<sys:Double x:Key="Double/MenuItem.Icon.Size">16</sys:Double>
-	<Thickness x:Key="Thickness/MenuItem.Padding">12,5,12,5</Thickness>
+	<sys:Double x:Key="Double/MenuItem.Icon.Size">14</sys:Double>
+	<Thickness x:Key="Thickness/MenuItem.Padding">12,6,12,6</Thickness>
 
 	<!-- MessageDialog -->
 	<sys:Double x:Key="Double/MessageDialog.MinWidth">200</sys:Double>
@@ -233,7 +234,7 @@
 	<sys:Double x:Key="Double/TabItem.Header.Content.Height">20</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.FontSize">14</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.Height">40</sys:Double>
-	<sys:Double x:Key="Double/TabItem.Header.Icon.Size">16</sys:Double>
+	<sys:Double x:Key="Double/TabItem.Header.Icon.Size">14</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.InsertionIndicator.Width">20</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.MaxWidth">250</sys:Double>
 	<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">10,0,0,0</Thickness>
@@ -282,7 +283,7 @@
 	<!-- TreeViewItem -->
 	<CornerRadius x:Key="CornerRadius/TreeViewItem">4</CornerRadius>
 	<sys:Double x:Key="Double/TreeViewItem.Chevron.Width">10</sys:Double>
-	<sys:Double x:Key="Double/TreeViewItem.Icon.Size">16</sys:Double>
+	<sys:Double x:Key="Double/TreeViewItem.Icon.Size">14</sys:Double>
 	<Thickness x:Key="Thickness/TreeViewItem.Icon.Margin">0,0,9,0</Thickness>
 	<Thickness x:Key="Thickness/TreeViewItem.Margin">0,1,0,1</Thickness>
 	<Thickness x:Key="Thickness/TreeViewItem.Padding">0,5,15,5</Thickness>
