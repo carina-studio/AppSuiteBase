@@ -28,7 +28,7 @@ namespace CarinaStudio.AppSuite
 		/// <returns>True if two objects are equivlent.</returns>
 		public override bool Equals(object? obj)
 		{
-			if (!(obj is ApplicationUpdateInfo updateInfo))
+			if (obj is not ApplicationUpdateInfo updateInfo)
 				return false;
 			return this.Version == updateInfo.Version
 				&& this.ReleasePageUri == updateInfo.ReleasePageUri
@@ -46,13 +46,13 @@ namespace CarinaStudio.AppSuite
 		/// <summary>
 		/// Equality operator.
 		/// </summary>
-		public static bool operator ==(ApplicationUpdateInfo? x, ApplicationUpdateInfo? y) => x?.Equals(y) ?? object.ReferenceEquals(y, null);
+		public static bool operator ==(ApplicationUpdateInfo? x, ApplicationUpdateInfo? y) => x?.Equals(y) ?? y is null;
 
 
 		/// <summary>
 		/// Inequality operator.
 		/// </summary>
-		public static bool operator !=(ApplicationUpdateInfo? x, ApplicationUpdateInfo? y) => !(x?.Equals(y) ?? object.ReferenceEquals(y, null));
+		public static bool operator !=(ApplicationUpdateInfo? x, ApplicationUpdateInfo? y) => !(x?.Equals(y) ?? y is null);
 
 
 		/// <summary>

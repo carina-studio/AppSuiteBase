@@ -404,14 +404,14 @@ namespace CarinaStudio.AppSuite.Controls
         /// Called to create view-model for application change list dialog.
         /// </summary>
         /// <returns>View-model for application change list dialog.</returns>
-        protected virtual ApplicationChangeList OnCreateApplicationChangeList() => new ApplicationChangeList();
+        protected virtual ApplicationChangeList OnCreateApplicationChangeList() => new();
 
 
         /// <summary>
         /// Called to create view-model for application update dialog.
         /// </summary>
         /// <returns>View-model for application update dialog.</returns>
-        protected virtual ApplicationUpdater OnCreateApplicationUpdater() => new ApplicationUpdater();
+        protected virtual ApplicationUpdater OnCreateApplicationUpdater() => new();
 
 
         /// <summary>

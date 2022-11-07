@@ -38,8 +38,8 @@ namespace CarinaStudio.AppSuite
     {
 		// Statc fields.
 		static volatile CultureInfo? CachedMacOSSysCultureInfo;
-		static readonly Regex IetfLangTagRegex = new Regex("^(?<Language>[^\\-]+)\\-((?<Script>[^\\-]+)\\-)?(?<Region>[^\\-]+)$");
-		static readonly Regex MacOSSysLangRegex = new Regex("^[\\s]*\"(?<Language>[^\"]*)\"");
+		static readonly Regex IetfLangTagRegex = new("^(?<Language>[^\\-]+)\\-((?<Script>[^\\-]+)\\-)?(?<Region>[^\\-]+)$");
+		static readonly Regex MacOSSysLangRegex = new("^[\\s]*\"(?<Language>[^\"]*)\"");
 
 
 		/// <summary>

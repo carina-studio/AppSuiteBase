@@ -2,7 +2,6 @@
 using CarinaStudio.AutoUpdate;
 using CarinaStudio.AutoUpdate.Installers;
 using CarinaStudio.AutoUpdate.Resolvers;
-using CarinaStudio.Controls;
 using CarinaStudio.IO;
 using CarinaStudio.Net;
 using CarinaStudio.Threading;
@@ -32,8 +31,8 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
 		// Static fields.
-		static readonly Regex AutoUpdaterDirNameRegex = new Regex("^AutoUpdater\\-(?<Version>[\\d\\.]+)$", RegexOptions.IgnoreCase);
-		static readonly Uri AutoUpdaterPackageManifestUri = new Uri("https://raw.githubusercontent.com/carina-studio/AutoUpdater/master/PackageManifest-Avalonia.json");
+		static readonly Regex AutoUpdaterDirNameRegex = new("^AutoUpdater\\-(?<Version>[\\d\\.]+)$", RegexOptions.IgnoreCase);
+		static readonly Uri AutoUpdaterPackageManifestUri = new("https://raw.githubusercontent.com/carina-studio/AutoUpdater/master/PackageManifest-Avalonia.json");
 		static readonly Version AutoUpdaterVersionSupportsBaseVersion = new(1, 1, 0, 713);
 		static readonly ObservableProperty<bool> HasReleasePageUriProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(HasReleasePageUri));
 		static readonly ObservableProperty<bool> IsCheckingForUpdateProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsCheckingForUpdate));
@@ -51,8 +50,8 @@ namespace CarinaStudio.AppSuite.ViewModels
 		// Fields.
 		Updater? auUpdater;
 		Version? auVersion;
-		readonly MutableObservableBoolean canCheckForUpdate = new MutableObservableBoolean(true);
-		readonly MutableObservableBoolean canStartUpdating = new MutableObservableBoolean();
+		readonly MutableObservableBoolean canCheckForUpdate = new(true);
+		readonly MutableObservableBoolean canStartUpdating = new();
 		CancellationTokenSource? updatePreparationCancellationTokenSource;
 
 
@@ -218,7 +217,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 							Global.RunWithoutErrorAsync(() =>
 							{
 								var tempDirectory = Path.Combine(this.Application.RootPrivateDirectoryPath, TempAutoUpdaterDirName);
-								this.Logger.LogWarning($"Delete auto updater download directory '{tempDirectory}'");
+								this.Logger.LogWarning("Delete auto updater download directory '{tempDirectory}'", tempDirectory);
 								Directory.Delete(tempDirectory, true);
 							});
 							this.OnUpdatePreparationCompleted(updater.State, updater.ApplicationDirectoryPath.AsNonNull(), updater.PackageResolver?.PackageVersion);
@@ -234,7 +233,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 								{
 									try
 									{
-										this.Logger.LogDebug($"Rename auto updater directory from '{tempDirectory}' to '{finalDirectory}'");
+										this.Logger.LogDebug("Rename auto updater directory from '{tempDirectory}' to '{finalDirectory}'", tempDirectory, finalDirectory);
 										Directory.Move(tempDirectory, finalDirectory);
 										return true;
 									}
@@ -248,12 +247,12 @@ namespace CarinaStudio.AppSuite.ViewModels
 										if (retryCount > 0)
 										{
 											--retryCount;
-											this.Logger.LogError(ex, $"Unable to rename auto updater directory from '{tempDirectory}' to '{finalDirectory}', try again");
+											this.Logger.LogError(ex, "Unable to rename auto updater directory from '{tempDirectory}' to '{finalDirectory}', try again", tempDirectory, finalDirectory);
 											Thread.Sleep(500);
 										}
 										else
 										{
-											this.Logger.LogError(ex, $"Unable to rename auto updater directory from '{tempDirectory}' to '{finalDirectory}'");
+											this.Logger.LogError(ex, "Unable to rename auto updater directory from '{tempDirectory}' to '{finalDirectory}'", tempDirectory, finalDirectory);
 											Global.RunWithoutError(() => Directory.Delete(tempDirectory, true));
 											return false;
 										}
@@ -341,7 +340,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 				}
 				catch (Exception ex)
 				{
-					this.Logger.LogError(ex, $"Unable to mark '{autoUpdaterPath}' as executable");
+					this.Logger.LogError(ex, "Unable to mark '{autoUpdaterPath}' as executable", autoUpdaterPath);
 				}
 			}
 
@@ -377,7 +376,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 						var directory = Path.GetDirectoryName(mainModule.FileName);
 						if (!Platform.IsMacOS || directory?.EndsWith(".app/Contents/MacOS") != true)
 							return directory;
-						return directory.Substring(0, directory.Length - 15);
+						return directory[0..^15];
 					});
 
 					// prepare arguments
@@ -563,12 +562,12 @@ namespace CarinaStudio.AppSuite.ViewModels
 							}
 							try
 							{
-								this.Logger.LogDebug($"Delete auto updater '{path}'");
+								this.Logger.LogDebug("Delete auto updater '{path}'", path);
 								Directory.Delete(path, true);
 							}
 							catch (Exception ex)
 							{
-								this.Logger.LogError(ex, $"Failed to delete auto updater '{path}'");
+								this.Logger.LogError(ex, "Failed to delete auto updater '{path}'", path);
 							}
 						}
 					}
@@ -589,7 +588,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 			// continue updating if auto updater is already installed
 			if (isAutoUpdaterInstalled)
 			{
-				this.Logger.LogDebug($"Auto updater {auPackageResolver.PackageVersion} is already installed before");
+				this.Logger.LogDebug("Auto updater {packageVersion} is already installed before", auPackageResolver.PackageVersion);
 				this.OnUpdatePreparationCompleted(UpdaterState.Succeeded, Path.Combine(this.Application.RootPrivateDirectoryPath, $"AutoUpdater-{auPackageResolver.PackageVersion}"), auPackageResolver.PackageVersion);
 				return;
 			}
@@ -604,7 +603,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 				}
 				catch (Exception ex)
 				{
-					this.Logger.LogError(ex, $"Fail to create '{tempAutoUpdaterDirectory}'");
+					this.Logger.LogError(ex, "Fail to create '{tempAutoUpdaterDirectory}'", tempAutoUpdaterDirectory);
 				}
 			});
 			if (this.IsDisposed)
@@ -622,7 +621,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 				PackageInstaller = new ZipPackageInstaller(this.Application),
 				PackageResolver = new JsonPackageResolver(this.Application, localAuVersion) { Source = new WebRequestStreamProvider(AutoUpdaterPackageManifestUri) },
 			};
-			this.Logger.LogWarning($"Start downloading auto updater to '{tempAutoUpdaterDirectory}'");
+			this.Logger.LogWarning("Start downloading auto updater to '{tempAutoUpdaterDirectory}'", tempAutoUpdaterDirectory);
 			this.auUpdater.PropertyChanged += this.OnAuUpdaterPropertyChanged;
 			if (!this.auUpdater.Start())
 			{

@@ -30,7 +30,7 @@ namespace CarinaStudio.AppSuite
 
         // Static fields.
         static volatile MockAppSuiteApplication? current;
-        static readonly object initSyncLock = new object();
+        static readonly object initSyncLock = new();
         static volatile SingleThreadSynchronizationContext? synchronizationContext;
 
 
@@ -107,12 +107,12 @@ namespace CarinaStudio.AppSuite
 
         /// <inheritdoc/>
         public virtual ViewModels.ApplicationInfo CreateApplicationInfoViewModel() =>
-            new ViewModels.ApplicationInfo();
+            new();
         
 
         /// <inheritdoc/>
         public virtual ViewModels.ApplicationOptions CreateApplicationOptionsViewModel() =>
-            new ViewModels.ApplicationOptions();
+            new();
 
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public virtual IEnumerable<ExternalDependency> ExternalDependencies { get; } = new ExternalDependency[0];
+        public virtual IEnumerable<ExternalDependency> ExternalDependencies { get; } = Array.Empty<ExternalDependency>();
 
 
         /// <inheritdoc/>
@@ -278,7 +278,7 @@ namespace CarinaStudio.AppSuite
 
         /// <inheritdoc/>
 #pragma warning disable CS0067
-        public virtual event EventHandler<IAppSuiteApplication, CultureInfo>? LoadingStrings;
+        public event EventHandler<IAppSuiteApplication, CultureInfo>? LoadingStrings;
 #pragma warning restore CS0067
 
 
@@ -317,7 +317,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get list of main windows.
         /// </summary>
-        public IList<CarinaStudio.Controls.Window> MainWindows { get; } = new CarinaStudio.Controls.Window[0];
+        public IList<CarinaStudio.Controls.Window> MainWindows { get; } = Array.Empty<CarinaStudio.Controls.Window>();
 
 
         /// <summary>
@@ -476,7 +476,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public virtual IList<Avalonia.Controls.Window> Windows { get; } = new Avalonia.Controls.Window[0];
+        public virtual IList<Avalonia.Controls.Window> Windows { get; } = Array.Empty<Avalonia.Controls.Window>();
 
 
         // Interface implementations.

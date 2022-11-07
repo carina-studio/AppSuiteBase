@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,8 +17,8 @@ namespace CarinaStudio.AppSuite.ViewModels
     public class ApplicationChangeList : ViewModel
     {
         // Fields.
-        readonly ObservableList<ApplicationChange> changeList = new ObservableList<ApplicationChange>();
-        readonly CancellationTokenSource changeListLoadingCancellationTokenSource = new CancellationTokenSource();
+        readonly ObservableList<ApplicationChange> changeList = new();
+        readonly CancellationTokenSource changeListLoadingCancellationTokenSource = new();
 
 
         /// <summary>
@@ -60,7 +59,7 @@ namespace CarinaStudio.AppSuite.ViewModels
                 return;
 
             // load change list
-            var changeList = (IEnumerable<ApplicationChange>)new ApplicationChange[0];
+            var changeList = (IEnumerable<ApplicationChange>)Array.Empty<ApplicationChange>();
             try
             {
                 changeList = await this.LoadChangeListAsync(this.changeListLoadingCancellationTokenSource.Token);
@@ -128,7 +127,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 
             // resource not found
             this.Logger.LogWarning("No embedded resource for change list found");
-            return Task.FromResult((IEnumerable<ApplicationChange>)new ApplicationChange[0]);
+            return Task.FromResult((IEnumerable<ApplicationChange>)Array.Empty<ApplicationChange>());
         }
 
 
@@ -239,8 +238,12 @@ namespace CarinaStudio.AppSuite.ViewModels
                     var type = ApplicationChangeType.Unclassified;
                     if (jsonValue.TryGetProperty(nameof(DetailsPageUri), out var jsonProperty) && jsonProperty.ValueKind == JsonValueKind.String)
                         Uri.TryCreate(jsonProperty.GetString(), UriKind.Absolute, out detailsPageUri);
-                    if (jsonValue.TryGetProperty(nameof(Type), out jsonProperty) && jsonProperty.ValueKind == JsonValueKind.String)
-                        Enum.TryParse(jsonProperty.GetString(), out type);
+                    if (jsonValue.TryGetProperty(nameof(Type), out jsonProperty) 
+                        && jsonProperty.ValueKind == JsonValueKind.String
+                        && Enum.TryParse<ApplicationChangeType>(jsonProperty.GetString(), out var changeType))
+                    {
+                        type = changeType;
+                    }
                     changes.Add(new ApplicationChange(type, descriptionProperty.GetString().AsNonNull(), detailsPageUri));
                 }
             }

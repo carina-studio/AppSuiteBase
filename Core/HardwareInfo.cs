@@ -20,7 +20,7 @@ namespace CarinaStudio.AppSuite
         readonly ScheduledAction checkGraphicsCardAction;
         readonly ManagementEventWatcher? graphicsCardWatcher;
         readonly ILogger logger;
-        readonly SingleThreadSynchronizationContext hwCheckingSyncContext = new SingleThreadSynchronizationContext("Hardware info checker");
+        readonly SingleThreadSynchronizationContext hwCheckingSyncContext = new("Hardware info checker");
 
 
         // Constructor.
@@ -82,7 +82,7 @@ namespace CarinaStudio.AppSuite
             {
                 if (this.HasDedicatedGraphicsCard != hasDedicatedGraphicsCard)
                 {
-                    this.logger.LogTrace($"Dedicated graphics card: {hasDedicatedGraphicsCard}");
+                    this.logger.LogTrace("Dedicated graphics card: {hasDedicatedGraphicsCard}", hasDedicatedGraphicsCard);
                     this.HasDedicatedGraphicsCard = hasDedicatedGraphicsCard;
                     this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasDedicatedGraphicsCard)));
                 }

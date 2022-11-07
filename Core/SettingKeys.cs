@@ -11,13 +11,13 @@ public sealed class SettingKeys
     /// <summary>
     /// Accept application update with non-stable version.
     /// </summary>
-    public static readonly SettingKey<bool> AcceptNonStableApplicationUpdate = new SettingKey<bool>(nameof(AcceptNonStableApplicationUpdate), true);
+    public static readonly SettingKey<bool> AcceptNonStableApplicationUpdate = new(nameof(AcceptNonStableApplicationUpdate), true);
 
 
     /// <summary>
     /// Application culture.
     /// </summary>
-    public static readonly SettingKey<ApplicationCulture> Culture = new SettingKey<ApplicationCulture>(nameof(Culture), ApplicationCulture.System);
+    public static readonly SettingKey<ApplicationCulture> Culture = new(nameof(Culture), ApplicationCulture.System);
 
 
     /// <summary>
@@ -29,7 +29,7 @@ public sealed class SettingKeys
     /// <summary>
     /// Enable blurry window background if available.
     /// </summary>
-    public static readonly SettingKey<bool> EnableBlurryBackground = new SettingKey<bool>(nameof(EnableBlurryBackground), true);
+    public static readonly SettingKey<bool> EnableBlurryBackground = new(nameof(EnableBlurryBackground), true);
 
 
     /// <summary>
@@ -47,25 +47,25 @@ public sealed class SettingKeys
     /// <summary>
     /// Whether splash window should be shown when launching application or not.
     /// </summary>
-    public static readonly SettingKey<bool> LaunchWithSplashWindow = new SettingKey<bool>(nameof(LaunchWithSplashWindow), true);
+    public static readonly SettingKey<bool> LaunchWithSplashWindow = new(nameof(LaunchWithSplashWindow), true);
 
 
     /// <summary>
     /// Notify user when application update found.
     /// </summary>
-    public static readonly SettingKey<bool> NotifyApplicationUpdate = new SettingKey<bool>(nameof(NotifyApplicationUpdate), true);
+    public static readonly SettingKey<bool> NotifyApplicationUpdate = new(nameof(NotifyApplicationUpdate), true);
 
 
     /// <summary>
     /// Show process info on UI or not.
     /// </summary>
-    public static readonly SettingKey<bool> ShowProcessInfo = new SettingKey<bool>(nameof(ShowProcessInfo), false);
+    public static readonly SettingKey<bool> ShowProcessInfo = new(nameof(ShowProcessInfo), false);
 
 
     /// <summary>
     /// Theme mode.
     /// </summary>
-    public static readonly SettingKey<ThemeMode> ThemeMode = new SettingKey<ThemeMode>(nameof(ThemeMode), AppSuite.ThemeMode.System);
+    public static readonly SettingKey<ThemeMode> ThemeMode = new(nameof(ThemeMode), AppSuite.ThemeMode.System);
 
 
     /// <summary>

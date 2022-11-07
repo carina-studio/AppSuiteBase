@@ -47,7 +47,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         // Fields.
-        readonly ApplicationChangeList appChangeList = new ApplicationChangeList();
+        readonly ApplicationChangeList appChangeList = new();
         IBitmap? icon;
 
 
@@ -99,7 +99,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Get list of badge of application.
         /// </summary>
-        public virtual IList<IImage> Badges { get; } = new IImage[0];
+        public virtual IList<IImage> Badges { get; } = Array.Empty<IImage>();
 
 
         /// <inheritdoc/>
@@ -125,12 +125,12 @@ namespace CarinaStudio.AppSuite.ViewModels
             try
             {
                 if (this.Application.IsDebugMode)
-                    this.Logger.LogDebug($"Create directory '{exportLogDirectory}' for log files to export");
+                    this.Logger.LogDebug("Create directory '{exportLogDirectory}' for log files to export", exportLogDirectory);
                 Directory.CreateDirectory(exportLogDirectory);
             }
             catch (Exception ex)
             {
-                this.Logger.LogError(ex, $"Failed to create directory '{exportLogDirectory}' for log files to export");
+                this.Logger.LogError(ex, "Failed to create directory '{exportLogDirectory}' for log files to export", exportLogDirectory);
                 return false;
             }
 
@@ -141,13 +141,13 @@ namespace CarinaStudio.AppSuite.ViewModels
                 {
                     var fileName = Path.GetFileName(filePath);
                     if (this.Application.IsDebugMode)
-                        this.Logger.LogDebug($"Copy '{fileName}' to export directory");
+                        this.Logger.LogDebug("Copy '{fileName}' to export directory", fileName);
                     File.Copy(filePath, Path.Combine(exportLogDirectory, fileName));
                 }
             }
             catch (Exception ex)
             {
-                this.Logger.LogError(ex, $"Failed to copy log files to directory '{exportLogDirectory}'");
+                this.Logger.LogError(ex, "Failed to copy log files to directory '{exportLogDirectory}'", exportLogDirectory);
                 Global.RunWithoutError(() => Directory.Delete(exportLogDirectory, true));
                 return false;
             }
@@ -157,7 +157,7 @@ namespace CarinaStudio.AppSuite.ViewModels
             {
                 if (File.Exists(outputFileName))
                 {
-                    this.Logger.LogWarning($"Delete '{outputFileName}' before archiving log file");
+                    this.Logger.LogWarning("Delete '{outputFileName}' before archiving log file", outputFileName);
                     File.Delete(outputFileName);
                 }
                 ZipFile.CreateFromDirectory(exportLogDirectory, outputFileName, CompressionLevel.Optimal, false);
@@ -165,7 +165,7 @@ namespace CarinaStudio.AppSuite.ViewModels
             }
             catch (Exception ex)
             {
-                this.Logger.LogError(ex, $"Failed to export logs to '{outputFileName}'");
+                this.Logger.LogError(ex, "Failed to export logs to '{outputFileName}'", outputFileName);
                 return false;
             }
             finally 
@@ -300,7 +300,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Get all ID of products.
         /// </summary>
-        public virtual IList<string> Products { get; } = new string[0];
+        public virtual IList<string> Products { get; } = Array.Empty<string>();
 
 
         /// <summary>

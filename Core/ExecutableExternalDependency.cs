@@ -73,11 +73,11 @@ public class ExecutableExternalDependency : ExternalDependency
                             paths.Add(path);
                         path = reader.ReadLine();
                     }
-                    return paths.IsNotEmpty() ? paths.ToArray() : new string[0];
+                    return paths.IsNotEmpty() ? paths.ToArray() : Array.Empty<string>();
                 }
                 catch
                 {
-                    return new string[0];
+                    return Array.Empty<string>();
                 }
             }
             else if (Platform.IsWindows)
@@ -88,7 +88,7 @@ public class ExecutableExternalDependency : ExternalDependency
                     Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine)?.Split(Path.PathSeparator)?.Let(it => pathSet.AddAll(it));
                 }).ToArray();
             }
-            return Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator) ?? new string[0];
+            return Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator) ?? Array.Empty<string>();
         });
         foreach (var directoryPath in paths)
         {

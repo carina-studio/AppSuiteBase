@@ -33,12 +33,14 @@ namespace CarinaStudio.AppSuite
 
 
 		// Time-base information for macOS.
+#pragma warning disable IDE1006
 		[StructLayout(LayoutKind.Sequential)]
         struct mach_timebase_info_t
         {
             public uint numer;
             public uint denom;
         }
+#pragma warning restore IDE1006
 
 
         // Constants.
@@ -51,7 +53,7 @@ namespace CarinaStudio.AppSuite
 
         // Fields.
         readonly IAppSuiteApplication app;
-		readonly List<HighFrequencyUpdateToken> hfUpdateTokens = new List<HighFrequencyUpdateToken>();
+		readonly List<HighFrequencyUpdateToken> hfUpdateTokens = new();
 		bool isFirstUpdate = true;
 		long latestGCCount;
 		readonly ILogger logger;
@@ -59,7 +61,7 @@ namespace CarinaStudio.AppSuite
 		long previousProcessInfoUpdateTime;
 		TimeSpan previousTotalProcessorTime;
 		readonly Process process = Process.GetCurrentProcess();
-        readonly SingleThreadSynchronizationContext processInfoCheckingSyncContext = new SingleThreadSynchronizationContext("Process information updater");
+        readonly SingleThreadSynchronizationContext processInfoCheckingSyncContext = new("Process information updater");
 		readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
 		readonly int uiResponseCheckingInterval;
 		readonly Thread uiResponseCheckingThread;
@@ -240,7 +242,7 @@ namespace CarinaStudio.AppSuite
 				checkingCount = 0;
 				lastReportTime = stopWatch.ElapsedMilliseconds;
 				if (this.app.IsDebugMode)
-					this.logger.LogTrace($"UI response duration: {responseDuration} ms");
+					this.logger.LogTrace("UI response duration: {responseDuration} ms", responseDuration);
 				this.app.SynchronizationContext.Post(() =>
 				{
 					if (!this.UIResponseDuration.HasValue || Math.Abs(this.UIResponseDuration.Value.TotalMilliseconds - responseDuration) >= 0.5)
@@ -313,8 +315,10 @@ namespace CarinaStudio.AppSuite
 					if (Platform.IsMacOS)
 					{
 						ref var timebaseInfo = ref this.macOSTimebaseInfo;
+#pragma warning disable CA1806
 						if (timebaseInfo.denom == 0)
 							mach_timebase_info(out timebaseInfo);
+#pragma warning restore CA1806
 						if (timebaseInfo.denom > 0)
 							processorTime = processorTime * timebaseInfo.numer / timebaseInfo.denom;
 					}
@@ -378,7 +382,7 @@ namespace CarinaStudio.AppSuite
 				}
 			});
 			if (this.app.IsDebugMode)
-				this.logger.LogTrace($"CPU usage: {cpuUsagePercentage:0.0}%, memory usage: {privateMemoryUsage.ToFileSizeString()}");
+				this.logger.LogTrace("CPU usage: {cpuUsagePercentage}%, memory usage: {privateMemoryUsage}", string.Format("{0:0.0}", cpuUsagePercentage), privateMemoryUsage.ToFileSizeString());
 			this.updateProcessInfoAction?.Schedule(this.updateInterval);
 		}
 	}
