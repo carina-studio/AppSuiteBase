@@ -2820,7 +2820,7 @@ namespace CarinaStudio.AppSuite
         {
             if (this.LaunchOptions.TryGetValue(DebugModeRequestedKey, out var value) && value is bool boolValue)
                 return boolValue;
-            return false;
+            return this.ReleasingType == ApplicationReleasingType.Development;
         }
 
 
