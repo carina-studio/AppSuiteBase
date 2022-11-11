@@ -34,11 +34,11 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         static readonly AvaloniaProperty<int> Int32Property = AvaloniaProperty.Register<MainWindow, int>("Int32", 1);
-         static readonly AvaloniaProperty<IImage?> SelectedImageProperty = AvaloniaProperty.RegisterDirect<MainWindow, IImage?>(nameof(SelectedImage), window => window.selectedImage);
+        static readonly AvaloniaProperty<IImage?> SelectedImageProperty = AvaloniaProperty.RegisterDirect<MainWindow, IImage?>(nameof(SelectedImage), window => window.selectedImage);
         static readonly AvaloniaProperty<string?> SelectedImageIdProperty = AvaloniaProperty.RegisterDirect<MainWindow, string?>(nameof(SelectedImageId), window => window.selectedImageId);
 
 
-        readonly MutableObservableBoolean canShowAppInfo = new MutableObservableBoolean(true);
+        readonly MutableObservableBoolean canShowAppInfo = new(true);
         readonly IDisposable hfProcessInfoUpdateToken;
         readonly IntegerTextBox integerTextBox;
         readonly IntegerTextBox integerTextBox2;
@@ -66,7 +66,7 @@ namespace CarinaStudio.AppSuite.Tests
                 for (var i = it.Length - 1; i >= 0; --i)
                 {
                     if (it[i].StartsWith("Image/"))
-                        it[i] = it[i].Substring(6);
+                        it[i] = it[i][6..^0];
                 }
                 Array.Sort(it, string.Compare);
             });
@@ -78,7 +78,7 @@ namespace CarinaStudio.AppSuite.Tests
 
             this.logAction = new ScheduledAction(() =>
             {
-                this.Logger.LogDebug($"Time: {DateTime.Now}");
+                this.Logger.LogDebug("Time: {dateTime}", DateTime.Now);
                 this.logAction?.Schedule(500);
             });
 
@@ -93,7 +93,7 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        ViewModels.ApplicationOptions ApplicationOptions { get; } = new ViewModels.ApplicationOptions();
+        public ViewModels.ApplicationOptions ApplicationOptions { get; } = new ViewModels.ApplicationOptions();
 
 
         public void EditConfiguration()
@@ -224,6 +224,7 @@ namespace CarinaStudio.AppSuite.Tests
             var srcIndex = tabItems.IndexOf(item);
             if (srcIndex < 0)
                 return;
+            var srcTabItem = this.tabItems[srcIndex];
 
             var targetIndex = e.PointerPosition.X <= e.HeaderVisual.Bounds.Width / 2
                     ? e.ItemIndex
@@ -236,6 +237,16 @@ namespace CarinaStudio.AppSuite.Tests
                 else
                     this.tabItems.Move(srcIndex, targetIndex);
             }
+            
+            // [Workaround] Sometimes the content of tab item will gone after moving tab item
+            (this.Content as Control)?.Let(it =>
+            {
+                it.Margin = new(0, 0, 0, -1);
+                this.SynchronizationContext.PostDelayed(() =>
+                {
+                    it.Margin = new();
+                }, 0);
+            });
         }
 
 

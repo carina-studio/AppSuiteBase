@@ -97,6 +97,10 @@
 	
 	<!-- Expander -->
 	<SolidColorBrush x:Key="ExpanderBackgroundDisabled" Color="{DynamicResource SystemAltMediumHighColor}" Opacity="0.5"/>
+	<SolidColorBrush x:Key="ExpanderChevronBackground" Color="#00000000"/>
+	<SolidColorBrush x:Key="ExpanderChevronBackgroundPointerOver" Color="#00000000"/>
+	<SolidColorBrush x:Key="ExpanderChevronBackgroundPressed" Color="#00000000"/>
+	<SolidColorBrush x:Key="ExpanderChevronBackgroundDisabled" Color="#00000000"/>
 	<SolidColorBrush x:Key="ExpanderDropDownBackground" Color="{DynamicResource ExpanderDropDownBackground}" Opacity="0.5"/>
 	<StaticResourceExtension x:Key="ExpanderBorderBrush" ResourceKey="Brush/Control.Border"/>
 	

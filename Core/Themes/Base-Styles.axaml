@@ -509,43 +509,48 @@
 
 	<!-- Expander -->
 	<Style Selector="Expander">
-		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="MinHeight" Value="{DynamicResource ExpanderMinHeight}" />
+		<Setter Property="Padding" Value="{DynamicResource ExpanderContentPadding}" />
 	</Style>
 	<Style Selector="Expander /template/ ToggleButton#ExpanderHeader">
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+		<Setter Property="Padding" Value="{DynamicResource ExpanderHeaderPadding}" />
 		<Setter Property="Template">
 			<ControlTemplate>
-				<Border x:Name="ToggleButtonBackground">
-				<Grid ColumnDefinitions="*,Auto">
-					<ContentPresenter x:Name="PART_ContentPresenter"
-									Margin="{TemplateBinding Padding}"
-									HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-									VerticalContentAlignment="Center"
-									Background="Transparent"
-									BorderBrush="Transparent"
-									BorderThickness="0"
-									Content="{TemplateBinding Content}"
-									ContentTemplate="{TemplateBinding ContentTemplate}"
-									TextBlock.Foreground="{DynamicResource ExpanderForeground}" />
-					<Border x:Name="ExpandCollapseChevronBorder"
-							Grid.Column="1"
-							Width="{DynamicResource Double/Expander.Chevron.Size}"
-							Height="{DynamicResource Double/Expander.Chevron.Size}"
-							Margin="{DynamicResource Thickness/Expander.Chevron.Margin}"
-							RenderTransformOrigin="50%,50%">
-						<Viewbox StretchDirection="DownOnly">
-							<Path x:Name="ExpandCollapseChevron"
-								HorizontalAlignment="Center"
-								VerticalAlignment="Center"
-								RenderTransformOrigin="50%,50%"
-								Stretch="None"
-								Stroke="{DynamicResource ExpanderChevronForeground}"
-								StrokeThickness="1" />
-						</Viewbox>
-						<Border.RenderTransform>
-							<RotateTransform />
-						</Border.RenderTransform>
-					</Border>
-				</Grid>
+				<Border x:Name="ToggleButtonBackground" 
+						Background="{DynamicResource ButtonBackground}"
+						CornerRadius="{TemplateBinding CornerRadius}">
+					<Grid ColumnDefinitions="*,Auto">
+						<ContentPresenter x:Name="PART_ContentPresenter"
+										Margin="{TemplateBinding Padding}"
+										HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+										VerticalContentAlignment="Center"
+										Background="Transparent"
+										BorderBrush="Transparent"
+										BorderThickness="0"
+										Content="{TemplateBinding Content}"
+										ContentTemplate="{TemplateBinding ContentTemplate}"
+										Foreground="{DynamicResource ExpanderForeground}" />
+						<Border x:Name="ExpandCollapseChevronBorder"
+								Grid.Column="1"
+								Width="{DynamicResource Double/Expander.Chevron.Size}"
+								Height="{DynamicResource Double/Expander.Chevron.Size}"
+								Margin="{DynamicResource Thickness/Expander.Chevron.Margin}"
+								RenderTransformOrigin="50%,50%">
+							<Viewbox StretchDirection="DownOnly">
+								<Path x:Name="ExpandCollapseChevron"
+									HorizontalAlignment="Center"
+									VerticalAlignment="Center"
+									RenderTransformOrigin="50%,50%"
+									Stretch="None"
+									Stroke="{DynamicResource ExpanderChevronForeground}"
+									StrokeThickness="1" />
+							</Viewbox>
+							<Border.RenderTransform>
+								<RotateTransform />
+							</Border.RenderTransform>
+						</Border>
+					</Grid>
 				</Border>
 			</ControlTemplate>
 		</Setter>
@@ -555,6 +560,7 @@
 		<Setter Property="VerticalAlignment" Value="Stretch" />
 	</Style>
 	<Style Selector="Expander:expanded:left /template/ ToggleButton#ExpanderHeader">
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadiusRight}" />
 		<Setter Property="Margin" Value="0,0,1,0" />
 	</Style>
 	<Style Selector="Expander:up /template/ ToggleButton#ExpanderHeader">
@@ -562,6 +568,7 @@
 		<Setter Property="VerticalAlignment" Value="Bottom" />
 	</Style>
 	<Style Selector="Expander:expanded:up /template/ ToggleButton#ExpanderHeader">
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadiusBottom}" />
 		<Setter Property="Margin" Value="0,1,0,0" />
 	</Style>
 	<Style Selector="Expander:right /template/ ToggleButton#ExpanderHeader">
@@ -569,6 +576,7 @@
 		<Setter Property="VerticalAlignment" Value="Stretch" />
 	</Style>
 	<Style Selector="Expander:expanded:right /template/ ToggleButton#ExpanderHeader">
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadiusLeft}" />
 		<Setter Property="Margin" Value="1,0,0,0" />
 	</Style>
 	<Style Selector="Expander:down /template/ ToggleButton#ExpanderHeader">
@@ -576,6 +584,7 @@
 		<Setter Property="VerticalAlignment" Value="Top" />
 	</Style>
 	<Style Selector="Expander:expanded:down /template/ ToggleButton#ExpanderHeader">
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadiusTop}" />
 		<Setter Property="Margin" Value="0,0,0,1" />
 	</Style>
 	<Style Selector="Expander /template/ ToggleButton#ExpanderHeader:disabled /template/ Border#ToggleButtonBackground">

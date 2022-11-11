@@ -43,8 +43,7 @@ namespace CarinaStudio.AppSuite.Controls
             var currentOffset = this.offsetAnimator?.EndValue ?? this.Offset;
 
             // cancel current animation
-            if (this.offsetAnimator != null)
-                this.offsetAnimator.Cancel();
+            this.offsetAnimator?.Cancel();
 
             // calculate target offset
             var targetOffsetX = currentOffset.X + offset;
@@ -73,11 +72,15 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
-        // Scroll left.
-        void ScrollLeft() => ScrollBy(-100);
+        /// <summary>
+        /// Scroll left.
+        /// </summary>
+        public void ScrollLeft() => ScrollBy(-100);
 
 
-        // Scroll right.
-        void ScrollRight() => ScrollBy(100);
+        /// <summary>
+        /// Scroll right.
+        /// </summary>
+        public void ScrollRight() => ScrollBy(100);
     }
 }

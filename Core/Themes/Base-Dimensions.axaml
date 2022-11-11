@@ -108,11 +108,16 @@
 
 	<!-- Expander -->
 	<sys:Double x:Key="Double/Expander.Chevron.Size">10</sys:Double>
+	<Thickness x:Key="ExpanderContentDownBorderThickness">0</Thickness>
+	<Thickness x:Key="ExpanderContentLeftBorderThickness">0</Thickness>
+	<Thickness x:Key="ExpanderContentRightBorderThickness">0</Thickness>
+	<Thickness x:Key="ExpanderContentUpBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderDropdownDownBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderDropdownLeftBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderDropdownRightBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderDropdownUpBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderHeaderPadding">8</Thickness>
+	<sys:Double x:Key="ExpanderMinHeight">0</sys:Double>
 	<Thickness x:Key="Thickness/Expander.Chevron.Margin">10</Thickness>
 
 	<!-- ExternalDependenciesDialog -->
@@ -224,7 +229,7 @@
 	<!-- TabControl -->
 	<sys:Double x:Key="Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace">40</sys:Double>
 	<sys:Double x:Key="Double/TabControl.TabStrip.ScrollingButton.Icon.Size">10</sys:Double>
-	<Thickness x:Key="Thickness/TabControl.TabStrip.Padding">6,0,6,0</Thickness>
+	<Thickness x:Key="Thickness/TabControl.TabStrip.Padding">6,0,6,-2</Thickness>
 	<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Margin">2,4,2,4</Thickness>
 	<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Padding">5</Thickness>
 
