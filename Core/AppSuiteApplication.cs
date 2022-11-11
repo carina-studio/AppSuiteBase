@@ -3818,13 +3818,7 @@ namespace CarinaStudio.AppSuite
 
             // update fall-back font families
             if (resourceUpdated)
-            {
                 this.LoadingStrings?.Invoke(this, cultureInfo);
-                if (this.Resources.TryGetResource("String/TextBox.FallbackFontFamilies", out var res) && res is string fontFamilies)
-                    this.Resources["FontFamily/TextBox.FallbackFontFamilies"] = new FontFamily(fontFamilies);
-                else
-                    this.Resources.Remove("FontFamily/TextBox.FallbackFontFamilies");
-            }
 
             // raise event
             if (resourceUpdated)

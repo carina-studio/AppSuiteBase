@@ -215,9 +215,6 @@
 	<sys:String x:Key="String/ExternalDependencyState.Unavailable">尚未安裝</sys:String>
 	<sys:String x:Key="String/ExternalDependencyState.Unknown">未知</sys:String>
 
-	<!-- FallbackFontFamilies -->
-	<sys:String x:Key="String/TextBox.FallbackFontFamilies">Microsoft JhengHei,Noto Sans CJK TC,Noto Sans CJK TS,蘋方-繁</sys:String>
-
 	<!-- FileFormat -->
 	<sys:String x:Key="String/FileFormat.All">所有檔案</sys:String>
 	<sys:String x:Key="String/FileFormat.Text">文字文件</sys:String>

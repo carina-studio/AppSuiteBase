@@ -164,6 +164,10 @@
 	<StaticResourceExtension x:Key="RepeatButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
 	<StaticResourceExtension x:Key="RepeatButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
 
+	<!-- ScrollBar-->
+	<StaticResource x:Key="ScrollBarButtonArrowForegroundPressed" ResourceKey="SystemControlBackgroundBaseMediumBrush" />
+    <StaticResource x:Key="ScrollBarButtonArrowForegroundDisabled" ResourceKey="SystemControlDisabledTransparentBrush" />
+
 	<!-- ScrollViewer -->
 	<SolidColorBrush x:Key="ScrollViewerScrollBarsSeparatorBackground" Color="Transparent"/>
 

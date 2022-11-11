@@ -25,7 +25,7 @@
 	<!-- ComboBox -->
 	<Thickness x:Key="ComboBoxDropdownBorderPadding">0</Thickness>
 	<Thickness x:Key="ComboBoxPadding">4,2,4,2</Thickness>
-	<sys:Double x:Key="Double/ComboBox.MinHeight">26</sys:Double>
+	<sys:Double x:Key="ComboBoxMinHeight">26</sys:Double>
 
 	<!-- ComboBoxItem -->
 	<CornerRadius x:Key="CornerRadius/ComboBoxItem">0</CornerRadius>

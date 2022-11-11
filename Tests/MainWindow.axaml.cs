@@ -96,7 +96,7 @@ namespace CarinaStudio.AppSuite.Tests
         ViewModels.ApplicationOptions ApplicationOptions { get; } = new ViewModels.ApplicationOptions();
 
 
-        void EditConfiguration()
+        public void EditConfiguration()
         {
             _ = new SettingsEditorDialog()
             {
@@ -275,7 +275,7 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        void RestartApp()
+        public void RestartApp()
         {
             this.Application.Restart(AppSuiteApplication.RestoreMainWindowsArgument);
         }
@@ -303,13 +303,13 @@ namespace CarinaStudio.AppSuite.Tests
             this.canShowAppInfo.Update(true);
         }
 
-        void ShowAppUpdateDialog() =>
+        public void ShowAppUpdateDialog() =>
             this.Application.CheckForApplicationUpdateAsync(this, true);
         
-        void ShowExternalDependenciesDialog() =>
+        public void ShowExternalDependenciesDialog() =>
             _ = new ExternalDependenciesDialog().ShowDialog(this);
 
-        async void ShowMessageDialog()
+        public async void ShowMessageDialog()
         {
             var result = await new MessageDialog()
             {
@@ -327,9 +327,9 @@ namespace CarinaStudio.AppSuite.Tests
             }.ShowDialog(this);
         }
 
-        ICommand ShowAppInfoDialogCommand { get; }
+        public ICommand ShowAppInfoDialogCommand { get; }
 
-        void ShowTestDialog()
+        public void ShowTestDialog()
         {
             new Dialog().Show();
             //var result = await new Dialog().ShowDialog<ApplicationOptionsDialogResult>(this);
@@ -338,7 +338,7 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        void ShowTutorial(IVisual anchor)
+        public void ShowTutorial(IVisual anchor)
         {
             var tutorial = new Tutorial().Also(it =>
             {
@@ -363,7 +363,7 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        void SwitchAppCulture()
+        public void SwitchAppCulture()
         {
             this.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, this.Settings.GetValueOrDefault(SettingKeys.Culture) switch
             {
@@ -375,7 +375,7 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        void SwitchTheme()
+        public void SwitchTheme()
         {
             this.Settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, this.Settings.GetValueOrDefault(SettingKeys.ThemeMode) switch
             {
@@ -395,7 +395,7 @@ namespace CarinaStudio.AppSuite.Tests
 #endif
 
 
-        void Test()
+        public void Test()
         {
             _ = new TextInputDialog()
             {
@@ -420,7 +420,7 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        void Test2()
+        public void Test2()
         {
             this.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, this.Settings.GetValueOrDefault(SettingKeys.Culture) switch
             {

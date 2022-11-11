@@ -47,7 +47,7 @@
 	<Thickness x:Key="ComboBoxDropdownBorderPadding">4,3,4,3</Thickness>
 	<Thickness x:Key="ComboBoxDropdownBorderThickness">1,2,1,2</Thickness>
 	<Thickness x:Key="ComboBoxDropdownContentMargin">0</Thickness>
-	<sys:Double x:Key="Double/ComboBox.MinHeight">32</sys:Double>
+	<sys:Double x:Key="ComboBoxMinHeight">32</sys:Double>
 
 	<!-- ComboBoxItem -->
 	<CornerRadius x:Key="CornerRadius/ComboBoxItem">5</CornerRadius>
@@ -246,10 +246,12 @@
 
 	<!-- TextBox -->
 	<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>
+	<sys:Double x:Key="TextControlThemeMinHeight">0</sys:Double>
+	<Thickness x:Key="TextControlThemePadding">6</Thickness>
 	<sys:Double x:Key="Double/TextBox.InPlaceAction.Size">18</sys:Double>
-	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction">10,6,27,5</Thickness>
+	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction">6,6,27,6</Thickness>
 	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Padding">3</Thickness>
-	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Margin">0,0,5,0</Thickness>
+	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Margin">0,0,6,0</Thickness>
 
 	<!-- TextInputDialog -->
 	<sys:Double x:Key="Double/TextInputDialog.Width">450</sys:Double>
