@@ -18,7 +18,7 @@ namespace CarinaStudio.AppSuite.Controls
 			window.VerifyAccess();
 			window.Activate();
 			if (Platform.IsWindows)
-				Win32.SetForegroundWindow(window.PlatformImpl.Handle.Handle);
+				Win32.SetForegroundWindow(window.PlatformImpl!.Handle.Handle);
 		}
 
 
@@ -29,19 +29,19 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <returns>Size of system decorations.</returns>
 		public static Thickness GetSystemDecorationSizes(this Avalonia.Controls.Window window)
         {
-			var screen = window.Screens.ScreenFromWindow(window.PlatformImpl) ?? window.Screens.Primary;
+			var screen = window.Screens.ScreenFromWindow(window.PlatformImpl.AsNonNull()) ?? window.Screens.Primary;
 			if (screen == null)
 				return default;
-			var pixelDensity = screen.PixelDensity;
+			var scaling = screen.Scaling;
 			if (Platform.IsGnome)
-				return new Thickness(0, 75 / pixelDensity, 0, 0); // Ubuntu
+				return new Thickness(0, 75 / scaling, 0, 0); // Ubuntu
 			if (Platform.IsWindows)
             {
 				if (Win32.GetWindowRect(window.PlatformImpl.Handle.Handle, out var rect))
 				{
 					var clientSize = window.ClientSize;
-					var windowWidth = (rect.right - rect.left) / pixelDensity;
-					var windowHeight = (rect.bottom - rect.top) / pixelDensity;
+					var windowWidth = (rect.right - rect.left) / scaling;
+					var windowHeight = (rect.bottom - rect.top) / scaling;
 					var borderWidth = Math.Max(0, (windowWidth - clientSize.Width) / 2);
 					return new Thickness(borderWidth, Math.Max(0, windowHeight - clientSize.Height - borderWidth), borderWidth, borderWidth);
 				}

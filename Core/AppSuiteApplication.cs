@@ -389,17 +389,6 @@ namespace CarinaStudio.AppSuite
             // get time for performance check
             this.creationTime = this.stopWatch.ElapsedMilliseconds;
 
-            /* 
-             * Prevent using Avalonia with version >= 0.11.0 because some control styles are not compatible.
-             * Need to update control styles if upgrading to Avalonia with version >= 0.11.0:
-             * - Use Foreground property for ContentPresenter instead of TextBlock.Foreground.
-             */
-            typeof(AvaloniaObject).Assembly.GetName().Version?.Let(version =>
-            {
-                if (version.Major > 0 || version.Minor > 10)
-                    throw new NotSupportedException($"Incompatible Avalonia version: {version}");
-            });
-
             // create logger
             LogManager.Configuration = new NLog.Config.LoggingConfiguration().Also(it =>
             {
@@ -754,7 +743,7 @@ namespace CarinaStudio.AppSuite
                         var initWindowingSubSystem = it.WindowingSubsystemInitializer;
                         it.UseWindowingSubsystem(() =>
                         {
-                            initWindowingSubSystem();
+                            initWindowingSubSystem?.Invoke();
                             AvaloniaLocator.CurrentMutable.Bind<IRenderTimer>().ToConstant(new DefaultRenderTimer(30));
                         });
                     }
@@ -1057,7 +1046,7 @@ namespace CarinaStudio.AppSuite
                     transitions.Add(new Animation.BrushTransition()
                     {
                         Duration = duration,
-                        Easing = easing,
+                        Easing = easing!,
                         Property = Avalonia.Controls.Primitives.TemplatedControl.BackgroundProperty,
                     });
                 })));
@@ -1420,8 +1409,7 @@ namespace CarinaStudio.AppSuite
             }
 
             // confirm layouting lots of main windows
-            if (activeMainWindow == null)
-                activeMainWindow = this.LatestActiveMainWindow ?? this.mainWindows[0];
+            activeMainWindow ??= this.LatestActiveMainWindow ?? this.mainWindows[0];
             if (mainWindowCount > 4)
             {
                 Controls.WindowExtensions.ActivateAndBringToFront(activeMainWindow);
@@ -1437,7 +1425,7 @@ namespace CarinaStudio.AppSuite
 
             // layout main windows
             var workingArea = screen.WorkingArea;
-            var pixelDensity = screen.PixelDensity;
+            var scaling = screen.Scaling;
             var windowBounds = new PixelRect[mainWindowCount];
             switch (layout)
             {
@@ -1529,8 +1517,8 @@ namespace CarinaStudio.AppSuite
                     }
                     else
                     {
-                        it.Width = (bounds.Width / pixelDensity) - sysDecorSizes.Left - sysDecorSizes.Right;
-                        it.Height = (bounds.Height / pixelDensity) - sysDecorSizes.Top - sysDecorSizes.Bottom;
+                        it.Width = (bounds.Width / scaling) - sysDecorSizes.Left - sysDecorSizes.Right;
+                        it.Height = (bounds.Height / scaling) - sysDecorSizes.Top - sysDecorSizes.Bottom;
                     }
                     (it as Controls.IMainWindow)?.CancelSavingSize();
                     Controls.WindowExtensions.ActivateAndBringToFront(it);
@@ -1587,8 +1575,7 @@ namespace CarinaStudio.AppSuite
             this.VerifyAccess();
 
             // create persistent state
-            if (this.persistentState == null)
-                this.persistentState = new PersistentStateImpl(this);
+            this.persistentState ??= new PersistentStateImpl(this);
 
             // load from file
             this.Logger.LogDebug("Start loading persistent state");
@@ -1710,8 +1697,7 @@ namespace CarinaStudio.AppSuite
             this.VerifyAccess();
 
             // create settings
-            if (this.settings == null)
-                this.settings = new SettingsImpl(this);
+            this.settings ??= new SettingsImpl(this);
 
             // load from file
             this.Logger.LogDebug("Start loading settings");
@@ -1742,8 +1728,8 @@ namespace CarinaStudio.AppSuite
             // check settings
             if (!this.settings.GetValueOrDefault(SettingKeys.ShowProcessInfo))
                 this.processInfoHfUpdateToken = this.processInfoHfUpdateToken.DisposeAndReturnNull();
-            else if (this.processInfoHfUpdateToken == null)
-                this.processInfoHfUpdateToken = this.processInfo?.RequestHighFrequencyUpdate();
+            else
+                this.processInfoHfUpdateToken ??= this.processInfo?.RequestHighFrequencyUpdate();
             
             // check performance
             if (time > 0)
@@ -1923,7 +1909,7 @@ namespace CarinaStudio.AppSuite
                 if (Platform.IsNotWindows)
                 {
                     // [workaround] treat process as client first becase limitation of max server instance seems not working on Linux
-                    if (this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args))
+                    if (this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args ?? Array.Empty<string>()))
                     {
                         this.SynchronizationContext.Post(() => desktopLifetime.Shutdown());
                         return;
@@ -1933,7 +1919,7 @@ namespace CarinaStudio.AppSuite
                     this.WaitForMultiInstancesClient();
                 else
                 {
-                    this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args);
+                    this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args ?? Array.Empty<string>());
                     this.SynchronizationContext.Post(() => desktopLifetime.Shutdown());
                     return;
                 }
@@ -1942,7 +1928,7 @@ namespace CarinaStudio.AppSuite
             // parse arguments
             if (desktopLifetime != null)
             {
-                this.LaunchOptions = this.ParseArguments(desktopLifetime.Args);
+                this.LaunchOptions = this.ParseArguments(desktopLifetime.Args ?? Array.Empty<string>());
                 if (this.LaunchOptions.TryGetValue(RestoreMainWindowsRequestedKey, out var value)
                     && value is bool boolValue
                     && boolValue)
@@ -2842,8 +2828,8 @@ namespace CarinaStudio.AppSuite
             {
                 if (!(bool)e.Value)
                     this.processInfoHfUpdateToken = this.processInfoHfUpdateToken.DisposeAndReturnNull();
-                else if (this.processInfoHfUpdateToken == null)
-                    this.processInfoHfUpdateToken = this.processInfo?.RequestHighFrequencyUpdate();
+                else
+                    this.processInfoHfUpdateToken ??= this.processInfo?.RequestHighFrequencyUpdate();
             }
             else if (e.Key == SettingKeys.ThemeMode)
             {

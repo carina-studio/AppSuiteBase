@@ -23,9 +23,9 @@ namespace CarinaStudio.AppSuite.Controls
 	{
 		// Static fields.
 		static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
-		static readonly AvaloniaProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
-		static readonly AvaloniaProperty<bool> HasExternalDependenciesProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasExternalDependencies");
-		static readonly AvaloniaProperty<bool> HasTotalPhysicalMemoryProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasTotalPhysicalMemory));
+		static readonly StyledProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
+		static readonly StyledProperty<bool> HasExternalDependenciesProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasExternalDependencies");
+		static readonly StyledProperty<bool> HasTotalPhysicalMemoryProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasTotalPhysicalMemory));
 		static readonly SettingKey<bool> IsRestartingInDebugModeConfirmationShownKey = new("ApplicationInfoDialog.IsRestartingInDebugModeConfirmationShown");
 		static readonly DirectProperty<ApplicationInfoDialogImpl, PixelSize> PhysicalScreenSizeProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelSize>("PhysicalScreenSize", w => w.physicalScreenSize);
 		static readonly DirectProperty<ApplicationInfoDialogImpl, PixelRect> PhysicalScreenWorkingAreaProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelRect>("PhysicalScreenWorkingArea", w => w.physicalScreenWorkingArea);
@@ -48,7 +48,7 @@ namespace CarinaStudio.AppSuite.Controls
 				return $"{size.Width:F0}x{size.Height:F0}";
 			return null;
 		});
-		static readonly AvaloniaProperty<string?> VersionStringProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, string?>(nameof(VersionString));
+		static readonly StyledProperty<string?> VersionStringProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, string?>(nameof(VersionString));
 
 
 		// Fields.
@@ -90,37 +90,37 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				if (!this.IsOpened)
 					return;
-				var screen = this.Screens.ScreenFromWindow(this.PlatformImpl) ?? this.Screens.ScreenFromVisual(this) ?? this.Screens.Primary;
+				var screen = this.Screens.ScreenFromWindow(this.PlatformImpl!) ?? this.Screens.ScreenFromVisual(this) ?? this.Screens.Primary;
 				if (screen == null)
 					return;
-				var pixelDensity = screen.PixelDensity;
+				var scaling = screen.Scaling;
 				var screenSizePx = screen.Bounds.Size.Let(it =>
 				{
 					return Platform.IsMacOS
-						? new PixelSize((int)(it.Width * pixelDensity + 0.5), (int)(it.Height * pixelDensity + 0.5))
+						? new PixelSize((int)(it.Width * scaling + 0.5), (int)(it.Height * scaling + 0.5))
 						: it;
 				});
 				var screenSizeDip = screen.Bounds.Size.Let(it =>
 				{
 					return Platform.IsMacOS
 						? new Size(it.Width, it.Height)
-						: new Size(it.Width / pixelDensity, it.Height / pixelDensity);
+						: new Size(it.Width / scaling, it.Height / scaling);
 				});
 				var workingAreaPx = screen.WorkingArea.Let(it =>
 				{
 					return Platform.IsMacOS
-						? new PixelRect((int)(it.X * pixelDensity + 0.5), (int)(it.Y * pixelDensity + 0.5), (int)(it.Width * pixelDensity + 0.5), (int)(it.Height * pixelDensity + 0.5))
+						? new PixelRect((int)(it.X * scaling + 0.5), (int)(it.Y * scaling + 0.5), (int)(it.Width * scaling + 0.5), (int)(it.Height * scaling + 0.5))
 						: it;
 				});
 				var workingAreaDip = screen.WorkingArea.Let(it =>
 				{
 					return Platform.IsMacOS
 						? new Rect(it.X, it.Y, it.Width, it.Height)
-						: new Rect(it.X / pixelDensity, it.Y / pixelDensity, it.Width / pixelDensity, it.Height / pixelDensity);
+						: new Rect(it.X / scaling, it.Y / scaling, it.Width / scaling, it.Height / scaling);
 				});
 				this.SetAndRaise<PixelSize>(PhysicalScreenSizeProperty, ref this.physicalScreenSize, screenSizePx);
 				this.SetAndRaise<PixelRect>(PhysicalScreenWorkingAreaProperty, ref this.physicalScreenWorkingArea, workingAreaPx);
-				this.SetAndRaise<double>(ScreenPixelDensityProperty, ref this.screenPixelDensity, pixelDensity);
+				this.SetAndRaise<double>(ScreenPixelDensityProperty, ref this.screenPixelDensity, scaling);
 				this.SetAndRaise<Size>(ScreenSizeProperty, ref this.screenSize, screenSizeDip);
 				this.SetAndRaise<Rect>(ScreenWorkingAreaProperty, ref this.screenWorkingArea, workingAreaDip);
 			});
@@ -134,8 +134,10 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		// Export application logs to file.
-		async void ExportLogs()
+		/// <summary>
+		/// Export application logs to file.
+		/// </summary>
+		public async void ExportLogs()
 		{
 			// check state
 			if (this.DataContext is not ApplicationInfo appInfo)
@@ -150,7 +152,7 @@ namespace CarinaStudio.AppSuite.Controls
 					filter.Extensions.Add("zip");
 					filter.Name = this.Application.GetString("FileFormat.Zip");
 				}));
-				it.InitialFileName = $"Logs-{dateTime.ToString("yyyyMMdd-HHmmss")}.zip";
+				it.InitialFileName = $"Logs-{dateTime:yyyyMMdd-HHmmss}.zip";
 			}).ShowAsync(this);
 			if (fileName == null)
 				return;
@@ -322,8 +324,10 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		// Restart in debug mode.
-		async void RestartInDebugMode()
+		/// <summary>
+		/// Restart in debug mode.
+		/// </summary>
+		public async void RestartInDebugMode()
 		{
 			// check state
 			if (this.Application.IsDebugMode)
@@ -348,8 +352,10 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		// Show change list of application.
-		void ShowApplicationChangeList()
+		/// <summary>
+		/// Show change list of application.
+		/// </summary>
+		public void ShowApplicationChangeList()
         {
 			// check state
 			if (this.DataContext is not ApplicationInfo appInfo)
@@ -362,8 +368,10 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		// Show external dependencies.
-		void ShowExternalDependencies() =>
+		/// <summary>
+		/// Show external dependencies.
+		/// </summary>
+		public void ShowExternalDependencies() =>
 			new ExternalDependenciesDialog().ShowDialog(this);
 
 

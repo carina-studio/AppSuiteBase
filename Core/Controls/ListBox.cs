@@ -17,7 +17,7 @@ namespace CarinaStudio.AppSuite.Controls
         // Fields.
         long doubleTappedTime;
         object? pointerDownItem;
-        readonly Stopwatch stopwatch = new Stopwatch();
+        readonly Stopwatch stopwatch = new();
 
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace CarinaStudio.AppSuite.Controls
                 ? this.InputHitTest(pointerPoint.Position)
                 : null;
             base.OnPointerPressed(e);
-            if (hitElement != null && this.SelectedItems.Count == 1)
+            if (hitElement != null && this.SelectedItems?.Count == 1)
             {
                 var listBoxItem = hitElement.FindAncestorOfType<ListBoxItem>(true);
                 if (listBoxItem != null && listBoxItem.FindAncestorOfType<ListBox>() == this)
@@ -80,7 +80,7 @@ namespace CarinaStudio.AppSuite.Controls
             if (e.InitialPressMouseButton == MouseButton.Left 
                 && (this.stopwatch.ElapsedMilliseconds - this.doubleTappedTime) <= 500
                 && this.pointerDownItem != null
-                && this.SelectedItems.Count == 1
+                && this.SelectedItems?.Count == 1
                 && this.SelectedItem == this.pointerDownItem)
             {
                 this.DoubleClickOnItem?.Invoke(this, new ListBoxItemEventArgs(this.SelectedIndex, this.pointerDownItem));

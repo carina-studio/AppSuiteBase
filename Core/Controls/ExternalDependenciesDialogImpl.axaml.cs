@@ -82,7 +82,7 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 
 
 	// Static fields.
-	static readonly AvaloniaProperty<bool> CanCloseProperty = AvaloniaProperty.Register<ExternalDependenciesDialogImpl, bool>("CanClose");
+	static readonly StyledProperty<bool> CanCloseProperty = AvaloniaProperty.Register<ExternalDependenciesDialogImpl, bool>("CanClose");
 
 
 	// Fields.
@@ -117,11 +117,11 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 		});
 		this.externalDependenciesPanel = this.Get<Panel>(nameof(externalDependenciesPanel)).Also(panel =>
 		{
-			var template = this.DataTemplates[0];
+			var template = this.DataTemplates[0].AsNonNull();
 			var count = this.externalDependencies.Length;
 			for (var i = 0; i < count; ++i)
 			{
-				panel.Children.Add(template.Build(this.externalDependencies[i]).Also(it =>
+				panel.Children.Add(template.Build(this.externalDependencies[i])!.Also(it =>
 				{
 					it.DataContext = this.externalDependencies[i];
 				}));
@@ -189,9 +189,14 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	}
 
 
-	// Refresh.
-	void Refresh() =>
+	/// <summary>
+	/// Refresh.
+	/// </summary>
+	public void Refresh() =>
 		this.Refresh(true);
+	
+
+	// Refresh.
 	void Refresh(bool refreshAll)
 	{
 		foreach (var externalDependency in this.externalDependencies)

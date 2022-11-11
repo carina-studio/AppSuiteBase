@@ -293,7 +293,7 @@ namespace CarinaStudio.AppSuite.Controls
             }
             
             // create taskbar manager
-            var taskbarManager = (object?)null;
+            object? taskbarManager;
             try
             {
                 taskbarManager = tbmType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static).AsNonNull().GetValue(null).AsNonNull();
@@ -339,7 +339,7 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 this.VerifyAccess();
                 if (!double.IsFinite(value))
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException(nameof(value));
                 if (value < 0)
                     value = 0;
                 else if (value > 1)
@@ -348,7 +348,7 @@ namespace CarinaStudio.AppSuite.Controls
                 if (Platform.IsWindows)
                 {
                     if (this.SetupWindowsTaskbarManager())
-                        SetWindowsTaskbarProgressValueMethod!.Invoke(WindowsTaskbarManager, new object?[]{ (int)(value * 100 + 0.5), 100, this.PlatformImpl.Handle.Handle });
+                        SetWindowsTaskbarProgressValueMethod!.Invoke(WindowsTaskbarManager, new object?[]{ (int)(value * 100 + 0.5), 100, this.PlatformImpl!.Handle.Handle });
                 }
                 else if (Platform.IsMacOS)
                     AppSuiteApplication.CurrentOrNull?.UpdateMacOSDockTileProgressState();
@@ -371,7 +371,7 @@ namespace CarinaStudio.AppSuite.Controls
                 if (Platform.IsWindows)
                 {
                     if (this.SetupWindowsTaskbarManager())
-                        SetWindowsTaskbarProgressStateMethod!.Invoke(WindowsTaskbarManager, new object?[]{ (int)value, this.PlatformImpl.Handle.Handle });
+                        SetWindowsTaskbarProgressStateMethod!.Invoke(WindowsTaskbarManager, new object?[]{ (int)value, this.PlatformImpl!.Handle.Handle });
                 }
                 else if (Platform.IsMacOS)
                     AppSuiteApplication.CurrentOrNull?.UpdateMacOSDockTileProgressState();

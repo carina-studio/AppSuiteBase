@@ -23,7 +23,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// <param name="property">Property.</param>
         /// <param name="value">Value.</param>
         /// <returns><see cref="IDisposable"/> represents bound value.</returns>
-        protected IDisposable BindValueToDialog(CarinaStudio.Controls.Window dialog, AvaloniaProperty<string?> property, object? value)
+        protected IDisposable BindValueToDialog(CarinaStudio.Controls.Window dialog, StyledProperty<string?> property, object? value)
         {
             if (value == null)
                 return EmptyDisposable.Default;

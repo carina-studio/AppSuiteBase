@@ -28,10 +28,10 @@ namespace CarinaStudio.AppSuite.Controls
 
 		// Static fields.
 		static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
-		static readonly AvaloniaProperty<IBrush?> BackgroundImageOpacityMaskProperty = AvaloniaProperty.Register<SplashWindowImpl, IBrush?>(nameof(BackgroundImageOpacityMask));
-		static readonly AvaloniaProperty<IImage?> BackgroundImageProperty = AvaloniaProperty.Register<SplashWindowImpl, IImage?>(nameof(BackgroundImage));
-		static readonly AvaloniaProperty<IBitmap?> IconBitmapProperty = AvaloniaProperty.Register<SplashWindowImpl, IBitmap?>(nameof(IconBitmap));
-		static readonly AvaloniaProperty<string> MessageProperty = AvaloniaProperty.Register<SplashWindowImpl, string>(nameof(Message), " ", coerce: ((_, it) => string.IsNullOrEmpty(it) ? " " : it));
+		static readonly StyledProperty<IBrush?> BackgroundImageOpacityMaskProperty = AvaloniaProperty.Register<SplashWindowImpl, IBrush?>(nameof(BackgroundImageOpacityMask));
+		static readonly StyledProperty<IImage?> BackgroundImageProperty = AvaloniaProperty.Register<SplashWindowImpl, IImage?>(nameof(BackgroundImage));
+		static readonly StyledProperty<IBitmap?> IconBitmapProperty = AvaloniaProperty.Register<SplashWindowImpl, IBitmap?>(nameof(IconBitmap));
+		static readonly StyledProperty<string> MessageProperty = AvaloniaProperty.Register<SplashWindowImpl, string>(nameof(Message), " ", coerce: ((_, it) => string.IsNullOrEmpty(it) ? " " : it));
 
 
 		// Fields.
@@ -43,7 +43,7 @@ namespace CarinaStudio.AppSuite.Controls
 		DoubleAnimator? progressAnimator;
 		readonly ProgressBar progressBar;
 		readonly ScheduledAction showAction;
-		readonly Stopwatch stopwatch = new Stopwatch();
+		readonly Stopwatch stopwatch = new();
 
 
 		/// <summary>
@@ -57,7 +57,7 @@ namespace CarinaStudio.AppSuite.Controls
 			this.showAction = new(() =>
 			{
 				// get screen info
-				var screen = this.Screens.ScreenFromWindow(this.PlatformImpl);
+				var screen = this.Screens.ScreenFromWindow(this.PlatformImpl.AsNonNull());
 				if (screen == null && this.stopwatch.ElapsedMilliseconds < MaxShowingRetryingDuration)
 				{
 					this.showAction?.Schedule(RetryShowingDelay);
@@ -68,19 +68,19 @@ namespace CarinaStudio.AppSuite.Controls
 				if (screen != null)
 				{
 					var screenBounds = screen.WorkingArea;
-					var pixelDensity = screen.PixelDensity;
+					var scaling = screen.Scaling;
 					var width = this.Width;
 					var height = this.Height;
 					if (!Platform.IsMacOS)
 					{
-						width *= pixelDensity;
-						height *= pixelDensity;
+						width *= scaling;
+						height *= scaling;
 					}
 					this.Position = new PixelPoint((int)((screenBounds.Width - width) / 2), (int)((screenBounds.Height - height) / 2));
 				}
 				
 				// show content
-				((Control)(this.Content)).Opacity = 1;
+				((Control)(this.Content.AsNonNull())).Opacity = 1;
 				this.Get<Avalonia.Controls.Control>("backgroundOverlayBorder").Let(control =>
 				{
 					control.Opacity = 1;
@@ -223,7 +223,7 @@ namespace CarinaStudio.AppSuite.Controls
 				if (this.iconUri == value)
 					return;
 				this.iconUri = value;
-				value = value ?? new Uri($"avares://{AppSuiteApplication.Current.Assembly.GetName()}/AppIcon.ico");
+				value ??= new Uri($"avares://{AppSuiteApplication.Current.Assembly.GetName()}/AppIcon.ico");
 				this.Icon = AvaloniaLocator.Current.GetService<IAssetLoader>()?.Let(loader =>
 				{
 					return loader.Open(value).Use(stream => new WindowIcon(stream));
@@ -324,8 +324,10 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-        // String represents version.
-        string Version { get; }
+        /// <summary>
+        /// String represents version.
+        /// </summary>
+        public string Version { get; }
 
 
 		// Wait for completion of animation.

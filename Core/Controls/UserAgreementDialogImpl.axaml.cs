@@ -13,8 +13,8 @@ namespace CarinaStudio.AppSuite.Controls
     partial class UserAgreementDialogImpl : Dialog
     {
         // Static fields.
-        static readonly AvaloniaProperty<string?> Message1Property = AvaloniaProperty.Register<UserAgreementDialogImpl, string?>("Message1");
-        static readonly AvaloniaProperty<string?> Message2Property = AvaloniaProperty.Register<UserAgreementDialogImpl, string?>("Message2");
+        static readonly StyledProperty<string?> Message1Property = AvaloniaProperty.Register<UserAgreementDialogImpl, string?>("Message1");
+        static readonly StyledProperty<string?> Message2Property = AvaloniaProperty.Register<UserAgreementDialogImpl, string?>("Message2");
 
 
         // Fields.

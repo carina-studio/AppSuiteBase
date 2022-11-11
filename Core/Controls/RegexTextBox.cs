@@ -41,13 +41,13 @@ namespace CarinaStudio.AppSuite.Controls
 
 		// Fields.
 		InputAssistancePopup? escapedCharactersPopup;
-		readonly ObservableList<ListBoxItem> filteredPredefinedGroupListBoxItems = new ObservableList<ListBoxItem>();
-		readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new SortedObservableList<RegexGroup>((x, y) => string.Compare(x?.Name, y?.Name, true, CultureInfo.InvariantCulture));
+		readonly ObservableList<ListBoxItem> filteredPredefinedGroupListBoxItems = new();
+		readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new((x, y) => string.Compare(x?.Name, y?.Name, true, CultureInfo.InvariantCulture));
 		bool isBackSlashPressed;
 		bool isEscapeKeyHandled;
-		readonly ObservableList<RegexGroup> predefinedGroups = new ObservableList<RegexGroup>();
+		readonly ObservableList<RegexGroup> predefinedGroups = new();
 		InputAssistancePopup? predefinedGroupsPopup;
-		readonly Queue<ListBoxItem> recycledListBoxItems = new Queue<ListBoxItem>();
+		readonly Queue<ListBoxItem> recycledListBoxItems = new();
 		readonly ScheduledAction showAssistanceMenuAction;
 		TextPresenter? textPresenter;
 
@@ -90,7 +90,7 @@ namespace CarinaStudio.AppSuite.Controls
 					var (groupStart, groupEnd) = this.GetGroupNameSelection(text);
 					if (groupStart >= 0)
 					{
-						var filterText = this.Text?.Substring(groupStart, groupEnd - groupStart)?.ToLower() ?? "";
+						var filterText = this.Text?[groupStart..groupEnd]?.ToLower() ?? "";
 						this.filteredPredefinedGroups.Clear();
 						if (string.IsNullOrEmpty(filterText))
 							this.filteredPredefinedGroups.AddAll(this.predefinedGroups);
@@ -114,7 +114,7 @@ namespace CarinaStudio.AppSuite.Controls
 				{
 					var padding = this.Padding;
 					var caretRect = this.textPresenter?.Let(it =>
-						it.FormattedText.HitTestTextPosition(Math.Max(0, it.CaretIndex - 1))
+						it.TextLayout.HitTestTextPosition(Math.Max(0, it.CaretIndex - 1))
 					) ?? new Rect();
 					popupToOpen.PlacementRect = new Rect(caretRect.Left + padding.Left, caretRect.Top + padding.Top, caretRect.Width, caretRect.Height);
 					popupToOpen.PlacementTarget = this;
@@ -131,8 +131,7 @@ namespace CarinaStudio.AppSuite.Controls
 			});
 			this.GetObservable(ObjectProperty).Subscribe(o =>
 			{
-				var regex = o as Regex;
-				if (regex != null && ((regex.Options & RegexOptions.IgnoreCase) != 0) != this.IgnoreCase)
+				if (o is Regex regex && ((regex.Options & RegexOptions.IgnoreCase) != 0) != this.IgnoreCase)
 				{
 					var options = regex.Options;
 					if (this.IgnoreCase)
@@ -292,8 +291,10 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		// Command to input group name.
-		ICommand InputGroupNameCommand { get; }
+		/// <summary>
+		/// Command to input group name.
+		/// </summary>
+		public ICommand InputGroupNameCommand { get; }
 
 
 		// Input given string.
@@ -303,8 +304,10 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		// Command to input given string.
-		ICommand InputStringCommand { get; }
+		/// <summary>
+		/// Command to input given string.
+		/// </summary>
+		public ICommand InputStringCommand { get; }
 
 
 		/// <summary>
@@ -402,11 +405,7 @@ namespace CarinaStudio.AppSuite.Controls
 				var selectionStart = this.SelectionStart;
 				var selectionEnd = this.SelectionEnd;
 				if (selectionStart > selectionEnd)
-				{
-					var t = selectionEnd;
-					selectionEnd = selectionStart;
-					selectionStart = t;
-				}
+					(selectionStart, selectionEnd) = (selectionEnd, selectionStart);
 				var text = this.Text ?? "";
 				var textLength = text.Length;
 				var deletingChar = Global.Run(() =>
@@ -583,11 +582,7 @@ namespace CarinaStudio.AppSuite.Controls
 			var selectionStart = this.SelectionStart;
 			var selectionEnd = this.SelectionEnd;
 			if (selectionStart > selectionEnd)
-			{
-				var t = selectionEnd;
-				selectionEnd = selectionStart;
-				selectionStart = t;
-			}
+				(selectionStart, selectionEnd) = (selectionEnd, selectionStart);
 			var text = this.Text ?? "";
 			var textLength = text.Length;
 			var prevChar1 = selectionStart > 0 ? text[selectionStart - 1] : '\0';
@@ -747,11 +742,11 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <summary>
 		/// Property of <see cref="DisplayName"/>.
 		/// </summary>
-		public static readonly AvaloniaProperty<string> DisplayNameProperty = AvaloniaProperty.Register<RegexGroup, string>(nameof(DisplayName), "");
+		public static readonly StyledProperty<string> DisplayNameProperty = AvaloniaProperty.Register<RegexGroup, string>(nameof(DisplayName), "");
 		/// <summary>
 		/// Property of <see cref="Name"/>.
 		/// </summary>
-		public static readonly AvaloniaProperty<string> NameProperty = AvaloniaProperty.Register<RegexGroup, string>(nameof(Name), "");
+		public static readonly StyledProperty<string> NameProperty = AvaloniaProperty.Register<RegexGroup, string>(nameof(Name), "");
 
 
 		/// <summary>

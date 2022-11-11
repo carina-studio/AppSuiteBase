@@ -12,7 +12,7 @@ namespace CarinaStudio.AppSuite.Controls
 	partial class SettingsEditorDialogImpl : Dialog
 	{
 		// Fields.
-		readonly SortedObservableList<Tuple<SettingKey, object>> settingKeyValues = new SortedObservableList<Tuple<SettingKey, object>>((x, y) => string.Compare(x?.Item1?.Name, y?.Item1?.Name, true, CultureInfo.InvariantCulture));
+		readonly SortedObservableList<Tuple<SettingKey, object>> settingKeyValues = new((x, y) => string.Compare(x?.Item1?.Name, y?.Item1?.Name, true, CultureInfo.InvariantCulture));
 		readonly ListBox settingsListBox;
 
 
@@ -22,7 +22,7 @@ namespace CarinaStudio.AppSuite.Controls
 			this.SettingKeyValues = ListExtensions.AsReadOnly(this.settingKeyValues);
 			this.Settings = base.Settings;
 			InitializeComponent();
-			this.settingsListBox = this.FindControl<ListBox>(nameof(settingsListBox));
+			this.settingsListBox = this.Get<ListBox>(nameof(settingsListBox));
 		}
 
 
@@ -97,8 +97,10 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		// Reset setting values.
-		void ResetValues()
+		/// <summary>
+		/// Reset setting values.
+		/// </summary>
+		public void ResetValues()
 		{
 			var settings = this.Settings;
 			foreach (var setting in this.settingKeyValues)
@@ -111,8 +113,10 @@ namespace CarinaStudio.AppSuite.Controls
 		public ISet<SettingKey> SettingKeys { get; set; } = SetExtensions.AsReadOnly(new HashSet<SettingKey>());
 
 
-		// Key-value of settings.
-		IList<Tuple<SettingKey, object>> SettingKeyValues { get; }
+		/// <summary>
+		/// Key-value of settings.
+		/// </summary>
+		public IList<Tuple<SettingKey, object>> SettingKeyValues { get; }
 
 
 		// Settings.

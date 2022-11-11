@@ -21,7 +21,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
     class BackgroundDrawing : Drawing
     {
         // Fields.
-        readonly Pen anchorBorderPen = new Pen();
+        readonly Pen anchorBorderPen = new();
         readonly FullWindowTutorialPresenter presneter;
 
         // Constructor.
@@ -67,10 +67,8 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
 
     // Fields.
     Rect anchorBounds;
+    Image? background;
     DoubleAnimator? backgroundAnimator;
-#pragma warning disable CS0618
-    DrawingPresenter? backgroundPresenter;
-#pragma warning restore CS0618
     Control? dismissControl;
     Control? root;
     Control? skipAllTutorialsControl;
@@ -96,14 +94,12 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-#pragma warning disable CS0618
-        this.backgroundPresenter = e.NameScope.Find<DrawingPresenter>("PART_BackgroundPresenter")?.Also(it =>
+        this.background = e.NameScope.Find<Image>("PART_Background")?.Also(it =>
         {
-            it.Drawing = new BackgroundDrawing(this);
+            it.Source = new DrawingImage(new BackgroundDrawing(this));
         });
-#pragma warning restore CS0618
         this.dismissControl = e.NameScope.Find<Control>("PART_Dismiss");
-        this.root = e.NameScope.Find<Control>("PART_Root").Also(it =>
+        this.root = e.NameScope.Find<Control>("PART_Root").AsNonNull().Also(it =>
         {
             it.IsVisible = false;
             it.Opacity = 0;
@@ -278,7 +274,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                     it.Margin = new();
                     it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
                     this.anchorBounds = new();
-                    this.backgroundPresenter?.InvalidateVisual();
+                    this.background?.InvalidateVisual();
                     return;
                 }
                 anchorBounds = new(anchorBounds.X - selfBounds.X, anchorBounds.Y - selfBounds.Y, anchorBounds.Width, anchorBounds.Height);
@@ -339,7 +335,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
 
                 // update background
                 this.anchorBounds = anchorBounds;
-                this.backgroundPresenter?.InvalidateVisual();
+                this.background?.InvalidateVisual();
             }
             else
             {
@@ -347,7 +343,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                 it.Margin = new();
                 it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
                 this.anchorBounds = new();
-                this.backgroundPresenter?.InvalidateVisual();
+                this.background?.InvalidateVisual();
             }
         });
     }

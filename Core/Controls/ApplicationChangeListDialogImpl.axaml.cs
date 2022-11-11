@@ -30,7 +30,7 @@ namespace CarinaStudio.AppSuite.Controls
                     return null;
                 if (!typeof(object).IsAssignableFrom(targetType) && !targetType.IsAssignableFrom(typeof(IImage)))
                     return null;
-                var image = (IImage?)null;
+                IImage? image;
                 switch (type)
                 {
                     case ApplicationChangeType.BehaviorChange:
@@ -59,7 +59,7 @@ namespace CarinaStudio.AppSuite.Controls
 
         // Static fields.
         public static readonly IValueConverter ApplicationChangeTypeConverter = new ApplicationChangeTypeConverterImpl();
-        static readonly AvaloniaProperty<string?> HeaderProperty = AvaloniaProperty.Register<ApplicationChangeListDialogImpl, string?>(nameof(Header));
+        static readonly StyledProperty<string?> HeaderProperty = AvaloniaProperty.Register<ApplicationChangeListDialogImpl, string?>(nameof(Header));
 
 
         // Fields.
@@ -70,7 +70,7 @@ namespace CarinaStudio.AppSuite.Controls
         public ApplicationChangeListDialogImpl()
         {
             AvaloniaXamlLoader.Load(this);
-            this.contentPanel = this.FindControl<Panel>(nameof(contentPanel));
+            this.contentPanel = this.Get<Panel>(nameof(contentPanel));
         }
 
 
@@ -98,7 +98,7 @@ namespace CarinaStudio.AppSuite.Controls
                             it.Classes.Add("Dialog_Separator");
                         }));
                     }
-                    this.contentPanel.Children.Add(this.DataTemplates[0].Build(changeList[i]).Also(it =>
+                    this.contentPanel.Children.Add(this.DataTemplates[0]!.Build(changeList[i])!.Also(it =>
                     {
                         it.DataContext = changeList[i];
                     }));

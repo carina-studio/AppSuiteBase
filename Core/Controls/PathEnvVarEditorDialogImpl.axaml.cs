@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.Collections;
-using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
@@ -23,8 +22,8 @@ namespace CarinaStudio.AppSuite.Controls;
 partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 {
 	// Static fields.
-	static readonly AvaloniaProperty<bool> IsRefreshingPathsProperty = AvaloniaProperty.Register<PathEnvVarEditorDialogImpl, bool>("IsRefreshingPaths");
-	static readonly AvaloniaProperty<bool> IsSavingPathsProperty = AvaloniaProperty.Register<PathEnvVarEditorDialogImpl, bool>("IsSavingPaths");
+	static readonly StyledProperty<bool> IsRefreshingPathsProperty = AvaloniaProperty.Register<PathEnvVarEditorDialogImpl, bool>("IsRefreshingPaths");
+	static readonly StyledProperty<bool> IsSavingPathsProperty = AvaloniaProperty.Register<PathEnvVarEditorDialogImpl, bool>("IsSavingPaths");
 
 
 	// Fields.
@@ -94,7 +93,7 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 
 
 	// Get path list from system.
-	Task<HashSet<string>> GetPathsAsync(bool includeGlobal = true, bool includeUser = true) => Task.Run(() =>
+	static Task<HashSet<string>> GetPathsAsync(bool includeGlobal = true, bool includeUser = true) => Task.Run(() =>
 	{
 		var pathSet = new HashSet<string>(CarinaStudio.IO.PathEqualityComparer.Default);
 		if (Platform.IsMacOS)
@@ -188,23 +187,27 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	}
 
 
-	// Path list.
-	IList<string> Paths { get; }
+	/// <summary>
+	/// Path list.
+	/// </summary>
+	public IList<string> Paths { get; }
 
 
 	// Refresh path list.
 	async void RefreshPaths()
 	{
 		this.SetValue<bool>(IsRefreshingPathsProperty, true);
-		var paths = await this.GetPathsAsync();
+		var paths = await GetPathsAsync();
 		this.paths.Clear();
 		this.paths.AddAll(paths);
 		this.SetValue<bool>(IsRefreshingPathsProperty, false);
 	}
 
 
-	// Remove path.
-	void RemovePath(string? path)
+	/// <summary>
+	/// Remove path.
+	/// </summary>
+	public void RemovePath(string? path)
 	{
 		if (path == null 
 			||this.GetValue<bool>(IsRefreshingPathsProperty) 
@@ -218,11 +221,13 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	}
 
 
-	// Save path to system and close dialog.
-	async void SaveAndClose()
+	/// <summary>
+	/// Save path to system and close dialog.
+	/// </summary>
+	public async void SaveAndClose()
 	{
 		this.SetValue<bool>(IsSavingPathsProperty, true);
-		var currentPaths = await this.GetPathsAsync();
+		var currentPaths = await GetPathsAsync();
 		var success = true;
 		if (!currentPaths.SetEquals(this.paths))
 		{
@@ -281,8 +286,8 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 					else if (Platform.IsWindows)
 					{
 						// separate into machine and user paths
-						var currentMachinePaths = await this.GetPathsAsync(true, false);
-						var currentUserPaths = await this.GetPathsAsync(false, true);
+						var currentMachinePaths = await GetPathsAsync(true, false);
+						var currentUserPaths = await GetPathsAsync(false, true);
 						var machinePaths = new HashSet<string>(currentMachinePaths, CarinaStudio.IO.PathEqualityComparer.Default).Also(it =>
 						{
 							foreach (var path in it.ToArray())

@@ -614,7 +614,7 @@
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Panel Name="PART_Root">
-					<DrawingPresenter Name="PART_BackgroundPresenter"/>
+					<controls:Image Name="PART_Background"/>
 					<Border Name="PART_TutorialContainer" Background="{DynamicResource ToolTipBackground}" BorderBrush="{DynamicResource ToolTipBorderBrush}" BorderThickness="1" BoxShadow="{DynamicResource BoxShadows/FullWindowTutorialPresenter.Tutorial}" CornerRadius="{DynamicResource ControlCornerRadius}" Padding="{DynamicResource Thickness/FullWindowTutorialPresenter.Tutorial.Padding}">
 						<Grid ClipToBounds="True" ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto">
 							<Image Classes="Icon" Height="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}" IsVisible="{Binding Icon, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.Icon.Margin}" Source="{Binding Icon}" VerticalAlignment="Center" Width="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}"/>
@@ -697,15 +697,6 @@
 	</Style>
 
 	<!-- Icon -->
-	<Style Selector="DrawingPresenter.Icon">
-		<Setter Property="HorizontalAlignment" Value="Center"/>
-		<Setter Property="IsHitTestVisible" Value="False"/>
-		<Setter Property="Stretch" Value="Uniform"/>
-		<Setter Property="VerticalAlignment" Value="Center"/>
-	</Style>
-	<Style Selector="DrawingPresenter.Icon:disabled">
-		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
-	</Style>
 	<Style Selector=":is(Image).Icon">
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -1199,6 +1190,7 @@
 	<!-- Separator -->
 	<Style Selector="Separator">
 		<Setter Property="Background" Value="{DynamicResource Brush/Separator.Background}"/>
+		<Setter Property="Margin" Value="0"/>
 	</Style>
 	<Style Selector="MenuItem > Separator, ContextMenu > Separator">
 		<Setter Property="Background" Value="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" />

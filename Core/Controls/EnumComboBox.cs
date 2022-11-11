@@ -97,7 +97,7 @@ namespace CarinaStudio.AppSuite.Controls
 							it.Bind(TextBlock.TextProperty, new Binding { Converter = this.enumConverter });
 							it.TextTrimming = Avalonia.Media.TextTrimming.CharacterEllipsis;
 						});
-						return new ControlTemplateResult(textBlock, null);
+						return new ControlTemplateResult(textBlock, this.FindNameScope().AsNonNull());
 					}),
 					DataType = type,
 				};

@@ -13,8 +13,8 @@ namespace CarinaStudio.AppSuite.Controls
     partial class PrivacyPolicyDialogImpl : Dialog
     {
         // Static fields.
-        static readonly AvaloniaProperty<string?> Message1Property = AvaloniaProperty.Register<PrivacyPolicyDialogImpl, string?>("Message1");
-        static readonly AvaloniaProperty<string?> Message2Property = AvaloniaProperty.Register<PrivacyPolicyDialogImpl, string?>("Message2");
+        static readonly StyledProperty<string?> Message1Property = AvaloniaProperty.Register<PrivacyPolicyDialogImpl, string?>("Message1");
+        static readonly StyledProperty<string?> Message2Property = AvaloniaProperty.Register<PrivacyPolicyDialogImpl, string?>("Message2");
 
 
         // Fields.

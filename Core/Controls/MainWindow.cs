@@ -29,15 +29,15 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Property of <see cref="AreInitialDialogsClosed"/>.
         /// </summary>
-        public static readonly AvaloniaProperty<bool> AreInitialDialogsClosedProperty = AvaloniaProperty.RegisterDirect<MainWindow<TViewModel>, bool>(nameof(AreInitialDialogsClosed), w => w.areInitialDialogsClosed);
+        public static readonly DirectProperty<MainWindow<TViewModel>, bool> AreInitialDialogsClosedProperty = AvaloniaProperty.RegisterDirect<MainWindow<TViewModel>, bool>(nameof(AreInitialDialogsClosed), w => w.areInitialDialogsClosed);
         /// <summary>
         /// Property of <see cref="ContentPadding"/>.
         /// </summary>
-        public static readonly AvaloniaProperty<Thickness> ContentPaddingProperty = AvaloniaProperty.RegisterDirect<MainWindow<TViewModel>, Thickness>(nameof(ContentPadding), w => w.contentPadding);
+        public static readonly DirectProperty<MainWindow<TViewModel>, Thickness> ContentPaddingProperty = AvaloniaProperty.RegisterDirect<MainWindow<TViewModel>, Thickness>(nameof(ContentPadding), w => w.contentPadding);
         /// <summary>
         /// Property of <see cref="HasMultipleMainWindows"/>.
         /// </summary>
-        public static readonly AvaloniaProperty<bool> HasMultipleMainWindowsProperty = AvaloniaProperty.RegisterDirect<MainWindow<TViewModel>, bool>(nameof(HasMultipleMainWindows), w => w.hasMultipleMainWindows);
+        public static readonly DirectProperty<MainWindow<TViewModel>, bool> HasMultipleMainWindowsProperty = AvaloniaProperty.RegisterDirect<MainWindow<TViewModel>, bool>(nameof(HasMultipleMainWindows), w => w.hasMultipleMainWindows);
 
 
         // Constants.
@@ -290,7 +290,7 @@ namespace CarinaStudio.AppSuite.Controls
                 return;
 
             // layout
-            this.Application.LayoutMainWindows(this.Screens.ScreenFromWindow(this.PlatformImpl) ?? this.Screens.Primary, layout, this);
+            this.Application.LayoutMainWindows(this.Screens.ScreenFromWindow(this.PlatformImpl.AsNonNull()) ?? this.Screens.Primary.AsNonNull(), layout, this);
         }
 
 
@@ -347,7 +347,7 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
         {
             base.OnApplyTemplate(e);
-            this.contentPresenter = e.NameScope.Find<ContentPresenter>("PART_ContentPresenter").Also(it =>
+            this.contentPresenter = e.NameScope.Find<ContentPresenter>("PART_ContentPresenter")?.Also(it =>
             {
                 it.GetObservable(PaddingProperty).Subscribe(padding =>
                     this.SetAndRaise<Thickness>(ContentPaddingProperty, ref this.contentPadding, padding));
@@ -523,7 +523,7 @@ namespace CarinaStudio.AppSuite.Controls
                 && double.IsFinite(this.restoredWidth)
                 && double.IsFinite(this.restoredHeight))
             {
-                var screen = this.Screens.ScreenFromWindow(this.PlatformImpl) ?? this.Screens.Primary;
+                var screen = this.Screens.ScreenFromWindow(this.PlatformImpl.AsNonNull()) ?? this.Screens.Primary;
                 if (screen == null)
                 {
                     this.Logger.LogWarning("Cannot find screen for restoring size of window");
@@ -533,8 +533,8 @@ namespace CarinaStudio.AppSuite.Controls
                 var workingAreaHeight = (double)screen.WorkingArea.Height;
                 if (!Platform.IsMacOS)
                 {
-                    workingAreaWidth /= screen.PixelDensity;
-                    workingAreaHeight /= screen.PixelDensity;
+                    workingAreaWidth /= screen.Scaling;
+                    workingAreaHeight /= screen.Scaling;
                 }
                 this.restoredWidth = Math.Min(this.restoredWidth, workingAreaWidth * 0.95);
                 this.restoredHeight = Math.Min(this.restoredHeight, workingAreaHeight * 0.95);
@@ -568,10 +568,10 @@ namespace CarinaStudio.AppSuite.Controls
             // use compact UI
             if (!this.PersistentState.GetValueOrDefault(IsUsingCompactUIConfirmedKey))
             {
-                var screen = this.Screens.ScreenFromWindow(this.PlatformImpl) ?? this.Screens.ScreenFromVisual(this) ?? this.Screens.Primary;
+                var screen = this.Screens.ScreenFromWindow(this.PlatformImpl.AsNonNull()) ?? this.Screens.ScreenFromVisual(this) ?? this.Screens.Primary;
                 if (screen != null)
                 {
-                    var pixelDensity = screen.PixelDensity;
+                    var pixelDensity = screen.Scaling;
                     var sizeToUseCompactUI = this.Configuration.GetValueOrDefault(ConfigurationKeys.WorkingAreaSizeToSuggestUsingCompactUI);
                     var workingSize = screen.WorkingArea.Size.Let(it =>
                     {

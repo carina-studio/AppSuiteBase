@@ -121,7 +121,7 @@ namespace CarinaStudio.AppSuite.Controls
             itemIndex = -1;
             item = null;
             headerVisual = null;
-            var itemsPanel = this.tabItemsPresenter.FindDescendantOfType<Panel>();
+            var itemsPanel = this.tabItemsPresenter?.FindDescendantOfType<Panel>();
             if (itemsPanel == null)
                 return false;
             var index = Global.Run(() =>
@@ -166,7 +166,7 @@ namespace CarinaStudio.AppSuite.Controls
         {
             itemIndex = -1;
             item = null;
-            var index = this.tabItemsPresenter.FindDescendantOfType<Panel>()?.Let(panel =>
+            var index = this.tabItemsPresenter?.FindDescendantOfType<Panel>()?.Let(panel =>
             {
                 for (var i = panel.Children.Count - 1; i >= 0; --i)
                 {
@@ -552,7 +552,7 @@ namespace CarinaStudio.AppSuite.Controls
             if (this.Items is not IList items)
                 return;
             if (itemIndex < 0 || itemIndex >= items.Count)
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException(nameof(itemIndex));
             this.scrollToSelectedItemAction.Cancel();
             this.ScrollHeaderIntoViewCore(itemIndex);
         }

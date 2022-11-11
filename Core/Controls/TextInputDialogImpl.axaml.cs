@@ -17,15 +17,15 @@ partial class TextInputDialogImpl : InputDialog
 	/// <summary>
 	/// Property of <see cref="MaxTextLength"/>.
 	/// </summary>
-	public static readonly AvaloniaProperty<int> MaxTextLengthProperty = AvaloniaProperty.Register<TextInputDialogImpl, int>(nameof(MaxTextLength), -1);
+	public static readonly StyledProperty<int> MaxTextLengthProperty = AvaloniaProperty.Register<TextInputDialogImpl, int>(nameof(MaxTextLength), -1);
 	/// <summary>
 	/// Property of <see cref="Message"/>.
 	/// </summary>
-	public static readonly AvaloniaProperty<string?> MessageProperty = AvaloniaProperty.Register<TextInputDialogImpl, string?>(nameof(Message));
+	public static readonly StyledProperty<string?> MessageProperty = AvaloniaProperty.Register<TextInputDialogImpl, string?>(nameof(Message));
 	/// <summary>
 	/// Property of <see cref="Text"/>.
 	/// </summary>
-	public static readonly AvaloniaProperty<string?> TextProperty = AvaloniaProperty.Register<TextInputDialogImpl, string?>(nameof(Text));
+	public static readonly StyledProperty<string?> TextProperty = AvaloniaProperty.Register<TextInputDialogImpl, string?>(nameof(Text));
 
 
 	// Fields.

@@ -30,12 +30,12 @@ namespace CarinaStudio.AppSuite.Controls
     public class StringInterpolationFormatTextBox : TextBox, IStyleable
     {
         // Fields.
-        readonly ObservableList<ListBoxItem> filteredPredefinedVarListBoxItems = new ObservableList<ListBoxItem>();
-        readonly SortedObservableList<StringInterpolationVariable> filteredPredefinedVars = new SortedObservableList<StringInterpolationVariable>((x, y) => string.Compare(x?.Name, y?.Name, true, CultureInfo.InvariantCulture));
+        readonly ObservableList<ListBoxItem> filteredPredefinedVarListBoxItems = new();
+        readonly SortedObservableList<StringInterpolationVariable> filteredPredefinedVars = new((x, y) => string.Compare(x?.Name, y?.Name, true, CultureInfo.InvariantCulture));
 		bool isEscapeKeyHandled;
-        readonly ObservableList<StringInterpolationVariable> predefinedVars = new ObservableList<StringInterpolationVariable>();
+        readonly ObservableList<StringInterpolationVariable> predefinedVars = new();
         InputAssistancePopup? predefinedVarsPopup;
-        readonly Queue<ListBoxItem> recycledListBoxItems = new Queue<ListBoxItem>();
+        readonly Queue<ListBoxItem> recycledListBoxItems = new();
         readonly ScheduledAction showAssistanceMenuAction;
         TextPresenter? textPresenter;
 
@@ -72,7 +72,7 @@ namespace CarinaStudio.AppSuite.Controls
 					var (varStart, varEnd) = this.GetVariableNameSelection(text);
 					if (varStart >= 0)
 					{
-						var filterText = this.Text?.Substring(varStart, varEnd - varStart)?.ToLower() ?? "";
+						var filterText = this.Text?[varStart..varEnd]?.ToLower() ?? "";
 						this.filteredPredefinedVars.Clear();
 						if (string.IsNullOrEmpty(filterText))
 							this.filteredPredefinedVars.AddAll(this.predefinedVars);
@@ -88,7 +88,7 @@ namespace CarinaStudio.AppSuite.Controls
 				{
 					var padding = this.Padding;
 					var caretRect = this.textPresenter?.Let(it =>
-						it.FormattedText.HitTestTextPosition(Math.Max(0, it.CaretIndex - 1))
+						it.TextLayout.HitTestTextPosition(Math.Max(0, it.CaretIndex - 1))
 					) ?? new Rect();
 					popupToOpen.PlacementRect = new Rect(caretRect.Left + padding.Left, caretRect.Top + padding.Top, caretRect.Width, caretRect.Height);
 					popupToOpen.PlacementTarget = this;
@@ -195,8 +195,10 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		// Command to input variable name.
-		ICommand InputVariableNameCommand { get; }
+		/// <summary>
+		/// Command to input variable name.
+		/// </summary>
+		public ICommand InputVariableNameCommand { get; }
 
 
         /// <inheritdoc/>
@@ -477,11 +479,11 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <summary>
 		/// Property of <see cref="DisplayName"/>.
 		/// </summary>
-		public static readonly AvaloniaProperty<string> DisplayNameProperty = AvaloniaProperty.Register<StringInterpolationVariable, string>(nameof(DisplayName), "");
+		public static readonly StyledProperty<string> DisplayNameProperty = AvaloniaProperty.Register<StringInterpolationVariable, string>(nameof(DisplayName), "");
 		/// <summary>
 		/// Property of <see cref="Name"/>.
 		/// </summary>
-		public static readonly AvaloniaProperty<string> NameProperty = AvaloniaProperty.Register<StringInterpolationVariable, string>(nameof(Name), "");
+		public static readonly StyledProperty<string> NameProperty = AvaloniaProperty.Register<StringInterpolationVariable, string>(nameof(Name), "");
 
 
 		/// <summary>

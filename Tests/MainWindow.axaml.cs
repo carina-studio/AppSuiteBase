@@ -87,7 +87,7 @@ namespace CarinaStudio.AppSuite.Tests
             this.ipAddressTextBox = this.FindControl<IPAddressTextBox>(nameof(ipAddressTextBox)).AsNonNull();
 
             var tabControl = this.FindControl<TabControl>("tabControl").AsNonNull();
-            this.tabItems.AddRange(tabControl.Items.Cast<TabItem>());
+            this.tabItems.AddRange(tabControl.Items!.Cast<TabItem>());
             tabControl.Items = this.tabItems;
             (this.tabItems[0].Header as Control)?.Let(it => this.Application.EnsureClosingToolTipIfWindowIsInactive(it));
         }

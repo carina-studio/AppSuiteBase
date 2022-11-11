@@ -79,8 +79,7 @@ namespace CarinaStudio.AppSuite.Controls
             var currentOffset = this.offsetAnimator?.EndValue ?? this.Offset;
 
             // cancel current animation
-            if (this.offsetAnimator != null)
-                this.offsetAnimator.Cancel();
+            this.offsetAnimator?.Cancel();
             
             // prevent scrolling
             if (this.HorizontalScrollBarVisibility == ScrollBarVisibility.Disabled)
@@ -147,13 +146,13 @@ namespace CarinaStudio.AppSuite.Controls
             var bounds = visual.Bounds;
             var x = bounds.Left;
             var y = bounds.Top;
-            visual = visual.GetVisualParent();
-            while (visual != null && visual != this)
+            var parentVisual = visual.GetVisualParent();
+            while (parentVisual != null)
             {
                 var parentBounds = visual.Bounds;
                 x += parentBounds.Left;
                 y += parentBounds.Top;
-                visual = visual.GetVisualParent();
+                parentVisual = parentVisual.GetVisualParent();
             }
             if (visual == null)
                 return;

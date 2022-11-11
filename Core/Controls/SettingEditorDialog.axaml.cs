@@ -11,8 +11,8 @@ namespace CarinaStudio.AppSuite.Controls
 	partial class SettingEditorDialog : Dialog
 	{
 		// Static fields.
-		static readonly AvaloniaProperty<SettingKey?> SettingKeyProperty = AvaloniaProperty.Register<SettingEditorDialog, SettingKey?>(nameof(SettingKey));
-		static readonly AvaloniaProperty<ISettings?> SettingsProperty = AvaloniaProperty.Register<SettingEditorDialog, ISettings?>(nameof(Settings));
+		static readonly StyledProperty<SettingKey?> SettingKeyProperty = AvaloniaProperty.Register<SettingEditorDialog, SettingKey?>(nameof(SettingKey));
+		static readonly StyledProperty<ISettings?> SettingsProperty = AvaloniaProperty.Register<SettingEditorDialog, ISettings?>(nameof(Settings));
 
 
 		// Fields.
@@ -56,7 +56,7 @@ namespace CarinaStudio.AppSuite.Controls
 				}
 				else if (type == typeof(double))
 				{
-					this.numericUpDown.Value = (double)settings.GetValueOrDefault(key);
+					this.numericUpDown.Value = (decimal)settings.GetValueOrDefault(key);
 					this.numericUpDown.IsVisible = true;
 				}
 				else if (type.IsEnum)
@@ -123,7 +123,7 @@ namespace CarinaStudio.AppSuite.Controls
 				if (type == typeof(bool))
 					settings.SetValue(key, this.toggleSwitch.IsChecked.GetValueOrDefault());
 				if (type == typeof(double))
-					settings.SetValue(key, this.numericUpDown.Value);
+					settings.SetValue(key, (double)this.numericUpDown.Value.GetValueOrDefault());
 				else if (type.IsEnum)
 					settings.SetValue(key, this.enumComboBox.SelectedItem.AsNonNull());
 				else if (type == typeof(int))
