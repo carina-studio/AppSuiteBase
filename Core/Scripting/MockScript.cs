@@ -16,7 +16,7 @@ class MockScript : IScript
         if (options.ContextType == null)
             throw new ArgumentException("No context type specified.");
         this.Application = app;
-        this.CompilationResults = new ICompilationResult[0];
+        this.CompilationResults = Array.Empty<ICompilationResult>();
         this.IsEmpty = string.IsNullOrWhiteSpace(source);
         this.IsTemplate = isTemplate;
         this.Language = language;

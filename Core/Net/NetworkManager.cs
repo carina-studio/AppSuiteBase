@@ -90,14 +90,14 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
                     ping.Send(server, 5000, pingData)?.Status == IPStatus.Success);
                 if (success)
                 {
-                    this.logger.LogTrace($"Network connection checked by '{server}'");
+                    this.logger.LogTrace("Network connection checked by '{server}'", server);
                     isConnected = true;
                     break;
                 }
             }
             catch
             { }
-            this.logger.LogWarning($"Failed to ping '{server}'");
+            this.logger.LogWarning("Failed to ping '{server}'", server);
         }
 
         // get IP addresses
@@ -156,13 +156,13 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         // update state
         if (ipAddress != this.IPAddress)
         {
-            this.logger.LogTrace($"IPv4 address: {ipAddress}");
+            this.logger.LogTrace("IPv4 address: {ipAddress}", ipAddress);
             this.IPAddress = ipAddress;
             this.PropertyChanged?.Invoke(this, new(nameof(IPAddress)));
         }
         if (publicIPAddress != this.PublicIPAddress)
         {
-            this.logger.LogTrace($"Public IPv4 address: {publicIPAddress}");
+            this.logger.LogTrace("Public IPv4 address: {publicIPAddress}", publicIPAddress);
             this.PublicIPAddress = publicIPAddress;
             this.PropertyChanged?.Invoke(this, new(nameof(PublicIPAddress)));
         }

@@ -46,7 +46,9 @@ public class Context : IContext
             if (value is IDisposable disposable)
                 disposable.Dispose();
             else if (value is IAsyncDisposable asyncDisposable)
+#pragma warning disable CA2012
                 _ = asyncDisposable.DisposeAsync();
+#pragma warning restore CA2012
         }
     }
 

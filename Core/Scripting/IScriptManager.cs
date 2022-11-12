@@ -204,6 +204,6 @@ public static class ScriptManagerExtensions
                 scriptManager.SaveScript(script, writer);
                 writer.WriteEndObject();
             }
-        });
+        }, CancellationToken.None);
     }
 }

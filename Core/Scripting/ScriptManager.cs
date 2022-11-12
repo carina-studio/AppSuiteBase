@@ -63,12 +63,12 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
         {
             if (!typeof(IScriptManager).IsAssignableFrom(implType))
             {
-                Logger.LogError($"Implementation '{implType.Name}' doesn't implement IScriptManager interface");
+                Logger.LogError("Implementation '{implTypeName}' doesn't implement IScriptManager interface", implType.Name);
                 implType = null;
             }
             else if (typeof(ScriptManager).IsAssignableFrom(implType))
             {
-                Logger.LogError($"Cannot use '{implType.Name}' as implementation");
+                Logger.LogError("Cannot use '{implTypeName}' as implementation", implType.Name);
                 implType = null;
             }
         }
@@ -97,7 +97,7 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
         var initAsyncMethod = implType!.GetMethod("InitializeAsync");
         if (initAsyncMethod != null)
         {
-            var initAsyncResult = initAsyncMethod.Invoke(implementation, new object?[0]);
+            var initAsyncResult = initAsyncMethod.Invoke(implementation, Array.Empty<object>());
             if (initAsyncResult is Task task)
                 await task;
             Logger.LogDebug("Implementation has been initialized");

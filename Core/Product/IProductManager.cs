@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -105,7 +106,7 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
     /// <param name="id">ID of product.</param>
     /// <param name="devices">Active devices.</param>
     /// <returns>True if devices got successfully.</returns>
-    bool TryGetProductActiveDevices(string id, out IActiveDeviceInfo[] devices);
+    bool TryGetProductActiveDevices(string id, [NotNullWhen(true)] out IActiveDeviceInfo[] devices);
 
 
     /// <summary>
@@ -114,7 +115,7 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
     /// <param name="id">ID of product.</param>
     /// <param name="description">Description of product.</param>
     /// <returns>True if description got successfully.</returns>
-    bool TryGetProductDescription(string id, out string description);
+    bool TryGetProductDescription(string id, [NotNullWhen(true)] out string? description);
 
 
     /// <summary>
@@ -123,7 +124,7 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
     /// <param name="id">ID of product.</param>
     /// <param name="description">Description of product.</param>
     /// <returns>True if description got successfully.</returns>
-    bool TryGetProductDescription(string id, out IObservable<string> description);
+    bool TryGetProductDescription(string id, [NotNullWhen(true)] out IObservable<string>? description);
 
 
     /// <summary>
@@ -132,7 +133,7 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
     /// <param name="id">ID of product.</param>
     /// <param name="emailAddress">E-mail address.</param>
     /// <returns>True if e-mail address got successfully.</returns>
-    bool TryGetProductEmailAddress(string id, out string emailAddress);
+    bool TryGetProductEmailAddress(string id, [NotNullWhen(true)] out string? emailAddress);
 
 
     /// <summary>
@@ -150,7 +151,7 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
     /// <param name="id">ID of product.</param>
     /// <param name="name">Name of product.</param>
     /// <returns>True if name got successfully.</returns>
-    bool TryGetProductName(string id, out string name);
+    bool TryGetProductName(string id, [NotNullWhen(true)] out string? name);
 
 
     /// <summary>
@@ -159,7 +160,7 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
     /// <param name="id">ID of product.</param>
     /// <param name="name">Name of product.</param>
     /// <returns>True if name got successfully.</returns>
-    bool TryGetProductName(string id, out IObservable<string> name);
+    bool TryGetProductName(string id, [NotNullWhen(true)] out IObservable<string>? name);
 
 
     /// <summary>
@@ -221,7 +222,7 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
 
 
     /// <inheritdoc/>
-    public IList<string> Products { get; } = new string[0];
+    public IList<string> Products { get; } = Array.Empty<string>();
 
 
     /// <inheritdoc/>
@@ -291,7 +292,7 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
     /// <returns>True if devices got successfully.</returns>
     public bool TryGetProductActiveDevices(string id, out IActiveDeviceInfo[] devices)
     {
-        devices = new IActiveDeviceInfo[0];
+        devices = Array.Empty<IActiveDeviceInfo>();
         return false;
     }
 
