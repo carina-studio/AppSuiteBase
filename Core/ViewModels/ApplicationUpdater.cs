@@ -8,7 +8,9 @@ using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
 using CarinaStudio.Windows.Input;
 using Microsoft.Extensions.Logging;
+#if !NET7_0_OR_GREATER
 using Mono.Unix;
+#endif
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -336,7 +338,16 @@ namespace CarinaStudio.AppSuite.ViewModels
 			{
 				try
 				{
-					await Task.Run(() => new UnixFileInfo(autoUpdaterPath).FileAccessPermissions |= (FileAccessPermissions.UserExecute | FileAccessPermissions.GroupExecute));
+					await Task.Run(() => 
+					{
+#if NET7_0_OR_GREATER
+#pragma warning disable CA1416
+						System.IO.File.SetUnixFileMode(autoUpdaterPath, System.IO.File.GetUnixFileMode(autoUpdaterPath) | UnixFileMode.UserExecute | UnixFileMode.GroupExecute);
+#pragma warning restore CA1416
+#else
+						new UnixFileInfo(autoUpdaterPath).FileAccessPermissions |= (FileAccessPermissions.UserExecute | FileAccessPermissions.GroupExecute);
+#endif
+					});
 				}
 				catch (Exception ex)
 				{

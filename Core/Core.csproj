@@ -70,11 +70,14 @@
 		<PackageReference Include="CarinaStudio.AppBase.AutoUpdate" Version="2.0.0.1111-preview" />
 		<PackageReference Include="CarinaStudio.AppBase.MacOS" Version="2.0.0.1111-preview" />
 		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="6.0.1" />
-		<PackageReference Include="Mono.Posix" Version="7.1.0-final.1.21458.1" />
 		<PackageReference Include="NLog" Version="5.0.5" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="5.1.0" />
 		<PackageReference Include="System.Management" Version="6.0.0" />
 		<PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(TargetFramework.Contains('6.0'))">
+		<PackageReference Include="Mono.Posix" Version="7.1.0-final.1.21458.1" />
 	</ItemGroup>
 	
 	<ItemGroup>
