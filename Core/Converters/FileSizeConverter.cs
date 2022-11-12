@@ -13,7 +13,7 @@ namespace CarinaStudio.AppSuite.Converters
         /// <summary>
         /// Default instance.
         /// </summary>
-        public static readonly FileSizeConverter Default = new FileSizeConverter();
+        public static readonly IValueConverter Default = new FileSizeConverter();
 
 
         // Constructor.

@@ -3369,8 +3369,16 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <summary>
+        /// Show main window asynchronously.
+        /// </summary>
+        /// <returns>Task of showing main window.</returns>
+        public Task<bool> ShowMainWindowAsync() =>
+            this.ShowMainWindowAsync(null, null);
+
+
         /// <inheritdoc/>
-        public Task<bool> ShowMainWindowAsync(Action<Window>? windowCreatedAction = null) => 
+        public Task<bool> ShowMainWindowAsync(Action<Window>? windowCreatedAction) => 
             this.ShowMainWindowAsync(null, windowCreatedAction);
 
 

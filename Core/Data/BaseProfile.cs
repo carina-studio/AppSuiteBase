@@ -91,8 +91,7 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
         {
             return this.logger ?? this.Lock(() =>
             {
-                if (this.logger == null)
-                    this.logger = this.Application.LoggerFactory.CreateLogger(this.GetType().Name);
+                this.logger ??= this.Application.LoggerFactory.CreateLogger(this.GetType().Name);
                 return logger;
             });
         }
@@ -159,7 +158,8 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
 
         // write to stream
         await this.IOTaskFactory.StartNew(() =>
-            stream.Write(data));
+            stream.Write(data), 
+            CancellationToken.None);
     }
 
 

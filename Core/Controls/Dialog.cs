@@ -13,7 +13,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         protected Dialog()
         {
-            new WindowContentFadingHelper(this);
+            _ = new WindowContentFadingHelper(this);
             this.Title = this.Application.Name;
         }
 

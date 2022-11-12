@@ -150,7 +150,9 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	}
 
 
-	// Edit path environment variable.
+	/// <summary>
+	/// Edit path environment variable.
+	/// </summary>
 	public void EditPathEnvironmentVariable() =>
 		_ = new PathEnvVarEditorDialog().ShowDialog(this);
 

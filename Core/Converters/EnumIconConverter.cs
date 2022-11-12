@@ -35,7 +35,7 @@ public class EnumIconConverter : BaseValueConverter<object?, IImage?>
     {
         if (value == null || this.app == null)
             return null;
-        var icon = (IImage?)null;
+        IImage? icon;
         var resName = string.IsNullOrEmpty(this.resourceNamePostfix)
             ? $"Image/{this.resourceNamePrefix}.{value}"
             : $"Image/{this.resourceNamePrefix}.{value}.{this.resourceNamePostfix}";

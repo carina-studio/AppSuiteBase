@@ -16,8 +16,8 @@ namespace CarinaStudio.AppSuite.Controls
 	partial class ApplicationUpdateDialogImpl : Dialog<IAppSuiteApplication>
 	{
 		// Static fields.
-		public static readonly SettingKey<DateTime> LatestNotifiedTimeKey = new SettingKey<DateTime>("LatestNotifiedTime", DateTime.MinValue);
-		public static readonly SettingKey<string> LatestNotifiedVersionKey = new SettingKey<string>("LatestNotifiedVersion", "");
+		public static readonly SettingKey<DateTime> LatestNotifiedTimeKey = new("LatestNotifiedTime", DateTime.MinValue);
+		public static readonly SettingKey<string> LatestNotifiedVersionKey = new("LatestNotifiedVersion", "");
 		public static readonly AvaloniaProperty<string?> LatestVersionMessageProperty = AvaloniaProperty.Register<ApplicationUpdateDialogImpl, string?>(nameof(LatestVersionMessage));
 		public static readonly AvaloniaProperty<string?> NewVersionFoundMessageProperty = AvaloniaProperty.Register<ApplicationUpdateDialogImpl, string?>(nameof(NewVersionFoundMessage));
 
@@ -42,8 +42,10 @@ namespace CarinaStudio.AppSuite.Controls
 		public bool CheckForUpdateWhenOpening { get; set; }
 
 
-		// Download update package.
-		void DownloadUpdatePackage()
+		/// <summary>
+		/// Download update package.
+		/// </summary>
+		public void DownloadUpdatePackage()
 		{
 			if (this.attachedAppUpdater != null && this.attachedAppUpdater.UpdatePackageUri != null)
 			{

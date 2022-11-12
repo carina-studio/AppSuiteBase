@@ -21,13 +21,9 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			this.SettingKeyValues = ListExtensions.AsReadOnly(this.settingKeyValues);
 			this.Settings = base.Settings;
-			InitializeComponent();
+			AvaloniaXamlLoader.Load(this);
 			this.settingsListBox = this.Get<ListBox>(nameof(settingsListBox));
 		}
-
-
-		// Initialize.
-		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
 
 		// Called when closing.

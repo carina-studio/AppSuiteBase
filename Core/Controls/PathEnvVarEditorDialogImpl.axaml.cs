@@ -1,8 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Platform.Storage.FileIO;
 using CarinaStudio.Collections;
 using CarinaStudio.Threading;
+using CarinaStudio.Windows.Input;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace CarinaStudio.AppSuite.Controls;
 
@@ -34,7 +37,9 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	// Constructor.
 	public PathEnvVarEditorDialogImpl()
 	{
+		this.EditPathCommand = new Command<string?>(this.EditPath);
 		this.Paths = ListExtensions.AsReadOnly(this.paths);
+		this.RemovePathCommand = new Command<string?>(this.RemovePath);
 		AvaloniaXamlLoader.Load(this);
 		this.pathListBox = this.Get<CarinaStudio.AppSuite.Controls.ListBox>(nameof(pathListBox)).Also(it =>
 		{
@@ -44,13 +49,20 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	}
 
 
-	// Add new path.
-	async void AddPath()
+	/// <summary>
+	/// Add new path.
+	/// </summary>
+	public async void AddPath()
 	{
-		var path = await new OpenFolderDialog()
+		var path = (await this.StorageProvider.OpenFolderPickerAsync(new()
 		{
 			Title = this.Application.GetString("SystemPathEditorDialog.AddPath"),
-		}.ShowAsync(this);
+		})).Let(it => 
+		{
+			if (it == null || it.Count == 0 || !it[0].TryGetUri(out var uri))
+				return null;
+			return uri.LocalPath;
+		});
 		if (string.IsNullOrEmpty(path) || this.IsClosed)
 			return;
 		var index = this.paths.IndexOf(path);
@@ -71,12 +83,17 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		{
 			return;
 		}
-		var newPath = await new OpenFolderDialog()
+		var newPath = (await this.StorageProvider.OpenFolderPickerAsync(new()
 		{
-			Directory = path,
+			SuggestedStartLocation = new BclStorageFolder(path),
 			Title = this.Application.GetString("SystemPathEditorDialog.EditPath"),
-		}.ShowAsync(this);
-		if (string.IsNullOrEmpty(newPath) 
+		})).Let(it => 
+		{
+			if (it == null || it.Count == 0 || !it[0].TryGetUri(out var uri))
+				return null;
+			return uri.LocalPath;
+		});
+		if (string.IsNullOrEmpty(newPath)
 			|| this.IsClosed 
 			|| CarinaStudio.IO.PathEqualityComparer.Default.Equals(path, newPath))
 		{
@@ -85,11 +102,17 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		this.paths.Remove(path);
 		var index = this.paths.IndexOf(newPath);
 		if (index < 0)
-			index = this.paths.Add(path);
+			index = this.paths.Add(newPath);
 		this.pathListBox.SelectedIndex = index;
 		this.pathListBox.Focus();
 		this.SynchronizationContext.Post(() => this.pathListBox.ScrollIntoView(index));
 	}
+
+
+	/// <summary>
+	/// Command to edit specific path.
+	/// </summary>
+	public ICommand EditPathCommand { get; }
 
 
 	// Get path list from system.
@@ -204,10 +227,8 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	}
 
 
-	/// <summary>
-	/// Remove path.
-	/// </summary>
-	public void RemovePath(string? path)
+	// Remove path.
+	void RemovePath(string? path)
 	{
 		if (path == null 
 			||this.GetValue<bool>(IsRefreshingPathsProperty) 
@@ -219,6 +240,12 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		this.pathListBox.SelectedIndex = -1;
 		this.pathListBox.Focus();
 	}
+
+
+	/// <summary>
+	/// Command to remove specific path.
+	/// </summary>
+	public ICommand RemovePathCommand { get; }
 
 
 	/// <summary>

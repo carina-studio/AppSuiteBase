@@ -13,7 +13,7 @@ namespace CarinaStudio.AppSuite.Converters
 		/// <summary>
 		/// Default instance without decimal place.
 		/// </summary>
-		public static readonly RatioToPercentageConverter Default = new RatioToPercentageConverter(0);
+		public static readonly IValueConverter Default = new RatioToPercentageConverter(0);
 
 
 		// Fields.
@@ -27,7 +27,7 @@ namespace CarinaStudio.AppSuite.Converters
 		public RatioToPercentageConverter(int decimalPlaces)
 		{
 			if (decimalPlaces < 0)
-				throw new ArgumentOutOfRangeException();
+				throw new ArgumentOutOfRangeException(nameof(decimalPlaces));
 			if (decimalPlaces > 0)
 			{
 				this.stringFormat = new StringBuilder("{0:0.").Also(it =>
@@ -84,8 +84,8 @@ namespace CarinaStudio.AppSuite.Converters
 		/// <inheritdoc/>
 		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
 		{
-			if (value is string str && str.Length > 1 && str[str.Length - 1] == '%')
-				value = str.Substring(0, str.Length - 1);
+			if (value is string str && str.Length > 1 && str[^1] == '%')
+				value = str[0..^1];
 			var ratio = value.Let(it =>
 			{
 				if (it is IConvertible convertible)

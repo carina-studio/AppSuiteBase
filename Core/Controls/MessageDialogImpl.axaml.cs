@@ -4,8 +4,10 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
+using CarinaStudio.Windows.Input;
 using System;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace CarinaStudio.AppSuite.Controls;
 
@@ -38,6 +40,7 @@ partial class MessageDialogImpl : Dialog
 	// Constructor.
 	public MessageDialogImpl()
 	{
+		this.SelectResultCommand = new Command<MessageDialogResult?>(this.SelectResult);
 		AvaloniaXamlLoader.Load(this);
 		this.doNotAskOrShowAgainPanel = this.Get<Panel>(nameof(doNotAskOrShowAgainPanel));
 		this.doNotAskOrShowAgainCheckBox = this.Get<CheckBox>(nameof(doNotAskOrShowAgainCheckBox));
@@ -251,6 +254,12 @@ partial class MessageDialogImpl : Dialog
 			this.Close(result);
 		}
 	}
+
+
+	/// <summary>
+	/// Command to select result.
+	/// </summary>
+	public ICommand SelectResultCommand { get; }
 
 
 	// Update text of buttons.

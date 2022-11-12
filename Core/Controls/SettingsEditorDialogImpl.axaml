@@ -21,14 +21,14 @@
 
 		<!-- Content -->
 		<controls:ListBox Name="settingsListBox" Background="{x:Static Brushes.Transparent}" BorderThickness="0" DoubleClickOnItem="OnSettingsListBoxDoubleClickOnItem" Height="400" Items="{Binding $parent[Window].SettingKeyValues}">
-			<ListBox.DataTemplates>
+			<ListBox.ItemTemplate>
 				<DataTemplate>
 					<StackPanel>
 						<TextBlock FontWeight="Bold" Text="{Binding Item1.Name}" TextTrimming="CharacterEllipsis"/>
 						<TextBlock Text="{Binding Item2}" TextTrimming="CharacterEllipsis"/>
 					</StackPanel>
 				</DataTemplate>
-			</ListBox.DataTemplates>
+			</ListBox.ItemTemplate>
 		</controls:ListBox>
 		
 	</DockPanel>

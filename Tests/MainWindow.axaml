@@ -218,7 +218,7 @@
 												6789
 											</ComboBox>
 
-											<Button Classes="ToolBar_Button" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}">
+											<Button Classes="ToolBar_Button" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}">
 												<Image Classes="Icon" Source="{StaticResource Image/Icon.Lightbulb}"/>
 											</Button>
 
@@ -684,17 +684,17 @@
 					</TabItem.Header>
 					<Panel>
 						<StackPanel HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Top">
-							<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" Margin="10" VerticalAlignment="Center"/>
+							<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" Margin="10" VerticalAlignment="Center"/>
 							<TextBlock Name="tutorialAnchorTextBlock" Margin="20,10,10,10" Text="Anchor" VerticalAlignment="Center"/>
 						</StackPanel>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Left" Margin="10,10,10,80" VerticalAlignment="Center"/>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Bottom"/>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="10,10,20,10" VerticalAlignment="Top"/>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center"/>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="20,10,10,10" VerticalAlignment="Bottom"/>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Top"/>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10,80,10,10" VerticalAlignment="Center"/>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorial}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Left" Margin="10,10,10,80" VerticalAlignment="Center"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Bottom"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="10,10,20,10" VerticalAlignment="Top"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="20,10,10,10" VerticalAlignment="Bottom"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Top"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10,80,10,10" VerticalAlignment="Center"/>
+						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom"/>
 					</Panel>
 				</TabItem>
 

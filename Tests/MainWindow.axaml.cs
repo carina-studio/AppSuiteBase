@@ -53,6 +53,7 @@ namespace CarinaStudio.AppSuite.Tests
         public MainWindow()
         {
             this.ShowAppInfoDialogCommand = new Command(() => this.ShowAppInfoDialog(), this.canShowAppInfo);
+            this.ShowTutorialCommand = new Command<IVisual>(this.ShowTutorial);
 
             this.hfProcessInfoUpdateToken = this.Application.ProcessInfo.RequestHighFrequencyUpdate();
 
@@ -307,7 +308,7 @@ namespace CarinaStudio.AppSuite.Tests
             }));
         }
 
-        async void ShowAppInfoDialog()
+        public async void ShowAppInfoDialog()
         {
             this.canShowAppInfo.Update(false);
             await this.Application.ShowApplicationInfoDialogAsync(this);
@@ -349,7 +350,7 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        public void ShowTutorial(IVisual anchor)
+        void ShowTutorial(IVisual anchor)
         {
             var tutorial = new Tutorial().Also(it =>
             {
@@ -372,6 +373,9 @@ namespace CarinaStudio.AppSuite.Tests
             });
             this.ShowTutorial(tutorial);
         }
+
+
+        public ICommand ShowTutorialCommand { get; }
 
 
         public void SwitchAppCulture()

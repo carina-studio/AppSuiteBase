@@ -8,7 +8,7 @@ namespace CarinaStudio.AppSuite.Converters
     internal class ScrollingButtonVisibilityConverter : IMultiValueConverter
     {
         // Static fields.
-        public static readonly ScrollingButtonVisibilityConverter Default = new ScrollingButtonVisibilityConverter();
+        public static readonly IMultiValueConverter Default = new ScrollingButtonVisibilityConverter();
 
 
         /// <inheritdoc/>
@@ -29,9 +29,5 @@ namespace CarinaStudio.AppSuite.Converters
             }
             return false;
         }
-
-
-        /// <inheritdoc/>
-        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => null;
     }
 }

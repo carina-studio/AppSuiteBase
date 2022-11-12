@@ -12,14 +12,14 @@ namespace CarinaStudio.AppSuite.Tests
             InitializeComponent();
         }
 
-        protected override ApplicationOptions OnCreateViewModel() => new ApplicationOptions();
+        protected override ApplicationOptions OnCreateViewModel() => new();
 
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
         }
 
-        void Test()
+        public void Test()
         {
             using var appInfo = new AppInfo();
             new AppSuite.Controls.ApplicationInfoDialog(appInfo).ShowDialog(this);

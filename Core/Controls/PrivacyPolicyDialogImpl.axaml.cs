@@ -24,7 +24,7 @@ namespace CarinaStudio.AppSuite.Controls
         // Constructor.
         public PrivacyPolicyDialogImpl()
         {
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
             var app = this.Application;
             var appName = app.Name;
             if (app.IsPrivacyPolicyAgreedBefore)
@@ -40,8 +40,10 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
-        // Agree the user agreement.
-        void Agree()
+        /// <summary>
+        /// Agree the user agreement.
+        /// </summary>
+        public void Agree()
         {
             this.hasResult = true;
             this.Application.AgreePrivacyPolicy();
@@ -49,16 +51,14 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
-        // Agree the user agreement.
-        void Decline()
+        /// <summary>
+        /// Decline the user agreement.
+        /// </summary>
+        public void Decline()
         {
             this.hasResult = true;
             this.Close(false);
         }
-
-
-        // Initialize.
-        private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
 
         // Called when closing.

@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
+using Avalonia.Platform.Storage;
 using CarinaStudio.AppSuite.Converters;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.ViewModels;
@@ -144,16 +145,24 @@ namespace CarinaStudio.AppSuite.Controls
 				return;
 
 			// select file
-			var fileName = await new SaveFileDialog().Also(it =>
+			var options = new FilePickerSaveOptions().Also(options =>
 			{
 				var dateTime = DateTime.Now;
-				it.Filters!.Add(new FileDialogFilter().Also(filter =>
+				options.FileTypeChoices = new FilePickerFileType[]
 				{
-					filter.Extensions.Add("zip");
-					filter.Name = this.Application.GetString("FileFormat.Zip");
-				}));
-				it.InitialFileName = $"Logs-{dateTime:yyyyMMdd-HHmmss}.zip";
-			}).ShowAsync(this);
+					new FilePickerFileType(this.Application.GetStringNonNull("FileFormat.Zip")).Also(type =>
+					{
+						type.Patterns = new string[] { "*.zip" };
+					}),
+				};
+				options.SuggestedFileName = $"Logs-{dateTime:yyyyMMdd-HHmmss}.zip";
+			});
+			var fileName = (await this.StorageProvider.SaveFilePickerAsync(options))?.Let(it =>
+			{
+				if (it.TryGetUri(out var uri))
+					return uri.LocalPath;
+				return null;
+			});
 			if (fileName == null)
 				return;
 

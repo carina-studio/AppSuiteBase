@@ -997,7 +997,6 @@
 							<Border x:Name="TrackBorder"
 									Background="{DynamicResource ScrollBarTrackFill}"
 									BorderBrush="{DynamicResource ScrollBarTrackStroke}"
-									BorderThickness="{DynamicResource ScrollBarTrackBorderThemeThickness}"
 									CornerRadius="{TemplateBinding CornerRadius}"
 									Opacity="0"
 									Grid.ColumnSpan="3"/>
@@ -1081,7 +1080,6 @@
 							<Border x:Name="TrackBorder"
 									Background="{DynamicResource ScrollBarTrackFill}"
 									BorderBrush="{DynamicResource ScrollBarTrackStroke}"
-									BorderThickness="{DynamicResource ScrollBarTrackBorderThemeThickness}"
 									CornerRadius="{TemplateBinding CornerRadius}"
 									Opacity="0"
 									Grid.RowSpan="3"/>

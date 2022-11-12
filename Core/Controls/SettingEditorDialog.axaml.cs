@@ -26,17 +26,13 @@ namespace CarinaStudio.AppSuite.Controls
 		// Constructor.
 		public SettingEditorDialog()
 		{
-			InitializeComponent();
-			this.enumComboBox = this.FindControl<EnumComboBox>(nameof(enumComboBox)).AsNonNull();
-			this.integerTextBox = this.FindControl<IntegerTextBox>(nameof(integerTextBox)).AsNonNull();
-			this.numericUpDown = this.FindControl<NumericUpDown>(nameof(numericUpDown)).AsNonNull();
-			this.textBox = this.FindControl<TextBox>(nameof(this.textBox)).AsNonNull();
-			this.toggleSwitch = this.FindControl<ToggleSwitch>(nameof(toggleSwitch)).AsNonNull();
+			AvaloniaXamlLoader.Load(this);
+			this.enumComboBox = this.Get<EnumComboBox>(nameof(enumComboBox));
+			this.integerTextBox = this.Get<IntegerTextBox>(nameof(integerTextBox));
+			this.numericUpDown = this.Get<NumericUpDown>(nameof(numericUpDown));
+			this.textBox = this.Get<TextBox>(nameof(this.textBox));
+			this.toggleSwitch = this.Get<ToggleSwitch>(nameof(toggleSwitch));
 		}
-
-
-		// Initialize.
-		private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
 
 
 		// Called when opened.
@@ -84,8 +80,10 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		// Reset setting value.
-		void ResetValue()
+		/// <summary>
+		/// Reset setting value.
+		/// </summary>
+		public void ResetValue()
 		{
 			var settings = this.Settings;
 			var key = this.SettingKey;
@@ -111,8 +109,10 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		// Update setting value.
-		void UpdateValue()
+		/// <summary>
+		/// Update setting value.
+		/// </summary>
+		public void UpdateValue()
 		{
 			var settings = this.Settings;
 			var key = this.SettingKey;

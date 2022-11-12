@@ -104,7 +104,7 @@ namespace CarinaStudio.AppSuite.Tests
         //public override Uri? PackageManifestUri => new Uri("https://raw.githubusercontent.com/carina-studio/ULogViewer/master/PackageManifest-Preview.json");
 
 
-        public override Version? PrivacyPolicyVersion => new Version(1, 3);
+        public override Version? PrivacyPolicyVersion => new(1, 4);
 
 
         //protected override string? ProVersionProductId => "Test";
@@ -114,6 +114,6 @@ namespace CarinaStudio.AppSuite.Tests
             Task.CompletedTask;
 
 
-        public override Version? UserAgreementVersion => new Version(1, 5);
+        public override Version? UserAgreementVersion => new(1, 6);
     }
 }
