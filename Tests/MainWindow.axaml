@@ -488,6 +488,7 @@
 								<Button Command="{Binding $parent[Window].Application.ShowMainWindowAsync}" Content="Open New Window" Margin="5"/>
 								<Button Command="{Binding $parent[Window].RestartApp}" Content="Restart App" Margin="5"/>
 								<Button Command="{Binding $parent[Window].EditConfiguration}" Content="Edit Configuration" Margin="5"/>
+								<Button Command="{Binding $parent[Window].Shutdown}" Content="Shutdown" Margin="5"/>
 							</WrapPanel>
 
 							<abControls:LinkTextBlock HorizontalAlignment="Left" IsEnabled="False" Margin="5" Text="Google" Uri="http://www.google.com/"/>

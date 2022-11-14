@@ -94,11 +94,15 @@ namespace CarinaStudio.AppSuite
                             if (it == null)
                                 return NSApplication.TerminateReply.TerminateNow;
                             it.SendMessageToBaseAppDelegateWithResult(cmd, NSApplication.TerminateReply.TerminateNow, app);
+                            if (it.app.shutdownSource == ShutdownSource.None)
+                                it.app.shutdownSource = ShutdownSource.System;
                             if (!it.app.isShutdownStarted)
                             {
                                 it.app.Logger.LogWarning("Shutting down has been requested by system");
                                 it.app.Shutdown();
                             }
+                            if (it.app.shutdownSource == ShutdownSource.Application)
+                                return NSApplication.TerminateReply.TerminateNow;
                             return NSApplication.TerminateReply.TerminateLater;
                         });
                     });
@@ -259,6 +263,15 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        // Source to request shutting down.
+        enum ShutdownSource
+        {
+            None,
+            Application,
+            System,
+        }
+
+
         /// <summary>
         /// Argument indicates to enable debug mode.
         /// </summary>
@@ -359,6 +372,7 @@ namespace CarinaStudio.AppSuite
         string? restartArgs;
         SettingsImpl? settings;
         readonly string settingsFilePath;
+        ShutdownSource shutdownSource = ShutdownSource.None;
         Controls.SplashWindowImpl? splashWindow;
         long splashWindowShownTime;
         readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
@@ -3525,6 +3539,17 @@ namespace CarinaStudio.AppSuite
             this.VerifyAccess();
 
             // update state
+            if (this.shutdownSource == ShutdownSource.None)
+                this.shutdownSource = ShutdownSource.Application;
+            switch (this.shutdownSource)
+            {
+                case ShutdownSource.Application:
+                    this.Logger.LogWarning("Shut down requested by application");
+                    break;
+                case ShutdownSource.System:
+                    this.Logger.LogWarning("Shut down requested by system");
+                    break;
+            }
             bool isFirstCall = !this.isShutdownStarted;
             if (isFirstCall)
             {
@@ -3572,9 +3597,12 @@ namespace CarinaStudio.AppSuite
             this.Logger.LogWarning("Prepare shutting down");
             await this.OnPrepareShuttingDownAsync();
 
-            // shut down
-            this.Logger.LogWarning("Shut down");
-            (this.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
+            // shut down Avalonia
+            if (Platform.IsNotMacOS)
+            {
+                this.Logger.LogWarning("Shut down");
+                (this.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
+            }
 
             // restart application
             if (isRestartRequested)
@@ -3611,10 +3639,27 @@ namespace CarinaStudio.AppSuite
             }
 
             // reply to system that application can be shutted down now
+            // complete shutting down
             if (Platform.IsMacOS)
             {
-                var selector = ObjCSelector.FromName("replyToApplicationShouldTerminate:");
-                NSApplication.Current?.SendMessage(selector, true);
+                this.Logger.LogWarning("Shut down");
+                switch (this.shutdownSource)
+                {
+                    case ShutdownSource.Application:
+                    {
+                        var selector = ObjCSelector.FromName("terminate:");
+                        NSApplication.Current?.SendMessage(selector, IntPtr.Zero);
+                        break;
+                    }
+                    case ShutdownSource.System:
+                    {
+                        var selector = ObjCSelector.FromName("replyToApplicationShouldTerminate:");
+                        NSApplication.Current?.SendMessage(selector, true);
+                        break;
+                    }
+                    default:
+                        throw new NotSupportedException($"Unknown source of shutting down: {this.shutdownSource}.");
+                }
             }
         }
 

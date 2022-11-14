@@ -378,6 +378,10 @@ namespace CarinaStudio.AppSuite.Tests
         public ICommand ShowTutorialCommand { get; }
 
 
+        public void Shutdown() =>
+            this.Application.Shutdown();
+
+
         public void SwitchAppCulture()
         {
             this.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, this.Settings.GetValueOrDefault(SettingKeys.Culture) switch
