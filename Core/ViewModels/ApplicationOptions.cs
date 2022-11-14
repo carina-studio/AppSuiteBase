@@ -89,9 +89,32 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// </summary>
         public double CustomScreenScaleFactor
         {
-            get => this.Application.CustomScreenScaleFactor;
-            set => this.Application.CustomScreenScaleFactor = value;
+            get 
+            {
+                var factor = this.Application.CustomScreenScaleFactor;
+                if (!double.IsFinite(factor) || factor < 1.0)
+                    return 1.0;
+                if (factor > this.MaxCustomScreenScaleFactor)
+                    return this.MaxCustomScreenScaleFactor;
+                return this.CustomScreenScaleFactorGranularity * (int)((factor / this.CustomScreenScaleFactorGranularity) + 0.5);
+            }
+            set
+            {
+                if (!double.IsFinite(value))
+                    return;
+                if (value < 1.0)
+                    value = 1.0;
+                else if (value > this.MaxCustomScreenScaleFactor)
+                    value = this.MaxCustomScreenScaleFactor;
+                this.Application.CustomScreenScaleFactor = this.CustomScreenScaleFactorGranularity * (int)((value / this.CustomScreenScaleFactorGranularity) + 0.5);
+            }
         }
+
+
+        /// <summary>
+        /// Get granularity of <see cref="CustomScreenScaleFactor"/>.
+        /// </summary>
+        public virtual double CustomScreenScaleFactorGranularity { get => 0.25; }
 
 
         /// <summary>
@@ -212,6 +235,12 @@ namespace CarinaStudio.AppSuite.ViewModels
             get => (this.Application as AppSuiteApplication)?.LogOutputTargetPort ?? 0;
             set => (this.Application as AppSuiteApplication)?.Let(app => app.LogOutputTargetPort = value);
         }
+
+
+        /// <summary>
+        /// Get maximum value of <see cref="CustomScreenScaleFactor"/>.
+        /// </summary>
+        public virtual double MaxCustomScreenScaleFactor { get => 4.0; }
 
 
         /// <summary>

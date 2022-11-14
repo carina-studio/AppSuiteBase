@@ -959,7 +959,7 @@ namespace CarinaStudio.AppSuite
             get => CachedCustomScreenScaleFactor;
             set
             {
-                if (!Platform.IsLinux)
+                if (Platform.IsNotLinux)
                     return;
                 if (!double.IsFinite(value))
                     throw new ArgumentException("Scale should be finite number.");
