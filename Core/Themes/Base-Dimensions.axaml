@@ -188,8 +188,9 @@
 	<CornerRadius x:Key="OverlayCornerRadius">8</CornerRadius>
 
 	<!-- PathEnvVarEditorDialog -->
+	<sys:Double x:Key="Double/PathEnvVarEditorDialog.CustomPathListBox.Height">100</sys:Double>
 	<sys:Double x:Key="Double/PathEnvVarEditorDialog.Height">400</sys:Double>
-	<sys:Double x:Key="Double/PathEnvVarEditorDialog.MinHeight">200</sys:Double>
+	<sys:Double x:Key="Double/PathEnvVarEditorDialog.MinHeight">300</sys:Double>
 	<sys:Double x:Key="Double/PathEnvVarEditorDialog.MinWidth">200</sys:Double>
 	<sys:Double x:Key="Double/PathEnvVarEditorDialog.Width">400</sys:Double>
 

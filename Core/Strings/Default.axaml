@@ -115,6 +115,9 @@
 	<sys:String x:Key="String/AppSuiteApplication.NetworkConnectionNeededForProductActivation">In order to activate '{0}', please connect to internet or it will be deactivated temporarily after a while.</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.ReActivateProductNeeded">Unable to activate '{0}', please try activating it again.</sys:String>
 
+	<!-- CommandSearchPaths -->
+	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">Update paths defined by system</sys:String>
+
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Add">Add</sys:String>
 	<sys:String x:Key="String/Common.Add.WithDialog">Add…</sys:String>
@@ -235,6 +238,7 @@
 	<!-- PathEnvVarEditorDialog -->
 	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath">Add new directory path</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath.WithDialog">Add new directory path…</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.CustomPaths">Default paths</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.EditPath">Edit directory path</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">Edit PATH environment variable</sys:String>
 

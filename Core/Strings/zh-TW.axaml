@@ -113,6 +113,9 @@
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">載入佈景主題</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.NetworkConnectionNeededForProductActivation">請連接至網際網路以啟用「{0}」，否則「{0}」將會在一段時間後暫時被停用。</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.ReActivateProductNeeded">無法啟用「{0}」，請嘗試再次啟用。</sys:String>
+
+	<!-- CommandSearchPaths -->
+	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">更新系統定義路徑</sys:String>
 	
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Add">加入</sys:String>
@@ -234,6 +237,7 @@
 	<!-- PathEnvVarEditorDialog -->
 	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath">新增目錄路徑</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath.WithDialog">新增目錄路徑…</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.CustomPaths">預設路徑</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.EditPath">編輯目錄路徑</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">編輯 PATH 環境變數</sys:String>
 

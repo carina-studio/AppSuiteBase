@@ -2,19 +2,15 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage.FileIO;
+using CarinaStudio.AppSuite.IO;
 using CarinaStudio.Collections;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Globalization;
 using System.Windows.Input;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -37,8 +33,9 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	// Constructor.
 	public PathEnvVarEditorDialogImpl()
 	{
+		this.CustomPaths = ListExtensions.AsReadOnly(new SortedObservableList<string>(CommandSearchPaths.CustomPaths));
 		this.EditPathCommand = new Command<string?>(this.EditPath);
-		this.Paths = ListExtensions.AsReadOnly(this.paths);
+		this.SystemPaths = ListExtensions.AsReadOnly(this.paths);
 		this.RemovePathCommand = new Command<string?>(this.RemovePath);
 		AvaloniaXamlLoader.Load(this);
 		this.pathListBox = this.Get<CarinaStudio.AppSuite.Controls.ListBox>(nameof(pathListBox)).Also(it =>
@@ -72,6 +69,12 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		this.pathListBox.Focus();
 		this.SynchronizationContext.Post(() => this.pathListBox.ScrollIntoView(index));
 	}
+
+
+	/// <summary>
+	/// Custom path list.
+	/// </summary>
+	public IList<string> CustomPaths { get; }
 
 
 	// Edit path.
@@ -115,84 +118,6 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	public ICommand EditPathCommand { get; }
 
 
-	// Get path list from system.
-	static Task<HashSet<string>> GetPathsAsync(bool includeGlobal = true, bool includeUser = true) => Task.Run(() =>
-	{
-		var pathSet = new HashSet<string>(CarinaStudio.IO.PathEqualityComparer.Default);
-		if (Platform.IsMacOS)
-		{
-			if (includeGlobal)
-			{
-				try
-				{
-					using var reader = new StreamReader("/etc/paths");
-					var paths = new List<string>();
-					var path = reader.ReadLine();
-					while (path != null)
-					{
-						if (!string.IsNullOrWhiteSpace(path))
-							pathSet.Add(path);
-						path = reader.ReadLine();
-					}
-				}
-				catch
-				{ }
-			}
-		}
-		else if (Platform.IsWindows)
-		{
-			if (includeGlobal)
-			{
-				Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.Machine)?.Split(Path.PathSeparator)?.Let(it =>
-				{
-					foreach (var path in it)
-					{
-						if (!string.IsNullOrWhiteSpace(path))
-							pathSet.Add(path);
-					}
-				});
-			}
-			if (includeUser)
-			{
-				Environment.GetEnvironmentVariable("Path", EnvironmentVariableTarget.User)?.Split(Path.PathSeparator)?.Let(it =>
-				{
-					foreach (var path in it)
-					{
-						if (!string.IsNullOrWhiteSpace(path))
-							pathSet.Add(path);
-					}
-				});
-			}
-		}
-		else
-		{
-			Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator)?.Let(it =>
-			{
-				foreach (var path in it)
-				{
-					if (!string.IsNullOrWhiteSpace(path))
-						pathSet.Add(path);
-				}
-			});
-		}
-		return pathSet;
-	});
-
-
-	// Generate value for PATH environment.
-	static string GetPathValue(IEnumerable<string> paths)
-	{
-		var pathBuffer = new StringBuilder();
-		foreach (var path in paths)
-		{
-			if (pathBuffer.Length > 0)
-				pathBuffer.Append(Path.PathSeparator);
-			pathBuffer.Append(path);
-		}
-		return pathBuffer.ToString();
-	}
-
-
 	/// <inheritdoc/>
 	protected override void OnClosing(CancelEventArgs e)
 	{
@@ -210,17 +135,11 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	}
 
 
-	/// <summary>
-	/// Path list.
-	/// </summary>
-	public IList<string> Paths { get; }
-
-
 	// Refresh path list.
 	async void RefreshPaths()
 	{
 		this.SetValue<bool>(IsRefreshingPathsProperty, true);
-		var paths = await GetPathsAsync();
+		var paths = await CommandSearchPaths.GetPathsAsync();
 		this.paths.Clear();
 		this.paths.AddAll(paths);
 		this.SetValue<bool>(IsRefreshingPathsProperty, false);
@@ -254,132 +173,15 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	public async void SaveAndClose()
 	{
 		this.SetValue<bool>(IsSavingPathsProperty, true);
-		var currentPaths = await GetPathsAsync();
-		var success = true;
-		if (!currentPaths.SetEquals(this.paths))
-		{
-			var paths = new SortedObservableList<string>(CarinaStudio.IO.PathComparer.Default, this.paths);
-			success = await Task.Run(async () =>
-			{
-				var tempFilePaths = new List<string>();
-				try
-				{
-					if (Platform.IsMacOS)
-					{
-						// generate paths file
-						var tempPathsFile = Path.GetTempFileName().Also(it => tempFilePaths.Add(it));
-						using (var stream = new FileStream(tempPathsFile, FileMode.Create, FileAccess.ReadWrite))
-						{
-							using var writer = new StreamWriter(stream, Encoding.UTF8);
-							for (int i = 0, count = paths.Count; i < count; ++i)
-							{
-								if (i > 0)
-									writer.WriteLine();
-								writer.Write(paths[i]);
-							}
-						}
-
-						// generate apple script file
-						var tempScriptFile = Path.GetTempFileName().Also(it => tempFilePaths.Add(it));
-						using (var stream = new FileStream(tempScriptFile, FileMode.Create, FileAccess.ReadWrite))
-						{
-							using var writer = new StreamWriter(stream, Encoding.UTF8);
-							writer.Write($"do shell script \"mv -f '{tempPathsFile}' '/etc/paths'\"");
-							writer.Write($" with prompt \"{this.Application.GetString("SystemPathEditorDialog.Title")}\"");
-							writer.Write($" with administrator privileges");
-						}
-
-						// run apple script
-						using var process = Process.Start(new ProcessStartInfo()
-						{
-							Arguments = tempScriptFile,
-							CreateNoWindow = true,
-							FileName = "osascript",
-							RedirectStandardError = true,
-							RedirectStandardOutput = true,
-							UseShellExecute = false,
-						});
-						if (process != null)
-						{
-							await process.WaitForExitAsync();
-							return process.ExitCode == 0;
-						}
-						else
-						{
-							this.Logger.LogError("Unable to start osascript to save paths to system");
-							return false;
-						}
-					}
-					else if (Platform.IsWindows)
-					{
-						// separate into machine and user paths
-						var currentMachinePaths = await GetPathsAsync(true, false);
-						var currentUserPaths = await GetPathsAsync(false, true);
-						var machinePaths = new HashSet<string>(currentMachinePaths, CarinaStudio.IO.PathEqualityComparer.Default).Also(it =>
-						{
-							foreach (var path in it.ToArray())
-							{
-								if (!paths.Contains(path))
-									it.Remove(path);
-							}
-						});
-						var userPaths = new HashSet<string>(CarinaStudio.IO.PathEqualityComparer.Default).Also(it =>
-						{
-							foreach (var path in paths)
-							{
-								if (!machinePaths.Contains(path))
-									it.Add(path);
-							}
-						});
-
-						// change user paths
-						if (!currentUserPaths.SetEquals(userPaths))
-							Environment.SetEnvironmentVariable("Path", GetPathValue(userPaths), EnvironmentVariableTarget.User);
-
-						// change machine paths
-						if (!currentMachinePaths.SetEquals(machinePaths))
-						{
-							using var process = Process.Start(new ProcessStartInfo()
-							{
-								Arguments = $"/c setx /M Path \"{GetPathValue(machinePaths)}\"",
-								CreateNoWindow = true,
-								FileName = "cmd",
-								UseShellExecute = true,
-								Verb = "runas",
-							});
-							if (process != null)
-							{
-								await process.WaitForExitAsync();
-								if (process.ExitCode != 0)
-									return false;
-							}
-							else
-							{
-								this.Logger.LogError("Unable to start cmd to save paths to system");
-								return false;
-							}
-						}
-						return true;
-					}
-					else
-					{
-						return false;
-					}
-				}
-				catch (Exception ex)
-				{
-					this.Logger.LogError(ex, "Failed to save paths to system");
-					return false;
-				}
-				finally
-				{
-					foreach (var tempFilePath in tempFilePaths)
-						Global.RunWithoutError(() => File.Delete(tempFilePath));
-				}
-			});
-		}
+		var success = await CommandSearchPaths.SetSystemPathsAsync(this.paths);
 		this.SetValue<bool>(IsSavingPathsProperty, false);
 		if (success)
 			this.Close(true);
 	}
+
+
+	/// <summary>
+	/// System path list.
+	/// </summary>
+	public IList<string> SystemPaths { get; }
 }

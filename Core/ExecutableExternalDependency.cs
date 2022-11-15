@@ -1,8 +1,7 @@
-using CarinaStudio.Collections;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite;
@@ -44,7 +43,7 @@ public class ExecutableExternalDependency : ExternalDependency
 
 
     /// <inheritdoc/>
-    protected override Task<bool> OnCheckAvailabilityAsync() => Task.Run(() =>
+    protected override async Task<bool> OnCheckAvailabilityAsync()
     {
         var exeNames = new List<string>();
         if (Platform.IsWindows)
@@ -58,47 +57,19 @@ public class ExecutableExternalDependency : ExternalDependency
             exeNames.Add(this.ExecutableName);
             exeNames.Add($"{this.ExecutableName}.sh");
         }
-        var paths = Global.Run(() =>
+        var paths = await IO.CommandSearchPaths.GetPathsAsync();
+        return await Task.Run(() =>
         {
-            if (Platform.IsMacOS)
+            foreach (var directoryPath in paths)
             {
-                try
+                foreach (var exeName in exeNames)
                 {
-                    using var reader = new StreamReader("/etc/paths");
-                    var paths = new List<string>();
-                    var path = reader.ReadLine();
-                    while (path != null)
-                    {
-                        if (!string.IsNullOrWhiteSpace(path))
-                            paths.Add(path);
-                        path = reader.ReadLine();
-                    }
-                    return paths.IsNotEmpty() ? paths.ToArray() : Array.Empty<string>();
-                }
-                catch
-                {
-                    return Array.Empty<string>();
+                    string commandFile = Path.Combine(directoryPath, exeName);
+                    if (File.Exists(commandFile))
+                        return true;
                 }
             }
-            else if (Platform.IsWindows)
-            {
-                return new HashSet<string>(IO.PathEqualityComparer.Default).Also(pathSet =>
-                {
-                    Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User)?.Split(Path.PathSeparator)?.Let(it => pathSet.AddAll(it));
-                    Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine)?.Split(Path.PathSeparator)?.Let(it => pathSet.AddAll(it));
-                }).ToArray();
-            }
-            return Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator) ?? Array.Empty<string>();
-        });
-        foreach (var directoryPath in paths)
-        {
-            foreach (var exeName in exeNames)
-            {
-                string commandFile = Path.Combine(directoryPath, exeName);
-                if (File.Exists(commandFile))
-                    return true;
-            }
-        }
-        return false;
-    });
+            return false;
+        }, CancellationToken.None);
+    }
 }

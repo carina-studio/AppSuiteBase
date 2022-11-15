@@ -416,26 +416,8 @@ namespace CarinaStudio.AppSuite.Tests
 
         public void Test()
         {
-            _ = new TextInputDialog()
-            {
-                Message = new FormattedString()
-                {
-                    Format = "Message of text input dialog"
-                }
-            }.ShowDialog(this);
-            //this.integerTextBox2.IsNullValueAllowed = !this.integerTextBox2.IsNullValueAllowed;
-
-            this.integerTextBox.Value = 321;
-            this.integerTextBox.Text = "321";
-            this.integerTextBox.Value = 1234;
-            this.integerTextBox.Text = "1234";
-
-            //this.ipAddressTextBox.Text = "127.0.0.1";
-            //this.ipAddressTextBox.IPAddress = System.Net.IPAddress.Parse("127.0.0.1");
-            //this.ipAddressTextBox.Text = "192.168.0.1";
-            //this.ipAddressTextBox.IPAddress = System.Net.IPAddress.Parse("192.168.0.1");
-
-            //this.Settings.SetValue<bool>(SettingKeys.ShowProcessInfo, !this.Settings.GetValueOrDefault(SettingKeys.ShowProcessInfo));
+            AppSuite.IO.CommandSearchPaths.AddCustomPath(Environment.GetFolderPath(Environment.SpecialFolder.Personal));
+            _ = new PathEnvVarEditorDialog().ShowDialog(this);
         }
 
 
