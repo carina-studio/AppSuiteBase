@@ -42,6 +42,16 @@ public static class CommandSearchPaths
     static volatile ILogger? logger;
 
 
+    // Static initializer.
+    static CommandSearchPaths()
+    {
+        if (Platform.IsMacOS)
+        {
+            customPaths.Add("/opt/homebrew/bin");
+        }
+    }
+
+
     /// <summary>
     /// Add custom search path.
     /// </summary>
