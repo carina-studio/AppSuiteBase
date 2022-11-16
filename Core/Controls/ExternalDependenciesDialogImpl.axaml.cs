@@ -4,7 +4,6 @@ using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using CarinaStudio.Collections;
-using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using System;
@@ -114,6 +113,18 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 		{
 			foreach (var externalDependency in it)
 				externalDependency.PropertyChanged += this.OnExternalDependencyPropertyChanged;
+			Array.Sort(it, (lhs, rhs) =>
+			{
+				if (lhs.State == ExternalDependencyState.Unavailable)
+				{
+					if (rhs.State == ExternalDependencyState.Unavailable)
+						return string.Compare(lhs.Name, rhs.Name);
+					return -1;
+				}
+				if (rhs.State == ExternalDependencyState.Unavailable)
+					return 1;
+				return string.Compare(lhs.Name, rhs.Name);
+			});
 		});
 		this.externalDependenciesPanel = this.Get<Panel>(nameof(externalDependenciesPanel)).Also(panel =>
 		{

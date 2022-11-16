@@ -115,8 +115,7 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
     {
         get
         {
-            if (this.name == null)
-                this.name = this.OnUpdateName();
+            this.name ??= this.OnUpdateName();
             return this.name;
         }
     }
