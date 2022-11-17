@@ -46,11 +46,11 @@
 	<CornerRadius x:Key="CornerRadius/Dialog.TextBlock.Header2">0</CornerRadius>
 	<sys:Double x:Key="Double/Dialog.ControlButton.MinWidth">80</sys:Double>
 	<sys:Double x:Key="Double/Dialog.ListActionButton.MinWidth">80</sys:Double>
-	<sys:Double x:Key="Double/Dialog.Separator.Height">10</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Separator.Height">14</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Height.Large">30</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Height.Micro">2</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Height.Small">3</sys:Double>
-	<sys:Double x:Key="Double/Dialog.Separator.Width">10</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Separator.Width">14</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Width.Large">30</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Width.Micro">2</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Width.Small">3</sys:Double>
