@@ -213,9 +213,15 @@
 	<sys:String x:Key="String/ExternalDependencyPriority.RequiredByFeatures">對部分功能為必要相依性</sys:String>
 
 	<!-- ExternalDependencyState -->
-	<sys:String x:Key="String/ExternalDependencyState.Available">已安裝</sys:String>
-	<sys:String x:Key="String/ExternalDependencyState.CheckingForAvailability">正在確認安裝狀態…</sys:String>
-	<sys:String x:Key="String/ExternalDependencyState.Unavailable">尚未安裝</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Available.Configuration">已完成</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Available.Permission">已授權</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Available.Software">已安裝</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.CheckingForAvailability.Configuration">正在確認組態…</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.CheckingForAvailability.Permission">正在確認權限…</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.CheckingForAvailability.Software">正在確認安裝狀態…</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Unavailable.Configuration">尚未完成</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Unavailable.Permission">尚未授權</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Unavailable.Software">尚未安裝</sys:String>
 	<sys:String x:Key="String/ExternalDependencyState.Unknown">未知</sys:String>
 
 	<!-- FileFormat -->

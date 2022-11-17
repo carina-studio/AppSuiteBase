@@ -77,7 +77,35 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 
 
 	// Converter to convert from state to string.
-	public static readonly IValueConverter StateConverter = new AppSuite.Converters.EnumConverter(AppSuiteApplication.CurrentOrNull, typeof(ExternalDependencyState));
+	public static readonly IMultiValueConverter StateConverter = new FuncMultiValueConverter<object, string?>(values =>
+	{
+		var app = AppSuiteApplication.CurrentOrNull;
+		if (app == null)
+			return null;
+		var type = ExternalDependencyType.Software;
+		var state = ExternalDependencyState.Unknown;
+		var i = 0;
+		foreach (var value in values)
+		{
+			if (value is UnsetValueType)
+			{
+				++i;
+				continue;
+			}
+			switch (i++)
+			{
+				case 0:
+					type = (ExternalDependencyType)value!;
+					break;
+				case 1:
+					state = (ExternalDependencyState)value!;
+					break;
+			}
+		}
+		if (state == ExternalDependencyState.Unknown)
+			return app.GetString("ExternalDependencyState.Unknown");
+		return app.GetString($"ExternalDependencyState.{state}.{type}") ?? state.ToString();
+	});
 
 
 	// Static fields.

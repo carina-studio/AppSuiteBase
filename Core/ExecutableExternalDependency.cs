@@ -20,7 +20,7 @@ public class ExecutableExternalDependency : ExternalDependency
     /// <param name="exeName">Name of executable or command without extension.</param>
     /// <param name="detailsUri">URI for details of external dependency.</param>
     /// <param name="installationUri">URI for downloading and installation of external dependency.</param>
-    public ExecutableExternalDependency(IAppSuiteApplication app, string id, ExternalDependencyPriority priority, string exeName, Uri? detailsUri, Uri? installationUri) : base(app, id, priority)
+    public ExecutableExternalDependency(IAppSuiteApplication app, string id, ExternalDependencyPriority priority, string exeName, Uri? detailsUri, Uri? installationUri) : base(app, id, ExternalDependencyType.Software, priority)
     { 
         this.DetailsUri = detailsUri;
         this.ExecutableName = exeName;

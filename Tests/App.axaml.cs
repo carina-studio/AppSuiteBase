@@ -7,20 +7,53 @@ using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Tests
 {
     public class App : AppSuiteApplication
     {
+        class DotNet7ExternalDependency : ExternalDependency
+        {
+            public DotNet7ExternalDependency(App app) : base(app, "dotnet7", ExternalDependencyType.Configuration, ExternalDependencyPriority.RequiredByFeatures)
+            { }
+
+            protected override async Task<bool> OnCheckAvailabilityAsync() => await Task.Run(() =>
+            {
+                var process = Process.Start(new ProcessStartInfo()
+                {
+                    Arguments = "--version",
+                    CreateNoWindow = true,
+                    FileName = "dotnet",
+                    RedirectStandardOutput = true,
+                    UseShellExecute = false,
+                });
+                if (process != null)
+                {
+                    var isDotNet7 = (process.StandardOutput.ReadLine()?.Contains("7.0")).GetValueOrDefault();
+                    process.WaitForExit();
+                    return isDotNet7;
+                }
+                return false;
+            }, CancellationToken.None);
+
+            protected override string? OnUpdateDescription() =>
+                "Description of .NET 7.";
+
+            protected override string OnUpdateName() =>
+                ".NET 7";
+        }
+
         readonly List<ExternalDependency> externalDependencies = new();
 
         protected override bool AllowMultipleMainWindows => true;
 
         public override ApplicationInfo CreateApplicationInfoViewModel() => new AppInfo();
 
-        public override ApplicationOptions CreateApplicationOptionsViewModel() => new ApplicationOptions();
+        public override ApplicationOptions CreateApplicationOptionsViewModel() => new();
 
         public override int DefaultLogOutputTargetPort => 5566;
 
@@ -64,6 +97,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         protected override async Task OnPrepareStartingAsync()
         {
+            this.externalDependencies.Add(new DotNet7ExternalDependency(this));
             this.externalDependencies.Add(new ExecutableExternalDependency(this, "dotnet", ExternalDependencyPriority.Optional, "dotnet", new Uri("https://dotnet.microsoft.com/"), new Uri("https://dotnet.microsoft.com/download")));
             this.externalDependencies.Add(new ExecutableExternalDependency(this, "bash", ExternalDependencyPriority.RequiredByFeatures, "bash", null, new Uri("https://www.gnu.org/software/bash/")));
             if (Platform.IsLinux)

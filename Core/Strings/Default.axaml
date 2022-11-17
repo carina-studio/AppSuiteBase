@@ -214,9 +214,15 @@
 	<sys:String x:Key="String/ExternalDependencyPriority.RequiredByFeatures">It is required by some features</sys:String>
 
 	<!-- ExternalDependencyState -->
-	<sys:String x:Key="String/ExternalDependencyState.Available">Installed</sys:String>
-	<sys:String x:Key="String/ExternalDependencyState.CheckingForAvailability">Checking for installation state…</sys:String>
-	<sys:String x:Key="String/ExternalDependencyState.Unavailable">Not installed</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Available.Configuration">Ready</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Available.Permission">Granted</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Available.Software">Installed</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.CheckingForAvailability.Configuration">Checking for configuration…</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.CheckingForAvailability.Permission">Checking for permission…</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.CheckingForAvailability.Software">Checking for installation state…</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Unavailable.Configuration">Not ready</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Unavailable.Permission">Not granted</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Unavailable.Software">Not installed</sys:String>
 	<sys:String x:Key="String/ExternalDependencyState.Unknown">Unknown</sys:String>
 
 	<!-- FileFormat -->

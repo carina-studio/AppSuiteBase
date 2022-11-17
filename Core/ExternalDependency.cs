@@ -25,8 +25,9 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
     /// </summary>
     /// <param name="app">Application.</param>
     /// <param name="id">Unique ID of dependency.</param>
+    /// <param name="type">Type of dependency.</param>
     /// <param name="priority">Priority of dependency.</param>
-    protected ExternalDependency(IAppSuiteApplication app, string id, ExternalDependencyPriority priority) : base(app)
+    protected ExternalDependency(IAppSuiteApplication app, string id, ExternalDependencyType type, ExternalDependencyPriority priority) : base(app)
     {
         this.checkAvailabilityAction = new(async () =>
         {
@@ -38,6 +39,7 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
         });
         this.Id = id;
         this.Priority = priority;
+        this.Type = type;
         app.AddWeakEventHandler(nameof(IApplication.StringsUpdated), this.OnAppStringsUpdated);
         this.InvalidateAvailability();
     }
@@ -188,6 +190,12 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
 
 
     /// <summary>
+    /// Get type of external denepdency.
+    /// </summary>
+    public ExternalDependencyType Type { get; }
+
+
+    /// <summary>
     /// Wait for availability check completed.
     /// </summary>
     /// <returns>Task of waiting.</returns>
@@ -240,4 +248,24 @@ public enum ExternalDependencyState
     /// Unavailable.
     /// </summary>
     Unavailable,
+}
+
+
+/// <summary>
+/// Type of external dependency.
+/// </summary>
+public enum ExternalDependencyType
+{
+    /// <summary>
+    /// Software.
+    /// </summary>
+    Software,
+    /// <summary>
+    /// Configuration.
+    /// </summary>
+    Configuration,
+    /// <summary>
+    /// Permission.
+    /// </summary>
+    Permission,
 }
