@@ -118,6 +118,7 @@
 				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
 				<ToggleSwitch Classes="Dialog_ToggleSwitch"/>
 				<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+				<Separator Classes="Dialog_Separator"/>
 
 				<appControls:GroupBox Header="Header" HorizontalContentAlignment="Stretch">
 					<StackPanel>
