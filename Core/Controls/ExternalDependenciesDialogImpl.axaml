@@ -18,9 +18,9 @@
 		<DataTemplate DataType="{x:Type as:ExternalDependency}">
 			<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
 				<Border Classes="Dialog_TextBlock_Header1">
-					<TextBlock Classes="Dialog_TextBlock_Header1" Text="{Binding Name}"/>
+					<RichTextBlock Classes="Dialog_TextBlock_Header1" IsTextSelectionEnabled="True" Text="{Binding Name}"/>
 				</Border>
-				<TextBlock Classes="Dialog_TextBlock" Grid.Row="1" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" Text="{Binding Description}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
+				<RichTextBlock Classes="Dialog_TextBlock" Grid.Row="1" IsTextSelectionEnabled="True" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" Text="{Binding Description}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
 				<Separator Classes="Dialog_Separator" Grid.Row="2" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}"/>
 				<StackPanel Grid.Row="3" Orientation="Horizontal">
 					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Dependencies}"/>
@@ -69,7 +69,7 @@
 
 		<!-- Content -->
 		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="{StaticResource Double/ExternalDependenciesDialog.Content.MaxHeight}">
-			<StackPanel Name="externalDependenciesPanel" Classes="Dialog_ContentPanel_WithHeader"/>
+			<StackPanel Name="externalDependenciesPanel" Background="{x:Static Brushes.Transparent}" Classes="Dialog_ContentPanel_WithHeader"/>
 		</ScrollViewer>
 
 	</DockPanel>

@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using CarinaStudio.Collections;
@@ -172,6 +174,11 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 					}));
 				}
 			}
+			panel.AddHandler(PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
+			{
+				if (e.Source is not RichTextBlock)
+					panel.Focus();
+			}), RoutingStrategies.Tunnel);
 		});
 		this.GetObservable(IsActiveProperty).Subscribe(isActive =>
 		{
