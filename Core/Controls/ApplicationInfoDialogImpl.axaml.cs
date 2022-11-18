@@ -1,9 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
-using CarinaStudio.AppSuite.Converters;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Collections;
@@ -59,7 +60,6 @@ namespace CarinaStudio.AppSuite.Controls
 		PixelRect physicalScreenWorkingArea;
 		IDisposable processInfoHfuToken = EmptyDisposable.Default;
 		readonly Panel productListPanel;
-		readonly EnumConverter productStateConverter;
 		double screenPixelDensity = 1;
 		Size screenSize;
 		Rect screenWorkingArea;
@@ -83,8 +83,15 @@ namespace CarinaStudio.AppSuite.Controls
 			// setup controls
 			AvaloniaXamlLoader.Load(this);
 			this.badgesPanel = this.Get<Panel>(nameof(badgesPanel)).AsNonNull();
+			this.Get<Panel>("itemsPanel").Also(it =>
+			{
+				it.AddHandler(PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
+				{
+					if (e.Source is not RichTextBlock)
+						it.Focus();
+				}), Avalonia.Interactivity.RoutingStrategies.Tunnel);
+			});
 			this.productListPanel = this.Get<Panel>(nameof(productListPanel)).AsNonNull();
-			this.productStateConverter = new(this.Application, typeof(ProductState));
 
 			// setup actions
 			this.updateScreenInfoAction = new(() =>
@@ -272,23 +279,36 @@ namespace CarinaStudio.AppSuite.Controls
 								panel.Children.Add(new Separator().Also(it => 
 									it.Classes.Add("Dialog_Separator_Small")));
 							}
-							panel.Children.Add(new StackPanel().Also(itemPanel => 
+							panel.Children.Add(new Grid().Also(itemPanel => 
 							{ 
+								itemPanel.ColumnDefinitions.Add(new(0, GridUnitType.Auto));
+								itemPanel.ColumnDefinitions.Add(new(0, GridUnitType.Auto));
+								itemPanel.ColumnDefinitions.Add(new(1, GridUnitType.Star));
 								itemPanel.DataContext = productId;
-								itemPanel.Orientation = Avalonia.Layout.Orientation.Horizontal;
-								itemPanel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
-									it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center));
+								itemPanel.Children.Add(new RichTextBlock().Also(it =>
+								{
+									it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
+								}));
 								itemPanel.Children.Add(new Separator().Also(it =>
-									it.Classes.Add("Dialog_Separator_Small")));
-								itemPanel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
-									it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center));
+								{
+									it.Classes.Add("Dialog_Separator_Small");
+									Grid.SetColumn(it, 1);
+								}));
+								itemPanel.Children.Add(new RichTextBlock().Also(it =>
+								{
+									if (this.Application.TryFindResource<IBrush>("Brush/Dialog.TextBlock.Foreground.Description", out var brush))
+										it.Foreground = brush;
+									it.TextTrimming = TextTrimming.CharacterEllipsis;
+									it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
+									Grid.SetColumn(it, 2);
+								}));
 								this.ShowProductInfo(itemPanel);
 							}));
 						}
-						this.FindControl<Panel>("productListSectionPanel")!.IsVisible = true;
+						this.Get<Panel>("productListSectionPanel").IsVisible = true;
 					}
 					else
-						this.FindControl<Panel>("productListSectionPanel")!.IsVisible = false;
+						this.Get<Panel>("productListSectionPanel").IsVisible = false;
 				});
 
 				// show assemblies
@@ -299,7 +319,17 @@ namespace CarinaStudio.AppSuite.Controls
 					{
 						if (panel.Children.Count > 0)
 							panel.Children.Add(new Separator().Also(it => it.Classes.Add("Dialog_Separator_Small")));
-						panel.Children.Add(new Avalonia.Controls.TextBlock() { Text = $"{assembly.GetName().Name} {assembly.GetName().Version}" });
+						var assemblyName = assembly.GetName();
+						var assemblyVersion = assemblyName.Version ?? new Version();
+						if (assemblyVersion.Major != 0 
+							|| assemblyVersion.Minor != 0 
+							|| assemblyVersion.Revision != 0 
+							|| assemblyVersion.Build != 0)
+						{
+							panel.Children.Add(new RichTextBlock() { Text = $"{assemblyName.Name} {assemblyVersion}" });
+						}
+						else
+							panel.Children.Add(new RichTextBlock() { Text = $"{assemblyName.Name}" });
 					}
 				});
 			}
@@ -396,20 +426,27 @@ namespace CarinaStudio.AppSuite.Controls
 			if (view.DataContext is not string productId)
 				return;
 			
+			// get state
+			if (!productManager.TryGetProductState(productId, out var state))
+				state = ProductState.Deactivated;
+			
 			// show name
 			if (!productManager.TryGetProductName(productId, out string? name))
 				name = productId;
-			(view.Children[0] as Avalonia.Controls.TextBlock)?.Let(it => it.Text = name);
-
-			// show state
-			if (productManager.TryGetProductState(productId, out var state))
+			view.Children[0].TryCastAndRun<Avalonia.Controls.TextBlock>(it => it.Text = name);
+			
+			// show authorization state
+			if (state == ProductState.Activated 
+				&& productManager.TryGetProductEmailAddress(productId, out var emailAddress))
 			{
-				(view.Children[2] as Avalonia.Controls.TextBlock)?.Let(it => 
-					it.Text = this.productStateConverter.Convert<string?>(state)?.Let(s =>
-						$"({s})"));
+				view.Children[2].TryCastAndRun<Avalonia.Controls.TextBlock>(it => 
+				{
+					it.IsVisible = true;
+					it.Text = this.Application.GetFormattedString("ApplicationInfoDialog.ProductAuthorizationInfo", emailAddress);
+				});
 			}
 			else
-				(view.Children[2] as Avalonia.Controls.TextBlock)?.Let(it => it.Text = null);
+				view.Children[2].TryCastAndRun<Control>(it => it.IsVisible = false);
 		}
 
 

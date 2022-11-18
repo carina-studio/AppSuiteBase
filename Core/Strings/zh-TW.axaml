@@ -45,6 +45,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessId">識別碼 (ID)：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessInformation">處理程序資訊</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessorCount">處理器個數：{0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ProductAuthorizationInfo">(已授權給 {0})</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Products">相關產品</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProprietaryVersion">(Carina Studio 建置)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.RestartInDebugMode">以偵錯模式重新啟動</sys:String>

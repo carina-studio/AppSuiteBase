@@ -45,6 +45,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessId">ID: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessInformation">Process information</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessorCount">Number of processors: {0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ProductAuthorizationInfo">(Authorized to {0})</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Products">Products</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProprietaryVersion">(Built by Carina Studio)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.RestartInDebugMode">Restart in Debug Mode</sys:String>

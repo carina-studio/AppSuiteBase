@@ -17,6 +17,12 @@
         Classes="Dialog"
         MinWidth="{DynamicResource Double/ApplicationInfoDialog.MinWidth}"
         SizeToContent="WidthAndHeight">
+	
+	<Window.Styles>
+		<Style Selector="RichTextBlock">
+			<Setter Property="IsTextSelectionEnabled" Value="True"/>
+		</Style>
+	</Window.Styles>
 
 	<DockPanel>
 
@@ -42,7 +48,7 @@
 				</Border>
 
 				<!-- Content -->
-				<StackPanel Classes="Dialog_ContentPanel_WithHeader">
+				<StackPanel Name="itemsPanel" Background="{x:Static Brushes.Transparent}" Classes="Dialog_ContentPanel_WithHeader">
 
 					<!-- Icon and title -->
 					<DockPanel HorizontalAlignment="Stretch">
@@ -56,11 +62,11 @@
 						<Border>
 							<StackPanel Orientation="Vertical" VerticalAlignment="Center">
 								<StackPanel Margin="{DynamicResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Orientation="Horizontal">
-									<TextBlock FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Text="{Binding Name}" VerticalAlignment="Center"/>
+									<RichTextBlock FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Text="{Binding Name}" VerticalAlignment="Center"/>
 									<StackPanel Name="badgesPanel" Height="{StaticResource Double/ApplicationInfoDialog.AppBadge.Size}" Orientation="Horizontal" VerticalAlignment="Center"/>
 								</StackPanel>
 								<StackPanel Orientation="Horizontal">
-									<TextBlock Opacity="{StaticResource Double/ApplicationInfoDialog.AppVersion.Opacity}" Text="{Binding $parent[Window].VersionString}" VerticalAlignment="Center"/>
+									<RichTextBlock Opacity="{StaticResource Double/ApplicationInfoDialog.AppVersion.Opacity}" Text="{Binding $parent[Window].VersionString}" VerticalAlignment="Center"/>
 									<Separator Classes="Dialog_Separator_Small"/>
 									<TextBlock Text="[" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
 									<abControls:LinkTextBlock Command="{Binding $parent[Window].ShowApplicationChangeList}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{DynamicResource String/ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
