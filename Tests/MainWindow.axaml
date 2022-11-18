@@ -477,6 +477,8 @@
 								<RadioButton Content="Indeternimate" IsChecked="{x:Null}" Margin="5"/>
 							</WrapPanel>
 
+							<NumericUpDown HorizontalAlignment="Left" Maximum="100" Minimum="0" Margin="5" Value="50" Width="150"/>
+
 							<!-- Test actions -->
 							<WrapPanel Orientation="Horizontal">
 								<Button Command="{Binding $parent[Window].ShowAppInfoDialog}" Content="App Info" Margin="5"/>

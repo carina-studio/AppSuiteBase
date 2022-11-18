@@ -43,6 +43,9 @@
 	<!-- Button -->
 	<Thickness x:Key="Thickness/Button.Border">1</Thickness>
 
+	<!-- ButtonSpinner -->
+	<sys:Double x:Key="Double/ButtonSpinner.Button.Icon.Size">12</sys:Double>
+
 	<!-- ComboBox -->
 	<Thickness x:Key="ComboBoxDropdownBorderPadding">4,3,4,3</Thickness>
 	<Thickness x:Key="ComboBoxDropdownBorderThickness">1,2,1,2</Thickness>
