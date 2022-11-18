@@ -502,56 +502,56 @@
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="Orientation" Value="Horizontal"/>
 	</Style>
-	<Style Selector="TextBlock.Dialog_Icon_TextBlock">
+	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
-	<Style Selector="TextBlock.Dialog_Icon_TextBlock_Description">
+	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock_Description">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
-	<Style Selector="TextBlock.Dialog_Icon_TextBlock_Description_Error">
+	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock_Description_Error">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
-	<Style Selector="TextBlock.Dialog_Icon_TextBlock_Description_Warning">
+	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock_Description_Warning">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Warning}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
-	<Style Selector="TextBlock.Dialog_TextBlock">
+	<Style Selector=":is(TextBlock).Dialog_TextBlock">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
-	<Style Selector="TextBlock.Dialog_TextBlock_Description">
+	<Style Selector=":is(TextBlock).Dialog_TextBlock_Description">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Description}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
-	<Style Selector="TextBlock.Dialog_TextBlock_Description_Error">
+	<Style Selector=":is(TextBlock).Dialog_TextBlock_Description_Error">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
-	<Style Selector="TextBlock.Dialog_TextBlock_Description_Warning">
+	<Style Selector=":is(TextBlock).Dialog_TextBlock_Description_Warning">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Warning}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
-	<Style Selector="TextBlock.Dialog_TextBlock_Header1">
+	<Style Selector=":is(TextBlock).Dialog_TextBlock_Header1">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Header1}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
 	</Style>
-	<Style Selector="TextBlock.Dialog_TextBlock_Header2">
+	<Style Selector=":is(TextBlock).Dialog_TextBlock_Header2">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Header2}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
 	</Style>
@@ -1069,6 +1069,11 @@
 	<!-- RepeatButton -->
 	<Style Selector="RepeatButton">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
+	</Style>
+
+	<!-- RichTextBlock -->
+	<Style Selector="RichTextBlock">
+		<Setter Property="SelectionBrush" Value="{DynamicResource Brush/RichTextBlock.Selection.Background}"/>
 	</Style>
 
 	<!-- ScrollBar -->

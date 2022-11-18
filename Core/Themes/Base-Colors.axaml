@@ -168,6 +168,9 @@
 	<StaticResourceExtension x:Key="RepeatButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
 	<StaticResourceExtension x:Key="RepeatButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
 
+	<!-- RichTextBlock -->
+	<SolidColorBrush x:Key="Brush/RichTextBlock.Selection.Background" Color="{DynamicResource SystemAccentColor}" Opacity="0.44" />
+
 	<!-- ScrollBar-->
 	<StaticResource x:Key="ScrollBarButtonArrowForegroundPressed" ResourceKey="SystemControlBackgroundBaseMediumBrush" />
     <StaticResource x:Key="ScrollBarButtonArrowForegroundDisabled" ResourceKey="SystemControlDisabledTransparentBrush" />
