@@ -33,7 +33,7 @@
 				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
 				<TextBox Classes="Dialog_TextBox"/>
 				<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
-				<RichTextBlock Classes="Dialog_TextBlock_Description" IsTextSelectionEnabled="True" Text="Selectable description"/>
+				<RichTextBlock Classes="Dialog_TextBlock_Description" Text="Selectable description"/>
 				<Separator Classes="Dialog_Separator"/>
 
 				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>

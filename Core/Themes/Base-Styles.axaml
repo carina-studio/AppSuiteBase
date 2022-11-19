@@ -1341,6 +1341,12 @@
 		<Setter Property="RenderTransformOrigin" Value="120%,120%"/>
 	</Style>
 
+	<!-- SelectableTextBlock -->
+	<!--Style Selector=":is(SelectableTextBlock)"-->
+	<Style Selector=":is(RichTextBlock)">
+		<Setter Property="IsTextSelectionEnabled" Value="True"/>
+	</Style>
+
 	<!-- Separator -->
 	<Style Selector="Separator">
 		<Setter Property="Background" Value="{DynamicResource Brush/Separator.Background}"/>

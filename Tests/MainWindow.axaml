@@ -302,7 +302,7 @@
 								<StackPanel>
 									<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5,0,0,0"/>
 									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ProcessId, StringFormat={}PID: {0}}" Margin="5,5,0,0"/>
-									<RichTextBlock Focusable="True" IsTextSelectionEnabled="True" Text="" Margin="5,5,0,0">
+									<RichTextBlock Focusable="True" Text="" Margin="5,5,0,0">
 										<Run Text="CPU: "/>
 										<Run FontWeight="Bold" Foreground="Green" Text="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage, StringFormat={}{0:F2}%}"/>
 									</RichTextBlock>

@@ -17,12 +17,6 @@
         Classes="Dialog"
         MinWidth="{DynamicResource Double/ApplicationInfoDialog.MinWidth}"
         SizeToContent="WidthAndHeight">
-	
-	<Window.Styles>
-		<Style Selector="RichTextBlock">
-			<Setter Property="IsTextSelectionEnabled" Value="True"/>
-		</Style>
-	</Window.Styles>
 
 	<DockPanel>
 
