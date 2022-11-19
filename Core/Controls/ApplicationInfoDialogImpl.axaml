@@ -121,34 +121,30 @@
 					</Border>
 
 					<!-- Device name -->
-					<abControls:FormattedTextBlock Arg1="{x:Static sys:Environment.MachineName}" Format="{DynamicResource String/ApplicationInfoDialog.DeviceName}" TextTrimming="CharacterEllipsis"/>
+					<abControls:FormattedSelectableTextBlock Arg1="{x:Static sys:Environment.MachineName}" Format="{DynamicResource String/ApplicationInfoDialog.DeviceName}" TextTrimming="CharacterEllipsis"/>
 					<Separator Classes="Dialog_Separator_Small"/>
 
 					<!-- Operating system -->
-					<abControls:FormattedTextBlock Arg1="{Binding OperatingSystemDescription}" Format="{DynamicResource String/ApplicationInfoDialog.OperatingSystem}" TextTrimming="CharacterEllipsis"/>
+					<abControls:FormattedSelectableTextBlock Arg1="{Binding OperatingSystemDescription}" Format="{DynamicResource String/ApplicationInfoDialog.OperatingSystem}" TextTrimming="CharacterEllipsis"/>
 					<Separator Classes="Dialog_Separator_Small"/>
 
 					<!-- Framework version -->
-					<StackPanel Orientation="Horizontal">
-						<abControls:FormattedTextBlock Arg1="{Binding FrameworkVersion}" Format="{DynamicResource String/ApplicationInfoDialog.FrameworkVersion}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
-						<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding IsFrameworkInstalled}"/>
-						<abControls:FormattedTextBlock Arg1="{Binding InstalledFrameworkVersion}" Format="{DynamicResource String/ApplicationInfoDialog.InstalledFrameworkVersion}" IsVisible="{Binding IsFrameworkInstalled}" TextTrimming="CharacterEllipsis"/>
-					</StackPanel>
+					<abControls:FormattedSelectableTextBlock Arg1="{Binding FrameworkVersion}" Format="{DynamicResource String/ApplicationInfoDialog.FrameworkVersion}" TextTrimming="CharacterEllipsis"/>
 					<Separator Classes="Dialog_Separator_Small"/>
 
 					<!-- Processor count -->
 					<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
-						<abControls:FormattedTextBlock Arg1="{x:Static sys:Environment.ProcessorCount}" Format="{DynamicResource String/ApplicationInfoDialog.ProcessorCount}" TextTrimming="CharacterEllipsis"/>
+						<abControls:FormattedSelectableTextBlock Arg1="{x:Static sys:Environment.ProcessorCount}" Format="{DynamicResource String/ApplicationInfoDialog.ProcessorCount}" TextTrimming="CharacterEllipsis"/>
 						<Separator Classes="Dialog_Separator_Small"/>
 					</StackPanel>
 
 					<!-- Total physical memory -->
-					<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.TotalPhysicalMemory}" IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}" TextTrimming="CharacterEllipsis"/>
+					<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.TotalPhysicalMemory}" IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}" TextTrimming="CharacterEllipsis"/>
 					<Separator Classes="Dialog_Separator_Small"/>
 
 					<!-- Network connection -->
 					<Panel>
-						<abControls:FormattedTextBlock Arg1="{Binding PublicIPAddress, Source={x:Static net:NetworkManager.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Connected}" IsVisible="{Binding IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" TextTrimming="CharacterEllipsis"/>
+						<abControls:FormattedSelectableTextBlock Arg1="{Binding PublicIPAddress, Source={x:Static net:NetworkManager.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Connected}" IsVisible="{Binding IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" TextTrimming="CharacterEllipsis"/>
 						<TextBlock IsVisible="{Binding !IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" Text="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Disconnected}" TextTrimming="CharacterEllipsis"/>
 					</Panel>
 
@@ -157,15 +153,15 @@
 
 						<!-- Screen pixel density -->
 						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].ScreenPixelDensity}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.PixelDensity}" TextTrimming="CharacterEllipsis"/>
+						<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].ScreenPixelDensity}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.PixelDensity}" TextTrimming="CharacterEllipsis"/>
 
 						<!-- Screen size -->
 						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].PhysicalScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" Arg2="{Binding $parent[Window].ScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.Size}" TextTrimming="CharacterEllipsis"/>
+						<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].PhysicalScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" Arg2="{Binding $parent[Window].ScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.Size}" TextTrimming="CharacterEllipsis"/>
 
 						<!-- Working area -->
 						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].PhysicalScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" Arg2="{Binding $parent[Window].ScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.WorkingArea}" TextTrimming="CharacterEllipsis"/>
+						<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].PhysicalScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" Arg2="{Binding $parent[Window].ScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.WorkingArea}" TextTrimming="CharacterEllipsis"/>
 
 					</StackPanel>
 					<Separator Classes="Dialog_Separator_Large"/>
@@ -176,38 +172,38 @@
 					</Border>
 
 					<!-- Process ID -->
-					<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ProcessId, Mode=OneTime}" Format="{DynamicResource String/ApplicationInfoDialog.ProcessId}" TextTrimming="CharacterEllipsis"/>
+					<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ProcessId, Mode=OneTime}" Format="{DynamicResource String/ApplicationInfoDialog.ProcessId}" TextTrimming="CharacterEllipsis"/>
 					<Separator Classes="Dialog_Separator_Small"/>
 
 					<!-- Thread count -->
-					<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ThreadCount}" Format="{DynamicResource String/ApplicationInfoDialog.ThreadCount}" TextTrimming="CharacterEllipsis"/>
+					<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ThreadCount}" Format="{DynamicResource String/ApplicationInfoDialog.ThreadCount}" TextTrimming="CharacterEllipsis"/>
 					<Separator Classes="Dialog_Separator_Small"/>
 
 					<!-- CPU usage -->
-					<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage}" Format="{DynamicResource String/ApplicationInfoDialog.CpuUsage}" TextTrimming="CharacterEllipsis"/>
+					<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage}" Format="{DynamicResource String/ApplicationInfoDialog.CpuUsage}" TextTrimming="CharacterEllipsis"/>
 					<Separator Classes="Dialog_Separator_Small"/>
 
 					<!-- Private memory usage -->
-					<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.PrivateMemoryUsage}" TextTrimming="CharacterEllipsis"/>
+					<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.PrivateMemoryUsage}" TextTrimming="CharacterEllipsis"/>
 
 					<!-- Managed environment information -->
 					<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
 
 						<!-- Managed heap size -->
 						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapSize, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.ManagedHeapSize}" TextTrimming="CharacterEllipsis"/>
+						<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapSize, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.ManagedHeapSize}" TextTrimming="CharacterEllipsis"/>
 
 						<!-- Managed heap usage -->
 						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.ManagedHeapUsage}" TextTrimming="CharacterEllipsis"/>
+						<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.ManagedHeapUsage}" TextTrimming="CharacterEllipsis"/>
 
 						<!-- GC frequency -->
 						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.GCFrequency}" Format="{DynamicResource String/ApplicationInfoDialog.GCFrequency}" TextTrimming="CharacterEllipsis"/>
+						<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.GCFrequency}" Format="{DynamicResource String/ApplicationInfoDialog.GCFrequency}" TextTrimming="CharacterEllipsis"/>
 
 						<!-- Finalization pending count -->
 						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.FinalizationPendingCount}" Format="{DynamicResource String/ApplicationInfoDialog.FinalizationPendingCount}" TextTrimming="CharacterEllipsis"/>
+						<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.FinalizationPendingCount}" Format="{DynamicResource String/ApplicationInfoDialog.FinalizationPendingCount}" TextTrimming="CharacterEllipsis"/>
 
 					</StackPanel>
 					
@@ -216,11 +212,11 @@
 
 						<!-- Running script count -->
 						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedTextBlock Arg1="{Binding RunningScriptCount, Source={x:Static scripting:ScriptManager.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.RunningScriptCount}" TextTrimming="CharacterEllipsis"/>
+						<abControls:FormattedSelectableTextBlock Arg1="{Binding RunningScriptCount, Source={x:Static scripting:ScriptManager.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.RunningScriptCount}" TextTrimming="CharacterEllipsis"/>
 
 						<!-- Script running loading -->
 						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedTextBlock Arg1="{Binding ScriptRunningLoading, Source={x:Static scripting:ScriptManager.Default}, Converter={x:Static converters:RatioToPercentageConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.ScriptRunningLoading}" TextTrimming="CharacterEllipsis"/>
+						<abControls:FormattedSelectableTextBlock Arg1="{Binding ScriptRunningLoading, Source={x:Static scripting:ScriptManager.Default}, Converter={x:Static converters:RatioToPercentageConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.ScriptRunningLoading}" TextTrimming="CharacterEllipsis"/>
 
 					</StackPanel>
 					<Separator Classes="Dialog_Separator_Large"/>

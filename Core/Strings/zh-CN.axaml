@@ -45,7 +45,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessId">识别码 (ID)：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessInformation">程序信息</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessorCount">处理器个数：{0}</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.ProductAuthorizationInfo">(已授权给 {0})</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ProductAuthorizationInfo">(授权给 {0})</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Products">相关产品</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProprietaryVersion">(Carina Studio 建置)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.RestartInDebugMode">以调试模式重新启动</sys:String>
