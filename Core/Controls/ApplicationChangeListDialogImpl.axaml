@@ -17,7 +17,7 @@
 			<Grid ColumnDefinitions="Auto,*">
 				<Image Classes="Dialog_Icon" Source="{Binding Type, Converter={x:Static controls:ApplicationChangeListDialogImpl.ApplicationChangeTypeConverter}}" VerticalAlignment="Top"/>
 				<StackPanel Grid.Column="1" VerticalAlignment="Center">
-					<TextBlock FontSize="{DynamicResource Double/Dialog.TextBlock.FontSize}" Margin="{StaticResource Thickness/ApplicationChangeListDialog.Change.Description.Margin}" Text="{Binding Description}" TextWrapping="Wrap"/>
+					<RichTextBlock FontSize="{DynamicResource Double/Dialog.TextBlock.FontSize}" Margin="{StaticResource Thickness/ApplicationChangeListDialog.Change.Description.Margin}" Text="{Binding Description}" TextWrapping="Wrap"/>
 					<abControls:LinkTextBlock FontSize="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}" HorizontalAlignment="Left" IsVisible="{Binding HasDetailsPageUri}" Text="{DynamicResource String/ApplicationChangeListDialog.Details}" Uri="{Binding DetailsPageUri}"/>
 				</StackPanel>
 			</Grid>
