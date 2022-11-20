@@ -104,8 +104,8 @@
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Border.Header2">1</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">12,10,12,10</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">12,6,12,6</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin">0,0,0,5</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,5,0,0</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin">0,0,0,6</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,6,0,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">-12,0,-12,10</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">-12,0,-12,8</Thickness>
 
@@ -266,8 +266,8 @@
 	<sys:Double x:Key="Double/TextInputDialog.Width">450</sys:Double>
 
 	<!-- ToggleSwitch -->
-	<GridLength x:Key="ToggleSwitchPostContentMargin">0</GridLength>
-	<GridLength x:Key="ToggleSwitchPreContentMargin">0</GridLength>
+	<GridLength x:Key="ToggleSwitchPostContentMargin">1</GridLength>
+	<GridLength x:Key="ToggleSwitchPreContentMargin">1</GridLength>
 	<Thickness x:Key="ToggleSwitchTopHeaderMargin">0</Thickness>
 
 	<!-- ToolBar -->
