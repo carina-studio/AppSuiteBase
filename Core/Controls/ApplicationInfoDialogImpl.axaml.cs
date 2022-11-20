@@ -15,6 +15,7 @@ using CarinaStudio.Threading;
 using System;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -55,6 +56,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 		// Fields.
 		readonly Panel badgesPanel;
+		readonly TaskCompletionSource closingTaskSource = new();
 		readonly bool isProprietaryApp;
 		PixelSize physicalScreenSize;
 		PixelRect physicalScreenWorkingArea;
@@ -225,6 +227,7 @@ namespace CarinaStudio.AppSuite.Controls
 			this.processInfoHfuToken.Dispose();
 			this.Application.StringsUpdated -= this.OnAppStringsUpdated;
 			this.Application.ProductManager.ProductStateChanged -= this.OnProductStateChanged;
+			this.closingTaskSource.SetResult();
 			base.OnClosed(e);
 		}
 
@@ -484,5 +487,13 @@ namespace CarinaStudio.AppSuite.Controls
 
         // String represent version.
         string? VersionString { get => this.GetValue<string?>(VersionStringProperty); }
+
+
+		/// <summary>
+		/// Wait for closing dialog.
+		/// </summary>
+		/// <returns>Task of waiting.</returns>
+		public Task WaitForClosingAsync() =>
+			this.closingTaskSource.Task;
 	}
 }

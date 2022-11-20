@@ -15,6 +15,7 @@ namespace CarinaStudio.AppSuite.Controls
         // Fields.
         readonly ApplicationUpdater appUpdater;
         bool checkForUpdateWhenShowing;
+        ApplicationUpdateDialogImpl? dialog;
 
 
         /// <summary>
@@ -22,6 +23,22 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         /// <param name="appUpdater">View-model of dialog.</param>
         public ApplicationUpdateDialog(ApplicationUpdater appUpdater) => this.appUpdater = appUpdater;
+
+
+        /// <summary>
+        /// Activate the shown dialog.
+        /// </summary>
+        /// <returns>True if dialog has been activated successfully.</returns>
+        public bool Activate()
+        {
+            this.VerifyAccess();
+            if (this.dialog != null)
+            {
+                this.dialog.ActivateAndBringToFront();
+                return true;
+            }
+            return false;
+        }
 
 
         /// <summary>
@@ -83,15 +100,35 @@ namespace CarinaStudio.AppSuite.Controls
         /// <returns>Task to get result.</returns>
         protected override async Task<ApplicationUpdateDialogResult> ShowDialogCore(Avalonia.Controls.Window? owner)
         {
-            var dialog = new ApplicationUpdateDialogImpl()
+            this.dialog = new ApplicationUpdateDialogImpl()
             {
                 CheckForUpdateWhenOpening = this.checkForUpdateWhenShowing,
                 DataContext = this.appUpdater,
             };
-            var result = await (owner != null 
-                ? dialog.ShowDialog<ApplicationUpdateDialogResult?>(owner)
-                : dialog.ShowDialog<ApplicationUpdateDialogResult?>());
-            return result ?? ApplicationUpdateDialogResult.None;
+            try
+            {
+                var result = await (owner != null 
+                    ? this.dialog.ShowDialog<ApplicationUpdateDialogResult?>(owner)
+                    : this.dialog.ShowDialog<ApplicationUpdateDialogResult?>());
+                return result ?? ApplicationUpdateDialogResult.None;
+            }
+            finally
+            {
+                this.dialog = null;
+            }
+        }
+
+
+        /// <summary>
+        /// Wait for closing dialog asynchronously.
+        /// </summary>
+        /// <returns>Task of waiting.</returns>
+        public Task<ApplicationUpdateDialogResult> WaitForClosingDialogAsync()
+        {
+            this.VerifyAccess();
+            if (this.dialog != null)
+                return dialog.WaitForClosingAsync();
+            return Task.FromResult(ApplicationUpdateDialogResult.None);
         }
     }
 

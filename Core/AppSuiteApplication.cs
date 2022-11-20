@@ -325,6 +325,8 @@ namespace CarinaStudio.AppSuite
         // Fields.
         Avalonia.Controls.ResourceDictionary? accentColorResources;
         readonly LinkedList<MainWindowHolder> activeMainWindowList = new();
+        Controls.ApplicationInfoDialog? appInfoDialog;
+        Controls.ApplicationUpdateDialog? appUpdateDialog;
         Avalonia.Themes.Fluent.FluentTheme? baseTheme;
         readonly bool canUseWindows10Features = Environment.OSVersion.Version.Let(version =>
         {
@@ -817,7 +819,7 @@ namespace CarinaStudio.AppSuite
                     return Task.FromResult(false);
             }
             this.Logger.LogDebug("Show application update dialog");
-            return this.ShowAppUpdateDialog(owner, forceShowingDialog);
+            return this.ShowAppUpdateDialogAsync(owner, forceShowingDialog);
         }
 
 
@@ -3342,9 +3344,26 @@ namespace CarinaStudio.AppSuite
         /// <inheritdoc/>
         public async Task ShowApplicationInfoDialogAsync(Avalonia.Controls.Window? owner)
         {
+            // wait for current dialog
             this.VerifyAccess();
+            if (this.appInfoDialog != null
+                && this.appInfoDialog.Activate())
+            {
+                await this.appInfoDialog.WaitForClosingDialogAsync();
+                return;
+            }
+
+            // show dialog
             using var appInfo = this.CreateApplicationInfoViewModel();
-            await new Controls.ApplicationInfoDialog(appInfo).ShowDialog(owner);
+            this.appInfoDialog = new(appInfo);
+            try
+            {
+                await this.appInfoDialog.ShowDialog(owner);
+            }
+            finally
+            {
+                this.appInfoDialog = null;
+            }
         }
 
 
@@ -3360,17 +3379,31 @@ namespace CarinaStudio.AppSuite
 
 
         // Show application update dialog.
-        async Task<bool> ShowAppUpdateDialog(Avalonia.Controls.Window? owner, bool checkAppUpdateWhenOpening)
+        async Task<bool> ShowAppUpdateDialogAsync(Avalonia.Controls.Window? owner, bool checkAppUpdateWhenOpening)
         {
+            // wait for current dialog
+            AppSuite.Controls.ApplicationUpdateDialogResult result;
+            if (this.appUpdateDialog != null
+                && this.appUpdateDialog.Activate())
+            {
+                result = await this.appUpdateDialog.WaitForClosingDialogAsync();
+                return (result == AppSuite.Controls.ApplicationUpdateDialogResult.ShutdownNeeded);
+            }
+
             // check for update
 			using var appUpdater = new AppSuite.ViewModels.ApplicationUpdater();
-			var result = await new AppSuite.Controls.ApplicationUpdateDialog(appUpdater)
-			{
-				CheckForUpdateWhenShowing = checkAppUpdateWhenOpening
-			}.ShowDialog(owner);
-
-            // save settings
-            _ = this.SaveSettingsAsync();
+            this.appUpdateDialog = new(appUpdater)
+            {
+                CheckForUpdateWhenShowing = checkAppUpdateWhenOpening
+            };
+            try
+            {
+                result = await this.appUpdateDialog.ShowDialog(owner);
+            }
+            finally
+            {
+                this.appUpdateDialog = null;
+            }
 
 			// shutdown to update
 			if (result == AppSuite.Controls.ApplicationUpdateDialogResult.ShutdownNeeded)

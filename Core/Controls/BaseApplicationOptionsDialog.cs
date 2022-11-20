@@ -1,5 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +12,10 @@ namespace CarinaStudio.AppSuite.Controls
     {
         // Static fields.
         static int OpenedDialogCount;
+
+
+        // Fields.
+        readonly TaskCompletionSource<ApplicationOptionsDialogResult> closingTaskSource = new();
 
 
         /// <summary>
@@ -37,11 +40,21 @@ namespace CarinaStudio.AppSuite.Controls
         protected override Task<object?> GenerateResultAsync(CancellationToken cancellationToken)
         {
             if (this.DataContext is not ViewModels.ApplicationOptions options)
+            {
+                this.closingTaskSource.SetResult(ApplicationOptionsDialogResult.None);
                 return Task.FromResult((object?)ApplicationOptionsDialogResult.None);
+            }
             if (options.IsCustomScreenScaleFactorAdjusted)
+            {
+                this.closingTaskSource.SetResult(ApplicationOptionsDialogResult.RestartApplicationNeeded);
                 return Task.FromResult((object?)ApplicationOptionsDialogResult.RestartApplicationNeeded);
+            }
             if (options.IsRestartingMainWindowsNeeded)
+            {
+                this.closingTaskSource.SetResult(ApplicationOptionsDialogResult.RestartMainWindowsNeeded);
                 return Task.FromResult((object?)ApplicationOptionsDialogResult.RestartMainWindowsNeeded);
+            }
+            this.closingTaskSource.SetResult(ApplicationOptionsDialogResult.None);
             return Task.FromResult((object?)ApplicationOptionsDialogResult.None);
         }
 
@@ -51,6 +64,7 @@ namespace CarinaStudio.AppSuite.Controls
         {
             (this.DataContext as ViewModels.ApplicationOptions)?.Dispose();
             --OpenedDialogCount;
+            this.closingTaskSource.TrySetResult(ApplicationOptionsDialogResult.None);
             base.OnClosed(e);
         }
 

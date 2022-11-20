@@ -7,6 +7,7 @@ using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -25,6 +26,7 @@ namespace CarinaStudio.AppSuite.Controls
 		// Fields.
 		ApplicationUpdater? attachedAppUpdater;
 		bool isClosingRequested;
+		readonly TaskCompletionSource<ApplicationUpdateDialogResult> closingTaskSource = new();
 
 
 		/// <summary>
@@ -51,6 +53,7 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				Platform.OpenLink(this.attachedAppUpdater.UpdatePackageUri);
 				this.Close();
+				this.closingTaskSource.SetResult(ApplicationUpdateDialogResult.None);
 			}
 		}
 
@@ -67,6 +70,7 @@ namespace CarinaStudio.AppSuite.Controls
 		protected override void OnClosed(EventArgs e)
 		{
 			this.DataContext = null;
+			this.closingTaskSource.TrySetResult(ApplicationUpdateDialogResult.None);
 			base.OnClosed(e);
 		}
 
@@ -159,6 +163,7 @@ namespace CarinaStudio.AppSuite.Controls
 				&& this.isClosingRequested)
 			{
 				this.Close(ApplicationUpdateDialogResult.UpdatingCancelled);
+				this.closingTaskSource.SetResult(ApplicationUpdateDialogResult.UpdatingCancelled);
 			}
 			else if (e.PropertyName == nameof(ApplicationUpdater.IsLatestVersion))
 			{
@@ -182,7 +187,10 @@ namespace CarinaStudio.AppSuite.Controls
 			else if (e.PropertyName == nameof(ApplicationUpdater.IsShutdownNeededToContinueUpdate))
 			{
 				if (updater.IsShutdownNeededToContinueUpdate)
+				{
 					this.Close(ApplicationUpdateDialogResult.ShutdownNeeded);
+					this.closingTaskSource.SetResult(ApplicationUpdateDialogResult.ShutdownNeeded);
+				}
 			}
 			else if (e.PropertyName == nameof(ApplicationUpdater.UpdateVersion))
 				this.UpdateLatestNotifiedInfo();
@@ -206,5 +214,13 @@ namespace CarinaStudio.AppSuite.Controls
 				this.PersistentState.ResetValue(LatestNotifiedVersionKey);
 			}
 		}
+
+
+		/// <summary>
+		/// Wait for closing dialog.
+		/// </summary>
+		/// <returns>Task of waiting.</returns>
+		public Task<ApplicationUpdateDialogResult> WaitForClosingAsync() =>
+			this.closingTaskSource.Task;
     }
 }

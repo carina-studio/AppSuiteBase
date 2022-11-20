@@ -20,7 +20,9 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         protected InputDialog()
         {
+#pragma warning disable CA1806
             new WindowContentFadingHelper(this);
+#pragma warning restore CA1806
             this.AddHandler(KeyDownEvent, (_, e) => this.OnPreviewKeyDown(e), Avalonia.Interactivity.RoutingStrategies.Tunnel);
             this.AddHandler(KeyUpEvent, (_, e) => this.OnPreviewKeyUp(e), Avalonia.Interactivity.RoutingStrategies.Tunnel);
             this.Title = this.Application.Name;
