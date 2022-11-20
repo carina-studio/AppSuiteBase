@@ -77,7 +77,7 @@
 				<appControls:StringInterpolationFormatTextBox Classes="Dialog_TextBox"/>
 				<Separator Classes="Dialog_Separator"/>
 
-				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<TextBlock Name="radioButtonLabel" Classes="Dialog_TextBlock" Text="Label"/>
 				<RadioButton Classes="Dialog_RadioButton" Content="RadioButton"/>
 				<StackPanel Classes="Dialog_ContentPanel_Indented">
 					<TextBlock Classes="Dialog_TextBlock" Text="Indented content"/>

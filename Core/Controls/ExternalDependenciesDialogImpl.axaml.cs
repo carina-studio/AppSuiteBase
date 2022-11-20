@@ -8,6 +8,7 @@ using Avalonia.Media;
 using CarinaStudio.Collections;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
+using CarinaStudio.VisualTree;
 using System;
 using System.ComponentModel;
 using System.Linq;
@@ -201,6 +202,12 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	/// </summary>
 	public void EditPathEnvironmentVariable() =>
 		_ = new PathEnvVarEditorDialog().ShowDialog(this);
+	
+
+	/// <summary>
+	/// External dependency to be focused when showing dialog.
+	/// </summary>
+	public ExternalDependency? FocusedExternalDependency { get; set; }
 
 
 	/// <inheritdoc/>
@@ -233,6 +240,18 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	protected override void OnOpened(EventArgs e)
 	{
 		base.OnOpened(e);
+		this.FocusedExternalDependency?.Let(extDependency =>
+		{
+			this.externalDependenciesPanel.Children.FirstOrDefault(it => it.DataContext == extDependency)?.Let(extDependencyItemPanel =>
+			{
+				var headerBorder = extDependencyItemPanel.FindDescendantOfTypeAndName<Border>("headerBorder");
+				if (headerBorder != null)
+				{
+					this.ScrollToControl(headerBorder);
+					this.AnimateHeader(headerBorder);
+				}
+			});
+		});
 		this.checkCanCloseAction.Execute();
 	}
 

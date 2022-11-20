@@ -17,7 +17,7 @@
 	<Window.DataTemplates>
 		<DataTemplate DataType="{x:Type as:ExternalDependency}">
 			<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-				<Border Classes="Dialog_TextBlock_Header1">
+				<Border Name="headerBorder" Classes="Dialog_TextBlock_Header1">
 					<RichTextBlock Classes="Dialog_TextBlock_Header1" Text="{Binding Name}"/>
 				</Border>
 				<RichTextBlock Classes="Dialog_TextBlock" Grid.Row="1" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" Text="{Binding Description}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>

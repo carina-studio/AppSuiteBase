@@ -1,6 +1,8 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.AppSuite.ViewModels;
 
 namespace CarinaStudio.AppSuite.Tests
@@ -17,6 +19,17 @@ namespace CarinaStudio.AppSuite.Tests
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        protected override void OnOpened(EventArgs e)
+        {
+            base.OnOpened(e);
+            var textBlock = this.FindControl<TextBlock>("radioButtonLabel");
+            if (textBlock != null)
+            {
+                //this.ScrollToControl(textBlock);
+                //this.AnimateTextBlock(textBlock);
+            }
         }
 
         public void Test()

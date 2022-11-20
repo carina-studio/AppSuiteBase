@@ -79,10 +79,15 @@
 
 	<!-- Dialog -->
 	<SolidColorBrush x:Key="Brush/Dialog.ControlButtonsPanel.Background" Color="{DynamicResource Color/Dialog.ControlButtonsPanel.Background}"/>
+	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Background.Focused" Color="{DynamicResource SystemAccentColor}" Opacity="0.5"/>
 	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Background.Header1" Color="{DynamicResource Color/Dialog.TextBlock.Background.Header1}"/>
+	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Background.Header1.Focused" Color="{DynamicResource SystemAccentColor}" Opacity="0.5"/>
 	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Background.Header2" Color="{DynamicResource Color/Dialog.TextBlock.Background.Header2}"/>
+	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Background.Header2.Focused" Color="{DynamicResource SystemAccentColor}" Opacity="0.5"/>
 	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Border.Header1" Color="{DynamicResource Color/Dialog.TextBlock.Border.Header1}"/>
+	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Border.Header1.Focused" Color="{DynamicResource SystemAccentColor}"/>
 	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Border.Header2" Color="{DynamicResource Color/Dialog.TextBlock.Border.Header2}"/>
+	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Border.Header2.Focused" Color="{DynamicResource SystemAccentColor}"/>
 	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Foreground.Description" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Description}"/>
 	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Foreground.Error" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Error}"/>
 	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Foreground.Warning" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Warning}"/>

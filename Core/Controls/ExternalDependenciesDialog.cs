@@ -1,4 +1,5 @@
 ﻿using CarinaStudio.Controls;
+using CarinaStudio.Threading;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -8,6 +9,25 @@ namespace CarinaStudio.AppSuite.Controls;
 /// </summary>
 public class ExternalDependenciesDialog : CommonDialog<object?>
 {
+    // Fields.
+    ExternalDependency? focusedExternalDependency;
+
+
+    /// <summary>
+    /// Get or set the external dependency to be focused when showing dialog.
+    /// </summary>
+    public ExternalDependency? FocusedExternalDependency
+    {
+        get => this.focusedExternalDependency;
+        set
+        {
+            this.VerifyAccess();
+            this.VerifyShowing();
+            this.focusedExternalDependency = value;
+        }
+    }
+
+
     /// <summary>
     /// Show dialog.
     /// </summary>
@@ -19,7 +39,10 @@ public class ExternalDependenciesDialog : CommonDialog<object?>
     /// <inheritdoc/>
     protected override Task<object?> ShowDialogCore(Avalonia.Controls.Window? owner)
     {
-        var dialog = new ExternalDependenciesDialogImpl();
+        var dialog = new ExternalDependenciesDialogImpl()
+        {
+            FocusedExternalDependency = this.focusedExternalDependency
+        };
         return owner != null
             ? dialog.ShowDialog<object?>(owner)
             : dialog.ShowDialog<object?>();

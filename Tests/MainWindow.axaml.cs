@@ -416,8 +416,11 @@ namespace CarinaStudio.AppSuite.Tests
 
         public void Test()
         {
-            AppSuite.IO.CommandSearchPaths.AddCustomPath(Environment.GetFolderPath(Environment.SpecialFolder.Personal));
-            _ = new PathEnvVarEditorDialog().ShowDialog(this);
+            var extDependency = this.Application.ExternalDependencies.FirstOrDefault(it => it.Id == "dotnet7");
+            new ExternalDependenciesDialog()
+            {
+                FocusedExternalDependency = extDependency
+            }.ShowDialog(this);
         }
 
 
