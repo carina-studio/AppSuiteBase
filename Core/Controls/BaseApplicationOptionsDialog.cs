@@ -82,6 +82,14 @@ namespace CarinaStudio.AppSuite.Controls
             base.OnOpened(e);
             ++OpenedDialogCount;
         }
+
+
+        /// <summary>
+        /// Wait for closing dialog.
+        /// </summary>
+        /// <returns>Task of waiting.</returns>
+        public Task<ApplicationOptionsDialogResult> WaitForClosingDialogAsync() =>
+            this.closingTaskSource.Task;
     }
 
 
