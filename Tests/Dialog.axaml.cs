@@ -27,8 +27,8 @@ namespace CarinaStudio.AppSuite.Tests
             var textBlock = this.FindControl<TextBlock>("radioButtonLabel");
             if (textBlock != null)
             {
-                //this.ScrollToControl(textBlock);
-                //this.AnimateTextBlock(textBlock);
+                this.ScrollToControl(textBlock);
+                this.AnimateTextBlock(textBlock);
             }
         }
 

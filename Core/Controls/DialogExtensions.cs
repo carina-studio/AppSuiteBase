@@ -1,5 +1,4 @@
 using Avalonia.Animation;
-using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.VisualTree;
@@ -47,14 +46,12 @@ public static class DialogExtensions
             header.BorderBrush = brush;
         
         // prepare transitions
-        if (!avnApp.TryFindResource("TimeSpan/Animation.Slow", out TimeSpan? duration))
+        if (!avnApp.TryFindResource("TimeSpan/Animation", out TimeSpan? duration))
             duration = default;
         if (HeaderBackgroundTransition == null || HeaderBorderBrushTransition == null)
         {
-            if (!avnApp.TryFindResource("Easing/Animation", out Easing? easing))
-                easing = new LinearEasing(); 
-            HeaderBackgroundTransition ??= new BrushTransition() { Duration = duration.GetValueOrDefault(), Easing = easing!, Property = Border.BackgroundProperty };
-            HeaderBorderBrushTransition ??= new BrushTransition() { Duration = duration.GetValueOrDefault(), Easing = easing!, Property = Border.BorderBrushProperty };
+            HeaderBackgroundTransition ??= new BrushTransition() { Duration = duration.GetValueOrDefault(), Property = Border.BackgroundProperty };
+            HeaderBorderBrushTransition ??= new BrushTransition() { Duration = duration.GetValueOrDefault(), Property = Border.BorderBrushProperty };
         }
         var transitions = header.Transitions;
         if (transitions == null)
@@ -98,14 +95,9 @@ public static class DialogExtensions
             textBlock.Background = brush;
         
         // prepare transitions
-        if (!avnApp.TryFindResource("TimeSpan/Animation.Slow", out TimeSpan? duration))
+        if (!avnApp.TryFindResource("TimeSpan/Animation", out TimeSpan? duration))
             duration = default;
-        if (TextBlockBackgroundTransition == null)
-        {
-            if (!avnApp.TryFindResource("Easing/Animation", out Easing? easing))
-                easing = new LinearEasing(); 
-            TextBlockBackgroundTransition ??= new BrushTransition() { Duration = duration.GetValueOrDefault(), Easing = easing!, Property = Avalonia.Controls.TextBlock.BackgroundProperty };
-        }
+        TextBlockBackgroundTransition ??= new BrushTransition() { Duration = duration.GetValueOrDefault(), Property = Avalonia.Controls.TextBlock.BackgroundProperty };
         var transitions = textBlock.Transitions;
         if (transitions == null)
         {
@@ -168,15 +160,17 @@ public static class DialogExtensions
                 scrollViewer.Opacity = scrollViewerOpacity;
                 return;
             }
+            if (control.Margin.Top <= 0.01)
+                offsetY -= 10;
 
             // scroll to control
             var extent = scrollViewer.Extent;
             var viewport = scrollViewer.Viewport;
             if (offsetY + viewport.Height > extent.Height)
                 offsetY = extent.Height - viewport.Height;
+            else if (offsetY < 0)
+                offsetY = 0;
             scrollViewer.Offset = new(0, offsetY);
-            if (control.Margin.Top <= 0.01)
-                scrollViewer.LineUp();
             scrollViewer.Opacity = scrollViewerOpacity;
         });
     }
