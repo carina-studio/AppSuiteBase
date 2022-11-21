@@ -177,7 +177,7 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 			}
 			panel.AddHandler(PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
 			{
-				if (e.Source is not RichTextBlock)
+				if (e.Source is not Avalonia.Controls.SelectableTextBlock)
 					panel.Focus();
 			}), RoutingStrategies.Tunnel);
 		});

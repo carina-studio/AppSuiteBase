@@ -302,10 +302,10 @@
 								<StackPanel>
 									<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5,0,0,0"/>
 									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ProcessId, StringFormat={}PID: {0}}" Margin="5,5,0,0"/>
-									<RichTextBlock Focusable="True" Text="" Margin="5,5,0,0">
+									<SelectableTextBlock Focusable="True" Text="" Margin="5,5,0,0">
 										<Run Text="CPU: "/>
 										<Run FontWeight="Bold" Foreground="Green" Text="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage, StringFormat={}{0:F2}%}"/>
-									</RichTextBlock>
+									</SelectableTextBlock>
 									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Memory Usage: {0}}" Margin="5,5,0,0"/>
 									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapSize, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Size: {0}}" Margin="5,5,0,0"/>
 									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Usage: {0}}" Margin="5,5,0,0"/>

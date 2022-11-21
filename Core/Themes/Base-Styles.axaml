@@ -1071,11 +1071,6 @@
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
 	</Style>
 
-	<!-- RichTextBlock -->
-	<Style Selector="RichTextBlock">
-		<Setter Property="SelectionBrush" Value="{DynamicResource Brush/RichTextBlock.Selection.Background}"/>
-	</Style>
-
 	<!-- ScrollBar -->
 	<Style Selector="ScrollBar">
 		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ScrollBar}"/>
@@ -1342,9 +1337,8 @@
 	</Style>
 
 	<!-- SelectableTextBlock -->
-	<!--Style Selector=":is(SelectableTextBlock)"-->
-	<Style Selector=":is(RichTextBlock)">
-		<Setter Property="IsTextSelectionEnabled" Value="True"/>
+	<Style Selector=":is(SelectableTextBlock)">
+		<Setter Property="SelectionBrush" Value="{DynamicResource Brush/SelectableTextBlock.Selection.Background}"/>
 	</Style>
 
 	<!-- Separator -->

@@ -89,7 +89,7 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				it.AddHandler(PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
 				{
-					if (e.Source is not RichTextBlock)
+					if (e.Source is not Avalonia.Controls.SelectableTextBlock)
 						it.Focus();
 				}), Avalonia.Interactivity.RoutingStrategies.Tunnel);
 			});
@@ -288,7 +288,7 @@ namespace CarinaStudio.AppSuite.Controls
 								itemPanel.ColumnDefinitions.Add(new(0, GridUnitType.Auto));
 								itemPanel.ColumnDefinitions.Add(new(1, GridUnitType.Star));
 								itemPanel.DataContext = productId;
-								itemPanel.Children.Add(new RichTextBlock().Also(it =>
+								itemPanel.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
 								{
 									it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
 								}));
@@ -297,7 +297,7 @@ namespace CarinaStudio.AppSuite.Controls
 									it.Classes.Add("Dialog_Separator_Small");
 									Grid.SetColumn(it, 1);
 								}));
-								itemPanel.Children.Add(new RichTextBlock().Also(it =>
+								itemPanel.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
 								{
 									if (this.Application.TryFindResource<IBrush>("Brush/Dialog.TextBlock.Foreground.Description", out var brush))
 										it.Foreground = brush;
@@ -329,10 +329,10 @@ namespace CarinaStudio.AppSuite.Controls
 							|| assemblyVersion.Revision != 0 
 							|| assemblyVersion.Build != 0)
 						{
-							panel.Children.Add(new RichTextBlock() { Text = $"{assemblyName.Name} {assemblyVersion}" });
+							panel.Children.Add(new Avalonia.Controls.SelectableTextBlock() { Text = $"{assemblyName.Name} {assemblyVersion}" });
 						}
 						else
-							panel.Children.Add(new RichTextBlock() { Text = $"{assemblyName.Name}" });
+							panel.Children.Add(new Avalonia.Controls.SelectableTextBlock() { Text = $"{assemblyName.Name}" });
 					}
 				});
 			}

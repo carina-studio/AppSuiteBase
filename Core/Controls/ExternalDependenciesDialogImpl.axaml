@@ -18,9 +18,9 @@
 		<DataTemplate DataType="{x:Type as:ExternalDependency}">
 			<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
 				<Border Name="headerBorder" Classes="Dialog_TextBlock_Header1">
-					<RichTextBlock Classes="Dialog_TextBlock_Header1" Text="{Binding Name}"/>
+					<SelectableTextBlock Classes="Dialog_TextBlock_Header1" Text="{Binding Name}"/>
 				</Border>
-				<RichTextBlock Classes="Dialog_TextBlock" Grid.Row="1" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" Text="{Binding Description}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
+				<SelectableTextBlock Classes="Dialog_TextBlock" Grid.Row="1" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" Text="{Binding Description}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
 				<Separator Classes="Dialog_Separator" Grid.Row="2" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}"/>
 				<StackPanel Grid.Row="3" Orientation="Horizontal">
 					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Dependencies}"/>
