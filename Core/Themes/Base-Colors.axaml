@@ -163,6 +163,16 @@
 	<SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePointerOver" Color="{DynamicResource SystemAccentColorLight1}" />
 	<SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePressed" Color="{DynamicResource SystemAccentColorDark1}" />
 
+	<!-- RegexSyntaxHighlighting -->
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Alternation">#aaaaaa</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Anchors">#ff40d0</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Brackets">#ffe800</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterClasses">#b966ff</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterRanges">#00e600</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.EscapeCharacters">#00c7e6</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Quantifiers">#ff5959</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.UnicodeCategories">#00c7e6</SolidColorBrush>
+
 	<!-- RepeatButton -->
 	<StaticResourceExtension x:Key="RepeatButtonBackground" ResourceKey="ButtonBackground"/>
 	<StaticResourceExtension x:Key="RepeatButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>

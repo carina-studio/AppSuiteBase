@@ -44,6 +44,14 @@
 	<!-- Menu -->
 	<Color x:Key="Color/Menu.Background">#e0e0e0</Color>
 
+	<!-- RegexSyntaxHighlighting -->
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Alternation">#404040</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Brackets">#e6bb00</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterClasses">#8400f2</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterRanges">#007f00</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.EscapeCharacters">#00b1cc</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.UnicodeCategories">#00b1cc</SolidColorBrush>
+
 	<!-- Separator -->
 	<Color x:Key="Color/Separator.Background">#4f000000</Color>
 

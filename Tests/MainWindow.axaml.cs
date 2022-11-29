@@ -139,9 +139,9 @@ namespace CarinaStudio.AppSuite.Tests
 
             this.syntaxHighlightingTextBlock = this.Get<SyntaxHighlightingTextBlock>(nameof(syntaxHighlightingTextBlock)).Also(it =>
             {
-                it.DefinitionSet = syntaxHighlightingDefSet;
+                it.DefinitionSet = RegexSyntaxHighlighting.CreateDefinitionSet(this.Application);
                 //it.Text = "var s1 = \"Hello \\\"World\";\nvar s2 = \"\";\nvar s3 = \"\";\nvar c1 = '\\n';";
-                it.Text = "// Create regular expression for parsing base name.";
+                //it.Text = "// Create regular expression for parsing base name.";
             });
             this.syntaxHighlightingRefTextBlock = this.Get<Avalonia.Controls.TextBlock>(nameof(syntaxHighlightingRefTextBlock)).Also(it =>
             {

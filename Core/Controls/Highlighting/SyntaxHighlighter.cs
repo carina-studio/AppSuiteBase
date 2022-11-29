@@ -270,7 +270,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 return result;
             result = this.definitionSet?.SpanDefinitions?.Let(it =>
             {
-                return it.IndexOf(lhs.Item3) - it.IndexOf(rhs.Item3);
+                return it.IndexOf(rhs.Item3) - it.IndexOf(lhs.Item3);
             }) ?? 0;
             return result != 0 ? result : (rhs.GetHashCode() - lhs.GetHashCode());
         });
@@ -360,7 +360,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     void CreateTextRuns(string text, int start, int end, IList<SyntaxHighlightingToken> tokenDefinitions, TextRunProperties defaultRunProperties, IList<TextRun> textRuns)
     {
         // setup initial candidate tokens
-        var candidateTokens = new SortedObservableList<(int, int, SyntaxHighlightingToken)>((lhs, rhs) =>
+        var tokenComparison = new Comparison<(int, int, SyntaxHighlightingToken)>((lhs, rhs) =>
         {
             var result = (rhs.Item1 - lhs.Item1);
             if (result != 0)
@@ -368,9 +368,10 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             result = (lhs.Item2 - rhs.Item2);
             if (result != 0)
                 return result;
-            result = tokenDefinitions.IndexOf(lhs.Item3) - tokenDefinitions.IndexOf(rhs.Item3);
+            result = tokenDefinitions.IndexOf(rhs.Item3) - tokenDefinitions.IndexOf(lhs.Item3);
             return result != 0 ? result : (rhs.GetHashCode() - lhs.GetHashCode());
         });
+        var candidateTokens = new SortedObservableList<(int, int, SyntaxHighlightingToken)>(tokenComparison);
         foreach (var tokenDefinition in tokenDefinitions)
         {
             if (!tokenDefinition.IsValid)
@@ -407,12 +408,16 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 if (endIndex > end)
                     break;
                 if (match.Index == tokenEndIndex) // combine into single token
-                    tokenEndIndex = endIndex;
-                else
                 {
-                    candidateTokens.Add((match.Index, endIndex, tokenDefinition));
-                    break;
+                    var nextTokenIndex = candidateTokens.BinarySearch((match.Index, match.Index + match.Length, tokenDefinition), tokenComparison);
+                    if (nextTokenIndex == ~candidateTokens.Count)
+                    {
+                        tokenEndIndex = endIndex;
+                        continue;
+                    }
                 }
+                candidateTokens.Add((match.Index, endIndex, tokenDefinition));
+                break;
             }
 
             // remove tokens which overlaps with current token
