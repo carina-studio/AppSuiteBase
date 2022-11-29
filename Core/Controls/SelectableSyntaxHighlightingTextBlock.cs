@@ -70,6 +70,16 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
             this.syntaxHighlighter.LineHeight = height);
         this.GetObservable(MaxLinesProperty).Subscribe(maxLines =>
             this.syntaxHighlighter.MaxLines = maxLines);
+        this.GetObservable(SelectionEndProperty).Subscribe(end =>
+        {
+            this.syntaxHighlighter.SelectionEnd = end;
+            this.InvalidateTextLayout();
+        });
+        this.GetObservable(SelectionStartProperty).Subscribe(start =>
+        {
+            this.syntaxHighlighter.SelectionStart = start;
+            this.InvalidateTextLayout();
+        });
         this.GetObservable(TextProperty).Subscribe(text =>
             this.syntaxHighlighter.Text = text);
         this.GetObservable(TextAlignmentProperty).Subscribe(alignment =>

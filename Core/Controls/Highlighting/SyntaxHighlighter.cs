@@ -71,6 +71,18 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlighter, double> MaxWidthProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, double>(nameof(MaxWidth), sh => sh.maxWidth, (sh, w) => sh.MaxWidth = w);
     /// <summary>
+    /// Property of <see cref="SelectionEnd"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, int> SelectionEndProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, int>(nameof(SelectionEnd), sh => sh.selectionEnd, (sh, i) => sh.SelectionEnd = i);
+    /// <summary>
+    /// Property of <see cref="SelectionForeground"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, IBrush?> SelectionForegroundProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, IBrush?>(nameof(SelectionForeground), sh => sh.selectionForeground, (sh, b) => sh.SelectionForeground = b);
+    /// <summary>
+    /// Property of <see cref="SelectionStart"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, int> SelectionStartProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, int>(nameof(SelectionStart), sh => sh.selectionStart, (sh, i) => sh.SelectionStart = i);
+    /// <summary>
     /// Property of <see cref="Text"/>.
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlighter, string?> TextProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, string?>(nameof(Text), sh => sh.text, (sh, t) => sh.Text = t);
@@ -168,6 +180,9 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     double maxHeight = double.PositiveInfinity;
     int maxLines;
     double maxWidth = double.PositiveInfinity;
+    int selectionEnd;
+    IBrush? selectionForeground;
+    int selectionStart;
     string? text;
     TextAlignment textAlignment = TextAlignment.Left;
     TextLayout? textLayout;
@@ -259,6 +274,14 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         if (string.IsNullOrEmpty(text))
             return Array.Empty<TextRun>();
         
+        // setup default run properties for selected text
+        var defaultSelectionRunProperties = new GenericTextRunProperties(
+            defaultRunProperties.Typeface,
+            defaultRunProperties.FontRenderingEmSize,
+            null,
+            this.selectionForeground ?? defaultRunProperties.ForegroundBrush
+        );
+        
         // setup initial candidate spans
         var candidateSpans = new SortedObservableList<(int, int, SyntaxHighlightingSpan)>((lhs, rhs) =>
         {
@@ -293,6 +316,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         var textRuns = new List<TextRun>();
         var textStartIndex = 0;
         var runPropertiesMap = new Dictionary<SyntaxHighlightingSpan, TextRunProperties>();
+        var selectionRunPropertiesMap = new Dictionary<SyntaxHighlightingSpan, TextRunProperties>();
         var defaultTokenDefinitions = this.definitionSet?.TokenDefinitions ?? Array.Empty<SyntaxHighlightingToken>();
         while (candidateSpans.IsNotEmpty())
         {
@@ -348,16 +372,26 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 );
                 runPropertiesMap[spanDefinition] = runProperties;
             }
+            if (!selectionRunPropertiesMap.TryGetValue(spanDefinition, out var selectionRunProperties))
+            {
+                selectionRunProperties = new GenericTextRunProperties(
+                    runProperties.Typeface,
+                    runProperties.FontRenderingEmSize,
+                    null,
+                    this.selectionForeground ?? runProperties.ForegroundBrush
+                );
+                selectionRunPropertiesMap[spanDefinition] = selectionRunProperties;
+            }
             if (textStartIndex < spanStartIndex)
-                CreateTextRuns(text, textStartIndex, spanStartIndex, defaultTokenDefinitions, defaultRunProperties, textRuns);
-            CreateTextRuns(text, spanStartIndex, spanEndIndex, spanDefinition.TokenDefinitions, runProperties, textRuns);
+                CreateTextRunsInSpan(text, textStartIndex, spanStartIndex, defaultTokenDefinitions, defaultRunProperties, defaultSelectionRunProperties, textRuns);
+            CreateTextRunsInSpan(text, spanStartIndex, spanEndIndex, spanDefinition.TokenDefinitions, runProperties, selectionRunProperties, textRuns);
             textStartIndex = spanEndIndex;
         }
         if (textStartIndex < text.Length)
-            CreateTextRuns(text, textStartIndex, text.Length, defaultTokenDefinitions, defaultRunProperties, textRuns);
+            CreateTextRunsInSpan(text, textStartIndex, text.Length, defaultTokenDefinitions, defaultRunProperties, defaultSelectionRunProperties, textRuns);
         return textRuns;
     }
-    void CreateTextRuns(string text, int start, int end, IList<SyntaxHighlightingToken> tokenDefinitions, TextRunProperties defaultRunProperties, IList<TextRun> textRuns)
+    void CreateTextRunsInSpan(string text, int start, int end, IList<SyntaxHighlightingToken> tokenDefinitions, TextRunProperties defaultRunProperties, TextRunProperties defaultSelectionRunProperties, IList<TextRun> textRuns)
     {
         // setup initial candidate tokens
         var tokenComparison = new Comparison<(int, int, SyntaxHighlightingToken)>((lhs, rhs) =>
@@ -389,6 +423,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         var textMemory = text.AsMemory();
         var textStartIndex = start;
         var runPropertiesMap = new Dictionary<SyntaxHighlightingToken, TextRunProperties>();
+        var selectionRunPropertiesMap = new Dictionary<SyntaxHighlightingToken, TextRunProperties>();
         while (candidateTokens.IsNotEmpty())
         {
             // get current token
@@ -456,15 +491,25 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 );
                 runPropertiesMap[tokenDefinition] = runProperties;
             }
+            if (!selectionRunPropertiesMap.TryGetValue(tokenDefinition, out var selectionRunProperties))
+            {
+                selectionRunProperties = new GenericTextRunProperties(
+                    defaultSelectionRunProperties.Typeface,
+                    defaultSelectionRunProperties.FontRenderingEmSize,
+                    null,
+                    this.selectionForeground ?? defaultSelectionRunProperties.ForegroundBrush
+                );
+                selectionRunPropertiesMap[tokenDefinition] = selectionRunProperties;
+            }
             if (textStartIndex < tokenStartIndex)
-                CreateTextRuns(text, textStartIndex, tokenStartIndex, defaultRunProperties, textRuns);
-            CreateTextRuns(text, tokenStartIndex, tokenEndIndex, runProperties, textRuns);
+                this.CreateTextRunsWithLineBreaks(text, textStartIndex, tokenStartIndex, defaultRunProperties, defaultSelectionRunProperties, textRuns);
+            this.CreateTextRunsWithLineBreaks(text, tokenStartIndex, tokenEndIndex, runProperties, selectionRunProperties, textRuns);
             textStartIndex = tokenEndIndex;
         }
         if (textStartIndex < end)
-            CreateTextRuns(text, textStartIndex, end, defaultRunProperties, textRuns);
+            this.CreateTextRunsWithLineBreaks(text, textStartIndex, end, defaultRunProperties, defaultSelectionRunProperties, textRuns);
     }
-    static unsafe void CreateTextRuns(string text, int start, int end, TextRunProperties runProperties, IList<TextRun> textRuns)
+    unsafe void CreateTextRunsWithLineBreaks(string text, int start, int end, TextRunProperties runProperties, TextRunProperties selectionRunProperties, IList<TextRun> textRuns)
     {
         var textStartIndex = start;
         var textEndIndex = start;
@@ -479,7 +524,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 {
                     case '\n':
                         if (textEndIndex - 1 > textStartIndex)
-                            textRuns.Add(new TextCharacters(new(text.AsMemory(textStartIndex), 0, textEndIndex - textStartIndex - 1), runProperties));
+                            this.CreateTextRunsWithoutLineBreaks(text, textStartIndex, textEndIndex - 1, runProperties, selectionRunProperties, textRuns);
                         textRuns.Add(new TextCharacters("\n".AsMemory(), runProperties));
                         textStartIndex = textEndIndex;
                         break;
@@ -492,7 +537,37 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 }
             }
             if (textStartIndex < textEndIndex)
-                textRuns.Add(new TextCharacters(new(text.AsMemory(textStartIndex), 0, textEndIndex - textStartIndex), runProperties));
+                this.CreateTextRunsWithoutLineBreaks(text, textStartIndex, textEndIndex, runProperties, selectionRunProperties, textRuns);
+        }
+    }
+    void CreateTextRunsWithoutLineBreaks(string text, int start, int end, TextRunProperties runProperties, TextRunProperties selectionRunProperties, IList<TextRun> textRuns)
+    {
+        var selectionStart = this.selectionStart;
+        var selectionEnd = this.selectionEnd;
+        if (selectionEnd < selectionStart)
+            (selectionStart, selectionEnd) = (selectionEnd, selectionStart);
+        if (start >= selectionEnd || end <= selectionStart)
+            textRuns.Add(new TextCharacters(new(text.AsMemory(start), 0, end - start), runProperties));
+        else if (start < selectionStart)
+        {
+            textRuns.Add(new TextCharacters(new(text.AsMemory(start), 0, selectionStart - start), runProperties));
+            if (end <= selectionEnd)
+                textRuns.Add(new TextCharacters(new(text.AsMemory(selectionStart), 0, end - selectionStart), selectionRunProperties));
+            else
+            {
+                textRuns.Add(new TextCharacters(new(text.AsMemory(selectionStart), 0, selectionEnd - selectionStart), selectionRunProperties));
+                textRuns.Add(new TextCharacters(new(text.AsMemory(selectionEnd), 0, end - selectionEnd), runProperties));
+            }
+        }
+        else
+        {
+            if (end <= selectionEnd)
+                textRuns.Add(new TextCharacters(new(text.AsMemory(start), 0, end - start), selectionRunProperties));
+            else
+            {
+                textRuns.Add(new TextCharacters(new(text.AsMemory(start), 0, selectionEnd - start), selectionRunProperties));
+                textRuns.Add(new TextCharacters(new(text.AsMemory(selectionEnd), 0, end - selectionEnd), runProperties));
+            }
         }
     }
 
@@ -764,6 +839,60 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     // Called when definition set changed.
     void OnDefinitionSetChanged(object? sender, EventArgs e) =>
         this.InvalidateTextRuns();
+    
+
+    /// <summary>
+    /// Get or set end (exclusive) index of selected text.
+    /// </summary>
+    public int SelectionEnd
+    {
+        get => this.selectionEnd;
+        set
+        {
+            this.VerifyAccess();
+            if (this.selectionEnd == value)
+                return;
+            this.SetAndRaise(SelectionEndProperty, ref this.selectionEnd, value);
+            if (this.selectionForeground != null)
+                this.InvalidateTextRuns();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set foreground brush for selected text.
+    /// </summary>
+    public IBrush? SelectionForeground
+    {
+        get => this.selectionForeground;
+        set
+        {
+            this.VerifyAccess();
+            if (this.selectionForeground == value)
+                return;
+            this.SetAndRaise(SelectionForegroundProperty, ref this.selectionForeground, value);
+            if (this.selectionStart != this.selectionEnd)
+                this.InvalidateTextRuns();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set start (inclusive) index of selected text.
+    /// </summary>
+    public int SelectionStart
+    {
+        get => this.selectionStart;
+        set
+        {
+            this.VerifyAccess();
+            if (this.selectionStart == value)
+                return;
+            this.SetAndRaise(SelectionStartProperty, ref this.selectionStart, value);
+            if (this.selectionForeground != null)
+                this.InvalidateTextRuns();
+        }
+    }
 
 
     /// <summary>
