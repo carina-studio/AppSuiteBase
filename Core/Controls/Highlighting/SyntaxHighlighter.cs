@@ -1,0 +1,834 @@
+using Avalonia;
+using Avalonia.Media;
+using Avalonia.Media.TextFormatting;
+using CarinaStudio.Collections;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
+
+namespace CarinaStudio.AppSuite.Controls.Highlighting;
+
+/// <summary>
+/// Syntax highlighter.
+/// </summary>
+public sealed class SyntaxHighlighter : AvaloniaObject
+{
+    /// <summary>
+    /// Property of <see cref="Background"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, IBrush?> BackgroundProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, IBrush?>(nameof(Background), sh => sh.background, (sh, b) => sh.Background = b);
+    /// <summary>
+    /// Property of <see cref="FlowDirection"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, FlowDirection> FlowDirectionProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, FlowDirection>(nameof(FlowDirection), sh => sh.flowDirection, (sh, d) => sh.FlowDirection = d);
+    /// <summary>
+    /// Property of <see cref="FontFamily"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, FontFamily> FontFamilyProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, FontFamily>(nameof(FontFamily), sh => sh.fontFamily, (sh, f) => sh.FontFamily = f);
+    /// <summary>
+    /// Property of <see cref="FontStretch"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, FontStretch> FontStretchProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, FontStretch>(nameof(FontStretch), sh => sh.fontStretch, (sh, s) => sh.FontStretch = s);
+    /// <summary>
+    /// Property of <see cref="FontSize"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, double> FontSizeProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, double>(nameof(FontSize), sh => sh.fontSize, (sh, s) => sh.FontSize = s);
+    /// <summary>
+    /// Property of <see cref="FontStyle"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, FontStyle> FontStyleProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, FontStyle>(nameof(FontStyle), sh => sh.fontStyle, (sh, s) => sh.FontStyle = s);
+    /// <summary>
+    /// Property of <see cref="FontWeight"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, FontWeight> FontWeightProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, FontWeight>(nameof(FontWeight), sh => sh.fontWeight, (sh, w) => sh.FontWeight = w);
+    /// <summary>
+    /// Property of <see cref="Foreground"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, IBrush?> ForegroundProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, IBrush?>(nameof(Foreground), sh => sh.foreground, (sh, b) => sh.Foreground = b);
+    /// <summary>
+    /// Property of <see cref="DefinitionSet"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, SyntaxHighlightingDefinitionSet?> DefinitionSetProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, SyntaxHighlightingDefinitionSet?>(nameof(DefinitionSet), sh => sh.definitionSet, (sh, ds) => sh.DefinitionSet = ds);
+    /// <summary>
+    /// Property of <see cref="LetterSpacing"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, double> LetterSpacingProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, double>(nameof(LetterSpacing), sh => sh.letterSpacing, (sh, s) => sh.LetterSpacing = s);
+    /// <summary>
+    /// Property of <see cref="FlowDirection"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, double> LineHeightProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, double>(nameof(LineHeight), sh => sh.lineHeight, (sh, h) => sh.LineHeight = h);
+    /// <summary>
+    /// Property of <see cref="MaxHeight"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, double> MaxHeightProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, double>(nameof(MaxHeight), sh => sh.maxHeight, (sh, h) => sh.MaxHeight = h);
+    /// <summary>
+    /// Property of <see cref="MaxLines"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, int> MaxLinesProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, int>(nameof(MaxLines), sh => sh.maxLines, (sh, l) => sh.MaxLines = l);
+    /// <summary>
+    /// Property of <see cref="MaxWidth"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, double> MaxWidthProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, double>(nameof(MaxWidth), sh => sh.maxWidth, (sh, w) => sh.MaxWidth = w);
+    /// <summary>
+    /// Property of <see cref="Text"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, string?> TextProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, string?>(nameof(Text), sh => sh.text, (sh, t) => sh.Text = t);
+    /// <summary>
+    /// Property of <see cref="TextAlignment"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, TextAlignment> TextAlignmentProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, TextAlignment>(nameof(TextAlignment), sh => sh.textAlignment, (sh, a) => sh.TextAlignment = a);
+    /// <summary>
+    /// Property of <see cref="TextTrimming"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, TextTrimming> TextTrimmingProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, TextTrimming>(nameof(TextTrimming), sh => sh.textTrimming, (sh, t) => sh.TextTrimming = t);
+    /// <summary>
+    /// Property of <see cref="TextWrapping"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, TextWrapping> TextWrappingProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, TextWrapping>(nameof(TextWrapping), sh => sh.textWrapping, (sh, w) => sh.TextWrapping = w);
+
+
+    // Implementation of ITextSource.
+    class TextSourceImpl : ITextSource
+    {
+        // Fields.
+        readonly int textLength;
+        readonly IList<(int, TextRun)> textRuns;
+
+        // Constructor.
+        public TextSourceImpl(IList<TextRun> textRuns)
+        {
+            var textRunCount = textRuns.Count;
+            if (textRunCount > 0)
+            {
+                this.textRuns = new List<(int, TextRun)>(textRunCount);
+                var textSourceIndex = 0;
+                for (var i = 0; i < textRunCount; ++i)
+                {
+                    var textRun = textRuns[i];
+                    if (textRun.TextSourceLength == 0)
+                        continue;
+                    this.textRuns.Add((textSourceIndex, textRun));
+                    textSourceIndex += textRun.TextSourceLength;
+                }
+                this.textLength = textSourceIndex;
+            }
+            else
+                this.textRuns = Array.Empty<(int, TextRun)>();
+        }
+
+        // Find text run.
+        bool FindTextRun(int textSourceIndex, int searchRangeStart, int searchRangeEnd, out int textSourceIndexOfTextRun, [NotNullWhen(true)] out TextRun? textRun)
+        {
+            if (searchRangeStart >= searchRangeEnd)
+            {
+                textSourceIndexOfTextRun = -1;
+                textRun = null;
+                return false;
+            }
+            var searchIndex = (searchRangeStart + searchRangeEnd) >> 1;
+            var candidateTextRun = this.textRuns[searchIndex];
+            if (candidateTextRun.Item1 > textSourceIndex)
+                return this.FindTextRun(textSourceIndex, searchRangeStart, searchIndex, out textSourceIndexOfTextRun, out textRun);
+            if (candidateTextRun.Item1 + candidateTextRun.Item2.TextSourceLength <= textSourceIndex)
+                return this.FindTextRun(textSourceIndex, searchIndex + 1, searchRangeEnd, out textSourceIndexOfTextRun, out textRun);
+            textSourceIndexOfTextRun = candidateTextRun.Item1;
+            textRun = candidateTextRun.Item2;
+            return true;
+        }
+        
+        /// <inheritdoc/>
+        public TextRun? GetTextRun(int textSourceIndex)
+        {
+            if (textRuns.IsEmpty() || textSourceIndex >= this.textLength)
+                return null;
+            if (!this.FindTextRun(textSourceIndex, 0, this.textRuns.Count, out var textSourceIndexOfTextRun, out var textRun))
+                return null;
+            if (textSourceIndexOfTextRun == textSourceIndex)
+                return textRun;
+            if (textRun is TextCharacters textCharacters)
+                return new TextCharacters(textCharacters.Text.Skip((textSourceIndex - textSourceIndexOfTextRun)), textCharacters.Properties);
+            return textRun;
+        }
+    }
+
+
+    // Fields.
+    IBrush? background;
+    SyntaxHighlightingDefinitionSet? definitionSet;
+    FlowDirection flowDirection = FlowDirection.LeftToRight;
+    FontFamily fontFamily = FontManager.Current.DefaultFontFamilyName;
+    double fontSize = 12;
+    FontStretch fontStretch = FontStretch.Normal;
+    FontStyle fontStyle = FontStyle.Normal;
+    FontWeight fontWeight = FontWeight.Normal;
+    IBrush? foreground;
+    double letterSpacing;
+    double lineHeight = double.NaN;
+    double maxHeight = double.PositiveInfinity;
+    int maxLines;
+    double maxWidth = double.PositiveInfinity;
+    string? text;
+    TextAlignment textAlignment = TextAlignment.Left;
+    TextLayout? textLayout;
+    IList<TextRun>? textRuns;
+    ITextSource? textSource;
+    TextTrimming textTrimming = TextTrimming.CharacterEllipsis;
+    TextWrapping textWrapping = TextWrapping.NoWrap;
+
+
+    /// <summary>
+    /// Initialize new <see cref="SyntaxHighlighter"/> instance.
+    /// </summary>
+    public SyntaxHighlighter()
+    { }
+
+
+    /// <summary>
+    /// Get or set base background brush.
+    /// </summary>
+    public IBrush? Background
+    {
+        get => this.background;
+        set
+        {
+            this.VerifyAccess();
+            if (this.background == value)
+                return;
+            this.SetAndRaise(BackgroundProperty, ref this.background, value);
+            this.InvalidateTextRuns();
+        }
+    }
+
+
+    /// <summary>
+    /// Create text layout.
+    /// </summary>
+    /// <returns>Text layout.</returns>
+    public TextLayout CreateTextLayout()
+    {
+        // use created text layout
+        if (this.textLayout != null)
+            return this.textLayout;
+        
+        // create typr face
+        var typeface = new Typeface(this.fontFamily, this.fontStyle, this.fontWeight, this.fontStretch);
+
+        // prepare base run properties
+        var defaultRunProperties = new GenericTextRunProperties(
+            typeface,
+            this.fontSize,
+            null,
+            this.foreground
+        );
+
+        // prepare paragraph properties
+        var paragraphProperties = new GenericTextParagraphProperties(
+            this.flowDirection, 
+            this.textAlignment, 
+            true, 
+            false,
+            defaultRunProperties, 
+            this.textWrapping, 
+            this.lineHeight, 
+            0, 
+            this.letterSpacing);
+        
+        // create text runs and source
+        this.textRuns ??= this.CreateTextRuns(defaultRunProperties);
+        this.textSource ??= new TextSourceImpl(this.textRuns);
+
+        // create text layout
+        this.textLayout = new TextLayout(
+            this.textSource,
+            paragraphProperties,
+            this.textTrimming,
+            this.maxWidth,
+            this.maxHeight,
+            maxLines: this.maxLines,
+            lineHeight: this.lineHeight);
+        return this.textLayout;
+    }
+
+
+    // Create text runs.
+    IList<TextRun> CreateTextRuns(TextRunProperties defaultRunProperties)
+    {
+        // check text
+        var text = this.text;
+        if (string.IsNullOrEmpty(text))
+            return Array.Empty<TextRun>();
+        
+        // setup initial candidate spans
+        var candidateSpans = new SortedObservableList<(int, int, SyntaxHighlightingSpan)>((lhs, rhs) =>
+        {
+            var result = (rhs.Item1 - lhs.Item1);
+            if (result != 0)
+                return result;
+            result = (lhs.Item2 - rhs.Item2);
+            if (result != 0)
+                return result;
+            result = this.definitionSet?.SpanDefinitions?.Let(it =>
+            {
+                return it.IndexOf(lhs.Item3) - it.IndexOf(rhs.Item3);
+            }) ?? 0;
+            return result != 0 ? result : (rhs.GetHashCode() - lhs.GetHashCode());
+        });
+        this.definitionSet?.SpanDefinitions?.Let(it =>
+        {
+            foreach (var spanDefinition in it)
+            {
+                if (!spanDefinition.IsValid)
+                    continue;
+                var startMatch = spanDefinition.StartPattern!.Match(text);
+                if (!startMatch.Success)
+                    continue;
+                var endMatch = spanDefinition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
+                if (endMatch.Success)
+                    candidateSpans.Add((startMatch.Index, endMatch.Index + endMatch.Length, spanDefinition));
+            }
+        });
+        
+        // create text runs
+        var textRuns = new List<TextRun>();
+        var textStartIndex = 0;
+        var runPropertiesMap = new Dictionary<SyntaxHighlightingSpan, TextRunProperties>();
+        var defaultTokenDefinitions = this.definitionSet?.TokenDefinitions ?? Array.Empty<SyntaxHighlightingToken>();
+        while (candidateSpans.IsNotEmpty())
+        {
+            // get current span
+            var span = candidateSpans[^1];
+            var spanStartIndex = span.Item1;
+            var spanEndIndex = span.Item2;
+            var spanDefinition = span.Item3;
+            candidateSpans.RemoveAt(candidateSpans.Count - 1);
+
+            // find next span
+            var startMatch = spanDefinition.StartPattern!.Match(text, spanEndIndex);
+            var endMatch = default(Match);
+            if (startMatch.Success)
+            {
+                endMatch = spanDefinition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
+                if (endMatch.Success)
+                    candidateSpans.Add((startMatch.Index, endMatch.Index + endMatch.Length, spanDefinition));
+            }
+
+            // remove spans which overlaps with current span
+            for (var i = candidateSpans.Count - 1; i >= 0; --i)
+            {
+                // check overlapping
+                var removingSpan = candidateSpans[i];
+                if (removingSpan.Item1 >= spanEndIndex && removingSpan.Item2 >= spanEndIndex)
+                    continue;
+                candidateSpans.RemoveAt(i);
+
+                // find next span
+                startMatch = removingSpan.Item3.StartPattern!.Match(text, spanEndIndex);
+                if (!startMatch.Success)
+                    continue;
+                endMatch = removingSpan.Item3.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
+                if (endMatch.Success)
+                    candidateSpans.Add((startMatch.Index, endMatch.Index + endMatch.Length, removingSpan.Item3));
+            }
+
+            // create text runs
+            if (!runPropertiesMap.TryGetValue(spanDefinition, out var runProperties))
+            {
+                var typeface = new Typeface(
+                    spanDefinition.FontFamily ?? defaultRunProperties.Typeface.FontFamily, 
+                    spanDefinition.FontStyle ?? defaultRunProperties.Typeface.Style,
+                    spanDefinition.FontWeight ?? defaultRunProperties.Typeface.Weight, 
+                    this.fontStretch
+                );
+                runProperties = new GenericTextRunProperties(
+                    typeface,
+                    double.IsNaN(spanDefinition.FontSize) ? defaultRunProperties.FontRenderingEmSize : spanDefinition.FontSize,
+                    null,
+                    spanDefinition.Foreground ?? defaultRunProperties.ForegroundBrush
+                );
+                runPropertiesMap[spanDefinition] = runProperties;
+            }
+            if (textStartIndex < spanStartIndex)
+                CreateTextRuns(text, textStartIndex, spanStartIndex, defaultTokenDefinitions, defaultRunProperties, textRuns);
+            CreateTextRuns(text, spanStartIndex, spanEndIndex, spanDefinition.TokenDefinitions, runProperties, textRuns);
+            textStartIndex = spanEndIndex;
+        }
+        if (textStartIndex < text.Length)
+            CreateTextRuns(text, textStartIndex, text.Length, defaultTokenDefinitions, defaultRunProperties, textRuns);
+        return textRuns;
+    }
+    void CreateTextRuns(string text, int start, int end, IList<SyntaxHighlightingToken> tokenDefinitions, TextRunProperties defaultRunProperties, IList<TextRun> textRuns)
+    {
+        // setup initial candidate tokens
+        var candidateTokens = new SortedObservableList<(int, int, SyntaxHighlightingToken)>((lhs, rhs) =>
+        {
+            var result = (rhs.Item1 - lhs.Item1);
+            if (result != 0)
+                return result;
+            result = (lhs.Item2 - rhs.Item2);
+            if (result != 0)
+                return result;
+            result = tokenDefinitions.IndexOf(lhs.Item3) - tokenDefinitions.IndexOf(rhs.Item3);
+            return result != 0 ? result : (rhs.GetHashCode() - lhs.GetHashCode());
+        });
+        foreach (var tokenDefinition in tokenDefinitions)
+        {
+            if (!tokenDefinition.IsValid)
+                continue;
+            var match = tokenDefinition.Pattern!.Match(text, start);
+            if (match.Success)
+            {
+                var endIndex = match.Index + match.Length;
+                if (endIndex <= end)
+                    candidateTokens.Add((match.Index, endIndex, tokenDefinition));
+            }
+        }
+
+        // create text runs
+        var textMemory = text.AsMemory();
+        var textStartIndex = start;
+        var runPropertiesMap = new Dictionary<SyntaxHighlightingToken, TextRunProperties>();
+        while (candidateTokens.IsNotEmpty())
+        {
+            // get current token
+            var token = candidateTokens[^1];
+            var tokenStartIndex = token.Item1;
+            var tokenEndIndex = token.Item2;
+            var tokenDefinition = token.Item3;
+            candidateTokens.RemoveAt(candidateTokens.Count - 1);
+
+            // find next token
+            while (true)
+            {
+                var match = tokenDefinition.Pattern!.Match(text, tokenEndIndex);
+                if (!match.Success)
+                    break;
+                var endIndex = match.Index + match.Length;
+                if (endIndex > end)
+                    break;
+                if (match.Index == tokenEndIndex) // combine into single token
+                    tokenEndIndex = endIndex;
+                else
+                {
+                    candidateTokens.Add((match.Index, endIndex, tokenDefinition));
+                    break;
+                }
+            }
+
+            // remove tokens which overlaps with current token
+            for (var i = candidateTokens.Count - 1; i >= 0; --i)
+            {
+                // check overlapping
+                var removingToken = candidateTokens[i];
+                if (removingToken.Item1 >= tokenEndIndex && removingToken.Item2 >= tokenEndIndex)
+                    continue;
+                candidateTokens.RemoveAt(i);
+
+                // find next token
+                var match = removingToken.Item3.Pattern!.Match(text, tokenEndIndex);
+                if (match.Success)
+                {
+                    var endIndex = match.Index + match.Length;
+                    if (endIndex <= end)
+                        candidateTokens.Add((match.Index, endIndex, removingToken.Item3));
+                }
+            }
+
+            // create text runs
+            if (!runPropertiesMap.TryGetValue(tokenDefinition, out var runProperties))
+            {
+                var typeface = new Typeface(
+                    tokenDefinition.FontFamily ?? defaultRunProperties.Typeface.FontFamily, 
+                    tokenDefinition.FontStyle ?? defaultRunProperties.Typeface.Style,
+                    tokenDefinition.FontWeight ?? defaultRunProperties.Typeface.Weight, 
+                    this.fontStretch
+                );
+                runProperties = new GenericTextRunProperties(
+                    typeface,
+                    double.IsNaN(tokenDefinition.FontSize) ? defaultRunProperties.FontRenderingEmSize : tokenDefinition.FontSize,
+                    null,
+                    tokenDefinition.Foreground ?? defaultRunProperties.ForegroundBrush
+                );
+                runPropertiesMap[tokenDefinition] = runProperties;
+            }
+            if (textStartIndex < tokenStartIndex)
+                CreateTextRuns(text, textStartIndex, tokenStartIndex, defaultRunProperties, textRuns);
+            CreateTextRuns(text, tokenStartIndex, tokenEndIndex, runProperties, textRuns);
+            textStartIndex = tokenEndIndex;
+        }
+        if (textStartIndex < end)
+            CreateTextRuns(text, textStartIndex, end, defaultRunProperties, textRuns);
+    }
+    static unsafe void CreateTextRuns(string text, int start, int end, TextRunProperties runProperties, IList<TextRun> textRuns)
+    {
+        var textStartIndex = start;
+        var textEndIndex = start;
+        fixed (char* textPtr = text)
+        {
+            var cPtr = (textPtr + start);
+            while (textEndIndex < end)
+            {
+                var c = *(cPtr++);
+                ++textEndIndex;
+                switch (c)
+                {
+                    case '\n':
+                        if (textEndIndex - 1 > textStartIndex)
+                            textRuns.Add(new TextCharacters(new(text.AsMemory(textStartIndex), 0, textEndIndex - textStartIndex - 1), runProperties));
+                        textRuns.Add(new TextCharacters("\n".AsMemory(), runProperties));
+                        textStartIndex = textEndIndex;
+                        break;
+                    case '\b':
+                    case '\r':
+                        textStartIndex = textEndIndex;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (textStartIndex < textEndIndex)
+                textRuns.Add(new TextCharacters(new(text.AsMemory(textStartIndex), 0, textEndIndex - textStartIndex), runProperties));
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set syntax highlighting definition set.
+    /// </summary>
+    public SyntaxHighlightingDefinitionSet? DefinitionSet
+    {
+        get => this.definitionSet;
+        set
+        {
+            this.VerifyAccess();
+            if (this.definitionSet == value)
+                return;
+            if (this.definitionSet != null)
+                this.definitionSet.Changed -= this.OnDefinitionSetChanged;
+            if (value != null)
+                value.Changed += this.OnDefinitionSetChanged;
+            this.SetAndRaise(DefinitionSetProperty, ref this.definitionSet, value);
+            this.InvalidateTextLayout();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set flow direction.
+    /// </summary>
+    public FlowDirection FlowDirection
+    {
+        get => this.flowDirection;
+        set
+        {
+            this.VerifyAccess();
+            if (this.flowDirection == value)
+                return;
+            this.SetAndRaise(FlowDirectionProperty, ref this.flowDirection, value);
+            this.InvalidateTextRuns();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set base font family.
+    /// </summary>
+    public FontFamily FontFamily
+    {
+        get => this.fontFamily;
+        set
+        {
+            this.VerifyAccess();
+            if (this.fontFamily == value)
+                return;
+            this.SetAndRaise(FontFamilyProperty, ref this.fontFamily, value);
+            this.InvalidateTextLayout();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set base font size.
+    /// </summary>
+    public double FontSize
+    {
+        get => this.fontSize;
+        set
+        {
+            this.VerifyAccess();
+            if (Math.Abs(this.fontSize - value) <= 0.01)
+                return;
+            this.SetAndRaise(FontSizeProperty, ref this.fontSize, value);
+            this.InvalidateTextRuns();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set base font stretch.
+    /// </summary>
+    public FontStretch FontStretch
+    {
+        get => this.fontStretch;
+        set
+        {
+            this.VerifyAccess();
+            if (this.fontStretch == value)
+                return;
+            this.SetAndRaise(FontStretchProperty, ref this.fontStretch, value);
+            this.InvalidateTextLayout();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set base font style.
+    /// </summary>
+    public FontStyle FontStyle
+    {
+        get => this.fontStyle;
+        set
+        {
+            this.VerifyAccess();
+            if (this.fontStyle == value)
+                return;
+            this.SetAndRaise(FontStyleProperty, ref this.fontStyle, value);
+            this.InvalidateTextRuns();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set base font weight.
+    /// </summary>
+    public FontWeight FontWeight
+    {
+        get => this.fontWeight;
+        set
+        {
+            this.VerifyAccess();
+            if (this.fontWeight == value)
+                return;
+            this.SetAndRaise(FontWeightProperty, ref this.fontWeight, value);
+            this.InvalidateTextLayout();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set base foreground brush.
+    /// </summary>
+    public IBrush? Foreground
+    {
+        get => this.foreground;
+        set
+        {
+            this.VerifyAccess();
+            if (this.foreground == value)
+                return;
+            this.SetAndRaise(ForegroundProperty, ref this.foreground, value);
+            this.InvalidateTextRuns();
+        }
+    }
+
+
+    // Invalidate text layout.
+    void InvalidateTextLayout() =>
+        this.textLayout = null;
+    
+
+    // Invalidate text runs.
+    void InvalidateTextRuns()
+    {
+        this.textRuns = null;
+        this.textSource = null;
+        this.InvalidateTextLayout();
+    }
+
+
+    /// <summary>
+    /// Get or set letter spacing.
+    /// </summary>
+    public double LetterSpacing
+    {
+        get => this.letterSpacing;
+        set
+        {
+            this.VerifyAccess();
+            if (!double.IsFinite(value))
+                throw new ArgumentOutOfRangeException(nameof(value));
+            if (Math.Abs(this.letterSpacing - value) <= 0.01)
+                return;
+            this.SetAndRaise(LetterSpacingProperty, ref this.letterSpacing, value);
+            this.InvalidateTextLayout();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set line height
+    /// </summary>
+    public double LineHeight
+    {
+        get => this.lineHeight;
+        set
+        {
+            this.VerifyAccess();
+            if (double.IsNaN(value))
+            {
+                if (double.IsNaN(this.lineHeight))
+                    return;
+            }
+            else if (!double.IsFinite(value) || value <= 0)
+                throw new ArgumentOutOfRangeException(nameof(value));
+            else if (double.IsFinite(this.lineHeight) && Math.Abs(this.lineHeight - value) <= 0.01)
+                return;
+            this.SetAndRaise(LineHeightProperty, ref this.lineHeight, value);
+            this.InvalidateTextLayout();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set maximum height of text layout.
+    /// </summary>
+    public double MaxHeight
+    {
+        get => this.maxHeight;
+        set
+        {
+            this.VerifyAccess();
+            if (double.IsInfinity(value))
+            {
+                if (value.Equals(this.maxHeight))
+                    return;
+            }
+            else if (double.IsNaN(value))
+                throw new ArgumentOutOfRangeException(nameof(value));
+            else if (double.IsFinite(this.maxHeight) && Math.Abs(this.maxHeight - value) <= 0.01)
+                return;
+            this.SetAndRaise(MaxHeightProperty, ref this.maxHeight, value);
+            this.InvalidateTextLayout();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set maximum number of lines.
+    /// </summary>
+    public int MaxLines
+    {
+        get => this.maxLines;
+        set
+        {
+            this.VerifyAccess();
+            if (value < 0)
+                throw new ArgumentOutOfRangeException(nameof(value));
+            else if (this.maxLines == value)
+                return;
+            this.SetAndRaise(MaxLinesProperty, ref this.maxLines, value);
+            this.InvalidateTextLayout();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set maximum width of text layout.
+    /// </summary>
+    public double MaxWidth
+    {
+        get => this.maxWidth;
+        set
+        {
+            this.VerifyAccess();
+            if (double.IsInfinity(value))
+            {
+                if (value.Equals(this.maxWidth))
+                    return;
+            }
+            else if (double.IsNaN(value))
+                throw new ArgumentOutOfRangeException(nameof(value));
+            else if (double.IsFinite(this.maxWidth) && Math.Abs(this.maxWidth - value) <= 0.01)
+                return;
+            this.SetAndRaise(MaxWidthProperty, ref this.maxWidth, value);
+            this.InvalidateTextLayout();
+        }
+    }
+
+
+    // Called when definition set changed.
+    void OnDefinitionSetChanged(object? sender, EventArgs e) =>
+        this.InvalidateTextRuns();
+
+
+    /// <summary>
+    /// Get or set text.
+    /// </summary>
+    public string? Text
+    {
+        get => this.text;
+        set
+        {
+            this.VerifyAccess();
+            if ((this.text?.Length ?? 0) < 1024
+                && (value?.Length ?? 0) < 1024
+                && this.text == value)
+            {
+                return;
+            }
+            this.SetAndRaise(TextProperty, ref this.text, value);
+            this.InvalidateTextRuns();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set text alignment.
+    /// </summary>
+    public TextAlignment TextAlignment
+    {
+        get => this.textAlignment;
+        set
+        {
+            this.VerifyAccess();
+            if (this.textAlignment == value)
+                return;
+            this.SetAndRaise(TextAlignmentProperty, ref this.textAlignment, value);
+            this.InvalidateTextLayout();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set text trimming.
+    /// </summary>
+    public TextTrimming TextTrimming
+    {
+        get => this.textTrimming;
+        set
+        {
+            this.VerifyAccess();
+            if (this.textTrimming == value)
+                return;
+            this.SetAndRaise(TextTrimmingProperty, ref this.textTrimming, value);
+            this.InvalidateTextLayout();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set text wrapping.
+    /// </summary>
+    public TextWrapping TextWrapping
+    {
+        get => this.textWrapping;
+        set
+        {
+            this.VerifyAccess();
+            if (this.textWrapping == value)
+                return;
+            this.SetAndRaise(TextWrappingProperty, ref this.textWrapping, value);
+            this.InvalidateTextLayout();
+        }
+    }
+}

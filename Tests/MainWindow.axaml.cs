@@ -1,13 +1,13 @@
-using System.Threading.Tasks;
-using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Controls;
+using CarinaStudio.AppSuite.Controls.Highlighting;
 using CarinaStudio.AppSuite.Converters;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Collections;
@@ -21,8 +21,10 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using TabControl = Avalonia.Controls.TabControl;
 
@@ -47,6 +49,8 @@ namespace CarinaStudio.AppSuite.Tests
         IDisposable? overlayResourcesToken;
         IImage? selectedImage;
         string? selectedImageId;
+        readonly Avalonia.Controls.TextBlock syntaxHighlightingRefTextBlock;
+        readonly SyntaxHighlightingTextBlock syntaxHighlightingTextBlock;
         readonly ObservableList<TabItem> tabItems = new();
 
 
@@ -86,6 +90,63 @@ namespace CarinaStudio.AppSuite.Tests
             this.integerTextBox = this.FindControl<IntegerTextBox>(nameof(integerTextBox)).AsNonNull();
             this.integerTextBox2 = this.FindControl<IntegerTextBox>(nameof(integerTextBox2)).AsNonNull();
             this.ipAddressTextBox = this.FindControl<IPAddressTextBox>(nameof(ipAddressTextBox)).AsNonNull();
+
+            var syntaxHighlightingDefSet = new SyntaxHighlightingDefinitionSet("C#").Also(defSet =>
+            {
+#pragma warning disable SYSLIB1045
+                defSet.SpanDefinitions.Add(new SyntaxHighlightingSpan().Also(it => 
+                { 
+                    it.StartPattern = new("\"");
+                    it.EndPattern = new("(?<=[^\\\\])\"");
+                    it.Foreground = Brushes.Brown;
+                    it.FontStyle = FontStyle.Italic;
+
+                    it.TokenDefinitions.Add(new() { Pattern = new("\\\\\\S"), Foreground = Brushes.Orange });
+                }));
+                defSet.SpanDefinitions.Add(new SyntaxHighlightingSpan().Also(it => 
+                { 
+                    it.StartPattern = new("\\$\"");
+                    it.EndPattern = new("(?<=[^\\\\])\"");
+                    it.Foreground = Brushes.Brown;
+                    it.FontStyle = FontStyle.Italic;
+
+                    it.TokenDefinitions.Add(new() { Pattern = new("\\\\\\S"), Foreground = Brushes.Orange });
+                    it.TokenDefinitions.Add(new() { Pattern = new("(\\{\\{|\\}\\})"), Foreground = Brushes.Yellow });
+                    it.TokenDefinitions.Add(new() { Pattern = new("\\{([^\\{][^\\}]*)?\\}"), Foreground = Brushes.Yellow });
+                }));
+                defSet.SpanDefinitions.Add(new SyntaxHighlightingSpan().Also(it => 
+                { 
+                    it.StartPattern = new("'");
+                    it.EndPattern = new("(?<=[^\\\\])'");
+                    it.Foreground = Brushes.Brown;
+
+                    it.TokenDefinitions.Add(new() { Pattern = new("\\\\\\S"), Foreground = Brushes.Orange });
+                }));
+                defSet.SpanDefinitions.Add(new SyntaxHighlightingSpan().Also(it => 
+                { 
+                    it.StartPattern = new("///");
+                    it.EndPattern = new("(\\n|$)");
+                    it.Foreground = Brushes.Gray;
+                }));
+                defSet.TokenDefinitions.Add(new() { Pattern = new("\\b(async|await|base|break|case|catch|class|continue|default|delegate|do|else|enum|event|finally|for|foreach|get|goto|if|internal|lock|nameof|namespace|new|sealed|set|static|struct|switch|this|throw|try|override|protected|public|private|readonly|return|using|var|virtual|volatile|while|yield)\\b"), Foreground = Brushes.Cyan });
+                defSet.TokenDefinitions.Add(new() { Pattern = new("\\b(bool|byte|char|decimal|double|float|int|long|nint|nuint|short|string|uint|ulong|ushort)\\b"), Foreground = Brushes.Green });
+                defSet.TokenDefinitions.Add(new() { Pattern = new("\\b[+-]?(0x[0-9a-fA-F]+|[0-9]+|0[0-7]+|[0-9]+\\.[0-9]+)[uU]?[lL]?\\b"), Foreground = Brushes.Orange });
+                defSet.TokenDefinitions.Add(new() { Pattern = new("\\b(true|false)\\b"), Foreground = Brushes.Orange });
+                defSet.TokenDefinitions.Add(new() { Pattern = new("//[^$\\n]*"), Foreground = Brushes.Green });
+                //defSet.TokenDefinitions.Add(new() { Pattern = new("\"\""), FontStyle = FontStyle.Italic, Foreground = Brushes.Brown });
+#pragma warning restore SYSLIB1045
+            });
+
+            this.syntaxHighlightingTextBlock = this.Get<SyntaxHighlightingTextBlock>(nameof(syntaxHighlightingTextBlock)).Also(it =>
+            {
+                it.DefinitionSet = syntaxHighlightingDefSet;
+                //it.Text = "var s1 = \"Hello \\\"World\";\nvar s2 = \"\";\nvar s3 = \"\";\nvar c1 = '\\n';";
+                it.Text = "// Create regular expression for parsing base name.";
+            });
+            this.syntaxHighlightingRefTextBlock = this.Get<Avalonia.Controls.TextBlock>(nameof(syntaxHighlightingRefTextBlock)).Also(it =>
+            {
+                //
+            });
 
             var tabControl = this.FindControl<TabControl>("tabControl").AsNonNull();
             this.tabItems.AddRange(tabControl.Items!.Cast<TabItem>());
@@ -284,6 +345,25 @@ namespace CarinaStudio.AppSuite.Tests
             data.Set(TabItemKey, e.Item);
             DragDrop.DoDragDrop(e.PointerEventArgs, data, DragDropEffects.Move);
             e.Handled = true;
+        }
+
+
+        public async void OpenFileForSyntaxHighlightingTextBlocks()
+        {
+            using var stream = await (await this.StorageProvider.OpenFilePickerAsync(new()
+            {
+                //
+            })).LetAsync(async it =>
+            {
+                if (it != null && it.Count == 1)
+                    return await it[0].OpenReadAsync();
+                return null;
+            });
+            if (stream == null)
+                return;
+            
+            using var reader = new System.IO.StreamReader(stream, System.Text.Encoding.UTF8);
+            this.syntaxHighlightingTextBlock.Text = await reader.ReadToEndAsync();
         }
 
 
