@@ -147,5 +147,5 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
 
 
     /// <inheritdoc/>
-    Type IStyleable.StyleKey => typeof(TextBlock);
+    Type IStyleable.StyleKey => typeof(SyntaxHighlightingTextBlock);
 }

@@ -52,6 +52,9 @@
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.EscapeCharacters">#00b1cc</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.UnicodeCategories">#00b1cc</SolidColorBrush>
 
+	<!-- SelectableSyntaxHighlightingTextBlock -->
+	<StaticResource x:Key="Brush/SelectableSyntaxHighlightingTextBlock.Selection.Foreground" ResourceKey="SystemControlHighlightAltAltHighBrush" />
+
 	<!-- Separator -->
 	<Color x:Key="Color/Separator.Background">#4f000000</Color>
 

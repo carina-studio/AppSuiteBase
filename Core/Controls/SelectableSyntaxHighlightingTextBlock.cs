@@ -20,6 +20,10 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
     /// Property of <see cref="DefinitionSet"/>.
     /// </summary>
     public static readonly DirectProperty<SelectableSyntaxHighlightingTextBlock, SyntaxHighlightingDefinitionSet?> DefinitionSetProperty = AvaloniaProperty.RegisterDirect<SelectableSyntaxHighlightingTextBlock, SyntaxHighlightingDefinitionSet?>(nameof(DefinitionSet), t => t.syntaxHighlighter.DefinitionSet, (t, ds) => t.syntaxHighlighter.DefinitionSet = ds);
+    /// <summary>
+    /// Property of <see cref="SelectionForegroundBrush"/>.
+    /// </summary>
+    public static readonly DirectProperty<SelectableSyntaxHighlightingTextBlock, IBrush?> SelectionForegroundBrushProperty = AvaloniaProperty.RegisterDirect<SelectableSyntaxHighlightingTextBlock, IBrush?>(nameof(SelectionForegroundBrush), t => t.syntaxHighlighter.SelectionForeground, (t, b) => t.syntaxHighlighter.SelectionForeground = b);
 
 
     // Fields.
@@ -94,7 +98,9 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
         {
             var property = e.Property;
             if (property == SyntaxHighlighter.DefinitionSetProperty)
-                this.RaisePropertyChanged(DefinitionSetProperty, (SyntaxHighlightingDefinitionSet?)e.OldValue,  (SyntaxHighlightingDefinitionSet?)e.NewValue);
+                this.RaisePropertyChanged(DefinitionSetProperty, new((SyntaxHighlightingDefinitionSet?)e.OldValue), new((SyntaxHighlightingDefinitionSet?)e.NewValue));
+            else if (property == SyntaxHighlighter.SelectionForegroundProperty)
+                this.RaisePropertyChanged(SelectionForegroundBrushProperty, new((IBrush?)e.OldValue), new((IBrush?)e.NewValue));
         };
     }
 
@@ -156,6 +162,16 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
     }
 
 
+    /// <summary>
+    /// Get or set brush of foreground of selected text.
+    /// </summary>
+    public IBrush? SelectionForegroundBrush
+    {
+        get => this.syntaxHighlighter.SelectionForeground;
+        set => this.syntaxHighlighter.SelectionForeground = value;
+    }
+
+
     /// <inheritdoc/>
-    Type IStyleable.StyleKey => typeof(Avalonia.Controls.SelectableTextBlock);
+    Type IStyleable.StyleKey => typeof(SelectableSyntaxHighlightingTextBlock);
 }

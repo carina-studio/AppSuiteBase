@@ -190,6 +190,10 @@
 	<!-- ScrollViewer -->
 	<SolidColorBrush x:Key="ScrollViewerScrollBarsSeparatorBackground" Color="Transparent"/>
 
+	<!-- SelectableSyntaxHighlightingTextBlock -->
+	<SolidColorBrush x:Key="Brush/SelectableSyntaxHighlightingTextBlock.Selection.Background" Color="{DynamicResource SystemAccentColor}" />
+	<StaticResource x:Key="Brush/SelectableSyntaxHighlightingTextBlock.Selection.Foreground" ResourceKey="TextControlForeground" />
+
 	<!-- SelectableTextBlock -->
 	<SolidColorBrush x:Key="Brush/SelectableTextBlock.Selection.Background" Color="{DynamicResource SystemAccentColor}" Opacity="0.44" />
 
