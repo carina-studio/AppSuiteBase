@@ -61,6 +61,11 @@
 	<!-- StatusBar -->
 	<Color x:Key="Color/StatusBar.Background.Inactive">#8a8a8a</Color>
 
+	<!-- StringInterpolationFormatSyntaxHighlighting -->
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.StringFormat">#00b1cc</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.VariableExpression">#e6bb00</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.Variables">#007f00</SolidColorBrush>
+
 	<!-- TabControl -->
 	<Color x:Key="Color/TabControl.TabStrip.Border">#20000000</Color>
 

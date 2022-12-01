@@ -215,6 +215,12 @@
 	<SolidColorBrush x:Key="Brush/StatusBar.Foreground" Color="{DynamicResource Color/StatusBar.Foreground}"/>
 	<SolidColorBrush x:Key="Brush/StatusBar.Foreground.Disabled" Color="{DynamicResource Color/StatusBar.Foreground.Disabled}"/>
 	<SolidColorBrush x:Key="Brush/StatusBar.ToggleButton.Background.Checked" Color="{DynamicResource Color/StatusBar.ToggleButton.Background.Checked}"/>
+
+	<!-- StringInterpolationFormatSyntaxHighlighting -->
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.SpecialTokens">#ff40d0</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.StringFormat">#00c7e6</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.VariableExpression">#ffe800</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.Variables">#00e600</SolidColorBrush>
 	
 	<!-- TabControl -->
 	<SolidColorBrush x:Key="Brush/TabControl.TabStrip.Border" Color="{DynamicResource Color/TabControl.TabStrip.Border}"/>

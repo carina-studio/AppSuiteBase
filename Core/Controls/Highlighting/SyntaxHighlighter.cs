@@ -104,6 +104,10 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     public static readonly DirectProperty<SyntaxHighlighter, TextWrapping> TextWrappingProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, TextWrapping>(nameof(TextWrapping), sh => sh.textWrapping, (sh, w) => sh.TextWrapping = w);
 
 
+    // Span.
+    record class Span(SyntaxHighlightingSpan Definition, int Start, int End, int InnerStart, int InnerEnd);
+
+
     // Implementation of ITextSource.
     class TextSourceImpl : ITextSource
     {
@@ -167,6 +171,14 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             return textRun;
         }
     }
+
+
+    // Token.
+    record class Token(SyntaxHighlightingSpan Definition, int Start, int End);
+
+
+    // Static fields.
+    static readonly IList<SyntaxHighlightingToken> EmptyTokenDefinitions = Array.Empty<SyntaxHighlightingToken>();
 
 
     // Fields.
@@ -293,17 +305,17 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         );
         
         // setup initial candidate spans
-        var candidateSpans = new SortedObservableList<(int, int, SyntaxHighlightingSpan)>((lhs, rhs) =>
+        var candidateSpans = new SortedObservableList<Span>((lhs, rhs) =>
         {
-            var result = (rhs.Item1 - lhs.Item1);
+            var result = (rhs.Start - lhs.Start);
             if (result != 0)
                 return result;
-            result = (lhs.Item2 - rhs.Item2);
+            result = (lhs.End - rhs.End);
             if (result != 0)
                 return result;
             result = this.definitionSet?.SpanDefinitions?.Let(it =>
             {
-                return it.IndexOf(rhs.Item3) - it.IndexOf(lhs.Item3);
+                return it.IndexOf(rhs.Definition) - it.IndexOf(lhs.Definition);
             }) ?? 0;
             return result != 0 ? result : (rhs.GetHashCode() - lhs.GetHashCode());
         });
@@ -318,7 +330,14 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                     continue;
                 var endMatch = spanDefinition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
                 if (endMatch.Success)
-                    candidateSpans.Add((startMatch.Index, endMatch.Index + endMatch.Length, spanDefinition));
+                {
+                    candidateSpans.Add(new(
+                        spanDefinition, 
+                        startMatch.Index, 
+                        endMatch.Index + endMatch.Length, 
+                        startMatch.Index + startMatch.Length,
+                        endMatch.Index));
+                }
             }
         });
         
@@ -332,19 +351,23 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         {
             // get current span
             var span = candidateSpans[^1];
-            var spanStartIndex = span.Item1;
-            var spanEndIndex = span.Item2;
-            var spanDefinition = span.Item3;
             candidateSpans.RemoveAt(candidateSpans.Count - 1);
 
             // find next span
-            var startMatch = spanDefinition.StartPattern!.Match(text, spanEndIndex);
+            var startMatch = span.Definition.StartPattern!.Match(text, span.End);
             var endMatch = default(Match);
             if (startMatch.Success)
             {
-                endMatch = spanDefinition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
+                endMatch = span.Definition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
                 if (endMatch.Success)
-                    candidateSpans.Add((startMatch.Index, endMatch.Index + endMatch.Length, spanDefinition));
+                {
+                    candidateSpans.Add(new(
+                        span.Definition,
+                        startMatch.Index, 
+                        endMatch.Index + endMatch.Length,
+                        startMatch.Index + startMatch.Length,
+                        endMatch.Index));
+                }
             }
 
             // remove spans which overlaps with current span
@@ -352,37 +375,44 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             {
                 // check overlapping
                 var removingSpan = candidateSpans[i];
-                if (removingSpan.Item1 >= spanEndIndex && removingSpan.Item2 >= spanEndIndex)
+                if (removingSpan.Start >= span.End)
                     continue;
                 candidateSpans.RemoveAt(i);
 
                 // find next span
-                startMatch = removingSpan.Item3.StartPattern!.Match(text, spanEndIndex);
+                startMatch = removingSpan.Definition.StartPattern!.Match(text, span.End);
                 if (!startMatch.Success)
                     continue;
-                endMatch = removingSpan.Item3.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
+                endMatch = removingSpan.Definition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
                 if (endMatch.Success)
-                    candidateSpans.Add((startMatch.Index, endMatch.Index + endMatch.Length, removingSpan.Item3));
+                {
+                    candidateSpans.Add(new(
+                        removingSpan.Definition, 
+                        startMatch.Index, 
+                        endMatch.Index + endMatch.Length,
+                        startMatch.Index + startMatch.Length,
+                        endMatch.Index));
+                }
             }
 
             // create text runs
-            if (!runPropertiesMap.TryGetValue(spanDefinition, out var runProperties))
+            if (!runPropertiesMap.TryGetValue(span.Definition, out var runProperties))
             {
                 var typeface = new Typeface(
-                    spanDefinition.FontFamily ?? defaultRunProperties.Typeface.FontFamily, 
-                    spanDefinition.FontStyle ?? defaultRunProperties.Typeface.Style,
-                    spanDefinition.FontWeight ?? defaultRunProperties.Typeface.Weight, 
+                    span.Definition.FontFamily ?? defaultRunProperties.Typeface.FontFamily, 
+                    span.Definition.FontStyle ?? defaultRunProperties.Typeface.Style,
+                    span.Definition.FontWeight ?? defaultRunProperties.Typeface.Weight, 
                     this.fontStretch
                 );
                 runProperties = new GenericTextRunProperties(
                     typeface,
-                    double.IsNaN(spanDefinition.FontSize) ? defaultRunProperties.FontRenderingEmSize : spanDefinition.FontSize,
+                    double.IsNaN(span.Definition.FontSize) ? defaultRunProperties.FontRenderingEmSize : span.Definition.FontSize,
                     null,
-                    spanDefinition.Foreground ?? defaultRunProperties.ForegroundBrush
+                    span.Definition.Foreground ?? defaultRunProperties.ForegroundBrush
                 );
-                runPropertiesMap[spanDefinition] = runProperties;
+                runPropertiesMap[span.Definition] = runProperties;
             }
-            if (!selectionRunPropertiesMap.TryGetValue(spanDefinition, out var selectionRunProperties))
+            if (!selectionRunPropertiesMap.TryGetValue(span.Definition, out var selectionRunProperties))
             {
                 selectionRunProperties = new GenericTextRunProperties(
                     runProperties.Typeface,
@@ -390,12 +420,14 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                     null,
                     this.selectionForeground ?? runProperties.ForegroundBrush
                 );
-                selectionRunPropertiesMap[spanDefinition] = selectionRunProperties;
+                selectionRunPropertiesMap[span.Definition] = selectionRunProperties;
             }
-            if (textStartIndex < spanStartIndex)
-                CreateTextRunsInSpan(text, textStartIndex, spanStartIndex, defaultTokenDefinitions, defaultRunProperties, defaultSelectionRunProperties, textRuns);
-            CreateTextRunsInSpan(text, spanStartIndex, spanEndIndex, spanDefinition.TokenDefinitions, runProperties, selectionRunProperties, textRuns);
-            textStartIndex = spanEndIndex;
+            if (textStartIndex < span.Start)
+                CreateTextRunsInSpan(text, textStartIndex, span.Start, defaultTokenDefinitions, defaultRunProperties, defaultSelectionRunProperties, textRuns);
+            CreateTextRunsInSpan(text, span.Start, span.InnerStart, EmptyTokenDefinitions, runProperties, selectionRunProperties, textRuns);
+            CreateTextRunsInSpan(text, span.InnerStart, span.InnerEnd, span.Definition.TokenDefinitions, runProperties, selectionRunProperties, textRuns);
+            CreateTextRunsInSpan(text, span.InnerEnd, span.End, EmptyTokenDefinitions, runProperties, selectionRunProperties, textRuns);
+            textStartIndex = span.End;
         }
         if (textStartIndex < text.Length)
             CreateTextRunsInSpan(text, textStartIndex, text.Length, defaultTokenDefinitions, defaultRunProperties, defaultSelectionRunProperties, textRuns);

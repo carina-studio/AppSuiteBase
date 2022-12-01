@@ -139,7 +139,7 @@ namespace CarinaStudio.AppSuite.Tests
 
             this.syntaxHighlightingTextBlock = this.Get<SyntaxHighlightingTextBlock>(nameof(syntaxHighlightingTextBlock)).Also(it =>
             {
-                it.DefinitionSet = RegexSyntaxHighlighting.CreateDefinitionSet(this.Application);
+                it.DefinitionSet = StringInterpolationFormatSyntaxHighlighting.CreateDefinitionSet(this.Application);
                 //it.Text = "var s1 = \"Hello \\\"World\";\nvar s2 = \"\";\nvar s3 = \"\";\nvar c1 = '\\n';";
                 //it.Text = "// Create regular expression for parsing base name.";
             });

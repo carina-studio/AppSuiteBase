@@ -26,7 +26,7 @@ public static class RegexSyntaxHighlighting
     /// </summary>
     /// <param name="app">Application.</param>
     /// <returns>Definition set for regular expression.</returns>
-    public static SyntaxHighlightingDefinitionSet CreateDefinitionSet(CarinaStudio.IAvaloniaApplication app)
+    public static SyntaxHighlightingDefinitionSet CreateDefinitionSet(IAvaloniaApplication app)
     {
         // create patterns
         AlternationPattern ??= new(@"\|", RegexOptions.Compiled);
