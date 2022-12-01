@@ -8,6 +8,93 @@
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
 		xmlns:presenters="using:CarinaStudio.AppSuite.Controls.Presenters">
+	
+	<!-- Resources -->
+	<Styles.Resources>
+
+		<!-- TextBox -->
+		<ControlTemplate x:Key="ControlTemplate/TextBox.WithSyntaxHighlightingTextBlock" TargetType="{x:Type TextBox}">
+			<Panel>
+				<Border
+					Name="PART_BorderElement"
+					Background="{TemplateBinding Background}"
+					BorderBrush="{TemplateBinding BorderBrush}"
+					BorderThickness="{TemplateBinding BorderThickness}"
+					CornerRadius="{TemplateBinding CornerRadius}"
+					MinWidth="{TemplateBinding MinWidth}"
+					MinHeight="{TemplateBinding MinHeight}"/>
+
+				<Border
+					Margin="{TemplateBinding BorderThickness}">
+					<Grid ColumnDefinitions="Auto,*,Auto" >
+						<ContentPresenter Grid.Column="0"
+										Grid.ColumnSpan="1"
+										Content="{TemplateBinding InnerLeftContent}"/>
+						<DockPanel x:Name="PART_InnerDockPanel"
+								Grid.Column="1"
+								Grid.ColumnSpan="1"
+								Cursor="IBeam"
+								Margin="{TemplateBinding Padding}">
+							<TextBlock Name="PART_FloatingWatermark"
+										Foreground="{DynamicResource SystemAccentColor}"
+										FontSize="{TemplateBinding FontSize}"
+										IsVisible="False"
+										Text="{TemplateBinding Watermark}"
+										DockPanel.Dock="Top" />
+							<ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+											VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+											IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+											AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}">
+								<Panel>
+									<TextBlock Name="PART_Watermark"
+											Opacity="0.5"
+											Text="{TemplateBinding Watermark}"
+											TextAlignment="{TemplateBinding TextAlignment}"
+											TextWrapping="{TemplateBinding TextWrapping}"
+											IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+											HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+											VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+									<controls:SyntaxHighlightingTextBlock Name="PART_SyntaxHighlightingTextBlock"
+											FontFamily="{TemplateBinding FontFamily}"
+											FontSize="{TemplateBinding FontSize}"
+											FontStyle="{TemplateBinding FontStyle}"
+											FontWeight="{TemplateBinding FontWeight}"
+											Foreground="{TemplateBinding Foreground}"
+											HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+											LetterSpacing="{TemplateBinding LetterSpacing}"
+											LineHeight="{TemplateBinding LineHeight}"
+											Text="{TemplateBinding Text}"
+											TextAlignment="{TemplateBinding TextAlignment}"
+											TextWrapping="{TemplateBinding TextWrapping}"
+											VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+									<presenters:TextPresenter Name="PART_TextPresenter"
+													Text="{TemplateBinding Text, Mode=TwoWay}"
+													CaretIndex="{TemplateBinding CaretIndex}"
+													Foreground="{x:Null}"
+													SelectionStart="{TemplateBinding SelectionStart}"
+													SelectionEnd="{TemplateBinding SelectionEnd}"
+													TextAlignment="{TemplateBinding TextAlignment}"
+													TextWrapping="{TemplateBinding TextWrapping}"
+													LineHeight="{TemplateBinding LineHeight}"
+													LetterSpacing="{TemplateBinding LetterSpacing}"
+													PasswordChar="{TemplateBinding PasswordChar}"
+													RevealPassword="{TemplateBinding RevealPassword}"
+													SelectionBrush="{TemplateBinding SelectionBrush}"
+													SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+													PreeditTextForegroundBrush="{TemplateBinding Foreground}"
+													CaretBrush="{TemplateBinding CaretBrush}"
+													HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+													VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+								</Panel>
+							</ScrollViewer>
+						</DockPanel>
+						<ContentPresenter Grid.Column="2" Grid.ColumnSpan="1" Content="{TemplateBinding InnerRightContent}"/>
+					</Grid>
+				</Border>
+			</Panel>
+		</ControlTemplate>
+
+	</Styles.Resources>
 
 	<!-- AddTabItemButton -->
 	<Style Selector="Button.AddTabItem">
@@ -1070,88 +1157,7 @@
 	<!-- RegexTextBox -->
 	<Style Selector="TextBox:regexTextBox">
 		<Setter Property="FontFamily" Value="{DynamicResource FontFamily/DefaultFixWidth}"/>
-		<Setter Property="Template">
-			<ControlTemplate>
-				<Panel>
-					<Border
-						Name="PART_BorderElement"
-						Background="{TemplateBinding Background}"
-						BorderBrush="{TemplateBinding BorderBrush}"
-						BorderThickness="{TemplateBinding BorderThickness}"
-						CornerRadius="{TemplateBinding CornerRadius}"
-						MinWidth="{TemplateBinding MinWidth}"
-						MinHeight="{TemplateBinding MinHeight}"/>
-
-					<Border
-						Margin="{TemplateBinding BorderThickness}">
-						<Grid ColumnDefinitions="Auto,*,Auto" >
-							<ContentPresenter Grid.Column="0"
-											Grid.ColumnSpan="1"
-											Content="{TemplateBinding InnerLeftContent}"/>
-							<DockPanel x:Name="PART_InnerDockPanel"
-									Grid.Column="1"
-									Grid.ColumnSpan="1"
-									Cursor="IBeam"
-									Margin="{TemplateBinding Padding}">
-								<TextBlock Name="PART_FloatingWatermark"
-											Foreground="{DynamicResource SystemAccentColor}"
-											FontSize="{TemplateBinding FontSize}"
-											IsVisible="False"
-											Text="{TemplateBinding Watermark}"
-											DockPanel.Dock="Top" />
-								<ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
-												VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
-												IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
-												AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}">
-									<Panel>
-										<TextBlock Name="PART_Watermark"
-												Opacity="0.5"
-												Text="{TemplateBinding Watermark}"
-												TextAlignment="{TemplateBinding TextAlignment}"
-												TextWrapping="{TemplateBinding TextWrapping}"
-												IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}"
-												HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-												VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-										<controls:SyntaxHighlightingTextBlock Name="PART_SyntaxHighlightingTextBlock"
-												FontFamily="{TemplateBinding FontFamily}"
-												FontSize="{TemplateBinding FontSize}"
-												FontStyle="{TemplateBinding FontStyle}"
-												FontWeight="{TemplateBinding FontWeight}"
-												Foreground="{TemplateBinding Foreground}"
-												HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-												LetterSpacing="{TemplateBinding LetterSpacing}"
-												LineHeight="{TemplateBinding LineHeight}"
-												Text="{TemplateBinding Text}"
-												TextAlignment="{TemplateBinding TextAlignment}"
-												TextWrapping="{TemplateBinding TextWrapping}"
-												VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-										<presenters:TextPresenter Name="PART_TextPresenter"
-														Text="{TemplateBinding Text, Mode=TwoWay}"
-														CaretIndex="{TemplateBinding CaretIndex}"
-														Foreground="{x:Null}"
-														SelectionStart="{TemplateBinding SelectionStart}"
-														SelectionEnd="{TemplateBinding SelectionEnd}"
-														TextAlignment="{TemplateBinding TextAlignment}"
-														TextWrapping="{TemplateBinding TextWrapping}"
-														LineHeight="{TemplateBinding LineHeight}"
-														LetterSpacing="{TemplateBinding LetterSpacing}"
-														PasswordChar="{TemplateBinding PasswordChar}"
-														RevealPassword="{TemplateBinding RevealPassword}"
-														SelectionBrush="{TemplateBinding SelectionBrush}"
-														SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
-														PreeditTextForegroundBrush="{TemplateBinding Foreground}"
-														CaretBrush="{TemplateBinding CaretBrush}"
-														HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-														VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-									</Panel>
-								</ScrollViewer>
-							</DockPanel>
-							<ContentPresenter Grid.Column="2" Grid.ColumnSpan="1" Content="{TemplateBinding InnerRightContent}"/>
-						</Grid>
-					</Border>
-				</Panel>
-			</ControlTemplate>
-		</Setter>
+		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlightingTextBlock}"/>
 	</Style>
 	<Style Selector="TextBox:regexTextBox /template/ TextBlock#PART_Watermark">
 		<Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
@@ -1603,6 +1609,15 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
 	</Style>
 
+	<!-- StringInterpolationFormatTextBox -->
+	<Style Selector="TextBox:stringInterpolationFormatTextBox">
+		<Setter Property="FontFamily" Value="{DynamicResource FontFamily/DefaultFixWidth}"/>
+		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlightingTextBlock}"/>
+	</Style>
+	<Style Selector="TextBox:stringInterpolationFormatTextBox /template/ TextBlock#PART_Watermark">
+		<Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
+    </Style>
+
 	<!-- TabControl -->
 	<Style Selector="RepeatButton.TabStripScroller">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundChecked}"/>
@@ -1849,7 +1864,7 @@
 	<Style Selector="Button.TextBox_InPlaceAction:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
 	</Style>
-	<Style Selector="TextBox">
+	<Style Selector=":is(TextBox)">
 		<Setter Property="ContextFlyout" Value="{x:Null}"/>
 		<Setter Property="ContextMenu">
 			<ContextMenu PlacementAnchor="BottomRight" PlacementGravity="BottomRight" PlacementMode="AnchorAndGravity" PlacementRect="0 0 0 0">
@@ -1861,6 +1876,7 @@
 				<MenuItem Command="{Binding $parent[TextBox].Clear}" Header="{DynamicResource String/Common.Clear}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" IsVisible="{Binding !$parent[TextBox].IsReadOnly}"/>
 			</ContextMenu>
 		</Setter>
+		<Setter Property="SelectionForegroundBrush" Value="{DynamicResource Brush/TextBox.SelectionForeground}"/>
 	</Style>
 	<Style Selector="TextBox:disabled">
 		<!-- [Workaround] -->

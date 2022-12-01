@@ -67,7 +67,6 @@ public class TextPresenter : Avalonia.Controls.Presenters.TextPresenter
 
         IReadOnlyList<ValueSpan<TextRunProperties>>? textStyleOverrides = null;
 
-        var foreground = Foreground;
         var preeditText = this.PreeditText;
 
         if (!string.IsNullOrEmpty(preeditText))

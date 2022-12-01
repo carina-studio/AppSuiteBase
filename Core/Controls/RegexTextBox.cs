@@ -123,7 +123,7 @@ namespace CarinaStudio.AppSuite.Controls
 				}
 			});
 
-			// onserve self properties
+			// observe self properties
 			var isSubscribed = false;
 			this.GetObservable(IgnoreCaseProperty).Subscribe(_ =>
 			{
@@ -152,6 +152,11 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				if (isSubscribed)
 					this.showAssistanceMenuAction.Schedule();
+			});
+			this.GetObservable(TextWrappingProperty).Subscribe(wrapping =>
+			{
+				if (wrapping != Avalonia.Media.TextWrapping.NoWrap)
+					throw new NotSupportedException("Text wrapping is unsupported.");
 			});
 			isSubscribed = true;
 		}

@@ -45,6 +45,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public StringInterpolationFormatTextBox()
         {
+			this.PseudoClasses.Add(":stringInterpolationFormatTextBox");
             this.filteredPredefinedVars.CollectionChanged += this.OnFilteredPredefinedVarsChanged;
             this.InputVariableNameCommand = new Command<string>(this.InputVariableName);
             this.MaxLength = 1024;
@@ -96,7 +97,7 @@ namespace CarinaStudio.AppSuite.Controls
 				}
 			});
 
-			// onserve self properties
+			// observe self properties
 			var isSubscribed = false;
 			this.GetObservable(SelectionEndProperty).Subscribe(_ =>
 			{
@@ -107,6 +108,11 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				if (isSubscribed)
 					this.showAssistanceMenuAction.Schedule();
+			});
+			this.GetObservable(TextWrappingProperty).Subscribe(wrapping =>
+			{
+				if (wrapping != Avalonia.Media.TextWrapping.NoWrap)
+					throw new NotSupportedException("Text wrapping is unsupported.");
 			});
 			isSubscribed = true;
         }
@@ -206,6 +212,11 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			base.OnApplyTemplate(e);
 			this.textPresenter = e.NameScope.Find<TextPresenter>("PART_TextPresenter");
+			e.NameScope.Find<SyntaxHighlightingTextBlock>("PART_SyntaxHighlightingTextBlock")?.Let(it =>
+			{
+				AppSuiteApplication.CurrentOrNull?.Let(app =>
+					it.DefinitionSet = Highlighting.StringInterpolationFormatSyntaxHighlighting.CreateDefinitionSet(app));
+			});
 		}
 
 
