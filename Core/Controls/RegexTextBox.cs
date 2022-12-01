@@ -57,6 +57,7 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		public RegexTextBox()
 		{
+			this.PseudoClasses.Add(":regexTextBox");
 			this.filteredPredefinedGroups.CollectionChanged += this.OnFilteredPredefinedGroupChanged;
 			this.predefinedGroups.CollectionChanged += this.OnPredefinedGroupChanged;
 			this.InputGroupNameCommand = new Command<string>(this.InputGroupName);
@@ -326,6 +327,11 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			base.OnApplyTemplate(e);
 			this.textPresenter = e.NameScope.Find<TextPresenter>("PART_TextPresenter");
+			e.NameScope.Find<SyntaxHighlightingTextBlock>("PART_SyntaxHighlightingTextBlock")?.Let(it =>
+			{
+				AppSuiteApplication.CurrentOrNull?.Let(app =>
+					it.DefinitionSet = Highlighting.RegexSyntaxHighlighting.CreateDefinitionSet(app));
+			});
 		}
 
 

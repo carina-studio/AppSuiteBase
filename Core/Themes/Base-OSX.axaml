@@ -2,6 +2,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:aConverters="using:Avalonia.Data.Converters"
 		xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+	
+	<!-- Resources -->
+	<Styles.Resources>
+		<ResourceDictionary>
+			
+			<!-- FontFamilies -->
+			<FontFamily x:Key="FontFamily/DefaultFixWidth">Menlo,Monaco,Courier New</FontFamily>
+			
+		</ResourceDictionary>
+	</Styles.Resources>
 
 	<!-- TextBox -->
 	<Style Selector="TextBox">

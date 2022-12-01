@@ -6,7 +6,8 @@
 		xmlns:aConverters="using:Avalonia.Data.Converters"
 		xmlns:appSuite="using:CarinaStudio.AppSuite"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
-		xmlns:converters="using:CarinaStudio.AppSuite.Converters">
+		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
+		xmlns:presenters="using:CarinaStudio.AppSuite.Controls.Presenters">
 
 	<!-- AddTabItemButton -->
 	<Style Selector="Button.AddTabItem">
@@ -1065,6 +1066,96 @@
 		<Setter Property="BorderBrush" Value="{x:Null}"/>
 		<Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius, Converter={x:Static converters:CornerRadiusConverters.Left}}"/>
 	</Style>
+
+	<!-- RegexTextBox -->
+	<Style Selector="TextBox:regexTextBox">
+		<Setter Property="FontFamily" Value="{DynamicResource FontFamily/DefaultFixWidth}"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Panel>
+					<Border
+						Name="PART_BorderElement"
+						Background="{TemplateBinding Background}"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						CornerRadius="{TemplateBinding CornerRadius}"
+						MinWidth="{TemplateBinding MinWidth}"
+						MinHeight="{TemplateBinding MinHeight}"/>
+
+					<Border
+						Margin="{TemplateBinding BorderThickness}">
+						<Grid ColumnDefinitions="Auto,*,Auto" >
+							<ContentPresenter Grid.Column="0"
+											Grid.ColumnSpan="1"
+											Content="{TemplateBinding InnerLeftContent}"/>
+							<DockPanel x:Name="PART_InnerDockPanel"
+									Grid.Column="1"
+									Grid.ColumnSpan="1"
+									Cursor="IBeam"
+									Margin="{TemplateBinding Padding}">
+								<TextBlock Name="PART_FloatingWatermark"
+											Foreground="{DynamicResource SystemAccentColor}"
+											FontSize="{TemplateBinding FontSize}"
+											IsVisible="False"
+											Text="{TemplateBinding Watermark}"
+											DockPanel.Dock="Top" />
+								<ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+												VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+												IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+												AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}">
+									<Panel>
+										<TextBlock Name="PART_Watermark"
+												Opacity="0.5"
+												Text="{TemplateBinding Watermark}"
+												TextAlignment="{TemplateBinding TextAlignment}"
+												TextWrapping="{TemplateBinding TextWrapping}"
+												IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+												HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+												VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+										<controls:SyntaxHighlightingTextBlock Name="PART_SyntaxHighlightingTextBlock"
+												FontFamily="{TemplateBinding FontFamily}"
+												FontSize="{TemplateBinding FontSize}"
+												FontStyle="{TemplateBinding FontStyle}"
+												FontWeight="{TemplateBinding FontWeight}"
+												Foreground="{TemplateBinding Foreground}"
+												HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+												LetterSpacing="{TemplateBinding LetterSpacing}"
+												LineHeight="{TemplateBinding LineHeight}"
+												Text="{TemplateBinding Text}"
+												TextAlignment="{TemplateBinding TextAlignment}"
+												TextWrapping="{TemplateBinding TextWrapping}"
+												VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+										<presenters:TextPresenter Name="PART_TextPresenter"
+														Text="{TemplateBinding Text, Mode=TwoWay}"
+														CaretIndex="{TemplateBinding CaretIndex}"
+														Foreground="{x:Null}"
+														SelectionStart="{TemplateBinding SelectionStart}"
+														SelectionEnd="{TemplateBinding SelectionEnd}"
+														TextAlignment="{TemplateBinding TextAlignment}"
+														TextWrapping="{TemplateBinding TextWrapping}"
+														LineHeight="{TemplateBinding LineHeight}"
+														LetterSpacing="{TemplateBinding LetterSpacing}"
+														PasswordChar="{TemplateBinding PasswordChar}"
+														RevealPassword="{TemplateBinding RevealPassword}"
+														SelectionBrush="{TemplateBinding SelectionBrush}"
+														SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+														PreeditTextForegroundBrush="{TemplateBinding Foreground}"
+														CaretBrush="{TemplateBinding CaretBrush}"
+														HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+														VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+									</Panel>
+								</ScrollViewer>
+							</DockPanel>
+							<ContentPresenter Grid.Column="2" Grid.ColumnSpan="1" Content="{TemplateBinding InnerRightContent}"/>
+						</Grid>
+					</Border>
+				</Panel>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="TextBox:regexTextBox /template/ TextBlock#PART_Watermark">
+		<Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
+    </Style>
 
 	<!-- RepeatButton -->
 	<Style Selector="RepeatButton">
