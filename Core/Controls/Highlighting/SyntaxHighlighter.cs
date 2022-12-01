@@ -70,6 +70,10 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     /// Property of <see cref="MaxWidth"/>.
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlighter, double> MaxWidthProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, double>(nameof(MaxWidth), sh => sh.maxWidth, (sh, w) => sh.MaxWidth = w);
+     /// <summary>
+    /// Property of <see cref="PreeditText"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, string?> PreeditTextProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, string?>(nameof(PreeditText), sh => sh.preeditText, (sh, t) => sh.PreeditText = t);
     /// <summary>
     /// Property of <see cref="SelectionEnd"/>.
     /// </summary>
@@ -180,6 +184,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     double maxHeight = double.PositiveInfinity;
     int maxLines;
     double maxWidth = double.PositiveInfinity;
+    string? preeditText;
     int selectionEnd;
     IBrush? selectionForeground;
     int selectionStart;
@@ -271,8 +276,13 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     {
         // check text
         var text = this.text;
+        var preeditText = this.preeditText;
         if (string.IsNullOrEmpty(text))
-            return Array.Empty<TextRun>();
+        {
+            if (string.IsNullOrEmpty(preeditText))
+                return Array.Empty<TextRun>();
+            text = "";
+        }
         
         // setup default run properties for selected text
         var defaultSelectionRunProperties = new GenericTextRunProperties(
@@ -389,6 +399,54 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         }
         if (textStartIndex < text.Length)
             CreateTextRunsInSpan(text, textStartIndex, text.Length, defaultTokenDefinitions, defaultRunProperties, defaultSelectionRunProperties, textRuns);
+        
+        // insert text run for preedit text
+        if (!string.IsNullOrEmpty(preeditText))
+        {
+            var caretIndex = Math.Min(this.selectionStart, this.selectionEnd);
+            var runProperties = new GenericTextRunProperties(
+                defaultRunProperties.Typeface,
+                defaultRunProperties.FontRenderingEmSize,
+                TextDecorations.Underline,
+                defaultRunProperties.ForegroundBrush
+            );
+            if (caretIndex <= 0)
+                textRuns.Insert(0, new TextCharacters(preeditText.AsMemory(), runProperties));
+            else if (caretIndex >= text.Length || textRuns.IsEmpty())
+                textRuns.Add(new TextCharacters(preeditText.AsMemory(), runProperties));
+            else
+            {
+                var indexOfTextRunToInsert = textRuns.Count - 1;
+                var textRunToInsert = textRuns[indexOfTextRunToInsert];
+                var textSourceIndexOfTextRun = text.Length - textRunToInsert.TextSourceLength;
+                if (textSourceIndexOfTextRun > caretIndex)
+                {
+                    for (var i = textRuns.Count - 2; i >= 0; --i)
+                    {
+                        var textRun = textRuns[i];
+                        textSourceIndexOfTextRun -= textRun.TextSourceLength;
+                        if (textSourceIndexOfTextRun <= caretIndex)
+                        {
+                            indexOfTextRunToInsert = i;
+                            textRunToInsert = textRun;
+                            break;
+                        }
+                    }
+                }
+                if (textSourceIndexOfTextRun < 0)
+                    textSourceIndexOfTextRun = 0;
+                if (textSourceIndexOfTextRun == caretIndex)
+                    textRuns.Insert(indexOfTextRunToInsert, new TextCharacters(preeditText.AsMemory(), runProperties));
+                else
+                {
+                    textRuns[indexOfTextRunToInsert] = new TextCharacters(textRunToInsert.Text.Take(textSourceIndexOfTextRun + textRunToInsert.TextSourceLength - caretIndex), textRunToInsert.Properties!);
+                    textRuns.Insert(indexOfTextRunToInsert + 1, new TextCharacters(preeditText.AsMemory(), runProperties));
+                    textRuns.Insert(indexOfTextRunToInsert + 2, new TextCharacters(textRunToInsert.Text.Skip(caretIndex - textSourceIndexOfTextRun), textRunToInsert.Properties!));
+                }
+            }
+        }
+
+        // complete
         return textRuns;
     }
     void CreateTextRunsInSpan(string text, int start, int end, IList<SyntaxHighlightingToken> tokenDefinitions, TextRunProperties defaultRunProperties, TextRunProperties defaultSelectionRunProperties, IList<TextRun> textRuns)
@@ -546,7 +604,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         var selectionEnd = this.selectionEnd;
         if (selectionEnd < selectionStart)
             (selectionStart, selectionEnd) = (selectionEnd, selectionStart);
-        if (start >= selectionEnd || end <= selectionStart)
+        if (selectionStart == selectionEnd || start >= selectionEnd || end <= selectionStart)
             textRuns.Add(new TextCharacters(new(text.AsMemory(start), 0, end - start), runProperties));
         else if (start < selectionStart)
         {
@@ -839,6 +897,23 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     // Called when definition set changed.
     void OnDefinitionSetChanged(object? sender, EventArgs e) =>
         this.InvalidateTextRuns();
+    
+
+    /// <summary>
+    /// Get or set preedit text.
+    /// </summary>
+    public string? PreeditText
+    {
+        get => this.preeditText;
+        set
+        {
+            this.VerifyAccess();
+            if (this.preeditText == value)
+                return;
+            this.SetAndRaise(PreeditTextProperty, ref this.preeditText, value);
+            this.InvalidateTextRuns();
+        }
+    }
     
 
     /// <summary>
