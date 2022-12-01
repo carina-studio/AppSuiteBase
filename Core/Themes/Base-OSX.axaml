@@ -13,6 +13,16 @@
 		</ResourceDictionary>
 	</Styles.Resources>
 
+	<!-- SelectableTextBlock -->
+	<Style Selector=":is(SelectableTextBlock)[IsEnabled=True]">
+		<Setter Property="ContextMenu">
+			<ContextMenu>
+				<MenuItem Command="{Binding $parent[SelectableTextBlock].Copy}" Header="{DynamicResource String/Common.Copy}" IsEnabled="{Binding $parent[SelectableTextBlock].CanCopy}" InputGesture="Cmd+C"/>
+				<MenuItem Command="{Binding $parent[SelectableTextBlock].SelectAll}" Header="{DynamicResource String/Common.SelectAll}" IsEnabled="{Binding $parent[SelectableTextBlock].Text, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}"/>
+			</ContextMenu>
+		</Setter>
+	</Style>
+
 	<!-- TextBox -->
 	<Style Selector="TextBox">
 		<Setter Property="ContextMenu">
