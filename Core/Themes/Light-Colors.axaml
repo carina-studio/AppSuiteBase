@@ -44,12 +44,17 @@
 	<!-- Menu -->
 	<Color x:Key="Color/Menu.Background">#e0e0e0</Color>
 
+	<!-- ObjectTextBox -->
+    <SolidColorBrush x:Key="ObjectTextBoxBackgroundInvalid" Color="#ffcccc"/>
+    <SolidColorBrush x:Key="ObjectTextBoxBackgroundInvalidPointerOver" Color="#ffd9d9"/>
+
 	<!-- RegexSyntaxHighlighting -->
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Alternation">#404040</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Brackets">#e6bb00</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterClasses">#8400f2</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterRanges">#007f00</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.EscapeCharacters">#00b1cc</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Brackets">#665300</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterClasses">#0000ff</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterRanges">#008855</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.EscapeCharacters">#ff0000</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Quantifiers">#008855</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.UnicodeCategories">#00b1cc</SolidColorBrush>
 
 	<!-- SelectableSyntaxHighlightingTextBlock -->
@@ -62,9 +67,9 @@
 	<Color x:Key="Color/StatusBar.Background.Inactive">#8a8a8a</Color>
 
 	<!-- StringInterpolationFormatSyntaxHighlighting -->
-	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.StringFormat">#00b1cc</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.VariableExpression">#e6bb00</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.Variables">#007f00</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.StringFormat">#ff0000</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.VariableExpression">#008855</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.Variables">#0000ff</SolidColorBrush>
 
 	<!-- TabControl -->
 	<Color x:Key="Color/TabControl.TabStrip.Border">#20000000</Color>
@@ -92,6 +97,10 @@
 
 	<!-- TreeViewItem -->
 	<SolidColorBrush x:Key="Brush/TreeViewItem.Foreground.Selected" Color="#ffffff"/>
+
+	<!-- ValueTextBox -->
+    <SolidColorBrush x:Key="ValueTextBoxBackgroundInvalid" Color="#ffcccc"/>
+    <SolidColorBrush x:Key="ValueTextBoxBackgroundInvalidPointerOver" Color="#ffd9d9"/>
 
 	<!-- Window -->
 	<Color x:Key="Color/Window.Background">#f0f0f0</Color>
