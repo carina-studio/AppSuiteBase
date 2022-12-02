@@ -247,7 +247,7 @@ namespace CarinaStudio.AppSuite.Controls
 					return (-1, -1);
 				--selectionStart;
 			}
-			if (selectionStart < 0)
+			if (selectionStart < 2 || text[selectionStart - 1] != '?' || text[selectionStart - 2] != '(')
 				return (-1, -1);
 			for (var selectionEnd = selectionStart + 1; selectionEnd < textLength; ++selectionEnd)
 			{
