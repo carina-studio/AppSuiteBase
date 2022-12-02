@@ -37,6 +37,10 @@ namespace CarinaStudio.AppSuite.Controls
 		/// Property of <see cref="IsInputAssistanceEnabled"/>.
 		/// </summary>
 		public static readonly StyledProperty<bool> IsInputAssistanceEnabledProperty = AvaloniaProperty.Register<RegexTextBox, bool>(nameof(IsInputAssistanceEnabled), true);
+		/// <summary>
+		/// Property of <see cref="IsSyntaxHighlightingEnabled"/>.
+		/// </summary>
+		public static readonly DirectProperty<RegexTextBox, bool> IsSyntaxHighlightingEnabledProperty = AvaloniaProperty.RegisterDirect<RegexTextBox, bool>(nameof(IsSyntaxHighlightingEnabled), tb => tb.isSyntaxHighlightingEnabled, (tb, e) => tb.IsSyntaxHighlightingEnabled = e);
 
 
 		// Fields.
@@ -45,6 +49,7 @@ namespace CarinaStudio.AppSuite.Controls
 		readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new((x, y) => string.Compare(x?.Name, y?.Name, true, CultureInfo.InvariantCulture));
 		bool isBackSlashPressed;
 		bool isEscapeKeyHandled;
+		bool isSyntaxHighlightingEnabled = true;
 		readonly ObservableList<RegexGroup> predefinedGroups = new();
 		InputAssistancePopup? predefinedGroupsPopup;
 		readonly Queue<ListBoxItem> recycledListBoxItems = new();
@@ -152,11 +157,6 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				if (isSubscribed)
 					this.showAssistanceMenuAction.Schedule();
-			});
-			this.GetObservable(TextWrappingProperty).Subscribe(wrapping =>
-			{
-				if (wrapping != Avalonia.Media.TextWrapping.NoWrap)
-					throw new NotSupportedException("Text wrapping is unsupported.");
 			});
 			isSubscribed = true;
 		}
@@ -327,16 +327,42 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
+		/// <summary>
+		/// Get or set whether syntax highlighting is enabled or not.
+		/// </summary>
+		public bool IsSyntaxHighlightingEnabled
+		{
+			get => this.isSyntaxHighlightingEnabled;
+			set 
+			{
+				this.VerifyAccess();
+				if (this.isSyntaxHighlightingEnabled == value)
+					return;
+				this.SetAndRaise(IsSyntaxHighlightingEnabledProperty, ref this.isSyntaxHighlightingEnabled, value);
+				if (textPresenter is Presenters.SyntaxHighlightingTextPresenter shTextPresenter)
+				{
+					if (this.isSyntaxHighlightingEnabled)
+					{
+						AppSuiteApplication.CurrentOrNull?.Let(app =>
+							shTextPresenter.DefinitionSet = Highlighting.RegexSyntaxHighlighting.CreateDefinitionSet(app));
+					}
+					else
+						shTextPresenter.DefinitionSet = null;
+				}
+			}
+		}
+
+
 		/// <inheritdoc/>
 		protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
 		{
 			base.OnApplyTemplate(e);
 			this.textPresenter = e.NameScope.Find<TextPresenter>("PART_TextPresenter");
-			e.NameScope.Find<SyntaxHighlightingTextBlock>("PART_SyntaxHighlightingTextBlock")?.Let(it =>
+			if (this.isSyntaxHighlightingEnabled && textPresenter is Presenters.SyntaxHighlightingTextPresenter shTextPresenter)
 			{
 				AppSuiteApplication.CurrentOrNull?.Let(app =>
-					it.DefinitionSet = Highlighting.RegexSyntaxHighlighting.CreateDefinitionSet(app));
-			});
+					shTextPresenter.DefinitionSet = Highlighting.RegexSyntaxHighlighting.CreateDefinitionSet(app));
+			}
 		}
 
 

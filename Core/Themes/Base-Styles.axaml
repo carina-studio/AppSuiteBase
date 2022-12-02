@@ -13,7 +13,7 @@
 	<Styles.Resources>
 
 		<!-- TextBox -->
-		<ControlTemplate x:Key="ControlTemplate/TextBox.WithSyntaxHighlightingTextBlock" TargetType="{x:Type TextBox}">
+		<ControlTemplate x:Key="ControlTemplate/TextBox.WithSyntaxHighlighting" TargetType="{x:Type TextBox}">
 			<Panel>
 				<Border
 					Name="PART_BorderElement"
@@ -54,23 +54,14 @@
 											IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}"
 											HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
 											VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-									<controls:SyntaxHighlightingTextBlock Name="PART_SyntaxHighlightingTextBlock"
-											FontFamily="{TemplateBinding FontFamily}"
-											FontSize="{TemplateBinding FontSize}"
-											FontStyle="{TemplateBinding FontStyle}"
-											FontWeight="{TemplateBinding FontWeight}"
-											Foreground="{TemplateBinding Foreground}"
-											HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-											LetterSpacing="{TemplateBinding LetterSpacing}"
-											LineHeight="{TemplateBinding LineHeight}"
-											Text="{TemplateBinding Text}"
-											TextAlignment="{TemplateBinding TextAlignment}"
-											TextWrapping="{TemplateBinding TextWrapping}"
-											VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-									<presenters:TextPresenter Name="PART_TextPresenter"
+									<presenters:SyntaxHighlightingTextPresenter Name="PART_TextPresenter"
 													Text="{TemplateBinding Text, Mode=TwoWay}"
 													CaretIndex="{TemplateBinding CaretIndex}"
-													Foreground="{x:Null}"
+													TextElement.FontFamily="{TemplateBinding FontFamily}"
+													TextElement.FontSize="{TemplateBinding FontSize}"
+													TextElement.FontStyle="{TemplateBinding FontStyle}"
+													TextElement.FontWeight="{TemplateBinding FontWeight}"
+													TextElement.Foreground="{TemplateBinding Foreground}"
 													SelectionStart="{TemplateBinding SelectionStart}"
 													SelectionEnd="{TemplateBinding SelectionEnd}"
 													TextAlignment="{TemplateBinding TextAlignment}"
@@ -81,7 +72,6 @@
 													RevealPassword="{TemplateBinding RevealPassword}"
 													SelectionBrush="{TemplateBinding SelectionBrush}"
 													SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
-													PreeditTextForegroundBrush="{TemplateBinding Foreground}"
 													CaretBrush="{TemplateBinding CaretBrush}"
 													HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
 													VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
@@ -1157,7 +1147,7 @@
 	<!-- RegexTextBox -->
 	<Style Selector="TextBox:regexTextBox">
 		<Setter Property="FontFamily" Value="{DynamicResource FontFamily/DefaultFixWidth}"/>
-		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlightingTextBlock}"/>
+		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
 	</Style>
 	<Style Selector="TextBox:regexTextBox /template/ TextBlock#PART_Watermark">
 		<Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
@@ -1620,11 +1610,16 @@
 	<!-- StringInterpolationFormatTextBox -->
 	<Style Selector="TextBox:stringInterpolationFormatTextBox">
 		<Setter Property="FontFamily" Value="{DynamicResource FontFamily/DefaultFixWidth}"/>
-		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlightingTextBlock}"/>
+		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
 	</Style>
 	<Style Selector="TextBox:stringInterpolationFormatTextBox /template/ TextBlock#PART_Watermark">
 		<Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
     </Style>
+
+	<!-- SyntaxHighlightingTextBox -->
+	<Style Selector="TextBox:syntaxHighlightingTextBox">
+		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
+	</Style>
 
 	<!-- TabControl -->
 	<Style Selector="RepeatButton.TabStripScroller">

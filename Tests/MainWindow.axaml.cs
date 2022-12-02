@@ -148,6 +148,11 @@ namespace CarinaStudio.AppSuite.Tests
                 //
             });
 
+            this.Get<SyntaxHighlightingTextBox>("syntaxHighlightingTextBox").Also(it =>
+            {
+                it.DefinitionSet = RegexSyntaxHighlighting.CreateDefinitionSet(this.Application);
+            });
+
             var tabControl = this.FindControl<TabControl>("tabControl").AsNonNull();
             this.tabItems.AddRange(tabControl.Items!.Cast<TabItem>());
             tabControl.Items = this.tabItems;
