@@ -18,6 +18,7 @@ public static class RegexSyntaxHighlighting
     static Regex? CharacterClassesStartPattern;
     static Regex? EscapeCharactersPattern;
     static Regex? QuantifiersPattern;
+    static Regex? SpecialCharactersPattern;
     static Regex? UnicodeCategoriesPattern;
 
 
@@ -32,11 +33,12 @@ public static class RegexSyntaxHighlighting
         AlternationPattern ??= new(@"\|", RegexOptions.Compiled);
         AnchorsPattern ??= new(@"\^|\$|\\b|\\B|\\z|\\Z|\\A|\\G", RegexOptions.Compiled);
         BracketsPattern ??= new(@"\((\?(:|\!|<=|<\!|=)?(<[^-\>]+(\-[^-\>]+)?>|'[^-\']+(\-[^-\']+)?')?)?|\)", RegexOptions.Compiled);
-        CharacterClassesEndPattern ??= new(@"(?<=(\\\\)*[^\\]?)\]", RegexOptions.Compiled);
-        CharacterClassesStartPattern ??= new(@"(^|(?<=(\\\\)*[^\\]?))\[(\^)?", RegexOptions.Compiled);
+        CharacterClassesEndPattern ??= new(@"(?<=[^\\](\\\\)*)\]", RegexOptions.Compiled);
+        CharacterClassesStartPattern ??= new(@"(?<=(^|[^\\])(\\\\)*)\[(\^)?", RegexOptions.Compiled);
         CharacterRangesPattern ??= new(@"[0-9\w]\-[0-9\w]", RegexOptions.Compiled);
         EscapeCharactersPattern ??= new(@"\\[^\sbBzZAG]", RegexOptions.Compiled);
         QuantifiersPattern ??= new(@"\+(\?)?|\*(\?)?|\?(\?)?|\{\d+\}|\{\d+\,(\d+)?\}|\{(\d+)?\,\d+\}", RegexOptions.Compiled);
+        SpecialCharactersPattern ??= new(@"\.", RegexOptions.Compiled);
         UnicodeCategoriesPattern ??= new(@"\\[pP]\{\w+\}", RegexOptions.Compiled);
 
         // create definition set
@@ -72,6 +74,14 @@ public static class RegexSyntaxHighlighting
         };
         definitionSet.TokenDefinitions.Add(escapeCharTokenDef);
 
+        // special characters
+        var specialCharTokenDef = new SyntaxHighlightingToken(name: "Special Characters")
+        {
+            Foreground = app.FindResourceOrDefault<IBrush>("Brush/RegexSyntaxHighlighting.SpecialCharacters", Brushes.Magenta),
+            Pattern = SpecialCharactersPattern,
+        };
+        definitionSet.TokenDefinitions.Add(specialCharTokenDef);
+
         // character classes
         definitionSet.SpanDefinitions.Add(new SyntaxHighlightingSpan("Character Classes").Also(it =>
         {
@@ -92,6 +102,9 @@ public static class RegexSyntaxHighlighting
             
             // escape characters
             it.TokenDefinitions.Add(escapeCharTokenDef);
+
+            // special characters
+            it.TokenDefinitions.Add(specialCharTokenDef);
         }));
 
         // quantifiers

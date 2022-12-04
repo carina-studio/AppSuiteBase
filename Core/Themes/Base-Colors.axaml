@@ -175,6 +175,7 @@
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterRanges">#00ccaf</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.EscapeCharacters">#ddb974</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Quantifiers">#91cf7c</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.SpecialCharacters">#ff40d0</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.UnicodeCategories">#00ccaf</SolidColorBrush>
 
 	<!-- RepeatButton -->
