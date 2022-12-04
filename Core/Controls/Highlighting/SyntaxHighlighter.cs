@@ -733,8 +733,14 @@ public sealed class SyntaxHighlighter : AvaloniaObject
 
 
     // Invalidate text layout.
-    void InvalidateTextLayout() =>
-        this.textLayout = null;
+    void InvalidateTextLayout()
+    {
+        if (this.textLayout != null)
+        {
+            this.textLayout = null;
+            this.TextLayoutInvalidated?.Invoke(this, EventArgs.Empty);
+        }
+    }
     
 
     // Invalidate text properties.
@@ -967,6 +973,12 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             this.InvalidateTextLayout();
         }
     }
+
+
+    /// <summary>
+    /// Raised when text layout of the instance was invalidated.
+    /// </summary>
+    public event EventHandler? TextLayoutInvalidated;
 
 
     /// <summary>

@@ -102,6 +102,8 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
             else if (property == SyntaxHighlighter.SelectionForegroundProperty)
                 this.RaisePropertyChanged(SelectionForegroundBrushProperty, new((IBrush?)e.OldValue), new((IBrush?)e.NewValue));
         };
+        this.syntaxHighlighter.TextLayoutInvalidated += (_, e) =>
+            this.InvalidateTextLayout();
     }
 
 

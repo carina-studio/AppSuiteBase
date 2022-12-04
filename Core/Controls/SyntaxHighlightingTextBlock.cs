@@ -86,6 +86,8 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
             if (property == SyntaxHighlighter.DefinitionSetProperty)
                 this.RaisePropertyChanged(DefinitionSetProperty, (SyntaxHighlightingDefinitionSet?)e.OldValue,  (SyntaxHighlightingDefinitionSet?)e.NewValue);
         };
+        this.syntaxHighlighter.TextLayoutInvalidated += (_, e) =>
+            this.InvalidateTextLayout();
     }
 
 

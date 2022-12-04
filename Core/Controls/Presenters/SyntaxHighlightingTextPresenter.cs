@@ -65,7 +65,6 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         this.GetObservable(SelectionEndProperty).Subscribe(end =>
         {
             this.syntaxHighlighter.SelectionEnd = end;
-            this.InvalidateTextLayout();
             this.correctCaretIndexAction.Schedule();
         });
         this.GetObservable(SelectionForegroundBrushProperty).Subscribe(brush =>
@@ -73,7 +72,6 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         this.GetObservable(SelectionStartProperty).Subscribe(start =>
         {
             this.syntaxHighlighter.SelectionStart = start;
-            this.InvalidateTextLayout();
             this.correctCaretIndexAction.Schedule();
         });
         this.GetObservable(TextProperty).Subscribe(text =>
@@ -90,6 +88,8 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
             if (property == SyntaxHighlighter.DefinitionSetProperty)
                 this.RaisePropertyChanged(DefinitionSetProperty, new((SyntaxHighlightingDefinitionSet?)e.OldValue), new((SyntaxHighlightingDefinitionSet?)e.NewValue));
         };
+        this.syntaxHighlighter.TextLayoutInvalidated += (_, e) =>
+            this.InvalidateTextLayout();
     }
 
 
