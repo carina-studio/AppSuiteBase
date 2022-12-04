@@ -8,7 +8,7 @@
 		<ResourceDictionary>
 			
 			<!-- FontFamilies -->
-			<FontFamily x:Key="FontFamily/DefaultFixWidth">Menlo,Monaco,Courier New</FontFamily>
+			<FontFamily x:Key="FontFamily/DefaultSystemFixWidth">Menlo,Monaco,Courier New</FontFamily>
 			
 		</ResourceDictionary>
 	</Styles.Resources>

@@ -182,6 +182,7 @@ namespace CarinaStudio.AppSuite.Controls
 					var opacityObservable = this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity");
 					panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 					{
+						it.Bind(Avalonia.Controls.TextBlock.FontFamilyProperty, new Binding() { Path = nameof(FontFamily), Source = this });
 						it.Text = $"\\{escapedChar}";
 						it.VerticalAlignment = VerticalAlignment.Center;
 					}));

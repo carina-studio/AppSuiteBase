@@ -7,6 +7,7 @@
 		xmlns:appSuite="using:CarinaStudio.AppSuite"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
+		xmlns:media="using:CarinaStudio.AppSuite.Media"
 		xmlns:presenters="using:CarinaStudio.AppSuite.Controls.Presenters">
 	
 	<!-- Resources -->
@@ -1146,7 +1147,7 @@
 
 	<!-- RegexTextBox -->
 	<Style Selector="TextBox:regexTextBox">
-		<Setter Property="FontFamily" Value="{DynamicResource FontFamily/DefaultFixWidth}"/>
+		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
 		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
 	</Style>
 	<Style Selector="TextBox:regexTextBox /template/ TextBlock#PART_Watermark">
@@ -1609,7 +1610,7 @@
 
 	<!-- StringInterpolationFormatTextBox -->
 	<Style Selector="TextBox:stringInterpolationFormatTextBox">
-		<Setter Property="FontFamily" Value="{DynamicResource FontFamily/DefaultFixWidth}"/>
+		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
 		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
 	</Style>
 	<Style Selector="TextBox:stringInterpolationFormatTextBox /template/ TextBlock#PART_Watermark">

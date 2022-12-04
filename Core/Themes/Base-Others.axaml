@@ -12,7 +12,7 @@
 	<sys:Double x:Key="Double/ApplicationInfoDialog.AppVersion.Opacity">0.6</sys:Double>
 
 	<!-- FontFamilies -->
-	<FontFamily x:Key="FontFamily/DefaultFixWidth">Consolas,Courier New</FontFamily>
+	<FontFamily x:Key="FontFamily/DefaultSystemFixWidth">Consolas,Courier New</FontFamily>
 
 	<!-- Icon -->
 	<sys:Double x:Key="Double/Icon.Opacity.Disabled">0.3</sys:Double>

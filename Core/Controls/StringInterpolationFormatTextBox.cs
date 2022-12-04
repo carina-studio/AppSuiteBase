@@ -130,6 +130,7 @@ namespace CarinaStudio.AppSuite.Controls
 					{
 						panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 						{
+							it.Bind(Avalonia.Controls.TextBlock.FontFamilyProperty, new Binding() { Path = nameof(FontFamily), Source = this });
 							it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding() { Path = nameof(StringInterpolationVariable.Name) });
 							it.VerticalAlignment = VerticalAlignment.Center;
 						}));
