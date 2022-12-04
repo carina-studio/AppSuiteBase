@@ -157,7 +157,7 @@
 	<Thickness x:Key="Thickness/InPlaceAction.Padding.Medium">4</Thickness>
 
 	<!-- InputAssistancePopup -->
-	<sys:Double x:Key="Double/InputAssistancePopup.Content.MaxHeight">250</sys:Double>
+	<sys:Double x:Key="Double/InputAssistancePopup.Content.MaxHeight">370</sys:Double>
 	<Thickness x:Key="Thickness/InputAssistancePopup.Padding">0</Thickness>
 
 	<!-- ListBox -->

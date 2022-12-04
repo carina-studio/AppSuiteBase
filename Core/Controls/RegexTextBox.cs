@@ -43,10 +43,23 @@ namespace CarinaStudio.AppSuite.Controls
 		public static readonly DirectProperty<RegexTextBox, bool> IsSyntaxHighlightingEnabledProperty = AvaloniaProperty.RegisterDirect<RegexTextBox, bool>(nameof(IsSyntaxHighlightingEnabled), tb => tb.isSyntaxHighlightingEnabled, (tb, e) => tb.IsSyntaxHighlightingEnabled = e);
 
 
+		// Grouping construct.
+		enum GroupingConstruct
+		{
+			NamedGroup,
+			NoncapturingGroup,
+			ZeroWidthPositiveLookaheadAssertion,
+			ZeroWidthNegativeLookaheadAssertion,
+			ZeroWidthPositiveLookbehindAssertion,
+			ZeroWidthNegativeLookbehindAssertion,
+		}
+
+
 		// Fields.
 		InputAssistancePopup? escapedCharactersPopup;
 		readonly ObservableList<ListBoxItem> filteredPredefinedGroupListBoxItems = new();
 		readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new((x, y) => string.Compare(x?.Name, y?.Name, true, CultureInfo.InvariantCulture));
+		InputAssistancePopup? groupingConstructsPopup;
 		bool isBackSlashPressed;
 		bool isEscapeKeyHandled;
 		bool isSyntaxHighlightingEnabled = true;
@@ -73,9 +86,11 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				// close menu first
 				if (this.escapedCharactersPopup?.IsOpen == true
+					|| this.groupingConstructsPopup?.IsOpen == true
 					|| this.predefinedGroupsPopup?.IsOpen == true)
 				{
 					this.escapedCharactersPopup?.Close();
+					this.groupingConstructsPopup?.Close();
 					this.predefinedGroupsPopup?.Close();
 					this.showAssistanceMenuAction!.Schedule();
 					return;
@@ -105,6 +120,13 @@ namespace CarinaStudio.AppSuite.Controls
 						if (this.filteredPredefinedGroups.IsNotEmpty())
 							popupToOpen = this.SetupPredefinedGroupsPopup();
 					}
+				}
+
+				// show grouping constructs menu
+				if (popupToOpen == null && start >= 2 && start < textLength 
+					&& text[start - 1] == '?' && text[start - 2] == '(' && text[start] == ')')
+				{
+					popupToOpen = this.SetupGroupingConstructsPopup();
 				}
 
 				// show escaped characters menu
@@ -177,60 +199,121 @@ namespace CarinaStudio.AppSuite.Controls
 		ListBoxItem CreateListBoxItem(char escapedChar) =>
 			new ListBoxItem().Also(it =>
 			{
-				it.Content = new StackPanel().Also(panel => 
+				it.Content = new Grid().Also(panel => 
 				{
 					var opacityObservable = this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity");
+					panel.ColumnDefinitions.Add(new ColumnDefinition(0, GridUnitType.Auto).Also(columnDefinition =>
+					{
+						columnDefinition.SharedSizeGroup = "Character";
+					}));
+					panel.ColumnDefinitions.Add(new(0, GridUnitType.Auto));
+					panel.ColumnDefinitions.Add(new(0, GridUnitType.Auto));
 					panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 					{
 						it.Bind(Avalonia.Controls.TextBlock.FontFamilyProperty, new Binding() { Path = nameof(FontFamily), Source = this });
 						it.Text = $"\\{escapedChar}";
 						it.VerticalAlignment = VerticalAlignment.Center;
 					}));
-					panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
+					panel.Children.Add(new Separator().Also(it => 
 					{
-						it.Bind(Avalonia.Controls.TextBlock.OpacityProperty, opacityObservable);
-						it.Text = " (";
-						it.VerticalAlignment = VerticalAlignment.Center;
+						it.Classes.Add("Dialog_Separator");
+						Grid.SetColumn(it, 1);
 					}));
 					panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 					{
 						it.Bind(Avalonia.Controls.TextBlock.OpacityProperty, opacityObservable);
 						it.Bind(Avalonia.Controls.TextBlock.TextProperty, this.GetResourceObservable($"String/RegexTextBox.EscapedCharacter.{escapedChar}"));
 						it.VerticalAlignment = VerticalAlignment.Center;
+						Grid.SetColumn(it, 2);
+					}));
+				});
+				it.DataContext = escapedChar;
+			});
+		ListBoxItem CreateListBoxItem(GroupingConstruct groupingConstruct) =>
+			new ListBoxItem().Also(it =>
+			{
+				it.Content = new Grid().Also(panel => 
+				{
+					var opacityObservable = this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity");
+					panel.ColumnDefinitions.Add(new ColumnDefinition(0, GridUnitType.Auto).Also(columnDefinition =>
+					{
+						columnDefinition.SharedSizeGroup = "Keyword";
+					}));
+					panel.ColumnDefinitions.Add(new(0, GridUnitType.Auto));
+					panel.ColumnDefinitions.Add(new(0, GridUnitType.Auto));
+					panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
+					{
+						it.Bind(Avalonia.Controls.TextBlock.FontFamilyProperty, new Binding() { Path = nameof(FontFamily), Source = this });
+						it.Text = $"(?{GetGroupingConstructKeyword(groupingConstruct)})";
+						it.VerticalAlignment = VerticalAlignment.Center;
+					}));
+					panel.Children.Add(new Separator().Also(it => 
+					{
+						it.Classes.Add("Dialog_Separator");
+						Grid.SetColumn(it, 1);
 					}));
 					panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 					{
 						it.Bind(Avalonia.Controls.TextBlock.OpacityProperty, opacityObservable);
-						it.Text = ")";
+						it.Bind(Avalonia.Controls.TextBlock.TextProperty, this.GetResourceObservable($"String/GroupingConstruct.{groupingConstruct}"));
 						it.VerticalAlignment = VerticalAlignment.Center;
+						Grid.SetColumn(it, 2);
 					}));
-					panel.Orientation = Orientation.Horizontal ;
 				});
-				it.DataContext = escapedChar;
+				it.DataContext = groupingConstruct;
 			});
 		ListBoxItem CreateListBoxItem(RegexGroup group) =>
 			this.recycledListBoxItems.Count > 0
 				? this.recycledListBoxItems.Dequeue().Also(it => it.DataContext = group)
 				: new ListBoxItem().Also(it =>
 				{
-					it.Content = new StackPanel().Also(panel => 
+					it.Content = new Grid().Also(panel => 
 					{
+						panel.ColumnDefinitions.Add(new ColumnDefinition(0, GridUnitType.Auto).Also(columnDefinition =>
+						{
+							columnDefinition.SharedSizeGroup = "Character";
+						}));
+						panel.ColumnDefinitions.Add(new ColumnDefinition(0, GridUnitType.Auto).Also(columnDefinition =>
+						{
+							columnDefinition.SharedSizeGroup = "Separator";
+						}));
+						panel.ColumnDefinitions.Add(new(0, GridUnitType.Auto));
 						panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 						{
 							it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding() { Path = nameof(RegexGroup.Name) });
 							it.VerticalAlignment = VerticalAlignment.Center;
 						}));
-						panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
+						var displayNameTextBlock = new Avalonia.Controls.TextBlock().Also(it =>
 						{
 							it.Bind(Avalonia.Controls.TextBlock.IsVisibleProperty, new Binding() { Path = nameof(RegexGroup.DisplayName), Converter = StringConverters.IsNotNullOrEmpty });
+							it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding() { Path = nameof(RegexGroup.DisplayName) });
 							it.Bind(Avalonia.Controls.TextBlock.OpacityProperty, this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity"));
-							it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding() { Path = nameof(RegexGroup.DisplayName), StringFormat = " ({0})" });
 							it.VerticalAlignment = VerticalAlignment.Center;
+							Grid.SetColumn(it, 2);
+						});
+						panel.Children.Add(new Separator().Also(it => 
+						{
+							it.Classes.Add("Dialog_Separator");
+							it.Bind(Avalonia.Controls.TextBlock.IsVisibleProperty, new Binding() { Path = nameof(IsVisible), Source = displayNameTextBlock });
+							Grid.SetColumn(it, 1);
 						}));
-						panel.Orientation = Orientation.Horizontal ;
+						panel.Children.Add(displayNameTextBlock);
 					});
 					it.DataContext = group;
 				});
+		
+
+		// Get keyword of grouping construct.
+		static string GetGroupingConstructKeyword(GroupingConstruct groupingConstruct) => groupingConstruct switch
+		{
+			GroupingConstruct.NamedGroup => "<>",
+			GroupingConstruct.NoncapturingGroup => ":",
+			GroupingConstruct.ZeroWidthNegativeLookaheadAssertion => "!",
+			GroupingConstruct.ZeroWidthNegativeLookbehindAssertion => "<!",
+			GroupingConstruct.ZeroWidthPositiveLookaheadAssertion => "=",
+			GroupingConstruct.ZeroWidthPositiveLookbehindAssertion => "<=",
+			_ => throw new NotSupportedException(),
+		};
 		
 
 		// Get selection range of group name.
@@ -277,6 +360,16 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			get => this.GetValue<bool>(IgnoreCaseProperty);
 			set => this.SetValue<bool>(IgnoreCaseProperty, value);
+		}
+
+
+		// Input grouping construct.
+		void InputGroupingConstruct(GroupingConstruct groupingConstruct)
+		{
+			var keyword = GetGroupingConstructKeyword(groupingConstruct);
+			this.InputString(keyword);
+			if (keyword == "<>")
+				--this.CaretIndex;
 		}
 
 
@@ -423,6 +516,7 @@ namespace CarinaStudio.AppSuite.Controls
 				if (!this.IsFocused)
 				{
 					this.escapedCharactersPopup?.Close();
+					this.groupingConstructsPopup?.Close();
 					this.predefinedGroupsPopup?.Close();
 					this.showAssistanceMenuAction.Cancel();
 				}
@@ -520,6 +614,12 @@ namespace CarinaStudio.AppSuite.Controls
 							isKeyForAssistentPopup = true;
 							e.Handled = true;
 						}
+						else if (this.groupingConstructsPopup?.IsOpen == true)
+						{
+							this.groupingConstructsPopup.ItemListBox?.SelectNextItem();
+							isKeyForAssistentPopup = true;
+							e.Handled = true;
+						}
 						else if (this.predefinedGroupsPopup?.IsOpen == true)
 						{
 							this.predefinedGroupsPopup.ItemListBox?.SelectNextItem();
@@ -543,6 +643,12 @@ namespace CarinaStudio.AppSuite.Controls
 							isKeyForAssistentPopup = true;
 							e.Handled = true;
 						}
+						else if (this.groupingConstructsPopup?.IsOpen == true)
+						{
+							this.groupingConstructsPopup.ItemListBox?.SelectPreviousItem();
+							isKeyForAssistentPopup = true;
+							e.Handled = true;
+						}
 						else if (this.predefinedGroupsPopup?.IsOpen == true)
 						{
 							this.predefinedGroupsPopup.ItemListBox?.SelectPreviousItem();
@@ -560,6 +666,7 @@ namespace CarinaStudio.AppSuite.Controls
 			if (e.Key == Key.Escape)
 			{
 				this.escapedCharactersPopup?.Close();
+				this.groupingConstructsPopup?.Close();
 				this.predefinedGroupsPopup?.Close();
 				this.showAssistanceMenuAction.Cancel();
 			}
@@ -586,6 +693,15 @@ namespace CarinaStudio.AppSuite.Controls
 							this.InputString(c.ToString());
 					});
 					this.escapedCharactersPopup?.Close();
+				}
+				else if (this.groupingConstructsPopup?.IsOpen == true)
+				{
+					(this.groupingConstructsPopup.ItemListBox?.SelectedItem as ListBoxItem)?.Let(item =>
+					{
+						if (item.DataContext is GroupingConstruct groupingConstruct)
+							this.InputGroupingConstruct(groupingConstruct);
+					});
+					this.groupingConstructsPopup?.Close();
 				}
 				else if (this.predefinedGroupsPopup?.IsOpen == true)
 				{
@@ -693,6 +809,7 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				menu.ItemListBox.Let(it =>
 				{
+					Grid.SetIsSharedSizeScope(it, true);
 					it.DoubleClickOnItem += (_, e) =>
 					{
 						menu.Close();
@@ -703,10 +820,11 @@ namespace CarinaStudio.AppSuite.Controls
 						this.CreateListBoxItem('d'),
 						this.CreateListBoxItem('s'),
 						this.CreateListBoxItem('w'),
-						this.CreateListBoxItem('t'),
+						this.CreateListBoxItem('b'),
 						this.CreateListBoxItem('D'),
 						this.CreateListBoxItem('S'),
 						this.CreateListBoxItem('W'),
+						this.CreateListBoxItem('B'),
 					};
 					it.AddHandler(Control.PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
 					{
@@ -723,6 +841,46 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
+		// Setup menu for grouping constructs.
+		InputAssistancePopup SetupGroupingConstructsPopup()
+		{
+			if (this.groupingConstructsPopup != null)
+				return this.groupingConstructsPopup;
+			var rootPanel = this.FindDescendantOfType<Panel>().AsNonNull();
+			this.groupingConstructsPopup = new InputAssistancePopup().Also(menu =>
+			{
+				menu.ItemListBox.Let(it =>
+				{
+					Grid.SetIsSharedSizeScope(it, true);
+					it.DoubleClickOnItem += (_, e) =>
+					{
+						menu.Close();
+						if (e.Item is ListBoxItem item && item.DataContext is GroupingConstruct groupingConstruct)
+							this.InputGroupingConstruct(groupingConstruct);
+					};
+					it.Items = new ListBoxItem[] {
+						this.CreateListBoxItem(GroupingConstruct.NamedGroup),
+						this.CreateListBoxItem(GroupingConstruct.NoncapturingGroup),
+						this.CreateListBoxItem(GroupingConstruct.ZeroWidthPositiveLookaheadAssertion),
+						this.CreateListBoxItem(GroupingConstruct.ZeroWidthNegativeLookaheadAssertion),
+						this.CreateListBoxItem(GroupingConstruct.ZeroWidthPositiveLookbehindAssertion),
+						this.CreateListBoxItem(GroupingConstruct.ZeroWidthNegativeLookbehindAssertion),
+					};
+					it.AddHandler(Control.PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
+					{
+						SynchronizationContext.Current?.Post(this.Focus);
+					}), RoutingStrategies.Tunnel);
+				});
+				menu.PlacementAnchor = PopupAnchor.BottomLeft;
+				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
+				menu.PlacementGravity = PopupGravity.BottomRight;
+				menu.PlacementMode = PlacementMode.AnchorAndGravity;
+			});
+			rootPanel.Children.Insert(0, this.groupingConstructsPopup);
+			return this.groupingConstructsPopup;
+		}
+
+
 		// Setup menu of predefined groups.
 		InputAssistancePopup SetupPredefinedGroupsPopup()
 		{
@@ -733,6 +891,7 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				menu.ItemListBox.Let(it =>
 				{
+					Grid.SetIsSharedSizeScope(it, true);
 					it.DoubleClickOnItem += (_, e) =>
 					{
 						menu.Close();

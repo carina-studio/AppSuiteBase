@@ -31,7 +31,7 @@ public static class RegexSyntaxHighlighting
         // create patterns
         AlternationPattern ??= new(@"\|", RegexOptions.Compiled);
         AnchorsPattern ??= new(@"\^|\$|\\b|\\B|\\z|\\Z|\\A|\\G", RegexOptions.Compiled);
-        BracketsPattern ??= new(@"\((\?(:|\!|<=|>=)?(<[^-\>]+(\-[^-\>]+)?>|'[^-\']+(\-[^-\']+)?')?)?|\)", RegexOptions.Compiled);
+        BracketsPattern ??= new(@"\((\?(:|\!|<=|<\!|=)?(<[^-\>]+(\-[^-\>]+)?>|'[^-\']+(\-[^-\']+)?')?)?|\)", RegexOptions.Compiled);
         CharacterClassesEndPattern ??= new(@"(?<=(\\\\)*[^\\]?)\]", RegexOptions.Compiled);
         CharacterClassesStartPattern ??= new(@"(^|(?<=(\\\\)*[^\\]?))\[(\^)?", RegexOptions.Compiled);
         CharacterRangesPattern ??= new(@"[0-9\w]\-[0-9\w]", RegexOptions.Compiled);

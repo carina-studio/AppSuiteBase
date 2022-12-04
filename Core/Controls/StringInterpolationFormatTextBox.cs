@@ -126,22 +126,38 @@ namespace CarinaStudio.AppSuite.Controls
 				? this.recycledListBoxItems.Dequeue().Also(it => it.DataContext = variable)
 				: new ListBoxItem().Also(it =>
 				{
-					it.Content = new StackPanel().Also(panel => 
+					it.Content = new Grid().Also(panel => 
 					{
+						panel.ColumnDefinitions.Add(new ColumnDefinition(0, GridUnitType.Auto).Also(columnDefinition =>
+						{
+							columnDefinition.SharedSizeGroup = "Name";
+						}));
+						panel.ColumnDefinitions.Add(new ColumnDefinition(0, GridUnitType.Auto).Also(columnDefinition =>
+						{
+							columnDefinition.SharedSizeGroup = "Separator";
+						}));
+						panel.ColumnDefinitions.Add(new(0, GridUnitType.Auto));
 						panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 						{
 							it.Bind(Avalonia.Controls.TextBlock.FontFamilyProperty, new Binding() { Path = nameof(FontFamily), Source = this });
 							it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding() { Path = nameof(StringInterpolationVariable.Name) });
 							it.VerticalAlignment = VerticalAlignment.Center;
 						}));
-						panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
+						var displayNameTextBlock = new Avalonia.Controls.TextBlock().Also(it =>
 						{
 							it.Bind(Avalonia.Controls.TextBlock.IsVisibleProperty, new Binding() { Path = nameof(StringInterpolationVariable.DisplayName), Converter = StringConverters.IsNotNullOrEmpty });
                             it.Bind(Avalonia.Controls.TextBlock.OpacityProperty, this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity"));
-							it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding() { Path = nameof(StringInterpolationVariable.DisplayName), StringFormat = " ({0})" });
+							it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding() { Path = nameof(StringInterpolationVariable.DisplayName) });
 							it.VerticalAlignment = VerticalAlignment.Center;
+							Grid.SetColumn(it, 2);
+						});
+						panel.Children.Add(new Separator().Also(it => 
+						{
+							it.Classes.Add("Dialog_Separator");
+							it.Bind(IsVisibleProperty, new Binding() { Path = nameof(IsVisible), Source = displayNameTextBlock});
+							Grid.SetColumn(it, 1);
 						}));
-						panel.Orientation = Orientation.Horizontal ;
+						panel.Children.Add(displayNameTextBlock);
 					});
 					it.DataContext = variable;
 				});

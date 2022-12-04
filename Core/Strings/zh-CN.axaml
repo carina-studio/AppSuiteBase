@@ -230,6 +230,14 @@
 	<sys:String x:Key="String/FileFormat.Text">文字文件</sys:String>
 	<sys:String x:Key="String/FileFormat.Zip">ZIP 压缩档案</sys:String>
 
+	<!-- GroupingConstruct -->
+	<sys:String x:Key="String/GroupingConstruct.NamedGroup">具名群组</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.NoncapturingGroup">不具名群组 (不撷取内容)</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthNegativeLookaheadAssertion">负向后行断言 (Negative Lookahead)</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthNegativeLookbehindAssertion">负向先行断言 (Negative Lookbehind)</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthPositiveLookaheadAssertion">正向后行断言 (Positive Lookahead)</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthPositiveLookbehindAssertion">正向先行断言 (Positive Lookbehind)</sys:String>
+
 	<!-- IPAddressTextBox -->
 	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 或 IPv6</sys:String>
 
@@ -262,11 +270,12 @@
 	<sys:String x:Key="String/ProductState.Deactivated">停用</sys:String>
 
 	<!-- RegexTextBox -->
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.b">字词边界</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.B">非字词边界</sys:String>
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.d">十进制数字</sys:String>
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.D">非十进制数字</sys:String>
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.s">空白字符</sys:String>
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.S">非空白字符</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.t">Tab 字符</sys:String>
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.w">一般文字字符</sys:String>
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.W">非一般文字字符</sys:String>
 	<sys:String x:Key="String/RegexTextBox.Watermark">正则表达式</sys:String>
