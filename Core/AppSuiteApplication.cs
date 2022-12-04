@@ -206,6 +206,22 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <summary>
+        /// Predefined keys of launch options.
+        /// </summary>
+        protected static class LaunchOptionKeys
+        {
+            /// <summary>
+            /// Whether debug mode is requested or not.
+            /// </summary>
+            public const string IsDebugModeRequested = "IsDebugModeRequested";
+            /// <summary>
+            /// Whether restoring main window is requested or not.
+            /// </summary>
+            public const string IsRestoringMainWindowsRequested = "IsRestoringMainWindowsRequested";
+        }
+
+
         // Holder of main window.
         class MainWindowHolder
         {
@@ -283,8 +299,6 @@ namespace CarinaStudio.AppSuite
 
 
         // Constants.
-        const string DebugModeRequestedKey = "IsDebugModeRequested";
-        const string RestoreMainWindowsRequestedKey = "IsRestoringMainWindowsRequested";
         const int MinSplashWindowDuration = 2000;
         const int SplashWindowShowingDuration = 1500;
         const int SplashWindowLoadingThemeDuration = 400;
@@ -328,6 +342,7 @@ namespace CarinaStudio.AppSuite
         Controls.ApplicationInfoDialog? appInfoDialog;
         Controls.ApplicationUpdateDialog? appUpdateDialog;
         Avalonia.Themes.Fluent.FluentTheme? baseTheme;
+        bool canRequestRestoringMainWindows;
         readonly bool canUseWindows10Features = Environment.OSVersion.Version.Let(version =>
         {
             if (!Platform.IsWindows)
@@ -1941,17 +1956,15 @@ namespace CarinaStudio.AppSuite
                 }
             }
 
+            // allow requesting restoring main windows
+            this.canRequestRestoringMainWindows = true;
+
             // parse arguments
             if (desktopLifetime != null)
             {
                 this.LaunchOptions = this.ParseArguments(desktopLifetime.Args ?? Array.Empty<string>());
-                if (this.LaunchOptions.TryGetValue(RestoreMainWindowsRequestedKey, out var value)
-                    && value is bool boolValue
-                    && boolValue)
-                {
-                    this.Logger.LogWarning("Restoring main windows is requested");
-                    this.IsRestoringMainWindowsRequested = true;
-                }
+                if (this.LaunchOptions.TryGetValue(LaunchOptionKeys.IsRestoringMainWindowsRequested, out bool boolValue) && boolValue)
+                    this.RequestRestoringMainWindows();
             }
 
             // enter debug mode
@@ -2129,6 +2142,9 @@ namespace CarinaStudio.AppSuite
 
                 // prepare
                 await this.OnPrepareStartingAsync();
+
+                // disallow requesting restoring main windows
+                this.canRequestRestoringMainWindows = false;
 
                 // restore main windows
                 if (this.IsRestoringMainWindowsRequested)
@@ -2350,10 +2366,10 @@ namespace CarinaStudio.AppSuite
             switch (arg)
             {
                 case DebugArgument:
-                    launchOptions[DebugModeRequestedKey] = true;
+                    launchOptions[LaunchOptionKeys.IsDebugModeRequested] = true;
                     break;
                 case RestoreMainWindowsArgument:
-                    launchOptions[RestoreMainWindowsRequestedKey] = true;
+                    launchOptions[LaunchOptionKeys.IsRestoringMainWindowsRequested] = true;
                     break;
                 default:
                     return index;
@@ -2823,10 +2839,10 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Called to check whether application needs to enter debug mode or not.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>True if application needs to enter debug mode.</returns>
         protected virtual bool OnSelectEnteringDebugMode()
         {
-            if (this.LaunchOptions.TryGetValue(DebugModeRequestedKey, out var value) && value is bool boolValue)
+            if (this.LaunchOptions.TryGetValue(LaunchOptionKeys.IsDebugModeRequested, out bool boolValue))
                 return boolValue;
             return this.ReleasingType == ApplicationReleasingType.Development;
         }
@@ -3073,6 +3089,23 @@ namespace CarinaStudio.AppSuite
         {
             this.VerifyAccess();
             this.Styles.Remove(style);
+        }
+
+
+        /// <summary>
+        /// Request restoring main windows when launching application.
+        /// </summary>
+        /// <returns>True if request has been accepted.</returns>
+        protected bool RequestRestoringMainWindows()
+        {
+            this.VerifyAccess();
+            if (!this.canRequestRestoringMainWindows)
+                return false;
+            if (this.IsRestoringMainWindowsRequested)
+                return true;
+            this.Logger.LogWarning("Restoring main windows has been requested");
+            this.IsRestoringMainWindowsRequested = true;
+            return true;
         }
 
 
