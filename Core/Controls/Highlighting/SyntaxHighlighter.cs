@@ -95,6 +95,10 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlighter, TextAlignment> TextAlignmentProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, TextAlignment>(nameof(TextAlignment), sh => sh.textAlignment, (sh, a) => sh.TextAlignment = a);
     /// <summary>
+    /// Property of <see cref="TextDecorations"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, TextDecorationCollection?> TextDecorationProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, TextDecorationCollection?>(nameof(TextDecorations), sh => sh.textDecorations, (sh, d) => sh.TextDecorations = d);
+    /// <summary>
     /// Property of <see cref="TextTrimming"/>.
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlighter, TextTrimming> TextTrimmingProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, TextTrimming>(nameof(TextTrimming), sh => sh.textTrimming, (sh, t) => sh.TextTrimming = t);
@@ -137,6 +141,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     int selectionStart;
     string? text;
     TextAlignment textAlignment = TextAlignment.Left;
+    TextDecorationCollection? textDecorations;
     TextLayout? textLayout;
     IReadOnlyList<ValueSpan<TextRunProperties>>? textProperties;
     TextTrimming textTrimming = TextTrimming.CharacterEllipsis;
@@ -184,7 +189,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         var defaultSelectionRunProperties = new GenericTextRunProperties(
             defaultRunProperties.Typeface,
             defaultRunProperties.FontRenderingEmSize,
-            null,
+            defaultRunProperties.TextDecorations,
             this.selectionForeground ?? defaultRunProperties.ForegroundBrush
         );
         
@@ -291,7 +296,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 runProperties = new GenericTextRunProperties(
                     typeface,
                     double.IsNaN(span.Definition.FontSize) ? defaultRunProperties.FontRenderingEmSize : span.Definition.FontSize,
-                    null,
+                    span.Definition.TextDecorations ?? defaultRunProperties.TextDecorations,
                     span.Definition.Foreground ?? defaultRunProperties.ForegroundBrush
                 );
                 runPropertiesMap[span.Definition] = runProperties;
@@ -301,7 +306,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 selectionRunProperties = new GenericTextRunProperties(
                     runProperties.Typeface,
                     runProperties.FontRenderingEmSize,
-                    null,
+                    runProperties.TextDecorations,
                     this.selectionForeground ?? runProperties.ForegroundBrush
                 );
                 selectionRunPropertiesMap[span.Definition] = selectionRunProperties;
@@ -324,7 +329,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             var runProperties = new GenericTextRunProperties(
                 defaultRunProperties.Typeface,
                 defaultRunProperties.FontRenderingEmSize,
-                TextDecorations.Underline,
+                Avalonia.Media.TextDecorations.Underline,
                 defaultRunProperties.ForegroundBrush
             );
             if (caretIndex <= 0)
@@ -503,7 +508,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 runProperties = new GenericTextRunProperties(
                     typeface,
                     double.IsNaN(token.Definition.FontSize) ? defaultRunProperties.FontRenderingEmSize : token.Definition.FontSize,
-                    null,
+                    token.Definition.TextDecorations ?? defaultRunProperties.TextDecorations,
                     token.Definition.Foreground ?? defaultRunProperties.ForegroundBrush
                 );
                 runPropertiesMap[token.Definition] = runProperties;
@@ -513,7 +518,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 selectionRunProperties = new GenericTextRunProperties(
                     runProperties.Typeface,
                     runProperties.FontRenderingEmSize,
-                    null,
+                    runProperties.TextDecorations,
                     this.selectionForeground ?? defaultRunProperties.ForegroundBrush
                 );
                 selectionRunPropertiesMap[token.Definition] = selectionRunProperties;
@@ -565,7 +570,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         var defaultRunProperties = new GenericTextRunProperties(
             typeface,
             this.fontSize,
-            null,
+            this.textDecorations,
             this.foreground
         );
         
@@ -971,6 +976,23 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 return;
             this.SetAndRaise(TextAlignmentProperty, ref this.textAlignment, value);
             this.InvalidateTextLayout();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set base text decorations.
+    /// </summary>
+    public TextDecorationCollection? TextDecorations
+    {
+        get => this.textDecorations;
+        set
+        {
+            this.VerifyAccess();
+            if (this.textDecorations == value)
+                return;
+            this.SetAndRaise(TextDecorationProperty, ref this.textDecorations, value);
+            this.InvalidateTextProperties();
         }
     }
 

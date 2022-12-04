@@ -88,6 +88,8 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
             this.syntaxHighlighter.Text = text);
         this.GetObservable(TextAlignmentProperty).Subscribe(alignment =>
             this.syntaxHighlighter.TextAlignment = alignment);
+        this.GetObservable(TextDecorationsProperty).Subscribe(decorations =>
+            this.syntaxHighlighter.TextDecorations = decorations);
         this.GetObservable(TextTrimmingProperty).Subscribe(trimming =>
             this.syntaxHighlighter.TextTrimming = trimming);
         this.GetObservable(TextWrappingProperty).Subscribe(wrapping =>

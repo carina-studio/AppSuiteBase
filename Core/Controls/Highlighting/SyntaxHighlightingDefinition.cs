@@ -17,6 +17,7 @@ public abstract class SyntaxHighlightingDefinition : INotifyPropertyChanged
     FontWeight? fontWeight;
     IBrush? foreground;
     bool isValid;
+    TextDecorationCollection? textDecorations;
 
 
     /// <summary>
@@ -174,13 +175,31 @@ public abstract class SyntaxHighlightingDefinition : INotifyPropertyChanged
         || double.IsFinite(this.fontSize)
         || this.fontStyle.HasValue
         || this.fontWeight.HasValue
-        || this.foreground is not null;
+        || this.foreground is not null
+        || this.textDecorations is not null;
 
 
     /// <summary>
     /// Raised when property of rule has been changed.
     /// </summary>
     public event PropertyChangedEventHandler? PropertyChanged;
+
+
+    /// <summary>
+    /// Get or set text decorations of the definition.
+    /// </summary>
+    public TextDecorationCollection? TextDecorations
+    {
+        get => this.textDecorations;
+        set
+        {
+            if (this.textDecorations == value)
+                return;
+            this.textDecorations = value;
+            this.Validate();
+            this.OnPropertyChanged(nameof(TextDecorations));
+        }
+    }
 
 
     /// <summary>
