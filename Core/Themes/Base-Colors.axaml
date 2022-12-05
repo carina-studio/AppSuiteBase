@@ -222,6 +222,7 @@
 	<SolidColorBrush x:Key="Brush/StatusBar.ToggleButton.Background.Checked" Color="{DynamicResource Color/StatusBar.ToggleButton.Background.Checked}"/>
 
 	<!-- StringInterpolationFormatSyntaxHighlighting -->
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.Alignment">#ff40d0</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.SpecialTokens">#ff40d0</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.StringFormat">#ddb974</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.VariableExpression">#afcfa4</SolidColorBrush>

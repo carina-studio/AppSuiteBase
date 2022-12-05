@@ -10,6 +10,7 @@ namespace CarinaStudio.AppSuite.Controls.Highlighting;
 public static class StringInterpolationFormatSyntaxHighlighting
 {
     // Static fields.
+    static Regex? AlignmentPattern;
     static Regex? StringFormatPattern;
     static Regex? SpecialTokensPattern;
     static Regex? VarEndPattern;
@@ -25,10 +26,11 @@ public static class StringInterpolationFormatSyntaxHighlighting
     public static SyntaxHighlightingDefinitionSet CreateDefinitionSet(IAvaloniaApplication app)
     {
         // create patterns
-        StringFormatPattern ??= new(@":[^\}]+", RegexOptions.Compiled);
+        AlignmentPattern ??= new(@"\,[^,:\}]+(?=[:\}])", RegexOptions.Compiled);
+        StringFormatPattern ??= new(@":[^,:\}]+(?=\})", RegexOptions.Compiled);
         SpecialTokensPattern ??= new(@"\{\{|\}\}", RegexOptions.Compiled);
         VarEndPattern ??= new(@"\}", RegexOptions.Compiled);
-        VarExpressionPattern ??= new(@"[^:\}]+(?=[:\}])", RegexOptions.Compiled);
+        VarExpressionPattern ??= new(@"[^,:\}]+(?=[,:\}])", RegexOptions.Compiled);
         VarStartPattern ??= new(@"(?<=(^|[^\{])(\{\{)*[^\{]?)\{(?!\{)", RegexOptions.Compiled);
 
         // create definition set
@@ -54,6 +56,13 @@ public static class StringInterpolationFormatSyntaxHighlighting
             {
                 Foreground = app.FindResourceOrDefault<IBrush>("Brush/StringInterpolationFormatSyntaxHighlighting.VariableExpression", Brushes.Yellow),
                 Pattern = VarExpressionPattern,
+            });
+
+            // alignment
+            it.TokenDefinitions.Add(new("Alignment")
+            {
+                Foreground = app.FindResourceOrDefault<IBrush>("Brush/StringInterpolationFormatSyntaxHighlighting.Alignment", Brushes.Magenta),
+                Pattern = AlignmentPattern,
             });
 
             // string format
