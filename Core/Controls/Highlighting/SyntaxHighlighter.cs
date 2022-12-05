@@ -75,6 +75,10 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlighter, string?> PreeditTextProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, string?>(nameof(PreeditText), sh => sh.preeditText, (sh, t) => sh.PreeditText = t);
     /// <summary>
+    /// Property of <see cref="SelectionBackground"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, IBrush?> SelectionBackgroundProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, IBrush?>(nameof(SelectionBackground), sh => sh.selectionBackground, (sh, b) => sh.SelectionBackground = b);
+    /// <summary>
     /// Property of <see cref="SelectionEnd"/>.
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlighter, int> SelectionEndProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, int>(nameof(SelectionEnd), sh => sh.selectionEnd, (sh, i) => sh.SelectionEnd = i);
@@ -136,6 +140,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     int maxLines;
     double maxWidth = double.PositiveInfinity;
     string? preeditText;
+    IBrush? selectionBackground;
     int selectionEnd;
     IBrush? selectionForeground;
     int selectionStart;
@@ -190,7 +195,8 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             defaultRunProperties.Typeface,
             defaultRunProperties.FontRenderingEmSize,
             defaultRunProperties.TextDecorations,
-            this.selectionForeground ?? defaultRunProperties.ForegroundBrush
+            this.selectionForeground ?? defaultRunProperties.ForegroundBrush,
+            this.selectionBackground ?? defaultRunProperties.BackgroundBrush
         );
         
         // setup initial candidate spans
@@ -297,7 +303,8 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                     typeface,
                     double.IsNaN(span.Definition.FontSize) ? defaultRunProperties.FontRenderingEmSize : span.Definition.FontSize,
                     span.Definition.TextDecorations ?? defaultRunProperties.TextDecorations,
-                    span.Definition.Foreground ?? defaultRunProperties.ForegroundBrush
+                    span.Definition.Foreground ?? defaultRunProperties.ForegroundBrush,
+                    span.Definition.Background ?? defaultRunProperties.BackgroundBrush
                 );
                 runPropertiesMap[span.Definition] = runProperties;
             }
@@ -307,7 +314,8 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                     runProperties.Typeface,
                     runProperties.FontRenderingEmSize,
                     runProperties.TextDecorations,
-                    this.selectionForeground ?? runProperties.ForegroundBrush
+                    this.selectionForeground ?? runProperties.ForegroundBrush,
+                    this.selectionBackground ?? runProperties.BackgroundBrush
                 );
                 selectionRunPropertiesMap[span.Definition] = selectionRunProperties;
             }
@@ -509,7 +517,8 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                     typeface,
                     double.IsNaN(token.Definition.FontSize) ? defaultRunProperties.FontRenderingEmSize : token.Definition.FontSize,
                     token.Definition.TextDecorations ?? defaultRunProperties.TextDecorations,
-                    token.Definition.Foreground ?? defaultRunProperties.ForegroundBrush
+                    token.Definition.Foreground ?? defaultRunProperties.ForegroundBrush,
+                    token.Definition.Background ?? defaultRunProperties.BackgroundBrush
                 );
                 runPropertiesMap[token.Definition] = runProperties;
             }
@@ -519,7 +528,8 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                     runProperties.Typeface,
                     runProperties.FontRenderingEmSize,
                     runProperties.TextDecorations,
-                    this.selectionForeground ?? defaultRunProperties.ForegroundBrush
+                    this.selectionForeground ?? defaultRunProperties.ForegroundBrush,
+                    this.selectionBackground ?? defaultRunProperties.BackgroundBrush
                 );
                 selectionRunPropertiesMap[token.Definition] = selectionRunProperties;
             }
@@ -571,7 +581,8 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             typeface,
             this.fontSize,
             this.textDecorations,
-            this.foreground
+            this.foreground,
+            this.background
         );
         
         // create text runs and source
@@ -884,6 +895,24 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 return;
             this.SetAndRaise(PreeditTextProperty, ref this.preeditText, value);
             this.InvalidateTextProperties();
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set background brush for selected text.
+    /// </summary>
+    public IBrush? SelectionBackground
+    {
+        get => this.selectionBackground;
+        set
+        {
+            this.VerifyAccess();
+            if (this.selectionBackground == value)
+                return;
+            this.SetAndRaise(SelectionBackgroundProperty, ref this.selectionBackground, value);
+            if (this.selectionStart != this.selectionEnd)
+                this.InvalidateTextProperties();
         }
     }
     
