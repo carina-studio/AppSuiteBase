@@ -1150,9 +1150,6 @@
 		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
 		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
 	</Style>
-	<Style Selector="TextBox:regexTextBox /template/ TextBlock#PART_Watermark">
-		<Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
-    </Style>
 
 	<!-- RepeatButton -->
 	<Style Selector="RepeatButton">
@@ -1440,8 +1437,10 @@
 	<!-- SelectableSyntaxHighlightingTextBlock -->
 	<Style Selector="controls|SelectableSyntaxHighlightingTextBlock">
 		<Setter Property="Cursor" Value="IBeam"/>
+		<Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}"/>
 		<Setter Property="SelectionBrush" Value="{DynamicResource Brush/SelectableSyntaxHighlightingTextBlock.Selection.Background}"/>
 		<Setter Property="SelectionForegroundBrush" Value="{DynamicResource Brush/SelectableSyntaxHighlightingTextBlock.Selection.Foreground}"/>
+		<Setter Property="TextTrimming" Value="None"/>
 	</Style>
 
 	<!-- Separator -->
@@ -1613,9 +1612,12 @@
 		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
 		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
 	</Style>
-	<Style Selector="TextBox:stringInterpolationFormatTextBox /template/ TextBlock#PART_Watermark">
-		<Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
-    </Style>
+
+	<!-- SyntaxHighlightingTextBlock -->
+	<Style Selector="controls|SyntaxHighlightingTextBlock">
+		<Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}"/>
+		<Setter Property="TextTrimming" Value="None"/>
+	</Style>
 
 	<!-- SyntaxHighlightingTextBox -->
 	<Style Selector="TextBox:syntaxHighlightingTextBox">
