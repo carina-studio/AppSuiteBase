@@ -1438,6 +1438,7 @@
 	<Style Selector="controls|SelectableSyntaxHighlightingTextBlock">
 		<Setter Property="Cursor" Value="IBeam"/>
 		<Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}"/>
+		<Setter Property="Foreground" Value="{DynamicResource TextControlForeground}"/>
 		<Setter Property="SelectionBrush" Value="{DynamicResource Brush/SelectableSyntaxHighlightingTextBlock.Selection.Background}"/>
 		<Setter Property="SelectionForegroundBrush" Value="{DynamicResource Brush/SelectableSyntaxHighlightingTextBlock.Selection.Foreground}"/>
 		<Setter Property="TextTrimming" Value="None"/>
@@ -1616,6 +1617,7 @@
 	<!-- SyntaxHighlightingTextBlock -->
 	<Style Selector="controls|SyntaxHighlightingTextBlock">
 		<Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}"/>
+		<Setter Property="Foreground" Value="{DynamicResource TextControlForeground}"/>
 		<Setter Property="TextTrimming" Value="None"/>
 	</Style>
 

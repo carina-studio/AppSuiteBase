@@ -80,6 +80,8 @@ namespace CarinaStudio.AppSuite.Tests
             this.Application.LoadingStrings += this.OnAppLoadingStrings;
             this.SetupCustomResource(this.Application.CultureInfo);
 
+            this.RegexSyntaxHighlightingDefinitionSet = RegexSyntaxHighlighting.CreateDefinitionSet(this.Application);
+
             InitializeComponent();
 
             this.logAction = new ScheduledAction(() =>
@@ -386,6 +388,9 @@ namespace CarinaStudio.AppSuite.Tests
             using var reader = new System.IO.StreamReader(stream, System.Text.Encoding.UTF8);
             this.syntaxHighlightingTextBlock.Text = await reader.ReadToEndAsync();
         }
+
+
+        public SyntaxHighlightingDefinitionSet RegexSyntaxHighlightingDefinitionSet { get; }
 
 
         public void RestartApp()

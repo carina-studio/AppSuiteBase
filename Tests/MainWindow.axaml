@@ -523,6 +523,9 @@
 
 							<appControls:ListBox DoubleClickOnItem="OnListBoxDoubleClickOnItem" HorizontalAlignment="Left" Width="150" Margin="5" SelectionMode="Multiple">
 								<ListBoxItem>
+									<appControls:SyntaxHighlightingTextBlock DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="[0-9]abc(123)"/>
+								</ListBoxItem>
+								<ListBoxItem>
 									<Grid ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch">
 										<TextBlock Text="Item 1" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
 										<appControls:Image Classes="Icon" Grid.Column="1" Height="14" VerticalAlignment="Center" Width="14">

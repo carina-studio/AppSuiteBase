@@ -50,7 +50,7 @@
 
 	<!-- RegexSyntaxHighlighting -->
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Alternation">#404040</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Brackets">#665300</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Brackets">#b34c00</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterClasses">#0000ff</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterRanges">#008855</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.EscapeCharacters">#ff0000</SolidColorBrush>
