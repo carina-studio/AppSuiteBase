@@ -500,6 +500,7 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				menu.ItemListBox.Let(it =>
 				{
+					Grid.SetIsSharedSizeScope(it, true);
 					it.DoubleClickOnItem += (_, e) =>
 					{
 						menu.Close();
