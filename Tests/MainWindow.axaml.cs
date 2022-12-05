@@ -51,6 +51,7 @@ namespace CarinaStudio.AppSuite.Tests
         string? selectedImageId;
         readonly Avalonia.Controls.TextBlock syntaxHighlightingRefTextBlock;
         readonly SyntaxHighlightingTextBlock syntaxHighlightingTextBlock;
+        readonly SyntaxHighlightingTextBox syntaxHighlightingTextBox;
         readonly ObservableList<TabItem> tabItems = new();
 
 
@@ -148,9 +149,15 @@ namespace CarinaStudio.AppSuite.Tests
                 //
             });
 
-            this.Get<SyntaxHighlightingTextBox>("syntaxHighlightingTextBox").Also(it =>
+            this.syntaxHighlightingTextBox = this.Get<SyntaxHighlightingTextBox>(nameof(syntaxHighlightingTextBox)).Also(it =>
             {
-                it.DefinitionSet = RegexSyntaxHighlighting.CreateDefinitionSet(this.Application);
+                it.DefinitionSet = new SyntaxHighlightingDefinitionSet("").Also(it =>
+                {
+                    it.TokenDefinitions.Add(new()
+                    {
+                        Foreground = Brushes.Red,
+                    });
+                });
             });
 
             var tabControl = this.FindControl<TabControl>("tabControl").AsNonNull();
@@ -355,6 +362,15 @@ namespace CarinaStudio.AppSuite.Tests
 
         public async void OpenFileForSyntaxHighlightingTextBlocks()
         {
+            this.syntaxHighlightingTextBox.DefinitionSet!.TokenDefinitions[0].Let(it =>
+            {
+                if (it.Pattern == null)
+                    it.Pattern = new("a");
+                else
+                    it.Pattern = null;
+            });
+            return;
+
             using var stream = await (await this.StorageProvider.OpenFilePickerAsync(new()
             {
                 //

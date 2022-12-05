@@ -24,6 +24,8 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
 
     // Fields.
     InlineCollection? attachedInlines;
+    bool isArranging;
+    bool isMeasuring;
     readonly SyntaxHighlighter syntaxHighlighter = new();
 
 
@@ -89,21 +91,33 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
                 this.RaisePropertyChanged(DefinitionSetProperty, (SyntaxHighlightingDefinitionSet?)e.OldValue,  (SyntaxHighlightingDefinitionSet?)e.NewValue);
         };
         this.syntaxHighlighter.TextLayoutInvalidated += (_, e) =>
-            this.InvalidateTextLayout();
+        {
+            if (!this.isArranging && !this.isMeasuring)
+                this.InvalidateTextLayout();
+            this.InvalidateVisual();
+        };
     }
 
 
     /// <inheritdoc/>
     protected override Size ArrangeOverride(Size availableSize)
     {
-        var padding = this.Padding;
-        this.syntaxHighlighter.MaxWidth = double.IsInfinity(availableSize.Width)
-            ? double.PositiveInfinity
-            : Math.Max(0, availableSize.Width - padding.Left - padding.Right);
-        this.syntaxHighlighter.MaxHeight = double.IsInfinity(availableSize.Height)
-            ? double.PositiveInfinity
-            : Math.Max(0, availableSize.Height - padding.Top - padding.Bottom);
-        return base.ArrangeOverride(availableSize);
+        this.isArranging = true;
+        try
+        {
+            var padding = this.Padding;
+            this.syntaxHighlighter.MaxWidth = double.IsInfinity(availableSize.Width)
+                ? double.PositiveInfinity
+                : Math.Max(0, availableSize.Width - padding.Left - padding.Right);
+            this.syntaxHighlighter.MaxHeight = double.IsInfinity(availableSize.Height)
+                ? double.PositiveInfinity
+                : Math.Max(0, availableSize.Height - padding.Top - padding.Bottom);
+            return base.ArrangeOverride(availableSize);
+        }
+        finally
+        {
+            this.isArranging = false;
+        }
     }
 
 
@@ -129,13 +143,21 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
     /// <inheritdoc/>
     protected override Size MeasureOverride(Size availableSize)
     {
-        var scale = LayoutHelper.GetLayoutScale(this);
-        var padding = LayoutHelper.RoundLayoutThickness(this.Padding, scale, scale);
-        var availableTextBounds = availableSize.Deflate(padding);
-        this.syntaxHighlighter.MaxWidth = availableTextBounds.Width;
-        this.syntaxHighlighter.MaxHeight = availableTextBounds.Height;
-        this._textLayout = null;
-        return this.TextLayout.Bounds.Inflate(padding).Size;
+        this.isMeasuring = true;
+        try
+        {
+            var scale = LayoutHelper.GetLayoutScale(this);
+            var padding = LayoutHelper.RoundLayoutThickness(this.Padding, scale, scale);
+            var availableTextBounds = availableSize.Deflate(padding);
+            this.syntaxHighlighter.MaxWidth = availableTextBounds.Width;
+            this.syntaxHighlighter.MaxHeight = availableTextBounds.Height;
+            this._textLayout = null;
+            return this.TextLayout.Bounds.Inflate(padding).Size;
+        }
+        finally
+        {
+            this.isMeasuring = false;
+        }
     }
 
 

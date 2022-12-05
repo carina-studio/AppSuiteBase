@@ -756,7 +756,7 @@
 					</TabItem.Header>
 					<ScrollViewer Background="{DynamicResource Brush/Window.WorkingArea.Background}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
 						<StackPanel Margin="5">
-							<Button Command="{Binding $parent[Window].OpenFileForSyntaxHighlightingTextBlocks}" Content="Open file" IsVisible="False"/>
+							<Button Command="{Binding $parent[Window].OpenFileForSyntaxHighlightingTextBlocks}" Content="Open file"/>
 							<appControls:SyntaxHighlightingTextBox Name="syntaxHighlightingTextBox" HorizontalAlignment="Stretch"/>
 							<Separator Background="{x:Null}" Height="5"/>
 							<Border BorderBrush="Blue" BorderThickness="1" HorizontalAlignment="Stretch">

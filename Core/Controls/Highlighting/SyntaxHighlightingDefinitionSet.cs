@@ -28,6 +28,7 @@ public sealed class SyntaxHighlightingDefinitionSet
         this.Name = name;
         this.spanDefinitions.CollectionChanged += this.OnSpanDefinitionsChanged;
         this.tokenDefinitions.CollectionChanged += this.OnTokenDefinitionsChanged;
+        this.attachedTokenDefinitions[this] = new();
     }
 
 

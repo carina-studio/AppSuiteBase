@@ -19,6 +19,8 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
 
     // Fields.
     readonly ScheduledAction correctCaretIndexAction;
+    bool isArranging;
+    bool isMeasuring;
     readonly SyntaxHighlighter syntaxHighlighter = new()
     {
         TextTrimming = Avalonia.Media.TextTrimming.None,
@@ -89,16 +91,29 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
                 this.RaisePropertyChanged(DefinitionSetProperty, new((SyntaxHighlightingDefinitionSet?)e.OldValue), new((SyntaxHighlightingDefinitionSet?)e.NewValue));
         };
         this.syntaxHighlighter.TextLayoutInvalidated += (_, e) =>
-            this.InvalidateTextLayout();
+        {
+            if (!this.isArranging && !this.isMeasuring)
+                this.InvalidateTextLayout();
+            if (!this.IsFocused)
+                this.InvalidateVisual();
+        };
     }
 
 
     /// <inheritdoc/>
     protected override Size ArrangeOverride(Size availableSize)
     {
-        this.syntaxHighlighter.MaxWidth = availableSize.Width;
-        this.syntaxHighlighter.MaxHeight = availableSize.Height;
-        return base.ArrangeOverride(availableSize);
+        this.isArranging = true;
+        try
+        {
+            this.syntaxHighlighter.MaxWidth = availableSize.Width;
+            this.syntaxHighlighter.MaxHeight = availableSize.Height;
+            return base.ArrangeOverride(availableSize);
+        }
+        finally
+        {
+            this.isArranging = false;
+        }
     }
 
 
@@ -124,8 +139,16 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
     /// <inheritdoc/>
     protected override Size MeasureOverride(Size availableSize)
     {
-        this.syntaxHighlighter.MaxWidth = availableSize.Width;
-        this.syntaxHighlighter.MaxHeight = availableSize.Height;
-        return base.MeasureOverride(availableSize);
+        this.isMeasuring = true;
+        try
+        {
+            this.syntaxHighlighter.MaxWidth = availableSize.Width;
+            this.syntaxHighlighter.MaxHeight = availableSize.Height;
+            return base.MeasureOverride(availableSize);
+        }
+        finally
+        {
+            this.isMeasuring = false;
+        }
     }
 }
