@@ -67,7 +67,7 @@
 	<Color x:Key="Color/StatusBar.Background.Inactive">#8a8a8a</Color>
 
 	<!-- StringInterpolationFormatSyntaxHighlighting -->
-	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.StringFormat">#ff0000</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.StringFormat">#b34c00</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.VariableExpression">#008855</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.Variables">#0000ff</SolidColorBrush>
 
