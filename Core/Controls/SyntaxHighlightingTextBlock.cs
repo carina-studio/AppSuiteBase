@@ -1,5 +1,4 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Layout;
 using Avalonia.Media.TextFormatting;
@@ -25,6 +24,7 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
     // Fields.
     InlineCollection? attachedInlines;
     bool isArranging;
+    bool isCreatingTextLayout;
     bool isMeasuring;
     readonly SyntaxHighlighter syntaxHighlighter = new();
 
@@ -35,20 +35,6 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
     public SyntaxHighlightingTextBlock()
     {
         // attach to self members
-        this.GetObservable(FlowDirectionProperty).Subscribe(direction =>
-            this.syntaxHighlighter.FlowDirection = direction);
-        this.GetObservable(FontFamilyProperty).Subscribe(fontFamily =>
-            this.syntaxHighlighter.FontFamily = fontFamily);
-        this.GetObservable(FontSizeProperty).Subscribe(fontSize =>
-            this.syntaxHighlighter.FontSize = fontSize);
-        this.GetObservable(FontStretchProperty).Subscribe(stretch =>
-            this.syntaxHighlighter.FontStretch = stretch);
-        this.GetObservable(FontStyleProperty).Subscribe(fontStyle =>
-            this.syntaxHighlighter.FontStyle = fontStyle);
-        this.GetObservable(FontWeightProperty).Subscribe(fontWeight =>
-            this.syntaxHighlighter.FontWeight = fontWeight);
-        this.GetObservable(ForegroundProperty).Subscribe(brush =>
-            this.syntaxHighlighter.Foreground = brush);
         this.GetObservable(InlinesProperty).Subscribe(inlines =>
         {
             if (this.attachedInlines != null)
@@ -64,22 +50,8 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
                 }
             }
         });
-        this.GetObservable(LetterSpacingProperty).Subscribe(spacing =>
-            this.syntaxHighlighter.LetterSpacing = spacing);
-        this.GetObservable(LineHeightProperty).Subscribe(height =>
-            this.syntaxHighlighter.LineHeight = height);
-        this.GetObservable(MaxLinesProperty).Subscribe(maxLines =>
-            this.syntaxHighlighter.MaxLines = maxLines);
         this.GetObservable(TextProperty).Subscribe(text =>
             this.syntaxHighlighter.Text = text);
-        this.GetObservable(TextAlignmentProperty).Subscribe(alignment =>
-            this.syntaxHighlighter.TextAlignment = alignment);
-        this.GetObservable(TextDecorationsProperty).Subscribe(decorations =>
-            this.syntaxHighlighter.TextDecorations = decorations);
-        this.GetObservable(TextTrimmingProperty).Subscribe(trimming =>
-            this.syntaxHighlighter.TextTrimming = trimming);
-        this.GetObservable(TextWrappingProperty).Subscribe(wrapping =>
-            this.syntaxHighlighter.TextWrapping = wrapping);
         
         // attach to syntax highlighter
         this.syntaxHighlighter.PropertyChanged += (_, e) =>
@@ -90,7 +62,7 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
         };
         this.syntaxHighlighter.TextLayoutInvalidated += (_, e) =>
         {
-            if (!this.isArranging && !this.isMeasuring)
+            if (!this.isArranging && !this.isCreatingTextLayout && !this.isMeasuring)
                 this.InvalidateTextLayout();
             this.InvalidateVisual();
         };
@@ -124,7 +96,30 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
     {
         if (string.IsNullOrEmpty(text) || this.syntaxHighlighter.DefinitionSet == null)
             return base.CreateTextLayout(text);
-        return this.syntaxHighlighter.CreateTextLayout();
+        this.isCreatingTextLayout = true;
+        try
+        {
+            var syntaxHighlighter = this.syntaxHighlighter;
+            syntaxHighlighter.FlowDirection = this.FlowDirection;
+            syntaxHighlighter.FontFamily = this.FontFamily;
+            syntaxHighlighter.FontSize = this.FontSize;
+            syntaxHighlighter.FontStretch = this.FontStretch;
+            syntaxHighlighter.FontStyle = this.FontStyle;
+            syntaxHighlighter.FontWeight = this.FontWeight;
+            syntaxHighlighter.Foreground = this.Foreground;
+            syntaxHighlighter.LetterSpacing = this.LetterSpacing;
+            syntaxHighlighter.LineHeight = this.LineHeight;
+            syntaxHighlighter.MaxLines = this.MaxLines;
+            syntaxHighlighter.TextAlignment = this.TextAlignment;
+            syntaxHighlighter.TextDecorations = this.TextDecorations;
+            syntaxHighlighter.TextTrimming = this.TextTrimming;
+            syntaxHighlighter.TextWrapping = this.TextWrapping;
+            return syntaxHighlighter.CreateTextLayout();
+        }
+        finally
+        {
+            this.isCreatingTextLayout = false;
+        }
     }
 
 
@@ -168,6 +163,12 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
             throw new InvalidOperationException();
         }
     }
+
+
+    /// <summary>
+    /// Get <see cref="SyntaxHighlighter"/> used by the control.
+    /// </summary>
+    protected SyntaxHighlighter SyntaxHighlighter { get => this.syntaxHighlighter; }
 
 
     /// <inheritdoc/>

@@ -20,6 +20,7 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
     // Fields.
     readonly ScheduledAction correctCaretIndexAction;
     bool isArranging;
+    bool isCreatingTextLayout;
     bool isMeasuring;
     readonly SyntaxHighlighter syntaxHighlighter = new()
     {
@@ -42,26 +43,6 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         });
 
         // attach to self members
-        this.GetObservable(BackgroundProperty).Subscribe(brush =>
-            this.syntaxHighlighter.Background = brush);
-        this.GetObservable(FlowDirectionProperty).Subscribe(direction =>
-            this.syntaxHighlighter.FlowDirection = direction);
-        this.GetObservable(TextElement.FontFamilyProperty).Subscribe(fontFamily =>
-            this.syntaxHighlighter.FontFamily = fontFamily);
-        this.GetObservable(TextElement.FontSizeProperty).Subscribe(fontSize =>
-            this.syntaxHighlighter.FontSize = fontSize);
-        this.GetObservable(TextElement.FontStretchProperty).Subscribe(stretch =>
-            this.syntaxHighlighter.FontStretch = stretch);
-        this.GetObservable(TextElement.FontStyleProperty).Subscribe(fontStyle =>
-            this.syntaxHighlighter.FontStyle = fontStyle);
-        this.GetObservable(TextElement.FontWeightProperty).Subscribe(fontWeight =>
-            this.syntaxHighlighter.FontWeight = fontWeight);
-        this.GetObservable(TextElement.ForegroundProperty).Subscribe(brush =>
-            this.syntaxHighlighter.Foreground = brush);
-        this.GetObservable(LetterSpacingProperty).Subscribe(spacing =>
-            this.syntaxHighlighter.LetterSpacing = spacing);
-        this.GetObservable(LineHeightProperty).Subscribe(height =>
-            this.syntaxHighlighter.LineHeight = height);
         this.GetObservable(PreeditTextProperty).Subscribe(text =>
             this.syntaxHighlighter.PreeditText = text);
         this.GetObservable(SelectionEndProperty).Subscribe(end =>
@@ -78,10 +59,6 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         });
         this.GetObservable(TextProperty).Subscribe(text =>
             this.syntaxHighlighter.Text = text);
-        this.GetObservable(TextAlignmentProperty).Subscribe(alignment =>
-            this.syntaxHighlighter.TextAlignment = alignment);
-        this.GetObservable(TextWrappingProperty).Subscribe(wrapping =>
-            this.syntaxHighlighter.TextWrapping = wrapping);
         
         // attach to syntax highlighter
         this.syntaxHighlighter.PropertyChanged += (_, e) =>
@@ -92,10 +69,9 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         };
         this.syntaxHighlighter.TextLayoutInvalidated += (_, e) =>
         {
-            if (!this.isArranging && !this.isMeasuring)
+            if (!this.isArranging && !this.isCreatingTextLayout && !this.isMeasuring)
                 this.InvalidateTextLayout();
-            if (!this.IsFocused)
-                this.InvalidateVisual();
+            this.InvalidateVisual();
         };
     }
 
@@ -120,9 +96,29 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
     /// <inheritdoc/>
     protected override TextLayout CreateTextLayout()
     {
-        if (this.syntaxHighlighter.DefinitionSet != null)
-            return this.syntaxHighlighter.CreateTextLayout();
-        return base.CreateTextLayout();
+        var syntaxHighlighter = this.syntaxHighlighter;
+        if (syntaxHighlighter.DefinitionSet == null)
+            return base.CreateTextLayout();
+        this.isCreatingTextLayout = true;
+        try
+        {
+            syntaxHighlighter.FlowDirection = this.FlowDirection;
+            syntaxHighlighter.FontFamily = this.FontFamily;
+            syntaxHighlighter.FontSize = this.FontSize;
+            syntaxHighlighter.FontStretch = this.FontStretch;
+            syntaxHighlighter.FontStyle = this.FontStyle;
+            syntaxHighlighter.FontWeight = this.FontWeight;
+            syntaxHighlighter.Foreground = this.Foreground;
+            syntaxHighlighter.LetterSpacing = this.LetterSpacing;
+            syntaxHighlighter.LineHeight = this.LineHeight;
+            syntaxHighlighter.TextAlignment = this.TextAlignment;
+            syntaxHighlighter.TextWrapping = this.TextWrapping;
+            return syntaxHighlighter.CreateTextLayout();
+        }
+        finally
+        {
+            this.isCreatingTextLayout = false;
+        }
     }
 
 
@@ -151,4 +147,10 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
             this.isMeasuring = false;
         }
     }
+
+
+    /// <summary>
+    /// Get <see cref="SyntaxHighlighter"/> used by the control.
+    /// </summary>
+    protected SyntaxHighlighter SyntaxHighlighter { get => this.syntaxHighlighter; }
 }
