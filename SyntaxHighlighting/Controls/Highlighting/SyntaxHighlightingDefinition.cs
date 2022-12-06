@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Media;
 using System;
 using System.ComponentModel;
@@ -51,6 +52,8 @@ public abstract class SyntaxHighlightingDefinition : INotifyPropertyChanged
         {
             if (this.background == value)
                 return;
+            (this.background as AvaloniaObject)?.Let(it => it.PropertyChanged -= this.OnBrushPropertyChanged);
+            (value as AvaloniaObject)?.Let(it => it.PropertyChanged += this.OnBrushPropertyChanged);
             this.background = value;
             this.Validate();
             this.OnPropertyChanged(nameof(Background));
@@ -138,6 +141,8 @@ public abstract class SyntaxHighlightingDefinition : INotifyPropertyChanged
         {
             if (this.foreground == value)
                 return;
+            (this.foreground as AvaloniaObject)?.Let(it => it.PropertyChanged -= this.OnBrushPropertyChanged);
+            (value as AvaloniaObject)?.Let(it => it.PropertyChanged += this.OnBrushPropertyChanged);
             this.foreground = value;
             this.Validate();
             this.OnPropertyChanged(nameof(Foreground));
@@ -155,6 +160,16 @@ public abstract class SyntaxHighlightingDefinition : INotifyPropertyChanged
     /// Get name of definition.
     /// </summary>
     public string? Name { get; }
+
+
+    // Called when property of attached brush has been changed.
+    void OnBrushPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (sender == this.background)
+            this.OnPropertyChanged(nameof(Background));
+        else if (sender == this.foreground)
+            this.OnPropertyChanged(nameof(Foreground));
+    }
 
 
     /// <summary>

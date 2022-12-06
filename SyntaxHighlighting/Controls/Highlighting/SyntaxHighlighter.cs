@@ -171,6 +171,8 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             this.VerifyAccess();
             if (this.background == value)
                 return;
+            (this.background as AvaloniaObject)?.Let(it => it.PropertyChanged -= this.OnBrushPropertyChanged);
+            (value as AvaloniaObject)?.Let(it => it.PropertyChanged += this.OnBrushPropertyChanged);
             this.SetAndRaise(BackgroundProperty, ref this.background, value);
             this.InvalidateTextProperties();
         }
@@ -742,6 +744,8 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             this.VerifyAccess();
             if (this.foreground == value)
                 return;
+            (this.foreground as AvaloniaObject)?.Let(it => it.PropertyChanged -= this.OnBrushPropertyChanged);
+            (value as AvaloniaObject)?.Let(it => it.PropertyChanged += this.OnBrushPropertyChanged);
             this.SetAndRaise(ForegroundProperty, ref this.foreground, value);
             this.InvalidateTextProperties();
         }
@@ -874,6 +878,11 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     }
 
 
+    // Called when property of attached brush has been changed.
+    void OnBrushPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e) =>
+        this.InvalidateTextProperties();
+
+
     // Called when definition set changed.
     void OnDefinitionSetChanged(object? sender, EventArgs e) =>
         this.InvalidateTextProperties();
@@ -907,6 +916,8 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             this.VerifyAccess();
             if (this.selectionBackground == value)
                 return;
+            (this.selectionBackground as AvaloniaObject)?.Let(it => it.PropertyChanged -= this.OnBrushPropertyChanged);
+            (value as AvaloniaObject)?.Let(it => it.PropertyChanged += this.OnBrushPropertyChanged);
             this.SetAndRaise(SelectionBackgroundProperty, ref this.selectionBackground, value);
             if (this.selectionStart != this.selectionEnd)
                 this.InvalidateTextProperties();
@@ -943,6 +954,8 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             this.VerifyAccess();
             if (this.selectionForeground == value)
                 return;
+            (this.selectionForeground as AvaloniaObject)?.Let(it => it.PropertyChanged -= this.OnBrushPropertyChanged);
+            (value as AvaloniaObject)?.Let(it => it.PropertyChanged += this.OnBrushPropertyChanged);
             this.SetAndRaise(SelectionForegroundProperty, ref this.selectionForeground, value);
             if (this.selectionStart != this.selectionEnd)
                 this.InvalidateTextProperties();
