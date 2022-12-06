@@ -540,6 +540,14 @@
 								<ListBoxItem>Item 4 Item 4 Item 4 Item 4 Item 4</ListBoxItem>
 							</appControls:ListBox>
 
+							<appControls:ListBox HorizontalAlignment="Left" Items="{Binding $parent[Window].StringItems}" Width="150" Margin="5" SelectionMode="Multiple">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<appControls:SyntaxHighlightingTextBlock DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="{Binding}"/>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</appControls:ListBox>
+
 							<ComboBox HorizontalAlignment="Left" Width="200" Margin="5">
 								<ComboBoxItem HorizontalAlignment="Stretch">
 									<Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Left" VerticalAlignment="Center">

@@ -35,8 +35,6 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
     public SyntaxHighlightingTextBlock()
     {
         // attach to self members
-        this.GetObservable(BackgroundProperty).Subscribe(brush =>
-            this.syntaxHighlighter.Background = brush);
         this.GetObservable(FlowDirectionProperty).Subscribe(direction =>
             this.syntaxHighlighter.FlowDirection = direction);
         this.GetObservable(FontFamilyProperty).Subscribe(fontFamily =>
