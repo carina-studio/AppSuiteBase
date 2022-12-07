@@ -630,6 +630,7 @@ namespace CarinaStudio.AppSuite.Controls
 						break;
 					case Key.Enter:
 						if (this.escapedCharactersPopup?.IsOpen == true
+							|| this.groupingConstructsPopup?.IsOpen == true
 							|| this.predefinedGroupsPopup?.IsOpen == true)
 						{
 							isKeyForAssistentPopup = true;
