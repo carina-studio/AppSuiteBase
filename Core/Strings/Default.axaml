@@ -124,6 +124,7 @@
 	<sys:String x:Key="String/Common.Add.WithDialog">Add…</sys:String>
 	<sys:String x:Key="String/Common.Administrator">Administrator</sys:String>
 	<sys:String x:Key="String/Common.Agree">Agree</sys:String>
+	<sys:String x:Key="String/Common.BuiltIn">Built-in</sys:String>
 	<sys:String x:Key="String/Common.Cancel">Cancel</sys:String>
 	<sys:String x:Key="String/Common.Clear">Clear</sys:String>
 	<sys:String x:Key="String/Common.Close">Close</sys:String>

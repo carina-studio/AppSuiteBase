@@ -123,6 +123,7 @@
 	<sys:String x:Key="String/Common.Add.WithDialog">加入…</sys:String>
 	<sys:String x:Key="String/Common.Administrator">系統管理員</sys:String>
 	<sys:String x:Key="String/Common.Agree">同意</sys:String>
+	<sys:String x:Key="String/Common.BuiltIn">內建</sys:String>
 	<sys:String x:Key="String/Common.Cancel">取消</sys:String>
 	<sys:String x:Key="String/Common.Clear">清除</sys:String>
 	<sys:String x:Key="String/Common.Close">關閉</sys:String>
