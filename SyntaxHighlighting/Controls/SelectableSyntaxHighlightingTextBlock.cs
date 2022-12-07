@@ -161,8 +161,7 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
             var availableTextBounds = availableSize.Deflate(padding);
             this.syntaxHighlighter.MaxWidth = availableTextBounds.Width;
             this.syntaxHighlighter.MaxHeight = availableTextBounds.Height;
-            this._textLayout = null;
-            return this.TextLayout.Bounds.Inflate(padding).Size;
+            return base.MeasureOverride(availableSize);
         }
         finally
         {
