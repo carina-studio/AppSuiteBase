@@ -32,6 +32,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<AvaloniaResource Include="Resources/Fonts/IBMPlexMono-Bold.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/IBMPlexMono-BoldItalic.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/IBMPlexMono-Italic.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/IBMPlexMono-Light.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/IBMPlexMono-LightItalic.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/IBMPlexMono-Regular.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/Roboto-Bold.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/Roboto-BoldItalic.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/Roboto-Italic.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/Roboto-Light.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/Roboto-LightItalic.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/Roboto-Regular.ttf" />
 		<AvaloniaResource Include="Resources/Fonts/RobotoMono-Bold.ttf" />
 		<AvaloniaResource Include="Resources/Fonts/RobotoMono-BoldItalic.ttf" />
 		<AvaloniaResource Include="Resources/Fonts/RobotoMono-Italic.ttf" />

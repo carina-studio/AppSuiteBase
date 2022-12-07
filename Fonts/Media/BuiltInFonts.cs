@@ -2,7 +2,6 @@ using Avalonia.Media;
 using CarinaStudio.Collections;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Media;
 
@@ -12,7 +11,10 @@ namespace CarinaStudio.AppSuite.Media;
 public static class BuiltInFonts
 {
     // Fields.
+    static readonly Uri baseResourceUri = new($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}/Resources/Fonts/");
     static IList<FontFamily>? fontFamilies;
+    static FontFamily? ibmPlexMono;
+    static FontFamily? roboto;
     static FontFamily? robotoMono;
     static FontFamily? sourceCodePro;
 
@@ -20,35 +22,35 @@ public static class BuiltInFonts
     /// <summary>
     /// Get all built-in font families.
     /// </summary>
-    public static IList<FontFamily> FontFamilies { get => fontFamilies ?? throw new InvalidOperationException(); }
+    public static IList<FontFamily> FontFamilies { get => fontFamilies ?? ListExtensions.AsReadOnly(new FontFamily[]
+    {
+        IBMPlexMono,
+        Roboto,
+        RobotoMono,
+        SourceCodePro,
+    }).Also(it => fontFamilies = it); }
 
 
     /// <summary>
-    /// Initialize asynchronously.
+    /// IBM Plex Mono.
     /// </summary>
-    /// <returns>Task of iitialization.</returns>
-    public static Task InitializeAsync()
-    {
-        var baseUri = new Uri($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}/Resources/Fonts/");
-        robotoMono = new(baseUri, "#Roboto Mono");
-        sourceCodePro = new(baseUri, "#Source Code Pro");
-        fontFamilies = ListExtensions.AsReadOnly(new FontFamily[]
-        {
-            robotoMono,
-            sourceCodePro,
-        });
-        return Task.CompletedTask;
-    }
+    public static FontFamily IBMPlexMono { get => ibmPlexMono ?? new FontFamily(baseResourceUri, "#IBM Plex Mono").Also(it => ibmPlexMono = it); }
+
+
+    /// <summary>
+    /// Roboto.
+    /// </summary>
+    public static FontFamily Roboto { get => roboto ?? new FontFamily(baseResourceUri, "#Roboto").Also(it => roboto = it); }
 
 
     /// <summary>
     /// Roboto Mono.
     /// </summary>
-    public static FontFamily RobotoMono { get => robotoMono ?? throw new InvalidOperationException(); }
+    public static FontFamily RobotoMono { get => robotoMono ?? new FontFamily(baseResourceUri, "#Roboto Mono").Also(it => robotoMono = it); }
 
 
     /// <summary>
     /// Source Code Pro.
     /// </summary>
-    public static FontFamily SourceCodePro { get => sourceCodePro ?? throw new InvalidOperationException(); }
+    public static FontFamily SourceCodePro { get => sourceCodePro ?? new FontFamily(baseResourceUri, "#Source Code Pro").Also(it => sourceCodePro = it); }
 }

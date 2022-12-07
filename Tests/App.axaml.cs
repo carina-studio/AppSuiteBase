@@ -106,9 +106,6 @@ namespace CarinaStudio.AppSuite.Tests
             await base.OnPrepareStartingAsync();
             this.UpdateSplashWindowProgress(0.4);
 
-            await Media.BuiltInFonts.InitializeAsync();
-            this.UpdateSplashWindowProgress(0.5);
-
             await Controls.SyntaxHighlighting.InitializeAsync(this);
             this.UpdateSplashWindowProgress(0.7);
 
