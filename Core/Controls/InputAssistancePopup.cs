@@ -9,7 +9,7 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// Popup for input assistance.
 /// </summary>
-class InputAssistancePopup : Popup
+public class InputAssistancePopup : Popup
 {
     /// <summary>
     /// Initialize new <see cref="InputAssistancePopup"/> instance.

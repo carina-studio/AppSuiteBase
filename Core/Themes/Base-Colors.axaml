@@ -167,17 +167,6 @@
 	<SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePointerOver" Color="{DynamicResource SystemAccentColorLight1}" />
 	<SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePressed" Color="{DynamicResource SystemAccentColorDark1}" />
 
-	<!-- RegexSyntaxHighlighting -->
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Alternation">#aaaaaa</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Anchors">#ff40d0</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Brackets">#ffe800</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterClasses">#389edb</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterRanges">#00ccaf</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.EscapeCharacters">#ddb974</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Quantifiers">#91cf7c</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.SpecialCharacters">#ff40d0</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.UnicodeCategories">#00ccaf</SolidColorBrush>
-
 	<!-- RepeatButton -->
 	<StaticResourceExtension x:Key="RepeatButtonBackground" ResourceKey="ButtonBackground"/>
 	<StaticResourceExtension x:Key="RepeatButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
@@ -194,10 +183,6 @@
 
 	<!-- ScrollViewer -->
 	<SolidColorBrush x:Key="ScrollViewerScrollBarsSeparatorBackground" Color="Transparent"/>
-
-	<!-- SelectableSyntaxHighlightingTextBlock -->
-	<SolidColorBrush x:Key="Brush/SelectableSyntaxHighlightingTextBlock.Selection.Background" Color="{DynamicResource SystemAccentColor}" />
-	<StaticResource x:Key="Brush/SelectableSyntaxHighlightingTextBlock.Selection.Foreground" ResourceKey="TextControlForeground" />
 
 	<!-- SelectableTextBlock -->
 	<SolidColorBrush x:Key="Brush/SelectableTextBlock.Selection.Background" Color="{DynamicResource SystemAccentColor}" Opacity="0.44" />
@@ -220,13 +205,6 @@
 	<SolidColorBrush x:Key="Brush/StatusBar.Foreground" Color="{DynamicResource Color/StatusBar.Foreground}"/>
 	<SolidColorBrush x:Key="Brush/StatusBar.Foreground.Disabled" Color="{DynamicResource Color/StatusBar.Foreground.Disabled}"/>
 	<SolidColorBrush x:Key="Brush/StatusBar.ToggleButton.Background.Checked" Color="{DynamicResource Color/StatusBar.ToggleButton.Background.Checked}"/>
-
-	<!-- StringInterpolationFormatSyntaxHighlighting -->
-	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.Alignment">#ff40d0</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.SpecialTokens">#ff40d0</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.StringFormat">#ddb974</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.VariableExpression">#afcfa4</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.Variables">#389edb</SolidColorBrush>
 	
 	<!-- TabControl -->
 	<SolidColorBrush x:Key="Brush/TabControl.TabStrip.Border" Color="{DynamicResource Color/TabControl.TabStrip.Border}"/>

@@ -75,6 +75,7 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		public RegexTextBox()
 		{
+			SyntaxHighlighting.VerifyInitialization();
 			this.PseudoClasses.Add(":regexTextBox");
 			this.filteredPredefinedGroups.CollectionChanged += this.OnFilteredPredefinedGroupChanged;
 			this.predefinedGroups.CollectionChanged += this.OnPredefinedGroupChanged;

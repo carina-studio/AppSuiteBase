@@ -48,28 +48,11 @@
     <SolidColorBrush x:Key="ObjectTextBoxBackgroundInvalid" Color="#ffcccc"/>
     <SolidColorBrush x:Key="ObjectTextBoxBackgroundInvalidPointerOver" Color="#ffd9d9"/>
 
-	<!-- RegexSyntaxHighlighting -->
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Alternation">#404040</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Brackets">#b34c00</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterClasses">#0000ff</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterRanges">#008855</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.EscapeCharacters">#ff0000</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Quantifiers">#008855</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.UnicodeCategories">#00b1cc</SolidColorBrush>
-
-	<!-- SelectableSyntaxHighlightingTextBlock -->
-	<StaticResource x:Key="Brush/SelectableSyntaxHighlightingTextBlock.Selection.Foreground" ResourceKey="SystemControlHighlightAltAltHighBrush" />
-
 	<!-- Separator -->
 	<Color x:Key="Color/Separator.Background">#4f000000</Color>
 
 	<!-- StatusBar -->
 	<Color x:Key="Color/StatusBar.Background.Inactive">#8a8a8a</Color>
-
-	<!-- StringInterpolationFormatSyntaxHighlighting -->
-	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.StringFormat">#b34c00</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.VariableExpression">#008855</SolidColorBrush>
-	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.Variables">#0000ff</SolidColorBrush>
 
 	<!-- TabControl -->
 	<Color x:Key="Color/TabControl.TabStrip.Border">#20000000</Color>

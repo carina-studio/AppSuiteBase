@@ -1,0 +1,24 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:sys="using:System">
+
+	<!-- GroupingConstruct -->
+	<sys:String x:Key="String/GroupingConstruct.NamedGroup">具名群組</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.NoncapturingGroup">不具名群組 (不擷取內容)</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthNegativeLookaheadAssertion">向後環顧且不符合 (Negative Lookahead)</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthNegativeLookbehindAssertion">向前環顧且不符合 (Negative Lookbehind)</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthPositiveLookaheadAssertion">向後環顧且符合 (Positive Lookahead)</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthPositiveLookbehindAssertion">向前環顧且符合 (Positive Lookbehind)</sys:String>
+
+	<!-- RegexTextBox -->
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.b">字詞邊界</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.B">非字詞邊界</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.d">十進位數字</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.D">非十進位數字</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.s">空白字元</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.S">非空白字元</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.w">一般文字字元</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.W">非一般文字字元</sys:String>
+	<sys:String x:Key="String/RegexTextBox.Watermark">正規表示式</sys:String>
+	
+</ResourceDictionary>

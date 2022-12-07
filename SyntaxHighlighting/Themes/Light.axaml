@@ -1,0 +1,26 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<!-- RegexSyntaxHighlighting -->
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Alternation">#404040</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Anchors">#ff40d0</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Brackets">#b34c00</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterClasses">#0000ff</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterRanges">#008855</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.EscapeCharacters">#ff0000</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Quantifiers">#008855</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.SpecialCharacters">#ff40d0</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.UnicodeCategories">#00b1cc</SolidColorBrush>
+
+	<!-- SelectableSyntaxHighlightingTextBlock -->
+	<SolidColorBrush x:Key="Brush/SelectableSyntaxHighlightingTextBlock.Selection.Background" Color="{DynamicResource SystemAccentColor}" />
+	<StaticResource x:Key="Brush/SelectableSyntaxHighlightingTextBlock.Selection.Foreground" ResourceKey="SystemControlHighlightAltAltHighBrush" />
+
+	<!-- StringInterpolationFormatSyntaxHighlighting -->
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.Alignment">#ff40d0</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.SpecialTokens">#ff40d0</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.StringFormat">#b34c00</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.VariableExpression">#008855</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.Variables">#0000ff</SolidColorBrush>
+	
+</ResourceDictionary>

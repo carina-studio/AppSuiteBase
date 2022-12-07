@@ -25,6 +25,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Core\Core.csproj" />
 		<ProjectReference Include="..\Fonts\Fonts.csproj" />
+		<ProjectReference Include="..\SyntaxHighlighting\SyntaxHighlighting.csproj" />
 	</ItemGroup>
 
 	<ItemGroup Condition="$(TargetFramework.Contains('windows'))">

@@ -231,14 +231,6 @@
 	<sys:String x:Key="String/FileFormat.Text">Text File</sys:String>
 	<sys:String x:Key="String/FileFormat.Zip">ZIP File</sys:String>
 
-	<!-- GroupingConstruct -->
-	<sys:String x:Key="String/GroupingConstruct.NamedGroup">Named group</sys:String>
-	<sys:String x:Key="String/GroupingConstruct.NoncapturingGroup">Noncapturing group</sys:String>
-	<sys:String x:Key="String/GroupingConstruct.ZeroWidthNegativeLookaheadAssertion">Zero-width negative lookahead assertion</sys:String>
-	<sys:String x:Key="String/GroupingConstruct.ZeroWidthNegativeLookbehindAssertion">Zero-width negative lookbehind assertion</sys:String>
-	<sys:String x:Key="String/GroupingConstruct.ZeroWidthPositiveLookaheadAssertion">Zero-width positive lookahead assertion</sys:String>
-	<sys:String x:Key="String/GroupingConstruct.ZeroWidthPositiveLookbehindAssertion">Zero-width positive lookbehind assertion</sys:String>
-
 	<!-- IPAddressTextBox -->
 	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 or IPv6</sys:String>
 
@@ -269,17 +261,6 @@
 	<sys:String x:Key="String/ProductState.Activated">Activated</sys:String>
 	<sys:String x:Key="String/ProductState.Activating">Activating…</sys:String>
 	<sys:String x:Key="String/ProductState.Deactivated">Deactivated</sys:String>
-
-	<!-- RegexTextBox -->
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.b">Word boundary</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.B">Non-word boundary</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.d">Decimal digit</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.D">Non-decimal digit</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.s">White space characters</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.S">Non-white space characters</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.w">Word characters</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.W">Non-word characters</sys:String>
-	<sys:String x:Key="String/RegexTextBox.Watermark">Regular Expression</sys:String>
 
 	<!-- ScriptLanguage -->
 	<sys:String x:Key="String/ScriptLanguage.CSharp">C# Script</sys:String>

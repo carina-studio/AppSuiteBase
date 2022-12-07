@@ -107,8 +107,11 @@ namespace CarinaStudio.AppSuite.Tests
             this.UpdateSplashWindowProgress(0.4);
 
             await Media.BuiltInFonts.InitializeAsync();
-
             this.UpdateSplashWindowProgress(0.5);
+
+            await Controls.SyntaxHighlighting.InitializeAsync(this);
+            this.UpdateSplashWindowProgress(0.7);
+
             await this.WaitForSplashWindowAnimationAsync();
 
             if (!this.IsRestoringMainWindowsRequested)

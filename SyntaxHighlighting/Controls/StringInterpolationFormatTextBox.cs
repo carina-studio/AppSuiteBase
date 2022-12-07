@@ -52,6 +52,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public StringInterpolationFormatTextBox()
         {
+			SyntaxHighlighting.VerifyInitialization();
 			this.PseudoClasses.Add(":stringInterpolationFormatTextBox");
             this.filteredPredefinedVars.CollectionChanged += this.OnFilteredPredefinedVarsChanged;
             this.InputVariableNameCommand = new Command<string>(this.InputVariableName);

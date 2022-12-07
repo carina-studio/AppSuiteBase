@@ -1,0 +1,115 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:sys="using:System"
+		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
+		xmlns:media="using:CarinaStudio.AppSuite.Media"
+		xmlns:presenters="using:CarinaStudio.AppSuite.Controls.Presenters">
+	
+	<!-- Resources -->
+	<Styles.Resources>
+
+		<!-- TextBox -->
+		<ControlTemplate x:Key="ControlTemplate/TextBox.WithSyntaxHighlighting" TargetType="{x:Type TextBox}">
+			<Panel>
+				<Border
+					Name="PART_BorderElement"
+					Background="{TemplateBinding Background}"
+					BorderBrush="{TemplateBinding BorderBrush}"
+					BorderThickness="{TemplateBinding BorderThickness}"
+					CornerRadius="{TemplateBinding CornerRadius}"
+					MinWidth="{TemplateBinding MinWidth}"
+					MinHeight="{TemplateBinding MinHeight}"/>
+
+				<Border
+					Margin="{TemplateBinding BorderThickness}">
+					<Grid ColumnDefinitions="Auto,*,Auto" >
+						<ContentPresenter Grid.Column="0"
+										Grid.ColumnSpan="1"
+										Content="{TemplateBinding InnerLeftContent}"/>
+						<DockPanel x:Name="PART_InnerDockPanel"
+								Grid.Column="1"
+								Grid.ColumnSpan="1"
+								Cursor="IBeam"
+								Margin="{TemplateBinding Padding}">
+							<TextBlock Name="PART_FloatingWatermark"
+										Foreground="{DynamicResource SystemAccentColor}"
+										FontSize="{TemplateBinding FontSize}"
+										IsVisible="False"
+										Text="{TemplateBinding Watermark}"
+										DockPanel.Dock="Top" />
+							<ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+											VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+											IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+											AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}">
+								<Panel>
+									<TextBlock Name="PART_Watermark"
+											Opacity="0.5"
+											Text="{TemplateBinding Watermark}"
+											TextAlignment="{TemplateBinding TextAlignment}"
+											TextWrapping="{TemplateBinding TextWrapping}"
+											IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+											HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+											VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+									<presenters:SyntaxHighlightingTextPresenter Name="PART_TextPresenter"
+													Text="{TemplateBinding Text, Mode=TwoWay}"
+													CaretIndex="{TemplateBinding CaretIndex}"
+													TextElement.FontFamily="{TemplateBinding FontFamily}"
+													TextElement.FontSize="{TemplateBinding FontSize}"
+													TextElement.FontStyle="{TemplateBinding FontStyle}"
+													TextElement.FontWeight="{TemplateBinding FontWeight}"
+													TextElement.Foreground="{TemplateBinding Foreground}"
+													SelectionStart="{TemplateBinding SelectionStart}"
+													SelectionEnd="{TemplateBinding SelectionEnd}"
+													TextAlignment="{TemplateBinding TextAlignment}"
+													TextWrapping="{TemplateBinding TextWrapping}"
+													LineHeight="{TemplateBinding LineHeight}"
+													LetterSpacing="{TemplateBinding LetterSpacing}"
+													PasswordChar="{TemplateBinding PasswordChar}"
+													RevealPassword="{TemplateBinding RevealPassword}"
+													SelectionBrush="{TemplateBinding SelectionBrush}"
+													SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+													CaretBrush="{TemplateBinding CaretBrush}"
+													HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+													VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+								</Panel>
+							</ScrollViewer>
+						</DockPanel>
+						<ContentPresenter Grid.Column="2" Grid.ColumnSpan="1" Content="{TemplateBinding InnerRightContent}"/>
+					</Grid>
+				</Border>
+			</Panel>
+		</ControlTemplate>
+
+	</Styles.Resources>
+
+	<!-- RegexTextBox -->
+	<Style Selector="TextBox:regexTextBox">
+		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
+		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
+	</Style>
+
+	<!-- SelectableSyntaxHighlightingTextBlock -->
+	<Style Selector="controls|SelectableSyntaxHighlightingTextBlock">
+		<Setter Property="Cursor" Value="IBeam"/>
+		<Setter Property="Foreground" Value="{DynamicResource TextControlForeground}"/>
+		<Setter Property="SelectionBrush" Value="{DynamicResource Brush/SelectableSyntaxHighlightingTextBlock.Selection.Background}"/>
+		<Setter Property="SelectionForegroundBrush" Value="{DynamicResource Brush/SelectableSyntaxHighlightingTextBlock.Selection.Foreground}"/>
+	</Style>
+
+	<!-- StringInterpolationFormatTextBox -->
+	<Style Selector="TextBox:stringInterpolationFormatTextBox">
+		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
+		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
+	</Style>
+
+	<!-- SyntaxHighlightingTextBlock -->
+	<Style Selector="controls|SyntaxHighlightingTextBlock">
+		<Setter Property="Foreground" Value="{DynamicResource TextControlForeground}"/>
+	</Style>
+
+	<!-- SyntaxHighlightingTextBox -->
+	<Style Selector="TextBox:syntaxHighlightingTextBox">
+		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
+	</Style>
+	
+</Styles>
