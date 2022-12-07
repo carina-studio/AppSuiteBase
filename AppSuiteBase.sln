@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Packaging", "Packaging\Pack
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Packaging.Tests", "Packaging.Tests\Packaging.Tests.csproj", "{B1CEBF3D-D1AA-4D15-A565-48295F6A8104}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonts", "Fonts\Fonts.csproj", "{B9C664F3-983F-4126-B9D2-D286426B6F16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxHighlighting", "SyntaxHighlighting\SyntaxHighlighting.csproj", "{936E88D7-3894-40E4-A2D8-28B9E40F9338}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{B1CEBF3D-D1AA-4D15-A565-48295F6A8104}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1CEBF3D-D1AA-4D15-A565-48295F6A8104}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1CEBF3D-D1AA-4D15-A565-48295F6A8104}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9C664F3-983F-4126-B9D2-D286426B6F16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9C664F3-983F-4126-B9D2-D286426B6F16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9C664F3-983F-4126-B9D2-D286426B6F16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9C664F3-983F-4126-B9D2-D286426B6F16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{936E88D7-3894-40E4-A2D8-28B9E40F9338}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{936E88D7-3894-40E4-A2D8-28B9E40F9338}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{936E88D7-3894-40E4-A2D8-28B9E40F9338}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{936E88D7-3894-40E4-A2D8-28B9E40F9338}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
