@@ -4,6 +4,8 @@ bin
 PublishProfiles
 Core/CarinaStudio.AppSuite.Core.xml
 Core.Tests/CarinaStudio.AppSuite.Core.Tests.xml
+Fonts/CarinaStudio.AppSuite.Fonts.xml
 Packaging/CarinaStudio.AppSuite.Packaging.xml
 Packages
+SyntaxHighlighting/CarinaStudio.AppSuite.SyntaxHighlighting.xml
 Tests/Properties/launchSettings.json
