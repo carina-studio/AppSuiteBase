@@ -27,7 +27,7 @@ public static class BuiltInFonts
     /// Initialize asynchronously.
     /// </summary>
     /// <returns>Task of iitialization.</returns>
-    internal static Task InitializeAsync()
+    public static Task InitializeAsync()
     {
         var baseUri = new Uri($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}/Resources/Fonts/");
         robotoMono = new(baseUri, "#Roboto Mono");

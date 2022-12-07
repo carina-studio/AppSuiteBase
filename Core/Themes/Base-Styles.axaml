@@ -1147,7 +1147,7 @@
 
 	<!-- RegexTextBox -->
 	<Style Selector="TextBox:regexTextBox">
-		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
+		<!--Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/-->
 		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
 	</Style>
 
@@ -1608,7 +1608,7 @@
 
 	<!-- StringInterpolationFormatTextBox -->
 	<Style Selector="TextBox:stringInterpolationFormatTextBox">
-		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
+		<!--Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/-->
 		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
 	</Style>
 

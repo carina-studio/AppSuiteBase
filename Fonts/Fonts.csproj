@@ -31,4 +31,19 @@
 		<ProjectReference Include="..\Core\Core.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<AvaloniaResource Include="Resources/Fonts/RobotoMono-Bold.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/RobotoMono-BoldItalic.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/RobotoMono-Italic.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/RobotoMono-Light.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/RobotoMono-LightItalic.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/RobotoMono-Regular.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/SourceCodePro-Bold.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/SourceCodePro-BoldItalic.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/SourceCodePro-Italic.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/SourceCodePro-Light.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/SourceCodePro-LightItalic.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/SourceCodePro-Regular.ttf" />
+	</ItemGroup>
+
 </Project>

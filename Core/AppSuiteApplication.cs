@@ -2601,12 +2601,6 @@ namespace CarinaStudio.AppSuite
             this.OnLoadDefaultStringResource()?.Let(it => this.Resources.MergedDictionaries.Add(it));
             this.UpdateStringResources();
 
-            // initialize built-in fonts
-            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
-            await Media.BuiltInFonts.InitializeAsync();
-            if (time > 0)
-                this.Logger.LogTrace("[Performance] Took {duration} ms to load built-in fonts", this.stopWatch.ElapsedMilliseconds - time);
-
             // get current system theme mode
             this.UpdateSystemThemeMode(false);
             
@@ -2621,7 +2615,7 @@ namespace CarinaStudio.AppSuite
             });
 
             // create base theme
-            time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
             this.baseTheme = new Avalonia.Themes.Fluent.FluentTheme(new Uri("avares://Avalonia.Themes.Fluent/"))
             {
                 Mode = this.EffectiveThemeMode switch
