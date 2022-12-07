@@ -429,10 +429,12 @@ namespace CarinaStudio.AppSuite.Tests
 
         public async void ShowMessageDialog()
         {
+            var icon = Enum.GetValues<MessageDialogIcon>().SelectRandomElement();
             var result = await new MessageDialog()
             {
                 Buttons = Enum.GetValues<MessageDialogButtons>().SelectRandomElement(),
-                Icon = Enum.GetValues<MessageDialogIcon>().SelectRandomElement(),
+                CustomIcon = icon == MessageDialogIcon.Custom ? this.FindResourceOrDefault<IImage>("Image/Icon.Star") : null,
+                Icon = icon,
                 Message = this.GetResourceObservable("String/MessageDialog.Message"),
             }.ShowDialog(this);
             _ = new MessageDialog()

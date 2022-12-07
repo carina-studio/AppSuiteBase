@@ -1,4 +1,5 @@
-﻿using CarinaStudio.Controls;
+﻿using Avalonia.Media;
+using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using System.Threading.Tasks;
 
@@ -7,10 +8,11 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// Message dialog.
 /// </summary>
-public class MessageDialog:CommonDialog<MessageDialogResult>
+public class MessageDialog : CommonDialog<MessageDialogResult>
 {
 	// Fields.
 	MessageDialogButtons buttons = MessageDialogButtons.OK;
+	IImage? customIcon;
 	MessageDialogResult? defaultResult;
 	bool? doNotAskOrShowAgain;
 	MessageDialogIcon icon = MessageDialogIcon.Information;
@@ -28,6 +30,21 @@ public class MessageDialog:CommonDialog<MessageDialogResult>
 			this.VerifyAccess();
 			this.VerifyShowing();
 			this.buttons = value;
+		}
+	}
+
+
+	/// <summary>
+	/// Get or set custom icon.
+	/// </summary>
+	public IImage? CustomIcon
+	{
+		get => this.customIcon;
+		set
+		{
+			this.VerifyAccess();
+			this.VerifyShowing();
+			this.customIcon = value;
 		}
 	}
 
@@ -99,11 +116,14 @@ public class MessageDialog:CommonDialog<MessageDialogResult>
 	/// <returns>Task to get result of dialog.</returns>
 	protected override async Task<MessageDialogResult> ShowDialogCore(Avalonia.Controls.Window? owner)
 	{
-		var dialog = new MessageDialogImpl();
-		dialog.Buttons = this.buttons;
-		dialog.DefaultResult = this.defaultResult;
-		dialog.DoNotAskOrShowAgain = this.doNotAskOrShowAgain;
-		dialog.Icon = this.icon;
+		var dialog = new MessageDialogImpl()
+		{
+			Buttons = this.buttons,
+			CustomIcon = this.icon == MessageDialogIcon.Custom ? this.customIcon : null,
+			DefaultResult = this.defaultResult,
+			DoNotAskOrShowAgain = this.doNotAskOrShowAgain,
+			Icon = this.icon,
+		};
 		using var messageBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.MessageProperty, this.message);
 		using var titleBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
 		var result = owner != null
@@ -164,6 +184,10 @@ public enum MessageDialogIcon
 	/// Error.
 	/// </summary>
 	Error,
+	/// <summary>
+	/// Custom.
+	/// </summary>
+	Custom,
 }
 
 

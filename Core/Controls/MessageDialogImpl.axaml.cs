@@ -78,6 +78,12 @@ partial class MessageDialogImpl : Dialog
 
 
 	/// <summary>
+	/// Custom icon.
+	/// </summary>
+	public IImage? CustomIcon { get; set; }
+
+
+	/// <summary>
 	/// Default dialog result.
 	/// </summary>
 	public MessageDialogResult? DefaultResult { get; set; }
@@ -165,8 +171,10 @@ partial class MessageDialogImpl : Dialog
 
 		// setup icon
 		var app = this.Application;
-		if (((Avalonia.Application)app).TryFindResource<IImage>($"Image/Icon.{this.Icon}.Colored", out var image))
-			this.SetValue<IImage?>(IconImageProperty, image);
+		if (this.Icon == MessageDialogIcon.Custom)
+			this.SetValue(IconImageProperty, this.CustomIcon);
+		else if (((Avalonia.Application)app).TryFindResource<IImage>($"Image/Icon.{this.Icon}.Colored", out var image))
+			this.SetValue(IconImageProperty, image);
 
 		// setup "do not ask again" UI
 		if (this.doNotAskOrShowAgain.HasValue)
