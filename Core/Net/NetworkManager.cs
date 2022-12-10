@@ -81,7 +81,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         // ping
         var isConnected = false;
         using var ping = new Ping();
-        var pingData = new byte[4];
+        var pingData = Array.Empty<byte>();
         foreach (var server in PingTargetAddresses)
         {
             try
