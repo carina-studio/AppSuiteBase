@@ -1002,7 +1002,7 @@ namespace CarinaStudio.AppSuite
 
             // [Workaround] Prevent tooltip stays open after changing focus to another window
             if (Platform.IsMacOS)
-                this.DefineExtraStylesForMacOS();
+                DefineExtraStylesForMacOS();
 
             // add to top styles
             this.Styles.Add(this.extraStyles);

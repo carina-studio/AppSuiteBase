@@ -1,21 +1,26 @@
 using Avalonia;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using Avalonia.Rendering;
 using Avalonia.VisualTree;
 using CarinaStudio.Collections;
+using CarinaStudio.Controls;
 using CarinaStudio.MacOS.AppKit;
+using CarinaStudio.MacOS.CoreGraphics;
 using CarinaStudio.MacOS.ObjectiveC;
 using ObjCSelector = CarinaStudio.MacOS.ObjectiveC.Selector;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
+using SkiaSharp;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace CarinaStudio.AppSuite;
 
-partial class AppSuiteApplication
+unsafe partial class AppSuiteApplication
 {
     // Application call-back for macOS.
     class AppSuiteAppDelegate : NSObject
@@ -114,12 +119,18 @@ partial class AppSuiteApplication
     // Fields.
     AppSuiteAppDelegate? macOSAppDelegate;
     NSDockTile? macOSAppDockTile;
-    NSProgressIndicator? macOSAppDockTileProgressBar;
+    SKBitmap? macOSAppDockTileOverlayBitmap;
+    byte[]? macOSAppDockTileOverlayBitmapBuffer;
+    GCHandle macOSAppDockTileOverlayBitmapBufferHandle;
+    CGDataProvider? macOSAppDockTileOverlayBitmapBufferProvider;
+    CGImage? macOSAppDockTileOverlayCGImage;
+    NSImageView? macOSAppDockTileOverlayImageView;
+    NSImage? macOSAppDockTileOverlayNSImage;
     ScheduledAction? updateMacOSAppDockTileProgressAction;
 
 
     // Define extra styles by code for macOS.
-    void DefineExtraStylesForMacOS()
+    static void DefineExtraStylesForMacOS()
     {
         var clickHandler = new EventHandler<RoutedEventArgs>((sender, e) =>
             Avalonia.Controls.ToolTip.SetIsOpen((Avalonia.Controls.Control)sender.AsNonNull(), false));
@@ -228,9 +239,9 @@ partial class AppSuiteApplication
         });
 
         /* [Workaround]
-            * Reduce UI frame rate to lower the CPU usage
-            * Please refer to https://github.com/AvaloniaUI/Avalonia/issues/4500
-            */
+         * Reduce UI frame rate to lower the CPU usage
+         * Please refer to https://github.com/AvaloniaUI/Avalonia/issues/4500
+         */
         var initWindowingSubSystem = builder.WindowingSubsystemInitializer;
         builder.UseWindowingSubsystem(() =>
         {
@@ -243,9 +254,15 @@ partial class AppSuiteApplication
     // Perform necessary setup for dock tile on macOS.
     void SetupMacOSAppDockTile()
     {
+        // check state
         if (Platform.IsNotMacOS || this.macOSAppDockTile != null)
             return;
+        
+        // get application
         var app = NSApplication.Shared;
+
+        // create NSView for dock tile
+        var dockTileSize = default(Size);
         this.macOSAppDockTile = app.DockTile.Also(dockTile =>
         {
             // prepare icon
@@ -258,23 +275,33 @@ partial class AppSuiteApplication
             }
 
             // setup dock tile
-            var dockTileSize = dockTile.Size;
-            dockTile.ContentView = new NSImageView(new(default, dockTileSize)).Also(imageView =>
+            dockTileSize = dockTile.Size.Let(it => new Size(it.Width, it.Height));
+            dockTile.ContentView = new NSImageView(new(0, 0, dockTileSize.Width, dockTileSize.Height)).Also(imageView =>
             {
                 imageView.Image = iconImage;
                 imageView.ImageAlignment = NSImageAlignment.Bottom;
                 imageView.ImageScaling = NSImageScaling.ProportionallyUpOrDown;
-                var progressBarWidth = (dockTileSize.Width * 0.58);
-                var progressBarBottom = dockTileSize.Height * 0.11;
-                this.macOSAppDockTileProgressBar = new NSProgressIndicator(new((dockTileSize.Width - progressBarWidth) / 2, progressBarBottom, progressBarWidth, 20)).Also(it =>
-                {
-                    it.IsHidden = true;
-                    it.IsIndeterminate = false;
-                    imageView.AddSubView(it);
-                });
+                this.macOSAppDockTileOverlayImageView = new(new(0, 0, dockTileSize.Width, dockTileSize.Height));
+                imageView.AddSubView(this.macOSAppDockTileOverlayImageView);
             });
             dockTile.Display();
         });
+
+        // create overlay bitmap
+        this.macOSAppDockTileOverlayBitmap = new(
+            (int)dockTileSize.Width, 
+            (int)dockTileSize.Height
+        );
+        this.macOSAppDockTileOverlayBitmapBuffer = new byte[this.macOSAppDockTileOverlayBitmap.ByteCount];
+        this.macOSAppDockTileOverlayBitmapBufferHandle = GCHandle.Alloc(this.macOSAppDockTileOverlayBitmapBuffer, GCHandleType.Pinned);
+        this.macOSAppDockTileOverlayBitmap.InstallPixels(new(
+            this.macOSAppDockTileOverlayBitmap.Width, 
+            this.macOSAppDockTileOverlayBitmap.Height, 
+            SKColorType.Rgba8888, 
+            SKAlphaType.Unpremul, 
+            SKColorSpace.CreateSrgb()
+        ), this.macOSAppDockTileOverlayBitmapBufferHandle.AddrOfPinnedObject());
+        this.macOSAppDockTileOverlayBitmapBufferProvider = new(this.macOSAppDockTileOverlayBitmapBuffer);
     }
 
 
@@ -316,28 +343,88 @@ partial class AppSuiteApplication
             case Controls.TaskbarIconProgressState.Normal:
             case Controls.TaskbarIconProgressState.Error:
             case Controls.TaskbarIconProgressState.Paused:
-                this.macOSAppDockTileProgressBar?.Let(it =>
+                // update overlay bitmap
+                new SKCanvas(this.macOSAppDockTileOverlayBitmap).Use(canvas =>
                 {
-                    var value = it.MaxValue * (window?.TaskbarIconProgress ?? 0);
-                    it.IsHidden = state != Controls.TaskbarIconProgressState.Normal && value < 0.1;
-                    it.DoubleValue = value;
-                    this.macOSAppDockTile?.Let(it =>
+                    // get info of dock tile
+                    var dockTileWidth = this.macOSAppDockTileOverlayBitmap!.Width;
+                    var dockTileHeight = this.macOSAppDockTileOverlayBitmap.Height;
+                    var progressBackgroundColor = this.FindResourceOrDefault<Color>("Color/AppSuiteApplication.MacOSDockTile.Progress.Background", Colors.Black);
+                    var progressForegroundColor = state switch
                     {
-                        it.BadgeLabel = state switch
-                        {
-                            Controls.TaskbarIconProgressState.Error => "✖",
-                            //Controls.TaskbarIconProgressState.Paused => "‖",
-                            _ => null,
-                        };
-                    });
+                        Controls.TaskbarIconProgressState.Error => this.FindResourceOrDefault<Color>("Color/AppSuiteApplication.MacOSDockTile.Progress.Foreground.Error", Colors.Red),
+                        Controls.TaskbarIconProgressState.Paused => this.FindResourceOrDefault<Color>("Color/AppSuiteApplication.MacOSDockTile.Progress.Foreground.Paused", Colors.Yellow),
+                        _ => this.FindResourceOrDefault<Color>("Color/AppSuiteApplication.MacOSDockTile.Progress.Foreground", Colors.LightGray),
+                    };
+
+                    // prepare progress background
+                    using var progressBackgroundPaint = new SKPaint()
+                    {
+                        Color = new(progressBackgroundColor.R, progressBackgroundColor.G, progressBackgroundColor.B, progressBackgroundColor.A),
+                        IsAntialias = true,
+                        Style = SKPaintStyle.Fill,
+                    };
+                    var progressBackgroundWidth = (int)(dockTileWidth * 0.65 + 0.5);
+                    var progressBackgroundHeight = (int)(dockTileHeight * 0.1 + 0.5);
+                    var progressBackgroundLeft = (dockTileWidth - progressBackgroundWidth) >> 1;
+                    var progressBackgroundTop = (int)(dockTileHeight * 0.7 + 0.5);
+                    var progressBackgroundRect = new SKRect(progressBackgroundLeft, progressBackgroundTop, progressBackgroundLeft + progressBackgroundWidth, progressBackgroundTop + progressBackgroundHeight);
+
+                    // prepare progress foreground
+                    var progress = window?.TaskbarIconProgress ?? 0;
+                    using var progressForegroundPaint = new SKPaint()
+                    {
+                        Color = new(progressForegroundColor.R, progressForegroundColor.G, progressForegroundColor.B, progressForegroundColor.A),
+                        IsAntialias = true,
+                        Style = SKPaintStyle.Fill,
+                    };
+                    var progressBorderWidth = (int)(progressBackgroundHeight * 0.15 + 0.5);
+                    var progressForegroundWidth = (int)((progressBackgroundWidth - progressBorderWidth - progressBorderWidth) * progress + 0.5);
+                    var progressForegroundHeight = progressBackgroundHeight - progressBorderWidth - progressBorderWidth;
+                    var progressForegroundLeft = progressBackgroundLeft + progressBorderWidth;
+                    var progressForegroundTop = progressBackgroundTop + progressBorderWidth;
+                    var progressForegroundRect = new SKRect(progressForegroundLeft, progressForegroundTop, progressForegroundLeft + progressForegroundWidth, progressForegroundTop + progressForegroundHeight);
+
+                    // clear buffer
+                    canvas.Clear(new(0, 0, 0, 0));
+
+                    // draw progress
+                    canvas.DrawRoundRect(new(progressBackgroundRect, progressBackgroundHeight / 2f), progressBackgroundPaint);
+                    canvas.DrawRoundRect(new(progressForegroundRect, progressForegroundHeight / 2f), progressForegroundPaint);
                 });
+
+                // create new image for overlay
+                this.macOSAppDockTileOverlayImageView!.Image = null;
+                this.macOSAppDockTileOverlayNSImage?.Release();
+                this.macOSAppDockTileOverlayCGImage?.Release();
+                this.macOSAppDockTileOverlayCGImage = new CGImage(
+                    this.macOSAppDockTileOverlayBitmap!.Width, 
+                    this.macOSAppDockTileOverlayBitmap.Height, 
+                    CGImagePixelFormatInfo.Packed, 
+                    8, 
+                    CGImageByteOrderInfo.ByteOrderDefault, 
+                    this.macOSAppDockTileOverlayBitmap.RowBytes, 
+                    CGImageAlphaInfo.AlphaLast, 
+                    this.macOSAppDockTileOverlayBitmapBufferProvider!,
+                    CGColorSpace.SRGB
+                );
+                
+                // show overlay image
+                this.macOSAppDockTileOverlayNSImage = NSImage.FromCGImage(this.macOSAppDockTileOverlayCGImage);
+                this.macOSAppDockTileOverlayImageView!.Image = this.macOSAppDockTileOverlayNSImage;
                 break;
             default:
-                this.macOSAppDockTileProgressBar?.Let(it =>
+                if (this.macOSAppDockTileOverlayNSImage != null)
                 {
-                    it.IsHidden = true;
-                    it.DoubleValue = 0;
-                });
+                    this.macOSAppDockTileOverlayImageView!.Image = null;
+                    this.macOSAppDockTileOverlayNSImage.Release();
+                    this.macOSAppDockTileOverlayNSImage = null;
+                }
+                if (this.macOSAppDockTileOverlayCGImage != null)
+                {
+                    this.macOSAppDockTileOverlayCGImage.Release();
+                    this.macOSAppDockTileOverlayCGImage = null;
+                }
                 this.macOSAppDockTile?.Let(it =>
                     it.BadgeLabel = null);
                 break;
