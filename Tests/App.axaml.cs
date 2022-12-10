@@ -104,6 +104,8 @@ namespace CarinaStudio.AppSuite.Tests
 				this.externalDependencies.Add(new ExecutableExternalDependency(this, "XRandR", ExternalDependencyPriority.Optional, "xrandr", new Uri("https://www.x.org/wiki/Projects/XRandR/"), new Uri("https://command-not-found.com/xrandr")));
             
             await base.OnPrepareStartingAsync();
+            if (this.IsShutdownStarted)
+                return;
             this.UpdateSplashWindowProgress(0.4);
 
             await Controls.SyntaxHighlighting.InitializeAsync(this);

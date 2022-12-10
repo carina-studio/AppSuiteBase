@@ -232,6 +232,7 @@ namespace CarinaStudio.AppSuite
             return Path.Combine(AppDirectoryPath, "ScreenScaleFactor");
         });
         static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new("IsAcceptNonStableApplicationUpdateInitialized", false);
+        static readonly SettingKey<bool> IsInitCustomScreenScaleFactorSetKey = new("IsInitialCustomScreenScaleFactorSet", false);
         static readonly SettingKey<int> LogOutputTargetPortKey = new("LogOutputTargetPort");
         static readonly SettingKey<byte[]> MainWindowViewModelStatesKey = new("MainWindowViewModelStates", Array.Empty<byte>());
 
@@ -2281,6 +2282,10 @@ namespace CarinaStudio.AppSuite
                 this.loadingInitSettingsTask = null;
                 this.Settings.SettingChanged += this.OnSettingChanged;
             }
+
+            // setup initial custom screen scale factor
+            if (Platform.IsLinux && await this.SetupInitCustomScreenScaleFactorOnLinux())
+                return;
 
             // setup culture info
             this.UpdateCultureInfo(false);
