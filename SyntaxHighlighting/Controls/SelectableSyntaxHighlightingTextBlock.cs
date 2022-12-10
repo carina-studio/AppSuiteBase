@@ -6,6 +6,7 @@ using Avalonia.Media.TextFormatting;
 using Avalonia.Styling;
 using CarinaStudio.AppSuite.Controls.Highlighting;
 using CarinaStudio.Collections;
+using CarinaStudio.Threading;
 using System;
 using System.Collections.Specialized;
 
@@ -28,6 +29,7 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
 
     // Fields.
     InlineCollection? attachedInlines;
+    readonly ScheduledAction invalidateVisualAction;
     bool isArranging;
     bool isCreatingTextLayout;
     bool isMeasuring;
@@ -39,6 +41,9 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
     /// </summary>
     public SelectableSyntaxHighlightingTextBlock()
     {
+        // create actions
+        this.invalidateVisualAction = new(this.InvalidateVisual);
+
         // attach to self members
         this.GetObservable(InlinesProperty).Subscribe(inlines =>
         {
@@ -81,7 +86,7 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
         {
             if (!this.isArranging && !this.isCreatingTextLayout && !this.isMeasuring)
                 this.InvalidateTextLayout();
-            this.InvalidateVisual();
+            this.invalidateVisualAction.Schedule();
         };
     }
 

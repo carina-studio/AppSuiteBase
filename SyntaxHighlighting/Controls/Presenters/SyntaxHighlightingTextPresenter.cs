@@ -1,5 +1,4 @@
 using Avalonia;
-using Avalonia.Controls.Documents;
 using Avalonia.Media.TextFormatting;
 using CarinaStudio.AppSuite.Controls.Highlighting;
 using CarinaStudio.Threading;
@@ -19,6 +18,7 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
 
     // Fields.
     readonly ScheduledAction correctCaretIndexAction;
+    readonly ScheduledAction invalidateVisualAction;
     bool isArranging;
     bool isCreatingTextLayout;
     bool isMeasuring;
@@ -41,6 +41,7 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
             if (this.CaretIndex != this.SelectionStart)
                 this.CaretIndex = this.SelectionStart;
         });
+        this.invalidateVisualAction = new(this.InvalidateVisual);
 
         // attach to self members
         this.GetObservable(PreeditTextProperty).Subscribe(text =>
@@ -71,7 +72,7 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         {
             if (!this.isArranging && !this.isCreatingTextLayout && !this.isMeasuring)
                 this.InvalidateTextLayout();
-            this.InvalidateVisual();
+            this.invalidateVisualAction.Schedule();
         };
     }
 
