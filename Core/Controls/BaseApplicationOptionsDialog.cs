@@ -49,7 +49,7 @@ namespace CarinaStudio.AppSuite.Controls
                 this.closingTaskSource.SetResult(ApplicationOptionsDialogResult.RestartApplicationNeeded);
                 return Task.FromResult((object?)ApplicationOptionsDialogResult.RestartApplicationNeeded);
             }
-            if (options.IsRestartingMainWindowsNeeded)
+            if (options.IsRestartingRootWindowsNeeded)
             {
                 this.closingTaskSource.SetResult(ApplicationOptionsDialogResult.RestartMainWindowsNeeded);
                 return Task.FromResult((object?)ApplicationOptionsDialogResult.RestartMainWindowsNeeded);

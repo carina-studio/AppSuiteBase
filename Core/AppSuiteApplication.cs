@@ -666,14 +666,25 @@ namespace CarinaStudio.AppSuite
         }
 
 
-        // Check whether restarting all main windows is needed or not.
-        void CheckRestartingMainWindowsNeeded()
+        // Check whether restarting all root windows is needed or not.
+        void CheckRestartingRootWindowsNeeded()
         {
             if (this.IsShutdownStarted)
                 return;
             var isRestartingNeeded = Global.Run(() =>
             {
-                if (this.mainWindowHolders.IsEmpty())
+                if (this.windows.IsEmpty())
+                    return false;
+                var hasRootWindows = false;
+                foreach (var window in this.windows)
+                {
+                    if (window.Parent == null)
+                    {
+                        hasRootWindows = true;
+                        break;
+                    }
+                }
+                if (!hasRootWindows)
                     return false;
                 var themeMode = this.Settings.GetValueOrDefault(SettingKeys.ThemeMode).Let(it =>
                 {
@@ -685,14 +696,14 @@ namespace CarinaStudio.AppSuite
                 return themeMode != this.stylesThemeMode
                     || useCompactUI != this.isCompactStyles;
             });
-            if (this.IsRestartingMainWindowsNeeded != isRestartingNeeded)
+            if (this.IsRestartingRootWindowsNeeded != isRestartingNeeded)
             {
                 if (isRestartingNeeded)
-                    this.Logger.LogWarning("Need to restart main windows");
+                    this.Logger.LogWarning("Need to restart root windows");
                 else
-                    this.Logger.LogWarning("No need to restart main windows");
-                this.IsRestartingMainWindowsNeeded = isRestartingNeeded;
-                this.OnPropertyChanged(nameof(IsRestartingMainWindowsNeeded));
+                    this.Logger.LogWarning("No need to restart root windows");
+                this.IsRestartingRootWindowsNeeded = isRestartingNeeded;
+                this.OnPropertyChanged(nameof(IsRestartingRootWindowsNeeded));
             }
         }
 
@@ -1185,7 +1196,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Check whether restarting all main windows is needed or not.
         /// </summary>
-        public bool IsRestartingMainWindowsNeeded { get; private set; }
+        public bool IsRestartingRootWindowsNeeded { get; private set; }
 
 
         /// <summary>
@@ -2662,10 +2673,10 @@ namespace CarinaStudio.AppSuite
             {
                 if (Platform.IsMacOS && (ThemeMode)e.Value == ThemeMode.System)
                     this.UpdateSystemThemeMode(false);
-                this.CheckRestartingMainWindowsNeeded();
+                this.CheckRestartingRootWindowsNeeded();
             }
             else if (e.Key == SettingKeys.UseCompactUserInterface)
-                this.CheckRestartingMainWindowsNeeded();
+                this.CheckRestartingRootWindowsNeeded();
         }
 
 
@@ -2957,7 +2968,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public Task<bool> RestartMainWindowsAsync()
+        public Task<bool> RestartRootWindowsAsync()
         {
             // check state
             this.VerifyAccess();
@@ -2966,9 +2977,9 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogWarning("Cannot restart main windows when shutting down");
                 return Task.FromResult(false);
             }
-            if (this.mainWindowHolders.IsEmpty())
+            if (this.windows.IsEmpty())
             {
-                this.Logger.LogWarning("No main window to restart");
+                this.Logger.LogWarning("No root window to restart");
                 return Task.FromResult(false);
             }
             if (this.isRestartingMainWindowsRequested)
@@ -2977,17 +2988,26 @@ namespace CarinaStudio.AppSuite
             // restart
             this.Logger.LogWarning("Request restarting all {count} main window(s)", this.mainWindowHolders.Count);
             this.isRestartingMainWindowsRequested = true;
-            foreach (var mainWindowHolder in this.mainWindowHolders.Values)
-                mainWindowHolder.IsRestartingRequested = true;
+            foreach (var window in this.windows)
+            {
+                if (window.Parent != null)
+                    continue;
+                if (window is CarinaStudio.Controls.Window csWindow && this.mainWindowHolders.TryGetValue(csWindow, out var mainWindowHolder))
+                    mainWindowHolder.IsRestartingRequested = true;
+            }
+            var taskCompletionSource = new TaskCompletionSource<bool>();
             this.SynchronizationContext.Post(() =>
             {
-                foreach (var mainWindow in this.mainWindowHolders.Keys.ToArray())
+                foreach (var window in this.windows.ToArray())
                 {
-                    if (!mainWindow.IsClosed)
-                        mainWindow.Close();
+                    if (window is not CarinaStudio.Controls.Window csWindow)
+                        Global.RunWithoutError(window.Close);
+                    else if (!csWindow.IsClosed)
+                        csWindow.Close();
                 }
+                taskCompletionSource.SetResult(true);
             });
-            return Task.FromResult(true);
+            return taskCompletionSource.Task;
         }
 
 
@@ -3840,7 +3860,7 @@ namespace CarinaStudio.AppSuite
             }
 
             // check state
-            this.CheckRestartingMainWindowsNeeded();
+            this.CheckRestartingRootWindowsNeeded();
 
             // check performance
             if (time > 0)
@@ -3884,7 +3904,7 @@ namespace CarinaStudio.AppSuite
             // update state
             this.systemThemeMode = themeMode;
             if (checkRestartingMainWindows)
-                this.CheckRestartingMainWindowsNeeded();
+                this.CheckRestartingRootWindowsNeeded();
             
             // check performance
             if (time > 0)

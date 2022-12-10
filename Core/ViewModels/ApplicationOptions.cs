@@ -191,11 +191,11 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
-        /// Check whether restarting all main windows is needed or not.
+        /// Check whether restarting all root windows is needed or not.
         /// </summary>
-        public bool IsRestartingMainWindowsNeeded
+        public bool IsRestartingRootWindowsNeeded
         {
-            get => this.Application.IsRestartingMainWindowsNeeded;
+            get => this.Application.IsRestartingRootWindowsNeeded;
         }
 
 
@@ -270,8 +270,8 @@ namespace CarinaStudio.AppSuite.ViewModels
                     this.OnPropertyChanged(nameof(IsCustomScreenScaleFactorAdjusted));
                 }
             }
-            else if (e.PropertyName == nameof(IAppSuiteApplication.IsRestartingMainWindowsNeeded))
-                this.OnPropertyChanged(nameof(IsRestartingMainWindowsNeeded));
+            else if (e.PropertyName == nameof(IAppSuiteApplication.IsRestartingRootWindowsNeeded))
+                this.OnPropertyChanged(nameof(IsRestartingRootWindowsNeeded));
             else if (e.PropertyName == nameof(AppSuiteApplication.LogOutputTargetPort))
                 this.OnPropertyChanged(nameof(LogOutputTargetPort));
         }

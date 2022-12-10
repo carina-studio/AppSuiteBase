@@ -230,7 +230,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Check whether restarting all main windows is needed or not.
         /// </summary>
-        public bool IsRestartingMainWindowsNeeded { get; } = false;
+        public bool IsRestartingRootWindowsNeeded { get; } = false;
 
         
         /// <inheritdoc/>
@@ -393,7 +393,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public Task<bool> RestartMainWindowsAsync() => 
+        public Task<bool> RestartRootWindowsAsync() => 
             Task.FromResult(false);
 
 

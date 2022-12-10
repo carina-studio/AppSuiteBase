@@ -417,7 +417,7 @@ namespace CarinaStudio.AppSuite.Tests
         public async void ShowAppInfoDialog()
         {
             this.canShowAppInfo.Update(false);
-            await this.Application.ShowApplicationInfoDialogAsync(this);
+            await this.Application.ShowApplicationInfoDialogAsync(null);
             this.canShowAppInfo.Update(true);
         }
 
@@ -449,12 +449,13 @@ namespace CarinaStudio.AppSuite.Tests
 
         public ICommand ShowAppInfoDialogCommand { get; }
 
-        public void ShowTestDialog()
+        public async void ShowTestDialog()
         {
-            new Dialog().Show();
-            //var result = await new Dialog().ShowDialog<ApplicationOptionsDialogResult>(this);
-            //if (result == ApplicationOptionsDialogResult.RestartMainWindowsNeeded)
-                //this.Application.RestartMainWindows();
+            var result = await new Dialog().ShowDialog<ApplicationOptionsDialogResult>();
+            if (result == ApplicationOptionsDialogResult.RestartMainWindowsNeeded)
+                _ = this.Application.RestartRootWindowsAsync();
+            else if (result == ApplicationOptionsDialogResult.RestartApplicationNeeded)
+                this.Application.Restart();
         }
 
 

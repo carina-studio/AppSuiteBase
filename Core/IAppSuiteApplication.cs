@@ -151,9 +151,9 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Check whether restarting all main windows is needed or not.
+        /// Check whether restarting all root windows is needed or not.
         /// </summary>
-        bool IsRestartingMainWindowsNeeded { get; }
+        bool IsRestartingRootWindowsNeeded { get; }
 
 
         /// <summary>
@@ -302,10 +302,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Request restarting all main windows asynchronously.
+        /// Request restarting all root windows asynchronously.
         /// </summary>
-        /// <returns>Task of restarting all main windows. The result will be True if restarting has been accepted.</returns>
-        Task<bool> RestartMainWindowsAsync();
+        /// <returns>Task of restarting all root windows. The result will be True if restarting has been accepted.</returns>
+        Task<bool> RestartRootWindowsAsync();
 
 
         /// <summary>

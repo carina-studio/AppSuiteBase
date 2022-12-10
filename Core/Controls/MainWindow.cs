@@ -14,8 +14,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -67,7 +65,7 @@ namespace CarinaStudio.AppSuite.Controls
         bool isFirstContentPaddingUpdate = true;
         bool isShowingInitialDialogs;
         long openedTime;
-        readonly ScheduledAction restartingMainWindowsAction;
+        readonly ScheduledAction restartingRootWindowsAction;
         double restoredHeight;
         double restoredWidth;
         readonly ScheduledAction saveWindowSizeAction;
@@ -84,12 +82,12 @@ namespace CarinaStudio.AppSuite.Controls
             this.LayoutMainWindowsCommand = new Command<MultiWindowLayout>(this.LayoutMainWindows, this.GetObservable(HasMultipleMainWindowsProperty));
 
             // create scheduled actions
-            this.restartingMainWindowsAction = new ScheduledAction(() =>
+            this.restartingRootWindowsAction = new ScheduledAction(() =>
             {
-                if (!this.IsOpened || this.HasDialogs || !this.Application.IsRestartingMainWindowsNeeded)
+                if (!this.IsOpened || this.HasDialogs || !this.Application.IsRestartingRootWindowsNeeded)
                     return;
                 this.Logger.LogWarning("Restart main windows");
-                this.Application.RestartMainWindowsAsync();
+                this.Application.RestartRootWindowsAsync();
             });
             this.saveWindowSizeAction = new ScheduledAction(() =>
             {
@@ -184,8 +182,8 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 if (!isSubscribing && !hasDialogs)
                 {
-                    if (this.Application.IsRestartingMainWindowsNeeded)
-                        this.restartingMainWindowsAction.Reschedule(RestartingMainWindowsDelay);
+                    if (this.Application.IsRestartingRootWindowsNeeded)
+                        this.restartingRootWindowsAction.Reschedule(RestartingMainWindowsDelay);
                     if (!this.AreInitialDialogsClosed)
                         this.showInitDialogsAction.Schedule();
                 }
@@ -317,14 +315,14 @@ namespace CarinaStudio.AppSuite.Controls
                 case nameof(IAppSuiteApplication.IsUserAgreementAgreed):
                     (this.Content as Control)?.Let(content => content.IsEnabled = this.Application.IsPrivacyPolicyAgreed && this.Application.IsUserAgreementAgreed);
                     break;
-                case nameof(IAppSuiteApplication.IsRestartingMainWindowsNeeded):
-                    if (this.Application.IsRestartingMainWindowsNeeded)
+                case nameof(IAppSuiteApplication.IsRestartingRootWindowsNeeded):
+                    if (this.Application.IsRestartingRootWindowsNeeded)
                     {
                         if (!BaseApplicationOptionsDialog.HasOpenedDialogs)
-                            this.restartingMainWindowsAction.Reschedule(RestartingMainWindowsDelay);
+                            this.restartingRootWindowsAction.Reschedule(RestartingMainWindowsDelay);
                     }
                     else
-                        this.restartingMainWindowsAction.Cancel();
+                        this.restartingRootWindowsAction.Cancel();
                     break;
                 case nameof(IAppSuiteApplication.UpdateInfo):
                     this.SynchronizationContext.Post(async () =>
@@ -381,7 +379,7 @@ namespace CarinaStudio.AppSuite.Controls
             ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged -= this.OnMainWindowsChanged;
             this.Application.PropertyChanged -= this.OnApplicationPropertyChanged;
             this.RemoveHandler(DragDrop.DragEnterEvent, this.OnDragEnter);
-            this.restartingMainWindowsAction.Cancel();
+            this.restartingRootWindowsAction.Cancel();
             this.showInitDialogsAction.Cancel();
             base.OnClosed(e);
         }
