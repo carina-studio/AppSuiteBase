@@ -264,7 +264,7 @@ namespace CarinaStudio.AppSuite
         bool isReActivatingProVersion;
 		bool isReActivatingProVersionNeeded;
         bool isRestartAsAdminRequested;
-        bool isRestartingMainWindowsRequested;
+        bool isRestartingRootWindowsRequested;
         bool isRestartRequested;
         bool isShutdownStarted;
         Task? loadingInitPersistentStateTask;
@@ -2048,14 +2048,14 @@ namespace CarinaStudio.AppSuite
             {
                 if (!this.IsShutdownStarted)
                 {
-                    if (this.isRestartingMainWindowsRequested)
+                    if (this.isRestartingRootWindowsRequested)
                     {
                         this.mainWindowHolders.Remove(mainWindow);
                         this.pendingMainWindowHolders.Add(new MainWindowHolder(mainWindowHolder.ViewModel, null, mainWindowHolder.WindowCreatedAction));
                         if (this.mainWindowHolders.IsEmpty())
                         {
                             this.Logger.LogWarning("Restart all main windows");
-                            this.isRestartingMainWindowsRequested = false;
+                            this.isRestartingRootWindowsRequested = false;
                             var pendingMainWindowHolders = this.pendingMainWindowHolders.ToArray().Also(_ =>
                             {
                                 this.pendingMainWindowHolders.Clear();
@@ -2982,12 +2982,12 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogWarning("No root window to restart");
                 return Task.FromResult(false);
             }
-            if (this.isRestartingMainWindowsRequested)
+            if (this.isRestartingRootWindowsRequested)
                 return Task.FromResult(true);
 
             // restart
             this.Logger.LogWarning("Request restarting all {count} main window(s)", this.mainWindowHolders.Count);
-            this.isRestartingMainWindowsRequested = true;
+            this.isRestartingRootWindowsRequested = true;
             foreach (var window in this.windows)
             {
                 if (window.Parent != null)
@@ -3005,6 +3005,8 @@ namespace CarinaStudio.AppSuite
                     else if (!csWindow.IsClosed)
                         csWindow.Close();
                 }
+                if (this.mainWindowHolders.IsEmpty())
+                    this.isRestartingRootWindowsRequested = false;
                 taskCompletionSource.SetResult(true);
             });
             return taskCompletionSource.Task;
@@ -3281,7 +3283,7 @@ namespace CarinaStudio.AppSuite
             }
 
             // creat and show window later if restarting main windows
-            if (this.isRestartingMainWindowsRequested)
+            if (this.isRestartingRootWindowsRequested)
             {
                 this.Logger.LogWarning("Show main window later after closing all main windows");
                 this.pendingMainWindowHolders.Add(new MainWindowHolder(viewModel, null, windowCreatedAction));
