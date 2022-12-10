@@ -1,9 +1,11 @@
 ﻿using Avalonia.Data.Converters;
 using CarinaStudio.AppSuite.Scripting;
+using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 
 namespace CarinaStudio.AppSuite.ViewModels
@@ -34,6 +36,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// </summary>
         public ApplicationOptions() : base(AppSuiteApplication.Current)
         {
+            this.HasMainWindows = this.Application.MainWindows.IsNotEmpty();
             this.IsCustomScreenScaleFactorSupported = double.IsFinite(this.Application.CustomScreenScaleFactor);
             this.IsCustomScreenScaleFactorAdjusted = this.IsCustomScreenScaleFactorSupported
                 && Math.Abs(this.Application.CustomScreenScaleFactor - this.Application.EffectiveCustomScreenScaleFactor) >= 0.01;
@@ -55,6 +58,7 @@ namespace CarinaStudio.AppSuite.ViewModels
             }
             this.originalThemeMode = this.ThemeMode;
             this.originalUsingCompactUI = this.UseCompactUserInterface;
+            ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged += this.OnMainWindowsChanged;
         }
 
 
@@ -132,6 +136,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         {
             foreach (var externalDependency in this.attachedExternalDependencies)
                 externalDependency.PropertyChanged -= this.OnExternalDependencyPropertyChanged;
+            ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged -= this.OnMainWindowsChanged;
             base.Dispose(disposing);
         }
 
@@ -160,6 +165,12 @@ namespace CarinaStudio.AppSuite.ViewModels
             get => this.Settings.GetValueOrDefault(SettingKeys.EnableRunningScript);
             set => this.Settings.SetValue<bool>(SettingKeys.EnableRunningScript, value);
         }
+
+
+        /// <summary>
+        /// Check whether at least one main window is valid or not.
+        /// </summary>
+        public bool HasMainWindows { get; private set; }
 
 
         /// <summary>
@@ -274,6 +285,17 @@ namespace CarinaStudio.AppSuite.ViewModels
                 this.OnPropertyChanged(nameof(IsRestartingRootWindowsNeeded));
             else if (e.PropertyName == nameof(AppSuiteApplication.LogOutputTargetPort))
                 this.OnPropertyChanged(nameof(LogOutputTargetPort));
+        }
+
+
+        // Called when list of main window has been changed.
+        void OnMainWindowsChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (this.HasMainWindows != this.Application.MainWindows.IsNotEmpty())
+            {
+                this.HasMainWindows = !this.HasMainWindows;
+                this.OnPropertyChanged(nameof(HasMainWindows));
+            }
         }
 
 

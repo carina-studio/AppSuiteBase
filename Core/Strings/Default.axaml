@@ -85,6 +85,7 @@
 	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface.Description">Recommended if you are using device with small screen.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UserInterface">User Interface</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">Use spaces for indentation</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.WillCloseAllWindowsToTakeEffect">Will close all windows to take effect.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">Will restart application to take effect.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartMainWindowsToTakeEffect">Will restart windows to take effect.</sys:String>
 
