@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<AssemblyVersion>2.2.1.1207</AssemblyVersion>
-		<Version>2.2.1.1207</Version>
-		<PackageVersion>2.2.1.1207-preview</PackageVersion>
+		<AssemblyVersion>2.2.2.1210</AssemblyVersion>
+		<Version>2.2.2.1210</Version>
+		<PackageVersion>2.2.2.1210-preview</PackageVersion>
 		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Fonts</AssemblyName>
 		<Nullable>enable</Nullable>
