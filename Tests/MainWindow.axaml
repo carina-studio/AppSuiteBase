@@ -769,7 +769,7 @@
 					<TabItem.Header>
 						<TextBlock Text="Syntax Highlighting"/>
 					</TabItem.Header>
-					<ScrollViewer Background="{DynamicResource Brush/Window.WorkingArea.Background}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+					<ScrollViewer Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
 						<StackPanel Margin="5">
 							<Button Command="{Binding $parent[Window].OpenFileForSyntaxHighlightingTextBlocks}" Content="Open file"/>
 							<appControls:SyntaxHighlightingTextBox Name="syntaxHighlightingTextBox" HorizontalAlignment="Stretch"/>
@@ -791,6 +791,10 @@
 							</Border>
 						</StackPanel>
 					</ScrollViewer>
+				</TabItem>
+
+				<TabItem Header="Markdown">
+					<appControls:MarkdownViewer Margin="10" Source="avares://CarinaStudio.AppSuite.Tests/Document.md"/>
 				</TabItem>
 
 				<TabItem Classes="Empty">

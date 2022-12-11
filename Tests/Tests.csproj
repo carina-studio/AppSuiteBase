@@ -13,6 +13,7 @@
 	
 	<ItemGroup>
 	  <AvaloniaResource Include="AppIcon.ico" />
+	  <AvaloniaResource Include="Document.md" />
 	  <AvaloniaResource Include="SplashWindowBackground.jpg" />
 	</ItemGroup>
 	

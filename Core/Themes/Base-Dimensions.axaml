@@ -170,6 +170,9 @@
 	<Thickness x:Key="Thickness/ListBoxItem.Margin">0,1,0,1</Thickness>
 	<Thickness x:Key="Thickness/ListBoxItem.Padding">6,5,15,5</Thickness>
 
+	<!-- MarkdownViewer -->
+	<Thickness x:Key="Thickness/MarkdownViewer.Padding">10</Thickness>
+
 	<!-- Menu -->
 	<Thickness x:Key="Thickness/Menu.MenuItem.Padding">10,5,10,5</Thickness>
 	<Thickness x:Key="Thickness/Menu.Padding">5,3,5,3</Thickness>

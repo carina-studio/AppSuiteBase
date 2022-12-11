@@ -6,7 +6,8 @@
 		xmlns:aConverters="using:Avalonia.Data.Converters"
 		xmlns:appSuite="using:CarinaStudio.AppSuite"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
-		xmlns:converters="using:CarinaStudio.AppSuite.Converters">
+		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
+		xmlns:md="using:Markdown.Avalonia">
 
 	<!-- AddTabItemButton -->
 	<Style Selector="Button.AddTabItem">
@@ -1014,6 +1015,32 @@
 		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
 		<Setter Property="TextWrapping" Value="NoWrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+
+	<!-- MarkdownViewer -->
+	<Style Selector="controls|MarkdownViewer">
+		<Setter Property="Background" Value="{DynamicResource TextControlBackground}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrush}"/>
+		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Padding}"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border 
+					Background="{TemplateBinding Background}"
+					BorderBrush="{TemplateBinding BorderBrush}"
+					BorderThickness="{TemplateBinding BorderThickness}"
+					CornerRadius="{TemplateBinding CornerRadius}">
+					<ScrollViewer Name="PART_ScrollViewer"
+						HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
+						VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}">
+						<md:MarkdownScrollViewer Name="PART_MarkdownPresenter"
+							Margin="{TemplateBinding Padding}" 
+							Source="{TemplateBinding Source}"/>
+					</ScrollViewer>
+				</Border>
+			</ControlTemplate>
+		</Setter>
 	</Style>
 
 	<!-- Menu -->
