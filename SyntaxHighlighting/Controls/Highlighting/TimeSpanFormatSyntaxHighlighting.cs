@@ -8,7 +8,7 @@ namespace CarinaStudio.AppSuite.Controls.Highlighting;
 /// <summary>
 /// Syntax highlighting for format of <see cref="TimeSpan"/>.
 /// </summary>
-static partial class TimeSpanFormatSyntaxHighlighting
+public static class TimeSpanFormatSyntaxHighlighting
 {
     // Fields.
     static Regex? ConstantFormatPattern;

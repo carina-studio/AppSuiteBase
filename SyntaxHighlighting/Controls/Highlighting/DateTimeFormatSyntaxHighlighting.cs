@@ -8,7 +8,7 @@ namespace CarinaStudio.AppSuite.Controls.Highlighting;
 /// <summary>
 /// Syntax highlighting for format of <see cref="DateTime"/>.
 /// </summary>
-static partial class DateTimeFormatSyntaxHighlighting
+public static class DateTimeFormatSyntaxHighlighting
 {
     // Fields.
     static Regex? AmPmDesignatorPattern;
