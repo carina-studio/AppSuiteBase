@@ -61,14 +61,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="XRandR/arm64/xrandr" Pack="true">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<Content Include="XRandR/arm64/xrandr" Pack="true">
+			<CopyToOutputDirectory>true</CopyToOutputDirectory>
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-		</None>
-		<None Include="XRandR/x64/xrandr" Pack="true">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<PackageCopyToOutput>true</PackageCopyToOutput>
+		</Content>
+		<Content Include="XRandR/x64/xrandr" Pack="true">
+			<CopyToOutputDirectory>true</CopyToOutputDirectory>
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-		</None>
+			<PackageCopyToOutput>true</PackageCopyToOutput>
+		</Content>
 	</ItemGroup>
 
 	<ItemGroup>
