@@ -61,11 +61,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="XRandR/arm64/xrandr">
+		<None Include="XRandR/arm64/xrandr" Pack="true">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 		</None>
-		<None Update="XRandR/x64/xrandr">
+		<None Include="XRandR/x64/xrandr" Pack="true">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 		</None>
