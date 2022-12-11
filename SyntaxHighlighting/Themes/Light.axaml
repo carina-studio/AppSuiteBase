@@ -1,5 +1,20 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	
+	<!-- DateTimeFormatSyntaxHighlighting -->
+	<SolidColorBrush x:Key="Brush/DateTimeFormatSyntaxHighlighting.AmPmDesignator">#ff40d0</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/DateTimeFormatSyntaxHighlighting.Day">#0000ff</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/DateTimeFormatSyntaxHighlighting.Era">#ff40d0</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/DateTimeFormatSyntaxHighlighting.EscapeCharacter">#ff0000</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/DateTimeFormatSyntaxHighlighting.Hour">#008855</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/DateTimeFormatSyntaxHighlighting.Minute">#008855</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/DateTimeFormatSyntaxHighlighting.Month">#0000ff</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/DateTimeFormatSyntaxHighlighting.Second">#008855</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/DateTimeFormatSyntaxHighlighting.Separator">#ff40d0</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/DateTimeFormatSyntaxHighlighting.SubSecond">#008855</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/DateTimeFormatSyntaxHighlighting.TimeZone">#ff40d0</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/DateTimeFormatSyntaxHighlighting.TimeZoneOffset">#ff40d0</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/DateTimeFormatSyntaxHighlighting.Year">#0000ff</SolidColorBrush>
 
 	<!-- RegexSyntaxHighlighting -->
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Alternation">#404040</SolidColorBrush>
@@ -22,5 +37,16 @@
 	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.StringFormat">#b34c00</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.VariableExpression">#008855</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/StringInterpolationFormatSyntaxHighlighting.Variables">#0000ff</SolidColorBrush>
+
+	<!-- TimeSpanFormatSyntaxHighlighting -->
+	<SolidColorBrush x:Key="Brush/TimeSpanFormatSyntaxHighlighting.ConstantFormat">#008855</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/TimeSpanFormatSyntaxHighlighting.Days">#0000ff</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/TimeSpanFormatSyntaxHighlighting.EscapeCharacter">#ff0000</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/TimeSpanFormatSyntaxHighlighting.Hours">#0000ff</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/TimeSpanFormatSyntaxHighlighting.LongFormat">#008855</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/TimeSpanFormatSyntaxHighlighting.Minutes">#0000ff</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/TimeSpanFormatSyntaxHighlighting.Seconds">#0000ff</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/TimeSpanFormatSyntaxHighlighting.ShortFormat">#008855</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/TimeSpanFormatSyntaxHighlighting.SubSeconds">#0000ff</SolidColorBrush>
 	
 </ResourceDictionary>

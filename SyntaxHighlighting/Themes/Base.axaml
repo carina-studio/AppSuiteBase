@@ -82,10 +82,14 @@
 
 	</Styles.Resources>
 
+	<!-- DateTimeFormatTextBox -->
+	<Style Selector="TextBox:dateTimeFormatTextBox">
+		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
+	</Style>
+
 	<!-- RegexTextBox -->
 	<Style Selector="TextBox:regexTextBox">
 		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
-		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
 	</Style>
 
 	<!-- SelectableSyntaxHighlightingTextBlock -->
@@ -99,7 +103,6 @@
 	<!-- StringInterpolationFormatTextBox -->
 	<Style Selector="TextBox:stringInterpolationFormatTextBox">
 		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
-		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
 	</Style>
 
 	<!-- SyntaxHighlightingTextBlock -->
@@ -108,7 +111,7 @@
 	</Style>
 
 	<!-- SyntaxHighlightingTextBox -->
-	<Style Selector="TextBox:syntaxHighlightingTextBox">
+	<Style Selector="TextBox:syntaxHighlighted">
 		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
 	</Style>
 	

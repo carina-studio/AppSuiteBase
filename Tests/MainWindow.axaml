@@ -370,6 +370,8 @@
 							</appControls:StringInterpolationFormatTextBox>
 							<appControls:StringInterpolationFormatTextBox HorizontalAlignment="Left" Margin="5" Watermark="String interpolation" Width="200"/>
 
+							<appControls:DateTimeFormatTextBox HorizontalAlignment="Left" Margin="5" Width="200"/>
+
 							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
 								<StackPanel Orientation="Horizontal">
 									<Button Classes="InPlaceAction_Button">

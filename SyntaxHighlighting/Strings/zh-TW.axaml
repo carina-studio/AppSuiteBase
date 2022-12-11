@@ -2,6 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:sys="using:System">
 
+	<!-- DateTimeFormatTextBox -->
+	<sys:String x:Key="String/DateTimeFormatTextBox.Watermark">日期與時間格式</sys:String>
+
 	<!-- GroupingConstruct -->
 	<sys:String x:Key="String/GroupingConstruct.NamedGroup">具名群組</sys:String>
 	<sys:String x:Key="String/GroupingConstruct.NoncapturingGroup">不具名群組 (不擷取內容)</sys:String>

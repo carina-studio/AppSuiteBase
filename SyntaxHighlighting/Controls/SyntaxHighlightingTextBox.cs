@@ -28,6 +28,7 @@ public class SyntaxHighlightingTextBox : Avalonia.Controls.TextBox, IStyleable
     /// </summary>
     public SyntaxHighlightingTextBox()
     {
+        this.PseudoClasses.Add(":syntaxHighlighted");
         this.PseudoClasses.Add(":syntaxHighlightingTextBox");
     }
 

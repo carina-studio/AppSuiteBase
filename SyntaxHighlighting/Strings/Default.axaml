@@ -2,6 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:sys="using:System">
 
+	<!-- DateTimeFormatTextBox -->
+	<sys:String x:Key="String/DateTimeFormatTextBox.Watermark">Format of Date and Time</sys:String>
+
 	<!-- GroupingConstruct -->
 	<sys:String x:Key="String/GroupingConstruct.NamedGroup">Named group</sys:String>
 	<sys:String x:Key="String/GroupingConstruct.NoncapturingGroup">Noncapturing group</sys:String>
