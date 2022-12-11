@@ -61,6 +61,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="XRandR/arm64/xrandr">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</None>
+		<None Update="XRandR/x64/xrandr">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Avalonia" Version="11.0.0-preview4" />
 		<PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview4" />
 		<PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview4" />

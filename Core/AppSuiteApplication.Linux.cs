@@ -1,10 +1,14 @@
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using Microsoft.Extensions.Logging;
+#if !NET7_0_OR_GREATER
+using Mono.Unix;
+#endif
 using System.IO;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -112,12 +116,30 @@ partial class AppSuiteApplication
         var monitors = new List<X11MonitorInfo>();
         try
         {
+            // prepare pattern to parse result
             X11MonitorLineRegex ??= new(@"^[\s]*[\d]+[\s]*:[\s]*\+\*(?<Name>[\S]+)\s+(?<PixelWidth>\d+)/\d+x(?<PixelHeight>\d+)");
+
+            // select XRandR to use
+            var xRandRPath = Path.Combine(AppDirectoryPath, "XRandR", RuntimeInformation.ProcessArchitecture.ToString().ToLower(), "xrandr");
+            if (File.Exists(xRandRPath))
+            {
+#if NET7_0_OR_GREATER
+#pragma warning disable CA1416
+                File.SetUnixFileMode(xRandRPath, File.GetUnixFileMode(xRandRPath) | UnixFileMode.UserExecute | UnixFileMode.GroupExecute);
+#pragma warning restore CA1416
+#else
+                new UnixFileInfo(xRandRPath).FileAccessPermissions |= (FileAccessPermissions.UserExecute | FileAccessPermissions.GroupExecute);
+#endif
+            }
+            else
+                xRandRPath = "xrandr";
+
+            // get monitors
             using var process = Process.Start(new ProcessStartInfo()
             {
                 Arguments = "--listactivemonitors",
                 CreateNoWindow = true,
-                FileName = "xrandr",
+                FileName = xRandRPath,
                 RedirectStandardOutput = true,
                 UseShellExecute = false,
             });

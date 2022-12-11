@@ -7,6 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.ViewModels
 {
@@ -45,20 +49,10 @@ namespace CarinaStudio.AppSuite.ViewModels
                 if (!this.Application.IsSystemThemeModeSupported)
                     it.Remove(ThemeMode.System);
             }).AsReadOnly();
-            foreach (var externalDependency in this.Application.ExternalDependencies)
-            {
-                switch (externalDependency.Id)
-                {
-                    case "XRandR":
-                        this.attachedExternalDependencies.Add(externalDependency);
-                        externalDependency.PropertyChanged += this.OnExternalDependencyPropertyChanged;
-                        this.OnExternalDependencyPropertyChanged(externalDependency, new(nameof(ExternalDependency.State)));
-                        break;
-                }
-            }
             this.originalThemeMode = this.ThemeMode;
             this.originalUsingCompactUI = this.UseCompactUserInterface;
             ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged += this.OnMainWindowsChanged;
+            this.CheckXRandRAsync();
         }
 
 
@@ -69,6 +63,70 @@ namespace CarinaStudio.AppSuite.ViewModels
         {
             get => this.Settings.GetValueOrDefault(SettingKeys.AcceptNonStableApplicationUpdate);
             set => this.Settings.SetValue<bool>(SettingKeys.AcceptNonStableApplicationUpdate, value);
+        }
+
+
+        // Check installation of XRandR.
+        async void CheckXRandRAsync()
+        {
+            // check platform
+            if (Platform.IsNotLinux)
+            {
+                this.IsXRandRInstalled = false;
+                this.OnPropertyChanged(nameof(IsXRandRInstalled));
+                return;
+            }
+
+            // update state
+            this.IsCheckingXRandR = true;
+            this.OnPropertyChanged(nameof(IsCheckingXRandR));
+
+            // check built-in XRandR
+            var xRandRPath = Path.Combine(this.Application.RootPrivateDirectoryPath, "XRandR", RuntimeInformation.ProcessArchitecture.ToString().ToLower(), "xrandr");
+            var isXRandRInstalled = await Task.Run(() =>
+                Global.RunOrDefault(() => File.Exists(xRandRPath)));
+            
+            // check XRandR installed on system
+            if (!isXRandRInstalled)
+            {
+                isXRandRInstalled = await Task.Run(() =>
+                {
+                    try
+                    {
+                        using var process = Process.Start(new ProcessStartInfo()
+                        {
+                            CreateNoWindow = true,
+                            FileName = "xrandr",
+                            RedirectStandardError = true,
+                            RedirectStandardInput = true,
+                            RedirectStandardOutput = true,
+                            UseShellExecute = false,
+                        });
+                        if (process == null)
+                            return false;
+                        process.WaitForExit(3000);
+                        Global.RunWithoutError(() =>
+                        {
+                            if (!process.HasExited)
+                                process.Kill();
+                        });
+                        return true;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                });
+            }
+
+            // complete
+            if (this.IsXRandRInstalled != isXRandRInstalled)
+            {
+                this.IsXRandRInstalled = isXRandRInstalled;
+                this.OnPropertyChanged(nameof(IsXRandRInstalled));
+            }
+            this.IsCheckingXRandR = false;
+            this.OnPropertyChanged(nameof(IsCheckingXRandR));
         }
 
 
@@ -134,8 +192,6 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
-            foreach (var externalDependency in this.attachedExternalDependencies)
-                externalDependency.PropertyChanged -= this.OnExternalDependencyPropertyChanged;
             ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged -= this.OnMainWindowsChanged;
             base.Dispose(disposing);
         }
@@ -184,6 +240,12 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
+        /// Check whether installation of XRandR is being checked or not.
+        /// </summary>
+        public bool IsCheckingXRandR { get; private set; }
+
+
+        /// <summary>
         /// Check whether custom screen scale factor is different from effective scale factor or not.
         /// </summary>
         public bool IsCustomScreenScaleFactorAdjusted { get; private set; }
@@ -225,7 +287,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Check whether XRandR tool is installed or not.
         /// </summary>
-        public bool IsXRandRInstalled { get; private set; }
+        public bool IsXRandRInstalled { get; private set; } = true;
 
 
         /// <summary>
@@ -295,36 +357,6 @@ namespace CarinaStudio.AppSuite.ViewModels
             {
                 this.HasMainWindows = !this.HasMainWindows;
                 this.OnPropertyChanged(nameof(HasMainWindows));
-            }
-        }
-
-
-        // Called when property of external dependency changed.
-        void OnExternalDependencyPropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            if (sender is not ExternalDependency externalDependency)
-                return;
-            switch (externalDependency.Id)
-            {
-                case "XRandR":
-                    switch (externalDependency.State)
-                    {
-                        case ExternalDependencyState.Available:
-                            if (!this.IsXRandRInstalled)
-                            {
-                                this.IsXRandRInstalled = true;
-                                this.OnPropertyChanged(nameof(IsXRandRInstalled));
-                            }
-                            break;
-                        case ExternalDependencyState.Unavailable:
-                            if (this.IsXRandRInstalled)
-                            {
-                                this.IsXRandRInstalled = false;
-                                this.OnPropertyChanged(nameof(IsXRandRInstalled));
-                            }
-                            break;
-                    }
-                    break;
             }
         }
 
