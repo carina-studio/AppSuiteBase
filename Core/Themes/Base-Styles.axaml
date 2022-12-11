@@ -5,9 +5,11 @@
 		xmlns:abConverters="using:CarinaStudio.Data.Converters"
 		xmlns:aConverters="using:Avalonia.Data.Converters"
 		xmlns:appSuite="using:CarinaStudio.AppSuite"
+		xmlns:ca="using:ColorTextBlock.Avalonia"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
-		xmlns:md="using:Markdown.Avalonia">
+		xmlns:md="using:Markdown.Avalonia"
+		xmlns:mdControls="using:Markdown.Avalonia.Controls">
 
 	<!-- AddTabItemButton -->
 	<Style Selector="Button.AddTabItem">
@@ -1020,7 +1022,7 @@
 	<!-- MarkdownViewer -->
 	<Style Selector="controls|MarkdownViewer">
 		<Setter Property="Background" Value="{DynamicResource TextControlBackground}"/>
-		<Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrush}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Control.Border}"/>
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
 		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Padding}"/>
@@ -1035,7 +1037,7 @@
 						HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
 						VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}">
 						<md:MarkdownScrollViewer Name="PART_MarkdownPresenter"
-							Margin="{TemplateBinding Padding}" 
+							Margin="{TemplateBinding Padding}"
 							Source="{TemplateBinding Source}"/>
 					</ScrollViewer>
 				</Border>

@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Markup.Xaml.Styling;
 using Markdown.Avalonia;
 using System;
 
@@ -34,6 +35,15 @@ public class MarkdownViewer : TemplatedControl
     {
         base.OnApplyTemplate(e);
         this.presenter = e.NameScope.Find<MarkdownScrollViewer>("PART_MarkdownPresenter");
+        if (this.presenter != null)
+        {
+            // [Workaround] Need to use separate styles for each MarkdownScrollViewer to prevent crashing after changing theme mode.
+            var baseUri = new Uri($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}/");
+            this.presenter.MarkdownStyle = new StyleInclude(baseUri)
+            {
+                Source = new(baseUri, "/Themes/Base-Styles-Markdown.axaml"),
+            };
+        }
     }
 
 

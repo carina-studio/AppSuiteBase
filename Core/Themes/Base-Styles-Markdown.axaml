@@ -1,0 +1,61 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:ca="using:ColorTextBlock.Avalonia"
+		xmlns:md="using:Markdown.Avalonia"
+		xmlns:mdControls="using:Markdown.Avalonia.Controls">
+
+	<Style Selector="Border.Blockquote">
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Control.Border}" />
+		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Blockquote.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Blockquote.Padding}"/>
+	</Style>
+	<Style Selector="ca|CHyperlink">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForeground}"/>
+		<Setter Property="IsUnderline" Value="True"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Text.Margin}"/>
+	</Style>
+	<Style Selector="ca|CHyperlink:pointerover">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForegroundPointerOver}"/>
+	</Style>
+	<Style Selector="ca|CHyperlink:pressed">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForegroundPressed}"/>
+	</Style>
+	<Style Selector="Grid.List">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.List.Margin}"/>
+	</Style>
+	<Style Selector="mdControls|Rule.Single">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Separator.Background}"/>
+	</Style>
+	<Style Selector="mdControls|Rule.TwoLines">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Separator.Background}"/>
+	</Style>
+	<Style Selector="mdControls|Rule.Bold">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Separator.Background}"/>
+	</Style>
+	<Style Selector="mdControls|Rule.BoldWithSingle">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Separator.Background}"/>
+	</Style>
+	<Style Selector="ca|CTextBlock.ListMarker">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.ListMarker.Margin}"/>
+	</Style>
+	<Style Selector="ca|CTextBlock">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Text.Margin}"/>
+	</Style>
+	<Style Selector="ca|CTextBlock.Heading1">
+		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading1}"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading1}"/>
+	</Style>
+	<Style Selector="ca|CTextBlock.Heading2">
+		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading2}"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading2}"/>
+	</Style>
+	<Style Selector="ca|CTextBlock.Heading3">
+		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading3}"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading3}"/>
+	</Style>
+</Styles>
