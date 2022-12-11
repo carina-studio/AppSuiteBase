@@ -23,5 +23,8 @@
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.w">一般文字字元</sys:String>
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.W">非一般文字字元</sys:String>
 	<sys:String x:Key="String/RegexTextBox.Watermark">正規表示式</sys:String>
+
+	<!-- TimeSpanFormatTextBox -->
+	<sys:String x:Key="String/TimeSpanFormatTextBox.Watermark">時距格式</sys:String>
 	
 </ResourceDictionary>

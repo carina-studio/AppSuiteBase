@@ -114,5 +114,10 @@
 	<Style Selector="TextBox:syntaxHighlighted">
 		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
 	</Style>
+
+	<!-- TimeSpanFormatTextBox -->
+	<Style Selector="TextBox:timeSpanFormatTextBox">
+		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
+	</Style>
 	
 </Styles>

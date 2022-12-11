@@ -23,5 +23,8 @@
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.w">Word characters</sys:String>
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.W">Non-word characters</sys:String>
 	<sys:String x:Key="String/RegexTextBox.Watermark">Regular Expression</sys:String>
+
+	<!-- TimeSpanFormatTextBox -->
+	<sys:String x:Key="String/TimeSpanFormatTextBox.Watermark">Format of Time Span</sys:String>
 	
 </ResourceDictionary>
