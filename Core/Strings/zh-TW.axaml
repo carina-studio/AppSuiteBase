@@ -40,7 +40,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Disconnected">網路：未連線</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作業系統：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">其他資訊</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">隱私權政策</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicyWasAgreedBefore">您已經同意本《隱私權政策》。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivateMemoryUsage">私有記憶體使用量：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessId">識別碼 (ID)：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessInformation">處理程序資訊</sys:String>
@@ -59,7 +59,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ThreadCount">執行緒數量：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">關於 {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">記憶體：{0}</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">使用者協議</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreementWasAgreedBefore">您已經同意本《使用者協議》。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Website">{0} 網站</sys:String>
 
 	<!-- ApplicationOptions -->
@@ -172,6 +172,8 @@
 	<sys:String x:Key="String/Common.Options.WithDialog">選項…</sys:String>
 	<sys:String x:Key="String/Common.Paste">貼上</sys:String>
 	<sys:String x:Key="String/Common.Paste.WithGesture">貼上 (Ctrl+V)</sys:String>
+	<sys:String x:Key="String/Common.PrivacyPolicy">隱私權政策</sys:String>
+	<sys:String x:Key="String/Common.PrivacyPolicy.WithDialog">隱私權政策…</sys:String>
 	<sys:String x:Key="String/Common.Refresh">重新整理</sys:String>
 	<sys:String x:Key="String/Common.Remove">移除</sys:String>
 	<sys:String x:Key="String/Common.Rename">重新命名</sys:String>
@@ -183,6 +185,8 @@
 	<sys:String x:Key="String/Common.Save.WithGesture">儲存 (Ctrl+S)</sys:String>
 	<sys:String x:Key="String/Common.SelectAll">全選</sys:String>
 	<sys:String x:Key="String/Common.SelectAll.WithGesture">全選 (Ctrl+A)</sys:String>
+	<sys:String x:Key="String/Common.UserAgreement">使用者協議</sys:String>
+	<sys:String x:Key="String/Common.UserAgreement.WithDialog">使用者協議…</sys:String>
 	<sys:String x:Key="String/Common.Yes">是</sys:String>
 
 	<!-- DatePicker -->
@@ -242,6 +246,10 @@
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">水平排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">網格排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">垂直排列視窗</sys:String>
+	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message">在您使用 {0} 之前，您必須閱讀且同意《隱私權政策》。</sys:String>
+	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">在您使用 {0} 之前，您必須閱讀且同意新的《隱私權政策》。</sys:String>
+	<sys:String x:Key="String/MainWindow.UserAgreement.Message">在您使用 {0} 之前，您必須閱讀且同意《使用者協議》。</sys:String>
+	<sys:String x:Key="String/MainWindow.UserAgreement.Message.Updated">在您使用 {0} 之前，您必須閱讀且同意新的《使用者協議》。</sys:String>
 
 	<!-- PathEnvVarEditorDialog -->
 	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath">新增目錄路徑</sys:String>
@@ -249,14 +257,6 @@
 	<sys:String x:Key="String/PathEnvVarEditorDialog.CustomPaths">預設路徑</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.EditPath">編輯目錄路徑</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">編輯 PATH 環境變數</sys:String>
-
-	<!-- PrivacyPolicyDialog -->
-	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Section1">在您使用 {0} 之前，您必須閱讀且同意</sys:String>
-	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Section2">。</sys:String>
-	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Updated.Section1">在您使用 {0} 之前，您必須閱讀且同意新的</sys:String>
-	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Updated.Section2">。</sys:String>
-	<sys:String x:Key="String/PrivacyPolicyDialog.PrivacyPolicy">《隱私權政策》</sys:String>
-	<sys:String x:Key="String/PrivacyPolicyDialog.Title">隱私權政策</sys:String>
 
 	<!-- ProductState -->
 	<sys:String x:Key="String/ProductState.Activated">已啟用</sys:String>
@@ -303,13 +303,5 @@
 
 	<!-- UriTextBox -->
 	<sys:String x:Key="String/UriTextBox.Watermark">網址 (URI)</sys:String>
-
-	<!-- UserAgreementDialog -->
-	<sys:String x:Key="String/UserAgreementDialog.Message.Section1">在您使用 {0} 之前，您必須閱讀且同意</sys:String>
-	<sys:String x:Key="String/UserAgreementDialog.Message.Section2">。</sys:String>
-	<sys:String x:Key="String/UserAgreementDialog.Message.Updated.Section1">在您使用 {0} 之前，您必須閱讀且同意新的</sys:String>
-	<sys:String x:Key="String/UserAgreementDialog.Message.Updated.Section2">。</sys:String>
-	<sys:String x:Key="String/UserAgreementDialog.Title">使用者協議</sys:String>
-	<sys:String x:Key="String/UserAgreementDialog.UserAgreement">《使用者協議》</sys:String>
 	
 </ResourceDictionary>

@@ -60,6 +60,14 @@ namespace CarinaStudio.AppSuite
         /// <inheritdoc/>
         public virtual IDisposable AddCustomStyle(IStyle style) =>
             new EmptyDisposable();
+        
+
+        /// <inheritdoc/>
+        public virtual Version? AgreedPrivacyPolicyVersion { get; }
+
+
+        /// <inheritdoc/>
+        public virtual Version? AgreedUserAgreementVersion { get; }
 
 
         /// <inheritdoc/>
@@ -347,6 +355,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public virtual DocumentSource? PrivacyPolicy { get; }
+
+
+        /// <inheritdoc/>
         public virtual Version? PrivacyPolicyVersion { get; } = null;
 
 
@@ -469,6 +481,10 @@ namespace CarinaStudio.AppSuite
         /// Get latest checked application update information.
         /// </summary>
         public virtual ApplicationUpdateInfo? UpdateInfo { get; } = null;
+
+
+        /// <inheritdoc/>
+        public virtual DocumentSource? UserAgreement { get; }
 
 
         /// <inheritdoc/>

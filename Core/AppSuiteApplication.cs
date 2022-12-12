@@ -481,6 +481,14 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public Version? AgreedPrivacyPolicyVersion { get; private set; }
+
+
+        /// <inheritdoc/>
+        public Version? AgreedUserAgreementVersion { get; private set; }
+
+
+        /// <inheritdoc/>
         public void AgreePrivacyPolicy()
         {
             // check state
@@ -500,6 +508,8 @@ namespace CarinaStudio.AppSuite
             {
                 this.PersistentState.SetValue<string>(AgreedPrivacyPolicyVersionKey, version.ToString());
                 _ = this.SavePersistentStateAsync();
+                this.AgreedPrivacyPolicyVersion = version;
+                this.OnPropertyChanged(nameof(AgreedPrivacyPolicyVersion));
             });
             this.IsPrivacyPolicyAgreed = true;
             this.OnPropertyChanged(nameof(IsPrivacyPolicyAgreed));
@@ -531,6 +541,8 @@ namespace CarinaStudio.AppSuite
             {
                 this.PersistentState.SetValue<string>(AgreedUserAgreementVersionKey, version.ToString());
                 _ = this.SavePersistentStateAsync();
+                this.AgreedUserAgreementVersion = version;
+                this.OnPropertyChanged(nameof(AgreedUserAgreementVersion));
             });
             this.IsUserAgreementAgreed = true;
             this.OnPropertyChanged(nameof(IsUserAgreementAgreed));
@@ -1418,6 +1430,11 @@ namespace CarinaStudio.AppSuite
                         return v;
                     return null;
                 });
+                if (agreedVersion != null)
+                {
+                    this.AgreedPrivacyPolicyVersion = agreedVersion;
+                    this.OnPropertyChanged(nameof(AgreedPrivacyPolicyVersion));
+                }
                 bool isAgreed = (agreedVersion != null && agreedVersion >= version);
                 if (agreedVersion != null)
                 {
@@ -1457,6 +1474,11 @@ namespace CarinaStudio.AppSuite
                         return v;
                     return null;
                 });
+                if (agreedVersion != null)
+                {
+                    this.AgreedUserAgreementVersion = agreedVersion;
+                    this.OnPropertyChanged(nameof(AgreedUserAgreementVersion));
+                }
                 bool isAgreed = (agreedVersion != null && agreedVersion >= version);
                 if (agreedVersion != null)
                 {
@@ -2719,6 +2741,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public abstract DocumentSource? PrivacyPolicy { get; }
+
+
+        /// <inheritdoc/>
         public abstract Version? PrivacyPolicyVersion { get; }
 
 
@@ -3409,6 +3435,10 @@ namespace CarinaStudio.AppSuite
         /// Get latest checked application update information.
         /// </summary>
         public ApplicationUpdateInfo? UpdateInfo { get; private set; }
+
+
+        /// <inheritdoc/>
+        public abstract DocumentSource? UserAgreement { get; }
 
 
         /// <inheritdoc/>

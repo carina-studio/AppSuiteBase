@@ -12,6 +12,12 @@
 	<sys:Double x:Key="Double/AddTabItemButton.Size">32</sys:Double>
 	<Thickness x:Key="Thickness/AddTabItemButton.Padding">8</Thickness>
 
+	<!-- AgreementDialog -->
+	<sys:Double x:Key="Double/AgreementDialog.Height">600</sys:Double>
+	<sys:Double x:Key="Double/AgreementDialog.MinHeight">200</sys:Double>
+	<sys:Double x:Key="Double/AgreementDialog.MinWidth">200</sys:Double>
+	<sys:Double x:Key="Double/AgreementDialog.Width">800</sys:Double>
+
 	<!-- ApplicationChangeListDialog -->
 	<sys:Double x:Key="Double/ApplicationChangeListDialog.Content.MaxHeight">500</sys:Double>
 	<sys:Double x:Key="Double/ApplicationChangeListDialog.Width">500</sys:Double>

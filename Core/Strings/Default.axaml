@@ -40,7 +40,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Disconnected">Network: Disconnected</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">Operating system: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">Other information</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicy">Privacy Policy</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicyWasAgreedBefore">You have agreed the《Privacy Policy》.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivateMemoryUsage">Usage of private memory: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessId">ID: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessInformation">Process information</sys:String>
@@ -59,7 +59,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ThreadCount">Number of threads: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">About {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">RAM: {0}</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreement">User Agreement</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreementWasAgreedBefore">You have agreed the《User Agreement》.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Version">{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Website">Website of {0}</sys:String>
 
@@ -173,6 +173,8 @@
 	<sys:String x:Key="String/Common.Options.WithDialog">Options…</sys:String>
 	<sys:String x:Key="String/Common.Paste">Paste</sys:String>
 	<sys:String x:Key="String/Common.Paste.WithGesture">Paste (Ctrl+V)</sys:String>
+	<sys:String x:Key="String/Common.PrivacyPolicy">Privacy Policy</sys:String>
+	<sys:String x:Key="String/Common.PrivacyPolicy.WithDialog">Privacy Policy…</sys:String>
 	<sys:String x:Key="String/Common.Refresh">Refresh</sys:String>
 	<sys:String x:Key="String/Common.Remove">Remove</sys:String>
 	<sys:String x:Key="String/Common.Rename">Rename</sys:String>
@@ -184,6 +186,8 @@
 	<sys:String x:Key="String/Common.Save.WithGesture">Save (Ctrl+S)</sys:String>
 	<sys:String x:Key="String/Common.SelectAll">Select all</sys:String>
 	<sys:String x:Key="String/Common.SelectAll.WithGesture">Select all (Ctrl+A)</sys:String>
+	<sys:String x:Key="String/Common.UserAgreement">User Agreement</sys:String>
+	<sys:String x:Key="String/Common.UserAgreement.WithDialog">User Agreement…</sys:String>
 	<sys:String x:Key="String/Common.Yes">Yes</sys:String>
 	
 	<!-- DatePicker -->
@@ -243,6 +247,10 @@
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">Layout windows horizontally</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">Tile windows</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">Layout windows vertically</sys:String>
+	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message">You must read and agree the《Privacy Policy》before you start using {0}.</sys:String>
+	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">You must read and agree the updated《Privacy Policy》before you start using {0}.</sys:String>
+	<sys:String x:Key="String/MainWindow.UserAgreement.Message">You must read and agree the《User Agreement》before you start using {0}.</sys:String>
+	<sys:String x:Key="String/MainWindow.UserAgreement.Message.Updated">You must read and agree the updated《User Agreement》before you start using {0}.</sys:String>
 
 	<!-- PathEnvVarEditorDialog -->
 	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath">Add new directory path</sys:String>
@@ -250,14 +258,6 @@
 	<sys:String x:Key="String/PathEnvVarEditorDialog.CustomPaths">Default paths</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.EditPath">Edit directory path</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">Edit PATH environment variable</sys:String>
-
-	<!-- PrivacyPolicyDialog -->
-	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Section1">You must read and agree the</sys:String>
-	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Section2">before you start using {0}.</sys:String>
-	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Updated.Section1">You must read and agree the updated</sys:String>
-	<sys:String x:Key="String/PrivacyPolicyDialog.Message.Updated.Section2">before you start using {0}.</sys:String>
-	<sys:String x:Key="String/PrivacyPolicyDialog.PrivacyPolicy">《Privacy Policy》</sys:String>
-	<sys:String x:Key="String/PrivacyPolicyDialog.Title">Privacy Policy</sys:String>
 
 	<!-- ProductState -->
 	<sys:String x:Key="String/ProductState.Activated">Activated</sys:String>
@@ -306,13 +306,5 @@
 
 	<!-- UriTextBox -->
 	<sys:String x:Key="String/UriTextBox.Watermark">URI</sys:String>
-
-	<!-- UserAgreementDialog -->
-	<sys:String x:Key="String/UserAgreementDialog.Message.Section1">You must read and agree the</sys:String>
-	<sys:String x:Key="String/UserAgreementDialog.Message.Section2">before you start using {0}.</sys:String>
-	<sys:String x:Key="String/UserAgreementDialog.Message.Updated.Section1">You must read and agree the updated</sys:String>
-	<sys:String x:Key="String/UserAgreementDialog.Message.Updated.Section2">before you start using {0}.</sys:String>
-	<sys:String x:Key="String/UserAgreementDialog.Title">User Agreement</sys:String>
-	<sys:String x:Key="String/UserAgreementDialog.UserAgreement">《User Agreement》</sys:String>
 	
 </ResourceDictionary>

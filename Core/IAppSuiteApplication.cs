@@ -37,6 +37,18 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get version of Privacy Policy which was agreed by user.
+        /// </summary>
+        Version? AgreedPrivacyPolicyVersion { get; }
+
+
+        /// <summary>
+        /// Get version of User Agreement which was agreed by user.
+        /// </summary>
+        Version? AgreedUserAgreementVersion { get; }
+
+
+        /// <summary>
         /// Called when user agree the Privacy Policy.
         /// </summary>
         void AgreePrivacyPolicy();
@@ -254,6 +266,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get latest document of Privacy Policy.
+        /// </summary>
+        DocumentSource? PrivacyPolicy { get; }
+
+
+        /// <summary>
         /// Get version of the Privacy Policy. Null means there is no Privacy Policy.
         /// </summary>
         Version? PrivacyPolicyVersion { get; }
@@ -358,6 +376,12 @@ namespace CarinaStudio.AppSuite
         /// Get latest checked application update information.
         /// </summary>
         ApplicationUpdateInfo? UpdateInfo { get; }
+
+
+        /// <summary>
+        /// Get latest document of User Agreement.
+        /// </summary>
+        DocumentSource? UserAgreement { get; }
 
 
         /// <summary>

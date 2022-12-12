@@ -607,30 +607,66 @@ namespace CarinaStudio.AppSuite.Controls
             if (!this.Application.IsUserAgreementAgreed)
             {
                 this.Logger.LogDebug("Show User Agreement dialog");
-                using var appInfo = this.Application.CreateApplicationInfoViewModel();
-                this.isShowingInitialDialogs = true;
-                if (!await new UserAgreementDialog(appInfo).ShowDialog(this))
+                var documentSource = this.Application.UserAgreement;
+                if (documentSource != null)
                 {
-                    this.Logger.LogWarning("User decline the current User Agreement");
-                    this.Application.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
+                    this.isShowingInitialDialogs = true;
+                    var dialog = new AgreementDialog()
+                    {
+                        DocumentSource = documentSource,
+                        Message = new FormattedString().Also(it =>
+                        {
+                            it.Arg1 = this.Application.Name;
+                            it.Bind(FormattedString.FormatProperty, this.GetResourceObservable(this.Application.IsUserAgreementAgreedBefore
+                                ? "String/MainWindow.UserAgreement.Message.Updated"
+                                : "String/MainWindow.UserAgreement.Message"
+                            ));
+                        }),
+                        Title = this.GetResourceObservable("String/Common.UserAgreement"),
+                    };
+                    if ((await dialog.ShowDialog(this)) == AgreementDialogResult.Declined)
+                    {
+                        this.Logger.LogWarning("User decline the current User Agreement");
+                        this.Application.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
+                        this.isShowingInitialDialogs = false;
+                        return;
+                    }
+                    this.isShowingInitialDialogs = false;
                 }
-                this.isShowingInitialDialogs = false;
-                return;
+                this.Application.AgreeUserAgreement();
             }
 
             // show privacy policy
             if (!this.Application.IsPrivacyPolicyAgreed)
             {
                 this.Logger.LogDebug("Show Privacy Policy dialog");
-                using var appInfo = this.Application.CreateApplicationInfoViewModel();
-                this.isShowingInitialDialogs = true;
-                if (!await new PrivacyPolicyDialog(appInfo).ShowDialog(this))
+                var documentSource = this.Application.PrivacyPolicy;
+                if (documentSource != null)
                 {
-                    this.Logger.LogWarning("User decline the current Privacy Policy");
-                    this.Application.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
+                    this.isShowingInitialDialogs = true;
+                    var dialog = new AgreementDialog()
+                    {
+                        DocumentSource = documentSource,
+                        Message = new FormattedString().Also(it =>
+                        {
+                            it.Arg1 = this.Application.Name;
+                            it.Bind(FormattedString.FormatProperty, this.GetResourceObservable(this.Application.IsPrivacyPolicyAgreedBefore
+                                ? "String/MainWindow.PrivacyPolicy.Message.Updated"
+                                : "String/MainWindow.PrivacyPolicy.Message"
+                            ));
+                        }),
+                        Title = this.GetResourceObservable("String/Common.PrivacyPolicy"),
+                    };
+                    if ((await dialog.ShowDialog(this)) == AgreementDialogResult.Declined)
+                    {
+                        this.Logger.LogWarning("User decline the current Privacy Policy");
+                        this.Application.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
+                        this.isShowingInitialDialogs = false;
+                        return;
+                    }
+                    this.isShowingInitialDialogs = false;
                 }
-                this.isShowingInitialDialogs = false;
-                return;
+                this.Application.AgreePrivacyPolicy();
             }
 
             // show application change list

@@ -263,19 +263,19 @@
 					</StackPanel>
 
 					<!-- User agreement -->
-					<StackPanel IsVisible="{Binding UserAgreementUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
+					<StackPanel IsVisible="{Binding $parent[Window].HasUserAgreement}">
 						<StackPanel Orientation="Horizontal">
 							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.UserAgreement.Outline}"/>
-							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.UserAgreement}" Uri="{Binding UserAgreementUri}"/>
+							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowUserAgreement}" Text="{DynamicResource String/Common.UserAgreement.WithDialog}"/>
 						</StackPanel>
 						<Separator Classes="Dialog_Separator_Small"/>
 					</StackPanel>
 
 					<!-- Privacy policy -->
-					<StackPanel IsVisible="{Binding PrivacyPolicyUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
+					<StackPanel IsVisible="{Binding $parent[Window].HasPrivacyPolicy}">
 						<StackPanel Orientation="Horizontal">
 							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PrivacyPolicy.Outline}"/>
-							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.PrivacyPolicy}" Uri="{Binding PrivacyPolicyUri}"/>
+							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowPrivacyPolicy}" Text="{DynamicResource String/Common.PrivacyPolicy.WithDialog}"/>
 						</StackPanel>
 						<Separator Classes="Dialog_Separator_Small"/>
 					</StackPanel>

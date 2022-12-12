@@ -28,7 +28,9 @@ namespace CarinaStudio.AppSuite.Controls
 		static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
 		static readonly StyledProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
 		static readonly StyledProperty<bool> HasExternalDependenciesProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasExternalDependencies");
+		static readonly StyledProperty<bool> HasPrivacyPolicyProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasPrivacyPolicy");
 		static readonly StyledProperty<bool> HasTotalPhysicalMemoryProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasTotalPhysicalMemory));
+		static readonly StyledProperty<bool> HasUserAgreementProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasUserAgreement");
 		static readonly SettingKey<bool> IsRestartingInDebugModeConfirmationShownKey = new("ApplicationInfoDialog.IsRestartingInDebugModeConfirmationShown");
 		static readonly DirectProperty<ApplicationInfoDialogImpl, PixelSize> PhysicalScreenSizeProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelSize>("PhysicalScreenSize", w => w.physicalScreenSize);
 		static readonly DirectProperty<ApplicationInfoDialogImpl, PixelRect> PhysicalScreenWorkingAreaProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelRect>("PhysicalScreenWorkingArea", w => w.physicalScreenWorkingArea);
@@ -81,6 +83,10 @@ namespace CarinaStudio.AppSuite.Controls
 					break;
 				}
 			}
+
+			// check user agreement and privacy policy
+			this.SetValue(HasPrivacyPolicyProperty, this.Application.PrivacyPolicyVersion != null && this.Application.PrivacyPolicy != null);
+			this.SetValue(HasUserAgreementProperty, this.Application.UserAgreementVersion != null && this.Application.UserAgreement != null);
 			
 			// setup controls
 			AvaloniaXamlLoader.Load(this);
@@ -415,6 +421,24 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		public void ShowExternalDependencies() =>
 			new ExternalDependenciesDialog().ShowDialog(this);
+		
+
+		/// <summary>
+		/// Show Privacy Policy.
+		/// </summary>
+		public void ShowPrivacyPolicy()
+		{
+			var documentSource = this.Application.PrivacyPolicy;
+			if (documentSource == null)
+				return;
+			_ = new AgreementDialog()
+			{
+				DocumentSource = documentSource,
+				IsAgreedBefore = true,
+				Message = this.GetResourceObservable("String/ApplicationInfoDialog.PrivacyPolicyWasAgreedBefore"),
+				Title = this.GetResourceObservable("String/Common.PrivacyPolicy"),
+			}.ShowDialog(this);
+		}
 
 
 		// Show product information on given view.
@@ -450,6 +474,24 @@ namespace CarinaStudio.AppSuite.Controls
 			}
 			else
 				view.Children[2].TryCastAndRun<Control>(it => it.IsVisible = false);
+		}
+
+
+		/// <summary>
+		/// Show User Agreement.
+		/// </summary>
+		public void ShowUserAgreement()
+		{
+			var documentSource = this.Application.UserAgreement;
+			if (documentSource == null)
+				return;
+			_ = new AgreementDialog()
+			{
+				DocumentSource = documentSource,
+				IsAgreedBefore = true,
+				Message = this.GetResourceObservable("String/ApplicationInfoDialog.UserAgreementWasAgreedBefore"),
+				Title = this.GetResourceObservable("String/Common.UserAgreement"),
+			}.ShowDialog(this);
 		}
 
 

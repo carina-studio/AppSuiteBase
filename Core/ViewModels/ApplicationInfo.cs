@@ -292,12 +292,6 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
-        /// Get URI of Privacy Policy.
-        /// </summary>
-        public virtual Uri? PrivacyPolicyUri { get; }
-
-
-        /// <summary>
         /// Get all ID of products.
         /// </summary>
         public virtual IList<string> Products { get; } = Array.Empty<string>();
@@ -307,12 +301,6 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// Get type of application releasing.
         /// </summary>
         public ApplicationReleasingType ReleasingType { get => this.Application.ReleasingType; }
-
-
-        /// <summary>
-        /// Get URI of User Agreement.
-        /// </summary>
-        public virtual Uri? UserAgreementUri { get; }
 
 
         /// <summary>

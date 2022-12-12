@@ -24,14 +24,10 @@ namespace CarinaStudio.AppSuite.Tests
 
         public override Uri? GitHubProjectUri => new Uri("http://localhost/");
 
-        public override Uri? PrivacyPolicyUri => new Uri("https://carina-studio.github.io/ULogViewer/privacy_policy.html");
-
         public override IList<string> Products => new string[] {
             "test1",
             "test2"
         };
-
-        public override Uri? UserAgreementUri => new Uri("https://carina-studio.github.io/ULogViewer/user_agreement.html");
 
         public override Uri? WebsiteUri => new Uri("https://carinastudio.azurewebsites.net/");
     }

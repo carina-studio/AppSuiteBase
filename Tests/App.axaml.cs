@@ -8,6 +8,7 @@ using CarinaStudio.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +17,25 @@ namespace CarinaStudio.AppSuite.Tests
 {
     public class App : AppSuiteApplication
     {
+        class AgreementDocumentSource : DocumentSource
+        {
+            public AgreementDocumentSource(IAppSuiteApplication app) : base(app)
+            { }
+
+            public override IList<ApplicationCulture> SupportedCultures => new ApplicationCulture[]
+            {
+                ApplicationCulture.EN_US,
+                ApplicationCulture.ZH_TW
+            };
+
+            public override Uri Uri => this.Culture switch
+            {
+                ApplicationCulture.ZH_TW => new($"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Document-zh-TW.md"),
+                _ => new($"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Document.md"),
+            };
+        }
+
+
         class DotNet7ExternalDependency : ExternalDependency
         {
             public DotNet7ExternalDependency(App app) : base(app, "dotnet7", ExternalDependencyType.Configuration, ExternalDependencyPriority.RequiredByFeatures)
@@ -143,6 +163,9 @@ namespace CarinaStudio.AppSuite.Tests
         //public override Uri? PackageManifestUri => new Uri("https://raw.githubusercontent.com/carina-studio/ULogViewer/master/PackageManifest-Preview.json");
 
 
+        public override DocumentSource? PrivacyPolicy => new AgreementDocumentSource(this);
+
+
         public override Version? PrivacyPolicyVersion => new(1, 4);
 
 
@@ -151,6 +174,9 @@ namespace CarinaStudio.AppSuite.Tests
 
         public override Task ShowApplicationOptionsDialogAsync(Avalonia.Controls.Window? owner, string? section = null) =>
             Task.CompletedTask;
+
+
+        public override DocumentSource? UserAgreement => new AgreementDocumentSource(this);
 
 
         public override Version? UserAgreementVersion => new(1, 6);
