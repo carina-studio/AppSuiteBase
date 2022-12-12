@@ -13,11 +13,11 @@
 	</Style>
 	<Style Selector="ca|CHyperlink">
 		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForeground}"/>
-		<Setter Property="IsUnderline" Value="True"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Text.Margin}"/>
 	</Style>
 	<Style Selector="ca|CHyperlink:pointerover">
 		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForegroundPointerOver}"/>
+		<Setter Property="IsUnderline" Value="True"/>
 	</Style>
 	<Style Selector="ca|CHyperlink:pressed">
 		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForegroundPressed}"/>

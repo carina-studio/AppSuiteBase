@@ -794,7 +794,7 @@
 				</TabItem>
 
 				<TabItem Header="Markdown">
-					<appControls:MarkdownViewer Margin="10" Source="avares://CarinaStudio.AppSuite.Tests/Document.md"/>
+					<appControls:MarkdownViewer HorizontalScrollBarVisibility="Disabled" Margin="10" Source="avares://CarinaStudio.AppSuite.Tests/Document.md"/>
 				</TabItem>
 
 				<TabItem Classes="Empty">

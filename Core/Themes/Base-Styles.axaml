@@ -1044,6 +1044,9 @@
 			</ControlTemplate>
 		</Setter>
 	</Style>
+	<Style Selector="controls|MarkdownViewer:startsWithHeading">
+		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Padding.StartsWithHeading}"/>
+	</Style>
 
 	<!-- Menu -->
 	<Style Selector="Menu">
