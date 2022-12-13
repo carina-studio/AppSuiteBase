@@ -43,8 +43,8 @@ public unsafe class MarkdownViewer : TemplatedControl
         });
         this.GetObservable(PaddingProperty).Subscribe(padding =>
         {
-            if (this.scrollViewer != null)
-                this.scrollViewer.Padding = padding;
+            (this.scrollViewer?.Content as Control)?.Let(it =>
+                it.Margin = padding);
         });
         this.GetObservable(VerticalScrollBarVisibilityProperty).Subscribe(visibility =>
         {
@@ -97,8 +97,12 @@ public unsafe class MarkdownViewer : TemplatedControl
         }
         if (this.scrollViewer != null)
         {
+            this.scrollViewer.GetObservable(ScrollViewer.ContentProperty).Subscribe(content =>
+            {
+                if (content is Control control)
+                    control.Margin = Padding;
+            });
             this.scrollViewer.HorizontalScrollBarVisibility = this.GetValue(HorizontalScrollBarVisibilityProperty);
-            this.scrollViewer.Padding = this.GetValue(PaddingProperty);
             this.scrollViewer.VerticalScrollBarVisibility = this.GetValue(VerticalScrollBarVisibilityProperty);
         }
     }
