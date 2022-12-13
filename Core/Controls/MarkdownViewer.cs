@@ -1,7 +1,10 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input;
+using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml.Styling;
+using ColorTextBlock.Avalonia;
 using Markdown.Avalonia;
 using System;
 
@@ -29,6 +32,21 @@ public unsafe class MarkdownViewer : TemplatedControl
     // Fields.
     MarkdownScrollViewer? presenter;
     ScrollViewer? scrollViewer;
+
+
+    // Static initializer.
+    static MarkdownViewer()
+    {
+        var handCursor = new Cursor(StandardCursorType.Hand);
+        CHyperlink.IsUnderlineProperty.Changed.Subscribe(e =>
+        {
+            if (e.Sender is CHyperlink hyperlink)
+            {
+                hyperlink.FindLogicalAncestorOfType<Control>()?.Let(control =>
+                    control.Cursor = e.NewValue.GetValueOrDefault() ? handCursor : Cursor.Default);
+            }
+        });
+    }
 
 
     /// <summary>
