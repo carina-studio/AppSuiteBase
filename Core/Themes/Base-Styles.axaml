@@ -1033,13 +1033,8 @@
 					BorderBrush="{TemplateBinding BorderBrush}"
 					BorderThickness="{TemplateBinding BorderThickness}"
 					CornerRadius="{TemplateBinding CornerRadius}">
-					<ScrollViewer Name="PART_ScrollViewer"
-						HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
-						VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}">
-						<md:MarkdownScrollViewer Name="PART_MarkdownPresenter"
-							Margin="{TemplateBinding Padding}"
-							Source="{TemplateBinding Source}"/>
-					</ScrollViewer>
+					<md:MarkdownScrollViewer Name="PART_MarkdownPresenter"
+						Source="{TemplateBinding Source}"/>
 				</Border>
 			</ControlTemplate>
 		</Setter>

@@ -28,6 +28,30 @@ public unsafe class MarkdownViewer : TemplatedControl
 
     // Fields.
     MarkdownScrollViewer? presenter;
+    ScrollViewer? scrollViewer;
+
+
+    /// <summary>
+    /// Initialize new <see cref="MarkdownViewer"/> instance.
+    /// </summary>
+    public MarkdownViewer()
+    { 
+        this.GetObservable(HorizontalScrollBarVisibilityProperty).Subscribe(visibility =>
+        {
+            if (this.scrollViewer != null)
+                this.scrollViewer.HorizontalScrollBarVisibility = visibility;
+        });
+        this.GetObservable(PaddingProperty).Subscribe(padding =>
+        {
+            if (this.scrollViewer != null)
+                this.scrollViewer.Padding = padding;
+        });
+        this.GetObservable(VerticalScrollBarVisibilityProperty).Subscribe(visibility =>
+        {
+            if (this.scrollViewer != null)
+                this.scrollViewer.VerticalScrollBarVisibility = visibility;
+        });
+    }
 
 
     /// <inheritdoc/>
@@ -68,6 +92,14 @@ public unsafe class MarkdownViewer : TemplatedControl
                 else if (!this.PseudoClasses.Contains(":startsWithHeading"))
                     this.PseudoClasses.Add(":startsWithHeading");
             });
+            var fieldInfo = typeof(MarkdownScrollViewer).GetField("_viewer", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            this.scrollViewer = fieldInfo?.GetValue(this.presenter) as ScrollViewer;
+        }
+        if (this.scrollViewer != null)
+        {
+            this.scrollViewer.HorizontalScrollBarVisibility = this.GetValue(HorizontalScrollBarVisibilityProperty);
+            this.scrollViewer.Padding = this.GetValue(PaddingProperty);
+            this.scrollViewer.VerticalScrollBarVisibility = this.GetValue(VerticalScrollBarVisibilityProperty);
         }
     }
 
