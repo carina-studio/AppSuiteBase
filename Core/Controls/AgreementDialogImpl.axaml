@@ -42,7 +42,7 @@
 
 			<!-- Document -->
 			<Separator Classes="Dialog_Separator_Small" Grid.Row="1"/>
-			<controls:MarkdownViewer Name="documentViewer" Grid.ColumnSpan="2" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" Source="{Binding $parent[Window].DocumentUri}"/>
+			<controls:MarkdownViewer Name="documentViewer" Grid.ColumnSpan="2" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" TextElement.FontFamily="{Binding $parent[Window].DocumentFontFamily}" Source="{Binding $parent[Window].DocumentUri}"/>
 			
 		</Grid>
 		

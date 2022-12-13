@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using CarinaStudio.Collections;
 using CarinaStudio.Threading;
 using System;
@@ -24,6 +25,7 @@ partial class AgreementDialogImpl : Dialog
     // Static fields.
     static readonly StyledProperty<ApplicationCulture> CultureProperty = AvaloniaProperty.Register<AgreementDialogImpl, ApplicationCulture>("Culture", ApplicationCulture.System);
     static readonly StyledProperty<IList<ApplicationCulture>> CulturesProperty = AvaloniaProperty.Register<AgreementDialogImpl, IList<ApplicationCulture>>("Cultures", Array.Empty<ApplicationCulture>());
+    static readonly StyledProperty<FontFamily> DocumentFontFamilyProperty = AvaloniaProperty.Register<AgreementDialogImpl, FontFamily>(nameof(DocumentFontFamily), FontFamily.Default);
     static readonly StyledProperty<Uri?> DocumentUriProperty = AvaloniaProperty.Register<AgreementDialogImpl, Uri?>("DocumentUri");
     public static readonly StyledProperty<bool> IsAgreedBeforeProperty = AvaloniaProperty.Register<AgreementDialogImpl, bool>(nameof(IsAgreedBefore));
     public static readonly StyledProperty<string?> MessageProperty = AvaloniaProperty.Register<AgreementDialogImpl, string?>(nameof(Message));
@@ -66,6 +68,16 @@ partial class AgreementDialogImpl : Dialog
     {
         this.hasResult = true;
         this.Close(AgreementDialogResult.Declined);
+    }
+
+
+    /// <summary>
+    /// Get or set font family for showing document.
+    /// </summary>
+    public FontFamily DocumentFontFamily
+    {
+        get => this.GetValue(DocumentFontFamilyProperty);
+        set => this.SetValue(DocumentFontFamilyProperty, value);
     }
 
 

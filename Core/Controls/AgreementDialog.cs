@@ -1,3 +1,5 @@
+using Avalonia.Media;
+using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using System.Threading.Tasks;
@@ -10,6 +12,10 @@ namespace CarinaStudio.AppSuite.Controls;
 public class AgreementDialog : CommonDialog<AgreementDialogResult>
 {
     // Fields.
+	FontFamily documentFontFamily = AppSuiteApplication.CurrentOrNull?.Configuration?.GetValueOrDefault(ConfigurationKeys.DefaultFontFamilyOfAgreement)?.Let(it =>
+	{
+		return new FontFamily(it);
+	}) ?? FontFamily.Default;
     DocumentSource? documentSource;
     bool isAgreedBefore;
     object? message;
@@ -20,6 +26,21 @@ public class AgreementDialog : CommonDialog<AgreementDialogResult>
     /// </summary>
     public AgreementDialog()
     { }
+
+
+	/// <summary>
+    /// Get or set font family for showing document.
+    /// </summary>
+    public FontFamily DocumentFontFamily
+    {
+        get => this.documentFontFamily;
+        set
+		{
+			this.VerifyAccess();
+			this.VerifyShowing();
+			this.documentFontFamily = value;
+		}
+    }
 
 
     /// <summary>
@@ -74,6 +95,7 @@ public class AgreementDialog : CommonDialog<AgreementDialogResult>
             return AgreementDialogResult.Declined;
         var dialog = new AgreementDialogImpl()
         {
+			DocumentFontFamily = this.documentFontFamily,
             DocumentSource = this.documentSource,
             IsAgreedBefore = this.isAgreedBefore,
         };

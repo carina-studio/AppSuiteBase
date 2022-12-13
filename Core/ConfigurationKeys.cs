@@ -13,6 +13,10 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         public static readonly SettingKey<int> AppUpdateInfoCheckingInterval = new(nameof(AppUpdateInfoCheckingInterval), 3600000 /* 1 hr */);
         /// <summary>
+        /// Name of default font family for showing agreement.
+        /// </summary>
+        public static readonly SettingKey<string> DefaultFontFamilyOfAgreement = new(nameof(DefaultFontFamilyOfAgreement), "Arial");
+        /// <summary>
         /// Whether retrieved application update info should be always accepted or not.
         /// </summary>
         public static readonly SettingKey<bool> ForceAcceptingAppUpdateInfo = new(nameof(ForceAcceptingAppUpdateInfo), false);
