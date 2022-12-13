@@ -98,7 +98,7 @@ partial class AgreementDialogImpl : Dialog
     // Called when closing.
     protected override void OnClosing(CancelEventArgs e)
     {
-        if (!this.hasResult)
+        if (!this.hasResult && !this.IsAgreedBefore)
             e.Cancel = true;
         base.OnClosing(e);
     }
