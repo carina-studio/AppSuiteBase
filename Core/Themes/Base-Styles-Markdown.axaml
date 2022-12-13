@@ -12,8 +12,9 @@
 		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Blockquote.Padding}"/>
 	</Style>
 	<Style Selector="ca|CHyperlink">
+		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Text}"/>
 		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForeground}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Text.Margin}"/>
+		<Setter Property="Margin" Value="0"/>
 	</Style>
 	<Style Selector="ca|CHyperlink:pointerover">
 		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForegroundPointerOver}"/>
@@ -24,6 +25,9 @@
 	</Style>
 	<Style Selector="Grid.List">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.List.Margin}"/>
+	</Style>
+	<Style Selector="mdControls|Rule">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Rule.Margin}"/>
 	</Style>
 	<Style Selector="mdControls|Rule.Single">
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Separator.Background}"/>
@@ -41,6 +45,8 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.ListMarker.Margin}"/>
 	</Style>
 	<Style Selector="ca|CTextBlock">
+		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Text}"/>
+		<Setter Property="LineSpacing" Value="{DynamicResource Double/MarkdownViewer.Markdown.Text.LineSpacing}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Text.Margin}"/>
 	</Style>
 	<Style Selector="ca|CTextBlock.Heading1">
