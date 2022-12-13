@@ -49,6 +49,9 @@
 		<Setter Property="LineSpacing" Value="{DynamicResource Double/MarkdownViewer.Markdown.Text.LineSpacing}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Text.Margin}"/>
 	</Style>
+	<Style Selector=".List ca|CTextBlock">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.List.Text.Margin}"/>
+	</Style>
 	<Style Selector="ca|CTextBlock.Heading1">
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading1}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
@@ -63,5 +66,20 @@
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading3}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading3}"/>
+	</Style>
+	<Style Selector="ca|CTextBlock.Heading4">
+		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading4}"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading4}"/>
+	</Style>
+	<Style Selector="ca|CTextBlock.Heading5">
+		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading5}"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading5}"/>
+	</Style>
+	<Style Selector="ca|CTextBlock.Heading6">
+		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading6}"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading6}"/>
 	</Style>
 </Styles>
