@@ -389,8 +389,22 @@ unsafe partial class AppSuiteApplication
                     canvas.Clear(new(0, 0, 0, 0));
 
                     // draw progress
-                    canvas.DrawRoundRect(new(progressBackgroundRect, progressBackgroundHeight / 2f), progressBackgroundPaint);
-                    canvas.DrawRoundRect(new(progressForegroundRect, progressForegroundHeight / 2f), progressForegroundPaint);
+                    if (progress >= 0.001)
+                    {
+                        canvas.DrawRoundRect(new(progressBackgroundRect, progressBackgroundHeight / 2f), progressBackgroundPaint);
+                        canvas.DrawRoundRect(new(progressForegroundRect, progressForegroundHeight / 2f), progressForegroundPaint);
+                    }
+
+                    // draw dot on top-right
+                    if (state != Controls.TaskbarIconProgressState.Normal)
+                    {
+                        var centerX = (int)(dockTileWidth * 0.87 + 0.5);
+                        var centerY = (int)(dockTileHeight * 0.13 + 0.5);
+                        var radius = (int)(dockTileWidth * 0.1 + 0.5);
+                        var borderWidth = (int)(dockTileWidth * 0.015 + 0.5);
+                        canvas.DrawCircle(centerX, centerY, radius + borderWidth, progressBackgroundPaint);
+                        canvas.DrawCircle(centerX, centerY, radius, progressForegroundPaint);
+                    }
                 });
 
                 // create new image for overlay
