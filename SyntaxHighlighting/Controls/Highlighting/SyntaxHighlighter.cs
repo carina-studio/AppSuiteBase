@@ -221,10 +221,10 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 if (!spanDefinition.IsValid)
                     continue;
                 var startMatch = spanDefinition.StartPattern!.Match(text);
-                if (!startMatch.Success)
+                if (!startMatch.Success || startMatch.Length == 0)
                     continue;
                 var endMatch = spanDefinition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
-                if (endMatch.Success)
+                if (endMatch.Success && endMatch.Length > 0)
                 {
                     candidateSpans.Add(new(
                         spanDefinition, 
@@ -443,7 +443,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             if (!tokenDefinition.IsValid)
                 continue;
             var match = tokenDefinition.Pattern!.Match(text, start);
-            if (match.Success)
+            if (match.Success && match.Length > 0)
             {
                 var endIndex = match.Index + match.Length;
                 if (endIndex <= end)
