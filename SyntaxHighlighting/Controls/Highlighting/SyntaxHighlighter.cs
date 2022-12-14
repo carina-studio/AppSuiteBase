@@ -751,11 +751,8 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     // Invalidate text layout.
     void InvalidateTextLayout()
     {
-        if (this.textLayout != null)
-        {
-            this.textLayout = null;
-            this.TextLayoutInvalidated?.Invoke(this, EventArgs.Empty);
-        }
+        this.textLayout = null;
+        this.TextLayoutInvalidated?.Invoke(this, EventArgs.Empty);
     }
     
 

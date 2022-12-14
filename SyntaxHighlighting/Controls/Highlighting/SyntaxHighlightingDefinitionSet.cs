@@ -17,6 +17,7 @@ public sealed class SyntaxHighlightingDefinitionSet
     readonly Dictionary<object, HashSet<SyntaxHighlightingToken>> attachedTokenDefinitions = new();
     readonly ObservableList<SyntaxHighlightingSpan> spanDefinitions = new();
     readonly ObservableList<SyntaxHighlightingToken> tokenDefinitions = new();
+    int validDefinitionsCount;
 
 
     /// <summary>
@@ -42,7 +43,9 @@ public sealed class SyntaxHighlightingDefinitionSet
         }
         else
             throw new InvalidOperationException("Duplicated span definition.");
-        spanDefinition.PropertyChanged += this.OnSpanDefinitionPropertyChanged;
+        if (spanDefinition.IsValid)
+            ++this.validDefinitionsCount;
+        spanDefinition.PropertyChanged += this.OnDefinitionPropertyChanged;
         ((INotifyCollectionChanged)spanDefinition.TokenDefinitions).CollectionChanged += this.OnTokenDefinitionsChanged;
         foreach (var tokenDefinition in spanDefinition.TokenDefinitions)
             this.AttachToTokenDefinition(tokenDefinition, attachedTokenDefinitions);
@@ -54,14 +57,18 @@ public sealed class SyntaxHighlightingDefinitionSet
     {
         if (!attachedTokenDefinitions.Add(tokenDefinition))
             throw new InvalidOperationException("Duplicated token definition.");
-        tokenDefinition.PropertyChanged += this.OnTokenDefinitionPropertyChanged;
+        if (tokenDefinition.IsValid)
+            ++this.validDefinitionsCount;
+        tokenDefinition.PropertyChanged += this.OnDefinitionPropertyChanged;
     }
 
 
     // Detach from given span definition.
     void DetachFromSpanDefinition(SyntaxHighlightingSpan spanDefinition)
     {
-        spanDefinition.PropertyChanged -= this.OnSpanDefinitionPropertyChanged;
+        if (spanDefinition.IsValid)
+            --this.validDefinitionsCount;
+        spanDefinition.PropertyChanged -= this.OnDefinitionPropertyChanged;
         ((INotifyCollectionChanged)spanDefinition.TokenDefinitions).CollectionChanged -= this.OnTokenDefinitionsChanged;
         foreach (var tokenDefinition in spanDefinition.TokenDefinitions)
             this.DetachFromTokenDefinition(tokenDefinition, null);
@@ -72,7 +79,9 @@ public sealed class SyntaxHighlightingDefinitionSet
     // Detach from given token definition.
     void DetachFromTokenDefinition(SyntaxHighlightingToken tokenDefinition, HashSet<SyntaxHighlightingToken>? attachedTokenDefinitions)
     {
-        tokenDefinition.PropertyChanged -= this.OnTokenDefinitionPropertyChanged;
+        if (tokenDefinition.IsValid)
+            --this.validDefinitionsCount;
+        tokenDefinition.PropertyChanged -= this.OnDefinitionPropertyChanged;
         attachedTokenDefinitions?.Remove(tokenDefinition);
     }
 
@@ -81,6 +90,18 @@ public sealed class SyntaxHighlightingDefinitionSet
     /// Raised when one of definitions in the set has been changed.
     /// </summary>
     public event EventHandler? Changed;
+
+
+    /// <summary>
+    /// Check whether at least one token or span definition has been added to the set or not.
+    /// </summary>
+    public bool HasDefinitions { get => this.tokenDefinitions.IsNotEmpty() || this.spanDefinitions.IsNotEmpty(); }
+
+
+    /// <summary>
+    /// Check whether at least one token or span definition in the set is valid or not.
+    /// </summary>
+    public bool HasValidDefinitions { get => this.validDefinitionsCount > 0; }
 
 
     /// <summary>
@@ -94,14 +115,21 @@ public sealed class SyntaxHighlightingDefinitionSet
         this.Changed?.Invoke(this, EventArgs.Empty);
     
 
-    // Called when property of span definition changed.
-    void OnSpanDefinitionPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    // Called when property of definition changed.
+    void OnDefinitionPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(SyntaxHighlightingDefinition.IsValid)
-            || (sender as SyntaxHighlightingDefinition)?.IsValid == true)
+        if (sender is not SyntaxHighlightingDefinition definition)
+            return;
+        if (e.PropertyName == nameof(SyntaxHighlightingDefinition.IsValid))
         {
+            if (definition.IsValid)
+                ++this.validDefinitionsCount;
+            else
+                --this.validDefinitionsCount;
             this.OnChanged();
         }
+        else if (definition.IsValid)
+            this.OnChanged();
     }
 
 
@@ -144,17 +172,6 @@ public sealed class SyntaxHighlightingDefinitionSet
                 break;
         }
         this.OnChanged();
-    }
-
-
-    // Called when property of token definition changed.
-    void OnTokenDefinitionPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(SyntaxHighlightingDefinition.IsValid)
-            || (sender as SyntaxHighlightingDefinition)?.IsValid == true)
-        {
-            this.OnChanged();
-        }
     }
 
 

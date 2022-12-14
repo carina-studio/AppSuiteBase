@@ -98,7 +98,8 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
     protected override TextLayout CreateTextLayout()
     {
         var syntaxHighlighter = this.syntaxHighlighter;
-        if (syntaxHighlighter.DefinitionSet == null)
+        var definitionSet = this.syntaxHighlighter.DefinitionSet;
+        if (definitionSet == null || !definitionSet.HasValidDefinitions)
             return base.CreateTextLayout();
         this.isCreatingTextLayout = true;
         try

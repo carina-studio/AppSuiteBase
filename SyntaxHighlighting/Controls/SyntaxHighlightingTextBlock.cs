@@ -99,12 +99,15 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
     /// <inheritdoc/>
     protected override TextLayout CreateTextLayout(string? text)
     {
-        if (string.IsNullOrEmpty(text) || this.syntaxHighlighter.DefinitionSet == null)
+        if (string.IsNullOrEmpty(text))
+            return base.CreateTextLayout(text);
+        var syntaxHighlighter = this.syntaxHighlighter;
+        var definitionSet = syntaxHighlighter.DefinitionSet;
+        if (definitionSet == null || !definitionSet.HasValidDefinitions)
             return base.CreateTextLayout(text);
         this.isCreatingTextLayout = true;
         try
         {
-            var syntaxHighlighter = this.syntaxHighlighter;
             syntaxHighlighter.FlowDirection = this.FlowDirection;
             syntaxHighlighter.FontFamily = this.FontFamily;
             syntaxHighlighter.FontSize = this.FontSize;
