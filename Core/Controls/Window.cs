@@ -15,7 +15,7 @@ namespace CarinaStudio.AppSuite.Controls
     /// <summary>
     /// Base class of window of AppSuite.
     /// </summary>
-    public abstract class Window : CarinaStudio.Controls.Window<IAppSuiteApplication>, ITutorialPresenter
+    public abstract class Window : CarinaStudio.Controls.ApplicationWindow<IAppSuiteApplication>, ITutorialPresenter
     {
         /// <summary>
         /// Property of <see cref="CurrentTutorial"/>.
