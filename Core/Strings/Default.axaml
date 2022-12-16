@@ -40,6 +40,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Disconnected">Network: Disconnected</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">Operating system: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">Other information</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrimaryNetworkInterface">Network interface for identifying: {0} ({1}), {2}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicyWasAgreedBefore">You have agreed the《Privacy Policy》.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivateMemoryUsage">Usage of private memory: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessId">ID: {0}</sys:String>
@@ -251,6 +252,11 @@
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">You must read and agree the updated《Privacy Policy》before you start using {0}.</sys:String>
 	<sys:String x:Key="String/MainWindow.UserAgreement.Message">You must read and agree the《User Agreement》before you start using {0}.</sys:String>
 	<sys:String x:Key="String/MainWindow.UserAgreement.Message.Updated">You must read and agree the updated《User Agreement》before you start using {0}.</sys:String>
+
+	<!-- NetworkInterfaceType -->
+	<sys:String x:Key="String/NetworkInterfaceType.Ethernet">Ethernet</sys:String>
+	<sys:String x:Key="String/NetworkInterfaceType.Unknown">Unknown</sys:String>
+	<sys:String x:Key="String/NetworkInterfaceType.Wireless80211">Wireless</sys:String>
 
 	<!-- PathEnvVarEditorDialog -->
 	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath">Add new directory path</sys:String>

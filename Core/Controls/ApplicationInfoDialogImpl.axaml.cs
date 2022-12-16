@@ -5,6 +5,7 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using CarinaStudio.AppSuite.Converters;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Collections;
@@ -24,6 +25,12 @@ namespace CarinaStudio.AppSuite.Controls
 	/// </summary>
 	partial class ApplicationInfoDialogImpl : Dialog
 	{
+		/// <summary>
+		/// Converter to convert from <see cref="System.Net.NetworkInformation.NetworkInterfaceType"/> to string.
+		/// </summary>
+		public static readonly IValueConverter NetworkInterfaceTypeConverter = new EnumConverter(AppSuiteApplication.CurrentOrNull, typeof(System.Net.NetworkInformation.NetworkInterfaceType));
+
+
 		// Static fields.
 		static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
 		static readonly StyledProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
@@ -34,6 +41,7 @@ namespace CarinaStudio.AppSuite.Controls
 		static readonly SettingKey<bool> IsRestartingInDebugModeConfirmationShownKey = new("ApplicationInfoDialog.IsRestartingInDebugModeConfirmationShown");
 		static readonly DirectProperty<ApplicationInfoDialogImpl, PixelSize> PhysicalScreenSizeProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelSize>("PhysicalScreenSize", w => w.physicalScreenSize);
 		static readonly DirectProperty<ApplicationInfoDialogImpl, PixelRect> PhysicalScreenWorkingAreaProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelRect>("PhysicalScreenWorkingArea", w => w.physicalScreenWorkingArea);
+		static readonly StyledProperty<string?> PrimaryNetworkInterfacePhysicalAddressProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, string?>("PrimaryNetworkInterfacePhysicalAddress");
 		public static readonly IValueConverter RectToStringConverter = new FuncValueConverter<object?, string?>(value =>
 		{
 			if (value is PixelRect pixelRect)
@@ -87,6 +95,19 @@ namespace CarinaStudio.AppSuite.Controls
 			// check user agreement and privacy policy
 			this.SetValue(HasPrivacyPolicyProperty, this.Application.PrivacyPolicyVersion != null && this.Application.PrivacyPolicy != null);
 			this.SetValue(HasUserAgreementProperty, this.Application.UserAgreementVersion != null && this.Application.UserAgreement != null);
+
+			// check MAC address
+			Net.NetworkManager.Default.PrimaryPhysicalAddress?.Let(address =>
+			{
+				var buffer = new StringBuilder();
+				foreach (var b in address.GetAddressBytes())
+				{
+					if (buffer.Length > 0)
+						buffer.Append(':');
+					buffer.AppendFormat("{0:x2}", b);
+				}
+				this.SetValue(PrimaryNetworkInterfacePhysicalAddressProperty, buffer.ToString());
+			});
 			
 			// setup controls
 			AvaloniaXamlLoader.Load(this);

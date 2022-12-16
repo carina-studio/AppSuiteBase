@@ -40,6 +40,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Disconnected">网络：未连线</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作业系统：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">其他资讯</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrimaryNetworkInterface">识别用网络介面：{0} ({1})，{2}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicyWasAgreedBefore">您已经同意本《隐私权政策》。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivateMemoryUsage">私有内存使用量：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessId">识别码 (ID)：{0}</sys:String>
@@ -250,6 +251,11 @@
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">在您使用 {0} 之前，您必须阅读且同意新的《隐私权政策》。 </sys:String>
 	<sys:String x:Key="String/MainWindow.UserAgreement.Message">在您使用 {0} 之前，您必须阅读且同意《使用者协议》。 </sys:String>
 	<sys:String x:Key="String/MainWindow.UserAgreement.Message.Updated">在您使用 {0} 之前，您必须阅读且同意新的《使用者协议》。 </sys:String>
+
+	<!-- NetworkInterfaceType -->
+	<sys:String x:Key="String/NetworkInterfaceType.Ethernet">乙太网络</sys:String>
+	<sys:String x:Key="String/NetworkInterfaceType.Unknown">未知</sys:String>
+	<sys:String x:Key="String/NetworkInterfaceType.Wireless80211">无线网络</sys:String>
 
 	<!-- PathEnvVarEditorDialog -->
 	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath">新增目录路径</sys:String>

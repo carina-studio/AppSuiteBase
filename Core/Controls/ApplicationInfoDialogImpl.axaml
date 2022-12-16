@@ -14,6 +14,7 @@
 		xmlns:sys="using:System"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.ApplicationInfoDialogImpl"
+		Name="window"
         Classes="Dialog"
         MinWidth="{DynamicResource Double/ApplicationInfoDialog.MinWidth}"
         SizeToContent="WidthAndHeight">
@@ -147,6 +148,18 @@
 						<abControls:FormattedSelectableTextBlock Arg1="{Binding PublicIPAddress, Source={x:Static net:NetworkManager.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Connected}" IsVisible="{Binding IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" TextTrimming="CharacterEllipsis"/>
 						<TextBlock IsVisible="{Binding !IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" Text="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Disconnected}" TextTrimming="CharacterEllipsis"/>
 					</Panel>
+
+					<!-- Primary network interface -->
+					<StackPanel>
+						<StackPanel.IsVisible>
+							<MultiBinding Converter="{x:Static BoolConverters.And}">
+								<Binding Path="PrimaryNetworkInterfacePhysicalAddress" ElementName="window" Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
+								<Binding Path="Application.IsDebugMode" ElementName="window"/>
+							</MultiBinding>
+						</StackPanel.IsVisible>
+						<Separator Classes="Dialog_Separator_Small"/>
+						<abControls:FormattedSelectableTextBlock Arg1="{Binding PrimaryInterfaceName, Source={x:Static net:NetworkManager.Default}}" Arg2="{Binding PrimaryInterfaceType, Converter={x:Static controls:ApplicationInfoDialogImpl.NetworkInterfaceTypeConverter}, Source={x:Static net:NetworkManager.Default}}" Arg3="{Binding $parent[Window].PrimaryNetworkInterfacePhysicalAddress}" Format="{DynamicResource String/ApplicationInfoDialog.PrimaryNetworkInterface}" TextTrimming="CharacterEllipsis"/>
+					</StackPanel>
 
 					<!-- Screen info -->
 					<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
