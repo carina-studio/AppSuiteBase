@@ -44,10 +44,12 @@ namespace CarinaStudio.AppSuite
 
 
         // Constants.
-        const int ProcessInfoUpdateInterval = 3000;
+		const int ProcessInfoUpdateInterval = 3000;
+        const int ProcessInfoUpdateIntervalBG = 10000;
 		const int ProcessInfoUpdateIntervalHF = 1500;
 		const int ProcessInfoUpdateIntervalHFInDebugMode = 1000;
 		const int UIResponseCheckingInterval = 500;
+		const int UIResponseCheckingIntervalBG = 10000;
 		const int UIResponseCheckingIntervalHF = 200;
 
 
@@ -63,9 +65,8 @@ namespace CarinaStudio.AppSuite
 		readonly Process process = Process.GetCurrentProcess();
         readonly SingleThreadSynchronizationContext processInfoCheckingSyncContext = new("Process information updater");
 		readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
-		readonly int uiResponseCheckingInterval;
+		readonly object uiResponseCheckingSyncLock = new();
 		readonly Thread uiResponseCheckingThread;
-		int updateInterval = ProcessInfoUpdateInterval;
         readonly ScheduledAction updateProcessInfoAction;
 
 
@@ -75,7 +76,6 @@ namespace CarinaStudio.AppSuite
             // setup fields and properties
             this.app = app;
 			this.logger = app.LoggerFactory.CreateLogger(nameof(ProcessInfo));
-			this.uiResponseCheckingInterval = app.IsDebugMode ? UIResponseCheckingIntervalHF : UIResponseCheckingInterval;
 			this.ProcessId = this.process.Id;
 			this.ThreadCount = 1;
 
@@ -85,6 +85,9 @@ namespace CarinaStudio.AppSuite
 				this.isFirstUpdate = false;
 				this.Update();
 			});
+
+			// attach to application
+			app.PropertyChanged += this.OnApplicationPropertyChanged;
 
 			// start checking
 			this.uiResponseCheckingThread = new Thread(this.UIResponseCheckingThreadEntry).Also(it =>
@@ -116,17 +119,29 @@ namespace CarinaStudio.AppSuite
 		public double? GCFrequency { get; private set; }
 
 
+		// Called when property of application changed.
+		void OnApplicationPropertyChanged(object? sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof(IAppSuiteApplication.IsBackgroundMode)
+				&& !this.app.IsBackgroundMode)
+			{
+				if (!this.isFirstUpdate)
+					this.updateProcessInfoAction.Reschedule(this.SelectUpdateInterval());
+				lock (this.uiResponseCheckingSyncLock)
+				{
+					Monitor.PulseAll(this.uiResponseCheckingSyncLock);
+				}
+			}
+		}
+
+
 		// Called after disposing high-frequency update token.
 		void OnHfTokenDisposed(HighFrequencyUpdateToken token)
 		{
-			lock (this.hfUpdateTokens)
-			{
-				if (!this.hfUpdateTokens.Remove(token))
-					return;
-				if (this.hfUpdateTokens.IsNotEmpty())
-					return;
-			}
-			this.updateInterval = ProcessInfoUpdateInterval;
+			this.app.VerifyAccess();
+			this.hfUpdateTokens.Remove(token);
+			if (this.hfUpdateTokens.IsEmpty())
+				this.updateProcessInfoAction.Reschedule(this.SelectUpdateInterval());
 		}
 
 
@@ -168,6 +183,7 @@ namespace CarinaStudio.AppSuite
 		/// <returns>Token of request.</returns>
 		public IDisposable RequestHighFrequencyUpdate()
 		{
+			this.app.VerifyAccess();
 			var isFirstToken = false;
 			var token = this.hfUpdateTokens.Lock(it =>
 			{
@@ -176,13 +192,35 @@ namespace CarinaStudio.AppSuite
 				isFirstToken = it.Count == 1;
 				return token;
 			});
-			if (isFirstToken)
-			{
-				this.updateInterval = this.app.IsDebugMode ? ProcessInfoUpdateIntervalHFInDebugMode : ProcessInfoUpdateIntervalHF;
-				if (!this.isFirstUpdate)
-					this.updateProcessInfoAction.Reschedule();
-			}
+			if (isFirstToken && !this.isFirstUpdate)
+				this.updateProcessInfoAction.Reschedule(this.SelectUpdateInterval());
 			return token;
+		}
+
+
+		// Select proper interval for checking UI response.
+		int SelectUIResponseCheckingInterval()
+		{
+			if (this.app.IsBackgroundMode)
+				return UIResponseCheckingIntervalBG;
+			if (app.IsDebugMode)
+				return UIResponseCheckingIntervalHF;
+			return UIResponseCheckingInterval;
+		}
+
+
+		// Select proper interval to update process info.
+		int SelectUpdateInterval()
+		{
+			if (this.hfUpdateTokens.IsNotEmpty())
+			{
+				if (app.IsDebugMode)
+					return ProcessInfoUpdateIntervalHFInDebugMode;
+				return ProcessInfoUpdateIntervalHF;
+			}
+			if (app.IsBackgroundMode)
+				return ProcessInfoUpdateIntervalBG;
+			return ProcessInfoUpdateInterval;
 		}
 
 
@@ -218,7 +256,7 @@ namespace CarinaStudio.AppSuite
 								Monitor.Pulse(syncLock);
 						}
 					});
-					if (!Monitor.Wait(syncLock, this.updateInterval))
+					if (!Monitor.Wait(syncLock, 3000))
 					{
 						this.logger.LogWarning("UI is not responding");
 						totalDuration = 0;
@@ -230,11 +268,10 @@ namespace CarinaStudio.AppSuite
 					++checkingCount;
 					++checkingId;
 				}
-				Thread.Sleep(this.uiResponseCheckingInterval);
-
-				// report later
-				if ((stopWatch.ElapsedMilliseconds - lastReportTime) < this.updateInterval)
-					continue;
+				lock (this.uiResponseCheckingSyncLock)
+				{
+					Monitor.Wait(this.uiResponseCheckingSyncLock, this.SelectUIResponseCheckingInterval());
+				}
 
 				// report respone duration
 				var responseDuration = (totalDuration / checkingCount);
@@ -383,7 +420,7 @@ namespace CarinaStudio.AppSuite
 			});
 			if (this.app.IsDebugMode)
 				this.logger.LogTrace("CPU usage: {cpuUsagePercentage}%, memory usage: {privateMemoryUsage}", string.Format("{0:0.0}", cpuUsagePercentage), privateMemoryUsage.ToFileSizeString());
-			this.updateProcessInfoAction?.Schedule(this.updateInterval);
+			this.updateProcessInfoAction.Schedule(this.SelectUpdateInterval());
 		}
 	}
 }
