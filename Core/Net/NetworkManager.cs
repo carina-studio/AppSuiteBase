@@ -256,7 +256,19 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
 
 
     /// <summary>
-    /// Get primary physical address of network adapter on current device.
+    /// Get name of primary network interface.
+    /// </summary>
+    public string? PrimaryInterfaceName { get; private set; }
+
+
+    /// <summary>
+    /// Get type of primary network interface.
+    /// </summary>
+    public NetworkInterfaceType PrimaryInterfaceType { get; private set; } = NetworkInterfaceType.Unknown;
+
+
+    /// <summary>
+    /// Get physical address of primary network interface on current device.
     /// </summary>
     public PhysicalAddress? PrimaryPhysicalAddress { get; private set; }
 
@@ -279,6 +291,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
             // get addresses
             var addresses = new HashSet<IPAddress>();
             var primaryPhysicalAddress = (PhysicalAddress?)null;
+            var primaryInterfaceName = default(string);
             var primaryInterfaceType = NetworkInterfaceType.Ethernet;
             var isWirelessInterfaceUp = false;
             var isNetworkAvailable = false;
@@ -302,6 +315,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
                     }
                     if (primaryPhysicalAddress == null)
                     {
+                        primaryInterfaceName = networkInterface.Name;
                         primaryInterfaceType = networkInterface.NetworkInterfaceType;
                         primaryPhysicalAddress = networkInterface.GetPhysicalAddress();
                     }
@@ -310,25 +324,43 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
                         switch (networkInterface.NetworkInterfaceType)
                         {
                             case NetworkInterfaceType.Ethernet:
-                                if (primaryInterfaceType != NetworkInterfaceType.Ethernet)
+                                if (primaryInterfaceType == NetworkInterfaceType.Ethernet
+                                    && string.CompareOrdinal(primaryInterfaceName, networkInterface.Name) < 0)
                                 {
-                                    primaryInterfaceType = NetworkInterfaceType.Ethernet;
-                                    primaryPhysicalAddress = networkInterface.GetPhysicalAddress();
+                                    continue;
                                 }
                                 break;
                             case NetworkInterfaceType.Wireless80211:
-                                if (primaryInterfaceType != NetworkInterfaceType.Ethernet
-                                    && primaryInterfaceType != NetworkInterfaceType.Wireless80211)
+                                if (primaryInterfaceType == NetworkInterfaceType.Ethernet)
+                                    continue;
+                                if (primaryInterfaceType == NetworkInterfaceType.Wireless80211
+                                    && string.CompareOrdinal(primaryInterfaceName, networkInterface.Name) < 0)
                                 {
-                                    primaryInterfaceType = NetworkInterfaceType.Wireless80211;
-                                    primaryPhysicalAddress = networkInterface.GetPhysicalAddress();
+                                    continue;
                                 }
                                 break;
+                            default:
+                                continue;
                         }
+                        primaryInterfaceName = networkInterface.Name;
+                        primaryInterfaceType = networkInterface.NetworkInterfaceType;
+                        primaryPhysicalAddress = networkInterface.GetPhysicalAddress();
                     }
                 }
                 isNetworkAvailable = NetworkInterface.GetIsNetworkAvailable();
             });
+
+            // report primary interface
+            if (this.PrimaryInterfaceName != primaryInterfaceName)
+            {
+                this.PrimaryInterfaceName = primaryInterfaceName;
+                this.PropertyChanged?.Invoke(this, new(nameof(PrimaryInterfaceName)));
+            }
+            if (this.PrimaryInterfaceType != primaryInterfaceType)
+            {
+                this.PrimaryInterfaceType = primaryInterfaceType;
+                this.PropertyChanged?.Invoke(this, new(nameof(PrimaryInterfaceType)));
+            }
 
             // report physical address
             if (this.PrimaryPhysicalAddress?.Equals(primaryPhysicalAddress) != true)
