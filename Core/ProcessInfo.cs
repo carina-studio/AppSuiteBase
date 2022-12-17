@@ -48,9 +48,9 @@ namespace CarinaStudio.AppSuite
         const int ProcessInfoUpdateIntervalBG = 10000;
 		const int ProcessInfoUpdateIntervalHF = 1500;
 		const int ProcessInfoUpdateIntervalHFInDebugMode = 1000;
-		const int UIResponseCheckingInterval = 500;
+		const int UIResponseCheckingInterval = 3000;
 		const int UIResponseCheckingIntervalBG = 10000;
-		const int UIResponseCheckingIntervalHF = 200;
+		const int UIResponseCheckingIntervalHF = 1000;
 
 
         // Fields.
