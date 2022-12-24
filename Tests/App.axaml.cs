@@ -36,6 +36,27 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
+        class AppChangeListDocumentSource : DocumentSource
+        {
+            public AppChangeListDocumentSource(IAppSuiteApplication app) : base(app)
+            { }
+
+            public override IList<ApplicationCulture> SupportedCultures => new ApplicationCulture[]
+            {
+                ApplicationCulture.EN_US,
+                ApplicationCulture.ZH_CN,
+                ApplicationCulture.ZH_TW,
+            };
+
+            public override Uri Uri => this.Culture switch
+            {
+                ApplicationCulture.ZH_CN => this.Application.CreateAvaloniaResourceUri("ChangeList-zh-CN.md"),
+                ApplicationCulture.ZH_TW => this.Application.CreateAvaloniaResourceUri("ChangeList-zh-TW.md"),
+                _ => this.Application.CreateAvaloniaResourceUri("ChangeList.md"),
+            };
+        }
+
+
         class DotNet7ExternalDependency : ExternalDependency
         {
             public DotNet7ExternalDependency(App app) : base(app, "dotnet7", ExternalDependencyType.Configuration, ExternalDependencyPriority.RequiredByFeatures)
@@ -70,6 +91,9 @@ namespace CarinaStudio.AppSuite.Tests
         readonly List<ExternalDependency> externalDependencies = new();
 
         protected override bool AllowMultipleMainWindows => true;
+
+
+        public override DocumentSource? ChangeList => new AppChangeListDocumentSource(this);
 
         public override ApplicationInfo CreateApplicationInfoViewModel() => new AppInfo();
 

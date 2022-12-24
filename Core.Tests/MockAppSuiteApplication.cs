@@ -94,6 +94,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public virtual DocumentSource? ChangeList { get; }
+
+
+        /// <inheritdoc/>
         public virtual Task<bool> CheckForApplicationUpdateAsync(Avalonia.Controls.Window? owner, bool forceShowingDialog) =>
             Task.FromResult(false);
 

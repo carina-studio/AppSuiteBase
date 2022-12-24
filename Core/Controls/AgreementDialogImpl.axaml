@@ -19,7 +19,7 @@
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
 			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-				<Button Classes="Dialog_AccentControlButton" Command="{Binding $parent[Window].Agree}" Content="{DynamicResource String/Common.OK}" IsVisible="{Binding $parent[Window].IsAgreedBefore}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Agree}" Content="{DynamicResource String/Common.OK}" IsVisible="{Binding $parent[Window].IsAgreedBefore}"/>
 				<Button Name="agreeButton" Classes="Dialog_AccentControlButton" Command="{Binding $parent[Window].Agree}" Content="{DynamicResource String/Common.Agree}" IsVisible="{Binding !$parent[Window].IsAgreedBefore}"/>
 				<Button Classes="Dialog_AccentControlButton" Command="{Binding $parent[Window].Decline}" Content="{DynamicResource String/Common.Decline}" IsVisible="{Binding !$parent[Window].IsAgreedBefore}"/>
 			</StackPanel>

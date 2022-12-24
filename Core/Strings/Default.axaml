@@ -2,11 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:sys="using:System">
 
-	<!-- ApplicationChangeListDialog -->
-	<sys:String x:Key="String/ApplicationChangeListDialog.Details">Details</sys:String>
-	<sys:String x:Key="String/ApplicationChangeListDialog.Header">What's change in {0} {1}</sys:String>
-	<sys:String x:Key="String/ApplicationChangeListDialog.IconSpaceReservationChar">A</sys:String>
-
 	<!-- ApplicationCulture -->
 	<sys:String x:Key="String/ApplicationCulture.EN_US">English (United States)</sys:String>
 	<sys:String x:Key="String/ApplicationCulture.System">System</sys:String>

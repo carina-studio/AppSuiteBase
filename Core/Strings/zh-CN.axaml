@@ -1,11 +1,6 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:sys="using:System">
-
-	<!-- ApplicationChangeListDialog -->
-	<sys:String x:Key="String/ApplicationChangeListDialog.Details">详细资讯</sys:String>
-	<sys:String x:Key="String/ApplicationChangeListDialog.Header">{0} {1} 的变更</sys:String>
-	<sys:String x:Key="String/ApplicationChangeListDialog.IconSpaceReservationChar">中</sys:String>
 	
 	<!-- ApplicationCulture -->
 	<sys:String x:Key="String/ApplicationCulture.EN_US">英文 (美国)</sys:String>

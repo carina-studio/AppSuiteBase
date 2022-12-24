@@ -17,6 +17,10 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         public static readonly SettingKey<string> DefaultFontFamilyOfAgreement = new(nameof(DefaultFontFamilyOfAgreement), "Arial");
         /// <summary>
+        /// Name of default font family for showing document.
+        /// </summary>
+        public static readonly SettingKey<string> DefaultFontFamilyOfDocument = new(nameof(DefaultFontFamilyOfDocument), "Arial");
+        /// <summary>
         /// Whether retrieved application update info should be always accepted or not.
         /// </summary>
         public static readonly SettingKey<bool> ForceAcceptingAppUpdateInfo = new(nameof(ForceAcceptingAppUpdateInfo), false);

@@ -600,6 +600,10 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <inheritdoc/>
+        public virtual DocumentSource? ChangeList { get; }
+
+
         // Check whether restarting all root windows is needed or not.
         void CheckRestartingRootWindowsNeeded()
         {

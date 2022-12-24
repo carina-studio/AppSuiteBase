@@ -61,6 +61,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get document of change list of application.
+        /// </summary>
+        DocumentSource? ChangeList { get; }
+
+
+        /// <summary>
 		/// Check for application update asynchronously.
 		/// </summary>
         /// <param name="owner">Owner window.</param>
@@ -394,5 +400,28 @@ namespace CarinaStudio.AppSuite
         /// Get all windows of application.
         /// </summary>
         IList<Avalonia.Controls.Window> Windows { get; }
+    }
+
+
+    /// <summary>
+    /// Extensions for <see cref="IAppSuiteApplication"/>.
+    /// </summary>
+    public static class AppSuiteApplicationExtensions
+    {
+        // Fields.
+        static Uri? baseAvaloniaResourceUri;
+
+
+        /// <summary>
+        /// Create URI of avalonia resource in assembly of application.
+        /// </summary>
+        /// <param name="app">Application.</param>
+        /// <param name="path">Path to resource.</param>
+        /// <returns>URI of avalonia resource.</returns>
+        public static Uri CreateAvaloniaResourceUri(this IAppSuiteApplication app, string path)
+        {
+            baseAvaloniaResourceUri ??= new($"avares://{app.Assembly.GetName().Name}");
+            return new(baseAvaloniaResourceUri, path);
+        }
     }
 }

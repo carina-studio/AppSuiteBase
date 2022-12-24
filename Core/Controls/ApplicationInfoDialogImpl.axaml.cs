@@ -286,15 +286,7 @@ namespace CarinaStudio.AppSuite.Controls
 				}
 
 				// check change list
-				this.SynchronizationContext.Post(async () =>
-				{
-					if (this.DataContext is not ApplicationInfo appInfo)
-						return;
-					await appInfo.ApplicationChangeList.WaitForChangeListReadyAsync();
-					if (this.DataContext != appInfo)
-						return;
-					this.SetValue(HasApplicationChangeListProperty, appInfo.ApplicationChangeList.ChangeList.IsNotEmpty());
-				});
+				this.SetValue(HasApplicationChangeListProperty, this.Application.ChangeList != null);
 
 				// show products
 				this.productListPanel.Let(panel =>
@@ -426,14 +418,10 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		public void ShowApplicationChangeList()
         {
-			// check state
-			if (this.DataContext is not ApplicationInfo appInfo)
-				return;
-			if (appInfo.ApplicationChangeList.ChangeList.IsEmpty())
-				return;
-
-			// show dialog
-			_ = new ApplicationChangeListDialog(appInfo.ApplicationChangeList).ShowDialog(this);
+			_ = new DocumentViewerDialog()
+			{
+				DocumentSource = this.Application.ChangeList,
+			}.ShowDialog(this);
 		}
 
 

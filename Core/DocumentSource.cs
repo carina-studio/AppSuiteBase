@@ -1,3 +1,4 @@
+using CarinaStudio.Collections;
 using CarinaStudio.Threading;
 using System;
 using System.Collections.Generic;
@@ -64,4 +65,64 @@ public abstract class DocumentSource : BaseApplicationObject<IAppSuiteApplicatio
     /// Get URI of document.
     /// </summary>
     public abstract Uri Uri { get; }
+}
+
+
+/// <summary>
+/// Extensions for <see cref="DocumentSource"/>.
+/// </summary>
+public static class DocumentSourceExtensions
+{
+    /// <summary>
+    /// Set <see cref="DocumentSource.Culture"/> to current culture of application.
+    /// </summary>
+    /// <param name="source"><see cref="DocumentSource"/>.</param>
+    /// <returns>True if <see cref="DocumentSource.Culture"/> has been set successfully.</returns>
+    public static bool SetToCurrentCulture(this DocumentSource source)
+    {
+        // get current culture
+        var cultureName = AppSuiteApplication.CurrentOrNull?.CultureInfo?.Name;
+        if (string.IsNullOrEmpty(cultureName))
+            return false;
+        
+        // select and set culture
+        var cultures = source.SupportedCultures;
+        if (cultures.IsEmpty())
+            return false;
+        if (cultureName.StartsWith("zh"))
+        {
+            if (cultureName.EndsWith("TW"))
+            {
+                if (cultures.Contains(ApplicationCulture.ZH_TW))
+                {
+                    source.Culture = ApplicationCulture.ZH_TW;
+                    return (source.Culture == ApplicationCulture.ZH_TW);
+                }
+                if (cultures.Contains(ApplicationCulture.ZH_CN))
+                {
+                    source.Culture = ApplicationCulture.ZH_CN;
+                    return (source.Culture == ApplicationCulture.ZH_CN);
+                }
+            }
+            else
+            {
+                if (cultures.Contains(ApplicationCulture.ZH_CN))
+                {
+                    source.Culture = ApplicationCulture.ZH_CN;
+                    return (source.Culture == ApplicationCulture.ZH_CN);
+                }
+                if (cultures.Contains(ApplicationCulture.ZH_TW))
+                {
+                    source.Culture = ApplicationCulture.ZH_TW;
+                    return (source.Culture == ApplicationCulture.ZH_TW);
+                }
+            }
+        }
+        if (cultures.Contains(ApplicationCulture.EN_US))
+        {
+            source.Culture = ApplicationCulture.EN_US;
+            return (source.Culture == ApplicationCulture.EN_US);
+        }
+        return false;
+    }
 }

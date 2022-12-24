@@ -18,11 +18,6 @@
 	<sys:Double x:Key="Double/AgreementDialog.MinWidth">200</sys:Double>
 	<sys:Double x:Key="Double/AgreementDialog.Width">800</sys:Double>
 
-	<!-- ApplicationChangeListDialog -->
-	<sys:Double x:Key="Double/ApplicationChangeListDialog.Content.MaxHeight">500</sys:Double>
-	<sys:Double x:Key="Double/ApplicationChangeListDialog.Width">500</sys:Double>
-	<Thickness x:Key="Thickness/ApplicationChangeListDialog.Change.Description.Margin">0,-1,0,0</Thickness>
-
 	<!-- ApplicationInfoDialog -->
 	<sys:Double x:Key="Double/ApplicationInfoDialog.AppBadge.Size">20</sys:Double>
 	<sys:Double x:Key="Double/ApplicationInfoDialog.AppIcon.Size">60</sys:Double>
@@ -114,6 +109,12 @@
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,6,0,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">-12,0,-12,10</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">-12,0,-12,8</Thickness>
+
+	<!-- DocumentViewerDialog -->
+	<sys:Double x:Key="Double/DocumentViewerDialog.Height">600</sys:Double>
+	<sys:Double x:Key="Double/DocumentViewerDialog.MinHeight">200</sys:Double>
+	<sys:Double x:Key="Double/DocumentViewerDialog.MinWidth">200</sys:Double>
+	<sys:Double x:Key="Double/DocumentViewerDialog.Width">800</sys:Double>
 
 	<!-- Expander -->
 	<sys:Double x:Key="Double/Expander.Chevron.Size">10</sys:Double>

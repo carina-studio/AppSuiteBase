@@ -6,7 +6,6 @@ using Avalonia.Input;
 using Avalonia.Platform;
 using CarinaStudio.Animation;
 using CarinaStudio.AppSuite.ViewModels;
-using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
@@ -49,6 +48,7 @@ namespace CarinaStudio.AppSuite.Controls
         static readonly SettingKey<int> ExtDepDialogShownVersionKey = new("MainWindow.ExternalDependenciesDialogShownVersion", -1);
         static bool IsNotifyingAppUpdateFound;
         static readonly SettingKey<bool> IsUsingCompactUIConfirmedKey = new("MainWindow.IsUsingCompactUIConfirmed", false);
+        static readonly SettingKey<string> LatestAppChangeListShownVersionKey = new("ApplicationChangeListDialog.LatestShownVersion", "");
         static readonly SettingKey<int> WindowHeightSettingKey = new("MainWindow.Height", 600);
         static readonly SettingKey<WindowState> WindowStateSettingKey = new("MainWindow.State", WindowState.Maximized);
         static readonly SettingKey<int> WindowWidthSettingKey = new("MainWindow.Width", 800);
@@ -399,13 +399,6 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
-        /// Called to create view-model for application change list dialog.
-        /// </summary>
-        /// <returns>View-model for application change list dialog.</returns>
-        protected virtual ApplicationChangeList OnCreateApplicationChangeList() => new();
-
-
-        /// <summary>
         /// Called to create view-model for application update dialog.
         /// </summary>
         /// <returns>View-model for application update dialog.</returns>
@@ -670,23 +663,28 @@ namespace CarinaStudio.AppSuite.Controls
             }
 
             // show application change list
-            if (!ApplicationChangeListDialog.IsShownBeforeForCurrentVersion(this.Application))
+            var changeListShownVersion = this.PersistentState.GetValueOrDefault(LatestAppChangeListShownVersionKey)?.Let(it =>
+            {
+                if (Version.TryParse(it, out var v))
+                    return v;
+                return null;
+            });
+            var changeListVersion = this.Application.Assembly.GetName().Version?.Let(it =>
+                new Version(it.Major, it.Minor));
+            if (changeListVersion != null && changeListVersion > changeListShownVersion)
             {
                 this.Logger.LogDebug("Show application change list dialog");
 
-                // check for change list
+                // show change list
                 this.isShowingInitialDialogs = true;
-                using var appChangeList = this.OnCreateApplicationChangeList();
-                await appChangeList.WaitForChangeListReadyAsync();
-                if (this.IsClosed || !this.IsActive)
+                var changeList = this.Application.ChangeList;
+                if (changeList != null)
                 {
-                    this.Logger.LogWarning("Window is closed or inactive, show dialog later");
-                    this.isShowingInitialDialogs = false;
-                    return;
-                }
-                if (appChangeList.ChangeList.IsNotEmpty())
-                {
-                    await new ApplicationChangeListDialog(appChangeList).ShowDialog(this);
+                    this.PersistentState.SetValue<string>(LatestAppChangeListShownVersionKey, changeListVersion.ToString());
+                    await new DocumentViewerDialog()
+                    {
+                        DocumentSource = changeList,
+                    }.ShowDialog(this);
                     this.isShowingInitialDialogs = false;
                     return;
                 }

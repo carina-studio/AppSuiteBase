@@ -47,7 +47,6 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         // Fields.
-        readonly ApplicationChangeList appChangeList = new();
         IBitmap? icon;
 
 
@@ -85,12 +84,6 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         /// <summary>
-        /// Get change list of current version of application.
-        /// </summary>
-        public virtual ApplicationChangeList ApplicationChangeList { get => this.appChangeList; }
-
-
-        /// <summary>
         /// Get assemblies of this application.
         /// </summary>
         public IList<Assembly> Assemblies { get; }
@@ -100,15 +93,6 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// Get list of badge of application.
         /// </summary>
         public virtual IList<IImage> Badges { get; } = Array.Empty<IImage>();
-
-
-        /// <inheritdoc/>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-                this.appChangeList.Dispose();
-            base.Dispose(disposing);
-        }
 
 
         /// <summary>
