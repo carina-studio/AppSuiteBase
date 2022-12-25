@@ -40,6 +40,10 @@
 	<Color x:Key="Color/Button.Background.Disabled">#ffffff</Color>
 	<Color x:Key="Color/Button.Background.PointerOver">#ffffff</Color>
 	<Color x:Key="Color/Button.Background.Pressed">#ffffff</Color>
+
+	<!-- CaptionButtons -->
+	<SolidColorBrush x:Key="Brush/CaptionButtons.Button.Background.PointerOver" Color="#3fe5e5e5"/>
+	<SolidColorBrush x:Key="Brush/CaptionButtons.Button.Background.Pressed" Color="#4fe5e5e5"/>
 	
 	<!-- CheckBox -->
 	<SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeIndeterminatePointerOver" Color="{DynamicResource SystemAccentColorLight1}"/>

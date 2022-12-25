@@ -142,6 +142,78 @@
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
 	</Style>
 
+	<!-- CaptionButtons -->
+	<Style Selector="Button.CaptionButton">
+		<Setter Property="Background" Value="{DynamicResource Brush/CaptionButtons.Button.Background.PointerOver}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/CaptionButtons.Button.Background.Pressed}" />
+		<Setter Property="Foreground" Value="Black"/>
+		<Setter Property="Width" Value="45"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<ContentPresenter Name="PART_ContentPresenter"
+								Background="Transparent"
+								Content="{TemplateBinding Content}"/>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="Button.CaptionButton:pointerover /template/ ContentPresenter">
+		<Setter Property="Background" Value="{TemplateBinding Background}" />
+	</Style>
+	<Style Selector="Button.CaptionButton:pressed /template/ ContentPresenter">
+		<Setter Property="Background" Value="{TemplateBinding BorderBrush}" />
+	</Style>
+	<Style Selector="Button.CaptionButton_Close">
+		<Setter Property="Background" Value="#ffe81123" />
+		<Setter Property="BorderBrush" Value="#fff1707a" />
+	</Style>
+	<Style Selector="CaptionButtons">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<StackPanel Spacing="2" VerticalAlignment="Stretch" TextElement.FontSize="10" Orientation="Horizontal">
+				  <Button x:Name="PART_FullScreenButton"
+						  Classes="CaptionButton"
+						  IsVisible="False">
+					<Viewbox Width="11" Margin="2">
+					  <Path Name="FullScreenButtonPath"
+							Stretch="UniformToFill"
+							Fill="{TemplateBinding Foreground}"
+							Data="M2048 2048v-819h-205v469l-1493 -1493h469v-205h-819v819h205v-469l1493 1493h-469v205h819z" />
+					</Viewbox>
+				  </Button>
+				  <Button x:Name="PART_MinimiseButton"
+						  Classes="CaptionButton">
+					<Viewbox Width="11" Margin="2">
+					  <Path Stretch="UniformToFill"
+							Fill="{TemplateBinding Foreground}"
+							Data="M2048 1229v-205h-2048v205h2048z" />
+					</Viewbox>
+				  </Button>
+				  <Button x:Name="PART_RestoreButton"
+						  Classes="CaptionButton">
+					<Viewbox Width="11" Margin="2">
+					  <Viewbox.RenderTransform>
+						<RotateTransform Angle="-90" />
+					  </Viewbox.RenderTransform>
+					  <Path Name="RestoreButtonPath"
+							Stretch="UniformToFill"
+							Fill="{TemplateBinding Foreground}"
+							Data="M2048 2048v-2048h-2048v2048h2048zM1843 1843h-1638v-1638h1638v1638z"/>
+					</Viewbox>
+				  </Button>
+				  <Button x:Name="PART_CloseButton"
+						  Classes="CaptionButton CaptionButton_Close">
+					<Viewbox Width="11" Margin="2">
+					  <Path Stretch="UniformToFill"
+							Fill="{TemplateBinding Foreground}"
+							Data="M1169 1024l879 -879l-145 -145l-879 879l-879 -879l-145 145l879 879l-879 879l145 145l879 -879l879 879l145 -145z" />
+					</Viewbox>
+				  </Button>
+				</StackPanel>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+
 	<!-- ComboBox -->
 	<Style Selector="ComboBox">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
