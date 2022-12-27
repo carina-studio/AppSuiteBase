@@ -33,12 +33,12 @@ partial class AppSuiteApplication
         {
             var monitor = getGdkMonitor(display, i);
             var monitorModelPtr = getGdkMonitorModel(monitor);
-            if (monitorModelPtr == null)
+            if (monitorModelPtr == null && i > 0)
                 continue;
             var scaleFactor = Math.Max(1, getGdkMonitorScaleFactor(monitor));
             if (valueBuilder.Length > 0)
                 valueBuilder.Append(';');
-            valueBuilder.Append(new string(monitorModelPtr));
+            valueBuilder.Append(monitorModelPtr != null ? new string(monitorModelPtr) : "default");
             valueBuilder.Append('=');
             valueBuilder.Append(scaleFactor);
         }

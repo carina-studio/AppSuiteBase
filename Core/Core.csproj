@@ -62,19 +62,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Content Include="XRandR/arm64/xrandr" Pack="true">
-			<CopyToOutputDirectory>true</CopyToOutputDirectory>
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<PackageCopyToOutput>true</PackageCopyToOutput>
-		</Content>
-		<Content Include="XRandR/x64/xrandr" Pack="true">
-			<CopyToOutputDirectory>true</CopyToOutputDirectory>
-			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-			<PackageCopyToOutput>true</PackageCopyToOutput>
-		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Avalonia" Version="11.0.0-preview4" />
 		<PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview4" />
 		<PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview4" />
