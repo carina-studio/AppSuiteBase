@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -273,13 +274,19 @@ namespace CarinaStudio.AppSuite.Controls
         
 
         // Setup TaskbarManager for Windows is available.
+        [MemberNotNullWhen(true, nameof(SetWindowsTaskbarProgressStateMethod))]
+        [MemberNotNullWhen(true, nameof(SetWindowsTaskbarProgressValueMethod))]
+        [MemberNotNullWhen(true, nameof(WindowsTaskbarManager))]
+        [MemberNotNullWhen(true, nameof(WindowsTaskbarProgressBarStateType))]
         bool SetupWindowsTaskbarManager()
         {
             // check state
             if (Platform.IsNotWindows)
                 return false;
+#pragma warning disable CS8775
             if (WindowsTaskbarManager != null)
                 return true;
+#pragma warning restore CS8775
             var tbmType = this.TaskbarManagerType;
             if (tbmType == null)
                 return false;
@@ -348,7 +355,10 @@ namespace CarinaStudio.AppSuite.Controls
                 if (Platform.IsWindows)
                 {
                     if (this.SetupWindowsTaskbarManager())
-                        SetWindowsTaskbarProgressValueMethod!.Invoke(WindowsTaskbarManager, new object?[]{ (int)(value * 100 + 0.5), 100, this.PlatformImpl!.Handle.Handle });
+                    {
+                        (this.PlatformImpl?.Handle?.Handle)?.Let(hWnd =>
+                            SetWindowsTaskbarProgressValueMethod.Invoke(WindowsTaskbarManager, new object?[]{ (int)(value * 100 + 0.5), 100, hWnd }));
+                    }
                 }
                 else if (Platform.IsMacOS)
                     AppSuiteApplication.CurrentOrNull?.UpdateMacOSDockTileProgressState();
@@ -371,7 +381,10 @@ namespace CarinaStudio.AppSuite.Controls
                 if (Platform.IsWindows)
                 {
                     if (this.SetupWindowsTaskbarManager())
-                        SetWindowsTaskbarProgressStateMethod!.Invoke(WindowsTaskbarManager, new object?[]{ (int)value, this.PlatformImpl!.Handle.Handle });
+                    {
+                        (this.PlatformImpl?.Handle?.Handle)?.Let(hWnd =>
+                            SetWindowsTaskbarProgressStateMethod.Invoke(WindowsTaskbarManager, new object?[]{ (int)value, hWnd }));
+                    }
                 }
                 else if (Platform.IsMacOS)
                     AppSuiteApplication.CurrentOrNull?.UpdateMacOSDockTileProgressState();
