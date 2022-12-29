@@ -33,7 +33,12 @@ public class PathEnvVarEditorDialog : CommonDialog<bool>
     {
         if (IsSupported)
         {
-            var dialog = new PathEnvVarEditorDialogImpl();
+            var dialog = new PathEnvVarEditorDialogImpl()
+            {
+                WindowStartupLocation = owner != null 
+                    ? Avalonia.Controls.WindowStartupLocation.CenterOwner
+                    : Avalonia.Controls.WindowStartupLocation.CenterScreen,
+            };
             var result = await (owner != null ? dialog.ShowDialog<bool?>(owner) : dialog.ShowDialog<bool?>());
             return result.GetValueOrDefault();
         }

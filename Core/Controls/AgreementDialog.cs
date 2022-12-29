@@ -98,6 +98,9 @@ public class AgreementDialog : CommonDialog<AgreementDialogResult>
 			DocumentFontFamily = this.documentFontFamily,
             DocumentSource = this.documentSource,
             IsAgreedBefore = this.isAgreedBefore,
+			WindowStartupLocation = owner != null 
+                ? Avalonia.Controls.WindowStartupLocation.CenterOwner
+                : Avalonia.Controls.WindowStartupLocation.CenterScreen,
         };
         using var messageBindingToken = this.BindValueToDialog(dialog, AgreementDialogImpl.MessageProperty, this.message);
 		using var titleBindingToken = this.BindValueToDialog(dialog, AgreementDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);

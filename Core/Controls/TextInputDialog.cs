@@ -99,10 +99,15 @@ public class TextInputDialog : CommonDialog<string?>
     /// <returns>Task to get result.</returns>
     protected override async Task<string?> ShowDialogCore(Avalonia.Controls.Window? owner)
     {
-        var dialog = new TextInputDialogImpl();
-        dialog.DoNotAskAgain = this.doNotAskAgain;
-        dialog.DoNotShowAgain = this.doNotShowAgain;
-        dialog.MaxTextLength = this.maxTextLength;
+        var dialog = new TextInputDialogImpl()
+        {
+            DoNotAskAgain = this.doNotAskAgain,
+            DoNotShowAgain = this.doNotShowAgain,
+            MaxTextLength = this.maxTextLength,
+            WindowStartupLocation = owner != null 
+                ? Avalonia.Controls.WindowStartupLocation.CenterOwner
+                : Avalonia.Controls.WindowStartupLocation.CenterScreen,
+        };
         using var messageBindingToken = this.BindValueToDialog(dialog, TextInputDialogImpl.MessageProperty, this.message);
         dialog.Text = this.initialText;
         using var titleBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);

@@ -75,6 +75,9 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 SettingKeys = new HashSet<SettingKey>(this.settingKeys),
                 Settings = this.settings,
+                WindowStartupLocation = owner != null 
+                    ? Avalonia.Controls.WindowStartupLocation.CenterOwner
+                    : Avalonia.Controls.WindowStartupLocation.CenterScreen,
             };
             return owner != null 
                 ? dialog.ShowDialog<object?>(owner)

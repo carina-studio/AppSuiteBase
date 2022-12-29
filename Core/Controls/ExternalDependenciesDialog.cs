@@ -41,7 +41,10 @@ public class ExternalDependenciesDialog : CommonDialog<object?>
     {
         var dialog = new ExternalDependenciesDialogImpl()
         {
-            FocusedExternalDependency = this.focusedExternalDependency
+            FocusedExternalDependency = this.focusedExternalDependency,
+            WindowStartupLocation = owner != null 
+                ? Avalonia.Controls.WindowStartupLocation.CenterOwner
+                : Avalonia.Controls.WindowStartupLocation.CenterScreen,
         };
         return owner != null
             ? dialog.ShowDialog<object?>(owner)

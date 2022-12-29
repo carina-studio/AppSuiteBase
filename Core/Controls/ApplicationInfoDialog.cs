@@ -62,7 +62,10 @@ namespace CarinaStudio.AppSuite.Controls
                 if (owner != null)
                     await this.dialog.ShowDialog<object?>(owner);
                 else
+                {
+                    dialog.WindowStartupLocation = Avalonia.Controls.WindowStartupLocation.CenterScreen;
                     await this.dialog.ShowDialog<object?>();
+                }
                 return null;
             }
             finally

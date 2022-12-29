@@ -123,6 +123,9 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 			DefaultResult = this.defaultResult,
 			DoNotAskOrShowAgain = this.doNotAskOrShowAgain,
 			Icon = this.icon,
+			WindowStartupLocation = owner != null 
+                ? Avalonia.Controls.WindowStartupLocation.CenterOwner
+                : Avalonia.Controls.WindowStartupLocation.CenterScreen,
 		};
 		using var messageBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.MessageProperty, this.message);
 		using var titleBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);

@@ -89,6 +89,9 @@ public class DocumentViewerDialog : CommonDialog<object?>
         {
 			DocumentFontFamily = this.documentFontFamily,
             DocumentSource = this.documentSource,
+			WindowStartupLocation = owner != null 
+                ? Avalonia.Controls.WindowStartupLocation.CenterOwner
+                : Avalonia.Controls.WindowStartupLocation.CenterScreen,
         };
         using var messageBindingToken = this.BindValueToDialog(dialog, DocumentViewerDialogImpl.MessageProperty, this.message);
 		using var titleBindingToken = this.BindValueToDialog(dialog, DocumentViewerDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
