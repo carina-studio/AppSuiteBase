@@ -33,7 +33,7 @@ namespace CarinaStudio.AppSuite.Controls
 			if (screen == null)
 				return default;
 			var scaling = screen.Scaling;
-			if (Platform.IsGnome)
+			if (Platform.IsLinux)
 				return new Thickness(0, 75 / scaling, 0, 0); // Ubuntu
 			if (Platform.IsWindows)
             {
