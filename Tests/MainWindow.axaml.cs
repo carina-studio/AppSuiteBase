@@ -573,7 +573,7 @@ namespace CarinaStudio.AppSuite.Tests
                     this.TaskbarIconProgressState = TaskbarIconProgressState.Paused;
                     break;
                 case TaskbarIconProgressState.Paused:
-                    this.TaskbarIconProgress = 0;
+                    this.TaskbarIconProgress = 0.8;
                     this.TaskbarIconProgressState = TaskbarIconProgressState.Error;
                     break;
                 /*
