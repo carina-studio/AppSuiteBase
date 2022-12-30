@@ -128,6 +128,9 @@
 	<sys:String x:Key="String/Common.CloseTab">Close tab</sys:String>
 	<sys:String x:Key="String/Common.CloseTab.WithGesture">Close tab (Ctrl+W)</sys:String>
 	<sys:String x:Key="String/Common.CloseWindow">Close window</sys:String>
+	<sys:String x:Key="String/Common.Continue">Continue</sys:String>
+	<sys:String x:Key="String/Common.Continue.WithDialog">Continue…</sys:String>
+	<sys:String x:Key="String/Common.ContinueToUse">Continue to use</sys:String>
 	<sys:String x:Key="String/Common.Copy">Copy</sys:String>
 	<sys:String x:Key="String/Common.Copy.WithGesture">Copy (Ctrl+C)</sys:String>
 	<sys:String x:Key="String/Common.Create">Create</sys:String>
@@ -245,6 +248,8 @@
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">Layout windows vertically</sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message">You must read and agree the《Privacy Policy》before you start using {0}.</sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">You must read and agree the updated《Privacy Policy》before you start using {0}.</sys:String>
+	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS">You are running {0} outside from the 'Applications' folder. We suggest moving the application into the 'Applications' folder to make sure that application can run properly without system permission issue.</sys:String>
+	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication">Close application</sys:String>
 	<sys:String x:Key="String/MainWindow.UserAgreement.Message">You must read and agree the《User Agreement》before you start using {0}.</sys:String>
 	<sys:String x:Key="String/MainWindow.UserAgreement.Message.Updated">You must read and agree the updated《User Agreement》before you start using {0}.</sys:String>
 

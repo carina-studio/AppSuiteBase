@@ -240,6 +240,7 @@ partial class MessageDialogImpl : Dialog
 			switch (this.Buttons)
 			{
 				case MessageDialogButtons.OK:
+				case MessageDialogButtons.OKCancel:
 					this.doNotAskOrShowAgainCheckBox.Bind(CheckBox.ContentProperty, this.GetResourceObservable("String/Common.DoNotShowAgain"));
 					break;
 				default:

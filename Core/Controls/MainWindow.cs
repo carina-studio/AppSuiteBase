@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -45,7 +46,9 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Static fields.
+        static readonly SettingKey<bool> DoNotCheckAppRunningLocationOnMacOSKey = new("MainWindow.DoNotCheckAppRunningLocationOnMacOS");
         static readonly SettingKey<int> ExtDepDialogShownVersionKey = new("MainWindow.ExternalDependenciesDialogShownVersion", -1);
+        static bool IsAppRunningLocationOnMacOSChecked;
         static bool IsNotifyingAppUpdateFound;
         static readonly SettingKey<bool> IsUsingCompactUIConfirmedKey = new("MainWindow.IsUsingCompactUIConfirmed", false);
         static readonly SettingKey<string> LatestAppChangeListShownVersionKey = new("ApplicationChangeListDialog.LatestShownVersion", "");
@@ -556,6 +559,43 @@ namespace CarinaStudio.AppSuite.Controls
                 return;
             }
 
+            // check application running location on macOS
+            var app = this.Application;
+            if (Platform.IsMacOS && !IsAppRunningLocationOnMacOSChecked && !this.PersistentState.GetValueOrDefault(DoNotCheckAppRunningLocationOnMacOSKey))
+            {
+                IsAppRunningLocationOnMacOSChecked = true;
+                var path = app.RootPrivateDirectoryPath;
+                if (Regex.IsMatch(path, @"\.app/Contents/MacOS(/.+)?")
+                    && !Regex.IsMatch(path, @"^(/Applications|/Users/[^/]+/Applications)/.+"))
+                {
+                    this.isShowingInitialDialogs = true;
+                    var dialog = new MessageDialog()
+                    {
+                        Buttons = MessageDialogButtons.OKCancel,
+                        CustomCancelText = app.GetObservableString("MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication"),
+                        CustomOKText = app.GetObservableString("Common.ContinueToUse"),
+                        DefaultResult = MessageDialogResult.Cancel,
+                        DoNotAskOrShowAgain = false,
+                        Icon = MessageDialogIcon.Warning,
+                        Message = new FormattedString().Also(it =>
+                        {
+                            it.Arg1 = app.Name;
+                            it.Bind(FormattedString.FormatProperty, app.GetObservableString("MainWindow.RunningOutsideOfApplicationFolderOnMacOS"));
+                        }),
+                    };
+                    var result = await dialog.ShowDialog(this);
+                    if (dialog.DoNotAskOrShowAgain.GetValueOrDefault())
+                        this.PersistentState.SetValue<bool>(DoNotCheckAppRunningLocationOnMacOSKey, true);
+                    if (result == MessageDialogResult.Cancel)
+                    {
+                        app.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
+                        this.isShowingInitialDialogs = false;
+                        return;
+                    }
+                    this.isShowingInitialDialogs = false;
+                }
+            }
+
             // use compact UI
             if (!this.PersistentState.GetValueOrDefault(IsUsingCompactUIConfirmedKey))
             {
@@ -578,7 +618,7 @@ namespace CarinaStudio.AppSuite.Controls
                             Buttons = MessageDialogButtons.YesNo,
                             DefaultResult = MessageDialogResult.Yes,
                             Icon = MessageDialogIcon.Question,
-                            Message = this.Application.GetObservableString("MainWindow.ConfirmUsingCompactUI"),
+                            Message = app.GetObservableString("MainWindow.ConfirmUsingCompactUI"),
                         }.ShowDialog(this);
                         this.isShowingInitialDialogs = false;
                         this.PersistentState.SetValue<bool>(IsUsingCompactUIConfirmedKey, true);
@@ -597,10 +637,10 @@ namespace CarinaStudio.AppSuite.Controls
             }
 
             // show user agreement
-            if (!this.Application.IsUserAgreementAgreed)
+            if (!app.IsUserAgreementAgreed)
             {
                 this.Logger.LogDebug("Show User Agreement dialog");
-                var documentSource = this.Application.UserAgreement;
+                var documentSource = app.UserAgreement;
                 if (documentSource != null)
                 {
                     this.isShowingInitialDialogs = true;
@@ -609,8 +649,8 @@ namespace CarinaStudio.AppSuite.Controls
                         DocumentSource = documentSource,
                         Message = new FormattedString().Also(it =>
                         {
-                            it.Arg1 = this.Application.Name;
-                            it.Bind(FormattedString.FormatProperty, this.GetResourceObservable(this.Application.IsUserAgreementAgreedBefore
+                            it.Arg1 = app.Name;
+                            it.Bind(FormattedString.FormatProperty, this.GetResourceObservable(app.IsUserAgreementAgreedBefore
                                 ? "String/MainWindow.UserAgreement.Message.Updated"
                                 : "String/MainWindow.UserAgreement.Message"
                             ));
@@ -620,20 +660,20 @@ namespace CarinaStudio.AppSuite.Controls
                     if ((await dialog.ShowDialog(this)) == AgreementDialogResult.Declined)
                     {
                         this.Logger.LogWarning("User decline the current User Agreement");
-                        this.Application.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
+                        app.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
                         this.isShowingInitialDialogs = false;
                         return;
                     }
                     this.isShowingInitialDialogs = false;
                 }
-                this.Application.AgreeUserAgreement();
+                app.AgreeUserAgreement();
             }
 
             // show privacy policy
-            if (!this.Application.IsPrivacyPolicyAgreed)
+            if (!app.IsPrivacyPolicyAgreed)
             {
                 this.Logger.LogDebug("Show Privacy Policy dialog");
-                var documentSource = this.Application.PrivacyPolicy;
+                var documentSource = app.PrivacyPolicy;
                 if (documentSource != null)
                 {
                     this.isShowingInitialDialogs = true;
@@ -642,8 +682,8 @@ namespace CarinaStudio.AppSuite.Controls
                         DocumentSource = documentSource,
                         Message = new FormattedString().Also(it =>
                         {
-                            it.Arg1 = this.Application.Name;
-                            it.Bind(FormattedString.FormatProperty, this.GetResourceObservable(this.Application.IsPrivacyPolicyAgreedBefore
+                            it.Arg1 = app.Name;
+                            it.Bind(FormattedString.FormatProperty, this.GetResourceObservable(app.IsPrivacyPolicyAgreedBefore
                                 ? "String/MainWindow.PrivacyPolicy.Message.Updated"
                                 : "String/MainWindow.PrivacyPolicy.Message"
                             ));
@@ -653,13 +693,13 @@ namespace CarinaStudio.AppSuite.Controls
                     if ((await dialog.ShowDialog(this)) == AgreementDialogResult.Declined)
                     {
                         this.Logger.LogWarning("User decline the current Privacy Policy");
-                        this.Application.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
+                        app.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
                         this.isShowingInitialDialogs = false;
                         return;
                     }
                     this.isShowingInitialDialogs = false;
                 }
-                this.Application.AgreePrivacyPolicy();
+                app.AgreePrivacyPolicy();
             }
 
             // show application change list
@@ -669,7 +709,7 @@ namespace CarinaStudio.AppSuite.Controls
                     return v;
                 return null;
             });
-            var changeListVersion = this.Application.Assembly.GetName().Version?.Let(it =>
+            var changeListVersion = app.Assembly.GetName().Version?.Let(it =>
                 new Version(it.Major, it.Minor));
             if (changeListVersion != null && changeListVersion > changeListShownVersion)
             {
@@ -677,7 +717,7 @@ namespace CarinaStudio.AppSuite.Controls
 
                 // show change list
                 this.isShowingInitialDialogs = true;
-                var changeList = this.Application.ChangeList;
+                var changeList = app.ChangeList;
                 if (changeList != null)
                 {
                     this.PersistentState.SetValue<string>(LatestAppChangeListShownVersionKey, changeListVersion.ToString());
@@ -699,7 +739,7 @@ namespace CarinaStudio.AppSuite.Controls
             if (this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate)
                 && !IsNotifyingAppUpdateFound)
             {
-                var task = this.Application.CheckForApplicationUpdateAsync(this, false);
+                var task = app.CheckForApplicationUpdateAsync(this, false);
                 if (!task.IsCompleted)
                 {
                     IsNotifyingAppUpdateFound = true;
@@ -714,7 +754,7 @@ namespace CarinaStudio.AppSuite.Controls
             // show external dependencies dialog
             var hasUnavailableExtDep = false;
             var hasUnavailableRequiredExtDep = false;
-            foreach (var extDep in this.Application.ExternalDependencies)
+            foreach (var extDep in app.ExternalDependencies)
             {
                 if (extDep.State != ExternalDependencyState.Available)
                 {
@@ -723,23 +763,23 @@ namespace CarinaStudio.AppSuite.Controls
                         hasUnavailableRequiredExtDep = true;
                 }
             }
-            if (hasUnavailableRequiredExtDep || this.PersistentState.GetValueOrDefault(ExtDepDialogShownVersionKey) != this.Application.ExternalDependenciesVersion)
+            if (hasUnavailableRequiredExtDep || this.PersistentState.GetValueOrDefault(ExtDepDialogShownVersionKey) != app.ExternalDependenciesVersion)
             {
                 if (hasUnavailableExtDep)
                 {
                     this.Logger.LogDebug("Show external dependencies dialog");
-                    this.PersistentState.SetValue<int>(ExtDepDialogShownVersionKey, this.Application.ExternalDependenciesVersion);
+                    this.PersistentState.SetValue<int>(ExtDepDialogShownVersionKey, app.ExternalDependenciesVersion);
                     this.isShowingInitialDialogs = true;
                     await new ExternalDependenciesDialog().ShowDialog(this);
                     this.isShowingInitialDialogs = false;
                     return;
                 }
                 else
-                    this.PersistentState.SetValue<int>(ExtDepDialogShownVersionKey, this.Application.ExternalDependenciesVersion);
+                    this.PersistentState.SetValue<int>(ExtDepDialogShownVersionKey, app.ExternalDependenciesVersion);
             }
 
             // all dialogs closed
-            if (!this.isClosingScheduled && !this.Application.IsShutdownStarted)
+            if (!this.isClosingScheduled && !app.IsShutdownStarted)
             {
                 this.Logger.LogWarning("All initial dialogs closed");
                 this.SetAndRaise<bool>(AreInitialDialogsClosedProperty, ref this.areInitialDialogsClosed, true);

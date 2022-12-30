@@ -127,6 +127,9 @@
 	<sys:String x:Key="String/Common.CloseTab">关闭页面</sys:String>
 	<sys:String x:Key="String/Common.CloseTab.WithGesture">关闭页面 (Ctrl+W)</sys:String>
 	<sys:String x:Key="String/Common.CloseWindow">关闭窗口</sys:String>
+	<sys:String x:Key="String/Common.Continue">继续</sys:String>
+	<sys:String x:Key="String/Common.Continue.WithDialog">继续…</sys:String>
+	<sys:String x:Key="String/Common.ContinueToUse">继续使用</sys:String>
 	<sys:String x:Key="String/Common.Copy">复制</sys:String>
 	<sys:String x:Key="String/Common.Copy.WithGesture">复制 (Ctrl+C)</sys:String>
 	<sys:String x:Key="String/Common.Create">建立</sys:String>
@@ -244,6 +247,8 @@
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">垂直排列窗口</sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message">在您使用 {0} 之前，您必须阅读且同意《隐私权政策》。 </sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">在您使用 {0} 之前，您必须阅读且同意新的《隐私权政策》。 </sys:String>
+	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS">您正在「应用程序」资料夹外执行 {0}。建议您将其移动至「应用程序」资料夹内执行以确保功能不受到系统权限问题之影响。</sys:String>
+	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication">关闭应用程序</sys:String>
 	<sys:String x:Key="String/MainWindow.UserAgreement.Message">在您使用 {0} 之前，您必须阅读且同意《使用者协议》。 </sys:String>
 	<sys:String x:Key="String/MainWindow.UserAgreement.Message.Updated">在您使用 {0} 之前，您必须阅读且同意新的《使用者协议》。 </sys:String>
 
