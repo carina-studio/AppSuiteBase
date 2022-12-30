@@ -217,6 +217,7 @@
 	<Thickness x:Key="Thickness/MenuItem.Padding">12,6,12,6</Thickness>
 
 	<!-- MessageDialog -->
+	<sys:Double x:Key="Double/MessageDialog.MaxWidth">500</sys:Double>
 	<sys:Double x:Key="Double/MessageDialog.MinWidth">200</sys:Double>
 
 	<!-- Overlay -->

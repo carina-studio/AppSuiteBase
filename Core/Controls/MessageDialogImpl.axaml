@@ -9,7 +9,7 @@
 		SizeToContent="WidthAndHeight"
         Title="ULogViewer">
 
-	<Grid RowDefinitions="Auto,Auto">
+	<Grid MaxWidth="{StaticResource Double/MessageDialog.MaxWidth}" RowDefinitions="Auto,Auto">
 
 		<!-- Content -->
 		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">

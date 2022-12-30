@@ -16,6 +16,24 @@ namespace CarinaStudio.AppSuite.Controls;
 /// </summary>
 partial class MessageDialogImpl : Dialog
 {
+	/// <summary>
+	/// Define <see cref="CustomCancelText"/> property.
+	/// </summary>
+	public static readonly StyledProperty<string?> CustomCancelTextProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(CustomCancelText));
+	/// <summary>
+	/// Define <see cref="CustomNoText"/> property.
+	/// </summary>
+	public static readonly StyledProperty<string?> CustomNoTextProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(CustomNoText));
+	/// <summary>
+	/// Define <see cref="CustomOKText"/> property.
+	/// </summary>
+	public static readonly StyledProperty<string?> CustomOKTextProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(CustomOKText));
+	/// <summary>
+	/// Define <see cref="CustomYesText"/> property.
+	/// </summary>
+	public static readonly StyledProperty<string?> CustomYesTextProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(CustomYesText));
+
+
 	// Static fields.
 	static readonly StyledProperty<MessageDialogResult?> Button1ResultProperty = AvaloniaProperty.Register<MessageDialogImpl, MessageDialogResult?>(nameof(Button1Result));
 	static readonly StyledProperty<string?> Button1TextProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(Button1Text));
@@ -78,9 +96,49 @@ partial class MessageDialogImpl : Dialog
 
 
 	/// <summary>
+	/// Get or set custom text for [Cancel] button.
+	/// </summary>
+	public string? CustomCancelText
+	{
+		get => this.GetValue(CustomCancelTextProperty);
+		set => this.SetValue(CustomCancelTextProperty, value);
+	}
+
+
+	/// <summary>
 	/// Custom icon.
 	/// </summary>
 	public IImage? CustomIcon { get; set; }
+
+
+	/// <summary>
+	/// Get or set custom text for [No] button.
+	/// </summary>
+	public string? CustomNoText
+	{
+		get => this.GetValue(CustomNoTextProperty);
+		set => this.SetValue(CustomNoTextProperty, value);
+	}
+
+
+	/// <summary>
+	/// Get or set custom text for [OK] button.
+	/// </summary>
+	public string? CustomOKText
+	{
+		get => this.GetValue(CustomOKTextProperty);
+		set => this.SetValue(CustomOKTextProperty, value);
+	}
+
+
+	/// <summary>
+	/// Get or set custom text for [Yes] button.
+	/// </summary>
+	public string? CustomYesText
+	{
+		get => this.GetValue(CustomYesTextProperty);
+		set => this.SetValue(CustomYesTextProperty, value);
+	}
 
 
 	/// <summary>
@@ -240,7 +298,7 @@ partial class MessageDialogImpl : Dialog
 				};
 				break;
 			default:
-				throw new ArgumentException();
+				throw new ArgumentException($"Unsupported buttons type: {this.Buttons}.");
 		}
 		this.UpdateButtonText();
 		if (defaultButton != null)
@@ -248,6 +306,21 @@ partial class MessageDialogImpl : Dialog
 
 		// call base
 		base.OnOpened(e);
+	}
+
+
+	/// <inheritdoc/>
+	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs e)
+	{
+		base.OnPropertyChanged(e);
+		var property = e.Property;
+		if (property == CustomCancelTextProperty
+			|| property == CustomNoTextProperty
+			|| property == CustomOKTextProperty
+			|| property == CustomYesTextProperty)
+		{
+			this.UpdateButtonText();
+		}
 	}
 
 
@@ -277,23 +350,39 @@ partial class MessageDialogImpl : Dialog
 		switch (this.Buttons)
 		{
 			case MessageDialogButtons.OK:
-				this.SetValue<string?>(Button1TextProperty, app.GetString("Common.OK"));
+			{
+				var customOKText = this.CustomOKText;
+				this.SetValue(Button1TextProperty, string.IsNullOrEmpty(customOKText) ? app.GetString("Common.OK") : customOKText);
 				break;
+			}
 			case MessageDialogButtons.OKCancel:
-				this.SetValue<string?>(Button1TextProperty, app.GetString("Common.OK"));
-				this.SetValue<string?>(Button2TextProperty, app.GetString("Common.Cancel"));
+			{
+				var customOKText = this.CustomOKText;
+				var customCancelText = this.CustomCancelText;
+				this.SetValue(Button1TextProperty, string.IsNullOrEmpty(customOKText) ? app.GetString("Common.OK") : customOKText);
+				this.SetValue(Button2TextProperty, string.IsNullOrEmpty(customCancelText) ? app.GetString("Common.Cancel") : customCancelText);
 				break;
+			}
 			case MessageDialogButtons.YesNo:
-				this.SetValue<string?>(Button1TextProperty, app.GetString("Common.Yes"));
-				this.SetValue<string?>(Button2TextProperty, app.GetString("Common.No"));
+			{
+				var customYesText = this.CustomYesText;
+				var customNoText = this.CustomNoText;
+				this.SetValue(Button1TextProperty, string.IsNullOrEmpty(customYesText) ? app.GetString("Common.Yes") : customYesText);
+				this.SetValue(Button2TextProperty, string.IsNullOrEmpty(customNoText) ? app.GetString("Common.No") : customNoText);
 				break;
+			}
 			case MessageDialogButtons.YesNoCancel:
-				this.SetValue<string?>(Button1TextProperty, app.GetString("Common.Yes"));
-				this.SetValue<string?>(Button2TextProperty, app.GetString("Common.No"));
-				this.SetValue<string?>(Button3TextProperty, app.GetString("Common.Cancel"));
+			{
+				var customYesText = this.CustomYesText;
+				var customNoText = this.CustomNoText;
+				var customCancelText = this.CustomCancelText;
+				this.SetValue(Button1TextProperty, string.IsNullOrEmpty(customYesText) ? app.GetString("Common.Yes") : customYesText);
+				this.SetValue(Button2TextProperty, string.IsNullOrEmpty(customNoText) ? app.GetString("Common.No") : customNoText);
+				this.SetValue(Button3TextProperty, string.IsNullOrEmpty(customCancelText) ? app.GetString("Common.Cancel") : customCancelText);
 				break;
+			}
 			default:
-				throw new ArgumentException();
+				throw new ArgumentException($"Unsupported buttons type: {this.Buttons}.");
 		}
 	}
 }

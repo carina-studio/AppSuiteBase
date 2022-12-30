@@ -12,7 +12,11 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 {
 	// Fields.
 	MessageDialogButtons buttons = MessageDialogButtons.OK;
+	object? customCancelText;
 	IImage? customIcon;
+	object? customNoText;
+	object? customOKText;
+	object? customYesText;
 	MessageDialogResult? defaultResult;
 	bool? doNotAskOrShowAgain;
 	MessageDialogIcon icon = MessageDialogIcon.Information;
@@ -35,6 +39,21 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 
 
 	/// <summary>
+	/// Get or set custom text for [Cancel] button.
+	/// </summary>
+	public object? CustomCancelText
+	{
+		get => this.customCancelText;
+		set
+		{
+			this.VerifyAccess();
+			this.VerifyShowing();
+			this.customCancelText = value;
+		}
+	}
+
+
+	/// <summary>
 	/// Get or set custom icon.
 	/// </summary>
 	public IImage? CustomIcon
@@ -45,6 +64,51 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 			this.VerifyAccess();
 			this.VerifyShowing();
 			this.customIcon = value;
+		}
+	}
+
+
+	/// <summary>
+	/// Get or set custom text for [No] button.
+	/// </summary>
+	public object? CustomNoText
+	{
+		get => this.customNoText;
+		set
+		{
+			this.VerifyAccess();
+			this.VerifyShowing();
+			this.customNoText = value;
+		}
+	}
+
+
+	/// <summary>
+	/// Get or set custom text for [OK] button.
+	/// </summary>
+	public object? CustomOKText
+	{
+		get => this.customOKText;
+		set
+		{
+			this.VerifyAccess();
+			this.VerifyShowing();
+			this.customOKText = value;
+		}
+	}
+
+
+	/// <summary>
+	/// Get or set custom text for [Yes] button.
+	/// </summary>
+	public object? CustomYesText
+	{
+		get => this.customYesText;
+		set
+		{
+			this.VerifyAccess();
+			this.VerifyShowing();
+			this.customYesText = value;
 		}
 	}
 
@@ -127,6 +191,10 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
                 ? Avalonia.Controls.WindowStartupLocation.CenterOwner
                 : Avalonia.Controls.WindowStartupLocation.CenterScreen,
 		};
+		using var customCancelTextBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.CustomCancelTextProperty, this.customCancelText);
+		using var customNoTextBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.CustomNoTextProperty, this.customNoText);
+		using var customOKTextBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.CustomOKTextProperty, this.customOKText);
+		using var customYesTextBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.CustomYesTextProperty, this.customYesText);
 		using var messageBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.MessageProperty, this.message);
 		using var titleBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
 		var result = owner != null
