@@ -290,10 +290,13 @@
 	<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>
 	<sys:Double x:Key="TextControlThemeMinHeight">0</sys:Double>
 	<Thickness x:Key="TextControlThemePadding">6</Thickness>
-	<sys:Double x:Key="Double/TextBox.InPlaceAction.Size">18</sys:Double>
-	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction">6,6,27,6</Thickness>
-	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Padding">3</Thickness>
-	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Margin">0,0,6,0</Thickness>
+	<sys:Double x:Key="Double/TextBox.InPlaceAction.Size">20</sys:Double>
+	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction.1">6,6,28,6</Thickness>
+	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction.2">6,6,50,6</Thickness>
+	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction.3">6,6,72,6</Thickness>
+	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Padding">4</Thickness>
+	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Margin">1,0,1,0</Thickness>
+	<Thickness x:Key="Thickness/TextBox.InPlaceActions.Margin">0,0,5,0</Thickness>
 
 	<!-- TextInputDialog -->
 	<sys:Double x:Key="Double/TextInputDialog.Width">450</sys:Double>

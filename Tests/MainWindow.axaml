@@ -191,9 +191,11 @@
 
 											<Panel>
 												<TextBox Classes="ToolBar_TextBox_WithInPlaceAction" Width="100"/>
-												<ToggleButton Classes="TextBox_InPlaceAction">
-													<Image Classes="Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
-												</ToggleButton>
+												<StackPanel Classes="TextBox_InPlaceActions">
+													<ToggleButton Classes="TextBox_InPlaceAction">
+														<Image Classes="Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
+													</ToggleButton>
+												</StackPanel>
 											</Panel>
 											<TextBox Classes="ToolBar_TextBox" Width="50" IsEnabled="False"/>
 
@@ -231,10 +233,15 @@
 										</StackPanel>
 
 										<Panel Grid.Column="1">
-											<TextBox Name="toolBarTextBox" Classes="ToolBar_TextBox_WithInPlaceAction"/>
-											<Button Classes="TextBox_InPlaceAction">
-												<Image Classes="Icon" Source="{DynamicResource Image/Icon.Close}"/>
-											</Button>
+											<TextBox Name="toolBarTextBox" Classes="ToolBar_TextBox_With2InPlaceActions"/>
+											<StackPanel Classes="TextBox_InPlaceActions">
+												<Button Classes="TextBox_InPlaceAction">
+													<Image Classes="Icon" Source="{DynamicResource Image/Icon.Save}"/>
+												</Button>
+												<Button Classes="TextBox_InPlaceAction">
+													<Image Classes="Icon" Source="{DynamicResource Image/Icon.Close}"/>
+												</Button>
+											</StackPanel>
 										</Panel>
 
 										<StackPanel Grid.Column="2" HorizontalAlignment="Stretch" Orientation="Horizontal">

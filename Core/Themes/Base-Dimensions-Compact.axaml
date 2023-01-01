@@ -153,10 +153,13 @@
 	<!-- TextBox -->
 	<sys:Double x:Key="TextControlThemeMinHeight">0</sys:Double>
 	<Thickness x:Key="TextControlThemePadding">4,2,4,2</Thickness>
-	<sys:Double x:Key="Double/TextBox.InPlaceAction.Size">20</sys:Double>
-	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction">4,2,27,2</Thickness>
-	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Padding">5</Thickness>
-	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Margin">0,0,4,0</Thickness>
+	<sys:Double x:Key="Double/TextBox.InPlaceAction.Size">18</sys:Double>
+	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction.1">4,2,24,2</Thickness>
+	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction.2">4,2,44,2</Thickness>
+	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction.3">4,2,64,2</Thickness>
+	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Padding">3</Thickness>
+	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Margin">1,0,1,0</Thickness>
+	<Thickness x:Key="Thickness/TextBox.InPlaceAction2.Margin">0,0,3,0</Thickness>
 
 	<!-- TextInputDialog -->
 	<sys:Double x:Key="Double/TextInputDialog.Width">400</sys:Double>
