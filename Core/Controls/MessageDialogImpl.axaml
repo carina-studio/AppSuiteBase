@@ -5,16 +5,15 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.MessageDialogImpl"
 		Classes="Dialog"
-		MinWidth="{DynamicResource Double/MessageDialog.MinWidth}"
 		SizeToContent="WidthAndHeight"
         Title="ULogViewer">
 
-	<Grid MaxWidth="{StaticResource Double/MessageDialog.MaxWidth}" RowDefinitions="Auto,Auto">
+	<Grid RowDefinitions="Auto,Auto">
 
 		<!-- Content -->
 		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
 			<Image Classes="Dialog_Icon_Large" Source="{Binding $parent[Window].IconImage}" VerticalAlignment="Top"/>
-			<TextBlock Grid.Column="1" Text="{Binding $parent[Window].Message}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+			<TextBlock Grid.Column="1" MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].Message}" TextWrapping="WrapWithOverflow" VerticalAlignment="Center"/>
 			<StackPanel Name="doNotAskOrShowAgainPanel" Grid.Column="1" Grid.Row="1" IsVisible="False">
 				<Separator Classes="Dialog_Separator"/>
 				<CheckBox Name="doNotAskOrShowAgainCheckBox" Content=" " HorizontalAlignment="Left"/>
