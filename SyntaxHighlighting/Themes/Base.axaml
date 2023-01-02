@@ -47,9 +47,15 @@
 											Text="{TemplateBinding Watermark}"
 											TextAlignment="{TemplateBinding TextAlignment}"
 											TextWrapping="{TemplateBinding TextWrapping}"
-											IsVisible="{TemplateBinding Text, Converter={x:Static StringConverters.IsNullOrEmpty}}"
 											HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-											VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+											VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+										<TextBlock.IsVisible>
+											<MultiBinding Converter="{x:Static BoolConverters.And}">
+												<Binding Path="PreeditText" ElementName="PART_TextPresenter" Converter="{x:Static StringConverters.IsNullOrEmpty}"/>
+												<Binding Path="Text" ElementName="PART_TextPresenter" Converter="{x:Static StringConverters.IsNullOrEmpty}"/>
+											</MultiBinding>
+										</TextBlock.IsVisible>
+									</TextBlock>
 									<presenters:SyntaxHighlightingTextPresenter Name="PART_TextPresenter"
 													Text="{TemplateBinding Text, Mode=TwoWay}"
 													CaretIndex="{TemplateBinding CaretIndex}"

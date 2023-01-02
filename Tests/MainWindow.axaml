@@ -233,7 +233,7 @@
 										</StackPanel>
 
 										<Panel Grid.Column="1">
-											<TextBox Name="toolBarTextBox" Classes="ToolBar_TextBox_With2InPlaceActions"/>
+											<TextBox Name="toolBarTextBox" Classes="ToolBar_TextBox_With2InPlaceActions" Watermark="TextBox with in-place actions"/>
 											<StackPanel Classes="TextBox_InPlaceActions">
 												<Button Classes="TextBox_InPlaceAction">
 													<Image Classes="Icon" Source="{DynamicResource Image/Icon.Save}"/>

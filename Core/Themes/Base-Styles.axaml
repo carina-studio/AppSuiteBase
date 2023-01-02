@@ -1883,6 +1883,84 @@
 			</ContextMenu>
 		</Setter>
 		<Setter Property="SelectionForegroundBrush" Value="{DynamicResource Brush/TextBox.SelectionForeground}"/>
+		<Setter Property="Template">
+			<ControlTemplate TargetType="{x:Type TextBox}">
+				<Panel>
+					<Border
+						Name="PART_BorderElement"
+						Background="{TemplateBinding Background}"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						CornerRadius="{TemplateBinding CornerRadius}"
+						MinWidth="{TemplateBinding MinWidth}"
+						MinHeight="{TemplateBinding MinHeight}"/>
+	
+					<Border
+						Margin="{TemplateBinding BorderThickness}">
+						<Grid ColumnDefinitions="Auto,*,Auto" >
+							<ContentPresenter Grid.Column="0"
+											Grid.ColumnSpan="1"
+											Content="{TemplateBinding InnerLeftContent}"/>
+							<DockPanel x:Name="PART_InnerDockPanel"
+									Grid.Column="1"
+									Grid.ColumnSpan="1"
+									Cursor="IBeam"
+									Margin="{TemplateBinding Padding}">
+								<TextBlock Name="PART_FloatingWatermark"
+											Foreground="{DynamicResource SystemAccentColor}"
+											FontSize="{TemplateBinding FontSize}"
+											IsVisible="False"
+											Text="{TemplateBinding Watermark}"
+											DockPanel.Dock="Top" />
+								<ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+												VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+												IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+												AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}">
+									<Panel>
+										<TextBlock Name="PART_Watermark"
+												Opacity="0.5"
+												Text="{TemplateBinding Watermark}"
+												TextAlignment="{TemplateBinding TextAlignment}"
+												TextWrapping="{TemplateBinding TextWrapping}"
+												HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+												VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+											<TextBlock.IsVisible>
+												<MultiBinding Converter="{x:Static BoolConverters.And}">
+													<Binding Path="PreeditText" ElementName="PART_TextPresenter" Converter="{x:Static StringConverters.IsNullOrEmpty}"/>
+													<Binding Path="Text" ElementName="PART_TextPresenter" Converter="{x:Static StringConverters.IsNullOrEmpty}"/>
+												</MultiBinding>
+											</TextBlock.IsVisible>
+										</TextBlock>
+										<TextPresenter Name="PART_TextPresenter"
+														Text="{TemplateBinding Text, Mode=TwoWay}"
+														CaretIndex="{TemplateBinding CaretIndex}"
+														TextElement.FontFamily="{TemplateBinding FontFamily}"
+														TextElement.FontSize="{TemplateBinding FontSize}"
+														TextElement.FontStyle="{TemplateBinding FontStyle}"
+														TextElement.FontWeight="{TemplateBinding FontWeight}"
+														TextElement.Foreground="{TemplateBinding Foreground}"
+														SelectionStart="{TemplateBinding SelectionStart}"
+														SelectionEnd="{TemplateBinding SelectionEnd}"
+														TextAlignment="{TemplateBinding TextAlignment}"
+														TextWrapping="{TemplateBinding TextWrapping}"
+														LineHeight="{TemplateBinding LineHeight}"
+														LetterSpacing="{TemplateBinding LetterSpacing}"
+														PasswordChar="{TemplateBinding PasswordChar}"
+														RevealPassword="{TemplateBinding RevealPassword}"
+														SelectionBrush="{TemplateBinding SelectionBrush}"
+														SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+														CaretBrush="{TemplateBinding CaretBrush}"
+														HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+														VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+									</Panel>
+								</ScrollViewer>
+							</DockPanel>
+							<ContentPresenter Grid.Column="2" Grid.ColumnSpan="1" Content="{TemplateBinding InnerRightContent}"/>
+						</Grid>
+					</Border>
+				</Panel>
+			</ControlTemplate>
+		</Setter>
 	</Style>
 	<Style Selector="TextBox:disabled">
 		<!-- [Workaround] -->
