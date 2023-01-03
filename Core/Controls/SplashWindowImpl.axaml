@@ -50,7 +50,7 @@
 		<sys:Double x:Key="Double/SplashWindow.ContentAnimation.Translation">30</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Copyright.FontSize">12</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Icon.Size">65</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Message.FontSize">13</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.Message.FontSize">12</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Title.FontSize">20</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Title.MaxWidth">355</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Version.FontSize">12</sys:Double>
