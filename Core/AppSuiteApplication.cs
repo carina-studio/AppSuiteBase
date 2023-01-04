@@ -119,6 +119,10 @@ namespace CarinaStudio.AppSuite
             /// Whether restoring main window is requested or not.
             /// </summary>
             public const string IsRestoringMainWindowsRequested = "IsRestoringMainWindowsRequested";
+            /// <summary>
+            /// Whether testing mode is requested or not.
+            /// </summary>
+            public const string IsTestingModeRequested = "IsTestingModeRequested";
         }
 
 
@@ -196,6 +200,10 @@ namespace CarinaStudio.AppSuite
         /// Argument indicates to restore main windows.
         /// </summary>
         public const string RestoreMainWindowsArgument = "-restore-main-windows";
+        /// <summary>
+        /// Argument indicates to enable testing mode.
+        /// </summary>
+        public const string TestingArgument = "-test";
 
 
         // Constants.
@@ -276,7 +284,7 @@ namespace CarinaStudio.AppSuite
         IDisposable? processInfoHfUpdateToken;
         IProductManager? productManager;
         ScheduledAction? reActivateProVersionAction;
-        string? restartArgs;
+        ApplicationArgsBuilder? restartArgs;
         SettingsImpl? settings;
         readonly string settingsFilePath;
         ShutdownSource shutdownSource = ShutdownSource.None;
@@ -737,6 +745,14 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public virtual ApplicationArgsBuilder CreateApplicationArgsBuilder() => new()
+        {
+            IsDebugMode = this.IsDebugMode,
+            IsTestingMode = this.IsTestingMode
+        };
+
+
+        /// <inheritdoc/>
         public virtual ViewModels.ApplicationInfo CreateApplicationInfoViewModel() => new();
 
 
@@ -1164,6 +1180,10 @@ namespace CarinaStudio.AppSuite
                 return (this.uiSettings != null);
             }
         }
+
+
+        /// <inheritdoc/>
+        public bool IsTestingMode { get; private set; }
 
 
         /// <inheritdoc/>
@@ -1767,6 +1787,13 @@ namespace CarinaStudio.AppSuite
                     this.RequestRestoringMainWindows();
             }
 
+            // enter testing mode
+            if (this.OnSelectEnteringTestingMode())
+            {
+                this.Logger.LogWarning("Enter testing mode");
+                this.IsTestingMode = true;
+            }
+
             // enter debug mode
             if (this.OnSelectEnteringDebugMode())
             {
@@ -2117,6 +2144,9 @@ namespace CarinaStudio.AppSuite
                     break;
                 case RestoreMainWindowsArgument:
                     launchOptions[LaunchOptionKeys.IsRestoringMainWindowsRequested] = true;
+                    break;
+                case TestingArgument:
+                    launchOptions[LaunchOptionKeys.IsTestingModeRequested] = true;
                     break;
                 default:
                     return index;
@@ -2544,7 +2574,21 @@ namespace CarinaStudio.AppSuite
         /// <returns>True if application needs to enter debug mode.</returns>
         protected virtual bool OnSelectEnteringDebugMode()
         {
+            if (this.IsTestingMode)
+                return true;
             if (this.LaunchOptions.TryGetValue(LaunchOptionKeys.IsDebugModeRequested, out bool boolValue))
+                return boolValue;
+            return this.ReleasingType == ApplicationReleasingType.Development;
+        }
+
+
+        /// <summary>
+        /// Called to check whether application needs to enter testing mode or not.
+        /// </summary>
+        /// <returns>True if application needs to enter testing mode.</returns>
+        protected virtual bool OnSelectEnteringTestingMode()
+        {
+            if (this.LaunchOptions.TryGetValue(LaunchOptionKeys.IsTestingModeRequested, out bool boolValue))
                 return boolValue;
             return this.ReleasingType == ApplicationReleasingType.Development;
         }
@@ -2815,14 +2859,44 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <summary>
+        /// Restart application and restore main windows.
+        /// </summary>
+        /// <returns>True if restarting has been accepted.</returns>
+        public bool Restart() =>
+            this.Restart(this.IsRunningAsAdministrator);
+
+
+        /// <summary>
+        /// Restart application and restore main windows.
+        /// </summary>
+        /// <param name="asAdministrator">True to restart application as Administrator/Superuser.</param>
+        /// <returns>True if restarting has been accepted.</returns>
+        public bool Restart(bool asAdministrator)
+        {
+            var argsBuilder = this.CreateApplicationArgsBuilder();
+            argsBuilder.RestoringMainWindows = true;
+            return this.Restart(argsBuilder, asAdministrator);
+        }
+
+
+        /// <summary>
+        /// Restart application.
+        /// </summary>
+        /// <param name="argsBuilder">Builder to build arguments to restart.</param>
+        /// <returns>True if restarting has been accepted.</returns>
+        public bool Restart(ApplicationArgsBuilder argsBuilder) =>
+            this.Restart(argsBuilder, this.IsRunningAsAdministrator);
+
+
         /// <inheritdoc/>
-        public bool Restart(string? args = null, bool asAdministrator = false)
+        public bool Restart(ApplicationArgsBuilder argsBuilder, bool asAdministrator)
         {
             // check state
             this.VerifyAccess();
             if (this.isRestartRequested)
             {
-                if (this.restartArgs == args)
+                if (argsBuilder.Equals(this.restartArgs))
                 {
                     this.isRestartAsAdminRequested |= asAdministrator;
                     return true;
@@ -2835,7 +2909,7 @@ namespace CarinaStudio.AppSuite
             this.Logger.LogWarning("Request restarting");
             this.isRestartRequested = true;
             this.isRestartAsAdminRequested = asAdministrator;
-            this.restartArgs = args;
+            this.restartArgs = argsBuilder.Clone();
 
             // shutdown to restart
             this.Shutdown();
@@ -3372,7 +3446,7 @@ namespace CarinaStudio.AppSuite
                             if (exeName.EndsWith("/dotnet") || exeName.EndsWith("\\dotnet.exe", true, null))
                                 it.Arguments = $"{Environment.CommandLine} {this.restartArgs}";
                             else
-                                it.Arguments = this.restartArgs ?? "";
+                                it.Arguments = this.restartArgs?.ToString() ?? "";
                             it.FileName = exeName;
                             if (this.isRestartAsAdminRequested && Platform.IsWindows)
                             {

@@ -395,7 +395,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         public void RestartApp()
         {
-            this.Application.Restart(AppSuiteApplication.RestoreMainWindowsArgument);
+            this.Application.Restart();
         }
 
 

@@ -408,8 +408,10 @@ namespace CarinaStudio.AppSuite.Controls
 			// restart
 			this.Close();
 			this.SynchronizationContext.PostDelayed(() => // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
-				this.Application.Restart($"{AppSuiteApplication.RestoreMainWindowsArgument} {AppSuiteApplication.DebugArgument}", this.Application.IsRunningAsAdministrator),
-				300);
+			{
+				var argsBuilder = this.Application.CreateApplicationArgsBuilder().Also(it => it.IsDebugMode = true);
+				this.Application.Restart(argsBuilder);
+			}, 300);
 		}
 
 

@@ -3,6 +3,7 @@ using Avalonia.Styling;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite
@@ -86,6 +87,13 @@ namespace CarinaStudio.AppSuite
         /// Get application configuration.
         /// </summary>
         Configuration.ISettings Configuration { get; }
+
+
+        /// <summary>
+        /// Create builder to build arguments to launch application.
+        /// </summary>
+        /// <returns>Builder.</returns>
+        ApplicationArgsBuilder CreateApplicationArgsBuilder();
 
 
         /// <summary>
@@ -196,6 +204,12 @@ namespace CarinaStudio.AppSuite
         /// Check whether the User Agreement has been agreed by user before or not.
         /// </summary>
         bool IsUserAgreementAgreedBefore { get; }
+
+
+        /// <summary>
+        /// Check whether application is running in testing mode or not.
+        /// </summary>
+        bool IsTestingMode { get; }
 
 
         /// <summary>
@@ -311,10 +325,10 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Restart application.
         /// </summary>
-        /// <param name="args">Arguments to restart.</param>
+        /// <param name="argsBuilder">Builder to build arguments to restart.</param>
         /// <param name="asAdministrator">True to restart application as Administrator/Superuser.</param>
         /// <returns>True if restarting has been accepted.</returns>
-        bool Restart(string? args = null, bool asAdministrator = false);
+        bool Restart(ApplicationArgsBuilder argsBuilder, bool asAdministrator = false);
 
 
         /// <summary>
@@ -400,6 +414,106 @@ namespace CarinaStudio.AppSuite
         /// Get all windows of application.
         /// </summary>
         IList<Avalonia.Controls.Window> Windows { get; }
+    }
+
+
+    /// <summary>
+    /// Builder for arguments to launch application.
+    /// </summary>
+    public class ApplicationArgsBuilder : ICloneable, IEquatable<ApplicationArgsBuilder>
+    {
+        /// <summary>
+        /// Initialize new <see cref="ApplicationArgsBuilder"/> instance.
+        /// </summary>
+        public ApplicationArgsBuilder()
+        { }
+
+
+        /// <summary>
+        /// Initialize new <see cref="ApplicationArgsBuilder"/> instance.
+        /// </summary>
+        /// <param name="template">Template.</param>
+        public ApplicationArgsBuilder(ApplicationArgsBuilder template)
+        {
+            this.IsDebugMode = template.IsDebugMode;
+            this.IsTestingMode = template.IsTestingMode;
+            this.RestoringMainWindows = template.RestoringMainWindows;
+        }
+
+
+        /// <summary>
+        /// Clone the builder.
+        /// </summary>
+        /// <returns>Cloned builder.</returns>
+        public virtual ApplicationArgsBuilder Clone() => 
+            new(this);
+        
+
+        /// <inheritdoc/>
+        object ICloneable.Clone() =>
+            this.Clone();
+
+
+        /// <inheritdoc/>
+        public virtual bool Equals(ApplicationArgsBuilder? builder) =>
+            builder is not null
+            && this.IsDebugMode == builder.IsDebugMode
+            && this.IsTestingMode == builder.IsTestingMode
+            && this.RestoringMainWindows == builder.RestoringMainWindows;
+
+
+        /// <inheritdoc/>
+        public override bool Equals(object? obj) =>
+            obj is ApplicationArgsBuilder builder && this.Equals(builder);
+
+
+        /// <inheritdoc/>
+        public override int GetHashCode() =>
+            ((this.IsDebugMode ? 1 : 0) << 31) | ((this.IsTestingMode ? 1 : 0) << 30);
+
+
+        /// <summary>
+        /// Get or set whether application should be launched in debug mode or not.
+        /// </summary>
+        public bool IsDebugMode { get; set; }
+
+
+        /// <summary>
+        /// Get or set whether application should be launched in testing mode or not.
+        /// </summary>
+        public bool IsTestingMode { get; set; }
+
+
+        /// <summary>
+        /// Get or set whether main windows should be restored after launching application or not.
+        /// </summary>
+        public bool RestoringMainWindows { get; set; }
+
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            var buffer = new StringBuilder();
+            if (this.IsDebugMode)
+            {
+                if (buffer.Length > 0)
+                    buffer.Append(' ');
+                buffer.Append(AppSuiteApplication.DebugArgument);
+            }
+            if (this.IsTestingMode)
+            {
+                if (buffer.Length > 0)
+                    buffer.Append(' ');
+                buffer.Append(AppSuiteApplication.TestingArgument);
+            }
+            if (this.RestoringMainWindows)
+            {
+                if (buffer.Length > 0)
+                    buffer.Append(' ');
+                buffer.Append(AppSuiteApplication.RestoreMainWindowsArgument);
+            }
+            return buffer.ToString();
+        }
     }
 
 

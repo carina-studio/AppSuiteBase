@@ -118,6 +118,15 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public virtual ApplicationArgsBuilder CreateApplicationArgsBuilder() =>
+            new()
+            {
+                IsDebugMode = this.IsDebugMode,
+                IsTestingMode = this.IsTestingMode
+            };
+
+
+        /// <inheritdoc/>
         public virtual ViewModels.ApplicationInfo CreateApplicationInfoViewModel() =>
             new();
         
@@ -270,6 +279,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public virtual bool IsTestingMode { get; } = true;
+
+
+        /// <inheritdoc/>
         public virtual CarinaStudio.Controls.Window? LatestActiveMainWindow { get; }
 
 
@@ -400,7 +413,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public bool Restart(string? args, bool asAdministrator) => false;
+        public bool Restart(ApplicationArgsBuilder argsBuilder, bool asAdministrator) => false;
 
 
         /// <inheritdoc/>
