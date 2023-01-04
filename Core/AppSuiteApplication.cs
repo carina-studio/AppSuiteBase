@@ -1813,6 +1813,10 @@ namespace CarinaStudio.AppSuite
                 }
             }
 
+            // initialize test manager
+            if (this.IsTestingMode)
+                Testing.TestManager.Initialize(this);
+
             // setup NSApplication and dock tile on macOS
             if (Platform.IsMacOS)
                 this.SetupMacOSApp();
