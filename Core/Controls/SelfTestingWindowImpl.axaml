@@ -50,11 +50,11 @@
 
 					<!-- TestCase -->
 					<DataTemplate DataType="{x:Type testing:TestCase}">
-						<Grid ColumnDefinitions="Auto,Auto,*,Auto">
+						<Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
 							<Image Classes="TreeViewItem_Icon" Source="{Binding State, Converter={x:Static controls:SelfTestingWindowImpl.TestCaseIconConverter}}"/>
 							<Border Classes="InPlaceAction_Reserved" Grid.Column="1"/>
 							<TextBlock Classes="TreeViewItem_TextBlock" Grid.Column="1" Text="{Binding Name}"/>
-							<StackPanel Grid.Column="3" IsVisible="{Binding $parent[TreeViewItem].IsPointerOver}" Orientation="Horizontal">
+							<StackPanel Grid.Column="2" IsVisible="{Binding $parent[TreeViewItem].IsPointerOver}" Orientation="Horizontal">
 								<Button Classes="InPlaceAction_Button" Command="{Binding $parent[Window].RunTestCaseCommand}" CommandParameter="{Binding $parent[TreeViewItem]}" IsVisible="{Binding IsRunnable}" ToolTip.Tip="{DynamicResource String/SelfTestingWindow.RunTestCase}">
 									<controls:Image Classes="InPlaceAction_Icon">
 										<DrawingImage>
@@ -70,6 +70,7 @@
 									</controls:Image>
 								</Button>
 							</StackPanel>
+							<TextBlock Foreground="{DynamicResource Brush/Icon.Error}" Grid.Column="1" Grid.Row="1" IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" Text="{Binding Error.Message}"/>
 						</Grid>
 					</DataTemplate>
 

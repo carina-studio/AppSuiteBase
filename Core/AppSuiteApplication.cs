@@ -2985,6 +2985,8 @@ namespace CarinaStudio.AppSuite
             {
                 foreach (var window in this.windows.ToArray())
                 {
+                    if (window == this.selfTestingWindow)
+                        continue;
                     if (window is not CarinaStudio.Controls.Window csWindow)
                         Global.RunWithoutError(window.Close);
                     else if (!csWindow.IsClosed)

@@ -32,6 +32,8 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
     TestManager(IAppSuiteApplication app) : base(app)
     { 
         this.logger = app.LoggerFactory.CreateLogger(nameof(TestManager));
+        this.AddTestCase(typeof(MainWindows.RestartMainWindowsTest));
+        this.AddTestCase(typeof(MainWindows.ShowMainWindowsTest));
     }
 
 

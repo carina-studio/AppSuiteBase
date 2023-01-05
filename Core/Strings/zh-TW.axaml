@@ -281,7 +281,7 @@
 	<sys:String x:Key="String/SelfTestingWindow.RunAllTestCases">執行所有測試</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.RunTestCase">執行測試</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.RunTestCasesInCategory">執行分類中的所有測試</sys:String>
-	<sys:String x:Key="String/SelfTestingWindow.Title">{0} 的自我測試</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.Title">{0} 自我測試</sys:String>
 
 	<!-- SplashWindow -->
 	<sys:String x:Key="String/SplashWindow.Launching">啟動中</sys:String>

@@ -203,7 +203,8 @@ public abstract class TestCase : BaseApplicationObject<IAppSuiteApplication>, IN
             }
             catch (Exception ex)
             {
-                this.Error = ex;
+                if (ex is not TaskCanceledException)
+                    this.Error = ex;
             }
         }
         finally

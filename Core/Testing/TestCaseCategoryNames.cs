@@ -10,6 +10,10 @@ public static class TestCaseCategoryNames
     /// </summary>
     public const string Common = "Common";
     /// <summary>
+    /// Main Windows.
+    /// </summary>
+    public const string MainWindows = "Main Windows";
+    /// <summary>
     /// Unclassified.
     /// </summary>
     public const string Unclassified = "Unclassified";
