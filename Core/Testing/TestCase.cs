@@ -48,6 +48,12 @@ public abstract class TestCase : BaseApplicationObject<IAppSuiteApplication>, IN
         // cancel
         this.State = TestCaseState.Cancelling;
         this.cancellationTokenSource?.Cancel();
+
+        // update state
+        this.IsCancellable = false;
+        this.PropertyChanged?.Invoke(this, new(nameof(IsCancellable)));
+
+        // complete
         return true;
     }
 
@@ -73,6 +79,18 @@ public abstract class TestCase : BaseApplicationObject<IAppSuiteApplication>, IN
             }
         }
     }
+
+
+    /// <summary>
+    /// Check whether test can be cancelled in current state or not.
+    /// </summary>
+    public bool IsCancellable { get; private set; }
+
+
+    /// <summary>
+    /// Check whether test can be run in current state or not.
+    /// </summary>
+    public bool IsRunnable { get; private set; } = true;
 
 
     /// <summary>
@@ -148,6 +166,18 @@ public abstract class TestCase : BaseApplicationObject<IAppSuiteApplication>, IN
                 return false;
         }
 
+        // update state
+        if (!this.IsCancellable)
+        {
+            this.IsCancellable = true;
+            this.PropertyChanged?.Invoke(this, new(nameof(IsCancellable)));
+        }
+        if (this.IsRunnable)
+        {
+            this.IsRunnable = false;
+            this.PropertyChanged?.Invoke(this, new(nameof(IsRunnable)));
+        }
+
         // run
         try
         {
@@ -197,6 +227,13 @@ public abstract class TestCase : BaseApplicationObject<IAppSuiteApplication>, IN
                 this.State = TestCaseState.Succeeded;
             else
                 this.State = TestCaseState.Failed;
+            if (this.IsCancellable)
+            {
+                this.IsCancellable = false;
+                this.PropertyChanged?.Invoke(this, new(nameof(IsCancellable)));
+            }
+            this.IsRunnable = true;
+            this.PropertyChanged?.Invoke(this, new(nameof(IsRunnable)));
         }
         return true;
     }
@@ -244,6 +281,16 @@ public abstract class TestCase : BaseApplicationObject<IAppSuiteApplication>, IN
 
         // update state
         this.State = TestCaseState.WaitingForRunning;
+        if (!this.IsCancellable)
+        {
+            this.IsCancellable = true;
+            this.PropertyChanged?.Invoke(this, new(nameof(IsCancellable)));
+        }
+        if (this.IsRunnable)
+        {
+            this.IsRunnable = false;
+            this.PropertyChanged?.Invoke(this, new(nameof(IsRunnable)));
+        }
         return true;
     }
 }

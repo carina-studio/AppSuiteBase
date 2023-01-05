@@ -253,6 +253,12 @@
 	<Thickness x:Key="Thickness/ScrollViewer.ScrollBar.Margin.Horizontal">2,0,2,2</Thickness>
 	<Thickness x:Key="Thickness/ScrollViewer.ScrollBar.Margin.Vertical">0,2,2,2</Thickness>
 
+	<!-- SelfTestingWindow -->
+	<sys:Double x:Key="Double/SelfTestingWindow.Height">600</sys:Double>
+	<sys:Double x:Key="Double/SelfTestingWindow.MinHeight">200</sys:Double>
+	<sys:Double x:Key="Double/SelfTestingWindow.MinWidth">200</sys:Double>
+	<sys:Double x:Key="Double/SelfTestingWindow.Width">600</sys:Double>
+
 	<!-- StatusBar -->
 	<sys:Double x:Key="Double/StatusBar.DropDownIcon.Size">8</sys:Double>
 	<sys:Double x:Key="Double/StatusBar.Icon.Size">14</sys:Double>

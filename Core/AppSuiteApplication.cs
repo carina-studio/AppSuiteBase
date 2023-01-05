@@ -285,6 +285,7 @@ namespace CarinaStudio.AppSuite
         IProductManager? productManager;
         ScheduledAction? reActivateProVersionAction;
         ApplicationArgsBuilder? restartArgs;
+        Controls.SelfTestingWindowImpl? selfTestingWindow;
         SettingsImpl? settings;
         readonly string settingsFilePath;
         ShutdownSource shutdownSource = ShutdownSource.None;
@@ -3355,6 +3356,32 @@ namespace CarinaStudio.AppSuite
                     });
                 });
             });
+        }
+
+
+        /// <summary>
+        /// Open the window for self testing.
+        /// </summary>
+        /// <returns>True if window has been opened successfully.</returns>
+        public bool ShowSelfTestingWindow()
+        {
+            // check state
+            this.VerifyAccess();
+            if (!this.IsTestingMode)
+                return false;
+            if (this.selfTestingWindow != null)
+            {
+                Controls.WindowExtensions.ActivateAndBringToFront(this.selfTestingWindow);
+                return true;
+            }
+
+            // create and show the window
+            this.selfTestingWindow = new Controls.SelfTestingWindowImpl().Also(window =>
+            {
+                window.Closed += (_, e) => this.selfTestingWindow = null;
+            });
+            this.selfTestingWindow.Show();
+            return true;
         }
 
 

@@ -185,6 +185,8 @@
 	<sys:String x:Key="String/Common.Save.WithGesture">Save (Ctrl+S)</sys:String>
 	<sys:String x:Key="String/Common.SelectAll">Select all</sys:String>
 	<sys:String x:Key="String/Common.SelectAll.WithGesture">Select all (Ctrl+A)</sys:String>
+	<sys:String x:Key="String/Common.SelfTesting">Self testing</sys:String>
+	<sys:String x:Key="String/Common.SelfTesting.WithDialog">Self testing…</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement">User Agreement</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement.WithDialog">User Agreement…</sys:String>
 	<sys:String x:Key="String/Common.Yes">Yes</sys:String>
@@ -274,6 +276,15 @@
 	<sys:String x:Key="String/ScriptLanguage.CSharp">C# Script</sys:String>
 	<sys:String x:Key="String/ScriptLanguage.JavaScript">JavaScript (ECMAScript 5.1)</sys:String>
 	<sys:String x:Key="String/ScriptLanguage.Python">Python 3.4</sys:String>
+
+	<!-- SelfTestingWindow -->
+	<sys:String x:Key="String/SelfTestingWindow.CancelAllTestCases">Cancel all tests</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.CancelTestCase">Cancel the test</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.NeedToWaitForRunningTestCases">You need to wait for completion of running test case(s).</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.RunAllTestCases">Run all tests</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.RunTestCase">Run the test</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.RunTestCasesInCategory">Run all tests in the category</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.Title">Self testing of {0}</sys:String>
 
 	<!-- SplashWindow -->
 	<sys:String x:Key="String/SplashWindow.Launching">Launching</sys:String>

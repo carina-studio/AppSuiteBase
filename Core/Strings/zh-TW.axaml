@@ -184,6 +184,8 @@
 	<sys:String x:Key="String/Common.Save.WithGesture">儲存 (Ctrl+S)</sys:String>
 	<sys:String x:Key="String/Common.SelectAll">全選</sys:String>
 	<sys:String x:Key="String/Common.SelectAll.WithGesture">全選 (Ctrl+A)</sys:String>
+	<sys:String x:Key="String/Common.SelfTesting">自我測試</sys:String>
+	<sys:String x:Key="String/Common.SelfTesting.WithDialog">自我測試…</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement">使用者協議</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement.WithDialog">使用者協議…</sys:String>
 	<sys:String x:Key="String/Common.Yes">是</sys:String>
@@ -271,6 +273,15 @@
 
 	<!-- ScriptLanguage -->
 	<sys:String x:Key="String/ScriptLanguage.CSharp">C# 腳本語言</sys:String>
+
+	<!-- SelfTestingWindow -->
+	<sys:String x:Key="String/SelfTestingWindow.CancelAllTestCases">取消所有測試</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.CancelTestCase">取消測試</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.NeedToWaitForRunningTestCases">您必須等待正在執行的測試完成。</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.RunAllTestCases">執行所有測試</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.RunTestCase">執行測試</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.RunTestCasesInCategory">執行分類中的所有測試</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.Title">{0} 的自我測試</sys:String>
 
 	<!-- SplashWindow -->
 	<sys:String x:Key="String/SplashWindow.Launching">啟動中</sys:String>
