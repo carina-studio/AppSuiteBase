@@ -52,6 +52,35 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
 
 
     /// <summary>
+    /// Cancel all running and waiting test cases.
+    /// </summary>
+    public void CancelAllTestCases()
+    {
+        this.VerifyAccess();
+        if (this.testCasesToRun.IsNotEmpty())
+        {
+            this.logger.LogWarning("Cancel {count} waiting test case(s)", this.testCasesToRun.Count);
+            var node = this.testCasesToRun.First;
+            while (node != null)
+            {
+                var nextNode = node.Next;
+                var testCase = node.Value;
+                this.logger.LogDebug("Cancel waiting test case '{name}'", testCase.Name);
+                this.testCasesToRun.Remove(node);
+                testCase.Cancel();
+                node = nextNode;
+            }
+            this.PropertyChanged?.Invoke(this, new(nameof(TestCaseWaitingCount)));
+        }
+        if (this.runningTestCase != null)
+        {
+            this.logger.LogWarning("Cancel running test case '{name}'", this.runningTestCase.Name);
+            this.runningTestCase.Cancel();
+        }
+    }
+
+
+    /// <summary>
     /// Cancel running the test case.
     /// </summary>
     /// <param name="testCase">Test case.</param>
@@ -61,10 +90,18 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
         this.VerifyAccess();
         if (this.testCasesToRun.Remove(testCase))
         {
+            this.logger.LogDebug("Cancel waiting test case '{name}'", testCase.Name);
             testCase.Cancel();
+            this.PropertyChanged?.Invoke(this, new(nameof(TestCaseWaitingCount)));
             return true;
         }
-        return testCase.Cancel();
+        if (this.runningTestCase == testCase)
+        {
+            this.logger.LogWarning("Cancel running test case '{name}'", testCase.Name);
+            return testCase.Cancel();
+        }
+        this.logger.LogWarning("Cannot cancel unknown test case '{name}'", testCase.Name);
+        return false;
     }
 
 
@@ -112,6 +149,33 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
 
 
     /// <summary>
+    /// Run all test cases.
+    /// </summary>
+    public void RunAllTestCases()
+    {
+        foreach (var category in this.TestCaseCategories)
+            this.RunTestCases(category);
+    }
+
+
+    /// <summary>
+    /// Get the test case which is run currently.
+    /// </summary>
+    public TestCase? RunningTestCase
+    {
+        get => this.runningTestCase;
+        private set
+        {
+            if (this.runningTestCase != value)
+            {
+                this.runningTestCase = value;
+                this.PropertyChanged?.Invoke(this, new(nameof(RunningTestCase)));
+            }
+        }
+    }
+
+
+    /// <summary>
     /// Schedule to run the test case.
     /// </summary>
     /// <param name="testCase">Test case.</param>
@@ -124,9 +188,16 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
         if (!testCase.WaitForRunning())
             return false;
         if (this.runningTestCase != null)
+        {
+            this.logger.LogDebug("Add test case '{name}' to waiting queue, waiting count: {count}", testCase.Name, this.testCasesToRun.Count + 1);
             this.testCasesToRun.AddLast(testCase);
+            this.PropertyChanged?.Invoke(this, new(nameof(TestCaseWaitingCount)));
+        }
         else
+        {
+            this.logger.LogDebug("Run test case '{name}' immediately", testCase.Name);
             _ = this.RunTestCaseAsync(testCase);
+        }
         return true;
     }
 
@@ -146,10 +217,10 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
         }
         
         // run
-        this.logger.LogDebug("Start running test case '{name}'", testCase.Name);
-        this.runningTestCase = testCase;
+        this.logger.LogDebug("Start running test case '{name}', waiting count: {count}", testCase.Name, this.testCasesToRun.Count);
+        this.RunningTestCase = testCase;
         await testCase.RunAsync();
-        this.runningTestCase = null;
+        this.RunningTestCase = null;
         this.logger.LogDebug("Complete running test case '{name}'", testCase.Name);
 
         // run next test case
@@ -157,13 +228,26 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
         {
             var nextTestCase = this.testCasesToRun.First!.Value;
             this.testCasesToRun.RemoveFirst();
+            this.PropertyChanged?.Invoke(this, new(nameof(TestCaseWaitingCount)));
             _ = RunTestCaseAsync(nextTestCase);
         }
         else
         {
+            this.logger.LogDebug("No more test case to run");
             this.IsRunningTestCases = false;
             this.PropertyChanged?.Invoke(this, new(nameof(IsRunningTestCases)));
         }
+    }
+
+
+    /// <summary>
+    /// Run all test cases in given category.
+    /// </summary>
+    /// <param name="category">Category.</param>
+    public void RunTestCases(TestCaseCategory category)
+    {
+        foreach (var testCase in category.TestCases)
+            this.RunTestCase(testCase);
     }
 
 
@@ -187,6 +271,12 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
             return this.roTestCaseCategories;
         }
     }
+
+
+    /// <summary>
+    /// Get number of test cases which are waiting to be run.
+    /// </summary>
+    public int TestCaseWaitingCount { get => this.testCasesToRun.Count; }
 
 
     // Try creating test case.
