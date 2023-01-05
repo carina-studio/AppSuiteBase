@@ -89,6 +89,7 @@ public class DocumentViewerDialog : CommonDialog<object?>
         {
 			DocumentFontFamily = this.documentFontFamily,
             DocumentSource = this.documentSource,
+			Topmost = (owner?.Topmost).GetValueOrDefault(),
 			WindowStartupLocation = owner != null 
                 ? Avalonia.Controls.WindowStartupLocation.CenterOwner
                 : Avalonia.Controls.WindowStartupLocation.CenterScreen,

@@ -98,6 +98,7 @@ public class AgreementDialog : CommonDialog<AgreementDialogResult>
 			DocumentFontFamily = this.documentFontFamily,
             DocumentSource = this.documentSource,
             IsAgreedBefore = this.isAgreedBefore,
+			Topmost = (owner?.Topmost).GetValueOrDefault(),
 			WindowStartupLocation = owner != null 
                 ? Avalonia.Controls.WindowStartupLocation.CenterOwner
                 : Avalonia.Controls.WindowStartupLocation.CenterScreen,

@@ -104,6 +104,7 @@ public class TextInputDialog : CommonDialog<string?>
             DoNotAskAgain = this.doNotAskAgain,
             DoNotShowAgain = this.doNotShowAgain,
             MaxTextLength = this.maxTextLength,
+            Topmost = (owner?.Topmost).GetValueOrDefault(),
             WindowStartupLocation = owner != null 
                 ? Avalonia.Controls.WindowStartupLocation.CenterOwner
                 : Avalonia.Controls.WindowStartupLocation.CenterScreen,

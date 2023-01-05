@@ -104,6 +104,7 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 CheckForUpdateWhenOpening = this.checkForUpdateWhenShowing,
                 DataContext = this.appUpdater,
+                Topmost = (owner?.Topmost).GetValueOrDefault(),
                 WindowStartupLocation = owner != null 
                     ? Avalonia.Controls.WindowStartupLocation.CenterOwner
                     : Avalonia.Controls.WindowStartupLocation.CenterScreen,

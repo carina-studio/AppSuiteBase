@@ -55,7 +55,8 @@ namespace CarinaStudio.AppSuite.Controls
         {
             this.dialog = new ApplicationInfoDialogImpl()
             {
-                DataContext = this.appInfo
+                DataContext = this.appInfo,
+                Topmost = (owner?.Topmost).GetValueOrDefault(),
             };
             try
             {

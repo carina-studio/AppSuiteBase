@@ -35,6 +35,7 @@ public class PathEnvVarEditorDialog : CommonDialog<bool>
         {
             var dialog = new PathEnvVarEditorDialogImpl()
             {
+                Topmost = (owner?.Topmost).GetValueOrDefault(),
                 WindowStartupLocation = owner != null 
                     ? Avalonia.Controls.WindowStartupLocation.CenterOwner
                     : Avalonia.Controls.WindowStartupLocation.CenterScreen,
