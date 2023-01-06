@@ -73,6 +73,9 @@
 	<StaticResourceExtension x:Key="Brush/TextBox.SelectionForeground" ResourceKey="SystemControlHighlightAltAltHighBrush"/>
 	<SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{StaticResource Color/Control.Border.Dark}"/>
 
+	<!-- ThemeModeTest -->
+	<Color x:Key="Color/ThemeModeTest.Color">#70332211</Color>
+
 	<!-- ToolBar -->
 	<Color x:Key="Color/ToolBar.Background">#e0e0e0</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#c7c7c7</Color>

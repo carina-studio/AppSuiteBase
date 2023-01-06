@@ -50,6 +50,9 @@
 	<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#1f1f1f"/>
 	<SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{StaticResource Color/Control.Border.Light}"/>
 
+	<!-- ThemeModeTest -->
+	<Color x:Key="Color/ThemeModeTest.Color">#7faabbcc</Color>
+
 	<!-- ToolBar -->
 	<Color x:Key="Color/ToolBar.Background">#1e1e1e</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#373737</Color>

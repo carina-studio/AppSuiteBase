@@ -256,7 +256,7 @@
 	<!-- SelfTestingWindow -->
 	<sys:Double x:Key="Double/SelfTestingWindow.Height">600</sys:Double>
 	<sys:Double x:Key="Double/SelfTestingWindow.MinHeight">200</sys:Double>
-	<sys:Double x:Key="Double/SelfTestingWindow.MinWidth">200</sys:Double>
+	<sys:Double x:Key="Double/SelfTestingWindow.MinWidth">300</sys:Double>
 	<sys:Double x:Key="Double/SelfTestingWindow.Width">600</sys:Double>
 
 	<!-- StatusBar -->

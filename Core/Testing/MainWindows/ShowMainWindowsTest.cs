@@ -47,55 +47,33 @@ class ShowMainWindowsTest : TestCase
             });
             Assert.IsTrue(result, "Failed to create main window.");
         }
-        var retryCount = 10;
-        while (!cancellationToken.IsCancellationRequested)
-        {
-            if (this.createdMainWindows.Count == TestMainWindowCount)
-                break;
-            if (retryCount <= 0)
-                throw new AssertionException($"{this.createdMainWindows.Count} main window(s) created, {TestMainWindowCount} expected.");
-            --retryCount;
-            await Task.Delay(500, cancellationToken);
-        }
-        if (cancellationToken.IsCancellationRequested)
-            return;
+        await WaitForConditionAsync(() => this.createdMainWindows.Count == TestMainWindowCount,
+            $"{this.createdMainWindows.Count} main window(s) created, {TestMainWindowCount} expected.",
+            cancellationToken);
         Assert.AreEqual(TestMainWindowCount, viewModels.Count, "{0} view-model(s) created, {1} expected.", viewModels.Count, TestMainWindowCount);
         Assert.AreEqual(initMainWindowCount + TestMainWindowCount, this.Application.MainWindows.Count, "Total {0} main window(s), {1} expected.", this.Application.MainWindows.Count, initMainWindowCount + TestMainWindowCount);
 
         // close main windows
         foreach (var window in this.createdMainWindows.ToArray())
             window.Close();
-        retryCount = 10;
-        while (!cancellationToken.IsCancellationRequested)
-        {
-            if (this.createdMainWindows.IsEmpty())
-                break;
-            if (retryCount <= 0)
-                throw new AssertionException($"{this.createdMainWindows.Count} main window(s) could not be closed.");
-            --retryCount;
-            await Task.Delay(500, cancellationToken);
-        }
-        if (cancellationToken.IsCancellationRequested)
-            return;
+        await WaitForConditionAsync(() => this.createdMainWindows.IsEmpty(),
+            $"{this.createdMainWindows.Count} main window(s) could not be closed.",
+            cancellationToken);
         Assert.AreEqual(initMainWindowCount, this.Application.MainWindows.Count, "Total {0} main window(s), {1} expected.", this.Application.MainWindows.Count, initMainWindowCount);
 
         // check view-models
         var isDisposedProperty = typeof(ViewModel).GetProperty("IsDisposed", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).AsNonNull();
-        retryCount = 10;
-        while (!cancellationToken.IsCancellationRequested)
-        {
-            for (var i = viewModels.Count - 1; i >= 0; --i)
+        await WaitForConditionAsync(() =>
             {
-                if ((bool)isDisposedProperty.GetValue(viewModels[i]).AsNonNull())
-                    viewModels.RemoveAt(i);
-            }
-            if (viewModels.IsEmpty())
-                break;
-            if (retryCount <= 0)
-                throw new AssertionException($"{viewModels.Count} view-model(s) not disposed as expected.");
-            --retryCount;
-            await Task.Delay(500, cancellationToken);
-        }
+                for (var i = viewModels.Count - 1; i >= 0; --i)
+                {
+                    if ((bool)isDisposedProperty.GetValue(viewModels[i]).AsNonNull())
+                        viewModels.RemoveAt(i);
+                }
+                return viewModels.IsEmpty();
+            },
+            $"{viewModels.Count} view-model(s) not disposed as expected.",
+            cancellationToken);
     }
 
 

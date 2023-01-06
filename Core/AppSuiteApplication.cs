@@ -1099,6 +1099,30 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        // Get theme mode of system.
+        internal ThemeMode GetSystemThemeMode()
+        {
+            if (this.uiSettings != null 
+                && this.windowsColorType != null 
+                && this.uiSettingsGetColorValueMethod != null
+                && this.windowsColorRProperty != null
+                && this.windowsColorGProperty != null
+                && this.windowsColorBProperty != null)
+            {
+                var backgroundColor = this.uiSettingsGetColorValueMethod.Invoke(this.uiSettings, new object?[] { this.uiColorTypeBackground }).AsNonNull();
+                var r = (byte)this.windowsColorRProperty.GetValue(backgroundColor).AsNonNull();
+                var g = (byte)this.windowsColorGProperty.GetValue(backgroundColor).AsNonNull();
+                var b = (byte)this.windowsColorBProperty.GetValue(backgroundColor).AsNonNull();
+                return (r + g + b) / 3 < 128
+                    ? ThemeMode.Dark
+                    : ThemeMode.Light;
+            }
+            else if (Platform.IsMacOS)
+                return this.GetMacOSThemeMode();
+            return this.FallbackThemeMode;
+        }
+
+
         /// <summary>
         /// Get information of hardware.
         /// </summary>
@@ -1835,7 +1859,8 @@ namespace CarinaStudio.AppSuite
             {
                 if (sender is Avalonia.Controls.Window window)
                 {
-                    this.windows.Add(window);
+                    if (window is not CarinaStudio.Controls.Window csWindow || !this.mainWindowHolders.ContainsKey(csWindow))
+                        this.windows.Add(window);
                     this.OnWindowOpened(window);
                 }
             }, RoutingStrategies.Direct);
@@ -2009,6 +2034,7 @@ namespace CarinaStudio.AppSuite
             else if (mainWindowHolder.ActiveListNode.List != null)
                 this.activeMainWindowList.Remove(mainWindowHolder.ActiveListNode);
             this.mainWindows.Remove(mainWindow);
+            this.windows.Remove(mainWindow);
             mainWindow.Closed -= this.OnMainWindowClosed;
 
             this.Logger.LogDebug("Main window closed, {count} remains", this.mainWindows.Count);
@@ -2702,7 +2728,8 @@ namespace CarinaStudio.AppSuite
         protected virtual void OnWindowOpened(Avalonia.Controls.Window window)
         {
             // attach to window
-            var tokens = new List<IDisposable>() {
+            var tokens = new List<IDisposable>() 
+            {
                 window.GetObservable(Avalonia.Controls.Window.IsActiveProperty).Subscribe(isActive =>
                 {
                     if (isActive && this.LatestActiveWindow != window)
@@ -3269,7 +3296,7 @@ namespace CarinaStudio.AppSuite
                     this.Logger.LogTrace("[Performance] Took {time} ms to create view-model of main window", this.stopWatch.ElapsedMilliseconds - time);
             }
 
-            // creat and show window later if restarting main windows
+            // create and show window later if restarting main windows
             if (this.isRestartingRootWindowsRequested)
             {
                 this.Logger.LogWarning("Show main window later after closing all main windows");
@@ -3292,6 +3319,7 @@ namespace CarinaStudio.AppSuite
             var mainWindowHolder = new MainWindowHolder(viewModel, mainWindow, windowCreatedAction);
             this.mainWindowHolders[mainWindow] = mainWindowHolder;
             this.mainWindows.Add(mainWindow);
+            this.windows.Add(mainWindow);
             mainWindow.Closed += this.OnMainWindowClosed;
             mainWindow.GetObservable(Window.HasDialogsProperty).Subscribe(new Observer<bool>(value =>
             {
@@ -3897,24 +3925,7 @@ namespace CarinaStudio.AppSuite
             var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
 
             // get current theme
-            var themeMode = this.FallbackThemeMode;
-            if (this.uiSettings != null 
-                && this.windowsColorType != null 
-                && this.uiSettingsGetColorValueMethod != null
-                && this.windowsColorRProperty != null
-                && this.windowsColorGProperty != null
-                && this.windowsColorBProperty != null)
-            {
-                var backgroundColor = this.uiSettingsGetColorValueMethod.Invoke(this.uiSettings, new object?[] { this.uiColorTypeBackground }).AsNonNull();
-                var r = (byte)this.windowsColorRProperty.GetValue(backgroundColor).AsNonNull();
-                var g = (byte)this.windowsColorGProperty.GetValue(backgroundColor).AsNonNull();
-                var b = (byte)this.windowsColorBProperty.GetValue(backgroundColor).AsNonNull();
-                themeMode = (r + g + b) / 3 < 128
-                    ? ThemeMode.Dark
-                    : ThemeMode.Light;
-            }
-            else if (Platform.IsMacOS)
-                themeMode = this.GetMacOSThemeMode();
+            var themeMode = this.GetSystemThemeMode();
             if (this.systemThemeMode == themeMode)
                 return;
 

@@ -70,7 +70,7 @@
 									</controls:Image>
 								</Button>
 							</StackPanel>
-							<TextBlock Foreground="{DynamicResource Brush/Icon.Error}" Grid.Column="1" Grid.Row="1" IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" Text="{Binding Error.Message}"/>
+							<TextBlock Foreground="{DynamicResource Brush/Icon.Error}" Grid.Column="1" Grid.Row="1" IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" Text="{Binding Error.Message}" TextTrimming="CharacterEllipsis"/>
 						</Grid>
 					</DataTemplate>
 

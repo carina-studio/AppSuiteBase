@@ -1,3 +1,4 @@
+using System.Threading;
 using CarinaStudio.Collections;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
@@ -32,6 +33,7 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
     TestManager(IAppSuiteApplication app) : base(app)
     { 
         this.logger = app.LoggerFactory.CreateLogger(nameof(TestManager));
+        this.AddTestCase(typeof(Common.ThemeModeTest));
         this.AddTestCase(typeof(MainWindows.RestartMainWindowsTest));
         this.AddTestCase(typeof(MainWindows.ShowMainWindowsTest));
     }
@@ -226,6 +228,8 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
         this.logger.LogDebug("Complete running test case '{name}'", testCase.Name);
 
         // run next test case
+        if (this.testCasesToRun.IsNotEmpty())
+            await Task.Delay(500, CancellationToken.None);
         if (this.testCasesToRun.IsNotEmpty())
         {
             var nextTestCase = this.testCasesToRun.First!.Value;

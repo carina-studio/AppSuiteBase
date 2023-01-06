@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using NUnit.Framework;
 using System;
 using System.ComponentModel;
 using System.Threading;
@@ -38,6 +39,10 @@ public abstract class TestCase : BaseApplicationObject<IAppSuiteApplication>, IN
         if (this.State == TestCaseState.WaitingForRunning)
         {
             this.State = TestCaseState.Cancelled;
+            this.IsCancellable = false;
+            this.PropertyChanged?.Invoke(this, new(nameof(IsCancellable)));
+            this.IsRunnable = true;
+            this.PropertyChanged?.Invoke(this, new(nameof(IsRunnable)));
             return true;
         }
         if (this.State != TestCaseState.Running)
@@ -261,6 +266,54 @@ public abstract class TestCase : BaseApplicationObject<IAppSuiteApplication>, IN
     /// <inheritdoc/>
     public override string ToString() =>
         this.Name;
+    
+
+    /// <summary>
+    /// Wait for given condition asynchronously.
+    /// </summary>
+    /// <param name="condition">Condition.</param>
+    /// <param name="failureMessage">Message of <see cref="AssertionException"/> if failed to wait for condition.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Task of waiting for condition.</returns>
+    protected static Task WaitForConditionAsync(Func<bool> condition, string failureMessage, CancellationToken cancellationToken) =>
+        WaitForConditionAsync(condition, failureMessage, 5000, cancellationToken);
+
+
+    /// <summary>
+    /// Wait for given condition asynchronously.
+    /// </summary>
+    /// <param name="condition">Condition.</param>
+    /// <param name="failureMessage">Message of <see cref="AssertionException"/> if failed to wait for condition.</param>
+    /// <param name="timeout">Timeout in milliseconds.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Task of waiting for condition.</returns>
+    protected static async Task WaitForConditionAsync(Func<bool> condition, string failureMessage, int timeout, CancellationToken cancellationToken)
+    {
+        while (!cancellationToken.IsCancellationRequested)
+        {
+            if (condition())
+                break;
+            if (timeout == 0)
+                throw new AssertionException(failureMessage);
+            if (timeout > 0)
+            {
+                if (timeout >= 500)
+                {
+                    await Task.Delay(500, cancellationToken);
+                    timeout -= 500;
+                }
+                else
+                {
+                    await Task.Delay(timeout, cancellationToken);
+                    timeout = 0;
+                }
+            }
+            else
+                await Task.Delay(1000, cancellationToken);
+        }
+        if (cancellationToken.IsCancellationRequested)
+            throw new TaskCanceledException();
+    }
     
 
     // Notify that test is waiting for running.
