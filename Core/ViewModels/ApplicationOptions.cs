@@ -30,7 +30,6 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         // Fields.
-        readonly List<ExternalDependency> attachedExternalDependencies = new();
         readonly ThemeMode originalThemeMode;
         readonly bool originalUsingCompactUI;
 
