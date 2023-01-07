@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<AssemblyVersion>2.2.10.1214</AssemblyVersion>
-		<Version>2.2.10.1214</Version>
-		<PackageVersion>2.2.10.1214-dev</PackageVersion>
+		<AssemblyVersion>2.2.19.107</AssemblyVersion>
+		<Version>2.2.19.107</Version>
+		<PackageVersion>2.2.19.107-dev</PackageVersion>
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Core.Tests</AssemblyName>
@@ -28,7 +28,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NUnit" Version="3.13.2" />
+		<PackageReference Include="NUnit" Version="3.13.3" />
 	</ItemGroup>
 
 	<ItemGroup>
