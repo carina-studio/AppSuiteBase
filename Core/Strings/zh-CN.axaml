@@ -240,6 +240,9 @@
 	<!-- IPAddressTextBox -->
 	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 或 IPv6</sys:String>
 
+	<!-- LocalizationTest -->
+	<sys:String x:Key="String/LocalizationTest.String">简体中文</sys:String>
+
 	<!-- MainWindow -->
 	<sys:String x:Key="String/MainWindow.ConfirmLayoutingLotsOfMainWindows">排列较多数量的窗口导致不适合的排列结果，是否仍要进行排列？</sys:String>
 	<sys:String x:Key="String/MainWindow.ConfirmUsingCompactUI">您正在使用较小屏幕的设备，是否要启用紧密版面配置？您也可以在应用程序选项中变更此设置。</sys:String>
