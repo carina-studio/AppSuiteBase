@@ -282,9 +282,12 @@
 	<sys:String x:Key="String/SelfTestingWindow.CancelTestCase">取消测试</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.NeedToWaitForRunningTestCases">您必须等待正在执行的测试完成。</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.RunAllTestCases">执行所有测试</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.RunningTestCaseInfo">正在执行「{0}」…</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.RunTestCase">执行测试</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.RunTestCasesInCategory">执行分类中的所有测试</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.TestCaseCategoryInfo">{0} (成功：{1}，失败：{2}，总共：{3})</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.Title">{0} 自我测试</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.WaitingTestCasesInfo">{0} 个测试等待中</sys:String>
 
 	<!-- SplashWindow -->
 	<sys:String x:Key="String/SplashWindow.Launching">启动中</sys:String>

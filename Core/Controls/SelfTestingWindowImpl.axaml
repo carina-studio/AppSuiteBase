@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:abControls="using:CarinaStudio.Controls"
+		xmlns:abConverters="using:CarinaStudio.Data.Converters"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:testing="using:CarinaStudio.AppSuite.Testing"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -27,15 +28,17 @@
 		</Border>
 
 		<!-- Content -->
-		<Grid Classes="Dialog_ContentPanel">
-			<TreeView Name="testCasesTreeView">
+		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,Auto,*" RowDefinitions="*,Auto,Auto">
+
+			<!-- Test cases -->
+			<TreeView Name="testCasesTreeView" Grid.ColumnSpan="3">
 				<TreeView.DataTemplates>
 
 					<!-- TestCaseCategroy -->
 					<TreeDataTemplate DataType="{x:Type testing:TestCaseCategory}" ItemsSource="{Binding TestCases}">
 						<Grid Name="rootPanel" Background="{x:Static Brushes.Transparent}" ColumnDefinitions="*,Auto">
 							<Border Classes="InPlaceAction_Reserved"/>
-							<abControls:FormattedTextBlock Arg1="{Binding Name}" Arg2="{Binding TestCases.Count}" Format="{}{0} ({1})"/>
+							<abControls:FormattedTextBlock Arg1="{Binding Name}" Arg2="{Binding SucceededTestCaseCount}" Arg3="{Binding FailedTestCaseCount}" Arg4="{Binding TestCases.Count}" Format="{DynamicResource String/SelfTestingWindow.TestCaseCategoryInfo}"/>
 							<StackPanel Grid.Column="1" IsVisible="{Binding #rootPanel.IsPointerOver}" Orientation="Horizontal">
 								<Button Classes="InPlaceAction_Button" Command="{Binding $parent[Window].RunTestCasesInCategoryCommand}" CommandParameter="{Binding $parent[TreeViewItem]}" ToolTip.Tip="{DynamicResource String/SelfTestingWindow.RunTestCasesInCategory}">
 									<controls:Image Classes="InPlaceAction_Icon">
@@ -76,6 +79,20 @@
 
 				</TreeView.DataTemplates>
 			</TreeView>
+
+			<!-- Test info -->
+			<Separator Classes="Dialog_Separator" Grid.ColumnSpan="3" Grid.Row="1">
+				<Separator.IsVisible>
+					<MultiBinding Converter="{x:Static BoolConverters.Or}">
+						<Binding Path="IsVisible" ElementName="runningTestCaseInfoTextBlock"/>
+						<Binding Path="IsVisible" ElementName="waitingTestCasesInfoTextBlock"/>
+					</MultiBinding>
+				</Separator.IsVisible>
+			</Separator>
+			<abControls:FormattedTextBlock Name="runningTestCaseInfoTextBlock" Classes="Dialog_TextBlock" Arg1="{Binding RunningTestCase.Name, Source={x:Static testing:TestManager.Default}}" Format="{DynamicResource String/SelfTestingWindow.RunningTestCaseInfo}" Grid.Row="2" IsVisible="{Binding RunningTestCase, Source={x:Static testing:TestManager.Default}, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+			<Separator Classes="Dialog_Separator_Small" Grid.Column="1" Grid.Row="2" IsVisible="{Binding #runningTestCaseInfoTextBlock.IsVisible}"/>
+			<abControls:FormattedTextBlock Name="waitingTestCasesInfoTextBlock" Classes="Dialog_TextBlock" Arg1="{Binding TestCaseWaitingCount, Source={x:Static testing:TestManager.Default}}" Format="{DynamicResource String/SelfTestingWindow.WaitingTestCasesInfo}" Grid.Column="2" Grid.Row="2" IsVisible="{Binding TestCaseWaitingCount, Source={x:Static testing:TestManager.Default}, Converter={x:Static abConverters:NumberConverters.IsNonZero}}"/>
+
 		</Grid>
 		
 	</DockPanel>

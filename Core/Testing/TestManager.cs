@@ -224,8 +224,10 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
         // run
         this.logger.LogDebug("Start running test case '{name}', waiting count: {count}", testCase.Name, this.testCasesToRun.Count);
         this.RunningTestCase = testCase;
+        await Task.Delay(100, CancellationToken.None);
         await testCase.RunAsync();
         this.RunningTestCase = null;
+        await Task.Delay(100, CancellationToken.None);
         this.logger.LogDebug("Complete running test case '{name}'", testCase.Name);
 
         // run next test case

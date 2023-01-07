@@ -285,9 +285,12 @@
 	<sys:String x:Key="String/SelfTestingWindow.CancelTestCase">Cancel the test</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.NeedToWaitForRunningTestCases">You need to wait for completion of running test case(s).</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.RunAllTestCases">Run all tests</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.RunningTestCaseInfo">Running '{0}'…</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.RunTestCase">Run the test</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.RunTestCasesInCategory">Run all tests in the category</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.TestCaseCategoryInfo">{0} ({1} Succeeded, {2} Failed, {3} Total)</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.Title">Self testing of {0}</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.WaitingTestCasesInfo">{0} test(s) waiting</sys:String>
 
 	<!-- SplashWindow -->
 	<sys:String x:Key="String/SplashWindow.Launching">Launching</sys:String>
