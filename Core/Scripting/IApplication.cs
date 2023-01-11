@@ -18,6 +18,12 @@ public interface IApplication
 
 
     /// <summary>
+    /// Check whether application is running in debug mode or not.
+    /// </summary>
+    bool IsDebugMode { get; }
+
+
+    /// <summary>
     /// Check whether current thread is main thread of application or not.
     /// </summary>
     bool IsMainThread { get; }
