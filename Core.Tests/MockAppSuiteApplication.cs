@@ -272,6 +272,10 @@ namespace CarinaStudio.AppSuite
         public virtual bool IsUserAgreementAgreedBefore { get; } = false;
 
 
+        /// <inheritdoc/>
+        public virtual bool IsUserInteractive { get; } = false;
+
+
         /// <summary>
         /// Check whether <see cref="ThemeMode.System"/> is supported or not.
         /// </summary>

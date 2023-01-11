@@ -207,6 +207,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Check whether application is user interactive or not.
+        /// </summary>
+        bool IsUserInteractive { get; }
+
+
+        /// <summary>
         /// Check whether application is running in testing mode or not.
         /// </summary>
         bool IsTestingMode { get; }

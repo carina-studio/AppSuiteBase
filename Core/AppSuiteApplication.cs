@@ -277,6 +277,7 @@ namespace CarinaStudio.AppSuite
         string multiInstancesServerStreamName = "";
         ScheduledAction? notifyNetworkConnForProductActivationAction;
         readonly List<MainWindowHolder> pendingMainWindowHolders = new();
+        ScheduledAction? performFullGCAction;
         PersistentStateImpl? persistentState;
         readonly string persistentStateFilePath;
         long prepareStartingTime;
@@ -291,6 +292,7 @@ namespace CarinaStudio.AppSuite
         ShutdownSource shutdownSource = ShutdownSource.None;
         Controls.SplashWindowImpl? splashWindow;
         long splashWindowShownTime;
+        ScheduledAction? stopUserInteractionAction;
         readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
         Avalonia.Controls.ResourceDictionary? stringResource;
         CultureInfo? stringResourceCulture;
@@ -1220,6 +1222,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public bool IsUserInteractive { get; private set; }
+
+
+        /// <inheritdoc/>
         public Window? LatestActiveMainWindow { get => this.activeMainWindowList.IsNotEmpty() ? this.activeMainWindowList.First?.Value?.Window : null; }
 
 
@@ -1687,14 +1693,21 @@ namespace CarinaStudio.AppSuite
         /// Called after entering background mode.
         /// </summary>
         protected virtual void OnBackgroundModeEntered()
-        { }
+        { 
+            this.PerformOptmizedGC();
+            var delay = this.Configuration.GetValueOrDefault(ConfigurationKeys.DelayToPerformFullGCInBackgroundMode);
+            if (delay >= 0)
+                this.performFullGCAction?.Reschedule(delay);
+        }
 
 
         /// <summary>
         /// Called after exiting background mode.
         /// </summary>
         protected virtual void OnBackgroundModeExited()
-        { }
+        { 
+            this.performFullGCAction?.Cancel();
+        }
 
 
         // Called when one of configuration has been changed.
@@ -2302,6 +2315,7 @@ namespace CarinaStudio.AppSuite
 					}),
 				}.ShowDialog(window);
 			});
+            this.performFullGCAction = new(this.PerformFullGC);
 			this.reActivateProVersionAction = new(async () =>
 			{
                 var productId = this.ProVersionProductId;
@@ -2334,6 +2348,18 @@ namespace CarinaStudio.AppSuite
 					this.isReActivatingProVersion = false;
 				}
 			});
+            this.stopUserInteractionAction = new(() =>
+            {
+                if (this.LatestActiveWindow?.IsActive == true
+                    || !this.IsUserInteractive)
+                {
+                    return;
+                }
+                this.Logger.LogWarning("Leave user interactive mode");
+                this.IsUserInteractive = false;
+                this.OnPropertyChanged(nameof(IsUserInteractive));
+                this.OnUserInteractionStopped();
+            });
 
             // start checking update
             this.PackageManifestUri?.Let(it =>
@@ -2693,6 +2719,27 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Called when entering user interactive mode.
+        /// </summary>
+        protected virtual void OnUserInteractionStarted()
+        { 
+            this.performFullGCAction?.Cancel();
+        }
+
+
+        /// <summary>
+        /// Called when leaving user interactive mode.
+        /// </summary>
+        protected virtual void OnUserInteractionStopped()
+        { 
+            this.PerformOptmizedGC();
+            var delay = this.Configuration.GetValueOrDefault(ConfigurationKeys.DelayToPerformFullGCWhenUserInteractionStopped);
+            if (delay >= 0)
+                this.performFullGCAction?.Schedule(delay);
+        }
+
+
+        /// <summary>
         /// Called when window closed.
         /// </summary>
         /// <param name="window">Closed window.</param>
@@ -2710,6 +2757,7 @@ namespace CarinaStudio.AppSuite
             {
                 this.LatestActiveWindow = null;
                 this.OnPropertyChanged(nameof(LatestActiveWindow));
+                this.stopUserInteractionAction?.Reschedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.UserInteractionTimeout));
             }
 
             // enter background mode or shut down
@@ -2732,11 +2780,24 @@ namespace CarinaStudio.AppSuite
             {
                 window.GetObservable(Avalonia.Controls.Window.IsActiveProperty).Subscribe(isActive =>
                 {
-                    if (isActive && this.LatestActiveWindow != window)
+                    if (isActive)
                     {
-                        this.LatestActiveWindow = window;
-                        this.OnPropertyChanged(nameof(LatestActiveWindow));
+                        if (this.LatestActiveWindow != window)
+                        {
+                            this.LatestActiveWindow = window;
+                            this.OnPropertyChanged(nameof(LatestActiveWindow));
+                        }
+                        this.stopUserInteractionAction?.Cancel();
+                        if (!this.IsUserInteractive)
+                        {
+                            this.Logger.LogWarning("Enter user interactive mode");
+                            this.IsUserInteractive = true;
+                            this.OnPropertyChanged(nameof(IsUserInteractive));
+                            this.OnUserInteractionStarted();
+                        }
                     }
+                    else
+                        this.stopUserInteractionAction?.Reschedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.UserInteractionTimeout));
                 }),
             };
             this.windowObserverTokens.Add(window, tokens);
@@ -2790,6 +2851,38 @@ namespace CarinaStudio.AppSuite
                     ++index;
             }
             return DictionaryExtensions.AsReadOnly(launchOptions);
+        }
+
+
+        /// <summary>
+        /// Perform full blocking GC immediately.
+        /// </summary>
+        protected void PerformFullGC()
+        {
+            this.Logger.LogWarning("Perform full GC");
+            var stopwatch = this.IsDebugMode ? new Stopwatch().Also(it => it.Start()) : null;
+            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true);
+            if (stopwatch != null)
+            {
+                this.Logger.LogTrace("[Performance] Took {time} ms to perform full GC", stopwatch.ElapsedMilliseconds);
+                stopwatch.Stop();
+            }
+        }
+
+
+        /// <summary>
+        /// Perform optmized GC immediately.
+        /// </summary>
+        protected void PerformOptmizedGC()
+        {
+            this.Logger.LogDebug("Perform optmized GC");
+            var stopwatch = this.IsDebugMode ? new Stopwatch().Also(it => it.Start()) : null;
+            GC.Collect(Math.Min(1, GC.MaxGeneration), GCCollectionMode.Optimized, true);
+            if (stopwatch != null)
+            {
+                this.Logger.LogTrace("[Performance] Took {time} ms to perform optmized GC", stopwatch.ElapsedMilliseconds);
+                stopwatch.Stop();
+            }
         }
 
 
