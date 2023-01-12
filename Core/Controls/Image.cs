@@ -10,6 +10,7 @@ public class Image : Avalonia.Controls.Image
 {
     // Fields.
     AvaloniaObject? attachedSource;
+    bool isAttachedToVisualTree;
 
 
     /// <summary>
@@ -26,13 +27,41 @@ public class Image : Avalonia.Controls.Image
                     drawingImage.Drawing.PropertyChanged -= this.OnSourcePropertyChanged;
             }
             this.attachedSource = (source as AvaloniaObject);
-            if (this.attachedSource != null)
+            if (this.attachedSource != null && this.isAttachedToVisualTree)
             {
                 this.attachedSource.PropertyChanged += this.OnSourcePropertyChanged;
                 if (this.attachedSource is DrawingImage drawingImage)
                     drawingImage.Drawing.PropertyChanged += this.OnSourcePropertyChanged;
             }
         });
+    }
+
+
+    /// <inheritdoc/>
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        this.isAttachedToVisualTree = true;
+        if (this.attachedSource != null)
+        {
+            this.attachedSource.PropertyChanged += this.OnSourcePropertyChanged;
+            if (this.attachedSource is DrawingImage drawingImage)
+                drawingImage.Drawing.PropertyChanged += this.OnSourcePropertyChanged;
+        }
+    }
+
+
+    /// <inheritdoc/>
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        this.isAttachedToVisualTree = false;
+        if (this.attachedSource != null)
+        {
+            this.attachedSource.PropertyChanged -= this.OnSourcePropertyChanged;
+            if (this.attachedSource is DrawingImage drawingImage)
+                drawingImage.Drawing.PropertyChanged -= this.OnSourcePropertyChanged;
+        }
+        base.OnDetachedFromVisualTree(e);
     }
 
 

@@ -18,10 +18,18 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
-        /// <summary>
-        /// Called when key up.
-        /// </summary>
-        /// <param name="e">Event data.</param>
+        /// <inheritdoc/>
+        protected override void OnClosed(EventArgs e)
+        {
+            // call base
+            base.OnClosed(e);
+
+            // [Workaround] Prevent Window leak by child controls
+            this.SynchronizationContext.Post(_ => this.Content = null, null);
+        }
+
+
+        /// <inheritdoc/>
         protected override void OnKeyUp(KeyEventArgs e)
         {
             base.OnKeyUp(e);

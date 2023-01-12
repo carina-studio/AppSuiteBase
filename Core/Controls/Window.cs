@@ -195,6 +195,9 @@ namespace CarinaStudio.AppSuite.Controls
             this.Application.HardwareInfo.PropertyChanged -= this.OnHardwareInfoPropertyChanged;
             this.Settings.SettingChanged -= this.OnSettingChanged;
             base.OnClosed(e);
+            
+            // [Workaround] Prevent Window leak by child controls
+            this.SynchronizationContext.Post(() => this.Content = null);
         }
 
 

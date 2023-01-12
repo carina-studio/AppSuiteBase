@@ -29,6 +29,17 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
+        /// <inheritdoc/>
+        protected override void OnClosed(EventArgs e)
+        {
+            // call base
+            base.OnClosed(e);
+
+            // [Workaround] Prevent Window leak by child controls
+            this.SynchronizationContext.Post(_ => this.Content = null, null);
+        }
+
+
         /// <summary>
         /// Called when <see cref="Key.Enter"/> clicked on input control without handling by the control.
         /// </summary>
