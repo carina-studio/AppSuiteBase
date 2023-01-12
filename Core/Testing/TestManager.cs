@@ -37,6 +37,7 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
         this.AddTestCase(typeof(Common.ThemeModeTest));
         this.AddTestCase(typeof(MainWindows.RestartMainWindowsTest));
         this.AddTestCase(typeof(MainWindows.ShowMainWindowsTest));
+        this.AddTestCase(typeof(MainWindows.WindowLeakageTest));
     }
 
 
