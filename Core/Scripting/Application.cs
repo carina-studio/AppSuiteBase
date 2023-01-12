@@ -24,6 +24,10 @@ public class Application : IApplication
         }
 
         /// <inheritdoc/>
+        public override SynchronizationContext CreateCopy() =>
+            new GuardedSynchronizationContext(this.app);
+
+        /// <inheritdoc/>
         public override void Post(SendOrPostCallback d, object? state)
         {
             var callerStackTrace = this.app.IsDebugMode ? Environment.StackTrace : null;
@@ -42,6 +46,14 @@ public class Application : IApplication
                 }
             }, state);
         }
+
+        /// <inheritdoc/>
+        public override void Send(SendOrPostCallback d, object? state) =>
+            this.syncContext.Send(d, state);
+
+        /// <inheritdoc/>
+        public override int Wait(IntPtr[] waitHandles, bool waitAll, int millisecondsTimeout) =>
+            this.syncContext.Wait(waitHandles, waitAll, millisecondsTimeout);
     }
 
 
