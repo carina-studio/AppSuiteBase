@@ -46,9 +46,7 @@ class WindowLeakageTest : TestCase
         var retryCount = 10;
         while (!cancellationToken.IsCancellationRequested)
         {
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
+            this.Application.PerformGC(GCCollectionMode.Forced);
             for (var i = mainWindowRefs.Count - 1; i >= 0; --i)
             {
                 if (!mainWindowRefs[i].TryGetTarget(out var window))

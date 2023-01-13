@@ -369,6 +369,11 @@ namespace CarinaStudio.AppSuite
         public virtual Uri? PackageManifestUri { get; } = null;
 
 
+        /// <inheritdoc/>
+        public virtual void PerformGC(GCCollectionMode collectionMode)
+        { }
+
+
         /// <summary>
         /// Get persistent state.
         /// </summary>

@@ -292,6 +292,13 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Perform garbadge collection.
+        /// </summary>
+        /// <param name="collectionMode">GC mode.</param>
+        void PerformGC(GCCollectionMode collectionMode = GCCollectionMode.Default);
+
+
+        /// <summary>
         /// Get latest document of Privacy Policy.
         /// </summary>
         DocumentSource? PrivacyPolicy { get; }

@@ -1694,7 +1694,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         protected virtual void OnBackgroundModeEntered()
         { 
-            this.PerformOptmizedGC();
+            this.PerformGC(GCCollectionMode.Optimized);
             var delay = this.Configuration.GetValueOrDefault(ConfigurationKeys.DelayToPerformFullGCInBackgroundMode);
             if (delay >= 0)
                 this.performFullGCAction?.Reschedule(delay);
@@ -2315,7 +2315,7 @@ namespace CarinaStudio.AppSuite
 					}),
 				}.ShowDialog(window);
 			});
-            this.performFullGCAction = new(this.PerformFullGC);
+            this.performFullGCAction = new(() => this.PerformGC(GCCollectionMode.Forced));
 			this.reActivateProVersionAction = new(async () =>
 			{
                 var productId = this.ProVersionProductId;
@@ -2732,7 +2732,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         protected virtual void OnUserInteractionStopped()
         { 
-            this.PerformOptmizedGC();
+            this.PerformGC(GCCollectionMode.Optimized);
             var delay = this.Configuration.GetValueOrDefault(ConfigurationKeys.DelayToPerformFullGCWhenUserInteractionStopped);
             if (delay >= 0)
                 this.performFullGCAction?.Schedule(delay);
@@ -2854,33 +2854,28 @@ namespace CarinaStudio.AppSuite
         }
 
 
-        /// <summary>
-        /// Perform full blocking GC immediately.
-        /// </summary>
-        protected void PerformFullGC()
-        {
-            this.Logger.LogWarning("Perform full GC");
+        /// <inheritdoc/>
+        public void PerformGC(GCCollectionMode collectionMode = GCCollectionMode.Default)
+        { 
+            this.Logger.LogWarning("Perform GC with mode {mode}", collectionMode);
             var stopwatch = this.IsDebugMode ? new Stopwatch().Also(it => it.Start()) : null;
-            GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced, true);
-            if (stopwatch != null)
+            switch (collectionMode)
             {
-                this.Logger.LogTrace("[Performance] Took {time} ms to perform full GC", stopwatch.ElapsedMilliseconds);
-                stopwatch.Stop();
+                case GCCollectionMode.Forced:
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect();
+                    break;
+                case GCCollectionMode.Optimized:
+                    GC.Collect(Math.Min(1, GC.MaxGeneration), GCCollectionMode.Optimized, false);
+                    break;
+                default:
+                    GC.Collect(Math.Min(1, GC.MaxGeneration), GCCollectionMode.Default, true);
+                    break;
             }
-        }
-
-
-        /// <summary>
-        /// Perform optmized GC immediately.
-        /// </summary>
-        protected void PerformOptmizedGC()
-        {
-            this.Logger.LogDebug("Perform optmized GC");
-            var stopwatch = this.IsDebugMode ? new Stopwatch().Also(it => it.Start()) : null;
-            GC.Collect(Math.Min(1, GC.MaxGeneration), GCCollectionMode.Optimized, true);
             if (stopwatch != null)
             {
-                this.Logger.LogTrace("[Performance] Took {time} ms to perform optmized GC", stopwatch.ElapsedMilliseconds);
+                this.Logger.LogTrace("[Performance] Took {time} ms to perform GC with mode {mode}", stopwatch.ElapsedMilliseconds, collectionMode);
                 stopwatch.Stop();
             }
         }
