@@ -15,7 +15,8 @@
 		MinWidth="{StaticResource Double/SelfTestingWindow.MinWidth}"
 		SizeToContent="Manual"
 		Topmost="True"
-		Width="{StaticResource Double/SelfTestingWindow.Width}">
+		Width="{StaticResource Double/SelfTestingWindow.Width}"
+		WindowStartupLocation="CenterScreen">
 
 	<DockPanel>
 
