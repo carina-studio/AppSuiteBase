@@ -587,13 +587,41 @@ namespace CarinaStudio.AppSuite
                 .UsePlatformDetect()
                 .LogToTrace().Also(it =>
                 {
-                    if (Platform.IsWindows11OrAbove)
+                    var cjkUnicodeRanges = new UnicodeRange(new UnicodeRangeSegment[]
                     {
-                        // enable Mica effect
-                        it.With(new Win32PlatformOptions()
+                        new(0x2e80, 0x2eff), // CJKRadicalsSupplement
+                        new(0x3000, 0x303f), // CJKSymbolsandPunctuation
+                        new(0x3200, 0x4dbf), // EnclosedCJKLettersandMonths, CJKCompatibility, CJKUnifiedIdeographsExtensionA
+                        new(0x4e00, 0x9fff), // CJKUnifiedIdeographs
+                        new(0xf900, 0xfaff), // CJKCompatibilityIdeographs
+                        new(0xfe30, 0xfe4f), // CJKCompatibilityForms
+                    });
+                    if (Platform.IsWindows)
+                    {
+                        it.With(new FontManagerOptions()
                         {
-                            UseWindowsUIComposition = true,
+                            FontFallbacks = new FontFallback[]
+                            {
+                                new()
+                                {
+                                    FontFamily = new("Microsoft JhengHei UI"),
+                                    UnicodeRange = cjkUnicodeRanges,
+                                },
+                                new()
+                                {
+                                    FontFamily = new("Microsoft YaHei UI"),
+                                    UnicodeRange = cjkUnicodeRanges,
+                                }
+                            },
                         });
+                        if (Platform.IsWindows11OrAbove)
+                        {
+                            // enable Mica effect
+                            it.With(new Win32PlatformOptions()
+                            {
+                                UseWindowsUIComposition = true,
+                            });
+                        }
                     }
                     if (Platform.IsMacOS)
                         SetupMacOSAppBuilder(it);
