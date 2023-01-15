@@ -626,7 +626,25 @@ namespace CarinaStudio.AppSuite
                     if (Platform.IsMacOS)
                         SetupMacOSAppBuilder(it);
                     if (Platform.IsLinux)
+                    {
+                        it.With(new FontManagerOptions()
+                        {
+                            FontFallbacks = new FontFallback[]
+                            {
+                                new()
+                                {
+                                    FontFamily = new("Noto Sans Mono CJK TC"),
+                                    UnicodeRange = cjkUnicodeRanges,
+                                },
+                                new()
+                                {
+                                    FontFamily = new("Noto Sans Mono CJK SC"),
+                                    UnicodeRange = cjkUnicodeRanges,
+                                }
+                            },
+                        });
                         it.With(new X11PlatformOptions());
+                    }
                     setupAction?.Invoke(it);
                 });
         }
