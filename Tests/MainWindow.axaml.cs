@@ -93,6 +93,12 @@ namespace CarinaStudio.AppSuite.Tests
             this.integerTextBox = this.FindControl<IntegerTextBox>(nameof(integerTextBox)).AsNonNull();
             this.integerTextBox2 = this.FindControl<IntegerTextBox>(nameof(integerTextBox2)).AsNonNull();
             this.ipAddressTextBox = this.FindControl<IPAddressTextBox>(nameof(ipAddressTextBox)).AsNonNull();
+            this.Get<RegexTextBox>("regexTextBox").Also(it =>
+            {
+                // make a reference from RegexTextBox to MainWindow
+                it.GetObservable(RegexTextBox.IsTextValidProperty).Subscribe(_ =>
+                { });
+            });
 
             var syntaxHighlightingDefSet = new SyntaxHighlightingDefinitionSet("C#").Also(defSet =>
             {

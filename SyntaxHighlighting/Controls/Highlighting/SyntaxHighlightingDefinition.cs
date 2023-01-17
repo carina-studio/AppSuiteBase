@@ -12,11 +12,13 @@ public abstract class SyntaxHighlightingDefinition : INotifyPropertyChanged
 {
     // Fields.
     IBrush? background;
+    IDisposable backgroundPropertyChangedHandlerToken = EmptyDisposable.Default;
     FontFamily? fontFamily;
     double fontSize = double.NaN;
     FontStyle? fontStyle;
     FontWeight? fontWeight;
     IBrush? foreground;
+    IDisposable foregroundPropertyChangedHandlerToken = EmptyDisposable.Default;
     bool isValid;
     TextDecorationCollection? textDecorations;
 
@@ -28,6 +30,14 @@ public abstract class SyntaxHighlightingDefinition : INotifyPropertyChanged
     protected SyntaxHighlightingDefinition(string? name = null)
     { 
         this.Name = name;
+    }
+
+
+    /// <inheritdoc/>
+    ~SyntaxHighlightingDefinition()
+    {
+        this.backgroundPropertyChangedHandlerToken.Dispose();
+        this.foregroundPropertyChangedHandlerToken.Dispose();
     }
 
 
@@ -52,8 +62,9 @@ public abstract class SyntaxHighlightingDefinition : INotifyPropertyChanged
         {
             if (this.background == value)
                 return;
-            (this.background as AvaloniaObject)?.Let(it => it.PropertyChanged -= this.OnBrushPropertyChanged);
-            (value as AvaloniaObject)?.Let(it => it.PropertyChanged += this.OnBrushPropertyChanged);
+            this.backgroundPropertyChangedHandlerToken.Dispose();
+            (value as AvaloniaObject)?.Let(it => 
+                this.backgroundPropertyChangedHandlerToken = it.AddWeakEventHandler<AvaloniaPropertyChangedEventArgs>(nameof(AvaloniaObject.PropertyChanged), this.OnBrushPropertyChanged));
             this.background = value;
             this.Validate();
             this.OnPropertyChanged(nameof(Background));
@@ -141,8 +152,9 @@ public abstract class SyntaxHighlightingDefinition : INotifyPropertyChanged
         {
             if (this.foreground == value)
                 return;
-            (this.foreground as AvaloniaObject)?.Let(it => it.PropertyChanged -= this.OnBrushPropertyChanged);
-            (value as AvaloniaObject)?.Let(it => it.PropertyChanged += this.OnBrushPropertyChanged);
+           this.foregroundPropertyChangedHandlerToken.Dispose();
+            (value as AvaloniaObject)?.Let(it => 
+                this.foregroundPropertyChangedHandlerToken = it.AddWeakEventHandler<AvaloniaPropertyChangedEventArgs>(nameof(AvaloniaObject.PropertyChanged), this.OnBrushPropertyChanged));
             this.foreground = value;
             this.Validate();
             this.OnPropertyChanged(nameof(Foreground));
