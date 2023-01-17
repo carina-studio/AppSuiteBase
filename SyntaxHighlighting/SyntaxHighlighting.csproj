@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<AssemblyVersion>2.2.19.107</AssemblyVersion>
-		<Version>2.2.19.107</Version>
-		<PackageVersion>2.2.19.107-dev</PackageVersion>
+		<AssemblyVersion>2.2.22.117</AssemblyVersion>
+		<Version>2.2.22.117</Version>
+		<PackageVersion>2.2.22.117-dev</PackageVersion>
 		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.SyntaxHighlighting</AssemblyName>
 		<Nullable>enable</Nullable>
