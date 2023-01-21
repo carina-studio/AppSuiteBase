@@ -729,44 +729,71 @@ namespace CarinaStudio.AppSuite
             if (this.IsShutdownStarted)
                 return null;
 
-            // check package manifest URI
-            var packageManifestUri = this.PackageManifestUri;
-            if (packageManifestUri == null)
+            // check package manifest URIs
+            var manifestUris = this.PackageManifestUris.ToArray();
+            if (manifestUris.IsEmpty())
             {
                 this.Logger.LogWarning("No package manifest URI specified to check update");
                 return null;
             }
 
             // schedule next checking
-            this.checkUpdateInfoAction?.Reschedule(Math.Max(1000, this.Configuration.GetValueOrDefault(ConfigurationKeys.AppUpdateInfoCheckingInterval)));
+            this.checkUpdateInfoAction?.Reschedule(Math.Max(10 * 60 * 1000 /* 10 mins */, this.Configuration.GetValueOrDefault(ConfigurationKeys.AppUpdateInfoCheckingInterval)));
 
             // check update by package manifest
             var stopWatch = new Stopwatch().Also(it => it.Start());
-            var packageResolver = new JsonPackageResolver(this, null) { Source = new WebRequestStreamProvider(packageManifestUri) };
-            this.Logger.LogInformation("Start checking update");
-            try
+            var checkingTasks = new Task[manifestUris.Length];
+            var packageResolvers = new IPackageResolver[manifestUris.Length];
+            var selectedAppUpdateInfo = default(ApplicationUpdateInfo);
+            for (var i = manifestUris.Length - 1; i >= 0 ; --i)
             {
-                await packageResolver.StartAndWaitAsync();
+                var manifestUri = manifestUris[i];
+                var packageResolver = new JsonPackageResolver(this, null) { Source = new WebRequestStreamProvider(manifestUri) };
+                this.Logger.LogInformation("Start checking update from {uri}", manifestUri);
+                packageResolvers[i] = packageResolver;
+                checkingTasks[i] = packageResolver.StartAndWaitAsync();
             }
-            catch (Exception ex)
+            for (var i = manifestUris.Length - 1; i >= 0 ; --i)
             {
-                this.Logger.LogError(ex, "Failed to check update");
-                return null;
+                // wait for completion
+                var manifestUri = manifestUris[i];
+                var packageResolver = packageResolvers[i];
+                try
+                {
+                    await checkingTasks[i];
+                    this.Logger.LogInformation("Complete checking update from {uri}", manifestUri);
+                }
+                catch (Exception ex)
+                {
+                    this.Logger.LogError(ex, "Failed to check update from {uri}", manifestUri);
+                    continue;
+                }
+
+                // check version
+                var packageVersion = packageResolver.PackageVersion;
+                if (packageVersion == null)
+                {
+                    this.Logger.LogError("No application version gotten from {uri}", manifestUri);
+                    continue;
+                }
+                if (selectedAppUpdateInfo == null || selectedAppUpdateInfo.Version < packageVersion)
+                    selectedAppUpdateInfo = new ApplicationUpdateInfo(packageVersion, manifestUri, packageResolver.PageUri, packageResolver.PackageUri);
             }
+
+            // release resources
+            for (var i = manifestUris.Length - 1; i >= 0 ; --i)
+                packageResolvers[i].Dispose();
 
             // delay to make UX better
             var delay = (1000 - stopWatch.ElapsedMilliseconds);
             if (delay > 0)
                 await Task.Delay((int)delay);
+            stopWatch.Stop();
 
             // check version
-            var packageVersion = packageResolver.PackageVersion;
-            if (packageVersion == null)
-            {
-                this.Logger.LogError("No application version gotten from package manifest");
+            if (selectedAppUpdateInfo == null)
                 return null;
-            }
-            if (!this.Configuration.GetValueOrDefault(ConfigurationKeys.ForceAcceptingAppUpdateInfo) && packageVersion <= this.Assembly.GetName().Version)
+            if (!this.Configuration.GetValueOrDefault(ConfigurationKeys.ForceAcceptingAppUpdateInfo) && selectedAppUpdateInfo.Version <= this.Assembly.GetName().Version)
             {
                 this.Logger.LogInformation("This is the latest application");
                 if (this.UpdateInfo != null)
@@ -777,12 +804,11 @@ namespace CarinaStudio.AppSuite
                 return null;
             }
 
-            // create update info
-            this.Logger.LogDebug("New application version found: {packageVersion}", packageVersion);
-            var updateInfo = new ApplicationUpdateInfo(packageVersion, packageResolver.PageUri, packageResolver.PackageUri);
-            if (updateInfo != this.UpdateInfo)
+            // complete
+            this.Logger.LogDebug("New application version found: {packageVersion}", selectedAppUpdateInfo.Version);
+            if (selectedAppUpdateInfo != this.UpdateInfo)
             {
-                this.UpdateInfo = updateInfo;
+                this.UpdateInfo = selectedAppUpdateInfo;
                 this.OnPropertyChanged(nameof(UpdateInfo));
             }
             return this.UpdateInfo;
@@ -2408,14 +2434,11 @@ namespace CarinaStudio.AppSuite
             });
 
             // start checking update
-            this.PackageManifestUri?.Let(it =>
+            this.checkUpdateInfoAction = new(() =>
             {
-                this.checkUpdateInfoAction = new ScheduledAction(() =>
-                {
-                    _ = this.CheckForApplicationUpdateAsync();
-                });
-                this.checkUpdateInfoAction?.Schedule();
+                _ = this.CheckForApplicationUpdateAsync();
             });
+            this.checkUpdateInfoAction?.Schedule();
 
             // complete loading persistent state and settings
             if (this.loadingInitPersistentStateTask != null)
@@ -2878,9 +2901,9 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Get URI of application package manifest.
+        /// Get URIs of application package manifest.
         /// </summary>
-        public virtual Uri? PackageManifestUri { get; }
+        public virtual IEnumerable<Uri> PackageManifestUris { get; } = Array.Empty<Uri>();
 
 
         // Parse arguments to launch options.

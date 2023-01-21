@@ -11,10 +11,12 @@ namespace CarinaStudio.AppSuite
 		/// Initialize <see cref="ApplicationUpdateInfo"/> instance.
 		/// </summary>
 		/// <param name="version">Version of updated application.</param>
+		/// <param name="manifestUri">Uri of package manifest.</param>
 		/// <param name="releasePageUri">Uri of page of release.</param>
 		/// <param name="packageUri">URI of update package.</param>
-		public ApplicationUpdateInfo(Version version, Uri? releasePageUri, Uri? packageUri)
+		public ApplicationUpdateInfo(Version version, Uri manifestUri, Uri? releasePageUri, Uri? packageUri)
 		{
+			this.PackageManifestUri = manifestUri;
 			this.PackageUri = packageUri;
 			this.ReleasePageUri = releasePageUri;
 			this.Version = version;
@@ -31,6 +33,7 @@ namespace CarinaStudio.AppSuite
 			if (obj is not ApplicationUpdateInfo updateInfo)
 				return false;
 			return this.Version == updateInfo.Version
+				&& this.PackageManifestUri == updateInfo.PackageManifestUri
 				&& this.ReleasePageUri == updateInfo.ReleasePageUri
 				&& this.PackageUri == updateInfo.PackageUri;
 		}
@@ -53,6 +56,12 @@ namespace CarinaStudio.AppSuite
 		/// Inequality operator.
 		/// </summary>
 		public static bool operator !=(ApplicationUpdateInfo? x, ApplicationUpdateInfo? y) => !(x?.Equals(y) ?? y is null);
+
+
+		/// <summary>
+		/// Get URI of package manifest.
+		/// </summary>
+		public Uri PackageManifestUri { get; }
 
 
 		/// <summary>

@@ -54,6 +54,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 		Version? auVersion;
 		readonly MutableObservableBoolean canCheckForUpdate = new(true);
 		readonly MutableObservableBoolean canStartUpdating = new();
+		Uri? packageManifestUri;
 		CancellationTokenSource? updatePreparationCancellationTokenSource;
 
 
@@ -399,7 +400,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 							? $" -base-version {this.Application.Assembly.GetName()?.Version?.ToString() ?? "0.0.0.0"}"
 							: ""
 						) +
-						$" -package-manifest {this.Application.PackageManifestUri}" +
+						$" -package-manifest \"{this.packageManifestUri}\"" +
 						$" -wait-for-process {currentProcess.Id}");
 					mainModule.FileName?.Let(it =>
 					{
@@ -469,6 +470,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 			if (updateInfo == null)
 			{
 				this.canStartUpdating.Update(false);
+				this.packageManifestUri = null;
 				this.SetValue(IsLatestVersionProperty, true);
 				this.SetValue(ReleasePageUriProperty, null);
 				this.SetValue(UpdatePackageUriProperty, null);
@@ -481,6 +483,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 				this.SetValue(UpdatePackageUriProperty, updateInfo.PackageUri);
 				this.SetValue(UpdateVersionProperty, updateInfo.Version);
 				this.canStartUpdating.Update(IsAutoUpdateSupported && !this.IsPreparingForUpdate && !this.IsCheckingForUpdate);
+				this.packageManifestUri = updateInfo.PackageManifestUri;
 			}
 		}
 
@@ -493,7 +496,8 @@ namespace CarinaStudio.AppSuite.ViewModels
 			this.VerifyDisposed();
 			if (!this.canStartUpdating.Value
 				|| !this.IsAutoUpdateSupported
-				|| this.IsPreparingForUpdate)
+				|| this.IsPreparingForUpdate
+				|| this.packageManifestUri == null)
 			{
 				return;
 			}

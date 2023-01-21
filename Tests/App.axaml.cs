@@ -184,7 +184,13 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        //public override Uri? PackageManifestUri => new Uri("https://raw.githubusercontent.com/carina-studio/ULogViewer/master/PackageManifest-Preview.json");
+        /*
+        public override IEnumerable<Uri> PackageManifestUris => new[]
+        {
+            new Uri("https://raw.githubusercontent.com/carina-studio/PixelViewer/master/PackageManifest-Preview.json"),
+            new Uri("https://raw.githubusercontent.com/carina-studio/ULogViewer/master/PackageManifest-Preview.json"),
+        };
+        */
 
 
         public override DocumentSource? PrivacyPolicy => new AgreementDocumentSource(this);

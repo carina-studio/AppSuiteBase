@@ -366,7 +366,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get URI of application package manifest.
         /// </summary>
-        public virtual Uri? PackageManifestUri { get; } = null;
+        public virtual IEnumerable<Uri> PackageManifestUris { get; } = Array.Empty<Uri>();
 
 
         /// <inheritdoc/>

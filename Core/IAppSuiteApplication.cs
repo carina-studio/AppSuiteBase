@@ -286,9 +286,9 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Get URI of application package manifest.
+        /// Get URIs of application package manifest.
         /// </summary>
-        Uri? PackageManifestUri { get; }
+        IEnumerable<Uri> PackageManifestUris { get; }
 
 
         /// <summary>
