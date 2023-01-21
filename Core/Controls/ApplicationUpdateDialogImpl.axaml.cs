@@ -162,8 +162,8 @@ namespace CarinaStudio.AppSuite.Controls
 				&& !updater.IsPreparingForUpdate
 				&& this.isClosingRequested)
 			{
-				this.Close(ApplicationUpdateDialogResult.UpdatingCancelled);
-				this.closingTaskSource.SetResult(ApplicationUpdateDialogResult.UpdatingCancelled);
+				if (this.closingTaskSource.TrySetResult(ApplicationUpdateDialogResult.UpdatingCancelled))
+					this.Close(ApplicationUpdateDialogResult.UpdatingCancelled);
 			}
 			else if (e.PropertyName == nameof(ApplicationUpdater.IsLatestVersion))
 			{
