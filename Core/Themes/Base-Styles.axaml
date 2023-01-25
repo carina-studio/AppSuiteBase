@@ -8,6 +8,7 @@
 		xmlns:ca="using:ColorTextBlock.Avalonia"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
+		xmlns:input="using:CarinaStudio.AppSuite.Input"
 		xmlns:md="using:Markdown.Avalonia"
 		xmlns:mdControls="using:Markdown.Avalonia.Controls">
 
@@ -1442,7 +1443,7 @@
 	<Style Selector=":is(SelectableTextBlock)[IsEnabled=True]">
 		<Setter Property="ContextMenu">
 			<ContextMenu>
-				<MenuItem Command="{Binding $parent[SelectableTextBlock].Copy}" Header="{DynamicResource String/Common.Copy}" IsEnabled="{Binding $parent[SelectableTextBlock].CanCopy}" InputGesture="Ctrl+C"/>
+				<MenuItem Command="{Binding $parent[SelectableTextBlock].Copy}" Header="{DynamicResource String/Common.Copy}" IsEnabled="{Binding $parent[SelectableTextBlock].CanCopy}" InputGesture="{x:Static input:KeyGestures.Copy}"/>
 				<MenuItem Command="{Binding $parent[SelectableTextBlock].SelectAll}" Header="{DynamicResource String/Common.SelectAll}" IsEnabled="{Binding $parent[SelectableTextBlock].Text, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}"/>
 			</ContextMenu>
 		</Setter>
@@ -1874,11 +1875,11 @@
 		<Setter Property="ContextFlyout" Value="{x:Null}"/>
 		<Setter Property="ContextMenu">
 			<ContextMenu PlacementAnchor="BottomRight" PlacementGravity="BottomRight" PlacementMode="AnchorAndGravity" PlacementRect="0 0 0 0">
-				<MenuItem Command="{Binding $parent[TextBox].Cut}" Header="{DynamicResource String/Common.Cut}" IsEnabled="{Binding $parent[TextBox].CanCut}" IsVisible="{Binding !$parent[TextBox].IsReadOnly}" InputGesture="Ctrl+X"/>
-				<MenuItem Command="{Binding $parent[TextBox].Copy}" Header="{DynamicResource String/Common.Copy}" IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="Ctrl+C"/>
-				<MenuItem Command="{Binding $parent[TextBox].Paste}" Header="{DynamicResource String/Common.Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" IsVisible="{Binding !$parent[TextBox].IsReadOnly}" InputGesture="Ctrl+V"/>
+				<MenuItem Command="{Binding $parent[TextBox].Cut}" Header="{DynamicResource String/Common.Cut}" IsEnabled="{Binding $parent[TextBox].CanCut}" IsVisible="{Binding !$parent[TextBox].IsReadOnly}" InputGesture="{x:Static input:KeyGestures.Cut}"/>
+				<MenuItem Command="{Binding $parent[TextBox].Copy}" Header="{DynamicResource String/Common.Copy}" IsEnabled="{Binding $parent[TextBox].CanCopy}" InputGesture="{x:Static input:KeyGestures.Copy}"/>
+				<MenuItem Command="{Binding $parent[TextBox].Paste}" Header="{DynamicResource String/Common.Paste}" IsEnabled="{Binding $parent[TextBox].CanPaste}" IsVisible="{Binding !$parent[TextBox].IsReadOnly}" InputGesture="{x:Static input:KeyGestures.Paste}"/>
 				<Separator/>
-				<MenuItem Command="{Binding $parent[TextBox].SelectAll}" Header="{DynamicResource String/Common.SelectAll}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" InputGesture="Ctrl+A"/>
+				<MenuItem Command="{Binding $parent[TextBox].SelectAll}" Header="{DynamicResource String/Common.SelectAll}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" InputGesture="{x:Static input:KeyGestures.SelectAll}"/>
 				<MenuItem Command="{Binding $parent[TextBox].Clear}" Header="{DynamicResource String/Common.Clear}" IsEnabled="{Binding $parent[TextBox].Text, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" IsVisible="{Binding !$parent[TextBox].IsReadOnly}"/>
 			</ContextMenu>
 		</Setter>
