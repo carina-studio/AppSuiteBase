@@ -208,8 +208,6 @@ namespace CarinaStudio.AppSuite
 
         // Constants.
         const int MinSplashWindowDuration = 2000;
-        const int SplashWindowShowingDuration = 1500;
-        const int SplashWindowLoadingThemeDuration = 400;
 
 
         // Static fields.
@@ -2519,14 +2517,14 @@ namespace CarinaStudio.AppSuite
                 }
                 this.splashWindow.Show();
                 this.splashWindowShownTime = this.stopWatch.ElapsedMilliseconds;
-                await Task.Delay(SplashWindowShowingDuration);
+                await Task.Delay(Controls.SplashWindowImpl.InitialAnimationDuration);
             }
 
             // load built-in resources
             if (showSplashWindow)
             {
                 this.UpdateSplashWindowMessage(this.GetStringNonNull("AppSuiteApplication.LoadingTheme", ""));
-                await Task.Delay(SplashWindowLoadingThemeDuration);
+                await this.splashWindow!.WaitForRenderingAsync();
             }
             this.Resources.MergedDictionaries.Add(new ResourceInclude()
             {

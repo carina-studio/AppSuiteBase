@@ -61,7 +61,7 @@
 		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Padding">30</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Title.Margin">0,0,0,5</Thickness>
-		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1.4</sys:TimeSpan>
+		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1.2</sys:TimeSpan>
 
 	</Window.Resources>
 
@@ -176,7 +176,7 @@
 				</Grid>
 
 				<!-- Message -->
-				<Grid Name="messagePanel" ClipToBounds="False" Grid.ColumnSpan="4" Grid.Row="1" HorizontalAlignment="Center" Margin="{StaticResource Thickness/SplashWindow.Message.Margin}" Opacity="0" VerticalAlignment="Bottom">
+				<Grid Name="messagePanel" ClipToBounds="False" Grid.ColumnSpan="4" Grid.Row="1" HorizontalAlignment="Center" Margin="{StaticResource Thickness/SplashWindow.Message.Margin}" Opacity="0" TextElement.FontSize="{StaticResource Double/SplashWindow.Message.FontSize}" TextBlock.TextTrimming="CharacterEllipsis" TextBlock.TextWrapping="NoWrap" VerticalAlignment="Bottom">
 					<!--Grid.RenderTransform>
 						<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 							<TranslateTransform.Transitions>
@@ -191,17 +191,17 @@
 							<DoubleTransition Property="Opacity" Delay="0:0:0.4" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
 						</Transitions>
 					</Grid.Transitions>
-					<TextBlock FontSize="{StaticResource Double/SplashWindow.Message.FontSize}" Foreground="{DynamicResource Brush/SplashWindow.Foreground.Shadow}" Text="{Binding $parent[Window].Message}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" VerticalAlignment="Center">
+					<TextBlock Foreground="{DynamicResource Brush/SplashWindow.Foreground.Shadow}" Text="{Binding $parent[Window].Message}" VerticalAlignment="Center">
 						<TextBlock.RenderTransform>
 							<TranslateTransform X="1" Y="1"/>
 						</TextBlock.RenderTransform>
 					</TextBlock>
-					<TextBlock FontSize="{StaticResource Double/SplashWindow.Message.FontSize}" Foreground="{DynamicResource Brush/SplashWindow.Foreground.Shadow}" Text="{Binding $parent[Window].Message}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" VerticalAlignment="Center">
+					<TextBlock Foreground="{DynamicResource Brush/SplashWindow.Foreground.Shadow}" Text="{Binding $parent[Window].Message}" VerticalAlignment="Center">
 						<TextBlock.RenderTransform>
 							<TranslateTransform X="-1" Y="-1"/>
 						</TextBlock.RenderTransform>
 					</TextBlock>
-					<TextBlock FontSize="{StaticResource Double/SplashWindow.Message.FontSize}" Text="{Binding $parent[Window].Message}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap" VerticalAlignment="Center"/>
+					<TextBlock Text="{Binding $parent[Window].Message}" VerticalAlignment="Center"/>
 				</Grid>
 
 			</Grid>

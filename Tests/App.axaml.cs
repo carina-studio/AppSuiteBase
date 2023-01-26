@@ -153,6 +153,7 @@ namespace CarinaStudio.AppSuite.Tests
             this.UpdateSplashWindowProgress(0.4);
 
             await Controls.SyntaxHighlighting.InitializeAsync(this);
+            await this.WaitForSplashWindowAnimationAsync();
             this.UpdateSplashWindowProgress(0.7);
 
             await this.WaitForSplashWindowAnimationAsync();

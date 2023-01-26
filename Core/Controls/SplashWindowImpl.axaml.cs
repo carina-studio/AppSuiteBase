@@ -21,6 +21,12 @@ namespace CarinaStudio.AppSuite.Controls
 	/// </summary>
 	partial class SplashWindowImpl : Avalonia.Controls.Window
 	{
+		/// <summary>
+		/// Duration of initial animation in milliseconds.
+		/// </summary>
+		public static int InitialAnimationDuration = 1500;
+
+
 		// Constants.
 		const int MaxShowingRetryingDuration = 1000;
 		const int RetryShowingDelay = 100;
@@ -42,6 +48,7 @@ namespace CarinaStudio.AppSuite.Controls
 		TaskCompletionSource? progressAnimationTaskSource;
 		DoubleAnimator? progressAnimator;
 		readonly ProgressBar progressBar;
+		TaskCompletionSource? renderingTaskSource;
 		readonly ScheduledAction showAction;
 		readonly Stopwatch stopwatch = new();
 
@@ -80,34 +87,33 @@ namespace CarinaStudio.AppSuite.Controls
 				}
 				
 				// show content
-				((Control)(this.Content.AsNonNull())).Opacity = 1;
-				this.Get<Avalonia.Controls.Control>("backgroundOverlayBorder").Let(control =>
+				var versionOpacity = this.FindResourceOrDefault<double>("Double/ApplicationInfoDialog.AppVersion.Opacity", 0.75);
+				((Control)this.Content.AsNonNull()).Opacity = 1;
+				this.Get<Control>("backgroundOverlayBorder").Let(control =>
 				{
 					control.Opacity = 1;
 				});
-				this.Get<Avalonia.Controls.Control>("iconImage").Let(control =>
-				{
-					control.Opacity = 1;
-					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
-				});
-				this.Get<Avalonia.Controls.Control>("titleTextBlock").Let(control =>
+				this.Get<Control>("iconImage").Let(control =>
 				{
 					control.Opacity = 1;
 					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
-				this.Get<Avalonia.Controls.Control>("versionTextBlock").Let(control =>
+				this.Get<Control>("titleTextBlock").Let(control =>
 				{
-					this.TryFindResource<double>("Double/ApplicationInfoDialog.AppVersion.Opacity", out var opacity);
-					control.Opacity = opacity ?? 1;
+					control.Opacity = 1;
 					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
-				this.Get<Avalonia.Controls.Control>("copyrightTextBlock").Let(control =>
+				this.Get<Control>("versionTextBlock").Let(control =>
 				{
-					this.TryFindResource<double>("Double/ApplicationInfoDialog.AppVersion.Opacity", out var opacity);
-					control.Opacity = opacity ?? 1;
+					control.Opacity = versionOpacity;
 					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
-				this.Get<Avalonia.Controls.Control>("messagePanel").Let(control =>
+				this.Get<Control>("copyrightTextBlock").Let(control =>
+				{
+					control.Opacity = versionOpacity;
+					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+				});
+				this.Get<Control>("messagePanel").Let(control =>
 				{
 					control.Opacity = 1;
 					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
@@ -118,16 +124,20 @@ namespace CarinaStudio.AppSuite.Controls
 				this.Version += $" {AppReleasingTypeConverter.Convert<string?>(app.ReleasingType)}";
 			AvaloniaXamlLoader.Load(this);
 			this.progressBar = this.Get<ProgressBar>(nameof(progressBar));
-			if (Platform.IsWindows && !Platform.IsWindows8OrAbove)
+			if (Platform.IsWindows)
 			{
-				this.Get<Panel>("rootPanel").Margin = default;
-				this.Get<Border>("backgroundBorder").Let(it =>
+				this.Get<Control>("messagePanel").SetValue(Avalonia.Controls.TextBlock.FontWeightProperty, FontWeight.Bold);
+				if (!Platform.IsWindows8OrAbove)
 				{
-					it.BoxShadow = default;
-					it.CornerRadius = default;
-				});
-				this.Get<Border>("backgroundOverlayBorder").CornerRadius = default;
-				this.Get<Border>("border").CornerRadius = default;
+					this.Get<Panel>("rootPanel").Margin = default;
+					this.Get<Border>("backgroundBorder").Let(it =>
+					{
+						it.BoxShadow = default;
+						it.CornerRadius = default;
+					});
+					this.Get<Border>("backgroundOverlayBorder").CornerRadius = default;
+					this.Get<Border>("border").CornerRadius = default;
+				}
 			}
 			this.Styles.Add((Avalonia.Styling.IStyle)(app.EffectiveThemeMode switch
 			{
@@ -297,29 +307,43 @@ namespace CarinaStudio.AppSuite.Controls
 					this.progressAnimationTaskSource ??= new();
 					this.progressAnimator = new DoubleAnimator(this.progressBar.Value, Math.Max(0, Math.Min(1, value))).Also(it =>
 					{
-						it.Completed += (_, e) => 
+						it.Completed += async (_, e) => 
 						{
 							this.progressBar.Value = it.EndValue;
-							Dispatcher.UIThread.Post(async () =>
+							await Task.Delay(50);
+							if (this.progressAnimator != it)
+								return;
+							this.progressAnimator = null;
+							var taskSource = this.progressAnimationTaskSource;
+							if (taskSource != null)
 							{
-								await Task.Delay(50);
-								if (this.progressAnimator != it)
-									return;
-								this.progressAnimator = null;
-								var taskSource = this.progressAnimationTaskSource;
-								if (taskSource != null)
-								{
-									this.progressAnimationTaskSource = null;
-									taskSource.SetResult();
-								}
-							}, DispatcherPriority.Normal);
+								this.progressAnimationTaskSource = null;
+								taskSource.SetResult();
+							}
 						};
-						it.Duration = TimeSpan.FromMilliseconds(250);
-						it.Interpolator = Interpolators.Deceleration;
+						it.Duration = TimeSpan.FromMilliseconds(150);
 						it.ProgressChanged += (_, e) => this.progressBar.Value = it.Value;
 						it.Start();
 					});
 				}
+			}
+		}
+
+
+		/// <inheritdoc/>
+		public override void Render(DrawingContext context)
+		{
+			base.Render(context);
+			if (this.renderingTaskSource != null)
+			{
+				Dispatcher.UIThread.Post(() =>
+				{
+					if (this.renderingTaskSource != null)
+					{
+						this.renderingTaskSource.TrySetResult();
+						this.renderingTaskSource = null;
+					}
+				}, DispatcherPriority.Render);
 			}
 		}
 
@@ -336,6 +360,18 @@ namespace CarinaStudio.AppSuite.Controls
 			if (this.progressAnimationTaskSource == null)
 				return Task.CompletedTask;
 			return this.progressAnimationTaskSource.Task;
+		}
+
+
+		// Wait for completion of next rendering.
+		public Task WaitForRenderingAsync()
+		{
+			if (this.renderingTaskSource == null)
+			{
+				this.renderingTaskSource = new();
+				this.InvalidateVisual();
+			}
+			return this.renderingTaskSource.Task;
 		}
 	}
 }
