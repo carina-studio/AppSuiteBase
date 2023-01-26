@@ -2,6 +2,7 @@
 using CarinaStudio.AutoUpdate;
 using CarinaStudio.AutoUpdate.Installers;
 using CarinaStudio.AutoUpdate.Resolvers;
+using CarinaStudio.Configuration;
 using CarinaStudio.IO;
 using CarinaStudio.Net;
 using CarinaStudio.Threading;
@@ -185,6 +186,16 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
 		/// <summary>
+        /// Get or set whether to notify user when application update found or not.
+        /// </summary>
+        public bool NotifyApplicationUpdate
+        {
+            get => this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate);
+            set => this.Settings.SetValue<bool>(SettingKeys.NotifyApplicationUpdate, value);
+        }
+
+
+		/// <summary>
 		/// Called when property of application changed.
 		/// </summary>
 		/// <param name="e">Event data</param>
@@ -293,6 +304,15 @@ namespace CarinaStudio.AppSuite.ViewModels
 				this.SetValue(HasReleasePageUriProperty, newValue != null);
 			else if (property == UpdatePreparationProgressPercentageProperty)
 				this.SetValue(IsUpdatePreparationProgressAvailableProperty, double.IsFinite(this.UpdatePreparationProgressPercentage));
+		}
+
+
+		/// <inheritdoc/>
+        protected override void OnSettingChanged(SettingChangedEventArgs e)
+        {
+            base.OnSettingChanged(e);
+			if (e.Key == SettingKeys.NotifyApplicationUpdate)
+				this.OnPropertyChanged(nameof(NotifyApplicationUpdate));
 		}
 
 

@@ -97,6 +97,7 @@
 	<sys:String x:Key="String/ApplicationUpdateDialog.DownloadUpdatePackage">Download update</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.LatestVersion">The version of {0} is the latest.</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.NewVersionFound">New version of {0} found: {1}</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.NotifyApplicationUpdate.Description">You can also change the setting in application options.</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.ReleasePage">Details of this update</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.StartUpdating">Update</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.Title">Application update</sys:String>

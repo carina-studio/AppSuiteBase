@@ -96,6 +96,7 @@
 	<sys:String x:Key="String/ApplicationUpdateDialog.DownloadUpdatePackage">下載更新</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.LatestVersion">{0} 已經是最新版本。</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.NewVersionFound">已經有新的 {0} 版本：{1}</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.NotifyApplicationUpdate.Description">您也可以在應用程式選項中變更此設定。</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.ReleasePage">此更新的詳細資訊</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.StartUpdating">更新</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.Title">應用程式更新</sys:String>
