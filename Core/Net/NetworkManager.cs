@@ -129,7 +129,8 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
             {
                 try
                 {
-                    using var stream = await httpClient.GetStreamAsync(server);
+                    using var stream = await Task.Run(async () => 
+                        await httpClient.GetStreamAsync(server));
                     using var reader = new StreamReader(stream, Encoding.UTF8);
                     var match = IPv4Regex.Match(await reader.ReadToEndAsync());
                     if (match.Success)
