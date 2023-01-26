@@ -51,7 +51,8 @@ partial class MessageDialogImpl : Dialog
 	// Fields.
 	bool? doNotAskOrShowAgain;
 	readonly Panel doNotAskOrShowAgainPanel;
-	readonly CheckBox doNotAskOrShowAgainCheckBox;
+	readonly ToggleSwitch doNotAskOrShowAgainSwitch;
+	readonly Avalonia.Controls.TextBlock doNotAskOrShowAgainTextBlock;
 	MessageDialogResult? result;
 
 
@@ -61,7 +62,8 @@ partial class MessageDialogImpl : Dialog
 		this.SelectResultCommand = new Command<MessageDialogResult?>(this.SelectResult);
 		AvaloniaXamlLoader.Load(this);
 		this.doNotAskOrShowAgainPanel = this.Get<Panel>(nameof(doNotAskOrShowAgainPanel));
-		this.doNotAskOrShowAgainCheckBox = this.Get<CheckBox>(nameof(doNotAskOrShowAgainCheckBox));
+		this.doNotAskOrShowAgainSwitch = this.Get<ToggleSwitch>(nameof(doNotAskOrShowAgainSwitch));
+		this.doNotAskOrShowAgainTextBlock = this.Get<Avalonia.Controls.TextBlock>(nameof(doNotAskOrShowAgainTextBlock));
 	}
 
 
@@ -160,7 +162,7 @@ partial class MessageDialogImpl : Dialog
 				this.doNotAskOrShowAgainPanel.IsVisible = false;
 			else
 			{
-				this.doNotAskOrShowAgainCheckBox.IsChecked = value.GetValueOrDefault();
+				this.doNotAskOrShowAgainSwitch.IsChecked = value.GetValueOrDefault();
 				this.doNotAskOrShowAgainPanel.IsVisible = true;
 			}
 		}
@@ -241,10 +243,10 @@ partial class MessageDialogImpl : Dialog
 			{
 				case MessageDialogButtons.OK:
 				case MessageDialogButtons.OKCancel:
-					this.doNotAskOrShowAgainCheckBox.Bind(CheckBox.ContentProperty, this.GetResourceObservable("String/Common.DoNotShowAgain"));
+					this.doNotAskOrShowAgainTextBlock.Bind(Avalonia.Controls.TextBlock.TextProperty, this.GetResourceObservable("String/Common.DoNotShowAgain"));
 					break;
 				default:
-					this.doNotAskOrShowAgainCheckBox.Bind(CheckBox.ContentProperty, this.GetResourceObservable("String/Common.DoNotAskAgain"));
+					this.doNotAskOrShowAgainTextBlock.Bind(Avalonia.Controls.TextBlock.TextProperty, this.GetResourceObservable("String/Common.DoNotAskAgain"));
 					break;
 			}
 		}
@@ -332,7 +334,7 @@ partial class MessageDialogImpl : Dialog
 		{
 			this.result = result;
 			if (this.doNotAskOrShowAgainPanel.IsVisible)
-				this.DoNotAskOrShowAgain = this.doNotAskOrShowAgainCheckBox.IsChecked;
+				this.DoNotAskOrShowAgain = this.doNotAskOrShowAgainSwitch.IsChecked;
 			this.Close(result);
 		}
 	}

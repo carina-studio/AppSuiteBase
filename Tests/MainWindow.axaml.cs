@@ -440,6 +440,7 @@ namespace CarinaStudio.AppSuite.Tests
             {
                 Buttons = Enum.GetValues<MessageDialogButtons>().SelectRandomElement(),
                 CustomIcon = icon == MessageDialogIcon.Custom ? this.FindResourceOrDefault<IImage>("Image/Icon.Star") : null,
+                DoNotAskOrShowAgain = true,
                 Icon = icon,
                 Message = this.GetResourceObservable("String/MessageDialog.Message"),
             }.ShowDialog(this);
