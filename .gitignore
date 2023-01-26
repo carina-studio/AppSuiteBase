@@ -8,5 +8,7 @@ Core.Tests/CarinaStudio.AppSuite.Core.Tests.xml
 Fonts/CarinaStudio.AppSuite.Fonts.xml
 Packaging/CarinaStudio.AppSuite.Packaging.xml
 Packages
+Performance.xlsx
+~$Performance.xlsx
 SyntaxHighlighting/CarinaStudio.AppSuite.SyntaxHighlighting.xml
 Tests/Properties/launchSettings.json
