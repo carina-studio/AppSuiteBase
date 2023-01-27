@@ -15,11 +15,11 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Name of default font family for showing agreement.
         /// </summary>
-        public static readonly SettingKey<string> DefaultFontFamilyOfAgreement = new(nameof(DefaultFontFamilyOfAgreement), "Arial");
+        public static readonly SettingKey<string> DefaultFontFamilyOfAgreement = new(nameof(DefaultFontFamilyOfAgreement), "Roboto");
         /// <summary>
         /// Name of default font family for showing document.
         /// </summary>
-        public static readonly SettingKey<string> DefaultFontFamilyOfDocument = new(nameof(DefaultFontFamilyOfDocument), "Arial");
+        public static readonly SettingKey<string> DefaultFontFamilyOfDocument = new(nameof(DefaultFontFamilyOfDocument), "Roboto");
         /// <summary>
         /// Whether verbose of avalonia logging is enabled or not.
         /// </summary>
