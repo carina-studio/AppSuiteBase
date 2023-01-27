@@ -1869,16 +1869,9 @@ namespace CarinaStudio.AppSuite
             {
                 (Avalonia.Logging.Logger.Sink as AvaloniaLogSink)?.Let(it =>
                 {
-                    if ((bool)e.Value)
-                    {
-                        it.IsInfoLoggingEnabled = true;
-                        it.IsVerboseLoggingEnabled = true;
-                    }
-                    else
-                    {
-                        it.IsInfoLoggingEnabled = this.IsDebugMode;
-                        it.IsVerboseLoggingEnabled = false;
-                    }
+                    var enabled = (bool)e.Value;
+                    it.IsInfoLoggingEnabled = enabled;
+                    it.IsVerboseLoggingEnabled = enabled;
                 });
             }
         }
@@ -1992,8 +1985,6 @@ namespace CarinaStudio.AppSuite
             {
                 this.Logger.LogWarning("Enter debug mode");
                 this.IsDebugMode = true;
-                (Avalonia.Logging.Logger.Sink as AvaloniaLogSink)?.Let(it =>
-                    it.IsInfoLoggingEnabled = true);
             }
             else
             {
