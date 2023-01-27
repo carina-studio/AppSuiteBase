@@ -52,6 +52,72 @@ namespace CarinaStudio.AppSuite
     /// </summary>
     public abstract partial class AppSuiteApplication : Application, IAppSuiteApplication
     {
+        // Implementation of ILogSink to get logs from Avalonia.
+        class AvaloniaLogSink : Avalonia.Logging.ILogSink
+        {
+            // Fields.
+            readonly Microsoft.Extensions.Logging.ILogger logger;
+
+            // COnstructor.
+            public AvaloniaLogSink(IAppSuiteApplication app) =>
+                this.logger = app.LoggerFactory.CreateLogger("Avalonia");
+            
+            /// <inheritdoc/>
+            Microsoft.Extensions.Logging.LogLevel ConvertToLogLevel(Avalonia.Logging.LogEventLevel level) => level switch
+            {
+                Avalonia.Logging.LogEventLevel.Debug => Microsoft.Extensions.Logging.LogLevel.Debug,
+                Avalonia.Logging.LogEventLevel.Error => Microsoft.Extensions.Logging.LogLevel.Error,
+                Avalonia.Logging.LogEventLevel.Fatal => Microsoft.Extensions.Logging.LogLevel.Critical,
+                Avalonia.Logging.LogEventLevel.Information => this.IsInfoLoggingEnabled 
+                    ? Microsoft.Extensions.Logging.LogLevel.Information
+                    : Microsoft.Extensions.Logging.LogLevel.None,
+                Avalonia.Logging.LogEventLevel.Verbose => this.IsVerboseLoggingEnabled 
+                    ? Microsoft.Extensions.Logging.LogLevel.Trace
+                    : Microsoft.Extensions.Logging.LogLevel.None,
+                Avalonia.Logging.LogEventLevel.Warning => Microsoft.Extensions.Logging.LogLevel.Warning,
+                _ => Microsoft.Extensions.Logging.LogLevel.None,
+            };
+            
+            /// <inheritdoc/>
+            public bool IsEnabled(Avalonia.Logging.LogEventLevel level, string area) =>
+                this.logger.IsEnabled(this.ConvertToLogLevel(level));
+            
+            // Whether information logging is enabled or not.
+            public volatile bool IsInfoLoggingEnabled;
+
+            // Whether verbose logging is enabled or not.
+            public volatile bool IsVerboseLoggingEnabled;
+            
+            /// <inheritdoc/>
+            public void Log(Avalonia.Logging.LogEventLevel level, string area, object? source, string messageTemplate)
+            {
+                var convertedLevel = this.ConvertToLogLevel(level);
+                if (convertedLevel != Microsoft.Extensions.Logging.LogLevel.None)
+                    this.logger.Log(convertedLevel, "[{area}][{source}] {message}", area, source?.GetType().Name, messageTemplate);
+            }
+            
+            /// <inheritdoc/>
+            public void Log(Avalonia.Logging.LogEventLevel level, string area, object? source, string messageTemplate, params object?[] propertyValues)
+            {
+                var convertedLevel = this.ConvertToLogLevel(level);
+                if (convertedLevel == Microsoft.Extensions.Logging.LogLevel.None)
+                    return;
+                if (propertyValues == null || propertyValues.Length == 0)
+                    this.logger.Log(convertedLevel, "[{area}][{source}] messageTemplate", area, source?.GetType().Name);
+                else
+                {
+                    var newPropertyValues = new object?[propertyValues.Length + 2];
+                    newPropertyValues[0] = area;
+                    newPropertyValues[1] = source?.GetType().Name;
+                    Array.Copy(propertyValues, 0, newPropertyValues, 2, propertyValues.Length);
+#pragma warning disable CA2254
+                    this.logger.Log(convertedLevel, "[{area}][{source}] " + messageTemplate, newPropertyValues);
+#pragma warning restore CA2254
+                }
+            }
+        }
+
+
         // Implementation of Configuration.
         class ConfigurationImpl : PersistentSettings
         {
@@ -343,6 +409,9 @@ namespace CarinaStudio.AppSuite
             this.LoggerFactory = new LoggerFactory(new ILoggerProvider[] { this.OnCreateLoggerProvider() });
             this.Logger = this.LoggerFactory.CreateLogger(this.GetType().Name);
             this.Logger.LogDebug("Created");
+
+            // setup logger for Avalonia
+            Avalonia.Logging.Logger.Sink = new AvaloniaLogSink(this);
 
             // setup global exception handler
             AppDomain.CurrentDomain.UnhandledException += (_, e) =>
@@ -1796,6 +1865,22 @@ namespace CarinaStudio.AppSuite
             {
                 _ = this.CheckForApplicationUpdateAsync();
             }
+            else if (e.Key == ConfigurationKeys.EnableAvaloniaVerboseLogging)
+            {
+                (Avalonia.Logging.Logger.Sink as AvaloniaLogSink)?.Let(it =>
+                {
+                    if ((bool)e.Value)
+                    {
+                        it.IsInfoLoggingEnabled = true;
+                        it.IsVerboseLoggingEnabled = true;
+                    }
+                    else
+                    {
+                        it.IsInfoLoggingEnabled = this.IsDebugMode;
+                        it.IsVerboseLoggingEnabled = false;
+                    }
+                });
+            }
         }
 
 
@@ -1907,6 +1992,8 @@ namespace CarinaStudio.AppSuite
             {
                 this.Logger.LogWarning("Enter debug mode");
                 this.IsDebugMode = true;
+                (Avalonia.Logging.Logger.Sink as AvaloniaLogSink)?.Let(it =>
+                    it.IsInfoLoggingEnabled = true);
             }
             else
             {
@@ -2030,6 +2117,14 @@ namespace CarinaStudio.AppSuite
                 await this.LoadConfigurationAsync();
                 if (time > 0)
                     this.Logger.LogTrace("[Performance] Took {duration} ms to load configuration", this.stopWatch.ElapsedMilliseconds - time);
+                if (this.Configuration.GetValueOrDefault(ConfigurationKeys.EnableAvaloniaVerboseLogging))
+                {
+                    (Avalonia.Logging.Logger.Sink as AvaloniaLogSink)?.Let(it =>
+                    {
+                        it.IsInfoLoggingEnabled = true;
+                        it.IsVerboseLoggingEnabled = true;
+                    });
+                }
 
                 // prepare
                 await this.OnPrepareStartingAsync();

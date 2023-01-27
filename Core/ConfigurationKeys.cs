@@ -21,6 +21,10 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         public static readonly SettingKey<string> DefaultFontFamilyOfDocument = new(nameof(DefaultFontFamilyOfDocument), "Arial");
         /// <summary>
+        /// Whether verbose of avalonia logging is enabled or not.
+        /// </summary>
+        public static readonly SettingKey<bool> EnableAvaloniaVerboseLogging = new(nameof(EnableAvaloniaVerboseLogging), false);
+        /// <summary>
         /// Whether retrieved application update info should be always accepted or not.
         /// </summary>
         public static readonly SettingKey<bool> ForceAcceptingAppUpdateInfo = new(nameof(ForceAcceptingAppUpdateInfo), false);
