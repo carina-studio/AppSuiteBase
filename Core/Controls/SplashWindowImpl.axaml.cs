@@ -90,9 +90,7 @@ namespace CarinaStudio.AppSuite.Controls
 				var versionOpacity = this.FindResourceOrDefault<double>("Double/ApplicationInfoDialog.AppVersion.Opacity", 0.75);
 				((Control)this.Content.AsNonNull()).Opacity = 1;
 				this.Get<Control>("backgroundOverlayBorder").Let(control =>
-				{
-					control.Opacity = 1;
-				});
+					control.Opacity = 1);
 				this.Get<Control>("iconImage").Let(control =>
 				{
 					control.Opacity = 1;
@@ -154,8 +152,15 @@ namespace CarinaStudio.AppSuite.Controls
 			set
 			{
 				this.accentColor = value;
-				this.Resources["AccentColor30"] = Color.FromArgb((byte)(value.A * 0.3 + 0.5), value.R, value.G, value.B);
+				var lightColor = Color.FromArgb(value.A, 
+					(byte)(value.R * 0.4 + 255 * 0.6 + 0.5),
+					(byte)(value.G * 0.4 + 255 * 0.6 + 0.5),
+					(byte)(value.B * 0.4 + 255 * 0.6 + 0.5)
+				);
+				this.Resources["AccentColor30"] = Color.FromArgb((byte)(value.A * 0.30 + 0.5), value.R, value.G, value.B);
 				this.Resources["AccentColor00"] = Color.FromArgb(0, value.R, value.G, value.B);
+				this.Resources["AccentColorLight40"] = Color.FromArgb((byte)(lightColor.A * 0.4 + 0.5), lightColor.R, lightColor.G, lightColor.B);
+				this.Resources["AccentColorLight00"] = Color.FromArgb(0, lightColor.R, lightColor.G, lightColor.B);
 				this.progressBar.Foreground = new SolidColorBrush(value);
 			}
 		}

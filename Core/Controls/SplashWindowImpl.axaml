@@ -86,12 +86,24 @@
 			<!-- Background -->
 			<Border Name="backgroundBorder" Background="{DynamicResource Brush/SplashWindow.Background}" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" BoxShadow="{StaticResource BoxShadows/SplashWindow}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
 			<Border Name="backgroundOverlayBorder" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" CornerRadius="{StaticResource CornerRadius/SplashWindow}" Opacity="0">
-				<Border.Background>
-					<LinearGradientBrush EndPoint="0%,50%" StartPoint="0%,0%">
-						<GradientStop Color="{DynamicResource AccentColor30}" Offset="0"/>
-						<GradientStop Color="{DynamicResource AccentColor00}" Offset="1"/>
-					</LinearGradientBrush>
-				</Border.Background>
+				<Panel>
+					<Border CornerRadius="{StaticResource CornerRadius/SplashWindow}">
+						<Border.Background>
+							<LinearGradientBrush EndPoint="0%,70%" StartPoint="0%,0%">
+								<GradientStop Color="{DynamicResource AccentColor30}" Offset="0"/>
+								<GradientStop Color="{DynamicResource AccentColor00}" Offset="1"/>
+							</LinearGradientBrush>
+						</Border.Background>
+					</Border>
+					<Border CornerRadius="{StaticResource CornerRadius/SplashWindow}">
+						<Border.Background>
+							<RadialGradientBrush Center="90%,20%" GradientOrigin="90%,20%" Radius="0.5">
+								<GradientStop Color="{DynamicResource AccentColorLight40}" Offset="0"/>
+								<GradientStop Color="{DynamicResource AccentColorLight00}" Offset="1"/>
+							</RadialGradientBrush>
+						</Border.Background>
+					</Border>
+				</Panel>
 				<Border.Transitions>
 					<Transitions>
 						<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
