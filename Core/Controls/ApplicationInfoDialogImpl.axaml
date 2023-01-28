@@ -24,6 +24,7 @@
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].ShowAppUpdateDialog}" Content="{DynamicResource String/ApplicationInfoDialog.ShowAppUpdateDialog}"/>
 				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.OK}"/>
 			</StackPanel>
 		</Border>
@@ -36,10 +37,21 @@
 				<Border Height="{StaticResource Double/ApplicationInfoDialog.Header.Background.Height}" VerticalAlignment="Top">
 					<Border.Background>
 						<LinearGradientBrush EndPoint="0%,100%" StartPoint="0%,0%">
-							<GradientStop Color="{DynamicResource Color/Accent.WithOpacity.0.25}" Offset="0"/>
+							<GradientStop Color="{DynamicResource Color/Accent.WithOpacity.0.33}" Offset="0"/>
 							<GradientStop Color="{DynamicResource Color/Accent.Transparent}" Offset="1"/>
 						</LinearGradientBrush>
 					</Border.Background>
+				</Border>
+				<Border Height="{Binding #window.Width}" RenderTransformOrigin="50%,0%" VerticalAlignment="Top">
+					<Border.Background>
+						<RadialGradientBrush Center="80%,0%" GradientOrigin="80%,0%" Radius="0.5">
+							<GradientStop Color="#37ffffff" Offset="0"/>
+							<GradientStop Color="#00ffffff" Offset="1"/>
+						</RadialGradientBrush>
+					</Border.Background>
+					<Border.RenderTransform>
+						<ScaleTransform ScaleY="0.4"/>
+					</Border.RenderTransform>
 				</Border>
 
 				<!-- Content -->
@@ -56,16 +68,16 @@
 						<!-- Title and version -->
 						<Border>
 							<StackPanel Orientation="Vertical" VerticalAlignment="Center">
-								<StackPanel Margin="{DynamicResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Orientation="Horizontal">
+								<StackPanel Margin="{StaticResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Orientation="Horizontal">
 									<SelectableTextBlock FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Text="{Binding Name}" VerticalAlignment="Center"/>
 									<StackPanel Name="badgesPanel" Height="{StaticResource Double/ApplicationInfoDialog.AppBadge.Size}" Orientation="Horizontal" VerticalAlignment="Center"/>
 								</StackPanel>
 								<StackPanel Orientation="Horizontal">
-									<SelectableTextBlock Opacity="{StaticResource Double/ApplicationInfoDialog.AppVersion.Opacity}" Text="{Binding $parent[Window].VersionString}" VerticalAlignment="Center"/>
-									<Separator Classes="Dialog_Separator_Small"/>
-									<TextBlock Text="[" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
-									<abControls:LinkTextBlock Command="{Binding $parent[Window].ShowApplicationChangeList}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{DynamicResource String/ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
-									<TextBlock Text="]" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" VerticalAlignment="Center"/>
+									<SelectableTextBlock FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" Opacity="{StaticResource Double/ApplicationInfoDialog.AppVersion.Opacity}" Text="{Binding $parent[Window].VersionString}" VerticalAlignment="Center"/>
+									<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding $parent[Window].HasApplicationChangeList}"/>
+									<TextBlock FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="|" VerticalAlignment="Center"/>
+									<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding $parent[Window].HasApplicationChangeList}"/>
+									<abControls:LinkTextBlock Command="{Binding $parent[Window].ShowApplicationChangeList}" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{DynamicResource String/ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
 								</StackPanel>
 							</StackPanel>
 						</Border>

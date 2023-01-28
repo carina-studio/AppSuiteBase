@@ -4122,7 +4122,9 @@ namespace CarinaStudio.AppSuite
                 this.accentColorResources["SystemAccentColorLight2"] = GammaTransform(accentColor, gammaLight2);
                 this.accentColorResources["SystemAccentColorLight3"] = GammaTransform(accentColor, gammaLight3);
                 this.accentColorResources["Color/Accent.WithOpacity.0.75"] = Color.FromArgb((byte)(accentColor.A * 0.75 + 0.5), accentColor.R, accentColor.G, accentColor.B);
+                this.accentColorResources["Color/Accent.WithOpacity.0.67"] = Color.FromArgb((byte)(accentColor.A * 0.67 + 0.5), accentColor.R, accentColor.G, accentColor.B);
                 this.accentColorResources["Color/Accent.WithOpacity.0.5"] = Color.FromArgb((byte)(accentColor.A * 0.5 + 0.5), accentColor.R, accentColor.G, accentColor.B);
+                this.accentColorResources["Color/Accent.WithOpacity.0.33"] = Color.FromArgb((byte)(accentColor.A * 0.33 + 0.5), accentColor.R, accentColor.G, accentColor.B);
                 this.accentColorResources["Color/Accent.WithOpacity.0.25"] = Color.FromArgb((byte)(accentColor.A * 0.25 + 0.5), accentColor.R, accentColor.G, accentColor.B);
                 this.accentColorResources["Color/Accent.Transparent"] = Color.FromArgb(0, accentColor.R, accentColor.G, accentColor.B);
 

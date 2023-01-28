@@ -50,6 +50,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.Screen.Size">屏幕大小：{0} ({1} dip)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Screen.WorkingArea">屏幕工作区大小：{0} ({1} dip)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ScriptRunningLoading">脚本执行负载：{0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ShowAppUpdateDialog">检查更新…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">应用程序日志导出完成。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">系统信息</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ThreadCount">线程数量：{0}</sys:String>

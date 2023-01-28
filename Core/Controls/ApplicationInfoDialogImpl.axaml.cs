@@ -428,6 +428,16 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		/// <summary>
+		/// Show application update dialog.
+		/// </summary>
+		public void ShowAppUpdateDialog()
+		{
+			if (this.Application is IAppSuiteApplication asApp)
+				_ = asApp.CheckForApplicationUpdateAsync(this, true);
+		}
+
+
+		/// <summary>
 		/// Show external dependencies.
 		/// </summary>
 		public void ShowExternalDependencies() =>
