@@ -1812,7 +1812,7 @@
 											</Border.Background>
 										</Border-->
 									</Border>
-									<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
+									<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Stretch" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
 								</Panel>
 							</Border>
 
