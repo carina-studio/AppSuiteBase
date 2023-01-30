@@ -483,13 +483,13 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             while (true)
             {
                 var match = token.Definition.Pattern!.Match(text, token.End);
-                if (!match.Success)
+                if (!match.Success || match.Length <= 0)
                     break;
                 var endIndex = match.Index + match.Length;
                 if (endIndex > end)
                     break;
                 var nextToken = new Token(token.Definition, match.Index, match.Index + match.Length);
-                if (match.Index == token.End) // combine into single token
+                if (match.Index == token.End && match.Length > 0) // combine into single token
                 {
                     var nextTokenIndex = candidateTokens.BinarySearch(nextToken, tokenComparison);
                     if (nextTokenIndex == ~candidateTokens.Count)
@@ -513,7 +513,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
 
                 // find next token
                 var match = removingToken.Definition.Pattern!.Match(text, token.End);
-                if (match.Success)
+                if (match.Success && match.Length > 0)
                 {
                     var endIndex = match.Index + match.Length;
                     if (endIndex <= end)

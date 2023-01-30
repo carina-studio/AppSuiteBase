@@ -373,7 +373,7 @@ namespace CarinaStudio.AppSuite.Tests
             this.syntaxHighlightingTextBox.DefinitionSet!.TokenDefinitions[0].Let(it =>
             {
                 if (it.Pattern == null)
-                    it.Pattern = new("a");
+                    it.Pattern = new("\\s*");
                 else
                     it.Pattern = null;
             });
