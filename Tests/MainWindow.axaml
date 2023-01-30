@@ -620,7 +620,7 @@
 					<TabItem.Header>
 						<TextBlock Text="Expander"/>
 					</TabItem.Header>
-					<StackPanel Background="{DynamicResource Brush/ToolBar.Background}">
+					<StackPanel Background="{DynamicResource Brush/WorkingArea.Panel.Background}">
 						<Expander Header="Expander" HorizontalAlignment="Left" Margin="10" Width="200">
 							<Button Content="Button" Margin="30"/>
 						</Expander>
@@ -637,7 +637,7 @@
 					<TabItem.Header>
 						<TextBlock Text="TreeView"/>
 					</TabItem.Header>
-					<StackPanel Background="{DynamicResource Brush/ToolBar.Background}" Orientation="Horizontal">
+					<StackPanel Background="{DynamicResource Brush/WorkingArea.Panel.Background}" Orientation="Horizontal">
 						<TreeView Margin="10" Width="200">
 							<TreeViewItem>
 								<TreeViewItem.Header>
@@ -669,7 +669,7 @@
 					<TabItem.Header>
 						<TextBlock Text="GroupBox"/>
 					</TabItem.Header>
-					<StackPanel Background="{DynamicResource Brush/ToolBar.Background}">
+					<StackPanel Background="{DynamicResource Brush/WorkingArea.Panel.Background}">
 						<appControls:GroupBox Header="GroupBox" HorizontalAlignment="Left" Margin="10" Width="200">
 							<Button Content="Button"/>
 						</appControls:GroupBox>

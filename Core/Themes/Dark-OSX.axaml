@@ -8,8 +8,8 @@
 	<Styles.Resources>
 
 		<!-- Window -->
-		<Color x:Key="Color/Window.Background.Tabbed.Transparent">#90000000</Color>
-		<Color x:Key="Color/Window.Background.Transparent">#901e1e1e</Color>
+		<Color x:Key="Color/Window.Background.Tabbed.Transparent">#80171717</Color>
+		<Color x:Key="Color/Window.Background.Transparent">#90171717</Color>
 
 	</Styles.Resources>
 	
