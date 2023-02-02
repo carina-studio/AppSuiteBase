@@ -675,7 +675,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             if (this.fontFamily == value)
                 return;
             this.SetAndRaise(FontFamilyProperty, ref this.fontFamily, value);
-            this.InvalidateTextLayout();
+            this.InvalidateTextProperties();
         }
     }
 
