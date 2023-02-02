@@ -3014,6 +3014,9 @@ namespace CarinaStudio.AppSuite
             var stopwatch = this.IsDebugMode ? new Stopwatch().Also(it => it.Start()) : null;
             switch (collectionMode)
             {
+#if NET7_0_OR_GREATER
+                case GCCollectionMode.Aggressive:
+#endif
                 case GCCollectionMode.Forced:
                     GC.Collect();
                     GC.WaitForPendingFinalizers();
