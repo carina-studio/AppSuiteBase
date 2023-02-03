@@ -70,7 +70,7 @@
 		<PackageReference Include="CarinaStudio.AppBase.Application.Avalonia" Version="2.0.9.202-preview" />
 		<PackageReference Include="CarinaStudio.AppBase.AutoUpdate" Version="2.0.9.202-preview" />
 		<PackageReference Include="CarinaStudio.AppBase.MacOS" Version="2.0.9.202-preview" />
-		<PackageReference Include="Markdown.Avalonia" Version="11.0.0-a8" />
+		<PackageReference Include="Markdown.Avalonia.Tight" Version="11.0.0-a8" />
 		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="7.0.0" />
 		<PackageReference Include="NLog" Version="5.1.0" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="5.2.0" />
