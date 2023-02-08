@@ -11,9 +11,9 @@
 	<!-- ApplicationInfoDialog -->
 	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">變更列表</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">已載入組件列表</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">應用程式圖示由</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">提供，並發布於</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon" xml:space="preserve">。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">應用程式圖示修改自</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">提供並發布於</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon" xml:space="preserve">之圖示。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section1">是基於</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section2">開放原始碼專案</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section3">所開發的的應用程式。</sys:String>
@@ -35,7 +35,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Disconnected">網路：未連線</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">作業系統：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">其他資訊</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.PrimaryNetworkInterface">識別用網路介面：{0} ({1})，{2}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrimaryNetworkInterface">主要網路介面：{0} ({1})，{2}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicyWasAgreedBefore">您已經同意本《隱私權政策》。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivateMemoryUsage">私有記憶體使用量：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessId">識別碼 (ID)：{0}</sys:String>

@@ -11,7 +11,7 @@
 	<!-- ApplicationInfoDialog -->
 	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">Changelist</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">List of loaded assemblies</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">Application icon is made by</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">Application icon is modified from icons made by</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">from</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon" xml:space="preserve">.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section1">is an</sys:String>
@@ -35,7 +35,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Disconnected">Network: Disconnected</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">Operating system: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">Other information</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.PrimaryNetworkInterface">Network interface for identifying: {0} ({1}), {2}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrimaryNetworkInterface">Primary network interface: {0} ({1}), {2}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicyWasAgreedBefore">You have agreed the《Privacy Policy》.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivateMemoryUsage">Usage of private memory: {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessId">ID: {0}</sys:String>
