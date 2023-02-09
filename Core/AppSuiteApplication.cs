@@ -1092,24 +1092,6 @@ namespace CarinaStudio.AppSuite
                     control.Focus();
             }, RoutingStrategies.Tunnel);
 
-            // [Workaround] Prevent menu flicker in Avalonia 0.10.11
-            var pointerReleasedHandler = new EventHandler<RoutedEventArgs>((sender, e) =>
-            {
-                var pointerEventArgs = (Avalonia.Input.PointerReleasedEventArgs)e;
-                if (pointerEventArgs.InitialPressMouseButton != Avalonia.Input.MouseButton.Right)
-                    return;
-                var textBox = (Avalonia.Controls.TextBox)sender.AsNonNull();
-                var contextMenu = textBox.ContextMenu;
-                if (textBox.ContextFlyout == null && contextMenu != null && contextMenu.PlacementMode == Avalonia.Controls.PlacementMode.AnchorAndGravity)
-                {
-                    var position = pointerEventArgs.GetPosition(textBox);
-                    contextMenu.HorizontalOffset = position.X;
-                    contextMenu.VerticalOffset = position.Y;
-                    contextMenu.Open(textBox);
-                }
-            });
-            Avalonia.Controls.TextBox.PointerReleasedEvent.AddClassHandler(typeof(Avalonia.Controls.TextBox), pointerReleasedHandler, RoutingStrategies.Tunnel);
-
             // [Workaround] Prevent tooltip stays open after changing focus to another window
             if (Platform.IsMacOS)
                 DefineExtraStylesForMacOS();
