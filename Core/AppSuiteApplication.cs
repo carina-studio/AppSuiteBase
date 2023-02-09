@@ -11,6 +11,7 @@ using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Styling;
+using Avalonia.VisualTree;
 #if APPLY_CONTROL_BRUSH_ANIMATIONS || APPLY_ITEM_BRUSH_ANIMATIONS
 using CarinaStudio.AppSuite.Animation;
 #endif
@@ -1065,7 +1066,7 @@ namespace CarinaStudio.AppSuite
             }));
 
             // disable pointer wheel on ComboBox/NumericUpDown
-            Avalonia.Controls.TextBox.PointerWheelChangedEvent.AddClassHandler(typeof(Avalonia.Controls.ComboBox), (s, e) =>
+            Avalonia.Input.InputElement.PointerWheelChangedEvent.AddClassHandler(typeof(Avalonia.Controls.ComboBox), (s, e) =>
             {
                 var comboBox = (Avalonia.Controls.ComboBox)s.AsNonNull();
                 if (!comboBox.IsDropDownOpen)
@@ -1075,11 +1076,20 @@ namespace CarinaStudio.AppSuite
                     e.Handled = true;
                 }
             }, RoutingStrategies.Tunnel);
-            Avalonia.Controls.TextBox.PointerWheelChangedEvent.AddClassHandler(typeof(Avalonia.Controls.NumericUpDown), (s, e) =>
+            Avalonia.Input.InputElement.PointerWheelChangedEvent.AddClassHandler(typeof(Avalonia.Controls.NumericUpDown), (s, e) =>
             {
                 ((Avalonia.Controls.NumericUpDown)s.AsNonNull()).Parent?.Let(parent =>
                     parent.RaiseEvent(e));
                 e.Handled = true;
+            }, RoutingStrategies.Tunnel);
+        
+            // [Workaround] Focus on SelectableTextBlock before opening its context menu
+            Avalonia.Input.InputElement.PointerPressedEvent.AddClassHandler(typeof(Avalonia.Controls.SelectableTextBlock), (s, e) =>
+            {
+                var control = s as Avalonia.Controls.Control;
+                var pointer = ((Avalonia.Input.PointerPressedEventArgs)e).GetCurrentPoint(control);
+                if (pointer.Properties.IsRightButtonPressed && (control?.ContextFlyout != null || control?.ContextMenu != null))
+                    control.Focus();
             }, RoutingStrategies.Tunnel);
 
             // [Workaround] Prevent menu flicker in Avalonia 0.10.11

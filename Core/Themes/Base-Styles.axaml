@@ -1442,7 +1442,7 @@
 	</Style>
 	<Style Selector=":is(SelectableTextBlock)[IsEnabled=True]">
 		<Setter Property="ContextMenu">
-			<ContextMenu>
+			<ContextMenu Cursor="Arrow">
 				<MenuItem Command="{Binding $parent[SelectableTextBlock].Copy}" Header="{DynamicResource String/Common.Copy}" IsEnabled="{Binding $parent[SelectableTextBlock].CanCopy}" InputGesture="{x:Static input:KeyGestures.Copy}"/>
 				<MenuItem Command="{Binding $parent[SelectableTextBlock].SelectAll}" Header="{DynamicResource String/Common.SelectAll}" IsEnabled="{Binding $parent[SelectableTextBlock].Text, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}"/>
 			</ContextMenu>
