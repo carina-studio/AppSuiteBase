@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -15,6 +16,11 @@ namespace CarinaStudio.AppSuite
     /// </summary>
     public class HardwareInfo : INotifyPropertyChanged
     {
+        // Native symbols.
+        [DllImport("Kernel32")]
+        static extern bool GetPhysicallyInstalledSystemMemory(out ulong TotalMemoryInKilobytes);
+
+
         // Fields.
         readonly IAppSuiteApplication app;
         readonly ScheduledAction checkGraphicsCardAction;
@@ -96,29 +102,17 @@ namespace CarinaStudio.AppSuite
             var physicalMemorySize = (long?)null;
             if (Platform.IsWindows)
             {
-#pragma warning disable CA1416
                 try
                 {
-                    using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PhysicalMemory");
-                    var size = 0L;
-                    foreach (var obj in searcher.Get())
-                    {
-                        obj["Capacity"]?.ToString()?.Let(it =>
-                        {
-                            if (long.TryParse(it, out var partialSize) && partialSize > 0)
-                                size += partialSize;
-                        });
-                    }
-                    if (size > 0)
-                        physicalMemorySize = size;
+                    if (GetPhysicallyInstalledSystemMemory(out var totalMemoryKB))
+                        physicalMemorySize = (long)totalMemoryKB << 10;
                     else
-                        this.logger.LogWarning("Unable to get total physical memory on Windows");
+                        this.logger.LogError("Unable to get total physical memory on Windows");
                 }
                 catch (Exception ex)
                 {
                     this.logger.LogError(ex, "Unable to get total physical memory on Windows");
                 }
-#pragma warning restore CA1416
             }
             else if (Platform.IsLinux)
             {

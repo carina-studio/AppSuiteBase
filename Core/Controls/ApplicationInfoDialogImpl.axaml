@@ -153,7 +153,7 @@
 
 					<!-- Total physical memory -->
 					<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.TotalPhysicalMemory}" IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}" TextTrimming="CharacterEllipsis"/>
-					<Separator Classes="Dialog_Separator_Small"/>
+					<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}"/>
 
 					<!-- Network connection -->
 					<Panel>
