@@ -53,7 +53,7 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				Platform.OpenLink(this.attachedAppUpdater.UpdatePackageUri);
 				this.Close();
-				this.closingTaskSource.SetResult(ApplicationUpdateDialogResult.None);
+				this.closingTaskSource.TrySetResult(ApplicationUpdateDialogResult.None);
 			}
 		}
 
@@ -189,7 +189,7 @@ namespace CarinaStudio.AppSuite.Controls
 				if (updater.IsShutdownNeededToContinueUpdate)
 				{
 					this.Close(ApplicationUpdateDialogResult.ShutdownNeeded);
-					this.closingTaskSource.SetResult(ApplicationUpdateDialogResult.ShutdownNeeded);
+					this.closingTaskSource.TrySetResult(ApplicationUpdateDialogResult.ShutdownNeeded);
 				}
 			}
 			else if (e.PropertyName == nameof(ApplicationUpdater.UpdateVersion))
