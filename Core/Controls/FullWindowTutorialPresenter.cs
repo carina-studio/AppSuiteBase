@@ -8,6 +8,7 @@ using Avalonia.VisualTree;
 using CarinaStudio.Animation;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
+using CarinaStudio.VisualTree;
 using System;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -70,6 +71,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
     Image? background;
     DoubleAnimator? backgroundAnimator;
     Control? dismissControl;
+    bool isPointerMovedAfterShowingTutorial;
     Control? root;
     Control? skipAllTutorialsControl;
     Control? tutorialContainer;
@@ -118,6 +120,11 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
         {
             this.backgroundAnimator = new DoubleAnimator(this.root.Opacity, 0).Also(animator =>
             {
+                animator.Cancelled += (_, e) =>
+                {
+                    this.tutorialContainer?.Let(it =>
+                        it.DataContext = null);
+                };
                 animator.Completed += (_, e) =>
                 {
                     this.root.IsVisible = false;
@@ -136,9 +143,21 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
             this.tutorialContainer?.Let(it =>
                 it.DataContext = null);
         }
+        // [Workaround] Clear brush transitions of button
+        this.dismissControl?.FindDescendantOfTypeAndName<Avalonia.Controls.Presenters.ContentPresenter>("PART_ContentPresenter")?.Let(it => 
+        {
+            var transitions = it.Transitions;
+            it.Transitions = null;
+            it.Background = null;
+            it.BorderBrush = null;
+            if (transitions != null)
+                this.SynchronizationContext.Post(() => it.Transitions = transitions);
+        });
+        
 
         // remove key event handler
         this.RemoveHandler(KeyDownEvent, this.OnPreviewKeyDown);
+        this.RemoveHandler(PointerMovedEvent, this.OnPreviewPointerMoved);
     }
 
 
@@ -169,6 +188,22 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
     }
 
 
+    // Handle pointer moved event.
+    void OnPreviewPointerMoved(object? sender, PointerEventArgs e)
+    {
+        if (!this.isPointerMovedAfterShowingTutorial && this.CurrentTutorial != null)
+        {
+            this.isPointerMovedAfterShowingTutorial = true;
+            this.dismissControl?.FindDescendantOfTypeAndName<Avalonia.Controls.Presenters.ContentPresenter>("PART_ContentPresenter")?.Let(it => 
+            {
+                // [Workaround] Restore brush transitions of button
+                it.ClearValue(BackgroundProperty);
+                it.ClearValue(BorderBrushProperty);
+            });
+        }
+    }
+
+
     /// <inheritdoc/>
     protected override void OnShowTutorial(Tutorial tutorial)
     {
@@ -191,19 +226,37 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                 });
             }
         }
+        (this.tutorialContainer?.RenderTransform as ScaleTransform)?.Let(transform =>
+        {
+            var transitions = transform.Transitions;
+            transform.Transitions = null;
+            transform.ScaleX = this.FindResourceOrDefault("Double/FullWindowTutorialPresenter.Tutorial.InitScaleX", 0.5);
+            transform.ScaleY = this.FindResourceOrDefault("Double/FullWindowTutorialPresenter.Tutorial.InitScaleY", 0.5);
+            transform.Transitions = transitions;
+            transform.ScaleX = 1;
+            transform.ScaleY = 1;
+        });
 
-        // setup data context
-        this.tutorialContainer?.Let(it =>
-            it.DataContext = tutorial);
-
-        // add key event handler
+        // add input event handler
         this.AddHandler(KeyDownEvent, this.OnPreviewKeyDown, Avalonia.Interactivity.RoutingStrategies.Tunnel);
+        this.AddHandler(PointerMovedEvent, this.OnPreviewPointerMoved, Avalonia.Interactivity.RoutingStrategies.Tunnel);
+        this.isPointerMovedAfterShowingTutorial = false;
 
-        // setup tutorial position
-        this.updateTutorialPositionAction.Schedule();
+        // setup tutorial and its position
+        if (this.tutorialContainer != null)
+        {
+            this.tutorialContainer.Opacity = 0;
+            this.updateTutorialPositionAction.Schedule();
+            this.SynchronizationContext.Post(() =>
+            {
+                this.dismissControl?.Let(it => it.IsVisible = true);
+                this.tutorialContainer.DataContext = tutorial;
+                this.tutorialContainer.Opacity = 1;
+            });
+        }
 
         // setup focus
-        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        this.SynchronizationContext.Post(() =>
         {
             if (this.CurrentTutorial == null)
                 return;

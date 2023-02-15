@@ -765,6 +765,16 @@
 				<Panel Name="PART_Root">
 					<controls:Image Name="PART_Background"/>
 					<Border Name="PART_TutorialContainer" Background="{DynamicResource ToolTipBackground}" BorderBrush="{DynamicResource ToolTipBorderBrush}" BorderThickness="1" BoxShadow="{DynamicResource BoxShadows/FullWindowTutorialPresenter.Tutorial}" CornerRadius="{DynamicResource ControlCornerRadius}" Padding="{DynamicResource Thickness/FullWindowTutorialPresenter.Tutorial.Padding}">
+						<Border.RenderTransform>
+							<ScaleTransform ScaleX="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.InitScaleX}" ScaleY="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.InitScaleY}">
+								<ScaleTransform.Transitions>
+									<Transitions>
+										<DoubleTransition Property="ScaleX" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
+										<DoubleTransition Property="ScaleY" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
+									</Transitions>
+								</ScaleTransform.Transitions>
+							</ScaleTransform>
+						</Border.RenderTransform>
 						<Grid ClipToBounds="True" ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto">
 							<Image Classes="Icon" Height="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}" IsVisible="{Binding Icon, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.Icon.Margin}" Source="{Binding Icon}" VerticalAlignment="Center" Width="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}"/>
 							<TextBlock Grid.Column="1" FontSize="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize}" MaxWidth="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth}" Text="{Binding Description}" TextWrapping="Wrap" VerticalAlignment="Center"/>
