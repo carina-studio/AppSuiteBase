@@ -878,6 +878,11 @@
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Stretch" Value="Uniform"/>
 		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="Transitions">
+			<Transitions>
+				<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
+			</Transitions>
+		</Setter>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(Image).Icon:disabled">
@@ -913,6 +918,9 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="Button.InPlaceAction_Button /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions" Value="{x:Null}"/>
+	</Style>
 	<Style Selector="Button.InPlaceAction_Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
 	</Style>
@@ -931,6 +939,9 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="Button.InPlaceAction_Button_Large /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions" Value="{x:Null}"/>
+	</Style>
 	<Style Selector="Button.InPlaceAction_Button_Large:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
 	</Style>
@@ -948,6 +959,9 @@
 		<Setter Property="Padding" Value="{DynamicResource Thickness/InPlaceAction.Padding.Medium}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="Button.InPlaceAction_Button_Medium /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="Button.InPlaceAction_Button_Medium:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
@@ -1003,6 +1017,9 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions" Value="{x:Null}"/>
+	</Style>
 	<Style Selector="ToggleButton.InPlaceAction_ToggleButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
 	</Style>
@@ -1024,6 +1041,9 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Large /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions" Value="{x:Null}"/>
+	</Style>
 	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Large:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
 	</Style>
@@ -1044,6 +1064,9 @@
 		<Setter Property="Padding" Value="{DynamicResource Thickness/InPlaceAction.Padding.Medium}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Medium /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Medium:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
@@ -1815,29 +1838,19 @@
 								</Border.Width>
 								<Panel>
 									<Border Background="{DynamicResource Brush/TabItem.Header.Background}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding !$parent[TabItem].IsSelected}" Margin="0,0,0,1"/>
-									<Border Background="{DynamicResource Brush/TabItem.Header.Background.PointerOver}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsPointerOver}" Margin="0,0,0,1">
-										<!--Border.Transitions>
+									<Border Background="{DynamicResource Brush/TabItem.Header.Background.PointerOver}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsPointerOver, Converter={x:Static converters:TabItemOpacityConverters.IsPointerOverToOpacity}}" Margin="0,0,0,1">
+										<Border.Transitions>
 											<Transitions>
-												<DoubleTransition Property="Opacity" Duration="{DynamicResource TimeSpan/Animation.Fast}" Easing="{DynamicResource Easing/Animation}"/>
+												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
-										</Border.Transitions-->
+										</Border.Transitions>
 									</Border>
-									<Border Background="{DynamicResource Brush/TabItem.Header.Background.Selected}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsSelected}">
-										<!--Border.Transitions>
+									<Border Background="{DynamicResource Brush/TabItem.Header.Background.Selected}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:TabItemOpacityConverters.IsSelectedToOpacity}}">
+										<Border.Transitions>
 											<Transitions>
-												<DoubleTransition Property="Opacity" Delay="0:0:0.15" Duration="{DynamicResource TimeSpan/Animation}" Easing="{DynamicResource Easing/Animation}"/>
+												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
-										</Border.Transitions-->
-										<!--Border CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Height="{DynamicResource Double/TabItem.Header.ColorBar.Height}" VerticalAlignment="Top">
-											<Border.Background>
-												<LinearGradientBrush EndPoint="0%,100%" StartPoint="0%,0%">
-													<GradientStop Color="{DynamicResource Color/Accent}" Offset="0"/>
-													<GradientStop Color="{DynamicResource Color/Accent}" Offset="0.5"/>
-													<GradientStop Color="{DynamicResource Color/TabItem.Header.Background.Selected}" Offset="0.5"/>
-													<GradientStop Color="{DynamicResource Color/TabItem.Header.Background.Selected}" Offset="1"/>
-												</LinearGradientBrush>
-											</Border.Background>
-										</Border-->
+										</Border.Transitions>
 									</Border>
 									<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Stretch" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
 								</Panel>
@@ -1881,6 +1894,9 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
+	</Style>
+	<Style Selector="Button.TextBox_InPlaceAction /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="Button.TextBox_InPlaceAction:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -2018,6 +2034,9 @@
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
 	</Style>
+	<Style Selector="ToggleButton.TextBox_InPlaceAction /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions" Value="{x:Null}"/>
+	</Style>
 	<Style Selector="ToggleButton.TextBox_InPlaceAction:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
@@ -2069,9 +2088,13 @@
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Button.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Button.Padding}"/>
+		<Setter Property="Transitions" Value="{x:Null}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+	</Style>
+	<Style Selector="Button.ToolBar_Button /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="Button.ToolBar_Button:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -2096,6 +2119,9 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+	</Style>
+	<Style Selector="Button.ToolBar_Button_WithDropDownButton /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="Button.ToolBar_Button_WithDropDownButton:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -2150,6 +2176,9 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+	</Style>
+	<Style Selector="RepeatButton.ToolBar_RepeatButton /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="RepeatButton.ToolBar_RepeatButton:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -2226,6 +2255,9 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="ToggleButton.ToolBar_DropDownButton /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions" Value="{x:Null}"/>
+	</Style>
 	<Style Selector="ToggleButton.ToolBar_DropDownButton:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
@@ -2255,6 +2287,9 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="ToggleButton.ToolBar_ToggleButton:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>

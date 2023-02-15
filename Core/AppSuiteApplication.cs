@@ -1,4 +1,4 @@
-﻿//#define APPLY_CONTROL_BRUSH_ANIMATIONS
+﻿#define APPLY_CONTROL_BRUSH_ANIMATIONS
 //#define APPLY_ITEM_BRUSH_ANIMATIONS
 
 using Avalonia;
@@ -996,30 +996,24 @@ namespace CarinaStudio.AppSuite
                 return;
 
             // get resources
-            var duration = this.TryFindResource<TimeSpan>("TimeSpan/Animation", out var timeSpanRes) ? timeSpanRes.GetValueOrDefault() : new TimeSpan();
-            var durationFast = this.TryFindResource("TimeSpan/Animation.Fast", out timeSpanRes) ? timeSpanRes.GetValueOrDefault() : new TimeSpan();
-            var easing = this.TryFindResource<Easing>("Easing/Animation", out var easingRes) ? easingRes : null;
+            var duration = this.TryFindResource<TimeSpan>("TimeSpan/Animation", out var timeSpanRes) ? timeSpanRes.Value : default;
+            var durationFast = this.TryFindResource("TimeSpan/Animation.Fast", out timeSpanRes) ? timeSpanRes.Value : default;
+            var easing = this.TryFindResource<Easing>("Easing/Animation", out var easingRes) ? easingRes : new LinearEasing();
 
             // define styles
 #if APPLY_CONTROL_BRUSH_ANIMATIONS
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.Button))
                 .Template().Name("PART_ContentPresenter"), durationFast));
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ButtonSpinner))
+                .Template().Name("PART_IncreaseButton"), durationFast));
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ButtonSpinner))
+                .Template().Name("PART_DecreaseButton"), durationFast));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ComboBox))
                 .Template().Name("Background"), durationFast));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.DatePicker))
                 .Template().Name("FlyoutButton"), durationFast));
-            this.extraStyles.Add(new Style(s => s.OfType(typeof(Controls.LinkTextBlock))).Also(style =>
-            {
-                style.Setters.Add(new Setter(Animatable.TransitionsProperty, new Transitions().Also(transitions =>
-                {
-                    transitions.Add(new Animation.BrushTransition()
-                    {
-                        Duration = durationFast,
-                        Easing = easing,
-                        Property = Avalonia.Controls.TextBlock.ForegroundProperty,
-                    });
-                })));
-            }));
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.Expander))
+                .Template().Name("ExpanderHeader").Template().Name("ToggleButtonBackground"), durationFast));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ListBox)), durationFast));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.RepeatButton))
                 .Template().Name("PART_ContentPresenter"), durationFast));
@@ -1105,7 +1099,7 @@ namespace CarinaStudio.AppSuite
 #if APPLY_CONTROL_BRUSH_ANIMATIONS
         Style DefineBrushTransitionsStyle(Func<Avalonia.Styling.Selector?, Avalonia.Styling.Selector> selector, TimeSpan duration)
         {
-            var easing = this.TryFindResource<Easing>("Easing/Animation", out var easingRes) ? easingRes : null;
+            var easing = this.TryFindResource<Easing>("Easing/Animation", out var easingRes) ? easingRes : new LinearEasing();
             return new Style(selector).Also(style =>
             {
                 style.Setters.Add(new Setter(Animatable.TransitionsProperty, new Transitions().Also(transitions =>
