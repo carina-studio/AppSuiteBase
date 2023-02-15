@@ -28,6 +28,13 @@
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ComboBoxItem.Foreground.Selected}" />
 	</Style>
 
+	<!-- GridSplitter -->
+	<Style Selector="GridSplitter:pressed /template/ Border#PART_Root">
+		<Setter Property="Background">
+			<SolidColorBrush Color="{DynamicResource SystemAccentColorLight1}"/>
+		</Setter>
+	</Style>
+
 	<!-- ListBoxItem -->
 	<Style Selector="ListBoxItem:pressed">
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />

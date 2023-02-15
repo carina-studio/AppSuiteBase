@@ -780,6 +780,33 @@
 	</Style>
 
 	<!-- GridSplitter -->
+	<Style Selector="GridSplitter">
+		<Setter Property="MinHeight" Value="{DynamicResource Double/GridSplitter.Thickness}"/>
+		<Setter Property="MinWidth" Value="{DynamicResource Double/GridSplitter.Thickness}"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border x:Name="PART_Root" 
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						CornerRadius="{TemplateBinding CornerRadius}"
+						Background="{TemplateBinding Background}">
+					<Border.Transitions>
+						<Transitions>
+							<BrushTransition Property="Background" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
+						</Transitions>
+					</Border.Transitions>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="GridSplitter:pointerover /template/ Border#PART_Root">
+		<Setter Property="Background" Value="{DynamicResource Brush/Accent}"/>
+	</Style>
+	<Style Selector="GridSplitter:pressed /template/ Border#PART_Root">
+		<Setter Property="Background">
+			<SolidColorBrush Color="{DynamicResource SystemAccentColorDark1}"/>
+		</Setter>
+	</Style>
 	<Style Selector="GridSplitter.Splitter_Horizontal">
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="{DynamicResource Double/GridSplitter.Thickness}"/>
