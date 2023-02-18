@@ -26,9 +26,14 @@
 	<SolidColorBrush x:Key="ButtonBackgroundDisabled" Color="{DynamicResource Color/Button.Background.Disabled}"/>
 	<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource Color/Button.Background.PointerOver}"/>
 	<SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource Color/Button.Background.Pressed}"/>
+	<SolidColorBrush x:Key="ButtonBackgroundTransparent" Color="{DynamicResource Color/Button.Background.Transparent}"/>
 	<LinearGradientBrush x:Key="ButtonBorderBrush" EndPoint="0%,100%" StartPoint="0%,0%">
 		<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border.Light}"/>
 		<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border.Dark}"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="ButtonBorderBrushTransparent" EndPoint="0%,100%" StartPoint="0%,0%">
+		<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border.Light.Transparent}"/>
+		<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border.Dark.Transparent}"/>
 	</LinearGradientBrush>
 	<StaticResourceExtension x:Key="ButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrush"/>
 	<StaticResourceExtension x:Key="ButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
@@ -40,6 +45,7 @@
 	<Color x:Key="Color/Button.Background.Disabled">#ffffff</Color>
 	<Color x:Key="Color/Button.Background.PointerOver">#ffffff</Color>
 	<Color x:Key="Color/Button.Background.Pressed">#ffffff</Color>
+	<Color x:Key="Color/Button.Background.Transparent">#00ffffff</Color>
 
 	<!-- CaptionButtons -->
 	<SolidColorBrush x:Key="Brush/CaptionButtons.Button.Background.PointerOver" Color="#3fe5e5e5"/>
@@ -73,9 +79,13 @@
 	<SolidColorBrush x:Key="Brush/Control.Border" Color="{DynamicResource Color/Control.Border}"/>
 	<SolidColorBrush x:Key="Brush/Control.Border.Dark" Color="{DynamicResource Color/Control.Border.Dark}"/>
 	<SolidColorBrush x:Key="Brush/Control.Border.Light" Color="{DynamicResource Color/Control.Border.Light}"/>
+	<SolidColorBrush x:Key="Brush/Control.Border.Transparent" Color="{DynamicResource Color/Control.Border.Transparent}"/>
 	<Color x:Key="Color/Control.Border">#000000</Color>
 	<Color x:Key="Color/Control.Border.Dark">#000000</Color>
+	<Color x:Key="Color/Control.Border.Dark.Transparent">#00000000</Color>
 	<Color x:Key="Color/Control.Border.Light">#000000</Color>
+	<Color x:Key="Color/Control.Border.Light.Transparent">#00000000</Color>
+	<Color x:Key="Color/Control.Border.Transparent">#00000000</Color>
 	
 	<!-- DatePicker -->
 	<StaticResourceExtension x:Key="DatePickerButtonBackground" ResourceKey="ButtonBackground"/>
@@ -156,9 +166,11 @@
 	<SolidColorBrush x:Key="Brush/InPlaceAction.Background.Checked" Color="{DynamicResource Color/InPlaceAction.Background.Checked}"/>
 	<SolidColorBrush x:Key="Brush/InPlaceAction.Background.PointerOver" Color="{DynamicResource Color/InPlaceAction.Background.PointerOver}"/>
 	<SolidColorBrush x:Key="Brush/InPlaceAction.Background.Pressed" Color="{DynamicResource Color/InPlaceAction.Background.Pressed}"/>
+	<SolidColorBrush x:Key="Brush/InPlaceAction.Background.Transparent" Color="{DynamicResource Color/InPlaceAction.Background.Transparent}"/>
 	<Color x:Key="Color/InPlaceAction.Background.Checked">#20000000</Color>
 	<Color x:Key="Color/InPlaceAction.Background.PointerOver">#30ffffff</Color>
 	<Color x:Key="Color/InPlaceAction.Background.Pressed">#30000000</Color>
+	<Color x:Key="Color/InPlaceAction.Background.Transparent">#00ffffff</Color>
 	
 	<!-- Menu -->
 	<Color x:Key="Color/Menu.Background">#ffffff</Color>
@@ -205,6 +217,7 @@
 	<Color x:Key="Color/StatusBar.Background.Inactive">#ffffff</Color>
 	<Color x:Key="Color/StatusBar.Button.Background.PointerOver">#3fffffff</Color>
 	<Color x:Key="Color/StatusBar.Button.Background.Pressed">#3f000000</Color>
+	<Color x:Key="Color/StatusBar.Button.Background.Transparent">#00ffffff</Color>
 	<Color x:Key="Color/StatusBar.Foreground">#ffffff</Color>
 	<Color x:Key="Color/StatusBar.Foreground.Disabled">#7fffffff</Color>
 	<Color x:Key="Color/StatusBar.ToggleButton.Background.Checked">#7f000000</Color>
@@ -212,6 +225,7 @@
 	<SolidColorBrush x:Key="Brush/StatusBar.Background.Inactive" Color="{DynamicResource Color/StatusBar.Background.Inactive}"/>
 	<SolidColorBrush x:Key="Brush/StatusBar.Button.Background.PointerOver" Color="{DynamicResource Color/StatusBar.Button.Background.PointerOver}"/>
 	<SolidColorBrush x:Key="Brush/StatusBar.Button.Background.Pressed" Color="{DynamicResource Color/StatusBar.Button.Background.Pressed}"/>
+	<SolidColorBrush x:Key="Brush/StatusBar.Button.Background.Transparent" Color="{DynamicResource Color/StatusBar.Button.Background.Transparent}"/>
 	<SolidColorBrush x:Key="Brush/StatusBar.Foreground" Color="{DynamicResource Color/StatusBar.Foreground}"/>
 	<SolidColorBrush x:Key="Brush/StatusBar.Foreground.Disabled" Color="{DynamicResource Color/StatusBar.Foreground.Disabled}"/>
 	<SolidColorBrush x:Key="Brush/StatusBar.ToggleButton.Background.Checked" Color="{DynamicResource Color/StatusBar.ToggleButton.Background.Checked}"/>
@@ -284,9 +298,11 @@
 	<SolidColorBrush x:Key="Brush/ToolBar.Background" Color="{DynamicResource Color/ToolBar.Background}"/>
 	<SolidColorBrush x:Key="Brush/ToolBar.Button.Background.PointerOver" Color="{DynamicResource Color/ToolBar.Button.Background.PointerOver}"/>
 	<SolidColorBrush x:Key="Brush/ToolBar.Button.Background.Pressed" Color="{DynamicResource Color/ToolBar.Button.Background.Pressed}"/>
+	<SolidColorBrush x:Key="Brush/ToolBar.Button.Background.Transparent" Color="{DynamicResource Color/ToolBar.Button.Background.Transparent}"/>
 	<Color x:Key="Color/ToolBar.Background">#ffffff</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#ffffff</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#ffffff</Color>
+	<Color x:Key="Color/ToolBar.Button.Background.Transparent">#00ffffff</Color>
 	
 	<!-- ToolTip -->
 	<Color x:Key="Color/ToolTip.Background">#ffffff</Color>

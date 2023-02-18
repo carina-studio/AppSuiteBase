@@ -15,7 +15,7 @@
 	<!-- AddTabItemButton -->
 	<Style Selector="Button.AddTabItem">
 		<Setter Property="Background" Value="{DynamicResource Brush/TabItem.Header.Background}"/>
-		<Setter Property="BorderBrush" Value="{x:Null}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTransparent}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/AddTabItemButton.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/AddTabItemButton.Padding}"/>
@@ -779,7 +779,7 @@
 							<Image Classes="Icon" Height="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}" IsVisible="{Binding Icon, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.Icon.Margin}" Source="{Binding Icon}" VerticalAlignment="Center" Width="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}"/>
 							<TextBlock Grid.Column="1" FontSize="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize}" MaxWidth="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth}" Text="{Binding Description}" TextWrapping="Wrap" VerticalAlignment="Center"/>
 							<abControls:LinkTextBlock Name="PART_SkipAllTutorials" Command="{Binding Presenter.RequestSkippingAllTutorials}" FontSize="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.SkipAllTutorials.FontSize}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" IsVisible="{Binding IsSkippingAllTutorialsAllowed}" Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.SkipAllTutorials.Margin}" Text="{DynamicResource String/TutorialPresenter.SkipAllTutorials}"/>
-							<Button Name="PART_Dismiss" Background="{x:Static Brushes.Transparent}" BorderThickness="0" Command="{Binding Presenter.DismissTutorial}" Grid.Column="2" Height="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size}" Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.Dismiss.Margin}" Padding="{DynamicResource Thickness/FullWindowTutorialPresenter.Dismiss.Padding}" VerticalAlignment="Top" Width="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size}">
+							<Button Name="PART_Dismiss" Background="{DynamicResource ButtonBackgroundTransparent}" BorderThickness="0" Command="{Binding Presenter.DismissTutorial}" Grid.Column="2" Height="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size}" Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.Dismiss.Margin}" Padding="{DynamicResource Thickness/FullWindowTutorialPresenter.Dismiss.Padding}" VerticalAlignment="Top" Width="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size}">
 								<Image Classes="Icon" Source="{DynamicResource Image/Icon.Close}"/>
 							</Button>
 						</Grid>
@@ -920,7 +920,7 @@
 		<Setter Property="Width" Value="1"/>
 	</Style>
 	<Style Selector="Button.InPlaceAction_Button">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
@@ -941,7 +941,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Pressed}"/>
 	</Style>
 	<Style Selector="Button.InPlaceAction_Button_Large">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
@@ -962,7 +962,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Pressed}"/>
 	</Style>
 	<Style Selector="Button.InPlaceAction_Button_Medium">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
@@ -1019,7 +1019,7 @@
 		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="ToggleButton.InPlaceAction_ToggleButton">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
@@ -1043,7 +1043,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Pressed}"/>
 	</Style>
 	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Large">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
@@ -1067,7 +1067,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Pressed}"/>
 	</Style>
 	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Medium">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
@@ -1536,7 +1536,7 @@
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
 	</Style>
 	<Style Selector="Button.StatusBar_Button">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
 		<Setter Property="CornerRadius" Value="0"/>
@@ -1615,7 +1615,7 @@
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 	</Style>
 	<Style Selector="RepeatButton.StatusBar_RepeatButton">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
 		<Setter Property="CornerRadius" Value="0"/>
@@ -1645,7 +1645,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="ToggleButton.StatusBar_ToggleButton">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
 		<Setter Property="CornerRadius" Value="0"/>
@@ -1792,7 +1792,7 @@
 		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
 	</Style>
 	<Style Selector="Button.TabItem_Button">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundTransparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Content.Height}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Button.Margin}"/>
@@ -1894,7 +1894,7 @@
 
 	<!-- TextBox -->
 	<Style Selector="Button.TextBox_InPlaceAction">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundTransparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Focusable" Value="False"/>
 		<Setter Property="Height" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
@@ -2033,7 +2033,7 @@
 		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.Padding.WithInPlaceAction.3}"/>
 	</Style>
 	<Style Selector="ToggleButton.TextBox_InPlaceAction">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundTransparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Focusable" Value="False"/>
 		<Setter Property="Height" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
@@ -2091,7 +2091,7 @@
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
 	</Style>
 	<Style Selector="Button.ToolBar_Button">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -2119,7 +2119,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Pressed}"/>
 	</Style>
 	<Style Selector="Button.ToolBar_Button_WithDropDownButton">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -2176,7 +2176,7 @@
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
 	</Style>
 	<Style Selector="RepeatButton.ToolBar_RepeatButton">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -2255,7 +2255,7 @@
 		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
 	<Style Selector="ToggleButton.ToolBar_DropDownButton">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -2287,7 +2287,7 @@
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPressed}"/>
 	</Style>
 	<Style Selector="ToggleButton.ToolBar_ToggleButton">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>

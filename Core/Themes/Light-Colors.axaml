@@ -6,6 +6,7 @@
 	<Color x:Key="Color/Button.Background.Disabled">#e7e7e7</Color>
 	<Color x:Key="Color/Button.Background.PointerOver">#f0f0f0</Color>
 	<Color x:Key="Color/Button.Background.Pressed">#e7e7e7</Color>
+	<Color x:Key="Color/Button.Background.Transparent">#00fbfbfb</Color>
 
 	<!-- CaptionButtons -->
 	<SolidColorBrush x:Key="Brush/CaptionButtons.Button.Background.PointerOver" Color="#1f000000"/>
@@ -17,7 +18,10 @@
 	<!-- Control -->
 	<Color x:Key="Color/Control.Border">#37000000</Color>
 	<Color x:Key="Color/Control.Border.Dark">#40000000</Color>
+	<Color x:Key="Color/Control.Border.Dark.Transparent">#00000000</Color>
 	<Color x:Key="Color/Control.Border.Light">#20000000</Color>
+	<Color x:Key="Color/Control.Border.Light.Transparent">#00000000</Color>
+	<Color x:Key="Color/Control.Border.Transparent">#00000000</Color>
 
 	<!-- Dialog -->
 	<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#e0e0e0</Color>
@@ -62,7 +66,7 @@
 	<Color x:Key="Color/TabControl.TabStrip.Border">#20000000</Color>
 
 	<!-- TabItem -->
-	<Color x:Key="Color/TabItem.Header.Background">#00000000</Color>
+	<Color x:Key="Color/TabItem.Header.Background">#00e0e0e0</Color>
 	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#e0e0e0</Color>
 	<Color x:Key="Color/TabItem.Header.Background.Selected">#e0e0e0</Color>
 	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#30000000</Color>
@@ -80,6 +84,7 @@
 	<Color x:Key="Color/ToolBar.Background">#e0e0e0</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#c7c7c7</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#b7b7b7</Color>
+	<Color x:Key="Color/ToolBar.Button.Background.Transparent">#00c7c7c7</Color>
 
 	<!-- ToolTip -->
 	<StaticResourceExtension x:Key="Color/ToolTip.Background" ResourceKey="Color/Button.Background"/>
