@@ -11,7 +11,6 @@ using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Styling;
-using Avalonia.VisualTree;
 #if APPLY_CONTROL_BRUSH_ANIMATIONS || APPLY_ITEM_BRUSH_ANIMATIONS
 using CarinaStudio.AppSuite.Animation;
 #endif
@@ -1209,7 +1208,7 @@ namespace CarinaStudio.AppSuite
 
         /// <inheritdoc/>
         public override IObservable<string?> GetObservableString(string key) =>
-            Avalonia.Controls.ResourceNodeExtensions.GetResourceObservable(this, $"String/{key}").Cast<object?, string?>();
+            new CachedResource<string?>(this, $"String/{key}");
 
 
         /// <summary>
@@ -1218,12 +1217,8 @@ namespace CarinaStudio.AppSuite
         /// <param name="key">Key of string.</param>
         /// <param name="defaultValue">Default value.</param>
         /// <returns>String from resources.</returns>
-        public override string? GetString(string key, string? defaultValue = null)
-        {
-            if (this.TryFindResource<string>($"String/{key}", out var str))
-                return str;
-            return defaultValue;
-        }
+        public override string? GetString(string key, string? defaultValue = null) =>
+            this.FindResourceOrDefault($"String/{key}", defaultValue);
 
 
         // Get theme mode of system.
