@@ -51,7 +51,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Size of working area in logical pixels to suggest using compact user interface.
         /// </summary>
-        public static readonly SettingKey<int> WorkingAreaSizeToSuggestUsingCompactUI = new(nameof(WorkingAreaSizeToSuggestUsingCompactUI), 768);
+        public static readonly SettingKey<int> WorkingAreaSizeToSuggestUsingCompactUI = new(nameof(WorkingAreaSizeToSuggestUsingCompactUI), 700);
 
 
         // Constructor.
