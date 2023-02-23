@@ -47,6 +47,14 @@ public interface IScriptManager : IApplicationObject<IAppSuiteApplication>, INot
 
 
     /// <summary>
+    /// Open reader asynchronously to read logs output by script.
+    /// </summary>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Task of opening reader.</returns>
+    Task<TextReader> OpenLogReaderAsync(CancellationToken cancellationToken = default);
+
+
+    /// <summary>
     /// Number of running script instances.
     /// </summary>
     int RunningScriptCount { get; }

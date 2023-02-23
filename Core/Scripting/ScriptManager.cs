@@ -2,7 +2,9 @@ using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Scripting;
@@ -117,6 +119,15 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
     /// <inheritdoc/>
     public IScript LoadScript(JsonElement json, ScriptOptions options) =>
         this.implementation?.LoadScript(json, options) ?? throw new NotSupportedException();
+
+
+    /// <inheritdoc/>
+    public Task<TextReader> OpenLogReaderAsync(CancellationToken cancellationToken = default)
+    {
+        if (this.implementation != null)
+            return this.implementation.OpenLogReaderAsync(cancellationToken);
+        return Task.FromResult<TextReader>(new StringReader(""));
+    }
     
 
     /// <inheritdoc/>
