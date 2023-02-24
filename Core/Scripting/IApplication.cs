@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading;
 
 namespace CarinaStudio.AppSuite.Scripting;
@@ -8,6 +9,12 @@ namespace CarinaStudio.AppSuite.Scripting;
 /// </summary>
 public interface IApplication
 {
+    /// <summary>
+    /// Get current application culture.
+    /// </summary>
+    CultureInfo CultureInfo { get; }
+
+
     /// <summary>
     /// Get string defined in application resource.
     /// </summary>

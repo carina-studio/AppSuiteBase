@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using System;
+using System.Globalization;
 using System.Threading;
 
 namespace CarinaStudio.AppSuite.Scripting;
@@ -72,6 +73,10 @@ public class Application : IApplication
     /// <param name="app">Application.</param>
     public Application(IAppSuiteApplication app) =>
         this.app = app;
+    
+
+    /// <inheritdoc/>
+    public CultureInfo CultureInfo => this.app.CultureInfo;
     
 
     /// <inheritdoc/>
