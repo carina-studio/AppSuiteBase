@@ -1,3 +1,4 @@
+using System;
 using CarinaStudio.AppSuite.Controls;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -16,9 +17,26 @@ public interface IContext
 
 
     /// <summary>
+    /// Get string with given key defined in this context or application.
+    /// </summary>
+    /// <param name="key">Key of string.</param>
+    /// <param name="defaultValue">Default value.</param>
+    /// <returns>String with given key defined in this context/application, or default value if string cannot be found.</returns>
+    string? GetString(string key, string? defaultValue);
+
+
+    /// <summary>
     /// Get logger.
     /// </summary>
     ILogger Logger { get; }
+
+
+    /// <summary>
+    /// Prepare strings for specific culture.
+    /// </summary>
+    /// <param name="cultureName">Name of culture, or Null for default culture.</param>
+    /// <param name="preparation">Action to prepare strings.</param>
+    void PrepareStrings(string? cultureName, Action<IDictionary<string, string>> preparation);
 }
 
 
@@ -52,6 +70,25 @@ public interface IUserInteractiveContext : IContext
 /// </summary>
 public static class ContextExtensions
 {
+    /// <summary>
+    /// Get string with given key defined in this context or application.
+    /// </summary>
+    /// <param name="context">Context.</param>
+    /// <param name="key">Key of string.</param>
+    /// <returns>String with given key defined in this context/application.</returns>
+    public static string? GetString(this IContext context, string key) =>
+        context.GetString(key, null);
+    
+
+    /// <summary>
+    /// Prepare strings for default culture.
+    /// </summary>
+    /// <param name="context">Context.</param>
+    /// <param name="preparation">Action to prepare strings.</param>
+    public static void PrepareStrings(this IContext context, Action<IDictionary<string, string>> preparation) =>
+        context.PrepareStrings(null, preparation);
+
+
     /// <summary>
     /// Show message dialog.
     /// </summary>

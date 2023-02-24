@@ -16,6 +16,12 @@ namespace CarinaStudio.AppSuite.Scripting;
 /// </summary>
 public class Context : IContext
 {
+    // Fields.
+    volatile ConcurrentDictionary<string, string>? defaultStringTable;
+    volatile ConcurrentDictionary<string, IDictionary<string, string>>? stringTablesWithCulture;
+    readonly object stringTableSyncLock = new();
+
+
     /// <summary>
     /// Initialize new <see cref="Context"/> instance.
     /// </summary>
@@ -58,7 +64,47 @@ public class Context : IContext
 
 
     /// <inheritdoc/>
+    public string? GetString(string key, string? defaultValue)
+    {
+        var app = this.Application;
+        if (this.stringTablesWithCulture?.TryGetValue(app.CultureInfo.Name, out var t) == true
+            && t.TryGetValue(key, out string? s))
+        {
+            return s;
+        }
+        if (this.defaultStringTable?.TryGetValue(key, out s) == true)
+            return s;
+        return app.GetString(key, defaultValue);
+    }
+
+
+    /// <inheritdoc/>
     public ILogger Logger { get; }
+
+
+    /// <inheritdoc/>
+    public void PrepareStrings(string? cultureName, Action<IDictionary<string, string>> preparation)
+    {
+        if (cultureName == null)
+        {
+            lock (this.stringTableSyncLock)
+                this.defaultStringTable ??= new();
+            preparation(this.defaultStringTable);
+        }
+        else
+        {
+            var table = this.stringTableSyncLock.Lock(() =>
+            {
+                if (this.stringTablesWithCulture?.TryGetValue(cultureName, out IDictionary<string, string>? table) == true)
+                    return table;
+                table = new ConcurrentDictionary<string, string>();
+                this.stringTablesWithCulture ??= new();
+                this.stringTablesWithCulture[cultureName] = table;
+                return table;
+            });
+            preparation(table);
+        }
+    }
 }
 
 
