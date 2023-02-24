@@ -24,7 +24,7 @@ public class Context : IContext
     public Context(IAppSuiteApplication app, string loggerName)
     {
         this.Application = app;
-        this.Logger = app.LoggerFactory.CreateLogger(loggerName);
+        this.Logger = ScriptManager.Default.CreateScriptLogger(loggerName);
     }
 
 

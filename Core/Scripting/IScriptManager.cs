@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
@@ -19,6 +20,14 @@ public interface IScriptManager : IApplicationObject<IAppSuiteApplication>, INot
     /// <param name="options">Script options.</param>
     /// <returns>Script instance.</returns>
     IScript CreateScript(ScriptLanguage language, string source, ScriptOptions options);
+
+
+    /// <summary>
+    /// Create logger for script.
+    /// </summary>
+    /// <param name="name">Name of logger.</param>
+    /// <returns>Logger.</returns>
+    ILogger CreateScriptLogger(string name);
 
 
     /// <summary>

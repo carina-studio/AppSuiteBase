@@ -39,6 +39,15 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
     
 
     /// <inheritdoc/>
+    public ILogger CreateScriptLogger(string name)
+    {
+        if (this.implementation != null)
+            return this.implementation.CreateScriptLogger(name);
+        return this.Application.LoggerFactory.CreateLogger(name);
+    }
+    
+
+    /// <inheritdoc/>
     public IScript CreateTemplateScript(ScriptLanguage language, string source, ScriptOptions options) =>
         this.implementation?.CreateTemplateScript(language, source, options) ?? new MockScript(this.Application, language, source, true, options);
     
