@@ -139,6 +139,7 @@
 	<Color x:Key="Color/Icon.Dark">#000000</Color>
 	<Color x:Key="Color/Icon.Error">#ff3232</Color>
 	<Color x:Key="Color/Icon.Information">#288acc</Color>
+	<Color x:Key="Color/Icon.Inverse">#ffffff</Color>
 	<Color x:Key="Color/Icon.JavaScript">#e6bb00</Color>
 	<Color x:Key="Color/Icon.Light">#ffffff</Color>
 	<Color x:Key="Color/Icon.Lightbulb">#ffd800</Color>
@@ -153,6 +154,7 @@
 	<SolidColorBrush x:Key="Brush/Icon.Dark" Color="{DynamicResource Color/Icon.Dark}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Error" Color="{DynamicResource Color/Icon.Error}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Information" Color="{DynamicResource Color/Icon.Information}"/>
+	<SolidColorBrush x:Key="Brush/Icon.Inverse" Color="{DynamicResource Color/Icon.Inverse}"/>
 	<SolidColorBrush x:Key="Brush/Icon.JavaScript" Color="{DynamicResource Color/Icon.JavaScript}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Light" Color="{DynamicResource Color/Icon.Light}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Lightbulb" Color="{DynamicResource Color/Icon.Lightbulb}"/>

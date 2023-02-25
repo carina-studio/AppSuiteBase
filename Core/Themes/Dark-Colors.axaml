@@ -30,6 +30,7 @@
 
 	<!-- Icon -->
 	<Color x:Key="Color/Icon">#ffffff</Color>
+	<Color x:Key="Color/Icon.Inverse">#000000</Color>
 
 	<!-- Menu -->
 	<Color x:Key="Color/Menu.Background">#2c2c2c</Color>
