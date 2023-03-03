@@ -101,6 +101,11 @@
 					<Image Classes="Dialog_Icon" Source="{DynamicResource Image/Icon.Information}"/>
 					<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="Icon" Uri="https://github.com/carina-studio" VerticalAlignment="Center"/>
 				</StackPanel>
+				<Separator Classes="Dialog_Separator_Small"/>
+				<StackPanel IsEnabled="False" Orientation="Horizontal">
+					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Add}"/>
+					<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="Icon" Uri="https://github.com/carina-studio" VerticalAlignment="Center"/>
+				</StackPanel>
 				<Separator Classes="Dialog_Separator"/>
 				<StackPanel Orientation="Horizontal">
 					<Image Classes="Dialog_Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
