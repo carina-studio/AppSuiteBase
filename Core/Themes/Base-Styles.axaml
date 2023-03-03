@@ -2165,6 +2165,9 @@
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="RenderTransform">
+			<TranslateTransform X="{DynamicResource Double/ToolBar.NotificationIndicator.Offset}" Y="{DynamicResource Double/ToolBar.NotificationIndicator.Offset}"/>
+		</Setter>
 		<Setter Property="Stretch" Value="Fill"/>
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
