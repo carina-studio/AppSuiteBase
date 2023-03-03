@@ -863,6 +863,36 @@
 	<DrawingImage x:Key="Image/Icon.NetworkConnectionUp">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.NetworkConnectionUp}"/>
 	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.NotificationIndicator.Error">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Error}">
+				<GeometryDrawing.Pen>
+					<Pen Brush="{DynamicResource Brush/Icon.WithOpacity.0.5}"/>
+				</GeometryDrawing.Pen>
+				<EllipseGeometry RadiusX="{DynamicResource Double/ToolBar.NotificationIndicator.Size}" RadiusY="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
+			</GeometryDrawing>
+		</DrawingGroup>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.NotificationIndicator.Information">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Information}">
+				<GeometryDrawing.Pen>
+					<Pen Brush="{DynamicResource Brush/Icon.WithOpacity.0.5}"/>
+				</GeometryDrawing.Pen>
+				<EllipseGeometry RadiusX="{DynamicResource Double/ToolBar.NotificationIndicator.Size}" RadiusY="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
+			</GeometryDrawing>
+		</DrawingGroup>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.NotificationIndicator.Warning">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Warning}">
+				<GeometryDrawing.Pen>
+					<Pen Brush="{DynamicResource Brush/Icon.WithOpacity.0.5}"/>
+				</GeometryDrawing.Pen>
+				<EllipseGeometry RadiusX="{DynamicResource Double/ToolBar.NotificationIndicator.Size}" RadiusY="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
+			</GeometryDrawing>
+		</DrawingGroup>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.OK" Drawing="{StaticResource Drawing/Icon.OK}"/>
 	<DrawingImage x:Key="Image/Icon.OK.Colored" Drawing="{StaticResource Drawing/Icon.OK.Colored}"/>
 	<DrawingImage x:Key="Image/Icon.OK.Outline">

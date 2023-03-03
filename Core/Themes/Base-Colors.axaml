@@ -163,6 +163,9 @@
 	<SolidColorBrush x:Key="Brush/Icon.Python.Yellow" Color="{DynamicResource Color/Icon.Python.Yellow}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Question" Color="{DynamicResource Color/Icon.Question}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Warning" Color="{DynamicResource Color/Icon.Warning}"/>
+	<SolidColorBrush x:Key="Brush/Icon.WithOpacity.0.75" Color="{DynamicResource Color/Icon}" Opacity="0.75"/>
+	<SolidColorBrush x:Key="Brush/Icon.WithOpacity.0.5" Color="{DynamicResource Color/Icon}" Opacity="0.5"/>
+	<SolidColorBrush x:Key="Brush/Icon.WithOpacity.0.25" Color="{DynamicResource Color/Icon}" Opacity="0.25"/>
 
 	<!-- InPlaceAction -->
 	<SolidColorBrush x:Key="Brush/InPlaceAction.Background.Checked" Color="{DynamicResource Color/InPlaceAction.Background.Checked}"/>
