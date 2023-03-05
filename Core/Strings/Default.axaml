@@ -69,7 +69,6 @@
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">Default language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">Use blurry window background if supported by system</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">Enable scripting</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript.ConfirmEnabling">Your computer may be modified or damaged by running script. You need to review the script you wrote or imported carefully before running it. Are you sure to enable scripting?</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">Size of indentation</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">Show splash screen when launching</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">Target port of log output</sys:String>
@@ -123,6 +122,8 @@
 	<sys:String x:Key="String/Common.Add.WithDialog">Add…</sys:String>
 	<sys:String x:Key="String/Common.Administrator">Administrator</sys:String>
 	<sys:String x:Key="String/Common.Agree">Agree</sys:String>
+	<sys:String x:Key="String/Common.Allow">Allow</sys:String>
+	<sys:String x:Key="String/Common.Allow.WithDialog">Allow…</sys:String>
 	<sys:String x:Key="String/Common.BuiltIn">Built-in</sys:String>
 	<sys:String x:Key="String/Common.Cancel">Cancel</sys:String>
 	<sys:String x:Key="String/Common.Clear">Clear</sys:String>
@@ -148,12 +149,18 @@
 	<sys:String x:Key="String/Common.Delete">Delete</sys:String>
 	<sys:String x:Key="String/Common.Details">Details</sys:String>
 	<sys:String x:Key="String/Common.Details.WithDialog">Details…</sys:String>
+	<sys:String x:Key="String/Common.Disable">Disable</sys:String>
+	<sys:String x:Key="String/Common.Disable.WithDialog">Disable…</sys:String>
+	<sys:String x:Key="String/Common.Disallow">Disallow</sys:String>
+	<sys:String x:Key="String/Common.Disallow.WithDialog">Disallow…</sys:String>
 	<sys:String x:Key="String/Common.Document">Document</sys:String>
 	<sys:String x:Key="String/Common.DoNotAskAgain">Do not ask me again</sys:String>
 	<sys:String x:Key="String/Common.DoNotShowAgain">Do not show again</sys:String>
 	<sys:String x:Key="String/Common.Edit">Edit</sys:String>
 	<sys:String x:Key="String/Common.Edit.WithDialog">Edit…</sys:String>
 	<sys:String x:Key="String/Common.Empty">Empty</sys:String>
+	<sys:String x:Key="String/Common.Enable">Enable</sys:String>
+	<sys:String x:Key="String/Common.Enable.WithDialog">Enable…</sys:String>
 	<sys:String x:Key="String/Common.Export">Export</sys:String>
 	<sys:String x:Key="String/Common.Export.WithDialog">Export…</sys:String>
 	<sys:String x:Key="String/Common.Help">Help</sys:String>
@@ -208,6 +215,9 @@
 3.Unix timestamp in seconds/milliseconds/microseconds.
 4.Text in format 'yyyyMMdd_HH:mm:ss.ffffff'. Year, seconds, sub seconds and ':' can be eliminated.</sys:String>
 	<sys:String x:Key="String/DateTimeTextBox.Watermark">Date and Time</sys:String>
+
+	<!-- EnableRunningScriptDialog -->
+	<sys:String x:Key="String/EnableRunningScriptDialog.Message">Your computer may be modified or damaged by running script. You need to review the script you wrote or imported carefully before running it. Are you sure to enable scripting?</sys:String>
 
 	<!-- ExternalDependenciesDialog -->
 	<sys:String x:Key="String/ExternalDependenciesDialog.EditPathEnvVar">Edit PATH environment variable…</sys:String>

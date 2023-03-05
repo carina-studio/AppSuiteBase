@@ -68,7 +68,6 @@
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">預設腳本語言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">系統支援時使用模糊玻璃視窗背景</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">啟用腳本執行</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript.ConfirmEnabling">執行腳本可能會修改或損壞您的電腦，在執行腳本之前您必須仔細確認您所撰寫或匯入的腳本。是否確定要啟用腳本執行？</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">縮排空白字元數</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">啟動應用程式時顯示啟動畫面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">日誌輸出目標連接埠</sys:String>
@@ -122,6 +121,8 @@
 	<sys:String x:Key="String/Common.Add.WithDialog">加入…</sys:String>
 	<sys:String x:Key="String/Common.Administrator">系統管理員</sys:String>
 	<sys:String x:Key="String/Common.Agree">同意</sys:String>
+	<sys:String x:Key="String/Common.Allow">允許</sys:String>
+	<sys:String x:Key="String/Common.Allow.WithDialog">允許…</sys:String>
 	<sys:String x:Key="String/Common.BuiltIn">內建</sys:String>
 	<sys:String x:Key="String/Common.Cancel">取消</sys:String>
 	<sys:String x:Key="String/Common.Clear">清除</sys:String>
@@ -147,12 +148,18 @@
 	<sys:String x:Key="String/Common.Delete">刪除</sys:String>
 	<sys:String x:Key="String/Common.Details">詳細資訊</sys:String>
 	<sys:String x:Key="String/Common.Details.WithDialog">詳細資訊…</sys:String>
+	<sys:String x:Key="String/Common.Disable">停用</sys:String>
+	<sys:String x:Key="String/Common.Disable.WithDialog">停用…</sys:String>
+	<sys:String x:Key="String/Common.Disallow">不允許</sys:String>
+	<sys:String x:Key="String/Common.Disallow.WithDialog">不允許…</sys:String>
 	<sys:String x:Key="String/Common.Document">文件</sys:String>
 	<sys:String x:Key="String/Common.DoNotAskAgain">不要再詢問</sys:String>
 	<sys:String x:Key="String/Common.DoNotShowAgain">不要再顯示</sys:String>
 	<sys:String x:Key="String/Common.Edit">編輯</sys:String>
 	<sys:String x:Key="String/Common.Edit.WithDialog">編輯…</sys:String>
 	<sys:String x:Key="String/Common.Empty">空</sys:String>
+	<sys:String x:Key="String/Common.Enable">啟用</sys:String>
+	<sys:String x:Key="String/Common.Enable.WithDialog">啟用…</sys:String>
 	<sys:String x:Key="String/Common.Export">匯出</sys:String>
 	<sys:String x:Key="String/Common.Export.WithDialog">匯出…</sys:String>
 	<sys:String x:Key="String/Common.Help">說明</sys:String>
@@ -207,6 +214,9 @@
 3.Unix 時間戳記，單位可以為秒、毫秒或微秒。
 4.格式為 'yyyyMMdd_HH:mm:ss.ffffff' 的文字，其中年份、秒、毫微秒以及 ':' 可以省略。</sys:String>
 	<sys:String x:Key="String/DateTimeTextBox.Watermark">日期與時間</sys:String>
+
+	<!-- EnableRunningScriptDialog -->
+	<sys:String x:Key="String/EnableRunningScriptDialog.Message">執行腳本可能會修改或損壞您的電腦，在執行腳本之前您必須仔細確認您所撰寫或匯入的腳本。是否確定要啟用腳本執行？</sys:String>
 
 	<!-- ExternalDependenciesDialog -->
 	<sys:String x:Key="String/ExternalDependenciesDialog.EditPathEnvVar">編輯 PATH 環境變數…</sys:String>

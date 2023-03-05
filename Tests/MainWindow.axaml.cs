@@ -542,24 +542,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         public void Test()
         {
-            var proxy1 = new Action(() => Guard.VerifyInternalCall());
-            var proxy2 = typeof(Guard).GetMethod(nameof(Guard.VerifyInternalCall))!.CreateDelegate<Action>();
-
-            try
-            {
-                Guard.VerifyInternalCall();
-            }
-            catch
-            { }
-            
-            proxy1();
-
-            try
-            {
-                proxy2();
-            }
-            catch
-            { }
+            _ = new EnableRunningScriptDialog().ShowDialog(this);
         }
 
 

@@ -68,7 +68,6 @@
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">默认脚本语言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">系统支持情况下使用模糊玻璃窗口背景</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">启用脚本执行</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript.ConfirmEnabling">执行脚本可能会修改或损坏您的电脑，在执行脚本之前您必须仔细确认您所撰写或汇入的脚本。是否确定要启用脚本执行？</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">缩排空白字符数</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">启动应用时显示启动画面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">日志输出目标连接端口</sys:String>
@@ -122,6 +121,8 @@
 	<sys:String x:Key="String/Common.Add.WithDialog">加入…</sys:String>
 	<sys:String x:Key="String/Common.Administrator">系统管理员</sys:String>
 	<sys:String x:Key="String/Common.Agree">同意</sys:String>
+	<sys:String x:Key="String/Common.Allow">允许</sys:String>
+	<sys:String x:Key="String/Common.Allow.WithDialog">允许…</sys:String>
 	<sys:String x:Key="String/Common.BuiltIn">内建</sys:String>
 	<sys:String x:Key="String/Common.Cancel">取消</sys:String>
 	<sys:String x:Key="String/Common.Clear">清除</sys:String>
@@ -147,12 +148,18 @@
 	<sys:String x:Key="String/Common.Delete">删除</sys:String>
 	<sys:String x:Key="String/Common.Details">详细资讯</sys:String>
 	<sys:String x:Key="String/Common.Details.WithDialog">详细资讯…</sys:String>
+	<sys:String x:Key="String/Common.Disable">停用</sys:String>
+	<sys:String x:Key="String/Common.Disable.WithDialog">停用…</sys:String>
+	<sys:String x:Key="String/Common.Disallow">不允许</sys:String>
+	<sys:String x:Key="String/Common.Disallow.WithDialog">不允许…</sys:String>
 	<sys:String x:Key="String/Common.Document">文件</sys:String>
 	<sys:String x:Key="String/Common.DoNotAskAgain">不要再询问</sys:String>
 	<sys:String x:Key="String/Common.DoNotShowAgain">不要再显示</sys:String>
 	<sys:String x:Key="String/Common.Edit">编辑</sys:String>
 	<sys:String x:Key="String/Common.Edit.WithDialog">编辑…</sys:String>
 	<sys:String x:Key="String/Common.Empty">空</sys:String>
+	<sys:String x:Key="String/Common.Enable">启用</sys:String>
+	<sys:String x:Key="String/Common.Enable.WithDialog">启用…</sys:String>
 	<sys:String x:Key="String/Common.Export">导出</sys:String>
 	<sys:String x:Key="String/Common.Export.WithDialog">导出…</sys:String>
 	<sys:String x:Key="String/Common.Help">说明</sys:String>
@@ -207,6 +214,9 @@
 3.Unix 时间戳，单位可以为秒、毫秒、微秒。
 4.格式为 'yyyyMMdd_HH:mm:ss.ffffff' 的文字，其中年份、秒、毫微秒以及 ':' 可以省略。</sys:String>
 	<sys:String x:Key="String/DateTimeTextBox.Watermark">日期与时间</sys:String>
+
+	<!-- EnableRunningScriptDialog -->
+	<sys:String x:Key="String/EnableRunningScriptDialog.Message">执行脚本可能会修改或损坏您的电脑，在执行脚本之前您必须仔细确认您所撰写或汇入的脚本。是否确定要启用脚本执行？</sys:String>
 
 	<!-- ExternalDependenciesDialog -->
 	<sys:String x:Key="String/ExternalDependenciesDialog.EditPathEnvVar">编辑 PATH 环境变量…</sys:String>
