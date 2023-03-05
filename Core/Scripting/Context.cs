@@ -1,4 +1,5 @@
 using CarinaStudio.AppSuite.Controls;
+using CarinaStudio.AppSuite.Diagnostics;
 using CarinaStudio.Collections;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
@@ -29,6 +30,7 @@ public class Context : IContext
     /// <param name="loggerName">Name for logger.</param>
     public Context(IAppSuiteApplication app, string loggerName)
     {
+        Guard.VerifyInternalCall();
         this.Application = app;
         this.Logger = ScriptManager.Default.CreateScriptLogger(loggerName);
     }
@@ -43,6 +45,7 @@ public class Context : IContext
     /// </summary>
     public void ClearAndDisposeData()
     {
+        Guard.VerifyInternalCall();
         if (this.Data.IsEmpty())
             return;
         var values = this.Data.Values.ToArray();

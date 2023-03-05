@@ -9,6 +9,7 @@ using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.AppSuite.Controls.Highlighting;
 using CarinaStudio.AppSuite.Converters;
+using CarinaStudio.AppSuite.Diagnostics;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
@@ -541,11 +542,24 @@ namespace CarinaStudio.AppSuite.Tests
 
         public void Test()
         {
-            var extDependency = this.Application.ExternalDependencies.FirstOrDefault(it => it.Id == "dotnet7");
-            new ExternalDependenciesDialog()
+            var proxy1 = new Action(() => Guard.VerifyInternalCall());
+            var proxy2 = typeof(Guard).GetMethod(nameof(Guard.VerifyInternalCall))!.CreateDelegate<Action>();
+
+            try
             {
-                FocusedExternalDependency = extDependency
-            }.ShowDialog(this);
+                Guard.VerifyInternalCall();
+            }
+            catch
+            { }
+            
+            proxy1();
+
+            try
+            {
+                proxy2();
+            }
+            catch
+            { }
         }
 
 
