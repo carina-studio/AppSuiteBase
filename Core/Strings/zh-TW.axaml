@@ -184,9 +184,11 @@
 	<sys:String x:Key="String/Common.PrivacyPolicy.WithDialog">隱私權政策…</sys:String>
 	<sys:String x:Key="String/Common.Refresh">重新整理</sys:String>
 	<sys:String x:Key="String/Common.Remove">移除</sys:String>
+	<sys:String x:Key="String/Common.Remove.WithDialog">移除…</sys:String>
 	<sys:String x:Key="String/Common.Rename">重新命名</sys:String>
 	<sys:String x:Key="String/Common.Rename.WithDialog">重新命名…</sys:String>
 	<sys:String x:Key="String/Common.Reset">重設</sys:String>
+	<sys:String x:Key="String/Common.Reset.WithDialog">重設…</sys:String>
 	<sys:String x:Key="String/Common.Save">儲存</sys:String>
 	<sys:String x:Key="String/Common.Save.WithDialog">儲存…</sys:String>
 	<sys:String x:Key="String/Common.Save.WithDialogAndGesture">儲存… (Ctrl+S)</sys:String>

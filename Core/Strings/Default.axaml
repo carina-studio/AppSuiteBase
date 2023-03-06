@@ -185,9 +185,11 @@
 	<sys:String x:Key="String/Common.PrivacyPolicy.WithDialog">Privacy Policy…</sys:String>
 	<sys:String x:Key="String/Common.Refresh">Refresh</sys:String>
 	<sys:String x:Key="String/Common.Remove">Remove</sys:String>
+	<sys:String x:Key="String/Common.Remove.WithDialog">Remove…</sys:String>
 	<sys:String x:Key="String/Common.Rename">Rename</sys:String>
 	<sys:String x:Key="String/Common.Rename.WithDialog">Rename…</sys:String>
 	<sys:String x:Key="String/Common.Reset">Reset</sys:String>
+	<sys:String x:Key="String/Common.Reset.WithDialog">Reset…</sys:String>
 	<sys:String x:Key="String/Common.Save">Save</sys:String>
 	<sys:String x:Key="String/Common.Save.WithDialog">Save…</sys:String>
 	<sys:String x:Key="String/Common.Save.WithDialogAndGesture">Save… (Ctrl+S)</sys:String>
