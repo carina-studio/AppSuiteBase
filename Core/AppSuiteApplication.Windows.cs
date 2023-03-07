@@ -19,7 +19,7 @@ unsafe partial class AppSuiteApplication
 
     // Native symbols.
     [DllImport("Dwmapi", SetLastError = true)]
-    static extern IntPtr DwmSetWindowAttribute(IntPtr hwnd, uint dwAttribute, void* pvAttribute, uint cbAttribute);
+    static extern int DwmSetWindowAttribute(IntPtr hwnd, uint dwAttribute, void* pvAttribute, uint cbAttribute);
 
 
     // Apply current theme mode on given window.
@@ -36,18 +36,30 @@ unsafe partial class AppSuiteApplication
             var cornerPreference = DWMWCP_ROUND;
             var result = DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, &cornerPreference, sizeof(int));
             if (result != default)
-                return;
+            {
+                this.Logger.LogWarning("Failed to set corner preference of window, result: {result}", result);
+                Marshal.SetLastSystemError(0);
+            }
+            
 
             // enable/disable dark mode
             var darkMode = this.EffectiveThemeMode == ThemeMode.Dark;
             result = DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &darkMode, sizeof(int) /* size of BOOL is same as DWORD */);
             if (result != default)
-                return;
+            {
+                this.Logger.LogWarning("Failed to set dark mode of window, result: {result}", result);
+                Marshal.SetLastSystemError(0);
+            }
             
             // setup title bar color
             var titleBarColor = this.FindResourceOrDefault<Avalonia.Media.Color>("Color/Window.TitleBar");
-            var win32Color = ((titleBarColor.B << 16) | (titleBarColor.G << 8) | titleBarColor.R);
+            var win32Color = (titleBarColor.B << 16) | (titleBarColor.G << 8) | titleBarColor.R;
             result = DwmSetWindowAttribute(hwnd, DWMWA_CAPTION_COLOR, &win32Color, sizeof(int));
+            if (result != default)
+            {
+                this.Logger.LogWarning("Failed to set caption color of window, result: {result}", result);
+                Marshal.SetLastSystemError(0);
+            }
         }
     }
 
