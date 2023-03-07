@@ -38,7 +38,6 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
@@ -308,12 +307,6 @@ namespace CarinaStudio.AppSuite
         Controls.ApplicationUpdateDialog? appUpdateDialog;
         Avalonia.Themes.Fluent.FluentTheme? baseTheme;
         bool canRequestRestoringMainWindows;
-        readonly bool canUseWindows10Features = Environment.OSVersion.Version.Let(version =>
-        {
-            if (!Platform.IsWindows)
-                return false;
-            return version.Major > 10 || (version.Major == 10 && version.Build >= 17763);
-        });
         ScheduledAction? checkUpdateInfoAction;
         ISettings? configuration;
         readonly string configurationFilePath;
@@ -363,17 +356,8 @@ namespace CarinaStudio.AppSuite
         IStyle? styles;
         ThemeMode stylesThemeMode = ThemeMode.System;
         ThemeMode systemThemeMode = ThemeMode.Dark;
-        readonly object? uiColorTypeBackground;
-        readonly object? uiSettings;
-        Delegate? uiSettingsColorValueChangedHandler;
-        readonly MethodInfo? uiSettingsGetColorValueMethod;
-        readonly Type? uiSettingsType;
         readonly Dictionary<Avalonia.Controls.Window, List<IDisposable>> windowObserverTokens = new();
         readonly ObservableList<Avalonia.Controls.Window> windows = new();
-        readonly PropertyInfo? windowsColorBProperty;
-        readonly PropertyInfo? windowsColorGProperty;
-        readonly PropertyInfo? windowsColorRProperty;
-        readonly Type? windowsColorType;
 
 
         /// <summary>
@@ -428,74 +412,9 @@ namespace CarinaStudio.AppSuite
             this.persistentStateFilePath = Path.Combine(this.RootPrivateDirectoryPath, "PersistentState.json");
             this.settingsFilePath = Path.Combine(this.RootPrivateDirectoryPath, "Settings.json");
 
-            // create UISettings to monitor system UI change
-            if (this.canUseWindows10Features)
-            {
-                var assembly = this.WindowsSdkAssembly;
-                if (assembly != null)
-                {
-                    this.uiSettingsType = assembly.GetType("Windows.UI.ViewManagement.UISettings");
-                    this.windowsColorType = assembly.GetType("Windows.UI.Color");
-                }
-                else
-                    this.Logger.LogWarning("Cannot find Windows SDK assembly");
-                var uiColorType = assembly?.GetType("Windows.UI.ViewManagement.UIColorType");
-                if (this.uiSettingsType != null 
-                    && this.windowsColorType != null 
-                    && uiColorType != null)
-                {
-                    this.uiSettingsGetColorValueMethod = this.uiSettingsType.GetMethod("GetColorValue", new Type[] { uiColorType });
-                    this.windowsColorRProperty = this.windowsColorType.GetProperty("R");
-                    this.windowsColorGProperty = this.windowsColorType.GetProperty("G");
-                    this.windowsColorBProperty = this.windowsColorType.GetProperty("B");
-                    if (this.uiSettingsGetColorValueMethod != null 
-                        && this.windowsColorRProperty != null
-                        && this.windowsColorGProperty != null
-                        && this.windowsColorBProperty != null)
-                    {
-                        try
-                        {
-                            this.uiSettings = Activator.CreateInstance(this.uiSettingsType);
-                        }
-                        catch (Exception ex)
-                        {
-                            this.Logger.LogError(ex, "Failed to create UISettings for Windows 10");
-                        }
-                    }
-                    else
-                    {
-                        if (this.uiSettingsGetColorValueMethod == null)
-                            this.Logger.LogError("Cannot find UISettings.GetColorValue() for Windows 10 to monitor theme change");
-                        if (this.windowsColorRProperty == null)
-                            this.Logger.LogError("Cannot find Color.R for Windows 10 to monitor theme change");
-                        if (this.windowsColorGProperty == null)
-                            this.Logger.LogError("Cannot find Color.G for Windows 10 to monitor theme change");
-                        if (this.windowsColorBProperty == null)
-                            this.Logger.LogError("Cannot find Color.B for Windows 10 to monitor theme change");
-                    }
-                }
-                else
-                {
-                    if (this.uiSettingsType == null)
-                        this.Logger.LogWarning("Cannot find UISettings for Windows 10 to monitor theme change");
-                    if (this.windowsColorType == null)
-                        this.Logger.LogWarning("Cannot find Color for Windows 10 to monitor theme change");
-                    if (uiColorType == null)
-                        this.Logger.LogWarning("Cannot find UIColorType for Windows 10 to monitor theme change");
-                }
-                if (uiColorType != null && !Enum.TryParse(uiColorType, "Background", false, out this.uiColorTypeBackground))
-                    this.Logger.LogError("Unable to get UIColorType.Background for Windows 10 to monitor theme change");
-            }
-
             // check whether process is running as admin or not
             if (Platform.IsWindows)
-            {
-#pragma warning disable CA1416
-                using var identity = WindowsIdentity.GetCurrent();
-                var principal = new WindowsPrincipal(identity);
-                this.IsRunningAsAdministrator = principal.IsInRole(WindowsBuiltInRole.Administrator);
-#pragma warning restore CA1416
-            }
+                this.IsRunningAsAdministrator = IsRunningAsAdministratorOnWindows();
             if (this.IsRunningAsAdministrator)
                 this.Logger.LogWarning("Application is running as administrator/superuser");
 
@@ -1224,22 +1143,9 @@ namespace CarinaStudio.AppSuite
         // Get theme mode of system.
         internal ThemeMode GetSystemThemeMode()
         {
-            if (this.uiSettings != null 
-                && this.windowsColorType != null 
-                && this.uiSettingsGetColorValueMethod != null
-                && this.windowsColorRProperty != null
-                && this.windowsColorGProperty != null
-                && this.windowsColorBProperty != null)
-            {
-                var backgroundColor = this.uiSettingsGetColorValueMethod.Invoke(this.uiSettings, new object?[] { this.uiColorTypeBackground }).AsNonNull();
-                var r = (byte)this.windowsColorRProperty.GetValue(backgroundColor).AsNonNull();
-                var g = (byte)this.windowsColorGProperty.GetValue(backgroundColor).AsNonNull();
-                var b = (byte)this.windowsColorBProperty.GetValue(backgroundColor).AsNonNull();
-                return (r + g + b) / 3 < 128
-                    ? ThemeMode.Dark
-                    : ThemeMode.Light;
-            }
-            else if (Platform.IsMacOS)
+            if (Platform.IsWindows)
+                return this.GetWindowsThemeMode();
+            if (Platform.IsMacOS)
                 return this.GetMacOSThemeMode();
             return this.FallbackThemeMode;
         }
@@ -1318,15 +1224,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Check whether <see cref="ThemeMode.System"/> is supported or not.
         /// </summary>
-        public bool IsSystemThemeModeSupported
-        {
-            get
-            {
-                if (Platform.IsMacOS)
-                    return true;
-                return (this.uiSettings != null);
-            }
-        }
+        public bool IsSystemThemeModeSupported => Platform.IsWindows10OrAbove || Platform.IsMacOS;
 
 
         /// <inheritdoc/>
@@ -2140,7 +2038,9 @@ namespace CarinaStudio.AppSuite
         {
             if (isActive)
             {
-                if (Platform.IsMacOS)
+                if (Platform.IsWindows)
+                    this.OnMainWindowActivationChangedOnWindows();
+                else if (Platform.IsMacOS)
                     this.OnMainWindowActivationChangedOnMacOS();
                 this.ProVersionProductId?.Let(productId =>
                 {
@@ -2352,16 +2252,10 @@ namespace CarinaStudio.AppSuite
             }
 
             // detach from system event
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
+#pragma warning disable CA1416
+            if (Platform.IsWindows)
                 SystemEvents.UserPreferenceChanged -= this.OnWindowsUserPreferenceChanged;
-                if (this.uiSettings != null)
-                {
-                    var colorValuesChangedEvent = this.uiSettings.GetType().GetEvent("ColorValuesChanged");
-                    if (colorValuesChangedEvent != null && this.uiSettingsColorValueChangedHandler != null)
-                        Global.RunWithoutError(() => colorValuesChangedEvent.RemoveEventHandler(this.uiSettings, this.uiSettingsColorValueChangedHandler));
-                }
-            }
+#pragma warning restore CA1416
 
             // cancel checking update
             this.checkUpdateInfoAction?.Cancel();
@@ -2605,30 +2499,10 @@ namespace CarinaStudio.AppSuite
             this.UpdateStyles();
 
             // attach to system event
-            if (Platform.IsWindows)
-            {
 #pragma warning disable CA1416
+            if (Platform.IsWindows)
                 SystemEvents.UserPreferenceChanged += this.OnWindowsUserPreferenceChanged;
-                if (this.uiSettings != null)
-                {
-                    var colorValuesChangedEvent = this.uiSettings.GetType().GetEvent("ColorValuesChanged");
-                    if (colorValuesChangedEvent != null)
-                    {
-                        try
-                        {
-                            this.uiSettingsColorValueChangedHandler = Delegate.CreateDelegate(colorValuesChangedEvent.EventHandlerType!, this, typeof(AppSuiteApplication).GetMethod("OnWindowsUIColorValueChanged", BindingFlags.Instance | BindingFlags.NonPublic).AsNonNull());
-                            colorValuesChangedEvent.AddEventHandler(this.uiSettings, this.uiSettingsColorValueChangedHandler);
-                        }
-                        catch (Exception ex)
-                        {
-                            this.Logger.LogError(ex, "Failed to attach to UISettings.ColorValuesChanged event");
-                        }
-                    }
-                    else
-                        this.Logger.LogError("Cannot find UISettings.ColorValuesChanged event to attach");
-                }
 #pragma warning restore CA1416
-            }
 
             // start checking external dependencies
             var checkExtDepTasks = new List<Task>();
@@ -2953,16 +2827,6 @@ namespace CarinaStudio.AppSuite
         }
 #pragma warning restore IDE0051
 #pragma warning restore IDE0060
-
-
-#pragma warning disable CA1416
-        // Called when user preference changed on Windows
-        void OnWindowsUserPreferenceChanged(object? sender, UserPreferenceChangedEventArgs e)
-        {
-            if (e.Category == UserPreferenceCategory.Locale)
-                this.SynchronizationContext.Post(() => this.UpdateCultureInfo(true));
-        }
-#pragma warning restore CA1416
 
 
         /// <summary>
@@ -4238,12 +4102,6 @@ namespace CarinaStudio.AppSuite
 
         /// <inheritdoc/>
         public IList<Avalonia.Controls.Window> Windows { get; }
-
-
-        /// <summary>
-        /// Get assembly of Windows SDK.
-        /// </summary>
-        protected virtual Assembly? WindowsSdkAssembly { get; }
 
 
         // Interface implementations.

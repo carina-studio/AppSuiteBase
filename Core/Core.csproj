@@ -71,12 +71,13 @@
 		<PackageReference Include="CarinaStudio.AppBase.AutoUpdate" Version="2.0.14.303-preview" />
 		<PackageReference Include="CarinaStudio.AppBase.MacOS" Version="2.0.14.303-preview" />
 		<PackageReference Include="Markdown.Avalonia.Tight" Version="11.0.0-a8" />
+		<PackageReference Include="Microsoft.Win32.Registry" Version="6.0.0-preview.5.21301.5" />
 		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="7.0.0" />
 		<PackageReference Include="NLog" Version="5.1.0" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="5.2.0" />
 		<PackageReference Include="NUnit" Version="3.13.3" />
 		<PackageReference Include="System.Management" Version="7.0.0" />
-		<PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
+		<PackageReference Include="System.Security.Principal.Windows" Version="6.0.0-preview.5.21301.5" />
 	</ItemGroup>
 
 	<ItemGroup Condition="$(TargetFramework.Contains('6.0'))">
