@@ -1,13 +1,57 @@
+using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using System;
+using System.Runtime.InteropServices;
 using System.Security.Principal;
 
 namespace CarinaStudio.AppSuite;
 
 unsafe partial class AppSuiteApplication
 {
+    // Constants.
+    const uint DWMWA_CAPTION_COLOR = 35;
+    const uint DWMWA_WINDOW_CORNER_PREFERENCE = 33;
+    const uint DWMWA_USE_IMMERSIVE_DARK_MODE = 20;
+    const int DWMWCP_ROUND = 2;
+
+
+    // Native symbols.
+    [DllImport("Dwmapi", SetLastError = true)]
+    static extern IntPtr DwmSetWindowAttribute(IntPtr hwnd, uint dwAttribute, void* pvAttribute, uint cbAttribute);
+
+
+    // Apply current theme mode on given window.
+    void ApplyThemeModeOnWindows(Avalonia.Controls.Window window)
+    {
+        if (!Platform.IsWindows11OrAbove)
+            return;
+        if (window.IsExtendedIntoWindowDecorations || window.SystemDecorations == Avalonia.Controls.SystemDecorations.None)
+            return;
+        var hwnd = (window.PlatformImpl?.Handle?.Handle).GetValueOrDefault();
+        if (hwnd != default)
+        {
+            // setup window corner
+            var cornerPreference = DWMWCP_ROUND;
+            var result = DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, &cornerPreference, sizeof(int));
+            if (result != default)
+                return;
+
+            // enable/disable dark mode
+            var darkMode = this.EffectiveThemeMode == ThemeMode.Dark;
+            result = DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &darkMode, sizeof(int) /* size of BOOL is same as DWORD */);
+            if (result != default)
+                return;
+            
+            // setup title bar color
+            var titleBarColor = this.FindResourceOrDefault<Avalonia.Media.Color>("Color/Window.TitleBar");
+            var win32Color = ((titleBarColor.B << 16) | (titleBarColor.G << 8) | titleBarColor.R);
+            result = DwmSetWindowAttribute(hwnd, DWMWA_CAPTION_COLOR, &win32Color, sizeof(int));
+        }
+    }
+
+
 #pragma warning disable CA1416
     // Get current system theme mode on Windows.
     ThemeMode GetWindowsThemeMode()

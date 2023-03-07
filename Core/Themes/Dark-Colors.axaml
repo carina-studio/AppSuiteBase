@@ -75,6 +75,7 @@
 	<Color x:Key="Color/Window.Background.Tabbed">#171717</Color>
 	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#b7171717</Color>
 	<Color x:Key="Color/Window.Background.Transparent">#b7202020</Color>
+	<Color x:Key="Color/Window.TitleBar">#202020</Color>
 
 	<!-- WorkingArea -->
 	<Color x:Key="Color/WorkingArea.Background">#101010</Color>

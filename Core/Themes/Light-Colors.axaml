@@ -103,6 +103,7 @@
 	<Color x:Key="Color/Window.Background.Tabbed">#ffffff</Color>
 	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#a7e7e7e7</Color>
 	<Color x:Key="Color/Window.Background.Transparent">#a7f0f0f0</Color>
+	<Color x:Key="Color/Window.TitleBar">#f0f0f0</Color>
 
 	<!-- WorkingArea -->
 	<Color x:Key="Color/WorkingArea.Background">#eeeeee</Color>

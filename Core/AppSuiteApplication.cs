@@ -2783,6 +2783,10 @@ namespace CarinaStudio.AppSuite
         /// <param name="window">Opened window.</param>
         protected virtual void OnWindowOpened(Avalonia.Controls.Window window)
         {
+            // setup window
+            if (Platform.IsWindows)
+                this.ApplyThemeModeOnWindows(window);
+
             // attach to window
             var tokens = new List<IDisposable>() 
             {

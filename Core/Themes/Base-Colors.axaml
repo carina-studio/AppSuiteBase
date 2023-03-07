@@ -344,6 +344,7 @@
 	<Color x:Key="Color/Window.Background.Tabbed">#ffffff</Color>
 	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#ffffff</Color>
 	<Color x:Key="Color/Window.Background.Transparent">#ffffff</Color>
+	<Color x:Key="Color/Window.TitleBar">#ffffff</Color>
 
 	<!-- WorkingArea -->
 	<SolidColorBrush x:Key="Brush/WorkingArea.Background" Color="{DynamicResource Color/WorkingArea.Background}"/>
