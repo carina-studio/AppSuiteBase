@@ -4,12 +4,9 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
-using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -30,11 +27,7 @@ namespace CarinaStudio.AppSuite.Controls
 
         // Static fields.
         static readonly Version? AvaloniaVersion = typeof(Avalonia.Application).Assembly.GetName().Version;
-        static MethodInfo? SetWindowsTaskbarProgressStateMethod;
-        static MethodInfo? SetWindowsTaskbarProgressValueMethod;
         internal static readonly Stopwatch Stopwatch = new Stopwatch().Also(it => it.Start());
-        static object? WindowsTaskbarManager;
-        static Type? WindowsTaskbarProgressBarStateType;
 
 
         // Fields.
@@ -221,6 +214,14 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
+            if (Platform.IsWindows)
+            {
+                (this.Application as AppSuiteApplication)?.Let(app =>
+                {
+                    app.UpdateWindowsTaskBarProgress(this);
+                    app.UpdateWindowsTaskBarProgressState(this);
+                });
+            }
             this.checkSystemChromeVisibilityAction.Execute();
             this.updateTransparencyLevelAction.ExecuteIfScheduled();
         }
@@ -274,64 +275,6 @@ namespace CarinaStudio.AppSuite.Controls
             this.tutorialPresenter?.RequestSkippingAllTutorials();
         
 
-        // Setup TaskbarManager for Windows is available.
-        [MemberNotNullWhen(true, nameof(SetWindowsTaskbarProgressStateMethod))]
-        [MemberNotNullWhen(true, nameof(SetWindowsTaskbarProgressValueMethod))]
-        [MemberNotNullWhen(true, nameof(WindowsTaskbarManager))]
-        [MemberNotNullWhen(true, nameof(WindowsTaskbarProgressBarStateType))]
-        bool SetupWindowsTaskbarManager()
-        {
-            // check state
-            if (Platform.IsNotWindows)
-                return false;
-#pragma warning disable CS8775
-            if (WindowsTaskbarManager != null)
-                return true;
-#pragma warning restore CS8775
-            var tbmType = this.TaskbarManagerType;
-            if (tbmType == null)
-                return false;
-            
-            // find type
-            WindowsTaskbarProgressBarStateType = tbmType.Assembly.GetType("Microsoft.WindowsAPICodePack.Taskbar.TaskbarProgressBarState");
-            if (WindowsTaskbarProgressBarStateType == null)
-            {
-                this.Logger.LogError("Unable to find TaskbarProgressBarState type on Windows");
-                return false;
-            }
-            
-            // create taskbar manager
-            object? taskbarManager;
-            try
-            {
-                taskbarManager = tbmType.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static).AsNonNull().GetValue(null).AsNonNull();
-            }
-            catch (Exception ex)
-            {
-                this.Logger.LogError(ex, "Unable to get TaskbarManager on Windows");
-                return false;
-            }
-
-            // find methods
-            SetWindowsTaskbarProgressStateMethod = taskbarManager.GetType().GetMethod("SetProgressState", new Type[]{ WindowsTaskbarProgressBarStateType, typeof(IntPtr) });
-            if (SetWindowsTaskbarProgressStateMethod == null)
-            {
-                this.Logger.LogError("Unable to find TaskbarManager.SetProgressState() on Windows");
-                return false;
-            }
-            SetWindowsTaskbarProgressValueMethod = taskbarManager.GetType().GetMethod("SetProgressValue", new Type[]{ typeof(int), typeof(int), typeof(IntPtr) });
-            if (SetWindowsTaskbarProgressValueMethod == null)
-            {
-                this.Logger.LogError("Unable to find TaskbarManager.SetProgressValue() on Windows");
-                return false;
-            }
-
-            // complete
-            WindowsTaskbarManager = taskbarManager;
-            return true;
-        }
-        
-
         /// <inheritdoc/>
         public bool ShowTutorial(Tutorial tutorial) =>
             this.tutorialPresenter?.ShowTutorial(tutorial) ?? false;
@@ -354,15 +297,9 @@ namespace CarinaStudio.AppSuite.Controls
                     value = 1;
                 this.taskbarIconProgress = value;
                 if (Platform.IsWindows)
-                {
-                    if (this.SetupWindowsTaskbarManager())
-                    {
-                        (this.PlatformImpl?.Handle?.Handle)?.Let(hWnd =>
-                            SetWindowsTaskbarProgressValueMethod.Invoke(WindowsTaskbarManager, new object?[]{ (int)(value * 100 + 0.5), 100, hWnd }));
-                    }
-                }
+                    (this.Application as AppSuiteApplication)?.UpdateWindowsTaskBarProgress(this);
                 else if (Platform.IsMacOS)
-                    AppSuiteApplication.CurrentOrNull?.UpdateMacOSDockTileProgressState();
+                    (this.Application as AppSuiteApplication)?.UpdateMacOSDockTileProgressState();
             }
         }
 
@@ -380,23 +317,11 @@ namespace CarinaStudio.AppSuite.Controls
                     return;
                 this.taskbarIconProgressState = value;
                 if (Platform.IsWindows)
-                {
-                    if (this.SetupWindowsTaskbarManager())
-                    {
-                        (this.PlatformImpl?.Handle?.Handle)?.Let(hWnd =>
-                            SetWindowsTaskbarProgressStateMethod.Invoke(WindowsTaskbarManager, new object?[]{ (int)value, hWnd }));
-                    }
-                }
+                    (this.Application as AppSuiteApplication)?.UpdateWindowsTaskBarProgressState(this);
                 else if (Platform.IsMacOS)
-                    AppSuiteApplication.CurrentOrNull?.UpdateMacOSDockTileProgressState();
+                    (this.Application as AppSuiteApplication)?.UpdateMacOSDockTileProgressState();
             }
         }
-        
-
-        /// <summary>
-        /// Get type of Microsoft.WindowsAPICodePack.Taskbar.TaskbarManager.
-        /// </summary>
-        protected virtual Type? TaskbarManagerType { get => null; }
     }
 
 
