@@ -86,7 +86,7 @@ unsafe partial class AppSuiteApplication
             var result = DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, &cornerPreference, sizeof(int));
             if (result != default)
             {
-                this.Logger.LogWarning("Failed to set corner preference of window, result: {result}", result);
+                this.Logger.LogWarning("Failed to set corner preference of window '{title}', result: {result}", window.Title, result);
                 Marshal.SetLastSystemError(0);
             }
             
@@ -96,7 +96,7 @@ unsafe partial class AppSuiteApplication
             result = DwmSetWindowAttribute(hwnd, DWMWA_USE_IMMERSIVE_DARK_MODE, &darkMode, sizeof(int) /* size of BOOL is same as DWORD */);
             if (result != default)
             {
-                this.Logger.LogWarning("Failed to set dark mode of window, result: {result}", result);
+                this.Logger.LogWarning("Failed to set dark mode of window '{title}', result: {result}", window.Title, result);
                 Marshal.SetLastSystemError(0);
             }
             
@@ -106,7 +106,7 @@ unsafe partial class AppSuiteApplication
             result = DwmSetWindowAttribute(hwnd, DWMWA_CAPTION_COLOR, &win32Color, sizeof(int));
             if (result != default)
             {
-                this.Logger.LogWarning("Failed to set caption color of window, result: {result}", result);
+                this.Logger.LogWarning("Failed to set caption color of window '{title}', result: {result}", window.Title, result);
                 Marshal.SetLastSystemError(0);
             }
         }
