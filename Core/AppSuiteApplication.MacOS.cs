@@ -166,7 +166,7 @@ unsafe partial class AppSuiteApplication
     void ApplyThemeModeOnMacOS(Avalonia.Controls.Window window)
     {
         // check state
-        if (window.IsExtendedIntoWindowDecorations || window.SystemDecorations == Avalonia.Controls.SystemDecorations.None)
+        if (window.SystemDecorations == Avalonia.Controls.SystemDecorations.None)
             return;
         
         // get NSWindow

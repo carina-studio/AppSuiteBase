@@ -71,6 +71,7 @@ namespace CarinaStudio.AppSuite.Controls
         readonly ScheduledAction restartingRootWindowsAction;
         double restoredHeight;
         double restoredWidth;
+        WindowState restoredWindowState;
         readonly ScheduledAction saveWindowSizeAction;
         readonly ScheduledAction showInitDialogsAction;
         readonly ScheduledAction updateContentPaddingAction;
@@ -149,14 +150,17 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 this.restoredHeight = Math.Max(0, it.GetValueOrDefault(WindowHeightSettingKey));
                 this.restoredWidth = Math.Max(0, it.GetValueOrDefault(WindowWidthSettingKey));
+                this.restoredWindowState = it.GetValueOrDefault(WindowStateSettingKey);
                 this.Height = this.restoredHeight;
                 this.Width = this.restoredWidth;
-                this.WindowState = it.GetValueOrDefault(WindowStateSettingKey);
+                if (this.restoredWindowState == WindowState.FullScreen)
+                    this.UpdateExtendClientAreaChromeHints(true); // [Workaround] Prevent making title bar be transparent
+                this.WindowState = this.restoredWindowState;
             });
 
             // extend client area if needed
             this.UpdateExtendingClientArea();
-            this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.OSXThickTitleBar | ExtendClientAreaChromeHints.NoChrome; // show system chrome when opened
+            this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome; // show system chrome when opened
 
             // observe self properties
             var isSubscribing = true;
@@ -178,8 +182,8 @@ namespace CarinaStudio.AppSuite.Controls
             });
             this.GetObservable(ExtendClientAreaToDecorationsHintProperty).Subscribe(_ =>
             {
-                if (this.IsOpened && this.ExtendClientAreaToDecorationsHint)
-                    this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.OSXThickTitleBar | ExtendClientAreaChromeHints.PreferSystemChrome;
+                if (this.IsOpened)
+                    this.UpdateExtendClientAreaChromeHints(false);
             });
             this.GetObservable(HasDialogsProperty).Subscribe(hasDialogs =>
             {
@@ -227,8 +231,6 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 if (isSubscribing)
                     return;
-                if (windowState == WindowState.FullScreen)
-                    windowState = WindowState.Maximized; // [Workaround] Prevent launching in FullScreen mode because that layout may be incorrect on macOS
                 if (this.IsOpened)
                 {
                     if (windowState != WindowState.Minimized)
@@ -240,6 +242,7 @@ namespace CarinaStudio.AppSuite.Controls
                 }
                 this.RestoreToSavedSize();
                 this.InvalidateTransparencyLevelHint();
+                this.UpdateExtendClientAreaChromeHints(false);
             });
             isSubscribing = false;
         }
@@ -445,10 +448,10 @@ namespace CarinaStudio.AppSuite.Controls
             this.openedTime = Stopwatch.ElapsedMilliseconds;
 
             // restore to saved state and size
-            this.PersistentState.GetValueOrDefault(WindowStateSettingKey).Let(it =>
+            this.restoredWindowState.Let(it =>
             {
                 if (it == WindowState.FullScreen)
-                    it = WindowState.Maximized; // [Workaround] Prevent launching in FullScreen mode because that layout may be incorrect on macOS
+                    this.UpdateExtendClientAreaChromeHints(true); // [Workaround] Prevent making title bar be transparent
                 if (this.WindowState != it)
                     this.WindowState = it; // Size will also be restored in OnPropertyChanged()
                 else
@@ -476,8 +479,7 @@ namespace CarinaStudio.AppSuite.Controls
             this.showInitDialogsAction.Schedule();
 
             // show system chrome
-            if (this.ExtendClientAreaToDecorationsHint)
-                this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.OSXThickTitleBar | ExtendClientAreaChromeHints.PreferSystemChrome;
+            this.UpdateExtendClientAreaChromeHints(false);
         }
 
 
@@ -784,6 +786,21 @@ namespace CarinaStudio.AppSuite.Controls
                 this.Logger.LogWarning("All initial dialogs closed");
                 this.SetAndRaise<bool>(AreInitialDialogsClosedProperty, ref this.areInitialDialogsClosed, true);
                 this.OnInitialDialogsClosed();
+            }
+        }
+
+
+        // Update chrome hints for extending client area.
+        void UpdateExtendClientAreaChromeHints(bool willBeFullScreen)
+        {
+            if (this.IsClosed)
+                return;
+            if (this.ExtendClientAreaToDecorationsHint)
+            {
+                var hints = ExtendClientAreaChromeHints.PreferSystemChrome;
+                if (Platform.IsMacOS && !willBeFullScreen && this.WindowState != WindowState.FullScreen)
+                    hints |= ExtendClientAreaChromeHints.OSXThickTitleBar;
+                this.ExtendClientAreaChromeHints = hints;
             }
         }
 
