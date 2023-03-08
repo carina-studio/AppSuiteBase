@@ -183,7 +183,15 @@ unsafe partial class AppSuiteApplication
         };
         if (NSAppearance.TryGetByName(appearanceName, out var appearance))
         {
-            this.macOSWindowAppearanceProperty ??= nsWindow.Class.GetProperty("appearance");
+            if (this.macOSWindowAppearanceProperty == null)
+            {
+                this.macOSWindowAppearanceProperty = Class.GetClass("NSWindow")?.GetProperty("appearance");
+                if (this.macOSWindowAppearanceProperty == null)
+                {
+                    this.Logger.LogError("Unable to find NSWindow class.");
+                    return;
+                }
+            }
             if (macOSWindowAppearanceProperty != null)
                 nsWindow.SetProperty(this.macOSWindowAppearanceProperty, appearance);
             else
