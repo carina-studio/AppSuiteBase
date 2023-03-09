@@ -2786,8 +2786,6 @@ namespace CarinaStudio.AppSuite
             // setup window
             if (Platform.IsWindows)
                 this.ApplyThemeModeOnWindows(window);
-            else if (Platform.IsMacOS)
-                this.ApplyThemeModeOnMacOS(window);
 
             // attach to window
             var tokens = new List<IDisposable>() 
@@ -4002,6 +4000,10 @@ namespace CarinaStudio.AppSuite
                 this.EffectiveThemeMode = themeMode;
                 this.OnPropertyChanged(nameof(EffectiveThemeMode));
             }
+
+            // apply theme mode
+            if (Platform.IsMacOS)
+                this.ApplyThemeModeOnMacOS();
 
             // check state
             this.CheckRestartingRootWindowsNeeded();

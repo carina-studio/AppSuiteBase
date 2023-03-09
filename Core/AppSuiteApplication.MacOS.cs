@@ -14,7 +14,6 @@ using Microsoft.Extensions.Logging;
 using SkiaSharp;
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -117,37 +116,6 @@ unsafe partial class AppSuiteApplication
     }
 
 
-    // Appearance of NSWindow or NSView.
-    class NSAppearance : NSObject
-    {
-        // Static fields.
-        static readonly Selector? AppearanceNamedSelector;
-        static readonly Class? NSAppearanceClass;
-
-        // Static initializer.
-        static NSAppearance()
-        {
-            if (Platform.IsNotMacOS)
-                return;
-            NSAppearanceClass = Class.GetClass("NSAppearance").AsNonNull();
-            AppearanceNamedSelector = Selector.FromName("appearanceNamed:");
-        }
-
-        // Constructor.
-        public NSAppearance(IntPtr handle, bool ownsInstance) : base(handle, ownsInstance)
-        { }
-
-        // Find name of predefined appearance.
-        public static bool TryGetByName(string name, [NotNullWhen(true)] out NSAppearance? appearance)
-        {
-            using var nsName = new NSString(name);
-            var handle = NSObject.SendMessage<IntPtr>(NSAppearanceClass!.Handle, AppearanceNamedSelector!, nsName);
-            appearance = NSObject.FromHandle<NSAppearance>(handle);
-            return appearance != null;
-        }
-    }
-
-
     // Fields.
     AppSuiteAppDelegate? macOSAppDelegate;
     NSDockTile? macOSAppDockTile;
@@ -158,45 +126,17 @@ unsafe partial class AppSuiteApplication
     CGImage? macOSAppDockTileOverlayCGImage;
     NSImageView? macOSAppDockTileOverlayImageView;
     NSImage? macOSAppDockTileOverlayNSImage;
-    Property? macOSWindowAppearanceProperty;
     ScheduledAction? updateMacOSAppDockTileProgressAction;
 
 
-    // Apply theme mode on given window.
-    void ApplyThemeModeOnMacOS(Avalonia.Controls.Window window)
+    // Apply theme mode on current application
+    void ApplyThemeModeOnMacOS()
     {
-        // check state
-        if (window.SystemDecorations == Avalonia.Controls.SystemDecorations.None)
-            return;
-        
-        // get NSWindow
-        var handle = (window.PlatformImpl?.Handle?.Handle).GetValueOrDefault();
-        using var nsWindow = NSObject.Retain<NSWindow>(handle);
-        if (nsWindow == null)
-            return;
-
-        // setup appearance
-        var appearanceName = this.EffectiveThemeMode switch
+        NSApplication.Current!.Appearance = this.EffectiveThemeMode switch
         {
-            ThemeMode.Dark => "NSAppearanceNameDarkAqua",
-            _ => "NSAppearanceNameAqua",
+            ThemeMode.Dark => NSAppearance.DarkAqua,
+            _ => NSAppearance.Aqua,
         };
-        if (NSAppearance.TryGetByName(appearanceName, out var appearance))
-        {
-            if (this.macOSWindowAppearanceProperty == null)
-            {
-                this.macOSWindowAppearanceProperty = Class.GetClass("NSWindow")?.GetProperty("appearance");
-                if (this.macOSWindowAppearanceProperty == null)
-                {
-                    this.Logger.LogError("Unable to find NSWindow class.");
-                    return;
-                }
-            }
-            if (macOSWindowAppearanceProperty != null)
-                nsWindow.SetProperty(this.macOSWindowAppearanceProperty, appearance);
-            else
-                this.Logger.LogWarning("Unable to find NSWindow.appearance property.");
-        }
     }
 
 
