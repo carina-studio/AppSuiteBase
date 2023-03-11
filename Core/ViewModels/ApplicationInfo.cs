@@ -77,7 +77,7 @@ namespace CarinaStudio.AppSuite.ViewModels
             // get assemblies
             var appAssembly = this.Application.Assembly;
             this.Assemblies = ListExtensions.AsReadOnly(AppDomain.CurrentDomain.GetAssemblies()
-                .Where(it => it != appAssembly)
+                .Where(it => it != appAssembly && !it.IsDynamic && it.GetName().Name?.StartsWith("ℛ*") == false)
                 .OrderBy(it => it.GetName().Name)
                 .ToArray());
         }
