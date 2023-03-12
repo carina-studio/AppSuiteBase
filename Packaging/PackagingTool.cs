@@ -418,7 +418,7 @@ public class PackagingTool
             foreach (var path in Directory.EnumerateDirectories(PackagesFolderName))
             {
                 if (Version.TryParse(Path.GetFileName(path), out var candVersion)
-                    && candVersion != currentVersion)
+                    && candVersion < currentVersion)
                 {
                     if (version == null || candVersion > version)
                         version = candVersion;
