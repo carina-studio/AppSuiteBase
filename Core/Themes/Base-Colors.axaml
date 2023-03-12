@@ -135,7 +135,12 @@
 	
 	<!-- Icon -->
 	<Color x:Key="Color/Icon">#000000</Color>
-	<Color x:Key="Color/Icon.CSharp">#bf61b7</Color>
+	<Color x:Key="Color/Icon.CPlusPlus.Dark">#004482</Color>
+	<Color x:Key="Color/Icon.CPlusPlus.Light">#659ad2</Color>
+	<Color x:Key="Color/Icon.CPlusPlus.Middle">#00599c</Color>
+	<Color x:Key="Color/Icon.CSharp.Dark">#662579</Color>
+	<Color x:Key="Color/Icon.CSharp.Light">#9a5196</Color>
+	<Color x:Key="Color/Icon.CSharp.Middle">#7f3a86</Color>
 	<Color x:Key="Color/Icon.Dark">#000000</Color>
 	<Color x:Key="Color/Icon.Error">#ff3232</Color>
 	<Color x:Key="Color/Icon.Information">#288acc</Color>
@@ -150,7 +155,12 @@
 	<Color x:Key="Color/Icon.Warning">#ff8432</Color>
 	<SolidColorBrush x:Key="Brush/Icon" Color="{DynamicResource Color/Icon}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Active" Color="{DynamicResource Color/Accent}"/>
-	<SolidColorBrush x:Key="Brush/Icon.CSharp" Color="{DynamicResource Color/Icon.CSharp}"/>
+	<SolidColorBrush x:Key="Brush/Icon.CPlusPlus.Dark" Color="{DynamicResource Color/Icon.CPlusPlus.Dark}"/>
+	<SolidColorBrush x:Key="Brush/Icon.CPlusPlus.Light" Color="{DynamicResource Color/Icon.CPlusPlus.Light}"/>
+	<SolidColorBrush x:Key="Brush/Icon.CPlusPlus.Middle" Color="{DynamicResource Color/Icon.CPlusPlus.Middle}"/>
+	<SolidColorBrush x:Key="Brush/Icon.CSharp.Dark" Color="{DynamicResource Color/Icon.CSharp.Dark}"/>
+	<SolidColorBrush x:Key="Brush/Icon.CSharp.Light" Color="{DynamicResource Color/Icon.CSharp.Light}"/>
+	<SolidColorBrush x:Key="Brush/Icon.CSharp.Middle" Color="{DynamicResource Color/Icon.CSharp.Middle}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Dark" Color="{DynamicResource Color/Icon.Dark}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Error" Color="{DynamicResource Color/Icon.Error}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Information" Color="{DynamicResource Color/Icon.Information}"/>
