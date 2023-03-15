@@ -57,6 +57,12 @@ public sealed class SettingKeys
 
 
     /// <summary>
+    /// Show notification dialog when runtime error occurred by script.
+    /// </summary>
+    public static readonly SettingKey<bool> PromptWhenScriptRuntimeErrorOccurred = new(nameof(PromptWhenScriptRuntimeErrorOccurred), true);
+
+
+    /// <summary>
     /// Show process info on UI or not.
     /// </summary>
     public static readonly SettingKey<bool> ShowProcessInfo = new(nameof(ShowProcessInfo), false);

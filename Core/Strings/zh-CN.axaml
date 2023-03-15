@@ -17,7 +17,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section1">是基于</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section2">开源项目</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section3">所开发的的应用程序。</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">调试模式可以让应用程序输出更多的执行期间信息至日志，甚至提供应用程序内部功能调整。下次您自行启动应用程序时将自动退出调试模式。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">调试模式可以让应用程序输出更多的运行期间信息至日志，甚至提供应用程序内部功能调整。下次您自行启动应用程序时将自动退出调试模式。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.CpuUsage">CPU 使用率：{0:F2}%</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DeviceName">设备名称：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DonateWithPayPal">使用 PayPal 赞助</sys:String>
@@ -45,11 +45,11 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.Products">相关产品</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProprietaryVersion">(Carina Studio 建置)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.RestartInDebugMode">以调试模式重新启动</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.RunningScriptCount">执行中脚本个数：{0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.RunningScriptCount">运行中脚本个数：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Screen.PixelDensity">屏幕缩放系数：{0:F2}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Screen.Size">屏幕大小：{0} ({1} dip)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Screen.WorkingArea">屏幕工作区大小：{0} ({1} dip)</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.ScriptRunningLoading">脚本执行负载：{0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ScriptRunningLoading">脚本运行负载：{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ShowAppUpdateDialog">检查更新…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">应用程序日志导出完成。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">系统信息</sys:String>
@@ -67,13 +67,14 @@
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR 工具尚未安装。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">默认脚本语言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">系统支持情况下使用模糊玻璃窗口背景</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">启用脚本执行</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">启用脚本运行</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">缩排空白字符数</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">启动应用时显示启动画面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">日志输出目标连接端口</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">需要重新启动应用程序以生效。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NotifyApplicationUpdate">应用程序有更新时显示通知</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Others">其他设定</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.PromptForScriptRuntimeErrorOccurred">运行期间发生错误时显示提示</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Scripting">脚本</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">主题模式</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface">使用紧密版面配置</sys:String>
@@ -218,7 +219,7 @@
 	<sys:String x:Key="String/DateTimeTextBox.Watermark">日期与时间</sys:String>
 
 	<!-- EnableRunningScriptDialog -->
-	<sys:String x:Key="String/EnableRunningScriptDialog.Message">执行脚本可能会修改或损坏您的电脑，在执行脚本之前您必须仔细确认您所撰写或汇入的脚本。是否确定要启用脚本执行？</sys:String>
+	<sys:String x:Key="String/EnableRunningScriptDialog.Message">运行脚本可能会修改或损坏您的电脑，在运行脚本之前您必须仔细确认您所撰写或汇入的脚本。是否确定要启用脚本运行？</sys:String>
 
 	<!-- ExternalDependenciesDialog -->
 	<sys:String x:Key="String/ExternalDependenciesDialog.EditPathEnvVar">编辑 PATH 环境变量…</sys:String>
@@ -266,7 +267,7 @@
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">垂直排列窗口</sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message">在您使用 {0} 之前，您必须阅读且同意《隐私权政策》。 </sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">在您使用 {0} 之前，您必须阅读且同意新的《隐私权政策》。 </sys:String>
-	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS">您正在「应用程序」资料夹外执行 {0}。建议您将其移动至「应用程序」资料夹内执行以确保功能不受到系统权限问题之影响。</sys:String>
+	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS">您正在「应用程序」资料夹外运行 {0}。建议您将其移动至「应用程序」资料夹内运行以确保功能不受到系统权限问题之影响。</sys:String>
 	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication">关闭应用程序</sys:String>
 	<sys:String x:Key="String/MainWindow.UserAgreement.Message">在您使用 {0} 之前，您必须阅读且同意《使用者协议》。 </sys:String>
 	<sys:String x:Key="String/MainWindow.UserAgreement.Message.Updated">在您使用 {0} 之前，您必须阅读且同意新的《使用者协议》。 </sys:String>

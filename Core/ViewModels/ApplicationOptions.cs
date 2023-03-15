@@ -384,6 +384,8 @@ namespace CarinaStudio.AppSuite.ViewModels
                 this.OnPropertyChanged(nameof(LaunchWithSplashWindow));
             else if (key == SettingKeys.NotifyApplicationUpdate)
                 this.OnPropertyChanged(nameof(NotifyApplicationUpdate));
+            else if (key == SettingKeys.PromptWhenScriptRuntimeErrorOccurred)
+                this.OnPropertyChanged(nameof(PromptWhenScriptRuntimeErrorOccurred));
             else if (key == SettingKeys.ThemeMode)
             {
                 this.OnPropertyChanged(nameof(ThemeMode));
@@ -406,6 +408,16 @@ namespace CarinaStudio.AppSuite.ViewModels
             }
             else if (key == SettingKeys.UseSpacesForIndentationInScript)
                 this.OnPropertyChanged(nameof(UseSpacesForIndentationInScript));
+        }
+
+
+        /// <summary>
+        /// Get or set whether notification dialog should be shown when runtime error occurred by script or not.
+        /// </summary>
+        public bool PromptWhenScriptRuntimeErrorOccurred
+        {
+            get => this.Settings.GetValueOrDefault(SettingKeys.PromptWhenScriptRuntimeErrorOccurred);
+            set => this.Settings.SetValue<bool>(SettingKeys.PromptWhenScriptRuntimeErrorOccurred, value);
         }
 
 
