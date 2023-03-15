@@ -5,7 +5,7 @@ namespace CarinaStudio.AppSuite.Scripting;
 /// <summary>
 /// Host object which runs one or more scripts.
 /// </summary>
-interface IScriptRunningHost : IApplicationObject<IAppSuiteApplication>
+public interface IScriptRunningHost : IApplicationObject<IAppSuiteApplication>
 {
     /// <summary>
     /// Check whether one or more scripts are run by this object or not.
@@ -23,7 +23,7 @@ interface IScriptRunningHost : IApplicationObject<IAppSuiteApplication>
 /// <summary>
 /// Data for event of runtime error of script.
 /// </summary>
-class ScriptRuntimeErrorEventArgs : EventArgs
+public class ScriptRuntimeErrorEventArgs : EventArgs
 {
     /// <summary>
     /// Initialize new <see cref="ScriptRuntimeErrorEventArgs"/> instance.
