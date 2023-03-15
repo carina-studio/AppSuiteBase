@@ -178,6 +178,8 @@
 	<sys:String x:Key="String/Common.Open.WithDialog">Open…</sys:String>
 	<sys:String x:Key="String/Common.OpenInNewTab">Open in new tab</sys:String>
 	<sys:String x:Key="String/Common.OpenInNewWindow">Open in new window</sys:String>
+	<sys:String x:Key="String/Common.OpenScriptLogWindow">Script log window</sys:String>
+	<sys:String x:Key="String/Common.OpenScriptLogWindow.WithDialog">Script log window…</sys:String>
 	<sys:String x:Key="String/Common.Options">Options</sys:String>
 	<sys:String x:Key="String/Common.Options.WithDialog">Options…</sys:String>
 	<sys:String x:Key="String/Common.Paste">Paste</sys:String>
@@ -294,6 +296,14 @@
 	<sys:String x:Key="String/ScriptLanguage.CSharp">C# Script</sys:String>
 	<sys:String x:Key="String/ScriptLanguage.JavaScript">JavaScript (ECMAScript 5.1)</sys:String>
 	<sys:String x:Key="String/ScriptLanguage.Python">Python 3.4</sys:String>
+
+	<!-- ScriptRuntimeErrorDialog -->
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.DefaultMessage">Runtime error occurred while running script:</sys:String>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage">{0}</sys:String>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLine">{0} [Line {1}]</sys:String>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLineColumn">{0} [Line {1}, Column {2}]</sys:String>
+	<StaticResourceExtension x:Key="String/ScriptRuntimeErrorDialog.PromptForScriptRuntimeErrorOccurred" ResourceKey="String/ApplicationOptions.PromptForScriptRuntimeErrorOccurred"/>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.PromptForScriptRuntimeErrorOccurred.Description">You can also change the setting in application options.</sys:String>
 
 	<!-- SelfTestingWindow -->
 	<sys:String x:Key="String/SelfTestingWindow.CancelAllTestCases">Cancel all tests</sys:String>

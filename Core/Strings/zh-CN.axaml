@@ -177,6 +177,8 @@
 	<sys:String x:Key="String/Common.Open.WithDialog">打开…</sys:String>
 	<sys:String x:Key="String/Common.OpenInNewTab">在新页面中开启</sys:String>
 	<sys:String x:Key="String/Common.OpenInNewWindow">在新窗口中开启</sys:String>
+	<sys:String x:Key="String/Common.OpenScriptLogWindow">脚本日志窗口</sys:String>
+	<sys:String x:Key="String/Common.OpenScriptLogWindow.WithDialog">脚本日志窗口…</sys:String>
 	<sys:String x:Key="String/Common.Options">选项</sys:String>
 	<sys:String x:Key="String/Common.Options.WithDialog">选项…</sys:String>
 	<sys:String x:Key="String/Common.Paste">粘贴</sys:String>
@@ -291,6 +293,14 @@
 
 	<!-- ScriptLanguage -->
 	<sys:String x:Key="String/ScriptLanguage.CSharp">C# 脚本语言</sys:String>
+
+	<!-- ScriptRuntimeErrorDialog -->
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.DefaultMessage">脚本运行时发生错误：</sys:String>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage">{0}</sys:String>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLine">{0} [行 {1}]</sys:String>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLineColumn">{0} [行 {1}，字符 {2}]</sys:String>
+	<StaticResourceExtension x:Key="String/ScriptRuntimeErrorDialog.PromptForScriptRuntimeErrorOccurred" ResourceKey="String/ApplicationOptions.PromptForScriptRuntimeErrorOccurred"/>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.PromptForScriptRuntimeErrorOccurred.Description">您也可以在应用程序选项中变更此设定。</sys:String>
 
 	<!-- SelfTestingWindow -->
 	<sys:String x:Key="String/SelfTestingWindow.CancelAllTestCases">取消所有测试</sys:String>

@@ -5,8 +5,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.MessageDialogImpl"
 		Classes="Dialog"
-		SizeToContent="WidthAndHeight"
-        Title="ULogViewer">
+		SizeToContent="WidthAndHeight">
 
 	<Grid RowDefinitions="Auto,Auto">
 
