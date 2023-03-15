@@ -74,7 +74,7 @@
 	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">需要重新启动应用程序以生效。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NotifyApplicationUpdate">应用程序有更新时显示通知</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Others">其他设定</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.PromptForScriptRuntimeErrorOccurred">运行期间发生错误时显示提示</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.PromptWhenScriptRuntimeErrorOccurred">运行期间发生错误时显示提示</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Scripting">脚本</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">主题模式</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface">使用紧密版面配置</sys:String>
