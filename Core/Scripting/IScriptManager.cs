@@ -64,6 +64,12 @@ public interface IScriptManager : IApplicationObject<IAppSuiteApplication>, INot
 
 
     /// <summary>
+    /// Open a window which shows logs output by scripts.
+    /// </summary>
+    void OpenLogWindow();
+
+
+    /// <summary>
     /// Number of running script instances.
     /// </summary>
     int RunningScriptCount { get; }

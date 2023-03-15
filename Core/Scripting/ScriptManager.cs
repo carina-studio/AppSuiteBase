@@ -137,6 +137,11 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
             return this.implementation.OpenLogReaderAsync(cancellationToken);
         return Task.FromResult<TextReader>(new StringReader(""));
     }
+
+
+    /// <inheritdoc/>
+    public void OpenLogWindow() =>
+        this.implementation?.OpenLogWindow();
     
 
     /// <inheritdoc/>
