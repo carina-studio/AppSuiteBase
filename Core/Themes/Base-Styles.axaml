@@ -376,6 +376,20 @@
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ControlButtonsPanel.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 	</Style>
+	<Style Selector="Border.Dialog_ItemsGroup_Container">
+		<Setter Property="Background" Value="{DynamicResource Brush/Dialog.ItemsGroup.Background}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Dialog.ItemsGroup.Border}"/>
+		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Dialog.ItemsGroup.Border}"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/Dialog.ItemsGroup}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ItemsGroup.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ItemsGroup.Padding}"/>
+	</Style>
+	<Style Selector="Border.Dialog_ItemsGroup_Header">
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.ItemsGroupHeader}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.ItemsGroupHeader}"/>
+	</Style>
 	<Style Selector="Border.Dialog_TextBlock_Header1">
 		<Setter Property="Background" Value="{DynamicResource Brush/Dialog.TextBlock.Background.Header1}"/>
 		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Dialog.TextBlock.Border.Header1}"/>
@@ -450,9 +464,13 @@
 	</Style>
 	<Style Selector="ComboBox.Dialog_ComboBox">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="DatePicker.Dialog_DatePicker">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="Expander.Dialog_Expander">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -466,8 +484,20 @@
 	<Style Selector="Grid.Dialog_ContentPanel_WithHeader">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding.WithHeader}"/>
 	</Style>
+	<Style Selector="Grid.Dialog_FullWidthControl_Container">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.FullWidthControl.Margin}"/>
+	</Style>
+	<Style Selector="Grid.Dialog_IconText_Container">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.IconText.Margin}"/>
+	</Style>
 	<Style Selector="Grid.Dialog_IconText_Container_Description">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+	</Style>
+	<Style Selector="Grid.Dialog_Item_Container">
+		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight}"/>
+	</Style>
+	<Style Selector="Grid.Dialog_Item_Container_Small">
+		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight.Small}"/>
 	</Style>
 	<Style Selector=":is(Image).Dialog_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Icon.Size}"/>
@@ -480,6 +510,19 @@
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Icon.Size}"/>
 	</Style>
 	<Style Selector=":is(Image).Dialog_Icon:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<Style Selector=":is(Image).Dialog_Icon_Description">
+		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Icon.Size.Description}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Icon.Margin.Description}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Icon.Size.Description}"/>
+	</Style>
+	<Style Selector=":is(Image).Dialog_Icon_Description:disabled">
 		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector=":is(Image).Dialog_Icon_Large">
@@ -520,19 +563,26 @@
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
 	<Style Selector="ListBox.Dialog_ListBox">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ListBox.Margin}"/>
 	</Style>
 	<Style Selector="NumericUpDown.Dialog_NumericUpDown">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="Panel.Dialog_ContentPanel">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding}"/>
 	</Style>
 	<Style Selector="Panel.Dialog_ContentPanel_WithHeader">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding.WithHeader}"/>
+	</Style>
+	<Style Selector="Panel.Dialog_FullWidthControl_Container">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.FullWidthControl.Margin}"/>
 	</Style>
 	<Style Selector="RadioButton.Dialog_RadioButton">
 		<Setter Property="HorizontalAlignment" Value="Left"/>
@@ -570,6 +620,8 @@
 	<Style Selector="Slider.Dialog_Slider">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="TickPlacement" Value="Outside"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
 	</Style>
 	<Style Selector="StackPanel.Dialog_ContentPanel">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding}"/>
@@ -584,6 +636,20 @@
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="Orientation" Value="Horizontal"/>
 	</Style>
+	<Style Selector="StackPanel.Dialog_FullWidthControl_Container">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.FullWidthControl.Margin}"/>
+	</Style>
+	<Style Selector="StackPanel.Dialog_IconText_Container">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.IconText.Margin}"/>
+		<Setter Property="Orientation" Value="Horizontal"/>
+	</Style>
+	<Style Selector="StackPanel.Dialog_IconText_Container_Description">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="Orientation" Value="Horizontal"/>
+	</Style>
+	<Style Selector="StackPanel.Dialog_Item_Text_Container">
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
 	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
@@ -591,57 +657,93 @@
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock_Description">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Description}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock_Description_Error">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+		<Setter Property="Padding" Value="{DynamicResource Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock_Description_Warning">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Warning}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector=":is(TextBlock).Dialog_ItemsGroup_Header">
+		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.ItemsGroupHeader}"/>
+		<Setter Property="FontWeight" Value="Bold"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_TextBlock">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Description">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Description}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Description_Error">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Description_Warning">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Warning}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Header1">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Header1}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Header2">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Header2}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector=":is(TextBlock).Dialog_TextBlock_Label">
+		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Label}"/>
+		<!--Setter Property="FontWeight" Value="Bold"/-->
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Label}"/>
+		<Setter Property="MaxLines" Value="2"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Label}"/>
+		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="TextBox.Dialog_TextBox">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderBrush" Value="{x:Null}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
+		<Setter Property="TextAlignment" Value="Right"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Watermark" Value="{DynamicResource String/Common.None}"/>
 	</Style>
 	<Style Selector="TimePicker.Dialog_TimePicker">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="ToggleButton.Dialog_ControlButton">
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -659,10 +761,11 @@
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="ToggleSwitch.Dialog_ToggleSwitch">
-		<Setter Property="Margin" Value="0"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="TreeView.Dialog_TreeView">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TreeView.Margin}"/>
 	</Style>
 	<Style Selector="Window.Dialog">
 		<Setter Property="CanResize" Value="False"/>
@@ -2074,6 +2177,7 @@
 	<Style Selector="ToggleSwitch">
 		<Setter Property="OffContent" Value="{x:Null}"/>
 		<Setter Property="OnContent" Value="{x:Null}"/>
+		<Setter Property="Width" Value="40"/>
 	</Style>
 	<Style Selector="ToggleSwitch:disabled">
 		<Setter Property="Opacity" Value="0.5"/>

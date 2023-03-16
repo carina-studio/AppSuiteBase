@@ -24,12 +24,14 @@ namespace CarinaStudio.AppSuite.Tests
         protected override void OnOpened(EventArgs e)
         {
             base.OnOpened(e);
+            /*
             var textBlock = this.FindControl<TextBlock>("radioButtonLabel");
             if (textBlock != null)
             {
                 this.ScrollToControl(textBlock);
                 this.AnimateTextBlock(textBlock);
             }
+            */
         }
 
         public void Test()

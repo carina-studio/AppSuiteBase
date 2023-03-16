@@ -3,7 +3,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:abControls="using:CarinaStudio.Controls"
-		xmlns:aConverters="using:Avalonia.Data.Converters"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
 		xmlns:ia="using:Avalonia.Xaml.Interactivity"
@@ -88,9 +87,9 @@
 					<!-- Open source attribution -->
 					<StackPanel Name="openSourceAttrPanel" Orientation="Horizontal">
 						<StackPanel.IsVisible>
-							<MultiBinding Converter="{x:Static aConverters:BoolConverters.And}">
+							<MultiBinding Converter="{x:Static BoolConverters.And}">
 								<Binding Path="IsOpenSourceBased"/>
-								<Binding Path="GitHubProjectUri" Converter="{x:Static aConverters:ObjectConverters.IsNotNull}"/>
+								<Binding Path="GitHubProjectUri" Converter="{x:Static ObjectConverters.IsNotNull}"/>
 							</MultiBinding>
 						</StackPanel.IsVisible>
 						<TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
@@ -128,206 +127,289 @@
 					<TextBlock Text="©2021 Carina Studio"/>
 					<Separator Classes="Dialog_Separator_Large"/>
 
-					<!-- System info (Header) -->
-					<Border Classes="Dialog_TextBlock_Header1">
-						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.SystemInformation}"/>
+					<!-- System info -->
+					<Border Classes="Dialog_ItemsGroup_Header">
+						<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{DynamicResource String/ApplicationInfoDialog.SystemInformation}"/>
 					</Border>
+					<Border Classes="Dialog_ItemsGroup_Container">
+						<StackPanel>
 
-					<!-- Device name -->
-					<abControls:FormattedSelectableTextBlock Arg1="{x:Static sys:Environment.MachineName}" Format="{DynamicResource String/ApplicationInfoDialog.DeviceName}" TextTrimming="CharacterEllipsis"/>
-					<Separator Classes="Dialog_Separator_Small"/>
+							<!-- Device name -->
+							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.DeviceName}"/>
+								<SelectableTextBlock Grid.Column="1" Text="{x:Static sys:Environment.MachineName}" TextTrimming="CharacterEllipsis"/>
+							</Grid>
+							<Separator Classes="Dialog_Separator"/>
 
-					<!-- Operating system -->
-					<abControls:FormattedSelectableTextBlock Arg1="{Binding OperatingSystemDescription}" Format="{DynamicResource String/ApplicationInfoDialog.OperatingSystem}" TextTrimming="CharacterEllipsis"/>
-					<Separator Classes="Dialog_Separator_Small"/>
+							<!-- Operating system -->
+							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.OperatingSystem}"/>
+								<SelectableTextBlock Grid.Column="1" Text="{Binding OperatingSystemDescription}" TextTrimming="CharacterEllipsis"/>
+							</Grid>
+							<Separator Classes="Dialog_Separator"/>
 
-					<!-- Framework version -->
-					<abControls:FormattedSelectableTextBlock Arg1="{Binding FrameworkVersion}" Format="{DynamicResource String/ApplicationInfoDialog.FrameworkVersion}" TextTrimming="CharacterEllipsis"/>
-					<Separator Classes="Dialog_Separator_Small"/>
+							<!-- Framework version -->
+							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.FrameworkVersion}"/>
+								<SelectableTextBlock Grid.Column="1" Text="{Binding FrameworkVersion}" TextTrimming="CharacterEllipsis"/>
+							</Grid>
+							<Separator Classes="Dialog_Separator"/>
 
-					<!-- Processor count -->
-					<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
-						<abControls:FormattedSelectableTextBlock Arg1="{x:Static sys:Environment.ProcessorCount}" Format="{DynamicResource String/ApplicationInfoDialog.ProcessorCount}" TextTrimming="CharacterEllipsis"/>
-						<Separator Classes="Dialog_Separator_Small"/>
-					</StackPanel>
+							<!-- Processor count -->
+							<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
+								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ProcessorCount}"/>
+									<SelectableTextBlock Grid.Column="1" Text="{Binding Source={x:Static sys:Environment.ProcessorCount}}" TextTrimming="CharacterEllipsis"/>
+								</Grid>
+								<Separator Classes="Dialog_Separator"/>
+							</StackPanel>
 
-					<!-- Total physical memory -->
-					<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.TotalPhysicalMemory}" IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}" TextTrimming="CharacterEllipsis"/>
-					<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}"/>
+							<!-- Total physical memory -->
+							<StackPanel IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}">
+								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.TotalPhysicalMemory}"/>
+									<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" TextTrimming="CharacterEllipsis"/>
+								</Grid>
+								<Separator Classes="Dialog_Separator"/>
+							</StackPanel>
 
-					<!-- Network connection -->
-					<Panel>
-						<abControls:FormattedSelectableTextBlock Arg1="{Binding PublicIPAddress, Source={x:Static net:NetworkManager.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Connected}" IsVisible="{Binding IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" TextTrimming="CharacterEllipsis"/>
-						<TextBlock IsVisible="{Binding !IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" Text="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Disconnected}" TextTrimming="CharacterEllipsis"/>
-					</Panel>
+							<!-- Network connection -->
+							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.NetworkConnection}"/>
+								<Panel Grid.Column="1">
+									<SelectableTextBlock IsVisible="{Binding !IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" Text="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Disconnected}" TextTrimming="CharacterEllipsis"/>
+									<abControls:FormattedSelectableTextBlock Arg1="{Binding PublicIPAddress, Source={x:Static net:NetworkManager.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Format}" IsVisible="{Binding IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" TextTrimming="CharacterEllipsis"/>
+								</Panel>
+							</Grid>
 
-					<!-- Primary network interface -->
-					<StackPanel>
-						<StackPanel.IsVisible>
-							<MultiBinding Converter="{x:Static BoolConverters.And}">
-								<Binding Path="PrimaryNetworkInterfacePhysicalAddress" ElementName="window" Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
-								<Binding Path="Application.IsDebugMode" ElementName="window"/>
-							</MultiBinding>
-						</StackPanel.IsVisible>
-						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedSelectableTextBlock Arg1="{Binding PrimaryInterfaceName, Source={x:Static net:NetworkManager.Default}}" Arg2="{Binding PrimaryInterfaceType, Converter={x:Static controls:ApplicationInfoDialogImpl.NetworkInterfaceTypeConverter}, Source={x:Static net:NetworkManager.Default}}" Arg3="{Binding $parent[Window].PrimaryNetworkInterfacePhysicalAddress}" Format="{DynamicResource String/ApplicationInfoDialog.PrimaryNetworkInterface}" TextTrimming="CharacterEllipsis"/>
-					</StackPanel>
+							<!-- Primary network interface -->
+							<StackPanel>
+								<StackPanel.IsVisible>
+									<MultiBinding Converter="{x:Static BoolConverters.And}">
+										<Binding Path="PrimaryNetworkInterfacePhysicalAddress" ElementName="window" Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
+										<Binding Path="Application.IsDebugMode" ElementName="window"/>
+									</MultiBinding>
+								</StackPanel.IsVisible>
+								<Separator Classes="Dialog_Separator"/>
+								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.PrimaryNetworkInterface}"/>
+									<abControls:FormattedSelectableTextBlock Arg1="{Binding PrimaryInterfaceName, Source={x:Static net:NetworkManager.Default}}" Arg2="{Binding PrimaryInterfaceType, Converter={x:Static controls:ApplicationInfoDialogImpl.NetworkInterfaceTypeConverter}, Source={x:Static net:NetworkManager.Default}}" Arg3="{Binding $parent[Window].PrimaryNetworkInterfacePhysicalAddress}" Format="{DynamicResource String/ApplicationInfoDialog.PrimaryNetworkInterface.Format}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
+								</Grid>
+							</StackPanel>
 
-					<!-- Screen info -->
-					<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
+							<!-- Screen info -->
+							<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
 
-						<!-- Screen pixel density -->
-						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].ScreenPixelDensity}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.PixelDensity}" TextTrimming="CharacterEllipsis"/>
+								<!-- Screen pixel density -->
+								<Separator Classes="Dialog_Separator"/>
+								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.Screen.PixelDensity}"/>
+									<abControls:FormattedSelectableTextBlock Grid.Column="1" Arg1="{Binding $parent[Window].ScreenPixelDensity}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.PixelDensity.Format}" TextTrimming="CharacterEllipsis"/>
+								</Grid>
 
-						<!-- Screen size -->
-						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].PhysicalScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" Arg2="{Binding $parent[Window].ScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.Size}" TextTrimming="CharacterEllipsis"/>
+								<!-- Screen size -->
+								<Separator Classes="Dialog_Separator"/>
+								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.Screen.Size}"/>
+									<abControls:FormattedSelectableTextBlock Grid.Column="1" Arg1="{Binding $parent[Window].PhysicalScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" Arg2="{Binding $parent[Window].ScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.Size.Format}" TextTrimming="CharacterEllipsis"/>
+								</Grid>
+								
+								<!-- Working area -->
+								<Separator Classes="Dialog_Separator"/>
+								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.Screen.WorkingArea}"/>
+									<abControls:FormattedSelectableTextBlock Grid.Column="1" Arg1="{Binding $parent[Window].PhysicalScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" Arg2="{Binding $parent[Window].ScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.WorkingArea.Format}" TextTrimming="CharacterEllipsis"/>
+								</Grid>
 
-						<!-- Working area -->
-						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].PhysicalScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" Arg2="{Binding $parent[Window].ScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.WorkingArea}" TextTrimming="CharacterEllipsis"/>
-
-					</StackPanel>
-					<Separator Classes="Dialog_Separator_Large"/>
-
-					<!-- Process info (Header) -->
-					<Border Classes="Dialog_TextBlock_Header1">
-						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.ProcessInformation}"/>
+							</StackPanel>
+						</StackPanel>
 					</Border>
+					<Separator Classes="Dialog_Separator"/>
 
-					<!-- Process ID -->
-					<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ProcessId, Mode=OneTime}" Format="{DynamicResource String/ApplicationInfoDialog.ProcessId}" TextTrimming="CharacterEllipsis"/>
-					<Separator Classes="Dialog_Separator_Small"/>
+					<!-- Process info -->
+					<Border Classes="Dialog_ItemsGroup_Header">
+						<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{DynamicResource String/ApplicationInfoDialog.ProcessInformation}"/>
+					</Border>
+					<Border Classes="Dialog_ItemsGroup_Container">
+						<StackPanel>
 
-					<!-- Thread count -->
-					<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ThreadCount}" Format="{DynamicResource String/ApplicationInfoDialog.ThreadCount}" TextTrimming="CharacterEllipsis"/>
-					<Separator Classes="Dialog_Separator_Small"/>
+							<!-- Process ID -->
+							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ProcessId}"/>
+								<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.ProcessInfo.ProcessId, Mode=OneTime}" TextTrimming="CharacterEllipsis"/>
+							</Grid>
+							<Separator Classes="Dialog_Separator"/>
 
-					<!-- CPU usage -->
-					<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage}" Format="{DynamicResource String/ApplicationInfoDialog.CpuUsage}" TextTrimming="CharacterEllipsis"/>
-					<Separator Classes="Dialog_Separator_Small"/>
+							<!-- Thread count -->
+							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ThreadCount}"/>
+								<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.ProcessInfo.ThreadCount}" TextTrimming="CharacterEllipsis"/>
+							</Grid>
+							<Separator Classes="Dialog_Separator"/>
 
-					<!-- Private memory usage -->
-					<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.PrivateMemoryUsage}" TextTrimming="CharacterEllipsis"/>
+							<!-- CPU usage -->
+							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.CpuUsage}"/>
+								<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage}" Format="{DynamicResource String/ApplicationInfoDialog.CpuUsage.Format}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
+							</Grid>
+							<Separator Classes="Dialog_Separator"/>
 
-					<!-- Managed environment information -->
-					<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
+							<!-- Private memory usage -->
+							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.PrivateMemoryUsage}"/>
+								<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static converters:FileSizeConverter.Default}}" TextTrimming="CharacterEllipsis"/>
+							</Grid>
+							
+							<!-- Managed environment information -->
+							<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
 
-						<!-- Managed heap size -->
-						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapSize, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.ManagedHeapSize}" TextTrimming="CharacterEllipsis"/>
+								<!-- Managed heap size -->
+								<Separator Classes="Dialog_Separator"/>
+								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ManagedHeapSize}"/>
+									<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapSize, Converter={x:Static converters:FileSizeConverter.Default}}" TextTrimming="CharacterEllipsis"/>
+								</Grid>
+								
+								<!-- Managed heap usage -->
+								<Separator Classes="Dialog_Separator"/>
+								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ManagedHeapUsage}"/>
+									<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static converters:FileSizeConverter.Default}}" TextTrimming="CharacterEllipsis"/>
+								</Grid>
+								
+								<!-- GC frequency -->
+								<Separator Classes="Dialog_Separator"/>
+								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.GCFrequency}"/>
+									<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.GCFrequency}" Format="{DynamicResource String/ApplicationInfoDialog.GCFrequency.Format}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
+								</Grid>
 
-						<!-- Managed heap usage -->
-						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static converters:FileSizeConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.ManagedHeapUsage}" TextTrimming="CharacterEllipsis"/>
+								<!-- Finalization pending count -->
+								<Separator Classes="Dialog_Separator"/>
+								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.FinalizationPendingCount}"/>
+									<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.ProcessInfo.FinalizationPendingCount}" TextTrimming="CharacterEllipsis"/>
+								</Grid>
+								
+							</StackPanel>
+							
+							<!-- Script info -->
+							<StackPanel Name="scriptInfoPanel" IsVisible="False">
 
-						<!-- GC frequency -->
-						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.GCFrequency}" Format="{DynamicResource String/ApplicationInfoDialog.GCFrequency}" TextTrimming="CharacterEllipsis"/>
+								<!-- Running script count -->
+								<Separator Classes="Dialog_Separator"/>
+								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.RunningScriptCount}"/>
+									<SelectableTextBlock Grid.Column="1" Text="{Binding RunningScriptCount, Source={x:Static scripting:ScriptManager.Default}}" TextTrimming="CharacterEllipsis"/>
+								</Grid>
+								
+								<!-- Script running loading -->
+								<Separator Classes="Dialog_Separator"/>
+								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.GCFrequency}"/>
+									<abControls:FormattedSelectableTextBlock Arg1="{Binding ScriptRunningLoading, Source={x:Static scripting:ScriptManager.Default}, Converter={x:Static converters:RatioToPercentageConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.ScriptRunningLoading.Format}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
+								</Grid>
 
-						<!-- Finalization pending count -->
-						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.FinalizationPendingCount}" Format="{DynamicResource String/ApplicationInfoDialog.FinalizationPendingCount}" TextTrimming="CharacterEllipsis"/>
+							</StackPanel>
 
-					</StackPanel>
-					
-					<!-- Script info -->
-					<StackPanel Name="scriptInfoPanel" IsVisible="False">
-
-						<!-- Running script count -->
-						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedSelectableTextBlock Arg1="{Binding RunningScriptCount, Source={x:Static scripting:ScriptManager.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.RunningScriptCount}" TextTrimming="CharacterEllipsis"/>
-
-						<!-- Script running loading -->
-						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:FormattedSelectableTextBlock Arg1="{Binding ScriptRunningLoading, Source={x:Static scripting:ScriptManager.Default}, Converter={x:Static converters:RatioToPercentageConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.ScriptRunningLoading}" TextTrimming="CharacterEllipsis"/>
-
-					</StackPanel>
-					<Separator Classes="Dialog_Separator_Large"/>
+						</StackPanel>
+					</Border>
+					<Separator Classes="Dialog_Separator"/>
 
 					<!-- Activated products -->
 					<StackPanel Name="productListSectionPanel">
-						<Border Classes="Dialog_TextBlock_Header1">
-							<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Products}"/>
+						<Border Classes="Dialog_ItemsGroup_Header">
+							<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{DynamicResource String/ApplicationInfoDialog.Products}"/>
 						</Border>
-						<StackPanel Name="productListPanel"/>
-						<Separator Classes="Dialog_Separator_Large"/>
+						<Border Classes="Dialog_ItemsGroup_Container">
+							<StackPanel Name="productListPanel"/>
+						</Border>
+						<Separator Classes="Dialog_Separator"/>
 					</StackPanel>
 
 					<!-- Assemblies (Header) -->
-					<Border Classes="Dialog_TextBlock_Header1">
-						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Assemblies}"/>
+					<Border Classes="Dialog_ItemsGroup_Header">
+						<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{DynamicResource String/ApplicationInfoDialog.Assemblies}"/>
 					</Border>
+					<Border Classes="Dialog_ItemsGroup_Container">
+						<StackPanel>
 
-					<!-- Assemblies -->
-					<StackPanel Name="assembliesPanel"/>
-					<Separator Classes="Dialog_Separator_Large"/>
+							<!-- Assemblies -->
+							<StackPanel Name="assembliesPanel"/>
+
+						</StackPanel>
+					</Border>
+					<Separator Classes="Dialog_Separator"/>
 					
 					<!-- Other information -->
-					<Border Classes="Dialog_TextBlock_Header1">
-						<TextBlock Classes="Dialog_TextBlock_Header1" Text="{DynamicResource String/ApplicationInfoDialog.Other}"/>
+					<Border Classes="Dialog_ItemsGroup_Header">
+						<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{DynamicResource String/ApplicationInfoDialog.Other}"/>
 					</Border>
+					<Border Classes="Dialog_ItemsGroup_Container">
+						<StackPanel>
 
-					<!-- Donate -->
-					<StackPanel IsVisible="{Binding PayPalUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
-						<StackPanel Orientation="Horizontal">
-							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PayPal.Outline.Colored}"/>
-							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.DonateWithPayPal}" Uri="{Binding PayPalUri}"/>
+							<!-- Donate -->
+							<StackPanel IsVisible="{Binding PayPalUri, Converter={x:Static ObjectConverters.IsNotNull}}">
+								<StackPanel Classes="Dialog_IconText_Container">
+									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PayPal.Outline.Colored}"/>
+									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.DonateWithPayPal}" Uri="{Binding PayPalUri}"/>
+								</StackPanel>
+								<Separator Classes="Dialog_Separator_Small"/>
+							</StackPanel>
+
+							<!-- Website -->
+							<StackPanel IsVisible="{Binding WebsiteUri, Converter={x:Static ObjectConverters.IsNotNull}}">
+								<StackPanel Classes="Dialog_IconText_Container">
+									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Website}"/>
+									<abControls:FormattedLinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Arg1="{Binding Application.Name}" Format="{DynamicResource String/ApplicationInfoDialog.Website}" Uri="{Binding WebsiteUri}"/>
+								</StackPanel>
+								<Separator Classes="Dialog_Separator_Small"/>
+							</StackPanel>
+
+							<!-- User agreement -->
+							<StackPanel IsVisible="{Binding $parent[Window].HasUserAgreement}">
+								<StackPanel Classes="Dialog_IconText_Container">
+									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.UserAgreement.Outline}"/>
+									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowUserAgreement}" Text="{DynamicResource String/Common.UserAgreement.WithDialog}"/>
+								</StackPanel>
+								<Separator Classes="Dialog_Separator_Small"/>
+							</StackPanel>
+
+							<!-- Privacy policy -->
+							<StackPanel IsVisible="{Binding $parent[Window].HasPrivacyPolicy}">
+								<StackPanel Classes="Dialog_IconText_Container">
+									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PrivacyPolicy.Outline}"/>
+									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowPrivacyPolicy}" Text="{DynamicResource String/Common.PrivacyPolicy.WithDialog}"/>
+								</StackPanel>
+								<Separator Classes="Dialog_Separator_Small"/>
+							</StackPanel>
+
+							<!-- External dependencies -->
+							<StackPanel IsVisible="{Binding $parent[Window].HasExternalDependencies}">
+								<StackPanel Classes="Dialog_IconText_Container">
+									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Dependencies}"/>
+									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowExternalDependencies}" Text="{DynamicResource String/ApplicationInfoDialog.ExternalDependencies}"/>
+								</StackPanel>
+								<Separator Classes="Dialog_Separator_Small"/>
+							</StackPanel>
+
+							<!-- Restart in debug mode -->
+							<StackPanel IsVisible="{Binding !$parent[Window].Application.IsDebugMode}">
+								<StackPanel Classes="Dialog_IconText_Container">
+									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Debug.Outline}"/>
+									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].RestartInDebugMode}" Text="{DynamicResource String/ApplicationInfoDialog.RestartInDebugMode}"/>
+								</StackPanel>
+								<Separator Classes="Dialog_Separator_Small"/>
+							</StackPanel>
+
+							<!-- Export logs -->
+							<StackPanel Classes="Dialog_IconText_Container">
+								<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Export}"/>
+								<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ExportLogs}" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}"/>
+							</StackPanel>
+
 						</StackPanel>
-						<Separator Classes="Dialog_Separator_Small"/>
-					</StackPanel>
-
-					<!-- Website -->
-					<StackPanel IsVisible="{Binding WebsiteUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}">
-						<StackPanel Orientation="Horizontal">
-							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Website}"/>
-							<abControls:FormattedLinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Arg1="{Binding Application.Name}" Format="{DynamicResource String/ApplicationInfoDialog.Website}" Uri="{Binding WebsiteUri}"/>
-						</StackPanel>
-						<Separator Classes="Dialog_Separator_Small"/>
-					</StackPanel>
-
-					<!-- User agreement -->
-					<StackPanel IsVisible="{Binding $parent[Window].HasUserAgreement}">
-						<StackPanel Orientation="Horizontal">
-							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.UserAgreement.Outline}"/>
-							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowUserAgreement}" Text="{DynamicResource String/Common.UserAgreement.WithDialog}"/>
-						</StackPanel>
-						<Separator Classes="Dialog_Separator_Small"/>
-					</StackPanel>
-
-					<!-- Privacy policy -->
-					<StackPanel IsVisible="{Binding $parent[Window].HasPrivacyPolicy}">
-						<StackPanel Orientation="Horizontal">
-							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PrivacyPolicy.Outline}"/>
-							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowPrivacyPolicy}" Text="{DynamicResource String/Common.PrivacyPolicy.WithDialog}"/>
-						</StackPanel>
-						<Separator Classes="Dialog_Separator_Small"/>
-					</StackPanel>
-
-					<!-- External dependencies -->
-					<StackPanel IsVisible="{Binding $parent[Window].HasExternalDependencies}">
-						<StackPanel Orientation="Horizontal">
-							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Dependencies}"/>
-							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowExternalDependencies}" Text="{DynamicResource String/ApplicationInfoDialog.ExternalDependencies}"/>
-						</StackPanel>
-						<Separator Classes="Dialog_Separator_Small"/>
-					</StackPanel>
-
-					<!-- Restart in debug mode -->
-					<StackPanel IsVisible="{Binding !$parent[Window].Application.IsDebugMode}">
-						<StackPanel Orientation="Horizontal">
-							<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Debug.Outline}"/>
-							<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].RestartInDebugMode}" Text="{DynamicResource String/ApplicationInfoDialog.RestartInDebugMode}"/>
-						</StackPanel>
-						<Separator Classes="Dialog_Separator_Small"/>
-					</StackPanel>
-
-					<!-- Export logs -->
-					<StackPanel Orientation="Horizontal">
-						<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Export}"/>
-						<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ExportLogs}" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}"/>
-					</StackPanel>
+					</Border>
 
 				</StackPanel>
 			</Panel>

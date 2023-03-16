@@ -7,6 +7,7 @@
 		xmlns:as="using:CarinaStudio.AppSuite"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Tests.Dialog"
+		CanResize="True"
 		Classes="Dialog"
 		Width="400">
 
@@ -26,51 +27,188 @@
 		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="500" VerticalScrollBarVisibility="Auto">
 			<StackPanel Classes="Dialog_ContentPanel_WithHeader">
 
-				<Border Classes="Dialog_TextBlock_Header1">
-					<TextBlock Classes="Dialog_TextBlock_Header1" Text="Header1"/>
+				<Border Classes="Dialog_ItemsGroup_Header">
+					<TextBlock Classes="Dialog_ItemsGroup_Header" Text="Header1"/>
 				</Border>
 
-				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
-				<TextBox Classes="Dialog_TextBox"/>
-				<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
-				<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Selectable description"/>
-				<Separator Classes="Dialog_Separator"/>
+				<Border Classes="Dialog_ItemsGroup_Container">
+					<StackPanel>
 
-				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
-				<ComboBox Classes="Dialog_ComboBox"/>
-				<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" Text="Google" Uri="http://www.google.com/"/>
-				<Grid Classes="Dialog_IconText_Container_Description" ColumnDefinitions="Auto,*">
-					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Information.Outline.Colored}"/>
-					<TextBlock Classes="Dialog_Icon_TextBlock_Description" Grid.Column="1" Text="Description"/>
-				</Grid>
-				<Grid Classes="Dialog_IconText_Container_Description" ColumnDefinitions="Auto,*">
-					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Warning.Outline.Colored}"/>
-					<TextBlock Classes="Dialog_Icon_TextBlock_Description_Warning" Grid.Column="1" Text="Description (Warning)"/>
-				</Grid>
-				<Grid Classes="Dialog_IconText_Container_Description" ColumnDefinitions="Auto,*">
-					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Error.Outline.Colored}"/>
-					<TextBlock Classes="Dialog_Icon_TextBlock_Description_Error" Grid.Column="1" Text="Description (Error)"/>
-				</Grid>
+						<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+						<TextBlock Classes="Dialog_TextBlock_Description" Text="Description 1"/>
+						<TextBox Classes="Dialog_TextBox"/>
+						<TextBlock Classes="Dialog_TextBlock_Description" Text="Description 2"/>
+						<Separator Classes="Dialog_Separator"/>
+
+						<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+						<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Selectable description 1"/>
+						<ToggleSwitch Classes="Dialog_ToggleSwitch"/>
+						<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Selectable description 2"/>
+						<Separator Classes="Dialog_Separator"/>
+
+						<!-- Items with ToggleSwitch -->
+						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+							<StackPanel Classes="Dialog_Item_Text_Container">
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+								<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							</StackPanel>
+							<ToggleSwitch Classes="Dialog_ToggleSwitch" Grid.Column="1"/>
+						</Grid>
+						<Separator Classes="Dialog_Separator"/>
+						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+							<StackPanel Classes="Dialog_Item_Text_Container">
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+								<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" Text="Google" Uri="http://www.google.com/"/>
+							</StackPanel>
+							<ToggleSwitch Classes="Dialog_ToggleSwitch" Grid.Column="1"/>
+						</Grid>
+						<Separator Classes="Dialog_Separator"/>
+						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+							<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+							<ToggleSwitch Classes="Dialog_ToggleSwitch" Grid.Column="1"/>
+						</Grid>
+						<Separator Classes="Dialog_Separator"/>
+						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+							<StackPanel Classes="Dialog_Item_Text_Container">
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="Label with looooooooooooooooooooooog text"/>
+								<TextBlock Classes="Dialog_TextBlock_Description" Text="Description with looooooooooooooooooooooog text"/>
+							</StackPanel>
+							<ToggleSwitch Classes="Dialog_ToggleSwitch" Grid.Column="1"/>
+						</Grid>
+						<Separator Classes="Dialog_Separator"/>
+
+						<!-- Item with ComboBox -->
+						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+							<StackPanel Classes="Dialog_Item_Text_Container">
+								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							</StackPanel>
+							<ComboBox Classes="Dialog_ComboBox" Grid.Column="1">
+								<ComboBoxItem>Item 1</ComboBoxItem>
+								<ComboBoxItem>Item 2</ComboBoxItem>
+								<ComboBoxItem>Item 3___</ComboBoxItem>
+							</ComboBox>
+						</Grid>
+						<Separator Classes="Dialog_Separator"/>
+
+						<!-- Item with TextBox -->
+						<Grid Classes="Dialog_Item_Container">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="Auto"/>
+							</Grid.ColumnDefinitions>
+							<StackPanel Classes="Dialog_Item_Text_Container">
+								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							</StackPanel>
+							<TextBox Classes="Dialog_TextBox" Grid.Column="1"/>
+						</Grid>
+						<Separator Classes="Dialog_Separator"/>
+
+						<!-- Item with NumericUpDown -->
+						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+							<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+							<NumericUpDown Classes="Dialog_NumericUpDown" Grid.Column="1" Maximum="100" Minimum="0" Value="50"/>
+						</Grid>
+						<Separator Classes="Dialog_Separator"/>
+						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+							<StackPanel Classes="Dialog_Item_Text_Container">
+								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							</StackPanel>
+							<NumericUpDown Classes="Dialog_NumericUpDown" Grid.Column="1" Maximum="100" Minimum="0" Value="50"/>
+						</Grid>
+						<Separator Classes="Dialog_Separator"/>
+
+						<!-- Item with Slider -->
+						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+							<StackPanel Classes="Dialog_Item_Text_Container">
+								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							</StackPanel>
+							<Slider Classes="Dialog_Slider" Grid.Column="1" TickFrequency="10"/>
+						</Grid>
+						<Separator Classes="Dialog_Separator"/>
+						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+							<StackPanel Classes="Dialog_Item_Text_Container">
+								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							</StackPanel>
+							<Slider Classes="Dialog_Slider" Grid.Column="1" TickPlacement="None"/>
+						</Grid>
+						<Separator Classes="Dialog_Separator"/>
+
+						<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+						<ComboBox Classes="Dialog_ComboBox"/>
+						<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" Text="Google" Uri="http://www.google.com/"/>
+						<Grid Classes="Dialog_IconText_Container_Description" ColumnDefinitions="Auto,*">
+							<Image Classes="Dialog_Icon_Description">
+								<DrawingImage>
+									<GeometryDrawing Brush="{DynamicResource Brush/Icon.Dialog.Description}" Geometry="{StaticResource Geometry/Icon.Information.Outline}"/>
+								</DrawingImage>
+							</Image>
+							<TextBlock Classes="Dialog_Icon_TextBlock_Description" Grid.Column="1" Text="Description"/>
+						</Grid>
+						<Grid Classes="Dialog_IconText_Container_Description" ColumnDefinitions="Auto,*">
+							<Image Classes="Dialog_Icon_Description" Source="{StaticResource Image/Icon.Warning.Outline.Colored}"/>
+							<TextBlock Classes="Dialog_Icon_TextBlock_Description_Warning" Grid.Column="1" Text="Description (Warning)"/>
+						</Grid>
+						<Grid Classes="Dialog_IconText_Container_Description" ColumnDefinitions="Auto,*">
+							<Image Classes="Dialog_Icon_Description" Source="{StaticResource Image/Icon.Error.Outline.Colored}"/>
+							<TextBlock Classes="Dialog_Icon_TextBlock_Description_Error" Grid.Column="1" Text="Description (Error)"/>
+						</Grid>
+
+					</StackPanel>
+				</Border>
 				<Separator Classes="Dialog_Separator_Large"/>
 
-				<Border Classes="Dialog_TextBlock_Header2">
-					<TextBlock Classes="Dialog_TextBlock_Header2" Text="Header2"/>
+				<Border Classes="Dialog_ItemsGroup_Header">
+					<TextBlock Classes="Dialog_ItemsGroup_Header" Text="Header2"/>
 				</Border>
 
-				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
-				<TextBox Classes="Dialog_TextBox"/>
-				<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+				<Border Classes="Dialog_ItemsGroup_Container">
+					<StackPanel>
+
+						<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+						<TextBox Classes="Dialog_TextBox"/>
+						<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+
+					</StackPanel>
+				</Border>
 				<Separator Classes="Dialog_Separator_Large"/>
 
-				<Border Classes="Dialog_TextBlock_Header1">
-					<TextBlock Classes="Dialog_TextBlock_Header1" Text="Header1"/>
+				<Border Classes="Dialog_ItemsGroup_Header">
+					<TextBlock Classes="Dialog_ItemsGroup_Header" Text="Header1"/>
 				</Border>
 
 				<appControls:DatePicker HorizontalAlignment="Stretch"/>
 				<Separator Classes="Dialog_Separator"/>
 				
-				<ListBox HorizontalAlignment="Stretch" Height="100"/>
-				<Button Classes="Dialog_ListActionButton" Content="{DynamicResource String/Common.OK}"/>
+				<TextBlock Classes="Dialog_TextBox_Label" Text="ListBox"/>
+				<StackPanel Classes="Dialog_FullWidthControl_Container">
+					<ListBox Classes="Dialog_ListBox">
+						<ListBoxItem>Item 1</ListBoxItem>
+						<ListBoxItem>Item 2</ListBoxItem>
+						<ListBoxItem>Item 3</ListBoxItem>
+						<ListBoxItem>Item 4</ListBoxItem>
+					</ListBox>
+					<Button Classes="Dialog_ListActionButton" Content="{DynamicResource String/Common.Add.WithDialog}"/>
+				</StackPanel>
+				<Separator Classes="Dialog_Separator"/>
+
+				<TextBlock Classes="Dialog_TextBox_Label" Text="ListBox"/>
+				<Grid Classes="Dialog_FullWidthControl_Container" ColumnDefinitions="*,Auto">
+					<ListBox Classes="Dialog_ListBox">
+						<ListBoxItem>Item 1</ListBoxItem>
+						<ListBoxItem>Item 2</ListBoxItem>
+						<ListBoxItem>Item 3</ListBoxItem>
+						<ListBoxItem>Item 4</ListBoxItem>
+					</ListBox>
+					<Button Classes="BrowseButton" Grid.Column="1" VerticalAlignment="Top">
+						<Image Classes="BrowseButtonIcon" Source="{StaticResource Image/Icon.Add}"/>
+					</Button>
+				</Grid>
+				<Separator Classes="Dialog_Separator"/>
 
 				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
 				<appControls:RegexTextBox Classes="Dialog_TextBox"/>

@@ -299,30 +299,23 @@ namespace CarinaStudio.AppSuite.Controls
 							if (panel.Children.Count > 0)
 							{
 								panel.Children.Add(new Separator().Also(it => 
-									it.Classes.Add("Dialog_Separator_Small")));
+									it.Classes.Add("Dialog_Separator")));
 							}
 							panel.Children.Add(new Grid().Also(itemPanel => 
 							{ 
-								itemPanel.ColumnDefinitions.Add(new(0, GridUnitType.Auto));
-								itemPanel.ColumnDefinitions.Add(new(0, GridUnitType.Auto));
+								itemPanel.Classes.Add("Dialog_Item_Container_Small");
 								itemPanel.ColumnDefinitions.Add(new(1, GridUnitType.Star));
+								itemPanel.ColumnDefinitions.Add(new(0, GridUnitType.Auto));
 								itemPanel.DataContext = productId;
 								itemPanel.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
 								{
-									it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
-								}));
-								itemPanel.Children.Add(new Separator().Also(it =>
-								{
-									it.Classes.Add("Dialog_Separator_Small");
-									Grid.SetColumn(it, 1);
+									it.Classes.Add("Dialog_TextBlock_Label");
 								}));
 								itemPanel.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
 								{
-									if (this.Application.TryFindResource<IBrush>("Brush/Dialog.TextBlock.Foreground.Description", out var brush))
-										it.Foreground = brush;
 									it.TextTrimming = TextTrimming.CharacterEllipsis;
 									it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
-									Grid.SetColumn(it, 2);
+									Grid.SetColumn(it, 1);
 								}));
 								this.ShowProductInfo(itemPanel);
 							}));
@@ -340,18 +333,31 @@ namespace CarinaStudio.AppSuite.Controls
 					foreach (var assembly in appInfo.Assemblies)
 					{
 						if (panel.Children.Count > 0)
-							panel.Children.Add(new Separator().Also(it => it.Classes.Add("Dialog_Separator_Small")));
+							panel.Children.Add(new Separator().Also(it => it.Classes.Add("Dialog_Separator")));
 						var assemblyName = assembly.GetName();
 						var assemblyVersion = assemblyName.Version ?? new Version();
-						if (assemblyVersion.Major != 0 
-							|| assemblyVersion.Minor != 0 
-							|| assemblyVersion.Revision != 0 
-							|| assemblyVersion.Build != 0)
+						panel.Children.Add(new Grid().Also(it =>
 						{
-							panel.Children.Add(new Avalonia.Controls.SelectableTextBlock() { Text = $"{assemblyName.Name} {assemblyVersion}" });
-						}
-						else
-							panel.Children.Add(new Avalonia.Controls.SelectableTextBlock() { Text = $"{assemblyName.Name}" });
+							it.Classes.Add("Dialog_Item_Container_Small");
+							it.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
+							it.ColumnDefinitions.Add(new ColumnDefinition(0, GridUnitType.Auto));
+							it.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
+							{
+								it.Classes.Add("Dialog_TextBlock_Label");
+								it.Text = assemblyName.Name;
+							}));
+							if (assemblyVersion.Major != 0 
+								|| assemblyVersion.Minor != 0 
+								|| assemblyVersion.Revision != 0 
+								|| assemblyVersion.Build != 0)
+							{
+								it.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
+								{
+									it.Text = assemblyVersion.ToString();
+									Grid.SetColumn(it, 1);
+								}));
+							}
+						}));
 					}
 				});
 			}
@@ -487,14 +493,14 @@ namespace CarinaStudio.AppSuite.Controls
 			if (state == ProductState.Activated 
 				&& productManager.TryGetProductEmailAddress(productId, out var emailAddress))
 			{
-				view.Children[2].TryCastAndRun<Avalonia.Controls.TextBlock>(it => 
+				view.Children[1].TryCastAndRun<Avalonia.Controls.TextBlock>(it => 
 				{
 					it.IsVisible = true;
 					it.Text = this.Application.GetFormattedString("ApplicationInfoDialog.ProductAuthorizationInfo", emailAddress);
 				});
 			}
 			else
-				view.Children[2].TryCastAndRun<Control>(it => it.IsVisible = false);
+				view.Children[1].TryCastAndRun<Control>(it => it.IsVisible = false);
 		}
 
 
