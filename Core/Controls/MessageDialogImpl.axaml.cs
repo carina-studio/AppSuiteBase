@@ -21,6 +21,10 @@ partial class MessageDialogImpl : Dialog
 	/// </summary>
 	public static readonly StyledProperty<string?> CustomCancelTextProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(CustomCancelText));
 	/// <summary>
+	/// Define <see cref="CustomDoNotAskOrShowAgainText"/> property.
+	/// </summary>
+	public static readonly StyledProperty<string?> CustomDoNotAskOrShowAgainTextProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(CustomDoNotAskOrShowAgainText));
+	/// <summary>
 	/// Define <see cref="CustomNoText"/> property.
 	/// </summary>
 	public static readonly StyledProperty<string?> CustomNoTextProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(CustomNoText));
@@ -32,6 +36,10 @@ partial class MessageDialogImpl : Dialog
 	/// Define <see cref="CustomYesText"/> property.
 	/// </summary>
 	public static readonly StyledProperty<string?> CustomYesTextProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(CustomYesText));
+	/// <summary>
+	/// Define <see cref="DoNotAskOrShowAgainDescription"/> property.
+	/// </summary>
+	public static readonly StyledProperty<string?> DoNotAskOrShowAgainDescriptionProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(DoNotAskOrShowAgainDescription));
 
 
 	// Static fields.
@@ -50,9 +58,8 @@ partial class MessageDialogImpl : Dialog
 
 	// Fields.
 	bool? doNotAskOrShowAgain;
+	readonly CheckBox doNotAskOrShowAgainCheckBox;
 	readonly Panel doNotAskOrShowAgainPanel;
-	readonly ToggleSwitch doNotAskOrShowAgainSwitch;
-	readonly Avalonia.Controls.TextBlock doNotAskOrShowAgainTextBlock;
 	MessageDialogResult? result;
 
 
@@ -61,9 +68,8 @@ partial class MessageDialogImpl : Dialog
 	{
 		this.SelectResultCommand = new Command<MessageDialogResult?>(this.SelectResult);
 		AvaloniaXamlLoader.Load(this);
+		this.doNotAskOrShowAgainCheckBox = this.Get<CheckBox>(nameof(doNotAskOrShowAgainCheckBox));
 		this.doNotAskOrShowAgainPanel = this.Get<Panel>(nameof(doNotAskOrShowAgainPanel));
-		this.doNotAskOrShowAgainSwitch = this.Get<ToggleSwitch>(nameof(doNotAskOrShowAgainSwitch));
-		this.doNotAskOrShowAgainTextBlock = this.Get<Avalonia.Controls.TextBlock>(nameof(doNotAskOrShowAgainTextBlock));
 	}
 
 
@@ -104,6 +110,16 @@ partial class MessageDialogImpl : Dialog
 	{
 		get => this.GetValue(CustomCancelTextProperty);
 		set => this.SetValue(CustomCancelTextProperty, value);
+	}
+
+
+	/// <summary>
+	/// Get or set custom text for "Do not show again" UI.
+	/// </summary>
+	public string? CustomDoNotAskOrShowAgainText
+	{
+		get => this.GetValue(CustomDoNotAskOrShowAgainTextProperty);
+		set => this.SetValue(CustomDoNotAskOrShowAgainTextProperty, value);
 	}
 
 
@@ -162,10 +178,20 @@ partial class MessageDialogImpl : Dialog
 				this.doNotAskOrShowAgainPanel.IsVisible = false;
 			else
 			{
-				this.doNotAskOrShowAgainSwitch.IsChecked = value.GetValueOrDefault();
+				this.doNotAskOrShowAgainCheckBox.IsChecked = value.GetValueOrDefault();
 				this.doNotAskOrShowAgainPanel.IsVisible = true;
 			}
 		}
+	}
+
+
+	/// <summary>
+	/// Get or set description of "Do not show again" UI.
+	/// </summary>
+	public string? DoNotAskOrShowAgainDescription
+	{
+		get => this.GetValue(DoNotAskOrShowAgainDescriptionProperty);
+		set => this.SetValue(DoNotAskOrShowAgainDescriptionProperty, value);
 	}
 
 
@@ -239,15 +265,20 @@ partial class MessageDialogImpl : Dialog
 		// setup "do not ask again" UI
 		if (this.doNotAskOrShowAgain.HasValue)
 		{
-			switch (this.Buttons)
+			if (!string.IsNullOrEmpty(this.GetValue(CustomDoNotAskOrShowAgainTextProperty)))
+				this.doNotAskOrShowAgainCheckBox.Bind(ContentProperty, this.GetObservable(CustomDoNotAskOrShowAgainTextProperty));
+			else
 			{
-				case MessageDialogButtons.OK:
-				case MessageDialogButtons.OKCancel:
-					this.doNotAskOrShowAgainTextBlock.Bind(Avalonia.Controls.TextBlock.TextProperty, this.GetResourceObservable("String/Common.DoNotShowAgain"));
-					break;
-				default:
-					this.doNotAskOrShowAgainTextBlock.Bind(Avalonia.Controls.TextBlock.TextProperty, this.GetResourceObservable("String/Common.DoNotAskAgain"));
-					break;
+				switch (this.Buttons)
+				{
+					case MessageDialogButtons.OK:
+					case MessageDialogButtons.OKCancel:
+						this.doNotAskOrShowAgainCheckBox.Bind(ContentProperty, this.Application.GetObservableString("Common.DoNotShowAgain"));
+						break;
+					default:
+						this.doNotAskOrShowAgainCheckBox.Bind(ContentProperty, this.Application.GetObservableString("Common.DoNotAskAgain"));
+						break;
+				}
 			}
 		}
 
@@ -334,7 +365,7 @@ partial class MessageDialogImpl : Dialog
 		{
 			this.result = result;
 			if (this.doNotAskOrShowAgainPanel.IsVisible)
-				this.DoNotAskOrShowAgain = this.doNotAskOrShowAgainSwitch.IsChecked;
+				this.DoNotAskOrShowAgain = this.doNotAskOrShowAgainCheckBox.IsChecked;
 			this.Close(result);
 		}
 	}

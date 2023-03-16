@@ -13,12 +13,14 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 	// Fields.
 	MessageDialogButtons buttons = MessageDialogButtons.OK;
 	object? customCancelText;
+	object? customDoNotAskOrShowAgainText;
 	IImage? customIcon;
 	object? customNoText;
 	object? customOKText;
 	object? customYesText;
 	MessageDialogResult? defaultResult;
 	bool? doNotAskOrShowAgain;
+	object? doNotAskOrShowAgainDescription;
 	MessageDialogIcon icon = MessageDialogIcon.Information;
 	object? message;
 
@@ -49,6 +51,21 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 			this.VerifyAccess();
 			this.VerifyShowing();
 			this.customCancelText = value;
+		}
+	}
+
+
+	/// <summary>
+	/// Get or set custom text for "Do not show again" UI.
+	/// </summary>
+	public object? CustomDoNotAskOrShowAgainText
+	{
+		get => this.customDoNotAskOrShowAgainText;
+		set
+		{
+			this.VerifyAccess();
+			this.VerifyShowing();
+			this.customDoNotAskOrShowAgainText = value;
 		}
 	}
 
@@ -144,6 +161,21 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 
 
 	/// <summary>
+	/// Get or set description of "Do not ask me again" or "Do not show again".
+	/// </summary>
+	public object? DoNotAskOrShowAgainDescription
+	{
+		get => this.doNotAskOrShowAgainDescription;
+		set
+		{
+			this.VerifyAccess();
+			this.VerifyShowing();
+			this.doNotAskOrShowAgainDescription = value;
+		}
+	}
+
+
+	/// <summary>
 	/// Get or set icon shown in dialog.
 	/// </summary>
 	public MessageDialogIcon Icon
@@ -193,9 +225,11 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
                 : Avalonia.Controls.WindowStartupLocation.CenterScreen,
 		};
 		using var customCancelTextBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.CustomCancelTextProperty, this.customCancelText);
+		using var customDoNotAskOrShowAgainTextBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.CustomDoNotAskOrShowAgainTextProperty, this.customDoNotAskOrShowAgainText);
 		using var customNoTextBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.CustomNoTextProperty, this.customNoText);
 		using var customOKTextBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.CustomOKTextProperty, this.customOKText);
 		using var customYesTextBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.CustomYesTextProperty, this.customYesText);
+		using var doNotAskOrShowAgainDesBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.DoNotAskOrShowAgainDescriptionProperty, this.doNotAskOrShowAgainDescription);
 		using var messageBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.MessageProperty, this.message);
 		using var titleBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
 		var result = owner != null

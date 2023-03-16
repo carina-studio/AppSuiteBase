@@ -440,8 +440,10 @@ namespace CarinaStudio.AppSuite.Tests
             var result = await new MessageDialog()
             {
                 Buttons = Enum.GetValues<MessageDialogButtons>().SelectRandomElement(),
+                CustomDoNotAskOrShowAgainText = "DO NOT SHOW AGAIN!!!",
                 CustomIcon = icon == MessageDialogIcon.Custom ? this.FindResourceOrDefault<IImage>("Image/Icon.Star") : null,
                 DoNotAskOrShowAgain = true,
+                DoNotAskOrShowAgainDescription = "This is the description.",
                 Icon = icon,
                 Message = this.GetResourceObservable("String/MessageDialog.Message"),
             }.ShowDialog(this);

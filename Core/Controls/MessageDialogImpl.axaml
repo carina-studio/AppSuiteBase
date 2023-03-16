@@ -15,8 +15,11 @@
 			<SelectableTextBlock Grid.Column="1" MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].Message}" TextWrapping="WrapWithOverflow" VerticalAlignment="Center"/>
 			<StackPanel Name="doNotAskOrShowAgainPanel" Grid.Column="1" Grid.Row="1" IsVisible="False">
 				<Separator Classes="Dialog_Separator"/>
-				<TextBlock Name="doNotAskOrShowAgainTextBlock" Classes="Dialog_TextBlock" Text=" "/>
-				<ToggleSwitch Name="doNotAskOrShowAgainSwitch"/>
+				<CheckBox Name="doNotAskOrShowAgainCheckBox" Classes="Dialog_CheckBox"/>
+				<Grid ColumnDefinitions="Auto,*">
+					<Border Margin="{StaticResource Thickness/Dialog.Icon.Margin}" Width="{DynamicResource Double/Dialog.Icon.Size}"/>
+					<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" IsVisible="{Binding $parent[Window].DoNotAskOrShowAgainDescription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Margin="{StaticResource Thickness/Dialog.TextBlock.Margin.Description.BelowCheckBox}" Text="{Binding $parent[Window].DoNotAskOrShowAgainDescription}" VerticalAlignment="Top"/>
+				</Grid>
 			</StackPanel>
 		</Grid>
 
