@@ -23,6 +23,7 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 	object? doNotAskOrShowAgainDescription;
 	MessageDialogIcon icon = MessageDialogIcon.Information;
 	object? message;
+	object? secondaryMessage;
 
 
 	/// <summary>
@@ -206,6 +207,21 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 
 
 	/// <summary>
+	/// Get or set secondary message shown in dialog.
+	/// </summary>
+	public object? SecondaryMessage
+	{
+		get => this.message;
+		set
+		{
+			this.VerifyAccess();
+			this.VerifyShowing();
+			this.secondaryMessage = value;
+		}
+	}
+
+
+	/// <summary>
 	/// Show message dialog.
 	/// </summary>
 	/// <param name="owner">Owner window.</param>
@@ -231,6 +247,7 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 		using var customYesTextBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.CustomYesTextProperty, this.customYesText);
 		using var doNotAskOrShowAgainDesBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.DoNotAskOrShowAgainDescriptionProperty, this.doNotAskOrShowAgainDescription);
 		using var messageBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.MessageProperty, this.message);
+		using var secondaryMessageBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.SecondaryMessageProperty, this.secondaryMessage);
 		using var titleBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
 		var result = owner != null
 			? await dialog.ShowDialog<MessageDialogResult>(owner)

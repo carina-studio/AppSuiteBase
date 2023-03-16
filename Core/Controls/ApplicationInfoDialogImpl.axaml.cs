@@ -299,7 +299,7 @@ namespace CarinaStudio.AppSuite.Controls
 							if (panel.Children.Count > 0)
 							{
 								panel.Children.Add(new Separator().Also(it => 
-									it.Classes.Add("Dialog_Separator")));
+									it.Classes.Add("Dialog_Item_Separator")));
 							}
 							panel.Children.Add(new Grid().Also(itemPanel => 
 							{ 
@@ -333,7 +333,7 @@ namespace CarinaStudio.AppSuite.Controls
 					foreach (var assembly in appInfo.Assemblies)
 					{
 						if (panel.Children.Count > 0)
-							panel.Children.Add(new Separator().Also(it => it.Classes.Add("Dialog_Separator")));
+							panel.Children.Add(new Separator().Also(it => it.Classes.Add("Dialog_Item_Separator")));
 						var assemblyName = assembly.GetName();
 						var assemblyVersion = assemblyName.Version ?? new Version();
 						panel.Children.Add(new Grid().Also(it =>

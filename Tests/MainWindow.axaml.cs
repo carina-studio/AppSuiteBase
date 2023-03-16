@@ -446,6 +446,7 @@ namespace CarinaStudio.AppSuite.Tests
                 DoNotAskOrShowAgainDescription = "This is the description.",
                 Icon = icon,
                 Message = this.GetResourceObservable("String/MessageDialog.Message"),
+                SecondaryMessage = "Secondary message...",
             }.ShowDialog(this);
             _ = new MessageDialog()
             {

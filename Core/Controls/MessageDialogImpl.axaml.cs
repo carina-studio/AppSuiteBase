@@ -40,6 +40,14 @@ partial class MessageDialogImpl : Dialog
 	/// Define <see cref="DoNotAskOrShowAgainDescription"/> property.
 	/// </summary>
 	public static readonly StyledProperty<string?> DoNotAskOrShowAgainDescriptionProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(DoNotAskOrShowAgainDescription));
+	/// <summary>
+	/// Define <see cref="Message"/> property.
+	/// </summary>
+	public static readonly StyledProperty<string?> MessageProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(Message));
+	/// <summary>
+	/// Define <see cref="SecondaryMessage"/> property.
+	/// </summary>
+	public static readonly StyledProperty<string?> SecondaryMessageProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(SecondaryMessage));
 
 
 	// Static fields.
@@ -53,7 +61,6 @@ partial class MessageDialogImpl : Dialog
 	static readonly StyledProperty<bool> IsButton1VisibleProperty = AvaloniaProperty.Register<MessageDialogImpl, bool>(nameof(IsButton1Visible));
 	static readonly StyledProperty<bool> IsButton2VisibleProperty = AvaloniaProperty.Register<MessageDialogImpl, bool>(nameof(IsButton2Visible));
 	static readonly StyledProperty<bool> IsButton3VisibleProperty = AvaloniaProperty.Register<MessageDialogImpl, bool>(nameof(IsButton3Visible));
-	public static readonly StyledProperty<string?> MessageProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(Message));
 
 
 	// Fields.
@@ -222,8 +229,8 @@ partial class MessageDialogImpl : Dialog
 	/// </summary>
 	public string? Message
 	{
-		get => this.GetValue<string?>(MessageProperty);
-		set => this.SetValue<string?>(MessageProperty, value);
+		get => this.GetValue(MessageProperty);
+		set => this.SetValue(MessageProperty, value);
 	}
 
 
@@ -355,6 +362,16 @@ partial class MessageDialogImpl : Dialog
 		{
 			this.UpdateButtonText();
 		}
+	}
+
+
+	/// <summary>
+	/// Get or set secandary message to show.
+	/// </summary>
+	public string? SecondaryMessage
+	{
+		get => this.GetValue(SecondaryMessageProperty);
+		set => this.SetValue(SecondaryMessageProperty, value);
 	}
 
 

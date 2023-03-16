@@ -12,8 +12,14 @@
 		<!-- Content -->
 		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
 			<Image Classes="Dialog_Icon_Large" Source="{Binding $parent[Window].IconImage}" VerticalAlignment="Top"/>
-			<SelectableTextBlock Grid.Column="1" MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].Message}" TextWrapping="WrapWithOverflow" VerticalAlignment="Center"/>
-			<StackPanel Name="doNotAskOrShowAgainPanel" Grid.Column="1" Grid.Row="1" IsVisible="False">
+			<StackPanel Grid.Column="1" VerticalAlignment="Center">
+				<SelectableTextBlock MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].Message}" TextWrapping="WrapWithOverflow"/>
+				<StackPanel IsVisible="{Binding $parent[Window].SecondaryMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+					<Separator Classes="Dialog_Separator"/>
+					<SelectableTextBlock MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].SecondaryMessage}" TextWrapping="WrapWithOverflow"/>
+				</StackPanel>
+			</StackPanel>
+			<StackPanel Name="doNotAskOrShowAgainPanel" Grid.Column="1" Grid.Row="2" IsVisible="False">
 				<Separator Classes="Dialog_Separator"/>
 				<CheckBox Name="doNotAskOrShowAgainCheckBox" Classes="Dialog_CheckBox"/>
 				<Grid ColumnDefinitions="Auto,*">

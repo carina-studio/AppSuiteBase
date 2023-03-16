@@ -38,13 +38,13 @@
 						<TextBlock Classes="Dialog_TextBlock_Description" Text="Description 1"/>
 						<TextBox Classes="Dialog_TextBox"/>
 						<TextBlock Classes="Dialog_TextBlock_Description" Text="Description 2"/>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Item_Separator"/>
 
 						<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 						<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Selectable description 1"/>
 						<ToggleSwitch Classes="Dialog_ToggleSwitch"/>
 						<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Selectable description 2"/>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Items with ToggleSwitch -->
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
@@ -54,7 +54,7 @@
 							</StackPanel>
 							<ToggleSwitch Classes="Dialog_ToggleSwitch" Grid.Column="1"/>
 						</Grid>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Item_Separator"/>
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
@@ -62,12 +62,12 @@
 							</StackPanel>
 							<ToggleSwitch Classes="Dialog_ToggleSwitch" Grid.Column="1"/>
 						</Grid>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Item_Separator"/>
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
 							<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 							<ToggleSwitch Classes="Dialog_ToggleSwitch" Grid.Column="1"/>
 						</Grid>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Item_Separator"/>
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<TextBlock Classes="Dialog_TextBlock_Label" Text="Label with looooooooooooooooooooooog text"/>
@@ -75,7 +75,7 @@
 							</StackPanel>
 							<ToggleSwitch Classes="Dialog_ToggleSwitch" Grid.Column="1"/>
 						</Grid>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with ComboBox -->
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
@@ -89,7 +89,7 @@
 								<ComboBoxItem>Item 3___</ComboBoxItem>
 							</ComboBox>
 						</Grid>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with TextBox -->
 						<Grid Classes="Dialog_Item_Container">
@@ -103,14 +103,14 @@
 							</StackPanel>
 							<TextBox Classes="Dialog_TextBox" Grid.Column="1"/>
 						</Grid>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with NumericUpDown -->
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
 							<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 							<NumericUpDown Classes="Dialog_NumericUpDown" Grid.Column="1" Maximum="100" Minimum="0" Value="50"/>
 						</Grid>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Item_Separator"/>
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
@@ -128,7 +128,7 @@
 							</StackPanel>
 							<Slider Classes="Dialog_Slider" Grid.Column="1" TickFrequency="10"/>
 						</Grid>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Item_Separator"/>
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
@@ -136,7 +136,7 @@
 							</StackPanel>
 							<Slider Classes="Dialog_Slider" Grid.Column="1" TickPlacement="None"/>
 						</Grid>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Item_Separator"/>
 
 						<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 						<ComboBox Classes="Dialog_ComboBox"/>
