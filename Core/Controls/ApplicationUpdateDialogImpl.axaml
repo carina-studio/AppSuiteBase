@@ -28,14 +28,14 @@
 		</Border>
 
 		<!-- Content -->
-		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*" RowDefinitions="Auto,*">
+		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*">
 
 			<!-- Icon -->
-			<Panel IsVisible="{Binding !IsCheckingForUpdate}" VerticalAlignment="Center">
+			<Panel IsVisible="{Binding !IsCheckingForUpdate}" VerticalAlignment="Top">
 				<Image Classes="Dialog_Icon_Large" Source="{DynamicResource Image/Icon.OK.Colored}" IsVisible="{Binding IsLatestVersion}"/>
 				<Image Classes="Dialog_Icon_Large" Source="{DynamicResource Image/Icon.Update.Colored}" IsVisible="{Binding !IsLatestVersion}"/>
 			</Panel>
-			<abControls:ProgressRing Height="{StaticResource Double/Dialog.Icon.Size.Large}" IsIndeterminate="True" IsVisible="{Binding IsCheckingForUpdate}" Margin="{StaticResource Thickness/Dialog.Icon.Margin.Large}" VerticalAlignment="Center" Width="{StaticResource Double/Dialog.Icon.Size.Large}"/>
+			<abControls:ProgressRing Height="{StaticResource Double/Dialog.Icon.Size.Large}" IsIndeterminate="True" IsVisible="{Binding IsCheckingForUpdate}" Margin="{StaticResource Thickness/Dialog.Icon.Margin.Large}" VerticalAlignment="Top" Width="{StaticResource Double/Dialog.Icon.Size.Large}"/>
 
 			<!-- Message and progress -->
 			<StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
@@ -59,17 +59,17 @@
 					<Separator Classes="Dialog_Separator_Small"/>
 					<ProgressBar IsIndeterminate="{Binding !IsUpdatePreparationProgressAvailable}" Maximum="100" Value="{Binding UpdatePreparationProgressPercentage}"/>
 				</StackPanel>
-				
-			</StackPanel>
 
-			<!-- Setting -->
-			<StackPanel Grid.Column="1" Grid.Row="1" IsVisible="{Binding !IsPreparingForUpdate}">
-				<Separator Classes="Dialog_Separator"/>
-				<CheckBox Classes="Dialog_CheckBox" Content="{DynamicResource String/ApplicationOptions.NotifyApplicationUpdate}" IsChecked="{Binding NotifyApplicationUpdate, Mode=TwoWay}"/>
-				<Grid ColumnDefinitions="Auto,*">
-					<Border Margin="{StaticResource Thickness/Dialog.Icon.Margin}" Width="{DynamicResource Double/Dialog.Icon.Size}"/>
-					<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" Margin="{StaticResource Thickness/Dialog.TextBlock.Margin.Description.BelowCheckBox}" Text="{DynamicResource String/ApplicationUpdateDialog.NotifyApplicationUpdate.Description}" VerticalAlignment="Top"/>
-				</Grid>
+				<!-- Setting -->
+				<StackPanel IsVisible="{Binding !IsPreparingForUpdate}">
+					<Separator Classes="Dialog_Separator"/>
+					<CheckBox Classes="Dialog_CheckBox" Content="{DynamicResource String/ApplicationOptions.NotifyApplicationUpdate}" IsChecked="{Binding NotifyApplicationUpdate, Mode=TwoWay}"/>
+					<Grid ColumnDefinitions="Auto,*">
+						<Border Margin="{StaticResource Thickness/Dialog.Icon.Margin}" Width="{DynamicResource Double/Dialog.Icon.Size}"/>
+						<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" Margin="{StaticResource Thickness/Dialog.TextBlock.Margin.Description.BelowCheckBox}" Text="{DynamicResource String/ApplicationUpdateDialog.NotifyApplicationUpdate.Description}" VerticalAlignment="Top"/>
+					</Grid>
+				</StackPanel>
+				
 			</StackPanel>
 			
 		</Grid>

@@ -99,8 +99,10 @@
 	<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.ItemsGroupHeader">16</sys:Double>
 	<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Label">14</sys:Double>
 	<Thickness x:Key="Thickness/Dialog.ContentPanel.Margin.Indented">28,0,0,0</Thickness>
-	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding">35,20,35,20</Thickness>
+	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding">20</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding.WithHeader">22,20,22,20</Thickness>
+	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding.WithItemsGroups">30,20,30,20</Thickness>
+	<Thickness x:Key="Thickness/Dialog.Control.Margin">0,1,0,1</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ControlButton.Margin">3,0,3,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ControlButton.Padding">10,5,10,5</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ControlButtonsPanel.Padding">22,15,22,15</Thickness>
@@ -251,7 +253,8 @@
 	<CornerRadius x:Key="OverlayCornerRadius">8</CornerRadius>
 
 	<!-- PathEnvVarEditorDialog -->
-	<sys:Double x:Key="Double/PathEnvVarEditorDialog.MaxHeight">450</sys:Double>
+	<sys:Double x:Key="Double/PathEnvVarEditorDialog.CustomPaths.Height">60</sys:Double>
+	<sys:Double x:Key="Double/PathEnvVarEditorDialog.Height">450</sys:Double>
 	<sys:Double x:Key="Double/PathEnvVarEditorDialog.MinHeight">300</sys:Double>
 	<sys:Double x:Key="Double/PathEnvVarEditorDialog.MinWidth">200</sys:Double>
 	<sys:Double x:Key="Double/PathEnvVarEditorDialog.Width">400</sys:Double>

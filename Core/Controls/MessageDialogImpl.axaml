@@ -10,22 +10,27 @@
 	<Grid RowDefinitions="Auto,Auto">
 
 		<!-- Content -->
-		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*">
 			<Image Classes="Dialog_Icon_Large" Source="{Binding $parent[Window].IconImage}" VerticalAlignment="Top"/>
 			<StackPanel Grid.Column="1" VerticalAlignment="Center">
 				<SelectableTextBlock MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].Message}" TextWrapping="WrapWithOverflow"/>
-				<StackPanel IsVisible="{Binding $parent[Window].SecondaryMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+				<StackPanel Name="secondaryMessagePanel" IsVisible="{Binding $parent[Window].SecondaryMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
 					<Separator Classes="Dialog_Separator"/>
 					<SelectableTextBlock MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].SecondaryMessage}" TextWrapping="WrapWithOverflow"/>
 				</StackPanel>
-			</StackPanel>
-			<StackPanel Name="doNotAskOrShowAgainPanel" Grid.Column="1" Grid.Row="2" IsVisible="False">
-				<Separator Classes="Dialog_Separator"/>
-				<CheckBox Name="doNotAskOrShowAgainCheckBox" Classes="Dialog_CheckBox"/>
-				<Grid ColumnDefinitions="Auto,*">
-					<Border Margin="{StaticResource Thickness/Dialog.Icon.Margin}" Width="{DynamicResource Double/Dialog.Icon.Size}"/>
-					<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" IsVisible="{Binding $parent[Window].DoNotAskOrShowAgainDescription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Margin="{StaticResource Thickness/Dialog.TextBlock.Margin.Description.BelowCheckBox}" Text="{Binding $parent[Window].DoNotAskOrShowAgainDescription}" VerticalAlignment="Top"/>
-				</Grid>
+				<StackPanel IsVisible="{Binding $parent[Window].Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+					<Separator Classes="Dialog_Separator" IsVisible="{Binding #secondaryMessagePanel.IsVisible}"/>
+					<Separator Classes="Dialog_Separator_Micro" IsVisible="{Binding !#secondaryMessagePanel.IsVisible}"/>
+					<SelectableTextBlock FontSize="{StaticResource Double/Dialog.TextBlock.FontSize.Description}" Foreground="{DynamicResource Brush/Dialog.TextBlock.Foreground.Description}" MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].Description}" TextWrapping="WrapWithOverflow"/>
+				</StackPanel>
+				<StackPanel Name="doNotAskOrShowAgainPanel" Grid.Column="1" Grid.Row="2" IsVisible="False">
+					<Separator Classes="Dialog_Separator"/>
+					<CheckBox Name="doNotAskOrShowAgainCheckBox" Classes="Dialog_CheckBox"/>
+					<Grid ColumnDefinitions="Auto,*">
+						<Border Margin="{StaticResource Thickness/Dialog.Icon.Margin}" Width="{DynamicResource Double/Dialog.Icon.Size}"/>
+						<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" IsVisible="{Binding $parent[Window].DoNotAskOrShowAgainDescription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Margin="{StaticResource Thickness/Dialog.TextBlock.Margin.Description.BelowCheckBox}" Text="{Binding $parent[Window].DoNotAskOrShowAgainDescription}" VerticalAlignment="Top"/>
+					</Grid>
+				</StackPanel>
 			</StackPanel>
 		</Grid>
 

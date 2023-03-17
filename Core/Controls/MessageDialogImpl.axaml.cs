@@ -37,6 +37,10 @@ partial class MessageDialogImpl : Dialog
 	/// </summary>
 	public static readonly StyledProperty<string?> CustomYesTextProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(CustomYesText));
 	/// <summary>
+	/// Define <see cref="Description"/> property.
+	/// </summary>
+	public static readonly StyledProperty<string?> DescriptionProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(Description));
+	/// <summary>
 	/// Define <see cref="DoNotAskOrShowAgainDescription"/> property.
 	/// </summary>
 	public static readonly StyledProperty<string?> DoNotAskOrShowAgainDescriptionProperty = AvaloniaProperty.Register<MessageDialogImpl, string?>(nameof(DoNotAskOrShowAgainDescription));
@@ -170,6 +174,16 @@ partial class MessageDialogImpl : Dialog
 	/// Default dialog result.
 	/// </summary>
 	public MessageDialogResult? DefaultResult { get; set; }
+
+
+	/// <summary>
+	/// Get or set description to show.
+	/// </summary>
+	public string? Description
+	{
+		get => this.GetValue(DescriptionProperty);
+		set => this.SetValue(DescriptionProperty, value);
+	}
 
 
 	// Do not ask again or not.

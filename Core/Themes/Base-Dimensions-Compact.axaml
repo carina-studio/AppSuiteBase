@@ -56,13 +56,15 @@
 	<sys:Double x:Key="Double/Dialog.Separator.Width.Large">24</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Width.Micro">2</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Width.Small">3</sys:Double>
-	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding">25,15,25,15</Thickness>
+	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding">15</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding.WithHeader">18,15,18,15</Thickness>
+	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding.WithItemsGroups">25,15,25,15</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ControlButton.Margin">2,0,2,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ControlButton.Padding">5,2,5,2</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ControlButtonsPanel.Padding">18,10,18,10</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ItemSeparator.Margin">0,6,0,6</Thickness>
 	<Thickness x:Key="Thickness/Dialog.Icon.Margin.Description">0,0,8,0</Thickness>
+	<Thickness x:Key="Thickness/Dialog.Icon.Margin.Large">0,0,15,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.IconControlButton.Padding">5</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ItemsGroup.Padding">10,6,10,6</Thickness>
 	<Thickness x:Key="Thickness/Dialog.FullWidthControl.Margin">-1,1,0,1</Thickness>

@@ -285,7 +285,6 @@
 	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath.WithDialog">新增…</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.CustomPaths">預設路徑</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.EditPath">編輯目錄路徑</sys:String>
-	<sys:String x:Key="String/PathEnvVarEditorDialog.Paths">已加入的路徑</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">編輯 PATH 環境變數</sys:String>
 
 	<!-- ProductState -->

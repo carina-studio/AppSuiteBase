@@ -456,6 +456,9 @@
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="Button.Dialog_Item_Button">
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
 	<Style Selector="Button.Dialog_ListActionButton">
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -466,20 +469,28 @@
 	</Style>
 	<Style Selector="CheckBox.Dialog_CheckBox">
 		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
 		<Setter Property="TextBlock.FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
 	</Style>
 	<Style Selector="ComboBox.Dialog_ComboBox">
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="ComboBox.Dialog_Item_ComboBox">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="DatePicker.Dialog_DatePicker">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
 		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="Expander.Dialog_Expander">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
 	</Style>
 	<Style Selector="Grid.Dialog_ContentPanel">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding}"/>
@@ -489,6 +500,9 @@
 	</Style>
 	<Style Selector="Grid.Dialog_ContentPanel_WithHeader">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding.WithHeader}"/>
+	</Style>
+	<Style Selector="Grid.Dialog_ContentPanel_WithItemsGroups">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding.WithItemsGroups}"/>
 	</Style>
 	<Style Selector="Grid.Dialog_FullWidthControl_Container">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.FullWidthControl.Margin}"/>
@@ -578,6 +592,11 @@
 	</Style>
 	<Style Selector="NumericUpDown.Dialog_NumericUpDown">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="NumericUpDown.Dialog_Item_NumericUpDown">
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
@@ -586,6 +605,9 @@
 	</Style>
 	<Style Selector="Panel.Dialog_ContentPanel_WithHeader">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding.WithHeader}"/>
+	</Style>
+	<Style Selector="Panel.Dialog_ContentPanel_WithItemsGroups">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding.WithItemsGroups}"/>
 	</Style>
 	<Style Selector="Panel.Dialog_FullWidthControl_Container">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.FullWidthControl.Margin}"/>
@@ -598,6 +620,7 @@
 	</Style>
 	<Style Selector="RadioButton.Dialog_RadioButton">
 		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
 		<Setter Property="TextBlock.FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
 	</Style>
 	<Style Selector="ScrollViewer.Dialog_ContentPanel">
@@ -637,11 +660,17 @@
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height.Small}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width.Small}"/>
 	</Style>
-	<Style Selector="Slider.Dialog_Slider">
+	<Style Selector="Slider.Dialog_Item_Slider">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="TickPlacement" Value="Outside"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
+	</Style>
+	<Style Selector="Slider.Dialog_Slider">
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
+		<Setter Property="TickPlacement" Value="Outside"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="StackPanel.Dialog_ContentPanel">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding}"/>
@@ -651,6 +680,9 @@
 	</Style>
 	<Style Selector="StackPanel.Dialog_ContentPanel_WithHeader">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding.WithHeader}"/>
+	</Style>
+	<Style Selector="StackPanel.Dialog_ContentPanel_WithItemsGroups">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding.WithItemsGroups}"/>
 	</Style>
 	<Style Selector="StackPanel.Dialog_ControlButtonsPanel">
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -751,12 +783,17 @@
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
-	<Style Selector="TextBox.Dialog_TextBox">
+	<Style Selector="TextBox.Dialog_Item_TextBox">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderBrush" Value="{x:Null}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
 		<Setter Property="TextAlignment" Value="Right"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="TextBox.Dialog_TextBox">
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="TimePicker.Dialog_TimePicker">
@@ -779,7 +816,11 @@
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="ToggleSwitch.Dialog_Item_ToggleSwitch">
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
 	<Style Selector="ToggleSwitch.Dialog_ToggleSwitch">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="TreeView.Dialog_TreeView">

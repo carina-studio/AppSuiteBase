@@ -19,6 +19,7 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 	object? customOKText;
 	object? customYesText;
 	MessageDialogResult? defaultResult;
+	object? description;
 	bool? doNotAskOrShowAgain;
 	object? doNotAskOrShowAgainDescription;
 	MessageDialogIcon icon = MessageDialogIcon.Information;
@@ -147,6 +148,21 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 
 
 	/// <summary>
+	/// Get or set description shown in dialog.
+	/// </summary>
+	public object? Description
+	{
+		get => this.description;
+		set
+		{
+			this.VerifyAccess();
+			this.VerifyShowing();
+			this.description = value;
+		}
+	}
+
+
+	/// <summary>
 	/// Get or set whether "Do not ask me again" or "Do not show again" has been checked or not. Set Null to hide the UI.
 	/// </summary>
 	public bool? DoNotAskOrShowAgain
@@ -245,6 +261,7 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 		using var customNoTextBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.CustomNoTextProperty, this.customNoText);
 		using var customOKTextBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.CustomOKTextProperty, this.customOKText);
 		using var customYesTextBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.CustomYesTextProperty, this.customYesText);
+		using var descBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.DescriptionProperty, this.description);
 		using var doNotAskOrShowAgainDesBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.DoNotAskOrShowAgainDescriptionProperty, this.doNotAskOrShowAgainDescription);
 		using var messageBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.MessageProperty, this.message);
 		using var secondaryMessageBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.SecondaryMessageProperty, this.secondaryMessage);

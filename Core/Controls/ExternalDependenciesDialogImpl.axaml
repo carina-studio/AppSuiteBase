@@ -54,7 +54,9 @@
 							<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
 
 								<!-- Download -->
-								<Button Name="downloadButton" Content="{DynamicResource String/ExternalDependenciesDialog.ExternalDependency.Install}" 
+								<Button Name="downloadButton" 
+									Classes="Dialog_Item_Button" 
+									Content="{DynamicResource String/ExternalDependenciesDialog.ExternalDependency.Install}" 
 									Command="{Binding $parent[Window].Download}" 
 									CommandParameter="{Binding}"
 									IsVisible="{Binding State, Converter={x:Static abConverters:ObjectConverters.IsEquivalentTo}, ConverterParameter={x:Static as:ExternalDependencyState.Unavailable}}" 
@@ -63,6 +65,7 @@
 
 								<!-- Details -->
 								<Button Name="detailsButton" 
+									Classes="Dialog_Item_Button"
 									Content="{DynamicResource String/Common.Details}" 
 									Command="{Binding $parent[Window].ShowDetails}" 
 									CommandParameter="{Binding}"
@@ -95,7 +98,7 @@
 
 		<!-- Content -->
 		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="{StaticResource Double/ExternalDependenciesDialog.Content.MaxHeight}">
-			<StackPanel Name="externalDependenciesPanel" Background="{x:Static Brushes.Transparent}" Classes="Dialog_ContentPanel"/>
+			<StackPanel Name="externalDependenciesPanel" Background="{x:Static Brushes.Transparent}" Classes="Dialog_ContentPanel_WithItemsGroups"/>
 		</ScrollViewer>
 
 	</DockPanel>
