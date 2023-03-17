@@ -2,7 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:abControls="using:CarinaStudio.Controls"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.DocumentViewerDialogImpl"
@@ -24,16 +23,26 @@
 		</Border>
 
 		<!-- Content -->
-		<Grid Classes="Dialog_ContentPanel" RowDefinitions="Auto,Auto,*">
+		<DockPanel>
 
-			<!-- Message -->
-			<TextBlock Name="messageTextBlock" Classes="Dialog_TextBlock" IsVisible="{Binding $self.Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Text="{Binding $parent[Window].Message}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+			<!-- Tool bar -->
+			<Border Classes="ToolBar" DockPanel.Dock="Top" IsVisible="{Binding $parent[Window].Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="{StaticResource GridLength/DocumentViewerDialog.ToolBar.LeftPadding}"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+
+					<!-- Message -->
+					<TextBlock Text="{Binding $parent[Window].Message}" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center"/>
+				
+				</Grid>
+			</Border>
 
 			<!-- Document -->
-			<Separator Classes="Dialog_Separator_Small" Grid.Row="1" IsVisible="{Binding #messageTextBlock.IsVisible}"/>
-			<controls:MarkdownViewer Name="documentViewer" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" TextElement.FontFamily="{Binding $parent[Window].DocumentFontFamily}" Source="{Binding $parent[Window].DocumentUri}"/>
-			
-		</Grid>
+			<controls:MarkdownViewer BorderThickness="0" HorizontalScrollBarVisibility="Disabled" TextElement.FontFamily="{Binding $parent[Window].DocumentFontFamily}" Source="{Binding $parent[Window].DocumentUri}"/>
+
+		</DockPanel>
 		
 	</DockPanel>
 	

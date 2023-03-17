@@ -501,6 +501,7 @@
 								<Button Command="{Binding $parent[Window].ShowAppInfoDialog}" Content="App Info" Margin="5"/>
 								<Button Command="{Binding $parent[Window].ShowAppUpdateDialog}" Content="App Update" Margin="5"/>
 								<Button Command="{Binding $parent[Window].ShowMessageDialog}" Content="MessageDialog" Margin="5"/>
+								<Button Command="{Binding $parent[Window].ShowTextInputDialog}" Content="TextInputDialog" Margin="5"/>
 								<Button Command="{Binding $parent[Window].ShowExternalDependenciesDialog}" Content="External Dependencies" Margin="5"/>
 								<Button Command="{Binding $parent[Window].ShowTestDialog}" Content="Test Dialog" Margin="5"/>
 								<Button Command="{Binding $parent[Window].UpdateTaskbarIconProgressState}" Content="Update Taskbar icon progress" Margin="5"/>

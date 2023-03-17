@@ -288,10 +288,10 @@
 	<sys:String x:Key="String/NetworkInterfaceType.Wireless80211">Wireless</sys:String>
 
 	<!-- PathEnvVarEditorDialog -->
-	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath">Add new directory path</sys:String>
-	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath.WithDialog">Add new directory path…</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath.WithDialog">Add…</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.CustomPaths">Default paths</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.EditPath">Edit directory path</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.Paths">Added paths</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">Edit PATH environment variable</sys:String>
 
 	<!-- ProductState -->

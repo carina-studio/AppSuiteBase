@@ -139,6 +139,7 @@
 	<sys:Double x:Key="Double/DocumentViewerDialog.MinHeight">200</sys:Double>
 	<sys:Double x:Key="Double/DocumentViewerDialog.MinWidth">200</sys:Double>
 	<sys:Double x:Key="Double/DocumentViewerDialog.Width">800</sys:Double>
+	<GridLength x:Key="GridLength/DocumentViewerDialog.ToolBar.LeftPadding">8</GridLength> <!-- (Thickness/MarkdownViewer.Padding).Left - (Thickness/ToolBar.TextBlock.Margin).Left - (Thickness/ToolBar.Padding).Left -->
 
 	<!-- Expander -->
 	<sys:Double x:Key="Double/Expander.Chevron.Size">10</sys:Double>
@@ -250,8 +251,7 @@
 	<CornerRadius x:Key="OverlayCornerRadius">8</CornerRadius>
 
 	<!-- PathEnvVarEditorDialog -->
-	<sys:Double x:Key="Double/PathEnvVarEditorDialog.CustomPathListBox.Height">100</sys:Double>
-	<sys:Double x:Key="Double/PathEnvVarEditorDialog.Height">400</sys:Double>
+	<sys:Double x:Key="Double/PathEnvVarEditorDialog.MaxHeight">450</sys:Double>
 	<sys:Double x:Key="Double/PathEnvVarEditorDialog.MinHeight">300</sys:Double>
 	<sys:Double x:Key="Double/PathEnvVarEditorDialog.MinWidth">200</sys:Double>
 	<sys:Double x:Key="Double/PathEnvVarEditorDialog.Width">400</sys:Double>

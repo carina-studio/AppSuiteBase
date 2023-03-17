@@ -15,6 +15,14 @@ namespace CarinaStudio.AppSuite.Controls;
 partial class TextInputDialogImpl : InputDialog
 {
 	/// <summary>
+	/// Property of <see cref="CheckBoxDescription"/>.
+	/// </summary>
+	public static readonly StyledProperty<string?> CheckBoxDescriptionProperty = AvaloniaProperty.Register<TextInputDialogImpl, string?>(nameof(CheckBoxDescription));
+	/// <summary>
+	/// Property of <see cref="CheckBoxMessage"/>.
+	/// </summary>
+	public static readonly StyledProperty<string?> CheckBoxMessageProperty = AvaloniaProperty.Register<TextInputDialogImpl, string?>(nameof(CheckBoxMessage));
+	/// <summary>
 	/// Property of <see cref="MaxTextLength"/>.
 	/// </summary>
 	public static readonly StyledProperty<int> MaxTextLengthProperty = AvaloniaProperty.Register<TextInputDialogImpl, int>(nameof(MaxTextLength), -1);
@@ -29,10 +37,9 @@ partial class TextInputDialogImpl : InputDialog
 
 
 	// Fields.
-	bool? doNotAskAgain;
-	readonly CheckBox doNotAskAgainCheckBox;
-	bool? doNotShowAgain;
-	readonly CheckBox doNotShowAgainCheckBox;
+	readonly CheckBox checkBox;
+	readonly Panel checkBoxPanel;
+	bool? isCheckBoxChecked;
 	readonly TextBox textBox;
 
 
@@ -42,48 +49,48 @@ partial class TextInputDialogImpl : InputDialog
 	public TextInputDialogImpl()
 	{
 		AvaloniaXamlLoader.Load(this);
-		this.doNotAskAgainCheckBox = this.Get<CheckBox>(nameof(doNotAskAgainCheckBox));
-		this.doNotShowAgainCheckBox = this.Get<CheckBox>(nameof(doNotShowAgainCheckBox));
+		this.checkBox = this.Get<CheckBox>(nameof(checkBox));
+		this.checkBoxPanel = this.Get<Panel>(nameof(checkBoxPanel));
 		this.textBox = this.Get<TextBox>(nameof(textBox));
 		this.GetObservable(TextProperty).Subscribe(_ => this.InvalidateInput());
 	}
 
 
-	// Do not ask again or not.
-	public bool? DoNotAskAgain 
-	{ 
-		get => this.doNotAskAgain;
-		set
-		{
-			if (this.doNotAskAgain == value)
-				return;
-			this.doNotAskAgain = value;
-			if (!value.HasValue)
-				this.doNotAskAgainCheckBox.IsVisible = false;
-			else
-			{
-				this.doNotAskAgainCheckBox.IsChecked = value.GetValueOrDefault();
-				this.doNotAskAgainCheckBox.IsVisible = true;
-			}
-		}
+	/// <summary>
+	/// Get or set description of check box.
+	/// </summary>
+	public string? CheckBoxDescription
+	{
+		get => this.GetValue(CheckBoxDescriptionProperty);
+		set => this.SetValue(CheckBoxDescriptionProperty, value);
+	}
+
+
+	/// <summary>
+	/// Get or set message of check box.
+	/// </summary>
+	public string? CheckBoxMessage
+	{
+		get => this.GetValue(CheckBoxMessageProperty);
+		set => this.SetValue(CheckBoxMessageProperty, value);
 	}
 
 
 	// Do not show again or not.
-	public bool? DoNotShowAgain 
+	public bool? IsCheckBoxChecked 
 	{ 
-		get => this.doNotShowAgain;
+		get => this.isCheckBoxChecked;
 		set
 		{
-			if (this.doNotShowAgain == value)
+			if (this.isCheckBoxChecked == value)
 				return;
-			this.doNotShowAgain = value;
+			this.isCheckBoxChecked = value;
 			if (!value.HasValue)
-				this.doNotShowAgainCheckBox.IsVisible = false;
+				this.checkBoxPanel.IsVisible = false;
 			else
 			{
-				this.doNotShowAgainCheckBox.IsChecked = value.GetValueOrDefault();
-				this.doNotShowAgainCheckBox.IsVisible = true;
+				this.checkBoxPanel.IsVisible = true;
+				this.checkBox.IsChecked = value.GetValueOrDefault();
 			}
 		}
 	}
@@ -97,10 +104,8 @@ partial class TextInputDialogImpl : InputDialog
 	/// <inheritdoc/>
 	protected override void OnClosing(CancelEventArgs e)
 	{
-		if (this.doNotAskAgainCheckBox.IsVisible)
-			this.doNotAskAgain = this.doNotAskAgainCheckBox.IsChecked.GetValueOrDefault();
-		if (this.doNotShowAgainCheckBox.IsVisible)
-			this.doNotShowAgain = this.doNotShowAgainCheckBox.IsChecked.GetValueOrDefault();
+		if (this.checkBoxPanel.IsVisible)
+			this.isCheckBoxChecked = this.checkBox.IsChecked.GetValueOrDefault();
 		base.OnClosing(e);
 	}
 
@@ -123,10 +128,8 @@ partial class TextInputDialogImpl : InputDialog
 
 
 	// Validate input.
-	protected override bool OnValidateInput()
-	{
-		return base.OnValidateInput() && !string.IsNullOrEmpty(this.textBox.Text);
-	}
+	protected override bool OnValidateInput() =>
+		base.OnValidateInput() && !string.IsNullOrEmpty(this.textBox.Text);
 
 
 	/// <summary>
@@ -134,8 +137,8 @@ partial class TextInputDialogImpl : InputDialog
 	/// </summary>
 	public int MaxTextLength
 	{
-		get => this.GetValue<int>(MaxTextLengthProperty);
-		set => this.SetValue<int>(MaxTextLengthProperty, value);
+		get => this.GetValue(MaxTextLengthProperty);
+		set => this.SetValue(MaxTextLengthProperty, value);
 	}
 
 
@@ -144,8 +147,8 @@ partial class TextInputDialogImpl : InputDialog
 	/// </summary>
 	public string? Message
 	{
-		get => this.GetValue<string?>(MessageProperty);
-		set => this.SetValue<string?>(MessageProperty, value);
+		get => this.GetValue(MessageProperty);
+		set => this.SetValue(MessageProperty, value);
 	}
 
 
@@ -154,7 +157,7 @@ partial class TextInputDialogImpl : InputDialog
 	/// </summary>
 	public string? Text
 	{
-		get => this.GetValue<string?>(TextProperty);
-		set => this.SetValue<string?>(TextProperty, value);
+		get => this.GetValue(TextProperty);
+		set => this.SetValue(TextProperty, value);
 	}
 }

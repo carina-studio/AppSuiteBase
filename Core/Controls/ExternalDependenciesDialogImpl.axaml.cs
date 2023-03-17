@@ -197,6 +197,19 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	}
 
 
+#pragma warning disable CA1822
+	/// <summary>
+	/// Download given external dependency.
+	/// </summary>
+	public void Download(object? parameter)
+	{
+		if (parameter is not ExternalDependency externalDependency)
+			return;
+		externalDependency.InstallationUri?.Let(it => Platform.OpenLink(it));
+	}
+#pragma warning restore CA1822
+
+
 	/// <summary>
 	/// Edit path environment variable.
 	/// </summary>
@@ -272,4 +285,17 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 				externalDependency.InvalidateAvailability();
 		}
 	}
+
+
+#pragma warning disable CA1822
+	/// <summary>
+	/// Show details of external dependency.
+	/// </summary>
+	public void ShowDetails(object? parameter)
+	{
+		if (parameter is not ExternalDependency externalDependency)
+			return;
+		externalDependency.DetailsUri?.Let(it => Platform.OpenLink(it));
+	}
+#pragma warning restore CA1822
 }

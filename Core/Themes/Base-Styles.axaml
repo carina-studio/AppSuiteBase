@@ -376,6 +376,12 @@
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ControlButtonsPanel.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 	</Style>
+	<Style Selector="Border.Dialog_Item_Container">
+		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight}"/>
+	</Style>
+	<Style Selector="Border.Dialog_Item_Container_Small">
+		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight.Small}"/>
+	</Style>
 	<Style Selector="Border.Dialog_ItemsGroup_Container">
 		<Setter Property="Background" Value="{DynamicResource Brush/Dialog.ItemsGroup.Background}"/>
 		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Dialog.ItemsGroup.Border}"/>
@@ -584,6 +590,12 @@
 	<Style Selector="Panel.Dialog_FullWidthControl_Container">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.FullWidthControl.Margin}"/>
 	</Style>
+	<Style Selector="Panel.Dialog_Item_Container">
+		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight}"/>
+	</Style>
+	<Style Selector="Panel.Dialog_Item_Container_Small">
+		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight.Small}"/>
+	</Style>
 	<Style Selector="RadioButton.Dialog_RadioButton">
 		<Setter Property="HorizontalAlignment" Value="Left"/>
 		<Setter Property="TextBlock.FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
@@ -746,7 +758,6 @@
 		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
 		<Setter Property="TextAlignment" Value="Right"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Watermark" Value="{DynamicResource String/Common.None}"/>
 	</Style>
 	<Style Selector="TimePicker.Dialog_TimePicker">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>

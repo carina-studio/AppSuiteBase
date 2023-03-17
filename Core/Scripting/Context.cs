@@ -222,12 +222,13 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
                 {
                     var dialog = new TextInputDialog()
                     {
-                        DoNotShowAgain = false,
+                        CheckBoxMessage = this.Application.GetObservableString("Common.DoNotShowAgain"),
+                        IsCheckBoxChecked = false,
                         InitialText = initialText,
                         Message = message,
                     };
                     result = await dialog.ShowDialog(window);
-                    this.IsShowingTextInputDialogAllowed = !dialog.DoNotShowAgain.GetValueOrDefault();
+                    this.IsShowingTextInputDialogAllowed = !dialog.IsCheckBoxChecked.GetValueOrDefault();
                     taskCompletionSource.SetResult();
                 });
                 while (!taskCompletionSource.Task.IsCompleted)
@@ -245,12 +246,13 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
                     {
                         var dialog = new TextInputDialog()
                         {
-                            DoNotShowAgain = false,
+                            CheckBoxMessage = this.Application.GetObservableString("Common.DoNotShowAgain"),
+                            IsCheckBoxChecked = false,
                             InitialText = initialText,
                             Message = message,
                         };
                         result = await dialog.ShowDialog(window);
-                        this.IsShowingTextInputDialogAllowed = !dialog.DoNotShowAgain.GetValueOrDefault();
+                        this.IsShowingTextInputDialogAllowed = !dialog.IsCheckBoxChecked.GetValueOrDefault();
                     }
                     lock (syncLock)
                         Monitor.Pulse(syncLock);

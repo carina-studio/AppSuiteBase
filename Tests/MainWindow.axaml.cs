@@ -469,6 +469,17 @@ namespace CarinaStudio.AppSuite.Tests
                 this.Application.Restart();
         }
 
+        public async void ShowTextInputDialog()
+        {
+            var result = await new TextInputDialog()
+            {
+                CheckBoxDescription = "Description",
+                CheckBoxMessage = this.Application.GetObservableString("Common.DoNotShowAgain"),
+                IsCheckBoxChecked = true,
+                Message = "Message",
+            }.ShowDialog(this);
+        }
+
 
         void ShowTutorial(IVisual anchor)
         {

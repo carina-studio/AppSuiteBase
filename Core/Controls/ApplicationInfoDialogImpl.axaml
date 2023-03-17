@@ -54,7 +54,7 @@
 				</Border>
 
 				<!-- Content -->
-				<StackPanel Name="itemsPanel" Background="{x:Static Brushes.Transparent}" Classes="Dialog_ContentPanel_WithHeader">
+				<StackPanel Name="itemsPanel" Background="{x:Static Brushes.Transparent}" Classes="Dialog_ContentPanel">
 
 					<!-- Icon and title -->
 					<DockPanel HorizontalAlignment="Stretch">

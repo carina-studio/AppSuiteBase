@@ -25,7 +25,7 @@
 		</Border>
 
 		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="500" VerticalScrollBarVisibility="Auto">
-			<StackPanel Classes="Dialog_ContentPanel_WithHeader">
+			<StackPanel Classes="Dialog_ContentPanel">
 
 				<Border Classes="Dialog_ItemsGroup_Header">
 					<TextBlock Classes="Dialog_ItemsGroup_Header" Text="Header1"/>
@@ -92,11 +92,7 @@
 						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with TextBox -->
-						<Grid Classes="Dialog_Item_Container">
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="Auto"/>
-							</Grid.ColumnDefinitions>
+						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="Auto,*">
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
@@ -118,7 +114,7 @@
 							</StackPanel>
 							<NumericUpDown Classes="Dialog_NumericUpDown" Grid.Column="1" Maximum="100" Minimum="0" Value="50"/>
 						</Grid>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with Slider -->
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
@@ -160,6 +156,27 @@
 
 					</StackPanel>
 				</Border>
+				<Separator Classes="Dialog_Separator_Large"/>
+
+				<StackPanel Grid.IsSharedSizeScope="True">
+					<Grid Classes="Dialog_Item_Container">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="label" Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<TextBlock Classes="Dialog_TextBlock_Label" Text="User name"/>
+						<TextBox Classes="Dialog_TextBox" Grid.Column="1"/>
+					</Grid>
+					<!--Separator Classes="Dialog_Item_Separator"/-->
+					<Grid Classes="Dialog_Item_Container">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition SharedSizeGroup="label" Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+						<TextBlock Classes="Dialog_TextBlock_Label" Text="Password"/>
+						<TextBox Classes="Dialog_TextBox" Grid.Column="1"/>
+					</Grid>
+				</StackPanel>
 				<Separator Classes="Dialog_Separator_Large"/>
 
 				<Border Classes="Dialog_ItemsGroup_Header">

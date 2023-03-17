@@ -10,39 +10,40 @@ namespace CarinaStudio.AppSuite.Controls;
 public class TextInputDialog : CommonDialog<string?>
 {
     // Fields.
-    bool? doNotAskAgain;
-    bool? doNotShowAgain;
+    object? checkBoxDescription;
+    object? checkBoxMessage;
     string? initialText;
+    bool? isCheckBoxChecked;
     int maxTextLength = -1;
     object? message;
 
 
     /// <summary>
-    /// Get or set whether "Do not ask me again" has been checked or not. Set Null to hide the UI.
+    /// Get or set description of check box.
     /// </summary>
-    public bool? DoNotAskAgain
+    public object? CheckBoxDescription
     {
-        get => this.doNotAskAgain;
+        get => this.checkBoxDescription;
         set
         {
             this.VerifyAccess();
             this.VerifyShowing();
-            this.doNotAskAgain = value;
+            this.checkBoxDescription = value;
         }
     }
 
 
     /// <summary>
-    /// Get or set whether "Do not show again" has been checked or not. Set Null to hide the UI.
+    /// Get or set message of check box.
     /// </summary>
-    public bool? DoNotShowAgain
+    public object? CheckBoxMessage
     {
-        get => this.doNotShowAgain;
+        get => this.checkBoxMessage;
         set
         {
             this.VerifyAccess();
             this.VerifyShowing();
-            this.doNotShowAgain = value;
+            this.checkBoxMessage = value;
         }
     }
 
@@ -58,6 +59,21 @@ public class TextInputDialog : CommonDialog<string?>
             this.VerifyAccess();
             this.VerifyShowing();
             this.initialText = value;
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set whether "Do not show again" has been checked or not. Set Null to hide the UI.
+    /// </summary>
+    public bool? IsCheckBoxChecked
+    {
+        get => this.isCheckBoxChecked;
+        set
+        {
+            this.VerifyAccess();
+            this.VerifyShowing();
+            this.isCheckBoxChecked = value;
         }
     }
 
@@ -101,22 +117,22 @@ public class TextInputDialog : CommonDialog<string?>
     {
         var dialog = new TextInputDialogImpl()
         {
-            DoNotAskAgain = this.doNotAskAgain,
-            DoNotShowAgain = this.doNotShowAgain,
+            IsCheckBoxChecked = this.isCheckBoxChecked,
             MaxTextLength = this.maxTextLength,
             Topmost = (owner?.Topmost).GetValueOrDefault(),
             WindowStartupLocation = owner != null 
                 ? Avalonia.Controls.WindowStartupLocation.CenterOwner
                 : Avalonia.Controls.WindowStartupLocation.CenterScreen,
         };
+        using var checkBoxDescBindingToken = this.BindValueToDialog(dialog, TextInputDialogImpl.CheckBoxDescriptionProperty, this.checkBoxDescription);
+        using var checkBoxMessageBindingToken = this.BindValueToDialog(dialog, TextInputDialogImpl.CheckBoxMessageProperty, this.checkBoxMessage);
         using var messageBindingToken = this.BindValueToDialog(dialog, TextInputDialogImpl.MessageProperty, this.message);
         dialog.Text = this.initialText;
         using var titleBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
         var result = await (owner != null
             ? dialog.ShowDialog<string?>(owner)
             : dialog.ShowDialog<string?>());
-        this.doNotAskAgain = dialog.DoNotAskAgain;
-        this.doNotShowAgain = dialog.DoNotShowAgain;
+        this.isCheckBoxChecked = dialog.IsCheckBoxChecked;
         return result;
     }
 }

@@ -4,7 +4,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:abControls="using:CarinaStudio.Controls"
 		xmlns:abConverters="using:CarinaStudio.Data.Converters"
-		xmlns:aConverters="using:Avalonia.Data.Converters"
 		xmlns:as="using:CarinaStudio.AppSuite"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -16,39 +15,66 @@
 	<!-- DataTemplate -->
 	<Window.DataTemplates>
 		<DataTemplate DataType="{x:Type as:ExternalDependency}">
-			<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
-				<Border Name="headerBorder" Classes="Dialog_TextBlock_Header1">
-					<SelectableTextBlock Classes="Dialog_TextBlock_Header1" Text="{Binding Name}"/>
+			<StackPanel>
+				<Border Name="headerBorder" Classes="Dialog_ItemsGroup_Header">
+					<SelectableTextBlock Classes="Dialog_ItemsGroup_Header" Text="{Binding Name}"/>
 				</Border>
-				<SelectableTextBlock Classes="Dialog_TextBlock" Grid.Row="1" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}" Text="{Binding Description}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
-				<Separator Classes="Dialog_Separator" Grid.Row="2" IsVisible="{Binding Description, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}"/>
-				<StackPanel Grid.Row="3" Orientation="Horizontal">
-					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Dependencies}"/>
-					<TextBlock Classes="Dialog_Icon_TextBlock" Text="{Binding Priority, Converter={x:Static controls:ExternalDependenciesDialogImpl.PriorityConverter}}"/>
-				</StackPanel>
-				<Separator Classes="Dialog_Separator_Small" Grid.Row="4"/>
-				<StackPanel Grid.Row="5" Orientation="Horizontal">
-					<Image Classes="Dialog_Icon" Source="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateIconConverter}}"/>
-					<TextBlock Classes="Dialog_Icon_TextBlock" Foreground="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateBrushConverter}}">
-						<TextBlock.Text>
-							<MultiBinding Converter="{x:Static controls:ExternalDependenciesDialogImpl.StateConverter}">
-								<Binding Path="Type"/>
-								<Binding Path="State"/>
-							</MultiBinding>
-						</TextBlock.Text>
-					</TextBlock>
-				</StackPanel>
-				<Separator Classes="Dialog_Separator_Small" Grid.Row="6"/>
-				<StackPanel Name="detailsPanel" Grid.Row="7" IsVisible="{Binding DetailsUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Orientation="Horizontal">
-					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Details.Outline}"/>
-					<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/Common.Details}" Uri="{Binding DetailsUri}"/>
-				</StackPanel>
-				<Separator Classes="Dialog_Separator_Small" Grid.Row="8" IsVisible="{Binding #detailsPanel.IsVisible}"/>
-				<StackPanel Grid.Row="9" IsVisible="{Binding InstallationUri, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Orientation="Horizontal">
-					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Import}"/>
-					<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" IsEnabled="{Binding State, Converter={x:Static abConverters:ObjectConverters.IsEquivalentTo}, ConverterParameter={x:Static as:ExternalDependencyState.Unavailable}}" Text="{DynamicResource String/ExternalDependenciesDialog.ExternalDependency.Install}" Uri="{Binding InstallationUri}"/>
-				</StackPanel>
-			</Grid>
+				<Border Classes="Dialog_ItemsGroup_Container">
+					<StackPanel>
+
+						<!-- Description -->
+						<Border Name="descriptionItem" 
+							Classes="Dialog_Item_Container_Small"
+							IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+
+							<SelectableTextBlock Classes="Dialog_TextBlock" 
+								Text="{Binding Description}" 
+								TextTrimming="CharacterEllipsis" 
+								TextWrapping="Wrap"/>
+
+						</Border>
+						<Separator Classes="Dialog_Item_Separator" IsVisible="{Binding #descriptionItem.IsVisible}"/>
+
+						<!-- Priority -->
+						<Border Classes="Dialog_Item_Container_Small">
+							<TextBlock Classes="Dialog_TextBlock" Text="{Binding Priority, Converter={x:Static controls:ExternalDependenciesDialogImpl.PriorityConverter}}"/>
+						</Border>
+						<Separator Classes="Dialog_Item_Separator"/>
+
+						<!-- State & Download -->
+						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+							<TextBlock Classes="Dialog_TextBlock" Foreground="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateBrushConverter}}">
+								<TextBlock.Text>
+									<MultiBinding Converter="{x:Static controls:ExternalDependenciesDialogImpl.StateConverter}">
+										<Binding Path="Type"/>
+										<Binding Path="State"/>
+									</MultiBinding>
+								</TextBlock.Text>
+							</TextBlock>
+							<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+
+								<!-- Download -->
+								<Button Name="downloadButton" Content="{DynamicResource String/ExternalDependenciesDialog.ExternalDependency.Install}" 
+									Command="{Binding $parent[Window].Download}" 
+									CommandParameter="{Binding}"
+									IsVisible="{Binding State, Converter={x:Static abConverters:ObjectConverters.IsEquivalentTo}, ConverterParameter={x:Static as:ExternalDependencyState.Unavailable}}" 
+									VerticalAlignment="Center"/>
+								<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #downloadButton.IsVisible}"/>
+
+								<!-- Details -->
+								<Button Name="detailsButton" 
+									Content="{DynamicResource String/Common.Details}" 
+									Command="{Binding $parent[Window].ShowDetails}" 
+									CommandParameter="{Binding}"
+									IsVisible="{Binding DetailsUri, Converter={x:Static ObjectConverters.IsNotNull}}"
+									VerticalAlignment="Center"/>
+
+							</StackPanel>
+						</Grid>
+
+					</StackPanel>
+				</Border>
+			</StackPanel>
 		</DataTemplate>
 	</Window.DataTemplates>
 	
@@ -69,7 +95,7 @@
 
 		<!-- Content -->
 		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="{StaticResource Double/ExternalDependenciesDialog.Content.MaxHeight}">
-			<StackPanel Name="externalDependenciesPanel" Background="{x:Static Brushes.Transparent}" Classes="Dialog_ContentPanel_WithHeader"/>
+			<StackPanel Name="externalDependenciesPanel" Background="{x:Static Brushes.Transparent}" Classes="Dialog_ContentPanel"/>
 		</ScrollViewer>
 
 	</DockPanel>

@@ -56,7 +56,7 @@
 	<sys:Double x:Key="Double/Dialog.Separator.Width.Large">24</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Width.Micro">2</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Width.Small">3</sys:Double>
-	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding">30,15,30,15</Thickness>
+	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding">25,15,25,15</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding.WithHeader">18,15,18,15</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ControlButton.Margin">2,0,2,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ControlButton.Padding">5,2,5,2</Thickness>
@@ -74,6 +74,9 @@
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">10,5,10,5</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">-10,0,-10,5</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">-10,0,-10,4</Thickness>
+
+	<!-- DocumentViewerDialog -->
+	<GridLength x:Key="GridLength/DocumentViewerDialog.ToolBar.LeftPadding">6</GridLength> <!-- (Thickness/MarkdownViewer.Padding).Left - (Thickness/ToolBar.TextBlock.Margin).Left - (Thickness/ToolBar.Padding).Left -->
 
 	<!-- Expander -->
 	<sys:Double x:Key="Double/Expander.Chevron.Size">10</sys:Double>

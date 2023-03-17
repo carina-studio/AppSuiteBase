@@ -65,9 +65,11 @@
 			<!-- Setting -->
 			<StackPanel Grid.Column="1" Grid.Row="1" IsVisible="{Binding !IsPreparingForUpdate}">
 				<Separator Classes="Dialog_Separator"/>
-				<TextBlock Classes="Dialog_TextBlock" Text="{DynamicResource String/ApplicationOptions.NotifyApplicationUpdate}"/>
-				<ToggleSwitch Classes="Dialog_ToggleSwitch" IsChecked="{Binding NotifyApplicationUpdate, Mode=TwoWay}"/>
-				<TextBlock Classes="Dialog_TextBlock_Description" Text="{DynamicResource String/ApplicationUpdateDialog.NotifyApplicationUpdate.Description}"/>
+				<CheckBox Classes="Dialog_CheckBox" Content="{DynamicResource String/ApplicationOptions.NotifyApplicationUpdate}" IsChecked="{Binding NotifyApplicationUpdate, Mode=TwoWay}"/>
+				<Grid ColumnDefinitions="Auto,*">
+					<Border Margin="{StaticResource Thickness/Dialog.Icon.Margin}" Width="{DynamicResource Double/Dialog.Icon.Size}"/>
+					<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" Margin="{StaticResource Thickness/Dialog.TextBlock.Margin.Description.BelowCheckBox}" Text="{DynamicResource String/ApplicationUpdateDialog.NotifyApplicationUpdate.Description}" VerticalAlignment="Top"/>
+				</Grid>
 			</StackPanel>
 			
 		</Grid>

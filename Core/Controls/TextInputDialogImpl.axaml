@@ -2,7 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:aConverters="using:Avalonia.Data.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.TextInputDialogImpl"
         Classes="Dialog"
@@ -21,19 +20,17 @@
 
 		<!-- Content -->
 		<StackPanel Classes="Dialog_ContentPanel" Orientation="Vertical">
-			<TextBlock Classes="Dialog_TextBlock" Text="{Binding $parent[Window].Message}"/>
-			<TextBox Name="textBox" MaxLength="{Binding $parent[Window].MaxTextLength}" Text="{Binding $parent[Window].Text, Mode=TwoWay}"/>
-			<Separator Classes="Dialog_Separator">
-				<Separator.IsVisible>
-					<MultiBinding Converter="{x:Static aConverters:BoolConverters.Or}">
-						<Binding Path="IsVisible" ElementName="doNotAskAgainCheckBox"/>
-						<Binding Path="IsVisible" ElementName="doNotShowAgainCheckBox"/>
-					</MultiBinding>
-				</Separator.IsVisible>
-			</Separator>
-			<CheckBox Name="doNotAskAgainCheckBox" Content="{DynamicResource String/Common.DoNotAskAgain}" HorizontalAlignment="Left" IsVisible="False"/>
-			<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #doNotAskAgainCheckBox.IsVisible}"/>
-			<CheckBox Name="doNotShowAgainCheckBox" Content="{DynamicResource String/Common.DoNotShowAgain}" HorizontalAlignment="Left" IsVisible="False"/>
+			<TextBlock Name="messageTextBlock" Classes="Dialog_TextBlock_Label" IsVisible="{Binding $parent[Window].Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Text="{Binding $parent[Window].Message}"/>
+			<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #messageTextBlock.IsVisible}"/>
+			<TextBox Name="textBox" Grid.Column="1" MaxLength="{Binding $parent[Window].MaxTextLength}" Text="{Binding $parent[Window].Text, Mode=TwoWay}"/>
+			<StackPanel Name="checkBoxPanel" IsVisible="False">
+				<Separator Classes="Dialog_Separator"/>
+				<CheckBox Name="checkBox" Classes="Dialog_CheckBox" Content="{Binding $parent[Window].CheckBoxMessage}"/>
+				<Grid ColumnDefinitions="Auto,*">
+					<Border Margin="{StaticResource Thickness/Dialog.Icon.Margin}" Width="{DynamicResource Double/Dialog.Icon.Size}"/>
+					<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" IsVisible="{Binding $parent[Window].CheckBoxDescription, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Margin="{StaticResource Thickness/Dialog.TextBlock.Margin.Description.BelowCheckBox}" Text="{Binding $parent[Window].CheckBoxDescription}" VerticalAlignment="Top"/>
+				</Grid>
+			</StackPanel>
 		</StackPanel>
 		
 	</DockPanel>

@@ -26,25 +26,36 @@
 		</Border>
 
 		<!-- Content -->
-		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,*">
+		<DockPanel>
 
-			<!-- Message -->
-			<TextBlock Classes="Dialog_TextBlock" Text="{Binding $parent[Window].Message}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+			<!-- Tool bar -->
+			<Border Classes="ToolBar" DockPanel.Dock="Top">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="{StaticResource GridLength/DocumentViewerDialog.ToolBar.LeftPadding}"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="Auto"/>
+					</Grid.ColumnDefinitions>
 
-			<!-- Culture -->
-			<ComboBox Name="cultureComboBox" Grid.Column="1" Items="{Binding $parent[Window].Cultures}" SelectedItem="{Binding $parent[Window].Culture, Mode=TwoWay}" VerticalAlignment="Bottom">
-				<ComboBox.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding Converter={x:Static controls:AgreementDialogImpl.CultureConverter}}"/>
-					</DataTemplate>
-				</ComboBox.ItemTemplate>
-			</ComboBox>
+					<!-- Message -->
+					<TextBlock Classes="ToolBar_TextBlock" Grid.Column="1" IsVisible="{Binding $self.Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Text="{Binding $parent[Window].Message}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+
+					<!-- Culture -->
+					<ComboBox Name="cultureComboBox" Classes="ToolBar_ComboBox" Grid.Column="2" Items="{Binding $parent[Window].Cultures}" SelectedItem="{Binding $parent[Window].Culture, Mode=TwoWay}" VerticalAlignment="Bottom">
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Converter={x:Static controls:AgreementDialogImpl.CultureConverter}}"/>
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
+					</ComboBox>
+
+				</Grid>
+			</Border>
 
 			<!-- Document -->
-			<Separator Classes="Dialog_Separator_Small" Grid.Row="1"/>
-			<controls:MarkdownViewer Name="documentViewer" Grid.ColumnSpan="2" Grid.Row="2" HorizontalScrollBarVisibility="Disabled" TextElement.FontFamily="{Binding $parent[Window].DocumentFontFamily}" Source="{Binding $parent[Window].DocumentUri}"/>
-			
-		</Grid>
+			<controls:MarkdownViewer BorderThickness="0" HorizontalScrollBarVisibility="Disabled" TextElement.FontFamily="{Binding $parent[Window].DocumentFontFamily}" Source="{Binding $parent[Window].DocumentUri}"/>
+
+		</DockPanel>
 		
 	</DockPanel>
 	

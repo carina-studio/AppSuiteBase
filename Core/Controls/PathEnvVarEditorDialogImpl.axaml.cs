@@ -9,7 +9,6 @@ using CarinaStudio.Windows.Input;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Globalization;
 using System.Windows.Input;
 
@@ -26,6 +25,7 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 
 
 	// Fields.
+	readonly Avalonia.Controls.ListBox customPathListBox;
 	readonly Avalonia.Controls.ListBox pathListBox;
 	readonly SortedObservableList<string> paths = new((lhs, rhs) => string.Compare(lhs, rhs, true, CultureInfo.InvariantCulture));
 
@@ -38,9 +38,22 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		this.SystemPaths = ListExtensions.AsReadOnly(this.paths);
 		this.RemovePathCommand = new Command<string?>(this.RemovePath);
 		AvaloniaXamlLoader.Load(this);
-		this.pathListBox = this.Get<CarinaStudio.AppSuite.Controls.ListBox>(nameof(pathListBox)).Also(it =>
+		this.customPathListBox = this.Get<Avalonia.Controls.ListBox>(nameof(customPathListBox)).Also(it =>
+		{
+			it.SelectionChanged += (_, e) =>
+			{
+				if (e.AddedItems.Count > 0)
+					this.pathListBox?.Let(it => it.SelectedItem = null);
+			};
+		});
+		this.pathListBox = this.Get<ListBox>(nameof(pathListBox)).Also(it =>
 		{
 			it.DoubleClickOnItem += (_, e) => this.EditPath(e.Item as string);
+			it.SelectionChanged += (_, e) =>
+			{
+				if (e.AddedItems.Count > 0)
+					this.customPathListBox.SelectedItem = null;
+			};
 		});
 		this.RefreshPaths();
 	}
