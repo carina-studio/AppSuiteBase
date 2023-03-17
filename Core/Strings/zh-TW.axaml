@@ -300,8 +300,8 @@
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage">{0}</sys:String>
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLine">{0} [行 {1}]</sys:String>
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLineColumn">{0} [行 {1}，字元 {2}]</sys:String>
-	<StaticResourceExtension x:Key="String/ScriptRuntimeErrorDialog.PromptForScriptRuntimeErrorOccurred" ResourceKey="String/ApplicationOptions.PromptForScriptRuntimeErrorOccurred"/>
-	<sys:String x:Key="String/ScriptRuntimeErrorDialog.PromptForScriptRuntimeErrorOccurred.Description">您也可以在應用程式選項中變更此設定。</sys:String>
+	<StaticResourceExtension x:Key="String/ScriptRuntimeErrorDialog.PromptWhenScriptRuntimeErrorOccurred" ResourceKey="String/ApplicationOptions.PromptWhenScriptRuntimeErrorOccurred"/>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.PromptWhenScriptRuntimeErrorOccurred.Description">您也可以在應用程式選項中變更此設定。</sys:String>
 
 	<!-- SelfTestingWindow -->
 	<sys:String x:Key="String/SelfTestingWindow.CancelAllTestCases">取消所有測試</sys:String>

@@ -308,8 +308,8 @@
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage">{0}</sys:String>
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLine">{0} [Line {1}]</sys:String>
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLineColumn">{0} [Line {1}, Column {2}]</sys:String>
-	<StaticResourceExtension x:Key="String/ScriptRuntimeErrorDialog.PromptForScriptRuntimeErrorOccurred" ResourceKey="String/ApplicationOptions.PromptForScriptRuntimeErrorOccurred"/>
-	<sys:String x:Key="String/ScriptRuntimeErrorDialog.PromptForScriptRuntimeErrorOccurred.Description">You can also change the setting in application options.</sys:String>
+	<StaticResourceExtension x:Key="String/ScriptRuntimeErrorDialog.PromptWhenScriptRuntimeErrorOccurred" ResourceKey="String/ApplicationOptions.PromptWhenScriptRuntimeErrorOccurred"/>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.PromptWhenScriptRuntimeErrorOccurred.Description">You can also change the setting in application options.</sys:String>
 
 	<!-- SelfTestingWindow -->
 	<sys:String x:Key="String/SelfTestingWindow.CancelAllTestCases">Cancel all tests</sys:String>
