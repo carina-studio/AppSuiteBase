@@ -45,45 +45,42 @@
 		</Border>
 
 		<!-- Content -->
-		<Grid Classes="Dialog_ContentPanel" RowDefinitions="*,Auto">
+		<Grid Classes="Dialog_ContentPanel" RowDefinitions="Auto,*,Auto">
 
 			<!-- System paths -->
-			<Border Classes="Dialog_FullWidthControl_Container">
-				<controls:ListBox Name="pathListBox" Items="{Binding $parent[Window].SystemPaths}" VirtualizationMode="None">
-					<controls:ListBox.ItemTemplate>
-						<DataTemplate>
-							<Grid ColumnDefinitions="*,Auto">
-								<abControls:TextBlock Classes="ListBoxItem_TextBlock" Text="{Binding}"/>
-								<Border Classes="InPlaceAction_Reserved" Grid.ColumnSpan="2"/>
-								<StackPanel Grid.Column="1" IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}" Orientation="Horizontal">
-									<Button Classes="InPlaceAction_Button" Command="{Binding $parent[Window].RemovePathCommand}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{DynamicResource String/Common.Delete}">
-										<controls:Image Classes="InPlaceAction_Icon">
-											<DrawingImage>
-												<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Delete}"/>
-											</DrawingImage>
-										</controls:Image>
-									</Button>
-									<Button Classes="InPlaceAction_Button" Command="{Binding $parent[Window].EditPathCommand}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{DynamicResource String/Common.Edit}">
-										<controls:Image Classes="InPlaceAction_Icon">
-											<DrawingImage>
-												<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Edit}"/>
-											</DrawingImage>
-										</controls:Image>
-									</Button>
-								</StackPanel>
-							</Grid>
-						</DataTemplate>
-					</controls:ListBox.ItemTemplate>
-				</controls:ListBox>
-			</Border>
+			<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/PathEnvVarEditorDialog.Paths}"/>
+			<controls:ListBox Name="pathListBox" Classes="Dialog_ListBox" Grid.Row="1" Items="{Binding $parent[Window].SystemPaths}" VirtualizationMode="None">
+				<controls:ListBox.ItemTemplate>
+					<DataTemplate>
+						<Grid ColumnDefinitions="*,Auto">
+							<abControls:TextBlock Classes="ListBoxItem_TextBlock" Text="{Binding}"/>
+							<Border Classes="InPlaceAction_Reserved" Grid.ColumnSpan="2"/>
+							<StackPanel Grid.Column="1" IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}" Orientation="Horizontal">
+								<Button Classes="InPlaceAction_Button" Command="{Binding $parent[Window].RemovePathCommand}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{DynamicResource String/Common.Delete}">
+									<controls:Image Classes="InPlaceAction_Icon">
+										<DrawingImage>
+											<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Delete}"/>
+										</DrawingImage>
+									</controls:Image>
+								</Button>
+								<Button Classes="InPlaceAction_Button" Command="{Binding $parent[Window].EditPathCommand}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{DynamicResource String/Common.Edit}">
+									<controls:Image Classes="InPlaceAction_Icon">
+										<DrawingImage>
+											<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Edit}"/>
+										</DrawingImage>
+									</controls:Image>
+								</Button>
+							</StackPanel>
+						</Grid>
+					</DataTemplate>
+				</controls:ListBox.ItemTemplate>
+			</controls:ListBox>
 
 			<!-- Custom paths -->
-			<StackPanel Grid.Row="1" IsVisible="{Binding $parent[Window].CustomPaths.Count}">
-				<Separator Classes="Dialog_Separator"/>
+			<StackPanel Grid.Row="2" IsVisible="{Binding $parent[Window].CustomPaths.Count}">
+				<Separator Classes="Dialog_Separator_Small"/>
 				<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/PathEnvVarEditorDialog.CustomPaths}"/>
-				<Border Classes="Dialog_FullWidthControl_Container">
-					<ListBox Name="customPathListBox" Height="{StaticResource Double/PathEnvVarEditorDialog.CustomPaths.Height}" Items="{Binding $parent[Window].CustomPaths}" VirtualizationMode="None"/>
-				</Border>
+				<ListBox Name="customPathListBox" Classes="Dialog_ListBox" Height="{StaticResource Double/PathEnvVarEditorDialog.CustomPaths.Height}" Items="{Binding $parent[Window].CustomPaths}" VirtualizationMode="None"/>
 			</StackPanel>
 
 		</Grid>
