@@ -116,10 +116,10 @@
 	<Thickness x:Key="Thickness/Dialog.ItemsGroup.Border">1</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ItemsGroup.Margin">-10,0,-10,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ItemsGroup.Padding">10,7,10,7</Thickness>
-	<Thickness x:Key="Thickness/Dialog.FullWidthControl.Margin">-1,2,0,2</Thickness>
+	<Thickness x:Key="Thickness/Dialog.FullWidthControl.Margin">-1,1,0,1</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ListActionButton.Padding">10,5,10,5</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ListActionButton.Margin">5,5,0,0</Thickness>
-	<Thickness x:Key="Thickness/Dialog.ListBox.Margin">-1,0,0,0</Thickness>
+	<Thickness x:Key="Thickness/Dialog.ListBox.Margin">-1,1,0,1</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Border.Header1">0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Border.Header2">0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin">0,1,0,1</Thickness>
@@ -134,7 +134,7 @@
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">12,6,12,6</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.ItemsGroupHeader">0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Label">0,0,5,0</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TreeView.Margin">-1,0,0,0</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TreeView.Margin">-1,1,0,1</Thickness>
 
 	<!-- DocumentViewerDialog -->
 	<sys:Double x:Key="Double/DocumentViewerDialog.Height">600</sys:Double>
