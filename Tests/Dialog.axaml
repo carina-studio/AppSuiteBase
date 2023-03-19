@@ -60,12 +60,12 @@
 								<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" Text="Google" Uri="http://www.google.com/"/>
 							</StackPanel>
-							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" Grid.Column="1"/>
+							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" Grid.Column="1" IsChecked="True"/>
 						</Grid>
 						<Separator Classes="Dialog_Item_Separator"/>
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
 							<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" Grid.Column="1"/>
+							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" Grid.Column="1" IsEnabled="False"/>
 						</Grid>
 						<Separator Classes="Dialog_Item_Separator"/>
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
@@ -83,7 +83,19 @@
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
-							<ComboBox Classes="Dialog_Item_ComboBox" Grid.Column="1">
+							<ComboBox Classes="Dialog_Item_ComboBox" Grid.Column="1" SelectedIndex="1">
+								<ComboBoxItem>Item 1</ComboBoxItem>
+								<ComboBoxItem>Item 2</ComboBoxItem>
+								<ComboBoxItem>Item 3___</ComboBoxItem>
+							</ComboBox>
+						</Grid>
+						<Separator Classes="Dialog_Item_Separator"/>
+						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+							<StackPanel Classes="Dialog_Item_Text_Container">
+								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							</StackPanel>
+							<ComboBox Classes="Dialog_Item_ComboBox" Grid.Column="1" IsEnabled="False" SelectedIndex="1">
 								<ComboBoxItem>Item 1</ComboBoxItem>
 								<ComboBoxItem>Item 2</ComboBoxItem>
 								<ComboBoxItem>Item 3___</ComboBoxItem>
@@ -100,6 +112,14 @@
 							<TextBox Classes="Dialog_Item_TextBox" Grid.Column="1"/>
 						</Grid>
 						<Separator Classes="Dialog_Item_Separator"/>
+						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="Auto,*">
+							<StackPanel Classes="Dialog_Item_Text_Container">
+								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							</StackPanel>
+							<TextBox Classes="Dialog_Item_TextBox" Grid.Column="1" IsEnabled="False" Text="Text"/>
+						</Grid>
+						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with NumericUpDown -->
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
@@ -112,7 +132,7 @@
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
-							<NumericUpDown Classes="Dialog_Item_NumericUpDown" Grid.Column="1" Maximum="100" Minimum="0" Value="50"/>
+							<NumericUpDown Classes="Dialog_Item_NumericUpDown" Grid.Column="1" IsEnabled="False" Maximum="100" Minimum="0" Value="50"/>
 						</Grid>
 						<Separator Classes="Dialog_Item_Separator"/>
 

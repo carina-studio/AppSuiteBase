@@ -478,8 +478,9 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="ComboBox.Dialog_Item_ComboBox">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderBrush" Value="{x:Null}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
-		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="DatePicker.Dialog_DatePicker">
@@ -585,6 +586,12 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
+	</Style>
+	<Style Selector="ListBox.Dialog_Item_ListBox">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderBrush" Value="{x:Null}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ListBox.Margin}"/>
 	</Style>
 	<Style Selector="ListBox.Dialog_ListBox">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -791,6 +798,10 @@
 		<Setter Property="TextAlignment" Value="Right"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="TextBox.Dialog_Item_TextBox:disabled /template/ Border#PART_BorderElement">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderBrush" Value="{x:Null}"/>
+	</Style>
 	<Style Selector="TextBox.Dialog_TextBox">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
@@ -822,6 +833,12 @@
 	<Style Selector="ToggleSwitch.Dialog_ToggleSwitch">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="TreeView.Dialog_Item_TreeView">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderBrush" Value="{x:Null}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TreeView.Margin}"/>
 	</Style>
 	<Style Selector="TreeView.Dialog_TreeView">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>

@@ -32,7 +32,7 @@
 
 	<!-- ApplicationOptionsDialog -->
 	<sys:Double x:Key="Double/ApplicationOptionsDialog.Content.MaxHeight">500</sys:Double>
-	<sys:Double x:Key="Double/ApplicationOptionsDialog.Width">500</sys:Double>
+	<sys:Double x:Key="Double/ApplicationOptionsDialog.Width">600</sys:Double>
 
 	<!-- ApplicationUpdateDialog -->
 	<sys:Double x:Key="Double/ApplicationUpdateDialog.Width">500</sys:Double>
