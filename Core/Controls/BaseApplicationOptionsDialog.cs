@@ -25,6 +25,7 @@ namespace CarinaStudio.AppSuite.Controls
         {
             this.DataContext = this.OnCreateViewModel();
             this.Classes = new Classes().Also(it => it.Add("Dialog"));
+            this.SizeToContent = SizeToContent.Height;
             this.Bind(TitleProperty, this.GetResourceObservable("String/ApplicationOptions"));
             this.Bind(WidthProperty, this.GetResourceObservable("Double/ApplicationOptionsDialog.Width"));
         }
