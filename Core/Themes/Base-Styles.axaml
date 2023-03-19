@@ -369,6 +369,12 @@
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Margin.Indented}"/>
 	</Style>
+	<Style Selector="Border.Dialog_ContentPanel_WithItemsGroups">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding.WithItemsGroups}"/>
+	</Style>
+	<Style Selector="Border.Dialog_FullWidthControl_Container">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.FullWidthControl.Margin}"/>
+	</Style>
 	<Style Selector="Border.Dialog_ControlButtonsPanel">
 		<Setter Property="Background" Value="{DynamicResource Brush/Dialog.ControlButtonsPanel.Background}"/>
 		<Setter Property="DockPanel.Dock" Value="Bottom"/>
@@ -478,14 +484,8 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="ComboBox.Dialog_Item_ComboBox">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
-		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-	</Style>
-	<Style Selector="ComboBox.Dialog_Item_ComboBox:disabled /template/ Border#Background">
-		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
-		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
 	<Style Selector="DatePicker.Dialog_DatePicker">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -572,6 +572,28 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.IconControlButton.Icon.Size}"/>
 	</Style>
+	<Style Selector="Line.Dialog_Item_Separator">
+		<Setter Property="EndPoint" Value="6,0"/>
+		<Setter Property="Height" Value="1"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ItemSeparator.Margin}"/>
+		<Setter Property="StartPoint" Value="0,0"/>
+		<Setter Property="Stretch" Value="Fill"/>
+		<Setter Property="Stroke" Value="{DynamicResource Brush/Dialog.ItemSeparator}"/>
+		<Setter Property="StrokeThickness" Value="{DynamicResource Double/Dialog.ItemSeparator.Stroke}"/>
+	</Style>
+	<Style Selector="Line.Dialog_Item_Separator_Inner">
+		<Setter Property="EndPoint" Value="6,0"/>
+		<Setter Property="Height" Value="1"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ItemSeparator.Margin.Inner}"/>
+		<Setter Property="StartPoint" Value="0,0"/>
+		<Setter Property="Stretch" Value="Fill"/>
+		<Setter Property="Stroke" Value="{DynamicResource Brush/Dialog.ItemSeparator}"/>
+		<Setter Property="StrokeDashArray" Value="4,2"/>
+		<Setter Property="StrokeDashOffset" Value="0"/>
+		<Setter Property="StrokeThickness" Value="{DynamicResource Double/Dialog.ItemSeparator.Stroke}"/>
+	</Style>
 	<Style Selector="abControls|LinkTextBlock.Dialog_Icon_LinkTextBlock">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
@@ -593,9 +615,10 @@
 	</Style>
 	<Style Selector="ListBox.Dialog_Item_ListBox">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
-		<Setter Property="BorderBrush" Value="{x:Null}"/>
+		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ListBox.Margin}"/>
+		<Setter Property="Padding" Value="0"/>
 	</Style>
 	<Style Selector="ListBox.Dialog_ListBox">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -797,12 +820,22 @@
 	<Style Selector="TextBox.Dialog_Item_TextBox">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
+		<Setter Property="Padding" Value="0"/>
 		<Setter Property="TextAlignment" Value="Right"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="TextBox.Dialog_Item_TextBox:disabled /template/ Border#PART_BorderElement">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
+	</Style>
+	<Style Selector="TextBox.Dialog_Item_TextBox:focus /template/ Border#PART_BorderElement">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
+	</Style>
+	<Style Selector="TextBox.Dialog_Item_TextBox:pointerover /template/ Border#PART_BorderElement">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
@@ -840,9 +873,10 @@
 	</Style>
 	<Style Selector="TreeView.Dialog_Item_TreeView">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
-		<Setter Property="BorderBrush" Value="{x:Null}"/>
+		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TreeView.Margin}"/>
+		<Setter Property="Padding" Value="0"/>
 	</Style>
 	<Style Selector="TreeView.Dialog_TreeView">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
