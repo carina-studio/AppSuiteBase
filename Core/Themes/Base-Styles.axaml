@@ -479,9 +479,13 @@
 	</Style>
 	<Style Selector="ComboBox.Dialog_Item_ComboBox">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
-		<Setter Property="BorderBrush" Value="{x:Null}"/>
+		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="ComboBox.Dialog_Item_ComboBox:disabled /template/ Border#Background">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
 	<Style Selector="DatePicker.Dialog_DatePicker">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -792,7 +796,7 @@
 	</Style>
 	<Style Selector="TextBox.Dialog_Item_TextBox">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
-		<Setter Property="BorderBrush" Value="{x:Null}"/>
+		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
 		<Setter Property="TextAlignment" Value="Right"/>
@@ -800,7 +804,7 @@
 	</Style>
 	<Style Selector="TextBox.Dialog_Item_TextBox:disabled /template/ Border#PART_BorderElement">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
-		<Setter Property="BorderBrush" Value="{x:Null}"/>
+		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
 	<Style Selector="TextBox.Dialog_TextBox">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>

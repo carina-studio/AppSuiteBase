@@ -112,12 +112,14 @@
 							<TextBox Classes="Dialog_Item_TextBox" Grid.Column="1"/>
 						</Grid>
 						<Separator Classes="Dialog_Item_Separator"/>
-						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="Auto,*">
+						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto,Auto,Auto">
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
-							<TextBox Classes="Dialog_Item_TextBox" Grid.Column="1" IsEnabled="False" Text="Text"/>
+							<ToggleButton Content="IsEnabled" Grid.Column="1" IsChecked="{Binding #itemTextBox1.IsEnabled, Mode=TwoWay}"/>
+							<Separator Classes="Dialog_Separator_Small" Grid.Column="2"/>
+							<TextBox Name="itemTextBox1" Classes="Dialog_Item_TextBox" Grid.Column="3" IsEnabled="False" Text="Text"/>
 						</Grid>
 						<Separator Classes="Dialog_Item_Separator"/>
 
