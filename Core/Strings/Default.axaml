@@ -198,6 +198,7 @@
 	<sys:String x:Key="String/Common.Remove.WithDialog">Remove…</sys:String>
 	<sys:String x:Key="String/Common.Rename">Rename</sys:String>
 	<sys:String x:Key="String/Common.Rename.WithDialog">Rename…</sys:String>
+	<sys:String x:Key="String/Common.Required">Required</sys:String>
 	<sys:String x:Key="String/Common.Reset">Reset</sys:String>
 	<sys:String x:Key="String/Common.Reset.WithDialog">Reset…</sys:String>
 	<sys:String x:Key="String/Common.Save">Save</sys:String>

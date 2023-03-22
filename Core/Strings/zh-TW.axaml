@@ -192,6 +192,7 @@
 	<sys:String x:Key="String/Common.Remove.WithDialog">移除…</sys:String>
 	<sys:String x:Key="String/Common.Rename">重新命名</sys:String>
 	<sys:String x:Key="String/Common.Rename.WithDialog">重新命名…</sys:String>
+	<sys:String x:Key="String/Common.Required">必要</sys:String>
 	<sys:String x:Key="String/Common.Reset">重設</sys:String>
 	<sys:String x:Key="String/Common.Reset.WithDialog">重設…</sys:String>
 	<sys:String x:Key="String/Common.Save">儲存</sys:String>
