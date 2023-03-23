@@ -28,26 +28,30 @@ partial class AppSuiteApplication
             return;
         
         // set environment variable
-        var valueBuilder = new StringBuilder();
+        //var valueBuilder = new StringBuilder();
         var minScaleFactor = int.MaxValue;
         for (var i = getGdkMonitorCount(display) - 1; i >= 0; --i)
         {
             var monitor = getGdkMonitor(display, i);
+            /*
             var monitorModelPtr = getGdkMonitorModel(monitor);
             if (monitorModelPtr == null && i > 0)
                 continue;
+            */
             var scaleFactor = Math.Max(1, getGdkMonitorScaleFactor(monitor));
+            /*
             if (valueBuilder.Length > 0)
                 valueBuilder.Append(';');
             valueBuilder.Append(monitorModelPtr != null ? new string(monitorModelPtr) : "default");
             valueBuilder.Append('=');
             valueBuilder.Append(scaleFactor);
+            */
             if (scaleFactor >= 1 && scaleFactor < minScaleFactor)
                 minScaleFactor = scaleFactor;
         }
         if (minScaleFactor < int.MaxValue)
             Environment.SetEnvironmentVariable("AVALONIA_GLOBAL_SCALE_FACTOR", minScaleFactor.ToString());
-        Environment.SetEnvironmentVariable("AVALONIA_SCREEN_SCALE_FACTORS", valueBuilder.ToString());
+        //Environment.SetEnvironmentVariable("AVALONIA_SCREEN_SCALE_FACTORS", valueBuilder.ToString());
     }
 
 
