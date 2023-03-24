@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using System;
 using System.Diagnostics;
@@ -83,7 +84,15 @@ namespace CarinaStudio.AppSuite.Controls
                 && this.SelectedItems?.Count == 1
                 && this.SelectedItem == this.pointerDownItem)
             {
-                this.DoubleClickOnItem?.Invoke(this, new ListBoxItemEventArgs(this.SelectedIndex, this.pointerDownItem));
+                var doubleClickedItem = this.pointerDownItem;
+                Dispatcher.UIThread.Post(() =>
+                {
+                    if (this.SelectedItem == doubleClickedItem
+                        && this.SelectedItems?.Count == 1)
+                    {
+                        this.DoubleClickOnItem?.Invoke(this, new ListBoxItemEventArgs(this.SelectedIndex, doubleClickedItem));
+                    }
+                }, DispatcherPriority.Normal);
             }
             this.pointerDownItem = null;
         }
