@@ -1008,7 +1008,7 @@
 								</ScaleTransform.Transitions>
 							</ScaleTransform>
 						</Border.RenderTransform>
-						<Grid ClipToBounds="True" ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="Auto,Auto">
+						<Grid ClipToBounds="True" ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
 							<Image Classes="Icon" Height="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}" IsVisible="{Binding Icon, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.Icon.Margin}" Source="{Binding Icon}" VerticalAlignment="Center" Width="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}"/>
 							<TextBlock Grid.Column="1" FontSize="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize}" MaxWidth="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth}" Text="{Binding Description}" TextWrapping="Wrap" VerticalAlignment="Center"/>
 							<abControls:LinkTextBlock Name="PART_SkipAllTutorials" Command="{Binding Presenter.RequestSkippingAllTutorials}" FontSize="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.SkipAllTutorials.FontSize}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" IsVisible="{Binding IsSkippingAllTutorialsAllowed}" Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.SkipAllTutorials.Margin}" Text="{DynamicResource String/TutorialPresenter.SkipAllTutorials}"/>
