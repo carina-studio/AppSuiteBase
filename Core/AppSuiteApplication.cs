@@ -177,6 +177,10 @@ namespace CarinaStudio.AppSuite
         protected static class LaunchOptionKeys
         {
             /// <summary>
+            /// Whether clean mode is requested or not.
+            /// </summary>
+            public const string IsCleanModeRequested = "IsCleanModeRequested";
+            /// <summary>
             /// Whether debug mode is requested or not.
             /// </summary>
             public const string IsDebugModeRequested = "IsDebugModeRequested";
@@ -257,6 +261,10 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <summary>
+        /// Argument indicates to launch in clean mode.
+        /// </summary>
+        public const string CleanModeArgument = "-clean-mode";
         /// <summary>
         /// Argument indicates to enable debug mode.
         /// </summary>
@@ -808,6 +816,7 @@ namespace CarinaStudio.AppSuite
         /// <inheritdoc/>
         public virtual ApplicationArgsBuilder CreateApplicationArgsBuilder() => new()
         {
+            IsCleanMode = this.IsCleanMode,
             IsDebugMode = this.IsDebugMode,
             IsTestingMode = this.IsTestingMode
         };
@@ -1169,6 +1178,10 @@ namespace CarinaStudio.AppSuite
 #pragma warning restore CA1822
 
 
+        /// <inheritdoc/>
+        public bool IsCleanMode { get; private set; }
+
+
         /// <summary>
         /// Check whether application is running in debug mode or not.
         /// </summary>
@@ -1421,7 +1434,7 @@ namespace CarinaStudio.AppSuite
         // Load configuration.
         async Task LoadConfigurationAsync()
         {
-            if (this.IsDebugMode)
+            if (!this.IsCleanMode && this.IsDebugMode)
             {
                 // create instance
                 var config = new ConfigurationImpl();
@@ -1466,6 +1479,13 @@ namespace CarinaStudio.AppSuite
 
             // create persistent state
             this.persistentState ??= new PersistentStateImpl(this);
+
+            // skip in clean mode
+            if (this.IsCleanMode)
+            {
+                this.Logger.LogWarning("Skip loading persistent state in clean mode");
+                return;
+            }
 
             // load from file
             this.Logger.LogDebug("Start loading persistent state");
@@ -1598,6 +1618,13 @@ namespace CarinaStudio.AppSuite
 
             // create settings
             this.settings ??= new SettingsImpl(this);
+
+            // skip in clean mode
+            if (this.IsCleanMode)
+            {
+                this.Logger.LogWarning("Skip loading settings in clean mode");
+                return;
+            }
 
             // load from file
             this.Logger.LogDebug("Start loading settings");
@@ -1848,7 +1875,12 @@ namespace CarinaStudio.AppSuite
             if (desktopLifetime != null)
             {
                 this.LaunchOptions = this.ParseArguments(desktopLifetime.Args ?? Array.Empty<string>());
-                if (this.LaunchOptions.TryGetValue(LaunchOptionKeys.IsRestoringMainWindowsRequested, out bool boolValue) && boolValue)
+                if (this.LaunchOptions.TryGetValue(LaunchOptionKeys.IsCleanModeRequested, out bool isCleanMode) && isCleanMode)
+                {
+                    this.Logger.LogWarning("Launch in clean mode");
+                    this.IsCleanMode = isCleanMode;
+                }
+                if (!this.IsCleanMode && this.LaunchOptions.TryGetValue(LaunchOptionKeys.IsRestoringMainWindowsRequested, out bool boolValue) && boolValue)
                     this.RequestRestoringMainWindows();
             }
 
@@ -2220,6 +2252,9 @@ namespace CarinaStudio.AppSuite
             var arg = args[index];
             switch (arg)
             {
+                case CleanModeArgument:
+                    launchOptions[LaunchOptionKeys.IsCleanModeRequested] = true;
+                    break;
                 case DebugArgument:
                     launchOptions[LaunchOptionKeys.IsDebugModeRequested] = true;
                     break;
@@ -3130,6 +3165,11 @@ namespace CarinaStudio.AppSuite
             // check state
             if (this.configuration is not ConfigurationImpl config)
                 return;
+            if (this.IsCleanMode)
+            {
+                this.Logger.LogWarning("Skip saving configuration in clean mode");
+                return;
+            }
 
             // save
             this.Logger.LogDebug("Start saving configuration");
@@ -3155,6 +3195,11 @@ namespace CarinaStudio.AppSuite
             this.VerifyAccess();
             if (this.persistentState == null)
                 return;
+            if (this.IsCleanMode)
+            {
+                this.Logger.LogWarning("Skip saving persistent state in clean mode");
+                return;
+            }
 
             // save
             this.Logger.LogDebug("Start saving persistent state");
@@ -3180,6 +3225,11 @@ namespace CarinaStudio.AppSuite
             this.VerifyAccess();
             if (this.settings == null)
                 return;
+            if (this.IsCleanMode)
+            {
+                this.Logger.LogWarning("Skip saving settings in clean mode");
+                return;
+            }
 
             // save
             this.Logger.LogDebug("Start saving settings");

@@ -153,6 +153,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Check whether application is launched in clean mode or not.
+        /// </summary>
+        bool IsCleanMode { get; }
+
+
+        /// <summary>
         /// Check whether application is running in debug mode or not.
         /// </summary>
         bool IsDebugMode { get; }
@@ -448,6 +454,7 @@ namespace CarinaStudio.AppSuite
         /// <param name="template">Template.</param>
         public ApplicationArgsBuilder(ApplicationArgsBuilder template)
         {
+            this.IsCleanMode = template.IsCleanMode;
             this.IsDebugMode = template.IsDebugMode;
             this.IsTestingMode = template.IsTestingMode;
             this.RestoringMainWindows = template.RestoringMainWindows;
@@ -470,6 +477,7 @@ namespace CarinaStudio.AppSuite
         /// <inheritdoc/>
         public virtual bool Equals(ApplicationArgsBuilder? builder) =>
             builder is not null
+            && this.IsCleanMode == builder.IsCleanMode
             && this.IsDebugMode == builder.IsDebugMode
             && this.IsTestingMode == builder.IsTestingMode
             && this.RestoringMainWindows == builder.RestoringMainWindows;
@@ -483,6 +491,12 @@ namespace CarinaStudio.AppSuite
         /// <inheritdoc/>
         public override int GetHashCode() =>
             ((this.IsDebugMode ? 1 : 0) << 31) | ((this.IsTestingMode ? 1 : 0) << 30);
+        
+
+        /// <summary>
+        /// Get or set whether application should be launched in clean mode or not.
+        /// </summary>
+        public bool IsCleanMode { get; set; }
 
 
         /// <summary>
@@ -507,6 +521,12 @@ namespace CarinaStudio.AppSuite
         public override string ToString()
         {
             var buffer = new StringBuilder();
+            if (this.IsCleanMode)
+            {
+                if (buffer.Length > 0)
+                    buffer.Append(' ');
+                buffer.Append(AppSuiteApplication.CleanModeArgument);
+            }
             if (this.IsDebugMode)
             {
                 if (buffer.Length > 0)

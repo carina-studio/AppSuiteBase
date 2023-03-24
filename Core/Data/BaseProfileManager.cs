@@ -129,6 +129,11 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     {
         // get profile files
         this.VerifyAccess();
+        if (this.Application.IsCleanMode)
+        {
+            this.Logger.LogWarning("Skip loading profiles in clean mode");
+            return;
+        }
         var profileFileNames = await this.OnGetProfileFilesAsync();
         this.Logger.LogDebug("{count} profile file(s) found", profileFileNames.Count);
 
@@ -447,6 +452,11 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         this.VerifyAccess();
         if (!object.ReferenceEquals(profile.Manager, this))
             throw new ArgumentException("Profile is not managed by the manager.");
+        if (this.Application.IsCleanMode)
+        {
+            this.Logger.LogWarning("Skip saving profile '{id}' in clean mode", profile.Id);
+            return;
+        }
         if (profile.IsBuiltIn || !this.profilesToSave.Add(profile))
             return;
         this.saveProfilesAction.Schedule(SavingProfilesDelay);
@@ -459,6 +469,11 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     protected void ScheduleSavingProfiles()
     {
         this.VerifyAccess();
+        if (this.Application.IsCleanMode)
+        {
+            this.Logger.LogWarning("Skip saving profiles in clean mode");
+            return;
+        }
         foreach (var profile in this.profiles)
         {
             if (!profile.IsBuiltIn)
