@@ -157,6 +157,7 @@ public static class CommandSearchPaths
                 }, cancellationToken);
             }
         }
+        paths.RemoveAll(it => string.IsNullOrWhiteSpace(it));
     }
 
 
