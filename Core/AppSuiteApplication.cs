@@ -302,6 +302,7 @@ namespace CarinaStudio.AppSuite
             }
             return Environment.CurrentDirectory;
         });
+        static readonly SettingKey<string> AppVersionKey = new("ApplicationVersion", "");
         static double CachedCustomScreenScaleFactor = double.NaN;
         static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new("IsAcceptNonStableApplicationUpdateInitialized", false);
         static readonly SettingKey<int> LogOutputTargetPortKey = new("LogOutputTargetPort");
@@ -1505,6 +1506,24 @@ namespace CarinaStudio.AppSuite
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, "Failed to load persistent state from '{persistentStateFilePath}'", this.persistentStateFilePath);
+            }
+
+            // check application version
+            var currentVersion = this.Assembly.GetName().Version;
+            if (Version.TryParse(this.PersistentState.GetValueOrDefault(AppVersionKey), out var version))
+            {
+                this.PreviousVersion = version;
+                if (currentVersion != version)
+                {
+                    this.persistentState.SetValue<string>(AppVersionKey, currentVersion?.ToString() ?? "");
+                    _ = this.SavePersistentStateAsync();
+                }
+            }
+            else if (currentVersion != null)
+            {
+                this.PreviousVersion = null;
+                this.persistentState.SetValue<string>(AppVersionKey, currentVersion.ToString());
+                _ = this.SavePersistentStateAsync();
             }
 
             // check privacy policy state
@@ -2931,6 +2950,10 @@ namespace CarinaStudio.AppSuite
         /// Get version of <see cref="PersistentState"/>.
         /// </summary>
         protected virtual int PersistentStateVersion { get => 1; }
+
+
+        /// <inheritdoc/>
+        public Version? PreviousVersion { get; private set; }
 
 
         /// <inheritdoc/>

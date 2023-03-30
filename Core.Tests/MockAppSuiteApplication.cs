@@ -385,6 +385,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public virtual Version? PreviousVersion { get; }
+
+
+        /// <inheritdoc/>
         public virtual DocumentSource? PrivacyPolicy { get; }
 
 

@@ -305,6 +305,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get version of application in previous launch.
+        /// </summary>
+        Version? PreviousVersion { get; }
+
+
+        /// <summary>
         /// Get latest document of Privacy Policy.
         /// </summary>
         DocumentSource? PrivacyPolicy { get; }
