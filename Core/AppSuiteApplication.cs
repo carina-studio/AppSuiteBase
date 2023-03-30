@@ -2868,6 +2868,25 @@ namespace CarinaStudio.AppSuite
             };
             this.windowObserverTokens.Add(window, tokens);
 
+            // update latest active window
+            if (window is CarinaStudio.Controls.Window csWindow && this.mainWindowHolders.TryGetValue(csWindow, out var mainWindowHolder))
+            {
+                // add main window to active list
+                if (mainWindowHolder.ActiveListNode.List == null)
+                {
+                    this.activeMainWindowList.AddLast(mainWindowHolder.ActiveListNode);
+                    if (this.activeMainWindowList.Count == 1)
+                        this.OnPropertyChanged(nameof(LatestActiveMainWindow));
+                }
+
+                // make it as latest active window
+                if (this.LatestActiveWindow == null)
+                {
+                    this.LatestActiveWindow = window;
+                    this.OnPropertyChanged(nameof(LatestActiveWindow));
+                }
+            }
+
             // exit background mode
             this.ExitBackgroundMode();
         }
