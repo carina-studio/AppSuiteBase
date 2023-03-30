@@ -17,7 +17,7 @@
 	<SolidColorBrush x:Key="Brush/DateTimeFormatSyntaxHighlighting.Year">#389edb</SolidColorBrush>
 
 	<!-- RegexSyntaxHighlighting -->
-	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Alternation">#aaaaaa</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Alternation">#00ccc0</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Anchors">#ff40d0</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Brackets">#ffe800</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterClasses">#389edb</SolidColorBrush>
