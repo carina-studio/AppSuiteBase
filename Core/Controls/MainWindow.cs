@@ -5,6 +5,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Platform;
 using CarinaStudio.Animation;
+using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
@@ -14,6 +15,7 @@ using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -50,6 +52,8 @@ namespace CarinaStudio.AppSuite.Controls
         static readonly SettingKey<int> ExtDepDialogShownVersionKey = new("MainWindow.ExternalDependenciesDialogShownVersion", -1);
         static bool IsAppRunningLocationOnMacOSChecked;
         static bool IsNotifyingAppUpdateFound;
+        static bool IsReactivatingProVersion;
+		static bool IsReactivatingProVersionNeeded;
         static readonly SettingKey<bool> IsUsingCompactUIConfirmedKey = new("MainWindow.IsUsingCompactUIConfirmed", false);
         static readonly SettingKey<string> LatestAppChangeListShownVersionKey = new("ApplicationChangeListDialog.LatestShownVersion", "");
         static readonly SettingKey<int> WindowHeightSettingKey = new("MainWindow.Height", 600);
@@ -68,6 +72,7 @@ namespace CarinaStudio.AppSuite.Controls
         bool isFirstContentPaddingUpdate = true;
         bool isShowingInitialDialogs;
         long openedTime;
+        readonly ScheduledAction reactivateProVersionAction;
         readonly ScheduledAction restartingRootWindowsAction;
         double restoredHeight;
         double restoredWidth;
@@ -86,6 +91,30 @@ namespace CarinaStudio.AppSuite.Controls
             this.LayoutMainWindowsCommand = new Command<MultiWindowLayout>(this.LayoutMainWindows, this.GetObservable(HasMultipleMainWindowsProperty));
 
             // create scheduled actions
+            this.reactivateProVersionAction = new(async () =>
+			{
+                if (this.Application is not AppSuiteApplication asApp)
+                    return;
+                var productId = asApp.ProVersionProductId;
+				if (productId == null 
+                    || !IsReactivatingProVersionNeeded
+					|| this.HasDialogs 
+					|| !this.IsActive 
+					|| asApp.IsActivatingProVersion
+					|| IsReactivatingProVersion)
+				{
+					return;
+				}
+				IsReactivatingProVersionNeeded = false;
+				if (asApp.ProductManager.TryGetProductState(productId, out var state)
+					&& state == ProductState.Deactivated)
+				{
+					await this.OnNotifyReactivatingProVersionNeededAsync();
+					IsReactivatingProVersion = true;
+					await asApp.ActivateProVersionAsync(this);
+					IsReactivatingProVersion = false;
+				}
+			});
             this.restartingRootWindowsAction = new ScheduledAction(() =>
             {
                 if (!this.IsOpened || this.HasDialogs || !this.Application.IsRestartingRootWindowsNeeded)
@@ -193,6 +222,8 @@ namespace CarinaStudio.AppSuite.Controls
                         this.restartingRootWindowsAction.Reschedule(RestartingMainWindowsDelay);
                     if (!this.AreInitialDialogsClosed)
                         this.showInitDialogsAction.Schedule();
+                    if (IsReactivatingProVersionNeeded)
+                        this.reactivateProVersionAction.Schedule();
                 }
             });
             this.GetObservable(HeightProperty).Subscribe(_ => 
@@ -218,7 +249,9 @@ namespace CarinaStudio.AppSuite.Controls
                                 IsNotifyingAppUpdateFound = false;
                             }
                         });
-                    }
+                    } 
+                    if (IsReactivatingProVersionNeeded)
+                        this.reactivateProVersionAction.Schedule();
                 }
             });
             this.GetObservable(WidthProperty).Subscribe(_ => 
@@ -259,6 +292,34 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public void CancelSavingSize() =>
             this.saveWindowSizeAction.Cancel();
+        
+
+        // Check whether Pro-version reactivation is needed or not.
+        void CheckIsReactivatingProVersionNeeded()
+        {
+            if (this.Application is not AppSuiteApplication asApp)
+                return;
+            var productId = asApp.ProVersionProductId;
+            if (productId == null || !asApp.ProductManager.TryGetProductState(productId, out var state))
+				return;
+            switch (state)
+			{
+				case ProductState.Deactivated:
+					if (asApp.ProductManager.TryGetProductActivationFailure(productId, out var failure)
+						&& failure != ProductActivationFailure.NoNetworkConnection
+						&& !IsReactivatingProVersion)
+					{
+						this.Logger.LogWarning("Need to reactivate Pro-version because of {failure}", failure);
+						IsReactivatingProVersionNeeded = true;
+						this.reactivateProVersionAction.Schedule();
+					}
+					break;
+				default:
+					IsReactivatingProVersionNeeded = false;
+					this.reactivateProVersionAction.Cancel();
+					break;
+			}
+        }
 
 
         /// <summary>
@@ -384,8 +445,10 @@ namespace CarinaStudio.AppSuite.Controls
             this.Application.Configuration.SettingChanged -= this.OnConfigurationChanged;
             ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged -= this.OnMainWindowsChanged;
             this.Application.PropertyChanged -= this.OnApplicationPropertyChanged;
+            this.Application.ProductManager.ProductStateChanged -= this.OnProductStateChanged;
             this.RemoveHandler(DragDrop.DragEnterEvent, this.OnDragEnter);
             this.restartingRootWindowsAction.Cancel();
+            this.reactivateProVersionAction.Cancel();
             this.showInitDialogsAction.Cancel();
             base.OnClosed(e);
         }
@@ -436,6 +499,26 @@ namespace CarinaStudio.AppSuite.Controls
         // Called when list of main window changed.
         void OnMainWindowsChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
             this.SetAndRaise<bool>(HasMultipleMainWindowsProperty, ref this.hasMultipleMainWindows, this.Application.MainWindows.Count > 1);
+        
+
+        /// <summary>
+        /// Called to notify user that Pro-version is needed to be reactivated.
+        /// </summary>
+        /// <returns>Task of notifying user.</returns>
+        protected virtual Task OnNotifyReactivatingProVersionNeededAsync()
+        {
+            if (this.Application is not AppSuiteApplication asApp)
+                return Task.CompletedTask;
+            return new MessageDialog()
+            {
+                Icon = MessageDialogIcon.Warning,
+                Message = new FormattedString().Also(it =>
+                {
+                    it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{asApp.ProVersionProductId}"));
+                    it.Bind(FormattedString.FormatProperty, asApp.GetObservableString("MainWindow.ReactivateProductNeeded"));
+                }),
+            }.ShowDialog(this);
+        }
 
 
         /// <summary>
@@ -465,6 +548,7 @@ namespace CarinaStudio.AppSuite.Controls
             this.Application.Configuration.SettingChanged += this.OnConfigurationChanged;
             ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged += this.OnMainWindowsChanged;
             this.Application.PropertyChanged += this.OnApplicationPropertyChanged;
+            this.Application.ProductManager.ProductStateChanged += this.OnProductStateChanged;
             this.AddHandler(DragDrop.DragEnterEvent, this.OnDragEnter);
 
             // check main window count
@@ -480,6 +564,18 @@ namespace CarinaStudio.AppSuite.Controls
 
             // show system chrome
             this.UpdateExtendClientAreaChromeHints(false);
+
+            // check Pro-version
+            this.CheckIsReactivatingProVersionNeeded();
+        }
+
+
+        // Called when product state changed.
+		void OnProductStateChanged(IProductManager productManager, string productId)
+        {
+            if (this.Application is not AppSuiteApplication asApp || productId != asApp.ProVersionProductId)
+                return;
+            this.CheckIsReactivatingProVersionNeeded();
         }
 
 

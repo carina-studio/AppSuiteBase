@@ -324,11 +324,8 @@ namespace CarinaStudio.AppSuite
         readonly Styles extraStyles = new();
         long frameworkInitializedTime;
         HardwareInfo? hardwareInfo;
-        bool isActivatingProVersion;
         bool isCompactStyles;
         bool isNetworkConnForProductActivationNotified;
-        bool isReActivatingProVersion;
-		bool isReActivatingProVersionNeeded;
         bool isRestartAsAdminRequested;
         bool isRestartingRootWindowsRequested;
         bool isRestartRequested;
@@ -350,7 +347,6 @@ namespace CarinaStudio.AppSuite
         ProcessInfo? processInfo;
         IDisposable? processInfoHfUpdateToken;
         IProductManager? productManager;
-        ScheduledAction? reActivateProVersionAction;
         ApplicationArgsBuilder? restartArgs;
         Controls.SelfTestingWindowImpl? selfTestingWindow;
         SettingsImpl? settings;
@@ -450,14 +446,16 @@ namespace CarinaStudio.AppSuite
         public async Task ActivateProVersionAsync(Avalonia.Controls.Window? window)
 		{
 			this.VerifyAccess();
-			if (this.isActivatingProVersion)
+			if (this.IsActivatingProVersion)
 				return;
             var productId = this.ProVersionProductId;
             if (productId == null)
                 return;
-			this.isActivatingProVersion = true;
+			this.IsActivatingProVersion = true;
+            this.OnPropertyChanged(nameof(IsActivatingProVersion));
 			await this.ProductManager.ActivateProductAsync(productId, window);
-			this.isActivatingProVersion = false;
+			this.IsActivatingProVersion = false;
+            this.OnPropertyChanged(nameof(IsActivatingProVersion));
 		}
 
 
@@ -1165,6 +1163,12 @@ namespace CarinaStudio.AppSuite
         /// Get information of hardware.
         /// </summary>
         public HardwareInfo HardwareInfo { get => this.hardwareInfo ?? throw new InvalidOperationException("Application is not initialized yet."); }
+
+
+        /// <summary>
+        /// Check whether Pro-version is being activated or not.
+        /// </summary>
+        public bool IsActivatingProVersion { get; private set; }
 
 
         /// <inheritdoc/>
@@ -2102,8 +2106,6 @@ namespace CarinaStudio.AppSuite
                     {
                         this.notifyNetworkConnForProductActivationAction?.Schedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.TimeoutToNotifyNetworkConnectionForProductActivation));
                     }
-                    if (this.isReActivatingProVersionNeeded)
-                        this.reActivateProVersionAction?.Schedule();
                 });
                 if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value?.Window == mainWindow)
                     return;
@@ -2225,8 +2227,6 @@ namespace CarinaStudio.AppSuite
             {
                 if (!this.isNetworkConnForProductActivationNotified)
                     this.notifyNetworkConnForProductActivationAction?.Schedule();
-                if (this.isReActivatingProVersionNeeded)
-                    this.reActivateProVersionAction?.Schedule();
             }
         }
 
@@ -2401,38 +2401,6 @@ namespace CarinaStudio.AppSuite
 				}.ShowDialog(window);
 			});
             this.performFullGCAction = new(() => this.PerformGC(GCCollectionMode.Forced));
-			this.reActivateProVersionAction = new(async () =>
-			{
-                var productId = this.ProVersionProductId;
-				var window = this.LatestActiveMainWindow;
-				if (productId == null 
-                    || !this.isReActivatingProVersionNeeded 
-					|| window == null 
-					|| window.HasDialogs 
-					|| !window.IsActive 
-					|| this.isActivatingProVersion
-					|| this.isReActivatingProVersion)
-				{
-					return;
-				}
-				this.isReActivatingProVersionNeeded = false;
-				if (this.ProductManager.TryGetProductState(productId, out var state)
-					&& state == ProductState.Deactivated)
-				{
-					await new Controls.MessageDialog()
-					{
-						Icon = Controls.MessageDialogIcon.Warning,
-						Message = new FormattedString().Also(it =>
-						{
-							it.Bind(FormattedString.Arg1Property, Avalonia.Controls.ResourceNodeExtensions.GetResourceObservable(this, $"String/Product.{productId}"));
-							it.Bind(FormattedString.FormatProperty, Avalonia.Controls.ResourceNodeExtensions.GetResourceObservable(this, "String/AppSuiteApplication.ReActivateProductNeeded"));
-						}),
-					}.ShowDialog(this.LatestActiveMainWindow);
-					this.isReActivatingProVersion = true;
-					await this.ActivateProVersionAsync(this.LatestActiveMainWindow);
-					this.isReActivatingProVersion = false;
-				}
-			});
             this.stopUserInteractionAction = new(() =>
             {
                 if (this.LatestActiveWindow?.IsActive == true
@@ -2623,20 +2591,6 @@ namespace CarinaStudio.AppSuite
 			{
 				case ProductState.Activated:
 					this.notifyNetworkConnForProductActivationAction?.Cancel();
-					goto default;
-				case ProductState.Deactivated:
-					if (productManager.TryGetProductActivationFailure(productId, out var failure)
-						&& failure != ProductActivationFailure.NoNetworkConnection
-						&& !this.isReActivatingProVersion)
-					{
-						this.Logger.LogWarning("Need to reactivate Pro-version because of {failure}", failure);
-						this.isReActivatingProVersionNeeded = true;
-						this.reActivateProVersionAction?.Schedule();
-					}
-					break;
-				default:
-					this.isReActivatingProVersionNeeded = false;
-					this.reActivateProVersionAction?.Cancel();
 					break;
 			}
 		}
@@ -2986,7 +2940,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Product ID of Pro-version.
         /// </summary>
-        protected virtual string? ProVersionProductId { get => null; }
+        internal protected virtual string? ProVersionProductId { get => null; }
 
 
         /// <summary>
