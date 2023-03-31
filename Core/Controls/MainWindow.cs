@@ -5,6 +5,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Platform;
 using CarinaStudio.Animation;
+using CarinaStudio.AppSuite.Net;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Configuration;
@@ -51,6 +52,7 @@ namespace CarinaStudio.AppSuite.Controls
         static readonly SettingKey<bool> DoNotCheckAppRunningLocationOnMacOSKey = new("MainWindow.DoNotCheckAppRunningLocationOnMacOS");
         static readonly SettingKey<int> ExtDepDialogShownVersionKey = new("MainWindow.ExternalDependenciesDialogShownVersion", -1);
         static bool IsAppRunningLocationOnMacOSChecked;
+        static bool IsNetworkConnForActivatingProVersionNotified;
         static bool IsNotifyingAppUpdateFound;
         static bool IsReactivatingProVersion;
 		static bool IsReactivatingProVersionNeeded;
@@ -71,6 +73,7 @@ namespace CarinaStudio.AppSuite.Controls
         bool isClosingScheduled;
         bool isFirstContentPaddingUpdate = true;
         bool isShowingInitialDialogs;
+        readonly ScheduledAction notifyNetworkConnForActivatingProVersionAction;
         long openedTime;
         readonly ScheduledAction reactivateProVersionAction;
         readonly ScheduledAction restartingRootWindowsAction;
@@ -91,6 +94,32 @@ namespace CarinaStudio.AppSuite.Controls
             this.LayoutMainWindowsCommand = new Command<MultiWindowLayout>(this.LayoutMainWindows, this.GetObservable(HasMultipleMainWindowsProperty));
 
             // create scheduled actions
+            this.notifyNetworkConnForActivatingProVersionAction = new(() =>
+			{
+                if (this.Application is not AppSuiteApplication asApp)
+                    return;
+                var productId = asApp.ProVersionProductId;
+				if (productId == null 
+					|| !this.IsActive
+					|| this.HasDialogs
+					|| IsNetworkConnForActivatingProVersionNotified
+					|| NetworkManager.Default.IsNetworkConnected
+					|| !asApp.ProductManager.TryGetProductState(productId, out var state)
+                    || state != ProductState.Activated)
+				{
+					return;
+				}
+				IsNetworkConnForActivatingProVersionNotified = true;
+				_ = new MessageDialog()
+				{
+					Icon = MessageDialogIcon.Information,
+					Message = new FormattedString().Also(it =>
+					{
+						it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{productId}"));
+						it.Bind(FormattedString.FormatProperty, asApp.GetObservableString("MainWindow.NetworkConnectionNeededForProductActivation"));
+					}),
+				}.ShowDialog(this);
+			});
             this.reactivateProVersionAction = new(async () =>
 			{
                 if (this.Application is not AppSuiteApplication asApp)
@@ -222,8 +251,13 @@ namespace CarinaStudio.AppSuite.Controls
                         this.restartingRootWindowsAction.Reschedule(RestartingMainWindowsDelay);
                     if (!this.AreInitialDialogsClosed)
                         this.showInitDialogsAction.Schedule();
-                    if (IsReactivatingProVersionNeeded)
-                        this.reactivateProVersionAction.Schedule();
+                    if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId != null)
+                    {
+                        if (!IsNetworkConnForActivatingProVersionNotified)
+                            this.notifyNetworkConnForActivatingProVersionAction.Schedule();
+                        if (IsReactivatingProVersionNeeded)
+                            this.reactivateProVersionAction.Schedule();
+                    }
                 }
             });
             this.GetObservable(HeightProperty).Subscribe(_ => 
@@ -250,8 +284,18 @@ namespace CarinaStudio.AppSuite.Controls
                             }
                         });
                     } 
-                    if (IsReactivatingProVersionNeeded)
-                        this.reactivateProVersionAction.Schedule();
+                    if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId != null)
+                    {
+                        if (!this.notifyNetworkConnForActivatingProVersionAction.IsScheduled
+                            && !asApp.ProductManager.IsProductActivated(asApp.ProVersionProductId, true)
+                            && !NetworkManager.Default.IsNetworkConnected
+                            && !IsNetworkConnForActivatingProVersionNotified)
+                        {
+                            this.notifyNetworkConnForActivatingProVersionAction?.Schedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.TimeoutToNotifyNetworkConnectionForProductActivation));
+                        }
+                        if (IsReactivatingProVersionNeeded)
+                            this.reactivateProVersionAction.Schedule();
+                    }
                 }
             });
             this.GetObservable(WidthProperty).Subscribe(_ => 
@@ -304,6 +348,9 @@ namespace CarinaStudio.AppSuite.Controls
 				return;
             switch (state)
 			{
+                case ProductState.Activated:
+                    this.notifyNetworkConnForActivatingProVersionAction.Cancel();
+                    goto default;
 				case ProductState.Deactivated:
 					if (asApp.ProductManager.TryGetProductActivationFailure(productId, out var failure)
 						&& failure != ProductActivationFailure.NoNetworkConnection
@@ -318,6 +365,25 @@ namespace CarinaStudio.AppSuite.Controls
 					IsReactivatingProVersionNeeded = false;
 					this.reactivateProVersionAction.Cancel();
 					break;
+			}
+        }
+
+
+        // Check whether network connection is available for activating Pro-version or not.
+        void CheckNetworkConnectionForActivatingProVersion()
+        {
+            if (this.Application is not AppSuiteApplication asApp)
+                return;
+            var productId = asApp.ProVersionProductId;
+			if (productId != null)
+			{
+				if (NetworkManager.Default.IsNetworkConnected)
+					this.notifyNetworkConnForActivatingProVersionAction.Cancel();
+				else if (!asApp.ProductManager.IsProductActivated(productId, true)
+					&& !IsNetworkConnForActivatingProVersionNotified)
+				{
+					this.notifyNetworkConnForActivatingProVersionAction.Reschedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.TimeoutToNotifyNetworkConnectionForProductActivation));
+				}
 			}
         }
 
@@ -446,7 +512,9 @@ namespace CarinaStudio.AppSuite.Controls
             ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged -= this.OnMainWindowsChanged;
             this.Application.PropertyChanged -= this.OnApplicationPropertyChanged;
             this.Application.ProductManager.ProductStateChanged -= this.OnProductStateChanged;
+            NetworkManager.Default.PropertyChanged -= this.OnNetworkManagerPropertyChanged;
             this.RemoveHandler(DragDrop.DragEnterEvent, this.OnDragEnter);
+            this.notifyNetworkConnForActivatingProVersionAction.Cancel();
             this.restartingRootWindowsAction.Cancel();
             this.reactivateProVersionAction.Cancel();
             this.showInitDialogsAction.Cancel();
@@ -501,6 +569,14 @@ namespace CarinaStudio.AppSuite.Controls
             this.SetAndRaise<bool>(HasMultipleMainWindowsProperty, ref this.hasMultipleMainWindows, this.Application.MainWindows.Count > 1);
         
 
+        // Called when property of network manager changed.
+		void OnNetworkManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == nameof(NetworkManager.IsNetworkConnected))
+                this.CheckNetworkConnectionForActivatingProVersion();
+		}
+        
+
         /// <summary>
         /// Called to notify user that Pro-version is needed to be reactivated.
         /// </summary>
@@ -549,6 +625,7 @@ namespace CarinaStudio.AppSuite.Controls
             ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged += this.OnMainWindowsChanged;
             this.Application.PropertyChanged += this.OnApplicationPropertyChanged;
             this.Application.ProductManager.ProductStateChanged += this.OnProductStateChanged;
+            NetworkManager.Default.PropertyChanged += this.OnNetworkManagerPropertyChanged;
             this.AddHandler(DragDrop.DragEnterEvent, this.OnDragEnter);
 
             // check main window count
@@ -564,6 +641,9 @@ namespace CarinaStudio.AppSuite.Controls
 
             // show system chrome
             this.UpdateExtendClientAreaChromeHints(false);
+
+            // check network state
+            this.CheckNetworkConnectionForActivatingProVersion();
 
             // check Pro-version
             this.CheckIsReactivatingProVersionNeeded();

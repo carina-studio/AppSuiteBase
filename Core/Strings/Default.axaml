@@ -119,7 +119,6 @@
 
 	<!-- AppSuiteApplication -->
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">Loading theme</sys:String>
-	<sys:String x:Key="String/AppSuiteApplication.NetworkConnectionNeededForProductActivation">In order to activate '{0}', please connect to internet or it will be deactivated temporarily after a while.</sys:String>
 
 	<!-- CommandSearchPaths -->
 	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">Update paths defined by system</sys:String>
@@ -275,6 +274,7 @@
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">Layout windows horizontally</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">Tile windows</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">Layout windows vertically</sys:String>
+	<sys:String x:Key="String/MainWindow.NetworkConnectionNeededForProductActivation">In order to activate '{0}', please connect to internet or it will be deactivated temporarily after a while.</sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message">You must read and agree the《Privacy Policy》before you start using {0}.</sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">You must read and agree the updated《Privacy Policy》before you start using {0}.</sys:String>
 	<sys:String x:Key="String/MainWindow.ReactivateProductNeeded">Unable to activate '{0}', please try activating it again.</sys:String>

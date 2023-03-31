@@ -113,7 +113,6 @@
 
 	<!-- AppSuiteApplication -->
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">載入佈景主題</sys:String>
-	<sys:String x:Key="String/AppSuiteApplication.NetworkConnectionNeededForProductActivation">請連接至網際網路以啟用「{0}」，否則「{0}」將會在一段時間後暫時被停用。</sys:String>
 
 	<!-- CommandSearchPaths -->
 	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">更新系統定義路徑</sys:String>
@@ -269,6 +268,7 @@
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">水平排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">網格排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">垂直排列視窗</sys:String>
+	<sys:String x:Key="String/MainWindow.NetworkConnectionNeededForProductActivation">請連接至網際網路以啟用「{0}」，否則「{0}」將會在一段時間後暫時被停用。</sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message">在您使用 {0} 之前，您必須閱讀且同意《隱私權政策》。</sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">在您使用 {0} 之前，您必須閱讀且同意新的《隱私權政策》。</sys:String>
 	<sys:String x:Key="String/MainWindow.ReactivateProductNeeded">無法啟用「{0}」，請嘗試再次啟用。</sys:String>

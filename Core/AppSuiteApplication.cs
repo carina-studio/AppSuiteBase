@@ -14,7 +14,6 @@ using Avalonia.Styling;
 #if APPLY_CONTROL_BRUSH_ANIMATIONS || APPLY_ITEM_BRUSH_ANIMATIONS
 using CarinaStudio.AppSuite.Animation;
 #endif
-using CarinaStudio.AppSuite.Net;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.Scripting;
 using CarinaStudio.AutoUpdate;
@@ -31,7 +30,6 @@ using NLog;
 using NLog.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -325,7 +323,6 @@ namespace CarinaStudio.AppSuite
         long frameworkInitializedTime;
         HardwareInfo? hardwareInfo;
         bool isCompactStyles;
-        bool isNetworkConnForProductActivationNotified;
         bool isRestartAsAdminRequested;
         bool isRestartingRootWindowsRequested;
         bool isRestartRequested;
@@ -338,7 +335,6 @@ namespace CarinaStudio.AppSuite
         readonly CancellationTokenSource multiInstancesServerCancellationTokenSource = new();
         NamedPipeServerStream? multiInstancesServerStream;
         string multiInstancesServerStreamName = "";
-        ScheduledAction? notifyNetworkConnForProductActivationAction;
         readonly List<MainWindowHolder> pendingMainWindowHolders = new();
         ScheduledAction? performFullGCAction;
         PersistentStateImpl? persistentState;
@@ -2097,16 +2093,6 @@ namespace CarinaStudio.AppSuite
                     this.OnMainWindowActivationChangedOnWindows();
                 else if (Platform.IsMacOS)
                     this.OnMainWindowActivationChangedOnMacOS();
-                this.ProVersionProductId?.Let(productId =>
-                {
-                    if (this.notifyNetworkConnForProductActivationAction?.IsScheduled == false
-                        && !this.ProductManager.IsProductActivated(productId, true)
-                        && !NetworkManager.Default.IsNetworkConnected
-                        && !this.isNetworkConnForProductActivationNotified)
-                    {
-                        this.notifyNetworkConnForProductActivationAction?.Schedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.TimeoutToNotifyNetworkConnectionForProductActivation));
-                    }
-                });
                 if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value?.Window == mainWindow)
                     return;
                 if (this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
@@ -2211,23 +2197,8 @@ namespace CarinaStudio.AppSuite
         /// <returns>Task of performing operations.</returns>
         protected virtual async Task OnMainWindowClosedAsync(Window mainWindow, ViewModel viewModel)
         {
-            // cancel notification for network connection
-			if (this.MainWindows.IsEmpty())
-				this.notifyNetworkConnForProductActivationAction?.Cancel();
-            
             // save settings
             await this.SaveSettingsAsync();
-        }
-
-
-        // Called when HasDialogs of main window changed.
-        void OnMainWindowDialogsChanged(bool hasDialogs)
-        {
-            if (!hasDialogs && this.ProVersionProductId != null)
-            {
-                if (!this.isNetworkConnForProductActivationNotified)
-                    this.notifyNetworkConnForProductActivationAction?.Schedule();
-            }
         }
 
 
@@ -2238,25 +2209,6 @@ namespace CarinaStudio.AppSuite
         /// <param name="launchOptions">Options to launch new instance.</param>
         protected virtual void OnNewInstanceLaunched(IDictionary<string, object> launchOptions)
         { }
-
-
-        // Called when property of network manager changed.
-		void OnNetworkManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
-		{
-            var productId = this.ProVersionProductId;
-			if (productId != null 
-                && sender is NetworkManager networkManager 
-				&& e.PropertyName == nameof(NetworkManager.IsNetworkConnected))
-			{
-				if (networkManager.IsNetworkConnected)
-					this.notifyNetworkConnForProductActivationAction?.Cancel();
-				else if (!this.ProductManager.IsProductActivated(productId, true)
-					&& !this.isNetworkConnForProductActivationNotified)
-				{
-					this.notifyNetworkConnForProductActivationAction?.Reschedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.TimeoutToNotifyNetworkConnectionForProductActivation));
-				}
-			}
-		}
 
 
         /// <summary>
@@ -2375,31 +2327,6 @@ namespace CarinaStudio.AppSuite
             this.UpdateLogOutputToLocalhost();
 
             // setup scheduled actions
-			this.notifyNetworkConnForProductActivationAction = new(() =>
-			{
-                var productId = this.ProVersionProductId;
-				var window = this.LatestActiveMainWindow;
-				if (productId == null 
-                    || window == null 
-					|| !window.IsActive
-					|| window.HasDialogs
-					|| this.isNetworkConnForProductActivationNotified
-					|| NetworkManager.Default.IsNetworkConnected
-					|| this.ProductManager.IsProductActivated(productId, true))
-				{
-					return;
-				}
-				this.isNetworkConnForProductActivationNotified = true;
-				_ = new Controls.MessageDialog()
-				{
-					Icon = Controls.MessageDialogIcon.Information,
-					Message = new FormattedString().Also(it =>
-					{
-						it.Bind(FormattedString.Arg1Property, Avalonia.Controls.ResourceNodeExtensions.GetResourceObservable(this, $"String/Product.{productId}"));
-						it.Bind(FormattedString.FormatProperty, Avalonia.Controls.ResourceNodeExtensions.GetResourceObservable(this, "String/AppSuiteApplication.NetworkConnectionNeededForProductActivation"));
-					}),
-				}.ShowDialog(window);
-			});
             this.performFullGCAction = new(() => this.PerformGC(GCCollectionMode.Forced));
             this.stopUserInteractionAction = new(() =>
             {
@@ -2533,7 +2460,6 @@ namespace CarinaStudio.AppSuite
 
             // complete initializing network manager
             await initNetworkManagerTask;
-            NetworkManager.Default.PropertyChanged += this.OnNetworkManagerPropertyChanged;
 
             // initialize product manager
             try
@@ -2564,12 +2490,6 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogDebug("Use mock product manager");
                 this.productManager = new MockProductManager(this);
             }
-            else
-            {
-                this.productManager.ProductStateChanged += this.OnProductStateChanged;
-                this.ProVersionProductId?.Let(it =>
-                    this.OnProductStateChanged(this.productManager, it));
-            }
 
             // complete checking external dependencies
             await Task.WhenAll(checkExtDepTasks);
@@ -2577,23 +2497,6 @@ namespace CarinaStudio.AppSuite
             // initialize script manager
             await ScriptManager.InitializeAsync(this, this.ScriptManagerImplType);
         }
-
-
-        // Called when product state changed.
-		void OnProductStateChanged(IProductManager productManager, string productId)
-		{
-			if (productId != this.ProVersionProductId
-				|| !productManager.TryGetProductState(productId, out var state))
-			{
-				return;
-			}
-			switch (state)
-			{
-				case ProductState.Activated:
-					this.notifyNetworkConnForProductActivationAction?.Cancel();
-					break;
-			}
-		}
 
 
         /// <summary>
@@ -3460,10 +3363,6 @@ namespace CarinaStudio.AppSuite
             this.mainWindows.Add(mainWindow);
             this.windows.Add(mainWindow);
             mainWindow.Closed += this.OnMainWindowClosed;
-            mainWindow.GetObservable(Window.HasDialogsProperty).Subscribe(new Observer<bool>(value =>
-            {
-                this.OnMainWindowDialogsChanged(value);
-            }));
             mainWindow.GetObservable(Window.IsActiveProperty).Subscribe(new Observer<bool>(value =>
             {
                 this.OnMainWindowActivationChanged(mainWindow, value);
