@@ -105,7 +105,8 @@ namespace CarinaStudio.AppSuite.Controls
 					|| IsNetworkConnForActivatingProVersionNotified
 					|| NetworkManager.Default.IsNetworkConnected
 					|| !asApp.ProductManager.TryGetProductState(productId, out var state)
-                    || state != ProductState.Activated)
+                    || state != ProductState.Activated
+                    || asApp.ProductManager.IsProductActivated(productId, true))
 				{
 					return;
 				}
@@ -118,7 +119,7 @@ namespace CarinaStudio.AppSuite.Controls
 						it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{productId}"));
 						it.Bind(FormattedString.FormatProperty, asApp.GetObservableString("MainWindow.NetworkConnectionNeededForProductActivation"));
 					}),
-				}.ShowDialog(this);
+				}.ShowDialog(null);
 			});
             this.reactivateProVersionAction = new(async () =>
 			{
@@ -379,7 +380,9 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				if (NetworkManager.Default.IsNetworkConnected)
 					this.notifyNetworkConnForActivatingProVersionAction.Cancel();
-				else if (!asApp.ProductManager.IsProductActivated(productId, true)
+				else if (asApp.ProductManager.TryGetProductState(productId, out var state)
+                    && state == ProductState.Activated
+                    && !asApp.ProductManager.IsProductActivated(productId, true)
 					&& !IsNetworkConnForActivatingProVersionNotified)
 				{
 					this.notifyNetworkConnForActivatingProVersionAction.Reschedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.TimeoutToNotifyNetworkConnectionForProductActivation));
