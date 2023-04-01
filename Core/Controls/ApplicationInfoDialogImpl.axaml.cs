@@ -39,6 +39,14 @@ namespace CarinaStudio.AppSuite.Controls
 		// Constructor.
 		public ApplicationInfoDialogImpl()
 		{
+			// setup copyright
+			this.Copyright = ((this.Application as AppSuiteApplication)?.CopyrightBeginningYear ?? AppSuiteApplication.CopyrightEndingYear).Let(beginningYear =>
+			{
+				if (beginningYear < AppSuiteApplication.CopyrightEndingYear)
+					return $"©{beginningYear}-{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
+				return $"©{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
+			});
+			
 			AvaloniaXamlLoader.Load(this);
 			this.badgesPanel = this.Get<Panel>(nameof(badgesPanel)).AsNonNull();
 			this.productListPanel = this.Get<Panel>(nameof(productListPanel)).AsNonNull();
@@ -46,6 +54,12 @@ namespace CarinaStudio.AppSuite.Controls
 			this.SetValue<bool>(HasExternalDependenciesProperty, this.Application.ExternalDependencies.ToArray().IsNotEmpty());
 			this.SetValue<bool>(HasTotalPhysicalMemoryProperty, this.Application.HardwareInfo.TotalPhysicalMemory.HasValue);
 		}
+
+
+		/// <summary>
+		/// Copyright.
+		/// </summary>
+		public string Copyright { get; }
 
 
 		// Export application logs to file.

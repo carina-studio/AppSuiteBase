@@ -111,7 +111,7 @@
 					<Separator Classes="Dialog_Separator"/>
 
 					<!-- Copyright -->
-					<TextBlock Text="©2021 Carina Studio"/>
+					<TextBlock Text="{Binding $parent[Window].Copyright, Mode=OneTime}"/>
 					<Separator Classes="Dialog_Separator_Large"/>
 
 					<!-- System info (Header) -->

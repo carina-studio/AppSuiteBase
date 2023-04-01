@@ -162,6 +162,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Ending year of copyright.
+        /// </summary>
+        internal const int CopyrightEndingYear = 2023;
+        /// <summary>
         /// Argument indicates to enable debug mode.
         /// </summary>
         public const string DebugArgument = "-debug";
@@ -721,6 +725,12 @@ namespace CarinaStudio.AppSuite
 
         /// <inheritdoc/>
         public ISettings Configuration { get => this.configuration ?? throw new InvalidOperationException("Application is not initialized yet."); }
+
+
+        /// <summary>
+        /// Get beginning year of copyright.
+        /// </summary>
+        internal protected int CopyrightBeginningYear { get => 2021; }
 
 
         // Create server stream for multi-instances.
