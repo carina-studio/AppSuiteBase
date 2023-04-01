@@ -251,7 +251,7 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 			DefaultResult = this.defaultResult,
 			DoNotAskOrShowAgain = this.doNotAskOrShowAgain,
 			Icon = this.icon,
-			Topmost = (owner?.Topmost).GetValueOrDefault(),
+			Topmost = owner == null || owner.Topmost,
 			WindowStartupLocation = owner != null 
                 ? Avalonia.Controls.WindowStartupLocation.CenterOwner
                 : Avalonia.Controls.WindowStartupLocation.CenterScreen,

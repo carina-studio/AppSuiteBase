@@ -119,7 +119,7 @@ public class TextInputDialog : CommonDialog<string?>
         {
             IsCheckBoxChecked = this.isCheckBoxChecked,
             MaxTextLength = this.maxTextLength,
-            Topmost = (owner?.Topmost).GetValueOrDefault(),
+            Topmost = owner == null || owner.Topmost,
             WindowStartupLocation = owner != null 
                 ? Avalonia.Controls.WindowStartupLocation.CenterOwner
                 : Avalonia.Controls.WindowStartupLocation.CenterScreen,
