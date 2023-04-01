@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<AssemblyVersion>2.2.69.331</AssemblyVersion>
-		<Version>2.2.69.331</Version>
-		<PackageVersion>2.2.69.331-dev</PackageVersion>
+		<AssemblyVersion>2.2.70.401</AssemblyVersion>
+		<Version>2.2.70.401</Version>
+		<PackageVersion>2.2.70.401-dev</PackageVersion>
 		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Core</AssemblyName>
 		<Nullable>enable</Nullable>
