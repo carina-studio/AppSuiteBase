@@ -127,7 +127,7 @@ namespace CarinaStudio.AppSuite.Controls
 				else if (type.IsEnum)
 					settings.SetValue(key, this.enumComboBox.SelectedItem.AsNonNull());
 				else if (type == typeof(int))
-					settings.SetValue(key, this.integerTextBox.Value.GetValueOrDefault());
+					settings.SetValue(key, (int)this.integerTextBox.Value.GetValueOrDefault());
 				else if (type == typeof(string))
 					settings.SetValue(key, this.textBox.Text ?? "");
 #pragma warning restore CS0618
