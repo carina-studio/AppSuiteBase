@@ -104,13 +104,21 @@ namespace CarinaStudio.AppSuite.Controls
 					|| this.HasDialogs
 					|| IsNetworkConnForActivatingProVersionNotified
 					|| NetworkManager.Default.IsNetworkConnected
-					|| !asApp.ProductManager.TryGetProductState(productId, out var state)
-                    || state != ProductState.Activated
-                    || asApp.ProductManager.IsProductActivated(productId, true))
+					|| !asApp.ProductManager.TryGetProductState(productId, out var state))
 				{
 					return;
 				}
-				IsNetworkConnForActivatingProVersionNotified = true;
+                if (state != ProductState.Activated)
+                {
+                    this.Logger.LogTrace("No need to notify user about activating Pro-version because state of Pro-version is {state}", state);
+                    return;
+                }
+                IsNetworkConnForActivatingProVersionNotified = true;
+                if (asApp.ProductManager.IsProductActivated(productId, true))
+                {
+                    this.Logger.LogTrace("No need to notify user about activating Pro-version because Pro-version is already activated online");
+                    return;
+                }
 				_ = new MessageDialog()
 				{
 					Icon = MessageDialogIcon.Information,
@@ -254,8 +262,13 @@ namespace CarinaStudio.AppSuite.Controls
                         this.showInitDialogsAction.Schedule();
                     if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId != null)
                     {
-                        if (!IsNetworkConnForActivatingProVersionNotified)
+                        if (!this.notifyNetworkConnForActivatingProVersionAction.IsScheduled 
+                            && !NetworkManager.Default.IsNetworkConnected
+                            && !IsNetworkConnForActivatingProVersionNotified)
+                        {
+                            this.Logger.LogTrace("All dialogs were closed, notify user about network connection for activating Pro-version");
                             this.notifyNetworkConnForActivatingProVersionAction.Schedule();
+                        }
                         if (IsReactivatingProVersionNeeded)
                             this.reactivateProVersionAction.Schedule();
                     }
@@ -288,11 +301,11 @@ namespace CarinaStudio.AppSuite.Controls
                     if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId != null)
                     {
                         if (!this.notifyNetworkConnForActivatingProVersionAction.IsScheduled
-                            && !asApp.ProductManager.IsProductActivated(asApp.ProVersionProductId, true)
                             && !NetworkManager.Default.IsNetworkConnected
                             && !IsNetworkConnForActivatingProVersionNotified)
                         {
-                            this.notifyNetworkConnForActivatingProVersionAction?.Schedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.TimeoutToNotifyNetworkConnectionForProductActivation));
+                            this.Logger.LogTrace("Window activated, notify user about network connection for activating Pro-version");
+                            this.notifyNetworkConnForActivatingProVersionAction.Schedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.TimeoutToNotifyNetworkConnectionForProductActivation));
                         }
                         if (IsReactivatingProVersionNeeded)
                             this.reactivateProVersionAction.Schedule();
@@ -350,7 +363,11 @@ namespace CarinaStudio.AppSuite.Controls
             switch (state)
 			{
                 case ProductState.Activated:
-                    this.notifyNetworkConnForActivatingProVersionAction.Cancel();
+                    if (asApp.ProductManager.IsProductActivated(productId, true)
+                        && this.notifyNetworkConnForActivatingProVersionAction.Cancel())
+                    {
+                        this.Logger.LogTrace("Cancel notifying user about network connection for activating Pro-version");
+                    }
                     goto default;
 				case ProductState.Deactivated:
 					if (asApp.ProductManager.TryGetProductActivationFailure(productId, out var failure)
@@ -361,6 +378,8 @@ namespace CarinaStudio.AppSuite.Controls
 						IsReactivatingProVersionNeeded = true;
 						this.reactivateProVersionAction.Schedule();
 					}
+                    if (this.notifyNetworkConnForActivatingProVersionAction.Cancel())
+                        this.Logger.LogTrace("Cancel notifying user about network connection for activating Pro-version");
 					break;
 				default:
 					IsReactivatingProVersionNeeded = false;
@@ -379,12 +398,16 @@ namespace CarinaStudio.AppSuite.Controls
 			if (productId != null)
 			{
 				if (NetworkManager.Default.IsNetworkConnected)
-					this.notifyNetworkConnForActivatingProVersionAction.Cancel();
+                {
+					if (this.notifyNetworkConnForActivatingProVersionAction.Cancel())
+                        this.Logger.LogTrace("Network connected, cancel notifying user about activating Pro-version");
+                }
 				else if (asApp.ProductManager.TryGetProductState(productId, out var state)
                     && state == ProductState.Activated
                     && !asApp.ProductManager.IsProductActivated(productId, true)
 					&& !IsNetworkConnForActivatingProVersionNotified)
 				{
+                    this.Logger.LogTrace("Unable to activate Pro-version because network is disconnected, notify user later");
 					this.notifyNetworkConnForActivatingProVersionAction.Reschedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.TimeoutToNotifyNetworkConnectionForProductActivation));
 				}
 			}
