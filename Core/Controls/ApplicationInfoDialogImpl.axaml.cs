@@ -92,6 +92,15 @@ namespace CarinaStudio.AppSuite.Controls
 				}
 			}
 
+			// setup copyright
+
+			this.Copyright = ((this.Application as AppSuiteApplication)?.CopyrightBeginningYear ?? AppSuiteApplication.CopyrightEndingYear).Let(beginningYear =>
+			{
+				if (beginningYear < AppSuiteApplication.CopyrightEndingYear)
+					return $"©{beginningYear}-{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
+				return $"©{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
+			});
+
 			// check user agreement and privacy policy
 			this.SetValue(HasPrivacyPolicyProperty, this.Application.PrivacyPolicyVersion != null && this.Application.PrivacyPolicy != null);
 			this.SetValue(HasUserAgreementProperty, this.Application.UserAgreementVersion != null && this.Application.UserAgreement != null);
@@ -169,6 +178,12 @@ namespace CarinaStudio.AppSuite.Controls
 			// observe properties
 			this.GetObservable(BoundsProperty).Subscribe(_ => this.updateScreenInfoAction.Schedule(500));
 		}
+
+
+		/// <summary>
+		/// Copyright.
+		/// </summary>
+		public string Copyright { get; }
 
 
 		/// <summary>

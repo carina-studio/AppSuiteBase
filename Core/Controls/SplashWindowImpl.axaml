@@ -169,7 +169,7 @@
 							</Transitions>
 						</TextBlock.Transitions>
 					</TextBlock>
-					<TextBlock Name="copyrightTextBlock" FontSize="{StaticResource Double/SplashWindow.Copyright.FontSize}" Grid.Row="2" Opacity="0" Text="©2021 Carina Studio" TextTrimming="CharacterEllipsis">
+					<TextBlock Name="copyrightTextBlock" FontSize="{StaticResource Double/SplashWindow.Copyright.FontSize}" Grid.Row="2" Opacity="0" Text="{Binding $parent[Window].Copyright, Mode=OneTime}" TextTrimming="CharacterEllipsis">
 						<TextBlock.RenderTransform>
 							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 								<TranslateTransform.Transitions>

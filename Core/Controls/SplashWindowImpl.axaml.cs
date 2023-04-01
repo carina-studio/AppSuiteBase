@@ -60,6 +60,12 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			var app = AppSuiteApplication.Current;
 			this.ApplicationName = app.Name ?? "";
+			this.Copyright = app.CopyrightBeginningYear.Let(beginningYear =>
+			{
+				if (beginningYear < AppSuiteApplication.CopyrightEndingYear)
+					return $"©{beginningYear}-{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
+				return $"©{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
+			});
 			this.Message = app.GetStringNonNull("SplashWindow.Launching");
 			this.showAction = new(() =>
 			{
@@ -222,6 +228,10 @@ namespace CarinaStudio.AppSuite.Controls
 					this.SetValue<IImage?>(BackgroundImageProperty, null);
 			}
 		}
+
+
+		// Copyright.
+		public string Copyright { get; }
 
 
 		// Get icon as IBitmap.
