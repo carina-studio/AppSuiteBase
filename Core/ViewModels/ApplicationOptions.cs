@@ -51,6 +51,15 @@ namespace CarinaStudio.AppSuite.ViewModels
             this.originalThemeMode = this.ThemeMode;
             this.originalUsingCompactUI = this.UseCompactUserInterface;
             ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged += this.OnMainWindowsChanged;
+            this.Application.ProductManager.Let(it =>
+            {
+                if (!it.IsMock)
+                {
+                    if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId != null)
+                        this.IsProVersionActivated = it.IsProductActivated(asApp.ProVersionProductId);
+                    it.ProductActivationChanged += this.OnProductActivationStateChanged;
+                }
+            });
             this.CheckXRandRAsync();
         }
 
@@ -192,6 +201,11 @@ namespace CarinaStudio.AppSuite.ViewModels
         protected override void Dispose(bool disposing)
         {
             ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged -= this.OnMainWindowsChanged;
+            this.Application.ProductManager.Let(it =>
+            {
+                if (!it.IsMock)
+                    it.ProductActivationChanged -= this.OnProductActivationStateChanged;
+            });
             base.Dispose(disposing);
         }
 
@@ -260,6 +274,12 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// Check whether <see cref="LogOutputTargetPort"/> is supported or not.
         /// </summary>
         public bool IsLogOutputTargetPortSupported { get => (this.Application as AppSuiteApplication)?.DefaultLogOutputTargetPort != 0; }
+
+
+        /// <summary>
+        /// Check whether Pro-version has been activated or not.
+        /// </summary>
+        public bool IsProVersionActivated { get; private set; }
 
 
         /// <summary>
@@ -358,6 +378,26 @@ namespace CarinaStudio.AppSuite.ViewModels
                 this.OnPropertyChanged(nameof(HasMainWindows));
             }
         }
+
+
+        // Called when product activation state changed.
+        void OnProductActivationStateChanged(Product.IProductManager productManager, string productId, bool isActivated)
+        {
+            if (!productManager.IsMock && this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId == productId)
+            {
+                this.IsProVersionActivated = isActivated;
+                this.OnPropertyChanged(nameof(IsProVersionActivated));
+                this.OnProVersionActivationStateChanged(isActivated);
+            }
+        }
+
+
+        /// <summary>
+        /// Called when activation of Pro-version has been changed.
+        /// </summary>
+        /// <param name="isActivated">True if Pro-version is activated.</param>
+        protected virtual void OnProVersionActivationStateChanged(bool isActivated)
+        { }
 
 
         /// <summary>
