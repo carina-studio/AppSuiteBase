@@ -24,7 +24,7 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <summary>
 		/// Duration of initial animation in milliseconds.
 		/// </summary>
-		public static int InitialAnimationDuration = 1500;
+		public static int InitialAnimationDuration = 1400;
 
 
 		// Constants.

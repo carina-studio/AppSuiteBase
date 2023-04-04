@@ -47,7 +47,7 @@
 		<BoxShadows x:Key="BoxShadows/SplashWindow">0 0 10 0 #9f000000</BoxShadows>
 		<CornerRadius x:Key="CornerRadius/SplashWindow">10</CornerRadius>
 		<sys:Double x:Key="Double/ApplicationInfoDialog.AppVersion.Opacity">0.75</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.ContentAnimation.Translation">30</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.ContentAnimation.Translation">20</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Copyright.FontSize">12</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Icon.Size">65</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Message.FontSize">12</sys:Double>
@@ -61,7 +61,7 @@
 		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Padding">30</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Title.Margin">0,0,0,5</Thickness>
-		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1.2</sys:TimeSpan>
+		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1</sys:TimeSpan>
 
 	</Window.Resources>
 
@@ -77,7 +77,7 @@
 		
 		<Border.Transitions>
 			<Transitions>
-				<DoubleTransition Property="Opacity" Duration="0:0:0.8"/>
+				<DoubleTransition Property="Opacity" Duration="0:0:0.5"/>
 			</Transitions>
 		</Border.Transitions>
 
