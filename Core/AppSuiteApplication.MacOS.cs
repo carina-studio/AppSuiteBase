@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 
 namespace CarinaStudio.AppSuite;
 
-unsafe partial class AppSuiteApplication
+partial class AppSuiteApplication
 {
     // Application call-back for macOS.
     class AppSuiteAppDelegate : NSObject
@@ -41,19 +41,19 @@ unsafe partial class AppSuiteApplication
             {
                 cls.DefineMethod<IntPtr, IntPtr>("application:openFiles:", (self, cmd, app, fileName) =>
                 {
-                    AppSuiteApplication.Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, app, fileName);
+                    Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, app, fileName);
                 });
                 cls.DefineMethod<IntPtr, IntPtr>("application:openURLs:", (self, cmd, app, urls) =>
                 {
-                    AppSuiteApplication.Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, app, urls);
+                    Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, app, urls);
                 });
                 cls.DefineMethod<IntPtr>("applicationDidFinishLaunching:", (self, cmd, notification) =>
                 {
-                    AppSuiteApplication.Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
+                    Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
                 });
                 cls.DefineMethod<IntPtr, NSApplication.TerminateReply>("applicationShouldTerminate:", (self, cmd, app) =>
                 {
-                    return AppSuiteApplication.Current.macOSAppDelegate.Let(it =>
+                    return Current.macOSAppDelegate.Let(it =>
                     {
                         if (it == null)
                             return NSApplication.TerminateReply.TerminateNow;
@@ -80,7 +80,7 @@ unsafe partial class AppSuiteApplication
                 });
                 cls.DefineMethod<IntPtr>("applicationWillFinishLaunching:", (self, cmd, notification) =>
                 {
-                    AppSuiteApplication.Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
+                    Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
                 });
             });
         }
@@ -95,12 +95,12 @@ unsafe partial class AppSuiteApplication
         // Send message to base delegate.
         void SendMessageToBaseAppDelegate(ObjCSelector cmd, params object?[] args)
         {
-            if (this.baseAppDelegate?.Class?.HasMethod(cmd) == true)
+            if (this.baseAppDelegate?.Class.HasMethod(cmd) == true)
                 this.baseAppDelegate.SendMessage(cmd, args);
         }
         T SendMessageToBaseAppDelegateWithResult<T>(ObjCSelector cmd, T defaultResult, params object?[] args)
         {
-            if (this.baseAppDelegate?.Class?.HasMethod(cmd) == true)
+            if (this.baseAppDelegate?.Class.HasMethod(cmd) == true)
             {
                 try
                 {
@@ -143,9 +143,9 @@ unsafe partial class AppSuiteApplication
     // Define extra styles by code for macOS.
     static void DefineExtraStylesForMacOS()
     {
-        var clickHandler = new EventHandler<RoutedEventArgs>((sender, e) =>
+        var clickHandler = new EventHandler<RoutedEventArgs>((sender, _) =>
             Avalonia.Controls.ToolTip.SetIsOpen((Avalonia.Controls.Control)sender.AsNonNull(), false));
-        var templateAppliedHandler = new EventHandler<RoutedEventArgs>((sender, e) =>
+        var templateAppliedHandler = new EventHandler<RoutedEventArgs>((sender, _) =>
         {
             if (sender is Avalonia.Controls.Control control)
             {
@@ -172,6 +172,7 @@ unsafe partial class AppSuiteApplication
         if (!Platform.IsMacOS || control is Avalonia.Controls.Button)
             return;
 #pragma warning disable CA1806
+        // ReSharper disable once ObjectCreationAsStatement
         new Controls.MacOSToolTipHelper(control);
 #pragma warning restore CA1806
     }
@@ -349,7 +350,7 @@ unsafe partial class AppSuiteApplication
         switch (state)
         {
             case Controls.TaskbarIconProgressState.Indeterminate:
-                // Usupported
+                // Unsupported
                 goto default;
             case Controls.TaskbarIconProgressState.Normal:
             case Controls.TaskbarIconProgressState.Error:
@@ -360,12 +361,12 @@ unsafe partial class AppSuiteApplication
                     // get info of dock tile
                     var dockTileWidth = this.macOSAppDockTileOverlayBitmap!.Width;
                     var dockTileHeight = this.macOSAppDockTileOverlayBitmap.Height;
-                    var progressBackgroundColor = this.FindResourceOrDefault<Color>("Color/AppSuiteApplication.MacOSDockTile.Progress.Background", Colors.Black);
+                    var progressBackgroundColor = this.FindResourceOrDefault("Color/AppSuiteApplication.MacOSDockTile.Progress.Background", Colors.Black);
                     var progressForegroundColor = state switch
                     {
-                        Controls.TaskbarIconProgressState.Error => this.FindResourceOrDefault<Color>("Color/AppSuiteApplication.MacOSDockTile.Progress.Foreground.Error", Colors.Red),
-                        Controls.TaskbarIconProgressState.Paused => this.FindResourceOrDefault<Color>("Color/AppSuiteApplication.MacOSDockTile.Progress.Foreground.Paused", Colors.Yellow),
-                        _ => this.FindResourceOrDefault<Color>("Color/AppSuiteApplication.MacOSDockTile.Progress.Foreground", Colors.LightGray),
+                        Controls.TaskbarIconProgressState.Error => this.FindResourceOrDefault("Color/AppSuiteApplication.MacOSDockTile.Progress.Foreground.Error", Colors.Red),
+                        Controls.TaskbarIconProgressState.Paused => this.FindResourceOrDefault("Color/AppSuiteApplication.MacOSDockTile.Progress.Foreground.Paused", Colors.Yellow),
+                        _ => this.FindResourceOrDefault("Color/AppSuiteApplication.MacOSDockTile.Progress.Foreground", Colors.LightGray),
                     };
 
                     // prepare progress background

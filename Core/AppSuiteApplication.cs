@@ -36,7 +36,6 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
-using System.Security.Principal;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -55,11 +54,11 @@ namespace CarinaStudio.AppSuite
             // Fields.
             readonly Microsoft.Extensions.Logging.ILogger logger;
 
-            // COnstructor.
+            // Constructor.
             public AvaloniaLogSink(IAppSuiteApplication app) =>
                 this.logger = app.LoggerFactory.CreateLogger("Avalonia");
             
-            /// <inheritdoc/>
+            // Convert from Avalonia log level.
             Microsoft.Extensions.Logging.LogLevel ConvertToLogLevel(Avalonia.Logging.LogEventLevel level) => level switch
             {
                 Avalonia.Logging.LogEventLevel.Debug => Microsoft.Extensions.Logging.LogLevel.Debug,
@@ -99,7 +98,7 @@ namespace CarinaStudio.AppSuite
                 var convertedLevel = this.ConvertToLogLevel(level);
                 if (convertedLevel == Microsoft.Extensions.Logging.LogLevel.None)
                     return;
-                if (propertyValues == null || propertyValues.Length == 0)
+                if (propertyValues.Length == 0)
                     this.logger.Log(convertedLevel, "[{area}][{source}] messageTemplate", area, source?.GetType().Name);
                 else
                 {
@@ -228,7 +227,7 @@ namespace CarinaStudio.AppSuite
 
             // Implementations.
             protected override void OnUpgrade(int oldVersion) => this.app.OnUpgradePersistentState(this, oldVersion, this.Version);
-            public override int Version { get => this.app.PersistentStateVersion; }
+            public override int Version => this.app.PersistentStateVersion;
         }
 
 
@@ -246,7 +245,7 @@ namespace CarinaStudio.AppSuite
 
             // Implementations.
             protected override void OnUpgrade(int oldVersion) => this.app.OnUpgradeSettings(this, oldVersion, this.Version);
-            public override int Version { get => this.app.SettingsVersion; }
+            public override int Version => this.app.SettingsVersion;
         }
 
 
@@ -294,7 +293,7 @@ namespace CarinaStudio.AppSuite
             if (mainModule != null && Path.GetFileNameWithoutExtension(mainModule.FileName) != "dotnet")
                 return Path.GetDirectoryName(mainModule.FileName) ?? "";
 #pragma warning disable SYSLIB0044
-            var codeBase = System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.CodeBase;
+            var codeBase = Assembly.GetEntryAssembly()?.GetName().CodeBase;
 #pragma warning restore SYSLIB0044
             if (codeBase != null && codeBase.StartsWith("file://") && codeBase.Length > 7)
             {
@@ -383,7 +382,9 @@ namespace CarinaStudio.AppSuite
                     ArchiveFileName = Path.Combine(this.RootPrivateDirectoryPath, "Log", "log.txt"),
                     ArchiveNumbering = NLog.Targets.ArchiveNumberingMode.Sequence,
                     FileName = Path.Combine(this.RootPrivateDirectoryPath, "Log", "log.txt"),
+                    // ReSharper disable StringLiteralTypo
                     Layout = "${longdate} ${pad:padding=-5:inner=${processid}} ${pad:padding=-4:inner=${threadid}} ${pad:padding=-5:inner=${level:uppercase=true}} ${logger:shortName=true}: ${message} ${exception:format=tostring}",
+                    // ReSharper restore StringLiteralTypo
                     MaxArchiveFiles = 10,
                 };
                 var rule = new NLog.Config.LoggingRule("logToFile").Also(rule =>
@@ -395,8 +396,10 @@ namespace CarinaStudio.AppSuite
                 it.AddTarget(fileTarget);
                 it.LoggingRules.Add(rule);
             });
-            this.LoggerFactory = new LoggerFactory(new ILoggerProvider[] { this.OnCreateLoggerProvider() });
+            // ReSharper disable VirtualMemberCallInConstructor
+            this.LoggerFactory = new LoggerFactory(new[] { this.OnCreateLoggerProvider() });
             this.Logger = this.LoggerFactory.CreateLogger(this.GetType().Name);
+            // ReSharper restore VirtualMemberCallInConstructor
             this.Logger.LogDebug("Created");
 
             // setup logger for Avalonia
@@ -413,9 +416,11 @@ namespace CarinaStudio.AppSuite
             };
 
             // get file paths
+            // ReSharper disable VirtualMemberCallInConstructor
             this.configurationFilePath = Path.Combine(this.RootPrivateDirectoryPath, "ConfigOverride.json");
             this.persistentStateFilePath = Path.Combine(this.RootPrivateDirectoryPath, "PersistentState.json");
             this.settingsFilePath = Path.Combine(this.RootPrivateDirectoryPath, "Settings.json");
+            // ReSharper restore VirtualMemberCallInConstructor
 
             // check whether process is running as admin or not
             if (Platform.IsWindows)
@@ -554,7 +559,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Check whether multiple main windows are allowed or not.
         /// </summary>
-        protected virtual bool AllowMultipleMainWindows { get => false; }
+        protected virtual bool AllowMultipleMainWindows => false;
 
 
         /// <summary>
@@ -582,17 +587,20 @@ namespace CarinaStudio.AppSuite
                 {
                     var cjkUnicodeRanges = new UnicodeRange(new UnicodeRangeSegment[]
                     {
+                        // ReSharper disable CommentTypo
                         new(0x2e80, 0x2eff), // CJKRadicalsSupplement
                         new(0x3000, 0x303f), // CJKSymbolsandPunctuation
                         new(0x3200, 0x4dbf), // EnclosedCJKLettersandMonths, CJKCompatibility, CJKUnifiedIdeographsExtensionA
                         new(0x4e00, 0x9fff), // CJKUnifiedIdeographs
                         new(0xf900, 0xfaff), // CJKCompatibilityIdeographs
                         new(0xfe30, 0xfe4f), // CJKCompatibilityForms
+                        // ReSharper restore CommentTypo
                     });
                     if (Platform.IsWindows)
                     {
                         it.With(new FontManagerOptions()
                         {
+                            // ReSharper disable StringLiteralTypo
                             FontFallbacks = new FontFallback[]
                             {
                                 new()
@@ -606,6 +614,7 @@ namespace CarinaStudio.AppSuite
                                     UnicodeRange = cjkUnicodeRanges,
                                 }
                             },
+                            // ReSharper restore StringLiteralTypo
                         });
                         if (Platform.IsWindows11OrAbove)
                         {
@@ -622,6 +631,7 @@ namespace CarinaStudio.AppSuite
                     {
                         it.With(new FontManagerOptions()
                         {
+                            // ReSharper disable StringLiteralTypo
                             FontFallbacks = new FontFallback[]
                             {
                                 new()
@@ -635,6 +645,7 @@ namespace CarinaStudio.AppSuite
                                     UnicodeRange = cjkUnicodeRanges,
                                 }
                             },
+                            // ReSharper restore StringLiteralTypo
                         });
                         it.With(new X11PlatformOptions());
                     }
@@ -809,13 +820,13 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public ISettings Configuration { get => this.configuration ?? throw new InvalidOperationException("Application is not initialized yet."); }
+        public ISettings Configuration => this.configuration ?? throw new InvalidOperationException("Application is not initialized yet.");
 
 
         /// <summary>
         /// Get beginning year of copyright.
         /// </summary>
-        internal protected int CopyrightBeginningYear { get => 2021; }
+        internal protected int CopyrightBeginningYear => 2021;
 
 
         /// <inheritdoc/>
@@ -881,19 +892,19 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get current culture info of application.
         /// </summary>
-        public override CultureInfo CultureInfo { get => cultureInfo; }
+        public override CultureInfo CultureInfo => cultureInfo;
 
 
         /// <summary>
         /// Get <see cref="AppSuiteApplication"/> instance for current process.
         /// </summary>
-        public static new AppSuiteApplication Current { get => (AppSuiteApplication)Application.Current; }
+        public static new AppSuiteApplication Current => (AppSuiteApplication)Application.Current;
 
 
         /// <summary>
         /// Get <see cref="AppSuiteApplication"/> instance for current process or null if <see cref="AppSuiteApplication"/> is not ready yet.
         /// </summary>
-        public static new AppSuiteApplication? CurrentOrNull { get => Application.CurrentOrNull as AppSuiteApplication; }
+        public static new AppSuiteApplication? CurrentOrNull => Application.CurrentOrNull as AppSuiteApplication;
 
 
         /// <summary>
@@ -917,7 +928,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Default port at localhost to receive log output.
         /// </summary>
-        public virtual int DefaultLogOutputTargetPort { get; } = 0;
+        public virtual int DefaultLogOutputTargetPort => 0;
 
 
         // Define extra styles by code.
@@ -985,7 +996,7 @@ namespace CarinaStudio.AppSuite
                     transitions.Add(new Animation.BrushTransition()
                     {
                         Duration = duration,
-                        Easing = easing!,
+                        Easing = easing,
                         Property = Avalonia.Controls.Primitives.TemplatedControl.BackgroundProperty,
                     });
                 })));
@@ -1029,7 +1040,7 @@ namespace CarinaStudio.AppSuite
 
         // Define style for brush transitions of control.
 #if APPLY_CONTROL_BRUSH_ANIMATIONS
-        Style DefineBrushTransitionsStyle(Func<Avalonia.Styling.Selector?, Avalonia.Styling.Selector> selector, TimeSpan duration)
+        Style DefineBrushTransitionsStyle(Func<Selector?, Selector> selector, TimeSpan duration)
         {
             var easing = this.TryFindResource<Easing>("Easing/Animation", out var easingRes) ? easingRes : new LinearEasing();
             return new Style(selector).Also(style =>
@@ -1168,7 +1179,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get information of hardware.
         /// </summary>
-        public HardwareInfo HardwareInfo { get => this.hardwareInfo ?? throw new InvalidOperationException("Application is not initialized yet."); }
+        public HardwareInfo HardwareInfo => this.hardwareInfo ?? throw new InvalidOperationException("Application is not initialized yet.");
 
 
         /// <summary>
@@ -1185,7 +1196,7 @@ namespace CarinaStudio.AppSuite
         /// Check whether application can can running in background mode or not.
         /// </summary>
 #pragma warning disable CA1822
-        protected bool IsBackgroundModeSupported { get => Platform.IsMacOS; }
+        protected bool IsBackgroundModeSupported => Platform.IsMacOS;
 #pragma warning restore CA1822
 
 
@@ -1236,7 +1247,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Check whether application is shutting down or not.
         /// </summary>
-        public override bool IsShutdownStarted { get => isShutdownStarted; }
+        public override bool IsShutdownStarted => isShutdownStarted;
 
 
         /// <summary>
@@ -1268,7 +1279,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public Window? LatestActiveMainWindow { get => this.activeMainWindowList.IsNotEmpty() ? this.activeMainWindowList.First?.Value?.Window : null; }
+        public Window? LatestActiveMainWindow => this.activeMainWindowList.IsNotEmpty() ? this.activeMainWindowList.First?.Value.Window : null;
 
 
         /// <inheritdoc/>
@@ -1282,18 +1293,13 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public async void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, Window? activeMainWindow)
+        public async void LayoutMainWindows(Screen screen, Controls.MultiWindowLayout layout, Window? activeMainWindow)
         {
             // check state
             this.VerifyAccess();
             if (this.isShutdownStarted)
             {
                 this.Logger.LogError("Cannot layout main windows when shutting down");
-                return;
-            }
-            if (screen == null)
-            {
-                this.Logger.LogError("No screen to layout main windows");
                 return;
             }
             var mainWindowCount = this.mainWindows.Count;
@@ -1322,7 +1328,7 @@ namespace CarinaStudio.AppSuite
                 return;
             }
 
-            // confirm layouting lots of main windows
+            // confirm layout of lots of main windows
             activeMainWindow ??= this.LatestActiveMainWindow ?? this.mainWindows[0];
             if (mainWindowCount > 4)
             {
@@ -1466,7 +1472,7 @@ namespace CarinaStudio.AppSuite
             }
             else
             {
-                this.configuration = new CarinaStudio.Configuration.MemorySettings();
+                this.configuration = new MemorySettings();
                 this.configuration.SettingChanged += this.OnConfigurationChanged;
             }
         }
@@ -1880,7 +1886,7 @@ namespace CarinaStudio.AppSuite
                 });
                 if (Platform.IsNotWindows)
                 {
-                    // [workaround] treat process as client first becase limitation of max server instance seems not working on Linux
+                    // [workaround] treat process as client first because limitation of max server instance seems not working on Linux
                     if (this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args ?? Array.Empty<string>()))
                     {
                         this.SynchronizationContext.Post(() => desktopLifetime.Shutdown());
@@ -1960,7 +1966,7 @@ namespace CarinaStudio.AppSuite
             {
                 if (sender is Avalonia.Controls.Window window)
                 {
-                    if (window is not CarinaStudio.Controls.Window csWindow || !this.mainWindowHolders.ContainsKey(csWindow))
+                    if (window is not Controls.Window csWindow || !this.mainWindowHolders.ContainsKey(csWindow))
                         this.windows.Add(window);
                     this.OnWindowOpened(window);
                 }
@@ -1978,7 +1984,7 @@ namespace CarinaStudio.AppSuite
             if (desktopLifetime != null)
             {
                 desktopLifetime.ShutdownMode = Avalonia.Controls.ShutdownMode.OnExplicitShutdown;
-                desktopLifetime.ShutdownRequested += (_, e) =>
+                desktopLifetime.ShutdownRequested += (_, _) =>
                 {
                     if (!this.isShutdownStarted && Platform.IsNotMacOS)
                     {
@@ -2103,7 +2109,7 @@ namespace CarinaStudio.AppSuite
                     this.OnMainWindowActivationChangedOnWindows();
                 else if (Platform.IsMacOS)
                     this.OnMainWindowActivationChangedOnMacOS();
-                if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value?.Window == mainWindow)
+                if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value.Window == mainWindow)
                     return;
                 if (this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
                 {
@@ -2124,7 +2130,7 @@ namespace CarinaStudio.AppSuite
                 return;
             if (!this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
                 return;
-            if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value?.Window == mainWindow)
+            if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value.Window == mainWindow)
             {
                 this.activeMainWindowList.RemoveFirst();
                 this.OnPropertyChanged(nameof(LatestActiveMainWindow));
@@ -2433,7 +2439,7 @@ namespace CarinaStudio.AppSuite
                 {
                     var currentTime = this.stopWatch.ElapsedMilliseconds;
                     this.Logger.LogTrace("[Performance] Took {duration} ms to create splash window", currentTime - time);
-                    time = currentTime;
+                    //time = currentTime;
                 }
                 this.splashWindow.Show();
                 this.splashWindowShownTime = this.stopWatch.ElapsedMilliseconds;
@@ -2480,7 +2486,7 @@ namespace CarinaStudio.AppSuite
                     if (pmType.Assembly.GetName().FullName.StartsWith("CarinaStudio.AppSuite.Product,"))
                     {
                         // initialize
-                        await (Task)pmType.GetMethod("InitializeAsync", BindingFlags.Public | BindingFlags.Static, new Type[]{ typeof(IAppSuiteApplication) })!.Invoke(null, new object?[] { this })!;
+                        await (Task)pmType.GetMethod("InitializeAsync", BindingFlags.Public | BindingFlags.Static, new[]{ typeof(IAppSuiteApplication) })!.Invoke(null, new object?[] { this })!;
 
                         // get instance
                         this.productManager = (IProductManager)pmType.GetProperty("Default", BindingFlags.Public | BindingFlags.Static)!.GetGetMethod()!.Invoke(null, Array.Empty<object?>())!;
@@ -2517,13 +2523,7 @@ namespace CarinaStudio.AppSuite
         {
             // load saved states
             using var stateStream = new MemoryStream(this.PersistentState.GetValueOrDefault(MainWindowViewModelStatesKey));
-            var jsonDocument = (JsonDocument?)null;
-            try
-            {
-                jsonDocument = JsonDocument.Parse(stateStream);
-            }
-            catch
-            { }
+            var jsonDocument = await Global.RunOrDefaultAsync(async () => await JsonDocument.ParseAsync(stateStream));
             if (jsonDocument == null)
             {
                 this.Logger.LogWarning("No main windows to restore");
@@ -2736,7 +2736,7 @@ namespace CarinaStudio.AppSuite
             this.windowObserverTokens.Add(window, tokens);
 
             // update latest active window
-            if (window is CarinaStudio.Controls.Window csWindow && this.mainWindowHolders.TryGetValue(csWindow, out var mainWindowHolder))
+            if (window is Controls.Window csWindow && this.mainWindowHolders.TryGetValue(csWindow, out var mainWindowHolder))
             {
                 // add main window to active list
                 if (mainWindowHolder.ActiveListNode.List == null)
@@ -2757,20 +2757,6 @@ namespace CarinaStudio.AppSuite
             // exit background mode
             this.ExitBackgroundMode();
         }
-
-
-        // Called when Windows UI color changed.
-#pragma warning disable IDE0051
-#pragma warning disable IDE0060
-        void OnWindowsUIColorValueChanged(object? sender, object result)
-        {
-            this.SynchronizationContext.Post(() =>
-            {
-                this.UpdateSystemThemeMode(true);
-            });
-        }
-#pragma warning restore IDE0051
-#pragma warning restore IDE0060
 
 
         /// <summary>
@@ -2829,13 +2815,13 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get persistent state of application.
         /// </summary>
-        public override ISettings PersistentState { get => this.persistentState ?? throw new InvalidOperationException("Application is not initialized yet."); }
+        public override ISettings PersistentState => this.persistentState ?? throw new InvalidOperationException("Application is not initialized yet.");
 
 
         /// <summary>
         /// Get version of <see cref="PersistentState"/>.
         /// </summary>
-        protected virtual int PersistentStateVersion { get => 1; }
+        protected virtual int PersistentStateVersion => 1;
 
 
         /// <inheritdoc/>
@@ -2853,17 +2839,17 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Product ID of Pro-version.
         /// </summary>
-        internal protected virtual string? ProVersionProductId { get => null; }
+        internal protected virtual string? ProVersionProductId => null;
 
 
         /// <summary>
         /// Get information of current process.
         /// </summary>
-        public ProcessInfo ProcessInfo { get => this.processInfo ?? throw new InvalidOperationException("Application is not initialized yet."); }
+        public ProcessInfo ProcessInfo => this.processInfo ?? throw new InvalidOperationException("Application is not initialized yet.");
 
 
         /// <inheritdoc/>
-        public IProductManager ProductManager { get => this.productManager ?? throw new InvalidOperationException("Application is not initialized yet."); }
+        public IProductManager ProductManager => this.productManager ?? throw new InvalidOperationException("Application is not initialized yet.");
 
 
         /// <summary>
@@ -3041,7 +3027,7 @@ namespace CarinaStudio.AppSuite
             {
                 if (window.Parent != null)
                     continue;
-                if (window is CarinaStudio.Controls.Window csWindow && this.mainWindowHolders.TryGetValue(csWindow, out var mainWindowHolder))
+                if (window is Controls.Window csWindow && this.mainWindowHolders.TryGetValue(csWindow, out var mainWindowHolder))
                     mainWindowHolder.IsRestartingRequested = true;
             }
             var taskCompletionSource = new TaskCompletionSource<bool>();
@@ -3051,7 +3037,7 @@ namespace CarinaStudio.AppSuite
                 {
                     if (window == this.selfTestingWindow)
                         continue;
-                    if (window is not CarinaStudio.Controls.Window csWindow)
+                    if (window is not Controls.Window csWindow)
                         Global.RunWithoutError(window.Close);
                     else if (!csWindow.IsClosed)
                         csWindow.Close();
@@ -3065,7 +3051,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public override string RootPrivateDirectoryPath { get => AppDirectoryPath; }
+        public override string RootPrivateDirectoryPath => AppDirectoryPath;
 
 
         // Save configuration.
@@ -3203,7 +3189,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get application settings.
         /// </summary>
-        public override ISettings Settings { get => this.settings ?? throw new InvalidOperationException("Application is not initialized yet."); }
+        public override ISettings Settings => this.settings ?? throw new InvalidOperationException("Application is not initialized yet.");
 
 
         /// <summary>
@@ -3260,16 +3246,16 @@ namespace CarinaStudio.AppSuite
         async Task<bool> ShowAppUpdateDialogAsync(Avalonia.Controls.Window? owner, bool checkAppUpdateWhenOpening)
         {
             // wait for current dialog
-            AppSuite.Controls.ApplicationUpdateDialogResult result;
+            Controls.ApplicationUpdateDialogResult result;
             if (this.appUpdateDialog != null
                 && this.appUpdateDialog.Activate())
             {
                 result = await this.appUpdateDialog.WaitForClosingDialogAsync();
-                return (result == AppSuite.Controls.ApplicationUpdateDialogResult.ShutdownNeeded);
+                return (result == Controls.ApplicationUpdateDialogResult.ShutdownNeeded);
             }
 
             // check for update
-			using var appUpdater = new AppSuite.ViewModels.ApplicationUpdater();
+			using var appUpdater = new ViewModels.ApplicationUpdater();
             this.appUpdateDialog = new(appUpdater)
             {
                 CheckForUpdateWhenShowing = checkAppUpdateWhenOpening
@@ -3284,7 +3270,7 @@ namespace CarinaStudio.AppSuite
             }
 
 			// shutdown to update
-			if (result == AppSuite.Controls.ApplicationUpdateDialogResult.ShutdownNeeded)
+			if (result == Controls.ApplicationUpdateDialogResult.ShutdownNeeded)
 			{
                 this.Logger.LogWarning("Shut down to update application");
                 this.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
@@ -3407,7 +3393,7 @@ namespace CarinaStudio.AppSuite
             }
             this.SynchronizationContext.Post(() =>
             {
-                // [Workaround] sync culture back to system because it may be resetted
+                // [Workaround] sync culture back to system because it may be reset
                 CultureInfo.CurrentCulture = this.cultureInfo;
                 CultureInfo.CurrentUICulture = this.cultureInfo;
                 CultureInfo.DefaultThreadCurrentCulture = this.cultureInfo;
@@ -3456,7 +3442,7 @@ namespace CarinaStudio.AppSuite
             // create and show the window
             this.selfTestingWindow = new Controls.SelfTestingWindowImpl().Also(window =>
             {
-                window.Closed += (_, e) => this.selfTestingWindow = null;
+                window.Closed += (_, _) => this.selfTestingWindow = null;
             });
             this.selfTestingWindow.Show();
             return true;
@@ -3499,7 +3485,7 @@ namespace CarinaStudio.AppSuite
             }
 
             // close all main windows
-            if (this.mainWindowHolders.IsNotEmpty()) // check 'mainWindowHolders' becuse it will be updated after all tasks of closing main window are completed
+            if (this.mainWindowHolders.IsNotEmpty()) // check 'mainWindowHolders' because it will be updated after all tasks of closing main window are completed
             {
                 if (isFirstCall && this.mainWindows.IsNotEmpty())
                 {
@@ -3584,7 +3570,7 @@ namespace CarinaStudio.AppSuite
             // get culture info
             var cultureInfo = this.Settings.GetValueOrDefault(SettingKeys.Culture).ToCultureInfo(true);
             cultureInfo.ClearCachedData();
-            if (object.Equals(cultureInfo, this.cultureInfo))
+            if (Equals(cultureInfo, this.cultureInfo))
                 return;
 
             this.Logger.LogDebug("Change culture info to {cultureInfoName}", cultureInfo.Name);
@@ -3639,7 +3625,7 @@ namespace CarinaStudio.AppSuite
 
             // setup target
             var target = config.AllTargets.FirstOrDefault(it => it.Name == "outputToLocalhost") as NLog.Targets.NLogViewerTarget;
-            target = new NLog.Targets.NLogViewerTarget("outputToLocalhost")
+            target ??= new NLog.Targets.NLogViewerTarget("outputToLocalhost")
             {
                 Address = new NLog.Layouts.SimpleLayout($"tcp://127.0.0.1:{port}"),
                 NewLine = true,
@@ -3702,7 +3688,7 @@ namespace CarinaStudio.AppSuite
             var resourceUpdated = false;
             if (this.cultureInfo.Name != "en-US")
             {
-                if (this.stringResource == null || !object.Equals(this.stringResourceCulture, this.cultureInfo))
+                if (this.stringResource == null || !Equals(this.stringResourceCulture, this.cultureInfo))
                 {
                     // remove previous resource
                     if (this.stringResource != null)
@@ -3732,7 +3718,7 @@ namespace CarinaStudio.AppSuite
                         }
                         else if (Platform.IsMacOS)
                         {
-                            var builtInResourcesForOS = this.LoadStringResource(new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}-OSX.axaml")).AsNonNull();
+                            var builtInResourcesForOS = this.LoadStringResource(new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}-OSX.axaml"));
                             if (builtInResourcesForOS != null)
                             {
                                 builtInResource = new Avalonia.Controls.ResourceDictionary().Also(it =>
@@ -4068,6 +4054,6 @@ namespace CarinaStudio.AppSuite
 
 
         // Interface implementations.
-        string IAppSuiteApplication.Name { get => this.Name ?? ""; }
+        string IAppSuiteApplication.Name => this.Name ?? "";
     }
 }

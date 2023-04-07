@@ -18,11 +18,11 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="window">Window.</param>
         /// <returns>Task of Pro version activation.</returns>
-		Task ActivateProVersionAsync(Avalonia.Controls.Window? window);
+		Task ActivateProVersionAsync(Window? window);
 
 
         /// <summary>
-        /// Add custom resource to aplication resource dictionary.
+        /// Add custom resource to application resource dictionary.
         /// </summary>
         /// <param name="resource">Resource.</param>
         /// <returns><see cref="IDisposable"/> which represents token of added resource.</returns>
@@ -30,7 +30,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Add custom style to aplication styles.
+        /// Add custom style to application styles.
         /// </summary>
         /// <param name="style">Resource.</param>
         /// <returns><see cref="IDisposable"/> which represents token of added style.</returns>
@@ -73,7 +73,7 @@ namespace CarinaStudio.AppSuite
         /// <param name="owner">Owner window.</param>
         /// <param name="forceShowingDialog">True to show dialog no matter application update is available or not.</param> 
         /// <returns>True if application update has been found and update has been started.</returns>     
-		Task<bool> CheckForApplicationUpdateAsync(Avalonia.Controls.Window? owner, bool forceShowingDialog);
+		Task<bool> CheckForApplicationUpdateAsync(Window? owner, bool forceShowingDialog);
 
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Get information of hardware.iapsu
+        /// Get information of hardware.
         /// </summary>
         HardwareInfo HardwareInfo { get; }
 
@@ -233,7 +233,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get latest active window.
         /// </summary>
-        Avalonia.Controls.Window? LatestActiveWindow { get; }
+        Window? LatestActiveWindow { get; }
 
 
         /// <summary>
@@ -276,7 +276,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="uri">URI of string resource.</param>
         /// <returns>Loaded string resource, or Null if failed to load.</returns>
-        Avalonia.Controls.IResourceProvider? LoadStringResource(Uri uri);
+        IResourceProvider? LoadStringResource(Uri uri);
 
 
         /// <summary>
@@ -298,7 +298,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Perform garbadge collection.
+        /// Perform garbage collection.
         /// </summary>
         /// <param name="collectionMode">GC mode.</param>
         void PerformGC(GCCollectionMode collectionMode = GCCollectionMode.Default);
@@ -338,7 +338,7 @@ namespace CarinaStudio.AppSuite
         /// Start purchasing Pro version asynchronously.
         /// </summary>
         /// <param name="window">Window.</param>
-        void PurchaseProVersionAsync(Avalonia.Controls.Window? window);
+        void PurchaseProVersionAsync(Window? window);
 
 
         /// <summary>
@@ -386,20 +386,20 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Show dialog of appliation information.
+        /// Show dialog of application information.
         /// </summary>
         /// <param name="owner">Owner window.</param>
         /// <returns>Task of showing dialog.</returns>
-        Task ShowApplicationInfoDialogAsync(Avalonia.Controls.Window? owner);
+        Task ShowApplicationInfoDialogAsync(Window? owner);
 
 
         /// <summary>
-        /// Show dialog of appliation options.
+        /// Show dialog of application options.
         /// </summary>
         /// <param name="owner">Owner window.</param>
         /// <param name="section">Section of options to show.</param>
         /// <returns>Task of showing dialog.</returns>
-        Task ShowApplicationOptionsDialogAsync(Avalonia.Controls.Window? owner, string? section = null);
+        Task ShowApplicationOptionsDialogAsync(Window? owner, string? section = null);
 
 
         /// <summary>
@@ -438,7 +438,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get all windows of application.
         /// </summary>
-        IList<Avalonia.Controls.Window> Windows { get; }
+        IList<Window> Windows { get; }
     }
 
 
@@ -495,8 +495,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        // ReSharper disable NonReadonlyMemberInGetHashCode
         public override int GetHashCode() =>
             ((this.IsDebugMode ? 1 : 0) << 31) | ((this.IsTestingMode ? 1 : 0) << 30);
+        // ReSharper restore NonReadonlyMemberInGetHashCode
         
 
         /// <summary>

@@ -78,7 +78,7 @@ unsafe partial class AppSuiteApplication
             return;
         if (window.IsExtendedIntoWindowDecorations || window.SystemDecorations == Avalonia.Controls.SystemDecorations.None)
             return;
-        var hwnd = (window.PlatformImpl?.Handle?.Handle).GetValueOrDefault();
+        var hwnd = (window.PlatformImpl?.Handle.Handle).GetValueOrDefault();
         if (hwnd != default)
         {
             // setup window corner
@@ -210,7 +210,7 @@ unsafe partial class AppSuiteApplication
     {
         if (!this.SetupWindowsTaskbarList())
             return;
-        var hwnd = (window.PlatformImpl?.Handle?.Handle).GetValueOrDefault();
+        var hwnd = (window.PlatformImpl?.Handle.Handle).GetValueOrDefault();
         if (hwnd == default)
             return;
         this.windowsTaskbarList.SetProgressValue(hwnd, (ulong)(window.TaskbarIconProgress * 1000 + 0.5), 1000UL);
@@ -222,7 +222,7 @@ unsafe partial class AppSuiteApplication
     {
         if (!this.SetupWindowsTaskbarList())
             return;
-        var hwnd = (window.PlatformImpl?.Handle?.Handle).GetValueOrDefault();
+        var hwnd = (window.PlatformImpl?.Handle.Handle).GetValueOrDefault();
         if (hwnd == default)
             return;
         this.windowsTaskbarList.SetProgressState(hwnd, window.TaskbarIconProgressState switch
