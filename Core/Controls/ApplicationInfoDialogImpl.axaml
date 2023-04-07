@@ -305,8 +305,8 @@
 								<!-- Script running loading -->
 								<Separator Classes="Dialog_Item_Separator"/>
 								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.GCFrequency}"/>
-									<abControls:FormattedSelectableTextBlock Arg1="{Binding ScriptRunningLoading, Source={x:Static scripting:ScriptManager.Default}, Converter={x:Static converters:RatioToPercentageConverter.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.ScriptRunningLoading.Format}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ScriptRunningLoading}"/>
+									<abControls:FormattedSelectableTextBlock Arg1="{Binding ScriptRunningLoading, Source={x:Static scripting:ScriptManager.Default}, Converter={x:Static converters:RatioToPercentageConverter.Default}}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
 								</Grid>
 
 							</StackPanel>
