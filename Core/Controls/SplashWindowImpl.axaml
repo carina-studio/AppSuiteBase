@@ -137,7 +137,7 @@
 
 				<!-- Title and version -->
 				<Grid Grid.Column="1" HorizontalAlignment="Left" RowDefinitions="Auto,Auto,*" VerticalAlignment="Center">
-					<TextBlock Name="titleTextBlock" FontSize="{DynamicResource Double/SplashWindow.Title.FontSize}}" FontWeight="Bold" Margin="{StaticResource Thickness/SplashWindow.Title.Margin}" MaxWidth="{StaticResource Double/SplashWindow.Title.MaxWidth}" Opacity="0" Text="{Binding $parent[Window].ApplicationName}" TextTrimming="CharacterEllipsis">
+					<TextBlock Name="titleTextBlock" FontSize="{DynamicResource Double/SplashWindow.Title.FontSize}" FontWeight="Bold" Margin="{StaticResource Thickness/SplashWindow.Title.Margin}" MaxWidth="{StaticResource Double/SplashWindow.Title.MaxWidth}" Opacity="0" Text="{Binding $parent[Window].ApplicationName}" TextTrimming="CharacterEllipsis">
 						<TextBlock.RenderTransform>
 							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 								<TranslateTransform.Transitions>

@@ -7,7 +7,6 @@
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
 		xmlns:ia="using:Avalonia.Xaml.Interactivity"
         xmlns:iaCore="using:Avalonia.Xaml.Interactions.Core"
-		xmlns:interop="using:System.Runtime.InteropServices"
 		xmlns:net="using:CarinaStudio.AppSuite.Net"
 		xmlns:scripting="using:CarinaStudio.AppSuite.Scripting"
 		xmlns:sys="using:System"

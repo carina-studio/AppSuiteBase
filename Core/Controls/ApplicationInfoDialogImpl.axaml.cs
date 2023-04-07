@@ -39,8 +39,8 @@ namespace CarinaStudio.AppSuite.Controls
 		static readonly StyledProperty<bool> HasTotalPhysicalMemoryProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasTotalPhysicalMemory));
 		static readonly StyledProperty<bool> HasUserAgreementProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasUserAgreement");
 		static readonly SettingKey<bool> IsRestartingInDebugModeConfirmationShownKey = new("ApplicationInfoDialog.IsRestartingInDebugModeConfirmationShown");
-		static readonly DirectProperty<ApplicationInfoDialogImpl, PixelSize> PhysicalScreenSizeProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelSize>("PhysicalScreenSize", w => w.physicalScreenSize);
-		static readonly DirectProperty<ApplicationInfoDialogImpl, PixelRect> PhysicalScreenWorkingAreaProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelRect>("PhysicalScreenWorkingArea", w => w.physicalScreenWorkingArea);
+		static readonly DirectProperty<ApplicationInfoDialogImpl, PixelSize> PhysicalScreenSizeProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelSize>(nameof(PhysicalScreenSize), w => w.physicalScreenSize);
+		static readonly DirectProperty<ApplicationInfoDialogImpl, PixelRect> PhysicalScreenWorkingAreaProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelRect>(nameof(PhysicalScreenWorkingArea), w => w.physicalScreenWorkingArea);
 		static readonly StyledProperty<string?> PrimaryNetworkInterfacePhysicalAddressProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, string?>("PrimaryNetworkInterfacePhysicalAddress");
 		public static readonly IValueConverter RectToStringConverter = new FuncValueConverter<object?, string?>(value =>
 		{
@@ -50,9 +50,9 @@ namespace CarinaStudio.AppSuite.Controls
 				return $"[{rect.X:F0}, {rect.Y:F0}, {rect.Width:F0}x{rect.Height:F0}]";
 			return null;
 		});
-		static readonly DirectProperty<ApplicationInfoDialogImpl, double> ScreenPixelDensityProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, double>("ScreenPixelDensity", w => w.screenPixelDensity);
-		static readonly DirectProperty<ApplicationInfoDialogImpl, Size> ScreenSizeProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, Size>("ScreenSize", w => w.screenSize);
-		static readonly DirectProperty<ApplicationInfoDialogImpl, Rect> ScreenWorkingAreaProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, Rect>("ScreenWorkingArea", w => w.screenWorkingArea);
+		static readonly DirectProperty<ApplicationInfoDialogImpl, double> ScreenPixelDensityProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, double>(nameof(screenPixelDensity), w => w.screenPixelDensity);
+		static readonly DirectProperty<ApplicationInfoDialogImpl, Size> ScreenSizeProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, Size>(nameof(ScreenSize), w => w.screenSize);
+		static readonly DirectProperty<ApplicationInfoDialogImpl, Rect> ScreenWorkingAreaProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, Rect>(nameof(ScreenWorkingArea), w => w.screenWorkingArea);
 		public static readonly IValueConverter SizeToStringConverter = new FuncValueConverter<object?, string?>(value =>
 		{
 			if (value is PixelSize pixelSize)
@@ -406,6 +406,14 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
+		// Screen size in pixels.
+		public PixelSize PhysicalScreenSize => this.physicalScreenSize;
+
+
+		// Screen working area in pixels.
+		public PixelRect PhysicalScreenWorkingArea => this.physicalScreenWorkingArea;
+
+
 		/// <summary>
 		/// Restart in debug mode.
 		/// </summary>
@@ -434,6 +442,18 @@ namespace CarinaStudio.AppSuite.Controls
 				this.Application.Restart(argsBuilder);
 			}, 300);
 		}
+
+
+		// Pixel density of current screen.
+		public double? ScreenPixelDensity => this.screenPixelDensity;
+
+
+		// Size of current screen.
+		public Size ScreenSize => this.screenSize;
+
+
+		// Working area of screen.
+		public Rect ScreenWorkingArea => this.screenWorkingArea;
 
 
 		/// <summary>
