@@ -146,43 +146,43 @@ namespace CarinaStudio.AppSuite.ViewModels
 		/// <summary>
 		/// Check whether <see cref="ReleasePageUri"/> is valid or not.
 		/// </summary>
-		public bool HasReleasePageUri { get => this.GetValue(HasReleasePageUriProperty); }
+		public bool HasReleasePageUri => this.GetValue(HasReleasePageUriProperty);
 
 
 		/// <summary>
 		/// Check whether auto update is supported or not.
 		/// </summary>
-		public bool IsAutoUpdateSupported { get; } = true;
+		public bool IsAutoUpdateSupported => true;
 
 
 		/// <summary>
 		/// Check whether application update checking is on-going or not.
 		/// </summary>
-		public bool IsCheckingForUpdate { get => this.GetValue(IsCheckingForUpdateProperty); }
+		public bool IsCheckingForUpdate => this.GetValue(IsCheckingForUpdateProperty);
 
 
 		/// <summary>
 		/// Check whether application version is the latest or not.
 		/// </summary>
-		public bool IsLatestVersion { get => this.GetValue(IsLatestVersionProperty); }
+		public bool IsLatestVersion => this.GetValue(IsLatestVersionProperty);
 
 
 		/// <summary>
 		/// Check whether update preparation is on-going or not.
 		/// </summary>
-		public bool IsPreparingForUpdate { get => this.GetValue(IsPreparingForUpdateProperty); }
+		public bool IsPreparingForUpdate => this.GetValue(IsPreparingForUpdateProperty);
 
 
 		/// <summary>
 		/// Check whether shutting down is needed to continue update or not.
 		/// </summary>
-		public bool IsShutdownNeededToContinueUpdate { get => this.GetValue(IsShutdownNeededToContinueUpdateProperty); }
+		public bool IsShutdownNeededToContinueUpdate => this.GetValue(IsShutdownNeededToContinueUpdateProperty);
 
 
 		/// <summary>
 		/// Check whether value of <see cref="UpdatePreparationProgressPercentage"/> is available or not.
 		/// </summary>
-		public bool IsUpdatePreparationProgressAvailable { get => this.GetValue(IsUpdatePreparationProgressAvailableProperty); }
+		public bool IsUpdatePreparationProgressAvailable => this.GetValue(IsUpdatePreparationProgressAvailableProperty);
 
 
 		/// <summary>
@@ -232,7 +232,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 							{
 								var tempDirectory = Path.Combine(this.Application.RootPrivateDirectoryPath, TempAutoUpdaterDirName);
 								this.Logger.LogWarning("Delete auto updater download directory '{tempDirectory}'", tempDirectory);
-								Directory.Delete(tempDirectory, true);
+								System.IO.Directory.Delete(tempDirectory, true);
 							});
 							this.OnUpdatePreparationCompleted(updater.State, updater.ApplicationDirectoryPath.AsNonNull(), updater.PackageResolver?.PackageVersion);
 							break;
@@ -248,14 +248,14 @@ namespace CarinaStudio.AppSuite.ViewModels
 									try
 									{
 										this.Logger.LogDebug("Rename auto updater directory from '{tempDirectory}' to '{finalDirectory}'", tempDirectory, finalDirectory);
-										Directory.Move(tempDirectory, finalDirectory);
+										System.IO.Directory.Move(tempDirectory, finalDirectory);
 										return true;
 									}
 									catch (Exception ex)
 									{
 										if (this.updatePreparationCancellationTokenSource?.IsCancellationRequested == true)
 										{
-											Global.RunWithoutError(() => Directory.Delete(tempDirectory, true));
+											Global.RunWithoutError(() => System.IO.Directory.Delete(tempDirectory, true));
 											return false;
 										}
 										if (retryCount > 0)
@@ -267,7 +267,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 										else
 										{
 											this.Logger.LogError(ex, "Unable to rename auto updater directory from '{tempDirectory}' to '{finalDirectory}'", tempDirectory, finalDirectory);
-											Global.RunWithoutError(() => Directory.Delete(tempDirectory, true));
+											Global.RunWithoutError(() => System.IO.Directory.Delete(tempDirectory, true));
 											return false;
 										}
 									}
@@ -277,7 +277,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 							// complete
 							if (this.updatePreparationCancellationTokenSource?.IsCancellationRequested == true)
 							{
-								Global.RunWithoutErrorAsync(() => Directory.Delete(tempDirectory, true));
+								Global.RunWithoutErrorAsync(() => System.IO.Directory.Delete(tempDirectory, true));
 								this.OnUpdatePreparationCompleted(UpdaterState.Cancelled, "", updater.PackageResolver?.PackageVersion);
 							}
 							else if (success)
@@ -417,7 +417,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 						$" -directory \"{appDirectory}\"" +
 						$" -name \"{this.Application.Name}\"" +
 						(autoUpdaterVersion >= AutoUpdaterVersionSupportsBaseVersion
-							? $" -base-version {this.Application.Assembly.GetName()?.Version?.ToString() ?? "0.0.0.0"}"
+							? $" -base-version {this.Application.Assembly.GetName().Version?.ToString() ?? "0.0.0.0"}"
 							: ""
 						) +
 						$" -package-manifest \"{this.packageManifestUri}\"" +
@@ -480,7 +480,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 		/// <summary>
 		/// Get URI of update releasing page.
 		/// </summary>
-		public Uri? ReleasePageUri { get => this.GetValue(ReleasePageUriProperty); }
+		public Uri? ReleasePageUri => this.GetValue(ReleasePageUriProperty);
 
 
 		// Report current application update info.
@@ -536,7 +536,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 				try
 				{
 					var latestVersion = (Version?)null;
-					foreach (var path in Directory.EnumerateDirectories(this.Application.RootPrivateDirectoryPath))
+					foreach (var path in System.IO.Directory.EnumerateDirectories(this.Application.RootPrivateDirectoryPath))
 					{
 						var match = AutoUpdaterDirNameRegex.Match(Path.GetFileName(path));
 						if (match.Success)
@@ -585,7 +585,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 			{
 				try
 				{
-					foreach (var path in Directory.EnumerateDirectories(this.Application.RootPrivateDirectoryPath))
+					foreach (var path in System.IO.Directory.EnumerateDirectories(this.Application.RootPrivateDirectoryPath))
 					{
 						var match = AutoUpdaterDirNameRegex.Match(Path.GetFileName(path));
 						if (match.Success)
@@ -598,7 +598,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 							try
 							{
 								this.Logger.LogDebug("Delete auto updater '{path}'", path);
-								Directory.Delete(path, true);
+								System.IO.Directory.Delete(path, true);
 							}
 							catch (Exception ex)
 							{
@@ -634,7 +634,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 			{
 				try
 				{
-					Directory.CreateDirectory(tempAutoUpdaterDirectory);
+					System.IO.Directory.CreateDirectory(tempAutoUpdaterDirectory);
 				}
 				catch (Exception ex)
 				{
@@ -675,24 +675,24 @@ namespace CarinaStudio.AppSuite.ViewModels
 		/// <summary>
 		/// Get URI of update package.
 		/// </summary>
-		public Uri? UpdatePackageUri { get => this.GetValue(UpdatePackageUriProperty); }
+		public Uri? UpdatePackageUri => this.GetValue(UpdatePackageUriProperty);
 
 
 		/// <summary>
 		/// Get message to describe the status of update preparation.
 		/// </summary>
-		public string? UpdatePreparationMessage { get => this.GetValue(UpdatePreparationMessageProperty); }
+		public string? UpdatePreparationMessage => this.GetValue(UpdatePreparationMessageProperty);
 
 
 		/// <summary>
 		/// Get current progress percentage of update preparation.
 		/// </summary>
-		public double UpdatePreparationProgressPercentage { get => this.GetValue(UpdatePreparationProgressPercentageProperty); }
+		public double UpdatePreparationProgressPercentage => this.GetValue(UpdatePreparationProgressPercentageProperty);
 
 
 		/// <summary>
 		/// Get new version which application can be updated to.
 		/// </summary>
-		public Version? UpdateVersion { get => this.GetValue(UpdateVersionProperty); }
+		public Version? UpdateVersion => this.GetValue(UpdateVersionProperty);
 	}
 }
