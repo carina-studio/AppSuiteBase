@@ -112,6 +112,7 @@
 	<sys:String x:Key="String/ApplicationUpdater.ReleasePage">新版本中的变更</sys:String>
 
 	<!-- AppSuiteApplication -->
+	<sys:String x:Key="String/AppSuiteApplication.InitializingComponents">初始化元件</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">载入布景主题</sys:String>
 
 	<!-- CommandSearchPaths -->

@@ -158,14 +158,14 @@
 							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 								<TranslateTransform.Transitions>
 									<Transitions>
-										<DoubleTransition Property="X" Delay="0:0:0.2" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+										<DoubleTransition Property="X" Delay="0:0:0.15" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
 									</Transitions>
 								</TranslateTransform.Transitions>
 							</TranslateTransform>
 						</TextBlock.RenderTransform>
 						<TextBlock.Transitions>
 							<Transitions>
-								<DoubleTransition Property="Opacity" Delay="0:0:0.2" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+								<DoubleTransition Property="Opacity" Delay="0:0:0.15" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
 							</Transitions>
 						</TextBlock.Transitions>
 					</TextBlock>
@@ -174,14 +174,14 @@
 							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
 								<TranslateTransform.Transitions>
 									<Transitions>
-										<DoubleTransition Property="X" Delay="0:0:0.3" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+										<DoubleTransition Property="X" Delay="0:0:0.2" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
 									</Transitions>
 								</TranslateTransform.Transitions>
 							</TranslateTransform>
 						</TextBlock.RenderTransform>
 						<TextBlock.Transitions>
 							<Transitions>
-								<DoubleTransition Property="Opacity" Delay="0:0:0.3" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+								<DoubleTransition Property="Opacity" Delay="0:0:0.2" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
 							</Transitions>
 						</TextBlock.Transitions>
 					</TextBlock>
@@ -200,7 +200,7 @@
 					</Grid.RenderTransform-->
 					<Grid.Transitions>
 						<Transitions>
-							<DoubleTransition Property="Opacity" Delay="0:0:0.4" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
+							<DoubleTransition Property="Opacity" Delay="0:0:0.25" Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" Easing="ExponentialEaseOut"/>
 						</Transitions>
 					</Grid.Transitions>
 					<TextBlock Foreground="{DynamicResource Brush/SplashWindow.Foreground.Shadow}" Text="{Binding $parent[Window].Message}" VerticalAlignment="Center">

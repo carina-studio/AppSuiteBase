@@ -118,6 +118,7 @@
 	<sys:String x:Key="String/ApplicationUpdater.ReleasePage">Changes in new version</sys:String>
 
 	<!-- AppSuiteApplication -->
+	<sys:String x:Key="String/AppSuiteApplication.InitializingComponents">Initializing components</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">Loading theme</sys:String>
 
 	<!-- CommandSearchPaths -->

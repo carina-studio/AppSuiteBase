@@ -21,13 +21,8 @@ namespace CarinaStudio.AppSuite.Controls
 	/// </summary>
 	partial class SplashWindowImpl : Avalonia.Controls.Window
 	{
-		/// <summary>
-		/// Duration of initial animation in milliseconds.
-		/// </summary>
-		public static int InitialAnimationDuration = 1400;
-
-
 		// Constants.
+		const int InitialAnimationDuration = 1300;
 		const int MaxShowingRetryingDuration = 1000;
 		const int RetryShowingDelay = 100;
 
@@ -37,7 +32,7 @@ namespace CarinaStudio.AppSuite.Controls
 		static readonly StyledProperty<IBrush?> BackgroundImageOpacityMaskProperty = AvaloniaProperty.Register<SplashWindowImpl, IBrush?>(nameof(BackgroundImageOpacityMask));
 		static readonly StyledProperty<IImage?> BackgroundImageProperty = AvaloniaProperty.Register<SplashWindowImpl, IImage?>(nameof(BackgroundImage));
 		static readonly StyledProperty<IBitmap?> IconBitmapProperty = AvaloniaProperty.Register<SplashWindowImpl, IBitmap?>(nameof(IconBitmap));
-		static readonly StyledProperty<string> MessageProperty = AvaloniaProperty.Register<SplashWindowImpl, string>(nameof(Message), " ", coerce: ((_, it) => string.IsNullOrEmpty(it) ? " " : it));
+		static readonly StyledProperty<string> MessageProperty = AvaloniaProperty.Register<SplashWindowImpl, string>(nameof(Message), " ", coerce: (_, it) => string.IsNullOrEmpty(it) ? " " : it);
 
 
 		// Fields.
@@ -45,6 +40,7 @@ namespace CarinaStudio.AppSuite.Controls
 		double backgroundImageOpacity = 1.0;
 		Uri? backgroundImageUri;
 		Uri? iconUri;
+		readonly TaskCompletionSource initAnimationTaskCompletionSource = new(); 
 		TaskCompletionSource? progressAnimationTaskSource;
 		DoubleAnimator? progressAnimator;
 		readonly ProgressBar progressBar;
@@ -67,7 +63,7 @@ namespace CarinaStudio.AppSuite.Controls
 				return $"©{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
 			});
 			this.Message = app.GetStringNonNull("SplashWindow.Launching");
-			this.showAction = new(() =>
+			this.showAction = new(async () =>
 			{
 				// get screen info
 				var screen = this.Screens.ScreenFromWindow(this.PlatformImpl.AsNonNull());
@@ -93,7 +89,7 @@ namespace CarinaStudio.AppSuite.Controls
 				}
 				
 				// show content
-				var versionOpacity = this.FindResourceOrDefault<double>("Double/ApplicationInfoDialog.AppVersion.Opacity", 0.75);
+				var versionOpacity = this.FindResourceOrDefault("Double/ApplicationInfoDialog.AppVersion.Opacity", 0.75);
 				((Control)this.Content.AsNonNull()).Opacity = 1;
 				this.Get<Control>("backgroundOverlayBorder").Let(control =>
 					control.Opacity = 1);
@@ -122,6 +118,10 @@ namespace CarinaStudio.AppSuite.Controls
 					control.Opacity = 1;
 					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				});
+				
+				// complete animation later
+				await Task.Delay(InitialAnimationDuration);
+				this.initAnimationTaskCompletionSource.TrySetResult();
 			});
 			this.Version = app.GetFormattedString("ApplicationInfoDialog.Version", app.Assembly.GetName().Version).AsNonNull();
 			if (app.ReleasingType != ApplicationReleasingType.Stable)
@@ -177,7 +177,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Background image.
-		public IImage? BackgroundImage { get => this.GetValue<IImage?>(BackgroundImageProperty); }
+		public IImage? BackgroundImage => this.GetValue(BackgroundImageProperty);
 
 
 		// Opacity of background image.
@@ -191,7 +191,7 @@ namespace CarinaStudio.AppSuite.Controls
 				else if (value > 1)
 					value = 1;
 				this.backgroundImageOpacity = value;
-				this.SetValue<IBrush?>(BackgroundImageOpacityMaskProperty, new RadialGradientBrush().Also(it =>
+				this.SetValue(BackgroundImageOpacityMaskProperty, new RadialGradientBrush().Also(it =>
 				{
 					it.Center = new(0.5, 1.0, RelativeUnit.Relative);
 					it.GradientOrigin = it.Center;
@@ -204,7 +204,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Opacity mask of background image.
-		public IBrush? BackgroundImageOpacityMask { get => this.GetValue<IBrush?>(BackgroundImageOpacityMaskProperty); }
+		public IBrush? BackgroundImageOpacityMask => this.GetValue(BackgroundImageOpacityMaskProperty);
 
 
 		// Get or set URI of background image.
@@ -219,13 +219,13 @@ namespace CarinaStudio.AppSuite.Controls
 				this.backgroundImageUri = value;
 				if (value != null)
 				{
-					this.SetValue<IImage?>(BackgroundImageProperty, AvaloniaLocator.Current.GetService<IAssetLoader>()?.Let(loader =>
+					this.SetValue(BackgroundImageProperty, AvaloniaLocator.Current.GetService<IAssetLoader>()?.Let(loader =>
 					{
 						return loader.Open(value).Use(stream => new Bitmap(stream));
 					}));
 				}
 				else
-					this.SetValue<IImage?>(BackgroundImageProperty, null);
+					this.SetValue(BackgroundImageProperty, null);
 			}
 		}
 
@@ -235,7 +235,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Get icon as IBitmap.
-		public IBitmap? IconBitmap { get => this.GetValue<IBitmap?>(IconBitmapProperty); }
+		public IBitmap? IconBitmap => this.GetValue(IconBitmapProperty);
 
 
 		// Get or set URI of application icon.
@@ -253,7 +253,7 @@ namespace CarinaStudio.AppSuite.Controls
 				{
 					return loader.Open(value).Use(stream => new WindowIcon(stream));
 				});
-				this.SetValue<IBitmap?>(IconBitmapProperty, AvaloniaLocator.Current.GetService<IAssetLoader>()?.Let(loader =>
+				this.SetValue(IconBitmapProperty, AvaloniaLocator.Current.GetService<IAssetLoader>()?.Let(loader =>
 				{
 					return loader.Open(value).Use(stream => new Bitmap(stream));
 				}));
@@ -266,8 +266,8 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		public string Message
 		{
-			get => this.GetValue<string>(MessageProperty);
-			set => this.SetValue<string>(MessageProperty, value);
+			get => this.GetValue(MessageProperty);
+			set => this.SetValue(MessageProperty, value);
 		}
 
 
@@ -322,7 +322,7 @@ namespace CarinaStudio.AppSuite.Controls
 					this.progressAnimationTaskSource ??= new();
 					this.progressAnimator = new DoubleAnimator(this.progressBar.Value, Math.Max(0, Math.Min(1, value))).Also(it =>
 					{
-						it.Completed += async (_, e) => 
+						it.Completed += async (_, _) => 
 						{
 							this.progressBar.Value = it.EndValue;
 							await Task.Delay(50);
@@ -336,8 +336,9 @@ namespace CarinaStudio.AppSuite.Controls
 								taskSource.SetResult();
 							}
 						};
-						it.Duration = TimeSpan.FromMilliseconds(150);
-						it.ProgressChanged += (_, e) => this.progressBar.Value = it.Value;
+						it.Duration = TimeSpan.FromMilliseconds(Math.Abs(it.StartValue - it.EndValue) * 1000);
+						it.Interpolator = Interpolators.SlowDeceleration;
+						it.ProgressChanged += (_, _) => this.progressBar.Value = it.Value;
 						it.Start();
 					});
 				}
@@ -376,6 +377,11 @@ namespace CarinaStudio.AppSuite.Controls
 				return Task.CompletedTask;
 			return this.progressAnimationTaskSource.Task;
 		}
+
+
+		// Wait for initial animation.
+		public Task WaitForInitialAnimationAsync() =>
+			this.initAnimationTaskCompletionSource.Task;
 
 
 		// Wait for completion of next rendering.

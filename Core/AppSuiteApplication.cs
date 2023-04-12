@@ -2443,13 +2443,13 @@ namespace CarinaStudio.AppSuite
                 }
                 this.splashWindow.Show();
                 this.splashWindowShownTime = this.stopWatch.ElapsedMilliseconds;
-                await Task.Delay(Controls.SplashWindowImpl.InitialAnimationDuration);
+                await this.splashWindow.WaitForInitialAnimationAsync();
             }
 
             // load built-in resources
             if (showSplashWindow)
             {
-                this.UpdateSplashWindowMessage(this.GetStringNonNull("AppSuiteApplication.LoadingTheme", ""));
+                this.UpdateSplashWindowMessage(this.GetStringNonNull("AppSuiteApplication.LoadingTheme"));
                 await this.splashWindow!.WaitForRenderingAsync();
             }
             this.Resources.MergedDictionaries.Add(new ResourceInclude()
@@ -2458,6 +2458,11 @@ namespace CarinaStudio.AppSuite
             });
 
             // start initializing network manager
+            if (showSplashWindow)
+            {
+                this.UpdateSplashWindowMessage(this.GetStringNonNull("AppSuiteApplication.InitializingComponents"));
+                await this.splashWindow!.WaitForRenderingAsync();
+            }
             var initNetworkManagerTask = Net.NetworkManager.InitializeAsync(this);
 
             // setup styles
