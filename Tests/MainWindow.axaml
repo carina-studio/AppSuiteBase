@@ -252,7 +252,7 @@
 														<Image Classes="ToolBar_NotificationIndicator" Source="{StaticResource Image/Icon.Update.Colored}"/>
 													</Border>
 													<Border Classes="ToolBar_NotificationIndicator" IsVisible="{Binding !$parent[Window].Application.UpdateInfo, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}">
-														<Image Classes="ToolBar_NotificationIndicator" Source="{StaticResource Image/Icon.NotificationIndicator.Warning}"/>
+														<Image Classes="ToolBar_NotificationIndicator" Source="{StaticResource Image/Icon.NotificationIndicator.Success}"/>
 													</Border>
 												</Panel>
 											</Button>
