@@ -2,7 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:abControls="using:CarinaStudio.Controls"
 		xmlns:abConverters="using:CarinaStudio.Data.Converters"
 		xmlns:as="using:CarinaStudio.AppSuite"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
@@ -10,7 +9,7 @@
         x:Class="CarinaStudio.AppSuite.Controls.ExternalDependenciesDialogImpl"
 		Classes="Dialog"
         Title="{DynamicResource String/ExternalDependenciesDialog.Title}"
-		Width="{DynamicResource Double/ExternalDependenciesDialog.Width}">
+		Width="{StaticResource Double/ExternalDependenciesDialog.Width}">
 	
 	<!-- DataTemplate -->
 	<Window.DataTemplates>
@@ -87,10 +86,8 @@
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
 			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-				<Button Name="editPathEnvVarButton" Classes="Dialog_IconControlButton" Command="{Binding $parent[Window].EditPathEnvironmentVariable}" IsVisible="{x:Static controls:PathEnvVarEditorDialog.IsSupported}" ToolTip.Tip="{DynamicResource String/ExternalDependenciesDialog.EditPathEnvVar}">
-					<Image Classes="Dialog_IconControlButton_Icon" Source="{StaticResource Image/Icon.EditFolder}"/>
-				</Button>
-				<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #editPathEnvVarButton.IsVisible}"/>
+				<Button Name="editPathEnvVarButton" Classes="Dialog_IconControlButton" Command="{Binding $parent[Window].EditPathEnvironmentVariable}" Content="{DynamicResource String/ExternalDependenciesDialog.EditPathEnvVar}" IsVisible="{x:Static controls:PathEnvVarEditorDialog.IsSupported}"/>
+					<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #editPathEnvVarButton.IsVisible}"/>
 				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Refresh}" Content="{DynamicResource String/Common.Refresh}"/>
 				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.OK}" IsEnabled="{Binding $parent[Window].CanClose}"/>
 			</StackPanel>

@@ -161,7 +161,7 @@
 
 	<!-- ExternalDependenciesDialog -->
 	<sys:Double x:Key="Double/ExternalDependenciesDialog.Content.MaxHeight">500</sys:Double>
-	<sys:Double x:Key="Double/ExternalDependenciesDialog.Width">500</sys:Double>
+	<sys:Double x:Key="Double/ExternalDependenciesDialog.Width">600</sys:Double>
 
 	<!-- FullWindowTutorialPresenter -->
 	<BoxShadows x:Key="BoxShadows/FullWindowTutorialPresenter.Tutorial">0 0 10 0 #5f000000</BoxShadows>
