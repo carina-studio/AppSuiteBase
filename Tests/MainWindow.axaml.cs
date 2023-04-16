@@ -557,7 +557,8 @@ namespace CarinaStudio.AppSuite.Tests
 
         public void Test()
         {
-            _ = new EnableRunningScriptDialog().ShowDialog(this);
+            _ = this.Application.TakeMemorySnapshotAsync(this);
+            //_ = new EnableRunningScriptDialog().ShowDialog(this);
         }
 
 

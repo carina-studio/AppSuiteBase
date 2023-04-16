@@ -120,6 +120,8 @@
 	<!-- AppSuiteApplication -->
 	<sys:String x:Key="String/AppSuiteApplication.InitializingComponents">Initializing components</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">Loading theme</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Failed">Unable to take memory snapshot.</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Succeeded">Memory snapshot has been taken and saved to '{0}'.</sys:String>
 
 	<!-- CommandSearchPaths -->
 	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">Update paths defined by system</sys:String>
@@ -208,6 +210,8 @@
 	<sys:String x:Key="String/Common.SelectAll.WithGesture">Select all (Ctrl+A)</sys:String>
 	<sys:String x:Key="String/Common.SelfTesting">Self testing</sys:String>
 	<sys:String x:Key="String/Common.SelfTesting.WithDialog">Self testing…</sys:String>
+	<sys:String x:Key="String/Common.TakeMemorySnapshot">Take memory snapshot</sys:String>
+	<sys:String x:Key="String/Common.TakeMemorySnapshot.WithDialog">Take memory snapshot…</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement">User Agreement</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement.WithDialog">User Agreement…</sys:String>
 	<sys:String x:Key="String/Common.Yes">Yes</sys:String>

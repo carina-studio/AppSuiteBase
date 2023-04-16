@@ -114,6 +114,8 @@
 	<!-- AppSuiteApplication -->
 	<sys:String x:Key="String/AppSuiteApplication.InitializingComponents">初始化元件</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">載入佈景主題</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Failed">無法擷取記憶體快照</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Succeeded">記憶體快照擷取完成並儲存至 '{0}'。</sys:String>
 
 	<!-- CommandSearchPaths -->
 	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">更新系統定義路徑</sys:String>
@@ -202,6 +204,8 @@
 	<sys:String x:Key="String/Common.SelectAll.WithGesture">全選 (Ctrl+A)</sys:String>
 	<sys:String x:Key="String/Common.SelfTesting">自我測試</sys:String>
 	<sys:String x:Key="String/Common.SelfTesting.WithDialog">自我測試…</sys:String>
+	<sys:String x:Key="String/Common.TakeMemorySnapshot">擷取記憶體快照</sys:String>
+	<sys:String x:Key="String/Common.TakeMemorySnapshot.WithDialog">擷取記憶體快照…</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement">使用者協議</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement.WithDialog">使用者協議…</sys:String>
 	<sys:String x:Key="String/Common.Yes">是</sys:String>

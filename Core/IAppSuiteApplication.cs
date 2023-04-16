@@ -415,6 +415,14 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="delay">Delay before start process of shutting down in milliseconds.</param>
         void Shutdown(int delay = 0);
+        
+        
+        /// <summary>
+        /// Take single memory snapshot.
+        /// </summary>
+        /// <param name="outputFileName">Name of output snapshot file.</param>
+        /// <returns>True if memory snapshot has been taken successfully.</returns>
+        bool TakeMemorySnapshot(string outputFileName);
 
 
         /// <summary>

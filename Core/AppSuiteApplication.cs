@@ -24,6 +24,7 @@ using CarinaStudio.Controls;
 using CarinaStudio.Net;
 using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
+using JetBrains.Profiler.SelfApi;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using NLog;
@@ -40,6 +41,11 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Platform.Storage;
+using CarinaStudio.AppSuite.Controls;
+using CarinaStudio.IO;
+using File = System.IO.File;
+using Window = CarinaStudio.Controls.Window;
 
 namespace CarinaStudio.AppSuite
 {
@@ -165,6 +171,24 @@ namespace CarinaStudio.AppSuite
             // Dispose.
             public void Dispose() =>
                 this.app.RemoveCustomStyle(this.style);
+        }
+        
+        
+        // Class to receive call-back of downloading DotMemory.
+        class DotMemoryDownloadingProgressCallback : IProgress<double>
+        {
+            // Fields.
+            readonly AppSuiteApplication app;
+            
+            // Constructor.
+            public DotMemoryDownloadingProgressCallback(AppSuiteApplication app) =>
+                this.app = app;
+            
+            /// <inheritdoc/>
+            public void Report(double value)
+            {
+                app.Logger.LogTrace("Downloading DotMemory: {progress:F2}%", value * 100);
+            }
         }
 
 
@@ -3566,6 +3590,143 @@ namespace CarinaStudio.AppSuite
             // complete shutting down
             if (Platform.IsMacOS)
                 this.ShutdownMacOSApp();
+        }
+
+
+        /// <inheritdoc/>
+        public bool TakeMemorySnapshot(string outputFileName)
+        {
+            // check state
+            if (!this.IsDebugMode)
+            {
+                this.Logger.LogWarning("Unable to take memory snapshot in non-debug mode");
+                return false;
+            }
+            if (!outputFileName.IsValidFilePath())
+            {
+                this.Logger.LogError("Invalid file name to save memory snapshot: {fileName}", outputFileName);
+                return false;
+            }
+            
+            // initialize
+            this.Logger.LogTrace("Prepare taking memory snapshot");
+            try
+            {
+                DotMemory.EnsurePrerequisiteAsync(progress: new DotMemoryDownloadingProgressCallback(this)).Wait();
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Unable to prepare taking memory snapshot");
+                return false;
+            }
+            
+            // get snapshot
+            this.Logger.LogTrace("Start taking memory snapshot");
+            try
+            {
+                var config = new DotMemory.Config().Also(it =>
+                {
+                    it.SaveToFile(outputFileName);
+                });
+                DotMemory.GetSnapshotOnce(config);
+                this.Logger.LogTrace("Complete taking memory snapshot");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Unable to take memory snapshot to '{fileName}'", outputFileName);
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Take single memory snapshot asynchronously.
+        /// </summary>
+        /// <param name="window">Window.</param>
+        /// <returns>Task of getting memory snapshot.</returns>
+        public async Task<bool> TakeMemorySnapshotAsync(Avalonia.Controls.Window window)
+        {
+            // check state
+            if (!this.IsDebugMode)
+            {
+                this.Logger.LogWarning("Unable to take memory snapshot in non-debug mode");
+                return false;
+            }
+            
+            // start preparation of taking snapshot
+            this.Logger.LogTrace("Prepare taking memory snapshot");
+            var cancellationTokenSource = new CancellationTokenSource();
+            var preparationTask = DotMemory.EnsurePrerequisiteAsync(cancellationTokenSource.Token, progress: new DotMemoryDownloadingProgressCallback(this));
+
+            // select output file
+            var fileName = (await window.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions()
+            {
+                FileTypeChoices = new[]
+                {
+                    new FilePickerFileType("DotMemory Workspace")
+                    {
+                        Patterns = new[] { "*.dmw" },
+                    }
+                },
+            })).Let(it =>
+            {
+                if (it is null || !it.TryGetUri(out var uri))
+                    return null;
+                var path = uri.LocalPath;
+                if (!PathEqualityComparer.Default.Equals(Path.GetExtension(path), ".dmw"))
+                    path += ".dmw";
+                return path;
+            });
+            
+            // take snapshot
+            if (!string.IsNullOrEmpty(fileName))
+            {
+                var prepared = await preparationTask.LetAsync(async it =>
+                {
+                    try
+                    {
+                        await it;
+                        this.Logger.LogTrace("Taking memory snapshot prepared");
+                        return true;
+                    }
+                    catch (Exception ex)
+                    {
+                        this.Logger.LogError(ex, "Unable to prepare taking memory snapshot");
+                        return false;
+                    }
+                });
+                if (prepared && this.TakeMemorySnapshot(fileName))
+                {
+                    await new MessageDialog
+                    {
+                        Icon = MessageDialogIcon.Success,
+                        Message = new FormattedString().Also(it =>
+                        {
+                            it.Arg1 = fileName;
+                            it.Bind(FormattedString.FormatProperty, this.GetObservableString("AppSuiteApplication.TakeMemorySnapshot.Succeeded"));
+                        })
+                    }.ShowDialog(window);
+                    return true;
+                }
+                await new MessageDialog
+                {
+                    Icon = MessageDialogIcon.Error,
+                    Message = this.GetObservableString("AppSuiteApplication.TakeMemorySnapshot.Failed"),
+                }.ShowDialog(window);
+            }
+            
+            // cancel preparation
+            try
+            {
+                cancellationTokenSource.Cancel();
+                await preparationTask;
+            }
+            // ReSharper disable EmptyGeneralCatchClause
+            catch
+            { }
+            // ReSharper restore EmptyGeneralCatchClause
+            return false;
         }
 
 

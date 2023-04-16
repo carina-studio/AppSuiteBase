@@ -110,7 +110,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public virtual Avalonia.Input.Platform.IClipboard? Clipboard { get => null; }
+        public virtual Avalonia.Input.Platform.IClipboard? Clipboard => null;
 
 
         /// <inheritdoc/>
@@ -151,7 +151,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get instance for current process.
         /// </summary>
-        public static MockAppSuiteApplication Current { get => current ?? throw new InvalidOperationException("Application instance is not ready."); }
+        public static MockAppSuiteApplication Current => current ?? throw new InvalidOperationException("Application instance is not ready.");
 
 
         /// <inheritdoc/>
@@ -159,7 +159,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public double EffectiveCustomScreenScaleFactor { get => double.NaN; }
+        public double EffectiveCustomScreenScaleFactor => double.NaN;
 
 
         /// <summary>
@@ -227,7 +227,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public virtual bool IsBackgroundMode { get => false; }
+        public virtual bool IsBackgroundMode => false;
 
 
         /// <inheritdoc/>
@@ -502,7 +502,12 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get <see cref="SynchronizationContext"/> of the instance.
         /// </summary>
-        public SynchronizationContext SynchronizationContext { get => synchronizationContext ?? throw new InvalidOperationException("Application instance is not ready."); }
+        public SynchronizationContext SynchronizationContext => synchronizationContext ?? throw new InvalidOperationException("Application instance is not ready.");
+        
+        
+        /// <inheritdoc/>
+        public virtual bool TakeMemorySnapshot(string outputFileName) =>
+            false;
 
 
         /// <summary>
