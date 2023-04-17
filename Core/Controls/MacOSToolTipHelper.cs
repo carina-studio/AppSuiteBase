@@ -8,10 +8,10 @@ namespace CarinaStudio.AppSuite.Controls
     class MacOSToolTipHelper
     {
         // Fields.
-        readonly Control control;
-        readonly Observer<bool> isActiveObserver;
-        IDisposable? isActiveObserverToken;
-        Avalonia.Controls.Window? window;
+        readonly WeakReference<Control> controlRef;
+        readonly Observer<bool> isWindowActiveObserver;
+        IDisposable? isWindowActiveObserverToken;
+        WeakReference<Avalonia.Controls.Window>? windowRef;
 
 
         // Constructor.
@@ -21,31 +21,59 @@ namespace CarinaStudio.AppSuite.Controls
             ToolTip.SetIsOpen(control, false);
 
             // monitor current window
-            this.control = control;
-            this.window = control.FindAncestorOfType<Avalonia.Controls.Window>();
-            this.isActiveObserver = new Observer<bool>(isActive =>
+            this.controlRef = new(control);
+            this.isWindowActiveObserver = new Observer<bool>(isActive =>
             {
-                if (!isActive)
-                    ToolTip.SetIsOpen(this.control, false);
-            });
-            this.isActiveObserverToken = this.window?.GetObservable(Avalonia.Controls.Window.IsActiveProperty)?.Subscribe(this.isActiveObserver);
-
-            // monitor window change
-            control.AttachedToVisualTree += (sender, e) =>
-            {
-                var newWindow = control.FindAncestorOfType<Avalonia.Controls.Window>();
-                if (newWindow == window)
-                    return;
-                this.isActiveObserverToken?.Dispose();
-                this.window = newWindow;
-                this.isActiveObserverToken = newWindow?.GetObservable(Avalonia.Controls.Window.IsActiveProperty)?.Subscribe(this.isActiveObserver);
-                ToolTip.SetIsOpen(control, false);
-            };
-            control.GetObservable(ToolTip.IsOpenProperty).Subscribe(isOpen =>
-            {
-                if (isOpen && this.window?.IsActive == false)
+                if (!isActive && this.controlRef.TryGetTarget(out var control))
                     ToolTip.SetIsOpen(control, false);
             });
+            control.FindAncestorOfType<Avalonia.Controls.Window>()?.Let(window =>
+            {
+                this.windowRef = new(window);
+                this.isWindowActiveObserverToken = window.GetObservable(Avalonia.Controls.Window.IsActiveProperty).Subscribe(this.isWindowActiveObserver);
+            });
+
+            // monitor window change
+            control.AttachedToVisualTree += this.OnControlAttachedToVisualTree;
+            control.DetachedFromVisualTree += this.OnControlDetachedFromVisualTree;
+            control.GetObservable(ToolTip.IsOpenProperty).Subscribe(isOpen =>
+            {
+                if (isOpen 
+                    && this.windowRef?.TryGetTarget(out var window) == true 
+                    && !window.IsActive
+                    && this.controlRef.TryGetTarget(out var control))
+                {
+                    ToolTip.SetIsOpen(control, false);
+                }
+            });
+        }
+
+
+        // Called when control attached to visual tree.
+        void OnControlAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+        {
+            if (!this.controlRef.TryGetTarget(out var control))
+                return;
+            Avalonia.Controls.Window? window = null;
+            this.windowRef?.TryGetTarget(out window);
+            var newWindow = control.FindAncestorOfType<Avalonia.Controls.Window>();
+            if (ReferenceEquals(newWindow, window))
+                return;
+            this.isWindowActiveObserverToken?.Dispose();
+            if (newWindow is null)
+                this.windowRef = null;
+            else
+                this.windowRef = new(newWindow);
+            this.isWindowActiveObserverToken = newWindow?.GetObservable(Avalonia.Controls.Window.IsActiveProperty).Subscribe(this.isWindowActiveObserver);
+            ToolTip.SetIsOpen(control, false);
+        }
+        
+        
+        // Called when control detached from visual tree.
+        void OnControlDetachedFromVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+        {
+            this.isWindowActiveObserverToken?.Dispose();
+            this.windowRef = null;
         }
     }
 }

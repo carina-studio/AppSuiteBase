@@ -85,6 +85,8 @@ namespace CarinaStudio.AppSuite.Tests
 
             InitializeComponent();
 
+            App.Current.EnsureClosingToolTipIfWindowIsInactive(this.Get<Control>("testButton1"));
+
             this.logAction = new ScheduledAction(() =>
             {
                 this.Logger.LogDebug("Time: {dateTime}", DateTime.Now);
