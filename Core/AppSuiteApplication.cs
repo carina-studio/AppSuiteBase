@@ -3624,6 +3624,9 @@ namespace CarinaStudio.AppSuite
             this.Logger.LogTrace("Start taking memory snapshot");
             try
             {
+                var outputFileInfo = new FileInfo(outputFileName);
+                if (outputFileInfo.Exists)
+                    outputFileInfo.Delete();
                 var config = new DotMemory.Config().Also(it =>
                 {
                     it.SaveToFile(outputFileName);
@@ -3660,8 +3663,9 @@ namespace CarinaStudio.AppSuite
             var preparationTask = DotMemory.EnsurePrerequisiteAsync(cancellationTokenSource.Token, progress: new DotMemoryDownloadingProgressCallback(this));
 
             // select output file
-            var fileName = (await window.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions()
+            var fileName = (await window.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
             {
+                DefaultExtension = ".dmw",
                 FileTypeChoices = new[]
                 {
                     new FilePickerFileType("DotMemory Workspace")
@@ -3669,6 +3673,8 @@ namespace CarinaStudio.AppSuite
                         Patterns = new[] { "*.dmw" },
                     }
                 },
+                ShowOverwritePrompt = true,
+                SuggestedFileName = $"{this.Name}-{DateTime.Now:yyyyMMdd-HHmmss}.dmw",
             })).Let(it =>
             {
                 if (it is null || !it.TryGetUri(out var uri))
