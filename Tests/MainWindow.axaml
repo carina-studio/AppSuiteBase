@@ -280,7 +280,7 @@
 								</Border>
 							</StackPanel>
 
-							<Button Command="{Binding $parent[Window].Test}" Content="Test" Margin="5" ToolTip.Tip="{DynamicResource String/Common.Copy.WithGesture}"/>
+							<Button Name="testButton1" Command="{Binding $parent[Window].Test}" Content="Test" Margin="5" ToolTip.Tip="{DynamicResource String/Common.Copy.WithGesture}"/>
 							<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
 
 							<ScrollBar AllowAutoHide="False" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" ViewportSize="10" Width="300"/>
