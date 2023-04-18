@@ -27,6 +27,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using CarinaStudio.AppSuite.IO;
 using TabControl = Avalonia.Controls.TabControl;
 
 namespace CarinaStudio.AppSuite.Tests
@@ -188,6 +189,45 @@ namespace CarinaStudio.AppSuite.Tests
                 SettingKeys = SettingKey.GetDefinedKeys<ConfigurationKeys>(),
                 Settings = this.Configuration,
             }.ShowDialog(this);
+        }
+
+
+        public async Task FindCommandPath()
+        {
+            var command = await new TextInputDialog
+            {
+                Message = "Command:"
+            }.ShowDialog(this);
+            if (string.IsNullOrWhiteSpace(command))
+                return;
+            try
+            {
+                var path = await CommandSearchPaths.FindCommandPathAsync(command);
+                if (string.IsNullOrEmpty(path))
+                {
+                    _ = new MessageDialog
+                    {
+                        Icon = MessageDialogIcon.Warning,
+                        Message = $"Command '{command}' not found."
+                    }.ShowDialog(this);
+                }
+                else
+                {
+                    _ = new MessageDialog
+                    {
+                        Icon = MessageDialogIcon.Success,
+                        Message = $"Command '{command}' found: {path}."
+                    }.ShowDialog(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                _ = new MessageDialog
+                {
+                    Icon = MessageDialogIcon.Error,
+                    Message = $"{ex.GetType().Name}: {ex.Message}"
+                }.ShowDialog(this);
+            }
         }
 
 

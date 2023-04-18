@@ -13,6 +13,15 @@ public interface IApplication
     /// Get current application culture.
     /// </summary>
     CultureInfo CultureInfo { get; }
+    
+    
+    /// <summary>
+    /// Find valid path of command to execute.
+    /// </summary>
+    /// <param name="command">Command.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Path of command or Null if command cannot be found.</returns>
+    string? FindCommandPath(string command, CancellationToken cancellationToken = default);
 
 
     /// <summary>
@@ -92,5 +101,5 @@ public static class ApplicationExtensions
     /// <param name="defaultString">Default string.</param>
     /// <returns>String defined in resource or <paramref name="defaultString"/> if string not found.</returns>
     public static string GetStringNonNull(this IApplication app, string key, string defaultString) =>
-        app.GetString(key, null) ?? defaultString ?? "";
+        app.GetString(key, null) ?? defaultString;
 }

@@ -78,6 +78,15 @@ public class Application : IApplication
     /// <inheritdoc/>
     public CultureInfo CultureInfo => this.app.CultureInfo;
     
+    
+    /// <inheritdoc/>
+    public string? FindCommandPath(string command, CancellationToken cancellationToken = default) =>
+        IO.CommandSearchPaths.FindCommandPathAsync(command, cancellationToken).Let(it =>
+        {
+            it.Wait(cancellationToken);
+            return it.Result;
+        });
+    
 
     /// <inheritdoc/>
     public string? GetString(string key, string? defaultString) =>
@@ -85,11 +94,11 @@ public class Application : IApplication
     
 
     /// <inheritdoc/>
-    public bool IsDebugMode { get => this.app.IsDebugMode; }
-    
+    public bool IsDebugMode => this.app.IsDebugMode;
+
 
     /// <inheritdoc/>
-    public bool IsMainThread { get => this.app.CheckAccess(); }
+    public bool IsMainThread => this.app.CheckAccess();
 
 
     // Logger.
@@ -99,8 +108,10 @@ public class Application : IApplication
         {
             if (StaticLogger != null)
                 return StaticLogger;
+            // ReSharper disable NonAtomicCompoundOperator
             lock (typeof(Application))
                 StaticLogger ??= this.app.LoggerFactory.CreateLogger("ScriptApplication");
+            // ReSharper restore NonAtomicCompoundOperator
             return StaticLogger;
         }
     }
@@ -113,8 +124,10 @@ public class Application : IApplication
         {
             if (this.mainThreadSyncContext != null)
                 return this.mainThreadSyncContext;
+            // ReSharper disable NonAtomicCompoundOperator
             lock (this)
                 this.mainThreadSyncContext ??= new GuardedSynchronizationContext(this);
+            // ReSharper restore NonAtomicCompoundOperator
             return this.mainThreadSyncContext;
         }
     }

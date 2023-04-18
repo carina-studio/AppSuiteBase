@@ -1,4 +1,5 @@
 using CarinaStudio.Collections;
+using CarinaStudio.IO;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -38,8 +39,8 @@ public static class CommandSearchPaths
 
 
     // Fields.
-    static readonly HashSet<string> customPaths = new(CarinaStudio.IO.PathEqualityComparer.Default);
-    static volatile ILogger? logger;
+    static readonly HashSet<string> customPaths = new(PathEqualityComparer.Default);
+    static ILogger? logger;
 
 
     // Static initializer.
@@ -70,13 +71,86 @@ public static class CommandSearchPaths
 
 
     /// <summary>
+    /// Find valid path of command to execute.
+    /// </summary>
+    /// <param name="command">Command.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Task of finding path of command.</returns>
+    public static async Task<string?> FindCommandPathAsync(string command, CancellationToken cancellationToken = default)
+    {
+	    if (!command.IsValidFilePath())
+	    {
+		    Logger?.LogError("Invalid command: '{command}'", command);
+		    return null;
+	    }
+	    try
+	    {
+		    var paths = await GetPathsAsync(cancellationToken);
+		    return await Task.Run(() =>
+		    {
+			    var commandPathBuffer = new StringBuilder();
+			    foreach (var path in paths)
+			    {
+				    // check state
+				    if (cancellationToken.IsCancellationRequested)
+					    throw new TaskCanceledException();
+				    
+				    // prepare
+				    commandPathBuffer.Clear();
+				    commandPathBuffer.Append(path);
+				    commandPathBuffer.Append(Path.DirectorySeparatorChar);
+                
+				    // check without extension
+				    commandPathBuffer.Append(command);
+				    var candidatePath = commandPathBuffer.ToString();
+				    if (System.IO.File.Exists(candidatePath))
+					    return candidatePath;
+                
+				    // check with specific extensions
+				    if (Platform.IsWindows)
+				    {
+					    // .exe
+					    commandPathBuffer.Append(".exe");
+					    candidatePath = commandPathBuffer.ToString();
+					    if (System.IO.File.Exists(candidatePath))
+						    return candidatePath;
+                    
+					    // .cmd
+					    commandPathBuffer.Remove(commandPathBuffer.Length - 4, 4);
+					    commandPathBuffer.Append(".cmd");
+					    candidatePath = commandPathBuffer.ToString();
+					    if (System.IO.File.Exists(candidatePath))
+						    return candidatePath;
+                    
+					    // .bat
+					    commandPathBuffer.Remove(commandPathBuffer.Length - 4, 4);
+					    commandPathBuffer.Append(".bat");
+					    candidatePath = commandPathBuffer.ToString();
+					    if (System.IO.File.Exists(candidatePath))
+						    return candidatePath;
+				    }
+			    }
+			    return null;
+		    }, cancellationToken);
+	    }
+	    catch (Exception ex)
+	    {
+		    if (ex is TaskCanceledException)
+			    throw;
+		    Logger?.LogError(ex, "Error occurred while finding path of command '{command}'", command);
+	    }
+	    return null;
+    }
+
+
+    /// <summary>
     /// Get all paths asynchronously.
     /// </summary>
     /// <returns>Set of paths.</returns>
     public static async Task<ISet<string>> GetPathsAsync(CancellationToken cancellationToken = default)
     {
         // add system paths
-        var paths = new HashSet<string>(CarinaStudio.IO.PathEqualityComparer.Default);
+        var paths = new HashSet<string>(PathEqualityComparer.Default);
         await GetSystemPathsAsync(SystemPathsScope.All, paths, cancellationToken);
 
         // add custom paths
@@ -110,7 +184,7 @@ public static class CommandSearchPaths
     /// <returns>Paths</returns>
     public static async Task<ISet<string>> GetSystemPathsAsync(SystemPathsScope scopes, CancellationToken cancellationToken = default)
     {
-        var paths = new HashSet<string>(CarinaStudio.IO.PathEqualityComparer.Default);
+        var paths = new HashSet<string>(PathEqualityComparer.Default);
         await GetSystemPathsAsync(scopes, paths, cancellationToken);
         return paths;
     }
@@ -124,14 +198,14 @@ public static class CommandSearchPaths
         if (Platform.IsWindows)
         {
             if ((scopes & SystemPathsScope.User) != 0)
-                Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User)?.Split(Path.PathSeparator)?.Let(it => paths.AddAll(it));
+                Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User)?.Split(Path.PathSeparator).Let(paths.AddAll);
             if ((scopes & SystemPathsScope.Global) != 0)
-                Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine)?.Split(Path.PathSeparator)?.Let(it => paths.AddAll(it));
+                Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine)?.Split(Path.PathSeparator).Let(paths.AddAll);
         }
         else if (Platform.IsLinux)
         {
             if ((scopes & SystemPathsScope.User) != 0)
-                Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator)?.Let(it => paths.AddAll(it));
+                Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator).Let(paths.AddAll);
         }
         else if (Platform.IsMacOS)
         {
@@ -152,12 +226,14 @@ public static class CommandSearchPaths
                             path = reader.ReadLine();
                         }
                     }
+                    // ReSharper disable EmptyGeneralCatchClause
                     catch
                     { }
+                    // ReSharper restore EmptyGeneralCatchClause
                 }, cancellationToken);
             }
         }
-        paths.RemoveAll(it => string.IsNullOrWhiteSpace(it));
+        paths.RemoveAll(string.IsNullOrWhiteSpace);
     }
 
 
@@ -166,7 +242,7 @@ public static class CommandSearchPaths
     {
         get
         {
-            logger ??= AppSuiteApplication.CurrentOrNull?.LoggerFactory?.CreateLogger(nameof(CommandSearchPaths));
+            logger ??= AppSuiteApplication.CurrentOrNull?.LoggerFactory.CreateLogger(nameof(CommandSearchPaths));
             return logger;
         }
     }
@@ -180,12 +256,12 @@ public static class CommandSearchPaths
     /// <returns>Task of updating paths. Result will be True if paths updated successfully.</returns>
     public static async Task<bool> SetSystemPathsAsync(IEnumerable<string> paths, CancellationToken cancellationToken = default)
     {
-        var newPaths = new HashSet<string>(paths, CarinaStudio.IO.PathEqualityComparer.Default);
+        var newPaths = new HashSet<string>(paths, PathEqualityComparer.Default);
         var currentPaths = await GetSystemPathsAsync(SystemPathsScope.All, cancellationToken);
 		var success = true;
 		if (!currentPaths.SetEquals(newPaths))
 		{
-			var sortedPaths = newPaths.ToArray().Also(it => Array.Sort(it));
+			var sortedPaths = newPaths.ToArray().Also(Array.Sort);
 			success = await Task.Run(async () =>
 			{
 				var tempFilePaths = new List<string>();
@@ -233,7 +309,7 @@ public static class CommandSearchPaths
 						});
 						if (process != null)
 						{
-							await process.WaitForExitAsync();
+							await process.WaitForExitAsync(CancellationToken.None);
 							return process.ExitCode == 0;
 						}
 						else
@@ -247,7 +323,7 @@ public static class CommandSearchPaths
 						// separate into machine and user paths
 						var currentMachinePaths = await GetSystemPathsAsync(SystemPathsScope.Global, cancellationToken);
 						var currentUserPaths = await GetSystemPathsAsync(SystemPathsScope.User, cancellationToken);
-						var machinePaths = new HashSet<string>(currentMachinePaths, CarinaStudio.IO.PathEqualityComparer.Default).Also(it =>
+						var machinePaths = new HashSet<string>(currentMachinePaths, PathEqualityComparer.Default).Also(it =>
 						{
 							foreach (var path in it.ToArray())
 							{
@@ -255,7 +331,7 @@ public static class CommandSearchPaths
 									it.Remove(path);
 							}
 						});
-						var userPaths = new HashSet<string>(CarinaStudio.IO.PathEqualityComparer.Default).Also(it =>
+						var userPaths = new HashSet<string>(PathEqualityComparer.Default).Also(it =>
 						{
 							foreach (var path in paths)
 							{
@@ -281,7 +357,7 @@ public static class CommandSearchPaths
 							});
 							if (process != null)
 							{
-								await process.WaitForExitAsync();
+								await process.WaitForExitAsync(CancellationToken.None);
 								if (process.ExitCode != 0)
 									return false;
 							}
@@ -307,7 +383,7 @@ public static class CommandSearchPaths
 				finally
 				{
 					foreach (var tempFilePath in tempFilePaths)
-						Global.RunWithoutError(() => File.Delete(tempFilePath));
+						Global.RunWithoutError(() => System.IO.File.Delete(tempFilePath));
 				}
 			}, cancellationToken);
 		}

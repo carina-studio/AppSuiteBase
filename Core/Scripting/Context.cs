@@ -36,7 +36,9 @@ public class Context : IContext
     }
 
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Get application.
+    /// </summary>
     public IAppSuiteApplication Application { get; }
 
 
@@ -86,6 +88,7 @@ public class Context : IContext
 
 
     /// <inheritdoc/>
+    // ReSharper disable NonAtomicCompoundOperator
     public void PrepareStrings(string? cultureName, Action<IDictionary<string, string>> preparation)
     {
         if (cultureName == null)
@@ -108,6 +111,7 @@ public class Context : IContext
             preparation(table);
         }
     }
+    // ReSharper restore NonAtomicCompoundOperator
 }
 
 
@@ -162,14 +166,14 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
                 var taskCompletionSource = new TaskCompletionSource();
                 this.Application.SynchronizationContext.Post(async () =>
                 {
-                    var dialog = new MessageDialog()
+                    var dialog = new MessageDialog
                     {
-                        Buttons = (MessageDialogButtons)buttons,
+                        Buttons = buttons,
                         DoNotAskOrShowAgain = false,
-                        Icon = (MessageDialogIcon)icon,
+                        Icon = icon,
                         Message = message,
                     };
-                    result = (MessageDialogResult)await dialog.ShowDialog(window);
+                    result = await dialog.ShowDialog(window);
                     this.IsShowingMessageDialogAllowed = !dialog.DoNotAskOrShowAgain.GetValueOrDefault();
                     taskCompletionSource.SetResult();
                 });
@@ -186,14 +190,14 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
                     var window = this.Application.LatestActiveMainWindow;
                     if (window != null)
                     {
-                        var dialog = new MessageDialog()
+                        var dialog = new MessageDialog
                         {
-                            Buttons = (MessageDialogButtons)buttons,
+                            Buttons = buttons,
                             DoNotAskOrShowAgain = false,
-                            Icon = (MessageDialogIcon)icon,
+                            Icon = icon,
                             Message = message,
                         };
-                        result = (MessageDialogResult)await dialog.ShowDialog(window);
+                        result = await dialog.ShowDialog(window);
                         this.IsShowingMessageDialogAllowed = !dialog.DoNotAskOrShowAgain.GetValueOrDefault();
                     }
                     lock (syncLock)
