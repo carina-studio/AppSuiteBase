@@ -127,10 +127,35 @@ public class Application : IApplication
     public string? FindCommandPath(string command, CancellationToken cancellationToken = default) =>
         IO.CommandSearchPaths.FindCommandPath(command, cancellationToken);
     
+    
+    /// <inheritdoc/>
+    public string? GetFormattedString(string key, params object?[] args)
+    {
+        var format = this.GetString(key, null);
+        if (format != null)
+            return string.Format(format, args);
+        return null;
+    }
+    
+    
+    /// <inheritdoc/>
+    public string? GetString(string key) =>
+        this.GetString(key, null);
+    
 
     /// <inheritdoc/>
     public string? GetString(string key, string? defaultString) =>
         this.app.GetString(key, defaultString);
+    
+    
+    /// <inheritdoc/>
+    public string GetStringNonNull(string key) =>
+        this.GetString(key, null) ?? "";
+    
+    
+    /// <inheritdoc/>
+    public string GetStringNonNull(string key, string defaultString) =>
+        this.GetString(key, null) ?? defaultString;
     
 
     /// <inheritdoc/>

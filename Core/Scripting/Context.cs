@@ -66,6 +66,11 @@ public class Context : IContext
 
     /// <inheritdoc/>
     public IDictionary<string, object> Data { get; } = new ConcurrentDictionary<string, object>();
+    
+    
+    /// <inheritdoc/>
+    public string? GetString(string key) =>
+        this.GetString(key, null);
 
 
     /// <inheritdoc/>
@@ -85,6 +90,11 @@ public class Context : IContext
 
     /// <inheritdoc/>
     public ILogger Logger { get; }
+    
+    
+    /// <inheritdoc/>
+    public void PrepareStrings(Action<IDictionary<string, string>> preparation) =>
+        this.PrepareStrings(null, preparation);
 
 
     /// <inheritdoc/>
@@ -150,6 +160,16 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
     /// Check whether showing text input dialog is allowed or not.
     /// </summary>
     public bool IsShowingTextInputDialogAllowed { get; private set; } = true;
+    
+    
+    /// <inheritdoc/>
+    public MessageDialogResult ShowMessageDialog(object? message) =>
+        this.ShowMessageDialog(message, MessageDialogIcon.Information, MessageDialogButtons.OK);
+    
+    
+    /// <inheritdoc/>
+    public MessageDialogResult ShowMessageDialog(object? message, MessageDialogIcon icon) =>
+        this.ShowMessageDialog(message, icon, MessageDialogButtons.OK);
 
 
     /// <inheritdoc/>
@@ -208,6 +228,11 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         }
         return result;
     }
+    
+    
+    /// <inheritdoc/>
+    public string? ShowTextInputDialog(object? message) =>
+        this.ShowTextInputDialog(message, null);
 
 
     /// <inheritdoc/>

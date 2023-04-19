@@ -45,21 +45,15 @@ public interface IApplication
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Path of command or Null if command cannot be found.</returns>
     string? FindCommandPath(string command, CancellationToken cancellationToken = default);
-    
-    
+
+
     /// <summary>
     /// Get formatted string defined in application resource.
     /// </summary>
     /// <param name="key">Key of string.</param>
     /// <param name="args">Arguments to format string.</param>
     /// <returns>Formatted string or Null if string not found.</returns>
-    public string? GetFormattedString(string key, params object?[] args)
-    {
-        var format = this.GetString(key, null);
-        if (format != null)
-            return string.Format(format, args);
-        return null;
-    }
+    string? GetFormattedString(string key, params object?[] args);
 
 
     /// <summary>
@@ -67,8 +61,7 @@ public interface IApplication
     /// </summary>
     /// <param name="key">Key of string.</param>
     /// <returns>String defined in resource or Null if string not found.</returns>
-    public string? GetString(string key) =>
-        this.GetString(key, null);
+    string? GetString(string key);
     
     
     /// <summary>
@@ -78,25 +71,23 @@ public interface IApplication
     /// <param name="defaultString">Default string.</param>
     /// <returns>String defined in resource or <paramref name="defaultString"/> if string not found.</returns>
     string? GetString(string key, string? defaultString);
-    
-    
+
+
     /// <summary>
     /// Get non-null string defined in application resource.
     /// </summary>
     /// <param name="key">Key of string.</param>
     /// <returns>String defined in resource or <see cref="String.Empty"/> if string not found.</returns>
-    public string GetStringNonNull(string key) =>
-        this.GetString(key, null) ?? "";
-    
-    
+    string GetStringNonNull(string key);
+
+
     /// <summary>
     /// Get non-null string defined in application resource.
     /// </summary>
     /// <param name="key">Key of string.</param>
     /// <param name="defaultString">Default string.</param>
     /// <returns>String defined in resource or <paramref name="defaultString"/> if string not found.</returns>
-    public string GetStringNonNull(string key, string defaultString) =>
-        this.GetString(key, null) ?? defaultString;
+    string GetStringNonNull(string key, string defaultString);
 
 
     /// <summary>
