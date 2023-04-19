@@ -45,8 +45,32 @@ public interface IApplication
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Path of command or Null if command cannot be found.</returns>
     string? FindCommandPath(string command, CancellationToken cancellationToken = default);
+    
+    
+    /// <summary>
+    /// Get formatted string defined in application resource.
+    /// </summary>
+    /// <param name="key">Key of string.</param>
+    /// <param name="args">Arguments to format string.</param>
+    /// <returns>Formatted string or Null if string not found.</returns>
+    string? GetFormattedString(string key, params object?[] args)
+    {
+        var format = this.GetString(key, null);
+        if (format != null)
+            return string.Format(format, args);
+        return null;
+    }
 
 
+    /// <summary>
+    /// Get string defined in application resource.
+    /// </summary>
+    /// <param name="key">Key of string.</param>
+    /// <returns>String defined in resource or Null if string not found.</returns>
+    string? GetString(string key) =>
+        this.GetString(key, null);
+    
+    
     /// <summary>
     /// Get string defined in application resource.
     /// </summary>
@@ -54,6 +78,25 @@ public interface IApplication
     /// <param name="defaultString">Default string.</param>
     /// <returns>String defined in resource or <paramref name="defaultString"/> if string not found.</returns>
     string? GetString(string key, string? defaultString);
+    
+    
+    /// <summary>
+    /// Get non-null string defined in application resource.
+    /// </summary>
+    /// <param name="key">Key of string.</param>
+    /// <returns>String defined in resource or <see cref="String.Empty"/> if string not found.</returns>
+    string GetStringNonNull(string key) =>
+        this.GetString(key, null) ?? "";
+    
+    
+    /// <summary>
+    /// Get non-null string defined in application resource.
+    /// </summary>
+    /// <param name="key">Key of string.</param>
+    /// <param name="defaultString">Default string.</param>
+    /// <returns>String defined in resource or <paramref name="defaultString"/> if string not found.</returns>
+    string GetStringNonNull(string key, string defaultString) =>
+        this.GetString(key, null) ?? defaultString;
 
 
     /// <summary>
@@ -72,57 +115,4 @@ public interface IApplication
     /// Get <see cref="SynchronizationContext"/> of main thread of application.
     /// </summary>
     SynchronizationContext MainThreadSynchronizationContext { get; }
-}
-
-
-/// <summary>
-/// Extensions for <see cref="IApplication"/>.
-/// </summary>
-public static class ApplicationExtensions
-{
-    /// <summary>
-    /// Get formatted string defined in application resource.
-    /// </summary>
-    /// <param name="app">Application.</param>
-    /// <param name="key">Key of string.</param>
-    /// <param name="args">Arguments to format string.</param>
-    /// <returns>Formatted string or Null if string not found.</returns>
-    public static string? GetFormattedString(this IApplication app, string key, params object?[] args)
-    {
-        var format = app.GetString(key, null);
-        if (format != null)
-            return string.Format(format, args);
-        return null;
-    }
-
-
-    /// <summary>
-    /// Get string defined in application resource.
-    /// </summary>
-    /// <param name="app">Application.</param>
-    /// <param name="key">Key of string.</param>
-    /// <returns>String defined in resource or Null if string not found.</returns>
-    public static string? GetString(this IApplication app, string key) =>
-        app.GetString(key, null);
-    
-
-    /// <summary>
-    /// Get non-null string defined in application resource.
-    /// </summary>
-    /// <param name="app">Application.</param>
-    /// <param name="key">Key of string.</param>
-    /// <returns>String defined in resource or <see cref="String.Empty"/> if string not found.</returns>
-    public static string GetStringNonNull(this IApplication app, string key) =>
-        GetStringNonNull(app, key, "");
-    
-
-    /// <summary>
-    /// Get non-null string defined in application resource.
-    /// </summary>
-    /// <param name="app">Application.</param>
-    /// <param name="key">Key of string.</param>
-    /// <param name="defaultString">Default string.</param>
-    /// <returns>String defined in resource or <paramref name="defaultString"/> if string not found.</returns>
-    public static string GetStringNonNull(this IApplication app, string key, string defaultString) =>
-        app.GetString(key, null) ?? defaultString;
 }
