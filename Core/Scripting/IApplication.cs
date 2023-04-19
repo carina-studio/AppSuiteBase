@@ -53,7 +53,7 @@ public interface IApplication
     /// <param name="key">Key of string.</param>
     /// <param name="args">Arguments to format string.</param>
     /// <returns>Formatted string or Null if string not found.</returns>
-    string? GetFormattedString(string key, params object?[] args)
+    public string? GetFormattedString(string key, params object?[] args)
     {
         var format = this.GetString(key, null);
         if (format != null)
@@ -67,7 +67,7 @@ public interface IApplication
     /// </summary>
     /// <param name="key">Key of string.</param>
     /// <returns>String defined in resource or Null if string not found.</returns>
-    string? GetString(string key) =>
+    public string? GetString(string key) =>
         this.GetString(key, null);
     
     
@@ -85,7 +85,7 @@ public interface IApplication
     /// </summary>
     /// <param name="key">Key of string.</param>
     /// <returns>String defined in resource or <see cref="String.Empty"/> if string not found.</returns>
-    string GetStringNonNull(string key) =>
+    public string GetStringNonNull(string key) =>
         this.GetString(key, null) ?? "";
     
     
@@ -95,7 +95,7 @@ public interface IApplication
     /// <param name="key">Key of string.</param>
     /// <param name="defaultString">Default string.</param>
     /// <returns>String defined in resource or <paramref name="defaultString"/> if string not found.</returns>
-    string GetStringNonNull(string key, string defaultString) =>
+    public string GetStringNonNull(string key, string defaultString) =>
         this.GetString(key, null) ?? defaultString;
 
 

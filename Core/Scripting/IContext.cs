@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 namespace CarinaStudio.AppSuite.Scripting;
 
+// ReSharper disable UnusedMember.Global
+
 /// <summary>
 /// Context of running script.
 /// </summary>
@@ -21,7 +23,7 @@ public interface IContext
     /// </summary>
     /// <param name="key">Key of string.</param>
     /// <returns>String with given key defined in this context/application, or Null if string cannot be found.</returns>
-    string? GetString(string key) =>
+    public string? GetString(string key) =>
         this.GetString(key, null);
     
     
@@ -44,7 +46,7 @@ public interface IContext
     /// Prepare strings for default culture.
     /// </summary>
     /// <param name="preparation">Action to prepare strings.</param>
-    void PrepareStrings(Action<IDictionary<string, string>> preparation) =>
+    public void PrepareStrings(Action<IDictionary<string, string>> preparation) =>
         this.PrepareStrings(null, preparation);
 
 
@@ -67,7 +69,7 @@ public interface IUserInteractiveContext : IContext
     /// </summary>
     /// <param name="message">Message.</param>
     /// <returns>Result of dialog.</returns>
-    MessageDialogResult ShowMessageDialog(object? message) =>
+    public MessageDialogResult ShowMessageDialog(object? message) =>
         this.ShowMessageDialog(message, MessageDialogIcon.Information, MessageDialogButtons.OK);
     
     
@@ -77,7 +79,7 @@ public interface IUserInteractiveContext : IContext
     /// <param name="message">Message.</param>
     /// <param name="icon">Icon.</param>
     /// <returns>Result of dialog.</returns>
-    MessageDialogResult ShowMessageDialog(object? message, MessageDialogIcon icon) =>
+    public MessageDialogResult ShowMessageDialog(object? message, MessageDialogIcon icon) =>
         this.ShowMessageDialog(message, icon, MessageDialogButtons.OK);
     
     
@@ -96,7 +98,7 @@ public interface IUserInteractiveContext : IContext
     /// </summary>
     /// <param name="message">Message.</param>
     /// <returns>User input text.</returns>
-    string? ShowTextInputDialog(object? message) =>
+    public string? ShowTextInputDialog(object? message) =>
         this.ShowTextInputDialog(message, null);
     
     
