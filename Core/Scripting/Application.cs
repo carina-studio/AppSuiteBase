@@ -1,7 +1,10 @@
 using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Scripting;
 
@@ -59,6 +62,7 @@ public class Application : IApplication
 
 
     // Static fields.
+    static Regex? CommandFileNameRegex;
     static volatile ILogger? StaticLogger;
 
 
@@ -77,15 +81,51 @@ public class Application : IApplication
 
     /// <inheritdoc/>
     public CultureInfo CultureInfo => this.app.CultureInfo;
-    
-    
+
+
+    /// <inheritdoc/>
+    public int ExecuteCommand(string command, CancellationToken cancellationToken = default)
+    {
+        var startInfo = PrepareExecutingCommand(command, cancellationToken);
+        return Process.Start(startInfo)?.Use(process =>
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                process.Kill();
+                throw new TaskCanceledException();
+            }
+            process.WaitForExitAsync(cancellationToken).Wait(cancellationToken);
+            return process.ExitCode;
+        }) ?? throw new InvalidOperationException($"Unable to execute command '{startInfo.FileName}'.");
+    }
+
+
+    /// <inheritdoc/>
+    public int ExecuteCommand(string command, Action<Process, CancellationToken> action, CancellationToken cancellationToken = default)
+    {
+        var startInfo = PrepareExecutingCommand(command, cancellationToken).Also(it =>
+        {
+            it.RedirectStandardError = true;
+            it.RedirectStandardInput = true;
+            it.RedirectStandardOutput = true;
+        });
+        return Process.Start(startInfo)?.Use(process =>
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                process.Kill();
+                throw new TaskCanceledException();
+            }
+            action(process, cancellationToken);
+            process.WaitForExitAsync(cancellationToken).Wait(cancellationToken);
+            return process.ExitCode;
+        }) ?? throw new InvalidOperationException($"Unable to execute command '{startInfo.FileName}'.");
+    }
+
+
     /// <inheritdoc/>
     public string? FindCommandPath(string command, CancellationToken cancellationToken = default) =>
-        IO.CommandSearchPaths.FindCommandPathAsync(command, cancellationToken).Let(it =>
-        {
-            it.Wait(cancellationToken);
-            return it.Result;
-        });
+        IO.CommandSearchPaths.FindCommandPath(command, cancellationToken);
     
 
     /// <inheritdoc/>
@@ -130,5 +170,37 @@ public class Application : IApplication
             // ReSharper restore NonAtomicCompoundOperator
             return this.mainThreadSyncContext;
         }
+    }
+    
+    
+    // Prepare executing command.
+    static ProcessStartInfo PrepareExecutingCommand(string command, CancellationToken cancellationToken)
+    {
+        // check state
+        if (cancellationToken.IsCancellationRequested)
+            throw new TaskCanceledException();
+        
+        // parse command
+        CommandFileNameRegex ??= new("^\\s*(?<FileName>\\S+|\"[^\"]*\")");
+        var match = CommandFileNameRegex.Match(command);
+        if (!match.Success)
+            throw new ArgumentException($"Unable to parse command: {command}");
+        var fileNameGroup = match.Groups["FileName"];
+        var fileName = fileNameGroup.Value.Let(it => it.Length == 0 || it[0] != '"' ? it : it[1..^1]);
+        var args = command[(fileNameGroup.Index + fileNameGroup.Length)..];
+        
+        // find command path
+        var commandPath = IO.CommandSearchPaths.FindCommandPath(fileName, cancellationToken);
+        if (commandPath == null)
+            throw new InvalidOperationException($"Command '{fileName}' not found.");
+        
+        // complete
+        return new ProcessStartInfo
+        {
+            Arguments = args,
+            CreateNoWindow = true,
+            FileName = commandPath,
+            UseShellExecute = false,
+        };
     }
 }

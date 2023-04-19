@@ -1,8 +1,12 @@
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Threading;
 
 namespace CarinaStudio.AppSuite.Scripting;
+
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedMemberInSuper.Global
 
 /// <summary>
 /// Interface for script to access application functions.
@@ -13,6 +17,25 @@ public interface IApplication
     /// Get current application culture.
     /// </summary>
     CultureInfo CultureInfo { get; }
+    
+    
+    /// <summary>
+    /// Execute external command.
+    /// </summary>
+    /// <param name="command">Command.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Exit code of command.</returns>
+    int ExecuteCommand(string command, CancellationToken cancellationToken = default);
+
+
+    /// <summary>
+    /// Execute external command.
+    /// </summary>
+    /// <param name="command">Command.</param>
+    /// <param name="action">Action to interact with process of external command.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Exit code of command.</returns>
+    int ExecuteCommand(string command, Action<Process, CancellationToken> action, CancellationToken cancellationToken = default);
     
     
     /// <summary>

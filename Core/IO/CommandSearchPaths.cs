@@ -68,15 +68,15 @@ public static class CommandSearchPaths
     /// Get custom paths.
     /// </summary>
     public static ISet<string> CustomPaths { get; } = customPaths.AsReadOnly();
-
-
+    
+    
     /// <summary>
     /// Find valid path of command to execute.
     /// </summary>
     /// <param name="command">Command.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Task of finding path of command.</returns>
-    public static async Task<string?> FindCommandPathAsync(string command, CancellationToken cancellationToken = default)
+    public static string? FindCommandPath(string command, CancellationToken cancellationToken = default)
     {
 	    if (!command.IsValidFilePath())
 	    {
@@ -85,53 +85,50 @@ public static class CommandSearchPaths
 	    }
 	    try
 	    {
-		    var paths = await GetPathsAsync(cancellationToken);
-		    return await Task.Run(() =>
+		    var paths = GetPaths(cancellationToken);
+		    var commandPathBuffer = new StringBuilder();
+		    foreach (var path in paths)
 		    {
-			    var commandPathBuffer = new StringBuilder();
-			    foreach (var path in paths)
+			    // check state
+			    if (cancellationToken.IsCancellationRequested)
+				    throw new TaskCanceledException();
+
+			    // prepare
+			    commandPathBuffer.Clear();
+			    commandPathBuffer.Append(path);
+			    commandPathBuffer.Append(Path.DirectorySeparatorChar);
+
+			    // check without extension
+			    commandPathBuffer.Append(command);
+			    var candidatePath = commandPathBuffer.ToString();
+			    if (System.IO.File.Exists(candidatePath))
+				    return candidatePath;
+
+			    // check with specific extensions
+			    if (Platform.IsWindows)
 			    {
-				    // check state
-				    if (cancellationToken.IsCancellationRequested)
-					    throw new TaskCanceledException();
-				    
-				    // prepare
-				    commandPathBuffer.Clear();
-				    commandPathBuffer.Append(path);
-				    commandPathBuffer.Append(Path.DirectorySeparatorChar);
-                
-				    // check without extension
-				    commandPathBuffer.Append(command);
-				    var candidatePath = commandPathBuffer.ToString();
+				    // .exe
+				    commandPathBuffer.Append(".exe");
+				    candidatePath = commandPathBuffer.ToString();
 				    if (System.IO.File.Exists(candidatePath))
 					    return candidatePath;
-                
-				    // check with specific extensions
-				    if (Platform.IsWindows)
-				    {
-					    // .exe
-					    commandPathBuffer.Append(".exe");
-					    candidatePath = commandPathBuffer.ToString();
-					    if (System.IO.File.Exists(candidatePath))
-						    return candidatePath;
-                    
-					    // .cmd
-					    commandPathBuffer.Remove(commandPathBuffer.Length - 4, 4);
-					    commandPathBuffer.Append(".cmd");
-					    candidatePath = commandPathBuffer.ToString();
-					    if (System.IO.File.Exists(candidatePath))
-						    return candidatePath;
-                    
-					    // .bat
-					    commandPathBuffer.Remove(commandPathBuffer.Length - 4, 4);
-					    commandPathBuffer.Append(".bat");
-					    candidatePath = commandPathBuffer.ToString();
-					    if (System.IO.File.Exists(candidatePath))
-						    return candidatePath;
-				    }
+
+				    // .cmd
+				    commandPathBuffer.Remove(commandPathBuffer.Length - 4, 4);
+				    commandPathBuffer.Append(".cmd");
+				    candidatePath = commandPathBuffer.ToString();
+				    if (System.IO.File.Exists(candidatePath))
+					    return candidatePath;
+
+				    // .bat
+				    commandPathBuffer.Remove(commandPathBuffer.Length - 4, 4);
+				    commandPathBuffer.Append(".bat");
+				    candidatePath = commandPathBuffer.ToString();
+				    if (System.IO.File.Exists(candidatePath))
+					    return candidatePath;
 			    }
-			    return null;
-		    }, cancellationToken);
+		    }
+		    return null;
 	    }
 	    catch (Exception ex)
 	    {
@@ -144,22 +141,40 @@ public static class CommandSearchPaths
 
 
     /// <summary>
+    /// Find valid path of command to execute.
+    /// </summary>
+    /// <param name="command">Command.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Task of finding path of command.</returns>
+    public static Task<string?> FindCommandPathAsync(string command, CancellationToken cancellationToken = default) =>
+	    Task.Run(() => FindCommandPath(command, cancellationToken), cancellationToken);
+
+
+    /// <summary>
+    /// Get all paths.
+    /// </summary>
+    /// <returns>Set of paths.</returns>
+    public static ISet<string> GetPaths(CancellationToken cancellationToken = default)
+    {
+	    // add system paths
+	    var paths = new HashSet<string>(PathEqualityComparer.Default);
+	    GetSystemPaths(SystemPathsScope.All, paths, cancellationToken);
+
+	    // add custom paths
+	    lock (customPaths)
+		    paths.AddAll(customPaths);
+
+	    // complete
+	    return paths;
+    }
+
+
+    /// <summary>
     /// Get all paths asynchronously.
     /// </summary>
     /// <returns>Set of paths.</returns>
-    public static async Task<ISet<string>> GetPathsAsync(CancellationToken cancellationToken = default)
-    {
-        // add system paths
-        var paths = new HashSet<string>(PathEqualityComparer.Default);
-        await GetSystemPathsAsync(SystemPathsScope.All, paths, cancellationToken);
-
-        // add custom paths
-        lock (customPaths)
-            paths.AddAll(customPaths);
-
-        // complete
-        return paths;
-    }
+    public static Task<ISet<string>> GetPathsAsync(CancellationToken cancellationToken = default) =>
+	    Task.Run(() => GetPaths(cancellationToken), cancellationToken);
 
 
     // Generate value for PATH environment.
@@ -174,6 +189,50 @@ public static class CommandSearchPaths
 		}
 		return pathBuffer.ToString();
 	}
+	
+	
+	// Get paths defined by system.
+	static void GetSystemPaths(SystemPathsScope scopes, ISet<string> paths, CancellationToken cancellationToken = default)
+	{
+		if (scopes == 0)
+			return;
+		if (Platform.IsWindows)
+		{
+			if ((scopes & SystemPathsScope.User) != 0)
+				Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User)?.Split(Path.PathSeparator).Let(paths.AddAll);
+			if ((scopes & SystemPathsScope.Global) != 0)
+				Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine)?.Split(Path.PathSeparator).Let(paths.AddAll);
+		}
+		else if (Platform.IsLinux)
+		{
+			if ((scopes & SystemPathsScope.User) != 0)
+				Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator).Let(paths.AddAll);
+		}
+		else if (Platform.IsMacOS)
+		{
+			if ((scopes & SystemPathsScope.Global) != 0)
+			{
+				try
+				{
+					using var reader = new StreamReader("/etc/paths");
+					var path = reader.ReadLine();
+					while (path != null)
+					{
+						if (cancellationToken.IsCancellationRequested)
+							throw new TaskCanceledException();
+						if (!string.IsNullOrWhiteSpace(path))
+							paths.Add(path);
+						path = reader.ReadLine();
+					}
+				}
+				// ReSharper disable EmptyGeneralCatchClause
+				catch
+				{ }
+				// ReSharper restore EmptyGeneralCatchClause
+			}
+		}
+		paths.RemoveAll(string.IsNullOrWhiteSpace);
+	}
 
 
     /// <summary>
@@ -185,55 +244,8 @@ public static class CommandSearchPaths
     public static async Task<ISet<string>> GetSystemPathsAsync(SystemPathsScope scopes, CancellationToken cancellationToken = default)
     {
         var paths = new HashSet<string>(PathEqualityComparer.Default);
-        await GetSystemPathsAsync(scopes, paths, cancellationToken);
+        await Task.Run(() => GetSystemPaths(scopes, paths, cancellationToken), cancellationToken);
         return paths;
-    }
-
-
-    // Get paths defined by system.
-    static async Task GetSystemPathsAsync(SystemPathsScope scopes, ISet<string> paths, CancellationToken cancellationToken = default)
-    {
-        if (scopes == 0)
-            return;
-        if (Platform.IsWindows)
-        {
-            if ((scopes & SystemPathsScope.User) != 0)
-                Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.User)?.Split(Path.PathSeparator).Let(paths.AddAll);
-            if ((scopes & SystemPathsScope.Global) != 0)
-                Environment.GetEnvironmentVariable("PATH", EnvironmentVariableTarget.Machine)?.Split(Path.PathSeparator).Let(paths.AddAll);
-        }
-        else if (Platform.IsLinux)
-        {
-            if ((scopes & SystemPathsScope.User) != 0)
-                Environment.GetEnvironmentVariable("PATH")?.Split(Path.PathSeparator).Let(paths.AddAll);
-        }
-        else if (Platform.IsMacOS)
-        {
-            if ((scopes & SystemPathsScope.Global) != 0)
-            {
-                await Task.Run(() =>
-                {
-                    try
-                    {
-                        using var reader = new StreamReader("/etc/paths");
-                        var path = reader.ReadLine();
-                        while (path != null)
-                        {
-                            if (cancellationToken.IsCancellationRequested)
-                                throw new TaskCanceledException();
-                            if (!string.IsNullOrWhiteSpace(path))
-                                paths.Add(path);
-                            path = reader.ReadLine();
-                        }
-                    }
-                    // ReSharper disable EmptyGeneralCatchClause
-                    catch
-                    { }
-                    // ReSharper restore EmptyGeneralCatchClause
-                }, cancellationToken);
-            }
-        }
-        paths.RemoveAll(string.IsNullOrWhiteSpace);
     }
 
 
