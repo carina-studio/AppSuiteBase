@@ -13,7 +13,7 @@
 	
 	<!-- DataTemplate -->
 	<Window.DataTemplates>
-		<DataTemplate DataType="{x:Type as:ExternalDependency}">
+		<DataTemplate x:CompileBindings="True" x:DataType="as:ExternalDependency" DataType="{x:Type as:ExternalDependency}">
 			<StackPanel>
 				<Border Name="headerBorder" Classes="Dialog_ItemsGroup_Header">
 					<SelectableTextBlock Classes="Dialog_ItemsGroup_Header" Text="{Binding Name}"/>
@@ -50,7 +50,7 @@
 									</MultiBinding>
 								</TextBlock.Text>
 							</TextBlock>
-							<StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+							<StackPanel x:CompileBindings="False" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
 
 								<!-- Download -->
 								<Button Name="downloadButton" 
@@ -86,7 +86,7 @@
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
 			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-				<Button Name="editPathEnvVarButton" Classes="Dialog_IconControlButton" Command="{Binding $parent[Window].EditPathEnvironmentVariable}" Content="{DynamicResource String/ExternalDependenciesDialog.EditPathEnvVar}" IsVisible="{x:Static controls:PathEnvVarEditorDialog.IsSupported}"/>
+				<Button Name="editPathEnvVarButton" Classes="Dialog_ControlButton" Command="{Binding $parent[Window].EditPathEnvironmentVariable}" Content="{DynamicResource String/ExternalDependenciesDialog.EditPathEnvVar}" IsVisible="{x:Static controls:PathEnvVarEditorDialog.IsSupported}"/>
 					<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #editPathEnvVarButton.IsVisible}"/>
 				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Refresh}" Content="{DynamicResource String/Common.Refresh}"/>
 				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.OK}" IsEnabled="{Binding $parent[Window].CanClose}"/>
