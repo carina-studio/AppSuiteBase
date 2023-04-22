@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
-using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
@@ -32,7 +31,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Static fields.
-		static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
+		static readonly IValueConverter AppReleasingTypeConverter = new EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
 		static readonly StyledProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
 		static readonly StyledProperty<bool> HasExternalDependenciesProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasExternalDependencies");
 		static readonly StyledProperty<bool> HasPrivacyPolicyProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasPrivacyPolicy");
@@ -50,7 +49,7 @@ namespace CarinaStudio.AppSuite.Controls
 				return $"[{rect.X:F0}, {rect.Y:F0}, {rect.Width:F0}x{rect.Height:F0}]";
 			return null;
 		});
-		static readonly DirectProperty<ApplicationInfoDialogImpl, double> ScreenPixelDensityProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, double>(nameof(screenPixelDensity), w => w.screenPixelDensity);
+		static readonly DirectProperty<ApplicationInfoDialogImpl, double> ScreenPixelDensityProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, double>(nameof(ScreenPixelDensity), w => w.screenPixelDensity);
 		static readonly DirectProperty<ApplicationInfoDialogImpl, Size> ScreenSizeProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, Size>(nameof(ScreenSize), w => w.screenSize);
 		static readonly DirectProperty<ApplicationInfoDialogImpl, Rect> ScreenWorkingAreaProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, Rect>(nameof(ScreenWorkingArea), w => w.screenWorkingArea);
 		public static readonly IValueConverter SizeToStringConverter = new FuncValueConverter<object?, string?>(value =>
@@ -93,7 +92,6 @@ namespace CarinaStudio.AppSuite.Controls
 			}
 
 			// setup copyright
-
 			this.Copyright = ((this.Application as AppSuiteApplication)?.CopyrightBeginningYear ?? AppSuiteApplication.CopyrightEndingYear).Let(beginningYear =>
 			{
 				if (beginningYear < AppSuiteApplication.CopyrightEndingYear)
@@ -123,11 +121,11 @@ namespace CarinaStudio.AppSuite.Controls
 			this.badgesPanel = this.Get<Panel>(nameof(badgesPanel)).AsNonNull();
 			this.Get<Panel>("itemsPanel").Also(it =>
 			{
-				it.AddHandler(PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
+				it.AddHandler(PointerPressedEvent, (_, e) =>
 				{
 					if (e.Source is not Avalonia.Controls.SelectableTextBlock)
 						it.Focus();
-				}), Avalonia.Interactivity.RoutingStrategies.Tunnel);
+				}, Avalonia.Interactivity.RoutingStrategies.Tunnel);
 			});
 			this.productListPanel = this.Get<Panel>(nameof(productListPanel)).AsNonNull();
 
@@ -140,40 +138,28 @@ namespace CarinaStudio.AppSuite.Controls
 				if (screen == null)
 					return;
 				var scaling = screen.Scaling;
-				var screenSizePx = screen.Bounds.Size.Let(it =>
-				{
-					return Platform.IsMacOS
-						? new PixelSize((int)(it.Width * scaling + 0.5), (int)(it.Height * scaling + 0.5))
-						: it;
-				});
-				var screenSizeDip = screen.Bounds.Size.Let(it =>
-				{
-					return Platform.IsMacOS
-						? new Size(it.Width, it.Height)
-						: new Size(it.Width / scaling, it.Height / scaling);
-				});
-				var workingAreaPx = screen.WorkingArea.Let(it =>
-				{
-					return Platform.IsMacOS
-						? new PixelRect((int)(it.X * scaling + 0.5), (int)(it.Y * scaling + 0.5), (int)(it.Width * scaling + 0.5), (int)(it.Height * scaling + 0.5))
-						: it;
-				});
-				var workingAreaDip = screen.WorkingArea.Let(it =>
-				{
-					return Platform.IsMacOS
-						? new Rect(it.X, it.Y, it.Width, it.Height)
-						: new Rect(it.X / scaling, it.Y / scaling, it.Width / scaling, it.Height / scaling);
-				});
-				this.SetAndRaise<PixelSize>(PhysicalScreenSizeProperty, ref this.physicalScreenSize, screenSizePx);
-				this.SetAndRaise<PixelRect>(PhysicalScreenWorkingAreaProperty, ref this.physicalScreenWorkingArea, workingAreaPx);
-				this.SetAndRaise<double>(ScreenPixelDensityProperty, ref this.screenPixelDensity, scaling);
-				this.SetAndRaise<Size>(ScreenSizeProperty, ref this.screenSize, screenSizeDip);
-				this.SetAndRaise<Rect>(ScreenWorkingAreaProperty, ref this.screenWorkingArea, workingAreaDip);
+				var screenSizePx = screen.Bounds.Size.Let(it => Platform.IsMacOS
+					? new PixelSize((int) (it.Width * scaling + 0.5), (int) (it.Height * scaling + 0.5))
+					: it);
+				var screenSizeDip = screen.Bounds.Size.Let(it => Platform.IsMacOS
+					? new Size(it.Width, it.Height)
+					: new Size(it.Width / scaling, it.Height / scaling));
+				var workingAreaPx = screen.WorkingArea.Let(it => Platform.IsMacOS
+					? new PixelRect((int) (it.X * scaling + 0.5), (int) (it.Y * scaling + 0.5), (int) (it.Width * scaling + 0.5), (int) (it.Height * scaling + 0.5))
+					: it);
+				var workingAreaDip = screen.WorkingArea.Let(it => Platform.IsMacOS
+					? new Rect(it.X, it.Y, it.Width, it.Height)
+					: new Rect(it.X / scaling, it.Y / scaling, it.Width / scaling, it.Height / scaling));
+				this.SetAndRaise(PhysicalScreenSizeProperty, ref this.physicalScreenSize, screenSizePx);
+				this.SetAndRaise(PhysicalScreenWorkingAreaProperty, ref this.physicalScreenWorkingArea, workingAreaPx);
+				this.SetAndRaise(ScreenPixelDensityProperty, ref this.screenPixelDensity, scaling);
+				this.SetAndRaise(ScreenSizeProperty, ref this.screenSize, screenSizeDip);
+				this.SetAndRaise(ScreenWorkingAreaProperty, ref this.screenWorkingArea, workingAreaDip);
 			});
 
 			// setup properties
-			this.SetValue<bool>(HasExternalDependenciesProperty, this.Application.ExternalDependencies.ToArray().IsNotEmpty());
-			this.SetValue<bool>(HasTotalPhysicalMemoryProperty, this.Application.HardwareInfo.TotalPhysicalMemory.HasValue);
+			this.SetValue(HasExternalDependenciesProperty, this.Application.ExternalDependencies.ToArray().IsNotEmpty());
+			this.SetValue(HasTotalPhysicalMemoryProperty, this.Application.HardwareInfo.TotalPhysicalMemory.HasValue);
 
 			// observe properties
 			this.GetObservable(BoundsProperty).Subscribe(_ => this.updateScreenInfoAction.Schedule(500));
@@ -199,11 +185,11 @@ namespace CarinaStudio.AppSuite.Controls
 			var options = new FilePickerSaveOptions().Also(options =>
 			{
 				var dateTime = DateTime.Now;
-				options.FileTypeChoices = new FilePickerFileType[]
+				options.FileTypeChoices = new[]
 				{
 					new FilePickerFileType(this.Application.GetStringNonNull("FileFormat.Zip")).Also(type =>
 					{
-						type.Patterns = new string[] { "*.zip" };
+						type.Patterns = new[] { "*.zip" };
 					}),
 				};
 				options.SuggestedFileName = $"Logs-{dateTime:yyyyMMdd-HHmmss}.zip";
@@ -243,11 +229,11 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Check whether application change list is available or not.
-		public bool HasApplicationChangeList { get => this.GetValue<bool>(HasApplicationChangeListProperty); }
+		public bool HasApplicationChangeList => this.GetValue(HasApplicationChangeListProperty);
 
 
 		// Check whether total physical memory info is valid or not.
-		public bool HasTotalPhysicalMemory { get => this.GetValue<bool>(HasTotalPhysicalMemoryProperty); }
+		public bool HasTotalPhysicalMemory => this.GetValue(HasTotalPhysicalMemoryProperty);
 
 
 		// Called when application string resources updated.
@@ -295,7 +281,7 @@ namespace CarinaStudio.AppSuite.Controls
 						Height = badgeSize.GetValueOrDefault(),
 						Margin = badgeMargin.GetValueOrDefault(),
 						Source = badge,
-						Stretch = Avalonia.Media.Stretch.Uniform,
+						Stretch = Stretch.Uniform,
 						Width = badgeSize.GetValueOrDefault(),
 					});
 				}
@@ -510,7 +496,7 @@ namespace CarinaStudio.AppSuite.Controls
 			var productManager = this.Application.ProductManager;
 			if (productManager.IsMock)
 				return;
-			if (this.DataContext is not ApplicationInfo appInfo)
+			if (this.DataContext is not ApplicationInfo)
 				return;
 			if (view.DataContext is not string productId)
 				return;
@@ -571,7 +557,7 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			if (this.DataContext is not ApplicationInfo appInfo)
 				return;
-			this.SetValue<string?>(VersionStringProperty, Global.Run(() =>
+			this.SetValue(VersionStringProperty, Global.Run(() =>
 			{
 				var buffer = new StringBuilder(this.Application.GetFormattedString("ApplicationInfoDialog.Version", appInfo.Version));
 				if (appInfo.ReleasingType != ApplicationReleasingType.Stable)
@@ -590,10 +576,10 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // String represent version.
-        string? VersionString { get => this.GetValue<string?>(VersionStringProperty); }
+        string? VersionString => this.GetValue(VersionStringProperty);
 
 
-		/// <summary>
+        /// <summary>
 		/// Wait for closing dialog.
 		/// </summary>
 		/// <returns>Task of waiting.</returns>

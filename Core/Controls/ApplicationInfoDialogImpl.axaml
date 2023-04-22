@@ -10,8 +10,11 @@
 		xmlns:net="using:CarinaStudio.AppSuite.Net"
 		xmlns:scripting="using:CarinaStudio.AppSuite.Scripting"
 		xmlns:sys="using:System"
+        xmlns:vm="using:CarinaStudio.AppSuite.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.ApplicationInfoDialogImpl"
+        x:CompileBindings="True"
+        x:DataType="vm:ApplicationInfo"
 		Name="window"
         Classes="Dialog"
         MinWidth="{DynamicResource Double/ApplicationInfoDialog.MinWidth}"
@@ -20,7 +23,7 @@
 	<DockPanel>
 
 		<!-- Control buttons -->
-		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
+		<Border x:CompileBindings="False" Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
 				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].ShowAppUpdateDialog}" Content="{DynamicResource String/ApplicationInfoDialog.ShowAppUpdateDialog}"/>
 				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.OK}"/>
@@ -64,7 +67,7 @@
 						</Border>
 
 						<!-- Title and version -->
-						<Border>
+						<Border x:CompileBindings="False">
 							<StackPanel Orientation="Vertical" VerticalAlignment="Center">
 								<StackPanel Margin="{StaticResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Orientation="Horizontal">
 									<SelectableTextBlock FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Text="{Binding Name}" VerticalAlignment="Center"/>
@@ -123,7 +126,7 @@
 					<Separator Classes="Dialog_Separator"/>
 
 					<!-- Copyright -->
-					<TextBlock Text="{Binding $parent[Window].Copyright, Mode=OneTime}"/>
+					<TextBlock x:CompileBindings="False" Text="{Binding $parent[Window].Copyright, Mode=OneTime}"/>
 					<Separator Classes="Dialog_Separator_Large"/>
 
 					<!-- System info -->
@@ -155,7 +158,7 @@
 							<Separator Classes="Dialog_Item_Separator"/>
 
 							<!-- Processor count -->
-							<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
+							<StackPanel x:CompileBindings="False" IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
 								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ProcessorCount}"/>
 									<SelectableTextBlock Grid.Column="1" Text="{Binding Source={x:Static sys:Environment.ProcessorCount}}" TextTrimming="CharacterEllipsis"/>
@@ -164,7 +167,7 @@
 							</StackPanel>
 
 							<!-- Total physical memory -->
-							<StackPanel IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}">
+							<StackPanel x:CompileBindings="False" IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}">
 								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.TotalPhysicalMemory}"/>
 									<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" TextTrimming="CharacterEllipsis"/>
@@ -182,7 +185,7 @@
 							</Grid>
 
 							<!-- Primary network interface -->
-							<StackPanel>
+							<StackPanel x:CompileBindings="False">
 								<StackPanel.IsVisible>
 									<MultiBinding Converter="{x:Static BoolConverters.And}">
 										<Binding Path="PrimaryNetworkInterfacePhysicalAddress" ElementName="window" Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
@@ -197,7 +200,7 @@
 							</StackPanel>
 
 							<!-- Screen info -->
-							<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
+							<StackPanel x:CompileBindings="False" IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
 
 								<!-- Screen pixel density -->
 								<Separator Classes="Dialog_Item_Separator"/>
@@ -229,7 +232,7 @@
 					<Border Classes="Dialog_ItemsGroup_Header">
 						<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{DynamicResource String/ApplicationInfoDialog.ProcessInformation}"/>
 					</Border>
-					<Border Classes="Dialog_ItemsGroup_Container">
+					<Border x:CompileBindings="False" Classes="Dialog_ItemsGroup_Container">
 						<StackPanel>
 
 							<!-- Process ID -->
@@ -366,7 +369,7 @@
 							</StackPanel>
 
 							<!-- User agreement -->
-							<StackPanel IsVisible="{Binding $parent[Window].HasUserAgreement}">
+							<StackPanel x:CompileBindings="False" IsVisible="{Binding $parent[Window].HasUserAgreement}">
 								<StackPanel Classes="Dialog_IconText_Container">
 									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.UserAgreement.Outline}"/>
 									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowUserAgreement}" Text="{DynamicResource String/Common.UserAgreement.WithDialog}"/>
@@ -375,7 +378,7 @@
 							</StackPanel>
 
 							<!-- Privacy policy -->
-							<StackPanel IsVisible="{Binding $parent[Window].HasPrivacyPolicy}">
+							<StackPanel x:CompileBindings="False" IsVisible="{Binding $parent[Window].HasPrivacyPolicy}">
 								<StackPanel Classes="Dialog_IconText_Container">
 									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PrivacyPolicy.Outline}"/>
 									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowPrivacyPolicy}" Text="{DynamicResource String/Common.PrivacyPolicy.WithDialog}"/>
@@ -384,7 +387,7 @@
 							</StackPanel>
 
 							<!-- External dependencies -->
-							<StackPanel IsVisible="{Binding $parent[Window].HasExternalDependencies}">
+							<StackPanel x:CompileBindings="False" IsVisible="{Binding $parent[Window].HasExternalDependencies}">
 								<StackPanel Classes="Dialog_IconText_Container">
 									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Dependencies}"/>
 									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowExternalDependencies}" Text="{DynamicResource String/ApplicationInfoDialog.ExternalDependencies}"/>
@@ -393,7 +396,7 @@
 							</StackPanel>
 
 							<!-- Restart in debug mode -->
-							<StackPanel IsVisible="{Binding !$parent[Window].Application.IsDebugMode}">
+							<StackPanel x:CompileBindings="False" IsVisible="{Binding !$parent[Window].Application.IsDebugMode}">
 								<StackPanel Classes="Dialog_IconText_Container">
 									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Debug.Outline}"/>
 									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].RestartInDebugMode}" Text="{DynamicResource String/ApplicationInfoDialog.RestartInDebugMode}"/>
@@ -404,7 +407,7 @@
 							<!-- Export logs -->
 							<StackPanel Classes="Dialog_IconText_Container">
 								<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Export}"/>
-								<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ExportLogs}" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}"/>
+								<abControls:LinkTextBlock x:CompileBindings="False" Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ExportLogs}" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}"/>
 							</StackPanel>
 
 						</StackPanel>
