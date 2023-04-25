@@ -151,10 +151,8 @@ namespace CarinaStudio.AppSuite.Controls
             if (item != null)
             {
                 itemIndex = index;
-                headerVisual = itemsPanel.Children[index].GetVisualChildren()?.FirstOrDefault()?.Let(it =>
-                {
-                    return it.FindDescendantOfTypeAndName<Control>("PART_ContentContainer") ?? it;
-                }) ?? headerVisual;
+                headerVisual = itemsPanel.Children[index].GetVisualChildren().FirstOrDefault()?.Let(it => 
+                    ((Visual)it).FindDescendantOfTypeAndName<Control>("PART_ContentContainer") ?? it) ?? headerVisual;
                 return true;
             }
             return false;
@@ -228,8 +226,8 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public bool IsFullWindowMode
         {
-            get => this.GetValue<bool>(IsFullWindowModeProperty);
-            set => this.SetValue<bool>(IsFullWindowModeProperty, value);
+            get => this.GetValue(IsFullWindowModeProperty);
+            set => this.SetValue(IsFullWindowModeProperty, value);
         }
 
 
@@ -263,14 +261,14 @@ namespace CarinaStudio.AppSuite.Controls
             this.tabStripScrollViewer = e.NameScope.Find<TabStripScrollViewer>("PART_TabStripScrollViewer")?.Also(it =>
             {
                 it.GetObservable(BoundsProperty).Subscribe(bounds =>
-                    this.SetAndRaise<double>(TabStripSizeProperty, ref this.tabStripSize, bounds.Height));
+                    this.SetAndRaise(TabStripSizeProperty, ref this.tabStripSize, bounds.Height));
                 it.TemplateApplied += (_, e) =>
                 {
                     this.scrollTabStripLeftButton = e.NameScope.Find<RepeatButton>("PART_ScrollLeftButton");
                     this.scrollTabStripRightButton = e.NameScope.Find<RepeatButton>("PART_ScrollRightButton");
                 };
             });
-            this.SetAndRaise<double>(TabStripSizeProperty, ref this.tabStripSize, this.tabStripScrollViewer?.Bounds.Height ?? -1);
+            this.SetAndRaise(TabStripSizeProperty, ref this.tabStripSize, this.tabStripScrollViewer?.Bounds.Height ?? -1);
             this.updateTabStripScrollViewerMarginAction.Cancel();
             this.UpdateTabStripScrollViewerMargin(false);
         }
@@ -469,7 +467,7 @@ namespace CarinaStudio.AppSuite.Controls
                 return;
 
             // check pointer over item
-            if (!this.FindItemPointerOver(e, out var index, out var item) || this.pointerPressedItem != item)
+            if (!this.FindItemPointerOver(e, out _, out var item) || this.pointerPressedItem != item)
             {
                 this.pointerPressedItem = null;
                 this.pointerPressedItemIndex = -1;
@@ -596,7 +594,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Get width or height of tab strip.
         /// </summary>
-        public double TabStripSize { get => this.tabStripSize; }
+        public double TabStripSize => this.tabStripSize;
 
 
         // Update margin of tab strip.
@@ -637,10 +635,10 @@ namespace CarinaStudio.AppSuite.Controls
                     : TimeSpan.FromMilliseconds(250);
                 this.tabStripScrollViewerMarginAnimator = new ThicknessAnimator(this.tabStripScrollViewer.Margin, margin).Also(it =>
                 {
-                    it.Completed += (_, e) => this.tabStripScrollViewerMarginAnimator = null;
+                    it.Completed += (_, _) => this.tabStripScrollViewerMarginAnimator = null;
                     it.Duration = duration;
                     it.Interpolator = Interpolators.Deceleration;
-                    it.ProgressChanged += (_, e) => this.tabStripScrollViewer.Margin = it.Value;
+                    it.ProgressChanged += (_, _) => this.tabStripScrollViewer.Margin = it.Value;
                     it.Start();
                 });
             }
@@ -659,7 +657,7 @@ namespace CarinaStudio.AppSuite.Controls
     /// </summary>
     public class DragOnTabItemEventArgs : TabItemEventArgs
     {
-        // Constuctor.
+        // Constructor.
         internal DragOnTabItemEventArgs(DragEventArgs e, int itemIndex, object item, IVisual headerVisual) : base(itemIndex, item)
         {
             this.Data = e.Data;
@@ -725,7 +723,7 @@ namespace CarinaStudio.AppSuite.Controls
     /// </summary>
     public class TabItemEventArgs : EventArgs
     {
-        // Constuctor.
+        // Constructor.
         internal TabItemEventArgs(int itemIndex, object item)
         {
             this.Item = item;

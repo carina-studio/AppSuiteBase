@@ -1,11 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using CarinaStudio.Collections;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using CarinaStudio.VisualTree;
@@ -30,20 +28,20 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 		var app = AppSuiteApplication.CurrentOrNull;
 		if (app == null)
 			return null;
-		var brush = (IBrush?)null;
+		IBrush? brush;
 		switch (state)
 		{
 			case ExternalDependencyState.Available:
-				app.TryFindResource<IBrush>("Brush/Icon.OK", out brush);
+				app.TryFindResource("Brush/Icon.OK", out brush);
 				break;
 			case ExternalDependencyState.Unavailable:
-				app.TryFindResource<IBrush>("Brush/Icon.Warning", out brush);
+				app.TryFindResource("Brush/Icon.Warning", out brush);
 				break;
 			case ExternalDependencyState.Unknown:
-				app.TryFindResource<IBrush>("SystemControlForegroundBaseMediumBrush", out brush);
+				app.TryFindResource("SystemControlForegroundBaseMediumBrush", out brush);
 				break;
 			default: 
-				app.TryFindResource<IBrush>("SystemControlForegroundBaseHighBrush", out brush);
+				app.TryFindResource("SystemControlForegroundBaseHighBrush", out brush);
 				break;
 		}
 		return brush;
@@ -56,23 +54,23 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 		var app = AppSuiteApplication.CurrentOrNull;
 		if (app == null)
 			return null;
-		var icon = (IImage?)null;
+		IImage? icon;
 		switch (state)
 		{
 			case ExternalDependencyState.Available:
-				app.TryFindResource<IImage>("Image/Icon.OK.Outline.Colored", out icon);
+				app.TryFindResource("Image/Icon.OK.Outline.Colored", out icon);
 				break;
 			case ExternalDependencyState.CheckingForAvailability:
-				app.TryFindResource<IImage>("Image/Icon.Waiting.Outline", out icon);
+				app.TryFindResource("Image/Icon.Waiting.Outline", out icon);
 				break;
 			case ExternalDependencyState.Unavailable:
-				app.TryFindResource<IImage>("Image/Icon.Warning.Outline.Colored", out icon);
+				app.TryFindResource("Image/Icon.Warning.Outline.Colored", out icon);
 				break;
 			case ExternalDependencyState.Unknown:
-				app.TryFindResource<IImage>("Image/Icon.Question.Outline", out icon);
+				app.TryFindResource("Image/Icon.Question.Outline", out icon);
 				break;
 			default: 
-				app.TryFindResource<IImage>("Image/Icon.Information.Outline", out icon);
+				app.TryFindResource("Image/Icon.Information.Outline", out icon);
 				break;
 		}
 		return icon;
@@ -138,12 +136,13 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 					break;
 				}
 			}
-			this.SetValue<bool>(CanCloseProperty, canClose);
+			this.SetValue(CanCloseProperty, canClose);
 		});
 		this.externalDependencies = this.Application.ExternalDependencies.ToArray().Also(it =>
 		{
 			foreach (var externalDependency in it)
 				externalDependency.PropertyChanged += this.OnExternalDependencyPropertyChanged;
+			// ReSharper disable StringCompareIsCultureSpecific.1
 			Array.Sort(it, (lhs, rhs) =>
 			{
 				if (lhs.State == ExternalDependencyState.Unavailable)
@@ -156,6 +155,7 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 					return 1;
 				return string.Compare(lhs.Name, rhs.Name);
 			});
+			// ReSharper restore StringCompareIsCultureSpecific.1
 		});
 		this.externalDependenciesPanel = this.Get<Panel>(nameof(externalDependenciesPanel)).Also(panel =>
 		{
@@ -175,11 +175,11 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 					}));
 				}
 			}
-			panel.AddHandler(PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
+			panel.AddHandler(PointerPressedEvent, (_, e) =>
 			{
 				if (e.Source is not Avalonia.Controls.SelectableTextBlock)
 					panel.Focus();
-			}), RoutingStrategies.Tunnel);
+			}, RoutingStrategies.Tunnel);
 		});
 		this.GetObservable(IsActiveProperty).Subscribe(isActive =>
 		{
@@ -235,7 +235,7 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	/// <inheritdoc/>
 	protected override void OnClosing(CancelEventArgs e)
 	{
-		if (!this.GetValue<bool>(CanCloseProperty))
+		if (!this.GetValue(CanCloseProperty))
 			e.Cancel = true;
 		base.OnClosing(e);
 	}
@@ -257,7 +257,7 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 		{
 			this.externalDependenciesPanel.Children.FirstOrDefault(it => it.DataContext == extDependency)?.Let(extDependencyItemPanel =>
 			{
-				var headerBorder = extDependencyItemPanel.FindDescendantOfTypeAndName<Border>("headerBorder");
+				var headerBorder = ((Visual)extDependencyItemPanel).FindDescendantOfTypeAndName<Border>("headerBorder");
 				if (headerBorder != null)
 				{
 					this.ScrollToControl(headerBorder);
