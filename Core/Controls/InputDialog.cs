@@ -21,7 +21,9 @@ namespace CarinaStudio.AppSuite.Controls
         protected InputDialog()
         {
 #pragma warning disable CA1806
+            // ReSharper disable ObjectCreationAsStatement
             new WindowContentFadingHelper(this);
+            // ReSharper restore ObjectCreationAsStatement
 #pragma warning restore CA1806
             this.AddHandler(KeyDownEvent, (_, e) => this.OnPreviewKeyDown(e), Avalonia.Interactivity.RoutingStrategies.Tunnel);
             this.AddHandler(KeyUpEvent, (_, e) => this.OnPreviewKeyUp(e), Avalonia.Interactivity.RoutingStrategies.Tunnel);
@@ -43,8 +45,8 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Called when <see cref="Key.Enter"/> clicked on input control without handling by the control.
         /// </summary>
-        /// <param name="control"><see cref="IControl"/> which <see cref="Key.Enter"/> clicked on.</param>
-        protected virtual void OnEnterKeyClickedOnInputControl(IControl control)
+        /// <param name="control"><see cref="Control"/> which <see cref="Key.Enter"/> clicked on.</param>
+        protected virtual void OnEnterKeyClickedOnInputControl(Control control)
         { }
 
 
@@ -107,9 +109,6 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Get application instance.
         /// </summary>
-        public new TApp Application
-        {
-            get => (TApp)base.Application;
-        }
+        public new TApp Application => (TApp)base.Application;
     }
 }

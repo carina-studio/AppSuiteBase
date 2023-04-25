@@ -13,7 +13,7 @@ public class Tutorial : AvaloniaObject
     /// <summary>
     /// Property of <see cref="Anchor"/>.
     /// </summary>
-    public static readonly StyledProperty<IVisual?> AnchorProperty = AvaloniaProperty.Register<Tutorial, IVisual?>(nameof(Anchor));
+    public static readonly StyledProperty<Visual?> AnchorProperty = AvaloniaProperty.Register<Tutorial, Visual?>(nameof(Anchor));
     /// <summary>
     /// Property of <see cref="Description"/>.
     /// </summary>
@@ -42,12 +42,12 @@ public class Tutorial : AvaloniaObject
 
 
     /// <summary>
-    /// Get or set the <see cref="IVisual"/> should be anchor for showing the tutorial.
+    /// Get or set the <see cref="Visual"/> should be anchor for showing the tutorial.
     /// </summary>
-    public IVisual? Anchor
+    public Visual? Anchor
     {
-        get => this.GetValue<IVisual?>(AnchorProperty);
-        set => this.SetValue<IVisual?>(AnchorProperty, value);
+        get => this.GetValue(AnchorProperty);
+        set => this.SetValue(AnchorProperty, value);
     }
 
 
@@ -60,8 +60,8 @@ public class Tutorial : AvaloniaObject
             return;
         
         // update state
-        this.SetAndRaise<bool>(IsVisibleProperty, ref this.isVisible, false);
-        this.SetAndRaise<TutorialPresenter?>(PresenterProperty, ref this.presenter, null);
+        this.SetAndRaise(IsVisibleProperty, ref this.isVisible, false);
+        this.SetAndRaise(PresenterProperty, ref this.presenter, null);
         
         // raise event
         this.Cancelled?.Invoke(this, EventArgs.Empty);
@@ -79,8 +79,8 @@ public class Tutorial : AvaloniaObject
     /// </summary>
     public string? Description
     {
-        get => this.GetValue<string?>(DescriptionProperty);
-        set => this.SetValue<string?>(DescriptionProperty, value);
+        get => this.GetValue(DescriptionProperty);
+        set => this.SetValue(DescriptionProperty, value);
     }
 
 
@@ -93,8 +93,8 @@ public class Tutorial : AvaloniaObject
             return;
         
         // update state
-        this.SetAndRaise<bool>(IsVisibleProperty, ref this.isVisible, false);
-        this.SetAndRaise<TutorialPresenter?>(PresenterProperty, ref this.presenter, null);
+        this.SetAndRaise(IsVisibleProperty, ref this.isVisible, false);
+        this.SetAndRaise(PresenterProperty, ref this.presenter, null);
         
         // raise event
         this.Dismissed?.Invoke(this, EventArgs.Empty);
@@ -112,8 +112,8 @@ public class Tutorial : AvaloniaObject
     /// </summary>
     public IImage? Icon
     {
-        get => this.GetValue<IImage?>(IconProperty);
-        set => this.SetValue<IImage?>(IconProperty, value);
+        get => this.GetValue(IconProperty);
+        set => this.SetValue(IconProperty, value);
     }
 
 
@@ -122,21 +122,21 @@ public class Tutorial : AvaloniaObject
     /// </summary>
     public bool IsSkippingAllTutorialsAllowed
     {
-        get => this.GetValue<bool>(IsSkippingAllTutorialsAllowedProperty);
-        set => this.SetValue<bool>(IsSkippingAllTutorialsAllowedProperty, value);
+        get => this.GetValue(IsSkippingAllTutorialsAllowedProperty);
+        set => this.SetValue(IsSkippingAllTutorialsAllowedProperty, value);
     }
 
 
     /// <summary>
     /// Check whether tutorial is visible to user or not.
     /// </summary>
-    public bool IsVisible { get => this.isVisible; }
+    public bool IsVisible => this.isVisible;
 
 
     /// <summary>
     /// Get <see cref="TutorialPresenter"/> which hosts the tutorial.
     /// </summary>
-    public TutorialPresenter? Presenter { get => this.presenter; }
+    public TutorialPresenter? Presenter => this.presenter;
 
 
     // Skip all tutorials.
@@ -157,8 +157,8 @@ public class Tutorial : AvaloniaObject
         }
 
         // update state
-        this.SetAndRaise<TutorialPresenter?>(PresenterProperty, ref this.presenter, presenter);
-        this.SetAndRaise<bool>(IsVisibleProperty, ref this.isVisible, true);
+        this.SetAndRaise(PresenterProperty, ref this.presenter, presenter);
+        this.SetAndRaise(IsVisibleProperty, ref this.isVisible, true);
 
         // raise event
         this.Shown?.Invoke(this, EventArgs.Empty);

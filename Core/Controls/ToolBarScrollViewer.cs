@@ -110,10 +110,10 @@ namespace CarinaStudio.AppSuite.Controls
             }) ?? TimeSpan.FromMilliseconds(250);
             this.offsetAnimator = new VectorAnimator(currentOffset, new Vector(targetOffsetX, targetOffsetY)).Also(it =>
             {
-                it.Completed += (_, e) => this.offsetAnimator = null;
+                it.Completed += (_, _) => this.offsetAnimator = null;
                 it.Duration = duration;
                 it.Interpolator = Interpolators.Deceleration;
-                it.ProgressChanged += (_, e) => this.Offset = it.Value;
+                it.ProgressChanged += (_, _) => this.Offset = it.Value;
                 it.Start();
             });
         }
@@ -135,7 +135,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// Scroll given child visual into viewport.
         /// </summary>
         /// <param name="visual">Child visual.</param>
-        public void ScrollIntoView(IVisual visual)
+        public void ScrollIntoView(Visual visual)
         {
             // check state
             this.VerifyAccess();
@@ -154,8 +154,6 @@ namespace CarinaStudio.AppSuite.Controls
                 y += parentBounds.Top;
                 parentVisual = parentVisual.GetVisualParent();
             }
-            if (visual == null)
-                return;
 
             // scroll into view
             var leftMargin = this.scrollLeftButton?.Bounds.Right ?? 0;

@@ -115,7 +115,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Find tab item which data is dragged over.
-        bool FindItemDraggedOver(DragEventArgs e, out int itemIndex, out object? item, out IVisual? headerVisual)
+        bool FindItemDraggedOver(DragEventArgs e, out int itemIndex, out object? item, out Visual? headerVisual)
         {
             // find index of item
             itemIndex = -1;
@@ -128,7 +128,7 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 for (var i = itemsPanel.Children.Count - 1; i >= 0; --i)
                 {
-                    if (itemsPanel.Children[i] is IVisual visual)
+                    if (itemsPanel.Children[i] is Visual visual)
                     {
                         var position = e.GetPosition(visual);
                         var bounds = visual.Bounds;
@@ -152,7 +152,7 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 itemIndex = index;
                 headerVisual = itemsPanel.Children[index].GetVisualChildren().FirstOrDefault()?.Let(it => 
-                    ((Visual)it).FindDescendantOfTypeAndName<Control>("PART_ContentContainer") ?? it) ?? headerVisual;
+                    ((Visual)it).FindDescendantOfTypeAndName<Control>("PART_ContentContainer") ?? (Visual)it) ?? headerVisual;
                 return true;
             }
             return false;
@@ -168,7 +168,7 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 for (var i = panel.Children.Count - 1; i >= 0; --i)
                 {
-                    if (panel.Children[i] is IVisual visual)
+                    if (panel.Children[i] is Visual visual)
                     {
                         var position = e.GetPosition(visual);
                         var bounds = visual.Bounds;
@@ -658,7 +658,7 @@ namespace CarinaStudio.AppSuite.Controls
     public class DragOnTabItemEventArgs : TabItemEventArgs
     {
         // Constructor.
-        internal DragOnTabItemEventArgs(DragEventArgs e, int itemIndex, object item, IVisual headerVisual) : base(itemIndex, item)
+        internal DragOnTabItemEventArgs(DragEventArgs e, int itemIndex, object item, Visual headerVisual) : base(itemIndex, item)
         {
             this.Data = e.Data;
             this.DragEffects = e.DragEffects;
@@ -681,9 +681,9 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
-        /// Get <see cref="IVisual"/> of header of item.
+        /// Get <see cref="Visual"/> of header of item.
         /// </summary>
-        public IVisual HeaderVisual { get; }
+        public Visual HeaderVisual { get; }
 
 
         /// <summary>

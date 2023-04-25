@@ -111,7 +111,7 @@ partial class TextInputDialogImpl : InputDialog
 
 
 	/// <inheritdoc/>
-	protected override void OnEnterKeyClickedOnInputControl(IControl control)
+	protected override void OnEnterKeyClickedOnInputControl(Control control)
 	{
 		base.OnEnterKeyClickedOnInputControl(control);
 		this.GenerateResultCommand.TryExecute();

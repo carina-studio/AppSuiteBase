@@ -60,7 +60,7 @@ namespace CarinaStudio.AppSuite.Tests
         public MainWindow()
         {
             this.ShowAppInfoDialogCommand = new Command(() => this.ShowAppInfoDialog(), this.canShowAppInfo);
-            this.ShowTutorialCommand = new Command<IVisual>(this.ShowTutorial);
+            this.ShowTutorialCommand = new Command<Visual>(this.ShowTutorial);
 
             this.hfProcessInfoUpdateToken = this.Application.ProcessInfo.RequestHighFrequencyUpdate();
 
@@ -524,7 +524,7 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        void ShowTutorial(IVisual anchor)
+        void ShowTutorial(Visual anchor)
         {
             var tutorial = new Tutorial().Also(it =>
             {
