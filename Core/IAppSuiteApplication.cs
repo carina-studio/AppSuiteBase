@@ -227,7 +227,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get latest active main window.
         /// </summary>
-        CarinaStudio.Controls.Window? LatestActiveMainWindow { get; }
+        Controls.MainWindow? LatestActiveMainWindow { get; }
 
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace CarinaStudio.AppSuite
         /// <param name="screen"><see cref="Avalonia.Platform.Screen"/> to layout main windows.</param>
         /// <param name="layout">Layout.</param>
         /// <param name="activeMainWindow">Main window which should be active one after layout.</param>
-        void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, CarinaStudio.Controls.Window? activeMainWindow);
+        void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, Controls.MainWindow? activeMainWindow);
 
 
         /// <summary>
@@ -282,7 +282,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get list of main windows.
         /// </summary>
-        IList<CarinaStudio.Controls.Window> MainWindows { get; }
+        IList<Controls.MainWindow> MainWindows { get; }
 
 
         /// <summary>
@@ -361,7 +361,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="mainWindow">Main window to restart.</param>
         /// <returns>Task of restarting main window. The result will be True if restarting has been accepted.</returns>
-        Task<bool> RestartMainWindowAsync(CarinaStudio.Controls.Window mainWindow);
+        Task<bool> RestartMainWindowAsync(Controls.MainWindow mainWindow);
 
 
         /// <summary>
@@ -407,7 +407,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="windowCreatedAction">Action to perform when window created.</param>
         /// <returns>Task of showing main window. The result will be True if main window created and shown successfully.</returns>
-        Task<bool> ShowMainWindowAsync(Action<CarinaStudio.Controls.Window>? windowCreatedAction = null);
+        Task<bool> ShowMainWindowAsync(Action<Controls.MainWindow>? windowCreatedAction = null);
 
 
         /// <summary>
