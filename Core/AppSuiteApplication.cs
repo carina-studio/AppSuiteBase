@@ -113,7 +113,9 @@ namespace CarinaStudio.AppSuite
                     newPropertyValues[1] = source?.GetType().Name;
                     Array.Copy(propertyValues, 0, newPropertyValues, 2, propertyValues.Length);
 #pragma warning disable CA2254
+                    // ReSharper disable TemplateIsNotCompileTimeConstantProblem
                     this.logger.Log(convertedLevel, "[{area}][{source}] " + messageTemplate, newPropertyValues);
+                    // ReSharper restore TemplateIsNotCompileTimeConstantProblem
 #pragma warning restore CA2254
                 }
             }
@@ -223,11 +225,11 @@ namespace CarinaStudio.AppSuite
             public readonly LinkedListNode<MainWindowHolder> ActiveListNode;
             public bool IsRestartingRequested;
             public readonly ViewModel ViewModel;
-            public readonly Window? Window;
-            public Action<Window>? WindowCreatedAction;
+            public readonly MainWindow? Window;
+            public Action<MainWindow>? WindowCreatedAction;
 
             // Constructor.
-            public MainWindowHolder(ViewModel viewModel, Window? window, Action<Window>? windowCreatedAction)
+            public MainWindowHolder(ViewModel viewModel, MainWindow? window, Action<MainWindow>? windowCreatedAction)
             {
                 this.ActiveListNode = new LinkedListNode<MainWindowHolder>(this);
                 this.ViewModel = viewModel;
@@ -358,8 +360,8 @@ namespace CarinaStudio.AppSuite
         Task? loadingInitPersistentStateTask;
         Task? loadingInitSettingsTask;
         int logOutputTargetPort;
-        readonly Dictionary<Window, MainWindowHolder> mainWindowHolders = new();
-        readonly ObservableList<Window> mainWindows = new();
+        readonly Dictionary<MainWindow, MainWindowHolder> mainWindowHolders = new();
+        readonly ObservableList<MainWindow> mainWindows = new();
         readonly CancellationTokenSource multiInstancesServerCancellationTokenSource = new();
         NamedPipeServerStream? multiInstancesServerStream;
         string multiInstancesServerStreamName = "";
@@ -372,11 +374,11 @@ namespace CarinaStudio.AppSuite
         IDisposable? processInfoHfUpdateToken;
         IProductManager? productManager;
         ApplicationArgsBuilder? restartArgs;
-        Controls.SelfTestingWindowImpl? selfTestingWindow;
+        SelfTestingWindowImpl? selfTestingWindow;
         SettingsImpl? settings;
         readonly string settingsFilePath;
         ShutdownSource shutdownSource = ShutdownSource.None;
-        Controls.SplashWindowImpl? splashWindow;
+        SplashWindowImpl? splashWindow;
         long splashWindowShownTime;
         ScheduledAction? stopUserInteractionAction;
         readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
@@ -1304,7 +1306,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public Window? LatestActiveMainWindow => this.activeMainWindowList.IsNotEmpty() ? this.activeMainWindowList.First?.Value.Window : null;
+        public MainWindow? LatestActiveMainWindow => this.activeMainWindowList.IsNotEmpty() ? this.activeMainWindowList.First?.Value.Window : null;
 
 
         /// <inheritdoc/>
@@ -1318,7 +1320,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public async void LayoutMainWindows(Screen screen, Controls.MultiWindowLayout layout, Window? activeMainWindow)
+        public async void LayoutMainWindows(Screen screen, MultiWindowLayout layout, MainWindow? activeMainWindow)
         {
             // check state
             this.VerifyAccess();
@@ -1798,7 +1800,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get list of main windows.
         /// </summary>
-        public IList<Window> MainWindows { get; }
+        public IList<MainWindow> MainWindows { get; }
 
 
         /// <summary>
@@ -1865,7 +1867,7 @@ namespace CarinaStudio.AppSuite
         /// Called to create main window.
         /// </summary>
         /// <returns>Main window.</returns>
-        protected abstract Window OnCreateMainWindow();
+        protected abstract MainWindow OnCreateMainWindow();
 
 
         /// <summary>
@@ -1998,7 +2000,7 @@ namespace CarinaStudio.AppSuite
             {
                 if (sender is Avalonia.Controls.Window window)
                 {
-                    if (window is not Controls.Window csWindow || !this.mainWindowHolders.ContainsKey(csWindow))
+                    if (window is not MainWindow mainWindow || !this.mainWindowHolders.ContainsKey(mainWindow))
                         this.windows.Add(window);
                     this.OnWindowOpened(window);
                 }
@@ -2133,7 +2135,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Called when IsActive of main window changed.
-        void OnMainWindowActivationChanged(Window mainWindow, bool isActive)
+        void OnMainWindowActivationChanged(MainWindow mainWindow, bool isActive)
         {
             if (isActive)
             {
@@ -2158,7 +2160,7 @@ namespace CarinaStudio.AppSuite
         async void OnMainWindowClosed(object? sender, EventArgs e)
         {
             // detach from main window
-            if (sender is not Window mainWindow)
+            if (sender is not MainWindow mainWindow)
                 return;
             if (!this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
                 return;
@@ -2766,7 +2768,7 @@ namespace CarinaStudio.AppSuite
             this.windowObserverTokens.Add(window, tokens);
 
             // update latest active window
-            if (window is Controls.Window csWindow && this.mainWindowHolders.TryGetValue(csWindow, out var mainWindowHolder))
+            if (window is MainWindow mainWindow && this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
             {
                 // add main window to active list
                 if (mainWindowHolder.ActiveListNode.List == null)
@@ -3003,7 +3005,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public Task<bool> RestartMainWindowAsync(Window mainWindow)
+        public Task<bool> RestartMainWindowAsync(MainWindow mainWindow)
         {
             // check state
             this.VerifyAccess();
@@ -3057,7 +3059,7 @@ namespace CarinaStudio.AppSuite
             {
                 if (window.Parent != null)
                     continue;
-                if (window is Controls.Window csWindow && this.mainWindowHolders.TryGetValue(csWindow, out var mainWindowHolder))
+                if (window is MainWindow mainWindow && this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
                     mainWindowHolder.IsRestartingRequested = true;
             }
             var taskCompletionSource = new TaskCompletionSource<bool>();
@@ -3314,12 +3316,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public Task<bool> ShowMainWindowAsync(Action<Window>? windowCreatedAction) => 
+        public Task<bool> ShowMainWindowAsync(Action<MainWindow>? windowCreatedAction) => 
             this.ShowMainWindowAsync(null, windowCreatedAction);
 
 
         // Create and show main window.
-        async Task<bool> ShowMainWindowAsync(ViewModel? viewModel, Action<Window>? windowCreatedAction)
+        async Task<bool> ShowMainWindowAsync(ViewModel? viewModel, Action<MainWindow>? windowCreatedAction)
         {
             // check state
             this.VerifyAccess();

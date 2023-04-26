@@ -119,7 +119,7 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        protected override Window OnCreateMainWindow() => new MainWindow();
+        protected override Controls.MainWindow OnCreateMainWindow() => new MainWindow();
 
 
         protected override ViewModel OnCreateMainWindowViewModel(JsonElement? savedState) => new Workspace(savedState);

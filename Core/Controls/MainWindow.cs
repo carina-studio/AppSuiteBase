@@ -24,8 +24,34 @@ namespace CarinaStudio.AppSuite.Controls
     /// <summary>
     /// Base class of main window pf application.
     /// </summary>
+    public abstract class MainWindow : Window
+    {
+        // Static fields.
+        internal static readonly SettingKey<bool> DoNotCheckAppRunningLocationOnMacOSKey = new("MainWindow.DoNotCheckAppRunningLocationOnMacOS");
+        internal static readonly SettingKey<int> ExtDepDialogShownVersionKey = new("MainWindow.ExternalDependenciesDialogShownVersion", -1);
+        internal static bool IsAppRunningLocationOnMacOSChecked;
+        internal static bool IsNetworkConnForActivatingProVersionNotified;
+        internal static bool IsNotifyingAppUpdateFound;
+        internal static bool IsReactivatingProVersion;
+        internal static bool IsReactivatingProVersionNeeded;
+        internal static readonly SettingKey<bool> IsUsingCompactUIConfirmedKey = new("MainWindow.IsUsingCompactUIConfirmed", false);
+        internal static readonly SettingKey<string> LatestAppChangeListShownVersionKey = new("ApplicationChangeListDialog.LatestShownVersion", "");
+        internal static readonly SettingKey<int> WindowHeightSettingKey = new("MainWindow.Height", 600);
+        internal static readonly SettingKey<WindowState> WindowStateSettingKey = new("MainWindow.State", WindowState.Maximized);
+        internal static readonly SettingKey<int> WindowWidthSettingKey = new("MainWindow.Width", 800);
+        
+        
+        // Constructor.
+        internal MainWindow()
+        { }
+    }
+    
+    
+    /// <summary>
+    /// Base class of main window pf application.
+    /// </summary>
     /// <typeparam name="TViewModel">Type of view-model.</typeparam>
-    public abstract class MainWindow<TViewModel> : Window, IMainWindow where TViewModel : MainWindowViewModel
+    public abstract class MainWindow<TViewModel> : MainWindow, IMainWindow where TViewModel : MainWindowViewModel
     {
         /// <summary>
         /// Property of <see cref="AreInitialDialogsClosed"/>.
@@ -46,21 +72,6 @@ namespace CarinaStudio.AppSuite.Controls
         const int RestartingMainWindowsDelay = 500;
         const int SaveWindowSizeDelay = 300;
         const int UpdateContentPaddingDelay = 300;
-
-
-        // Static fields.
-        static readonly SettingKey<bool> DoNotCheckAppRunningLocationOnMacOSKey = new("MainWindow.DoNotCheckAppRunningLocationOnMacOS");
-        static readonly SettingKey<int> ExtDepDialogShownVersionKey = new("MainWindow.ExternalDependenciesDialogShownVersion", -1);
-        static bool IsAppRunningLocationOnMacOSChecked;
-        static bool IsNetworkConnForActivatingProVersionNotified;
-        static bool IsNotifyingAppUpdateFound;
-        static bool IsReactivatingProVersion;
-		static bool IsReactivatingProVersionNeeded;
-        static readonly SettingKey<bool> IsUsingCompactUIConfirmedKey = new("MainWindow.IsUsingCompactUIConfirmed", false);
-        static readonly SettingKey<string> LatestAppChangeListShownVersionKey = new("ApplicationChangeListDialog.LatestShownVersion", "");
-        static readonly SettingKey<int> WindowHeightSettingKey = new("MainWindow.Height", 600);
-        static readonly SettingKey<WindowState> WindowStateSettingKey = new("MainWindow.State", WindowState.Maximized);
-        static readonly SettingKey<int> WindowWidthSettingKey = new("MainWindow.Width", 800);
 
 
         // Fields.
@@ -202,11 +213,11 @@ namespace CarinaStudio.AppSuite.Controls
                 {
                     this.contentPaddingAnimator = new ThicknessAnimator(this.contentPresenter.Padding, margin).Also(it =>
                     {
-                        it.Completed += (_, e) => this.contentPresenter.Padding = it.EndValue;
+                        it.Completed += (_, _) => this.contentPresenter.Padding = it.EndValue;
                         if (this.TryFindResource("TimeSpan/MainWindow.ContentPaddingTransition", out var res) && res is TimeSpan duration)
                             it.Duration = duration;
                         it.Interpolator = Interpolators.Deceleration;
-                        it.ProgressChanged += (_, e) => this.contentPresenter.Padding = it.Value;
+                        it.ProgressChanged += (_, _) => this.contentPresenter.Padding = it.Value;
                         it.Start();
                     });
                 }
@@ -342,7 +353,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Check whether all dialogs which need to be shown after showing main window are closed or not.
         /// </summary>
-        public bool AreInitialDialogsClosed { get => this.areInitialDialogsClosed; }
+        public bool AreInitialDialogsClosed => this.areInitialDialogsClosed;
 
 
         /// <summary>
@@ -417,19 +428,19 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Get application configuration.
         /// </summary>
-        protected ISettings Configuration { get => this.Application.Configuration; }
+        protected ISettings Configuration => this.Application.Configuration;
 
-        
+
         /// <summary>
         /// Get padding applied on content of Window automatically.
         /// </summary>
-        public Thickness ContentPadding { get => this.contentPadding; }
+        public Thickness ContentPadding => this.contentPadding;
 
 
         /// <summary>
         /// Check whether multiple main windows were opened or not.
         /// </summary>
-        public bool HasMultipleMainWindows { get => this.hasMultipleMainWindows; }
+        public bool HasMultipleMainWindows => this.hasMultipleMainWindows;
 
 
         /// <summary>
@@ -507,7 +518,7 @@ namespace CarinaStudio.AppSuite.Controls
             this.contentPresenter = e.NameScope.Find<ContentPresenter>("PART_ContentPresenter")?.Also(it =>
             {
                 it.GetObservable(PaddingProperty).Subscribe(padding =>
-                    this.SetAndRaise<Thickness>(ContentPaddingProperty, ref this.contentPadding, padding));
+                    this.SetAndRaise(ContentPaddingProperty, ref this.contentPadding, padding));
             });
         }
 
@@ -592,7 +603,7 @@ namespace CarinaStudio.AppSuite.Controls
 
         // Called when list of main window changed.
         void OnMainWindowsChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
-            this.SetAndRaise<bool>(HasMultipleMainWindowsProperty, ref this.hasMultipleMainWindows, this.Application.MainWindows.Count > 1);
+            this.SetAndRaise(HasMultipleMainWindowsProperty, ref this.hasMultipleMainWindows, this.Application.MainWindows.Count > 1);
         
 
         // Called when property of network manager changed.
@@ -655,7 +666,7 @@ namespace CarinaStudio.AppSuite.Controls
             this.AddHandler(DragDrop.DragEnterEvent, this.OnDragEnter);
 
             // check main window count
-            this.SetAndRaise<bool>(HasMultipleMainWindowsProperty, ref this.hasMultipleMainWindows, this.Application.MainWindows.Count > 1);
+            this.SetAndRaise(HasMultipleMainWindowsProperty, ref this.hasMultipleMainWindows, this.Application.MainWindows.Count > 1);
 
             // update content padding
             this.updateContentPaddingAction.Execute();
@@ -907,7 +918,7 @@ namespace CarinaStudio.AppSuite.Controls
             }
 
             // show application change list
-            var changeListShownVersion = this.PersistentState.GetValueOrDefault(LatestAppChangeListShownVersionKey)?.Let(it =>
+            var changeListShownVersion = this.PersistentState.GetValueOrDefault(LatestAppChangeListShownVersionKey).Let(it =>
             {
                 if (Version.TryParse(it, out var v))
                     return v;
@@ -986,7 +997,7 @@ namespace CarinaStudio.AppSuite.Controls
             if (!this.isClosingScheduled && !app.IsShutdownStarted)
             {
                 this.Logger.LogWarning("All initial dialogs closed");
-                this.SetAndRaise<bool>(AreInitialDialogsClosedProperty, ref this.areInitialDialogsClosed, true);
+                this.SetAndRaise(AreInitialDialogsClosedProperty, ref this.areInitialDialogsClosed, true);
                 this.OnInitialDialogsClosed();
             }
         }
@@ -1030,9 +1041,6 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Get application instance.
         /// </summary>
-        public new TApp Application
-        {
-            get => (TApp)base.Application;
-        }
+        public new TApp Application => (TApp)base.Application;
     }
 }
