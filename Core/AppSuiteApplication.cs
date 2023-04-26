@@ -130,7 +130,7 @@ namespace CarinaStudio.AppSuite
             // Implementations.
             protected override void OnUpgrade(int oldVersion)
             { }
-            public override int Version { get; } = 1;
+            public override int Version => 1;
         }
 
 
@@ -337,8 +337,8 @@ namespace CarinaStudio.AppSuite
         // Fields.
         Avalonia.Controls.ResourceDictionary? accentColorResources;
         readonly LinkedList<MainWindowHolder> activeMainWindowList = new();
-        Controls.ApplicationInfoDialog? appInfoDialog;
-        Controls.ApplicationUpdateDialog? appUpdateDialog;
+        ApplicationInfoDialog? appInfoDialog;
+        ApplicationUpdateDialog? appUpdateDialog;
         Avalonia.Themes.Fluent.FluentTheme? baseTheme;
         bool canRequestRestoringMainWindows;
         ScheduledAction? checkUpdateInfoAction;
@@ -738,7 +738,7 @@ namespace CarinaStudio.AppSuite
             if (!forceShowingDialog)
             {
                 var updateInfo = this.UpdateInfo;
-                if (updateInfo == null || updateInfo.Version <= Controls.ApplicationUpdateDialog.LatestShownVersion)
+                if (updateInfo == null || updateInfo.Version <= ApplicationUpdateDialog.LatestShownVersion)
                     return Task.FromResult(false);
             }
             this.Logger.LogDebug("Show application update dialog");
@@ -1347,7 +1347,9 @@ namespace CarinaStudio.AppSuite
                             it.WindowState = Avalonia.Controls.WindowState.Maximized;
                             break;
                     }
+                    // ReSharper disable InvokeAsExtensionMethod
                     Controls.WindowExtensions.ActivateAndBringToFront(it);
+                    // ReSharper restore InvokeAsExtensionMethod
                 });
                 return;
             }
@@ -1356,14 +1358,16 @@ namespace CarinaStudio.AppSuite
             activeMainWindow ??= this.LatestActiveMainWindow ?? this.mainWindows[0];
             if (mainWindowCount > 4)
             {
+                // ReSharper disable InvokeAsExtensionMethod
                 Controls.WindowExtensions.ActivateAndBringToFront(activeMainWindow);
-                var result = await new Controls.MessageDialog()
+                // ReSharper restore InvokeAsExtensionMethod
+                var result = await new MessageDialog()
                 {
-                    Buttons = Controls.MessageDialogButtons.YesNo,
-                    Icon = Controls.MessageDialogIcon.Question,
+                    Buttons = MessageDialogButtons.YesNo,
+                    Icon = MessageDialogIcon.Question,
                     Message = Avalonia.Controls.ResourceNodeExtensions.GetResourceObservable(this, "String/MainWindow.ConfirmLayoutingLotsOfMainWindows"),
                 }.ShowDialog(activeMainWindow);
-                if (result != Controls.MessageDialogResult.Yes)
+                if (result != MessageDialogResult.Yes)
                     return;
             }
 
@@ -1373,7 +1377,7 @@ namespace CarinaStudio.AppSuite
             var windowBounds = new PixelRect[mainWindowCount];
             switch (layout)
             {
-                case Controls.MultiWindowLayout.Horizontal:
+                case MultiWindowLayout.Horizontal:
                     {
                         var width = (workingArea.Width / mainWindowCount);
                         var height = workingArea.Height;
@@ -1388,7 +1392,7 @@ namespace CarinaStudio.AppSuite
                         }
                     }
                     break;
-                case Controls.MultiWindowLayout.Tile:
+                case MultiWindowLayout.Tile:
                     {
                         var columnCount = (int)(Math.Ceiling(Math.Sqrt(mainWindowCount)) + 0.1);
                         var rowCount = (mainWindowCount / columnCount);
@@ -1414,7 +1418,7 @@ namespace CarinaStudio.AppSuite
                         }
                     }
                     break;
-                case Controls.MultiWindowLayout.Vertical:
+                case MultiWindowLayout.Vertical:
                     {
                         var width = workingArea.Width;
                         var height = (workingArea.Height / mainWindowCount);
@@ -1432,6 +1436,7 @@ namespace CarinaStudio.AppSuite
                 default:
                     return;
             }
+            // ReSharper disable InvokeAsExtensionMethod
             for (var i = mainWindowCount - 1; i >= 0; --i)
             {
                 this.mainWindows[i].Let(it =>
@@ -1452,7 +1457,7 @@ namespace CarinaStudio.AppSuite
                     {
                         // [Workaround] Height of window may be changed automatically later after setting size of window
                         this.SynchronizationContext.PostDelayed(() =>
-                            (it as Controls.IMainWindow)?.CancelSavingSize(), 300);
+                            (it as IMainWindow)?.CancelSavingSize(), 300);
                     }
                     if (Platform.IsMacOS)
                     {
@@ -1464,11 +1469,12 @@ namespace CarinaStudio.AppSuite
                         it.Width = (bounds.Width / scaling) - sysDecorSizes.Left - sysDecorSizes.Right;
                         it.Height = (bounds.Height / scaling) - sysDecorSizes.Top - sysDecorSizes.Bottom;
                     }
-                    (it as Controls.IMainWindow)?.CancelSavingSize();
+                    (it as IMainWindow)?.CancelSavingSize();
                     Controls.WindowExtensions.ActivateAndBringToFront(it);
                 });
             }
             Controls.WindowExtensions.ActivateAndBringToFront(activeMainWindow);
+            // ReSharper restore InvokeAsExtensionMethod
         }
 
 
@@ -2328,7 +2334,7 @@ namespace CarinaStudio.AppSuite
         /// Called to prepare showing splash window when launching application.
         /// </summary>
         /// <returns>Parameters of splash window.</returns>
-        protected virtual Controls.SplashWindowParams OnPrepareSplashWindow() => new Controls.SplashWindowParams().Also((ref Controls.SplashWindowParams it) =>
+        protected virtual SplashWindowParams OnPrepareSplashWindow() => new SplashWindowParams().Also((ref Controls.SplashWindowParams it) =>
         {
             var assetLoader = AvaloniaLocator.Current.GetService<IAssetLoader>().AsNonNull();
             it.BackgroundImageOpacity = 0.2;
@@ -2446,7 +2452,7 @@ namespace CarinaStudio.AppSuite
                     this.Logger.LogTrace("[Performance] Took {duration} ms to prepare parameters of splash window", currentTime - time);
                     time = currentTime;
                 }
-                this.splashWindow = new Controls.SplashWindowImpl()
+                this.splashWindow = new SplashWindowImpl()
                 {
                     AccentColor = splashWindowParams.AccentColor,
                     BackgroundImageOpacity = splashWindowParams.BackgroundImageOpacity,
@@ -3170,12 +3176,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Select current theme mode.
-        ThemeMode SelectCurrentThemeMode() => this.Settings.GetValueOrDefault(SettingKeys.ThemeMode).Let(it =>
-        {
-            if (it == ThemeMode.System)
-                return this.systemThemeMode;
-            return it;
-        });
+        ThemeMode SelectCurrentThemeMode() => this.Settings.GetValueOrDefault(SettingKeys.ThemeMode).Let(it => it == ThemeMode.System ? this.systemThemeMode : it);
 
 
         // Try sending arguments to multi-instances server.
@@ -3269,12 +3270,12 @@ namespace CarinaStudio.AppSuite
         async Task<bool> ShowAppUpdateDialogAsync(Avalonia.Controls.Window? owner, bool checkAppUpdateWhenOpening)
         {
             // wait for current dialog
-            Controls.ApplicationUpdateDialogResult result;
+            ApplicationUpdateDialogResult result;
             if (this.appUpdateDialog != null
                 && this.appUpdateDialog.Activate())
             {
                 result = await this.appUpdateDialog.WaitForClosingDialogAsync();
-                return (result == Controls.ApplicationUpdateDialogResult.ShutdownNeeded);
+                return (result == ApplicationUpdateDialogResult.ShutdownNeeded);
             }
 
             // check for update
@@ -3293,7 +3294,7 @@ namespace CarinaStudio.AppSuite
             }
 
 			// shutdown to update
-			if (result == Controls.ApplicationUpdateDialogResult.ShutdownNeeded)
+			if (result == ApplicationUpdateDialogResult.ShutdownNeeded)
 			{
                 this.Logger.LogWarning("Shut down to update application");
                 this.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
@@ -3439,7 +3440,7 @@ namespace CarinaStudio.AppSuite
                     this.splashWindow = this.splashWindow?.Let(it =>
                     {
                         it.Close();
-                        return (Controls.SplashWindowImpl?)null;
+                        return (SplashWindowImpl?)null;
                     });
                 });
             });
@@ -3458,12 +3459,14 @@ namespace CarinaStudio.AppSuite
                 return false;
             if (this.selfTestingWindow != null)
             {
+                // ReSharper disable InvokeAsExtensionMethod
                 Controls.WindowExtensions.ActivateAndBringToFront(this.selfTestingWindow);
+                // ReSharper restore InvokeAsExtensionMethod
                 return true;
             }
 
             // create and show the window
-            this.selfTestingWindow = new Controls.SelfTestingWindowImpl().Also(window =>
+            this.selfTestingWindow = new SelfTestingWindowImpl().Also(window =>
             {
                 window.Closed += (_, _) => this.selfTestingWindow = null;
             });
