@@ -409,6 +409,15 @@
 								<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Export}"/>
 								<abControls:LinkTextBlock x:CompileBindings="False" Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ExportLogs}" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}"/>
 							</StackPanel>
+							
+							<!-- Take memory snapshot -->
+							<StackPanel x:CompileBindings="False" IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
+								<Separator Classes="Dialog_Separator_Small"/>
+								<StackPanel Classes="Dialog_IconText_Container">
+									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Memory.Outline}"/>
+									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].TakeMemorySnapshot}" Text="{DynamicResource String/Common.TakeMemorySnapshot.WithDialog}"/>
+								</StackPanel>
+							</StackPanel>
 
 						</StackPanel>
 					</Border>
