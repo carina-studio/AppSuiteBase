@@ -1199,6 +1199,8 @@ namespace CarinaStudio.AppSuite
                 return this.GetWindowsThemeMode();
             if (Platform.IsMacOS)
                 return this.GetMacOSThemeMode();
+            if (Platform.IsLinux)
+                return this.GetLinuxThemeMode();
             return this.FallbackThemeMode;
         }
 
@@ -1286,7 +1288,17 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Check whether <see cref="ThemeMode.System"/> is supported or not.
         /// </summary>
-        public bool IsSystemThemeModeSupported => Platform.IsWindows10OrAbove || Platform.IsMacOS;
+        public bool IsSystemThemeModeSupported 
+        {
+            get
+            {
+                if (Platform.IsWindows10OrAbove || Platform.IsMacOS)
+                    return true;
+                if (Platform.IsLinux)
+                    return this.IsSystemThemeModeSupportedOnLinux;
+                return false;
+            }
+        }
 
 
         /// <inheritdoc/>
@@ -2143,6 +2155,8 @@ namespace CarinaStudio.AppSuite
                     this.OnMainWindowActivationChangedOnWindows();
                 else if (Platform.IsMacOS)
                     this.OnMainWindowActivationChangedOnMacOS();
+                else if (Platform.IsLinux)
+                    this.OnMainWindowActivationChangedOnLinux();
                 if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value.Window == mainWindow)
                     return;
                 if (this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))

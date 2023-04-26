@@ -1,4 +1,6 @@
+using Microsoft.Extensions.Logging;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace CarinaStudio.AppSuite;
@@ -12,6 +14,10 @@ partial class AppSuiteApplication
     static unsafe delegate*unmanaged[Cdecl]<void*, int> getGdkMonitorCount;
     static unsafe delegate*unmanaged[Cdecl]<void*, sbyte*> getGdkMonitorModel;
     static unsafe delegate*unmanaged[Cdecl]<void*, int> getGdkMonitorScaleFactor;
+
+
+    // Fields.
+    bool? isGSettingsAvailable;
 
 
     // Apply given screen scale factor for Linux.
@@ -51,6 +57,44 @@ partial class AppSuiteApplication
         if (minScaleFactor < int.MaxValue)
             Environment.SetEnvironmentVariable("AVALONIA_GLOBAL_SCALE_FACTOR", minScaleFactor.ToString());
         //Environment.SetEnvironmentVariable("AVALONIA_SCREEN_SCALE_FACTORS", valueBuilder.ToString());
+    }
+
+
+    // Get system theme mode on Linux.
+    ThemeMode GetLinuxThemeMode()
+    {
+        if (!this.IsSystemThemeModeSupportedOnLinux)
+            return this.FallbackThemeMode;
+        try
+        {
+            using var process = Process.Start(new ProcessStartInfo()
+            {
+                Arguments = "get org.gnome.desktop.interface color-scheme",
+                CreateNoWindow = true,
+                FileName = "gsettings",
+                RedirectStandardError = true,
+                RedirectStandardOutput = true,
+            });
+            if (process is not null)
+            {
+                var colorScheme = process.StandardOutput.ReadLine();
+                if (string.IsNullOrWhiteSpace(colorScheme))
+                    return this.FallbackThemeMode;
+                return colorScheme.ToLower().Contains("dark")
+                    ? ThemeMode.Dark
+                    : ThemeMode.Light;
+            }
+            else
+            {
+                this.Logger.LogError("Unable to start 'gsettings' to check system theme mode on Linux");
+                return this.FallbackThemeMode;
+            }
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, "Unable to check system theme mode on Linux");
+            return this.FallbackThemeMode;
+        }
     }
 
 
@@ -112,5 +156,52 @@ partial class AppSuiteApplication
         // complete
         gdkLibHandle = libHandle;
         return true;
+    }
+
+
+    // Check whether 'gsettings' tool is available on device or not.
+    bool IsGSettingsAvailable
+    {
+        get
+        {
+            if (this.isGSettingsAvailable.HasValue)
+                return this.isGSettingsAvailable.Value;
+            try
+            {
+                using var process = Process.Start(new ProcessStartInfo
+                {
+                    CreateNoWindow = true,
+                    FileName = "gsettings",
+                    UseShellExecute = false,
+                });
+                process?.Kill();
+                this.isGSettingsAvailable = process is not null;
+            }
+            catch
+            {
+                this.isGSettingsAvailable = false;
+            }
+            if (this.isGSettingsAvailable.Value)
+            {
+                this.Logger.LogInformation("gsettings found on device");
+                return true;
+            }
+            this.Logger.LogInformation("gsettings is unavailable on device");
+            return false;
+        }
+    }
+
+
+    /// <summary>
+    /// Check whether system theme mode is supported on Linux or not.
+    /// </summary>
+    internal bool IsSystemThemeModeSupportedOnLinux => this.IsGSettingsAvailable;
+
+
+    // Called when IsActive of main window changed on Linux.
+    void OnMainWindowActivationChangedOnLinux()
+    {
+        if (this.IsSystemThemeModeSupportedOnLinux)
+            this.UpdateSystemThemeMode(true);
     }
 }
