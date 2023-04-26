@@ -129,7 +129,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     IDisposable backgroundPropertyChangedHandlerToken = EmptyDisposable.Default;
     SyntaxHighlightingDefinitionSet? definitionSet;
     FlowDirection flowDirection = FlowDirection.LeftToRight;
-    FontFamily fontFamily = FontManager.Current.DefaultFontFamilyName;
+    FontFamily fontFamily = FontManager.Current.DefaultFontFamily;
     double fontSize = 12;
     FontStretch fontStretch = FontStretch.Normal;
     FontStyle fontStyle = FontStyle.Normal;
@@ -225,13 +225,10 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             result = (lhs.End - rhs.End);
             if (result != 0)
                 return result;
-            result = this.definitionSet?.SpanDefinitions?.Let(it =>
-            {
-                return it.IndexOf(rhs.Definition) - it.IndexOf(lhs.Definition);
-            }) ?? 0;
+            result = this.definitionSet?.SpanDefinitions.Let(it => it.IndexOf(rhs.Definition) - it.IndexOf(lhs.Definition)) ?? 0;
             return result != 0 ? result : (rhs.GetHashCode() - lhs.GetHashCode());
         });
-        this.definitionSet?.SpanDefinitions?.Let(it =>
+        this.definitionSet?.SpanDefinitions.Let(it =>
         {
             foreach (var spanDefinition in it)
             {
@@ -267,7 +264,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
 
             // find next span
             var startMatch = span.Definition.StartPattern!.Match(text, span.End);
-            var endMatch = default(Match);
+            Match endMatch;
             if (startMatch.Success)
             {
                 endMatch = span.Definition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
@@ -469,7 +466,6 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         }
 
         // create text runs
-        var textMemory = text.AsMemory();
         var textStartIndex = start;
         var runPropertiesMap = new Dictionary<SyntaxHighlightingToken, TextRunProperties>();
         var selectionRunPropertiesMap = new Dictionary<SyntaxHighlightingToken, TextRunProperties>();
@@ -590,7 +586,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         else
             text ??= "";
         
-        // create typr face
+        // create type face
         var typeface = new Typeface(this.fontFamily, this.fontStyle, this.fontWeight, this.fontStretch);
 
         // prepare base run properties

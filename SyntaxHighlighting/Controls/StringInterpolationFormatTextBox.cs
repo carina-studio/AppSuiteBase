@@ -37,7 +37,7 @@ namespace CarinaStudio.AppSuite.Controls
 
         // Fields.
         readonly ObservableList<ListBoxItem> filteredPredefinedVarListBoxItems = new();
-        readonly SortedObservableList<StringInterpolationVariable> filteredPredefinedVars = new((x, y) => string.Compare(x?.Name, y?.Name, true, CultureInfo.InvariantCulture));
+        readonly SortedObservableList<StringInterpolationVariable> filteredPredefinedVars = new((x, y) => string.Compare(x.Name, y.Name, true, CultureInfo.InvariantCulture));
 		bool isEscapeKeyHandled;
 		bool isSyntaxHighlightingEnabled = true;
         readonly ObservableList<StringInterpolationVariable> predefinedVars = new();
@@ -75,7 +75,6 @@ namespace CarinaStudio.AppSuite.Controls
 
 				// show predefined variable menu
 				var text = this.Text ?? "";
-				var textLength = text.Length;
 				var popupToOpen = (Popup?)null;
 				if (this.predefinedVars.IsNotEmpty())
 				{
@@ -321,7 +320,7 @@ namespace CarinaStudio.AppSuite.Controls
 			// delete more characters
 			var isBackspace = e.Key == Key.Back;
 			var isDelete = e.Key == Key.Delete;
-			var isKeyForAssistentPopup = false;
+			var isKeyForAssistantPopup = false;
 			if (isBackspace || isDelete)
 			{
 				var (selectionStart, selectionEnd) = this.GetSelection();
@@ -365,15 +364,15 @@ namespace CarinaStudio.AppSuite.Controls
 					case Key.FnDownArrow:
 						if (this.predefinedVarsPopup?.IsOpen == true)
 						{
-							this.predefinedVarsPopup.ItemListBox?.SelectNextItem();
-							isKeyForAssistentPopup = true;
+							this.predefinedVarsPopup.ItemListBox.SelectNextItem();
+							isKeyForAssistantPopup = true;
 							e.Handled = true;
 						}
 						break;
 					case Key.Enter:
 						if (this.predefinedVarsPopup?.IsOpen == true)
 						{
-							isKeyForAssistentPopup = true;
+							isKeyForAssistantPopup = true;
 							e.Handled = true;
 						}
 						break;
@@ -381,8 +380,8 @@ namespace CarinaStudio.AppSuite.Controls
 					case Key.Up:
 						if (this.predefinedVarsPopup?.IsOpen == true)
 						{
-							this.predefinedVarsPopup.ItemListBox?.SelectPreviousItem();
-							isKeyForAssistentPopup = true;
+							this.predefinedVarsPopup.ItemListBox.SelectPreviousItem();
+							isKeyForAssistantPopup = true;
 							e.Handled = true;
 						}
 						break;
@@ -398,7 +397,7 @@ namespace CarinaStudio.AppSuite.Controls
 				this.predefinedVarsPopup?.Close();
 				this.showAssistanceMenuAction.Cancel();
 			}
-			else if (!isKeyForAssistentPopup)
+			else if (!isKeyForAssistantPopup)
 				this.showAssistanceMenuAction.Reschedule(50);
 		}
 
@@ -415,7 +414,7 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				if (this.predefinedVarsPopup?.IsOpen == true)
 				{
-					(this.predefinedVarsPopup.ItemListBox?.SelectedItem as ListBoxItem)?.Let(item =>
+					(this.predefinedVarsPopup.ItemListBox.SelectedItem as ListBoxItem)?.Let(item =>
 					{
 						if (item.DataContext is StringInterpolationVariable variable)
 							this.InputVariableName(variable.Name);
@@ -489,7 +488,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
 		/// Predefined list of <see cref="StringInterpolationVariable"/> for input assistance.
 		/// </summary>
-		public IList<StringInterpolationVariable> PredefinedVariables { get => this.predefinedVars; }
+		public IList<StringInterpolationVariable> PredefinedVariables => this.predefinedVars;
 
 
         // Setup popup of predefined variables.
@@ -509,16 +508,16 @@ namespace CarinaStudio.AppSuite.Controls
 						if (e.Item is ListBoxItem item && item.DataContext is StringInterpolationVariable variable)
 							this.InputVariableName(variable.Name);
 					};
-					it.Items = this.filteredPredefinedVarListBoxItems;
-					it.AddHandler(Control.PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
+					it.ItemsSource = this.filteredPredefinedVarListBoxItems;
+					it.AddHandler(PointerPressedEvent, (_, _) =>
 					{
 						SynchronizationContext.Current?.Post(this.Focus);
-					}), RoutingStrategies.Tunnel);
+					}, RoutingStrategies.Tunnel);
 				});
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;
 				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
 				menu.PlacementGravity = PopupGravity.BottomRight;
-				menu.PlacementMode = PlacementMode.AnchorAndGravity;
+				menu.Placement = PlacementMode.AnchorAndGravity;
 			});
 			rootPanel.Children.Insert(0, this.predefinedVarsPopup);
 			return this.predefinedVarsPopup;
@@ -531,7 +530,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
     /// <summary>
-	/// Predefined veriable of string interpolation for <see cref="StringInterpolationFormatTextBox"/>.
+	/// Predefined variable of string interpolation for <see cref="StringInterpolationFormatTextBox"/>.
 	/// </summary>
 	public class StringInterpolationVariable : AvaloniaObject
 	{
@@ -550,8 +549,8 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		public string DisplayName
 		{
-			get => this.GetValue<string>(DisplayNameProperty);
-			set => this.SetValue<string>(DisplayNameProperty, value);
+			get => this.GetValue(DisplayNameProperty);
+			set => this.SetValue(DisplayNameProperty, value);
 		}
 
 
@@ -560,8 +559,8 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		public string Name
 		{
-			get => this.GetValue<string>(NameProperty);
-			set => this.SetValue<string>(NameProperty, value);
+			get => this.GetValue(NameProperty);
+			set => this.SetValue(NameProperty, value);
 		}
 	}
 }

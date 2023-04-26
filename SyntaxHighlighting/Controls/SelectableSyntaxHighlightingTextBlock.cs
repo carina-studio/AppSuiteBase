@@ -78,11 +78,11 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
         {
             var property = e.Property;
             if (property == SyntaxHighlighter.DefinitionSetProperty)
-                this.RaisePropertyChanged(DefinitionSetProperty, new((SyntaxHighlightingDefinitionSet?)e.OldValue), new((SyntaxHighlightingDefinitionSet?)e.NewValue));
+                this.RaisePropertyChanged(DefinitionSetProperty, (SyntaxHighlightingDefinitionSet?)e.OldValue, (SyntaxHighlightingDefinitionSet?)e.NewValue);
             else if (property == SyntaxHighlighter.SelectionForegroundProperty)
-                this.RaisePropertyChanged(SelectionForegroundBrushProperty, new((IBrush?)e.OldValue), new((IBrush?)e.NewValue));
+                this.RaisePropertyChanged(SelectionForegroundBrushProperty, (IBrush?)e.OldValue, (IBrush?)e.NewValue);
         };
-        this.syntaxHighlighter.TextLayoutInvalidated += (_, e) =>
+        this.syntaxHighlighter.TextLayoutInvalidated += (_, _) =>
         {
             if (!this.isArranging && !this.isCreatingTextLayout && !this.isMeasuring)
                 this.InvalidateTextLayout();
@@ -205,7 +205,7 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
     /// <summary>
     /// Get <see cref="SyntaxHighlighter"/> used by the control.
     /// </summary>
-    protected SyntaxHighlighter SyntaxHighlighter { get => this.syntaxHighlighter; }
+    protected SyntaxHighlighter SyntaxHighlighter => this.syntaxHighlighter;
 
 
     /// <inheritdoc/>

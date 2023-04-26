@@ -168,8 +168,7 @@ namespace CarinaStudio.AppSuite.Controls
 						options |= RegexOptions.IgnoreCase;
 					else
 						options &= ~RegexOptions.IgnoreCase;
-					regex = new Regex(regex.ToString(), options);
-						
+					this.Object = new Regex(regex.ToString(), options);
 				}
 			});
 			this.GetObservable(SelectionEndProperty).Subscribe(_ =>
@@ -360,8 +359,8 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public bool IgnoreCase
 		{
-			get => this.GetValue<bool>(IgnoreCaseProperty);
-			set => this.SetValue<bool>(IgnoreCaseProperty, value);
+			get => this.GetValue(IgnoreCaseProperty);
+			set => this.SetValue(IgnoreCaseProperty, value);
 		}
 
 
@@ -418,8 +417,8 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <value></value>
 		public bool IsInputAssistanceEnabled
 		{
-			get => this.GetValue<bool>(IsInputAssistanceEnabledProperty);
-			set => this.SetValue<bool>(IsInputAssistanceEnabledProperty, value);
+			get => this.GetValue(IsInputAssistanceEnabledProperty);
+			set => this.SetValue(IsInputAssistanceEnabledProperty, value);
 		}
 
 
@@ -533,7 +532,7 @@ namespace CarinaStudio.AppSuite.Controls
 			// delete more characters
 			var isBackspace = e.Key == Key.Back;
 			var isDelete = e.Key == Key.Delete;
-			var isKeyForAssistentPopup = false;
+			var isKeyForAssistantPopup = false;
 			if (isBackspace || isDelete)
 			{
 				var selectionStart = this.SelectionStart;
@@ -612,20 +611,20 @@ namespace CarinaStudio.AppSuite.Controls
 					case Key.FnDownArrow:
 						if (this.escapedCharactersPopup?.IsOpen == true)
 						{
-							this.escapedCharactersPopup.ItemListBox?.SelectNextItem();
-							isKeyForAssistentPopup = true;
+							this.escapedCharactersPopup.ItemListBox.SelectNextItem();
+							isKeyForAssistantPopup = true;
 							e.Handled = true;
 						}
 						else if (this.groupingConstructsPopup?.IsOpen == true)
 						{
-							this.groupingConstructsPopup.ItemListBox?.SelectNextItem();
-							isKeyForAssistentPopup = true;
+							this.groupingConstructsPopup.ItemListBox.SelectNextItem();
+							isKeyForAssistantPopup = true;
 							e.Handled = true;
 						}
 						else if (this.predefinedGroupsPopup?.IsOpen == true)
 						{
-							this.predefinedGroupsPopup.ItemListBox?.SelectNextItem();
-							isKeyForAssistentPopup = true;
+							this.predefinedGroupsPopup.ItemListBox.SelectNextItem();
+							isKeyForAssistantPopup = true;
 							e.Handled = true;
 						}
 						break;
@@ -634,7 +633,7 @@ namespace CarinaStudio.AppSuite.Controls
 							|| this.groupingConstructsPopup?.IsOpen == true
 							|| this.predefinedGroupsPopup?.IsOpen == true)
 						{
-							isKeyForAssistentPopup = true;
+							isKeyForAssistantPopup = true;
 							e.Handled = true;
 						}
 						break;
@@ -642,20 +641,20 @@ namespace CarinaStudio.AppSuite.Controls
 					case Key.Up:
 						if (this.escapedCharactersPopup?.IsOpen == true)
 						{
-							this.escapedCharactersPopup.ItemListBox?.SelectPreviousItem();
-							isKeyForAssistentPopup = true;
+							this.escapedCharactersPopup.ItemListBox.SelectPreviousItem();
+							isKeyForAssistantPopup = true;
 							e.Handled = true;
 						}
 						else if (this.groupingConstructsPopup?.IsOpen == true)
 						{
-							this.groupingConstructsPopup.ItemListBox?.SelectPreviousItem();
-							isKeyForAssistentPopup = true;
+							this.groupingConstructsPopup.ItemListBox.SelectPreviousItem();
+							isKeyForAssistantPopup = true;
 							e.Handled = true;
 						}
 						else if (this.predefinedGroupsPopup?.IsOpen == true)
 						{
-							this.predefinedGroupsPopup.ItemListBox?.SelectPreviousItem();
-							isKeyForAssistentPopup = true;
+							this.predefinedGroupsPopup.ItemListBox.SelectPreviousItem();
+							isKeyForAssistantPopup = true;
 							e.Handled = true;
 						}
 						break;
@@ -673,7 +672,7 @@ namespace CarinaStudio.AppSuite.Controls
 				this.predefinedGroupsPopup?.Close();
 				this.showAssistanceMenuAction.Cancel();
 			}
-			else if (!isKeyForAssistentPopup)
+			else if (!isKeyForAssistantPopup)
 				this.showAssistanceMenuAction.Reschedule(50);
 		}
 
@@ -690,7 +689,7 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				if (this.escapedCharactersPopup?.IsOpen == true)
 				{
-					(this.escapedCharactersPopup.ItemListBox?.SelectedItem as ListBoxItem)?.Let(item =>
+					(this.escapedCharactersPopup.ItemListBox.SelectedItem as ListBoxItem)?.Let(item =>
 					{
 						if (item.DataContext is char c)
 							this.InputString(c.ToString());
@@ -699,7 +698,7 @@ namespace CarinaStudio.AppSuite.Controls
 				}
 				else if (this.groupingConstructsPopup?.IsOpen == true)
 				{
-					(this.groupingConstructsPopup.ItemListBox?.SelectedItem as ListBoxItem)?.Let(item =>
+					(this.groupingConstructsPopup.ItemListBox.SelectedItem as ListBoxItem)?.Let(item =>
 					{
 						if (item.DataContext is GroupingConstruct groupingConstruct)
 							this.InputGroupingConstruct(groupingConstruct);
@@ -708,7 +707,7 @@ namespace CarinaStudio.AppSuite.Controls
 				}
 				else if (this.predefinedGroupsPopup?.IsOpen == true)
 				{
-					(this.predefinedGroupsPopup.ItemListBox?.SelectedItem as ListBoxItem)?.Let(item =>
+					(this.predefinedGroupsPopup.ItemListBox.SelectedItem as ListBoxItem)?.Let(item =>
 					{
 						if (item.DataContext is RegexGroup group)
 							this.InputGroupName(group.Name);
@@ -799,7 +798,7 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <summary>
 		/// Predefined list of <see cref="RegexGroup"/> for input assistance.
 		/// </summary>
-		public IList<RegexGroup> PredefinedGroups { get => this.predefinedGroups; }
+		public IList<RegexGroup> PredefinedGroups => this.predefinedGroups;
 
 
 		// Setup menu for escaped characters.
@@ -819,7 +818,7 @@ namespace CarinaStudio.AppSuite.Controls
 						if (e.Item is ListBoxItem item && item.DataContext is char c)
 							this.InputString(c.ToString());
 					};
-					it.Items = new ListBoxItem[] {
+					it.ItemsSource = new[] {
 						this.CreateListBoxItem('d'),
 						this.CreateListBoxItem('s'),
 						this.CreateListBoxItem('w'),
@@ -829,15 +828,15 @@ namespace CarinaStudio.AppSuite.Controls
 						this.CreateListBoxItem('W'),
 						this.CreateListBoxItem('B'),
 					};
-					it.AddHandler(Control.PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
+					it.AddHandler(PointerPressedEvent, (_, _) =>
 					{
 						SynchronizationContext.Current?.Post(this.Focus);
-					}), RoutingStrategies.Tunnel);
+					}, RoutingStrategies.Tunnel);
 				});
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;
 				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
 				menu.PlacementGravity = PopupGravity.BottomRight;
-				menu.PlacementMode = PlacementMode.AnchorAndGravity;
+				menu.Placement = PlacementMode.AnchorAndGravity;
 			});
 			rootPanel.Children.Insert(0, this.escapedCharactersPopup);
 			return this.escapedCharactersPopup;
@@ -861,7 +860,7 @@ namespace CarinaStudio.AppSuite.Controls
 						if (e.Item is ListBoxItem item && item.DataContext is GroupingConstruct groupingConstruct)
 							this.InputGroupingConstruct(groupingConstruct);
 					};
-					it.Items = new ListBoxItem[] {
+					it.ItemsSource = new[] {
 						this.CreateListBoxItem(GroupingConstruct.NamedGroup),
 						this.CreateListBoxItem(GroupingConstruct.NoncapturingGroup),
 						this.CreateListBoxItem(GroupingConstruct.ZeroWidthPositiveLookaheadAssertion),
@@ -869,15 +868,15 @@ namespace CarinaStudio.AppSuite.Controls
 						this.CreateListBoxItem(GroupingConstruct.ZeroWidthPositiveLookbehindAssertion),
 						this.CreateListBoxItem(GroupingConstruct.ZeroWidthNegativeLookbehindAssertion),
 					};
-					it.AddHandler(Control.PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
+					it.AddHandler(PointerPressedEvent, (_, _) =>
 					{
 						SynchronizationContext.Current?.Post(this.Focus);
-					}), RoutingStrategies.Tunnel);
+					}, RoutingStrategies.Tunnel);
 				});
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;
 				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
 				menu.PlacementGravity = PopupGravity.BottomRight;
-				menu.PlacementMode = PlacementMode.AnchorAndGravity;
+				menu.Placement = PlacementMode.AnchorAndGravity;
 			});
 			rootPanel.Children.Insert(0, this.groupingConstructsPopup);
 			return this.groupingConstructsPopup;
@@ -901,16 +900,16 @@ namespace CarinaStudio.AppSuite.Controls
 						if (e.Item is ListBoxItem item && item.DataContext is RegexGroup group)
 							this.InputGroupName(group.Name);
 					};
-					it.Items = this.filteredPredefinedGroupListBoxItems;
-					it.AddHandler(Control.PointerPressedEvent, new EventHandler<PointerPressedEventArgs>((_, e) =>
+					it.ItemsSource = this.filteredPredefinedGroupListBoxItems;
+					it.AddHandler(PointerPressedEvent, (_, _) =>
 					{
 						SynchronizationContext.Current?.Post(this.Focus);
-					}), RoutingStrategies.Tunnel);
+					}, RoutingStrategies.Tunnel);
 				});
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;
 				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
 				menu.PlacementGravity = PopupGravity.BottomRight;
-				menu.PlacementMode = PlacementMode.AnchorAndGravity;
+				menu.Placement = PlacementMode.AnchorAndGravity;
 			});
 			rootPanel.Children.Insert(0, this.predefinedGroupsPopup);
 			return this.predefinedGroupsPopup;
@@ -954,8 +953,8 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		public string DisplayName
 		{
-			get => this.GetValue<string>(DisplayNameProperty);
-			set => this.SetValue<string>(DisplayNameProperty, value);
+			get => this.GetValue(DisplayNameProperty);
+			set => this.SetValue(DisplayNameProperty, value);
 		}
 
 
@@ -964,8 +963,8 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		public string Name
 		{
-			get => this.GetValue<string>(NameProperty);
-			set => this.SetValue<string>(NameProperty, value);
+			get => this.GetValue(NameProperty);
+			set => this.SetValue(NameProperty, value);
 		}
 	}
 }

@@ -66,9 +66,9 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         {
             var property = e.Property;
             if (property == SyntaxHighlighter.DefinitionSetProperty)
-                this.RaisePropertyChanged(DefinitionSetProperty, new((SyntaxHighlightingDefinitionSet?)e.OldValue), new((SyntaxHighlightingDefinitionSet?)e.NewValue));
+                this.RaisePropertyChanged(DefinitionSetProperty, (SyntaxHighlightingDefinitionSet?)e.OldValue, (SyntaxHighlightingDefinitionSet?)e.NewValue);
         };
-        this.syntaxHighlighter.TextLayoutInvalidated += (_, e) =>
+        this.syntaxHighlighter.TextLayoutInvalidated += (_, _) =>
         {
             if (!this.isArranging && !this.isCreatingTextLayout && !this.isMeasuring)
                 this.InvalidateTextLayout();
@@ -154,5 +154,5 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
     /// <summary>
     /// Get <see cref="SyntaxHighlighter"/> used by the control.
     /// </summary>
-    protected SyntaxHighlighter SyntaxHighlighter { get => this.syntaxHighlighter; }
+    protected SyntaxHighlighter SyntaxHighlighter => this.syntaxHighlighter;
 }

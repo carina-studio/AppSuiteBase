@@ -1,4 +1,3 @@
-using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
 using CarinaStudio.Threading;
 using System;
@@ -39,27 +38,31 @@ public static class SyntaxHighlighting
 
         // load base strings
         var baseUri = new Uri($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}");
-        app.AddCustomResource(new ResourceInclude()
+        app.AddCustomResource(new ResourceInclude(baseUri)
         {
-            Source = new(baseUri, "/Strings/Default.axaml")
+            Source = new("Strings/Default.axaml", UriKind.Relative)
         });
 
         // load base styles
         app.AddCustomStyle(new StyleInclude(baseUri)
         {
-            Source = new(baseUri, "/Themes/Base.axaml")
+            Source = new("Themes/Base.axaml", UriKind.Relative)
         });
 
         // load strings
-        app.LoadingStrings += (IAppSuiteApplication? app, CultureInfo cultureInfo) => UpdateStrings();
+#pragma warning disable CS8622
+        app.LoadingStrings += (_, _) => UpdateStrings();
+#pragma warning restore CS8622
         UpdateStrings();
 
         // load theme resources
+#pragma warning disable CS8622
         app.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(app.EffectiveThemeMode))
                 UpdateThemeResources();
         };
+#pragma warning restore CS8622
         UpdateThemeResources();
 
         // complete
@@ -81,8 +84,8 @@ public static class SyntaxHighlighting
             if (name.StartsWith("zh-"))
             {
                 if (name.EndsWith("TW"))
-                    return new ResourceInclude() { Source = new(baseUri, "/Strings/zh-TW.axaml") };
-                return new ResourceInclude() { Source = new(baseUri, "/Strings/zh-CN.axaml") };
+                    return new ResourceInclude(baseUri) { Source = new("Strings/zh-TW.axaml", UriKind.Relative) };
+                return new ResourceInclude(baseUri) { Source = new("Strings/zh-CN.axaml", UriKind.Relative) };
             }
             return null;
         });
@@ -102,8 +105,8 @@ public static class SyntaxHighlighting
         resourcesToken = resourcesToken.DisposeAndReturnNull();
         resourcesToken = app.AddCustomResource(themeMode switch
         {
-            ThemeMode.Light => new ResourceInclude() { Source = new(baseUri, "/Themes/Light.axaml") },
-            _ => new ResourceInclude() { Source = new(baseUri, "/Themes/Dark.axaml") },
+            ThemeMode.Light => new ResourceInclude(baseUri) { Source = new("Themes/Light.axaml", UriKind.Relative) },
+            _ => new ResourceInclude(baseUri) { Source = new("Themes/Dark.axaml", UriKind.Relative) },
         });
         resourcesThemeMode = themeMode;
     }
