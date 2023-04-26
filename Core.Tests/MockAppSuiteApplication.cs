@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Styling;
+using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
@@ -20,7 +21,7 @@ namespace CarinaStudio.AppSuite
     /// </summary>
     public class MockAppSuiteApplication : IAppSuiteApplication
     {
-        // Empty implementation of IDIsposable.
+        // Empty implementation of IDisposable.
         class EmptyDisposable : IDisposable
         {
             public void Dispose()
@@ -291,7 +292,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public virtual CarinaStudio.Controls.Window? LatestActiveMainWindow { get; }
+        public virtual MainWindow? LatestActiveMainWindow { get; }
 
 
         /// <inheritdoc/>
@@ -305,7 +306,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public virtual void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, CarinaStudio.Controls.Window? activeMainWindow)
+        public virtual void LayoutMainWindows(Avalonia.Platform.Screen screen, Controls.MultiWindowLayout layout, MainWindow? activeMainWindow)
         { }
 
 
@@ -350,7 +351,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get list of main windows.
         /// </summary>
-        public IList<CarinaStudio.Controls.Window> MainWindows { get; } = Array.Empty<CarinaStudio.Controls.Window>();
+        public IList<MainWindow> MainWindows { get; } = Array.Empty<MainWindow>();
 
 
         /// <summary>
@@ -434,7 +435,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public Task<bool> RestartMainWindowAsync(CarinaStudio.Controls.Window mainWindow) => 
+        public Task<bool> RestartMainWindowAsync(MainWindow mainWindow) => 
             Task.FromResult(false);
 
 
@@ -480,7 +481,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public Task<bool> ShowMainWindowAsync(Action<CarinaStudio.Controls.Window>? windowCreatedAction = null) => 
+        public Task<bool> ShowMainWindowAsync(Action<MainWindow>? windowCreatedAction = null) => 
             Task.FromResult(false);
 
 
