@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.LogicalTree;
+using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
 using CarinaStudio.Controls;
 
@@ -21,8 +23,7 @@ public class InputAssistancePopup : Popup
         {
             it.Background = Brushes.Transparent;
 			it.BorderThickness = new Thickness(0);
-            it.Bind(Control.MaxHeightProperty, this.GetResourceObservable("Double/InputAssistancePopup.Content.MaxHeight"));
-            it.VirtualizationMode = ItemVirtualizationMode.None;
+            it.Bind(MaxHeightProperty, this.GetResourceObservable("Double/InputAssistancePopup.Content.MaxHeight"));
         });
         this.Child = new Border().Also(it =>
         {
@@ -33,7 +34,7 @@ public class InputAssistancePopup : Popup
             it.Bind(Border.CornerRadiusProperty, this.GetResourceObservable("OverlayCornerRadius"));
             it.Bind(Border.PaddingProperty, this.GetResourceObservable("Thickness/InputAssistancePopup.Padding"));
         });
-        this.Opened += (_ , e) => this.ItemListBox.SelectFirstItem();
+        this.Opened += (_ , _) => this.ItemListBox.SelectFirstItem();
     }
 
 
@@ -41,4 +42,13 @@ public class InputAssistancePopup : Popup
     /// ListBox for items in popup.
     /// </summary>
     public ListBox ItemListBox { get; }
+
+
+    /// <inheritdoc/>
+    protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
+    {
+        if (this.TryGetResource("ItemsPanelTemplate/StackPanel", out ItemsPanelTemplate? template))
+            this.ItemListBox.ItemsPanel = template;
+        base.OnAttachedToLogicalTree(e);
+    }
 }

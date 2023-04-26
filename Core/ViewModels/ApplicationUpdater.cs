@@ -3,6 +3,7 @@ using CarinaStudio.AutoUpdate;
 using CarinaStudio.AutoUpdate.Installers;
 using CarinaStudio.AutoUpdate.Resolvers;
 using CarinaStudio.Configuration;
+using CarinaStudio.Controls;
 using CarinaStudio.IO;
 using CarinaStudio.Net;
 using CarinaStudio.Threading;
@@ -395,8 +396,8 @@ namespace CarinaStudio.AppSuite.ViewModels
 					var accentColor = Colors.Transparent;
 					(this.Application as AppSuiteApplication)?.Let(app =>
 					{
-						if (app.Resources.TryGetResource("SystemAccentColor", out var res) && res is Color color)
-							accentColor = color;
+						if (app.TryGetResource("SystemAccentColor", out Color? color))
+							accentColor = color.Value;
 					});
 
 					// get screen scale factor

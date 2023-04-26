@@ -16,7 +16,7 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// Application info dialog.
 /// </summary>
-partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
+class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 {
 	// Converter to convert from priority to string.
 	public static readonly IValueConverter PriorityConverter = new AppSuite.Converters.EnumConverter(AppSuiteApplication.CurrentOrNull, typeof(ExternalDependencyPriority));
@@ -233,7 +233,7 @@ partial class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 
 
 	/// <inheritdoc/>
-	protected override void OnClosing(CancelEventArgs e)
+	protected override void OnClosing(WindowClosingEventArgs e)
 	{
 		if (!this.GetValue(CanCloseProperty))
 			e.Cancel = true;

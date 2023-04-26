@@ -18,7 +18,7 @@ namespace CarinaStudio.AppSuite.Controls
 			window.VerifyAccess();
 			window.Activate();
 			if (Platform.IsWindows)
-				Win32.SetForegroundWindow(window.PlatformImpl!.Handle.Handle);
+				Win32.SetForegroundWindow((window.TryGetPlatformHandle()?.Handle).GetValueOrDefault());
 		}
 
 
@@ -37,8 +37,8 @@ namespace CarinaStudio.AppSuite.Controls
 				return new Thickness(0, 75 / scaling, 0, 0); // Ubuntu
 			if (Platform.IsWindows)
             {
-				if (Win32.GetWindowRect(window.PlatformImpl.Handle.Handle, out var rect))
-				{
+	            if (Win32.GetWindowRect((window.TryGetPlatformHandle()?.Handle).GetValueOrDefault(), out var rect))
+	            {
 					var clientSize = window.ClientSize;
 					var windowWidth = (rect.right - rect.left) / scaling;
 					var windowHeight = (rect.bottom - rect.top) / scaling;

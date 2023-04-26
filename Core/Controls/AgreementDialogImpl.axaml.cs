@@ -7,14 +7,13 @@ using CarinaStudio.Collections;
 using CarinaStudio.Threading;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace CarinaStudio.AppSuite.Controls;
 
 /// <summary>
 /// Dialog to show document of agreement.
 /// </summary>
-partial class AgreementDialogImpl : Dialog
+class AgreementDialogImpl : Dialog
 {
     /// <summary>
     /// Converter to convert from application culture to string.
@@ -108,7 +107,7 @@ partial class AgreementDialogImpl : Dialog
 
 
     // Called when closing.
-    protected override void OnClosing(CancelEventArgs e)
+    protected override void OnClosing(WindowClosingEventArgs e)
     {
         if (!this.hasResult && !this.IsAgreedBefore)
             e.Cancel = true;

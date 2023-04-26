@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -152,7 +153,8 @@ public static class DialogExtensions
             var parent = control.Parent;
             while (parent != null && parent != scrollViewer)
             {
-                offsetY += parent.Bounds.Top;
+                if (parent is Visual visual)
+                    offsetY += visual.Bounds.Top;
                 parent = parent.Parent;
             }
             if (parent != scrollViewer)

@@ -1032,14 +1032,14 @@ namespace CarinaStudio.AppSuite
                 var comboBox = (Avalonia.Controls.ComboBox)s.AsNonNull();
                 if (!comboBox.IsDropDownOpen)
                 {
-                    comboBox.Parent?.Let(parent =>
+                    (comboBox.Parent as Interactive)?.Let(parent =>
                         parent.RaiseEvent(e));
                     e.Handled = true;
                 }
             }, RoutingStrategies.Tunnel);
             Avalonia.Input.InputElement.PointerWheelChangedEvent.AddClassHandler(typeof(Avalonia.Controls.NumericUpDown), (s, e) =>
             {
-                ((Avalonia.Controls.NumericUpDown)s.AsNonNull()).Parent?.Let(parent =>
+                (((Avalonia.Controls.NumericUpDown)s.AsNonNull()).Parent as Interactive)?.Let(parent =>
                     parent.RaiseEvent(e));
                 e.Handled = true;
             }, RoutingStrategies.Tunnel);
@@ -1735,7 +1735,8 @@ namespace CarinaStudio.AppSuite
         {
             try
             {
-                return new ResourceInclude().Also(it =>
+                var resources = new ResourceInclude(new Uri($"{uri.Scheme}://{uri.Host}"));
+                return resources.Also(it =>
                 {
                     it.Source = uri;
                     var resDictionary = it.Loaded;  // trigger error if resource not found
@@ -2428,14 +2429,7 @@ namespace CarinaStudio.AppSuite
 
             // create base theme
             var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
-            this.baseTheme = new Avalonia.Themes.Fluent.FluentTheme(new Uri("avares://Avalonia.Themes.Fluent/"))
-            {
-                Mode = this.EffectiveThemeMode switch
-                {
-                    ThemeMode.Light => Avalonia.Themes.Fluent.FluentThemeMode.Light,
-                    _ => Avalonia.Themes.Fluent.FluentThemeMode.Dark,
-                }
-            };
+            this.baseTheme = new();
             this.Styles.Add(this.baseTheme);
             if (time > 0)
                 this.Logger.LogTrace("[Performance] Took {duration} ms to create base theme", this.stopWatch.ElapsedMilliseconds - time);
@@ -2476,9 +2470,9 @@ namespace CarinaStudio.AppSuite
                 this.UpdateSplashWindowMessage(this.GetStringNonNull("AppSuiteApplication.LoadingTheme"));
                 await this.splashWindow!.WaitForRenderingAsync();
             }
-            this.Resources.MergedDictionaries.Add(new ResourceInclude()
+            this.Resources.MergedDictionaries.Add(new ResourceInclude(new Uri("avares://CarinaStudio.AppSuite.Core"))
             {
-                Source = new Uri("avares://CarinaStudio.AppSuite.Core/Resources/Icons.axaml")
+                Source = new Uri("Resources/Icons.axaml", UriKind.Relative)
             });
 
             // start initializing network manager
@@ -3677,9 +3671,9 @@ namespace CarinaStudio.AppSuite
                 SuggestedFileName = $"{this.Name}-{DateTime.Now:yyyyMMdd-HHmmss}.dmw",
             })).Let(it =>
             {
-                if (it is null || !it.TryGetUri(out var uri))
+                if (it is null)
                     return null;
-                var path = uri.LocalPath;
+                var path = it.TryGetLocalPath();
                 if (!PathEqualityComparer.Default.Equals(Path.GetExtension(path), ".dmw"))
                     path += ".dmw";
                 return path;
@@ -3971,15 +3965,11 @@ namespace CarinaStudio.AppSuite
                 || this.isCompactStyles != useCompactUI)
             {
                 // setup base theme
-                (themeMode switch
+                this.RequestedThemeVariant = themeMode switch
                 {
-                    ThemeMode.Light => Avalonia.Themes.Fluent.FluentThemeMode.Light,
-                    _ => Avalonia.Themes.Fluent.FluentThemeMode.Dark,
-                }).Let(it =>
-                {
-                    if (this.baseTheme != null && this.baseTheme.Mode != it)
-                        this.baseTheme.Mode = it;
-                });
+                    ThemeMode.Light => ThemeVariant.Light,
+                    _ => ThemeVariant.Dark,
+                };
                 if (time > 0)
                 {
                     var currentTime = this.stopWatch.ElapsedMilliseconds;
@@ -4064,7 +4054,7 @@ namespace CarinaStudio.AppSuite
             this.DefineExtraStyles();
 
             // update accent color
-            if (this.Styles.TryGetResource("Color/Accent", out var res) && res is Color accentColor)
+            if (this.Styles.TryGetResource("Color/Accent", out Color? color))
             {
                 // create resources
                 if (this.accentColorResources == null)
@@ -4074,6 +4064,7 @@ namespace CarinaStudio.AppSuite
                 }
 
                 // accent colors
+                var accentColor = color.Value;
                 var gammaLight1 = 0.8;
                 var gammaLight2 = 0.65;
                 var gammaLight3 = 0.5;

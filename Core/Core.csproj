@@ -15,6 +15,8 @@
 		<Description>Base libraries for Carina Studio Application Suite.</Description>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/carina-studio/AppSuiteBase/</PackageProjectUrl>
+		<AvaloniaVersion>11.0.0-preview7</AvaloniaVersion>
+		<AvaloniaNameGeneratorFilterByNamespace>Dummy</AvaloniaNameGeneratorFilterByNamespace> <!-- Prevent generating InitializeComponents() and fields -->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -62,12 +64,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Avalonia" Version="11.0.0-preview4" />
-		<PackageReference Include="Avalonia.Desktop" Version="11.0.0-preview4" />
-		<PackageReference Include="Avalonia.Diagnostics" Version="11.0.0-preview4" />
-		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview4" />
-		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.0-preview4" />
-		<PackageReference Include="CarinaStudio.AppBase.Application.Avalonia" Version="2.0.19.425-preview" />
+		<PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
+		<PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
+		<PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
+		<PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
+		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="$(AvaloniaVersion)" />
+		<PackageReference Include="CarinaStudio.AppBase.Application.Avalonia" Version="2.0.19.425-previewA11P7" />
 		<PackageReference Include="CarinaStudio.AppBase.AutoUpdate" Version="2.0.19.425-preview" />
 		<PackageReference Include="CarinaStudio.AppBase.MacOS" Version="2.0.19.425-preview" />
 		<PackageReference Include="JetBrains.Profiler.SelfApi" Version="2.4.3-preview1" />

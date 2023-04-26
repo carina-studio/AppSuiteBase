@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.LogicalTree;
@@ -41,7 +40,7 @@ namespace CarinaStudio.AppSuite.Controls
 			this.GetObservable(ConverterProperty).Subscribe(_ => this.UpdateConverter());
 			this.GetObservable(EnumTypeProperty).Subscribe(type =>
 			{
-				this.Items = type is not null ? Enum.GetValues(type) : null;
+				this.ItemsSource = type is not null ? Enum.GetValues(type) : null;
 				this.UpdateConverter();
 				this.updateItemTemplateAction.Schedule();
 			});
@@ -121,7 +120,7 @@ namespace CarinaStudio.AppSuite.Controls
 			var type = this.EnumType;
 			this.ItemTemplate = (type == null)
 				? null
-				: new DataTemplate()
+				: new DataTemplate
 				{
 					Content = new Func<IServiceProvider, object>(_ =>
 					{
@@ -130,7 +129,7 @@ namespace CarinaStudio.AppSuite.Controls
 							it.Bind(TextBlock.TextProperty, new Binding { Converter = this.enumConverter });
 							it.TextTrimming = Avalonia.Media.TextTrimming.CharacterEllipsis;
 						});
-						return new ControlTemplateResult(textBlock, this.FindNameScope().AsNonNull());
+						return new Func<IServiceProvider?, object?>(_ => textBlock);
 					}),
 					DataType = type,
 				};

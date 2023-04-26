@@ -41,7 +41,7 @@
 					<TextBlock Classes="ToolBar_TextBlock" Grid.Column="1" IsVisible="{Binding $self.Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Text="{Binding $parent[Window].Message}" TextWrapping="Wrap" VerticalAlignment="Center"/>
 
 					<!-- Culture -->
-					<ComboBox Name="cultureComboBox" Classes="ToolBar_ComboBox" Grid.Column="2" Items="{Binding $parent[Window].Cultures}" SelectedItem="{Binding $parent[Window].Culture, Mode=TwoWay}" VerticalAlignment="Bottom">
+					<ComboBox Name="cultureComboBox" Classes="ToolBar_ComboBox" Grid.Column="2" ItemsSource="{Binding $parent[Window].Cultures}" SelectedItem="{Binding $parent[Window].Culture, Mode=TwoWay}" VerticalAlignment="Bottom">
 						<ComboBox.ItemTemplate>
 							<DataTemplate>
 								<TextBlock Text="{Binding Converter={x:Static controls:AgreementDialogImpl.CultureConverter}}"/>

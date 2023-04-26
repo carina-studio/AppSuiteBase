@@ -6,6 +6,7 @@ using Avalonia.VisualTree;
 using CarinaStudio.Animation;
 using CarinaStudio.Threading;
 using System;
+using Avalonia.Controls.Presenters;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -15,6 +16,7 @@ namespace CarinaStudio.AppSuite.Controls
     public class ToolBarScrollViewer : ScrollViewer, IStyleable
     {
         // Fields.
+        ScrollContentPresenter? contentPresenter;
         readonly ScheduledAction correctOffsetAction;
         VectorAnimator? offsetAnimator;
         Control? scrollDownButton;
@@ -54,14 +56,29 @@ namespace CarinaStudio.AppSuite.Controls
                 }
             });
             this.GetObservable(ExtentProperty).Subscribe(_ => this.correctOffsetAction.Schedule());
+            this.GetObservable(HorizontalScrollBarVisibilityProperty).Subscribe(visibility =>
+            {
+                if (this.contentPresenter is not null)
+                    this.contentPresenter.CanHorizontallyScroll = visibility == ScrollBarVisibility.Visible;
+            });
+            this.GetObservable(VerticalScrollBarVisibilityProperty).Subscribe(visibility =>
+            {
+                if (this.contentPresenter is not null)
+                    this.contentPresenter.CanVerticallyScroll = visibility == ScrollBarVisibility.Visible;
+            });
             this.GetObservable(ViewportProperty).Subscribe(_ => this.correctOffsetAction.Schedule());
         }
 
 
-         /// <inheritdoc/>
+        /// <inheritdoc/>
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
         {
             base.OnApplyTemplate(e);
+            this.contentPresenter = e.NameScope.Find<ScrollContentPresenter>("PART_ContentPresenter")?.Also(it =>
+            {
+                it.CanHorizontallyScroll = this.HorizontalScrollBarVisibility == ScrollBarVisibility.Visible;
+                it.CanVerticallyScroll = this.VerticalScrollBarVisibility == ScrollBarVisibility.Visible;
+            });
             this.scrollDownButton = e.NameScope.Find<Control>("PART_ScrollDownButton");
             this.scrollLeftButton = e.NameScope.Find<Control>("PART_ScrollLeftButton");
             this.scrollRightButton = e.NameScope.Find<Control>("PART_ScrollRightButton");

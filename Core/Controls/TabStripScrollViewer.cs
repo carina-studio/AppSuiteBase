@@ -1,5 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
 using CarinaStudio.Animation;
 using CarinaStudio.Threading;
 using System;
@@ -9,6 +11,7 @@ namespace CarinaStudio.AppSuite.Controls
     internal class TabStripScrollViewer : ScrollViewer
     {
         // Fields.
+        ScrollContentPresenter? contentPresenter;
         readonly ScheduledAction correctOffsetAction;
         VectorAnimator? offsetAnimator;
 
@@ -32,7 +35,29 @@ namespace CarinaStudio.AppSuite.Controls
                 }
             });
             this.GetObservable(ExtentProperty).Subscribe(_ => this.correctOffsetAction.Schedule());
+            this.GetObservable(HorizontalScrollBarVisibilityProperty).Subscribe(visibility =>
+            {
+                if (this.contentPresenter is not null)
+                    this.contentPresenter.CanHorizontallyScroll = visibility == ScrollBarVisibility.Visible;
+            });
+            this.GetObservable(VerticalScrollBarVisibilityProperty).Subscribe(visibility =>
+            {
+                if (this.contentPresenter is not null)
+                    this.contentPresenter.CanVerticallyScroll = visibility == ScrollBarVisibility.Visible;
+            });
             this.GetObservable(ViewportProperty).Subscribe(_ => this.correctOffsetAction.Schedule());
+        }
+        
+        
+        /// <inheritdoc/>
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+        {
+            base.OnApplyTemplate(e);
+            this.contentPresenter = e.NameScope.Find<ScrollContentPresenter>("PART_ContentPresenter")?.Also(it =>
+            {
+                it.CanHorizontallyScroll = this.HorizontalScrollBarVisibility == ScrollBarVisibility.Visible;
+                it.CanVerticallyScroll = this.VerticalScrollBarVisibility == ScrollBarVisibility.Visible;
+            });
         }
 
 

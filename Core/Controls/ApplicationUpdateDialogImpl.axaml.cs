@@ -14,7 +14,7 @@ namespace CarinaStudio.AppSuite.Controls
 	/// <summary>
 	/// Dialog for application update.
 	/// </summary>
-	partial class ApplicationUpdateDialogImpl : Dialog<IAppSuiteApplication>
+	class ApplicationUpdateDialogImpl : Dialog<IAppSuiteApplication>
 	{
 		// Static fields.
 		public static readonly SettingKey<DateTime> LatestNotifiedTimeKey = new("LatestNotifiedTime", DateTime.MinValue);
@@ -76,7 +76,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Called when closing.
-		protected override void OnClosing(CancelEventArgs e)
+		protected override void OnClosing(WindowClosingEventArgs e)
 		{
 			if (this.attachedAppUpdater != null)
 			{

@@ -24,14 +24,14 @@ public class Image : Avalonia.Controls.Image
             {
                 this.attachedSource.PropertyChanged -= this.OnSourcePropertyChanged;
                 if (this.attachedSource is DrawingImage drawingImage)
-                    drawingImage.Drawing.PropertyChanged -= this.OnSourcePropertyChanged;
+                    drawingImage.Drawing?.Let(it => it.PropertyChanged -= this.OnSourcePropertyChanged);
             }
             this.attachedSource = (source as AvaloniaObject);
             if (this.attachedSource != null && this.isAttachedToVisualTree)
             {
                 this.attachedSource.PropertyChanged += this.OnSourcePropertyChanged;
                 if (this.attachedSource is DrawingImage drawingImage)
-                    drawingImage.Drawing.PropertyChanged += this.OnSourcePropertyChanged;
+                    drawingImage.Drawing?.Let(it => it.PropertyChanged += this.OnSourcePropertyChanged);
             }
         });
     }
@@ -46,7 +46,7 @@ public class Image : Avalonia.Controls.Image
         {
             this.attachedSource.PropertyChanged += this.OnSourcePropertyChanged;
             if (this.attachedSource is DrawingImage drawingImage)
-                drawingImage.Drawing.PropertyChanged += this.OnSourcePropertyChanged;
+                drawingImage.Drawing?.Let(it => it.PropertyChanged += this.OnSourcePropertyChanged);
         }
     }
 
@@ -59,7 +59,7 @@ public class Image : Avalonia.Controls.Image
         {
             this.attachedSource.PropertyChanged -= this.OnSourcePropertyChanged;
             if (this.attachedSource is DrawingImage drawingImage)
-                drawingImage.Drawing.PropertyChanged -= this.OnSourcePropertyChanged;
+                drawingImage.Drawing?.Let(it => it.PropertyChanged -= this.OnSourcePropertyChanged);
         }
         base.OnDetachedFromVisualTree(e);
     }

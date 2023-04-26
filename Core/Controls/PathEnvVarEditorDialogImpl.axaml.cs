@@ -1,14 +1,13 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Avalonia.Platform.Storage.FileIO;
+using Avalonia.Platform.Storage;
 using CarinaStudio.AppSuite.IO;
 using CarinaStudio.Collections;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Input;
 
@@ -17,7 +16,7 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// Dialog to path environment variable.
 /// </summary>
-partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
+class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 {
 	// Static fields.
 	static readonly StyledProperty<bool> IsRefreshingPathsProperty = AvaloniaProperty.Register<PathEnvVarEditorDialogImpl, bool>("IsRefreshingPaths");
@@ -67,12 +66,7 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		var path = (await this.StorageProvider.OpenFolderPickerAsync(new()
 		{
 			Title = this.Application.GetString("SystemPathEditorDialog.AddPath"),
-		})).Let(it => 
-		{
-			if (it == null || it.Count == 0 || !it[0].TryGetUri(out var uri))
-				return null;
-			return uri.LocalPath;
-		});
+		})).Let(it => it.Count == 1 ? it[0].TryGetLocalPath() : null);
 		if (string.IsNullOrEmpty(path) || this.IsClosed)
 			return;
 		var index = this.paths.IndexOf(path);
@@ -99,16 +93,12 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		{
 			return;
 		}
+		var storage = await this.StorageProvider.TryGetFolderFromPathAsync(path);
 		var newPath = (await this.StorageProvider.OpenFolderPickerAsync(new()
 		{
-			SuggestedStartLocation = new BclStorageFolder(path),
+			SuggestedStartLocation = storage,
 			Title = this.Application.GetString("SystemPathEditorDialog.EditPath"),
-		})).Let(it => 
-		{
-			if (it == null || it.Count == 0 || !it[0].TryGetUri(out var uri))
-				return null;
-			return uri.LocalPath;
-		});
+		})).Let(it => it.Count == 1 ? it[0].TryGetLocalPath() : null);
 		if (string.IsNullOrEmpty(newPath)
 			|| this.IsClosed 
 			|| CarinaStudio.IO.PathEqualityComparer.Default.Equals(path, newPath))
@@ -132,7 +122,7 @@ partial class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 
 
 	/// <inheritdoc/>
-	protected override void OnClosing(CancelEventArgs e)
+	protected override void OnClosing(WindowClosingEventArgs e)
 	{
 		if (this.GetValue<bool>(IsSavingPathsProperty))
 			e.Cancel = true;

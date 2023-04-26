@@ -1,16 +1,11 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:sys="using:System"
-		xmlns:abControls="using:CarinaStudio.Controls"
-		xmlns:abConverters="using:CarinaStudio.Data.Converters"
+        xmlns:abControls="using:CarinaStudio.Controls"
 		xmlns:aConverters="using:Avalonia.Data.Converters"
-		xmlns:appSuite="using:CarinaStudio.AppSuite"
-		xmlns:ca="using:ColorTextBlock.Avalonia"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
 		xmlns:input="using:CarinaStudio.AppSuite.Input"
-		xmlns:md="using:Markdown.Avalonia"
-		xmlns:mdControls="using:Markdown.Avalonia.Controls">
+		xmlns:md="using:Markdown.Avalonia">
 
 	<!-- AddTabItemButton -->
 	<Style Selector="Button.AddTabItem">
@@ -292,12 +287,9 @@
 									CornerRadius="{DynamicResource OverlayCornerRadius}">
 								<ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
 											VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
-								<ItemsPresenter Name="PART_ItemsPresenter"
-												Items="{TemplateBinding Items}"
-												Margin="{DynamicResource ComboBoxDropdownContentMargin}"
-												ItemsPanel="{TemplateBinding ItemsPanel}"
-												ItemTemplate="{TemplateBinding ItemTemplate}"
-												VirtualizationMode="{TemplateBinding VirtualizationMode}" />
+									<ItemsPresenter Name="PART_ItemsPresenter"
+									                Margin="{DynamicResource ComboBoxDropdownContentMargin}"
+									                ItemsPanel="{TemplateBinding ItemsPanel}" />
 								</ScrollViewer>
 							</Border>
 						</Popup>
@@ -1922,8 +1914,6 @@
 			<ControlTemplate>
 				<Panel Background="{TemplateBinding Background}">
 					<ScrollContentPresenter Name="PART_ContentPresenter"
-                        CanHorizontallyScroll="{TemplateBinding CanHorizontallyScroll}"
-                        CanVerticallyScroll="{TemplateBinding CanVerticallyScroll}"
                         Content="{TemplateBinding Content}"
                         Extent="{TemplateBinding Extent, Mode=TwoWay}"
                         Margin="{TemplateBinding Padding}"
@@ -1931,8 +1921,8 @@
                         Viewport="{TemplateBinding Viewport, Mode=TwoWay}">
 						<ScrollContentPresenter.GestureRecognizers>
 							<ScrollGestureRecognizer
-							  CanHorizontallyScroll="{TemplateBinding CanHorizontallyScroll}"
-							  CanVerticallyScroll="{TemplateBinding CanVerticallyScroll}" />
+							  CanHorizontallyScroll="{Binding #PART_ContentPresenter.CanHorizontallyScroll}"
+							  CanVerticallyScroll="{Binding #PART_ContentPresenter.CanVerticallyScroll}" />
 						</ScrollContentPresenter.GestureRecognizers>
 					</ScrollContentPresenter>
 					<RepeatButton
@@ -1992,10 +1982,8 @@
 								<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" Background="{x:Null}">
 									<Border Padding="{DynamicResource Thickness/TabControl.TabStrip.Padding}">
 										<ItemsPresenter Name="PART_ItemsPresenter"
-													Items="{TemplateBinding Items}"
-													ItemsPanel="{TemplateBinding ItemsPanel}"
-													ItemTemplate="{TemplateBinding ItemTemplate}"
-													Margin="0"/>
+										                ItemsPanel="{TemplateBinding ItemsPanel}"
+										                DockPanel.Dock="{TemplateBinding TabStripPlacement}" />
 									</Border>
 								</controls:TabStripScrollViewer>
 							</Panel>
@@ -2184,11 +2172,9 @@
 						Margin="{TemplateBinding BorderThickness}">
 						<Grid ColumnDefinitions="Auto,*,Auto" >
 							<ContentPresenter Grid.Column="0"
-											Grid.ColumnSpan="1"
 											Content="{TemplateBinding InnerLeftContent}"/>
 							<DockPanel x:Name="PART_InnerDockPanel"
 									Grid.Column="1"
-									Grid.ColumnSpan="1"
 									Cursor="IBeam"
 									Margin="{TemplateBinding Padding}">
 								<TextBlock Name="PART_FloatingWatermark"
@@ -2240,7 +2226,7 @@
 									</Panel>
 								</ScrollViewer>
 							</DockPanel>
-							<ContentPresenter Grid.Column="2" Grid.ColumnSpan="1" Content="{TemplateBinding InnerRightContent}"/>
+							<ContentPresenter Grid.Column="2" Content="{TemplateBinding InnerRightContent}"/>
 						</Grid>
 					</Border>
 				</Panel>
@@ -2574,8 +2560,6 @@
 			<ControlTemplate>
 				<Panel Background="{TemplateBinding Background}">
 					<ScrollContentPresenter Name="PART_ContentPresenter"
-                        CanHorizontallyScroll="{TemplateBinding CanHorizontallyScroll}"
-                        CanVerticallyScroll="{TemplateBinding CanVerticallyScroll}"
                         Content="{TemplateBinding Content}"
                         Extent="{TemplateBinding Extent, Mode=TwoWay}"
                         Margin="{TemplateBinding Padding}"
@@ -2583,8 +2567,8 @@
                         Viewport="{TemplateBinding Viewport, Mode=TwoWay}">
 						<ScrollContentPresenter.GestureRecognizers>
 							<ScrollGestureRecognizer
-							  CanHorizontallyScroll="{TemplateBinding CanHorizontallyScroll}"
-							  CanVerticallyScroll="{TemplateBinding CanVerticallyScroll}" />
+							  CanHorizontallyScroll="{Binding #PART_ContentPresenter.CanHorizontallyScroll}"
+							  CanVerticallyScroll="{Binding #PART_ContentPresenter.CanVerticallyScroll}" />
 						</ScrollContentPresenter.GestureRecognizers>
 					</ScrollContentPresenter>
 					<RepeatButton Name="PART_ScrollLeftButton"
@@ -2685,10 +2669,9 @@
 								HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
 								VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
 								AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}">
-						<ItemsPresenter Name="PART_ItemsPresenter"
-										Items="{TemplateBinding Items}"
-										ItemsPanel="{TemplateBinding ItemsPanel}"
-										Margin="{TemplateBinding Padding}" />
+							<ItemsPresenter Name="PART_ItemsPresenter"
+						                ItemsPanel="{TemplateBinding ItemsPanel}"
+						                Margin="{TemplateBinding Padding}" />
 					</ScrollViewer>
 				</Border>
 			</ControlTemplate>

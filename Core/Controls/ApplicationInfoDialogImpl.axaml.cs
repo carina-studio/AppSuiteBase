@@ -22,7 +22,7 @@ namespace CarinaStudio.AppSuite.Controls
 	/// <summary>
 	/// Application info dialog.
 	/// </summary>
-	partial class ApplicationInfoDialogImpl : Dialog
+	class ApplicationInfoDialogImpl : Dialog
 	{
 		/// <summary>
 		/// Converter to convert from <see cref="System.Net.NetworkInformation.NetworkInterfaceType"/> to string.
@@ -194,13 +194,8 @@ namespace CarinaStudio.AppSuite.Controls
 				};
 				options.SuggestedFileName = $"Logs-{dateTime:yyyyMMdd-HHmmss}.zip";
 			});
-			var fileName = (await this.StorageProvider.SaveFilePickerAsync(options))?.Let(it =>
-			{
-				if (it.TryGetUri(out var uri))
-					return uri.LocalPath;
-				return null;
-			});
-			if (fileName == null)
+			var fileName = (await this.StorageProvider.SaveFilePickerAsync(options))?.Let(it => it.TryGetLocalPath());
+			if (string.IsNullOrEmpty(fileName))
 				return;
 
 			// export

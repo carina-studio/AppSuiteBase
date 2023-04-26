@@ -6,7 +6,6 @@ using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
-using System.ComponentModel;
 using System.Windows.Input;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -14,7 +13,7 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// Message dialog.
 /// </summary>
-partial class MessageDialogImpl : Dialog
+class MessageDialogImpl : Dialog
 {
 	/// <summary>
 	/// Define <see cref="CustomCancelText"/> property.
@@ -262,7 +261,7 @@ partial class MessageDialogImpl : Dialog
 
 
 	// Called when closing.
-	protected override void OnClosing(CancelEventArgs e)
+	protected override void OnClosing(WindowClosingEventArgs e)
 	{
 		if (this.result == null)
 			e.Cancel = true;

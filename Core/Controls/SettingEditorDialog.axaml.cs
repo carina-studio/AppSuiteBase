@@ -8,7 +8,7 @@ using System;
 
 namespace CarinaStudio.AppSuite.Controls
 {
-	partial class SettingEditorDialog : Dialog
+	class SettingEditorDialog : Dialog
 	{
 		// Static fields.
 		static readonly StyledProperty<SettingKey?> SettingKeyProperty = AvaloniaProperty.Register<SettingEditorDialog, SettingKey?>(nameof(SettingKey));

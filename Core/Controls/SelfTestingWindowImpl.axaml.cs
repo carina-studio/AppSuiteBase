@@ -7,7 +7,6 @@ using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
-using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -17,7 +16,7 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// Window to perform self testing.
 /// </summary>
-partial class SelfTestingWindowImpl : Window<IAppSuiteApplication>
+class SelfTestingWindowImpl : Window<IAppSuiteApplication>
 {
     /// <summary>
     /// Converter to convert from <see cref="TestCaseState"/> to <see cref="IImage"/>.
@@ -75,7 +74,7 @@ partial class SelfTestingWindowImpl : Window<IAppSuiteApplication>
         AvaloniaXamlLoader.Load(this);
         this.testCasesTreeView = this.Get<TreeView>(nameof(testCasesTreeView)).Also(it =>
         {
-            it.Items = this.testManager.TestCaseCategories;
+            it.ItemsSource = this.testManager.TestCaseCategories;
         });
         this.Title = this.Application.GetFormattedString("SelfTestingWindow.Title", this.Application.Name);
     }
@@ -103,7 +102,7 @@ partial class SelfTestingWindowImpl : Window<IAppSuiteApplication>
 
 
     /// <inheritdoc/>
-    protected override void OnClosing(CancelEventArgs e)
+    protected override void OnClosing(WindowClosingEventArgs e)
     {
         this.testManager.CancelAllTestCases();
         if (this.testManager.IsRunningTestCases)

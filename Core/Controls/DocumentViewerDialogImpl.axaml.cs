@@ -9,7 +9,7 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// Dialog to show document.
 /// </summary>
-partial class DocumentViewerDialogImpl : Dialog
+class DocumentViewerDialogImpl : Dialog
 {
     // Static fields.
     static readonly StyledProperty<FontFamily> DocumentFontFamilyProperty = AvaloniaProperty.Register<DocumentViewerDialogImpl, FontFamily>(nameof(DocumentFontFamily), FontFamily.Default);

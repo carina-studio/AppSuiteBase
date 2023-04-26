@@ -19,7 +19,7 @@ namespace CarinaStudio.AppSuite.Controls
 	/// <summary>
 	/// Splash window when launching application.
 	/// </summary>
-	partial class SplashWindowImpl : Avalonia.Controls.Window
+	class SplashWindowImpl : Avalonia.Controls.Window
 	{
 		// Constants.
 		const int InitialAnimationDuration = 1300;

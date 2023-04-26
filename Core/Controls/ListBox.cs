@@ -67,7 +67,9 @@ namespace CarinaStudio.AppSuite.Controls
             base.OnPointerPressed(e);
             if (hitElement != null && this.SelectedItems?.Count == 1)
             {
-                var listBoxItem = hitElement.FindAncestorOfType<ListBoxItem>(true);
+                var listBoxItem = hitElement is Visual visual
+                    ? visual.FindAncestorOfType<ListBoxItem>(true)
+                    : null;
                 if (listBoxItem != null && listBoxItem.FindAncestorOfType<ListBox>() == this)
                     this.pointerDownItem = this.SelectedItem;
             }
@@ -108,7 +110,7 @@ namespace CarinaStudio.AppSuite.Controls
     /// </summary>
     public class ListBoxItemEventArgs : EventArgs
     {
-        // Constuctor.
+        // Constructor.
         internal ListBoxItemEventArgs(int itemIndex, object item)
         {
             this.Item = item;

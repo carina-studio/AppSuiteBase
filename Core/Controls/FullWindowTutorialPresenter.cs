@@ -51,7 +51,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
             var anchorBounds = this.presneter.anchorBounds;
             
             // draw 
-            if (anchorBounds.IsEmpty)
+            if (anchorBounds.Width <= 0 || anchorBounds.Height <= 0)
                 context.DrawRectangle(brush, null, bounds);
             else
             {

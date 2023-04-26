@@ -95,7 +95,7 @@ namespace CarinaStudio.AppSuite.Controls
                 if (isSubscribed)
                     this.updateTabStripScrollViewerMarginAction.Schedule();
             });
-            this.GetObservable(ItemsProperty).Subscribe(items =>
+            this.GetObservable(ItemsSourceProperty).Subscribe(items =>
             {
                 if (this.attachedItems != null)
                 {
@@ -579,7 +579,8 @@ namespace CarinaStudio.AppSuite.Controls
             var parent = this.tabItemsPresenter.Parent;
             while (parent != this.tabStripScrollViewer && parent != null)
             {
-                left += parent.Bounds.Left;
+                if (parent is Visual visual)
+                    left += visual.Bounds.Left;
                 parent = parent.Parent;
             }
             var leftMargin = this.scrollTabStripLeftButton?.IsVisible == true ? this.scrollTabStripLeftButton.Bounds.Right : 0;

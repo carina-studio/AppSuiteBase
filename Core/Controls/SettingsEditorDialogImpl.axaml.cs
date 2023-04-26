@@ -9,7 +9,7 @@ using System.Globalization;
 
 namespace CarinaStudio.AppSuite.Controls
 {
-	partial class SettingsEditorDialogImpl : Dialog
+	class SettingsEditorDialogImpl : Dialog
 	{
 		// Fields.
 		readonly SortedObservableList<Tuple<SettingKey, object>> settingKeyValues = new((x, y) => string.Compare(x?.Item1?.Name, y?.Item1?.Name, true, CultureInfo.InvariantCulture));

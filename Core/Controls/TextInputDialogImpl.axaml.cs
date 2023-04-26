@@ -12,7 +12,7 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// Dialog for single line text input.
 /// </summary>
-partial class TextInputDialogImpl : InputDialog
+class TextInputDialogImpl : InputDialog
 {
 	/// <summary>
 	/// Property of <see cref="CheckBoxDescription"/>.
@@ -102,7 +102,7 @@ partial class TextInputDialogImpl : InputDialog
 
 
 	/// <inheritdoc/>
-	protected override void OnClosing(CancelEventArgs e)
+	protected override void OnClosing(WindowClosingEventArgs e)
 	{
 		if (this.checkBoxPanel.IsVisible)
 			this.isCheckBoxChecked = this.checkBox.IsChecked.GetValueOrDefault();

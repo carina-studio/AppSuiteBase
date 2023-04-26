@@ -48,7 +48,12 @@
 
 			<!-- System paths -->
 			<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/PathEnvVarEditorDialog.Paths}"/>
-			<controls:ListBox Name="pathListBox" Classes="Dialog_ListBox" Grid.Row="1" Items="{Binding $parent[Window].SystemPaths}" VirtualizationMode="None">
+			<controls:ListBox Name="pathListBox" Classes="Dialog_ListBox" Grid.Row="1" ItemsSource="{Binding $parent[Window].SystemPaths}">
+				<controls:ListBox.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel/>
+					</ItemsPanelTemplate>
+				</controls:ListBox.ItemsPanel>
 				<controls:ListBox.ItemTemplate>
 					<DataTemplate>
 						<Grid ColumnDefinitions="*,Auto">
@@ -79,7 +84,13 @@
 			<StackPanel Grid.Row="2" IsVisible="{Binding $parent[Window].CustomPaths.Count}">
 				<Separator Classes="Dialog_Separator_Small"/>
 				<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/PathEnvVarEditorDialog.CustomPaths}"/>
-				<ListBox Name="customPathListBox" Classes="Dialog_ListBox" Height="{StaticResource Double/PathEnvVarEditorDialog.CustomPaths.Height}" Items="{Binding $parent[Window].CustomPaths}" VirtualizationMode="None"/>
+				<ListBox Name="customPathListBox" Classes="Dialog_ListBox" Height="{StaticResource Double/PathEnvVarEditorDialog.CustomPaths.Height}" ItemsSource="{Binding $parent[Window].CustomPaths}">
+					<ListBox.ItemsPanel>
+						<ItemsPanelTemplate>
+							<StackPanel/>
+						</ItemsPanelTemplate>
+					</ListBox.ItemsPanel>
+				</ListBox>
 			</StackPanel>
 
 		</Grid>

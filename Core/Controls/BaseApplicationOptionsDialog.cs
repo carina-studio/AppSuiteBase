@@ -24,7 +24,7 @@ namespace CarinaStudio.AppSuite.Controls
         protected BaseApplicationOptionsDialog()
         {
             this.DataContext = this.OnCreateViewModel();
-            this.Classes = new Classes().Also(it => it.Add("Dialog"));
+            this.Classes.Add("Dialog");
             this.SizeToContent = SizeToContent.Height;
             this.Bind(TitleProperty, this.GetResourceObservable("String/ApplicationOptions"));
             this.Bind(WidthProperty, this.GetResourceObservable("Double/ApplicationOptionsDialog.Width"));
