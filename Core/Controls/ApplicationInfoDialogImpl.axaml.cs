@@ -11,8 +11,10 @@ using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
 using CarinaStudio.Data.Converters;
+using CarinaStudio.IO;
 using CarinaStudio.Threading;
 using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +24,7 @@ namespace CarinaStudio.AppSuite.Controls
 	/// <summary>
 	/// Application info dialog.
 	/// </summary>
-	partial class ApplicationInfoDialogImpl : Dialog
+	class ApplicationInfoDialogImpl : Dialog
 	{
 		/// <summary>
 		/// Converter to convert from <see cref="System.Net.NetworkInformation.NetworkInterfaceType"/> to string.
@@ -192,15 +194,18 @@ namespace CarinaStudio.AppSuite.Controls
 						type.Patterns = new[] { "*.zip" };
 					}),
 				};
-				options.SuggestedFileName = $"Logs-{dateTime:yyyyMMdd-HHmmss}.zip";
+				options.SuggestedFileName = $"{this.Application.Name}-Logs-{dateTime:yyyyMMdd-HHmmss}.zip";
 			});
 			var fileName = (await this.StorageProvider.SaveFilePickerAsync(options))?.Let(it =>
 			{
-				if (it.TryGetUri(out var uri))
-					return uri.LocalPath;
-				return null;
+				if (!it.TryGetUri(out var uri))
+					return null;
+				var path = uri.LocalPath;
+				if (!PathEqualityComparer.Default.Equals(Path.GetExtension(path), ".zip"))
+					path += ".zip";
+				return path;
 			});
-			if (fileName == null)
+			if (string.IsNullOrEmpty(fileName))
 				return;
 
 			// export
@@ -541,6 +546,13 @@ namespace CarinaStudio.AppSuite.Controls
 				Title = this.GetResourceObservable("String/Common.UserAgreement"),
 			}.ShowDialog(this);
 		}
+
+
+		/// <summary>
+		/// Take memory snapshot.
+		/// </summary>
+		public void TakeMemorySnapshot() =>
+			(this.Application as AppSuiteApplication)?.TakeMemorySnapshotAsync(this);
 
 
 		// Update title of window.
