@@ -329,6 +329,7 @@ namespace CarinaStudio.AppSuite
         });
         static readonly SettingKey<string> AppVersionKey = new("ApplicationVersion", "");
         static double CachedCustomScreenScaleFactor = double.NaN;
+        static readonly SettingKey<bool> DoNotPromptBeforeTakingMemorySnapshotKey = new("DoNotPromptBeforeTakingMemorySnapshot", false);
         static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new("IsAcceptNonStableApplicationUpdateInitialized", false);
         static readonly SettingKey<int> LogOutputTargetPortKey = new("LogOutputTargetPort");
         static readonly SettingKey<byte[]> MainWindowViewModelStatesKey = new("MainWindowViewModelStates", Array.Empty<byte>());
@@ -3627,6 +3628,8 @@ namespace CarinaStudio.AppSuite
                 var config = new DotMemory.Config().Also(it =>
                 {
                     it.SaveToFile(outputFileName);
+                    it.UseCustomResponseTimeout(5 * 60 * 1000); // 5 mins
+                    it.UseLogLevelTrace();
                 });
                 DotMemory.GetSnapshotOnce(config);
                 this.Logger.LogTrace("Complete taking memory snapshot");
@@ -3658,6 +3661,20 @@ namespace CarinaStudio.AppSuite
             this.Logger.LogTrace("Prepare taking memory snapshot");
             var cancellationTokenSource = new CancellationTokenSource();
             var preparationTask = DotMemory.EnsurePrerequisiteAsync(cancellationTokenSource.Token, progress: new DotMemoryDownloadingProgressCallback(this));
+            
+            // notify user about taking memory snapshot
+            if (!this.PersistentState.GetValueOrDefault(DoNotPromptBeforeTakingMemorySnapshotKey))
+            {
+                var messageDialog = new MessageDialog
+                {
+                    DoNotAskOrShowAgain = false,
+                    Icon = MessageDialogIcon.Warning,
+                    Message = this.GetObservableString("AppSuiteApplication.TakeMemorySnapshot.Description"),
+                };
+                await messageDialog.ShowDialog(window);
+                if (messageDialog.DoNotAskOrShowAgain == true)
+                    this.PersistentState.SetValue<bool>(DoNotPromptBeforeTakingMemorySnapshotKey, true);
+            }
 
             // select output file
             var fileName = (await window.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions

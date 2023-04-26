@@ -114,6 +114,7 @@
 	<!-- AppSuiteApplication -->
 	<sys:String x:Key="String/AppSuiteApplication.InitializingComponents">初始化元件</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">載入佈景主題</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Description">擷取記憶體快照期間應用程式將停止回應數十秒至數分鐘。</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Failed">無法擷取記憶體快照</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Succeeded">記憶體快照擷取完成並儲存至 '{0}'。</sys:String>
 
