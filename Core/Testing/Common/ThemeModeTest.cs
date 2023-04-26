@@ -28,7 +28,14 @@ class ThemeModeTest : TestCase
     protected override async Task OnRunAsync(CancellationToken cancellationToken)
     {
         // check system theme mode
+        bool shouldSystemThemeModeSupported;
         if (Platform.IsNotLinux)
+            shouldSystemThemeModeSupported = true;
+        else if (this.Application is AppSuiteApplication asApp && asApp.IsSystemThemeModeSupportedOnLinux)
+            shouldSystemThemeModeSupported = true;
+        else
+            shouldSystemThemeModeSupported = false;
+        if (shouldSystemThemeModeSupported)
         {
             Assert.IsTrue(this.Application.IsSystemThemeModeSupported, "System theme mode should be supported.");
             if (this.Application is AppSuiteApplication appSuiteApp)

@@ -39,10 +39,29 @@ class LocalizationTest : TestCase
             isTestStringChanged = true;
             latestNotifyedTestString = s;
         });
-        foreach (var appCulture in Enum.GetValues<ApplicationCulture>())
+        var appCultures = new List<ApplicationCulture>(Enum.GetValues<ApplicationCulture>());
+        appCultures.Remove(ApplicationCulture.System);
+        appCultures[0].Let(it =>
         {
-            if (appCulture == ApplicationCulture.System)
-                continue;
+            var sysCultureName = CultureInfo.InstalledUICulture.Name;
+            switch (it)
+            {
+                case ApplicationCulture.EN_US:
+                    if (sysCultureName.StartsWith("en-"))
+                        appCultures.Reverse();
+                    break;
+                case ApplicationCulture.ZH_CN:
+                    if (sysCultureName.StartsWith("zh-") && sysCultureName.EndsWith("CN"))
+                        appCultures.Reverse();
+                    break;
+                case ApplicationCulture.ZH_TW:
+                    if (sysCultureName.StartsWith("zh-") && sysCultureName.EndsWith("TW"))
+                        appCultures.Reverse();
+                    break;
+            }
+        });
+        foreach (var appCulture in appCultures)
+        {
             if (!TestStrings.TryGetValue(appCulture, out var expectedString))
                 throw new AssertionException($"No predefined test string for '{appCulture}'.");
             if (this.Application.Settings.GetValueOrDefault(SettingKeys.Culture) != appCulture)
