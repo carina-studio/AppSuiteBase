@@ -27,6 +27,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Avalonia.Markup.Xaml.Styling;
 using CarinaStudio.AppSuite.IO;
 using TabControl = Avalonia.Controls.TabControl;
 
@@ -37,9 +38,9 @@ namespace CarinaStudio.AppSuite.Tests
         const string TabItemKey = "TabItem";
 
 
-        static readonly AvaloniaProperty<int> Int32Property = AvaloniaProperty.Register<MainWindow, int>("Int32", 1);
-        static readonly AvaloniaProperty<IImage?> SelectedImageProperty = AvaloniaProperty.RegisterDirect<MainWindow, IImage?>(nameof(SelectedImage), window => window.selectedImage);
-        static readonly AvaloniaProperty<string?> SelectedImageIdProperty = AvaloniaProperty.RegisterDirect<MainWindow, string?>(nameof(SelectedImageId), window => window.selectedImageId);
+        static readonly StyledProperty<int> Int32Property = AvaloniaProperty.Register<MainWindow, int>("Int32", 1);
+        static readonly DirectProperty<MainWindow, IImage?> SelectedImageProperty = AvaloniaProperty.RegisterDirect<MainWindow, IImage?>(nameof(SelectedImage), window => window.selectedImage);
+        static readonly DirectProperty<MainWindow, string?> SelectedImageIdProperty = AvaloniaProperty.RegisterDirect<MainWindow, string?>(nameof(SelectedImageId), window => window.selectedImageId);
 
 
         readonly MutableObservableBoolean canShowAppInfo = new(true);
@@ -64,9 +65,9 @@ namespace CarinaStudio.AppSuite.Tests
 
             this.hfProcessInfoUpdateToken = this.Application.ProcessInfo.RequestHighFrequencyUpdate();
 
-            var iconResources = new ResourceInclude().Let(it =>
+            var iconResources = new ResourceInclude(new Uri("avares://CarinaStudio.AppSuite.Core")).Let(it =>
             {
-                it.Source = new Uri("avares://CarinaStudio.AppSuite.Core/Resources/Icons.axaml");
+                it.Source = new Uri("Resources/Icons.axaml", UriKind.Relative);
                 return it.Loaded;
             });
             this.ImageIdList = iconResources.Keys.Where(it => iconResources[it] is IImage).Cast<string>().ToArray().Also(it => 
@@ -174,7 +175,8 @@ namespace CarinaStudio.AppSuite.Tests
 
             var tabControl = this.FindControl<TabControl>("tabControl").AsNonNull();
             this.tabItems.AddRange(tabControl.Items!.Cast<TabItem>());
-            tabControl.Items = this.tabItems;
+            tabControl.Items.Clear();
+            tabControl.ItemsSource = this.tabItems;
             (this.tabItems[0].Header as Control)?.Let(it => this.Application.EnsureClosingToolTipIfWindowIsInactive(it));
         }
 

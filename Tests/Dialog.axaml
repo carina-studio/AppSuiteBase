@@ -315,7 +315,7 @@
 				<appControls:GroupBox Header="Header" HorizontalContentAlignment="Stretch">
 					<StackPanel>
 						<TextBlock Classes="Dialog_TextBlock" Text="Theme"/>
-						<ComboBox Classes="Dialog_ComboBox" Items="{Binding ThemeModes}" SelectedItem="{Binding ThemeMode, Mode=TwoWay}"/>
+						<ComboBox Classes="Dialog_ComboBox" ItemsSource="{Binding ThemeModes}" SelectedItem="{Binding ThemeMode, Mode=TwoWay}"/>
 						<Separator Classes="Dialog_Separator"/>
 
 						<TextBlock Classes="Dialog_TextBlock" Text="Label"/>

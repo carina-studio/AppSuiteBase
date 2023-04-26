@@ -1909,20 +1909,16 @@
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
 	</Style>
 	<Style Selector="controls|TabStripScrollViewer">
-		<Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+		<Setter Property="HorizontalScrollBarVisibility" Value="Visible"/>
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Panel Background="{TemplateBinding Background}">
 					<ScrollContentPresenter Name="PART_ContentPresenter"
-                        Content="{TemplateBinding Content}"
-                        Extent="{TemplateBinding Extent, Mode=TwoWay}"
-                        Margin="{TemplateBinding Padding}"
-                        Offset="{TemplateBinding Offset, Mode=TwoWay}"
-                        Viewport="{TemplateBinding Viewport, Mode=TwoWay}">
+                        Margin="{TemplateBinding Padding}">
 						<ScrollContentPresenter.GestureRecognizers>
 							<ScrollGestureRecognizer
-							  CanHorizontallyScroll="{Binding #PART_ContentPresenter.CanHorizontallyScroll}"
-							  CanVerticallyScroll="{Binding #PART_ContentPresenter.CanVerticallyScroll}" />
+								CanHorizontallyScroll="{Binding #PART_ContentPresenter.CanHorizontallyScroll}"
+								CanVerticallyScroll="{Binding #PART_ContentPresenter.CanVerticallyScroll}"/>
 						</ScrollContentPresenter.GestureRecognizers>
 					</ScrollContentPresenter>
 					<RepeatButton
@@ -1967,6 +1963,11 @@
 		<Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
 	</Style>
 	<Style Selector="TabControl">
+		<Setter Property="ItemsPanel">
+			<ItemsPanelTemplate>
+				<StackPanel Orientation="Horizontal"/>
+			</ItemsPanelTemplate>
+		</Setter>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate>
@@ -2555,20 +2556,16 @@
 	</Style>
 	<Style Selector="controls|ToolBarScrollViewer">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
-		<Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+		<Setter Property="HorizontalScrollBarVisibility" Value="Visible"/>
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Panel Background="{TemplateBinding Background}">
 					<ScrollContentPresenter Name="PART_ContentPresenter"
-                        Content="{TemplateBinding Content}"
-                        Extent="{TemplateBinding Extent, Mode=TwoWay}"
-                        Margin="{TemplateBinding Padding}"
-                        Offset="{TemplateBinding Offset, Mode=TwoWay}"
-                        Viewport="{TemplateBinding Viewport, Mode=TwoWay}">
+                        Margin="{TemplateBinding Padding}">
 						<ScrollContentPresenter.GestureRecognizers>
 							<ScrollGestureRecognizer
-							  CanHorizontallyScroll="{Binding #PART_ContentPresenter.CanHorizontallyScroll}"
-							  CanVerticallyScroll="{Binding #PART_ContentPresenter.CanVerticallyScroll}" />
+								CanHorizontallyScroll="{Binding #PART_ContentPresenter.CanHorizontallyScroll}"
+								CanVerticallyScroll="{Binding #PART_ContentPresenter.CanVerticallyScroll}" />
 						</ScrollContentPresenter.GestureRecognizers>
 					</ScrollContentPresenter>
 					<RepeatButton Name="PART_ScrollLeftButton"

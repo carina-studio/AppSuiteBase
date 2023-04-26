@@ -557,7 +557,7 @@
 								<ListBoxItem>Item 4 Item 4 Item 4 Item 4 Item 4</ListBoxItem>
 							</appControls:ListBox>
 
-							<appControls:ListBox HorizontalAlignment="Left" Items="{Binding $parent[Window].StringItems}" Width="150" Margin="5" SelectionMode="Multiple">
+							<appControls:ListBox HorizontalAlignment="Left" ItemsSource="{Binding $parent[Window].StringItems}" Width="150" Margin="5" SelectionMode="Multiple">
 								<ListBox.ItemTemplate>
 									<DataTemplate>
 										<appControls:SyntaxHighlightingTextBlock DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="{Binding}"/>
@@ -737,7 +737,7 @@
 						<TextBlock Text="Images"/>
 					</TabItem.Header>
 					<Grid ColumnDefinitions="200,Auto,*" Margin="5" RowDefinitions="Auto,5,*">
-						<ListBox Grid.RowSpan="3" HorizontalAlignment="Stretch" Items="{Binding $parent[Window].ImageIdList}" SelectionChanged="OnImageIdListBoxSelectionChanged"/>
+						<ListBox Grid.RowSpan="3" HorizontalAlignment="Stretch" ItemsSource="{Binding $parent[Window].ImageIdList}" SelectionChanged="OnImageIdListBoxSelectionChanged"/>
 						<GridSplitter Classes="Splitter_Horizontal" Background="{DynamicResource Color/Accent.Transparent}" Grid.Column="1" Grid.RowSpan="3"/>
 						<TextBox Grid.Column="2" IsReadOnly="True" Text="{Binding $parent[Window].SelectedImageId}"/>
 						<WrapPanel Grid.Column="2" Grid.Row="2">
