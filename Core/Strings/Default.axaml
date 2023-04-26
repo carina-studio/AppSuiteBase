@@ -120,6 +120,7 @@
 	<!-- AppSuiteApplication -->
 	<sys:String x:Key="String/AppSuiteApplication.InitializingComponents">Initializing components</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">Loading theme</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Description">Taking memory snapshot will cause application stop responding for tens of seconds to minutes.</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Failed">Unable to take memory snapshot.</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Succeeded">Memory snapshot has been taken and saved to '{0}'.</sys:String>
 
