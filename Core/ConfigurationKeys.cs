@@ -1,5 +1,4 @@
 using CarinaStudio.Configuration;
-using System;
 
 namespace CarinaStudio.AppSuite
 {
@@ -40,6 +39,10 @@ namespace CarinaStudio.AppSuite
         /// Interval of checking whether script running is completed or not.
         /// </summary>
         public static readonly SettingKey<int> ScriptCompletionCheckingInterval = new(nameof(ScriptCompletionCheckingInterval), 3000);
+        /// <summary>
+        /// Whether frame rate of rendering should be shown on screen or not.
+        /// </summary>
+        public static readonly SettingKey<bool> ShowRenderingFrameRate = new(nameof(ShowRenderingFrameRate), false);
         /// <summary>
         /// Timeout before notifying user that network connection is needed for product activation.
         /// </summary>

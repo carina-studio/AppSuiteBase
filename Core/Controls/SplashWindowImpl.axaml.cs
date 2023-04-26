@@ -7,6 +7,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using CarinaStudio.Animation;
+using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
 using CarinaStudio.Data.Converters;
 using CarinaStudio.Threading;
@@ -126,6 +127,8 @@ namespace CarinaStudio.AppSuite.Controls
 			this.Version = app.GetFormattedString("ApplicationInfoDialog.Version", app.Assembly.GetName().Version).AsNonNull();
 			if (app.ReleasingType != ApplicationReleasingType.Stable)
 				this.Version += $" {AppReleasingTypeConverter.Convert<string?>(app.ReleasingType)}";
+			if (app.Configuration.GetValueOrDefault(ConfigurationKeys.ShowRenderingFrameRate))
+				this.Renderer.DrawFps = true;
 			AvaloniaXamlLoader.Load(this);
 			this.progressBar = this.Get<ProgressBar>(nameof(progressBar));
 			if (Platform.IsWindows)

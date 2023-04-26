@@ -211,6 +211,10 @@ namespace CarinaStudio.AppSuite.Controls
                     });
                 }
             });
+            
+            // show rendering FPS
+            if (this.Configuration.GetValueOrDefault(ConfigurationKeys.ShowRenderingFrameRate))
+                this.Renderer.DrawFps = true;
 
             // restore window state
             this.PersistentState.Let(it =>
@@ -558,7 +562,10 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         /// <param name="e">Event data.</param>
         protected virtual void OnConfigurationChanged(SettingChangedEventArgs e)
-        { }
+        {
+            if (e.Key == ConfigurationKeys.ShowRenderingFrameRate)
+                this.Renderer.DrawFps = (bool) e.Value;
+        }
 
 
         /// <summary>
