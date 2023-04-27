@@ -189,7 +189,7 @@ namespace CarinaStudio.AppSuite
             /// <inheritdoc/>
             public void Report(double value)
             {
-                app.Logger.LogTrace("Downloading DotMemory: {progress:F2}%", value * 100);
+                app.Logger.LogTrace("Downloading DotMemory: {progress:F2}%", value);
             }
         }
 
@@ -3626,7 +3626,7 @@ namespace CarinaStudio.AppSuite
             this.Logger.LogTrace("Prepare taking memory snapshot");
             try
             {
-                DotMemory.EnsurePrerequisiteAsync(progress: new DotMemoryDownloadingProgressCallback(this)).Wait();
+                DotMemory.EnsurePrerequisiteAsync(progress: new DotMemoryDownloadingProgressCallback(this), downloadTo: Path.Combine(this.RootPrivateDirectoryPath, "dotMemory")).Wait();
             }
             catch (Exception ex)
             {
