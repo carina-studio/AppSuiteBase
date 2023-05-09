@@ -15,7 +15,7 @@
 		<Description>Base libraries for Carina Studio Application Suite.</Description>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/carina-studio/AppSuiteBase/</PackageProjectUrl>
-		<AvaloniaVersion>11.0.0-preview7</AvaloniaVersion>
+		<AvaloniaVersion>11.0.0-preview8</AvaloniaVersion>
 		<AvaloniaNameGeneratorFilterByNamespace>Dummy</AvaloniaNameGeneratorFilterByNamespace> <!-- Prevent generating InitializeComponents() and fields -->
 	</PropertyGroup>
 
