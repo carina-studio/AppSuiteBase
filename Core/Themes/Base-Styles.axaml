@@ -1,16 +1,11 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:sys="using:System"
 		xmlns:abControls="using:CarinaStudio.Controls"
-		xmlns:abConverters="using:CarinaStudio.Data.Converters"
 		xmlns:aConverters="using:Avalonia.Data.Converters"
-		xmlns:appSuite="using:CarinaStudio.AppSuite"
-		xmlns:ca="using:ColorTextBlock.Avalonia"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
 		xmlns:input="using:CarinaStudio.AppSuite.Input"
-		xmlns:md="using:Markdown.Avalonia"
-		xmlns:mdControls="using:Markdown.Avalonia.Controls">
+		xmlns:md="using:Markdown.Avalonia">
 
 	<!-- AddTabItemButton -->
 	<Style Selector="Button.AddTabItem">
