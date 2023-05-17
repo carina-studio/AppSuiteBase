@@ -892,6 +892,8 @@
 
 	<!-- Expander -->
 	<Style Selector="Expander">
+		<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrush}"/>
+		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
 		<Setter Property="MinHeight" Value="{DynamicResource ExpanderMinHeight}" />
 		<Setter Property="Padding" Value="{DynamicResource ExpanderContentPadding}" />
 	</Style>
@@ -902,6 +904,8 @@
 			<ControlTemplate>
 				<Border x:Name="ToggleButtonBackground" 
 						Background="{DynamicResource ButtonBackground}"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
 						CornerRadius="{TemplateBinding CornerRadius}">
 					<Grid ColumnDefinitions="*,Auto">
 						<ContentPresenter x:Name="PART_ContentPresenter"
@@ -972,13 +976,16 @@
 	</Style>
 	<Style Selector="Expander /template/ ToggleButton#ExpanderHeader:disabled /template/ Border#ToggleButtonBackground">
 		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundDisabled}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushDisabled}" />
 	</Style>
 	<Style Selector="Expander /template/ ToggleButton#ExpanderHeader:pointerover /template/ Border#ToggleButtonBackground">
 		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundPointerOver}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushPointerOver}" />
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource ButtonForegroundPointerOver}" />
 	</Style>
 	<Style Selector="Expander /template/ ToggleButton#ExpanderHeader:pressed /template/ Border#ToggleButtonBackground">
 		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundPressed}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushPressed}" />
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource ButtonForegroundPressed}" />
 	</Style>
 
@@ -1053,12 +1060,12 @@
 
 	<!-- GroupBox -->
 	<Style Selector="controls|GroupBox">
-		<Setter Property="Background" Value="{DynamicResource ExpanderBackground}" />
-		<Setter Property="BorderThickness" Value="0" />
-		<Setter Property="BorderBrush" Value="{DynamicResource ExpanderBorderBrush}" />
+		<Setter Property="Background" Value="{DynamicResource ExpanderContentBackground}" />
+		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Control.Border}" />
 		<Setter Property="HorizontalAlignment" Value="Stretch" />
 		<Setter Property="HorizontalContentAlignment" Value="Left" />
-		<Setter Property="Padding" Value="{DynamicResource ExpanderHeaderPadding}" />
+		<Setter Property="Padding" Value="{DynamicResource ExpanderContentPadding}" />
 		<Setter Property="VerticalContentAlignment" Value="Top" />
 		<Setter Property="Template">
 			<ControlTemplate>
@@ -1067,13 +1074,13 @@
 
 					<!-- Header -->
 					<Border Name="PART_Header" 
-						Background="{TemplateBinding Background}" 
+						Background="{DynamicResource ButtonBackground}" 
 						BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
 						CornerRadius="{DynamicResource ControlCornerRadiusTop}" 
 						DockPanel.Dock="Top" 
 						HorizontalAlignment="Stretch" 
-						Padding="{TemplateBinding Padding}">
+						Padding="{DynamicResource ExpanderHeaderPadding}">
 
 						<ContentPresenter Content="{TemplateBinding Header}" 
 							ContentTemplate="{TemplateBinding HeaderTemplate}"/>
@@ -1082,11 +1089,10 @@
 
 					<!-- Content -->
 					<Border Name="PART_Content"  
-						Background="{DynamicResource ExpanderDropDownBackground}"
-						BorderBrush="{DynamicResource ExpanderDropDownBorderBrush}"
+						Background="{TemplateBinding Background}"
 						CornerRadius="{DynamicResource ControlCornerRadiusBottom}" 
 						Margin="0,1,0,0"
-						Padding="{DynamicResource ExpanderContentPadding}">
+						Padding="{TemplateBinding Padding}">
 
 						<ContentPresenter Content="{TemplateBinding Content}" 
 							ContentTemplate="{TemplateBinding ContentTemplate}"
