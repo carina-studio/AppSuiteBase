@@ -823,6 +823,10 @@
 		<Setter Property="TextAlignment" Value="Right"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="TextBox.Dialog_Item_TextBox /template/ Border#PART_BorderElement">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
+	</Style>
 	<Style Selector="TextBox.Dialog_Item_TextBox:disabled /template/ Border#PART_BorderElement">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
