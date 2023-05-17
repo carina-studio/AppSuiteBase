@@ -133,7 +133,6 @@
 	<SolidColorBrush x:Key="ExpanderChevronBackgroundPressed" Color="#00000000"/>
 	<SolidColorBrush x:Key="ExpanderChevronBackgroundDisabled" Color="#00000000"/>
 	<SolidColorBrush x:Key="ExpanderDropDownBackground" Color="{DynamicResource ExpanderDropDownBackground}" Opacity="0.5"/>
-	<StaticResourceExtension x:Key="ExpanderBorderBrush" ResourceKey="Brush/Control.Border"/>
 	
 	<!-- FullWindowTutorialPresenter -->
 	<Color x:Key="Color/FullWindowTutorialPresenter.Background">#cf000000</Color>

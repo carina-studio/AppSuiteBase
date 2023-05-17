@@ -21,6 +21,34 @@ public static class ThicknessConverters
     public static readonly IValueConverter Left = new FuncValueConverter<Thickness, Thickness>(t =>
         new(t.Left, 0, 0, 0));
     
+    
+    /// <summary>
+    /// Converter to exclude bottom of thickness.
+    /// </summary>
+    public static readonly IValueConverter NoBottom = new FuncValueConverter<Thickness, Thickness>(t =>
+        new(t.Left, t.Top, t.Right, 0));
+    
+
+    /// <summary>
+    /// Converter to exclude left of thickness.
+    /// </summary>
+    public static readonly IValueConverter NoLeft = new FuncValueConverter<Thickness, Thickness>(t =>
+        new(0, t.Top, t.Right, t.Bottom));
+    
+
+    /// <summary>
+    /// Converter to exclude right of thickness.
+    /// </summary>
+    public static readonly IValueConverter NoRight = new FuncValueConverter<Thickness, Thickness>(t =>
+        new(t.Left, t.Top, 0, t.Bottom));
+    
+
+    /// <summary>
+    /// Converter to exclude top of thickness.
+    /// </summary>
+    public static readonly IValueConverter NoTop = new FuncValueConverter<Thickness, Thickness>(t =>
+        new(t.Left, 0, t.Right, t.Bottom));
+    
 
     /// <summary>
     /// Converter to keep right of thickness.
