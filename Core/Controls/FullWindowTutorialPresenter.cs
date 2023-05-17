@@ -23,20 +23,20 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
     {
         // Fields.
         readonly Pen anchorBorderPen = new();
-        readonly FullWindowTutorialPresenter presneter;
+        readonly FullWindowTutorialPresenter presenter;
 
         // Constructor.
         public BackgroundDrawing(FullWindowTutorialPresenter presenter)
         {
             this.anchorBorderPen.Bind(Pen.BrushProperty, presenter.GetResourceObservable("Brush/Accent"));
             this.anchorBorderPen.Thickness = 2;
-            this.presneter = presenter;
+            this.presenter = presenter;
         }
 
         // Get bounds.
         public override Rect GetBounds()
         {
-            var bounds = this.presneter.Bounds;
+            var bounds = this.presenter.Bounds;
             return new Rect(0, 0, bounds.Width, bounds.Height);
         }
 
@@ -44,11 +44,11 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
         public override void Draw(DrawingContext context)
         {
             // get state
-            var brush = this.presneter.Background;
+            var brush = this.presenter.Background;
             if (brush == null)
                 return;
-            var bounds = this.presneter.Bounds;
-            var anchorBounds = this.presneter.anchorBounds;
+            var bounds = this.presenter.Bounds;
+            var anchorBounds = this.presenter.anchorBounds;
             
             // draw 
             if (anchorBounds.Width <= 0 || anchorBounds.Height <= 0)
@@ -68,6 +68,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
 
     // Fields.
     Rect anchorBounds;
+    IDisposable? anchorBoundsObserverToken;
     Image? background;
     DoubleAnimator? backgroundAnimator;
     Control? dismissControl;
@@ -120,12 +121,12 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
         {
             this.backgroundAnimator = new DoubleAnimator(this.root.Opacity, 0).Also(animator =>
             {
-                animator.Cancelled += (_, e) =>
+                animator.Cancelled += (_, _) =>
                 {
                     this.tutorialContainer?.Let(it =>
                         it.DataContext = null);
                 };
-                animator.Completed += (_, e) =>
+                animator.Completed += (_, _) =>
                 {
                     this.root.IsVisible = false;
                     this.root.Opacity = animator.EndValue;
@@ -134,7 +135,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                 };
                 animator.Duration = (TimeSpan)this.FindResource("TimeSpan/Animation").AsNonNull();
                 animator.Interpolator = Interpolators.Deceleration;
-                animator.ProgressChanged += (_, e) => this.root.Opacity = animator.Value;
+                animator.ProgressChanged += (_, _) => this.root.Opacity = animator.Value;
                 animator.Start();
             });
         }
@@ -154,6 +155,8 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                 this.SynchronizationContext.Post(() => it.Transitions = transitions);
         });
         
+        // stop monitor bounds change of anchor
+        this.anchorBoundsObserverToken = this.anchorBoundsObserverToken.DisposeAndReturnNull();
 
         // remove key event handler
         this.RemoveHandler(KeyDownEvent, this.OnPreviewKeyDown);
@@ -218,10 +221,10 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
             {
                 this.backgroundAnimator = new DoubleAnimator(this.root.Opacity, 1).Also(animator =>
                 {
-                    animator.Completed += (_, e) => this.root.Opacity = animator.EndValue;
+                    animator.Completed += (_, _) => this.root.Opacity = animator.EndValue;
                     animator.Duration = (TimeSpan)this.FindResource("TimeSpan/Animation").AsNonNull();
                     animator.Interpolator = Interpolators.Deceleration;
-                    animator.ProgressChanged += (_, e) => this.root.Opacity = animator.Value;
+                    animator.ProgressChanged += (_, _) => this.root.Opacity = animator.Value;
                     animator.Start();
                 });
             }
@@ -254,6 +257,12 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                 this.tutorialContainer.Opacity = 1;
             });
         }
+        
+        // monitor bounds change of anchor
+        this.anchorBoundsObserverToken = tutorial.Anchor?.GetObservable(BoundsProperty).Subscribe(_ =>
+        {
+            this.updateTutorialPositionAction.Schedule();
+        });
 
         // setup focus
         this.SynchronizationContext.Post(() =>
@@ -403,5 +412,5 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
 
 
     // Interface implementations.
-    Type IStyleable.StyleKey { get => typeof(FullWindowTutorialPresenter); }
+    Type IStyleable.StyleKey => typeof(FullWindowTutorialPresenter);
 }
