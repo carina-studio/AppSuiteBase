@@ -30,6 +30,12 @@
 	<Style Selector="Button.AddTabItem:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/TabItem.Header.Background.Selected}"/>
 	</Style>
+	
+	<!-- Button -->
+	<Style Selector="Button">
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
 
 	<!-- ButtonSpinner -->
 	<Style Selector="ButtonSpinner /template/ RepeatButton">
@@ -733,11 +739,13 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock">
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock_Description">
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Description}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
@@ -745,6 +753,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock_Description_Error">
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
 		<Setter Property="Padding" Value="{DynamicResource Dialog.TextBlock.Padding.Description}"/>
@@ -752,6 +761,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock_Description_Warning">
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Warning}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
@@ -764,12 +774,14 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_TextBlock">
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Description">
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Description}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
@@ -778,6 +790,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Description_Error">
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
@@ -786,6 +799,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Description_Warning">
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Warning}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
@@ -804,6 +818,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Label">
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Label}"/>
 		<!--Setter Property="FontWeight" Value="Bold"/-->
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Label}"/>
@@ -1459,6 +1474,8 @@
 	<!-- RepeatButton -->
 	<Style Selector="RepeatButton">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
 
 	<!-- ScrollBar -->
@@ -2089,7 +2106,9 @@
 											</Transitions>
 										</Border.Transitions>
 									</Border>
-									<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Stretch" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
+									<Border Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Stretch" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center">
+										<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+									</Border>
 								</Panel>
 							</Border>
 
@@ -2117,6 +2136,11 @@
 		<Setter Property="TextWrapping" Value="NoWrap"/>
 		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	
+	<!-- TextBlock -->
+	<Style Selector=":is(TextBlock)">
+		<Setter Property="Padding" Value="0,1,0,0"/> <!-- [Workaround] prevent clipping top of CJK characters -->
 	</Style>
 
 	<!-- TextBox -->
@@ -2292,6 +2316,8 @@
 	<!-- ToggleButton -->
 	<Style Selector="ToggleButton">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
 
 	<!-- ToggleSwitch -->

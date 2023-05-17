@@ -68,7 +68,9 @@
 	<!-- Styles -->
 	<Window.Styles>
 		<Style Selector="TextBlock">
+			<Setter Property="ClipToBounds" Value="False"/>
 			<Setter Property="Foreground" Value="{DynamicResource Brush/SplashWindow.Foreground}"/>
+			<Setter Property="Padding" Value="0,2,0,0"/><!-- [Workaround] prevent clipping top of CJK characters -->
 		</Style>
 	</Window.Styles>
 
