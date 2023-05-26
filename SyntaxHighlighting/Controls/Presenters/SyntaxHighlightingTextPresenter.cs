@@ -44,8 +44,6 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         this.invalidateVisualAction = new(this.InvalidateVisual);
 
         // attach to self members
-        this.GetObservable(PreeditTextProperty).Subscribe(text =>
-            this.syntaxHighlighter.PreeditText = text);
         this.GetObservable(SelectionEndProperty).Subscribe(end =>
         {
             this.syntaxHighlighter.SelectionEnd = end;

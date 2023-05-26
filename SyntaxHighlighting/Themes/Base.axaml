@@ -1,6 +1,5 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:sys="using:System"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:media="using:CarinaStudio.AppSuite.Media"
 		xmlns:presenters="using:CarinaStudio.AppSuite.Controls.Presenters">
@@ -24,7 +23,6 @@
 					Margin="{TemplateBinding BorderThickness}">
 					<Grid ColumnDefinitions="Auto,*,Auto" >
 						<ContentPresenter Grid.Column="0"
-										Grid.ColumnSpan="1"
 										Content="{TemplateBinding InnerLeftContent}"/>
 						<DockPanel x:Name="PART_InnerDockPanel"
 								Grid.Column="1"
