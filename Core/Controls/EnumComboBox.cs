@@ -1,9 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.LogicalTree;
-using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Styling;
 using CarinaStudio.AppSuite.Converters;
 using CarinaStudio.Threading;
@@ -118,21 +118,16 @@ namespace CarinaStudio.AppSuite.Controls
 		void UpdateItemTemplate()
         {
 			var type = this.EnumType;
-			this.ItemTemplate = (type == null)
+			this.ItemTemplate = type is null
 				? null
-				: new DataTemplate
+				: new FuncDataTemplate(type, (_, _) =>
 				{
-					Content = new Func<IServiceProvider, object>(_ =>
+					return new TextBlock().Also(it =>
 					{
-						var textBlock = new TextBlock().Also(it =>
-						{
-							it.Bind(TextBlock.TextProperty, new Binding { Converter = this.enumConverter });
-							it.TextTrimming = Avalonia.Media.TextTrimming.CharacterEllipsis;
-						});
-						return new Func<IServiceProvider?, object?>(_ => textBlock);
-					}),
-					DataType = type,
-				};
+						it.Bind(TextBlock.TextProperty, new Binding { Converter = this.enumConverter });
+						it.TextTrimming = Avalonia.Media.TextTrimming.CharacterEllipsis;
+					});
+				}, true);
 		}
 	}
 }

@@ -1,12 +1,6 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:sys="using:System"
-		xmlns:abControls="using:CarinaStudio.Controls"
-		xmlns:abConverters="using:CarinaStudio.Data.Converters"
-		xmlns:aConverters="using:Avalonia.Data.Converters"
-		xmlns:appSuite="using:CarinaStudio.AppSuite"
-		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
-		xmlns:converters="using:CarinaStudio.AppSuite.Converters">
+		xmlns:sys="using:System">
 	
 	<!-- Base -->
 	<ResourceDictionary.MergedDictionaries>
@@ -24,7 +18,7 @@
 
 	<!-- ComboBox -->
 	<Thickness x:Key="ComboBoxDropdownBorderPadding">1</Thickness>
-	<Thickness x:Key="ComboBoxPadding">4,2,4,2</Thickness>
+	<Thickness x:Key="ComboBoxPadding">4,3,4,3</Thickness>
 	<sys:Double x:Key="ComboBoxMinHeight">24</sys:Double>
 
 	<!-- ComboBoxItem -->
@@ -72,8 +66,8 @@
 	<Thickness x:Key="Thickness/Dialog.ListActionButton.Margin">3,3,0,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,1,0,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Label">0</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">10,6<!-- [Workaround] prevent clipping top of CJK characters -->,10,5</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">10,6<!-- [Workaround] prevent clipping top of CJK characters -->,10,5</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">10,6<!-- [Workaround] prevent clipping top of CJK characters -->,10,6</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">10,6<!-- [Workaround] prevent clipping top of CJK characters -->,10,6</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">-10,0,-10,5</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">-10,0,-10,4</Thickness>
 
@@ -163,11 +157,11 @@
 
 	<!-- TextBox -->
 	<sys:Double x:Key="TextControlThemeMinHeight">0</sys:Double>
-	<Thickness x:Key="TextControlThemePadding">4,2,4,2</Thickness>
+	<Thickness x:Key="TextControlThemePadding">4,3,4,3</Thickness>
 	<sys:Double x:Key="Double/TextBox.InPlaceAction.Size">18</sys:Double>
-	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction.1">4,2,28,2</Thickness>
-	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction.2">4,2,48,2</Thickness>
-	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction.3">4,2,68,2</Thickness>
+	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction.1">4,3,28,3</Thickness>
+	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction.2">4,3,48,3</Thickness>
+	<Thickness x:Key="Thickness/TextBox.Padding.WithInPlaceAction.3">4,3,68,3</Thickness>
 	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Padding">3</Thickness>
 	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Margin">1,0,1,0</Thickness>
 	<Thickness x:Key="Thickness/TextBox.InPlaceAction2.Margin">0,0,3,0</Thickness>

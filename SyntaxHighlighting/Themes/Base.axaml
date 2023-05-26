@@ -28,7 +28,6 @@
 										Content="{TemplateBinding InnerLeftContent}"/>
 						<DockPanel x:Name="PART_InnerDockPanel"
 								Grid.Column="1"
-								Grid.ColumnSpan="1"
 								Cursor="IBeam"
 								Margin="{TemplateBinding Padding}">
 							<TextBlock Name="PART_FloatingWatermark"
@@ -76,11 +75,12 @@
 													SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
 													CaretBrush="{TemplateBinding CaretBrush}"
 													HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-													VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+													VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+													Margin="0,1,0,1"/> <!-- [Workaround] Prevent clipping CJK characters -->
 								</Panel>
 							</ScrollViewer>
 						</DockPanel>
-						<ContentPresenter Grid.Column="2" Grid.ColumnSpan="1" Content="{TemplateBinding InnerRightContent}"/>
+						<ContentPresenter Grid.Column="2" Content="{TemplateBinding InnerRightContent}"/>
 					</Grid>
 				</Border>
 			</Panel>

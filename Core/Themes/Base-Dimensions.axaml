@@ -46,7 +46,8 @@
 	<Thickness x:Key="ComboBoxDropdownBorderPadding">4,3,4,3</Thickness>
 	<Thickness x:Key="ComboBoxDropdownBorderThickness">1,2,1,2</Thickness>
 	<Thickness x:Key="ComboBoxDropdownContentMargin">0</Thickness>
-	<sys:Double x:Key="ComboBoxMinHeight">32</sys:Double>
+	<Thickness x:Key="ComboBoxPadding">7</Thickness>
+	<sys:Double x:Key="ComboBoxMinHeight">30</sys:Double>
 
 	<!-- ComboBoxItem -->
 	<CornerRadius x:Key="CornerRadius/ComboBoxItem">5</CornerRadius>
@@ -125,11 +126,11 @@
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">-12,0,-12,8</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.ItemsGroupHeader">0,0,0,10</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Label">0,1,0,1</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Description">0,1<!-- [Workaround] prevent clipping top of CJK characters -->,10,0</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">12,11<!-- [Workaround] prevent clipping top of CJK characters -->,12,10</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">12,7<!-- [Workaround] prevent clipping top of CJK characters -->,12,6</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.ItemsGroupHeader">0,1<!-- [Workaround] prevent clipping top of CJK characters -->,0,0</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Label">0,1<!-- [Workaround] prevent clipping top of CJK characters -->,10,0</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Description">0,1<!-- [Workaround] prevent clipping top of CJK characters -->,10,1</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">12,11<!-- [Workaround] prevent clipping top of CJK characters -->,12,11</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">12,7<!-- [Workaround] prevent clipping top of CJK characters -->,12,7</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.ItemsGroupHeader">0,1<!-- [Workaround] prevent clipping top of CJK characters -->,0,1</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Label">0,1<!-- [Workaround] prevent clipping top of CJK characters -->,10,1</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TreeView.Margin">-1,1,0,1</Thickness>
 
 	<!-- DocumentViewerDialog -->

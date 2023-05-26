@@ -253,6 +253,7 @@
 										Grid.Column="0"
 										Margin="{TemplateBinding Padding}"
 										HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+										VerticalAlignment="Center"
 										VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
 
 						<Border x:Name="DropDownOverlay"
@@ -2140,7 +2141,7 @@
 	
 	<!-- TextBlock -->
 	<Style Selector=":is(TextBlock)">
-		<Setter Property="Padding" Value="0,1,0,0"/> <!-- [Workaround] prevent clipping top of CJK characters -->
+		<Setter Property="Padding" Value="0,1,0,1"/> <!-- [Workaround] prevent clipping top of CJK characters -->
 	</Style>
 
 	<!-- TextBox -->
@@ -2257,7 +2258,8 @@
 														SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
 														CaretBrush="{TemplateBinding CaretBrush}"
 														HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-														VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+														VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+														Margin="0,1,0,1"/> <!-- [Workaround] Prevent clipping CJK characters -->
 									</Panel>
 								</ScrollViewer>
 							</DockPanel>
