@@ -458,7 +458,7 @@ namespace CarinaStudio.AppSuite.Controls
                 return;
 
             // layout
-            this.Application.LayoutMainWindows(this.Screens.ScreenFromWindow(this.PlatformImpl.AsNonNull()) ?? this.Screens.Primary.AsNonNull(), layout, this);
+            this.Application.LayoutMainWindows(this.Screens.ScreenFromWindow(this) ?? this.Screens.Primary.AsNonNull(), layout, this);
         }
 
 
@@ -732,7 +732,7 @@ namespace CarinaStudio.AppSuite.Controls
                 && double.IsFinite(this.restoredWidth)
                 && double.IsFinite(this.restoredHeight))
             {
-                var screen = this.Screens.ScreenFromWindow(this.PlatformImpl.AsNonNull()) ?? this.Screens.Primary;
+                var screen = this.Screens.ScreenFromWindow(this) ?? this.Screens.Primary;
                 if (screen == null)
                 {
                     this.Logger.LogWarning("Cannot find screen for restoring size of window");
@@ -814,7 +814,7 @@ namespace CarinaStudio.AppSuite.Controls
             // use compact UI
             if (!this.PersistentState.GetValueOrDefault(IsUsingCompactUIConfirmedKey))
             {
-                var screen = this.Screens.ScreenFromWindow(this.PlatformImpl.AsNonNull()) ?? this.Screens.ScreenFromVisual(this) ?? this.Screens.Primary;
+                var screen = this.Screens.ScreenFromWindow(this) ?? this.Screens.ScreenFromVisual(this) ?? this.Screens.Primary;
                 if (screen != null)
                 {
                     var pixelDensity = screen.Scaling;

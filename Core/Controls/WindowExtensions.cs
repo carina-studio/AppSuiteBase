@@ -29,7 +29,7 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <returns>Size of system decorations.</returns>
 		public static Thickness GetSystemDecorationSizes(this Avalonia.Controls.Window window)
         {
-			var screen = window.Screens.ScreenFromWindow(window.PlatformImpl.AsNonNull()) ?? window.Screens.Primary;
+			var screen = window.Screens.ScreenFromWindow(window) ?? window.Screens.Primary;
 			if (screen == null)
 				return default;
 			var scaling = screen.Scaling;

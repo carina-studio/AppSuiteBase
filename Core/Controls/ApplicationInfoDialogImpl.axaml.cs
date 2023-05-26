@@ -136,7 +136,7 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				if (!this.IsOpened)
 					return;
-				var screen = this.Screens.ScreenFromWindow(this.PlatformImpl!) ?? this.Screens.ScreenFromVisual(this) ?? this.Screens.Primary;
+				var screen = this.Screens.ScreenFromWindow(this) ?? this.Screens.ScreenFromVisual(this) ?? this.Screens.Primary;
 				if (screen == null)
 					return;
 				var scaling = screen.Scaling;

@@ -66,7 +66,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 		this.showAction = new(async () =>
 		{
 			// get screen info
-			var screen = this.Screens.ScreenFromWindow(this.PlatformImpl.AsNonNull());
+			var screen = this.Screens.ScreenFromWindow(this);
 			if (screen == null && this.stopwatch.ElapsedMilliseconds < MaxShowingRetryingDuration)
 			{
 				this.showAction?.Schedule(RetryShowingDelay);
@@ -219,10 +219,8 @@ class SplashWindowImpl : Avalonia.Controls.Window
 			this.backgroundImageUri = value;
 			if (value != null)
 			{
-				this.SetValue(BackgroundImageProperty, AvaloniaLocator.Current.GetService<IAssetLoader>()?.Let(loader =>
-				{
-					return loader.Open(value).Use(stream => new Bitmap(stream));
-				}));
+				this.SetValue(BackgroundImageProperty, AssetLoader.Open(value).Use(stream => 
+					new Bitmap(stream)));
 			}
 			else
 				this.SetValue(BackgroundImageProperty, null);
@@ -249,14 +247,10 @@ class SplashWindowImpl : Avalonia.Controls.Window
 				return;
 			this.iconUri = value;
 			value ??= new Uri($"avares://{AppSuiteApplication.Current.Assembly.GetName()}/AppIcon.ico");
-			this.Icon = AvaloniaLocator.Current.GetService<IAssetLoader>()?.Let(loader =>
-			{
-				return loader.Open(value).Use(stream => new WindowIcon(stream));
-			});
-			this.SetValue(IconBitmapProperty, AvaloniaLocator.Current.GetService<IAssetLoader>()?.Let(loader =>
-			{
-				return loader.Open(value).Use(stream => new Bitmap(stream));
-			}));
+			this.Icon = AssetLoader.Open(value).Use(stream =>
+				new WindowIcon(stream));
+			this.SetValue(IconBitmapProperty, AssetLoader.Open(value).Use(stream =>
+				new Bitmap(stream)));
 		}
     }
 
