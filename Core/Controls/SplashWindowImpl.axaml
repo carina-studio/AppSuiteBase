@@ -77,7 +77,7 @@
 		
 		<Border.Transitions>
 			<Transitions>
-				<DoubleTransition Property="Opacity" Duration="0:0:0.5"/>
+				<DoubleTransition Property="Opacity" Duration="0:0:1.2" Easing="ExponentialEaseOut"/>
 			</Transitions>
 		</Border.Transitions>
 
