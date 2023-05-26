@@ -26,6 +26,27 @@ namespace CarinaStudio.AppSuite.Controls
     /// </summary>
     public abstract class MainWindow : Window
     {
+        /// <summary>
+        /// Property of <see cref="AreInitialDialogsClosed"/>.
+        /// </summary>
+        public static readonly DirectProperty<MainWindow, bool> AreInitialDialogsClosedProperty = AvaloniaProperty.RegisterDirect<MainWindow, bool>(nameof(AreInitialDialogsClosed), w => w.areInitialDialogsClosed);
+        /// <summary>
+        /// Property of <see cref="ContentPadding"/>.
+        /// </summary>
+        public static readonly DirectProperty<MainWindow, Thickness> ContentPaddingProperty = AvaloniaProperty.RegisterDirect<MainWindow, Thickness>(nameof(ContentPadding), w => w.contentPadding);
+        /// <summary>
+        /// Property of <see cref="HasMultipleMainWindows"/>.
+        /// </summary>
+        public static readonly DirectProperty<MainWindow, bool> HasMultipleMainWindowsProperty = AvaloniaProperty.RegisterDirect<MainWindow, bool>(nameof(HasMultipleMainWindows), w => w.hasMultipleMainWindows);
+        
+        
+        // Constants.
+        const int InitialDialogsDelay = 1000;
+        const int RestartingMainWindowsDelay = 500;
+        const int SaveWindowSizeDelay = 300;
+        const int UpdateContentPaddingDelay = 300;
+        
+        
         // Static fields.
         internal static readonly SettingKey<bool> DoNotCheckAppRunningLocationOnMacOSKey = new("MainWindow.DoNotCheckAppRunningLocationOnMacOS");
         internal static readonly SettingKey<int> ExtDepDialogShownVersionKey = new("MainWindow.ExternalDependenciesDialogShownVersion", -1);
@@ -41,42 +62,8 @@ namespace CarinaStudio.AppSuite.Controls
         internal static readonly SettingKey<int> WindowWidthSettingKey = new("MainWindow.Width", 800);
         
         
-        // Constructor.
-        internal MainWindow()
-        { }
-    }
-    
-    
-    /// <summary>
-    /// Base class of main window pf application.
-    /// </summary>
-    /// <typeparam name="TViewModel">Type of view-model.</typeparam>
-    public abstract class MainWindow<TViewModel> : MainWindow, IMainWindow where TViewModel : MainWindowViewModel
-    {
-        /// <summary>
-        /// Property of <see cref="AreInitialDialogsClosed"/>.
-        /// </summary>
-        public static readonly DirectProperty<MainWindow<TViewModel>, bool> AreInitialDialogsClosedProperty = AvaloniaProperty.RegisterDirect<MainWindow<TViewModel>, bool>(nameof(AreInitialDialogsClosed), w => w.areInitialDialogsClosed);
-        /// <summary>
-        /// Property of <see cref="ContentPadding"/>.
-        /// </summary>
-        public static readonly DirectProperty<MainWindow<TViewModel>, Thickness> ContentPaddingProperty = AvaloniaProperty.RegisterDirect<MainWindow<TViewModel>, Thickness>(nameof(ContentPadding), w => w.contentPadding);
-        /// <summary>
-        /// Property of <see cref="HasMultipleMainWindows"/>.
-        /// </summary>
-        public static readonly DirectProperty<MainWindow<TViewModel>, bool> HasMultipleMainWindowsProperty = AvaloniaProperty.RegisterDirect<MainWindow<TViewModel>, bool>(nameof(HasMultipleMainWindows), w => w.hasMultipleMainWindows);
-
-
-        // Constants.
-        const int InitialDialogsDelay = 1000;
-        const int RestartingMainWindowsDelay = 500;
-        const int SaveWindowSizeDelay = 300;
-        const int UpdateContentPaddingDelay = 300;
-
-
         // Fields.
         bool areInitialDialogsClosed;
-        TViewModel? attachedViewModel;
         Thickness contentPadding;
         ThicknessAnimator? contentPaddingAnimator;
         ContentPresenter? contentPresenter;
@@ -94,12 +81,13 @@ namespace CarinaStudio.AppSuite.Controls
         readonly ScheduledAction saveWindowSizeAction;
         readonly ScheduledAction showInitDialogsAction;
         readonly ScheduledAction updateContentPaddingAction;
-
-
+        
+        
+        // Constructor.
         /// <summary>
         /// Initialize new <see cref="MainWindow{TViewModel}"/> instance.
         /// </summary>
-        protected MainWindow()
+        internal MainWindow()
         {
             // create commands
             this.LayoutMainWindowsCommand = new Command<MultiWindowLayout>(this.LayoutMainWindows, this.GetObservable(HasMultipleMainWindowsProperty));
@@ -247,17 +235,6 @@ namespace CarinaStudio.AppSuite.Controls
                 if (!this.Application.IsPrivacyPolicyAgreed || !this.Application.IsUserAgreementAgreed)
                     (content as Control)?.Let(it => it.IsEnabled = false);
             });
-            this.GetObservable(DataContextProperty).Subscribe(dataContext =>
-            {
-                if (this.attachedViewModel != null)
-                {
-                    this.OnDetachFromViewModel(this.attachedViewModel);
-                    this.attachedViewModel = null;
-                }
-                this.attachedViewModel = dataContext as TViewModel;
-                if (this.attachedViewModel != null)
-                    this.OnAttachToViewModel(this.attachedViewModel);
-            });
             this.GetObservable(ExtendClientAreaToDecorationsHintProperty).Subscribe(_ =>
             {
                 if (this.IsOpened)
@@ -348,8 +325,8 @@ namespace CarinaStudio.AppSuite.Controls
             });
             isSubscribing = false;
         }
-
-
+        
+        
         /// <summary>
         /// Check whether all dialogs which need to be shown after showing main window are closed or not.
         /// </summary>
@@ -521,22 +498,8 @@ namespace CarinaStudio.AppSuite.Controls
                     this.SetAndRaise(ContentPaddingProperty, ref this.contentPadding, padding));
             });
         }
-
-
-        /// <summary>
-        /// Called to attach to view-model.
-        /// </summary>
-        /// <param name="viewModel">View-model.</param>
-        protected virtual void OnAttachToViewModel(TViewModel viewModel)
-        {
-            // attach
-            viewModel.PropertyChanged += this.OnViewModelPropertyChanged;
-
-            // update title
-            this.Title = viewModel.Title;
-        }
-
-
+        
+        
         /// <summary>
         /// Called when window closed.
         /// </summary>
@@ -577,19 +540,8 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         /// <returns>View-model for application update dialog.</returns>
         protected virtual ApplicationUpdater OnCreateApplicationUpdater() => new();
-
-
-        /// <summary>
-        /// Called to detach from view-model.
-        /// </summary>
-        /// <param name="viewModel">View-model.</param>
-        protected virtual void OnDetachFromViewModel(TViewModel viewModel)
-        {
-            // detach
-            viewModel.PropertyChanged -= this.OnViewModelPropertyChanged;
-        }
-
-
+        
+        
         // Called when data dragged into window,
         void OnDragEnter(object? sender, DragEventArgs e) => this.ActivateAndBringToFront();
 
@@ -706,23 +658,6 @@ namespace CarinaStudio.AppSuite.Controls
             or WindowState.Maximized => WindowTransparencyLevel.None,
             _ => base.OnSelectTransparentLevelHint(),
         };
-
-
-        // Called when property of view-model changed.
-        void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e) => this.OnViewModelPropertyChanged(e);
-
-
-        /// <summary>
-        /// Called when property of view-model changed.
-        /// </summary>
-        /// <param name="e">Event data.</param>
-        protected virtual void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
-        {
-            if (this.DataContext is not TViewModel viewModel)
-                return;
-            if (e.PropertyName == nameof(MainWindowViewModel.Title))
-                this.Title = viewModel.Title;
-        }
 
 
         // Restore to saved window size if available.
@@ -1027,6 +962,79 @@ namespace CarinaStudio.AppSuite.Controls
                 return;
             }
             this.ExtendClientAreaToDecorationsHint = true;
+        }
+    }
+    
+    
+    /// <summary>
+    /// Base class of main window pf application.
+    /// </summary>
+    /// <typeparam name="TViewModel">Type of view-model.</typeparam>
+    public abstract class MainWindow<TViewModel> : MainWindow, IMainWindow where TViewModel : MainWindowViewModel
+    {
+        // Fields.
+        TViewModel? attachedViewModel;
+
+
+        /// <summary>
+        /// Initialize new <see cref="MainWindow{TViewModel}"/> instance.
+        /// </summary>
+        protected MainWindow()
+        {
+            // observe self properties
+            this.GetObservable(DataContextProperty).Subscribe(dataContext =>
+            {
+                if (this.attachedViewModel != null)
+                {
+                    this.OnDetachFromViewModel(this.attachedViewModel);
+                    this.attachedViewModel = null;
+                }
+                this.attachedViewModel = dataContext as TViewModel;
+                if (this.attachedViewModel != null)
+                    this.OnAttachToViewModel(this.attachedViewModel);
+            });
+        }
+
+
+        /// <summary>
+        /// Called to attach to view-model.
+        /// </summary>
+        /// <param name="viewModel">View-model.</param>
+        protected virtual void OnAttachToViewModel(TViewModel viewModel)
+        {
+            // attach
+            viewModel.PropertyChanged += this.OnViewModelPropertyChanged;
+
+            // update title
+            this.Title = viewModel.Title;
+        }
+
+
+        /// <summary>
+        /// Called to detach from view-model.
+        /// </summary>
+        /// <param name="viewModel">View-model.</param>
+        protected virtual void OnDetachFromViewModel(TViewModel viewModel)
+        {
+            // detach
+            viewModel.PropertyChanged -= this.OnViewModelPropertyChanged;
+        }
+        
+        
+        // Called when property of view-model changed.
+        void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e) => this.OnViewModelPropertyChanged(e);
+
+
+        /// <summary>
+        /// Called when property of view-model changed.
+        /// </summary>
+        /// <param name="e">Event data.</param>
+        protected virtual void OnViewModelPropertyChanged(PropertyChangedEventArgs e)
+        {
+            if (this.DataContext is not TViewModel viewModel)
+                return;
+            if (e.PropertyName == nameof(MainWindowViewModel.Title))
+                this.Title = viewModel.Title;
         }
     }
 
