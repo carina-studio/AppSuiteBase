@@ -682,7 +682,9 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        // ReSharper disable UnassignedGetOnlyAutoProperty
         public virtual DocumentSource? ChangeList { get; }
+        // ReSharper restore UnassignedGetOnlyAutoProperty
 
 
         // Check whether restarting all root windows is needed or not.
@@ -2351,7 +2353,7 @@ namespace CarinaStudio.AppSuite
         /// Called to prepare showing splash window when launching application.
         /// </summary>
         /// <returns>Parameters of splash window.</returns>
-        protected virtual SplashWindowParams OnPrepareSplashWindow() => new SplashWindowParams().Also((ref Controls.SplashWindowParams it) =>
+        protected virtual SplashWindowParams OnPrepareSplashWindow() => new SplashWindowParams().Also((ref SplashWindowParams it) =>
         {
             var assetLoader = AvaloniaLocator.Current.GetService<IAssetLoader>().AsNonNull();
             it.BackgroundImageOpacity = 0.2;
@@ -2469,7 +2471,7 @@ namespace CarinaStudio.AppSuite
                     this.Logger.LogTrace("[Performance] Took {duration} ms to prepare parameters of splash window", currentTime - time);
                     time = currentTime;
                 }
-                this.splashWindow = new SplashWindowImpl()
+                this.splashWindow = new SplashWindowImpl
                 {
                     AccentColor = splashWindowParams.AccentColor,
                     BackgroundImageOpacity = splashWindowParams.BackgroundImageOpacity,
@@ -2666,7 +2668,9 @@ namespace CarinaStudio.AppSuite
         { 
             if (this.LatestActiveWindow != null)
             {
+                // ReSharper disable InvokeAsExtensionMethod
                 Controls.WindowExtensions.ActivateAndBringToFront(this.LatestActiveWindow);
+                // ReSharper restore InvokeAsExtensionMethod
                 return true;
             }
             return false;
@@ -2901,7 +2905,9 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get type of implementation of <see cref="IProductManager"/>.
         /// </summary>
+        // ReSharper disable UnassignedGetOnlyAutoProperty
         protected virtual Type? ProductManagerImplType { get; }
+        // ReSharper restore UnassignedGetOnlyAutoProperty
 
 
         /// <summary>
@@ -3189,7 +3195,9 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get type of implementation of <see cref="IScriptManager"/>.
         /// </summary>
+        // ReSharper disable UnassignedGetOnlyAutoProperty
         protected virtual Type? ScriptManagerImplType { get; }
+        // ReSharper restore UnassignedGetOnlyAutoProperty
 
 
         // Select current theme mode.
