@@ -23,7 +23,6 @@ namespace CarinaStudio.AppSuite.Controls;
 class SplashWindowImpl : Avalonia.Controls.Window
 {
 	// Constants.
-	const int InitialAnimationDuration = 1300;
 	const int MaxShowingRetryingDuration = 1000;
 	const int RetryShowingDelay = 100;
 
@@ -64,7 +63,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 			return $"©{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
 		});
 		this.Message = app.GetStringNonNull("SplashWindow.Launching");
-		this.showAction = new(async () =>
+		this.showAction = new(() =>
 		{
 			// get screen info
 			var screen = this.Screens.ScreenFromWindow(this.PlatformImpl.AsNonNull());
@@ -118,11 +117,12 @@ class SplashWindowImpl : Avalonia.Controls.Window
 			{
 				control.Opacity = 1;
 				(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+				control.PropertyChanged += (_, e) =>
+				{
+					if (e.Property == OpacityProperty && Math.Abs(1 - (double)e.NewValue!) <= double.Epsilon * 2)
+						Dispatcher.UIThread.Post(() => this.initAnimationTaskCompletionSource.TrySetResult());
+				};
 			});
-			
-			// complete animation later
-			await Task.Delay(InitialAnimationDuration);
-			this.initAnimationTaskCompletionSource.TrySetResult();
 		});
 		this.Version = app.GetFormattedString("ApplicationInfoDialog.Version", app.Assembly.GetName().Version).AsNonNull();
 		if (app.ReleasingType != ApplicationReleasingType.Stable)
