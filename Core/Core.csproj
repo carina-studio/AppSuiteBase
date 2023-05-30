@@ -69,9 +69,9 @@
 		<PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
 		<PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
 		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="$(AvaloniaVersion)" />
-		<PackageReference Include="CarinaStudio.AppBase.Application.Avalonia" Version="2.0.21.526-previewA11P8" />
-		<PackageReference Include="CarinaStudio.AppBase.AutoUpdate" Version="2.0.21.526-preview" />
-		<PackageReference Include="CarinaStudio.AppBase.MacOS" Version="2.0.21.526-preview" />
+		<PackageReference Include="CarinaStudio.AppBase.Application.Avalonia" Version="2.0.22.530-previewA11P8" />
+		<PackageReference Include="CarinaStudio.AppBase.AutoUpdate" Version="2.0.22.530-preview" />
+		<PackageReference Include="CarinaStudio.AppBase.MacOS" Version="2.0.22.530-preview" />
 		<PackageReference Include="JetBrains.Profiler.SelfApi" Version="2.4.3-preview1" />
 		<PackageReference Include="Markdown.Avalonia.Tight" Version="11.0.0-b1" />
 		<PackageReference Include="Microsoft.Win32.Registry" Version="6.0.0-preview.5.21301.5" />
