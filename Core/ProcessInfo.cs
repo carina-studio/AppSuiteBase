@@ -1,4 +1,5 @@
-﻿using CarinaStudio.Collections;
+﻿using CarinaStudio.AppSuite.Controls;
+using CarinaStudio.Collections;
 using CarinaStudio.IO;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -34,16 +36,19 @@ namespace CarinaStudio.AppSuite
 
 		// Time-base information for macOS.
 #pragma warning disable IDE1006
+	    // ReSharper disable IdentifierTypo
 		[StructLayout(LayoutKind.Sequential)]
         struct mach_timebase_info_t
         {
-            public uint numer;
-            public uint denom;
+	        public readonly uint numer;
+	        public readonly uint denom;
         }
+        // ReSharper restore IdentifierTypo
 #pragma warning restore IDE1006
 
 
         // Constants.
+        const int FirstUpdateDelay = 10000;
 		const int ProcessInfoUpdateInterval = 3000;
         const int ProcessInfoUpdateIntervalBG = 10000;
 		const int ProcessInfoUpdateIntervalHF = 1500;
@@ -56,7 +61,7 @@ namespace CarinaStudio.AppSuite
         // Fields.
         readonly IAppSuiteApplication app;
 		readonly List<HighFrequencyUpdateToken> hfUpdateTokens = new();
-		bool isFirstUpdate = true;
+		volatile bool isFirstUpdate = true;
 		long latestGCCount;
 		readonly ILogger logger;
 		mach_timebase_info_t macOSTimebaseInfo;
@@ -66,7 +71,6 @@ namespace CarinaStudio.AppSuite
         readonly SingleThreadSynchronizationContext processInfoCheckingSyncContext = new("Process information updater");
 		readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
 		readonly object uiResponseCheckingSyncLock = new();
-		readonly Thread uiResponseCheckingThread;
         readonly ScheduledAction updateProcessInfoAction;
 
 
@@ -82,7 +86,7 @@ namespace CarinaStudio.AppSuite
             // create scheduled actions
             this.updateProcessInfoAction = new ScheduledAction(this.processInfoCheckingSyncContext, () =>
             {
-				this.isFirstUpdate = false;
+	            this.isFirstUpdate = false;
 				this.Update();
 			});
 
@@ -90,13 +94,13 @@ namespace CarinaStudio.AppSuite
 			app.PropertyChanged += this.OnApplicationPropertyChanged;
 
 			// start checking
-			this.uiResponseCheckingThread = new Thread(this.UIResponseCheckingThreadEntry).Also(it =>
+			new Thread(this.UIResponseCheckingThreadEntry).Also(it =>
 			{
 				it.IsBackground = true;
 				it.Name = "UI response checking thread";
 				it.Start();
 			});
-			this.updateProcessInfoAction.Schedule(3000);
+			this.updateProcessInfoAction.Schedule(this.SelectUpdateInterval());
         }
 
 
@@ -122,14 +126,36 @@ namespace CarinaStudio.AppSuite
 		// Called when property of application changed.
 		void OnApplicationPropertyChanged(object? sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName == nameof(IAppSuiteApplication.IsBackgroundMode)
-				&& !this.app.IsBackgroundMode)
+			if (e.PropertyName == nameof(IAppSuiteApplication.IsBackgroundMode))
 			{
-				if (!this.isFirstUpdate)
-					this.updateProcessInfoAction.Reschedule(this.SelectUpdateInterval());
-				lock (this.uiResponseCheckingSyncLock)
+				if (!this.app.IsBackgroundMode)
 				{
-					Monitor.PulseAll(this.uiResponseCheckingSyncLock);
+					if (!this.isFirstUpdate)
+						this.updateProcessInfoAction.Reschedule(this.SelectUpdateInterval());
+					lock (this.uiResponseCheckingSyncLock)
+					{
+						Monitor.PulseAll(this.uiResponseCheckingSyncLock);
+					}
+				}
+				else if (!this.isFirstUpdate)
+				{
+					this.updateProcessInfoAction.Reschedule();
+					lock (this.uiResponseCheckingSyncLock)
+					{
+						Monitor.PulseAll(this.uiResponseCheckingSyncLock);
+					}
+				}
+			}
+			else if (e.PropertyName == nameof(IAppSuiteApplication.LatestActiveWindow))
+			{
+				var window = this.app.LatestActiveWindow;
+				if (window is not null && window is not SplashWindowImpl && this.isFirstUpdate)
+				{
+					this.updateProcessInfoAction.Reschedule();
+					lock (this.uiResponseCheckingSyncLock)
+					{
+						Monitor.PulseAll(this.uiResponseCheckingSyncLock);
+					}
 				}
 			}
 		}
@@ -201,6 +227,8 @@ namespace CarinaStudio.AppSuite
 		// Select proper interval for checking UI response.
 		int SelectUIResponseCheckingInterval()
 		{
+			if (this.isFirstUpdate)
+				return FirstUpdateDelay;
 			if (this.app.IsBackgroundMode)
 				return UIResponseCheckingIntervalBG;
 			if (app.IsDebugMode)
@@ -218,6 +246,8 @@ namespace CarinaStudio.AppSuite
 					return ProcessInfoUpdateIntervalHFInDebugMode;
 				return ProcessInfoUpdateIntervalHF;
 			}
+			if (this.isFirstUpdate)
+				return FirstUpdateDelay;
 			if (app.IsBackgroundMode)
 				return ProcessInfoUpdateIntervalBG;
 			return ProcessInfoUpdateInterval;
@@ -231,13 +261,14 @@ namespace CarinaStudio.AppSuite
 
 
 		// Entry of UI response checking thread.
+		// ReSharper disable FunctionNeverReturns
+		[DoesNotReturn]
 		void UIResponseCheckingThreadEntry()
 		{
 			var stopWatch = new Stopwatch().Also(it => it.Start());
 			var checkingId = 1L;
 			var totalDuration = 0L;
 			var checkingCount = 0;
-			var lastReportTime = 0L;
 			var syncLock = new object();
 			while (true)
 			{
@@ -273,11 +304,10 @@ namespace CarinaStudio.AppSuite
 					Monitor.Wait(this.uiResponseCheckingSyncLock, this.SelectUIResponseCheckingInterval());
 				}
 
-				// report respone duration
+				// report response duration
 				var responseDuration = (totalDuration / checkingCount);
 				totalDuration = 0;
 				checkingCount = 0;
-				lastReportTime = stopWatch.ElapsedMilliseconds;
 				if (this.app.IsDebugMode)
 					this.logger.LogTrace("UI response duration: {responseDuration} ms", responseDuration);
 				this.app.SynchronizationContext.Post(() =>
@@ -290,6 +320,7 @@ namespace CarinaStudio.AppSuite
 				});
 			}
 		}
+		// ReSharper restore FunctionNeverReturns
 
 
 		/// <summary>
@@ -419,7 +450,7 @@ namespace CarinaStudio.AppSuite
 				}
 			});
 			if (this.app.IsDebugMode)
-				this.logger.LogTrace("CPU usage: {cpuUsagePercentage}%, memory usage: {privateMemoryUsage}", string.Format("{0:0.0}", cpuUsagePercentage), privateMemoryUsage.ToFileSizeString());
+				this.logger.LogTrace("CPU usage: {cpuUsagePercentage}%, memory usage: {privateMemoryUsage}", $"{cpuUsagePercentage:0.0}", privateMemoryUsage.ToFileSizeString());
 			this.updateProcessInfoAction.Schedule(this.SelectUpdateInterval());
 		}
 	}

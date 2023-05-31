@@ -11,9 +11,6 @@ using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Styling;
-#if APPLY_CONTROL_BRUSH_ANIMATIONS || APPLY_ITEM_BRUSH_ANIMATIONS
-using CarinaStudio.AppSuite.Animation;
-#endif
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.Scripting;
 using CarinaStudio.AutoUpdate;
@@ -456,8 +453,10 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogWarning("Application is running as administrator/superuser");
 
             // setup properties
+            // ReSharper disable InvokeAsExtensionMethod
             this.MainWindows = ListExtensions.AsReadOnly(this.mainWindows);
             this.Windows = ListExtensions.AsReadOnly(this.windows);
+            // ReSharper restore InvokeAsExtensionMethod
 
             // setup default culture
             CultureInfo.CurrentCulture = this.cultureInfo;
@@ -1330,6 +1329,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get options to launch application which is converted by arguments passed to application.
         /// </summary>
+        // ReSharper disable once InvokeAsExtensionMethod
         public IDictionary<string, object> LaunchOptions { get; private set; } = DictionaryExtensions.AsReadOnly(new Dictionary<string, object>());
 
 
@@ -2392,6 +2392,10 @@ namespace CarinaStudio.AppSuite
             this.UpdateLogOutputToLocalhost();
 
             // setup scheduled actions
+            this.checkUpdateInfoAction = new(() =>
+            {
+                _ = this.CheckForApplicationUpdateAsync();
+            });
             this.performFullGCAction = new(() => this.PerformGC(GCCollectionMode.Forced));
             this.stopUserInteractionAction = new(() =>
             {
@@ -2405,13 +2409,6 @@ namespace CarinaStudio.AppSuite
                 this.OnPropertyChanged(nameof(IsUserInteractive));
                 this.OnUserInteractionStopped();
             });
-
-            // start checking update
-            this.checkUpdateInfoAction = new(() =>
-            {
-                _ = this.CheckForApplicationUpdateAsync();
-            });
-            this.checkUpdateInfoAction?.Schedule();
 
             // complete loading persistent state and settings
             if (this.loadingInitPersistentStateTask != null)
@@ -2563,6 +2560,9 @@ namespace CarinaStudio.AppSuite
 
             // complete checking external dependencies
             await Task.WhenAll(checkExtDepTasks);
+            
+            // start checking update
+            this.checkUpdateInfoAction?.Schedule();
 
             // initialize script manager
             await ScriptManager.InitializeAsync(this, this.ScriptManagerImplType);
@@ -2834,6 +2834,7 @@ namespace CarinaStudio.AppSuite
                 else
                     ++index;
             }
+            // ReSharper disable once InvokeAsExtensionMethod
             return DictionaryExtensions.AsReadOnly(launchOptions);
         }
 

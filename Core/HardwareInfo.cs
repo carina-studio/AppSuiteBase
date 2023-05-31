@@ -34,11 +34,11 @@ namespace CarinaStudio.AppSuite
         {
             // setup fields
             this.app = app;
-            this.checkGraphicsCardAction = new ScheduledAction(this.hwCheckingSyncContext, this.CheckGraphicsCard);
+            this.checkGraphicsCardAction = new(this.hwCheckingSyncContext, () => this.CheckGraphicsCard(false));
             this.logger = app.LoggerFactory.CreateLogger(nameof(HardwareInfo));
 
             // start checking graphics card
-            this.CheckGraphicsCard();
+            this.CheckGraphicsCard(true);
 
             // get physical memory
             this.CheckPhysicalMemory();
@@ -55,7 +55,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Check graphics card.
-        void CheckGraphicsCard()
+        void CheckGraphicsCard(bool isInitCheck)
         {
             var hasDedicatedGraphicsCard = (bool?)null;
             if (Platform.IsWindows)
@@ -84,15 +84,23 @@ namespace CarinaStudio.AppSuite
                 }
 #pragma warning restore CA1416
             }
-            this.app.SynchronizationContext.Post(() =>
+            if (isInitCheck)
             {
-                if (this.HasDedicatedGraphicsCard != hasDedicatedGraphicsCard)
+                this.logger.LogTrace("Dedicated graphics card: {hasDedicatedGraphicsCard}", hasDedicatedGraphicsCard);
+                this.HasDedicatedGraphicsCard = hasDedicatedGraphicsCard;
+            }
+            else
+            {
+                this.app.SynchronizationContext.Post(() =>
                 {
-                    this.logger.LogTrace("Dedicated graphics card: {hasDedicatedGraphicsCard}", hasDedicatedGraphicsCard);
-                    this.HasDedicatedGraphicsCard = hasDedicatedGraphicsCard;
-                    this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasDedicatedGraphicsCard)));
-                }
-            });
+                    if (this.HasDedicatedGraphicsCard != hasDedicatedGraphicsCard)
+                    {
+                        this.logger.LogTrace("Dedicated graphics card: {hasDedicatedGraphicsCard}", hasDedicatedGraphicsCard);
+                        this.HasDedicatedGraphicsCard = hasDedicatedGraphicsCard;
+                        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasDedicatedGraphicsCard)));
+                    }
+                });
+            }
         }
 
 
@@ -121,7 +129,7 @@ namespace CarinaStudio.AppSuite
                     using var reader = new StreamReader("/proc/meminfo", Encoding.UTF8);
                     var regex = new Regex("^[\\s]*MemTotal\\:[\\s]*(?<Size>[\\d]+)[\\s]*(?<Unit>[\\w]+)", RegexOptions.IgnoreCase);
                     var line = reader.ReadLine();
-                    while (line != null)
+                    while (line is not null)
                     {
                         var match = regex.Match(line);
                         if (match.Success && long.TryParse(match.Groups["Size"].Value, out var size))
@@ -129,10 +137,11 @@ namespace CarinaStudio.AppSuite
                             physicalMemorySize = match.Groups["Unit"].Value.ToLower() switch
                             {
                                 "kb" => size << 10,
-                                _ => (long?)null,
+                                _ => null,
                             };
                             break;
                         }
+                        line = reader.ReadLine();
                     }
                     if (physicalMemorySize == null)
                         this.logger.LogWarning("Unable to get total physical memory on Linux");
@@ -159,7 +168,7 @@ namespace CarinaStudio.AppSuite
                         using var reader = process.StandardOutput;
                         var regex = new Regex("^[\\s]*hw\\.memsize[\\s]*:[\\s]*(?<Size>[\\d]+)", RegexOptions.IgnoreCase);
                         var line = reader.ReadLine();
-                        while (line != null)
+                        while (line is not null)
                         {
                             var match = regex.Match(line);
                             if (match.Success && long.TryParse(match.Groups["Size"].Value, out var size))
@@ -167,6 +176,7 @@ namespace CarinaStudio.AppSuite
                                 physicalMemorySize = size;
                                 break;
                             }
+                            line = reader.ReadLine();
                         }
                         if (physicalMemorySize == null)
                             this.logger.LogWarning("Unable to get total physical memory on macOS");
