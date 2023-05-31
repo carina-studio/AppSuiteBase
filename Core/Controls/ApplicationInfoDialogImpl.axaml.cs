@@ -307,11 +307,8 @@ namespace CarinaStudio.AppSuite.Controls
 								panel.Children.Add(new Separator().Also(it => 
 									it.Classes.Add("Dialog_Item_Separator")));
 							}
-							panel.Children.Add(new Grid().Also(itemPanel => 
+							panel.Children.Add(new CompactDialogItemGrid().Also(itemPanel => 
 							{ 
-								itemPanel.Classes.Add("Dialog_Item_Container_Small");
-								itemPanel.ColumnDefinitions.Add(new(1, GridUnitType.Star));
-								itemPanel.ColumnDefinitions.Add(new(0, GridUnitType.Auto));
 								itemPanel.DataContext = productId;
 								itemPanel.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
 								{
@@ -342,11 +339,8 @@ namespace CarinaStudio.AppSuite.Controls
 							panel.Children.Add(new Separator().Also(it => it.Classes.Add("Dialog_Item_Separator")));
 						var assemblyName = assembly.GetName();
 						var assemblyVersion = assemblyName.Version ?? new Version();
-						panel.Children.Add(new Grid().Also(it =>
+						panel.Children.Add(new CompactDialogItemGrid().Also(it =>
 						{
-							it.Classes.Add("Dialog_Item_Container_Small");
-							it.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
-							it.ColumnDefinitions.Add(new ColumnDefinition(0, GridUnitType.Auto));
 							it.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
 							{
 								it.Classes.Add("Dialog_TextBlock_Label");
