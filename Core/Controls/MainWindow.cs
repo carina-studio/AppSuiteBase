@@ -43,6 +43,7 @@ namespace CarinaStudio.AppSuite.Controls
         // Constants.
         const int InitialDialogsDelay = 1000;
         const int RestartingMainWindowsDelay = 500;
+        const int RestoringWindowStateOnLinuxDuration = 500;
         const int SaveWindowSizeDelay = 300;
         const int UpdateContentPaddingDelay = 300;
         
@@ -313,7 +314,21 @@ namespace CarinaStudio.AppSuite.Controls
                 if (this.IsOpened)
                 {
                     if (windowState != WindowState.Minimized)
+                    {
+                        // [Workaround] Need to restore window state (Maximized) twice on Linux (Fedora)
+                        if (Platform.IsLinux 
+                            && windowState == WindowState.Normal
+                            && this.restoredWindowState != WindowState.Normal
+                            && (Stopwatch.ElapsedMilliseconds - this.openedTime) < RestoringWindowStateOnLinuxDuration)
+                        {
+                            this.RestoreToSavedSize();
+                            this.SynchronizationContext.PostDelayed(() => this.RestoreToSavedWindowState(), 100);
+                            return;
+                        }
+
+                        // save window state
                         this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, windowState);
+                    }
                     if (windowState == WindowState.FullScreen)
                         this.updateContentPaddingAction.Reschedule();
                     else
@@ -596,15 +611,8 @@ namespace CarinaStudio.AppSuite.Controls
             this.openedTime = Stopwatch.ElapsedMilliseconds;
 
             // restore to saved state and size
-            this.restoredWindowState.Let(it =>
-            {
-                if (it == WindowState.FullScreen)
-                    this.UpdateExtendClientAreaChromeHints(true); // [Workaround] Prevent making title bar be transparent
-                if (this.WindowState != it)
-                    this.WindowState = it; // Size will also be restored in OnPropertyChanged()
-                else
-                    this.RestoreToSavedSize();
-            });
+            if (!this.RestoreToSavedWindowState())
+                this.RestoreToSavedSize();
 
             // call base
             base.OnOpened(e);
@@ -687,6 +695,21 @@ namespace CarinaStudio.AppSuite.Controls
                 this.restoredWidth = double.NaN;
                 this.restoredHeight = double.NaN;
             }
+        }
+
+
+        // Restore to saved window state if available.
+        bool RestoreToSavedWindowState()
+        {
+            var savedWindowState = this.restoredWindowState;
+            if (savedWindowState == WindowState.FullScreen)
+                this.UpdateExtendClientAreaChromeHints(true); // [Workaround] Prevent making title bar be transparent
+            if (this.WindowState != savedWindowState)
+            {
+                this.WindowState = savedWindowState; // Size will also be restored in OnPropertyChanged()
+                return true;
+            }
+            return false;
         }
 
 
