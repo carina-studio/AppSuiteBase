@@ -31,7 +31,7 @@
 								TextWrapping="Wrap"/>
 
 						</controls:CompactDialogItemBorder>
-						<Separator Classes="Dialog_Item_Separator" IsVisible="{Binding #descriptionItem.IsVisible}"/>
+						<Separator Classes="Dialog_Item_Separator" IsVisible="{ReflectionBinding #descriptionItem.IsVisible}"/>
 
 						<!-- Priority -->
 						<controls:CompactDialogItemBorder>
