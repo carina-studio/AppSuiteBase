@@ -379,9 +379,11 @@
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 	</Style>
 	<Style Selector="Border.Dialog_Item_Container">
+		<Setter Property="ClipToBounds" Value="True"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight}"/>
 	</Style>
 	<Style Selector="Border.Dialog_Item_Container_Small">
+		<Setter Property="ClipToBounds" Value="True"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight.Small}"/>
 	</Style>
 	<Style Selector="Border.Dialog_ItemsGroup_Container">
@@ -519,9 +521,11 @@
 	<Style Selector="Grid.Dialog_IconText_Container_Description">
 	</Style>
 	<Style Selector="Grid.Dialog_Item_Container">
+		<Setter Property="ClipToBounds" Value="True"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight}"/>
 	</Style>
 	<Style Selector="Grid.Dialog_Item_Container_Small">
+		<Setter Property="ClipToBounds" Value="True"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight.Small}"/>
 	</Style>
 	<Style Selector=":is(Image).Dialog_Icon">
@@ -647,9 +651,11 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.FullWidthControl.Margin}"/>
 	</Style>
 	<Style Selector="Panel.Dialog_Item_Container">
+		<Setter Property="ClipToBounds" Value="True"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight}"/>
 	</Style>
 	<Style Selector="Panel.Dialog_Item_Container_Small">
+		<Setter Property="ClipToBounds" Value="True"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight.Small}"/>
 	</Style>
 	<Style Selector="RadioButton.Dialog_RadioButton">
