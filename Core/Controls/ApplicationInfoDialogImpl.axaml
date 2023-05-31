@@ -137,52 +137,52 @@
 						<StackPanel>
 
 							<!-- Device name -->
-							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+							<controls:CompactDialogItemGrid>
 								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.DeviceName}"/>
 								<SelectableTextBlock Grid.Column="1" Text="{x:Static sys:Environment.MachineName}" TextTrimming="CharacterEllipsis"/>
-							</Grid>
+							</controls:CompactDialogItemGrid>
 							<Separator Classes="Dialog_Item_Separator"/>
 
 							<!-- Operating system -->
-							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+							<controls:CompactDialogItemGrid>
 								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.OperatingSystem}"/>
 								<SelectableTextBlock Grid.Column="1" Text="{Binding OperatingSystemDescription}" TextTrimming="CharacterEllipsis"/>
-							</Grid>
+							</controls:CompactDialogItemGrid>
 							<Separator Classes="Dialog_Item_Separator"/>
 
 							<!-- Framework version -->
-							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+							<controls:CompactDialogItemGrid>
 								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.FrameworkVersion}"/>
 								<SelectableTextBlock Grid.Column="1" Text="{Binding FrameworkVersion}" TextTrimming="CharacterEllipsis"/>
-							</Grid>
+							</controls:CompactDialogItemGrid>
 							<Separator Classes="Dialog_Item_Separator"/>
 
 							<!-- Processor count -->
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
-								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<controls:CompactDialogItemGrid>
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ProcessorCount}"/>
 									<SelectableTextBlock Grid.Column="1" Text="{Binding Source={x:Static sys:Environment.ProcessorCount}}" TextTrimming="CharacterEllipsis"/>
-								</Grid>
+								</controls:CompactDialogItemGrid>
 								<Separator Classes="Dialog_Item_Separator"/>
 							</StackPanel>
 
 							<!-- Total physical memory -->
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}">
-								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<controls:CompactDialogItemGrid>
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.TotalPhysicalMemory}"/>
 									<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" TextTrimming="CharacterEllipsis"/>
-								</Grid>
+								</controls:CompactDialogItemGrid>
 								<Separator Classes="Dialog_Item_Separator"/>
 							</StackPanel>
 
 							<!-- Network connection -->
-							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+							<controls:CompactDialogItemGrid>
 								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.NetworkConnection}"/>
 								<Panel Grid.Column="1">
 									<SelectableTextBlock IsVisible="{Binding !IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" Text="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Disconnected}" TextTrimming="CharacterEllipsis"/>
 									<abControls:FormattedSelectableTextBlock Arg1="{Binding PublicIPAddress, Source={x:Static net:NetworkManager.Default}}" Format="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Format}" IsVisible="{Binding IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" TextTrimming="CharacterEllipsis"/>
 								</Panel>
-							</Grid>
+							</controls:CompactDialogItemGrid>
 
 							<!-- Primary network interface -->
 							<StackPanel x:CompileBindings="False">
@@ -193,10 +193,10 @@
 									</MultiBinding>
 								</StackPanel.IsVisible>
 								<Separator Classes="Dialog_Item_Separator"/>
-								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<controls:CompactDialogItemGrid>
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.PrimaryNetworkInterface}"/>
 									<abControls:FormattedSelectableTextBlock Arg1="{Binding PrimaryInterfaceName, Source={x:Static net:NetworkManager.Default}}" Arg2="{Binding PrimaryInterfaceType, Converter={x:Static controls:ApplicationInfoDialogImpl.NetworkInterfaceTypeConverter}, Source={x:Static net:NetworkManager.Default}}" Arg3="{Binding $parent[Window].PrimaryNetworkInterfacePhysicalAddress}" Format="{DynamicResource String/ApplicationInfoDialog.PrimaryNetworkInterface.Format}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
-								</Grid>
+								</controls:CompactDialogItemGrid>
 							</StackPanel>
 
 							<!-- Screen info -->
@@ -204,24 +204,24 @@
 
 								<!-- Screen pixel density -->
 								<Separator Classes="Dialog_Item_Separator"/>
-								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<controls:CompactDialogItemGrid>
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.Screen.PixelDensity}"/>
 									<abControls:FormattedSelectableTextBlock Grid.Column="1" Arg1="{Binding $parent[Window].ScreenPixelDensity}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.PixelDensity.Format}" TextTrimming="CharacterEllipsis"/>
-								</Grid>
+								</controls:CompactDialogItemGrid>
 
 								<!-- Screen size -->
 								<Separator Classes="Dialog_Item_Separator"/>
-								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<controls:CompactDialogItemGrid>
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.Screen.Size}"/>
 									<abControls:FormattedSelectableTextBlock Grid.Column="1" Arg1="{Binding $parent[Window].PhysicalScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" Arg2="{Binding $parent[Window].ScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.Size.Format}" TextTrimming="CharacterEllipsis"/>
-								</Grid>
+								</controls:CompactDialogItemGrid>
 								
 								<!-- Working area -->
 								<Separator Classes="Dialog_Item_Separator"/>
-								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<controls:CompactDialogItemGrid>
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.Screen.WorkingArea}"/>
 									<abControls:FormattedSelectableTextBlock Grid.Column="1" Arg1="{Binding $parent[Window].PhysicalScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" Arg2="{Binding $parent[Window].ScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" Format="{DynamicResource String/ApplicationInfoDialog.Screen.WorkingArea.Format}" TextTrimming="CharacterEllipsis"/>
-								</Grid>
+								</controls:CompactDialogItemGrid>
 
 							</StackPanel>
 						</StackPanel>
@@ -236,62 +236,62 @@
 						<StackPanel>
 
 							<!-- Process ID -->
-							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+							<controls:CompactDialogItemGrid>
 								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ProcessId}"/>
 								<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.ProcessInfo.ProcessId, Mode=OneTime}" TextTrimming="CharacterEllipsis"/>
-							</Grid>
+							</controls:CompactDialogItemGrid>
 							<Separator Classes="Dialog_Item_Separator"/>
 
 							<!-- Thread count -->
-							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+							<controls:CompactDialogItemGrid>
 								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ThreadCount}"/>
 								<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.ProcessInfo.ThreadCount}" TextTrimming="CharacterEllipsis"/>
-							</Grid>
+							</controls:CompactDialogItemGrid>
 							<Separator Classes="Dialog_Item_Separator"/>
 
 							<!-- CPU usage -->
-							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+							<controls:CompactDialogItemGrid>
 								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.CpuUsage}"/>
 								<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage}" Format="{DynamicResource String/ApplicationInfoDialog.CpuUsage.Format}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
-							</Grid>
+							</controls:CompactDialogItemGrid>
 							<Separator Classes="Dialog_Item_Separator"/>
 
 							<!-- Private memory usage -->
-							<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+							<controls:CompactDialogItemGrid>
 								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.PrivateMemoryUsage}"/>
 								<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static converters:FileSizeConverter.Default}}" TextTrimming="CharacterEllipsis"/>
-							</Grid>
+							</controls:CompactDialogItemGrid>
 							
 							<!-- Managed environment information -->
 							<StackPanel IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
 
 								<!-- Managed heap size -->
 								<Separator Classes="Dialog_Item_Separator"/>
-								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<controls:CompactDialogItemGrid>
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ManagedHeapSize}"/>
 									<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapSize, Converter={x:Static converters:FileSizeConverter.Default}}" TextTrimming="CharacterEllipsis"/>
-								</Grid>
+								</controls:CompactDialogItemGrid>
 								
 								<!-- Managed heap usage -->
 								<Separator Classes="Dialog_Item_Separator"/>
-								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<controls:CompactDialogItemGrid>
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ManagedHeapUsage}"/>
 									<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static converters:FileSizeConverter.Default}}" TextTrimming="CharacterEllipsis"/>
-								</Grid>
+								</controls:CompactDialogItemGrid>
 								
 								<!-- GC frequency -->
 								<Separator Classes="Dialog_Item_Separator"/>
-								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<controls:CompactDialogItemGrid>
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.GCFrequency}"/>
 									<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.GCFrequency}" Format="{DynamicResource String/ApplicationInfoDialog.GCFrequency.Format}" Grid.Column="1" TextTrimming="CharacterEllipsis"/>
-								</Grid>
+								</controls:CompactDialogItemGrid>
 
 								<!-- Finalization pending count -->
 								<Separator Classes="Dialog_Item_Separator"/>
-								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<controls:CompactDialogItemGrid>
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.FinalizationPendingCount}"/>
 									<SelectableTextBlock Grid.Column="1" Text="{Binding $parent[Window].Application.ProcessInfo.FinalizationPendingCount}" TextTrimming="CharacterEllipsis"/>
-								</Grid>
+								</controls:CompactDialogItemGrid>
 								
 							</StackPanel>
 							
@@ -300,17 +300,17 @@
 
 								<!-- Running script count -->
 								<Separator Classes="Dialog_Item_Separator"/>
-								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<controls:CompactDialogItemGrid>
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.RunningScriptCount}"/>
 									<SelectableTextBlock Grid.Column="1" Text="{Binding RunningScriptCount, Source={x:Static scripting:ScriptManager.Default}}" TextTrimming="CharacterEllipsis"/>
-								</Grid>
+								</controls:CompactDialogItemGrid>
 								
 								<!-- Script running loading -->
 								<Separator Classes="Dialog_Item_Separator"/>
-								<Grid Classes="Dialog_Item_Container_Small" ColumnDefinitions="*,Auto">
+								<controls:CompactDialogItemGrid>
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ScriptRunningLoading}"/>
 									<SelectableTextBlock Grid.Column="1" Text="{Binding ScriptRunningLoading, Source={x:Static scripting:ScriptManager.Default}, Converter={x:Static converters:RatioToPercentageConverter.Default}}" TextTrimming="CharacterEllipsis"/>
-								</Grid>
+								</controls:CompactDialogItemGrid>
 
 							</StackPanel>
 

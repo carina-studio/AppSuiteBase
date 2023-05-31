@@ -22,8 +22,7 @@
 					<StackPanel>
 
 						<!-- Description -->
-						<Border Name="descriptionItem" 
-							Classes="Dialog_Item_Container_Small"
+						<controls:CompactDialogItemBorder Name="descriptionItem" 
 							IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
 
 							<SelectableTextBlock Classes="Dialog_TextBlock" 
@@ -31,17 +30,17 @@
 								TextTrimming="CharacterEllipsis" 
 								TextWrapping="Wrap"/>
 
-						</Border>
+						</controls:CompactDialogItemBorder>
 						<Separator Classes="Dialog_Item_Separator" IsVisible="{Binding #descriptionItem.IsVisible}"/>
 
 						<!-- Priority -->
-						<Border Classes="Dialog_Item_Container_Small">
+						<controls:CompactDialogItemBorder>
 							<TextBlock Classes="Dialog_TextBlock" Text="{Binding Priority, Converter={x:Static controls:ExternalDependenciesDialogImpl.PriorityConverter}}"/>
-						</Border>
+						</controls:CompactDialogItemBorder>
 						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- State & Download -->
-						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+						<controls:DialogItemGrid>
 							<TextBlock Classes="Dialog_TextBlock" Foreground="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateBrushConverter}}">
 								<TextBlock.Text>
 									<MultiBinding Converter="{x:Static controls:ExternalDependenciesDialogImpl.StateConverter}">
@@ -72,7 +71,7 @@
 									VerticalAlignment="Center"/>
 
 							</StackPanel>
-						</Grid>
+						</controls:DialogItemGrid>
 
 					</StackPanel>
 				</Border>
