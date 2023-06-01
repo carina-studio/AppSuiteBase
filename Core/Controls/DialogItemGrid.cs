@@ -1,5 +1,4 @@
 using Avalonia.Controls;
-using Avalonia.Styling;
 using CarinaStudio.Controls;
 using System;
 
@@ -8,7 +7,7 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// <see cref="Grid"/> which is suitable for item in dialog.
 /// </summary>
-public class DialogItemGrid : Grid, IStyleable
+public class DialogItemGrid : Grid
 {
     /// <summary>
     /// Initialize new <see cref="DialogItemGrid"/> instance.
@@ -26,8 +25,8 @@ public class DialogItemGrid : Grid, IStyleable
             Width = new(1, GridUnitType.Auto),
         });
     }
-    
-    
+
+
     /// <inheritdoc/>
-    Type IStyleable.StyleKey => typeof(Grid);
+    protected override Type StyleKeyOverride => typeof(Grid);
 }

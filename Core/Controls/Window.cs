@@ -26,7 +26,6 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Static fields.
-        static readonly Version? AvaloniaVersion = typeof(Avalonia.Application).Assembly.GetName().Version;
         internal static readonly Stopwatch Stopwatch = new Stopwatch().Also(it => it.Start());
 
 
@@ -60,7 +59,7 @@ namespace CarinaStudio.AppSuite.Controls
             });
             this.checkSystemChromeVisibilityAction = new ScheduledAction(() =>
             {
-                this.SetAndRaise<bool>(IsSystemChromeVisibleInClientAreaProperty, 
+                this.SetAndRaise(IsSystemChromeVisibleInClientAreaProperty, 
                     ref this.isSystemChromeVisibleInClientArea, 
                     Global.Run(() =>
                     {
@@ -76,7 +75,7 @@ namespace CarinaStudio.AppSuite.Controls
             this.updateTransparencyLevelAction = new ScheduledAction(() =>
             {
                 if (!this.IsClosed)
-                    this.TransparencyLevelHint = this.OnSelectTransparentLevelHint();
+                    this.TransparencyLevelHint = new[] { this.OnSelectTransparentLevelHint() };
             });
             this.checkSystemChromeVisibilityAction.Schedule();
             this.updateTransparencyLevelAction.Schedule();
@@ -128,7 +127,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <inheritdoc/>
-        public Tutorial? CurrentTutorial { get => this.currentTutorial; }
+        public Tutorial? CurrentTutorial => this.currentTutorial;
 
 
         /// <inheritdoc/>
@@ -145,7 +144,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Check whether system chrome is visible in client area or not.
         /// </summary>
-        public bool IsSystemChromeVisibleInClientArea { get => this.isSystemChromeVisibleInClientArea; }
+        public bool IsSystemChromeVisibleInClientArea => this.isSystemChromeVisibleInClientArea;
 
 
         /// <inheritdoc/>
@@ -167,10 +166,10 @@ namespace CarinaStudio.AppSuite.Controls
                 if (it != null)
                 {
                     this.currentTutorialObserverToken = it.GetObservable(TutorialPresenter.CurrentTutorialProperty).Subscribe(tutorial =>
-                        this.SetAndRaise<Tutorial?>(CurrentTutorialProperty, ref this.currentTutorial, tutorial));
+                        this.SetAndRaise(CurrentTutorialProperty, ref this.currentTutorial, tutorial));
                 }
                 else
-                    this.SetAndRaise<Tutorial?>(CurrentTutorialProperty, ref this.currentTutorial, null);
+                    this.SetAndRaise(CurrentTutorialProperty, ref this.currentTutorial, null);
             });
         }
 
@@ -334,9 +333,6 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Get application instance.
         /// </summary>
-        public new TApp Application
-        {
-            get => (TApp)base.Application;
-        }
+        public new TApp Application => (TApp)base.Application;
     }
 }

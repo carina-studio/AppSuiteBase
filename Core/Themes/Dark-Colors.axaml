@@ -25,6 +25,7 @@
 
 	<!-- Expander -->
 	<StaticResourceExtension x:Key="ExpanderBackground" ResourceKey="Color/Button.Background"/>
+	<SolidColorBrush x:Key="ExpanderForeground" Color="{DynamicResource SystemBaseHighColor}"/>
 	<SolidColorBrush x:Key="ExpanderDropDownBackground" Color="#4f000000"/>
 
 	<!-- Icon -->

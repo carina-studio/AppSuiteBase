@@ -936,6 +936,7 @@
 					<Grid ColumnDefinitions="*,Auto">
 						<ContentPresenter x:Name="PART_ContentPresenter"
 										Margin="{TemplateBinding Padding}"
+										HorizontalAlignment="Left"
 										HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
 										VerticalContentAlignment="Center"
 										Background="Transparent"
@@ -1482,6 +1483,7 @@
 	<Style Selector="RepeatButton">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Padding" Value="{DynamicResource ButtonPadding}" />
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
 
@@ -2147,7 +2149,7 @@
 	
 	<!-- TextBlock -->
 	<Style Selector=":is(TextBlock)">
-		<Setter Property="Padding" Value="0,1,0,1"/> <!-- [Workaround] prevent clipping top of CJK characters -->
+		<Setter Property="Padding" Value="0,2,0,1"/> <!-- [Workaround] prevent clipping top of CJK characters -->
 	</Style>
 
 	<!-- TextBox -->
@@ -2265,7 +2267,7 @@
 														CaretBrush="{TemplateBinding CaretBrush}"
 														HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
 														VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-														Margin="0,1,0,1"/> <!-- [Workaround] Prevent clipping CJK characters -->
+														Margin="0,2,0,1"/> <!-- [Workaround] Prevent clipping CJK characters -->
 									</Panel>
 								</ScrollViewer>
 							</DockPanel>

@@ -1,5 +1,4 @@
 using Avalonia.Controls;
-using Avalonia.Styling;
 using System;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -7,7 +6,7 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// <see cref="Border"/> which is suitable for item in dialog.
 /// </summary>
-public class DialogItemBorder : Border, IStyleable
+public class DialogItemBorder : Border
 {
     /// <summary>
     /// Initialize new <see cref="DialogItemBorder"/> instance.
@@ -16,8 +15,8 @@ public class DialogItemBorder : Border, IStyleable
     {
         this.Classes.Add("Dialog_Item_Container");
     }
-    
-    
+
+
     /// <inheritdoc/>
-    Type IStyleable.StyleKey => typeof(Border);
+    protected override Type StyleKeyOverride => typeof(Border);
 }

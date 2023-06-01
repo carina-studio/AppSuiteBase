@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Styling;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using System;
@@ -13,7 +12,7 @@ namespace CarinaStudio.AppSuite.Controls
     /// <summary>
     /// <see cref="Avalonia.Controls.ListBox"/> with extended functions.
     /// </summary>
-    public class ListBox : Avalonia.Controls.ListBox, IStyleable
+    public class ListBox : Avalonia.Controls.ListBox
     {
         // Fields.
         long doubleTappedTime;
@@ -27,6 +26,8 @@ namespace CarinaStudio.AppSuite.Controls
         public ListBox()
         {
             this.DoubleTapped += this.OnDoubleTapped;
+            this.AddHandler(PointerPressedEvent, this.OnPreviewPointerPressed, RoutingStrategies.Tunnel);
+            this.AddHandler(PointerReleasedEvent, this.OnPreviewPointerReleased, RoutingStrategies.Tunnel);
         }
 
 
@@ -57,29 +58,30 @@ namespace CarinaStudio.AppSuite.Controls
             this.doubleTappedTime = this.stopwatch.ElapsedMilliseconds;
 
 
-        /// <inheritdoc/>
-        protected override void OnPointerPressed(PointerPressedEventArgs e)
+        // Pointer pressed.
+        void OnPreviewPointerPressed(object? sender, PointerPressedEventArgs e)
         {
             var pointerPoint = e.GetCurrentPoint(this);
             var hitElement = pointerPoint.Properties.IsLeftButtonPressed
                 ? this.InputHitTest(pointerPoint.Position)
                 : null;
-            base.OnPointerPressed(e);
-            if (hitElement != null && this.SelectedItems?.Count == 1)
+            Dispatcher.UIThread.Post(() =>
             {
-                var listBoxItem = hitElement is Visual visual
-                    ? visual.FindAncestorOfType<ListBoxItem>(true)
-                    : null;
-                if (listBoxItem != null && listBoxItem.FindAncestorOfType<ListBox>() == this)
-                    this.pointerDownItem = this.SelectedItem;
-            }
+                if (hitElement != null && this.SelectedItems?.Count == 1)
+                {
+                    var listBoxItem = hitElement is Visual visual
+                        ? visual.FindAncestorOfType<ListBoxItem>(true)
+                        : null;
+                    if (listBoxItem != null && listBoxItem.FindAncestorOfType<ListBox>() == this)
+                        this.pointerDownItem = this.SelectedItem;
+                }
+            });
         }
         
 
-        /// <inheritdoc/>
-        protected override void OnPointerReleased(PointerReleasedEventArgs e)
+        // Pointer released.
+        void OnPreviewPointerReleased(object? sender, PointerReleasedEventArgs e)
         {
-            base.OnPointerReleased(e);
             if (e.InitialPressMouseButton == MouseButton.Left 
                 && (this.stopwatch.ElapsedMilliseconds - this.doubleTappedTime) <= 500
                 && this.pointerDownItem != null
@@ -100,8 +102,8 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
-        // Interface implementations.
-		Type IStyleable.StyleKey => typeof(Avalonia.Controls.ListBox);
+        /// <inheritdoc/>
+        protected override Type StyleKeyOverride => typeof(Avalonia.Controls.ListBox);
     }
 
 

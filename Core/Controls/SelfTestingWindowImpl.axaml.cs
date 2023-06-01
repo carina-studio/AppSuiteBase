@@ -122,7 +122,7 @@ class SelfTestingWindowImpl : Window<IAppSuiteApplication>
     protected override void OnOpened(EventArgs e)
     {
         base.OnOpened(e);
-        this.SynchronizationContext.Post(this.testCasesTreeView.Focus);
+        this.SynchronizationContext.Post(() => this.testCasesTreeView.Focus());
     }
 
 

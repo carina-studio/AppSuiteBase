@@ -5,7 +5,6 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
-using Avalonia.Styling;
 using Avalonia.VisualTree;
 using CarinaStudio.Animation;
 using CarinaStudio.Threading;
@@ -21,7 +20,7 @@ namespace CarinaStudio.AppSuite.Controls
     /// <summary>
     /// <see cref="Avalonia.Controls.TabControl"/> with UX improvement.
     /// </summary>
-    public class TabControl : Avalonia.Controls.TabControl, IStyleable
+    public class TabControl : Avalonia.Controls.TabControl
     {
         /// <summary>
         /// Property of <see cref="IsFullWindowMode"/>.
@@ -142,7 +141,7 @@ namespace CarinaStudio.AppSuite.Controls
                 return false;
 
             // get tab item
-            item = (this.Items as IList)?.Let(it =>
+            item = this.Items.Let(it =>
             {
                 if (index < it.Count)
                     return it[index];
@@ -152,7 +151,7 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 itemIndex = index;
                 headerVisual = itemsPanel.Children[index].GetVisualChildren().FirstOrDefault()?.Let(it => 
-                    ((Visual)it).FindDescendantOfTypeAndName<Control>("PART_ContentContainer") ?? (Visual)it) ?? headerVisual;
+                    it.FindDescendantOfTypeAndName<Control>("PART_ContentContainer") ?? it) ?? headerVisual;
                 return true;
             }
             return false;
@@ -182,7 +181,7 @@ namespace CarinaStudio.AppSuite.Controls
                 return false;
 
             // get tab item
-            item = (this.Items as IList)?.Let(it =>
+            item = this.Items.Let(it =>
             {
                 if (index < it.Count)
                     return it[index];
@@ -296,7 +295,7 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 it.PropertyChanged += this.OnWindowPropertyChanged;
             });
-            (this.Items as INotifyCollectionChanged)?.Let(it => it.CollectionChanged += this.OnItemsChanged);
+            this.Items.CollectionChanged += this.OnItemsChanged;
             this.UpdateTabStripScrollViewerMargin(false);
         }
 
@@ -323,7 +322,7 @@ namespace CarinaStudio.AppSuite.Controls
                 it.PropertyChanged -= this.OnWindowPropertyChanged;
                 this.attachedWindow = null;
             });
-            (this.Items as INotifyCollectionChanged)?.Let(it => it.CollectionChanged -= this.OnItemsChanged);
+            this.Items.CollectionChanged -= this.OnItemsChanged;
             this.updateTabStripScrollViewerMarginAction.Cancel();
             base.OnDetachedFromVisualTree(e);
         }
@@ -438,7 +437,7 @@ namespace CarinaStudio.AppSuite.Controls
             if (e.Action == NotifyCollectionChangedAction.Move)
             {
                 // [Workaround] Prevent selecting items more than one
-                (this.Items as IList)?.Let(it =>
+                this.Items.Let(it =>
                 {
                     var selectedIndex = this.SelectedIndex;
                     for (var i = it.Count - 1 ; i >= 0 ; --i)
@@ -592,6 +591,10 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
+        /// <inheritdoc/>
+        protected override Type StyleKeyOverride => typeof(Avalonia.Controls.TabControl);
+
+
         /// <summary>
         /// Get width or height of tab strip.
         /// </summary>
@@ -646,10 +649,6 @@ namespace CarinaStudio.AppSuite.Controls
             else
                 this.tabStripScrollViewer.Margin = margin;
         }
-
-
-        // Interface implementation.
-        Type IStyleable.StyleKey { get; } = typeof(Avalonia.Controls.TabControl);
     }
 
 

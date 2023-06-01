@@ -12,7 +12,7 @@ namespace CarinaStudio.AppSuite.Controls
 	class SettingsEditorDialogImpl : Dialog
 	{
 		// Fields.
-		readonly SortedObservableList<Tuple<SettingKey, object>> settingKeyValues = new((x, y) => string.Compare(x?.Item1?.Name, y?.Item1?.Name, true, CultureInfo.InvariantCulture));
+		readonly SortedObservableList<Tuple<SettingKey, object>> settingKeyValues = new((x, y) => string.Compare(x.Item1.Name, y.Item1.Name, true, CultureInfo.InvariantCulture));
 		readonly ListBox settingsListBox;
 
 
@@ -73,7 +73,7 @@ namespace CarinaStudio.AppSuite.Controls
 				return;
 			}
 			settings.SettingChanged += this.OnSettingChanged;
-			this.SynchronizationContext.Post(this.settingsListBox.Focus);
+			this.SynchronizationContext.Post(() => this.settingsListBox.Focus());
 		}
 
 

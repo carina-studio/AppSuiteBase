@@ -1,5 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Media;
+﻿using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using CarinaStudio.Collections;
@@ -47,7 +46,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 
 
         // Fields.
-        IBitmap? icon;
+        Bitmap? icon;
 
 
         /// <summary>
@@ -76,10 +75,12 @@ namespace CarinaStudio.AppSuite.ViewModels
 
             // get assemblies
             var appAssembly = this.Application.Assembly;
+            // ReSharper disable InvokeAsExtensionMethod
             this.Assemblies = ListExtensions.AsReadOnly(AppDomain.CurrentDomain.GetAssemblies()
                 .Where(it => it != appAssembly && !it.IsDynamic && it.GetName().Name?.StartsWith("ℛ*") == false)
                 .OrderBy(it => it.GetName().Name)
                 .ToArray());
+            // ReSharper restore InvokeAsExtensionMethod
         }
 
 
@@ -174,24 +175,21 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Get application icon.
         /// </summary>
-        public virtual IBitmap Icon
+        public virtual Bitmap Icon
         {
             get
             {
                 if (this.icon != null)
                     return this.icon;
-                this.icon = AvaloniaLocator.Current.GetService<IAssetLoader>().Let(loader =>
+                this.icon = Global.Run(() =>
                 {
-                    if (loader != null)
-                    {
-                        var assembly = Assembly.GetEntryAssembly().AsNonNull();
-                        var uri = new Uri($"avares://{assembly.GetName().Name}/{this.Application.Name}.ico");
-                        if (loader.Exists(uri))
-                            return loader.Open(uri).Use(stream => new Bitmap(stream));
-                        uri = new Uri($"avares://{assembly.GetName().Name}/AppIcon.ico");
-                        if (loader.Exists(uri))
-                            return loader.Open(uri).Use(stream => new Bitmap(stream));
-                    }
+                    var assembly = Assembly.GetEntryAssembly().AsNonNull();
+                    var uri = new Uri($"avares://{assembly.GetName().Name}/{this.Application.Name}.ico");
+                    if (AssetLoader.Exists(uri))
+                        return AssetLoader.Open(uri).Use(stream => new Bitmap(stream));
+                    uri = new Uri($"avares://{assembly.GetName().Name}/AppIcon.ico");
+                    if (AssetLoader.Exists(uri))
+                        return AssetLoader.Open(uri).Use(stream => new Bitmap(stream));
                     throw new NotImplementedException("Cannot load default icon.");
                 });
                 return this.icon;

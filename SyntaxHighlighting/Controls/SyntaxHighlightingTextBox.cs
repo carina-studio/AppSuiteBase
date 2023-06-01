@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Styling;
 using CarinaStudio.AppSuite.Controls.Highlighting;
 using System;
 
@@ -10,7 +9,7 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// <see cref="Avalonia.Controls.TextBox"/> which supports syntax highlighting.
 /// </summary>
-public class SyntaxHighlightingTextBox : Avalonia.Controls.TextBox, IStyleable
+public class SyntaxHighlightingTextBox : TextBox
 {
     /// <summary>
     /// Property of <see cref="DefinitionSet"/>.
@@ -62,5 +61,5 @@ public class SyntaxHighlightingTextBox : Avalonia.Controls.TextBox, IStyleable
 
 
     /// <inheritdoc/>
-    Type IStyleable.StyleKey => typeof(Avalonia.Controls.TextBox);
+    protected override Type StyleKeyOverride => typeof(TextBox);
 }

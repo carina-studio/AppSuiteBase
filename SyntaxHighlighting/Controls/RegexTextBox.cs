@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Input;
@@ -53,12 +54,16 @@ namespace CarinaStudio.AppSuite.Controls
 			ZeroWidthPositiveLookbehindAssertion,
 			ZeroWidthNegativeLookbehindAssertion,
 		}
+		
+		
+		// Static fields.
+		static MethodInfo? HandleTextInputMethod;
 
 
 		// Fields.
 		InputAssistancePopup? escapedCharactersPopup;
 		readonly ObservableList<ListBoxItem> filteredPredefinedGroupListBoxItems = new();
-		readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new((x, y) => string.Compare(x?.Name, y?.Name, true, CultureInfo.InvariantCulture));
+		readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new((x, y) => string.Compare(x.Name, y.Name, true, CultureInfo.InvariantCulture));
 		InputAssistancePopup? groupingConstructsPopup;
 		bool isBackSlashPressed;
 		bool isEscapeKeyHandled;
@@ -746,39 +751,52 @@ namespace CarinaStudio.AppSuite.Controls
 			var nextChar1 = selectionEnd < textLength ? text[selectionEnd] : '\0';
 			var nextChar2 = selectionEnd < textLength - 1 ? text[selectionEnd + 1] : '\0';
 			++selectionStart;
+			HandleTextInputMethod ??= typeof(TextBox).GetMethod("HandleTextInput", BindingFlags.Instance | BindingFlags.NonPublic, new[] {typeof(string) });
 			switch (s[0])
 			{
 				case '(':
-					if (prevChar1 != '\\' && nextChar1 == '\0')
-						e.Text = "()";
+					if (prevChar1 != '\\' && nextChar1 == '\0' && HandleTextInputMethod is not null)
+					{
+						HandleTextInputMethod.Invoke(this, new object?[] { "()" });
+						e.Handled = true;
+					}
 					break;
 				case ')':
 					if (prevChar1 != '\\' && nextChar1 == ')' && nextChar2 == '\0')
-						e.Text = "";
+						e.Handled = true;
 					break;
 				case '[':
-					if (prevChar1 != '\\')
-						e.Text = "[]";
+					if (prevChar1 != '\\' && HandleTextInputMethod is not null)
+					{
+						HandleTextInputMethod.Invoke(this, new object?[] { "[]" });
+						e.Handled = true;
+					}
 					break;
 				case ']':
 					if (prevChar1 != '\\' && nextChar1 == ']')
-						e.Text = "";
+						e.Handled = true;
 					break;
 				case '{':
-					if (prevChar1 != '\\')
-						e.Text = "{}";
+					if (prevChar1 != '\\' && HandleTextInputMethod is not null)
+					{
+						HandleTextInputMethod.Invoke(this, new object?[] { "{}" });
+						e.Handled = true;
+					}
 					break;
 				case '}':
 					if (prevChar1 != '\\' && nextChar1 == '}')
-						e.Text = "";
+						e.Handled = true;
 					break;
 				case '<':
-					if (prevChar1 == '?' && prevChar2 == '(')
-						e.Text = "<>";
+					if (prevChar1 == '?' && prevChar2 == '(' && HandleTextInputMethod is not null)
+					{
+						HandleTextInputMethod.Invoke(this, new object?[] { "<>" });
+						e.Handled = true;
+					}
 					break;
 				case '>':
 					if (prevChar1 != '\\' && nextChar1 == '>')
-						e.Text = "";
+						e.Handled = true;
 					break;
 				case '\\':
 					this.isBackSlashPressed = true;
@@ -830,7 +848,7 @@ namespace CarinaStudio.AppSuite.Controls
 					};
 					it.AddHandler(PointerPressedEvent, (_, _) =>
 					{
-						SynchronizationContext.Current?.Post(this.Focus);
+						SynchronizationContext.Current?.Post(() => this.Focus());
 					}, RoutingStrategies.Tunnel);
 				});
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;
@@ -870,7 +888,7 @@ namespace CarinaStudio.AppSuite.Controls
 					};
 					it.AddHandler(PointerPressedEvent, (_, _) =>
 					{
-						SynchronizationContext.Current?.Post(this.Focus);
+						SynchronizationContext.Current?.Post(() => this.Focus());
 					}, RoutingStrategies.Tunnel);
 				});
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;
@@ -903,7 +921,7 @@ namespace CarinaStudio.AppSuite.Controls
 					it.ItemsSource = this.filteredPredefinedGroupListBoxItems;
 					it.AddHandler(PointerPressedEvent, (_, _) =>
 					{
-						SynchronizationContext.Current?.Post(this.Focus);
+						SynchronizationContext.Current?.Post(() => this.Focus());
 					}, RoutingStrategies.Tunnel);
 				});
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;

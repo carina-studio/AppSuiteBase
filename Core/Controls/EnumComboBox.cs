@@ -4,7 +4,6 @@ using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.LogicalTree;
-using Avalonia.Styling;
 using CarinaStudio.AppSuite.Converters;
 using CarinaStudio.Threading;
 using System;
@@ -14,7 +13,7 @@ namespace CarinaStudio.AppSuite.Controls
 	/// <summary>
 	/// <see cref="ComboBox"/> to show enumeration values.
 	/// </summary>
-	public class EnumComboBox : ComboBox, IStyleable
+	public class EnumComboBox : ComboBox
 	{
 		/// <summary>
 		/// Property of <see cref="Converter"/>.
@@ -88,8 +87,8 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
-		// Interface implementations.
-		Type IStyleable.StyleKey => typeof(ComboBox);
+		/// <inheritdoc/>
+		protected override Type StyleKeyOverride => typeof(ComboBox);
 		
 		
 		// Update converter.

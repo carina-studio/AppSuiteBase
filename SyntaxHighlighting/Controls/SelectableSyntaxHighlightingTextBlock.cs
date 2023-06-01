@@ -3,7 +3,6 @@ using Avalonia.Controls.Documents;
 using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
-using Avalonia.Styling;
 using CarinaStudio.AppSuite.Controls.Highlighting;
 using CarinaStudio.Collections;
 using CarinaStudio.Threading;
@@ -15,7 +14,7 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// <see cref="CarinaStudio.Controls.SelectableTextBlock"/> which supports syntax highlighting.
 /// </summary>
-public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.SelectableTextBlock, IStyleable
+public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.SelectableTextBlock
 {
     /// <summary>
     /// Property of <see cref="DefinitionSet"/>.
@@ -200,14 +199,14 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
         get => this.syntaxHighlighter.SelectionForeground;
         set => this.syntaxHighlighter.SelectionForeground = value;
     }
+    
+    
+    /// <inheritdoc/>
+    protected override Type StyleKeyOverride => typeof(SelectableSyntaxHighlightingTextBlock);
 
 
     /// <summary>
     /// Get <see cref="SyntaxHighlighter"/> used by the control.
     /// </summary>
     protected SyntaxHighlighter SyntaxHighlighter => this.syntaxHighlighter;
-
-
-    /// <inheritdoc/>
-    Type IStyleable.StyleKey => typeof(SelectableSyntaxHighlightingTextBlock);
 }

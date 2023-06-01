@@ -1,5 +1,4 @@
 using Avalonia.Controls.Primitives;
-using Avalonia.Styling;
 using System;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -7,9 +6,9 @@ namespace CarinaStudio.AppSuite.Controls
     /// <summary>
     /// Group box.
     /// </summary>
-    public class GroupBox : HeaderedContentControl, IStyleable
+    public class GroupBox : HeaderedContentControl
     {
-        // Style key.
-        Type IStyleable.StyleKey { get; } = typeof(GroupBox);
+        /// <inheritdox/>
+        protected override Type StyleKeyOverride => typeof(GroupBox);
     }
 }

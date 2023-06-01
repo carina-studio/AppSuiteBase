@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Styling;
 using Avalonia.VisualTree;
 using CarinaStudio.Animation;
 using CarinaStudio.Threading;
@@ -13,7 +12,7 @@ namespace CarinaStudio.AppSuite.Controls
     /// <summary>
     /// <see cref="ScrollViewer"/> which is designed for tool bar.
     /// </summary>
-    public class ToolBarScrollViewer : ScrollViewer, IStyleable
+    public class ToolBarScrollViewer : ScrollViewer
     {
         // Fields.
         ScrollContentPresenter? contentPresenter;
@@ -195,7 +194,7 @@ namespace CarinaStudio.AppSuite.Controls
         public void ScrollUp() => ScrollBy(0, -100);
 
 
-        // Interface implementation.
-        Type IStyleable.StyleKey { get; } = typeof(ToolBarScrollViewer);
+        /// <inheritdox/>
+        protected override Type StyleKeyOverride => typeof(ToolBarScrollViewer);
     }
 }

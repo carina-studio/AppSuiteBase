@@ -2,7 +2,6 @@
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
 using Avalonia.LogicalTree;
-using Avalonia.Styling;
 using System;
 using System.Reflection;
 
@@ -11,7 +10,7 @@ namespace CarinaStudio.AppSuite.Controls
     /// <summary>
     /// <see cref="Avalonia.Controls.DatePicker"/> which supports changing content according to current culture.
     /// </summary>
-    public class DatePicker : Avalonia.Controls.DatePicker, IStyleable
+    public class DatePicker : Avalonia.Controls.DatePicker
     {
         // Static fields.
         static readonly MethodInfo? setGridMethod = typeof(Avalonia.Controls.DatePicker).GetMethod("SetGrid", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -99,7 +98,7 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
-        // Style key.
-        Type IStyleable.StyleKey { get; } = typeof(Avalonia.Controls.DatePicker);
+        /// <inheritdoc/>
+        protected override Type StyleKeyOverride => typeof(Avalonia.Controls.DatePicker);
     }
 }

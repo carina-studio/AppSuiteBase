@@ -126,11 +126,11 @@
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">-12,0,-12,8</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.ItemsGroupHeader">0,0,0,10</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Label">0,1,0,1</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Description">0,1<!-- [Workaround] prevent clipping top of CJK characters -->,10,1</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">12,11<!-- [Workaround] prevent clipping top of CJK characters -->,12,11</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">12,7<!-- [Workaround] prevent clipping top of CJK characters -->,12,7</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.ItemsGroupHeader">0,1<!-- [Workaround] prevent clipping top of CJK characters -->,0,1</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Label">0,1<!-- [Workaround] prevent clipping top of CJK characters -->,10,1</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Description">0,2<!-- [Workaround] prevent clipping top of CJK characters -->,10,1</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">12,12<!-- [Workaround] prevent clipping top of CJK characters -->,12,11</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">12,8<!-- [Workaround] prevent clipping top of CJK characters -->,12,7</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.ItemsGroupHeader">0,2<!-- [Workaround] prevent clipping top of CJK characters -->,0,1</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Label">0,2<!-- [Workaround] prevent clipping top of CJK characters -->,10,1</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TreeView.Margin">-1,1,0,1</Thickness>
 
 	<!-- DocumentViewerDialog -->

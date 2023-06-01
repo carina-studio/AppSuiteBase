@@ -74,7 +74,7 @@
 													CaretBrush="{TemplateBinding CaretBrush}"
 													HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
 													VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-													Margin="0,1,0,1"/> <!-- [Workaround] Prevent clipping CJK characters -->
+													Margin="0,2,0,1"/> <!-- [Workaround] Prevent clipping CJK characters -->
 								</Panel>
 							</ScrollViewer>
 						</DockPanel>

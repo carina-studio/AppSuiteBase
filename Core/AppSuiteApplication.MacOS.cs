@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using Avalonia.Rendering;
 using Avalonia.VisualTree;
 using CarinaStudio.Collections;
 using CarinaStudio.Controls;
@@ -39,19 +38,19 @@ partial class AppSuiteApplication
                 return;
             AppSuiteAppDelegateClass = Class.DefineClass(nameof(AppSuiteAppDelegate), cls =>
             {
-                cls.DefineMethod<IntPtr, IntPtr>("application:openFiles:", (self, cmd, app, fileName) =>
+                cls.DefineMethod<IntPtr, IntPtr>("application:openFiles:", (_, cmd, app, fileName) =>
                 {
                     Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, app, fileName);
                 });
-                cls.DefineMethod<IntPtr, IntPtr>("application:openURLs:", (self, cmd, app, urls) =>
+                cls.DefineMethod<IntPtr, IntPtr>("application:openURLs:", (_, cmd, app, urls) =>
                 {
                     Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, app, urls);
                 });
-                cls.DefineMethod<IntPtr>("applicationDidFinishLaunching:", (self, cmd, notification) =>
+                cls.DefineMethod<IntPtr>("applicationDidFinishLaunching:", (_, cmd, notification) =>
                 {
                     Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
                 });
-                cls.DefineMethod<IntPtr, NSApplication.TerminateReply>("applicationShouldTerminate:", (self, cmd, app) =>
+                cls.DefineMethod<IntPtr, NSApplication.TerminateReply>("applicationShouldTerminate:", (_, cmd, app) =>
                 {
                     return Current.macOSAppDelegate.Let(it =>
                     {
@@ -70,7 +69,7 @@ partial class AppSuiteApplication
                         return NSApplication.TerminateReply.TerminateLater;
                     });
                 });
-                cls.DefineMethod<IntPtr, bool, bool>("applicationShouldHandleReopen:hasVisibleWindows:", (self, cmd, app, flag) =>
+                cls.DefineMethod<IntPtr, bool, bool>("applicationShouldHandleReopen:hasVisibleWindows:", (_, cmd, app, flag) =>
                 {
                     var asApp = AppSuiteApplication.Current;
                     asApp.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, app, flag);
@@ -78,7 +77,7 @@ partial class AppSuiteApplication
                         asApp.OnTryExitingBackgroundMode();
                     return true;
                 });
-                cls.DefineMethod<IntPtr>("applicationWillFinishLaunching:", (self, cmd, notification) =>
+                cls.DefineMethod<IntPtr>("applicationWillFinishLaunching:", (_, cmd, notification) =>
                 {
                     Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
                 });
@@ -108,7 +107,7 @@ partial class AppSuiteApplication
                 }
                 catch (Exception ex)
                 {
-                    AppSuiteApplication.Current.Logger.LogError(ex, "Error occurred while calling base delegate by '{cmdName}'", cmd.Name);
+                    Current.Logger.LogError(ex, "Error occurred while calling base delegate by '{cmdName}'", cmd.Name);
                 }
             }
             return defaultResult;
@@ -248,17 +247,6 @@ partial class AppSuiteApplication
         builder.With(new MacOSPlatformOptions()
         {
             DisableDefaultApplicationMenuItems = true,
-        });
-
-        /* [Workaround]
-         * Reduce UI frame rate to lower the CPU usage
-         * Please refer to https://github.com/AvaloniaUI/Avalonia/issues/4500
-         */
-        var initWindowingSubSystem = builder.WindowingSubsystemInitializer;
-        builder.UseWindowingSubsystem(() =>
-        {
-            initWindowingSubSystem?.Invoke();
-            AvaloniaLocator.CurrentMutable.Bind<IRenderTimer>().ToConstant(new DefaultRenderTimer(30));
         });
     }
 

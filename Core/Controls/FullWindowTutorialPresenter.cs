@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Media;
-using Avalonia.Styling;
 using Avalonia.VisualTree;
 using CarinaStudio.Animation;
 using CarinaStudio.Controls;
@@ -16,60 +15,12 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// <see cref="TutorialPresenter"/> which shows tutorial in full window mode.
 /// </summary>
-public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
+public class FullWindowTutorialPresenter : TutorialPresenter
 {
-    // Drawing of background.
-    class BackgroundDrawing : Drawing
-    {
-        // Fields.
-        readonly Pen anchorBorderPen = new();
-        readonly FullWindowTutorialPresenter presenter;
-
-        // Constructor.
-        public BackgroundDrawing(FullWindowTutorialPresenter presenter)
-        {
-            this.anchorBorderPen.Bind(Pen.BrushProperty, presenter.GetResourceObservable("Brush/Accent"));
-            this.anchorBorderPen.Thickness = 2;
-            this.presenter = presenter;
-        }
-
-        // Get bounds.
-        public override Rect GetBounds()
-        {
-            var bounds = this.presenter.Bounds;
-            return new Rect(0, 0, bounds.Width, bounds.Height);
-        }
-
-        // Draw.
-        public override void Draw(DrawingContext context)
-        {
-            // get state
-            var brush = this.presenter.Background;
-            if (brush == null)
-                return;
-            var bounds = this.presenter.Bounds;
-            var anchorBounds = this.presenter.anchorBounds;
-            
-            // draw 
-            if (anchorBounds.Width <= 0 || anchorBounds.Height <= 0)
-                context.DrawRectangle(brush, null, bounds);
-            else
-            {
-                context.DrawRectangle(brush, null, new(bounds.X, bounds.Y, bounds.Width, anchorBounds.Y));
-                context.DrawRectangle(brush, null, new(bounds.X, anchorBounds.Y, anchorBounds.X, anchorBounds.Height));
-                context.DrawRectangle(brush, null, new(anchorBounds.Right, anchorBounds.Y, bounds.Width - anchorBounds.Right, anchorBounds.Height));
-                context.DrawRectangle(brush, null, new(bounds.X, anchorBounds.Bottom, bounds.Width, bounds.Height - anchorBounds.Bottom));
-                context.DrawRectangle(Brushes.Transparent, null, anchorBounds);
-                context.DrawRectangle(null, this.anchorBorderPen, anchorBounds);
-            }
-        }
-    }
-
-
     // Fields.
+    readonly Pen anchorBorderPen = new();
     Rect anchorBounds;
     IDisposable? anchorBoundsObserverToken;
-    Image? background;
     DoubleAnimator? backgroundAnimator;
     Control? dismissControl;
     bool isPointerMovedAfterShowingTutorial;
@@ -84,6 +35,8 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
     /// </summary>
     public FullWindowTutorialPresenter()
     {
+        this.anchorBorderPen.Bind(Pen.BrushProperty, this.GetResourceObservable("Brush/Accent"));
+        this.anchorBorderPen.Thickness = 2;
         this.updateTutorialPositionAction = new(this.UpdateTutorialPosition);
         this.GetObservable(BoundsProperty).Subscribe(_ =>
         {
@@ -97,10 +50,6 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        this.background = e.NameScope.Find<Image>("PART_Background")?.Also(it =>
-        {
-            it.Source = new DrawingImage(new BackgroundDrawing(this));
-        });
         this.dismissControl = e.NameScope.Find<Control>("PART_Dismiss");
         this.root = e.NameScope.Find<Control>("PART_Root").AsNonNull().Also(it =>
         {
@@ -125,6 +74,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                 {
                     this.tutorialContainer?.Let(it =>
                         it.DataContext = null);
+                    this.InvalidateVisual();
                 };
                 animator.Completed += (_, _) =>
                 {
@@ -132,10 +82,15 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                     this.root.Opacity = animator.EndValue;
                     this.tutorialContainer?.Let(it =>
                         it.DataContext = null);
+                    this.InvalidateVisual();
                 };
                 animator.Duration = (TimeSpan)this.FindResource("TimeSpan/Animation").AsNonNull();
                 animator.Interpolator = Interpolators.Deceleration;
-                animator.ProgressChanged += (_, _) => this.root.Opacity = animator.Value;
+                animator.ProgressChanged += (_, _) => 
+                {
+                    this.root.Opacity = animator.Value;
+                    this.InvalidateVisual();
+                };
                 animator.Start();
             });
         }
@@ -224,7 +179,11 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                     animator.Completed += (_, _) => this.root.Opacity = animator.EndValue;
                     animator.Duration = (TimeSpan)this.FindResource("TimeSpan/Animation").AsNonNull();
                     animator.Interpolator = Interpolators.Deceleration;
-                    animator.ProgressChanged += (_, _) => this.root.Opacity = animator.Value;
+                    animator.ProgressChanged += (_, _) =>
+                    {
+                        this.root.Opacity = animator.Value;
+                        this.InvalidateVisual();
+                    };
                     animator.Start();
                 });
             }
@@ -284,7 +243,46 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
             else
                 this.Focus();
         });
+        
+        // invalidate
+        this.InvalidateVisual();
     }
+
+
+    /// <inheritdoc/>
+    public override void Render(DrawingContext context)
+    {
+        // call base
+        base.Render(context);
+        if (this.root?.IsVisible != true)
+            return;
+
+        // get state
+        var brush = this.Background;
+        if (brush is null)
+            return;
+        var bounds = this.Bounds;
+        var anchorBounds = this.anchorBounds;
+            
+        // draw 
+        if (brush is SolidColorBrush solidColorBrush)
+            solidColorBrush.Opacity = this.backgroundAnimator?.Value ?? 1.0;
+        if (anchorBounds.Width <= 0 || anchorBounds.Height <= 0)
+            context.DrawRectangle(brush, null, bounds);
+        else
+        {
+            context.DrawRectangle(brush, null, new(bounds.X, bounds.Y, bounds.Width, anchorBounds.Y));
+            context.DrawRectangle(brush, null, new(bounds.X, anchorBounds.Y, anchorBounds.X, anchorBounds.Height));
+            context.DrawRectangle(brush, null, new(anchorBounds.Right, anchorBounds.Y, bounds.Width - anchorBounds.Right, anchorBounds.Height));
+            context.DrawRectangle(brush, null, new(bounds.X, anchorBounds.Bottom, bounds.Width, bounds.Height - anchorBounds.Bottom));
+            context.DrawRectangle(Brushes.Transparent, null, anchorBounds);
+            context.DrawRectangle(null, this.anchorBorderPen, anchorBounds);
+        }
+    }
+
+
+    /// <inheritdoc/>
+    protected override Type StyleKeyOverride => typeof(FullWindowTutorialPresenter);
 
 
     // Update position of tutorial.
@@ -336,7 +334,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                     it.Margin = new();
                     it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
                     this.anchorBounds = new();
-                    this.background?.InvalidateVisual();
+                    this.InvalidateVisual();
                     return;
                 }
                 anchorBounds = new(anchorBounds.X - selfBounds.X, anchorBounds.Y - selfBounds.Y, anchorBounds.Width, anchorBounds.Height);
@@ -397,7 +395,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
 
                 // update background
                 this.anchorBounds = anchorBounds;
-                this.background?.InvalidateVisual();
+                this.InvalidateVisual();
             }
             else
             {
@@ -405,12 +403,8 @@ public class FullWindowTutorialPresenter : TutorialPresenter, IStyleable
                 it.Margin = new();
                 it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
                 this.anchorBounds = new();
-                this.background?.InvalidateVisual();
+                this.InvalidateVisual();
             }
         });
     }
-
-
-    // Interface implementations.
-    Type IStyleable.StyleKey => typeof(FullWindowTutorialPresenter);
 }

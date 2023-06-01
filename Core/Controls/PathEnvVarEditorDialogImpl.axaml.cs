@@ -88,8 +88,8 @@ class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	async void EditPath(string? path)
 	{
 		if (path == null 
-			|| this.GetValue<bool>(IsRefreshingPathsProperty) 
-			|| this.GetValue<bool>(IsSavingPathsProperty))
+			|| this.GetValue(IsRefreshingPathsProperty) 
+			|| this.GetValue(IsSavingPathsProperty))
 		{
 			return;
 		}
@@ -124,7 +124,7 @@ class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	/// <inheritdoc/>
 	protected override void OnClosing(WindowClosingEventArgs e)
 	{
-		if (this.GetValue<bool>(IsSavingPathsProperty))
+		if (this.GetValue(IsSavingPathsProperty))
 			e.Cancel = true;
 		base.OnClosing(e);
 	}
@@ -134,18 +134,18 @@ class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	protected override void OnOpened(EventArgs e)
 	{
 		base.OnOpened(e);
-		this.SynchronizationContext.Post(this.pathListBox.Focus);
+		this.SynchronizationContext.Post(() => this.pathListBox.Focus());
 	}
 
 
 	// Refresh path list.
 	async void RefreshPaths()
 	{
-		this.SetValue<bool>(IsRefreshingPathsProperty, true);
+		this.SetValue(IsRefreshingPathsProperty, true);
 		var paths = await CommandSearchPaths.GetPathsAsync();
 		this.paths.Clear();
 		this.paths.AddAll(paths);
-		this.SetValue<bool>(IsRefreshingPathsProperty, false);
+		this.SetValue(IsRefreshingPathsProperty, false);
 	}
 
 
@@ -153,8 +153,8 @@ class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	void RemovePath(string? path)
 	{
 		if (path == null 
-			||this.GetValue<bool>(IsRefreshingPathsProperty) 
-			|| this.GetValue<bool>(IsSavingPathsProperty))
+			||this.GetValue(IsRefreshingPathsProperty) 
+			|| this.GetValue(IsSavingPathsProperty))
 		{
 			return;
 		}
@@ -175,9 +175,9 @@ class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	/// </summary>
 	public async void SaveAndClose()
 	{
-		this.SetValue<bool>(IsSavingPathsProperty, true);
+		this.SetValue(IsSavingPathsProperty, true);
 		var success = await CommandSearchPaths.SetSystemPathsAsync(this.paths);
-		this.SetValue<bool>(IsSavingPathsProperty, false);
+		this.SetValue(IsSavingPathsProperty, false);
 		if (success)
 			this.Close(true);
 	}

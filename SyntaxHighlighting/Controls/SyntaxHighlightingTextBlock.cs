@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls.Documents;
 using Avalonia.Layout;
 using Avalonia.Media.TextFormatting;
-using Avalonia.Styling;
 using CarinaStudio.AppSuite.Controls.Highlighting;
 using CarinaStudio.Collections;
 using CarinaStudio.Threading;
@@ -14,7 +13,7 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// <see cref="CarinaStudio.Controls.TextBlock"/> which supports syntax highlighting.
 /// </summary>
-public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, IStyleable
+public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock
 {
     /// <summary>
     /// Property of <see cref="DefinitionSet"/>.
@@ -65,7 +64,7 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
             if (property == SyntaxHighlighter.DefinitionSetProperty)
                 this.RaisePropertyChanged(DefinitionSetProperty, (SyntaxHighlightingDefinitionSet?)e.OldValue,  (SyntaxHighlightingDefinitionSet?)e.NewValue);
         };
-        this.syntaxHighlighter.TextLayoutInvalidated += (_, e) =>
+        this.syntaxHighlighter.TextLayoutInvalidated += (_, _) =>
         {
             if (!this.isArranging && !this.isCreatingTextLayout && !this.isMeasuring)
                 this.InvalidateTextLayout();
@@ -170,14 +169,14 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock, ISty
             throw new InvalidOperationException();
         }
     }
+    
+    
+    /// <inheritdoc/>
+    protected override Type StyleKeyOverride => typeof(SyntaxHighlightingTextBlock);
 
 
     /// <summary>
     /// Get <see cref="SyntaxHighlighter"/> used by the control.
     /// </summary>
     protected SyntaxHighlighter SyntaxHighlighter { get => this.syntaxHighlighter; }
-
-
-    /// <inheritdoc/>
-    Type IStyleable.StyleKey => typeof(SyntaxHighlightingTextBlock);
 }

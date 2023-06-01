@@ -30,7 +30,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 	static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
 	static readonly StyledProperty<IBrush?> BackgroundImageOpacityMaskProperty = AvaloniaProperty.Register<SplashWindowImpl, IBrush?>(nameof(BackgroundImageOpacityMask));
 	static readonly StyledProperty<IImage?> BackgroundImageProperty = AvaloniaProperty.Register<SplashWindowImpl, IImage?>(nameof(BackgroundImage));
-	static readonly StyledProperty<IBitmap?> IconBitmapProperty = AvaloniaProperty.Register<SplashWindowImpl, IBitmap?>(nameof(IconBitmap));
+	static readonly StyledProperty<Bitmap?> IconBitmapProperty = AvaloniaProperty.Register<SplashWindowImpl, Bitmap?>(nameof(IconBitmap));
 	static readonly StyledProperty<string> MessageProperty = AvaloniaProperty.Register<SplashWindowImpl, string>(nameof(Message), " ", coerce: (_, it) => string.IsNullOrEmpty(it) ? " " : it);
 
 
@@ -120,7 +120,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 				
 				{
 				if (e.Property == OpacityProperty && Math.Abs(1 - (double)e.NewValue!) <= double.Epsilon * 2)
-				Dispatcher.UIThread.Post(() => this.initAnimationTaskCompletionSource.TrySetResult());
+					Dispatcher.UIThread.Post(() => this.initAnimationTaskCompletionSource.TrySetResult());
 				};
 			});
 			});
@@ -234,7 +234,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 
 
 	// Get icon as IBitmap.
-	public IBitmap? IconBitmap => this.GetValue(IconBitmapProperty);
+	public Bitmap? IconBitmap => this.GetValue(IconBitmapProperty);
 
 
 	// Get or set URI of application icon.

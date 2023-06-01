@@ -1,7 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.LogicalTree;
-using Avalonia.Styling;
 using System;
 using System.Reflection;
 
@@ -10,7 +9,7 @@ namespace CarinaStudio.AppSuite.Controls
     /// <summary>
     /// <see cref="Avalonia.Controls.TimePicker"/> which supports changing content according to current culture.
     /// </summary>
-    public class TimePicker : Avalonia.Controls.TimePicker, IStyleable
+    public class TimePicker : Avalonia.Controls.TimePicker
     {
         // Static fields.
         static readonly MethodInfo? setTimeTextMethod = typeof(Avalonia.Controls.TimePicker).GetMethod("SetSelectedTimeText", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -113,7 +112,7 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
-        // Style key.
-        Type IStyleable.StyleKey { get; } = typeof(Avalonia.Controls.TimePicker);
+        /// <inheritdox/>
+        protected override Type StyleKeyOverride => typeof(Avalonia.Controls.TimePicker);
     }
 }

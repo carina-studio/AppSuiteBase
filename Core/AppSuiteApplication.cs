@@ -6,7 +6,6 @@ using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.Platform;
@@ -1021,7 +1020,7 @@ namespace CarinaStudio.AppSuite
             {
                 style.Setters.Add(new Setter(Animatable.TransitionsProperty, new Transitions().Also(transitions =>
                 {
-                    transitions.Add(new Animation.BrushTransition()
+                    transitions.Add(new BrushTransition()
                     {
                         Duration = duration,
                         Easing = easing,
@@ -1075,13 +1074,13 @@ namespace CarinaStudio.AppSuite
             {
                 style.Setters.Add(new Setter(Animatable.TransitionsProperty, new Transitions().Also(transitions =>
                 {
-                    transitions.Add(new Animation.BrushTransition()
+                    transitions.Add(new BrushTransition()
                     {
                         Duration = duration,
                         Easing = easing,
                         Property = Avalonia.Controls.Primitives.TemplatedControl.BackgroundProperty,
                     });
-                    transitions.Add(new Animation.BrushTransition()
+                    transitions.Add(new BrushTransition()
                     {
                         Duration = duration,
                         Easing = easing,
@@ -2355,25 +2354,24 @@ namespace CarinaStudio.AppSuite
         /// <returns>Parameters of splash window.</returns>
         protected virtual SplashWindowParams OnPrepareSplashWindow() => new SplashWindowParams().Also((ref SplashWindowParams it) =>
         {
-            var assetLoader = AvaloniaLocator.Current.GetService<IAssetLoader>().AsNonNull();
             it.BackgroundImageOpacity = 0.2;
             it.BackgroundImageUri = Global.Run(() =>
             {
                 var uri = new Uri($"avares://{this.Assembly.GetName().Name}/SplashWindowBackground.jpg");
-                if (assetLoader.Exists(uri))
+                if (AssetLoader.Exists(uri))
                     return uri;
                 uri = new Uri($"avares://{this.Assembly.GetName().Name}/SplashWindowBackground.png");
-                if (assetLoader.Exists(uri))
+                if (AssetLoader.Exists(uri))
                     return uri;
                 return null;
             });
             it.IconUri = Global.Run(() =>
             {
                 var uri = new Uri($"avares://{this.Assembly.GetName().Name}/{this.Name}.ico");
-                if (assetLoader.Exists(uri))
+                if (AssetLoader.Exists(uri))
                     return uri;
                 uri = new Uri($"avares://{this.Assembly.GetName().Name}/AppIcon.ico");
-                if (assetLoader.Exists(uri))
+                if (AssetLoader.Exists(uri))
                     return uri;
                 throw new NotImplementedException("Cannot get default icon.");
             });
