@@ -22,6 +22,11 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     Rect anchorBounds;
     IDisposable? anchorBoundsObserverToken;
     DoubleAnimator? backgroundAnimator;
+    IBrush? backgroundBrush;
+    // ReSharper disable PrivateFieldCanBeConvertedToLocalVariable
+    readonly EventHandler<AvaloniaPropertyChangedEventArgs> backgroundPropertyChangedHandler;
+    // ReSharper restore PrivateFieldCanBeConvertedToLocalVariable
+    IDisposable? backgroundPropertyChangedHandlerToken;
     Control? dismissControl;
     bool isPointerMovedAfterShowingTutorial;
     Control? root;
@@ -37,12 +42,41 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     {
         this.anchorBorderPen.Bind(Pen.BrushProperty, this.GetResourceObservable("Brush/Accent"));
         this.anchorBorderPen.Thickness = 2;
+        this.backgroundPropertyChangedHandler = this.OnBackgroundPropertyChanged;
         this.updateTutorialPositionAction = new(this.UpdateTutorialPosition);
+        this.GetObservable(BackgroundProperty).Subscribe(background =>
+        {
+            this.backgroundPropertyChangedHandlerToken = this.backgroundPropertyChangedHandlerToken.DisposeAndReturnNull();
+            if (background is Brush brush)
+                this.backgroundPropertyChangedHandlerToken = brush.AddWeakEventHandler(nameof(PropertyChanged), this.backgroundPropertyChangedHandler);
+            this.CloneBackgroundBrush();
+        });
         this.GetObservable(BoundsProperty).Subscribe(_ =>
         {
             if (this.CurrentTutorial != null)
                 this.updateTutorialPositionAction.Schedule();
         });
+    }
+
+
+    // Clone background brush to local instance.
+    void CloneBackgroundBrush()
+    {
+        var background = this.Background;
+        if (background is not Brush brush)
+        {
+            this.backgroundBrush = null;
+            return;
+        }
+        if (brush is ISolidColorBrush solidColorBrush)
+        {
+            if (this.backgroundBrush is SolidColorBrush localSolidColorBrush)
+                localSolidColorBrush.Color = solidColorBrush.Color;
+            else
+                this.backgroundBrush = new SolidColorBrush(solidColorBrush.Color);
+        }
+        else
+            this.backgroundBrush = null;
     }
 
 
@@ -58,6 +92,15 @@ public class FullWindowTutorialPresenter : TutorialPresenter
         });
         this.skipAllTutorialsControl = e.NameScope.Find<Control>("PART_SkipAllTutorials");
         this.tutorialContainer = e.NameScope.Find<Control>("PART_TutorialContainer");
+    }
+
+
+    // Called when property pf background brush changed.
+    void OnBackgroundPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        this.CloneBackgroundBrush();
+        if (this.CurrentTutorial is not null)
+            this.InvalidateVisual();
     }
 
 
@@ -258,15 +301,18 @@ public class FullWindowTutorialPresenter : TutorialPresenter
             return;
 
         // get state
-        var brush = this.Background;
+        var brush = this.backgroundBrush;
         if (brush is null)
             return;
         var bounds = this.Bounds;
         var anchorBounds = this.anchorBounds;
-            
+        (brush as Brush)?.Let(it =>
+        {
+            var baseOpacity = (this.Background as Brush)?.Opacity ?? 1.0;
+            it.Opacity = (this.backgroundAnimator?.Value ?? 1.0) * baseOpacity;
+        });
+
         // draw 
-        if (brush is SolidColorBrush solidColorBrush)
-            solidColorBrush.Opacity = this.backgroundAnimator?.Value ?? 1.0;
         if (anchorBounds.Width <= 0 || anchorBounds.Height <= 0)
             context.DrawRectangle(brush, null, bounds);
         else
