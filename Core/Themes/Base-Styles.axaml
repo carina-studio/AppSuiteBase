@@ -2693,6 +2693,24 @@
 	<!-- ToolTip -->
 	<Style Selector="ToolTip">
 		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ToolTip}"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border Name="PART_LayoutRoot"
+				        BorderThickness="{TemplateBinding BorderThickness}"
+				        BoxShadow="{StaticResource BoxShadows/ToolTip}"
+				        Background="{TemplateBinding Background}"
+				        BorderBrush="{TemplateBinding BorderBrush}"
+				        Margin="{StaticResource Thickness/ToolTip.Margin}"
+				        Padding="{TemplateBinding Padding}"
+				        CornerRadius="{TemplateBinding CornerRadius}">
+					<ContentPresenter Name="PART_ContentPresenter"
+					                  MaxWidth="{TemplateBinding MaxWidth}"
+					                  Content="{TemplateBinding Content}"
+					                  ContentTemplate="{TemplateBinding ContentTemplate}"
+					                  TextBlock.TextWrapping="Wrap"/>
+				</Border>
+			</ControlTemplate>
+		</Setter>
 	</Style>
 
 	<!-- TreeView -->
