@@ -13,7 +13,10 @@
 		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*">
 			<Image Classes="Dialog_Icon_Large" Source="{Binding $parent[Window].IconImage}" VerticalAlignment="Top"/>
 			<StackPanel Grid.Column="1" VerticalAlignment="Center">
-				<SelectableTextBlock FontWeight="Bold" MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].Message}" TextWrapping="WrapWithOverflow"/>
+				<Panel>
+					<SelectableTextBlock Name="messageTextBlock1" FontWeight="Bold" MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].Message}" TextWrapping="WrapWithOverflow" VerticalAlignment="Top"/>
+					<SelectableTextBlock Name="messageTextBlock2" FontWeight="Bold" MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].Message}" TextWrapping="Wrap" VerticalAlignment="Top"/>
+				</Panel>
 				<StackPanel Name="secondaryMessagePanel" IsVisible="{Binding $parent[Window].SecondaryMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
 					<Separator Classes="Dialog_Separator"/>
 					<SelectableTextBlock MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].SecondaryMessage}" TextWrapping="WrapWithOverflow"/>
