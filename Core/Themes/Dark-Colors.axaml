@@ -73,7 +73,7 @@
 
 	<!-- ToolTip -->
 	<StaticResourceExtension x:Key="Color/ToolTip.Background" ResourceKey="Color/Button.Background"/>
-	<Color x:Key="Color/ToolTip.Border">#1c1c1c</Color>
+	<Color x:Key="Color/ToolTip.Border">#2effffff</Color>
 
 	<!-- Window -->
 	<Color x:Key="Color/Window.Background">#202020</Color>

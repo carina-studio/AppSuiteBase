@@ -364,7 +364,9 @@
 	<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Padding">5</Thickness>
 
 	<!-- ToolTip -->
+	<BoxShadows x:Key="BoxShadows/ToolTip">0 0 6 0 #4f000000</BoxShadows>
 	<CornerRadius x:Key="CornerRadius/ToolTip">4</CornerRadius>
+	<Thickness x:Key="Thickness/ToolTip.Margin">6</Thickness>
 
 	<!-- TreeView -->
 	<Thickness x:Key="Thickness/TreeView.Padding">3</Thickness>
