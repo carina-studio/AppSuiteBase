@@ -226,7 +226,7 @@
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading6">0,16,0,3</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Text.Margin">0,3,0,13</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Padding">15,12,15,12</Thickness>
-	<Thickness x:Key="Thickness/MarkdownViewer.Padding.StartsWithHeading">15,-5,15,12</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Padding.StartsWithHeading">15,-2,15,12</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Rule.Margin">0,3,0,13</Thickness>
 
 	<!-- Menu -->
