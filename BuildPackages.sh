@@ -1,4 +1,4 @@
-PROJECT_LIST=("Core" "Core.Tests" "Fonts" "SyntaxHighlighting")
+PROJECT_LIST=("Core" "Fonts" "SyntaxHighlighting")
 
 # Reset output directory
 rm -r ./Packages

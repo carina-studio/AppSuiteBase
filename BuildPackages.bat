@@ -15,6 +15,5 @@ IF %ERRORLEVEL% NEQ 0 (
 )
 
 dotnet pack Core -c Release -o Packages
-dotnet pack Core.Tests -c Release -o Packages
 dotnet pack Fonts -c Release -o Packages
 dotnet pack SyntaxHighlighting -c Release -o Packages
