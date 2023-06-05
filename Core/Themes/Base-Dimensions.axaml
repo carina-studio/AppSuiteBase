@@ -97,6 +97,7 @@
 	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding">20</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding.WithHeader">22,20,22,20</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding.WithItemsGroups">30,20,30,20</Thickness>
+	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding.WithItemsGroups.Right">10,20,30,20</Thickness>
 	<Thickness x:Key="Thickness/Dialog.Control.Margin">-1,1,0,1</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ControlButton.Margin">3,0,3,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ControlButton.Padding">10,5,10,5</Thickness>
