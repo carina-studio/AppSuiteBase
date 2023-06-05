@@ -222,7 +222,7 @@
 
 			<!-- Progress -->
 			<Border BorderBrush="{x:Null}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{StaticResource CornerRadius/SplashWindow}" Height="50" VerticalAlignment="Bottom">
-				<ProgressBar Name="progressBar" Background="{x:Null}" Margin="5,0,5,0" Maximum="1" Value="0" VerticalAlignment="Bottom"/>
+				<ProgressBar Name="progressBar" Background="{x:Null}" Maximum="1" Value="0" VerticalAlignment="Bottom"/>
 			</Border>
 
 			<!-- Border -->
