@@ -42,6 +42,10 @@ namespace CarinaStudio.AppSuite.Controls
 		/// Property of <see cref="IsSyntaxHighlightingEnabled"/>.
 		/// </summary>
 		public static readonly DirectProperty<RegexTextBox, bool> IsSyntaxHighlightingEnabledProperty = AvaloniaProperty.RegisterDirect<RegexTextBox, bool>(nameof(IsSyntaxHighlightingEnabled), tb => tb.isSyntaxHighlightingEnabled, (tb, e) => tb.IsSyntaxHighlightingEnabled = e);
+		/// <summary>
+		/// Property of <see cref="Object"/>.
+		/// </summary>
+		public static readonly new DirectProperty<RegexTextBox, Regex?> ObjectProperty = AvaloniaProperty.RegisterDirect<RegexTextBox, Regex?>(nameof(Object), t => t.Object, (t, o) => t.Object = o);
 
 
 		// Grouping construct.
@@ -454,6 +458,14 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		/// <inheritdoc/>
+		public override Regex? Object
+		{
+			get => (Regex?)((ObjectTextBox)this).Object;
+			set => ((ObjectTextBox)this).Object = value;
+		}
+
+
+		/// <inheritdoc/>
 		protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
 		{
 			base.OnApplyTemplate(e);
@@ -817,6 +829,11 @@ namespace CarinaStudio.AppSuite.Controls
 		/// Predefined list of <see cref="RegexGroup"/> for input assistance.
 		/// </summary>
 		public IList<RegexGroup> PredefinedGroups => this.predefinedGroups;
+		
+		
+		/// <inheritdoc/>
+		protected override void RaiseObjectChanged(Regex? oldValue, Regex? newValue) =>
+			this.RaisePropertyChanged(ObjectProperty, oldValue, newValue);
 
 
 		// Setup menu for escaped characters.
