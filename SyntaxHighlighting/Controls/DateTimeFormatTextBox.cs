@@ -17,6 +17,10 @@ public class DateTimeFormatTextBox : ObjectTextBox<string>
     /// Property of <see cref="IsSyntaxHighlightingEnabled"/>.
     /// </summary>
     public static readonly DirectProperty<DateTimeFormatTextBox, bool> IsSyntaxHighlightingEnabledProperty = AvaloniaProperty.RegisterDirect<DateTimeFormatTextBox, bool>(nameof(IsSyntaxHighlightingEnabled), tb => tb.isSyntaxHighlightingEnabled, (tb, e) => tb.IsSyntaxHighlightingEnabled = e);
+    /// <summary>
+    /// Property of <see cref="Object"/>.
+    /// </summary>
+    public static readonly new DirectProperty<DateTimeFormatTextBox, string?> ObjectProperty = AvaloniaProperty.RegisterDirect<DateTimeFormatTextBox, string?>(nameof(Object), t => t.Object, (t, o) => t.Object = o);
 
     
     // Fields.
@@ -33,6 +37,14 @@ public class DateTimeFormatTextBox : ObjectTextBox<string>
         this.PseudoClasses.Add(":syntaxHighlighted");
         this.PseudoClasses.Add(":dateTimeFormatTextBox");
         this.Bind(WatermarkProperty, this.GetResourceObservable("String/DateTimeFormatTextBox.Watermark"));
+    }
+    
+    
+    /// <inheritdoc/>
+    public override string? Object
+    {
+        get => (string?)((ObjectTextBox)this).Object;
+        set => ((ObjectTextBox)this).Object = value;
     }
 
 
@@ -73,6 +85,11 @@ public class DateTimeFormatTextBox : ObjectTextBox<string>
                 shTextPresenter.DefinitionSet = DateTimeFormatSyntaxHighlighting.CreateDefinitionSet(app));
         }
     }
+    
+    
+    /// <inheritdoc/>
+    protected override void RaiseObjectChanged(string? oldValue, string? newValue) =>
+        this.RaisePropertyChanged(ObjectProperty, oldValue, newValue);
 
 
     /// <inheritdoc/>
@@ -80,7 +97,7 @@ public class DateTimeFormatTextBox : ObjectTextBox<string>
     {
         try
         {
-            DateTime.UtcNow.ToString(text);
+            _ = DateTime.UtcNow.ToString(text);
             obj = text;
             return true;
         }

@@ -17,6 +17,10 @@ public class TimeSpanFormatTextBox : ObjectTextBox<string>
     /// Property of <see cref="IsSyntaxHighlightingEnabled"/>.
     /// </summary>
     public static readonly DirectProperty<TimeSpanFormatTextBox, bool> IsSyntaxHighlightingEnabledProperty = AvaloniaProperty.RegisterDirect<TimeSpanFormatTextBox, bool>(nameof(IsSyntaxHighlightingEnabled), tb => tb.isSyntaxHighlightingEnabled, (tb, e) => tb.IsSyntaxHighlightingEnabled = e);
+    /// <summary>
+    /// Property of <see cref="Object"/>.
+    /// </summary>
+    public static readonly new DirectProperty<TimeSpanFormatTextBox, string?> ObjectProperty = AvaloniaProperty.RegisterDirect<TimeSpanFormatTextBox, string?>(nameof(Object), t => t.Object, (t, o) => t.Object = o);
 
     
     // Fields.
@@ -60,6 +64,14 @@ public class TimeSpanFormatTextBox : ObjectTextBox<string>
             }
         }
     }
+    
+    
+    /// <inheritdoc/>
+    public override string? Object
+    {
+        get => (string?)((ObjectTextBox)this).Object;
+        set => ((ObjectTextBox)this).Object = value;
+    }
 
 
     /// <inheritdoc/>
@@ -76,11 +88,16 @@ public class TimeSpanFormatTextBox : ObjectTextBox<string>
 
 
     /// <inheritdoc/>
+    protected override void RaiseObjectChanged(string? oldValue, string? newValue) =>
+        this.RaisePropertyChanged(ObjectProperty, oldValue, newValue);
+
+
+    /// <inheritdoc/>
     protected override bool TryConvertToObject(string text, out string? obj)
     {
         try
         {
-            new TimeSpan().ToString(text);
+            _ = TimeSpan.Zero.ToString(text);
             obj = text;
             return true;
         }
