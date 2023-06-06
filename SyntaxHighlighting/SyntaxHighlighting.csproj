@@ -1,20 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<AssemblyVersion>2.2.94.605</AssemblyVersion>
-		<Version>2.2.94.605</Version>
-		<PackageVersion>2.2.94.605-preview</PackageVersion>
-		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.SyntaxHighlighting</AssemblyName>
-		<Nullable>enable</Nullable>
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
-		<Authors>Carina Studio</Authors>
-		<Company>Carina Studio</Company>
-		<Copyright>©2021-2023 Carina Studio</Copyright>
 		<PackageId>CarinaStudio.AppSuite.SyntaxHighlighting</PackageId>
-		<Description>Base libraries for Carina Studio Application Suite.</Description>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/carina-studio/AppSuiteBase/</PackageProjectUrl>
+		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

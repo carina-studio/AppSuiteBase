@@ -7,18 +7,18 @@
 		<RootNamespace>CarinaStudio.AppSuite.Tests</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Tests</AssemblyName>
 		<StartupObject>CarinaStudio.AppSuite.Tests.App</StartupObject>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFrameworks>net7.0</TargetFrameworks>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 	</PropertyGroup>
 	
 	<ItemGroup>
-	  <AvaloniaResource Include="AppIcon.ico" />
-	  <AvaloniaResource Include="ChangeList.md" />
-	  <AvaloniaResource Include="ChangeList-zh-CN.md" />
-	  <AvaloniaResource Include="ChangeList-zh-TW.md" />
-	  <AvaloniaResource Include="Document.md" />
-	  <AvaloniaResource Include="Document-zh-TW.md" />
-	  <AvaloniaResource Include="SplashWindowBackground.jpg" />
+		<AvaloniaResource Include="AppIcon.ico" />
+		<AvaloniaResource Include="ChangeList.md" />
+		<AvaloniaResource Include="ChangeList-zh-CN.md" />
+		<AvaloniaResource Include="ChangeList-zh-TW.md" />
+		<AvaloniaResource Include="Document.md" />
+		<AvaloniaResource Include="Document-zh-TW.md" />
+		<AvaloniaResource Include="SplashWindowBackground.jpg" />
 	</ItemGroup>
 	
 	<ItemGroup>
