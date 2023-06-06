@@ -1,0 +1,23 @@
+<Project>
+    <PropertyGroup>
+
+        <!-- Version -->
+        <AssemblyVersion>2.3.1.605</AssemblyVersion>
+        <Version>2.3.1.605</Version>
+        <PackageVersion>2.3.1.605-preview</PackageVersion>
+
+        <!-- Other information -->
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Authors>Carina Studio</Authors>
+        <AvaloniaVersion>11.0.0-rc1.1</AvaloniaVersion>
+        <AvaloniaNameGeneratorFilterByNamespace>Dummy</AvaloniaNameGeneratorFilterByNamespace> <!-- Prevent generating InitializeComponents() and fields -->
+		<Company>Carina Studio</Company>
+        <Copyright>©2022-2023 Carina Studio</Copyright>
+        <Description>Base libraries for Carina Studio Application Suite.</Description>
+		<Nullable>enable</Nullable>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/carina-studio/AppSuiteBase/</PackageProjectUrl>
+		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+
+    </PropertyGroup>
+</Project>

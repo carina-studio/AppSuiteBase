@@ -1,22 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<AssemblyVersion>2.3.1.605</AssemblyVersion>
-		<Version>2.3.1.605</Version>
-		<PackageVersion>2.3.1.605-dev</PackageVersion>
-		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Core</AssemblyName>
-		<Nullable>enable</Nullable>
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
-		<Authors>Carina Studio</Authors>
-		<Company>Carina Studio</Company>
-		<Copyright>©2021-2023 Carina Studio</Copyright>
 		<PackageId>CarinaStudio.AppSuite.Core</PackageId>
-		<Description>Base libraries for Carina Studio Application Suite.</Description>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/carina-studio/AppSuiteBase/</PackageProjectUrl>
-		<AvaloniaVersion>11.0.0-rc1.1</AvaloniaVersion>
-		<AvaloniaNameGeneratorFilterByNamespace>Dummy</AvaloniaNameGeneratorFilterByNamespace> <!-- Prevent generating InitializeComponents() and fields -->
+		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
