@@ -183,7 +183,7 @@
 							Data="M2048 2048v-819h-205v469l-1493 -1493h469v-205h-819v819h205v-469l1493 1493h-469v205h819z" />
 					</Viewbox>
 				  </Button>
-				  <Button x:Name="PART_MinimiseButton"
+				  <Button x:Name="PART_MinimizeButton"
 						  Classes="CaptionButton">
 					<Viewbox Width="11" Margin="2">
 					  <Path Stretch="UniformToFill"
@@ -2812,7 +2812,7 @@
 
 	<!-- Window -->
 	<Style Selector="Window">
-		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background}"/>
+		<Setter Property="Background" Value="{Binding $self.TransparencyLevelHint, Converter={x:Static converters:WindowBackgroundConverters.Default}}"/>
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Panel>
@@ -2838,38 +2838,8 @@
 			</ControlTemplate>
 		</Setter>
 	</Style>
-	<Style Selector="Window[ActualTransparencyLevel=AcrylicBlur]">
-		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Transparent}"/>
-	</Style>
-	<Style Selector="Window[ActualTransparencyLevel=Blur]">
-		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Transparent}"/>
-	</Style>
-	<Style Selector="Window[ActualTransparencyLevel=Mica]">
-		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Transparent}"/>
-	</Style>
-	<Style Selector="Window[ActualTransparencyLevel=Transparent]">
-		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Transparent}"/>
-	</Style>
-	<Style Selector="Window[TransparencyLevelHint=None]">
-		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background}"/>
-	</Style>
 	<Style Selector="Window.Tabbed">
-		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed}"/>
-	</Style>
-	<Style Selector="Window.Tabbed[ActualTransparencyLevel=AcrylicBlur]">
-		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed.Transparent}"/>
-	</Style>
-	<Style Selector="Window.Tabbed[ActualTransparencyLevel=Blur]">
-		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed.Transparent}"/>
-	</Style>
-	<Style Selector="Window.Tabbed[ActualTransparencyLevel=Mica]">
-		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed.Transparent}"/>
-	</Style>
-	<Style Selector="Window.Tabbed[ActualTransparencyLevel=Transparent]">
-		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed.Transparent}"/>
-	</Style>
-	<Style Selector="Window.Tabbed[TransparencyLevelHint=None]">
-		<Setter Property="Background" Value="{DynamicResource Brush/Window.Background.Tabbed}"/>
+		<Setter Property="Background" Value="{Binding $self.TransparencyLevelHint, Converter={x:Static converters:WindowBackgroundConverters.Tabbed}}"/>
 	</Style>
 	
 </Styles>
