@@ -186,7 +186,8 @@ namespace CarinaStudio.AppSuite
             /// <inheritdoc/>
             public void Report(double value)
             {
-                app.Logger.LogTrace("Downloading DotMemory: {progress:F2}%", value);
+                if ((int)(value + 0.5) % 5 == 0)
+                    app.Logger.LogTrace("Downloading DotMemory: {progress:F2}%", value);
             }
         }
 
@@ -1091,6 +1092,10 @@ namespace CarinaStudio.AppSuite
             });
         }
 #endif
+
+
+        // Root directory path of dotMemory.
+        string DotMemoryRootDirectoryPath => Path.Combine(this.RootPrivateDirectoryPath, "dotMemory");
 
 
         /// <inheritdoc/>
@@ -3641,7 +3646,7 @@ namespace CarinaStudio.AppSuite
             this.Logger.LogTrace("Prepare taking memory snapshot");
             try
             {
-                DotMemory.EnsurePrerequisiteAsync(progress: new DotMemoryDownloadingProgressCallback(this), downloadTo: Path.Combine(this.RootPrivateDirectoryPath, "dotMemory")).Wait();
+                DotMemory.EnsurePrerequisiteAsync(progress: new DotMemoryDownloadingProgressCallback(this), downloadTo: this.DotMemoryRootDirectoryPath).Wait();
             }
             catch (Exception ex)
             {
@@ -3691,7 +3696,7 @@ namespace CarinaStudio.AppSuite
             // start preparation of taking snapshot
             this.Logger.LogTrace("Prepare taking memory snapshot");
             var cancellationTokenSource = new CancellationTokenSource();
-            var preparationTask = DotMemory.EnsurePrerequisiteAsync(cancellationTokenSource.Token, progress: new DotMemoryDownloadingProgressCallback(this));
+            var preparationTask = DotMemory.EnsurePrerequisiteAsync(cancellationTokenSource.Token, progress: new DotMemoryDownloadingProgressCallback(this), downloadTo: this.DotMemoryRootDirectoryPath);
             
             // notify user about taking memory snapshot
             if (!this.PersistentState.GetValueOrDefault(DoNotPromptBeforeTakingMemorySnapshotKey))
