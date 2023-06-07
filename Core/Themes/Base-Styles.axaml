@@ -2158,11 +2158,6 @@
 		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
-	
-	<!-- TextBlock -->
-	<Style Selector=":is(TextBlock)">
-		<Setter Property="Padding" Value="0,2,0,1"/> <!-- [Workaround] prevent clipping top of CJK characters -->
-	</Style>
 
 	<!-- TextBox -->
 	<Style Selector="Button.TextBox_InPlaceAction">
@@ -2278,8 +2273,7 @@
 														SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
 														CaretBrush="{TemplateBinding CaretBrush}"
 														HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-														VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-														Margin="0,2,0,1"/> <!-- [Workaround] Prevent clipping CJK characters -->
+														VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
 									</Panel>
 								</ScrollViewer>
 							</DockPanel>

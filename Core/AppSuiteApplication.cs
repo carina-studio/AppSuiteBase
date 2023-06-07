@@ -606,76 +606,77 @@ namespace CarinaStudio.AppSuite
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
             // build application
-            return AppBuilder.Configure<TApp>()
-                .UsePlatformDetect()
-                .LogToTrace().Also(it =>
+            return AppBuilder.Configure<TApp>().Also(it =>
+            {
+                it.LogToTrace()
+                    .UsePlatformDetect()
+                    .WithInterFont();
+                var cjkUnicodeRanges = new UnicodeRange(new UnicodeRangeSegment[]
                 {
-                    var cjkUnicodeRanges = new UnicodeRange(new UnicodeRangeSegment[]
-                    {
-                        // ReSharper disable CommentTypo
-                        new(0x2e80, 0x2eff), // CJKRadicalsSupplement
-                        new(0x3000, 0x303f), // CJKSymbolsandPunctuation
-                        new(0x3200, 0x4dbf), // EnclosedCJKLettersandMonths, CJKCompatibility, CJKUnifiedIdeographsExtensionA
-                        new(0x4e00, 0x9fff), // CJKUnifiedIdeographs
-                        new(0xf900, 0xfaff), // CJKCompatibilityIdeographs
-                        new(0xfe30, 0xfe4f), // CJKCompatibilityForms
-                        // ReSharper restore CommentTypo
-                    });
-                    if (Platform.IsWindows)
-                    {
-                        it.With(new FontManagerOptions()
-                        {
-                            // ReSharper disable StringLiteralTypo
-                            FontFallbacks = new FontFallback[]
-                            {
-                                new()
-                                {
-                                    FontFamily = new("Microsoft JhengHei UI"),
-                                    UnicodeRange = cjkUnicodeRanges,
-                                },
-                                new()
-                                {
-                                    FontFamily = new("Microsoft YaHei UI"),
-                                    UnicodeRange = cjkUnicodeRanges,
-                                }
-                            },
-                            // ReSharper restore StringLiteralTypo
-                        });
-                        if (Platform.IsWindows11OrAbove)
-                        {
-                            // enable Mica effect
-                            it.With(new Win32PlatformOptions()
-                            {
-                                UseWindowsUIComposition = true,
-                            });
-                        }
-                    }
-                    if (Platform.IsMacOS)
-                        SetupMacOSAppBuilder(it);
-                    if (Platform.IsLinux)
-                    {
-                        it.With(new FontManagerOptions()
-                        {
-                            // ReSharper disable StringLiteralTypo
-                            FontFallbacks = new FontFallback[]
-                            {
-                                new()
-                                {
-                                    FontFamily = new("Noto Sans Mono CJK TC"),
-                                    UnicodeRange = cjkUnicodeRanges,
-                                },
-                                new()
-                                {
-                                    FontFamily = new("Noto Sans Mono CJK SC"),
-                                    UnicodeRange = cjkUnicodeRanges,
-                                }
-                            },
-                            // ReSharper restore StringLiteralTypo
-                        });
-                        it.With(new X11PlatformOptions());
-                    }
-                    setupAction?.Invoke(it);
+                    // ReSharper disable CommentTypo
+                    new(0x2e80, 0x2eff), // CJKRadicalsSupplement
+                    new(0x3000, 0x303f), // CJKSymbolsandPunctuation
+                    new(0x3200, 0x4dbf), // EnclosedCJKLettersandMonths, CJKCompatibility, CJKUnifiedIdeographsExtensionA
+                    new(0x4e00, 0x9fff), // CJKUnifiedIdeographs
+                    new(0xf900, 0xfaff), // CJKCompatibilityIdeographs
+                    new(0xfe30, 0xfe4f), // CJKCompatibilityForms
+                    // ReSharper restore CommentTypo
                 });
+                if (Platform.IsWindows)
+                {
+                    it.With(new FontManagerOptions()
+                    {
+                        // ReSharper disable StringLiteralTypo
+                        FontFallbacks = new FontFallback[]
+                        {
+                            new()
+                            {
+                                FontFamily = new("Microsoft JhengHei UI"),
+                                UnicodeRange = cjkUnicodeRanges,
+                            },
+                            new()
+                            {
+                                FontFamily = new("Microsoft YaHei UI"),
+                                UnicodeRange = cjkUnicodeRanges,
+                            }
+                        },
+                        // ReSharper restore StringLiteralTypo
+                    });
+                    if (Platform.IsWindows11OrAbove)
+                    {
+                        // enable Mica effect
+                        it.With(new Win32PlatformOptions()
+                        {
+                            UseWindowsUIComposition = true,
+                        });
+                    }
+                }
+                if (Platform.IsMacOS)
+                    SetupMacOSAppBuilder(it);
+                if (Platform.IsLinux)
+                {
+                    it.With(new FontManagerOptions()
+                    {
+                        // ReSharper disable StringLiteralTypo
+                        FontFallbacks = new FontFallback[]
+                        {
+                            new()
+                            {
+                                FontFamily = new("Noto Sans Mono CJK TC"),
+                                UnicodeRange = cjkUnicodeRanges,
+                            },
+                            new()
+                            {
+                                FontFamily = new("Noto Sans Mono CJK SC"),
+                                UnicodeRange = cjkUnicodeRanges,
+                            }
+                        },
+                        // ReSharper restore StringLiteralTypo
+                    });
+                    it.With(new X11PlatformOptions());
+                }
+                setupAction?.Invoke(it);
+            });
         }
 
 
