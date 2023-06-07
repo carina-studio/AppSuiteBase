@@ -1,3 +1,5 @@
+using Avalonia;
+using Avalonia.Media;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
@@ -101,7 +103,7 @@ unsafe partial class AppSuiteApplication
             }
             
             // setup title bar color
-            var titleBarColor = this.FindResourceOrDefault<Avalonia.Media.Color>("Color/Window.TitleBar");
+            var titleBarColor = this.FindResourceOrDefault<Color>("Color/Window.TitleBar");
             var win32Color = (titleBarColor.B << 16) | (titleBarColor.G << 8) | titleBarColor.R;
             result = DwmSetWindowAttribute(hwnd, DWMWA_CAPTION_COLOR, &win32Color, sizeof(int));
             if (result != default)
@@ -179,6 +181,38 @@ unsafe partial class AppSuiteApplication
         }
     }
 #pragma warning restore CA1416
+    
+    
+    // Setup AppBuilder for Windows.
+    static void SetupWindowsAppBuilder(AppBuilder builder, UnicodeRange cjkUnicodeRanges)
+    {
+        builder.With(new FontManagerOptions()
+        {
+            // ReSharper disable StringLiteralTypo
+            FontFallbacks = new FontFallback[]
+            {
+                new()
+                {
+                    FontFamily = new("Microsoft JhengHei UI"),
+                    UnicodeRange = cjkUnicodeRanges,
+                },
+                new()
+                {
+                    FontFamily = new("Microsoft YaHei UI"),
+                    UnicodeRange = cjkUnicodeRanges,
+                }
+            },
+            // ReSharper restore StringLiteralTypo
+        });
+        if (Platform.IsWindows11OrAbove)
+        {
+            // enable Mica effect
+            builder.With(new Win32PlatformOptions()
+            {
+                UseWindowsUIComposition = true,
+            });
+        }
+    }
 
 
     // Setup related objects for taskbar.

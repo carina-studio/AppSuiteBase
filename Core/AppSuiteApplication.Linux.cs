@@ -1,3 +1,5 @@
+using Avalonia;
+using Avalonia.Media;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
@@ -150,7 +152,7 @@ partial class AppSuiteApplication
         }
         getGdkMonitorScaleFactor = (delegate*unmanaged[Cdecl]<void*, int>)funcPtr;
 
-        // initialize GDKnull
+        // initialize GDK
         initGdk(0, null);
 
         // complete
@@ -203,5 +205,30 @@ partial class AppSuiteApplication
     {
         if (this.IsSystemThemeModeSupportedOnLinux)
             this.UpdateSystemThemeMode(true);
+    }
+    
+    
+    // Setup AppBuilder for Linux.
+    static void SetupLinuxAppBuilder(AppBuilder builder, UnicodeRange cjkUnicodeRanges)
+    {
+        builder.With(new FontManagerOptions()
+        {
+            // ReSharper disable StringLiteralTypo
+            FontFallbacks = new FontFallback[]
+            {
+                new()
+                {
+                    FontFamily = new("Noto Sans Mono CJK TC"),
+                    UnicodeRange = cjkUnicodeRanges,
+                },
+                new()
+                {
+                    FontFamily = new("Noto Sans Mono CJK SC"),
+                    UnicodeRange = cjkUnicodeRanges,
+                }
+            },
+            // ReSharper restore StringLiteralTypo
+        });
+        builder.With(new X11PlatformOptions());
     }
 }

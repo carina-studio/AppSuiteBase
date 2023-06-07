@@ -624,58 +624,11 @@ namespace CarinaStudio.AppSuite
                     // ReSharper restore CommentTypo
                 });
                 if (Platform.IsWindows)
-                {
-                    it.With(new FontManagerOptions()
-                    {
-                        // ReSharper disable StringLiteralTypo
-                        FontFallbacks = new FontFallback[]
-                        {
-                            new()
-                            {
-                                FontFamily = new("Microsoft JhengHei UI"),
-                                UnicodeRange = cjkUnicodeRanges,
-                            },
-                            new()
-                            {
-                                FontFamily = new("Microsoft YaHei UI"),
-                                UnicodeRange = cjkUnicodeRanges,
-                            }
-                        },
-                        // ReSharper restore StringLiteralTypo
-                    });
-                    if (Platform.IsWindows11OrAbove)
-                    {
-                        // enable Mica effect
-                        it.With(new Win32PlatformOptions()
-                        {
-                            UseWindowsUIComposition = true,
-                        });
-                    }
-                }
-                if (Platform.IsMacOS)
+                    SetupWindowsAppBuilder(it, cjkUnicodeRanges);
+                else if (Platform.IsMacOS)
                     SetupMacOSAppBuilder(it);
-                if (Platform.IsLinux)
-                {
-                    it.With(new FontManagerOptions()
-                    {
-                        // ReSharper disable StringLiteralTypo
-                        FontFallbacks = new FontFallback[]
-                        {
-                            new()
-                            {
-                                FontFamily = new("Noto Sans Mono CJK TC"),
-                                UnicodeRange = cjkUnicodeRanges,
-                            },
-                            new()
-                            {
-                                FontFamily = new("Noto Sans Mono CJK SC"),
-                                UnicodeRange = cjkUnicodeRanges,
-                            }
-                        },
-                        // ReSharper restore StringLiteralTypo
-                    });
-                    it.With(new X11PlatformOptions());
-                }
+                else if (Platform.IsLinux)
+                    SetupLinuxAppBuilder(it, cjkUnicodeRanges);
                 setupAction?.Invoke(it);
             });
         }
