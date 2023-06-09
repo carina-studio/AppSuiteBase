@@ -610,7 +610,11 @@ namespace CarinaStudio.AppSuite
             // build application
             return AppBuilder.Configure<TApp>()
                 .UsePlatformDetect()
-                .LogToTrace().Also(it =>
+                .LogToTrace()
+                .With(new FontManagerOptions
+                {
+                    DefaultFamilyName = "avares://CarinaStudio.AppSuite.Core/Fonts/Inter-Regular.ttf#Inter"
+                }).Also(it =>
                 {
                     var cjkUnicodeRanges = new UnicodeRange(new UnicodeRangeSegment[]
                     {

@@ -17,6 +17,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<AvaloniaResource Include="Fonts/Inter-Bold.ttf" />
+		<AvaloniaResource Include="Fonts/Inter-Regular.ttf" />
 		<AvaloniaResource Include="Resources/Icons.axaml" />
 		<AvaloniaResource Include="Strings/Default.axaml" />
 		<AvaloniaResource Include="Strings/Default-OSX.axaml" />
