@@ -2896,6 +2896,15 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <inheritdoc/>
+        public override void RegisterServices()
+        {
+            if (Platform.IsLinux) // [Workaround] Need to handle font loading for non-English locale
+                AvaloniaLocator.CurrentMutable.Bind<IFontManagerImpl>().ToConstant(new Fonts.FontManagerImpl());
+            base.RegisterServices();
+        }
+
+
         /// <summary>
         /// Get type of application releasing.
         /// </summary>
