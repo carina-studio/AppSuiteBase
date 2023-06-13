@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Media;
+using Avalonia.Media.Fonts;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
@@ -187,9 +188,14 @@ unsafe partial class AppSuiteApplication
     // Setup AppBuilder for Windows.
     static void SetupWindowsAppBuilder(AppBuilder builder, UnicodeRange cjkUnicodeRanges)
     {
-        builder.With(new FontManagerOptions()
+        builder.ConfigureFonts(fontManager =>
         {
-            DefaultFamilyName = $"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts/#Inter",
+            fontManager.AddFontCollection(new EmbeddedFontCollection(
+                new Uri("fonts:Inter", UriKind.Absolute),
+                new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts", UriKind.Absolute)));
+        });
+        builder.With(new FontManagerOptions
+        {
             // ReSharper disable StringLiteralTypo
             FontFallbacks = new FontFallback[]
             {

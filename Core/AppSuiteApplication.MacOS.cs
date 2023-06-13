@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Media.Fonts;
 using Avalonia.VisualTree;
 using CarinaStudio.Collections;
 using CarinaStudio.Controls;
@@ -244,10 +245,13 @@ partial class AppSuiteApplication
     // Setup AppBuilder for macOS.
     static void SetupMacOSAppBuilder(AppBuilder builder)
     {
-        builder.With(new FontManagerOptions
+        builder.ConfigureFonts(fontManager =>
         {
-            DefaultFamilyName = $"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts/#Inter"
-        }).With(new MacOSPlatformOptions
+            fontManager.AddFontCollection(new EmbeddedFontCollection(
+                new Uri("fonts:Inter", UriKind.Absolute),
+                new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts", UriKind.Absolute)));
+        });
+        builder.With(new MacOSPlatformOptions
         {
             DisableDefaultApplicationMenuItems = true,
         });

@@ -212,7 +212,7 @@ partial class AppSuiteApplication
     // Setup AppBuilder for Linux.
     static void SetupLinuxAppBuilder(AppBuilder builder, UnicodeRange cjkUnicodeRanges)
     {
-        builder.With(new FontManagerOptions()
+        builder.With(new FontManagerOptions
         {
             DefaultFamilyName = $"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts/#Inter",
             // ReSharper disable StringLiteralTypo
