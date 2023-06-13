@@ -17,6 +17,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<AvaloniaResource Include="Fonts/Inter-Bold.ttf" />
+		<AvaloniaResource Include="Fonts/Inter-Regular.ttf" />
 		<AvaloniaResource Include="Resources/Icons.axaml" />
 		<AvaloniaResource Include="Strings/Default.axaml" />
 		<AvaloniaResource Include="Strings/Default-OSX.axaml" />
@@ -54,7 +56,6 @@
 		<PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
 		<PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
 		<PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
-		<PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)" />
 		<PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
 		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="$(AvaloniaVersion)" />
 		<PackageReference Include="CarinaStudio.AppBase.Application.Avalonia" Version="2.0.31.611-previewA11RC11" />

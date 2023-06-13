@@ -610,8 +610,7 @@ namespace CarinaStudio.AppSuite
             return AppBuilder.Configure<TApp>().Also(it =>
             {
                 it.LogToTrace()
-                    .UsePlatformDetect()
-                    .WithInterFont();
+                    .UsePlatformDetect();
                 var cjkUnicodeRanges = new UnicodeRange(new UnicodeRangeSegment[]
                 {
                     // ReSharper disable CommentTypo

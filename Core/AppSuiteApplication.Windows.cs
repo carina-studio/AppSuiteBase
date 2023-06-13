@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 
@@ -188,6 +189,7 @@ unsafe partial class AppSuiteApplication
     {
         builder.With(new FontManagerOptions()
         {
+            DefaultFamilyName = $"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts/#Inter",
             // ReSharper disable StringLiteralTypo
             FontFallbacks = new FontFallback[]
             {
@@ -199,6 +201,16 @@ unsafe partial class AppSuiteApplication
                 new()
                 {
                     FontFamily = new("Microsoft YaHei UI"),
+                    UnicodeRange = cjkUnicodeRanges,
+                },
+                new()
+                {
+                    FontFamily = new("PMingLiU"),
+                    UnicodeRange = cjkUnicodeRanges,
+                },
+                new()
+                {
+                    FontFamily = new("MingLiU"),
                     UnicodeRange = cjkUnicodeRanges,
                 }
             },

@@ -244,7 +244,10 @@ partial class AppSuiteApplication
     // Setup AppBuilder for macOS.
     static void SetupMacOSAppBuilder(AppBuilder builder)
     {
-        builder.With(new MacOSPlatformOptions()
+        builder.With(new FontManagerOptions
+        {
+            DefaultFamilyName = $"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts/#Inter"
+        }).With(new MacOSPlatformOptions
         {
             DisableDefaultApplicationMenuItems = true,
         });

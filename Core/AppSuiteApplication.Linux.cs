@@ -3,6 +3,7 @@ using Avalonia.Media;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace CarinaStudio.AppSuite;
@@ -213,9 +214,20 @@ partial class AppSuiteApplication
     {
         builder.With(new FontManagerOptions()
         {
+            DefaultFamilyName = $"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts/#Inter",
             // ReSharper disable StringLiteralTypo
             FontFallbacks = new FontFallback[]
             {
+                new()
+                {
+                    FontFamily = new("Noto Sans CJK TC"),
+                    UnicodeRange = cjkUnicodeRanges,
+                },
+                new()
+                {
+                    FontFamily = new("Noto Sans CJK SC"),
+                    UnicodeRange = cjkUnicodeRanges,
+                },
                 new()
                 {
                     FontFamily = new("Noto Sans Mono CJK TC"),
@@ -224,6 +236,16 @@ partial class AppSuiteApplication
                 new()
                 {
                     FontFamily = new("Noto Sans Mono CJK SC"),
+                    UnicodeRange = cjkUnicodeRanges,
+                },
+                new()
+                {
+                    FontFamily = new("Noto Serif CJK TC"),
+                    UnicodeRange = cjkUnicodeRanges,
+                },
+                new()
+                {
+                    FontFamily = new("Noto Serif CJK SC"),
                     UnicodeRange = cjkUnicodeRanges,
                 }
             },
