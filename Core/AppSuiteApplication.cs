@@ -907,6 +907,24 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Deactivate Pro version and remove current device from product.
+        /// </summary>
+        /// <returns>Task of deactivating Pro version.</returns>
+        public Task DeactivateProVersionAndRemoveDeviceAsync() =>
+            this.DeactivateProVersionAndRemoveDeviceAsync(this.LatestActiveMainWindow ?? this.LatestActiveWindow);
+
+
+        /// <inheritdoc/>
+        public Task DeactivateProVersionAndRemoveDeviceAsync(Avalonia.Controls.Window? window)
+        {
+            var id = this.ProVersionProductId;
+            if (string.IsNullOrEmpty(id))
+                return Task.CompletedTask;
+            return this.ProductManager.DeactivateAndRemoveDeviceAsync(id, window);
+        }
+
+
+        /// <summary>
         /// Default port at localhost to receive log output.
         /// </summary>
         public virtual int DefaultLogOutputTargetPort => 0;
@@ -2331,7 +2349,7 @@ namespace CarinaStudio.AppSuite
                 uri = new Uri($"avares://{this.Assembly.GetName().Name}/AppIcon.ico");
                 if (AssetLoader.Exists(uri))
                     return uri;
-                throw new NotImplementedException("Cannot get default icon.");
+                throw new NotSupportedException("Cannot get default icon.");
             });
         });
 
