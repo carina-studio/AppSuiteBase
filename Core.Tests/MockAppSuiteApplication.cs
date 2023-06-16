@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Window = Avalonia.Controls.Window;
 
 namespace CarinaStudio.AppSuite
 {
@@ -92,6 +93,11 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <returns>True if current thread is the thread which instance depends on.</returns>
         public bool CheckAccess() => Thread.CurrentThread == synchronizationContext?.ExecutionThread;
+
+
+        /// <inheritdoc/>
+        public Task DeactivateProVersionAndRemoveDeviceAsync(Window? window) =>
+            Task.CompletedTask;
 
 
         /// <inheritdoc/>

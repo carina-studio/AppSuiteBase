@@ -114,6 +114,14 @@ namespace CarinaStudio.AppSuite
         /// Get or set custom screen scale factor for Linux.
         /// </summary>
         double CustomScreenScaleFactor { get; set; }
+        
+        
+        /// <summary>
+        /// Deactivate Pro version and remove current device from product.
+        /// </summary>
+        /// <param name="window">Window.</param>
+        /// <returns>Task of deactivating Pro version.</returns>
+        Task DeactivateProVersionAndRemoveDeviceAsync(Window? window);
 
 
         /// <summary>
