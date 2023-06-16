@@ -1,3 +1,4 @@
+using Avalonia.Controls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,7 +28,16 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
     /// <param name="id">ID of product.</param>
     /// <param name="window">Window to show dialog.</param>
     /// <returns>Task of activating product.</returns>
-    Task ActivateProductAsync(string id, Avalonia.Controls.Window? window);
+    Task ActivateProductAsync(string id, Window? window);
+
+
+    /// <summary>
+    /// Deactivate given product and remove current device from the product.
+    /// </summary>
+    /// <param name="id">ID of product.</param>
+    /// <param name="window">Window to show dialog.</param>
+    /// <returns>Task of deactivating product and removing device.</returns>
+    Task<bool> DeactivateAndRemoveDeviceAsync(string id, Window? window);
 
 
     /// <summary>
@@ -88,7 +98,7 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
     /// </summary>
     /// <param name="id">ID of product.</param>
     /// <param name="window">Window for showing UI.</param>
-    void PurchaseProduct(string id, Avalonia.Controls.Window? window);
+    void PurchaseProduct(string id, Window? window);
 
 
     /// <summary>
@@ -106,7 +116,7 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
     /// <param name="id">ID of product.</param>
     /// <param name="devices">Active devices.</param>
     /// <returns>True if devices got successfully.</returns>
-    bool TryGetProductActiveDevices(string id, [NotNullWhen(true)] out IActiveDeviceInfo[] devices);
+    bool TryGetProductActiveDevices(string id, [NotNullWhen(true)] out IActiveDeviceInfo[]? devices);
 
 
     /// <summary>
@@ -191,7 +201,7 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
 
 
     /// <inheritdoc/>
-    public Task ActivateProductAsync(string id, Avalonia.Controls.Window? window) => Task.CompletedTask;
+    public Task ActivateProductAsync(string id, Window? window) => Task.CompletedTask;
 
 
     /// <inheritdoc/>
@@ -199,10 +209,14 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
     { }
 
 
+    /// <inheritdoc/>
+    public Task<bool> DeactivateAndRemoveDeviceAsync(string id, Window? window) => Task.FromResult(false);
+
+
     /// <summary>
     /// Check whether at least one product need to be activated online or not.
     /// </summary>
-    public bool HasPendingOnlineProductActivation { get; }
+    public bool HasPendingOnlineProductActivation => false;
 
 
     /// <inheritdoc/>
@@ -210,11 +224,11 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
 
 
     /// <inheritdoc/>
-    public bool IsActivatingProductsOnline { get; }
+    public bool IsActivatingProductsOnline => false;
 
 
     /// <inheritdoc/>
-    public bool IsMock { get => true; }
+    public bool IsMock => true;
 
 
     /// <inheritdoc/>
@@ -256,7 +270,7 @@ class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProduct
 
 
     /// <inheritdoc/>
-    public void PurchaseProduct(string id, Avalonia.Controls.Window? window)
+    public void PurchaseProduct(string id, Window? window)
     { }
 
 
