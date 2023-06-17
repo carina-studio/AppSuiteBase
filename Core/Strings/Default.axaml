@@ -20,6 +20,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">Application will generate more runtime information to application log in Debug Mode, even provides options to enable or adjustment some internal functions. It will leave Debug Mode automatically when you launch application next time.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.CpuUsage">CPU usage</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.CpuUsage.Format">{0:F2}%</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.DeactivateProduct">Deactivate…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DeviceName">Device name</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DonateWithPayPal">Donate with PayPal</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">Export application logs…</sys:String>
