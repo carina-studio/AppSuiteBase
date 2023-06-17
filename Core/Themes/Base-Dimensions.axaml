@@ -19,7 +19,7 @@
 	<sys:Double x:Key="Double/ApplicationInfoDialog.AppVersion.FontSize">14</sys:Double>
 	<sys:Double x:Key="Double/ApplicationInfoDialog.Content.MaxHeight">500</sys:Double>
 	<sys:Double x:Key="Double/ApplicationInfoDialog.Header.Background.Height">150</sys:Double>
-	<sys:Double x:Key="Double/ApplicationInfoDialog.MinWidth">550</sys:Double>
+	<sys:Double x:Key="Double/ApplicationInfoDialog.Width">550</sys:Double>
 	<Thickness x:Key="Thickness/ApplicationInfoDialog.AppBadge.Margin">5,0,0,0</Thickness>
 	<Thickness x:Key="Thickness/ApplicationInfoDialog.AppIcon.Margin">0,0,15,0</Thickness>
 	<Thickness x:Key="Thickness/ApplicationInfoDialog.AppTitle.Margin">0,0,0,5</Thickness>

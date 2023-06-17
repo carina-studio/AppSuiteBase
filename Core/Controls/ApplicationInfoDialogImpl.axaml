@@ -17,8 +17,7 @@
         x:DataType="vm:ApplicationInfo"
 		Name="window"
         Classes="Dialog"
-        MinWidth="{DynamicResource Double/ApplicationInfoDialog.MinWidth}"
-        SizeToContent="WidthAndHeight">
+        Width="{DynamicResource Double/ApplicationInfoDialog.Width}">
 
 	<DockPanel>
 
@@ -73,13 +72,11 @@
 									<SelectableTextBlock FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Text="{Binding Name}" VerticalAlignment="Center"/>
 									<StackPanel Name="badgesPanel" Height="{StaticResource Double/ApplicationInfoDialog.AppBadge.Size}" Orientation="Horizontal" VerticalAlignment="Center"/>
 								</StackPanel>
-								<StackPanel Orientation="Horizontal">
+								<WrapPanel Orientation="Horizontal">
 									<SelectableTextBlock FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" Opacity="{StaticResource Double/ApplicationInfoDialog.AppVersion.Opacity}" Text="{Binding $parent[Window].VersionString}" VerticalAlignment="Center"/>
-									<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding $parent[Window].HasApplicationChangeList}"/>
-									<TextBlock FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="|" VerticalAlignment="Center"/>
-									<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding $parent[Window].HasApplicationChangeList}"/>
+									<TextBlock FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Margin="5,0,5,0" Text="|" VerticalAlignment="Center"/>
 									<abControls:LinkTextBlock Command="{Binding $parent[Window].ShowApplicationChangeList}" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{DynamicResource String/ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
-								</StackPanel>
+								</WrapPanel>
 							</StackPanel>
 						</Border>
 
@@ -87,7 +84,7 @@
 					<Separator Classes="Dialog_Separator_Large"/>
 
 					<!-- Open source attribution -->
-					<StackPanel Name="openSourceAttrPanel" Orientation="Horizontal">
+					<WrapPanel Name="openSourceAttrPanel" Orientation="Horizontal">
 						<StackPanel.IsVisible>
 							<MultiBinding Converter="{x:Static BoolConverters.And}">
 								<Binding Path="IsOpenSourceBased"/>
@@ -101,11 +98,11 @@
 						<abControls:LinkTextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section2}" Uri="{Binding GitHubProjectUri}" VerticalAlignment="Center"/>
 						<Separator Classes="Dialog_Separator_Small"/>
 						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section3}" VerticalAlignment="Center"/>
-					</StackPanel>
+					</WrapPanel>
 					<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #openSourceAttrPanel.IsVisible}"/>
 
 					<!-- App icon attribution (Flaticon) -->
-					<StackPanel Orientation="Horizontal" IsVisible="False">
+					<WrapPanel Orientation="Horizontal" IsVisible="False">
 						<ia:Interaction.Behaviors>
 							<iaCore:DataTriggerBehavior Binding="{Binding IconWebSite}" Value="Flaticon">
 								<iaCore:ChangePropertyAction PropertyName="IsVisible" Value="True"/>
@@ -122,7 +119,7 @@
 						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon}" VerticalAlignment="Center"/>
 						<abControls:LinkTextBlock Text=" Flaticon " Uri="https://www.flaticon.com/" VerticalAlignment="Center"/>
 						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon}" VerticalAlignment="Center"/>
-					</StackPanel>
+					</WrapPanel>
 					<Separator Classes="Dialog_Separator"/>
 
 					<!-- Copyright -->

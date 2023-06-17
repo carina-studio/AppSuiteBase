@@ -1,5 +1,9 @@
+//#define ALLOW_MOCK_PRODUCT_MANAGER
+
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
+using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
@@ -14,10 +18,10 @@ using CarinaStudio.Data.Converters;
 using CarinaStudio.IO;
 using CarinaStudio.Threading;
 using System;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Path = System.IO.Path;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -172,6 +176,11 @@ namespace CarinaStudio.AppSuite.Controls
 		/// Copyright.
 		/// </summary>
 		public string Copyright { get; }
+		
+		
+		// Deactivate product.
+		void DeactivateProduct(string id) =>
+			this.Application.ProductManager.DeactivateAndRemoveDeviceAsync(id, this);
 
 
 		/// <summary>
@@ -298,7 +307,11 @@ namespace CarinaStudio.AppSuite.Controls
 				this.productListPanel.Let(panel =>
 				{
 					panel.Children.Clear();
+#if ALLOW_MOCK_PRODUCT_MANAGER
+					if (appInfo.Products.IsNotEmpty())
+#else
 					if (appInfo.Products.IsNotEmpty() && !this.Application.ProductManager.IsMock)
+#endif
 					{
 						foreach (var productId in appInfo.Products)
 						{
@@ -307,20 +320,35 @@ namespace CarinaStudio.AppSuite.Controls
 								panel.Children.Add(new Separator().Also(it => 
 									it.Classes.Add("Dialog_Item_Separator")));
 							}
-							panel.Children.Add(new CompactDialogItemGrid().Also(itemPanel => 
-							{ 
-								itemPanel.DataContext = productId;
-								itemPanel.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
+							panel.Children.Add(new StackPanel().Also(stackPanel =>
+							{
+								stackPanel.Tag = productId;
+								stackPanel.Children.Add(new CompactDialogItemGrid().Also(itemPanel =>
 								{
-									it.Classes.Add("Dialog_TextBlock_Label");
+									itemPanel.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
+									{
+										it.Classes.Add("Dialog_TextBlock_Label");
+									}));
+									itemPanel.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
+									{
+										it.Classes.Add("Dialog_TextBlock");
+										it.TextTrimming = TextTrimming.CharacterEllipsis;
+										Grid.SetColumn(it, 1);
+									}));
 								}));
-								itemPanel.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
+								var deactivateButton = new Button().Also(it =>
 								{
-									it.TextTrimming = TextTrimming.CharacterEllipsis;
-									it.VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center;
-									Grid.SetColumn(it, 1);
+									it.Classes.Add("Dialog_Item_Button");
+									it.Click += (_, _) => this.DeactivateProduct(productId);
+									it.Bind(ContentProperty, this.Application.GetObservableString("ApplicationInfoDialog.DeactivateProduct"));
+								});
+								stackPanel.Children.Add(new Line().Also(it =>
+								{
+									it.Classes.Add("Dialog_Item_Separator_Inner");
+									it.Bind(IsVisibleProperty, new Binding { Source = deactivateButton, Path = nameof(IsVisible) });
 								}));
-								this.ShowProductInfo(itemPanel);
+								stackPanel.Children.Add(deactivateButton);
+								this.ShowProductInfo(stackPanel);
 							}));
 						}
 						this.Get<Panel>("productListSectionPanel").IsVisible = true;
@@ -382,7 +410,7 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			foreach (var child in this.productListPanel.Children)
 			{
-				if (child is Panel itemView && itemView.DataContext as string == productId)
+				if (child is Panel itemView && itemView.Tag as string == productId)
 				{
 					this.ShowProductInfo(itemView);
 					break;
@@ -493,11 +521,13 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			// check state
 			var productManager = this.Application.ProductManager;
+#if !ALLOW_MOCK_PRODUCT_MANAGER
 			if (productManager.IsMock)
 				return;
+#endif
 			if (this.DataContext is not ApplicationInfo)
 				return;
-			if (view.DataContext is not string productId)
+			if (view.Tag is not string productId)
 				return;
 			
 			// get state
@@ -505,22 +535,28 @@ namespace CarinaStudio.AppSuite.Controls
 				state = ProductState.Deactivated;
 			
 			// show name
+			var itemGrid = (Grid)view.Children.First(it => it is Grid);
 			if (!productManager.TryGetProductName(productId, out string? name))
 				name = productId;
-			view.Children[0].TryCastAndRun<Avalonia.Controls.TextBlock>(it => it.Text = name);
+			itemGrid.Children[0].TryCastAndRun<Avalonia.Controls.TextBlock>(it => it.Text = name);
 			
 			// show authorization state
+			var deactivateButton = view.Children.First(it => it is Button);
 			if (state == ProductState.Activated 
 				&& productManager.TryGetProductEmailAddress(productId, out var emailAddress))
 			{
-				view.Children[1].TryCastAndRun<Avalonia.Controls.TextBlock>(it => 
+				itemGrid.Children[1].TryCastAndRun<Avalonia.Controls.TextBlock>(it => 
 				{
 					it.IsVisible = true;
 					it.Text = this.Application.GetFormattedString("ApplicationInfoDialog.ProductAuthorizationInfo", emailAddress);
 				});
+				deactivateButton.IsVisible = true;
 			}
 			else
-				view.Children[1].TryCastAndRun<Control>(it => it.IsVisible = false);
+			{
+				itemGrid.Children[1].TryCastAndRun<Control>(it => it.IsVisible = false);
+				deactivateButton.IsVisible = false;
+			}
 		}
 
 
