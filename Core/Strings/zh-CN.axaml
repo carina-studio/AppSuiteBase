@@ -168,6 +168,8 @@
 	<sys:String x:Key="String/Common.Enable.WithDialog">启用…</sys:String>
 	<sys:String x:Key="String/Common.Export">导出</sys:String>
 	<sys:String x:Key="String/Common.Export.WithDialog">导出…</sys:String>
+	<sys:String x:Key="String/Common.Feedback">意见反馈</sys:String>
+	<sys:String x:Key="String/Common.Feedback.WithDialog">意见反馈…</sys:String>
 	<sys:String x:Key="String/Common.Help">说明</sys:String>
 	<sys:String x:Key="String/Common.Import">导入</sys:String>
 	<sys:String x:Key="String/Common.Import.WithDialog">导入…</sys:String>
