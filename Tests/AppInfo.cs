@@ -12,8 +12,8 @@ namespace CarinaStudio.AppSuite.Tests
     {
         public AppInfo()
         {
-            this.Application.TryGetResource<IImage>("Image/Icon.Professional.Colored", out var badge1);
-            this.Application.TryGetResource<IImage>("Image/Icon.Website", out var badge2);
+            this.Application.TryFindResource<IImage>("Image/Icon.Professional.Colored", out var badge1);
+            this.Application.TryFindResource<IImage>("Image/Icon.Website", out var badge2);
             this.Badges = new IImage[] {
                 badge1.AsNonNull(),
                 badge2.AsNonNull(),
