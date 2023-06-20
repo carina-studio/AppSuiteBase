@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fonts", "Fonts\Fonts.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxHighlighting", "SyntaxHighlighting\SyntaxHighlighting.csproj", "{936E88D7-3894-40E4-A2D8-28B9E40F9338}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tests", "Core.Tests\Core.Tests.csproj", "{63D29D43-AB61-4C1E-B63F-5AA43E19125D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{936E88D7-3894-40E4-A2D8-28B9E40F9338}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{936E88D7-3894-40E4-A2D8-28B9E40F9338}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{936E88D7-3894-40E4-A2D8-28B9E40F9338}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63D29D43-AB61-4C1E-B63F-5AA43E19125D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63D29D43-AB61-4C1E-B63F-5AA43E19125D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63D29D43-AB61-4C1E-B63F-5AA43E19125D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63D29D43-AB61-4C1E-B63F-5AA43E19125D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
