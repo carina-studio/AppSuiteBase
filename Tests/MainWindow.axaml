@@ -791,28 +791,31 @@
 					<TabItem.Header>
 						<TextBlock Text="Syntax Highlighting"/>
 					</TabItem.Header>
-					<ScrollViewer Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-						<StackPanel Margin="5">
-							<Button Command="{Binding $parent[Window].OpenFileForSyntaxHighlightingTextBlocks}" Content="Open file"/>
-							<appControls:SyntaxHighlightingTextBox Name="syntaxHighlightingTextBox" HorizontalAlignment="Stretch"/>
-							<Separator Background="{x:Null}" Height="5"/>
-							<Border BorderBrush="Blue" BorderThickness="1" HorizontalAlignment="Stretch">
-								<abControls:TextBlock Name="syntaxHighlightingRefTextBlock" IsVisible="False" MaxHeight="{Binding #syntaxHighlightingTextBlock.MaxHeight}" MaxWidth="{Binding #syntaxHighlightingTextBlock.MaxWidth}" Text="{Binding #syntaxHighlightingTextBlock.Text}" TextTrimming="{Binding #syntaxHighlightingTextBlock.TextTrimming}" TextWrapping="{Binding #syntaxHighlightingTextBlock.TextWrapping}"/>
-							</Border>
-							<Separator Background="{x:Null}" Height="5" IsVisible="{Binding #syntaxHighlightingRefTextBlock.IsVisible}"/>
-							<Border BorderBrush="LightBlue" BorderThickness="1" HorizontalAlignment="Stretch">
-								<abControls:SelectableTextBlock Name="syntaxHighlightingRefTextBlock2" MaxHeight="{Binding #syntaxHighlightingTextBlock.MaxHeight}" MaxWidth="{Binding #syntaxHighlightingTextBlock.MaxWidth}" Text="{Binding #syntaxHighlightingTextBlock.Text}" TextTrimming="{Binding #syntaxHighlightingTextBlock.TextTrimming}" TextWrapping="{Binding #syntaxHighlightingTextBlock.TextWrapping}"/>
-							</Border>
-							<Separator Background="{x:Null}" Height="5"/>
-							<Border BorderBrush="Green" BorderThickness="1" HorizontalAlignment="Stretch">
-								<appControls:SyntaxHighlightingTextBlock Name="syntaxHighlightingTextBlock" IsVisible="False" Text="{Binding #syntaxHighlightingTextBox.Text}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
-							</Border>
-							<Separator Background="{x:Null}" Height="5" IsVisible="{Binding #syntaxHighlightingTextBlock.IsVisible}"/>
-							<Border BorderBrush="LightGreen" BorderThickness="1" HorizontalAlignment="Stretch">
-								<appControls:SelectableSyntaxHighlightingTextBlock Name="syntaxHighlightingTextBlock2" DefinitionSet="{Binding #syntaxHighlightingTextBlock.DefinitionSet}" MaxHeight="{Binding #syntaxHighlightingTextBlock.MaxHeight}" MaxWidth="{Binding #syntaxHighlightingTextBlock.MaxWidth}" Text="{Binding #syntaxHighlightingTextBlock.Text}" TextTrimming="{Binding #syntaxHighlightingTextBlock.TextTrimming}" TextWrapping="{Binding #syntaxHighlightingTextBlock.TextWrapping}"/>
-							</Border>
-						</StackPanel>
-					</ScrollViewer>
+					<StackPanel>
+						<appControls:SyntaxHighlightingTextBlock Name="multiLineSyntaxHighlightingTextBlock" MaxLines="2"/>
+						<ScrollViewer Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+							<StackPanel Margin="5">
+								<Button Command="{Binding $parent[Window].OpenFileForSyntaxHighlightingTextBlocks}" Content="Open file"/>
+								<appControls:SyntaxHighlightingTextBox Name="syntaxHighlightingTextBox" HorizontalAlignment="Stretch"/>
+								<Separator Background="{x:Null}" Height="5"/>
+								<Border BorderBrush="Blue" BorderThickness="1" HorizontalAlignment="Stretch">
+									<abControls:TextBlock Name="syntaxHighlightingRefTextBlock" IsVisible="False" MaxHeight="{Binding #syntaxHighlightingTextBlock.MaxHeight}" MaxWidth="{Binding #syntaxHighlightingTextBlock.MaxWidth}" Text="{Binding #syntaxHighlightingTextBlock.Text}" TextTrimming="{Binding #syntaxHighlightingTextBlock.TextTrimming}" TextWrapping="{Binding #syntaxHighlightingTextBlock.TextWrapping}"/>
+								</Border>
+								<Separator Background="{x:Null}" Height="5" IsVisible="{Binding #syntaxHighlightingRefTextBlock.IsVisible}"/>
+								<Border BorderBrush="LightBlue" BorderThickness="1" HorizontalAlignment="Stretch">
+									<abControls:SelectableTextBlock Name="syntaxHighlightingRefTextBlock2" MaxHeight="{Binding #syntaxHighlightingTextBlock.MaxHeight}" MaxWidth="{Binding #syntaxHighlightingTextBlock.MaxWidth}" Text="{Binding #syntaxHighlightingTextBlock.Text}" TextTrimming="{Binding #syntaxHighlightingTextBlock.TextTrimming}" TextWrapping="{Binding #syntaxHighlightingTextBlock.TextWrapping}"/>
+								</Border>
+								<Separator Background="{x:Null}" Height="5"/>
+								<Border BorderBrush="Green" BorderThickness="1" HorizontalAlignment="Stretch">
+									<appControls:SyntaxHighlightingTextBlock Name="syntaxHighlightingTextBlock" IsVisible="False" Text="{Binding #syntaxHighlightingTextBox.Text}" TextTrimming="CharacterEllipsis" TextWrapping="Wrap"/>
+								</Border>
+								<Separator Background="{x:Null}" Height="5" IsVisible="{Binding #syntaxHighlightingTextBlock.IsVisible}"/>
+								<Border BorderBrush="LightGreen" BorderThickness="1" HorizontalAlignment="Stretch">
+									<appControls:SelectableSyntaxHighlightingTextBlock Name="syntaxHighlightingTextBlock2" DefinitionSet="{Binding #syntaxHighlightingTextBlock.DefinitionSet}" MaxHeight="{Binding #syntaxHighlightingTextBlock.MaxHeight}" MaxWidth="{Binding #syntaxHighlightingTextBlock.MaxWidth}" Text="{Binding #syntaxHighlightingTextBlock.Text}" TextTrimming="{Binding #syntaxHighlightingTextBlock.TextTrimming}" TextWrapping="{Binding #syntaxHighlightingTextBlock.TextWrapping}"/>
+								</Border>
+							</StackPanel>
+						</ScrollViewer>
+					</StackPanel>
 				</TabItem>
 
 				<TabItem Header="Markdown">
