@@ -113,11 +113,11 @@ public sealed class SyntaxHighlighter : AvaloniaObject
 
 
     // Span.
-    record class Span(SyntaxHighlightingSpan Definition, int Start, int End, int InnerStart, int InnerEnd);
+    record Span(SyntaxHighlightingSpan Definition, int Start, int End, int InnerStart, int InnerEnd);
 
 
     // Token.
-    record class Token(SyntaxHighlightingToken Definition, int Start, int End);
+    record Token(SyntaxHighlightingToken Definition, int Start, int End);
 
 
     // Static fields.
@@ -264,7 +264,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
 
             // find next span
             var startMatch = span.Definition.StartPattern!.Match(text, span.End);
-            Match endMatch;
+            Match? endMatch;
             if (startMatch.Success)
             {
                 endMatch = span.Definition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
@@ -580,7 +580,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 else if (caretIndex >= text.Length)
                     text += this.preeditText;
                 else
-                    text = text[0..caretIndex] + this.preeditText + text[caretIndex..^0];
+                    text = text[0..caretIndex] + this.preeditText + text[caretIndex..];
             }
         }
         else
@@ -610,6 +610,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             this.textAlignment,
             this.textWrapping, 
             this.textTrimming,
+            maxLines: this.maxLines,
             maxWidth: this.maxWidth, 
             maxHeight: this.maxHeight, 
             textStyleOverrides: this.textProperties,

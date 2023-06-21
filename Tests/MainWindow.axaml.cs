@@ -151,6 +151,16 @@ namespace CarinaStudio.AppSuite.Tests
 #pragma warning restore SYSLIB1045
             });
 
+            this.Get<SyntaxHighlightingTextBlock>("multiLineSyntaxHighlightingTextBlock").Also(it =>
+            {
+                it.DefinitionSet = syntaxHighlightingDefSet;
+                it.Text = """
+                    Line 1
+                    Line 2
+                    Line 3 (should not be shown)
+                    Line 4 (should not be shown)
+                    """;
+            });
             this.syntaxHighlightingTextBlock = this.Get<SyntaxHighlightingTextBlock>(nameof(syntaxHighlightingTextBlock)).Also(it =>
             {
                 it.DefinitionSet = StringInterpolationFormatSyntaxHighlighting.CreateDefinitionSet(this.Application);
