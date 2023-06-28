@@ -321,6 +321,12 @@ namespace CarinaStudio.AppSuite.Controls
                     (this.Application as AppSuiteApplication)?.UpdateMacOSDockTileProgressState();
             }
         }
+
+
+        /// <summary>
+        /// Get <see cref="TutorialPresenter"/> of this window.
+        /// </summary>
+        protected TutorialPresenter? TutorialPresenter => this.tutorialPresenter;
     }
 
 

@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using System;
 
@@ -13,6 +14,8 @@ namespace CarinaStudio.AppSuite.Controls
         Control? inputControlToAcceptEnterKey;
         bool isEnterKeyClickedOnInputControl;
         bool isEnterKeyDownOnInputControl;
+        INameScope? templateNameScope;
+        TutorialPresenter? tutorialPresenter;
 
 
         /// <summary>
@@ -28,6 +31,15 @@ namespace CarinaStudio.AppSuite.Controls
             this.AddHandler(KeyDownEvent, (_, e) => this.OnPreviewKeyDown(e), Avalonia.Interactivity.RoutingStrategies.Tunnel);
             this.AddHandler(KeyUpEvent, (_, e) => this.OnPreviewKeyUp(e), Avalonia.Interactivity.RoutingStrategies.Tunnel);
             this.Title = this.Application.Name;
+        }
+        
+        
+        /// <inheritdoc/>
+        protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+        {
+            base.OnApplyTemplate(e);
+            this.templateNameScope = e.NameScope;
+            this.tutorialPresenter = null;
         }
 
 
@@ -95,6 +107,19 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 this.isEnterKeyDownOnInputControl = false;
                 this.isEnterKeyClickedOnInputControl = true;
+            }
+        }
+        
+        
+        /// <summary>
+        /// Get <see cref="TutorialPresenter"/> of this dialog.
+        /// </summary>
+        protected TutorialPresenter? TutorialPresenter
+        {
+            get
+            {
+                this.tutorialPresenter ??= this.templateNameScope?.Find<TutorialPresenter>("PART_TutorialPresenter");
+                return this.tutorialPresenter;
             }
         }
     }
