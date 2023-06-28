@@ -36,8 +36,10 @@ namespace CarinaStudio.AppSuite.Tests
 
         public void Test()
         {
-            using var appInfo = new AppInfo();
-            new AppSuite.Controls.ApplicationInfoDialog(appInfo).ShowDialog(this);
+            if (this.TutorialPresenter is not null)
+                _ = new MessageDialog { Icon = MessageDialogIcon.Success, Message = "TutorialPresenter found." }.ShowDialog(this);
+            else
+                _ = new MessageDialog { Icon = MessageDialogIcon.Error, Message = "TutorialPresenter not found." }.ShowDialog(this);
         }
     }
 }
