@@ -2,7 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 	<!-- Base styles -->
-	<StyleInclude Source="avares://CarinaStudio.AppBase.Avalonia/Theme/Light.axaml"/>
 	<StyleInclude Source="/Themes/Base.axaml"/>
 
 	<!-- Resources -->

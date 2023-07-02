@@ -38,6 +38,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
+using Avalonia.Themes.Fluent;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.IO;
 using File = System.IO.File;
@@ -339,7 +340,6 @@ namespace CarinaStudio.AppSuite
         readonly LinkedList<MainWindowHolder> activeMainWindowList = new();
         ApplicationInfoDialog? appInfoDialog;
         ApplicationUpdateDialog? appUpdateDialog;
-        Avalonia.Themes.Fluent.FluentTheme? baseTheme;
         bool canRequestRestoringMainWindows;
         ScheduledAction? checkUpdateInfoAction;
         ISettings? configuration;
@@ -2425,8 +2425,11 @@ namespace CarinaStudio.AppSuite
 
             // create base theme
             var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
-            this.baseTheme = new();
-            this.Styles.Add(this.baseTheme);
+            this.Styles.Add(new FluentTheme());
+            this.Styles.Add(new StyleInclude(new Uri("avares://CarinaStudio.AppBase.Avalonia"))
+            {
+                Source = new("/Theme/Default.axaml", UriKind.Relative)
+            });
             if (time > 0)
                 this.Logger.LogTrace("[Performance] Took {duration} ms to create base theme", this.stopWatch.ElapsedMilliseconds - time);
 
