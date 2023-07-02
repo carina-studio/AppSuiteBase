@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Fonts;
-using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
@@ -222,14 +221,6 @@ unsafe partial class AppSuiteApplication
             },
             // ReSharper restore StringLiteralTypo
         });
-        if (Platform.IsWindows11OrAbove)
-        {
-            // enable Mica effect
-            builder.With(new Win32PlatformOptions()
-            {
-                UseWindowsUIComposition = true,
-            });
-        }
     }
 
 

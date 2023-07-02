@@ -57,7 +57,7 @@
 		<PackageReference Include="Avalonia.Desktop" Version="$(AvaloniaVersion)" />
 		<PackageReference Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)" />
 		<PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
-		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="$(AvaloniaVersion)" />
+		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="$(AvaloniaXamlBehaviorsVersion)" />
 		<PackageReference Include="CarinaStudio.AppBase.Application.Avalonia" Version="2.1.1.620-dev" />
 		<PackageReference Include="CarinaStudio.AppBase.AutoUpdate" Version="2.1.1.620-dev" />
 		<PackageReference Include="CarinaStudio.AppBase.MacOS" Version="2.1.1.620-dev" />
