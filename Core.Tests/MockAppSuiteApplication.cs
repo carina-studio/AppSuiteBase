@@ -160,7 +160,12 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public virtual int ExternalDependenciesVersion { get; } = 1;
+        public virtual int ExternalDependenciesVersion => 1;
+
+
+        /// <inheritdoc/>
+        public virtual IObservable<object?> GetResourceObservable(object key, Func<object?, object?>? converter = null) =>
+            new FixedObservableValue<object?>(null);
 
 
         /// <inheritdoc/>
