@@ -113,13 +113,13 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get instance of <see cref="IAppSuiteApplication"/> of current process.
         /// </summary>
-        public static IAppSuiteApplication Current => (IAppSuiteApplication)Avalonia.Application.Current.AsNonNull();
+        public static new IAppSuiteApplication Current => (IAppSuiteApplication)Avalonia.Application.Current.AsNonNull();
 
 
         /// <summary>
         /// Get instance of <see cref="IAppSuiteApplication"/> of current process, or Null if instance doesn't exist.
         /// </summary>
-        public static IAppSuiteApplication? CurrentOrNull => Avalonia.Application.Current as IAppSuiteApplication;
+        public static new IAppSuiteApplication? CurrentOrNull => Avalonia.Application.Current as IAppSuiteApplication;
 
 
         /// <summary>
