@@ -111,6 +111,18 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Get instance of <see cref="IAppSuiteApplication"/> of current process.
+        /// </summary>
+        public static IAppSuiteApplication Current => (IAppSuiteApplication)Avalonia.Application.Current.AsNonNull();
+
+
+        /// <summary>
+        /// Get instance of <see cref="IAppSuiteApplication"/> of current process, or Null if instance doesn't exist.
+        /// </summary>
+        public static IAppSuiteApplication? CurrentOrNull => Avalonia.Application.Current as IAppSuiteApplication;
+
+
+        /// <summary>
         /// Get or set custom screen scale factor for Linux.
         /// </summary>
         double CustomScreenScaleFactor { get; set; }

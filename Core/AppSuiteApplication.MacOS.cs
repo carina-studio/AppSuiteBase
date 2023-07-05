@@ -4,7 +4,6 @@ using Avalonia.Media;
 using Avalonia.Media.Fonts;
 using Avalonia.VisualTree;
 using CarinaStudio.Collections;
-using CarinaStudio.Controls;
 using CarinaStudio.MacOS.AppKit;
 using CarinaStudio.MacOS.CoreGraphics;
 using CarinaStudio.MacOS.ObjectiveC;
@@ -41,19 +40,19 @@ partial class AppSuiteApplication
             {
                 cls.DefineMethod<IntPtr, IntPtr>("application:openFiles:", (_, cmd, app, fileName) =>
                 {
-                    Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, app, fileName);
+                    ((AppSuiteApplication)Current).macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, app, fileName);
                 });
                 cls.DefineMethod<IntPtr, IntPtr>("application:openURLs:", (_, cmd, app, urls) =>
                 {
-                    Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, app, urls);
+                    ((AppSuiteApplication)Current).macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, app, urls);
                 });
                 cls.DefineMethod<IntPtr>("applicationDidFinishLaunching:", (_, cmd, notification) =>
                 {
-                    Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
+                    ((AppSuiteApplication)Current).macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
                 });
                 cls.DefineMethod<IntPtr, NSApplication.TerminateReply>("applicationShouldTerminate:", (_, cmd, app) =>
                 {
-                    return Current.macOSAppDelegate.Let(it =>
+                    return ((AppSuiteApplication)Current).macOSAppDelegate.Let(it =>
                     {
                         if (it == null)
                             return NSApplication.TerminateReply.TerminateNow;
@@ -72,7 +71,7 @@ partial class AppSuiteApplication
                 });
                 cls.DefineMethod<IntPtr, bool, bool>("applicationShouldHandleReopen:hasVisibleWindows:", (_, cmd, app, flag) =>
                 {
-                    var asApp = AppSuiteApplication.Current;
+                    var asApp = (AppSuiteApplication)IAppSuiteApplication.Current;
                     asApp.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, app, flag);
                     if (asApp.IsBackgroundMode)
                         asApp.OnTryExitingBackgroundMode();
@@ -80,7 +79,7 @@ partial class AppSuiteApplication
                 });
                 cls.DefineMethod<IntPtr>("applicationWillFinishLaunching:", (_, cmd, notification) =>
                 {
-                    Current.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
+                    ((AppSuiteApplication)Current).macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
                 });
             });
         }
@@ -108,7 +107,7 @@ partial class AppSuiteApplication
                 }
                 catch (Exception ex)
                 {
-                    Current.Logger.LogError(ex, "Error occurred while calling base delegate by '{cmdName}'", cmd.Name);
+                    ((AppSuiteApplication)Current).Logger.LogError(ex, "Error occurred while calling base delegate by '{cmdName}'", cmd.Name);
                 }
             }
             return defaultResult;

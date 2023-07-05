@@ -52,7 +52,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Initialize new <see cref="ApplicationInfo"/> instance.
         /// </summary>
-        public ApplicationInfo() : base(AppSuiteApplication.Current)
+        public ApplicationInfo() : base(IAppSuiteApplication.Current)
         {
             // get system info
             _ = Task.Run(() =>
@@ -200,13 +200,13 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Get creator of application icon.
         /// </summary>
-        public virtual ApplicationIconCreator IconCreator { get; } = ApplicationIconCreator.Freepik;
+        public virtual ApplicationIconCreator IconCreator => ApplicationIconCreator.Freepik;
 
 
         /// <summary>
         /// Get website of application icon.
         /// </summary>
-        public virtual ApplicationIconWebSite IconWebSite { get; } = ApplicationIconWebSite.Flaticon;
+        public virtual ApplicationIconWebSite IconWebSite => ApplicationIconWebSite.Flaticon;
 
 
         /// <summary>

@@ -12,10 +12,7 @@ namespace CarinaStudio.AppSuite.Controls;
 public class DocumentViewerDialog : CommonDialog<object?>
 {
     // Fields.
-	FontFamily documentFontFamily = AppSuiteApplication.CurrentOrNull?.Configuration?.GetValueOrDefault(ConfigurationKeys.DefaultFontFamilyOfDocument)?.Let(it =>
-	{
-		return new FontFamily(it);
-	}) ?? FontFamily.Default;
+	FontFamily documentFontFamily = IAppSuiteApplication.CurrentOrNull?.Configuration.GetValueOrDefault(ConfigurationKeys.DefaultFontFamilyOfDocument).Let(it => new FontFamily(it)) ?? FontFamily.Default;
     DocumentSource? documentSource;
     object? message;
 

@@ -63,7 +63,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 		/// <summary>
 		/// Initialize new <see cref="ApplicationUpdater"/> instance.
 		/// </summary>
-		public ApplicationUpdater() : base(AppSuiteApplication.Current)
+		public ApplicationUpdater() : base(IAppSuiteApplication.Current)
 		{
 			this.CancelUpdatingCommand = new Command(this.CancelUpdating, this.GetValueAsObservable(IsPreparingForUpdateProperty));
 			this.CheckForUpdateCommand = new Command(this.CheckForUpdate, this.canCheckForUpdate);

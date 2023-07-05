@@ -53,15 +53,15 @@ class SplashWindowImpl : Avalonia.Controls.Window
 	/// </summary>
 	public SplashWindowImpl()
 	{
-		var app = AppSuiteApplication.Current;
-		this.ApplicationName = app.Name ?? "";
-		this.Copyright = app.CopyrightBeginningYear.Let(beginningYear =>
+		var app = IAppSuiteApplication.CurrentOrNull as AppSuiteApplication;
+		this.ApplicationName = app?.Name ?? "";
+		this.Copyright = (app?.CopyrightBeginningYear)?.Let(beginningYear =>
 		{
 			if (beginningYear < AppSuiteApplication.CopyrightEndingYear)
 				return $"©{beginningYear}-{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
 			return $"©{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
-		});
-		this.Message = app.GetStringNonNull("SplashWindow.Launching");
+		}) ?? "";
+		this.Message = app?.GetStringNonNull("SplashWindow.Launching") ?? "";
 		this.showAction = new(() =>
 		{
 			// get screen info
@@ -124,9 +124,9 @@ class SplashWindowImpl : Avalonia.Controls.Window
 				};
 			});
 			});
-			this.Version = app.GetFormattedString("ApplicationInfoDialog.Version", app.Assembly.GetName().Version).AsNonNull();
-			if (app.ReleasingType != ApplicationReleasingType.Stable)
-				this.Version += $" {AppReleasingTypeConverter.Convert<string?>(app.ReleasingType)}";
+			this.Version = app?.GetFormattedString("ApplicationInfoDialog.Version", app.Assembly.GetName().Version).AsNonNull() ?? "";
+			if (app?.ReleasingType != ApplicationReleasingType.Stable)
+				this.Version += $" {AppReleasingTypeConverter.Convert<string?>(app?.ReleasingType)}";
 			AvaloniaXamlLoader.Load(this);
 			this.progressBar = this.Get<ProgressBar>(nameof(progressBar));
 			if (Platform.IsWindows)
@@ -144,7 +144,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 					this.Get<Border>("border").CornerRadius = default;
 				}
 			}
-			this.Styles.Add((Avalonia.Styling.IStyle)(app.EffectiveThemeMode switch
+			this.Styles.Add((Avalonia.Styling.IStyle)(app?.EffectiveThemeMode switch
 			{
 				ThemeMode.Light => this.Resources["lightTheme"].AsNonNull(),
 				_ => this.Resources["darkTheme"].AsNonNull(),

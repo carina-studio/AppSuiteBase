@@ -12,10 +12,7 @@ namespace CarinaStudio.AppSuite.Controls;
 public class AgreementDialog : CommonDialog<AgreementDialogResult>
 {
     // Fields.
-	FontFamily documentFontFamily = AppSuiteApplication.CurrentOrNull?.Configuration?.GetValueOrDefault(ConfigurationKeys.DefaultFontFamilyOfAgreement)?.Let(it =>
-	{
-		return new FontFamily(it);
-	}) ?? FontFamily.Default;
+	FontFamily documentFontFamily = IAppSuiteApplication.CurrentOrNull?.Configuration.GetValueOrDefault(ConfigurationKeys.DefaultFontFamilyOfAgreement).Let(it => new FontFamily(it)) ?? FontFamily.Default;
     DocumentSource? documentSource;
     bool isAgreedBefore;
     object? message;

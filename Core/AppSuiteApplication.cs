@@ -877,18 +877,6 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Get <see cref="AppSuiteApplication"/> instance for current process.
-        /// </summary>
-        public static new AppSuiteApplication Current => (AppSuiteApplication)Application.Current;
-
-
-        /// <summary>
-        /// Get <see cref="AppSuiteApplication"/> instance for current process or null if <see cref="AppSuiteApplication"/> is not ready yet.
-        /// </summary>
-        public static new AppSuiteApplication? CurrentOrNull => Application.CurrentOrNull as AppSuiteApplication;
-
-
-        /// <summary>
         /// Get or set custom screen scale factor for Linux.
         /// </summary>
         public double CustomScreenScaleFactor 

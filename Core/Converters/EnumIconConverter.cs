@@ -1,6 +1,5 @@
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using CarinaStudio.Controls;
 using CarinaStudio.Data.Converters;
 using System.Globalization;
 
@@ -12,7 +11,7 @@ namespace CarinaStudio.AppSuite.Converters;
 public class EnumIconConverter : BaseValueConverter<object?, IImage?>
 {
     // Fields.
-    readonly AppSuiteApplication? app;
+    readonly IAppSuiteApplication? app;
     readonly string? resourceNamePostfix;
     readonly string resourceNamePrefix;
 
@@ -24,7 +23,7 @@ public class EnumIconConverter : BaseValueConverter<object?, IImage?>
     /// <param name="resNamePostfix">Postfix of icon resource name.</param>
     protected EnumIconConverter(string resNamePrefix, string? resNamePostfix)
     {
-        this.app = AppSuiteApplication.CurrentOrNull;
+        this.app = IAppSuiteApplication.CurrentOrNull;
         this.resourceNamePostfix = resNamePostfix;
         this.resourceNamePrefix = resNamePrefix;
     }
@@ -41,10 +40,10 @@ public class EnumIconConverter : BaseValueConverter<object?, IImage?>
             : $"Image/{this.resourceNamePrefix}.{value}.{this.resourceNamePostfix}";
         if (parameter is string paramString && paramString.Length > 0)
         {
-            if (app.TryFindResource<IImage>($"{resName}.{paramString}", out icon))
+            if (app.TryFindResource($"{resName}.{paramString}", out icon))
                 return icon;
         }
-        app.TryFindResource<IImage>(resName, out icon);
+        app.TryFindResource(resName, out icon);
         return icon;
     }
 }

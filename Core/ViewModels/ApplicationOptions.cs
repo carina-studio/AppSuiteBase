@@ -37,7 +37,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Initialize new <see cref="ApplicationOptions"/> instance.
         /// </summary>
-        public ApplicationOptions() : base(AppSuiteApplication.Current)
+        public ApplicationOptions() : base(IAppSuiteApplication.Current)
         {
             this.HasMainWindows = this.Application.MainWindows.IsNotEmpty();
             this.IsCustomScreenScaleFactorSupported = double.IsFinite(this.Application.CustomScreenScaleFactor);
@@ -184,7 +184,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Get granularity of <see cref="CustomScreenScaleFactor"/>.
         /// </summary>
-        public virtual double CustomScreenScaleFactorGranularity { get => 0.25; }
+        public virtual double CustomScreenScaleFactorGranularity => 0.25;
 
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Get effective custom screen scale factor.
         /// </summary>
-        public double EffectiveCustomScreenScaleFactor { get => this.Application.EffectiveCustomScreenScaleFactor; }
+        public double EffectiveCustomScreenScaleFactor => this.Application.EffectiveCustomScreenScaleFactor;
 
 
         /// <summary>
@@ -273,7 +273,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Check whether <see cref="LogOutputTargetPort"/> is supported or not.
         /// </summary>
-        public bool IsLogOutputTargetPortSupported { get => (this.Application as AppSuiteApplication)?.DefaultLogOutputTargetPort != 0; }
+        public bool IsLogOutputTargetPortSupported => (this.Application as AppSuiteApplication)?.DefaultLogOutputTargetPort != 0;
 
 
         /// <summary>
@@ -285,10 +285,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Check whether restarting all root windows is needed or not.
         /// </summary>
-        public bool IsRestartingRootWindowsNeeded
-        {
-            get => this.Application.IsRestartingRootWindowsNeeded;
-        }
+        public bool IsRestartingRootWindowsNeeded => this.Application.IsRestartingRootWindowsNeeded;
 
 
         /// <summary>
@@ -332,7 +329,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <summary>
         /// Get maximum value of <see cref="CustomScreenScaleFactor"/>.
         /// </summary>
-        public virtual double MaxCustomScreenScaleFactor { get => 4.0; }
+        public virtual double MaxCustomScreenScaleFactor => 4.0;
 
 
         /// <summary>
