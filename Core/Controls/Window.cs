@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
@@ -31,13 +30,13 @@ namespace CarinaStudio.AppSuite.Controls
 
         // Fields.
         readonly ScheduledAction checkSystemChromeVisibilityAction;
-        ContentPresenter? contentPresenter;
         readonly WindowContentFadingHelper contentFadingHelper;
         Tutorial? currentTutorial;
         IDisposable? currentTutorialObserverToken;
         bool isSystemChromeVisibleInClientArea;
         double taskbarIconProgress;
         TaskbarIconProgressState taskbarIconProgressState = TaskbarIconProgressState.None;
+        INameScope? templateNameScope;
         TutorialPresenter? tutorialPresenter;
         readonly ScheduledAction updateTransparencyLevelAction;
 
@@ -92,11 +91,6 @@ namespace CarinaStudio.AppSuite.Controls
                 if (isSubscribed)
                     this.checkSystemChromeVisibilityAction.Schedule();
             });
-            this.GetObservable(HeightProperty).Subscribe(_ =>
-            {
-                if (isSubscribed)
-                    this.SynchronizationContext.Post(() => this.contentPresenter?.Let(it => it.Margin = new Thickness(0, 0, 0, 1)));
-            });
             this.GetObservable(IsActiveProperty).Subscribe(_ =>
             {
                 if (isSubscribed)
@@ -106,11 +100,6 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 if (isSubscribed)
                     this.checkSystemChromeVisibilityAction.Schedule();
-            });
-            this.GetObservable(WidthProperty).Subscribe(_ =>
-            {
-                if (isSubscribed)
-                    this.SynchronizationContext.Post(() => this.contentPresenter?.Let(it => it.Margin = new Thickness(0, 0, 0, 1)));
             });
             this.GetObservable(WindowStateProperty).Subscribe(_ =>
             {
@@ -151,26 +140,8 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
         {
             base.OnApplyTemplate(e);
-            this.contentPresenter = e.NameScope.Find<ContentPresenter>("PART_ContentPresenter")?.Also(it =>
-            {
-                // [Workaround] Force relayout content to make sure that layout will be correct after changing window size by code
-                it.GetObservable(BoundsProperty).Subscribe(_ =>
-                {
-                    if (it.Margin != new Thickness())
-                        this.SynchronizationContext.Post(() => it.Margin = new Thickness());
-                });
-            });
-            this.tutorialPresenter = e.NameScope.Find<TutorialPresenter>("PART_TutorialPresenter").Also(it =>
-            {
-                this.currentTutorialObserverToken = this.currentTutorialObserverToken.DisposeAndReturnNull();
-                if (it != null)
-                {
-                    this.currentTutorialObserverToken = it.GetObservable(TutorialPresenter.CurrentTutorialProperty).Subscribe(tutorial =>
-                        this.SetAndRaise(CurrentTutorialProperty, ref this.currentTutorial, tutorial));
-                }
-                else
-                    this.SetAndRaise(CurrentTutorialProperty, ref this.currentTutorial, null);
-            });
+            this.templateNameScope = e.NameScope;
+            this.tutorialPresenter = null;
         }
 
 
@@ -277,10 +248,11 @@ namespace CarinaStudio.AppSuite.Controls
         /// <inheritdoc/>
         public bool ShowTutorial(Tutorial tutorial)
         {
-            if (this.tutorialPresenter is null)
-                return false;
-            this.tutorialPresenter.IsVisible = true;
-            return this.tutorialPresenter.ShowTutorial(tutorial);
+            return this.TutorialPresenter?.Let(it =>
+            {
+                it.IsVisible = true;
+                return it.ShowTutorial(tutorial);
+            }) ?? false;
         }
 
 
@@ -331,7 +303,24 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Get <see cref="TutorialPresenter"/> of this window.
         /// </summary>
-        protected TutorialPresenter? TutorialPresenter => this.tutorialPresenter;
+        protected TutorialPresenter? TutorialPresenter
+        {
+            get
+            {
+                this.tutorialPresenter ??= this.templateNameScope?.Find<TutorialPresenter>("PART_TutorialPresenter").Also(it =>
+                {
+                    this.currentTutorialObserverToken = this.currentTutorialObserverToken.DisposeAndReturnNull();
+                    if (it != null)
+                    {
+                        this.currentTutorialObserverToken = it.GetObservable(TutorialPresenter.CurrentTutorialProperty).Subscribe(tutorial =>
+                            this.SetAndRaise(CurrentTutorialProperty, ref this.currentTutorial, tutorial));
+                    }
+                    else
+                        this.SetAndRaise(CurrentTutorialProperty, ref this.currentTutorial, null);
+                });
+                return this.tutorialPresenter;
+            }
+        }
     }
 
 
