@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -459,6 +460,22 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         /// <remarks>Type of parameter is <see cref="MultiWindowLayout"/>.</remarks>
         public ICommand LayoutMainWindowsCommand { get; }
+
+
+        /// <inheritdoc/>
+        protected override Size MeasureOverride(Size availableSize)
+        {
+            if (!this.IsOpened && this.Application.IsDebugMode)
+            {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
+                var size = base.MeasureOverride(availableSize);
+                stopwatch.Stop();
+                this.Logger.LogTrace("[Performance] Took {duration} ms to perform layout measurement before opening", stopwatch.ElapsedMilliseconds);
+                return size;
+            }
+            return base.MeasureOverride(availableSize);
+        }
 
 
         // Called when property of application changed.

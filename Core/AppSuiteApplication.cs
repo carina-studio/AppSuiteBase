@@ -39,6 +39,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Platform.Storage;
 using Avalonia.Themes.Fluent;
+using Avalonia.Threading;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.IO;
 using File = System.IO.File;
@@ -3406,34 +3407,58 @@ namespace CarinaStudio.AppSuite
                     await Task.Delay((int)delay);
                 }
             }
-            this.SynchronizationContext.Post(() =>
+            Dispatcher.UIThread.Let(dispatcher =>
             {
                 // [Workaround] sync culture back to system because it may be reset
-                CultureInfo.CurrentCulture = this.cultureInfo;
-                CultureInfo.CurrentUICulture = this.cultureInfo;
-                CultureInfo.DefaultThreadCurrentCulture = this.cultureInfo;
-                CultureInfo.DefaultThreadCurrentUICulture = this.cultureInfo;
-
-                // setup data context
-                mainWindowHolder.Window.DataContext = mainWindowHolder.ViewModel;
-
-                // notify window created
-                if (mainWindowHolder.WindowCreatedAction != null)
+                dispatcher.Post(() =>
                 {
-                    mainWindowHolder.WindowCreatedAction(mainWindowHolder.Window);
-                    mainWindowHolder.WindowCreatedAction = null;
-                }
-
+                    CultureInfo.CurrentCulture = this.cultureInfo;
+                    CultureInfo.CurrentUICulture = this.cultureInfo;
+                    CultureInfo.DefaultThreadCurrentCulture = this.cultureInfo;
+                    CultureInfo.DefaultThreadCurrentUICulture = this.cultureInfo;
+                });
+                
+                // setup data context
+                dispatcher.Post(() =>
+                {
+                    if (!mainWindowHolder.Window.IsClosed)
+                    {
+                        var startTime = this.stopWatch.ElapsedMilliseconds;
+                        mainWindowHolder.Window.DataContext = mainWindowHolder.ViewModel;
+                        this.Logger.LogTrace("[Performance] Took {duration} ms to set view-model to main window", this.stopWatch.ElapsedMilliseconds - startTime);
+                    }
+                }, DispatcherPriority.Render);
+                
+                // notify window created
+                dispatcher.Post(() =>
+                {
+                    if (mainWindowHolder.WindowCreatedAction is not null)
+                    {
+                        mainWindowHolder.WindowCreatedAction(mainWindowHolder.Window);
+                        mainWindowHolder.WindowCreatedAction = null;
+                    }
+                }, DispatcherPriority.Render);
+                
                 // show window
-                mainWindowHolder.Window.Show();
-                this.SynchronizationContext.Post(() =>
+                dispatcher.Post(() =>
+                {
+                    if (!mainWindowHolder.Window.IsClosed)
+                    {
+                        var startTime = this.stopWatch.ElapsedMilliseconds;
+                        mainWindowHolder.Window.Show();
+                        this.Logger.LogTrace("[Performance] Took {duration} ms to show main window", this.stopWatch.ElapsedMilliseconds - startTime);
+                    }
+                }, DispatcherPriority.Render);
+                
+                // close splash window
+                dispatcher.Post(() =>
                 {
                     this.splashWindow = this.splashWindow?.Let(it =>
                     {
                         it.Close();
                         return (SplashWindowImpl?)null;
                     });
-                });
+                }, DispatcherPriority.Background);
             });
         }
 
