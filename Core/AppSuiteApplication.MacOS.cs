@@ -1,8 +1,9 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Fonts;
-using Avalonia.VisualTree;
+using Avalonia.Threading;
 using CarinaStudio.Collections;
 using CarinaStudio.MacOS.AppKit;
 using CarinaStudio.MacOS.CoreGraphics;
@@ -143,20 +144,28 @@ partial class AppSuiteApplication
     static void DefineExtraStylesForMacOS()
     {
         var clickHandler = new EventHandler<RoutedEventArgs>((sender, _) =>
-            Avalonia.Controls.ToolTip.SetIsOpen((Avalonia.Controls.Control)sender.AsNonNull(), false));
+            ToolTip.SetIsOpen((Control)sender.AsNonNull(), false));
         var templateAppliedHandler = new EventHandler<RoutedEventArgs>((sender, _) =>
         {
-            if (sender is Avalonia.Controls.Control control)
+            if (sender is Control control)
             {
-                control.GetObservable(Avalonia.Controls.ToolTip.IsOpenProperty).Subscribe(isOpen =>
+                var isSubscribing = true;
+                control.GetObservable(ToolTip.IsOpenProperty).Subscribe(isOpen =>
                 {
-                    if (isOpen && control.FindAncestorOfType<Avalonia.Controls.Window>()?.IsActive == false)
-                        Avalonia.Controls.ToolTip.SetIsOpen(control, false);
+                    if (!isSubscribing && isOpen && (TopLevel.GetTopLevel(control) as Window)?.IsActive == false)
+                    {
+                        Dispatcher.UIThread.Post(() =>
+                        {
+                            if (ToolTip.GetIsOpen(control) && (TopLevel.GetTopLevel(control) as Window)?.IsActive == false)
+                                ToolTip.SetIsOpen(control, false);
+                        }, DispatcherPriority.Background);
+                    }
                 });
+                isSubscribing = false;
             }
         });
-        Avalonia.Controls.Button.ClickEvent.AddClassHandler(typeof(Avalonia.Controls.Button), clickHandler);
-        Avalonia.Controls.Button.TemplateAppliedEvent.AddClassHandler(typeof(Avalonia.Controls.Button), templateAppliedHandler);
+        Button.ClickEvent.AddClassHandler(typeof(Button), clickHandler);
+        Button.TemplateAppliedEvent.AddClassHandler(typeof(Button), templateAppliedHandler);
     }
 
 
@@ -166,9 +175,9 @@ partial class AppSuiteApplication
     /// <param name="control">Control.</param>
     /// <remark>The method is designed for macOS.</remark>
 #pragma warning disable CA1822
-    public void EnsureClosingToolTipIfWindowIsInactive(Avalonia.Controls.Control control)
+    public void EnsureClosingToolTipIfWindowIsInactive(Control control)
     {
-        if (!Platform.IsMacOS || control is Avalonia.Controls.Button)
+        if (!Platform.IsMacOS || control is Button)
             return;
 #pragma warning disable CA1806
         // ReSharper disable once ObjectCreationAsStatement
