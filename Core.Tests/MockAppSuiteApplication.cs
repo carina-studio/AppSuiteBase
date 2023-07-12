@@ -437,11 +437,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        SynchronizationContext ISynchronizable.SynchronizationContext => synchronizationContext ?? throw new InvalidOperationException("Application instance is not ready.");
-
-
-        /// <inheritdoc/>
-        public virtual DispatcherSynchronizationContext SynchronizationContext => throw new NotImplementedException();
+        public virtual SynchronizationContext SynchronizationContext => synchronizationContext ?? throw new InvalidOperationException("Application instance is not ready.");
         
         
         /// <inheritdoc/>
