@@ -1,5 +1,6 @@
 ﻿#define APPLY_CONTROL_BRUSH_ANIMATIONS
 //#define APPLY_ITEM_BRUSH_ANIMATIONS
+//#define TRACING_FOR_LAUNCH
 
 using Avalonia;
 using Avalonia.Animation;
@@ -174,7 +175,7 @@ namespace CarinaStudio.AppSuite
         }
         
         
-        // Class to receive call-back of downloading DotMemory.
+        // Class to receive call-back of downloading dotMemory.
         class DotMemoryDownloadingProgressCallback : IProgress<double>
         {
             // Fields.
@@ -188,7 +189,26 @@ namespace CarinaStudio.AppSuite
             public void Report(double value)
             {
                 if ((int)(value + 0.5) % 5 == 0)
-                    app.Logger.LogTrace("Downloading DotMemory: {progress:F2}%", value);
+                    app.Logger.LogTrace("Downloading dotMemory: {progress:F2}%", value);
+            }
+        }
+        
+        
+        // Class to receive call-back of downloading dotTrace.
+        class DotTraceDownloadingProgressCallback : IProgress<double>
+        {
+            // Fields.
+            readonly AppSuiteApplication app;
+            
+            // Constructor.
+            public DotTraceDownloadingProgressCallback(AppSuiteApplication app) =>
+                this.app = app;
+            
+            /// <inheritdoc/>
+            public void Report(double value)
+            {
+                if ((int)(value + 0.5) % 5 == 0)
+                    app.Logger.LogTrace("Downloading dotTrace: {progress:F2}%", value);
             }
         }
 
@@ -281,6 +301,24 @@ namespace CarinaStudio.AppSuite
             Application,
             System,
         }
+        
+        
+        // Session of tracing.
+        class TracingSession : IDisposable
+        {
+            // Fields.
+            readonly AppSuiteApplication app;
+            
+            // Constructor.
+            public TracingSession(AppSuiteApplication app)
+            {
+                this.app = app;
+            }
+            
+            // Dispose.
+            public void Dispose() =>
+                this.app.StopTracing(this);
+        }
 
 
         /// <summary>
@@ -355,6 +393,7 @@ namespace CarinaStudio.AppSuite
         bool isRestartingRootWindowsRequested;
         bool isRestartRequested;
         bool isShutdownStarted;
+        IDisposable? launchTracingToken;
         Task? loadingInitPersistentStateTask;
         Task? loadingInitSettingsTask;
         int logOutputTargetPort;
@@ -385,6 +424,8 @@ namespace CarinaStudio.AppSuite
         IStyle? styles;
         ThemeMode stylesThemeMode = ThemeMode.System;
         ThemeMode systemThemeMode = ThemeMode.Dark;
+        volatile TracingSession? tracingSession;
+        readonly object tracingSyncLock = new();
         readonly Dictionary<Avalonia.Controls.Window, List<IDisposable>> windowObserverTokens = new();
         readonly ObservableList<Avalonia.Controls.Window> windows = new();
 
@@ -426,6 +467,13 @@ namespace CarinaStudio.AppSuite
             this.Logger = this.LoggerFactory.CreateLogger(this.GetType().Name);
             // ReSharper restore VirtualMemberCallInConstructor
             this.Logger.LogDebug("Created");
+            
+            // start tracing for launch
+#if TRACING_FOR_LAUNCH
+            var launchTracingFileName = $"Launch-{DateTime.Now:yyyyMMdd-HHmmss}";
+            // ReSharper disable once VirtualMemberCallInConstructor
+            this.launchTracingToken = this.StartTracing(Path.Combine(this.RootPrivateDirectoryPath, launchTracingFileName, launchTracingFileName));
+#endif
 
             // setup logger for Avalonia
             Avalonia.Logging.Logger.Sink = new AvaloniaLogSink(this);
@@ -1055,6 +1103,10 @@ namespace CarinaStudio.AppSuite
 
         // Root directory path of dotMemory.
         string DotMemoryRootDirectoryPath => Path.Combine(this.RootPrivateDirectoryPath, "dotMemory");
+        
+        
+        // Root directory path of dotTrace.
+        string DotTraceRootDirectoryPath => Path.Combine(this.RootPrivateDirectoryPath, "dotTrace");
 
 
         /// <inheritdoc/>
@@ -3450,7 +3502,7 @@ namespace CarinaStudio.AppSuite
                     }
                 }, DispatcherPriority.Render);
                 
-                // close splash window
+                // close splash window and stop tracing
                 dispatcher.Post(() =>
                 {
                     this.splashWindow = this.splashWindow?.Let(it =>
@@ -3458,6 +3510,7 @@ namespace CarinaStudio.AppSuite
                         it.Close();
                         return (SplashWindowImpl?)null;
                     });
+                    this.launchTracingToken = this.launchTracingToken.DisposeAndReturnNull();
                 }, DispatcherPriority.Background);
             });
         }
@@ -3607,6 +3660,98 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public IDisposable StartTracing(string outputFileName)
+        {
+            // check state
+            if (!outputFileName.IsValidFilePath())
+            {
+                this.Logger.LogError("Invalid file name to save tracing: {fileName}", outputFileName);
+                return EmptyDisposable.Default;
+            }
+            if (this.tracingSession is not null)
+            {
+                this.Logger.LogWarning("Unable to start multiple tracings");
+                return EmptyDisposable.Default;
+            }
+            
+            // initialize
+            this.Logger.LogTrace("Prepare for tracing");
+            try
+            {
+                lock (this.tracingSyncLock)
+                    DotTrace.EnsurePrerequisiteAsync(progress: new DotTraceDownloadingProgressCallback(this), downloadTo: this.DotTraceRootDirectoryPath).Wait();
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Unable to prepare for tracing");
+                return EmptyDisposable.Default;
+            }
+            
+            // start tracing
+            lock (this.tracingSyncLock)
+            {
+                if (this.tracingSession is not null)
+                {
+                    this.Logger.LogWarning("Unable to start multiple tracings");
+                    return EmptyDisposable.Default;
+                }
+                try
+                {
+                    var outputFileInfo = new FileInfo(outputFileName);
+                    var directory = Path.GetDirectoryName(outputFileName);
+                    if (outputFileInfo.Exists)
+                        outputFileInfo.Delete();
+                    if (!string.IsNullOrEmpty(directory) && !System.IO.Directory.Exists(directory))
+                        System.IO.Directory.CreateDirectory(directory);
+                    var config = new DotTrace.Config().Also(it =>
+                    {
+                        it.SaveToFile(outputFileName);
+                        it.UseCustomResponseTimeout(5 * 60 * 1000); // 5 mins
+                    });
+                    DotTrace.Attach(config);
+                    this.Logger.LogWarning("Profiler attached for tracing");
+                    this.Logger.LogTrace("Start tracing");
+                    DotTrace.StartCollectingData();
+                    this.tracingSession = new(this);
+                    return this.tracingSession;
+                }
+                catch (Exception ex)
+                {
+                    this.Logger.LogError(ex, "Unable to start tracing which saves to '{fileName}'", outputFileName);
+                    return EmptyDisposable.Default;
+                }
+            }
+        }
+        
+        
+        // Stop tracing.
+        void StopTracing(TracingSession session)
+        {
+            lock (this.tracingSyncLock)
+            {
+                if (this.tracingSession != session)
+                    return;
+                this.Logger.LogWarning("Stop tracing");
+                try
+                {
+                    DotTrace.StopCollectingData();
+                    DotTrace.SaveData();
+                }
+                catch (Exception ex)
+                {
+                    this.Logger.LogError(ex, "Error occurred while stopping tracing");
+                }
+                finally
+                {
+                    this.tracingSession = null;
+                    DotTrace.Detach();
+                    this.Logger.LogWarning("Profiler detached for tracing");
+                }
+            }
+        }
+
+
+        /// <inheritdoc/>
         public bool TakeMemorySnapshot(string outputFileName)
         {
             // check state
@@ -3638,8 +3783,11 @@ namespace CarinaStudio.AppSuite
             try
             {
                 var outputFileInfo = new FileInfo(outputFileName);
+                var directory = Path.GetDirectoryName(outputFileName);
                 if (outputFileInfo.Exists)
                     outputFileInfo.Delete();
+                if (!string.IsNullOrEmpty(directory) && !System.IO.Directory.Exists(directory))
+                    System.IO.Directory.CreateDirectory(directory);
                 var config = new DotMemory.Config().Also(it =>
                 {
                     it.SaveToFile(outputFileName);

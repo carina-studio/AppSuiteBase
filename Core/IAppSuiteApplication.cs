@@ -435,6 +435,14 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="delay">Delay before start process of shutting down in milliseconds.</param>
         void Shutdown(int delay = 0);
+
+
+        /// <summary>
+        /// Start tracing for performance profiling.
+        /// </summary>
+        /// <param name="outputFileName">Name of output file.</param>
+        /// <returns>Token of the tracing. Call <see cref="IDisposable.Dispose"/> to stop the tracing.</returns>
+        IDisposable StartTracing(string outputFileName);
         
         
         /// <summary>

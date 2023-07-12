@@ -428,6 +428,11 @@ namespace CarinaStudio.AppSuite
         { }
 
 
+        /// <inheritdoc/>
+        public virtual IDisposable StartTracing(string outputFileName) =>
+            new EmptyDisposable();
+
+
         /// <summary>
         /// Raised when string resources updated.
         /// </summary>
