@@ -205,7 +205,7 @@ partial class AppSuiteApplication
     void OnMainWindowActivationChangedOnLinux()
     {
         if (this.IsSystemThemeModeSupportedOnLinux)
-            this.UpdateSystemThemeMode(true);
+            _ = this.UpdateSystemThemeModeAsync(true);
     }
     
     

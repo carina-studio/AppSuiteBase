@@ -1,9 +1,9 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite
 {
@@ -36,19 +36,19 @@ namespace CarinaStudio.AppSuite
 	/// </summary>
 	public static class ApplicationCultureExtensions
     {
-		// Statc fields.
+		// Static fields.
 		static volatile CultureInfo? CachedMacOSSysCultureInfo;
 		static readonly Regex IetfLangTagRegex = new("^(?<Language>[^\\-]+)\\-((?<Script>[^\\-]+)\\-)?(?<Region>[^\\-]+)$");
 		static readonly Regex MacOSSysLangRegex = new("^[\\s]*\"(?<Language>[^\"]*)\"");
 
 
 		/// <summary>
-		/// Convert to <see cref="CultureInfo"/>.
+		/// Convert to <see cref="CultureInfo"/> asynchronously.
 		/// </summary>
 		/// <param name="culture"><see cref="ApplicationCulture"/>.</param>
-		/// <param name="invalidateSysCultureInfo">True to invalidate system culture info before convertion.</param>
+		/// <param name="invalidateSysCultureInfo">True to invalidate system culture info before conversion.</param>
 		/// <returns><see cref="CultureInfo"/>.</returns>
-		public static CultureInfo ToCultureInfo(this ApplicationCulture culture, bool invalidateSysCultureInfo = false)
+		public static async Task<CultureInfo> ToCultureInfoAsync(this ApplicationCulture culture, bool invalidateSysCultureInfo = false)
         {
 			if (culture == ApplicationCulture.System)
 			{
@@ -56,46 +56,51 @@ namespace CarinaStudio.AppSuite
 				{
 					if (invalidateSysCultureInfo || CachedMacOSSysCultureInfo == null)
 					{
-						try
+						return await Task.Run(() =>
 						{
-							using var process = Process.Start(new ProcessStartInfo()
+							try
 							{
-								Arguments = "read -g AppleLanguages",
-								CreateNoWindow = true,
-								FileName = "defaults",
-								RedirectStandardOutput = true,
-								UseShellExecute = false,
-							});
-							if (process != null)
-							{
-								using var reader = process.StandardOutput;
-								var line = reader.ReadLine();
-								while (line != null)
+								using var process = Process.Start(new ProcessStartInfo()
 								{
-									var match = MacOSSysLangRegex.Match(line);
-									if (match.Success)
+									Arguments = "read -g AppleLanguages",
+									CreateNoWindow = true,
+									FileName = "defaults",
+									RedirectStandardOutput = true,
+									UseShellExecute = false,
+								});
+								if (process != null)
+								{
+									using var reader = process.StandardOutput;
+									var line = reader.ReadLine();
+									while (line != null)
 									{
-										match = IetfLangTagRegex.Match(match.Groups["Language"].Value);
+										var match = MacOSSysLangRegex.Match(line);
 										if (match.Success)
 										{
-											try
+											match = IetfLangTagRegex.Match(match.Groups["Language"].Value);
+											if (match.Success)
 											{
+												try
+												{
 												
-												CachedMacOSSysCultureInfo = CultureInfo.GetCultureInfo($"{match.Groups["Language"].Value}-{match.Groups["Region"].Value}");
-												break;
+													CachedMacOSSysCultureInfo = CultureInfo.GetCultureInfo($"{match.Groups["Language"].Value}-{match.Groups["Region"].Value}");
+													break;
+												}
+												// ReSharper disable once EmptyGeneralCatchClause
+												catch
+												{ }
 											}
-											catch
-											{ }
 										}
+										line = reader.ReadLine();
 									}
-									line = reader.ReadLine();
 								}
 							}
-						}
-						catch
-						{ }
+							// ReSharper disable once EmptyGeneralCatchClause
+							catch
+							{ }
+							return CachedMacOSSysCultureInfo ?? CultureInfo.InstalledUICulture;
+						}, CancellationToken.None);
 					}
-					return CachedMacOSSysCultureInfo ?? CultureInfo.InstalledUICulture;
 				}
 				return CultureInfo.InstalledUICulture;
 			}

@@ -1210,15 +1210,15 @@ namespace CarinaStudio.AppSuite
 
 
         // Get theme mode of system.
-        internal ThemeMode GetSystemThemeMode()
+        internal Task<ThemeMode> GetSystemThemeModeAsync()
         {
             if (Platform.IsWindows)
-                return this.GetWindowsThemeMode();
+                return Task.FromResult(this.GetWindowsThemeMode());
             if (Platform.IsMacOS)
-                return this.GetMacOSThemeMode();
+                return this.GetMacOSThemeModeAsync();
             if (Platform.IsLinux)
-                return this.GetLinuxThemeMode();
-            return this.FallbackThemeMode;
+                return Task.FromResult(this.GetLinuxThemeMode());
+            return Task.FromResult(this.FallbackThemeMode);
         }
 
 
@@ -2440,7 +2440,7 @@ namespace CarinaStudio.AppSuite
             }
 
             // setup culture info
-            this.UpdateCultureInfo(false);
+            await this.UpdateCultureInfoAsync(false);
 
             // load strings
             this.Resources.MergedDictionaries.Add(this.LoadStringResource(new Uri("avares://CarinaStudio.AppSuite.Core/Strings/Default.axaml")).AsNonNull());
@@ -2452,7 +2452,7 @@ namespace CarinaStudio.AppSuite
             this.UpdateStringResources();
 
             // get current system theme mode
-            this.UpdateSystemThemeMode(false);
+            await this.UpdateSystemThemeModeAsync(false);
             
             // setup effective theme mode
             this.SelectCurrentThemeMode().Let(themeMode =>
@@ -2659,7 +2659,7 @@ namespace CarinaStudio.AppSuite
             if (e.Key == SettingKeys.AcceptNonStableApplicationUpdate)
                 _ = this.CheckForApplicationUpdateAsync();
             else if (e.Key == SettingKeys.Culture)
-                this.UpdateCultureInfo(true);
+                _ = this.UpdateCultureInfoAsync(true);
             else if (e.Key == SettingKeys.ShowProcessInfo)
             {
                 if (!(bool)e.Value)
@@ -2669,9 +2669,16 @@ namespace CarinaStudio.AppSuite
             }
             else if (e.Key == SettingKeys.ThemeMode)
             {
-                if (Platform.IsMacOS && (ThemeMode)e.Value == ThemeMode.System)
-                    this.UpdateSystemThemeMode(false);
-                this.CheckRestartingRootWindowsNeeded();
+                if ((ThemeMode)e.Value == ThemeMode.System)
+                {
+                    Dispatcher.UIThread.Post(async () =>
+                    {
+                        await this.UpdateSystemThemeModeAsync(false);
+                        this.CheckRestartingRootWindowsNeeded();
+                    }, DispatcherPriority.Send);
+                }
+                else
+                    this.CheckRestartingRootWindowsNeeded();
             }
             else if (e.Key == SettingKeys.UseCompactUserInterface)
                 this.CheckRestartingRootWindowsNeeded();
@@ -3914,10 +3921,10 @@ namespace CarinaStudio.AppSuite
 
 
         // Update culture info according to settings.
-        void UpdateCultureInfo(bool updateStringResources)
+        async Task UpdateCultureInfoAsync(bool updateStringResources)
         {
             // get culture info
-            var cultureInfo = this.Settings.GetValueOrDefault(SettingKeys.Culture).ToCultureInfo(true);
+            var cultureInfo = await this.Settings.GetValueOrDefault(SettingKeys.Culture).ToCultureInfoAsync(true);
             cultureInfo.ClearCachedData();
             if (Equals(cultureInfo, this.cultureInfo))
                 return;
@@ -3926,15 +3933,23 @@ namespace CarinaStudio.AppSuite
 
             // change culture info
             this.cultureInfo = cultureInfo;
-            CultureInfo.CurrentCulture = cultureInfo;
-            CultureInfo.CurrentUICulture = cultureInfo;
-            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
-            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+            var taskCompletionSource = new TaskCompletionSource();
+            Dispatcher.UIThread.Post(() => // Prevent setting CultureInfo.Current(UI)Culture in task context
+            {
+                CultureInfo.CurrentCulture = cultureInfo;
+                CultureInfo.CurrentUICulture = cultureInfo;
+                CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+                CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+                taskCompletionSource.TrySetResult();
+            }, DispatcherPriority.Send);
             this.OnPropertyChanged(nameof(CultureInfo));
 
             // update string
             if (updateStringResources)
                 this.UpdateStringResources();
+
+            // wait for completion
+            await taskCompletionSource.Task;
         }
 
 
@@ -4305,13 +4320,13 @@ namespace CarinaStudio.AppSuite
 
 
         // Update system theme mode.
-        void UpdateSystemThemeMode(bool checkRestartingMainWindows)
+        async Task UpdateSystemThemeModeAsync(bool checkRestartingMainWindows)
         {
             // check performance
             var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
 
             // get current theme
-            var themeMode = this.GetSystemThemeMode();
+            var themeMode = await this.GetSystemThemeModeAsync();
             if (this.systemThemeMode == themeMode)
                 return;
 

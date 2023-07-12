@@ -163,7 +163,7 @@ unsafe partial class AppSuiteApplication
     // Called when activation state of main window changed.
     void OnMainWindowActivationChangedOnWindows()
     {
-        this.UpdateSystemThemeMode(true); // in case of system event was not received
+        _ = this.UpdateSystemThemeModeAsync(true); // in case of system event was not received
     }
 
 
@@ -174,10 +174,10 @@ unsafe partial class AppSuiteApplication
         switch (e.Category)
         {
             case UserPreferenceCategory.General:
-                this.SynchronizationContext.Post(() => this.UpdateSystemThemeMode(true));
+                this.SynchronizationContext.Post(() => _ = this.UpdateSystemThemeModeAsync(true));
                 break;
             case UserPreferenceCategory.Locale:
-                this.SynchronizationContext.Post(() => this.UpdateCultureInfo(true));
+                this.SynchronizationContext.Post(() => _ = this.UpdateCultureInfoAsync(true));
                 break;
         }
     }

@@ -1,3 +1,4 @@
+using Avalonia.Threading;
 using CarinaStudio.Configuration;
 using NUnit.Framework;
 using System;
@@ -29,15 +30,15 @@ class LocalizationTest : TestCase
 
 
     /// <inheritdoc/>
-    protected override Task OnRunAsync(CancellationToken cancellationToken)
+    protected override async Task OnRunAsync(CancellationToken cancellationToken)
     {
         var isTestStringChanged = false;
-        var latestNotifyedTestString = default(string);
+        var latestNotifiedTestString = default(string);
         var observableTestString = this.Application.GetObservableString("LocalizationTest.String");
         using var observerToken = observableTestString.Subscribe(s =>
         {
             isTestStringChanged = true;
-            latestNotifyedTestString = s;
+            latestNotifiedTestString = s;
         });
         var appCultures = new List<ApplicationCulture>(Enum.GetValues<ApplicationCulture>());
         appCultures.Remove(ApplicationCulture.System);
@@ -67,18 +68,29 @@ class LocalizationTest : TestCase
             if (this.Application.Settings.GetValueOrDefault(SettingKeys.Culture) != appCulture)
             {
                 isTestStringChanged = false;
-                latestNotifyedTestString = default;
+                latestNotifiedTestString = default;
                 this.Application.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, appCulture);
             }
+            await Task.Delay(1000, cancellationToken);
             Assert.IsTrue(isTestStringChanged, $"Did not receive change notification after changing culture to '{appCulture}'.");
-            Assert.AreEqual(expectedString, latestNotifyedTestString, "String from observer is incorrect");
+            Assert.AreEqual(expectedString, latestNotifiedTestString, "String from observer is incorrect");
             Assert.AreEqual(expectedString, this.Application.GetString("LocalizationTest.String"), "String is incorrect");
-            Assert.AreEqual(appCulture.ToCultureInfo().Name, CultureInfo.CurrentCulture.Name, "CultureInfo.CurrentCulture is incorrect");
-            Assert.AreEqual(appCulture.ToCultureInfo().Name, CultureInfo.CurrentUICulture.Name, "CultureInfo.CurrentUICulture is incorrect");
-            Assert.AreEqual(appCulture.ToCultureInfo().Name, CultureInfo.DefaultThreadCurrentCulture?.Name, "CultureInfo.DefaultThreadCurrentCulture is incorrect");
-            Assert.AreEqual(appCulture.ToCultureInfo().Name, CultureInfo.DefaultThreadCurrentUICulture?.Name, "CultureInfo.DefaultThreadCurrentUICulture is incorrect");
+            var appCultureInfo = await appCulture.ToCultureInfoAsync();
+            var currentCulture = CultureInfo.CurrentCulture;
+            var currentUICulture = CultureInfo.CurrentUICulture;
+            var taskCompletionSource = new TaskCompletionSource();
+            Dispatcher.UIThread.Post(() => // Prevent getting CultureInfo.Current(UI)Culture in task context
+            {
+                currentCulture = CultureInfo.CurrentCulture;
+                currentUICulture = CultureInfo.CurrentUICulture;
+                taskCompletionSource.TrySetResult();
+            });
+            await taskCompletionSource.Task;
+            Assert.AreEqual(appCultureInfo.Name, currentCulture.Name, "CultureInfo.CurrentCulture is incorrect");
+            Assert.AreEqual(appCultureInfo.Name, currentUICulture.Name, "CultureInfo.CurrentUICulture is incorrect");
+            Assert.AreEqual(appCultureInfo.Name, CultureInfo.DefaultThreadCurrentCulture?.Name, "CultureInfo.DefaultThreadCurrentCulture is incorrect");
+            Assert.AreEqual(appCultureInfo.Name, CultureInfo.DefaultThreadCurrentUICulture?.Name, "CultureInfo.DefaultThreadCurrentUICulture is incorrect");
         }
-        return Task.CompletedTask;
     }
 
 

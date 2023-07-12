@@ -1,8 +1,6 @@
 using Avalonia.Media;
 using CarinaStudio.Configuration;
-using CarinaStudio.Controls;
 using NUnit.Framework;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -40,7 +38,7 @@ class ThemeModeTest : TestCase
             Assert.IsTrue(this.Application.IsSystemThemeModeSupported, "System theme mode should be supported.");
             if (this.Application is AppSuiteApplication appSuiteApp)
             {
-                var sysThemeMode = appSuiteApp.GetSystemThemeMode();
+                var sysThemeMode = await appSuiteApp.GetSystemThemeModeAsync();
                 if (this.Application.Settings.GetValueOrDefault(SettingKeys.ThemeMode) != ThemeMode.System)
                 {
                     this.Application.Settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, ThemeMode.System);

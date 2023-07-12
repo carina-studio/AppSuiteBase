@@ -17,6 +17,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite;
 
@@ -188,38 +190,38 @@ partial class AppSuiteApplication
 
 
     // Get system theme mode on macOS.
-    ThemeMode GetMacOSThemeMode()
+    async Task<ThemeMode> GetMacOSThemeModeAsync()
     {
         try
         {
-            using var process = Process.Start(new ProcessStartInfo()
+            return await Task.Run(() =>
             {
-                Arguments = "read -g AppleInterfaceStyle",
-                CreateNoWindow = true,
-                FileName = "defaults",
-                RedirectStandardError = true,
-                RedirectStandardOutput = true,
-            });
-            if (process != null)
-            {
-                var interfaceStyle = process.StandardOutput.ReadLine();
-                return interfaceStyle == null
-                    ? ThemeMode.Light
-                    : interfaceStyle switch
-                    {
-                        "Dark" => ThemeMode.Dark,
-                        _ => Global.Run(() =>
+                using var process = Process.Start(new ProcessStartInfo()
+                {
+                    Arguments = "read -g AppleInterfaceStyle",
+                    CreateNoWindow = true,
+                    FileName = "defaults",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true,
+                });
+                if (process != null)
+                {
+                    var interfaceStyle = process.StandardOutput.ReadLine();
+                    return interfaceStyle == null
+                        ? ThemeMode.Light
+                        : interfaceStyle switch
                         {
-                            this.Logger.LogWarning("Unknown system theme mode on macOS: {interfaceStyle}", interfaceStyle);
-                            return this.FallbackThemeMode;
-                        }),
-                    };
-            }
-            else
-            {
+                            "Dark" => ThemeMode.Dark,
+                            _ => Global.Run(() =>
+                            {
+                                this.Logger.LogWarning("Unknown system theme mode on macOS: {interfaceStyle}", interfaceStyle);
+                                return this.FallbackThemeMode;
+                            }),
+                        };
+                }
                 this.Logger.LogError("Unable to start 'defaults' to check system theme mode on macOS");
                 return this.FallbackThemeMode;
-            }
+            }, CancellationToken.None);
         }
         catch (Exception ex)
         {
@@ -232,8 +234,8 @@ partial class AppSuiteApplication
     // Called when IsActive of main window changed on macOS.
     void OnMainWindowActivationChangedOnMacOS()
     {
-        this.UpdateCultureInfo(true);
-        this.UpdateSystemThemeMode(true);
+        _ = this.UpdateCultureInfoAsync(true);
+        _ = this.UpdateSystemThemeModeAsync(true);
         this.updateMacOSAppDockTileProgressAction?.Schedule();
     }
 
