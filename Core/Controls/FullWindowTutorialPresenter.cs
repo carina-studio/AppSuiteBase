@@ -92,6 +92,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter
         });
         this.skipAllTutorialsControl = e.NameScope.Find<Control>("PART_SkipAllTutorials");
         this.tutorialContainer = e.NameScope.Find<Control>("PART_TutorialContainer");
+        this.CurrentTutorial?.Let(this.OnShowTutorial);
     }
 
 

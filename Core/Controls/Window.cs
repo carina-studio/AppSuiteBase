@@ -275,9 +275,14 @@ namespace CarinaStudio.AppSuite.Controls
         
 
         /// <inheritdoc/>
-        public bool ShowTutorial(Tutorial tutorial) =>
-            this.tutorialPresenter?.ShowTutorial(tutorial) ?? false;
-        
+        public bool ShowTutorial(Tutorial tutorial)
+        {
+            if (this.tutorialPresenter is null)
+                return false;
+            this.tutorialPresenter.IsVisible = true;
+            return this.tutorialPresenter.ShowTutorial(tutorial);
+        }
+
 
         /// <summary>
         /// Get or set progress shown on taskbar icon. The range is [0.0, 1.0].

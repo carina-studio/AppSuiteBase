@@ -2027,13 +2027,10 @@
 							VerticalAlignment="{TemplateBinding VerticalAlignment}">
 						<DockPanel>
 							<Panel DockPanel.Dock="Top">
-								<Border BorderBrush="{DynamicResource Brush/TabControl.TabStrip.Border}" BorderThickness="0,0,0,1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-								<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" Background="{x:Null}">
-									<Border Padding="{DynamicResource Thickness/TabControl.TabStrip.Padding}">
-										<ItemsPresenter Name="PART_ItemsPresenter"
-										                ItemsPanel="{TemplateBinding ItemsPanel}"
-										                DockPanel.Dock="{TemplateBinding TabStripPlacement}" />
-									</Border>
+								<Line EndPoint="6,0" Height="1" HorizontalAlignment="Stretch" Stretch="Fill" StartPoint="0,0" Stroke="{DynamicResource Brush/TabControl.TabStrip.Border}" StrokeThickness="1" VerticalAlignment="Bottom"/>
+								<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" Background="{x:Null}" Padding="{DynamicResource Thickness/TabControl.TabStrip.Padding}">
+									<ItemsPresenter Name="PART_ItemsPresenter"
+									                ItemsPanel="{TemplateBinding ItemsPanel}"/>
 								</controls:TabStripScrollViewer>
 							</Panel>
 							<ContentPresenter Name="PART_SelectedContentHost"
@@ -2096,13 +2093,17 @@
 			<Setter.Value>
 				<ControlTemplate>
 					<Border Background="{x:Static Brushes.Transparent}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-						<Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Stretch">
+						<DockPanel VerticalAlignment="Stretch">
 
-							<Border IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemBefore}" Margin="{DynamicResource Thickness/TabItem.InsertionIndicator.Margin}">
+							<Border DockPanel.Dock="Left" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemBefore}" Margin="{DynamicResource Thickness/TabItem.InsertionIndicator.Margin}">
 								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
 							</Border>
 
-							<Border Name="PART_ContentContainer" Grid.Column="1" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" VerticalAlignment="Bottom">
+							<Border DockPanel.Dock="Right" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemAfter}" Margin="{DynamicResource Thickness/TabItem.InsertionIndicator.Margin}">
+								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
+							</Border>
+							
+							<Border Name="PART_ContentContainer" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" VerticalAlignment="Bottom">
 								<Border.Width>
 									<MultiBinding Converter="{x:Static converters:TabItemWidthConverter.Default}">
 										<Binding RelativeSource="{RelativeSource AncestorType={x:Type TabControl}}"/>
@@ -2113,31 +2114,25 @@
 								</Border.Width>
 								<Panel>
 									<Border Background="{DynamicResource Brush/TabItem.Header.Background}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding !$parent[TabItem].IsSelected}" Margin="0,0,0,1"/>
-									<Border Background="{DynamicResource Brush/TabItem.Header.Background.PointerOver}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsPointerOver, Converter={x:Static converters:TabItemOpacityConverters.IsPointerOverToOpacity}}" Margin="0,0,0,1">
+									<Border Background="{DynamicResource Brush/TabItem.Header.Background.PointerOver}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsPointerOver}" Opacity="{Binding $parent[TabItem].IsPointerOver, Converter={x:Static converters:TabItemOpacityConverters.IsPointerOverToOpacity}}" Margin="0,0,0,1">
 										<Border.Transitions>
 											<Transitions>
 												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Border.Transitions>
 									</Border>
-									<Border Background="{DynamicResource Brush/TabItem.Header.Background.Selected}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:TabItemOpacityConverters.IsSelectedToOpacity}}">
+									<Border Background="{DynamicResource Brush/TabItem.Header.Background.Selected}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsSelected}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:TabItemOpacityConverters.IsSelectedToOpacity}}">
 										<Border.Transitions>
 											<Transitions>
-												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
+												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Border.Transitions>
 									</Border>
-									<Border Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Stretch" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center">
-										<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-									</Border>
+									<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Stretch" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
 								</Panel>
 							</Border>
-
-							<Border Grid.Column="2" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemAfter}" Margin="{DynamicResource Thickness/TabItem.InsertionIndicator.Margin}">
-								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
-							</Border>
 							
-						</Grid>
+						</DockPanel>
 					</Border>
 				</ControlTemplate>
 			</Setter.Value>
@@ -2831,7 +2826,7 @@
 											  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
 											  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
 						</VisualLayerManager>
-						<controls:FullWindowTutorialPresenter Name="PART_TutorialPresenter"/>
+						<controls:FullWindowTutorialPresenter Name="PART_TutorialPresenter" IsVisible="False"/>
 						<Border Name="PART_ContentFadingOverlay" Background="{Binding #PART_TransparencyFallback.Background}" IsHitTestVisible="False" IsVisible="False" Opacity="0"/>
 					</Panel>
 				</Panel>
