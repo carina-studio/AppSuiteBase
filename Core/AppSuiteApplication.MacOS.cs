@@ -156,11 +156,13 @@ partial class AppSuiteApplication
                 {
                     if (!isSubscribing && isOpen && (TopLevel.GetTopLevel(control) as Window)?.IsActive == false)
                     {
-                        Dispatcher.UIThread.Post(() =>
+                        // [Workaround] Need to make sure that Dispatcher.InstanceLock is not held by UI thread when closing tool tip
+                        // https://github.com/AvaloniaUI/Avalonia/issues/12144
+                        Dispatcher.UIThread.Post(() => 
                         {
                             if (ToolTip.GetIsOpen(control) && (TopLevel.GetTopLevel(control) as Window)?.IsActive == false)
                                 ToolTip.SetIsOpen(control, false);
-                        }, DispatcherPriority.Background);
+                        }, DispatcherPriority.Send);
                     }
                 });
                 isSubscribing = false;
