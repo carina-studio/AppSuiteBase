@@ -477,9 +477,9 @@ namespace CarinaStudio.AppSuite.Tests
 
         public async void ShowAppInfoDialog()
         {
-            this.canShowAppInfo.Update(false);
-            await this.Application.ShowApplicationInfoDialogAsync(null);
-            this.canShowAppInfo.Update(true);
+            //this.canShowAppInfo.Update(false);
+            _ = this.Application.ShowApplicationInfoDialogAsync(this);
+            //this.canShowAppInfo.Update(true);
         }
 
         public void ShowAppUpdateDialog() =>

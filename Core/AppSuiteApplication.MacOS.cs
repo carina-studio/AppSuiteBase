@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Fonts;
-using Avalonia.Threading;
 using CarinaStudio.Collections;
 using CarinaStudio.MacOS.AppKit;
 using CarinaStudio.MacOS.CoreGraphics;
@@ -17,6 +16,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -145,24 +145,57 @@ partial class AppSuiteApplication
     // Define extra styles by code for macOS.
     static void DefineExtraStylesForMacOS()
     {
+        var backgroundProcessingStackTracePattern = new Regex(@"\s+at\s+Avalonia\.Threading\.Dispatcher\.OnReadyForExplicitBackgroundProcessing\(\)", RegexOptions.Compiled);
         var clickHandler = new EventHandler<RoutedEventArgs>((sender, _) =>
-            ToolTip.SetIsOpen((Control)sender.AsNonNull(), false));
+        {
+            // [Workaround] Need to make sure that Dispatcher.InstanceLock is not held by UI thread when closing tool tip
+            // https://github.com/AvaloniaUI/Avalonia/issues/12144
+            if (!backgroundProcessingStackTracePattern.IsMatch(Environment.StackTrace))
+                ToolTip.SetIsOpen((Control)sender!, false);
+        });
         var templateAppliedHandler = new EventHandler<RoutedEventArgs>((sender, _) =>
         {
             if (sender is Control control)
             {
+                // Monitor Window.IsActive
+                var window = default(Window);
+                var isAttachingToWindow = false;
+                var windowIsActiveObserver = new Observer<bool>(isActive =>
+                {
+                    if (!isAttachingToWindow && !isActive)
+                        ToolTip.SetIsOpen(control, false);
+                });
+                var windowIsActiveObserverToken = default(IDisposable);
+                void AttachToWindow()
+                {
+                    windowIsActiveObserverToken = windowIsActiveObserverToken.DisposeAndReturnNull();
+                    window = (TopLevel.GetTopLevel(control) as Window)?.Also(it =>
+                    {
+                        isAttachingToWindow = true;
+                        windowIsActiveObserverToken = it.GetObservable(Window.IsActiveProperty).Subscribe(windowIsActiveObserver);
+                        isAttachingToWindow = false;
+                    });
+                }
+                control.AttachedToLogicalTree += (_, _) => AttachToWindow();
+                control.DetachedFromVisualTree += (_, _) =>
+                {
+                    window = null;
+                    windowIsActiveObserverToken = windowIsActiveObserverToken.DisposeAndReturnNull();
+                };
+                AttachToWindow();
+                
+                // monitor ToolTip.IsOpen
                 var isSubscribing = true;
                 control.GetObservable(ToolTip.IsOpenProperty).Subscribe(isOpen =>
                 {
-                    if (!isSubscribing && isOpen && (TopLevel.GetTopLevel(control) as Window)?.IsActive == false)
+                    // [Workaround] Need to make sure that Dispatcher.InstanceLock is not held by UI thread when closing tool tip
+                    // https://github.com/AvaloniaUI/Avalonia/issues/12144
+                    if (!isSubscribing 
+                        && isOpen 
+                        && window?.IsActive == false 
+                        && !backgroundProcessingStackTracePattern.IsMatch(Environment.StackTrace))
                     {
-                        // [Workaround] Need to make sure that Dispatcher.InstanceLock is not held by UI thread when closing tool tip
-                        // https://github.com/AvaloniaUI/Avalonia/issues/12144
-                        Dispatcher.UIThread.Post(() => 
-                        {
-                            if (ToolTip.GetIsOpen(control) && (TopLevel.GetTopLevel(control) as Window)?.IsActive == false)
-                                ToolTip.SetIsOpen(control, false);
-                        }, DispatcherPriority.Send);
+                        ToolTip.SetIsOpen(control, false);
                     }
                 });
                 isSubscribing = false;
