@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Fonts;
@@ -16,7 +17,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -145,63 +145,45 @@ partial class AppSuiteApplication
     // Define extra styles by code for macOS.
     static void DefineExtraStylesForMacOS()
     {
-        var backgroundProcessingStackTracePattern = new Regex(@"\s+at\s+Avalonia\.Threading\.Dispatcher\.OnReadyForExplicitBackgroundProcessing\(\)", RegexOptions.Compiled);
-        var clickHandler = new EventHandler<RoutedEventArgs>((sender, _) =>
-        {
-            // [Workaround] Need to make sure that Dispatcher.InstanceLock is not held by UI thread when closing tool tip
-            // https://github.com/AvaloniaUI/Avalonia/issues/12144
-            if (!backgroundProcessingStackTracePattern.IsMatch(Environment.StackTrace))
-                ToolTip.SetIsOpen((Control)sender!, false);
-        });
         var templateAppliedHandler = new EventHandler<RoutedEventArgs>((sender, _) =>
         {
             if (sender is Control control)
             {
                 // Monitor Window.IsActive
-                var window = default(Window);
                 var isAttachingToWindow = false;
+                var emptyTip = new FixedObservableValue<object?>(null);
+                var emptyTipBindingToken = default(IDisposable);
                 var windowIsActiveObserver = new Observer<bool>(isActive =>
                 {
-                    if (!isAttachingToWindow && !isActive)
-                        ToolTip.SetIsOpen(control, false);
+                    if (isAttachingToWindow)
+                        return;
+                    if (isActive)
+                        emptyTipBindingToken = emptyTipBindingToken.DisposeAndReturnNull();
+                    else if (emptyTipBindingToken is null)
+                        emptyTipBindingToken = control.Bind(ToolTip.TipProperty, emptyTip, BindingPriority.Animation);
                 });
                 var windowIsActiveObserverToken = default(IDisposable);
-                void AttachToWindow()
+                void DetachFromWindow()
                 {
                     windowIsActiveObserverToken = windowIsActiveObserverToken.DisposeAndReturnNull();
-                    window = (TopLevel.GetTopLevel(control) as Window)?.Also(it =>
+                    emptyTipBindingToken = emptyTipBindingToken.DisposeAndReturnNull();
+                }
+                void AttachToWindow()
+                {
+                    (TopLevel.GetTopLevel(control) as Window)?.Also(it =>
                     {
                         isAttachingToWindow = true;
                         windowIsActiveObserverToken = it.GetObservable(Window.IsActiveProperty).Subscribe(windowIsActiveObserver);
+                        if (!it.IsActive && emptyTipBindingToken is null)
+                            emptyTipBindingToken = control.Bind(ToolTip.TipProperty, emptyTip, BindingPriority.Animation);
                         isAttachingToWindow = false;
                     });
                 }
                 control.AttachedToLogicalTree += (_, _) => AttachToWindow();
-                control.DetachedFromVisualTree += (_, _) =>
-                {
-                    window = null;
-                    windowIsActiveObserverToken = windowIsActiveObserverToken.DisposeAndReturnNull();
-                };
+                control.DetachedFromVisualTree += (_, _) => DetachFromWindow();
                 AttachToWindow();
-                
-                // monitor ToolTip.IsOpen
-                var isSubscribing = true;
-                control.GetObservable(ToolTip.IsOpenProperty).Subscribe(isOpen =>
-                {
-                    // [Workaround] Need to make sure that Dispatcher.InstanceLock is not held by UI thread when closing tool tip
-                    // https://github.com/AvaloniaUI/Avalonia/issues/12144
-                    if (!isSubscribing 
-                        && isOpen 
-                        && window?.IsActive == false 
-                        && !backgroundProcessingStackTracePattern.IsMatch(Environment.StackTrace))
-                    {
-                        ToolTip.SetIsOpen(control, false);
-                    }
-                });
-                isSubscribing = false;
             }
         });
-        Button.ClickEvent.AddClassHandler(typeof(Button), clickHandler);
         Button.TemplateAppliedEvent.AddClassHandler(typeof(Button), templateAppliedHandler);
     }
 
