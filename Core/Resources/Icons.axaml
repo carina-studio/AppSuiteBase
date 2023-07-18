@@ -287,7 +287,6 @@
 	<GeometryDrawing x:Key="Drawing/Icon.Details" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Details}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Edit" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Edit}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Error" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Error}"/>
-	<GeometryDrawing x:Key="Drawing/Icon.Error.Colored" Brush="{DynamicResource Brush/Icon.Error}" Geometry="{StaticResource Geometry/Icon.Error}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Export" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Export}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.FastBackward" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.FastBackward}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.FastForward" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.FastForward}"/>
@@ -297,7 +296,6 @@
 	<GeometryDrawing x:Key="Drawing/Icon.Forward" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Forward}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Import" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Import}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Information" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Information}"/>
-	<GeometryDrawing x:Key="Drawing/Icon.Information.Colored" Brush="{DynamicResource Brush/Icon.Information}" Geometry="{StaticResource Geometry/Icon.Information}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Lab" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Lab}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Link" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Link}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Memory" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Memory}"/>
@@ -306,14 +304,12 @@
 	<GeometryDrawing x:Key="Drawing/Icon.MoveDown" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.MoveDown}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.MoveUp" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.MoveUp}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.OK" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.OK}"/>
-	<GeometryDrawing x:Key="Drawing/Icon.OK.Colored" Brush="{DynamicResource Brush/Icon.OK}" Geometry="{StaticResource Geometry/Icon.OK}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.OpenFile" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.OpenFile}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Paste" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Paste}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.PauseMedia" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.PauseMedia}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.PlayMedia" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.PlayMedia}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Pin" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Pin}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Question" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Question}"/>
-	<GeometryDrawing x:Key="Drawing/Icon.Question.Colored" Brush="{DynamicResource Brush/Icon.Question}" Geometry="{StaticResource Geometry/Icon.Question}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Redo" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Redo}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Refresh" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Refresh}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.RemoveFile" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.RemoveFile}"/>
@@ -331,10 +327,8 @@
 	<GeometryDrawing x:Key="Drawing/Icon.Tab" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Tab}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Undo" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Undo}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Update" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Update}"/>
-	<GeometryDrawing x:Key="Drawing/Icon.Update.Colored" Brush="{DynamicResource Brush/Icon.Information}" Geometry="{StaticResource Geometry/Icon.Update}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Waiting" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Waiting}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.Warning" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Warning}"/>
-	<GeometryDrawing x:Key="Drawing/Icon.Warning.Colored" Brush="{DynamicResource Brush/Icon.Warning}" Geometry="{StaticResource Geometry/Icon.Warning}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.ZoomIn" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.ZoomIn}"/>
 	<GeometryDrawing x:Key="Drawing/Icon.ZoomOut" Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.ZoomOut}"/>
 
@@ -640,7 +634,12 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Enter}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Error" Drawing="{StaticResource Drawing/Icon.Error}"/>
-	<DrawingImage x:Key="Image/Icon.Error.Colored" Drawing="{StaticResource Drawing/Icon.Error.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.Error.Colored">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M19-74.5C19-105.152 43.8482-130 74.5-130C105.152-130 130-105.152 130-74.5C130-43.8482 105.152-19 74.5-19C43.8482-19 19-43.8482 19-74.5Z"/>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Error}" Geometry="{StaticResource Geometry/Icon.Error}"/>
+		</DrawingGroup>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Error.Light">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Error}"/>
 	</DrawingImage>
@@ -776,7 +775,12 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Import}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Information" Drawing="{StaticResource Drawing/Icon.Information}"/>
-	<DrawingImage x:Key="Image/Icon.Information.Colored" Drawing="{StaticResource Drawing/Icon.Information.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.Information.Colored">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M60-300C60-432.548 167.452-540 300-540C432.548-540 540-432.548 540-300C540-167.452 432.548-60 300-60C167.452-60 60-167.452 60-300Z"/>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Information}" Geometry="{StaticResource Geometry/Icon.Information}"/>
+		</DrawingGroup>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Information.Light">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Information}"/>
 	</DrawingImage>
@@ -960,7 +964,12 @@
 		</DrawingGroup>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.OK" Drawing="{StaticResource Drawing/Icon.OK}"/>
-	<DrawingImage x:Key="Image/Icon.OK.Colored" Drawing="{StaticResource Drawing/Icon.OK.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.OK.Colored">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M16 256C16 123.452 123.452 16 256 16C388.548 16 496 123.452 496 256C496 388.548 388.548 496 256 496C123.452 496 16 388.548 16 256Z"/>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.OK}" Geometry="{StaticResource Geometry/Icon.OK}"/>
+		</DrawingGroup>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.OK.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.OK.Outline}"/>
 	</DrawingImage>
@@ -1137,7 +1146,12 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Python}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Question" Drawing="{StaticResource Drawing/Icon.Question}"/>
-	<DrawingImage x:Key="Image/Icon.Question.Colored" Drawing="{StaticResource Drawing/Icon.Question.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.Question.Colored">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M16 256C16 123.452 123.452 16 256 16C388.548 16 496 123.452 496 256C496 388.548 388.548 496 256 496C123.452 496 16 388.548 16 256Z"/>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Question}" Geometry="{StaticResource Geometry/Icon.Question}"/>
+		</DrawingGroup>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Question.Light">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Question}"/>
 	</DrawingImage>
@@ -1234,7 +1248,7 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.StopMedia.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Success" Drawing="{StaticResource Drawing/Icon.OK}"/>
-	<DrawingImage x:Key="Image/Icon.Success.Colored" Drawing="{StaticResource Drawing/Icon.OK.Colored}"/>
+	<StaticResourceExtension x:Key="Image/Icon.Success.Colored" ResourceKey="Image/Icon.OK.Colored"/>
 	<DrawingImage x:Key="Image/Icon.Success.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.OK.Outline}"/>
 	</DrawingImage>
@@ -1286,7 +1300,12 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Unlock.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Update" Drawing="{StaticResource Drawing/Icon.Update}"/>
-	<DrawingImage x:Key="Image/Icon.Update.Colored" Drawing="{StaticResource Drawing/Icon.Update.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.Update.Colored">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M16 256C16 123.452 123.452 16 256 16C388.548 16 496 123.452 496 256C496 388.548 388.548 496 256 496C123.452 496 16 388.548 16 256Z"/>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Information}" Geometry="{StaticResource Geometry/Icon.Update}"/>
+		</DrawingGroup>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Update.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Update.Outline}"/>
 	</DrawingImage>
@@ -1310,7 +1329,12 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Waiting.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Warning" Drawing="{StaticResource Drawing/Icon.Warning}"/>
-	<DrawingImage x:Key="Image/Icon.Warning.Colored" Drawing="{StaticResource Drawing/Icon.Warning.Colored}"/>
+	<DrawingImage x:Key="Image/Icon.Warning.Colored">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M448-668L576-668L576-156L448-156L448-668Z"/>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Warning}" Geometry="{StaticResource Geometry/Icon.Warning}"/>
+		</DrawingGroup>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Warning.Light">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Warning}"/>
 	</DrawingImage>

@@ -750,12 +750,23 @@
 						<ListBox Grid.RowSpan="3" HorizontalAlignment="Stretch" ItemsSource="{Binding $parent[Window].ImageIdList}" SelectionChanged="OnImageIdListBoxSelectionChanged"/>
 						<GridSplitter Classes="Splitter_Horizontal" Background="{DynamicResource Color/Accent.Transparent}" Grid.Column="1" Grid.RowSpan="3"/>
 						<TextBox Grid.Column="2" IsReadOnly="True" Text="{Binding $parent[Window].SelectedImageId}"/>
-						<WrapPanel Grid.Column="2" Grid.Row="2">
-							<Image Classes="Icon" Height="100" Margin="10" Source="{Binding $parent[Window].SelectedImage}" Width="100"/>
-							<Image Classes="Icon" Height="{StaticResource Double/ToolBar.Button.Icon.Size}" Margin="10" Source="{Binding $parent[Window].SelectedImage}" Width="{StaticResource Double/ToolBar.Button.Icon.Size}"/>
-							<Image Classes="Icon" Height="{StaticResource Double/MenuItem.Icon.Size}" Margin="10" Source="{Binding $parent[Window].SelectedImage}" Width="{StaticResource Double/MenuItem.Icon.Size}"/>
-							<Image Classes="Icon" Height="{StaticResource Double/InPlaceAction.IconSize}" Margin="10" Source="{Binding $parent[Window].SelectedImage}" Width="{StaticResource Double/InPlaceAction.IconSize}"/>
-						</WrapPanel>
+						<StackPanel Grid.Column="2" Grid.Row="2">
+							<WrapPanel>
+								<Border BorderBrush="Gray" BorderThickness="1" Height="100" Margin="10" Width="100">
+									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedImage}"/>
+								</Border>
+								<Border BorderBrush="Gray" BorderThickness="1" Height="{StaticResource Double/ToolBar.Button.Icon.Size}" Margin="10" Width="{StaticResource Double/ToolBar.Button.Icon.Size}">
+									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedImage}"/>
+								</Border>
+								<Border BorderBrush="Gray" BorderThickness="1" Height="{StaticResource Double/MenuItem.Icon.Size}" Margin="10" Width="{StaticResource Double/MenuItem.Icon.Size}">
+									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedImage}"/>
+								</Border>
+								<Border BorderBrush="Gray" BorderThickness="1" Height="{StaticResource Double/InPlaceAction.IconSize}" Margin="10" Width="{StaticResource Double/InPlaceAction.IconSize}">
+									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedImage}"/>
+								</Border>
+							</WrapPanel>
+							<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].SelectedImage.Size.Width, FallbackValue=0}" Arg2="{Binding $parent[Window].SelectedImage.Size.Height, FallbackValue=0}" Format="{}{0:F2}x{1:F2}" Margin="10"/>
+						</StackPanel>
 					</Grid>
 				</TabItem>
 
