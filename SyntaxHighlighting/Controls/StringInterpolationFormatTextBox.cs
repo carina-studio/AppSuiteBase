@@ -8,6 +8,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.Markup.Xaml.Templates;
 using Avalonia.VisualTree;
 using CarinaStudio.Collections;
 using CarinaStudio.Controls;
@@ -519,6 +520,7 @@ public class StringInterpolationFormatTextBox : TextBox
 					if (e.Item is ListBoxItem item && item.DataContext is StringInterpolationVariable variable)
 						this.InputVariableName(variable.Name);
 				};
+				it.ItemsPanel = this.FindResourceOrDefault<ItemsPanelTemplate>("ItemsPanelTemplate/StackPanel"); // [Workaround] Prevent crashing caused by VirtualizationStackPanel
 				it.ItemsSource = this.filteredPredefinedVarListBoxItems;
 				it.AddHandler(PointerPressedEvent, (_, _) =>
 				{

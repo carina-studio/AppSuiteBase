@@ -8,6 +8,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.Markup.Xaml.Templates;
 using Avalonia.VisualTree;
 using CarinaStudio.Collections;
 using CarinaStudio.Controls;
@@ -935,6 +936,7 @@ namespace CarinaStudio.AppSuite.Controls
 						if (e.Item is ListBoxItem item && item.DataContext is RegexGroup group)
 							this.InputGroupName(group.Name);
 					};
+					it.ItemsPanel = this.FindResourceOrDefault<ItemsPanelTemplate>("ItemsPanelTemplate/StackPanel"); // [Workaround] Prevent crashing caused by VirtualizationStackPanel
 					it.ItemsSource = this.filteredPredefinedGroupListBoxItems;
 					it.AddHandler(PointerPressedEvent, (_, _) =>
 					{
