@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Media;
-using Avalonia.VisualTree;
 using System;
 
 namespace CarinaStudio.AppSuite.Controls;

@@ -246,6 +246,25 @@
 	<!-- MessageDialog -->
 	<sys:Double x:Key="Double/MessageDialog.Message.MaxWidth">600</sys:Double>
 	<sys:Double x:Key="Double/MessageDialog.Message.MinWidth">200</sys:Double>
+	
+	<!-- NotificationPresenter -->
+	<BoxShadows x:Key="BoxShadows/NotificationPresenter.Notification">0 0 10 0 #5f000000</BoxShadows>
+	<sys:Double x:Key="Double/NotificationPresenter.Notification.Action.FontSize">13</sys:Double>
+	<sys:Double x:Key="Double/NotificationPresenter.Notification.Dismiss.Size">24</sys:Double>
+	<sys:Double x:Key="Double/NotificationPresenter.Notification.Icon.Size">16</sys:Double>
+	<sys:Double x:Key="Double/NotificationPresenter.Notification.InitTranslation.Y">20</sys:Double>
+	<sys:Double x:Key="Double/NotificationPresenter.Notification.Message.FontSize">13</sys:Double>
+	<sys:Double x:Key="Double/NotificationPresenter.Notification.Title.FontSize">14</sys:Double>
+	<sys:Double x:Key="Double/NotificationPresenter.Notification.Width">300</sys:Double>
+	<sys:Int32 x:Key="Int32/NotificationPresenter.Notification.MaxLines">4</sys:Int32>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Dismiss.Margin">10,0,0,0</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Dismiss.Padding">5</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Icon.Margin">0,1,15,1</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Margin">0,0,10,10</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Padding">15</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Action.Margin">0,1,8,1</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Actions.Margin">0,10,0,0</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Title.Margin">0,0,0,3</Thickness>
 
 	<!-- Overlay -->
 	<CornerRadius x:Key="OverlayCornerRadius">8</CornerRadius>

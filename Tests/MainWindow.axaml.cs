@@ -49,6 +49,7 @@ namespace CarinaStudio.AppSuite.Tests
         readonly IntegerTextBox integerTextBox2;
         readonly IPAddressTextBox ipAddressTextBox;
         readonly ScheduledAction logAction;
+        readonly NotificationPresenter notificationPresenter;
         IDisposable? overlayResourcesToken;
         IImage? selectedImage;
         string? selectedImageId;
@@ -98,6 +99,7 @@ namespace CarinaStudio.AppSuite.Tests
             this.integerTextBox = this.FindControl<IntegerTextBox>(nameof(integerTextBox)).AsNonNull();
             this.integerTextBox2 = this.FindControl<IntegerTextBox>(nameof(integerTextBox2)).AsNonNull();
             this.ipAddressTextBox = this.FindControl<IPAddressTextBox>(nameof(ipAddressTextBox)).AsNonNull();
+            this.notificationPresenter = this.Get<NotificationPresenter>(nameof(notificationPresenter));
             this.Get<RegexTextBox>("regexTextBox").Also(it =>
             {
                 // make a reference from RegexTextBox to MainWindow
@@ -511,6 +513,44 @@ namespace CarinaStudio.AppSuite.Tests
                     it.Bind(FormattedString.FormatProperty, this.GetResourceObservable("String/MessageDialog.Result"));
                 })
             }.ShowDialog(this);
+        }
+
+        public void ShowNotification()
+        {
+            this.notificationPresenter.AddNotification(new Notification().Also(it =>
+            {
+                it.Actions = new[]
+                {
+                    new NotificationAction
+                    {
+                        Command = new Command(this.ShowNotification),
+                        Name = "Action1"
+                    },
+                    new NotificationAction
+                    {
+                        Command = new Command(this.ShowNotification),
+                        Name = "Action2"
+                    },
+                    new NotificationAction
+                    {
+                        Command = new Command(this.ShowNotification),
+                        Name = "Action3"
+                    },
+                    new NotificationAction
+                    {
+                        Command = new Command(this.ShowNotification),
+                        Name = "Action4"
+                    },
+                    new NotificationAction
+                    {
+                        Command = new Command(this.ShowNotification),
+                        Name = "Action5"
+                    },
+                };
+                it.Bind(Notification.IconProperty, new CachedResource<object?>(this, "Image/Icon.Information.Colored"));
+                it.Bind(Notification.MessageProperty, new FormattedString { Format = "Hello notification." });
+                it.Title = "Title";
+            }));
         }
 
         public ICommand ShowAppInfoDialogCommand { get; }

@@ -504,6 +504,7 @@
 								<Button Command="{Binding $parent[Window].ShowAppUpdateDialog}" Content="App Update" Margin="5"/>
 								<Button Command="{Binding $parent[Window].ShowMessageDialog}" Content="MessageDialog" Margin="5"/>
 								<Button Command="{Binding $parent[Window].ShowTextInputDialog}" Content="TextInputDialog" Margin="5"/>
+								<Button Command="{Binding $parent[Window].ShowNotification}" Content="Show Notification" Margin="5"/>
 								<Button Command="{Binding $parent[Window].ShowExternalDependenciesDialog}" Content="External Dependencies" Margin="5"/>
 								<Button Command="{Binding $parent[Window].ShowTestDialog}" Content="Test Dialog" Margin="5"/>
 								<Button Command="{Binding $parent[Window].FindCommandPath}" Content="Find command path" Margin="5"/>
@@ -844,6 +845,9 @@
 				</TabItem>
 
 			</appControls:TabControl>
+			
+			<appControls:NotificationPresenter Name="notificationPresenter"/>
+			
 		</Panel>
 		
 	</DockPanel>

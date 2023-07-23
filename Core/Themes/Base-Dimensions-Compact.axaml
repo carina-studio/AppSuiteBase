@@ -129,6 +129,20 @@
 	<!-- MenuItem -->
 	<CornerRadius x:Key="CornerRadius/MenuItem">0</CornerRadius>
 	<Thickness x:Key="Thickness/MenuItem.Padding">6,4,6,4</Thickness>
+	
+	<!-- NotificationPresenter -->
+	<sys:Double x:Key="Double/NotificationPresenter.Notification.Dismiss.Size">20</sys:Double>
+	<sys:Double x:Key="Double/NotificationPresenter.Notification.InitTranslation.Y">15</sys:Double>
+	<sys:Double x:Key="Double/NotificationPresenter.Notification.Width">250</sys:Double>
+	<sys:Int32 x:Key="Int32/NotificationPresenter.Notification.MaxLines">3</sys:Int32>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Dismiss.Margin">8,0,0,0</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Dismiss.Padding">5</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Icon.Margin">0,1,10,1</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Margin">0,0,8,8</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Padding">10</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Action.Margin">0,1,5,1</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Actions.Margin">0,8,0,0</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Title.Margin">0,0,0,2</Thickness>
 
 	<!-- Overlay -->
 	<CornerRadius x:Key="OverlayCornerRadius">0</CornerRadius>

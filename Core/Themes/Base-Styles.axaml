@@ -1,6 +1,7 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:abControls="using:CarinaStudio.Controls"
+        xmlns:abConverters="using:CarinaStudio.Data.Converters"
 		xmlns:aConverters="using:Avalonia.Data.Converters"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
@@ -1476,6 +1477,127 @@
 	<Style Selector="Panel.MenuItem_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/MenuItem.Icon.Size}"/>
+	</Style>
+	
+	<!-- NotificationPresenter -->
+	<Style Selector="controls|NotificationPresenter">
+		<Style.Resources>
+			
+			<DataTemplate x:Key="DataTemplate/NotificationPresenter.Notification"
+			              DataType="{x:Type controls:Notification}">
+				<Border Background="{DynamicResource ToolTipBackground}"
+				        BorderBrush="{DynamicResource ToolTipBorderBrush}"
+				        BorderThickness="1"
+				        BoxShadow="{DynamicResource BoxShadows/NotificationPresenter.Notification}"
+				        CornerRadius="{DynamicResource ControlCornerRadius}" 
+				        Margin="{DynamicResource Thickness/NotificationPresenter.Notification.Margin}"
+				        Opacity="0"
+				        Padding="{DynamicResource Thickness/NotificationPresenter.Notification.Padding}"
+				        Width="{DynamicResource Double/NotificationPresenter.Notification.Width}">
+					<Border.RenderTransform>
+						<TranslateTransform Y="{DynamicResource Double/NotificationPresenter.Notification.InitTranslation.Y}">
+							<TranslateTransform.Transitions>
+								<Transitions>
+									<DoubleTransition Property="Y" 
+									                  Duration="{StaticResource TimeSpan/NotificationPresenter.Notification}" 
+									                  Easing="{StaticResource Easing/Animation}"/>
+								</Transitions>
+							</TranslateTransform.Transitions>
+						</TranslateTransform>
+					</Border.RenderTransform>
+					<Border.Transitions>
+						<Transitions>
+							<DoubleTransition Property="Opacity" 
+							                  Duration="{StaticResource TimeSpan/NotificationPresenter.Notification}" 
+							                  Easing="{StaticResource Easing/Animation}"/>
+						</Transitions>
+					</Border.Transitions>
+					<Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="*,Auto">
+						
+						<!-- Icon -->
+						<Image Classes="Icon" 
+						       Height="{DynamicResource Double/NotificationPresenter.Notification.Icon.Size}"
+						       IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
+						       Margin="{DynamicResource Thickness/NotificationPresenter.Notification.Icon.Margin}"
+						       Source="{Binding Icon}"
+						       VerticalAlignment="Top"
+						       Width="{DynamicResource Double/NotificationPresenter.Notification.Icon.Size}"/>
+						
+						<!-- Title and message -->
+						<Grid Grid.Column="1"
+						      RowDefinitions="Auto,*"
+						      VerticalAlignment="Center">
+							
+							<TextBlock FontSize="{DynamicResource Double/NotificationPresenter.Notification.Title.FontSize}"
+							           FontWeight="Bold"
+							           IsVisible="{Binding Title, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+							           Margin="{DynamicResource Thickness/NotificationPresenter.Notification.Title.Margin}"
+							           Text="{Binding Title}"
+							           TextTrimming="CharacterEllipsis"
+							           TextWrapping="NoWrap"/>
+							
+							<TextBlock FontSize="{DynamicResource Double/NotificationPresenter.Notification.Message.FontSize}"
+							           Grid.Row="1"
+							           MaxLines="{DynamicResource Int32/NotificationPresenter.Notification.MaxLines}"
+							           Text="{Binding Message}"
+							           TextTrimming="CharacterEllipsis"
+							           TextWrapping="Wrap"/>
+							
+						</Grid>
+						
+						<!-- Actions -->
+						<WrapPanel Name="PART_ActionsPanel"
+						           Grid.Column="1" 
+						           Grid.Row="1"
+						           HorizontalAlignment="Left"
+						           IsVisible="{Binding $self.Children.Count}"
+						           Margin="{DynamicResource Thickness/NotificationPresenter.Notification.Actions.Margin}"/>
+						
+						<!-- Dismiss -->
+						<Button Background="{DynamicResource ButtonBackgroundTransparent}" 
+						        BorderThickness="0" 
+						        Command="{Binding Dismiss}" 
+						        Grid.Column="2" 
+						        Grid.RowSpan="2"
+						        Height="{DynamicResource Double/NotificationPresenter.Notification.Dismiss.Size}"
+						        Margin="{DynamicResource Thickness/NotificationPresenter.Notification.Dismiss.Margin}"
+						        Opacity="{Binding $parent[Border].IsPointerOver, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacity}}"
+						        Padding="{DynamicResource Thickness/NotificationPresenter.Notification.Dismiss.Padding}" 
+						        ToolTip.Tip="{DynamicResource String/Common.Close}"
+						        VerticalAlignment="Top" 
+						        Width="{DynamicResource Double/NotificationPresenter.Notification.Dismiss.Size}">
+							<Button.Transitions>
+								<Transitions>
+									<DoubleTransition Property="Opacity" 
+									                  Duration="{StaticResource TimeSpan/Animation.Fast}" 
+									                  Easing="{StaticResource Easing/Animation}"/>
+								</Transitions>
+							</Button.Transitions>
+							<Image Classes="Icon" 
+							       Source="{DynamicResource Image/Icon.Close}"/>
+						</Button>
+						
+					</Grid>
+				</Border>
+			</DataTemplate>
+			
+			<DataTemplate x:Key="DataTemplate/NotificationPresenter.Notification.Action"
+			              DataType="{x:Type controls:NotificationAction}">
+				<abControls:LinkTextBlock Command="{Binding Command}" 
+				                          CommandParameter="{Binding CommandParameter}"
+				                          FontSize="{DynamicResource Double/NotificationPresenter.Notification.Action.FontSize}"
+				                          Margin="{DynamicResource Thickness/NotificationPresenter.Notification.Action.Margin}"
+				                          Text="{Binding Name}"/>
+			</DataTemplate>
+			
+		</Style.Resources>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<StackPanel Name="PART_NotificationsPanel"
+				            HorizontalAlignment="{TemplateBinding HorizontalNotificationsAlignment}"
+				            VerticalAlignment="{TemplateBinding VerticalNotificationsAlignment}"/>
+			</ControlTemplate>
+		</Setter>
 	</Style>
 
 	<!-- NumericUpDown -->
