@@ -5,6 +5,8 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite;
 
@@ -64,34 +66,34 @@ partial class AppSuiteApplication
 
 
     // Get system theme mode on Linux.
-    ThemeMode GetLinuxThemeMode()
+    async Task<ThemeMode> GetLinuxThemeModeAsync()
     {
         if (!this.IsSystemThemeModeSupportedOnLinux)
             return this.FallbackThemeMode;
         try
         {
-            using var process = Process.Start(new ProcessStartInfo()
+            return await Task.Run(() =>
             {
-                Arguments = "get org.gnome.desktop.interface color-scheme",
-                CreateNoWindow = true,
-                FileName = "gsettings",
-                RedirectStandardError = true,
-                RedirectStandardOutput = true,
-            });
-            if (process is not null)
-            {
-                var colorScheme = process.StandardOutput.ReadLine();
-                if (string.IsNullOrWhiteSpace(colorScheme))
-                    return this.FallbackThemeMode;
-                return colorScheme.ToLower().Contains("dark")
-                    ? ThemeMode.Dark
-                    : ThemeMode.Light;
-            }
-            else
-            {
+                using var process = Process.Start(new ProcessStartInfo()
+                {
+                    Arguments = "get org.gnome.desktop.interface color-scheme",
+                    CreateNoWindow = true,
+                    FileName = "gsettings",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true,
+                });
+                if (process is not null)
+                {
+                    var colorScheme = process.StandardOutput.ReadLine();
+                    if (string.IsNullOrWhiteSpace(colorScheme))
+                        return this.FallbackThemeMode;
+                    return colorScheme.ToLower().Contains("dark")
+                        ? ThemeMode.Dark
+                        : ThemeMode.Light;
+                }
                 this.Logger.LogError("Unable to start 'gsettings' to check system theme mode on Linux");
                 return this.FallbackThemeMode;
-            }
+            }, CancellationToken.None);
         }
         catch (Exception ex)
         {

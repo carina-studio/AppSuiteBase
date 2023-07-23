@@ -1217,7 +1217,7 @@ namespace CarinaStudio.AppSuite
             if (Platform.IsMacOS)
                 return this.GetMacOSThemeModeAsync();
             if (Platform.IsLinux)
-                return Task.FromResult(this.GetLinuxThemeMode());
+                return this.GetLinuxThemeModeAsync();
             return Task.FromResult(this.FallbackThemeMode);
         }
 
