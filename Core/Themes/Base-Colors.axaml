@@ -155,6 +155,7 @@
 	<Color x:Key="Color/Icon.Light">#ffffff</Color>
 	<Color x:Key="Color/Icon.Lightbulb">#ffd800</Color>
 	<Color x:Key="Color/Icon.OK">#59b259</Color>
+	<Color x:Key="Color/Icon.Professional.Foreground">#ffffff</Color>
 	<Color x:Key="Color/Icon.Python.Blue">#407db3</Color>
 	<Color x:Key="Color/Icon.Python.Yellow">#e6bb00</Color>
 	<Color x:Key="Color/Icon.Question">#009999</Color>
@@ -175,6 +176,7 @@
 	<SolidColorBrush x:Key="Brush/Icon.Light" Color="{DynamicResource Color/Icon.Light}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Lightbulb" Color="{DynamicResource Color/Icon.Lightbulb}"/>
 	<SolidColorBrush x:Key="Brush/Icon.OK" Color="{DynamicResource Color/Icon.OK}"/>
+	<SolidColorBrush x:Key="Brush/Icon.Professional.Foreground" Color="{DynamicResource Color/Icon.Professional.Foreground}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Python.Blue" Color="{DynamicResource Color/Icon.Python.Blue}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Python.Yellow" Color="{DynamicResource Color/Icon.Python.Yellow}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Question" Color="{DynamicResource Color/Icon.Question}"/>

@@ -852,7 +852,10 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Lightbulb}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Lightbulb.Colored">
-		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Lightbulb}" Geometry="{StaticResource Geometry/Icon.Lightbulb}"/>
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M26 176C26 93.1573 93.1573 26 176 26C258.843 26 326 93.1573 326 176C326 258.843 258.843 326 176 326C93.1573 326 26 258.843 26 176Z"/>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Lightbulb}" Geometry="{StaticResource Geometry/Icon.Lightbulb}"/>
+		</DrawingGroup>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Lightbulb.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Lightbulb.Outline}"/>
@@ -1131,7 +1134,10 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Professional}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Professional.Colored">
-		<GeometryDrawing Brush="{DynamicResource Brush/Accent}" Geometry="{StaticResource Geometry/Icon.Professional}"/>
+		<DrawingGroup>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Professional.Foreground}" Geometry="M4.5 7L19.5 7L19.5 17L4.5 17L4.5 7Z"/>
+			<GeometryDrawing Brush="{DynamicResource Brush/Accent}" Geometry="{StaticResource Geometry/Icon.Professional}"/>
+		</DrawingGroup>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Python">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Python}"/>
