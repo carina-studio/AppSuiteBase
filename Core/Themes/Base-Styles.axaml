@@ -1047,13 +1047,53 @@
 								</ScaleTransform.Transitions>
 							</ScaleTransform>
 						</Border.RenderTransform>
-						<Grid ClipToBounds="True" ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
-							<Image Classes="Icon" Height="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}" IsVisible="{Binding Icon, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.Icon.Margin}" Source="{Binding Icon}" VerticalAlignment="Center" Width="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}"/>
-							<TextBlock Grid.Column="1" FontSize="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize}" MaxWidth="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth}" Text="{Binding Description}" TextWrapping="Wrap" VerticalAlignment="Center"/>
-							<abControls:LinkTextBlock Name="PART_SkipAllTutorials" Command="{Binding Presenter.RequestSkippingAllTutorials}" FontSize="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.SkipAllTutorials.FontSize}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" IsVisible="{Binding IsSkippingAllTutorialsAllowed}" Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.SkipAllTutorials.Margin}" Text="{DynamicResource String/TutorialPresenter.SkipAllTutorials}"/>
-							<Button Name="PART_Dismiss" Background="{DynamicResource ButtonBackgroundTransparent}" BorderThickness="0" Command="{Binding Presenter.DismissTutorial}" Grid.Column="2" Height="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size}" Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.Dismiss.Margin}" Padding="{DynamicResource Thickness/FullWindowTutorialPresenter.Dismiss.Padding}" VerticalAlignment="Top" Width="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size}">
-								<Image Classes="Icon" Source="{DynamicResource Image/Icon.Close}"/>
+						<Grid ClipToBounds="True" ColumnDefinitions="Auto,*,Auto" RowDefinitions="*,Auto">
+							
+							<!-- Icon -->
+							<Border VerticalAlignment="Top">
+								<Image Classes="Icon" 
+								       Height="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}" 
+								       IsVisible="{Binding Icon, Converter={x:Static aConverters:ObjectConverters.IsNotNull}}" 
+								       Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.Icon.Margin}" 
+								       Source="{Binding Icon}"
+								       Width="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Icon.Size}"/>
+							</Border>
+							
+							<!-- Description -->
+							<TextBlock Grid.Column="1" 
+							           FontSize="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize}" 
+							           MaxWidth="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth}" 
+							           Text="{Binding Description}" 
+							           TextWrapping="Wrap" 
+							           VerticalAlignment="Center"/>
+							
+							<!-- Skip all tutorials -->
+							<abControls:LinkTextBlock Name="PART_SkipAllTutorials" 
+							                          Command="{Binding Presenter.RequestSkippingAllTutorials}" 
+							                          FontSize="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.SkipAllTutorials.FontSize}" 
+							                          Grid.Column="1" 
+							                          Grid.Row="1" 
+							                          IsVisible="{Binding IsSkippingAllTutorialsAllowed}" 
+							                          Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.SkipAllTutorials.Margin}" 
+							                          Text="{DynamicResource String/TutorialPresenter.SkipAllTutorials}"/>
+							
+							<!-- Dismiss -->
+							<Button Name="PART_Dismiss" 
+							        Background="{DynamicResource ButtonBackgroundTransparent}" 
+							        BorderThickness="0" Command="{Binding Presenter.DismissTutorial}" 
+							        Grid.Column="2" 
+							        Grid.RowSpan="2"
+							        Height="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size}"
+							        HorizontalAlignment="Left"
+							        Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.Dismiss.Margin}" 
+							        Padding="{DynamicResource Thickness/FullWindowTutorialPresenter.Dismiss.Padding}" 
+							        ToolTip.Tip="{DynamicResource String/Common.Close}"
+							        VerticalAlignment="Top" 
+							        Width="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size}">
+								<Image Classes="Icon" 
+								       Source="{DynamicResource Image/Icon.Close}"/>
 							</Button>
+							
 						</Grid>
 					</Border>
 				</Panel>

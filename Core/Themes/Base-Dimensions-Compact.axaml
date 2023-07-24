@@ -82,13 +82,12 @@
 	<!-- FullWindowTutorialPresenter -->
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize">14</sys:Double>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth">200</sys:Double>
-	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size">20</sys:Double>
-	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Icon.Size">16</sys:Double>
+	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size">15</sys:Double>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Offset">15</sys:Double>
-	<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Icon.Margin">0,0,10,0</Thickness>
-	<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Dismiss.Margin">10,0,0,0</Thickness>
-	<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Dismiss.Padding">5</Thickness>
-	<Thickness x:Key="Thickness/FullWindowTutorialPresenter.SkipAllTutorials.Margin">3,10,0,0</Thickness>
+	<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Icon.Margin">0,1,10,1</Thickness>
+	<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Dismiss.Margin">5,0,0,0</Thickness>
+	<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Dismiss.Padding">3</Thickness>
+	<Thickness x:Key="Thickness/FullWindowTutorialPresenter.SkipAllTutorials.Margin">0,8,0,0</Thickness>
 	<Thickness x:Key="Thickness/FullWindowTutorialPresenter.Tutorial.Padding">10</Thickness>
 
 	<!-- ListBox -->
@@ -131,12 +130,12 @@
 	<Thickness x:Key="Thickness/MenuItem.Padding">6,4,6,4</Thickness>
 	
 	<!-- NotificationPresenter -->
-	<sys:Double x:Key="Double/NotificationPresenter.Notification.Dismiss.Size">20</sys:Double>
+	<sys:Double x:Key="Double/NotificationPresenter.Notification.Dismiss.Size">15</sys:Double>
 	<sys:Double x:Key="Double/NotificationPresenter.Notification.InitTranslation.Y">15</sys:Double>
-	<sys:Double x:Key="Double/NotificationPresenter.Notification.Width">250</sys:Double>
+	<sys:Double x:Key="Double/NotificationPresenter.Notification.Width">300</sys:Double>
 	<sys:Int32 x:Key="Int32/NotificationPresenter.Notification.MaxLines">3</sys:Int32>
-	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Dismiss.Margin">8,0,0,0</Thickness>
-	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Dismiss.Padding">5</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Dismiss.Margin">5,0,0,0</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Dismiss.Padding">3</Thickness>
 	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Icon.Margin">0,1,10,1</Thickness>
 	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Margin">0,0,8,8</Thickness>
 	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Padding">10</Thickness>

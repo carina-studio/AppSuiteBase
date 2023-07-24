@@ -172,6 +172,19 @@ public class Notification : AvaloniaObject
     /// Get <see cref="NotificationPresenter"/> which is currently presenting the notification.
     /// </summary>
     public NotificationPresenter? Presenter => this.presenter;
+    
+    
+    // Start auto dismiss of notification.
+    internal void StartAutoDismiss()
+    {
+        if (this.isVisible)
+            this.GetValue(TimeoutProperty)?.Let(it => this.dismissAction.Reschedule(it));
+    }
+
+
+    // Stop auto dismiss of notification.
+    internal void StopAutoDismiss() =>
+        this.dismissAction.Cancel();
 
 
     /// <summary>

@@ -114,6 +114,13 @@ public class NotificationPresenter : TemplatedControl, INotificationPresenter
                 this.notificationActionsPanels[notification] = actionsPanel;
                 this.BuildNotificationActionControls(notification, actionsPanel);
             });
+            it.GetObservable(IsPointerOverProperty).Subscribe(isPointerOver =>
+            {
+                if (isPointerOver)
+                    notification.StopAutoDismiss();
+                else
+                    notification.StartAutoDismiss();
+            });
         });
     }
     
