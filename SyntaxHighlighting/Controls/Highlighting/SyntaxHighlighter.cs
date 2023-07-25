@@ -295,12 +295,14 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 endMatch = removingSpan.Definition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
                 if (endMatch.Success)
                 {
-                    candidateSpans.Add(new(
+                    var j = candidateSpans.Add(new(
                         removingSpan.Definition, 
                         startMatch.Index, 
                         endMatch.Index + endMatch.Length,
                         startMatch.Index + startMatch.Length,
                         endMatch.Index));
+                    if (j < i)
+                        ++i;
                 }
             }
 
@@ -513,7 +515,11 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 {
                     var endIndex = match.Index + match.Length;
                     if (endIndex <= end)
-                        candidateTokens.Add(new(removingToken.Definition, match.Index, endIndex));
+                    {
+                        var j = candidateTokens.Add(new(removingToken.Definition, match.Index, endIndex));
+                        if (j < i)
+                            ++i;
+                    }
                 }
             }
 
@@ -738,12 +744,14 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 endMatch = removingSpan.Definition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
                 if (endMatch.Success)
                 {
-                    candidateSpans.Add(new(
+                    var j = candidateSpans.Add(new(
                         removingSpan.Definition, 
                         startMatch.Index, 
                         endMatch.Index + endMatch.Length,
                         startMatch.Index + startMatch.Length,
                         endMatch.Index));
+                    if (j < i)
+                        ++i;
                 }
             }
             
@@ -845,7 +853,11 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 {
                     var endIndex = match.Index + match.Length;
                     if (endIndex <= end)
-                        candidateTokens.Add(new(removingToken.Definition, match.Index, endIndex));
+                    {
+                        var j = candidateTokens.Add(new(removingToken.Definition, match.Index, endIndex));
+                        if (j < i)
+                            ++i;
+                    }
                 }
             }
 
