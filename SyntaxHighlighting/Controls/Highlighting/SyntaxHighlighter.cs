@@ -567,24 +567,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             return this.textLayout;
         
         // get text
-        var text = this.text;
-        if (!string.IsNullOrEmpty(this.preeditText))
-        {
-            if (text == null)
-                text = this.preeditText;
-            else
-            {
-                var caretIndex = Math.Min(this.selectionStart, this.selectionEnd);
-                if (caretIndex < 0)
-                    text = this.preeditText + text;
-                else if (caretIndex >= text.Length)
-                    text += this.preeditText;
-                else
-                    text = text[0..caretIndex] + this.preeditText + text[caretIndex..];
-            }
-        }
-        else
-            text ??= "";
+        var text = this.TextWithPreeditText;
         
         // create type face
         var typeface = new Typeface(this.fontFamily, this.fontStyle, this.fontWeight, this.fontStretch);
@@ -639,6 +622,235 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 value.Changed += this.OnDefinitionSetChanged;
             this.SetAndRaise(DefinitionSetProperty, ref this.definitionSet, value);
             this.InvalidateTextLayout();
+        }
+    }
+    
+    
+    /// <summary>
+    /// Find corresponding span and token which contains the character at specific position.
+    /// </summary>
+    /// <param name="characterIndex">Index of character.</param>
+    /// <param name="span">Span which contains the character.</param>
+    /// <param name="token">Token which contains the character.</param>
+    public void FindSpanAndToken(int characterIndex, out SyntaxHighlightingSpan? span, out SyntaxHighlightingToken? token)
+    {
+        // check state and parameter
+        span = default;
+        token = default;
+        if (this.definitionSet is null || characterIndex < 0)
+            return;
+        var text = this.TextWithPreeditText;
+        if (characterIndex >= text.Length)
+            return;
+        
+        // setup initial candidate spans
+        var spanDefinitions = this.definitionSet.SpanDefinitions;
+        var candidateSpans = new SortedObservableList<Span>((lhs, rhs) =>
+        {
+            var result = (rhs.Start - lhs.Start);
+            if (result != 0)
+                return result;
+            result = (lhs.End - rhs.End);
+            if (result != 0)
+                return result;
+            result = this.definitionSet?.SpanDefinitions.Let(it => it.IndexOf(rhs.Definition) - it.IndexOf(lhs.Definition)) ?? 0;
+            return result != 0 ? result : (rhs.GetHashCode() - lhs.GetHashCode());
+        });
+        foreach (var spanDefinition in spanDefinitions)
+        {
+            if (!spanDefinition.IsValid)
+                continue;
+            var startMatch = spanDefinition.StartPattern!.Match(text);
+            if (!startMatch.Success || startMatch.Length == 0)
+                continue;
+            var endMatch = spanDefinition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
+            if (endMatch.Success && endMatch.Length > 0)
+            {
+                candidateSpans.Add(new(
+                    spanDefinition,
+                    startMatch.Index,
+                    endMatch.Index + endMatch.Length,
+                    startMatch.Index + startMatch.Length,
+                    endMatch.Index));
+            }
+        }
+        
+        // find span and token
+        var textStartIndex = 0;
+        var defaultTokenDefinitions = this.definitionSet.TokenDefinitions;
+        while (candidateSpans.IsNotEmpty())
+        {
+            // stop finding
+            if (textStartIndex > characterIndex)
+            {
+                span = default;
+                token = default;
+                return;
+            }
+            
+            // get current span
+            var candidateSpan = candidateSpans[^1];
+            candidateSpans.RemoveAt(candidateSpans.Count - 1);
+            
+            // find token in/before the span
+            if (candidateSpan.Start > characterIndex)
+            {
+                this.FindToken(text, textStartIndex, candidateSpan.Start, characterIndex, defaultTokenDefinitions, out token);
+                return;
+            }
+            if (candidateSpan.End > characterIndex)
+            {
+                span = candidateSpan.Definition;
+                this.FindToken(text, candidateSpan.Start, candidateSpan.End, characterIndex, candidateSpan.Definition.TokenDefinitions, out token);
+                return;
+            }
+
+            // find next span
+            var startMatch = candidateSpan.Definition.StartPattern!.Match(text, candidateSpan.End);
+            Match? endMatch;
+            if (startMatch.Success)
+            {
+                endMatch = candidateSpan.Definition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
+                if (endMatch.Success)
+                {
+                    candidateSpans.Add(new(
+                        candidateSpan.Definition,
+                        startMatch.Index, 
+                        endMatch.Index + endMatch.Length,
+                        startMatch.Index + startMatch.Length,
+                        endMatch.Index));
+                }
+            }
+
+            // remove spans which overlaps with current span
+            for (var i = candidateSpans.Count - 1; i >= 0; --i)
+            {
+                // check overlapping
+                var removingSpan = candidateSpans[i];
+                if (removingSpan.Start >= candidateSpan.End)
+                    continue;
+                candidateSpans.RemoveAt(i);
+
+                // find next span
+                startMatch = removingSpan.Definition.StartPattern!.Match(text, candidateSpan.End);
+                if (!startMatch.Success)
+                    continue;
+                endMatch = removingSpan.Definition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
+                if (endMatch.Success)
+                {
+                    candidateSpans.Add(new(
+                        removingSpan.Definition, 
+                        startMatch.Index, 
+                        endMatch.Index + endMatch.Length,
+                        startMatch.Index + startMatch.Length,
+                        endMatch.Index));
+                }
+            }
+            
+            // move to next span
+            textStartIndex = candidateSpan.End;
+        }
+        this.FindToken(text, textStartIndex, text.Length, characterIndex, defaultTokenDefinitions, out token);
+    }
+    
+    
+    // Find token at given position.
+    void FindToken(string text, int start, int end, int index, IList<SyntaxHighlightingToken> tokenDefinitions, out SyntaxHighlightingToken? token)
+    {
+        // initialize
+        token = default;
+
+        // setup initial candidate tokens
+        var tokenComparison = new Comparison<Token>((lhs, rhs) =>
+        {
+            var result = (rhs.Start - lhs.Start);
+            if (result != 0)
+                return result;
+            result = (lhs.End - rhs.End);
+            if (result != 0)
+                return result;
+            result = tokenDefinitions.IndexOf(rhs.Definition) - tokenDefinitions.IndexOf(lhs.Definition);
+            return result != 0 ? result : (rhs.GetHashCode() - lhs.GetHashCode());
+        });
+        var candidateTokens = new SortedObservableList<Token>(tokenComparison);
+        foreach (var tokenDefinition in tokenDefinitions)
+        {
+            if (!tokenDefinition.IsValid)
+                continue;
+            var match = tokenDefinition.Pattern!.Match(text, start);
+            if (match.Success && match.Length > 0)
+            {
+                var endIndex = match.Index + match.Length;
+                if (endIndex <= end)
+                    candidateTokens.Add(new(tokenDefinition, match.Index, endIndex));
+            }
+        }
+
+        // create text runs
+        var textStartIndex = start;
+        while (candidateTokens.IsNotEmpty())
+        {
+            // stop finding
+            if (textStartIndex > index)
+                return;
+            
+            // get current token
+            var candidateToken = candidateTokens[^1];
+            candidateTokens.RemoveAt(candidateTokens.Count - 1);
+            if (candidateToken.Start > index)
+                return;
+
+            // find and combine with next token if possible
+            while (true)
+            {
+                var match = candidateToken.Definition.Pattern!.Match(text, candidateToken.End);
+                if (!match.Success || match.Length <= 0)
+                    break;
+                var endIndex = match.Index + match.Length;
+                if (endIndex > end)
+                    break;
+                var nextToken = new Token(candidateToken.Definition, match.Index, match.Index + match.Length);
+                if (match.Index == candidateToken.End && match.Length > 0) // combine into single token
+                {
+                    var nextTokenIndex = candidateTokens.BinarySearch(nextToken, tokenComparison);
+                    if (nextTokenIndex == ~candidateTokens.Count)
+                    {
+                        candidateToken = new(candidateToken.Definition, candidateToken.Start, nextToken.End);
+                        continue;
+                    }
+                }
+                candidateTokens.Add(nextToken);
+                break;
+            }
+            
+            // use current token
+            if (candidateToken.End > index)
+            {
+                token = candidateToken.Definition;
+                return;
+            }
+
+            // remove tokens which overlaps with current token
+            for (var i = candidateTokens.Count - 1; i >= 0; --i)
+            {
+                // check overlapping
+                var removingToken = candidateTokens[i];
+                if (removingToken.Start >= candidateToken.End)
+                    continue;
+                candidateTokens.RemoveAt(i);
+
+                // find next token
+                var match = removingToken.Definition.Pattern!.Match(text, candidateToken.End);
+                if (match.Success && match.Length > 0)
+                {
+                    var endIndex = match.Index + match.Length;
+                    if (endIndex <= end)
+                        candidateTokens.Add(new(removingToken.Definition, match.Index, endIndex));
+                }
+            }
+
+            // move to next token
+            textStartIndex = candidateToken.End;
         }
     }
 
@@ -1055,6 +1267,32 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     /// Raised when text layout of the instance was invalidated.
     /// </summary>
     public event EventHandler? TextLayoutInvalidated;
+
+
+    // Get text with pre-edit text.
+    string TextWithPreeditText
+    {
+        get
+        {
+            var text = this.text;
+            if (!string.IsNullOrEmpty(this.preeditText))
+            {
+                if (text == null)
+                    text = this.preeditText;
+                else
+                {
+                    var caretIndex = Math.Min(this.selectionStart, this.selectionEnd);
+                    if (caretIndex < 0)
+                        text = this.preeditText + text;
+                    else if (caretIndex >= text.Length)
+                        text += this.preeditText;
+                    else
+                        text = text[..caretIndex] + this.preeditText + text[caretIndex..];
+                }
+            }
+            return text ?? "";
+        }
+    }
 
 
     /// <summary>

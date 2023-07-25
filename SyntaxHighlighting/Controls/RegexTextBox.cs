@@ -10,6 +10,8 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.VisualTree;
+using CarinaStudio.AppSuite.Controls.Highlighting;
+using CarinaStudio.AppSuite.Controls.Presenters;
 using CarinaStudio.Collections;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
@@ -112,6 +114,18 @@ namespace CarinaStudio.AppSuite.Controls
 				{
 					this.isBackSlashPressed = false;
 					return;
+				}
+				
+				// show nothing in comment
+				if (this.textPresenter is SyntaxHighlightingTextPresenter shTextPresenter)
+				{
+					shTextPresenter.FindSpanAndToken(end, out _, out var token);
+					switch (token?.Name)
+					{
+						case RegexSyntaxHighlighting.EndOfLineComment:
+						case RegexSyntaxHighlighting.InlineComment:
+							return;
+					}
 				}
 
 				// show predefined groups menu

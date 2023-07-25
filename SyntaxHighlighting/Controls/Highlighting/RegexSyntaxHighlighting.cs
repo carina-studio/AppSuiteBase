@@ -8,6 +8,11 @@ namespace CarinaStudio.AppSuite.Controls.Highlighting;
 /// </summary>
 public static class RegexSyntaxHighlighting
 {
+    // Constants.
+    internal const string EndOfLineComment = "End-of-Line Comment";
+    internal const string InlineComment = "Inline Comment";
+    
+    
     // Static fields.
     static Regex? AlternationPattern;
     static Regex? AnchorsPattern;
@@ -71,13 +76,15 @@ public static class RegexSyntaxHighlighting
         
         // comment
         var commentForeground = app.FindResourceOrDefault<IBrush>("Brush/RegexSyntaxHighlighting.Comment", Brushes.Gray);
-        definitionSet.TokenDefinitions.Add(new(name: "End-of-Line Comment")
+        /*
+        definitionSet.TokenDefinitions.Add(new(EndOfLineComment)
         {
             FontStyle = FontStyle.Italic,
             Foreground = commentForeground,
             Pattern = EndOfLineCommentPattern,
         });
-        definitionSet.TokenDefinitions.Add(new(name: "Inline Comment")
+        */
+        definitionSet.TokenDefinitions.Add(new(InlineComment)
         {
             FontStyle = FontStyle.Italic,
             Foreground = commentForeground,

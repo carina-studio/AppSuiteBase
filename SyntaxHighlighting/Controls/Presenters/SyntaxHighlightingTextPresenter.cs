@@ -17,8 +17,6 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
 
 
     // Fields.
-    readonly ScheduledAction correctCaretIndexAction;
-    readonly ScheduledAction invalidateVisualAction;
     bool isArranging;
     bool isCreatingTextLayout;
     bool isMeasuring;
@@ -34,27 +32,27 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
     public SyntaxHighlightingTextPresenter()
     {
         // setup actions
-        this.correctCaretIndexAction = new(() =>
+        var correctCaretIndexAction = new ScheduledAction(() =>
         {
             if (this.SelectionStart != this.SelectionEnd)
                 return;
             if (this.CaretIndex != this.SelectionStart)
                 this.CaretIndex = this.SelectionStart;
         });
-        this.invalidateVisualAction = new(this.InvalidateVisual);
+        var invalidateVisualAction = new ScheduledAction(this.InvalidateVisual);
 
         // attach to self members
         this.GetObservable(SelectionEndProperty).Subscribe(end =>
         {
             this.syntaxHighlighter.SelectionEnd = end;
-            this.correctCaretIndexAction.Schedule();
+            correctCaretIndexAction.Schedule();
         });
         this.GetObservable(SelectionForegroundBrushProperty).Subscribe(brush =>
             this.syntaxHighlighter.SelectionForeground = brush);
         this.GetObservable(SelectionStartProperty).Subscribe(start =>
         {
             this.syntaxHighlighter.SelectionStart = start;
-            this.correctCaretIndexAction.Schedule();
+            correctCaretIndexAction.Schedule();
         });
         this.GetObservable(TextProperty).Subscribe(text =>
             this.syntaxHighlighter.Text = text);
@@ -70,7 +68,7 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         {
             if (!this.isArranging && !this.isCreatingTextLayout && !this.isMeasuring)
                 this.InvalidateTextLayout();
-            this.invalidateVisualAction.Schedule();
+            invalidateVisualAction.Schedule();
         };
     }
 
@@ -130,6 +128,16 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         get => this.syntaxHighlighter.DefinitionSet;
         set => this.syntaxHighlighter.DefinitionSet = value;
     }
+
+
+    /// <summary>
+    /// Find corresponding span and token which contains the character at specific position.
+    /// </summary>
+    /// <param name="characterIndex">Index of character.</param>
+    /// <param name="span">Span which contains the character.</param>
+    /// <param name="token">Token which contains the character.</param>
+    public void FindSpanAndToken(int characterIndex, out SyntaxHighlightingSpan? span, out SyntaxHighlightingToken? token) =>
+        this.syntaxHighlighter.FindSpanAndToken(characterIndex, out span, out token);
 
 
     /// <inheritdoc/>
