@@ -1,5 +1,4 @@
 using Avalonia.Media;
-using CarinaStudio.Controls;
 using System.Text.RegularExpressions;
 
 namespace CarinaStudio.AppSuite.Controls.Highlighting;
@@ -16,7 +15,9 @@ public static class RegexSyntaxHighlighting
     static Regex? CharacterClassesEndPattern;
     static Regex? CharacterRangesPattern;
     static Regex? CharacterClassesStartPattern;
+    static Regex? EndOfLineCommentPattern;
     static Regex? EscapeCharactersPattern;
+    static Regex? InlineCommentPattern;
     static Regex? QuantifiersPattern;
     static Regex? SpecialCharactersPattern;
     static Regex? UnicodeCategoriesPattern;
@@ -36,7 +37,9 @@ public static class RegexSyntaxHighlighting
         CharacterClassesEndPattern ??= new(@"(?<=[^\\](\\\\)*)\]", RegexOptions.Compiled);
         CharacterClassesStartPattern ??= new(@"(?<=(^|[^\\])(\\\\)*)\[(\^)?", RegexOptions.Compiled);
         CharacterRangesPattern ??= new(@"[0-9\w]\-[0-9\w]", RegexOptions.Compiled);
+        EndOfLineCommentPattern ??= new(@"(?<=(^|[^\\])(\\\\)*)\#.*$", RegexOptions.Compiled);
         EscapeCharactersPattern ??= new(@"\\[^\sbBzZAG]", RegexOptions.Compiled);
+        InlineCommentPattern ??= new(@"(?<=(^|[^\\])(\\\\)*)\(\?\#[^\)]*\)", RegexOptions.Compiled);
         QuantifiersPattern ??= new(@"\+(\?)?|\*(\?)?|\?(\?)?|\{\d+\}|\{\d+\,(\d+)?\}|\{(\d+)?\,\d+\}", RegexOptions.Compiled);
         SpecialCharactersPattern ??= new(@"\.", RegexOptions.Compiled);
         UnicodeCategoriesPattern ??= new(@"\\[pP]\{\w+\}", RegexOptions.Compiled);
@@ -64,6 +67,21 @@ public static class RegexSyntaxHighlighting
         {
             Foreground = app.FindResourceOrDefault<IBrush>("Brush/RegexSyntaxHighlighting.Brackets", Brushes.Yellow),
             Pattern = BracketsPattern,
+        });
+        
+        // comment
+        var commentForeground = app.FindResourceOrDefault<IBrush>("Brush/RegexSyntaxHighlighting.Comment", Brushes.Gray);
+        definitionSet.TokenDefinitions.Add(new(name: "End-of-Line Comment")
+        {
+            FontStyle = FontStyle.Italic,
+            Foreground = commentForeground,
+            Pattern = EndOfLineCommentPattern,
+        });
+        definitionSet.TokenDefinitions.Add(new(name: "Inline Comment")
+        {
+            FontStyle = FontStyle.Italic,
+            Foreground = commentForeground,
+            Pattern = InlineCommentPattern,
         });
 
         // escape characters

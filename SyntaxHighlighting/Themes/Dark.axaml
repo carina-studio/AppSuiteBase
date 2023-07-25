@@ -22,6 +22,7 @@
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Brackets">#ffe800</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterClasses">#389edb</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.CharacterRanges">#00ccaf</SolidColorBrush>
+	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Comment">#8f8f8f</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.EscapeCharacters">#ddb974</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.Quantifiers">#91cf7c</SolidColorBrush>
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.SpecialCharacters">#ff40d0</SolidColorBrush>
