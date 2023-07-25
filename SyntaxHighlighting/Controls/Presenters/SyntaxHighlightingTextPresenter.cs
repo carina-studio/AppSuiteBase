@@ -42,8 +42,11 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         var invalidateVisualAction = new ScheduledAction(this.InvalidateVisual);
 
         // attach to self members
+        this.GetObservable(PreeditTextProperty).Subscribe(text =>
+            this.syntaxHighlighter.PreeditText = text);
         this.GetObservable(SelectionEndProperty).Subscribe(end =>
         {
+            System.Diagnostics.Debug.WriteLine("SelectionEnd: " + end);
             this.syntaxHighlighter.SelectionEnd = end;
             correctCaretIndexAction.Schedule();
         });

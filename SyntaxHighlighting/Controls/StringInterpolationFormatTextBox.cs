@@ -488,9 +488,13 @@ public class StringInterpolationFormatTextBox : TextBox
 		}
 
 		// commit input
+		var handled = e.Handled;
 		base.OnTextInput(e);
-		this.SelectionStart = selectionStart;
-		this.SelectionEnd = selectionStart;
+		if (handled)
+		{
+			this.SelectionStart = selectionStart;
+			this.SelectionEnd = selectionStart;
+		}
 
 		// show assistance menu
 		this.showAssistanceMenuAction.Reschedule();
