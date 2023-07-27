@@ -262,7 +262,7 @@
 	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Icon.Margin">0,1,15,1</Thickness>
 	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Margin">0,0,10,10</Thickness>
 	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Padding">15</Thickness>
-	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Action.Margin">0,1,8,1</Thickness>
+	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Action.Margin">0,1,10,1</Thickness>
 	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Actions.Margin">0,10,0,0</Thickness>
 	<Thickness x:Key="Thickness/NotificationPresenter.Notification.Title.Margin">0,0,0,3</Thickness>
 

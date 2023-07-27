@@ -171,6 +171,7 @@
 	<sys:String x:Key="String/Common.Feedback">意見回饋</sys:String>
 	<sys:String x:Key="String/Common.Feedback.WithDialog">意見回饋…</sys:String>
 	<sys:String x:Key="String/Common.Help">說明</sys:String>
+	<sys:String x:Key="String/Common.Ignore">忽略</sys:String>
 	<sys:String x:Key="String/Common.Import">匯入</sys:String>
 	<sys:String x:Key="String/Common.Import.WithDialog">匯入…</sys:String>
 	<sys:String x:Key="String/Common.KnowMoreAbout">了解更多</sys:String>
@@ -271,6 +272,7 @@
 	<sys:String x:Key="String/LocalizationTest.String">正體中文</sys:String>
 
 	<!-- MainWindow -->
+	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">已經有新的 {0} 版本。</sys:String>
 	<sys:String x:Key="String/MainWindow.ConfirmLayoutingLotsOfMainWindows">排列較多數量的視窗可能導致不適合的排列結果，是否仍要進行排列？</sys:String>
 	<sys:String x:Key="String/MainWindow.ConfirmUsingCompactUI">您正在使用較小螢幕的裝置，是否要啟用緊密版面配置？您也可以在應用程式選項中變更此設定。</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows">排列視窗</sys:String>

@@ -65,6 +65,7 @@ namespace CarinaStudio.AppSuite.Controls
         
         
         // Fields.
+        Notification? appUpdateNotification;
         bool areInitialDialogsClosed;
         Thickness contentPadding;
         ThicknessAnimator? contentPaddingAnimator;
@@ -275,17 +276,10 @@ namespace CarinaStudio.AppSuite.Controls
                 {
                     if (!this.AreInitialDialogsClosed)
                         this.showInitDialogsAction.Schedule();
-                    else if (this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate))
+                    else
                     {
-                        this.SynchronizationContext.Post(async () =>
-                        {
-                            if (!IsNotifyingAppUpdateFound)
-                            {
-                                IsNotifyingAppUpdateFound = true;
-                                await this.Application.CheckForApplicationUpdateAsync(this, false);
-                                IsNotifyingAppUpdateFound = false;
-                            }
-                        });
+                        this.SynchronizationContext.Post(() => 
+                            _ = this.NotifyApplicationUpdateFoundAsync(false));
                     } 
                     if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId != null)
                     {
@@ -477,6 +471,66 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
+        // Notify user that application update has been found.
+        async Task NotifyApplicationUpdateFoundAsync(bool isInitialCheck)
+        {
+            // check state
+            if (!this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate))
+                return;
+            if (IsNotifyingAppUpdateFound || !this.IsOpened)
+                return;
+            var updateInfo = this.Application.UpdateInfo;
+            if (updateInfo is null || updateInfo.Version <= ApplicationUpdateDialog.LatestShownVersion)
+                return;
+            
+            // show notification
+            // ReSharper disable once SuspiciousTypeConversion.Global
+            if (this is INotificationPresenter notificationPresenter)
+            {
+                if (this.appUpdateNotification?.IsVisible == true)
+                    return;
+                this.appUpdateNotification = new Notification().Also(notification =>
+                {
+                    notification.Actions = new[]
+                    {
+                        new NotificationAction().Also(it =>
+                        {
+                            it.Command = new Command(() =>
+                            {
+                                notification.Dismiss();
+                                _ = this.Application.CheckForApplicationUpdateAsync(this, true);
+                            });
+                            it.Bind(NotificationAction.NameProperty, this.Application.GetObservableString("Common.KnowMoreAbout.WithDialog"));
+                        })
+                    };
+                    notification.Dismissed += (_, _) =>
+                    {
+                        if (this.appUpdateNotification == notification)
+                            this.appUpdateNotification = null;
+                    };
+                    notification.BindToResource(Notification.IconProperty, this, "Image/Icon.Update.Colored");
+                    notification.Bind(Notification.MessageProperty, new FormattedString().Also(it =>
+                    {
+                        it.Arg1 = this.Application.Name;
+                        it.Bind(FormattedString.FormatProperty, this.Application.GetObservableString("MainWindow.ApplicationUpdateFound"));
+                    }));
+                    notification.Timeout = null;
+                });
+                notificationPresenter.AddNotification(this.appUpdateNotification);
+                ApplicationUpdateDialog.IgnoreCurrentUpdateInfo();
+                return;
+            }
+            
+            // show dialog
+            if (isInitialCheck || this.areInitialDialogsClosed)
+            {
+                IsNotifyingAppUpdateFound = true;
+                await this.Application.CheckForApplicationUpdateAsync(this, false);
+                IsNotifyingAppUpdateFound = false;
+            }
+        }
+
+
         // Called when property of application changed.
         void OnApplicationPropertyChanged(object? sender, PropertyChangedEventArgs e) => this.OnApplicationPropertyChanged(e);
 
@@ -503,17 +557,8 @@ namespace CarinaStudio.AppSuite.Controls
                         this.restartingRootWindowsAction.Cancel();
                     break;
                 case nameof(IAppSuiteApplication.UpdateInfo):
-                    this.SynchronizationContext.Post(async () =>
-                    {
-                        if (this.AreInitialDialogsClosed 
-                            && this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate)
-                            && !IsNotifyingAppUpdateFound)
-                        {
-                            IsNotifyingAppUpdateFound = true;
-                            await this.Application.CheckForApplicationUpdateAsync(this, false);
-                            IsNotifyingAppUpdateFound = false;
-                        }
-                    });
+                    this.SynchronizationContext.Post(() => 
+                        _ = this.NotifyApplicationUpdateFoundAsync(false));
                     break;
             }
         }
@@ -938,19 +983,12 @@ namespace CarinaStudio.AppSuite.Controls
             }
 
             // notify application update found
-            if (this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate)
-                && !IsNotifyingAppUpdateFound)
+            var task = this.NotifyApplicationUpdateFoundAsync(true);
+            if (!task.IsCompleted)
             {
-                var task = app.CheckForApplicationUpdateAsync(this, false);
-                if (!task.IsCompleted)
-                {
-                    IsNotifyingAppUpdateFound = true;
-                    this.isShowingInitialDialogs = true;
-                    await task;
-                    IsNotifyingAppUpdateFound = false;
-                    this.isShowingInitialDialogs = false;
-                    return;
-                }
+                this.isShowingInitialDialogs = true;
+                await task;
+                IsNotifyingAppUpdateFound = false;
             }
 
             // show external dependencies dialog
@@ -976,8 +1014,7 @@ namespace CarinaStudio.AppSuite.Controls
                     this.isShowingInitialDialogs = false;
                     return;
                 }
-                else
-                    this.PersistentState.SetValue<int>(ExtDepDialogShownVersionKey, app.ExternalDependenciesVersion);
+                this.PersistentState.SetValue<int>(ExtDepDialogShownVersionKey, app.ExternalDependenciesVersion);
             }
 
             // all dialogs closed

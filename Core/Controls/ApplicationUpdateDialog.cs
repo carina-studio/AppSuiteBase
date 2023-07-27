@@ -57,12 +57,24 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         /// <summary>
+        /// Ignore current known application update information.
+        /// </summary>
+        public static void IgnoreCurrentUpdateInfo()
+        {
+            var app = IAppSuiteApplication.CurrentOrNull;
+            if (app is null)
+                return;
+            var updateInfo = app.UpdateInfo;
+            if (updateInfo is null || updateInfo.Version <= LatestShownVersion)
+                return;
+            ApplicationUpdateDialogImpl.UpdateLatestNotifiedInfo(app.PersistentState, updateInfo.Version);
+        }
+
+
+        /// <summary>
         /// Get latest time of showing update info to user.
         /// </summary>
-        public static DateTime? LatestShownTime
-        {
-            get => AppSuiteApplication.Current.PersistentState.GetValueOrDefault(ApplicationUpdateDialogImpl.LatestNotifiedTimeKey);
-        }
+        public static DateTime? LatestShownTime => AppSuiteApplication.Current.PersistentState.GetValueOrDefault(ApplicationUpdateDialogImpl.LatestNotifiedTimeKey);
 
 
         /// <summary>
@@ -100,7 +112,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// <returns>Task to get result.</returns>
         protected override async Task<ApplicationUpdateDialogResult> ShowDialogCore(Avalonia.Controls.Window? owner)
         {
-            this.dialog = new ApplicationUpdateDialogImpl()
+            this.dialog = new ApplicationUpdateDialogImpl
             {
                 CheckForUpdateWhenOpening = this.checkForUpdateWhenShowing,
                 DataContext = this.appUpdater,

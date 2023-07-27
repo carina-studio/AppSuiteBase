@@ -33,7 +33,7 @@ using TabControl = Avalonia.Controls.TabControl;
 
 namespace CarinaStudio.AppSuite.Tests
 {
-    partial class MainWindow : Controls.MainWindow<App, Workspace>
+    partial class MainWindow : Controls.MainWindow<App, Workspace>, INotificationPresenter
     {
         const string TabItemKey = "TabItem";
 
@@ -191,6 +191,10 @@ namespace CarinaStudio.AppSuite.Tests
             tabControl.ItemsSource = this.tabItems;
             (this.tabItems[0].Header as Control)?.Let(it => this.Application.EnsureClosingToolTipIfWindowIsInactive(it));
         }
+
+
+        public void AddNotification(Notification notification) =>
+            this.notificationPresenter.AddNotification(notification);
 
 
         public ViewModels.ApplicationOptions ApplicationOptions { get; } = new ViewModels.ApplicationOptions();

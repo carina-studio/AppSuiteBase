@@ -59,11 +59,11 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Message of latest application version.
-		string? LatestVersionMessage { get => this.GetValue<string?>(LatestVersionMessageProperty); }
+		string? LatestVersionMessage => this.GetValue<string?>(LatestVersionMessageProperty);
 
 
 		// Message of new application version found.
-		string? NewVersionFoundMessage { get => this.GetValue<string?>(NewVersionFoundMessageProperty); }
+		string? NewVersionFoundMessage => this.GetValue<string?>(NewVersionFoundMessageProperty);
 
 
 		// Called when closed.
@@ -210,16 +210,19 @@ namespace CarinaStudio.AppSuite.Controls
         {
 			if (this.attachedAppUpdater == null)
 				return;
-			var version = this.attachedAppUpdater.UpdateVersion;
-			if (version != null)
+			UpdateLatestNotifiedInfo(this.PersistentState, this.attachedAppUpdater.UpdateVersion);
+		}
+		public static void UpdateLatestNotifiedInfo(ISettings persistentState, Version? version)
+		{
+			if (version is not null)
 			{
-				this.PersistentState.SetValue<DateTime>(LatestNotifiedTimeKey, DateTime.Now);
-				this.PersistentState.SetValue<string>(LatestNotifiedVersionKey, version.ToString());
+				persistentState.SetValue<DateTime>(LatestNotifiedTimeKey, DateTime.Now);
+				persistentState.SetValue<string>(LatestNotifiedVersionKey, version.ToString());
 			}
 			else
 			{
-				this.PersistentState.ResetValue(LatestNotifiedTimeKey);
-				this.PersistentState.ResetValue(LatestNotifiedVersionKey);
+				persistentState.ResetValue(LatestNotifiedTimeKey);
+				persistentState.ResetValue(LatestNotifiedVersionKey);
 			}
 		}
 
