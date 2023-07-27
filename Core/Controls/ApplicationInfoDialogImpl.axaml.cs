@@ -394,11 +394,18 @@ namespace CarinaStudio.AppSuite.Controls
 		protected override void OnOpened(EventArgs e)
 		{
 			base.OnOpened(e);
-			if (this.isProprietaryApp)
-				this.Get<Panel>("scriptInfoPanel").IsVisible = true;
 			this.processInfoHfuToken = this.Application.ProcessInfo.RequestHighFrequencyUpdate();
 			this.Application.StringsUpdated += this.OnAppStringsUpdated;
 			this.Application.ProductManager.ProductStateChanged += this.OnProductStateChanged;
+		}
+
+
+		/// <inheritdoc/>
+		protected override void OnOpening(EventArgs e)
+		{
+			base.OnOpening(e);
+			if (this.isProprietaryApp)
+				this.Get<Panel>("scriptInfoPanel").IsVisible = true;
 			this.updateScreenInfoAction.Execute();
 		}
 

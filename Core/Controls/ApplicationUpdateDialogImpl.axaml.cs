@@ -120,12 +120,9 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
-		// Called when opened.
+		/// <inheritdoc/>
 		protected override void OnOpened(EventArgs e)
 		{
-			// setup UI
-			this.UpdateLatestNotifiedInfo();
-
 			// check for update
 			if (this.CheckForUpdateWhenOpening && this.attachedAppUpdater != null)
 				this.attachedAppUpdater.CheckForUpdateCommand.TryExecute();
@@ -150,6 +147,17 @@ namespace CarinaStudio.AppSuite.Controls
 			
 			// call base
 			base.OnOpened(e);
+		}
+
+
+		/// <inheritdoc/>
+		protected override void OnOpening(EventArgs e)
+		{
+			// call base
+			base.OnOpening(e);
+			
+			// setup UI
+			this.UpdateLatestNotifiedInfo();
 		}
 
 

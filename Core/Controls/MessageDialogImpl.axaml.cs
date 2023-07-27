@@ -67,6 +67,7 @@ class MessageDialogImpl : Dialog
 
 
 	// Fields.
+	Button? defaultButton;
 	bool? doNotAskOrShowAgain;
 	readonly CheckBox doNotAskOrShowAgainCheckBox;
 	readonly Panel doNotAskOrShowAgainPanel;
@@ -269,19 +270,33 @@ class MessageDialogImpl : Dialog
 	}
 
 
-	// Called when opened.
+	/// <inheritdoc/>
 	protected override void OnOpened(EventArgs e)
 	{
 		// attach to application
 		this.Application.StringsUpdated += this.OnAppStringsUpdated;
+		
+		// call base
+		base.OnOpened(e);
 
+		// setup initial focus
+		this.SynchronizationContext.Post(() => this.defaultButton?.Focus());
+	}
+
+
+	/// <inheritdoc/>
+	protected override void OnOpening(EventArgs e)
+	{
+		// call base
+		base.OnOpening(e);
+		
 		// setup icon
 		var app = this.Application;
 		if (this.Icon == MessageDialogIcon.Custom)
 			this.SetValue(IconImageProperty, this.CustomIcon);
 		else if (((Avalonia.Application)app).TryFindResource<IImage>($"Image/Icon.{this.Icon}.Colored", out var image))
 			this.SetValue(IconImageProperty, image);
-
+		
 		// setup "do not ask again" UI
 		if (this.doNotAskOrShowAgain.HasValue)
 		{
@@ -301,23 +316,22 @@ class MessageDialogImpl : Dialog
 				}
 			}
 		}
-
+		
 		// setup buttons
-		Button? defaultButton;
 		var defaultResult = this.DefaultResult;
 		switch (this.Buttons)
 		{
 			case MessageDialogButtons.OK:
 				this.SetValue(Button1ResultProperty, MessageDialogResult.OK);
 				this.SetValue(IsButton1VisibleProperty, true);
-				defaultButton = defaultResult == MessageDialogResult.OK ? this.FindControl<Button>("button1") : null;
+				this.defaultButton = defaultResult == MessageDialogResult.OK ? this.FindControl<Button>("button1") : null;
 				break;
 			case MessageDialogButtons.OKCancel:
 				this.SetValue(Button1ResultProperty, MessageDialogResult.OK);
 				this.SetValue(Button2ResultProperty, MessageDialogResult.Cancel);
 				this.SetValue(IsButton1VisibleProperty, true);
 				this.SetValue(IsButton2VisibleProperty, true);
-				defaultButton = defaultResult switch
+				this.defaultButton = defaultResult switch
 				{
 					MessageDialogResult.OK => this.FindControl<Button>("button1"),
 					MessageDialogResult.Cancel => this.FindControl<Button>("button2"),
@@ -329,7 +343,7 @@ class MessageDialogImpl : Dialog
 				this.SetValue(Button2ResultProperty, MessageDialogResult.No);
 				this.SetValue(IsButton1VisibleProperty, true);
 				this.SetValue(IsButton2VisibleProperty, true);
-				defaultButton = defaultResult switch
+				this.defaultButton = defaultResult switch
 				{
 					MessageDialogResult.Yes => this.FindControl<Button>("button1"),
 					MessageDialogResult.No => this.FindControl<Button>("button2"),
@@ -343,7 +357,7 @@ class MessageDialogImpl : Dialog
 				this.SetValue(IsButton1VisibleProperty, true);
 				this.SetValue(IsButton2VisibleProperty, true);
 				this.SetValue(IsButton3VisibleProperty, true);
-				defaultButton = defaultResult switch
+				this.defaultButton = defaultResult switch
 				{
 					MessageDialogResult.Yes => this.FindControl<Button>("button1"),
 					MessageDialogResult.No => this.FindControl<Button>("button2"),
@@ -355,11 +369,6 @@ class MessageDialogImpl : Dialog
 				throw new ArgumentException($"Unsupported buttons type: {this.Buttons}.");
 		}
 		this.UpdateButtonText();
-		if (defaultButton != null)
-			this.SynchronizationContext.Post(() => defaultButton.Focus());
-
-		// call base
-		base.OnOpened(e);
 	}
 
 

@@ -173,7 +173,7 @@ namespace CarinaStudio.AppSuite.Controls
             this.updateContentPaddingAction = new ScheduledAction(() =>
             {
                 // check state
-                if (!this.IsOpened || !this.ExtendClientAreaToDecorationsHint)
+                if (this.IsClosed || !this.ExtendClientAreaToDecorationsHint)
                     return;
                 var windowState = this.WindowState;
                 if (windowState == WindowState.Minimized)
@@ -223,7 +223,6 @@ namespace CarinaStudio.AppSuite.Controls
                 this.Width = this.restoredWidth;
                 if (this.restoredWindowState == WindowState.FullScreen)
                     this.UpdateExtendClientAreaChromeHints(true); // [Workaround] Prevent making title bar be transparent
-                this.WindowState = this.restoredWindowState;
             });
 
             // extend client area if needed
@@ -576,6 +575,17 @@ namespace CarinaStudio.AppSuite.Controls
         
         // Called when data dragged into window,
         void OnDragEnter(object? sender, DragEventArgs e) => this.ActivateAndBringToFront();
+        
+        
+        /// <inheritdoc/>
+        protected override void OnFirstMeasurementCompleted(Size measuredSize)
+        {
+            // call base
+            base.OnFirstMeasurementCompleted(measuredSize);
+            
+            // update content padding
+            this.updateContentPaddingAction.Execute();
+        }
 
 
         /// <summary>
@@ -618,18 +628,11 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
-        /// <summary>
-        /// Called when window opened.
-        /// </summary>
-        /// <param name="e">Event data.</param>
+        /// <inheritdoc/>
         protected override void OnOpened(EventArgs e)
         {
             // keep time
             this.openedTime = Stopwatch.ElapsedMilliseconds;
-
-            // restore to saved state and size
-            if (!this.RestoreToSavedWindowState())
-                this.RestoreToSavedSize();
 
             // call base
             base.OnOpened(e);
@@ -645,9 +648,6 @@ namespace CarinaStudio.AppSuite.Controls
             // check main window count
             this.SetAndRaise(HasMultipleMainWindowsProperty, ref this.hasMultipleMainWindows, this.Application.MainWindows.Count > 1);
 
-            // update content padding
-            this.updateContentPaddingAction.Execute();
-
             // notify application update found
             if (this.Application.MainWindows.Count == 1)
                 ApplicationUpdateDialog.ResetLatestShownInfo();
@@ -661,6 +661,18 @@ namespace CarinaStudio.AppSuite.Controls
 
             // check Pro-version
             this.CheckIsReactivatingProVersionNeeded();
+        }
+
+
+        /// <inheritdoc/>
+        protected override void OnOpening(EventArgs e)
+        {
+            // call base
+            base.OnOpening(e);
+            
+            // restore to saved state and size
+            if (!this.RestoreToSavedWindowState())
+                this.RestoreToSavedSize();
         }
 
 

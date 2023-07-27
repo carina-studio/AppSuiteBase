@@ -493,11 +493,13 @@ namespace CarinaStudio.AppSuite.Tests
         public async void ShowMessageDialog()
         {
             var icon = Enum.GetValues<MessageDialogIcon>().SelectRandomElement();
+            var buttons = Enum.GetValues<MessageDialogButtons>().SelectRandomElement();
             var result = await new MessageDialog()
             {
-                Buttons = Enum.GetValues<MessageDialogButtons>().SelectRandomElement(),
+                Buttons = buttons,
                 CustomDoNotAskOrShowAgainText = "DO NOT SHOW AGAIN!!!",
                 CustomIcon = icon == MessageDialogIcon.Custom ? this.FindResourceOrDefault<IImage>("Image/Icon.Star") : null,
+                DefaultResult = buttons == MessageDialogButtons.YesNo ? MessageDialogResult.Yes : null,
                 Description = "Description of dialog.",
                 DoNotAskOrShowAgain = true,
                 DoNotAskOrShowAgainDescription = "This is the description.",

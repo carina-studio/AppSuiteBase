@@ -115,12 +115,30 @@ class AgreementDialogImpl : Dialog
     }
 
 
-    // Window opened.
+    /// <inheritdoc/>
     protected override void OnOpened(EventArgs e)
     {
         base.OnOpened(e);
         var source = this.DocumentSource;
-        if (source != null)
+        if (source is not null)
+        {
+            // setup initial focus
+            this.SynchronizationContext.Post(() =>
+            {
+                if (!this.IsAgreedBefore)
+                    this.Get<Button>("agreeButton").Focus();
+            });
+        }
+        else
+            this.SynchronizationContext.Post(this.Decline);
+    }
+
+
+    /// <inheritdoc/>
+    protected override void OnOpening(EventArgs e)
+    {
+        base.OnOpening(e);
+        this.DocumentSource?.Let(source =>
         {
             // setup cultures
             var cultures = source.SupportedCultures;
@@ -137,15 +155,6 @@ class AgreementDialogImpl : Dialog
             
             // setup document Uri
             this.SetValue(DocumentUriProperty, source.Uri);
-
-            // setup initial focus
-            this.SynchronizationContext.Post(() =>
-            {
-                if (!this.IsAgreedBefore)
-                    this.Get<Button>("agreeButton").Focus();
-            });
-        }
-        else
-            this.SynchronizationContext.Post(this.Decline);
+        });
     }
 }
