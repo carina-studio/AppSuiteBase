@@ -1,5 +1,7 @@
 ﻿using Avalonia;
 using CarinaStudio.AppSuite.Native;
+using CarinaStudio.MacOS.AppKit;
+using CarinaStudio.MacOS.ObjectiveC;
 using System;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -65,6 +67,15 @@ namespace CarinaStudio.AppSuite.Controls
 				if (style == default)
 					return;
 				Win32.SetWindowLong(handle, Win32.GWL.STYLE, (nint)(style & ~Win32.WS.SYSMENU));
+			}
+			else if (Platform.IsMacOS)
+			{
+				NSObject.FromHandle<NSWindow>(handle)?.Use(nsWindow =>
+				{
+					nsWindow.StandardWindowButton(NSWindow.ButtonType.CloseButton)?.Use(it => it.IsHidden = true);
+					nsWindow.StandardWindowButton(NSWindow.ButtonType.MiniaturizeButton)?.Use(it => it.IsHidden = true);
+					nsWindow.StandardWindowButton(NSWindow.ButtonType.ZoomButton)?.Use(it => it.IsHidden = true);
+				});
 			}
 		}
 	}
