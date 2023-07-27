@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Media;
+using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
 using System;
 using System.Collections.Generic;
@@ -66,6 +67,8 @@ public class Notification : AvaloniaObject
         this.completeShowingAction = new(() =>
             this.SetAndRaise(IsShowingProperty, ref this.isShowing, false));
         this.dismissAction = new(this.Dismiss);
+        IAppSuiteApplication.CurrentOrNull?.Configuration.GetValueOrDefault(ConfigurationKeys.DefaultTimeoutOfNotification).Let(timeout =>
+            this.SetValue(TimeoutProperty, TimeSpan.FromMilliseconds(timeout)));
     }
 
 
