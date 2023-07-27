@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
-using CarinaStudio.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,7 @@ using System.Linq;
 namespace CarinaStudio.AppSuite.Converters;
 
 // Predefined converter for width of TabItem.
-class TabItemWidthConverter
+static class TabItemWidthConverter
 {
     // Fields.
     static IAvaloniaApplication? app;
@@ -36,17 +35,17 @@ class TabItemWidthConverter
         if (valueList.Count >= 2
             && valueList[0] is TabControl tabControl
             && valueList[1] is Controls.TabStripScrollViewer tabStrip
-            && tabStrip.Content is Avalonia.Controls.Control tabItemsContainer)
+            && tabStrip.Content is Control tabItemsContainer)
         {
             // get size of tab strip
             var margin = tabItemsContainer.Margin;
-            var padding = (tabItemsContainer as Avalonia.Controls.Border)?.Padding ?? default;
+            var padding = tabStrip.Padding;
             var tabStripWidth = (tabStrip.Bounds.Width - margin.Left - padding.Left - padding.Right - margin.Right);
             if (tabStripWidth <= 0)
                 return 0;
             
             // collect tab items
-            var tabItemCount = tabControl.Items?.Let(items =>
+            var tabItemCount = tabControl.Items.Let(items =>
             {
                 var count = 0;
                 foreach (var item in items)
@@ -69,11 +68,11 @@ class TabItemWidthConverter
                     }
                 }
                 return count;
-            }) ?? 0;
+            });
             if (tabItemCount <= 0)
                 return double.PositiveInfinity;
 
-            // calcluate width
+            // calculate width
             var width = (int)(tabStripWidth / tabItemCount - tabItemMargin.Left - tabItemMargin.Right);
             return Math.Max(Math.Min(width, maxTabItemWidth), minTabItemWidth);
         }
