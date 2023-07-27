@@ -48,5 +48,24 @@ namespace CarinaStudio.AppSuite.Controls
             }
 			return default;
 		}
+
+
+		/// <summary>
+		/// Hide all buttons on caption (title bar) of window.
+		/// </summary>
+		/// <param name="window">Window.</param>
+		public static void HideCaptionButtons(this Avalonia.Controls.Window window)
+		{
+			var handle = (window.TryGetPlatformHandle()?.Handle).GetValueOrDefault();
+			if (handle == default)
+				return;
+			if (Platform.IsWindows)
+			{
+				var style = (Win32.WS)Win32.GetWindowLong(handle, Win32.GWL.STYLE);
+				if (style == default)
+					return;
+				Win32.SetWindowLong(handle, Win32.GWL.STYLE, (nint)(style & ~Win32.WS.SYSMENU));
+			}
+		}
 	}
 }

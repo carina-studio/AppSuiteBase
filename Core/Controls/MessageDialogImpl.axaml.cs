@@ -273,6 +273,9 @@ class MessageDialogImpl : Dialog
 	/// <inheritdoc/>
 	protected override void OnOpened(EventArgs e)
 	{
+		// hide caption buttons
+		this.HideCaptionButtons();
+		
 		// attach to application
 		this.Application.StringsUpdated += this.OnAppStringsUpdated;
 		

@@ -118,6 +118,8 @@ class AgreementDialogImpl : Dialog
     /// <inheritdoc/>
     protected override void OnOpened(EventArgs e)
     {
+        if (!this.IsAgreedBefore)
+            this.HideCaptionButtons();
         base.OnOpened(e);
         var source = this.DocumentSource;
         if (source is not null)

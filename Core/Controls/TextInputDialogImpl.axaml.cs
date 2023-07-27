@@ -121,6 +121,7 @@ class TextInputDialogImpl : InputDialog
 	// Called when opened.
 	protected override void OnOpened(EventArgs e)
 	{
+		this.HideCaptionButtons();
 		base.OnOpened(e);
 		this.textBox.SelectAll();
 		this.textBox.Focus();
