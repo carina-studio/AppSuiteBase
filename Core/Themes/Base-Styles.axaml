@@ -2989,7 +2989,7 @@
 											  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
 						</VisualLayerManager>
 						<controls:FullWindowTutorialPresenter Name="PART_TutorialPresenter" IsVisible="False"/>
-						<Border Name="PART_ContentFadingOverlay" Background="{Binding #PART_TransparencyFallback.Background}" IsHitTestVisible="False" IsVisible="False" Opacity="0"/>
+						<Border Name="PART_ContentFadingOverlay" Background="{Binding #PART_Background.Background}" IsHitTestVisible="False" IsVisible="False" Opacity="0"/>
 					</Panel>
 				</Panel>
 			</ControlTemplate>
