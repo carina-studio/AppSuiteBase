@@ -80,6 +80,7 @@
 	<Thickness x:Key="ExpanderHeaderPadding">5</Thickness>
 
 	<!-- FullWindowTutorialPresenter -->
+	<BoxShadows x:Key="BoxShadows/FullWindowTutorialPresenter.Tutorial">0 0 10 0 #3f000000</BoxShadows>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize">14</sys:Double>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth">200</sys:Double>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size">15</sys:Double>
@@ -130,6 +131,7 @@
 	<Thickness x:Key="Thickness/MenuItem.Padding">6,4,6,4</Thickness>
 	
 	<!-- NotificationPresenter -->
+	<BoxShadows x:Key="BoxShadows/NotificationPresenter.Notification">0 0 10 0 #3f000000</BoxShadows>
 	<sys:Double x:Key="Double/NotificationPresenter.Notification.Dismiss.Size">15</sys:Double>
 	<sys:Double x:Key="Double/NotificationPresenter.Notification.InitTranslation.Y">15</sys:Double>
 	<sys:Double x:Key="Double/NotificationPresenter.Notification.Width">300</sys:Double>

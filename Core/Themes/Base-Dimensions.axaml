@@ -160,7 +160,7 @@
 	<sys:Double x:Key="Double/ExternalDependenciesDialog.Width">600</sys:Double>
 
 	<!-- FullWindowTutorialPresenter -->
-	<BoxShadows x:Key="BoxShadows/FullWindowTutorialPresenter.Tutorial">0 0 10 0 #5f000000</BoxShadows>
+	<BoxShadows x:Key="BoxShadows/FullWindowTutorialPresenter.Tutorial">0 0 15 0 #3f000000</BoxShadows>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize">14</sys:Double>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth">250</sys:Double>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size">18</sys:Double>
@@ -248,7 +248,7 @@
 	<sys:Double x:Key="Double/MessageDialog.Message.MinWidth">200</sys:Double>
 	
 	<!-- NotificationPresenter -->
-	<BoxShadows x:Key="BoxShadows/NotificationPresenter.Notification">0 0 10 0 #5f000000</BoxShadows>
+	<BoxShadows x:Key="BoxShadows/NotificationPresenter.Notification">0 0 15 0 #3f000000</BoxShadows>
 	<sys:Double x:Key="Double/NotificationPresenter.Notification.Action.FontSize">13</sys:Double>
 	<sys:Double x:Key="Double/NotificationPresenter.Notification.Dismiss.Size">18</sys:Double>
 	<sys:Double x:Key="Double/NotificationPresenter.Notification.Icon.Size">16</sys:Double>
