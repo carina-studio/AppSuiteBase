@@ -358,10 +358,12 @@
 	<SolidColorBrush x:Key="Brush/Window.Background.Tabbed" Color="{DynamicResource Color/Window.Background.Tabbed}"/>
 	<SolidColorBrush x:Key="Brush/Window.Background.Tabbed.Transparent" Color="{DynamicResource Color/Window.Background.Tabbed.Transparent}"/>
 	<SolidColorBrush x:Key="Brush/Window.Background.Transparent" Color="{DynamicResource Color/Window.Background.Transparent}"/>
+	<SolidColorBrush x:Key="Brush/Window.ContentFadingOverlay" Color="{DynamicResource Color/Window.ContentFadingOverlay}"/>
 	<Color x:Key="Color/Window.Background">#ffffff</Color>
 	<Color x:Key="Color/Window.Background.Tabbed">#ffffff</Color>
 	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#ffffff</Color>
 	<Color x:Key="Color/Window.Background.Transparent">#ffffff</Color>
+	<Color x:Key="Color/Window.ContentFadingOverlay">#ffffff</Color>
 	<Color x:Key="Color/Window.TitleBar">#ffffff</Color>
 
 	<!-- WorkingArea -->
