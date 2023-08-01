@@ -140,18 +140,48 @@ namespace CarinaStudio.AppSuite.Controls
 			{
 				if (!this.IsOpened)
 					return;
-				var screen = this.Screens.ScreenFromWindow(this) ?? this.Screens.ScreenFromVisual(this) ?? this.Screens.Primary;
-				if (screen == null)
+				var screen = this.Screens.ScreenFromWindow(this) ?? this.Screens.Primary;
+				if (screen is null)
 					return;
+				var screenBounds = screen.Bounds;
 				var scaling = screen.Scaling;
-				var screenSizePx = screen.Bounds.Size.Let(it => Platform.IsMacOS
-					? new PixelSize((int) (it.Width * scaling + 0.5), (int) (it.Height * scaling + 0.5))
-					: it);
-				var screenSizeDip = screen.Bounds.Size.Let(it => Platform.IsMacOS
-					? new Size(it.Width, it.Height)
-					: new Size(it.Width / scaling, it.Height / scaling));
+				if (Platform.IsMacOS)
+				{
+					var windowBounds = this.Bounds;
+					if (windowBounds.Width > 0 || windowBounds.Height > 0)
+					{
+						var displayId = 0u;
+						unsafe
+						{
+							var displayCount = 0u;
+							Native.MacOS.CGGetDisplaysWithRect(new(windowBounds.X, windowBounds.Y, windowBounds.Width, windowBounds.Height), 1, &displayId, &displayCount);
+							if (displayCount == 0)
+								displayId = Native.MacOS.CGMainDisplayID();
+						}
+						var displayModeRef = Native.MacOS.CGDisplayCopyDisplayMode(displayId);
+						if (displayModeRef != default)
+						{
+							try
+							{
+								var displayWidth = Native.MacOS.CGDisplayModeGetPixelWidth(displayModeRef);
+								if (displayWidth > 0)
+									scaling = (double)displayWidth / screenBounds.Width;
+							}
+							finally
+							{
+								Native.MacOS.CGDisplayModeRelease(displayModeRef);
+							}
+						}
+					}
+				}
+				var screenSizePx = Platform.IsMacOS
+					? new PixelSize((int)(screenBounds.Width * scaling + 0.5), (int)(screenBounds.Height * scaling + 0.5))
+					: screenBounds.Size;
+				var screenSizeDip = Platform.IsMacOS
+					? new Size(screenBounds.Width, screenBounds.Height)
+					: new Size(screenBounds.Width / scaling, screenBounds.Height / scaling);
 				var workingAreaPx = screen.WorkingArea.Let(it => Platform.IsMacOS
-					? new PixelRect((int) (it.X * scaling + 0.5), (int) (it.Y * scaling + 0.5), (int) (it.Width * scaling + 0.5), (int) (it.Height * scaling + 0.5))
+					? new PixelRect((int)(it.X * scaling + 0.5), (int)(it.Y * scaling + 0.5), (int) (it.Width * scaling + 0.5), (int) (it.Height * scaling + 0.5))
 					: it);
 				var workingAreaDip = screen.WorkingArea.Let(it => Platform.IsMacOS
 					? new Rect(it.X, it.Y, it.Width, it.Height)
