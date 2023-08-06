@@ -2105,18 +2105,11 @@
 
 	<!-- TabControl -->
 	<Style Selector="RepeatButton.TabStripScroller">
-		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundChecked}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/TabControl.TabStrip.ScrollingButton.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/TabControl.TabStrip.ScrollingButton.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
-	</Style>
-	<Style Selector="RepeatButton.TabStripScroller:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
-	</Style>
-	<Style Selector="RepeatButton.TabStripScroller:pressed /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
 	</Style>
 	<Style Selector="controls|TabStripScrollViewer">
 		<Setter Property="HorizontalScrollBarVisibility" Value="Visible"/>
