@@ -5,6 +5,7 @@ using Avalonia.Controls.Primitives;
 using CarinaStudio.AppSuite.Controls.Highlighting;
 using CarinaStudio.Controls;
 using System;
+using Avalonia.Input;
 
 namespace CarinaStudio.AppSuite.Controls;
 
@@ -34,6 +35,7 @@ public class DateTimeFormatTextBox : ObjectTextBox<string>
     public DateTimeFormatTextBox()
     {
         SyntaxHighlighting.VerifyInitialization();
+        this.AcceptsWhiteSpaces = true;
         this.PseudoClasses.Add(":syntaxHighlighted");
         this.PseudoClasses.Add(":dateTimeFormatTextBox");
         this.Bind(WatermarkProperty, this.GetResourceObservable("String/DateTimeFormatTextBox.Watermark"));
@@ -85,8 +87,17 @@ public class DateTimeFormatTextBox : ObjectTextBox<string>
                 shTextPresenter.DefinitionSet = DateTimeFormatSyntaxHighlighting.CreateDefinitionSet(app));
         }
     }
-    
-    
+
+
+    /// <inheritdoc/>
+    protected override void OnTextInput(TextInputEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(e.Text) && Math.Min(this.SelectionStart, this.SelectionEnd) == 0)
+            e.Handled = true;
+        base.OnTextInput(e);
+    }
+
+
     /// <inheritdoc/>
     protected override void RaiseObjectChanged(string? oldValue, string? newValue) =>
         this.RaisePropertyChanged(ObjectProperty, oldValue, newValue);

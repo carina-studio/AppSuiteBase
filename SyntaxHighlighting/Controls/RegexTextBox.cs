@@ -88,6 +88,7 @@ namespace CarinaStudio.AppSuite.Controls
 		public RegexTextBox()
 		{
 			SyntaxHighlighting.VerifyInitialization();
+			this.AcceptsWhiteSpaces = true;
 			this.PseudoClasses.Add(":syntaxHighlighted");
 			this.PseudoClasses.Add(":regexTextBox");
 			this.filteredPredefinedGroups.CollectionChanged += this.OnFilteredPredefinedGroupChanged;
