@@ -96,7 +96,6 @@ namespace CarinaStudio.AppSuite.Controls
                 updateOpacityMaskAction.Schedule();
             });
             this.GetObservable(OffsetProperty).Subscribe(_ => updateOpacityMaskAction.Schedule());
-            this.GetObservable(PaddingProperty).Subscribe(_ => updateOpacityMaskAction.Schedule());
             this.SizeChanged += (_, _) => updateOpacityMaskAction.Schedule();
             this.GetObservable(VerticalScrollBarVisibilityProperty).Subscribe(visibility =>
             {
@@ -104,7 +103,11 @@ namespace CarinaStudio.AppSuite.Controls
                     this.contentPresenter.CanVerticallyScroll = visibility == ScrollBarVisibility.Visible;
                 updateOpacityMaskAction.Schedule();
             });
-            this.GetObservable(ViewportProperty).Subscribe(_ => correctOffsetAction.Schedule());
+            this.GetObservable(ViewportProperty).Subscribe(_ =>
+            {
+                correctOffsetAction.Schedule();
+                updateOpacityMaskAction.Schedule();
+            });
         }
         
         
@@ -115,8 +118,8 @@ namespace CarinaStudio.AppSuite.Controls
             this.contentPresenter = e.NameScope.Find<ScrollContentPresenter>("PART_ContentPresenter")?.Also(it =>
             {
                 it.CanHorizontallyScroll = this.HorizontalScrollBarVisibility == ScrollBarVisibility.Visible;
-                it.OpacityMask = this.opacityMackBrush;
                 it.CanVerticallyScroll = this.VerticalScrollBarVisibility == ScrollBarVisibility.Visible;
+                it.OpacityMask = this.opacityMackBrush;
             });
         }
 

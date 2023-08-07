@@ -2743,18 +2743,11 @@
 
 	<!-- ToolBarScrollViewer -->
 	<Style Selector="RepeatButton.ToolBarScrollViewer">
-		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundChecked}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBarScrollViewer.ScrollingButton.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBarScrollViewer.ScrollingButton.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
-	</Style>
-	<Style Selector="RepeatButton.ToolBarScrollViewer:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
-	</Style>
-	<Style Selector="RepeatButton.ToolBarScrollViewer:pressed /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
 	</Style>
 	<Style Selector="controls|ToolBarScrollViewer">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>

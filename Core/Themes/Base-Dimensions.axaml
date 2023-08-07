@@ -381,8 +381,9 @@
 	<Thickness x:Key="Thickness/ToolBar.TextBlock.Margin">4,2,2,2</Thickness>
 
 	<!-- ToolBarScrollViewer -->
+	<sys:Double x:Key="Double/ToolBarScrollViewer.MaxEdgeFadingSize">20</sys:Double>
 	<sys:Double x:Key="Double/ToolBarScrollViewer.ScrollingButton.Icon.Size">10</sys:Double>
-	<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Margin">0</Thickness>
+	<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Margin">3</Thickness>
 	<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Padding">5</Thickness>
 
 	<!-- ToolTip -->
