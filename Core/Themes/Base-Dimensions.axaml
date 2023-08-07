@@ -332,7 +332,7 @@
 	<sys:Double x:Key="Double/TabItem.Header.ColorBar.Height">6</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.Content.Height">20</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.FontSize">14</sys:Double>
-	<sys:Double x:Key="Double/TabItem.Header.Height">40</sys:Double>
+	<sys:Double x:Key="Double/TabItem.Header.Height">38</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.Icon.Size">14</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.InsertionIndicator.Width">20</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.MaxWidth">250</sys:Double>
@@ -341,7 +341,7 @@
 	<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">4</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Margin">1,2,1,0</Thickness>
-	<Thickness x:Key="Thickness/TabItem.Header.Padding">15,10,15,10</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Padding">15,9,15,9</Thickness>
 	<Thickness x:Key="Thickness/TabItem.InsertionIndicator.Margin">0,2,0,0</Thickness>
 
 	<!-- TextBox -->
