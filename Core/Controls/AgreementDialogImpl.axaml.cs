@@ -120,16 +120,7 @@ class AgreementDialogImpl : Dialog
     {
         base.OnOpened(e);
         var source = this.DocumentSource;
-        if (source is not null)
-        {
-            // setup initial focus
-            this.SynchronizationContext.Post(() =>
-            {
-                if (!this.IsAgreedBefore)
-                    this.Get<Button>("agreeButton").Focus();
-            });
-        }
-        else
+        if (source is null)
             this.SynchronizationContext.Post(this.Decline);
     }
 
