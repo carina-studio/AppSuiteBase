@@ -204,7 +204,11 @@ namespace CarinaStudio.AppSuite.Tests
         {
             _ = new SettingsEditorDialog()
             {
-                SettingKeys = SettingKey.GetDefinedKeys<ConfigurationKeys>(),
+                SettingKeys = new List<SettingKey>().Also(it =>
+                {
+                    it.AddRange(SettingKey.GetDefinedKeys<ConfigurationKeys>());
+                    it.AddRange(SettingKey.GetDefinedKeys<SimulationConfigurationKeys>());
+                }),
                 Settings = this.Configuration,
             }.ShowDialog(this);
         }

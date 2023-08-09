@@ -12,6 +12,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using CarinaStudio.Configuration;
 
 namespace CarinaStudio.AppSuite.Net;
 
@@ -28,7 +29,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
     // Static fields.
     static NetworkManager? DefaultInstance;
     static readonly Regex IPv4Regex = new("(?<Address>\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})");
-    static readonly string[] PingTargetAddresses = new []{
+    static readonly string[] PingTargetAddresses = {
         "208.67.222.222", // OpenDNS
         "208.67.220.220", // OpenDNS
         "1.1.1.1", // Cloudflare
@@ -36,7 +37,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         "8.8.8.8", // Google DNS
         "8.8.4.4", // Google DNS
     };
-    static readonly string[] PublicIPCheckingServers = new []{
+    static readonly string[] PublicIPCheckingServers = {
         "https://ipv4.icanhazip.com/",
         "http://checkip.dyndns.org/",
     };
@@ -71,6 +72,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         this.UpdateNetworkAddresses();
 
         // setup properties
+        // ReSharper disable once InvokeAsExtensionMethod
         this.IPAddresses = ListExtensions.AsReadOnly(this.ipAddresses);
     }
 
@@ -82,26 +84,30 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         var isConnected = false;
         using var ping = new Ping();
         var pingData = Array.Empty<byte>();
-        foreach (var server in PingTargetAddresses)
+        if (!this.Application.Configuration.GetValueOrDefault(SimulationConfigurationKeys.NoNetworkConnection))
         {
-            try
+            foreach (var server in PingTargetAddresses)
             {
-                var success = await Task.Run(() =>
-                    ping.Send(server, 5000, pingData)?.Status == IPStatus.Success);
-                if (success)
+                try
                 {
-                    this.logger.LogTrace("Network connection checked by '{server}'", server);
-                    isConnected = true;
-                    break;
+                    var success = await Task.Run(() =>
+                        ping.Send(server, 5000, pingData)?.Status == IPStatus.Success);
+                    if (success)
+                    {
+                        this.logger.LogTrace("Network connection checked by '{server}'", server);
+                        isConnected = true;
+                        break;
+                    }
                 }
+                // ReSharper disable once EmptyGeneralCatchClause
+                catch
+                { }
+                this.logger.LogWarning("Failed to ping '{server}'", server);
             }
-            catch
-            { }
-            this.logger.LogWarning("Failed to ping '{server}'", server);
         }
 
         // get IP addresses
-        var ipAddress = (IPAddress?)null;
+        IPAddress? ipAddress;
         var publicIPAddress = (IPAddress?)null;
         if (isConnected)
         {
@@ -139,6 +145,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
                         break;
                     }
                 }
+                // ReSharper disable once EmptyGeneralCatchClause
                 catch
                 { }
             }
@@ -196,7 +203,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
     /// <summary>
     /// Get default instance.
     /// </summary>
-    public static NetworkManager Default { get => DefaultInstance ?? throw new InvalidOperationException("Component is not initialized yet."); }
+    public static NetworkManager Default => DefaultInstance ?? throw new InvalidOperationException("Component is not initialized yet.");
 
 
     /// <summary>

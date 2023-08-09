@@ -101,9 +101,12 @@ namespace CarinaStudio.AppSuite.Controls
                 if (this.Application is not AppSuiteApplication asApp)
                     return;
                 var productId = asApp.ProVersionProductId;
+                // ReSharper disable once SuspiciousTypeConversion.Global
+                var notificationPresenter = this as INotificationPresenter;
+                var useNotification = notificationPresenter is not null;
 				if (productId == null 
 					|| !this.IsActive
-					|| this.HasDialogs
+					|| (!useNotification && this.HasDialogs)
 					|| IsNetworkConnForActivatingProVersionNotified
 					|| NetworkManager.Default.IsNetworkConnected
 					|| !asApp.ProductManager.TryGetProductState(productId, out var state))
@@ -121,16 +124,33 @@ namespace CarinaStudio.AppSuite.Controls
                     this.Logger.LogTrace("No need to notify user about activating Pro-version because Pro-version is already activated online");
                     return;
                 }
-				_ = new MessageDialog()
-				{
-					Icon = MessageDialogIcon.Information,
-					Message = new FormattedString().Also(it =>
-					{
-						it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{productId}"));
-						it.Bind(FormattedString.FormatProperty, asApp.GetObservableString("MainWindow.NetworkConnectionNeededForProductActivation"));
-					}),
-				}.ShowDialog(null);
-			});
+                // ReSharper disable once SuspiciousTypeConversion.Global
+                if (useNotification)
+                {
+                    notificationPresenter!.AddNotification(new Notification().Also(it =>
+                    {
+                        it.BindToResource(Notification.IconProperty, this, "Image/Icon.Warning.Colored");
+                        it.Bind(Notification.MessageProperty, new FormattedString().Also(it =>
+                        {
+                            it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{productId}"));
+                            it.Bind(FormattedString.FormatProperty, asApp.GetObservableString("MainWindow.NetworkConnectionNeededForProductActivation"));
+                        }));
+                        it.Timeout = null;
+                    }));
+                }
+                else
+                {
+                    _ = new MessageDialog
+                    {
+                        Icon = MessageDialogIcon.Information,
+                        Message = new FormattedString().Also(it =>
+                        {
+                            it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{productId}"));
+                            it.Bind(FormattedString.FormatProperty, asApp.GetObservableString("MainWindow.NetworkConnectionNeededForProductActivation"));
+                        }),
+                    }.ShowDialog(null);
+                }
+            });
             this.reactivateProVersionAction = new(async () =>
 			{
                 if (this.Application is not AppSuiteApplication asApp)
