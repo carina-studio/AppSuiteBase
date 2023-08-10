@@ -129,6 +129,8 @@
 	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">Update paths defined by system</sys:String>
 
 	<!-- Common -->
+	<sys:String x:Key="String/Common.Activate">Activate</sys:String>
+	<sys:String x:Key="String/Common.Activate.WithDialog">Activate…</sys:String>
 	<sys:String x:Key="String/Common.Add">Add</sys:String>
 	<sys:String x:Key="String/Common.Add.WithDialog">Add…</sys:String>
 	<sys:String x:Key="String/Common.Administrator">Administrator</sys:String>
@@ -199,6 +201,8 @@
 	<sys:String x:Key="String/Common.Paste.WithGesture">Paste (Ctrl+V)</sys:String>
 	<sys:String x:Key="String/Common.PrivacyPolicy">Privacy Policy</sys:String>
 	<sys:String x:Key="String/Common.PrivacyPolicy.WithDialog">Privacy Policy…</sys:String>
+	<sys:String x:Key="String/Common.Reactivate">Reactivate</sys:String>
+	<sys:String x:Key="String/Common.Reactivate.WithDialog">Reactivate…</sys:String>
 	<sys:String x:Key="String/Common.Refresh">Refresh</sys:String>
 	<sys:String x:Key="String/Common.Remove">Remove</sys:String>
 	<sys:String x:Key="String/Common.Remove.WithDialog">Remove…</sys:String>

@@ -123,6 +123,8 @@
 	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">更新系统定义路径</sys:String>
 	
 	<!-- Common -->
+	<sys:String x:Key="String/Common.Activate">启用</sys:String>
+	<sys:String x:Key="String/Common.Activate.WithDialog">启用…</sys:String>
 	<sys:String x:Key="String/Common.Add">加入</sys:String>
 	<sys:String x:Key="String/Common.Add.WithDialog">加入…</sys:String>
 	<sys:String x:Key="String/Common.Administrator">系统管理员</sys:String>
@@ -193,6 +195,8 @@
 	<sys:String x:Key="String/Common.Paste.WithGesture">粘贴 (Ctrl+V)</sys:String>
 	<sys:String x:Key="String/Common.PrivacyPolicy">隐私权政策</sys:String>
 	<sys:String x:Key="String/Common.PrivacyPolicy.WithDialog">隐私权政策…</sys:String>
+	<sys:String x:Key="String/Common.Reactivate">重新启用</sys:String>
+	<sys:String x:Key="String/Common.Reactivate.WithDialog">重新启用…</sys:String>
 	<sys:String x:Key="String/Common.Refresh">重新整理</sys:String>
 	<sys:String x:Key="String/Common.Remove">移除</sys:String>
 	<sys:String x:Key="String/Common.Remove.WithDialog">移除…</sys:String>

@@ -166,14 +166,21 @@ namespace CarinaStudio.AppSuite.Controls
 					return;
 				}
 				IsReactivatingProVersionNeeded = false;
-				if (asApp.ProductManager.TryGetProductState(productId, out var state)
-					&& state == ProductState.Deactivated)
+                if (asApp.ProductManager.TryGetProductState(productId, out var state))
+                {
+                    if (state == ProductState.Activated && asApp.Configuration.GetValueOrDefault(SimulationConfigurationKeys.FailToActivateProVersion))
+                        state = ProductState.Deactivated;
+                }
+                else if (asApp.Configuration.GetValueOrDefault(SimulationConfigurationKeys.FailToActivateProVersion))
+                    state = ProductState.Deactivated;
+                else
+                    return;
+				if (state == ProductState.Deactivated && await this.OnNotifyReactivatingProVersionNeededAsync())
 				{
-					await this.OnNotifyReactivatingProVersionNeededAsync();
-					IsReactivatingProVersion = true;
-					await asApp.ActivateProVersionAsync(this);
-					IsReactivatingProVersion = false;
-				}
+                    IsReactivatingProVersion = true;
+                    await asApp.ActivateProVersionAsync(this);
+                    IsReactivatingProVersion = false;
+                }
 			});
             this.restartingRootWindowsAction = new ScheduledAction(() =>
             {
@@ -375,11 +382,20 @@ namespace CarinaStudio.AppSuite.Controls
             if (this.Application is not AppSuiteApplication asApp)
                 return;
             var productId = asApp.ProVersionProductId;
-            if (productId == null || !asApp.ProductManager.TryGetProductState(productId, out var state))
-				return;
+            if (string.IsNullOrEmpty(productId))
+                return;
+            if (!asApp.ProductManager.TryGetProductState(productId, out var state))
+            {
+                if (this.Configuration.GetValueOrDefault(SimulationConfigurationKeys.FailToActivateProVersion))
+                    state = ProductState.Deactivated;
+                else
+                    return;
+            }
             switch (state)
 			{
                 case ProductState.Activated:
+                    if (this.Configuration.GetValueOrDefault(SimulationConfigurationKeys.FailToActivateProVersion))
+                        goto case ProductState.Deactivated;
                     if (asApp.ProductManager.IsProductActivated(productId, true)
                         && this.notifyNetworkConnForActivatingProVersionAction.Cancel())
                     {
@@ -395,6 +411,13 @@ namespace CarinaStudio.AppSuite.Controls
 						IsReactivatingProVersionNeeded = true;
 						this.reactivateProVersionAction.Schedule();
 					}
+                    if (this.Configuration.GetValueOrDefault(SimulationConfigurationKeys.FailToActivateProVersion) 
+                        && !IsReactivatingProVersion)
+                    {
+                        this.Logger.LogWarning("Need to reactivate Pro-version because of simulation");
+                        IsReactivatingProVersionNeeded = true;
+                        this.reactivateProVersionAction.Schedule();
+                    }
                     if (this.notifyNetworkConnForActivatingProVersionAction.Cancel())
                         this.Logger.LogTrace("Cancel notifying user about network connection for activating Pro-version");
 					break;
@@ -676,20 +699,91 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Called to notify user that Pro-version is needed to be reactivated.
         /// </summary>
-        /// <returns>Task of notifying user.</returns>
-        protected virtual Task OnNotifyReactivatingProVersionNeededAsync()
+        /// <returns>Task of notifying user. The result will be true if user want to reactivate Pro-version.</returns>
+        protected virtual async Task<bool> OnNotifyReactivatingProVersionNeededAsync()
         {
+            // check state
             if (this.Application is not AppSuiteApplication asApp)
-                return Task.CompletedTask;
-            return new MessageDialog()
+                return false;
+            var productId = asApp.ProVersionProductId;
+            if (string.IsNullOrEmpty(productId))
+                return false;
+            
+            this.Logger.LogWarning("Notify user that Pro-version is needed to be reactivated");
+            
+            // show notification or message dialog
+            var activate = false;
+            var deactivate = false;
+            // ReSharper disable once SuspiciousTypeConversion.Global
+            if (this is INotificationPresenter notificationPresenter)
             {
-                Icon = MessageDialogIcon.Warning,
-                Message = new FormattedString().Also(it =>
+                var taskCompletionSource = new TaskCompletionSource();
+                notificationPresenter.AddNotification(new Notification().Also(notification =>
                 {
-                    it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{asApp.ProVersionProductId}"));
-                    it.Bind(FormattedString.FormatProperty, asApp.GetObservableString("MainWindow.ReactivateProductNeeded"));
-                }),
-            }.ShowDialog(this);
+                    notification.Actions = new[]
+                    {
+                        new NotificationAction().Also(it =>
+                        {
+                            it.Command = new Command(() =>
+                            {
+                                if (!taskCompletionSource.Task.IsCompleted)
+                                {
+                                    activate = true;
+                                    taskCompletionSource.TrySetResult();
+                                }
+                                notification.Dismiss();
+                            });
+                            it.Bind(NotificationAction.NameProperty, asApp.GetObservableString("Common.Reactivate.WithDialog"));
+                        }),
+                        new NotificationAction().Also(it =>
+                        {
+                            it.Command = new Command(() =>
+                            {
+                                if (!taskCompletionSource.Task.IsCompleted)
+                                {
+                                    deactivate = true;
+                                    taskCompletionSource.TrySetResult();
+                                }
+                                notification.Dismiss();
+                            });
+                            it.Bind(NotificationAction.NameProperty, asApp.GetObservableString("ApplicationInfoDialog.DeactivateProduct"));
+                        }),
+                    };
+                    notification.Dismissed += (_, _) => taskCompletionSource.TrySetResult();
+                    notification.BindToResource(Notification.IconProperty, this, "Image/Icon.Warning.Colored");
+                    notification.Bind(Notification.MessageProperty, new FormattedString().Also(it =>
+                    {
+                        it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{productId}"));
+                        it.Bind(FormattedString.FormatProperty, asApp.GetObservableString("MainWindow.ReactivateProductNeeded"));
+                    }));
+                    notification.Timeout = null;
+                }));
+                await taskCompletionSource.Task;
+            }
+            else
+            {
+                activate = await new MessageDialog
+                {
+                    Buttons = MessageDialogButtons.YesNo,
+                    CustomNoText = asApp.GetObservableString("ApplicationInfoDialog.DeactivateProduct"),
+                    CustomYesText = asApp.GetObservableString("Common.Reactivate"),
+                    DefaultResult = MessageDialogResult.Yes,
+                    Icon = MessageDialogIcon.Warning,
+                    Message = new FormattedString().Also(it =>
+                    {
+                        it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{productId}"));
+                        it.Bind(FormattedString.FormatProperty, asApp.GetObservableString("MainWindow.ReactivateProductNeeded"));
+                    }),
+                }.ShowDialog(this) == MessageDialogResult.Yes;
+                deactivate = !activate;
+            }
+            
+            // deactivate Pro-version
+            if (deactivate)
+                _ = asApp.ProductManager.DeactivateAndRemoveDeviceAsync(productId, this);
+            
+            // complete
+            return activate;
         }
 
 
