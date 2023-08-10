@@ -27,6 +27,8 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     readonly EventHandler<AvaloniaPropertyChangedEventArgs> backgroundPropertyChangedHandler;
     // ReSharper restore PrivateFieldCanBeConvertedToLocalVariable
     IDisposable? backgroundPropertyChangedHandlerToken;
+    Avalonia.Controls.TextBlock? descriptionTextBlock1;
+    Avalonia.Controls.TextBlock? descriptionTextBlock2;
     Control? dismissControl;
     bool isPointerMovedAfterShowingTutorial;
     Control? root;
@@ -84,14 +86,40 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        this.dismissControl = e.NameScope.Find<Control>("PART_Dismiss");
-        this.root = e.NameScope.Find<Control>("PART_Root").AsNonNull().Also(it =>
+        var nameScope = e.NameScope;
+        this.descriptionTextBlock1 = nameScope.Find<Avalonia.Controls.TextBlock>("PART_Description");
+        if (this.descriptionTextBlock1 is not null)
+        {
+            this.descriptionTextBlock2 = nameScope.Find<Avalonia.Controls.TextBlock>("PART_AlternativeDescription");
+            if (this.descriptionTextBlock2 is null)
+                this.descriptionTextBlock1 = null;
+        }
+        this.dismissControl = nameScope.Find<Control>("PART_Dismiss");
+        this.root = nameScope.Find<Control>("PART_Root").AsNonNull().Also(it =>
         {
             it.IsVisible = false;
             it.Opacity = 0;
         });
-        this.skipAllTutorialsControl = e.NameScope.Find<Control>("PART_SkipAllTutorials");
-        this.tutorialContainer = e.NameScope.Find<Control>("PART_TutorialContainer");
+        this.skipAllTutorialsControl = nameScope.Find<Control>("PART_SkipAllTutorials");
+        this.tutorialContainer = nameScope.Find<Control>("PART_TutorialContainer")?.Also(it =>
+        {
+            it.LayoutUpdated += (_, _) =>
+            {
+                // [Workaround] Make sure that description with CJK characters won't be clipped unexpectedly
+                if (this.descriptionTextBlock1 is null || this.descriptionTextBlock2 is null)
+                    return;
+                if (this.descriptionTextBlock1.Bounds.Height >= this.descriptionTextBlock2.Bounds.Height)
+                {
+                    this.descriptionTextBlock1.Opacity = 1;
+                    this.descriptionTextBlock2.Opacity = 0;
+                }
+                else
+                {
+                    this.descriptionTextBlock1.Opacity = 0;
+                    this.descriptionTextBlock2.Opacity = 1;
+                }
+            };
+        });
         this.CurrentTutorial?.Let(this.OnShowTutorial);
     }
 

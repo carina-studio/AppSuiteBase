@@ -1060,12 +1060,20 @@
 							</Border>
 							
 							<!-- Description -->
-							<TextBlock Grid.Column="1" 
-							           FontSize="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize}" 
-							           MaxWidth="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth}" 
-							           Text="{Binding Description}" 
-							           TextWrapping="Wrap" 
-							           VerticalAlignment="Center"/>
+							<Panel Grid.Column="1">
+								<TextBlock Name="PART_Description"
+								           FontSize="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize}" 
+								           MaxWidth="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth}" 
+								           Text="{Binding Description}" 
+								           TextWrapping="Wrap" 
+								           VerticalAlignment="Center"/>
+								<TextBlock Name="PART_AlternativeDescription"
+								           FontSize="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize}" 
+								           MaxWidth="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth}" 
+								           Text="{Binding Description}" 
+								           TextWrapping="WrapWithOverflow" 
+								           VerticalAlignment="Center"/>
+							</Panel>
 							
 							<!-- Skip all tutorials -->
 							<abControls:LinkTextBlock Name="PART_SkipAllTutorials" 
