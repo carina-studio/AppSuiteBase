@@ -1576,12 +1576,20 @@
 							           TextTrimming="CharacterEllipsis"
 							           TextWrapping="NoWrap"/>
 							
-							<TextBlock FontSize="{DynamicResource Double/NotificationPresenter.Notification.Message.FontSize}"
-							           Grid.Row="1"
-							           MaxLines="{DynamicResource Int32/NotificationPresenter.Notification.MaxLines}"
-							           Text="{Binding Message}"
-							           TextTrimming="CharacterEllipsis"
-							           TextWrapping="Wrap"/>
+							<Panel Grid.Row="1">
+								<TextBlock Name="PART_Message" 
+								           FontSize="{DynamicResource Double/NotificationPresenter.Notification.Message.FontSize}"
+								           MaxLines="{DynamicResource Int32/NotificationPresenter.Notification.MaxLines}"
+								           Text="{Binding Message}"
+								           TextTrimming="CharacterEllipsis"
+								           TextWrapping="Wrap"/>
+								<TextBlock Name="PART_AlternativeMessage" 
+								           FontSize="{DynamicResource Double/NotificationPresenter.Notification.Message.FontSize}"
+								           MaxLines="{DynamicResource Int32/NotificationPresenter.Notification.MaxLines}"
+								           Text="{Binding Message}"
+								           TextTrimming="CharacterEllipsis"
+								           TextWrapping="WrapWithOverflow"/>
+							</Panel>
 							
 						</Grid>
 						

@@ -114,6 +114,26 @@ public class NotificationPresenter : TemplatedControl, INotificationPresenter
                 this.notificationActionsPanels[notification] = actionsPanel;
                 this.BuildNotificationActionControls(notification, actionsPanel);
             });
+            it.FindDescendantOfTypeAndName<Avalonia.Controls.TextBlock>("PART_Message")?.Let(messageTextBlock1 =>
+            {
+                (messageTextBlock1.Parent as Visual)?.FindDescendantOfTypeAndName<Avalonia.Controls.TextBlock>("PART_AlternativeMessage")?.Let(messageTextBlock2 =>
+                {
+                    // [Workaround] Make sure that message with CJK characters won't be clipped unexpectedly
+                    it.LayoutUpdated += (_, _) =>
+                    {
+                        if (messageTextBlock1.Bounds.Height >= messageTextBlock2.Bounds.Height)
+                        {
+                            messageTextBlock1.Opacity = 1;
+                            messageTextBlock2.Opacity = 0;
+                        }
+                        else
+                        {
+                            messageTextBlock1.Opacity = 0;
+                            messageTextBlock2.Opacity = 1;
+                        }
+                    };
+                });
+            });
             it.GetObservable(IsPointerOverProperty).Subscribe(isPointerOver =>
             {
                 if (isPointerOver)
