@@ -5,6 +5,7 @@ using Avalonia.Controls.Primitives;
 using CarinaStudio.Animation;
 using CarinaStudio.Threading;
 using System;
+using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 using CarinaStudio.Controls;
@@ -129,6 +130,21 @@ namespace CarinaStudio.AppSuite.Controls
         {
             base.OnAttachedToLogicalTree(e);
             this.maxEdgeFadingSize = this.FindResourceOrDefault("Double/TabControl.TabStrip.MaxEdgeFadingSize", 20.0);
+        }
+
+
+        /// <inheritdoc/>
+        protected override void OnPointerWheelChanged(PointerWheelEventArgs e)
+        {
+            var delta = e.Delta;
+            if (Math.Abs(delta.Y) > 0 && Math.Abs(delta.X) < 0.01
+                && this.CanHorizontallyScroll
+                && !this.CanVerticallyScroll)
+            {
+                this.ScrollBy(delta.Y * -16);
+                e.Handled = true;
+            }
+            base.OnPointerWheelChanged(e);
         }
 
 
