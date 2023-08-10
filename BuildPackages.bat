@@ -1,16 +1,20 @@
 @echo off
 
-IF not exist Packages (
-	mkdir Packages
+if exist Packages (
+	rmdir Packages /s /q
+)
+mkdir Packages
+if %ERRORLEVEL% neq 0 ( 
+   exit
 )
 
 dotnet build Core.Tests -c Release
-IF %ERRORLEVEL% NEQ 0 ( 
+if %ERRORLEVEL% neq 0 ( 
    exit
 )
 
 dotnet build SyntaxHighlighting -c Release
-IF %ERRORLEVEL% NEQ 0 ( 
+if %ERRORLEVEL% neq 0 ( 
    exit
 )
 
