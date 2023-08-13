@@ -2155,7 +2155,7 @@
 						<Image 
 							Classes="Icon" 
 							Height="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveLeft.Light}"
+							Source="{DynamicResource Image/Icon.MoveLeft}"
 							Width="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton
@@ -2173,7 +2173,7 @@
 						<Image
 							Classes="Icon"
 							Height="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveRight.Light}"
+							Source="{DynamicResource Image/Icon.MoveRight}"
 							Width="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 				</Panel>
@@ -2793,7 +2793,7 @@
 						<Image
 							Classes="Icon"
 							Height="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveLeft.Light}"
+							Source="{DynamicResource Image/Icon.MoveLeft}"
 							Width="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton Name="PART_ScrollRightButton"
@@ -2810,7 +2810,7 @@
 						<Image
 							Classes="Icon"
 							Height="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveRight.Light}"
+							Source="{DynamicResource Image/Icon.MoveRight}"
 							Width="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton Name="PART_ScrollUpButton"
@@ -2828,7 +2828,7 @@
 						<Image
 							Classes="Icon"
 							Height="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveUp.Light}"
+							Source="{DynamicResource Image/Icon.MoveUp}"
 							Width="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton Name="PART_ScrollDownButton"
@@ -2846,7 +2846,7 @@
 						<Image
 							Classes="Icon"
 							Height="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveDown.Light}"
+							Source="{DynamicResource Image/Icon.MoveDown}"
 							Width="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 				</Panel>
