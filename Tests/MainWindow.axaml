@@ -35,49 +35,53 @@
 
 	<DockPanel>
 
-		<Border Classes="StatusBar">
-			<StackPanel Orientation="Horizontal">
-				<TextBlock Classes="StatusBar_TextBlock" Text="{DynamicResource String/Common.OK}"/>
-				<Separator Classes="StatusBar_Separator"/>
-				<TextBlock Classes="StatusBar_TextBlock" Text="{DynamicResource String/Common.Cancel}"/>
+		<!-- Status bar -->
+		<Panel DockPanel.Dock="Bottom">
+			<Border Classes="StatusBar">
+				<StackPanel Orientation="Horizontal">
+					<TextBlock Classes="StatusBar_TextBlock" Text="{DynamicResource String/Common.OK}"/>
+					<Separator Classes="StatusBar_Separator"/>
+					<TextBlock Classes="StatusBar_TextBlock" Text="{DynamicResource String/Common.Cancel}"/>
 
-				<Separator Classes="StatusBar_Separator"/>
-				<Image Classes="StatusBar_Icon">
-					<DrawingImage>
-						<GeometryDrawing Brush="{StaticResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.File.Text.Outline}"/>
-					</DrawingImage>
-				</Image>
+					<Separator Classes="StatusBar_Separator"/>
+					<Image Classes="StatusBar_Icon">
+						<DrawingImage>
+							<GeometryDrawing Brush="{StaticResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.File.Text.Outline}"/>
+						</DrawingImage>
+					</Image>
 
-				<Separator Classes="StatusBar_Separator"/>
-				<Image Classes="StatusBar_IconWithText">
-					<DrawingImage>
-						<GeometryDrawing Brush="{StaticResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.Folder.Outline}"/>
-					</DrawingImage>
-				</Image>
-				<TextBlock Classes="StatusBar_TextBlock" Text="Text of icon"/>
+					<Separator Classes="StatusBar_Separator"/>
+					<Image Classes="StatusBar_IconWithText">
+						<DrawingImage>
+							<GeometryDrawing Brush="{StaticResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.Folder.Outline}"/>
+						</DrawingImage>
+					</Image>
+					<TextBlock Classes="StatusBar_TextBlock" Text="Text of icon"/>
 
-				<Separator Classes="StatusBar_Separator"/>
-				<TextBlock Classes="StatusBar_TextBlock" Text="Text with arrow"/>
-				<Image Classes="StatusBar_DropDownIcon">
-					<DrawingImage>
-						<GeometryDrawing Brush="{StaticResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.MoveUp}"/>
-					</DrawingImage>
-				</Image>
+					<Separator Classes="StatusBar_Separator"/>
+					<TextBlock Classes="StatusBar_TextBlock" Text="Text with arrow"/>
+					<Image Classes="StatusBar_DropDownIcon">
+						<DrawingImage>
+							<GeometryDrawing Brush="{StaticResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.MoveUp}"/>
+						</DrawingImage>
+					</Image>
 
-				<Separator Classes="StatusBar_Separator"/>
-				<Button Classes="StatusBar_Button">Button</Button>
-				<Button Classes="StatusBar_Button" IsEnabled="False">Button</Button>
+					<Separator Classes="StatusBar_Separator"/>
+					<Button Classes="StatusBar_Button">Button</Button>
+					<Button Classes="StatusBar_Button" IsEnabled="False">Button</Button>
 
-				<Separator Classes="StatusBar_Separator"/>
-				<ToggleButton Classes="StatusBar_ToggleButton">ToggleButton</ToggleButton>
-				<ToggleButton Classes="StatusBar_ToggleButton" IsEnabled="False">ToggleButton</ToggleButton>
-				<ToggleButton Classes="StatusBar_ToggleButton" IsChecked="True" IsEnabled="False">ToggleButton</ToggleButton>
+					<Separator Classes="StatusBar_Separator"/>
+					<ToggleButton Classes="StatusBar_ToggleButton">ToggleButton</ToggleButton>
+					<ToggleButton Classes="StatusBar_ToggleButton" IsEnabled="False">ToggleButton</ToggleButton>
+					<ToggleButton Classes="StatusBar_ToggleButton" IsChecked="True" IsEnabled="False">ToggleButton</ToggleButton>
 
-				<Separator Classes="StatusBar_Separator"/>
-				<RepeatButton Classes="StatusBar_RepeatButton">RepeatButton</RepeatButton>
-				<RepeatButton Classes="StatusBar_RepeatButton" IsEnabled="False">RepeatButton</RepeatButton>
-			</StackPanel>
-		</Border>
+					<Separator Classes="StatusBar_Separator"/>
+					<RepeatButton Classes="StatusBar_RepeatButton">RepeatButton</RepeatButton>
+					<RepeatButton Classes="StatusBar_RepeatButton" IsEnabled="False">RepeatButton</RepeatButton>
+				</StackPanel>
+			</Border>
+			<Line Classes="Shadow" VerticalAlignment="Top"/>
+		</Panel>
 
 		<Panel>
 			<appControls:TabControl Name="tabControl" DragDrop.AllowDrop="True" DragEnterItem="OnDragEnterTabItem" DragLeaveItem="OnDragLeaveTabItem" DragOverItem="OnDragOverTabItem" DropOnItem="OnDropOnTabItem" ItemDragged="OnTabItemDragged">
@@ -142,124 +146,132 @@
 								</ContextMenu>
 							</StackPanel.ContextMenu>
 
-							<Menu>
+							<!-- Menu and ToolBar -->
+							<Panel>
+								<StackPanel>
+									
+									<Menu>
 
-								<MenuItem Header="File">
-									<MenuItem Header="Sub Item"/>
-									<MenuItem Header="Sub Item"/>
-									<Separator/>
-									<MenuItem Header="Sub Item"/>
-									<MenuItem Header="Sub Item"/>
-								</MenuItem>
+										<MenuItem Header="File">
+											<MenuItem Header="Sub Item"/>
+											<MenuItem Header="Sub Item"/>
+											<Separator/>
+											<MenuItem Header="Sub Item"/>
+											<MenuItem Header="Sub Item"/>
+										</MenuItem>
 
-								<MenuItem Header="Edit">
-									<MenuItem.Icon>
-										<Image Classes="MenuItem_Icon" Source="{DynamicResource Image/Icon.Edit}"/>
-									</MenuItem.Icon>
-								</MenuItem>
+										<MenuItem Header="Edit">
+											<MenuItem.Icon>
+												<Image Classes="MenuItem_Icon" Source="{DynamicResource Image/Icon.Edit}"/>
+											</MenuItem.Icon>
+										</MenuItem>
 
-							</Menu>
+									</Menu>
 
-							<!-- Toolbar -->
-							<Border Classes="ToolBar">
-								<appControls:ToolBarScrollViewer Name="toolBarScrollViewer">
-									<Grid Background="{x:Static Brushes.Transparent}" ColumnDefinitions="Auto,*,Auto">
-										<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
+									<!-- Toolbar -->
+									<Border Classes="ToolBar">
+										<appControls:ToolBarScrollViewer Name="toolBarScrollViewer">
+											<Grid Background="{x:Static Brushes.Transparent}" ColumnDefinitions="Auto,*,Auto">
+												<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
 
-											<Button Classes="ToolBar_Button" Command="{Binding $parent[Window].ShowAppInfoDialogCommand}" ToolTip.Tip="Tool tip">
-												<Image Classes="Icon" Source="{StaticResource Image/Icon.Panel.Right}"/>
-											</Button>
-											<Button Classes="ToolBar_Button" ToolTip.Tip="Tool tip">
-												<Image Classes="Icon" Source="{StaticResource Image/Icon.Sliders}"/>
-											</Button>
-											<Button Classes="ToolBar_Button">
-												<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
-											</Button>
-											<Button Classes="ToolBar_Button" IsEnabled="{Binding #toolBarToggleButton.IsChecked}">
-												<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
-											</Button>
+													<Button Classes="ToolBar_Button" Command="{Binding $parent[Window].ShowAppInfoDialogCommand}" ToolTip.Tip="Tool tip">
+														<Image Classes="Icon" Source="{StaticResource Image/Icon.Panel.Right}"/>
+													</Button>
+													<Button Classes="ToolBar_Button" ToolTip.Tip="Tool tip">
+														<Image Classes="Icon" Source="{StaticResource Image/Icon.Sliders}"/>
+													</Button>
+													<Button Classes="ToolBar_Button">
+														<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
+													</Button>
+													<Button Classes="ToolBar_Button" IsEnabled="{Binding #toolBarToggleButton.IsChecked}">
+														<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
+													</Button>
 
-											<Button Classes="ToolBar_Button_WithDropDownButton">
-												<Image Classes="Icon" Source="{StaticResource Image/Icon.Star}"/>
-											</Button>
-											<ToggleButton Classes="ToolBar_DropDownButton">
-												<Panel>
-													<Image Classes="ToolBar_DropDownButtonIcon" IsVisible="{Binding !$parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.MoveDown}"/>
-													<Image Classes="ToolBar_DropDownButtonIcon" IsVisible="{Binding $parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.MoveDown.Light}"/>
-												</Panel>
-											</ToggleButton>
-
-											<Panel>
-												<TextBox Classes="ToolBar_TextBox_WithInPlaceAction" Width="100"/>
-												<StackPanel Classes="TextBox_InPlaceActions">
-													<ToggleButton Classes="TextBox_InPlaceAction">
-														<Image Classes="Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
+													<Button Classes="ToolBar_Button_WithDropDownButton">
+														<Image Classes="Icon" Source="{StaticResource Image/Icon.Star}"/>
+													</Button>
+													<ToggleButton Classes="ToolBar_DropDownButton">
+														<Panel>
+															<Image Classes="ToolBar_DropDownButtonIcon" IsVisible="{Binding !$parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.MoveDown}"/>
+															<Image Classes="ToolBar_DropDownButtonIcon" IsVisible="{Binding $parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.MoveDown.Light}"/>
+														</Panel>
 													</ToggleButton>
+
+													<Panel>
+														<TextBox Classes="ToolBar_TextBox_WithInPlaceAction" Width="100"/>
+														<StackPanel Classes="TextBox_InPlaceActions">
+															<ToggleButton Classes="TextBox_InPlaceAction">
+																<Image Classes="Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
+															</ToggleButton>
+														</StackPanel>
+													</Panel>
+													<TextBox Classes="ToolBar_TextBox" Width="50" IsEnabled="False"/>
+
+													<ToggleButton Name="toolBarToggleButton" Classes="ToolBar_ToggleButton" ToolTip.Tip="This is tooltip">
+														<Image Classes="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
+													</ToggleButton>
+
+													<RepeatButton Classes="ToolBar_RepeatButton" ToolTip.Tip="This is tooltip">
+														<Image Classes="Icon" Source="{StaticResource Image/Icon.Add}"/>
+													</RepeatButton>
+
+													<Separator Classes="ToolBar_Separator"/>
+
+													<ToggleButton Classes="ToolBar_ToggleButton" IsEnabled="False">
+														<Image Classes="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
+													</ToggleButton>
+
+													<ComboBox Classes="ToolBar_ComboBox" Width="100">
+														12345
+													</ComboBox>
+													<ComboBox Classes="ToolBar_ComboBox" Width="100" IsEnabled="False">
+														6789
+													</ComboBox>
+
+													<Button Classes="ToolBar_Button" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}">
+														<Image Classes="Icon" Source="{StaticResource Image/Icon.Lightbulb}"/>
+													</Button>
+
+													<RepeatButton Classes="ToolBar_RepeatButton" IsEnabled="False">
+														<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
+													</RepeatButton>
+
+													<TextBlock Classes="ToolBar_TextBlock" IsEnabled="False" Text="test:"/>
+
 												</StackPanel>
-											</Panel>
-											<TextBox Classes="ToolBar_TextBox" Width="50" IsEnabled="False"/>
 
-											<ToggleButton Name="toolBarToggleButton" Classes="ToolBar_ToggleButton" ToolTip.Tip="This is tooltip">
-												<Image Classes="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
-											</ToggleButton>
-
-											<RepeatButton Classes="ToolBar_RepeatButton" ToolTip.Tip="This is tooltip">
-												<Image Classes="Icon" Source="{StaticResource Image/Icon.Add}"/>
-											</RepeatButton>
-
-											<Separator Classes="ToolBar_Separator"/>
-
-											<ToggleButton Classes="ToolBar_ToggleButton" IsEnabled="False">
-												<Image Classes="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
-											</ToggleButton>
-
-											<ComboBox Classes="ToolBar_ComboBox" Width="100">
-												12345
-											</ComboBox>
-											<ComboBox Classes="ToolBar_ComboBox" Width="100" IsEnabled="False">
-												6789
-											</ComboBox>
-
-											<Button Classes="ToolBar_Button" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}">
-												<Image Classes="Icon" Source="{StaticResource Image/Icon.Lightbulb}"/>
-											</Button>
-
-											<RepeatButton Classes="ToolBar_RepeatButton" IsEnabled="False">
-												<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
-											</RepeatButton>
-
-											<TextBlock Classes="ToolBar_TextBlock" IsEnabled="False" Text="test:"/>
-
-										</StackPanel>
-
-										<Panel Grid.Column="1">
-											<TextBox Name="toolBarTextBox" Classes="ToolBar_TextBox_With2InPlaceActions" Watermark="TextBox with in-place actions"/>
-											<StackPanel Classes="TextBox_InPlaceActions">
-												<Button Classes="TextBox_InPlaceAction">
-													<Image Classes="Icon" Source="{DynamicResource Image/Icon.Save}"/>
-												</Button>
-												<Button Classes="TextBox_InPlaceAction">
-													<Image Classes="Icon" Source="{DynamicResource Image/Icon.Close}"/>
-												</Button>
-											</StackPanel>
-										</Panel>
-
-										<StackPanel Grid.Column="2" HorizontalAlignment="Stretch" Orientation="Horizontal">
-											<Button Classes="ToolBar_Button">
-												<Panel Classes="Icon">
-													<Image Classes="Icon" Source="{DynamicResource Image/Icon.More}"/>
-													<Border Classes="ToolBar_NotificationIndicator" IsVisible="{Binding $parent[Window].Application.UpdateInfo, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}">
-														<Image Classes="ToolBar_NotificationIndicator" Source="{StaticResource Image/Icon.Update.Colored}"/>
-													</Border>
-													<Border Classes="ToolBar_NotificationIndicator" IsVisible="{Binding !$parent[Window].Application.UpdateInfo, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}">
-														<Image Classes="ToolBar_NotificationIndicator" Source="{StaticResource Image/Icon.NotificationIndicator.Success}"/>
-													</Border>
+												<Panel Grid.Column="1">
+													<TextBox Name="toolBarTextBox" Classes="ToolBar_TextBox_With2InPlaceActions" Watermark="TextBox with in-place actions"/>
+													<StackPanel Classes="TextBox_InPlaceActions">
+														<Button Classes="TextBox_InPlaceAction">
+															<Image Classes="Icon" Source="{DynamicResource Image/Icon.Save}"/>
+														</Button>
+														<Button Classes="TextBox_InPlaceAction">
+															<Image Classes="Icon" Source="{DynamicResource Image/Icon.Close}"/>
+														</Button>
+													</StackPanel>
 												</Panel>
-											</Button>
-										</StackPanel>
-									</Grid>
-								</appControls:ToolBarScrollViewer>
-							</Border>
+
+												<StackPanel Grid.Column="2" HorizontalAlignment="Stretch" Orientation="Horizontal">
+													<Button Classes="ToolBar_Button">
+														<Panel Classes="Icon">
+															<Image Classes="Icon" Source="{DynamicResource Image/Icon.More}"/>
+															<Border Classes="ToolBar_NotificationIndicator" IsVisible="{Binding $parent[Window].Application.UpdateInfo, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}">
+																<Image Classes="ToolBar_NotificationIndicator" Source="{StaticResource Image/Icon.Update.Colored}"/>
+															</Border>
+															<Border Classes="ToolBar_NotificationIndicator" IsVisible="{Binding !$parent[Window].Application.UpdateInfo, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}">
+																<Image Classes="ToolBar_NotificationIndicator" Source="{StaticResource Image/Icon.NotificationIndicator.Success}"/>
+															</Border>
+														</Panel>
+													</Button>
+												</StackPanel>
+											</Grid>
+										</appControls:ToolBarScrollViewer>
+									</Border>
+									
+								</StackPanel>
+								<Line Classes="Shadow" VerticalAlignment="Bottom"/>
+							</Panel>
 
 							<!-- Accent colors -->
 							<StackPanel Height="30" Margin="5" Orientation="Horizontal">
@@ -304,6 +316,14 @@
 								<TextBlock Background="Red" BaselineOffset="5" Text="ABC abjg 中文"/>
 							</Button>
 							<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
+							
+							<!-- Shadows -->
+							<Panel Height="100" HorizontalAlignment="Left" Margin="5" Width="100">
+								<Line Classes="Shadow" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+								<Line Classes="Shadow" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
+								<Line Classes="Shadow" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+								<Line Classes="Shadow" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
+							</Panel>
 
 							<ScrollBar AllowAutoHide="False" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" ViewportSize="10" Width="300"/>
 

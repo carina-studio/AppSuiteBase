@@ -235,6 +235,12 @@
 	<!-- Separator -->
 	<Color x:Key="Color/Separator.Background">#000000</Color>
 	<SolidColorBrush x:Key="Brush/Separator.Background" Color="{DynamicResource Color/Separator.Background}"/>
+	
+	<!-- Shadow -->
+	<SolidColorBrush x:Key="Brush/Shadow.Darken" Color="{DynamicResource Color/Shadow.Darken}"/>
+	<SolidColorBrush x:Key="Brush/Shadow.Lighten" Color="{DynamicResource Color/Shadow.Lighten}"/>
+	<Color x:Key="Color/Shadow.Darken">#1f000000</Color>
+	<Color x:Key="Color/Shadow.Lighten">#3fffffff</Color>
 
 	<!-- StatusBar -->
 	<Color x:Key="Color/StatusBar.Background.Inactive">#ffffff</Color>

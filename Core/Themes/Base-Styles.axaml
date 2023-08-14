@@ -1965,6 +1965,42 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MenuFlyout.Separator.Margin}"/>
 		<Setter Property="Opacity" Value="0.5"/>
 	</Style>
+	
+	<!-- Shadow -->
+	<Style Selector="Line.Shadow">
+		<Setter Property="Stretch" Value="Fill"/>
+		<Setter Property="StrokeThickness" Value="1"/>
+	</Style>
+	<Style Selector="Line[VerticalAlignment=Bottom].Shadow">
+		<Setter Property="EndPoint" Value="5,0"/>
+		<Setter Property="StartPoint" Value="0,0"/>
+		<Setter Property="Stroke" Value="{DynamicResource Brush/Shadow.Darken}"/>
+	</Style>
+	<Style Selector="Line[HorizontalAlignment=Left].Shadow">
+		<Setter Property="EndPoint" Value="0,5"/>
+		<Setter Property="StartPoint" Value="0,0"/>
+		<Setter Property="Stroke">
+			<LinearGradientBrush EndPoint="0%,100%" StartPoint="0%,0%">
+				<GradientStop Color="{DynamicResource Color/Shadow.Lighten}" Offset="0"/>
+				<GradientStop Color="{DynamicResource Color/Shadow.Darken}" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+	</Style>
+	<Style Selector="Line[HorizontalAlignment=Right].Shadow">
+		<Setter Property="EndPoint" Value="0,5"/>
+		<Setter Property="StartPoint" Value="0,0"/>
+		<Setter Property="Stroke">
+			<LinearGradientBrush EndPoint="0%,100%" StartPoint="0%,0%">
+				<GradientStop Color="{DynamicResource Color/Shadow.Lighten}" Offset="0"/>
+				<GradientStop Color="{DynamicResource Color/Shadow.Darken}" Offset="1"/>
+			</LinearGradientBrush>
+		</Setter>
+	</Style>
+	<Style Selector="Line[VerticalAlignment=Top].Shadow">
+		<Setter Property="EndPoint" Value="5,0"/>
+		<Setter Property="StartPoint" Value="0,0"/>
+		<Setter Property="Stroke" Value="{DynamicResource Brush/Shadow.Lighten}"/>
+	</Style>
 
 	<!-- StatusBar -->
 	<Style Selector="Border.StatusBar">
