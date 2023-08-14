@@ -60,6 +60,7 @@
 
 	<!-- StatusBar -->
 	<Color x:Key="Color/StatusBar.Background.Inactive">#8a8a8a</Color>
+	<StaticResourceExtension x:Key="Color/StatusBar.Border" ResourceKey="SystemAccentColorDark1"/>
 
 	<!-- TabControl -->
 	<Color x:Key="Color/TabControl.TabStrip.Border">#20000000</Color>
@@ -84,10 +85,7 @@
 	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#c7c7c7</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#b7b7b7</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Transparent">#00c7c7c7</Color>
-
-	<!-- ToolTip -->
-	<StaticResourceExtension x:Key="Color/ToolTip.Background" ResourceKey="Color/Button.Background"/>
-	<Color x:Key="Color/ToolTip.Border">#40000000</Color>
+	<StaticResource x:Key="Color/ToolBar.Border" ResourceKey="Color/ToolBar.Background"/>
 
 	<!-- TreeViewItem -->
 	<SolidColorBrush x:Key="Brush/TreeViewItem.Foreground.Selected" Color="#ffffff"/>

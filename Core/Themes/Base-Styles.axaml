@@ -1069,7 +1069,7 @@
 			<ControlTemplate>
 				<Panel Name="PART_Root">
 					<controls:Image Name="PART_Background"/>
-					<Border Name="PART_TutorialContainer" Background="{DynamicResource ToolTipBackground}" BorderBrush="{DynamicResource ToolTipBorderBrush}" BorderThickness="1" BoxShadow="{DynamicResource BoxShadows/FullWindowTutorialPresenter.Tutorial}" CornerRadius="{DynamicResource ControlCornerRadius}" Padding="{DynamicResource Thickness/FullWindowTutorialPresenter.Tutorial.Padding}">
+					<Border Name="PART_TutorialContainer" Background="{DynamicResource ToolTipBackground}" BorderBrush="{DynamicResource ToolTipBorderBrush}" BorderThickness="1" BoxShadow="{DynamicResource BoxShadows/Shadow}" CornerRadius="{DynamicResource ControlCornerRadius}" Padding="{DynamicResource Thickness/FullWindowTutorialPresenter.Tutorial.Padding}">
 						<Border.RenderTransform>
 							<ScaleTransform ScaleX="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.InitScaleX}" ScaleY="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.InitScaleY}">
 								<ScaleTransform.Transitions>
@@ -1569,7 +1569,7 @@
 				<Border Background="{DynamicResource ToolTipBackground}"
 				        BorderBrush="{DynamicResource ToolTipBorderBrush}"
 				        BorderThickness="1"
-				        BoxShadow="{DynamicResource BoxShadows/NotificationPresenter.Notification}"
+				        BoxShadow="{DynamicResource BoxShadows/Shadow}"
 				        CornerRadius="{DynamicResource ControlCornerRadius}" 
 				        Margin="{DynamicResource Thickness/NotificationPresenter.Notification.Margin}"
 				        Opacity="0"
@@ -2000,6 +2000,66 @@
 	</Style>
 	
 	<!-- Shadow -->
+	<Style Selector="Border.Shadow_Bottom">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Bottom}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+	</Style>
+	<Style Selector="Border.Shadow_Bottom_Heavy">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Bottom.Heavy}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+	</Style>
+	<Style Selector="Border.Shadow_Bottom_Light">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Bottom.Light}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+	</Style>
+	<Style Selector="Border.Shadow_Left">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Left}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size}"/>
+	</Style>
+	<Style Selector="Border.Shadow_Left_Heavy">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Left.Heavy}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
+	</Style>
+	<Style Selector="Border.Shadow_Left_Light">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Left.Light}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+	</Style>
+	<Style Selector="Border.Shadow_Right">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Right}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size}"/>
+	</Style>
+	<Style Selector="Border.Shadow_Right_Heavy">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Right.Heavy}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
+	</Style>
+	<Style Selector="Border.Shadow_Right_Light">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Right.Light}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+	</Style>
+	<Style Selector="Border.Shadow_Top">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Top}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+	</Style>
+	<Style Selector="Border.Shadow_Top_Heavy">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Top.Heavy}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+	</Style>
+	<Style Selector="Border.Shadow_Top_Light">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Top.Light}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+	</Style>
 	<Style Selector="Line.Shadow">
 		<Setter Property="Stretch" Value="Fill"/>
 		<Setter Property="StrokeThickness" Value="1"/>
@@ -2931,7 +2991,7 @@
 			<ControlTemplate>
 				<Border Name="PART_LayoutRoot"
 				        BorderThickness="{TemplateBinding BorderThickness}"
-				        BoxShadow="{StaticResource BoxShadows/ToolTip}"
+				        BoxShadow="{StaticResource BoxShadows/Shadow.Light}"
 				        Background="{TemplateBinding Background}"
 				        BorderBrush="{TemplateBinding BorderBrush}"
 				        Margin="{StaticResource Thickness/ToolTip.Margin}"

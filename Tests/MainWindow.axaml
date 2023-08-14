@@ -80,7 +80,7 @@
 					<RepeatButton Classes="StatusBar_RepeatButton" IsEnabled="False">RepeatButton</RepeatButton>
 				</StackPanel>
 			</Border>
-			<Line Classes="Shadow" VerticalAlignment="Top"/>
+			<Line Classes="Shadow" Stroke="{DynamicResource Brush/StatusBar.Border}" VerticalAlignment="Top"/>
 		</Panel>
 
 		<Panel>
@@ -270,8 +270,9 @@
 									</Border>
 									
 								</StackPanel>
-								<Line Classes="Shadow" VerticalAlignment="Bottom"/>
+								<Line Classes="Shadow" Stroke="{DynamicResource Brush/ToolBar.Border}" VerticalAlignment="Bottom"/>
 							</Panel>
+							<Border Classes="Shadow_Bottom"/>
 
 							<!-- Accent colors -->
 							<StackPanel Height="30" Margin="5" Orientation="Horizontal">
@@ -318,12 +319,38 @@
 							<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
 							
 							<!-- Shadows -->
-							<Panel Height="100" HorizontalAlignment="Left" Margin="5" Width="100">
-								<Line Classes="Shadow" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-								<Line Classes="Shadow" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
-								<Line Classes="Shadow" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
-								<Line Classes="Shadow" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
-							</Panel>
+							<WrapPanel>
+								<Panel Height="100" HorizontalAlignment="Left" Margin="5" Width="100">
+									<Line Classes="Shadow" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+									<Line Classes="Shadow" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
+									<Line Classes="Shadow" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+									<Line Classes="Shadow" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
+								</Panel>
+								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Light}" CornerRadius="5" Height="100" Margin="5,5,0,5" Width="100"/>
+								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow}" CornerRadius="5" Height="100" Margin="20,5,0,5" Width="100"/>
+								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Heavy}" CornerRadius="5" Height="100" Margin="30,5,0,5" Width="100"/>
+								<Grid Margin="30,0,0,0" ColumnDefinitions="Auto,100,Auto" RowDefinitions="Auto,100,Auto">
+									<Border Background="{x:Static Brushes.White}" Grid.Column="1" Grid.Row="1"/>
+									<Border Classes="Shadow_Left_Light" Grid.Column="0" Grid.Row="1"/>
+									<Border Classes="Shadow_Top_Light" Grid.Column="1" Grid.Row="0"/>
+									<Border Classes="Shadow_Right_Light" Grid.Column="2" Grid.Row="1"/>
+									<Border Classes="Shadow_Bottom_Light" Grid.Column="1" Grid.Row="2"/>
+								</Grid>
+								<Grid Margin="20,0,0,0" ColumnDefinitions="Auto,100,Auto" RowDefinitions="Auto,100,Auto">
+									<Border Background="{x:Static Brushes.White}" Grid.Column="1" Grid.Row="1"/>
+									<Border Classes="Shadow_Left" Grid.Column="0" Grid.Row="1"/>
+									<Border Classes="Shadow_Top" Grid.Column="1" Grid.Row="0"/>
+									<Border Classes="Shadow_Right" Grid.Column="2" Grid.Row="1"/>
+									<Border Classes="Shadow_Bottom" Grid.Column="1" Grid.Row="2"/>
+								</Grid>
+								<Grid Margin="30,0,0,0" ColumnDefinitions="Auto,100,Auto" RowDefinitions="Auto,100,Auto">
+									<Border Background="{x:Static Brushes.White}" Grid.Column="1" Grid.Row="1"/>
+									<Border Classes="Shadow_Left_Heavy" Grid.Column="0" Grid.Row="1"/>
+									<Border Classes="Shadow_Top_Heavy" Grid.Column="1" Grid.Row="0"/>
+									<Border Classes="Shadow_Right_Heavy" Grid.Column="2" Grid.Row="1"/>
+									<Border Classes="Shadow_Bottom_Heavy" Grid.Column="1" Grid.Row="2"/>
+								</Grid>
+							</WrapPanel>
 
 							<ScrollBar AllowAutoHide="False" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" ViewportSize="10" Width="300"/>
 
@@ -745,28 +772,36 @@
 					<TabItem.Header>
 						<TextBlock Text="ToolBar"/>
 					</TabItem.Header>
-					<Border Classes="ToolBar" HorizontalAlignment="Left">
-						<appControls:ToolBarScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-							<StackPanel Background="{x:Static Brushes.Transparent}">
-								<Button Classes="ToolBar_Button">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
-								</Button>
-								<Button Classes="ToolBar_Button">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.OpenFile}"/>
-								</Button>
-								<Button Classes="ToolBar_Button">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.Save}"/>
-								</Button>
-								<Button Classes="ToolBar_Button">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
-								</Button>
-								<Separator Classes="ToolBar_Separator_Horizontal"/>
-								<Button Classes="ToolBar_Button">
-									<Image Classes="Icon" Source="{StaticResource Image/Icon.More}"/>
-								</Button>
-							</StackPanel>
-						</appControls:ToolBarScrollViewer>
-					</Border>
+					<DockPanel Background="{DynamicResource Brush/WorkingArea.Background}">
+						
+						<Border Classes="ToolBar" DockPanel.Dock="Left" HorizontalAlignment="Left" ZIndex="1">
+							<appControls:ToolBarScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+								<StackPanel Background="{x:Static Brushes.Transparent}">
+									<Button Classes="ToolBar_Button">
+										<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
+									</Button>
+									<Button Classes="ToolBar_Button">
+										<Image Classes="Icon" Source="{StaticResource Image/Icon.OpenFile}"/>
+									</Button>
+									<Button Classes="ToolBar_Button">
+										<Image Classes="Icon" Source="{StaticResource Image/Icon.Save}"/>
+									</Button>
+									<Button Classes="ToolBar_Button">
+										<Image Classes="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
+									</Button>
+									<Separator Classes="ToolBar_Separator_Horizontal"/>
+									<Button Classes="ToolBar_Button">
+										<Image Classes="Icon" Source="{StaticResource Image/Icon.More}"/>
+									</Button>
+								</StackPanel>
+							</appControls:ToolBarScrollViewer>
+						</Border>
+						
+						<Border Classes="ToolBar" DockPanel.Dock="Top" Height="50" VerticalAlignment="Top" ZIndex="0">
+							
+						</Border>
+						
+					</DockPanel>
 				</TabItem>
 
 				<TabItem>
@@ -891,6 +926,8 @@
 				</TabItem>
 
 			</appControls:TabControl>
+			
+			<Border Classes="Shadow_Top" VerticalAlignment="Bottom"/>
 			
 			<appControls:NotificationPresenter Name="notificationPresenter"/>
 			

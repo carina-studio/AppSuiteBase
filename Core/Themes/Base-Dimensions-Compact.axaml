@@ -80,7 +80,6 @@
 	<Thickness x:Key="ExpanderHeaderPadding">5</Thickness>
 
 	<!-- FullWindowTutorialPresenter -->
-	<BoxShadows x:Key="BoxShadows/FullWindowTutorialPresenter.Tutorial">0 0 10 0 #3f000000</BoxShadows>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize">14</sys:Double>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth">200</sys:Double>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size">15</sys:Double>
@@ -131,7 +130,6 @@
 	<Thickness x:Key="Thickness/MenuItem.Padding">6,4,6,4</Thickness>
 	
 	<!-- NotificationPresenter -->
-	<BoxShadows x:Key="BoxShadows/NotificationPresenter.Notification">0 0 10 0 #3f000000</BoxShadows>
 	<sys:Double x:Key="Double/NotificationPresenter.Notification.Dismiss.Size">15</sys:Double>
 	<sys:Double x:Key="Double/NotificationPresenter.Notification.InitTranslation.Y">15</sys:Double>
 	<sys:Double x:Key="Double/NotificationPresenter.Notification.Width">300</sys:Double>
@@ -151,6 +149,14 @@
 	<!-- ScrollViewer -->
 	<Thickness x:Key="Thickness/ScrollViewer.ScrollBar.Margin.Horizontal">0</Thickness>
 	<Thickness x:Key="Thickness/ScrollViewer.ScrollBar.Margin.Vertical">0</Thickness>
+	
+	<!-- Shadow -->
+	<BoxShadows x:Key="BoxShadows/Shadow">0 0 10 0 #4f000000</BoxShadows>
+	<BoxShadows x:Key="BoxShadows/Shadow.Heavy">0 0 15 0 #5f000000</BoxShadows>
+	<BoxShadows x:Key="BoxShadows/Shadow.Light">0 0 8 0 #3f000000</BoxShadows>
+	<sys:Double x:Key="Double/Shadow.Size">10</sys:Double>
+	<sys:Double x:Key="Double/Shadow.Size.Heavy">15</sys:Double>
+	<sys:Double x:Key="Double/Shadow.Size.Light">8</sys:Double>
 
 	<!-- StatusBar -->
 	<Thickness x:Key="Thickness/StatusBar.Item.Margin">1,3,1,3</Thickness>
