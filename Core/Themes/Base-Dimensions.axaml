@@ -37,7 +37,11 @@
 	<Thickness x:Key="Thickness/BrowseButton.Padding">8</Thickness>
 
 	<!-- Button -->
+	<sys:Double x:Key="Double/Button.DropDownIcon.Size">12</sys:Double>
+	<sys:Double x:Key="Double/Button.Icon.Size">14</sys:Double>
 	<Thickness x:Key="Thickness/Button.Border">1</Thickness>
+	<Thickness x:Key="Thickness/Button.Icon.Margin">0,0,5,0</Thickness>
+	<Thickness x:Key="Thickness/Button.DropDownIcon.Margin">8,0,0,0</Thickness>
 
 	<!-- ButtonSpinner -->
 	<sys:Double x:Key="Double/ButtonSpinner.Button.Icon.Size">12</sys:Double>

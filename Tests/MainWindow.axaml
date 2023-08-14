@@ -62,7 +62,7 @@
 					<TextBlock Classes="StatusBar_TextBlock" Text="Text with arrow"/>
 					<Image Classes="StatusBar_DropDownIcon">
 						<DrawingImage>
-							<GeometryDrawing Brush="{StaticResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.MoveUp}"/>
+							<GeometryDrawing Brush="{StaticResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.DropDown.Up}"/>
 						</DrawingImage>
 					</Image>
 
@@ -192,8 +192,8 @@
 													</Button>
 													<ToggleButton Classes="ToolBar_DropDownButton">
 														<Panel>
-															<Image Classes="ToolBar_DropDownButtonIcon" IsVisible="{Binding !$parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.MoveDown}"/>
-															<Image Classes="ToolBar_DropDownButtonIcon" IsVisible="{Binding $parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.MoveDown.Light}"/>
+															<Image Classes="ToolBar_DropDownButtonIcon" IsVisible="{Binding !$parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.DropDown.Down}"/>
+															<Image Classes="ToolBar_DropDownButtonIcon" IsVisible="{Binding $parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.DropDown.Down.Light}"/>
 														</Panel>
 													</ToggleButton>
 
@@ -484,11 +484,37 @@
 								</StackPanel>
 							</Border>
 							
+							<!-- Buttons -->
 							<WrapPanel Orientation="Horizontal">
 								<Button Content="Button" Margin="5"/>
 								<Button Content="Button" IsEnabled="False" Margin="5"/>
 								<Button Classes="accent" Content="Button" Margin="5"/>
 								<Button Classes="accent" Content="Button" IsEnabled="False" Margin="5"/>
+								<Button Margin="5">
+									<Grid ColumnDefinitions="Auto,*">
+										<PathIcon Data=""/>
+										<Image Classes="Button_Icon" Source="{DynamicResource Image/Icon.Folder.Outline}"/>
+										<TextBlock Classes="Button_Text" Grid.Column="1" Text="Button"/>
+									</Grid>
+								</Button>
+								<Button IsEnabled="False" Margin="5">
+									<Grid ColumnDefinitions="Auto,*">
+										<Image Classes="Button_Icon" Source="{DynamicResource Image/Icon.File.Outline}"/>
+										<TextBlock Classes="Button_Text" Grid.Column="1" Text="Button"/>
+									</Grid>
+								</Button>
+								<Button Margin="5">
+									<Grid ColumnDefinitions="*,Auto">
+										<TextBlock Classes="Button_Text" Text="Button"/>
+										<Image Classes="Button_DropDownIcon" Grid.Column="1" Source="{DynamicResource Image/Icon.DropDown.Down}"/>
+									</Grid>
+								</Button>
+								<Button IsEnabled="False" Margin="5">
+									<Grid ColumnDefinitions="*,Auto">
+										<TextBlock Classes="Button_Text" Text="Button"/>
+										<Image Classes="Button_DropDownIcon" Grid.Column="1" Source="{DynamicResource Image/Icon.DropDown.Down}"/>
+									</Grid>
+								</Button>
 								<ToggleButton Content="ToggleButton" Margin="5"/>
 								<ToggleButton Content="ToggleButton" IsEnabled="False" Margin="5"/>
 								<ToggleButton Content="ToggleButton" IsChecked="True" IsEnabled="False" Margin="5"/>

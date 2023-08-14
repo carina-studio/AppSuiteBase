@@ -34,8 +34,44 @@
 	
 	<!-- Button -->
 	<Style Selector="Button">
+		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector=":is(Image).Button_DropDownIcon">
+		<Setter Property="Height" Value="{DynamicResource Double/Button.DropDownIcon.Size}"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Button.DropDownIcon.Margin}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Button.DropDownIcon.Size}"/>
+	</Style>
+	<Style Selector=":is(Image).Button_DropDownIcon:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<Style Selector=":is(Image).Button_Icon">
+		<Setter Property="Height" Value="{DynamicResource Double/Button.Icon.Size}"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Button.Icon.Margin}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Button.Icon.Size}"/>
+	</Style>
+	<Style Selector=":is(Image).Button_Icon:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<Style Selector="Panel.Button_Icon">
+		<Setter Property="Height" Value="{DynamicResource Double/Button.Icon.Size}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Button.Icon.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Button.Icon.Size}"/>
+	</Style>
+	<Style Selector=":is(TextBlock).Button_Text">
+		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+		<Setter Property="TextWrapping" Value="NoWrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 
 	<!-- ButtonSpinner -->
@@ -138,11 +174,6 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/BrowseButton.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/BrowseButton.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-	</Style>
-
-	<!-- Button -->
-	<Style Selector="Button">
-		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
 	</Style>
 
 	<!-- CaptionButtons -->
@@ -265,17 +296,19 @@
 								IsVisible="False"
 								HorizontalAlignment="Right" />
 
-						<PathIcon x:Name="DropDownGlyph"
-								Grid.Column="1"
-								UseLayoutRounding="False"
-								IsHitTestVisible="False"
-								Height="12"
-								Width="12"
-								Margin="0,0,10,0"
-								HorizontalAlignment="Right"
-								VerticalAlignment="Center"
-								Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
-								Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"/>
+						<Image x:Name="DropDownGlyph"
+						       Classes="Icon"
+						       Grid.Column="1"
+						       UseLayoutRounding="False"
+						       Height="12"
+						       Width="12"
+						       Margin="0,0,10,0"
+						       HorizontalAlignment="Right"
+						       VerticalAlignment="Center">
+							<DrawingImage>
+								<GeometryDrawing Brush="{DynamicResource ComboBoxDropDownGlyphForeground}" Geometry="{DynamicResource Geometry/Icon.DropDown.Down}"/>
+							</DrawingImage>
+						</Image>
 
 						<Popup Name="PART_Popup"
 							WindowManagerAddShadowHint="False"
@@ -2191,7 +2224,7 @@
 						<Image 
 							Classes="Icon" 
 							Height="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveLeft}"
+							Source="{DynamicResource Image/Icon.DropDown.Left}"
 							Width="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton
@@ -2209,7 +2242,7 @@
 						<Image
 							Classes="Icon"
 							Height="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveRight}"
+							Source="{DynamicResource Image/Icon.DropDown.Right}"
 							Width="{DynamicResource Double/TabControl.TabStrip.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 				</Panel>
@@ -2829,7 +2862,7 @@
 						<Image
 							Classes="Icon"
 							Height="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveLeft}"
+							Source="{DynamicResource Image/Icon.DropDown.Left}"
 							Width="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton Name="PART_ScrollRightButton"
@@ -2846,7 +2879,7 @@
 						<Image
 							Classes="Icon"
 							Height="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveRight}"
+							Source="{DynamicResource Image/Icon.DropDown.Right}"
 							Width="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton Name="PART_ScrollUpButton"
@@ -2864,7 +2897,7 @@
 						<Image
 							Classes="Icon"
 							Height="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveUp}"
+							Source="{DynamicResource Image/Icon.DropDown.Up}"
 							Width="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 					<RepeatButton Name="PART_ScrollDownButton"
@@ -2882,7 +2915,7 @@
 						<Image
 							Classes="Icon"
 							Height="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"
-							Source="{DynamicResource Image/Icon.MoveDown}"
+							Source="{DynamicResource Image/Icon.DropDown.Down}"
 							Width="{DynamicResource Double/ToolBarScrollViewer.ScrollingButton.Icon.Size}"/>
 					</RepeatButton>
 				</Panel>
