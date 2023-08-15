@@ -2,9 +2,9 @@
     <PropertyGroup>
 
         <!-- Version -->
-        <AssemblyVersion>2.3.24.810</AssemblyVersion>
-        <Version>2.3.24.810</Version>
-        <PackageVersion>2.3.24.810-dev</PackageVersion>
+        <AssemblyVersion>2.3.25.815</AssemblyVersion>
+        <Version>2.3.25.815</Version>
+        <PackageVersion>2.3.25.815-dev</PackageVersion>
 
         <!-- Other information -->
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
