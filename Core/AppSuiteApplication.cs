@@ -2359,7 +2359,7 @@ namespace CarinaStudio.AppSuite
         /// <param name="mainWindow">Closed main window.</param>
         /// <param name="viewModel">View-model of main window.</param>
         /// <returns>Task of performing operations.</returns>
-        protected virtual async Task OnMainWindowClosedAsync(Avalonia.Controls.Window mainWindow, ViewModel viewModel)
+        protected virtual async Task OnMainWindowClosedAsync(MainWindow mainWindow, ViewModel viewModel)
         {
             // save settings
             await this.SaveSettingsAsync();
