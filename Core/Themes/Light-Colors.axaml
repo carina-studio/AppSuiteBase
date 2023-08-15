@@ -11,6 +11,10 @@
 	<!-- CaptionButtons -->
 	<SolidColorBrush x:Key="Brush/CaptionButtons.Button.Background.PointerOver" Color="#1f000000"/>
 	<SolidColorBrush x:Key="Brush/CaptionButtons.Button.Background.Pressed" Color="#2f000000"/>
+	
+	<!-- ComboBox -->
+	<SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#ffffff"/>
+	<SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#cccccc"/>
 
 	<!-- ComboBoxItem -->
 	<SolidColorBrush x:Key="Brush/ComboBoxItem.Foreground.Selected" Color="#ffffff"/>
@@ -50,6 +54,10 @@
 
 	<!-- Menu -->
 	<Color x:Key="Color/Menu.Background">#e0e0e0</Color>
+	
+	<!-- MenuFlyout -->
+	<SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#ffffff"/>
+	<SolidColorBrush x:Key="MenuFlyoutPresenterBorderBrush" Color="#cccccc"/>
 
 	<!-- ObjectTextBox -->
     <SolidColorBrush x:Key="ObjectTextBoxBackgroundInvalid" Color="#ffcccc"/>

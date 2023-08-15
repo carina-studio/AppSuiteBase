@@ -319,15 +319,14 @@
 							IsLightDismissEnabled="True"
 							InheritsTransform="True">
 							<Border x:Name="PopupBorder"
-									Background="{DynamicResource ComboBoxDropDownBackground}"
-									BorderBrush="{DynamicResource ComboBoxDropDownBorderBrush}"
-									BorderThickness="{DynamicResource ComboBoxDropdownBorderThickness}"
-									Margin="0,-1,0,-1"
-									Padding="{DynamicResource ComboBoxDropdownBorderPadding}"
-									HorizontalAlignment="Stretch"
-									CornerRadius="{DynamicResource OverlayCornerRadius}">
+							        Background="{DynamicResource ComboBoxDropDownBackground}"
+							        BorderBrush="{DynamicResource ComboBoxDropDownBorderBrush}"
+							        BorderThickness="{DynamicResource ComboBoxDropdownBorderThickness}"
+							        Padding="{DynamicResource ComboBoxDropdownBorderPadding}"
+							        HorizontalAlignment="Stretch"
+							        CornerRadius="{DynamicResource OverlayCornerRadius}">
 								<ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
-											VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+								              VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
 									<ItemsPresenter Name="PART_ItemsPresenter"
 									                Margin="{DynamicResource ComboBoxDropdownContentMargin}"
 									                ItemsPanel="{TemplateBinding ItemsPanel}" />
@@ -379,6 +378,12 @@
 		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
 		<Setter Property="TextWrapping" Value="NoWrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	
+	<!-- ContextMenu -->
+	<Style Selector="ContextMenu /template/ Border">
+		<Setter Property="BoxShadow" Value="{DynamicResource BoxShadows/Shadow}"/>
+		<Setter Property="Margin" Value="15"/>
 	</Style>
 
 	<!-- DatePicker -->
@@ -1700,6 +1705,12 @@
 	<Style Selector="NumericUpDown[ButtonSpinnerLocation=Right] /template/ TextBox#PART_TextBox">
 		<Setter Property="BorderBrush" Value="{x:Null}"/>
 		<Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius, Converter={x:Static converters:CornerRadiusConverters.Left}}"/>
+	</Style>
+	
+	<!-- Popup -->
+	<Style Selector="Popup > Border">
+		<Setter Property="BoxShadow" Value="{DynamicResource BoxShadows/Shadow}"/>
+		<Setter Property="Margin" Value="15"/>
 	</Style>
 
 	<!-- RepeatButton -->

@@ -7,6 +7,10 @@
 	<Color x:Key="Color/Button.Background.PointerOver">#404040</Color>
 	<Color x:Key="Color/Button.Background.Pressed">#202020</Color>
 	<Color x:Key="Color/Button.Background.Transparent">#002d2d2d</Color>
+	
+	<!-- ComboBox -->
+	<SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="{DynamicResource Color/Button.Background}"/>
+	<SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="{DynamicResource Color/ToolTip.Border}"/>
 
 	<!-- Control -->
 	<Color x:Key="Color/Control.Border">#1effffff</Color>
@@ -40,6 +44,10 @@
 
 	<!-- Menu -->
 	<Color x:Key="Color/Menu.Background">#2c2c2c</Color>
+	
+	<!-- MenuFlyout -->
+	<SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="{DynamicResource Color/Button.Background}"/>
+	<SolidColorBrush x:Key="MenuFlyoutPresenterBorderBrush" Color="{DynamicResource Color/ToolTip.Border}"/>
 
 	<!-- Separator -->
 	<Color x:Key="Color/Separator.Background">#4fffffff</Color>
@@ -76,7 +84,7 @@
 
 	<!-- ToolTip -->
 	<StaticResourceExtension x:Key="Color/ToolTip.Background" ResourceKey="Color/Button.Background"/>
-	<Color x:Key="Color/ToolTip.Border">#2effffff</Color>
+	<Color x:Key="Color/ToolTip.Border">#1d1d1d</Color>
 
 	<!-- Window -->
 	<Color x:Key="Color/Window.Background">#202020</Color>

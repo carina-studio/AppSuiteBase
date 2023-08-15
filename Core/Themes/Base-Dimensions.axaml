@@ -48,7 +48,7 @@
 
 	<!-- ComboBox -->
 	<Thickness x:Key="ComboBoxDropdownBorderPadding">4,3,4,3</Thickness>
-	<Thickness x:Key="ComboBoxDropdownBorderThickness">1,2,1,2</Thickness>
+	<Thickness x:Key="ComboBoxDropdownBorderThickness">1</Thickness>
 	<Thickness x:Key="ComboBoxDropdownContentMargin">0</Thickness>
 	<Thickness x:Key="ComboBoxPadding">7</Thickness>
 	<sys:Double x:Key="ComboBoxMinHeight">30</sys:Double>

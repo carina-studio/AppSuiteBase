@@ -38,13 +38,16 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Primitives.PopupPositioning;
+using Avalonia.Data;
 using Avalonia.Platform.Storage;
 using Avalonia.Themes.Fluent;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.IO;
-using File = System.IO.File;
-using Window = CarinaStudio.Controls.Window;
 
 namespace CarinaStudio.AppSuite
 {
@@ -140,10 +143,10 @@ namespace CarinaStudio.AppSuite
         {
             // Fields.
             readonly AppSuiteApplication app;
-            readonly Avalonia.Controls.IResourceProvider resource;
+            readonly IResourceProvider resource;
 
             // Constructor.
-            public CustomResourceToken(AppSuiteApplication app, Avalonia.Controls.IResourceProvider resources)
+            public CustomResourceToken(AppSuiteApplication app, IResourceProvider resources)
             {
                 this.app = app;
                 this.resource = resources;
@@ -375,7 +378,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Fields.
-        Avalonia.Controls.ResourceDictionary? accentColorResources;
+        ResourceDictionary? accentColorResources;
         readonly LinkedList<MainWindowHolder> activeMainWindowList = new();
         ApplicationInfoDialog? appInfoDialog;
         ApplicationUpdateDialog? appUpdateDialog;
@@ -419,7 +422,7 @@ namespace CarinaStudio.AppSuite
         long splashWindowShownTime;
         ScheduledAction? stopUserInteractionAction;
         readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
-        Avalonia.Controls.ResourceDictionary? stringResource;
+        ResourceDictionary? stringResource;
         CultureInfo? stringResourceCulture;
         IStyle? styles;
         ThemeMode stylesThemeMode = ThemeMode.System;
@@ -540,7 +543,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public IDisposable AddCustomResource(Avalonia.Controls.IResourceProvider resource)
+        public IDisposable AddCustomResource(IResourceProvider resource)
         {
             this.VerifyAccess();
             this.Resources.MergedDictionaries.Add(resource);
@@ -981,39 +984,39 @@ namespace CarinaStudio.AppSuite
 
             // define styles
 #if APPLY_CONTROL_BRUSH_ANIMATIONS
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.Button))
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Button))
                 .Template().Name("PART_ContentPresenter"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ButtonSpinner))
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ButtonSpinner))
                 .Template().Name("PART_IncreaseButton"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ButtonSpinner))
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ButtonSpinner))
                 .Template().Name("PART_DecreaseButton"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ComboBox))
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ComboBox))
                 .Template().Name("Background"), durationFast));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.DatePicker))
                 .Template().Name("FlyoutButton"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.Expander))
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Expander))
                 .Template().Name("ExpanderHeader").Template().Name("ToggleButtonBackground"), durationFast));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ListBox)), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.RepeatButton))
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(RepeatButton))
                 .Template().Name("PART_ContentPresenter"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.Primitives.ScrollBar))
-                .Template().OfType(typeof(Avalonia.Controls.RepeatButton)).Class("line").Template().Name("Root"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.Primitives.ScrollBar))
-                .Template().OfType(typeof(Avalonia.Controls.Primitives.Thumb)).Class("thumb"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.Slider))
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ScrollBar))
+                .Template().OfType(typeof(RepeatButton)).Class("line").Template().Name("Root"), durationFast));
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ScrollBar))
+                .Template().OfType(typeof(Thumb)).Class("thumb"), durationFast));
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Slider))
                 .Template().Name("SliderContainer"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.Slider))
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Slider))
                 .Template().Name("PART_IncreaseButton"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.Slider))
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Slider))
                 .Template().Name("PART_DecreaseButton"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.TextBox))
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(TextBox))
                 .Template().Name("PART_BorderElement"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.Primitives.Thumb)), durationFast));
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Thumb)), durationFast));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.TimePicker))
                 .Template().Name("FlyoutButton"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.Primitives.ToggleButton))
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ToggleButton))
                 .Template().Name("PART_ContentPresenter"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ToggleSwitch))
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ToggleSwitch))
                 .Template().Name("OuterBorder"), durationFast));
 #endif
 #if APPLY_ITEM_BRUSH_ANIMATIONS
@@ -1033,15 +1036,15 @@ namespace CarinaStudio.AppSuite
                     {
                         Duration = duration,
                         Easing = easing,
-                        Property = Avalonia.Controls.Primitives.TemplatedControl.BackgroundProperty,
+                        Property = TemplatedControl.BackgroundProperty,
                     });
                 })));
             }));
 
             // disable pointer wheel on ComboBox/NumericUpDown
-            Avalonia.Input.InputElement.PointerWheelChangedEvent.AddClassHandler(typeof(Avalonia.Controls.ComboBox), (s, e) =>
+            Avalonia.Input.InputElement.PointerWheelChangedEvent.AddClassHandler(typeof(ComboBox), (s, e) =>
             {
-                var comboBox = (Avalonia.Controls.ComboBox)s.AsNonNull();
+                var comboBox = (ComboBox)s.AsNonNull();
                 if (!comboBox.IsDropDownOpen)
                 {
                     (comboBox.Parent as Interactive)?.Let(parent =>
@@ -1049,9 +1052,9 @@ namespace CarinaStudio.AppSuite
                     e.Handled = true;
                 }
             }, RoutingStrategies.Tunnel);
-            Avalonia.Input.InputElement.PointerWheelChangedEvent.AddClassHandler(typeof(Avalonia.Controls.NumericUpDown), (s, e) =>
+            Avalonia.Input.InputElement.PointerWheelChangedEvent.AddClassHandler(typeof(NumericUpDown), (s, e) =>
             {
-                (((Avalonia.Controls.NumericUpDown)s.AsNonNull()).Parent as Interactive)?.Let(parent =>
+                (((NumericUpDown)s.AsNonNull()).Parent as Interactive)?.Let(parent =>
                     parent.RaiseEvent(e));
                 e.Handled = true;
             }, RoutingStrategies.Tunnel);
@@ -1059,7 +1062,7 @@ namespace CarinaStudio.AppSuite
             // [Workaround] Focus on SelectableTextBlock before opening its context menu
             Avalonia.Input.InputElement.PointerPressedEvent.AddClassHandler(typeof(Avalonia.Controls.SelectableTextBlock), (s, e) =>
             {
-                var control = s as Avalonia.Controls.Control;
+                var control = s as Control;
                 var pointer = ((Avalonia.Input.PointerPressedEventArgs)e).GetCurrentPoint(control);
                 if (pointer.Properties.IsRightButtonPressed && (control?.ContextFlyout != null || control?.ContextMenu != null))
                     control.Focus();
@@ -1068,6 +1071,85 @@ namespace CarinaStudio.AppSuite
             // [Workaround] Prevent tooltip stays open after changing focus to another window
             if (Platform.IsMacOS)
                 DefineExtraStylesForMacOS();
+            
+            // Move popup to correct position according to its shadows
+            var popupPositionParamsField = typeof(PopupRoot).GetField("_positionerParameters", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new NotSupportedException();
+            if (popupPositionParamsField.FieldType != typeof(PopupPositionerParameters))
+                throw new NotSupportedException();
+            var popupHorzOffsetBindings = new Dictionary<Popup, IDisposable>();
+            var popupVertOffsetBindings = new Dictionary<Popup, IDisposable>();
+            Popup.IsOpenProperty.Changed.Subscribe(e =>
+            {
+                if (e.Sender is not Popup popup)
+                    return;
+                if (!e.NewValue.Value)
+                {
+                    if (popupHorzOffsetBindings.TryGetValue(popup, out var bindingToken))
+                    {
+                        popupHorzOffsetBindings.Remove(popup);
+                        bindingToken.Dispose();
+                    }
+                    if (popupVertOffsetBindings.TryGetValue(popup, out bindingToken))
+                    {
+                        popupVertOffsetBindings.Remove(popup);
+                        bindingToken.Dispose();
+                    }
+                    return;
+                }
+                (popup.Host as PopupRoot)?.Let(hostWindow =>
+                {
+                    // check state
+                    if (popup.PlacementTarget is not Control target)
+                    {
+                        if (popup.Parent is not Control parent)
+                            return;
+                        target = parent;
+                    }
+                    Thickness shadowMargin;
+                    if (popup.Child is ContextMenu contextMenu)
+                    {
+                        using var childrenEnumerator = contextMenu.GetVisualChildren().GetEnumerator();
+                        if (!childrenEnumerator.MoveNext() || childrenEnumerator.Current is not Border border)
+                            return;
+                        shadowMargin = border.Margin;
+                    }
+                    else if (popup.Child is Border border)
+                        shadowMargin = border.Margin;
+                    else
+                        return;
+                    if (shadowMargin == default)
+                        return;
+                    
+                    // calculate positions on screen
+                    var positionParams = (PopupPositionerParameters)popupPositionParamsField.GetValue(hostWindow)!;
+                    var screenScaling = (hostWindow.Screens.ScreenFromWindow(hostWindow) ?? hostWindow.Screens.Primary)?.Scaling ?? 1.0;
+                    var hostWindowRect = hostWindow.PointToScreen(default).Let(it => new Rect(new(it.X / screenScaling, it.Y / screenScaling), hostWindow.Bounds.Size));
+                    var targetPosition = target.PointToScreen(default).Let(it => new Point(it.X / screenScaling, it.Y / screenScaling));
+                    var anchorRect = popup.Placement == PlacementMode.Pointer
+#pragma warning disable CS0618
+                        ? positionParams.AnchorRectangle.Let(it => new Rect(targetPosition.X + it.X, targetPosition.Y + it.Y, it.Width, it.Height))
+                        : positionParams.AnchorRectangle.Let(it =>
+                        {
+                            var pointOnScreen = TopLevel.GetTopLevel(target)?.PointToScreen(it.TopLeft) ?? new PixelPoint();
+                            return new Rect(pointOnScreen.X / screenScaling, pointOnScreen.Y / screenScaling, it.Width, it.Height);
+                        });
+#pragma warning restore CS0618
+
+                    // update offset
+                    if (popupHorzOffsetBindings.TryGetValue(popup, out var bindingToken))
+                        bindingToken.Dispose();
+                    if (popupVertOffsetBindings.TryGetValue(popup, out bindingToken))
+                        bindingToken.Dispose();
+                    if (hostWindowRect.Center.X >= anchorRect.Center.X)
+                        popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset - 15), BindingPriority.Animation);
+                    else
+                        popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset + 15), BindingPriority.Animation);
+                    if (hostWindowRect.Center.Y >= anchorRect.Center.Y)
+                        popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset - 15), BindingPriority.Animation);
+                    else
+                        popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset + 15), BindingPriority.Animation);
+                });
+            });
 
             // add to top styles
             this.Styles.Add(this.extraStyles);
@@ -1087,13 +1169,13 @@ namespace CarinaStudio.AppSuite
                     {
                         Duration = duration,
                         Easing = easing,
-                        Property = Avalonia.Controls.Primitives.TemplatedControl.BackgroundProperty,
+                        Property = TemplatedControl.BackgroundProperty,
                     });
                     transitions.Add(new BrushTransition()
                     {
                         Duration = duration,
                         Easing = easing,
-                        Property = Avalonia.Controls.Primitives.TemplatedControl.BorderBrushProperty,
+                        Property = TemplatedControl.BorderBrushProperty,
                     });
                 })));
             });
@@ -1373,11 +1455,11 @@ namespace CarinaStudio.AppSuite
                 {
                     switch (it.WindowState)
                     {
-                        case Avalonia.Controls.WindowState.FullScreen:
-                        case Avalonia.Controls.WindowState.Maximized:
+                        case WindowState.FullScreen:
+                        case WindowState.Maximized:
                             break;
                         default:
-                            it.WindowState = Avalonia.Controls.WindowState.Maximized;
+                            it.WindowState = WindowState.Maximized;
                             break;
                     }
                     // ReSharper disable InvokeAsExtensionMethod
@@ -1478,7 +1560,7 @@ namespace CarinaStudio.AppSuite
                     var sysDecorSizes = it.IsExtendedIntoWindowDecorations
                         ? new Thickness()
                         : Controls.WindowExtensions.GetSystemDecorationSizes(it);
-                    it.WindowState = Avalonia.Controls.WindowState.Normal;
+                    it.WindowState = WindowState.Normal;
                     it.Position = new PixelPoint(bounds.X, bounds.Y);
                     if (Platform.IsLinux)
                     {
@@ -1770,7 +1852,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="uri">URI of string resource.</param>
         /// <returns>Loaded string resource, or Null if failed to load.</returns>
-        public Avalonia.Controls.IResourceProvider? LoadStringResource(Uri uri)
+        public IResourceProvider? LoadStringResource(Uri uri)
         {
             try
             {
@@ -2047,7 +2129,7 @@ namespace CarinaStudio.AppSuite
             // attach to lifetime
             if (desktopLifetime != null)
             {
-                desktopLifetime.ShutdownMode = Avalonia.Controls.ShutdownMode.OnExplicitShutdown;
+                desktopLifetime.ShutdownMode = ShutdownMode.OnExplicitShutdown;
                 desktopLifetime.ShutdownRequested += (_, _) =>
                 {
                     if (!this.isShutdownStarted && Platform.IsNotMacOS)
@@ -2068,7 +2150,7 @@ namespace CarinaStudio.AppSuite
                 {
                     ThreadPool.QueueUserWorkItem(_ =>
                     {
-                        isFirstLaunch = !File.Exists(this.persistentStateFilePath);
+                        isFirstLaunch = !System.IO.File.Exists(this.persistentStateFilePath);
                         lock (syncLock)
                             Monitor.Pulse(syncLock);
                     });
@@ -2144,7 +2226,7 @@ namespace CarinaStudio.AppSuite
         /// Called to load default string resource.
         /// </summary>
         /// <returns>Default string resource.</returns>
-        protected virtual Avalonia.Controls.IResourceProvider? OnLoadDefaultStringResource() => null;
+        protected virtual IResourceProvider? OnLoadDefaultStringResource() => null;
 
 
         /// <summary>
@@ -2152,7 +2234,7 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="cultureInfo">Culture info.</param>
         /// <returns>String resource.</returns>
-        protected virtual Avalonia.Controls.IResourceProvider? OnLoadStringResource(CultureInfo cultureInfo) => null;
+        protected virtual IResourceProvider? OnLoadStringResource(CultureInfo cultureInfo) => null;
 
 
         /// <summary>
@@ -2277,7 +2359,7 @@ namespace CarinaStudio.AppSuite
         /// <param name="mainWindow">Closed main window.</param>
         /// <param name="viewModel">View-model of main window.</param>
         /// <returns>Task of performing operations.</returns>
-        protected virtual async Task OnMainWindowClosedAsync(Window mainWindow, ViewModel viewModel)
+        protected virtual async Task OnMainWindowClosedAsync(Avalonia.Controls.Window mainWindow, ViewModel viewModel)
         {
             // save settings
             await this.SaveSettingsAsync();
@@ -2960,7 +3042,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Remove custom resource.
-        void RemoveCustomResource(Avalonia.Controls.IResourceProvider resource)
+        void RemoveCustomResource(IResourceProvider resource)
         {
             this.VerifyAccess();
             this.Resources.MergedDictionaries.Remove(resource);
@@ -3434,7 +3516,7 @@ namespace CarinaStudio.AppSuite
             this.mainWindows.Add(mainWindow);
             this.windows.Add(mainWindow);
             mainWindow.Closed += this.OnMainWindowClosed;
-            mainWindow.GetObservable(Window.IsActiveProperty).Subscribe(new Observer<bool>(value =>
+            mainWindow.GetObservable(Avalonia.Controls.Window.IsActiveProperty).Subscribe(new Observer<bool>(value =>
             {
                 this.OnMainWindowActivationChanged(mainWindow, value);
             }));
@@ -4071,7 +4153,7 @@ namespace CarinaStudio.AppSuite
                             var builtInResourcesForOS = this.LoadStringResource(new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}-Linux.axaml"));
                             if (builtInResourcesForOS != null)
                             {
-                                builtInResource = new Avalonia.Controls.ResourceDictionary().Also(it =>
+                                builtInResource = new ResourceDictionary().Also(it =>
                                 {
                                     it.MergedDictionaries.Add(builtInResource);
                                     it.MergedDictionaries.Add(builtInResourcesForOS);
@@ -4085,7 +4167,7 @@ namespace CarinaStudio.AppSuite
                             var builtInResourcesForOS = this.LoadStringResource(new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}-OSX.axaml"));
                             if (builtInResourcesForOS != null)
                             {
-                                builtInResource = new Avalonia.Controls.ResourceDictionary().Also(it =>
+                                builtInResource = new ResourceDictionary().Also(it =>
                                 {
                                     it.MergedDictionaries.Add(builtInResource);
                                     it.MergedDictionaries.Add(builtInResourcesForOS);
@@ -4099,7 +4181,7 @@ namespace CarinaStudio.AppSuite
                         this.Logger.LogWarning("No built-in string resource for {cultureInfoName}", this.cultureInfo.Name);
 
                     // load custom resource
-                    var resource = (Avalonia.Controls.IResourceProvider?)null;
+                    var resource = (IResourceProvider?)null;
                     try
                     {
                         resource = this.OnLoadStringResource(this.cultureInfo);
@@ -4112,7 +4194,7 @@ namespace CarinaStudio.AppSuite
                     // merge resources
                     if (builtInResource != null || resource != null)
                     {
-                        this.stringResource = new Avalonia.Controls.ResourceDictionary();
+                        this.stringResource = new ResourceDictionary();
                         builtInResource?.Let(it => this.stringResource.MergedDictionaries.Add(it));
                         resource?.Let(it => this.stringResource.MergedDictionaries.Add(it));
                         this.stringResourceCulture = this.cultureInfo;
@@ -4257,7 +4339,7 @@ namespace CarinaStudio.AppSuite
                 // create resources
                 if (this.accentColorResources == null)
                 {
-                    this.accentColorResources = new Avalonia.Controls.ResourceDictionary();
+                    this.accentColorResources = new ResourceDictionary();
                     this.Resources.MergedDictionaries.Add(this.accentColorResources);
                 }
 
