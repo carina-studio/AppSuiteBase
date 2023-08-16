@@ -2338,7 +2338,7 @@
 							VerticalAlignment="{TemplateBinding VerticalAlignment}">
 						<DockPanel>
 							<Panel DockPanel.Dock="Top">
-								<Line EndPoint="6,0" Height="1" HorizontalAlignment="Stretch" Stretch="Fill" StartPoint="0,0" Stroke="{DynamicResource Brush/TabControl.TabStrip.Border}" StrokeThickness="1" VerticalAlignment="Bottom"/>
+								<Line EndPoint="6,0" HorizontalAlignment="Stretch" Stretch="Fill" StartPoint="0,0" Stroke="{DynamicResource Brush/TabControl.TabStrip.Border}" StrokeThickness="1" VerticalAlignment="Bottom"/>
 								<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" Background="{x:Null}" Padding="{DynamicResource Thickness/TabControl.TabStrip.Padding}">
 									<ItemsPresenter Name="PART_ItemsPresenter"
 									                ItemsPanel="{TemplateBinding ItemsPanel}"/>

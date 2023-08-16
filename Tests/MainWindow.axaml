@@ -357,25 +357,28 @@
 							<TextBlock Text="{DynamicResource String/ApplicationOptions.LogOutputTargetPort}" Margin="5,5,5,0"/>
 							<NumericUpDown HorizontalAlignment="Left" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
 
-							<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" CornerRadius="5" HorizontalAlignment="Left" Margin="5" Padding="5">
-								<StackPanel>
-									<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5,0,0,0"/>
-									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ProcessId, StringFormat={}PID: {0}}" Margin="5,5,0,0"/>
-									<SelectableTextBlock Focusable="True" Text="" Margin="5,5,0,0">
-										<Run Text="CPU: "/>
-										<Run FontWeight="Bold" Foreground="Green" Text="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage, StringFormat={}{0:F2}%}"/>
-									</SelectableTextBlock>
-									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Memory Usage: {0}}" Margin="5,5,0,0"/>
-									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapSize, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Size: {0}}" Margin="5,5,0,0"/>
-									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Usage: {0}}" Margin="5,5,0,0"/>
-									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.FinalizationPendingCount, StringFormat={}Finalization Pending Count: {0}}" Margin="5,5,0,0"/>
-									<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.GCFrequency, StringFormat={}GC Frequency: {0:F2}}" Margin="5,5,0,0"/>
-									<TextBlock Text="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5,5,0,0"/>
-									<Slider IsEnabled="{Binding $parent[Window].ApplicationOptions.IsCustomScreenScaleFactorSupported, Mode=OneTime}" Margin="5,5,0,0" Maximum="{Binding $parent[Window].ApplicationOptions.MaxCustomScreenScaleFactor, Mode=OneTime}" Minimum="1" TickFrequency="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactorGranularity, Mode=OneTime}" TickPlacement="Outside" Value="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactor, Mode=TwoWay}" Width="200"/>
-									<TextBlock Text="{Binding $parent[Window].ActualTransparencyLevel}" Margin="5,5,0,0"/>
-									<TextBlock Text="{Binding $parent[Window].Application.IsDebugMode, StringFormat={}IsDebugMode: {0}}" Margin="5,5,0,0"/>
-								</StackPanel>
-							</Border>
+							<Panel HorizontalAlignment="Left" Margin="5">
+								<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" HorizontalAlignment="Left" Padding="5">
+									<StackPanel>
+										<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5,0,0,0"/>
+										<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ProcessId, StringFormat={}PID: {0}}" Margin="5,5,0,0"/>
+										<SelectableTextBlock Focusable="True" Text="" Margin="5,5,0,0">
+											<Run Text="CPU: "/>
+											<Run FontWeight="Bold" Foreground="Green" Text="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage, StringFormat={}{0:F2}%}"/>
+										</SelectableTextBlock>
+										<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Memory Usage: {0}}" Margin="5,5,0,0"/>
+										<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapSize, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Size: {0}}" Margin="5,5,0,0"/>
+										<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Usage: {0}}" Margin="5,5,0,0"/>
+										<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.FinalizationPendingCount, StringFormat={}Finalization Pending Count: {0}}" Margin="5,5,0,0"/>
+										<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.GCFrequency, StringFormat={}GC Frequency: {0:F2}}" Margin="5,5,0,0"/>
+										<TextBlock Text="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5,5,0,0"/>
+										<Slider IsEnabled="{Binding $parent[Window].ApplicationOptions.IsCustomScreenScaleFactorSupported, Mode=OneTime}" Margin="5,5,0,0" Maximum="{Binding $parent[Window].ApplicationOptions.MaxCustomScreenScaleFactor, Mode=OneTime}" Minimum="1" TickFrequency="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactorGranularity, Mode=OneTime}" TickPlacement="Outside" Value="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactor, Mode=TwoWay}" Width="200"/>
+										<TextBlock Text="{Binding $parent[Window].ActualTransparencyLevel}" Margin="5,5,0,0"/>
+										<TextBlock Text="{Binding $parent[Window].Application.IsDebugMode, StringFormat={}IsDebugMode: {0}}" Margin="5,5,0,0"/>
+									</StackPanel>
+								</Border>
+								<Line Classes="Shadow" Stroke="{DynamicResource Brush/WorkingArea.Panel.Border}" VerticalAlignment="Bottom"/>
+							</Panel>
 
 							<abControls:IntegerTextBox Name="integerTextBox" HorizontalAlignment="Left" IsNullValueAllowed="False" Margin="5,5,0,0" Minimum="1" Width="200" Watermark="Integer"/>
 							<TextBlock Text="{Binding #integerTextBox.Value, StringFormat={}Value: {0}}" HorizontalAlignment="Left" Margin="5,0,0,5"/>

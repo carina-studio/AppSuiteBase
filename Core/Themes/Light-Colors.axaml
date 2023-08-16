@@ -93,7 +93,7 @@
 	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#c7c7c7</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#b7b7b7</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Transparent">#00c7c7c7</Color>
-	<StaticResource x:Key="Color/ToolBar.Border" ResourceKey="Color/ToolBar.Background"/>
+	<Color x:Key="Color/ToolBar.Border">#d0d0d0</Color>
 
 	<!-- TreeViewItem -->
 	<SolidColorBrush x:Key="Brush/TreeViewItem.Foreground.Selected" Color="#ffffff"/>
@@ -113,5 +113,6 @@
 	<!-- WorkingArea -->
 	<Color x:Key="Color/WorkingArea.Background">#eeeeee</Color>
 	<Color x:Key="Color/WorkingArea.Panel.Background">#dadada</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Border">#d0d0d0</Color>
 	
 </ResourceDictionary>

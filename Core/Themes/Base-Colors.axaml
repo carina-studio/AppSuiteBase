@@ -418,7 +418,9 @@
 	<!-- WorkingArea -->
 	<SolidColorBrush x:Key="Brush/WorkingArea.Background" Color="{DynamicResource Color/WorkingArea.Background}"/>
 	<SolidColorBrush x:Key="Brush/WorkingArea.Panel.Background" Color="{DynamicResource Color/WorkingArea.Panel.Background}"/>
+	<SolidColorBrush x:Key="Brush/WorkingArea.Panel.Border" Color="{DynamicResource Color/WorkingArea.Panel.Border}"/>
 	<Color x:Key="Color/WorkingArea.Background">#ffffff</Color>
 	<Color x:Key="Color/WorkingArea.Panel.Background">#ffffff</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Border">#ffffff</Color>
 
 </ResourceDictionary>

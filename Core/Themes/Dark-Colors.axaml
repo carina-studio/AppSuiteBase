@@ -65,7 +65,6 @@
 	<Color x:Key="Color/TabItem.Header.Background.Selected">#2c2c2c</Color>
 	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#17808080</Color>
 	<Color x:Key="Color/TabItem.Header.Border.Selected">#20808080</Color>
-	<StaticResource x:Key="Color/ToolBar.Border" ResourceKey="Color/Control.Border"/>
 
 	<!-- TextBox -->
 	<SolidColorBrush x:Key="TextControlBackground" Color="#1c1c1c"/>
@@ -81,6 +80,7 @@
 	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#404040</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#171717</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Transparent">#00404040</Color>
+	<Color x:Key="Color/ToolBar.Border">#3c3c3c</Color>
 
 	<!-- ToolTip -->
 	<StaticResourceExtension x:Key="Color/ToolTip.Background" ResourceKey="Color/Button.Background"/>
@@ -97,5 +97,6 @@
 	<!-- WorkingArea -->
 	<Color x:Key="Color/WorkingArea.Background">#101010</Color>
 	<Color x:Key="Color/WorkingArea.Panel.Background">#191919</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Border">#292929</Color>
 	
 </ResourceDictionary>
