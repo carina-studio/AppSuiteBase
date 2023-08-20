@@ -11,6 +11,7 @@
 		SystemDecorations="None"
         Title="{Binding $parent[Window].ApplicationName}"
         TransparencyLevelHint="Transparent"
+        UseLayoutRounding="True"
         Width="500"
         WindowStartupLocation="CenterScreen">
 	
@@ -69,6 +70,7 @@
 	<Window.Styles>
 		<Style Selector="TextBlock">
 			<Setter Property="ClipToBounds" Value="False"/>
+			<Setter Property="FontFamily" Value="$Default"/>
 			<Setter Property="Foreground" Value="{DynamicResource Brush/SplashWindow.Foreground}"/>
 		</Style>
 	</Window.Styles>

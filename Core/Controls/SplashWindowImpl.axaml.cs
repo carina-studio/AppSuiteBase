@@ -72,84 +72,83 @@ class SplashWindowImpl : Avalonia.Controls.Window
 				return;
 			}
 
-				// move to center of screen
-				if (screen != null)
+			// move to center of screen
+			if (screen != null)
+			{
+				var screenBounds = screen.WorkingArea;
+				var scaling = screen.Scaling;
+				var width = this.Width;
+				var height = this.Height;
+				if (!Platform.IsMacOS)
 				{
-					var screenBounds = screen.WorkingArea;
-					var scaling = screen.Scaling;
-					var width = this.Width;
-					var height = this.Height;
-					if (!Platform.IsMacOS)
-					{
-						width *= scaling;
-						height *= scaling;
-					}
-					this.Position = new PixelPoint((int)((screenBounds.Width - width) / 2), (int)((screenBounds.Height - height) / 2));
+					width *= scaling;
+					height *= scaling;
 				}
-				
-				// show content
-				var versionOpacity = this.FindResourceOrDefault("Double/ApplicationInfoDialog.AppVersion.Opacity", 0.75);
-				((Control)this.Content.AsNonNull()).Opacity = 1;
-				this.Get<Control>("backgroundOverlayBorder").Let(control =>
-					control.Opacity = 1);
-				this.Get<Control>("iconImage").Let(control =>
-				{
-					control.Opacity = 1;
-					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
-				});
-				this.Get<Control>("titleTextBlock").Let(control =>
-				{
-					control.Opacity = 1;
-					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
-				});
-				this.Get<Control>("versionTextBlock").Let(control =>
-				{
-					control.Opacity = versionOpacity;
-					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
-				});
-				this.Get<Control>("copyrightTextBlock").Let(control =>
-				{
-					control.Opacity = versionOpacity;
-					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
-				});
-				this.Get<Control>("messagePanel").Let(control =>
-				{
-					control.Opacity = 1;
-					(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+				this.Position = new PixelPoint((int)((screenBounds.Width - width) / 2), (int)((screenBounds.Height - height) / 2));
+			}
+
+			// show content
+			var versionOpacity = this.FindResourceOrDefault("Double/ApplicationInfoDialog.AppVersion.Opacity", 0.75);
+			((Control)this.Content.AsNonNull()).Opacity = 1;
+			this.Get<Control>("backgroundOverlayBorder").Let(control =>
+				control.Opacity = 1);
+			this.Get<Control>("iconImage").Let(control =>
+			{
+				control.Opacity = 1;
+				(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+			});
+			this.Get<Control>("titleTextBlock").Let(control =>
+			{
+				control.Opacity = 1;
+				(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+			});
+			this.Get<Control>("versionTextBlock").Let(control =>
+			{
+				control.Opacity = versionOpacity;
+				(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+			});
+			this.Get<Control>("copyrightTextBlock").Let(control =>
+			{
+				control.Opacity = versionOpacity;
+				(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
+			});
+			this.Get<Control>("messagePanel").Let(control =>
+			{
+				control.Opacity = 1;
+				(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 				control.PropertyChanged += (_, e) =>
-				
 				{
-				if (e.Property == OpacityProperty && Math.Abs(1 - (double)e.NewValue!) <= double.Epsilon * 2)
-					Dispatcher.UIThread.Post(() => this.initAnimationTaskCompletionSource.TrySetResult());
+					if (e.Property == OpacityProperty && Math.Abs(1 - (double)e.NewValue!) <= double.Epsilon * 2)
+						Dispatcher.UIThread.Post(() => this.initAnimationTaskCompletionSource.TrySetResult());
 				};
 			});
-			});
-			this.Version = app?.GetFormattedString("ApplicationInfoDialog.Version", app.Assembly.GetName().Version).AsNonNull() ?? "";
-			if (app?.ReleasingType != ApplicationReleasingType.Stable)
-				this.Version += $" {AppReleasingTypeConverter.Convert<string?>(app?.ReleasingType)}";
-			AvaloniaXamlLoader.Load(this);
-			this.progressBar = this.Get<ProgressBar>(nameof(progressBar));
-			if (Platform.IsWindows)
+		});
+		this.Version = app?.GetFormattedString("ApplicationInfoDialog.Version", app.Assembly.GetName().Version).AsNonNull() ?? "";
+		if (app?.ReleasingType != ApplicationReleasingType.Stable)
+			this.Version += $" {AppReleasingTypeConverter.Convert<string?>(app?.ReleasingType)}";
+		AvaloniaXamlLoader.Load(this);
+		this.progressBar = this.Get<ProgressBar>(nameof(progressBar));
+		if (Platform.IsWindows)
+		{
+			this.Get<Control>("messagePanel").SetValue(Avalonia.Controls.TextBlock.FontWeightProperty, FontWeight.Bold);
+			if (!Platform.IsWindows8OrAbove)
 			{
-				this.Get<Control>("messagePanel").SetValue(Avalonia.Controls.TextBlock.FontWeightProperty, FontWeight.Bold);
-				if (!Platform.IsWindows8OrAbove)
+				this.Get<Panel>("rootPanel").Margin = default;
+				this.Get<Border>("backgroundBorder").Let(it =>
 				{
-					this.Get<Panel>("rootPanel").Margin = default;
-					this.Get<Border>("backgroundBorder").Let(it =>
-					{
-						it.BoxShadow = default;
-						it.CornerRadius = default;
-					});
-					this.Get<Border>("backgroundOverlayBorder").CornerRadius = default;
-					this.Get<Border>("border").CornerRadius = default;
-				}
+					it.BoxShadow = default;
+					it.CornerRadius = default;
+				});
+				this.Get<Border>("backgroundOverlayBorder").CornerRadius = default;
+				this.Get<Border>("border").CornerRadius = default;
 			}
-			this.Styles.Add((Avalonia.Styling.IStyle)(app?.EffectiveThemeMode switch
-			{
-				ThemeMode.Light => this.Resources["lightTheme"].AsNonNull(),
-				_ => this.Resources["darkTheme"].AsNonNull(),
-			}));
 		}
+		this.Styles.Add((Avalonia.Styling.IStyle)(app?.EffectiveThemeMode switch
+		{
+			ThemeMode.Light => this.Resources["lightTheme"].AsNonNull(),
+			_ => this.Resources["darkTheme"].AsNonNull(),
+		}));
+	}
 
 
 	// Accent color.
