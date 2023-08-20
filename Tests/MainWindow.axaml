@@ -272,7 +272,7 @@
 								</StackPanel>
 								<Line Classes="Shadow" Stroke="{DynamicResource Brush/ToolBar.Border}" VerticalAlignment="Bottom"/>
 							</Panel>
-							<Border Classes="Shadow_Bottom"/>
+							<Border Classes="Shadow_Bottom_Light"/>
 
 							<!-- Accent colors -->
 							<StackPanel Height="30" Margin="5" Orientation="Horizontal">
@@ -930,7 +930,7 @@
 
 			</appControls:TabControl>
 			
-			<Border Classes="Shadow_Top" VerticalAlignment="Bottom"/>
+			<Border Classes="Shadow_Top_Light" VerticalAlignment="Bottom"/>
 			
 			<appControls:NotificationPresenter Name="notificationPresenter"/>
 			

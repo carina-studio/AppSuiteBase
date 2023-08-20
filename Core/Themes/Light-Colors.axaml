@@ -57,7 +57,7 @@
 	
 	<!-- MenuFlyout -->
 	<SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#ffffff"/>
-	<SolidColorBrush x:Key="MenuFlyoutPresenterBorderBrush" Color="#cccccc"/>
+	<SolidColorBrush x:Key="MenuFlyoutPresenterBorderBrush" Color="#c7c7c7"/>
 
 	<!-- ObjectTextBox -->
     <SolidColorBrush x:Key="ObjectTextBoxBackgroundInvalid" Color="#ffcccc"/>
@@ -93,7 +93,10 @@
 	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#c7c7c7</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#b7b7b7</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Transparent">#00c7c7c7</Color>
-	<Color x:Key="Color/ToolBar.Border">#d0d0d0</Color>
+	<Color x:Key="Color/ToolBar.Border">#cccccc</Color>
+	
+	<!-- ToolTip -->
+	<Color x:Key="Color/ToolTip.Border">#cccccc</Color>
 
 	<!-- TreeViewItem -->
 	<SolidColorBrush x:Key="Brush/TreeViewItem.Foreground.Selected" Color="#ffffff"/>
