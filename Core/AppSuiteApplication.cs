@@ -42,6 +42,8 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Data;
+using Avalonia.Input;
+using Avalonia.Input.Raw;
 using Avalonia.Platform.Storage;
 using Avalonia.Themes.Fluent;
 using Avalonia.Threading;
@@ -1042,7 +1044,7 @@ namespace CarinaStudio.AppSuite
             }));
 
             // disable pointer wheel on ComboBox/NumericUpDown
-            Avalonia.Input.InputElement.PointerWheelChangedEvent.AddClassHandler(typeof(ComboBox), (s, e) =>
+            InputElement.PointerWheelChangedEvent.AddClassHandler(typeof(ComboBox), (s, e) =>
             {
                 var comboBox = (ComboBox)s.AsNonNull();
                 if (!comboBox.IsDropDownOpen)
@@ -1052,7 +1054,7 @@ namespace CarinaStudio.AppSuite
                     e.Handled = true;
                 }
             }, RoutingStrategies.Tunnel);
-            Avalonia.Input.InputElement.PointerWheelChangedEvent.AddClassHandler(typeof(NumericUpDown), (s, e) =>
+            InputElement.PointerWheelChangedEvent.AddClassHandler(typeof(NumericUpDown), (s, e) =>
             {
                 (((NumericUpDown)s.AsNonNull()).Parent as Interactive)?.Let(parent =>
                     parent.RaiseEvent(e));
@@ -1060,10 +1062,10 @@ namespace CarinaStudio.AppSuite
             }, RoutingStrategies.Tunnel);
         
             // [Workaround] Focus on SelectableTextBlock before opening its context menu
-            Avalonia.Input.InputElement.PointerPressedEvent.AddClassHandler(typeof(Avalonia.Controls.SelectableTextBlock), (s, e) =>
+            InputElement.PointerPressedEvent.AddClassHandler(typeof(Avalonia.Controls.SelectableTextBlock), (s, e) =>
             {
                 var control = s as Control;
-                var pointer = ((Avalonia.Input.PointerPressedEventArgs)e).GetCurrentPoint(control);
+                var pointer = ((PointerPressedEventArgs)e).GetCurrentPoint(control);
                 if (pointer.Properties.IsRightButtonPressed && (control?.ContextFlyout != null || control?.ContextMenu != null))
                     control.Focus();
             }, RoutingStrategies.Tunnel);
@@ -1072,12 +1074,65 @@ namespace CarinaStudio.AppSuite
             if (Platform.IsMacOS)
                 DefineExtraStylesForMacOS();
             
-            // Move popup to correct position according to its shadows
+            // close popup when clicking on its shadows
+            var topLevelInputManagerField = typeof(TopLevel).GetField("_inputManager", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new NotSupportedException();
+            if (topLevelInputManagerField.FieldType != typeof(IInputManager))
+                throw new NotSupportedException();
+            var processRawInputEventProperty = typeof(IInputManager).GetProperty("Process", BindingFlags.Instance | BindingFlags.Public) ?? throw new NotSupportedException();
+            if (processRawInputEventProperty.PropertyType != typeof(IObservable<RawInputEventArgs>))
+                throw new NotSupportedException();
+            var rawPointerEventTypeProperty = typeof(RawPointerEventArgs).GetProperty("Type", BindingFlags.Instance | BindingFlags.Public) ?? throw new NotSupportedException();
+            if (rawPointerEventTypeProperty.PropertyType != typeof(RawPointerEventType))
+                throw new NotSupportedException();
+            var rawPointerPositionProperty = typeof(RawPointerEventArgs).GetProperty("Position", BindingFlags.Instance | BindingFlags.Public) ?? throw new NotSupportedException();
+            if (rawPointerPositionProperty.PropertyType != typeof(Point))
+                throw new NotSupportedException();
+            void OnProcessPopupRootRawPointerEvent(TopLevel hostWindow, Popup popup, RawInputEventArgs e)
+            {
+                if (e is not RawPointerEventArgs pointerEventArgs)
+                    return;
+                switch ((RawPointerEventType)rawPointerEventTypeProperty.GetValue(pointerEventArgs)!)
+                {
+                    case RawPointerEventType.LeftButtonDown:
+                    {
+                        // get size of shadow
+                        Thickness shadowMargin;
+                        if (popup.Child is ContextMenu contextMenu)
+                        {
+                            using var childrenEnumerator = contextMenu.GetVisualChildren().GetEnumerator();
+                            if (!childrenEnumerator.MoveNext() || childrenEnumerator.Current is not Border border)
+                                return;
+                            shadowMargin = border.Margin;
+                        }
+                        else if (popup.Child is Border border)
+                            shadowMargin = border.Margin;
+                        else
+                            return;
+                        if (shadowMargin == default)
+                            return;
+                
+                        // close if pointer pressed on shadow
+                        var position = (Point)rawPointerPositionProperty.GetValue(pointerEventArgs)!;
+                        var hostWindowSize = hostWindow.Bounds.Size;
+                        if (position.X < shadowMargin.Left 
+                            || position.X >= hostWindowSize.Width - shadowMargin.Right
+                            || position.Y < shadowMargin.Top
+                            || position.Y >= hostWindowSize.Height - shadowMargin.Bottom)
+                        {
+                            popup.Close();
+                        }
+                        break;
+                    }
+                }
+            }
+            
+            // move popup to correct position according to its shadows
             var popupPositionParamsField = typeof(PopupRoot).GetField("_positionerParameters", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new NotSupportedException();
             if (popupPositionParamsField.FieldType != typeof(PopupPositionerParameters))
                 throw new NotSupportedException();
             var popupHorzOffsetBindings = new Dictionary<Popup, IDisposable>();
             var popupVertOffsetBindings = new Dictionary<Popup, IDisposable>();
+            var processPopupRawInputHandlerTokens = new Dictionary<Popup, IDisposable>();
             Popup.IsOpenProperty.Changed.Subscribe(e =>
             {
                 if (e.Sender is not Popup popup)
@@ -1094,16 +1149,28 @@ namespace CarinaStudio.AppSuite
                         popupVertOffsetBindings.Remove(popup);
                         bindingToken.Dispose();
                     }
+                    if (processPopupRawInputHandlerTokens.TryGetValue(popup, out var handlerToken))
+                    {
+                        processPopupRawInputHandlerTokens.Remove(popup);
+                        handlerToken.Dispose();
+                    }
                     return;
                 }
                 (popup.Host as PopupRoot)?.Let(hostWindow =>
                 {
                     // check state
-                    if (popup.PlacementTarget is not Control target)
+                    if (popup.Parent is not Control target)
                     {
-                        if (popup.Parent is not Control parent)
+                        if (popup.PlacementTarget is not Control placementTarget)
                             return;
-                        target = parent;
+                        target = placementTarget;
+                    }
+                    if (target is not TopLevel topLevel)
+                    {
+                        var targetTopLevel = TopLevel.GetTopLevel(target);
+                        if (targetTopLevel is null)
+                            return;
+                        topLevel = targetTopLevel;
                     }
                     Thickness shadowMargin;
                     if (popup.Child is ContextMenu contextMenu)
@@ -1124,13 +1191,13 @@ namespace CarinaStudio.AppSuite
                     var positionParams = (PopupPositionerParameters)popupPositionParamsField.GetValue(hostWindow)!;
                     var screenScaling = (hostWindow.Screens.ScreenFromWindow(hostWindow) ?? hostWindow.Screens.Primary)?.Scaling ?? 1.0;
                     var hostWindowRect = hostWindow.PointToScreen(default).Let(it => new Rect(new(it.X / screenScaling, it.Y / screenScaling), hostWindow.Bounds.Size));
-                    var targetPosition = target.PointToScreen(default).Let(it => new Point(it.X / screenScaling, it.Y / screenScaling));
+                    var topLevelPosition = topLevel.PointToScreen(default).Let(it => new Point(it.X / screenScaling, it.Y / screenScaling));
                     var anchorRect = popup.Placement == PlacementMode.Pointer
 #pragma warning disable CS0618
-                        ? positionParams.AnchorRectangle.Let(it => new Rect(targetPosition.X + it.X, targetPosition.Y + it.Y, it.Width, it.Height))
+                        ? positionParams.AnchorRectangle.Let(it => new Rect(topLevelPosition.X + it.X, topLevelPosition.Y + it.Y, it.Width, it.Height))
                         : positionParams.AnchorRectangle.Let(it =>
                         {
-                            var pointOnScreen = TopLevel.GetTopLevel(target)?.PointToScreen(it.TopLeft) ?? new PixelPoint();
+                            var pointOnScreen = topLevel.PointToScreen(it.TopLeft);
                             return new Rect(pointOnScreen.X / screenScaling, pointOnScreen.Y / screenScaling, it.Width, it.Height);
                         });
 #pragma warning restore CS0618
@@ -1148,8 +1215,55 @@ namespace CarinaStudio.AppSuite
                         popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset - 15), BindingPriority.Animation);
                     else
                         popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset + 15), BindingPriority.Animation);
+                    
+                    // intercept pointer pressed event
+                    (topLevelInputManagerField.GetValue(hostWindow) as IInputManager)?.Let(inputManager =>
+                    {
+                        (processRawInputEventProperty.GetValue(inputManager) as IObservable<RawInputEventArgs>)?.Let(process =>
+                        {
+                            processPopupRawInputHandlerTokens[popup] = process.Subscribe(e => OnProcessPopupRootRawPointerEvent(hostWindow, popup, e));
+                        });
+                    });
                 });
             });
+            
+            // close popup when clicking on its shadows
+            /*
+            InputElement.PointerPressedEvent.AddClassHandler(typeof(Control), (s, e) =>
+            {
+                // get size of shadow
+                if (((PointerPressedEventArgs)e).GetCurrentPoint((Control)s).Properties.IsRightButtonPressed)
+                    return;
+                if (s is not Popup popup)
+                    return;
+                Thickness shadowMargin;
+                if (popup.Child is ContextMenu contextMenu)
+                {
+                    using var childrenEnumerator = contextMenu.GetVisualChildren().GetEnumerator();
+                    if (!childrenEnumerator.MoveNext() || childrenEnumerator.Current is not Border border)
+                        return;
+                    shadowMargin = border.Margin;
+                }
+                else if (popup.Child is Border border)
+                    shadowMargin = border.Margin;
+                else
+                    return;
+                if (shadowMargin == default)
+                    return;
+                
+                // close if pointer pressed on shadow
+                var position = ((PointerPressedEventArgs)e).GetCurrentPoint(popup).Position;
+                var popupSize = popup.Bounds.Size;
+                if (position.X < shadowMargin.Left 
+                    || position.X >= popupSize.Width - shadowMargin.Right
+                    || position.Y < shadowMargin.Top
+                    || position.Y >= popupSize.Height - shadowMargin.Bottom)
+                {
+                    e.Handled = true;
+                    popup.Close();
+                }
+            }, RoutingStrategies.Tunnel);
+            */
 
             // add to top styles
             this.Styles.Add(this.extraStyles);

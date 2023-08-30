@@ -313,18 +313,19 @@
 						<Popup Name="PART_Popup"
 							WindowManagerAddShadowHint="False"
 							IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
-							MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
-							MaxHeight="{TemplateBinding MaxDropDownHeight}"
+							Placement="BottomEdgeAlignedLeft"
 							PlacementTarget="Background"
 							IsLightDismissEnabled="True"
 							InheritsTransform="True">
-							<Border x:Name="PopupBorder"
+							<Border Name="PART_PopupBorder"
 							        Background="{DynamicResource ComboBoxDropDownBackground}"
 							        BorderBrush="{DynamicResource ComboBoxDropDownBorderBrush}"
 							        BorderThickness="{DynamicResource ComboBoxDropdownBorderThickness}"
 							        Padding="{DynamicResource ComboBoxDropdownBorderPadding}"
 							        HorizontalAlignment="Stretch"
-							        CornerRadius="{DynamicResource OverlayCornerRadius}">
+							        CornerRadius="{DynamicResource OverlayCornerRadius}"
+							        MinWidth="{Binding #Background.Bounds.Width}"
+							        MaxHeight="{TemplateBinding MaxDropDownHeight}">
 								<ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
 								              VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
 									<ItemsPresenter Name="PART_ItemsPresenter"
