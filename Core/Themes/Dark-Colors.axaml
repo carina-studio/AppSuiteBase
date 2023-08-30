@@ -22,6 +22,7 @@
 
 	<!-- Dialog -->
 	<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#141414</Color>
+	<Color x:Key="Color/Dialog.ControlButtonsPanel.Border">#242424</Color>
 	<Color x:Key="Color/Dialog.ItemSeparator">#17ffffff</Color>
 	<Color x:Key="Color/Dialog.ItemsGroup.Background">#4f000000</Color>
 	<Color x:Key="Color/Dialog.ItemsGroup.Border">#1effffff</Color>

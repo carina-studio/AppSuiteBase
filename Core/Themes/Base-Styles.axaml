@@ -419,8 +419,12 @@
 	</Style>
 	<Style Selector="Border.Dialog_ControlButtonsPanel">
 		<Setter Property="Background" Value="{DynamicResource Brush/Dialog.ControlButtonsPanel.Background}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Dialog.ControlButtonsPanel.Border}"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="BoxShadow" Value="{DynamicResource BoxShadows/Shadow.Light}"/>
 		<Setter Property="DockPanel.Dock" Value="Bottom"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="-1,0,-1,-1"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ControlButtonsPanel.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 	</Style>

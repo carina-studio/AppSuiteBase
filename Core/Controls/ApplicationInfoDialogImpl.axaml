@@ -22,7 +22,7 @@
 	<DockPanel>
 
 		<!-- Control buttons -->
-		<Border x:CompileBindings="False" Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
+		<Border x:CompileBindings="False" Classes="Dialog_ControlButtonsPanel">
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
 				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].ShowAppUpdateDialog}" Content="{DynamicResource String/ApplicationInfoDialog.ShowAppUpdateDialog}"/>
 				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.OK}"/>

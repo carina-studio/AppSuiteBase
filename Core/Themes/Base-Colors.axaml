@@ -99,6 +99,7 @@
 
 	<!-- Dialog -->
 	<SolidColorBrush x:Key="Brush/Dialog.ControlButtonsPanel.Background" Color="{DynamicResource Color/Dialog.ControlButtonsPanel.Background}"/>
+	<SolidColorBrush x:Key="Brush/Dialog.ControlButtonsPanel.Border" Color="{DynamicResource Color/Dialog.ControlButtonsPanel.Border}"/>
 	<SolidColorBrush x:Key="Brush/Dialog.ItemSeparator" Color="{DynamicResource Color/Dialog.ItemSeparator}"/>
 	<SolidColorBrush x:Key="Brush/Dialog.ItemsGroup.Background" Color="{DynamicResource Color/Dialog.ItemsGroup.Background}"/>
 	<SolidColorBrush x:Key="Brush/Dialog.ItemsGroup.Border" Color="{DynamicResource Color/Dialog.ItemsGroup.Border}"/>
@@ -115,6 +116,7 @@
 	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Foreground.Error" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Error}"/>
 	<SolidColorBrush x:Key="Brush/Dialog.TextBlock.Foreground.Warning" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Warning}"/>
 	<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#ffffff</Color>
+	<Color x:Key="Color/Dialog.ControlButtonsPanel.Border">#ffffff</Color>
 	<Color x:Key="Color/Dialog.ItemSeparator">#00000000</Color>
 	<Color x:Key="Color/Dialog.ItemsGroup.Background">#00000000</Color>
 	<Color x:Key="Color/Dialog.ItemsGroup.Border">#00000000</Color>
