@@ -778,7 +778,7 @@
 					<DockPanel Background="{DynamicResource Brush/WorkingArea.Background}">
 						
 						<Border Classes="ToolBar" DockPanel.Dock="Left" HorizontalAlignment="Left" ZIndex="1">
-							<appControls:ToolBarScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+							<appControls:ToolBarScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
 								<StackPanel Background="{x:Static Brushes.Transparent}">
 									<Button Classes="ToolBar_Button">
 										<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>

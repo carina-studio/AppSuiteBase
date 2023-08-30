@@ -2907,7 +2907,6 @@
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBarScrollViewer.ScrollingButton.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBarScrollViewer.ScrollingButton.Padding}"/>
-		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="controls|ToolBarScrollViewer">
@@ -2927,7 +2926,8 @@
 					<RepeatButton Name="PART_ScrollLeftButton"
 						Classes="ToolBarScrollViewer"
 						Command="{Binding ScrollLeft, RelativeSource={RelativeSource TemplatedParent}}"
-                        HorizontalAlignment="Left">
+                        HorizontalAlignment="Left"
+						VerticalAlignment="Stretch">
 						<RepeatButton.IsVisible>
 							<MultiBinding Converter="{x:Static converters:ScrollingButtonVisibilityConverter.Default}" ConverterParameter="Left">
 								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Offset.X"/>
@@ -2944,7 +2944,8 @@
 					<RepeatButton Name="PART_ScrollRightButton"
 						Classes="ToolBarScrollViewer"
 						Command="{Binding ScrollRight, RelativeSource={RelativeSource TemplatedParent}}"
-                        HorizontalAlignment="Right">
+                        HorizontalAlignment="Right"
+						VerticalAlignment="Stretch">
 						<RepeatButton.IsVisible>
 							<MultiBinding Converter="{x:Static converters:ScrollingButtonVisibilityConverter.Default}" ConverterParameter="Right">
 								<Binding RelativeSource="{RelativeSource TemplatedParent}" Path="Offset.X"/>

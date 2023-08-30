@@ -40,7 +40,7 @@ static class TabItemWidthConverter
             // get size of tab strip
             var margin = tabItemsContainer.Margin;
             var padding = tabStrip.Padding;
-            var tabStripWidth = (tabStrip.Bounds.Width - margin.Left - padding.Left - padding.Right - margin.Right);
+            var tabStripWidth = (tabStrip.Bounds.Width - margin.Left - padding.Left - padding.Right - margin.Right - 1);
             if (tabStripWidth <= 0)
                 return 0;
             
@@ -73,7 +73,7 @@ static class TabItemWidthConverter
                 return double.PositiveInfinity;
 
             // calculate width
-            var width = (int)(tabStripWidth / tabItemCount - tabItemMargin.Left - tabItemMargin.Right);
+            var width = (int)(tabStripWidth / tabItemCount - tabItemMargin.Left - tabItemMargin.Right - 0.5);
             return Math.Max(Math.Min(width, maxTabItemWidth), minTabItemWidth);
         }
         return double.PositiveInfinity;
