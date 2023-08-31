@@ -62,7 +62,7 @@
 		<PackageReference Include="CarinaStudio.AppBase.AutoUpdate" Version="$(AppBaseVersion)" />
 		<PackageReference Include="CarinaStudio.AppBase.MacOS" Version="$(AppBaseVersion)" />
 		<PackageReference Include="JetBrains.Profiler.SelfApi" Version="2.5.0" />
-		<PackageReference Include="Markdown.Avalonia.Tight" Version="11.0.0" />
+		<PackageReference Include="Markdown.Avalonia.Tight" Version="11.0.1" />
 		<PackageReference Include="Microsoft.Win32.Registry" Version="6.0.0-preview.5.21301.5" />
 		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="8.0.0-preview.7.23375.6" />
 		<PackageReference Include="NLog" Version="5.2.3" />
