@@ -331,6 +331,10 @@
 								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Heavy}" CornerRadius="5" Height="100" Margin="30,5,0,5" Width="100"/>
 								<Grid Margin="30,0,0,0" ColumnDefinitions="Auto,100,Auto" RowDefinitions="Auto,100,Auto">
 									<Border Background="{x:Static Brushes.White}" Grid.Column="1" Grid.Row="1"/>
+									<Border Classes="Shadow_TopLeft_Outer_Light" Grid.Column="0" Grid.Row="0"/>
+									<Border Classes="Shadow_TopRight_Outer_Light" Grid.Column="2" Grid.Row="0"/>
+									<Border Classes="Shadow_BottomLeft_Outer_Light" Grid.Column="0" Grid.Row="2"/>
+									<Border Classes="Shadow_BottomRight_Outer_Light" Grid.Column="2" Grid.Row="2"/>
 									<Border Classes="Shadow_Left_Light" Grid.Column="0" Grid.Row="1"/>
 									<Border Classes="Shadow_Top_Light" Grid.Column="1" Grid.Row="0"/>
 									<Border Classes="Shadow_Right_Light" Grid.Column="2" Grid.Row="1"/>
@@ -338,6 +342,10 @@
 								</Grid>
 								<Grid Margin="20,0,0,0" ColumnDefinitions="Auto,100,Auto" RowDefinitions="Auto,100,Auto">
 									<Border Background="{x:Static Brushes.White}" Grid.Column="1" Grid.Row="1"/>
+									<Border Classes="Shadow_TopLeft_Outer" Grid.Column="0" Grid.Row="0"/>
+									<Border Classes="Shadow_TopRight_Outer" Grid.Column="2" Grid.Row="0"/>
+									<Border Classes="Shadow_BottomLeft_Outer" Grid.Column="0" Grid.Row="2"/>
+									<Border Classes="Shadow_BottomRight_Outer" Grid.Column="2" Grid.Row="2"/>
 									<Border Classes="Shadow_Left" Grid.Column="0" Grid.Row="1"/>
 									<Border Classes="Shadow_Top" Grid.Column="1" Grid.Row="0"/>
 									<Border Classes="Shadow_Right" Grid.Column="2" Grid.Row="1"/>
@@ -345,6 +353,10 @@
 								</Grid>
 								<Grid Margin="30,0,0,0" ColumnDefinitions="Auto,100,Auto" RowDefinitions="Auto,100,Auto">
 									<Border Background="{x:Static Brushes.White}" Grid.Column="1" Grid.Row="1"/>
+									<Border Classes="Shadow_TopLeft_Outer_Heavy" Grid.Column="0" Grid.Row="0"/>
+									<Border Classes="Shadow_TopRight_Outer_Heavy" Grid.Column="2" Grid.Row="0"/>
+									<Border Classes="Shadow_BottomLeft_Outer_Heavy" Grid.Column="0" Grid.Row="2"/>
+									<Border Classes="Shadow_BottomRight_Outer_Heavy" Grid.Column="2" Grid.Row="2"/>
 									<Border Classes="Shadow_Left_Heavy" Grid.Column="0" Grid.Row="1"/>
 									<Border Classes="Shadow_Top_Heavy" Grid.Column="1" Grid.Row="0"/>
 									<Border Classes="Shadow_Right_Heavy" Grid.Column="2" Grid.Row="1"/>

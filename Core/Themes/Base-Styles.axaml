@@ -2031,6 +2031,48 @@
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 	</Style>
+	<Style Selector="Border.Shadow_BottomLeft_Outer">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.BottomLeft.Outer}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size}"/>
+		<Setter Property="VerticalAlignment" Value="Top"/>
+	</Style>
+	<Style Selector="Border.Shadow_BottomLeft_Outer_Heavy">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.BottomLeft.Outer.Heavy}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
+		<Setter Property="VerticalAlignment" Value="Top"/>
+	</Style>
+	<Style Selector="Border.Shadow_BottomLeft_Outer_Light">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.BottomLeft.Outer.Light}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+		<Setter Property="VerticalAlignment" Value="Top"/>
+	</Style>
+	<Style Selector="Border.Shadow_BottomRight_Outer">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.BottomRight.Outer}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size}"/>
+		<Setter Property="VerticalAlignment" Value="Top"/>
+	</Style>
+	<Style Selector="Border.Shadow_BottomRight_Outer_Heavy">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.BottomRight.Outer.Heavy}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
+		<Setter Property="VerticalAlignment" Value="Top"/>
+	</Style>
+	<Style Selector="Border.Shadow_BottomRight_Outer_Light">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.BottomRight.Outer.Light}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+		<Setter Property="VerticalAlignment" Value="Top"/>
+	</Style>
 	<Style Selector="Border.Shadow_Left">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Left}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -2075,6 +2117,48 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Top.Light}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+	</Style>
+	<Style Selector="Border.Shadow_TopLeft_Outer">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.TopLeft.Outer}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size}"/>
+		<Setter Property="VerticalAlignment" Value="Bottom"/>
+	</Style>
+	<Style Selector="Border.Shadow_TopLeft_Outer_Heavy">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.TopLeft.Outer.Heavy}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
+		<Setter Property="VerticalAlignment" Value="Bottom"/>
+	</Style>
+	<Style Selector="Border.Shadow_TopLeft_Outer_Light">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.TopLeft.Outer.Light}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+		<Setter Property="VerticalAlignment" Value="Bottom"/>
+	</Style>
+	<Style Selector="Border.Shadow_TopRight_Outer">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.TopRight.Outer}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size}"/>
+		<Setter Property="VerticalAlignment" Value="Bottom"/>
+	</Style>
+	<Style Selector="Border.Shadow_TopRight_Outer_Heavy">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.TopRight.Outer.Heavy}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
+		<Setter Property="VerticalAlignment" Value="Bottom"/>
+	</Style>
+	<Style Selector="Border.Shadow_TopRight_Outer_Light">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.TopRight.Outer.Light}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+		<Setter Property="VerticalAlignment" Value="Bottom"/>
 	</Style>
 	<Style Selector="Line.Shadow">
 		<Setter Property="Stretch" Value="Fill"/>
