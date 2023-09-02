@@ -13,6 +13,7 @@ static class TabItemWidthConverter
     // Fields.
     static IAvaloniaApplication? app;
     static Thickness emptyTabItemPadding;
+    static Thickness itemsPanelMargin;
     static double maxTabItemWidth;
     static double minTabItemWidth;
     static Thickness tabItemMargin;
@@ -27,6 +28,7 @@ static class TabItemWidthConverter
             if (app == null)
                 return double.PositiveInfinity;
             emptyTabItemPadding = app.FindResourceOrDefault<Thickness>("Thickness/TabItem.Header.Padding");
+            itemsPanelMargin = app.FindResourceOrDefault<Thickness>("Thickness/TabControl.TabStrip.Panel.Margin");
             maxTabItemWidth = app.FindResourceOrDefault<double>("Double/TabItem.Header.MaxWidth", 300);
             minTabItemWidth = app.FindResourceOrDefault<double>("Double/TabItem.Header.MinWidth", 150);
             tabItemMargin = app.FindResourceOrDefault<Thickness>("Thickness/TabItem.Header.Margin");
@@ -40,7 +42,10 @@ static class TabItemWidthConverter
             // get size of tab strip
             var margin = tabItemsContainer.Margin;
             var padding = tabStrip.Padding;
-            var tabStripWidth = (tabStrip.Bounds.Width - margin.Left - padding.Left - padding.Right - margin.Right - 1);
+            var tabStripWidth = (tabStrip.Bounds.Width 
+                                 - margin.Left - padding.Left - itemsPanelMargin.Left
+                                 - padding.Right - margin.Right - itemsPanelMargin.Right
+                                 - 1);
             if (tabStripWidth <= 0)
                 return 0;
             

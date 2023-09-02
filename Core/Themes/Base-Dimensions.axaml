@@ -336,7 +336,8 @@
 	<sys:Double x:Key="Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace">40</sys:Double>
 	<sys:Double x:Key="Double/TabControl.TabStrip.MaxEdgeFadingSize">20</sys:Double>
 	<sys:Double x:Key="Double/TabControl.TabStrip.ScrollingButton.Icon.Size">10</sys:Double>
-	<Thickness x:Key="Thickness/TabControl.TabStrip.Padding">6,0,6,-2</Thickness>
+	<Thickness x:Key="Thickness/TabControl.TabStrip.Padding">-9,-15,-9,-2</Thickness> <!-- [Workaround] Reserve -15px at top/left/right for shadows -->
+	<Thickness x:Key="Thickness/TabControl.TabStrip.Panel.Margin">15,15,15,0</Thickness> <!-- [Workaround] Reserve 15px at top/left/right for shadows -->
 	<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Margin">5</Thickness>
 	<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Padding">5</Thickness>
 

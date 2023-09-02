@@ -72,14 +72,14 @@
 	<StaticResourceExtension x:Key="Color/StatusBar.Border" ResourceKey="SystemAccentColorDark1"/>
 
 	<!-- TabControl -->
-	<Color x:Key="Color/TabControl.TabStrip.Border">#20000000</Color>
+	<Color x:Key="Color/TabControl.TabStrip.Border">#c7c7c7</Color>
 
 	<!-- TabItem -->
 	<Color x:Key="Color/TabItem.Header.Background">#00e0e0e0</Color>
 	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#e0e0e0</Color>
 	<Color x:Key="Color/TabItem.Header.Background.Selected">#e0e0e0</Color>
-	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#30000000</Color>
-	<Color x:Key="Color/TabItem.Header.Border.Selected">#20000000</Color>
+	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#c0c0c0</Color>
+	<Color x:Key="Color/TabItem.Header.Border.Selected">#c7c7c7</Color>
 
 	<!-- TextBox -->
 	<SolidColorBrush x:Key="Brush/TextBox.Foreground.Selected" Color="#ffffff"/>

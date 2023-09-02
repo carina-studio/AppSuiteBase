@@ -12,6 +12,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Tests.MainWindow"
 		Classes="Tabbed"
+		ClipToBounds="False"
 		Icon="/AppIcon.ico"
         Title="{DynamicResource String/TestMainWIndow.Title}">
 	
@@ -33,7 +34,7 @@
 		</MultiBinding>
 	</Window.ExtendClientAreaTitleBarHeightHint>
 
-	<DockPanel>
+	<DockPanel ClipToBounds="False">
 
 		<!-- Status bar -->
 		<Panel DockPanel.Dock="Bottom">
@@ -83,7 +84,7 @@
 			<Line Classes="Shadow" Stroke="{DynamicResource Brush/StatusBar.Border}" VerticalAlignment="Top"/>
 		</Panel>
 
-		<Panel>
+		<Panel ClipToBounds="False">
 			<appControls:TabControl Name="tabControl" DragDrop.AllowDrop="True" DragEnterItem="OnDragEnterTabItem" DragLeaveItem="OnDragLeaveTabItem" DragOverItem="OnDragOverTabItem" DropOnItem="OnDropOnTabItem" ItemDragged="OnTabItemDragged">
 
 				<TabItem>

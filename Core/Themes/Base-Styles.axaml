@@ -12,6 +12,7 @@
 	<Style Selector="Button.AddTabItem">
 		<Setter Property="Background" Value="{DynamicResource Brush/TabItem.Header.Background}"/>
 		<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushTransparent}"/>
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="Height" Value="{DynamicResource Double/AddTabItemButton.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/AddTabItemButton.Padding}"/>
@@ -2020,21 +2021,25 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Bottom}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
 	<Style Selector="Border.Shadow_Bottom_Heavy">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Bottom.Heavy}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
 	<Style Selector="Border.Shadow_Bottom_Light">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Bottom.Light}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
 	<Style Selector="Border.Shadow_BottomLeft_Outer">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.BottomLeft.Outer}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size}"/>
 		<Setter Property="VerticalAlignment" Value="Top"/>
 	</Style>
@@ -2042,6 +2047,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.BottomLeft.Outer.Heavy}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 		<Setter Property="VerticalAlignment" Value="Top"/>
 	</Style>
@@ -2049,6 +2055,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.BottomLeft.Outer.Light}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 		<Setter Property="VerticalAlignment" Value="Top"/>
 	</Style>
@@ -2056,6 +2063,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.BottomRight.Outer}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size}"/>
 		<Setter Property="VerticalAlignment" Value="Top"/>
 	</Style>
@@ -2063,6 +2071,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.BottomRight.Outer.Heavy}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 		<Setter Property="VerticalAlignment" Value="Top"/>
 	</Style>
@@ -2070,58 +2079,69 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.BottomRight.Outer.Light}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 		<Setter Property="VerticalAlignment" Value="Top"/>
 	</Style>
 	<Style Selector="Border.Shadow_Left">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Left}"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size}"/>
 	</Style>
 	<Style Selector="Border.Shadow_Left_Heavy">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Left.Heavy}"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 	</Style>
 	<Style Selector="Border.Shadow_Left_Light">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Left.Light}"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 	</Style>
 	<Style Selector="Border.Shadow_Right">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Right}"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size}"/>
 	</Style>
 	<Style Selector="Border.Shadow_Right_Heavy">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Right.Heavy}"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 	</Style>
 	<Style Selector="Border.Shadow_Right_Light">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Right.Light}"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 	</Style>
 	<Style Selector="Border.Shadow_Top">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Top}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size}"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 	</Style>
 	<Style Selector="Border.Shadow_Top_Heavy">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Top.Heavy}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 	</Style>
 	<Style Selector="Border.Shadow_Top_Light">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Top.Light}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 	</Style>
 	<Style Selector="Border.Shadow_TopLeft_Outer">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.TopLeft.Outer}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size}"/>
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 	</Style>
@@ -2129,6 +2149,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.TopLeft.Outer.Heavy}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 	</Style>
@@ -2136,6 +2157,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.TopLeft.Outer.Light}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 	</Style>
@@ -2143,6 +2165,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.TopRight.Outer}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size}"/>
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 	</Style>
@@ -2150,6 +2173,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.TopRight.Outer.Heavy}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 	</Style>
@@ -2157,6 +2181,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.TopRight.Outer.Light}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 	</Style>
@@ -2350,11 +2375,15 @@
 
 	<!-- TabControl -->
 	<Style Selector="RepeatButton.TabStripScroller">
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/TabControl.TabStrip.ScrollingButton.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/TabControl.TabStrip.ScrollingButton.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="RepeatButton.TabStripScroller > ContentPresenter">
+		<Setter Property="BoxShadow" Value="{DynamicResource BoxShadows/Shadow.Light}"/>
 	</Style>
 	<Style Selector="controls|TabStripScrollViewer">
 		<Setter Property="HorizontalScrollBarVisibility" Value="Visible"/>
@@ -2411,9 +2440,12 @@
 		<Setter Property="VerticalScrollBarVisibility" Value="Disabled"/>
 	</Style>
 	<Style Selector="TabControl">
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="ItemsPanel">
 			<ItemsPanelTemplate>
-				<StackPanel Orientation="Horizontal"/>
+				<StackPanel ClipToBounds="False" 
+				            Margin="{DynamicResource Thickness/TabControl.TabStrip.Panel.Margin}"
+				            Orientation="Horizontal"/>
 			</ItemsPanelTemplate>
 		</Setter>
 		<Setter Property="Template">
@@ -2421,15 +2453,18 @@
 				<ControlTemplate>
 					<Border BorderBrush="{TemplateBinding BorderBrush}"
 							BorderThickness="{TemplateBinding BorderThickness}"
+							ClipToBounds="False"
 							CornerRadius="{TemplateBinding CornerRadius}"
 							Background="{x:Null}"
 							HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
 							VerticalAlignment="{TemplateBinding VerticalAlignment}">
-						<DockPanel>
-							<Panel DockPanel.Dock="Top">
-								<Line EndPoint="6,0" HorizontalAlignment="Stretch" Stretch="Fill" StartPoint="0,0" Stroke="{DynamicResource Brush/TabControl.TabStrip.Border}" StrokeThickness="1" VerticalAlignment="Bottom"/>
-								<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" Background="{x:Null}" Padding="{DynamicResource Thickness/TabControl.TabStrip.Padding}">
+						<DockPanel ClipToBounds="False">
+							<Panel ClipToBounds="False" DockPanel.Dock="Top">
+								<Border BorderBrush="{DynamicResource Brush/TabControl.TabStrip.Border}" BorderThickness="0,0,0,1" IsHitTestVisible="False"/>
+								<Border Classes="Shadow_Top_Light" VerticalAlignment="Bottom"/>
+								<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" Background="{x:Static Brushes.Transparent}" ClipToBounds="False" Padding="{DynamicResource Thickness/TabControl.TabStrip.Padding}">
 									<ItemsPresenter Name="PART_ItemsPresenter"
+									                ClipToBounds="False"
 									                ItemsPanel="{TemplateBinding ItemsPanel}"/>
 								</controls:TabStripScrollViewer>
 							</Panel>
@@ -2486,14 +2521,15 @@
 		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
 	</Style>
 	<Style Selector="TabItem">
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="MaxHeight" Value="{DynamicResource Double/TabItem.Header.Height}"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/TabItem.Header.Height}"/>
 		<Setter Property="Padding" Value="0"/>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate>
-					<Border Background="{x:Static Brushes.Transparent}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-						<DockPanel VerticalAlignment="Stretch">
+					<Border Background="{x:Static Brushes.Transparent}" ClipToBounds="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+						<DockPanel ClipToBounds="False" VerticalAlignment="Stretch">
 
 							<Border DockPanel.Dock="Left" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemBefore}" Margin="{DynamicResource Thickness/TabItem.InsertionIndicator.Margin}">
 								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
@@ -2503,7 +2539,7 @@
 								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
 							</Border>
 							
-							<Border Name="PART_ContentContainer" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" VerticalAlignment="Bottom">
+							<Border Name="PART_ContentContainer" ClipToBounds="False" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" VerticalAlignment="Bottom">
 								<Border.Width>
 									<MultiBinding Converter="{x:Static converters:TabItemWidthConverter.Default}">
 										<Binding RelativeSource="{RelativeSource AncestorType={x:Type TabControl}}"/>
@@ -2512,7 +2548,8 @@
 										<Binding Path="Bounds" RelativeSource="{RelativeSource AncestorType={x:Type controls:TabStripScrollViewer}}"/> <!-- Triggered by change of Bounds -->
 									</MultiBinding>
 								</Border.Width>
-								<Panel>
+								<Panel ClipToBounds="False">
+									<Border Background="{x:Null}" BoxShadow="{DynamicResource BoxShadows/Shadow.Light}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsSelected}"/>
 									<Border Background="{DynamicResource Brush/TabItem.Header.Background}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding !$parent[TabItem].IsSelected}" Margin="0,0,0,1"/>
 									<Border Background="{DynamicResource Brush/TabItem.Header.Background.PointerOver}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsPointerOver}" Opacity="{Binding $parent[TabItem].IsPointerOver, Converter={x:Static converters:TabItemOpacityConverters.IsPointerOverToOpacity}}" Margin="0,0,0,1">
 										<Border.Transitions>
@@ -2543,7 +2580,13 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate>
-					<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Center" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
+					<ContentPresenter ClipToBounds="False" 
+					                  Content="{TemplateBinding Header}" 
+					                  ContentTemplate="{TemplateBinding HeaderTemplate}" 
+					                  Height="{DynamicResource Double/TabItem.Header.Content.Height}" 
+					                  HorizontalAlignment="Center" 
+					                  Margin="{DynamicResource Thickness/TabItem.Header.Padding}" 
+					                  VerticalAlignment="Center"/>
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
