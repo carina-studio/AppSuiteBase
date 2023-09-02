@@ -329,6 +329,9 @@
 								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Light}" CornerRadius="5" Height="100" Margin="5,5,0,5" Width="100"/>
 								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow}" CornerRadius="5" Height="100" Margin="20,5,0,5" Width="100"/>
 								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Heavy}" CornerRadius="5" Height="100" Margin="30,5,0,5" Width="100"/>
+								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Inner.Light}" CornerRadius="5" Height="100" Margin="25,5,5,5" Width="100"/>
+								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Inner}" CornerRadius="5" Height="100" Margin="5" Width="100"/>
+								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Inner.Heavy}" CornerRadius="5" Height="100" Margin="5" Width="100"/>
 								<Grid Margin="30,0,0,0" ColumnDefinitions="Auto,100,Auto" RowDefinitions="Auto,100,Auto">
 									<Border Background="{x:Static Brushes.White}" Grid.Column="1" Grid.Row="1"/>
 									<Border Classes="Shadow_TopLeft_Outer_Light" Grid.Column="0" Grid.Row="0"/>
