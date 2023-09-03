@@ -401,7 +401,7 @@ namespace CarinaStudio.AppSuite.ViewModels
                 if (this.IsUseEmbeddedFontsForChineseChanged != isChanged)
                 {
                     this.IsUseEmbeddedFontsForChineseChanged = isChanged;
-                    this.OnPropertyChanged(nameof(IsUseCompactUserInterfaceChanged));
+                    this.OnPropertyChanged(nameof(IsUseEmbeddedFontsForChineseChanged));
                 }
             }
         }

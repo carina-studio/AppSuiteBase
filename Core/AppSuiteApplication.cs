@@ -2604,6 +2604,9 @@ namespace CarinaStudio.AppSuite
                 Global.RunWithoutError(() => this.multiInstancesServerStream.Close());
                 this.multiInstancesServerStream = null;
             }
+            
+            // save initial settings
+            await this.SaveInitSettingsAsync();
 
             // save configuration
             await this.SaveConfigurationAsync();
