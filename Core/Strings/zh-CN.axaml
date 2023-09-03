@@ -82,6 +82,7 @@
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">主题模式</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface">使用紧密版面配置</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface.Description">当您使用较小屏幕的设备时建议使用。</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.UseEmbeddedFontsForChinese">使用内建中文字型</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UserInterface">用户界面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">使用空白字符进行缩排</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillCloseAllWindowsToTakeEffect">将关闭所有窗口以套用。</sys:String>

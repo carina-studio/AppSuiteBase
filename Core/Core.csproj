@@ -19,6 +19,10 @@
 	<ItemGroup>
 		<AvaloniaResource Include="Fonts/Inter-Bold.ttf" />
 		<AvaloniaResource Include="Fonts/Inter-Regular.ttf" />
+		<AvaloniaResource Include="Fonts/NotoSansSC-Bold.ttf" />
+		<AvaloniaResource Include="Fonts/NotoSansSC-Regular.ttf" />
+		<AvaloniaResource Include="Fonts/NotoSansTC-Bold.ttf" />
+		<AvaloniaResource Include="Fonts/NotoSansTC-Regular.ttf" />
 		<AvaloniaResource Include="Resources/Icons.axaml" />
 		<AvaloniaResource Include="Strings/Default.axaml" />
 		<AvaloniaResource Include="Strings/Default-OSX.axaml" />

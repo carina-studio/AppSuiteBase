@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Media;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -212,46 +213,54 @@ partial class AppSuiteApplication
     
     
     // Setup AppBuilder for Linux.
-    static void SetupLinuxAppBuilder(AppBuilder builder, UnicodeRange cjkUnicodeRanges)
+    static void SetupLinuxAppBuilder(AppBuilder builder, UnicodeRange cjkUnicodeRanges, IList<FontFamily> embeddedChineseFonts)
     {
         builder.With(new FontManagerOptions
         {
             DefaultFamilyName = $"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts/#Inter",
-            // ReSharper disable StringLiteralTypo
-            FontFallbacks = new FontFallback[]
+            FontFallbacks = new List<FontFallback>(8).Also(it =>
             {
-                new()
+                foreach (var fontFamily in embeddedChineseFonts)
+                {
+                    it.Add(new()
+                    {
+                        FontFamily = fontFamily,
+                        UnicodeRange = cjkUnicodeRanges,
+                    });
+                }
+                // ReSharper disable StringLiteralTypo
+                it.Add(new()
                 {
                     FontFamily = new("Noto Sans CJK TC"),
                     UnicodeRange = cjkUnicodeRanges,
-                },
-                new()
+                });
+                it.Add(new()
                 {
                     FontFamily = new("Noto Sans CJK SC"),
                     UnicodeRange = cjkUnicodeRanges,
-                },
-                new()
+                });
+                it.Add(new()
                 {
                     FontFamily = new("Noto Sans Mono CJK TC"),
                     UnicodeRange = cjkUnicodeRanges,
-                },
-                new()
+                });
+                it.Add(new()
                 {
                     FontFamily = new("Noto Sans Mono CJK SC"),
                     UnicodeRange = cjkUnicodeRanges,
-                },
-                new()
+                });
+                it.Add(new()
                 {
                     FontFamily = new("Noto Serif CJK TC"),
                     UnicodeRange = cjkUnicodeRanges,
-                },
-                new()
+                });
+                it.Add(new()
                 {
                     FontFamily = new("Noto Serif CJK SC"),
                     UnicodeRange = cjkUnicodeRanges,
-                }
-            },
-            // ReSharper restore StringLiteralTypo
+                });
+                // ReSharper restore StringLiteralTypo
+            }).ToArray(),
         });
         builder.With(new X11PlatformOptions());
     }

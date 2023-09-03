@@ -27,6 +27,10 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <see cref="IValueConverter"/> to convert from <see cref="ThemeMode"/> to <see cref="string"/>.
         /// </summary>
         public static readonly IValueConverter ThemeModeConverter = new Converters.EnumConverter(AppSuiteApplication.CurrentOrNull, typeof(ThemeMode));
+        
+        
+        // Static fields.
+        static bool? InitUseEmbeddedFontsForChinese;
 
 
         // Fields.
@@ -50,6 +54,13 @@ namespace CarinaStudio.AppSuite.ViewModels
             }).AsReadOnly();
             this.originalThemeMode = this.ThemeMode;
             this.originalUsingCompactUI = this.UseCompactUserInterface;
+            (this.Application as AppSuiteApplication)?.InitSettings.Let(initSettings =>
+            {
+                initSettings.SettingChanged += this.OnInitSettingsChanged;
+                InitUseEmbeddedFontsForChinese ??= initSettings.GetValueOrDefault(InitSettingKeys.UseEmbeddedFontsForChinese);
+                this.IsUseEmbeddedFontsForChineseSupported = true;
+                this.IsUseEmbeddedFontsForChineseChanged = InitUseEmbeddedFontsForChinese != initSettings.GetValueOrDefault(InitSettingKeys.UseEmbeddedFontsForChinese);
+            });
             ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged += this.OnMainWindowsChanged;
             this.Application.ProductManager.Let(it =>
             {
@@ -200,6 +211,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// <inheritdoc/>
         protected override void Dispose(bool disposing)
         {
+            (this.Application as AppSuiteApplication)?.InitSettings.Let(it => it.SettingChanged -= this.OnInitSettingsChanged);
             ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged -= this.OnMainWindowsChanged;
             this.Application.ProductManager.Let(it =>
             {
@@ -298,6 +310,18 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// Check whether <see cref="UseCompactUserInterface"/> has been changed before restarting main windows or not.
         /// </summary>
         public bool IsUseCompactUserInterfaceChanged { get; private set;}
+        
+        
+        /// <summary>
+        /// Check whether <see cref="UseEmbeddedFontsForChinese"/> has been changed before restarting main windows or not.
+        /// </summary>
+        public bool IsUseEmbeddedFontsForChineseChanged { get; private set; }
+        
+        
+        /// <summary>
+        /// Check whether <see cref="UseEmbeddedFontsForChinese"/> is supported or not.
+        /// </summary>
+        public bool IsUseEmbeddedFontsForChineseSupported { get; private set; }
 
 
         /// <summary>
@@ -363,6 +387,23 @@ namespace CarinaStudio.AppSuite.ViewModels
                 this.OnPropertyChanged(nameof(IsRestartingRootWindowsNeeded));
             else if (e.PropertyName == nameof(AppSuiteApplication.LogOutputTargetPort))
                 this.OnPropertyChanged(nameof(LogOutputTargetPort));
+        }
+        
+        
+        // Called when initial settings changed.
+        void OnInitSettingsChanged(object? sender, SettingChangedEventArgs e)
+        {
+            var key = e.Key;
+            if (key == InitSettingKeys.UseEmbeddedFontsForChinese)
+            {
+                this.OnPropertyChanged(nameof(UseEmbeddedFontsForChinese));
+                var isChanged = InitUseEmbeddedFontsForChinese.GetValueOrDefault() != (bool)e.Value;
+                if (this.IsUseEmbeddedFontsForChineseChanged != isChanged)
+                {
+                    this.IsUseEmbeddedFontsForChineseChanged = isChanged;
+                    this.OnPropertyChanged(nameof(IsUseCompactUserInterfaceChanged));
+                }
+            }
         }
 
 
@@ -486,6 +527,16 @@ namespace CarinaStudio.AppSuite.ViewModels
         {
             get => this.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface);
             set => this.Settings.SetValue<bool>(SettingKeys.UseCompactUserInterface, value);
+        }
+        
+        
+        /// <summary>
+        /// Get or set to use embedded fonts for Chinese.
+        /// </summary>
+        public bool UseEmbeddedFontsForChinese
+        {
+            get => (this.Application as AppSuiteApplication)?.InitSettings.GetValueOrDefault(InitSettingKeys.UseEmbeddedFontsForChinese) ?? false;
+            set => (this.Application as AppSuiteApplication)?.InitSettings.Let(it => it.SetValue<bool>(InitSettingKeys.UseEmbeddedFontsForChinese, value));
         }
 
 

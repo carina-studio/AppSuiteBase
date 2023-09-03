@@ -13,6 +13,7 @@ using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using SkiaSharp;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -270,13 +271,27 @@ partial class AppSuiteApplication
 
 
     // Setup AppBuilder for macOS.
-    static void SetupMacOSAppBuilder(AppBuilder builder)
+    static void SetupMacOSAppBuilder(AppBuilder builder, UnicodeRange cjkUnicodeRanges, IList<FontFamily> embeddedChineseFonts)
     {
         builder.ConfigureFonts(fontManager =>
         {
             fontManager.AddFontCollection(new EmbeddedFontCollection(
                 new Uri("fonts:Inter", UriKind.Absolute),
                 new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts", UriKind.Absolute)));
+        });
+        builder.With(new FontManagerOptions
+        {
+            FontFallbacks = new List<FontFallback>(8).Also(it =>
+            {
+                foreach (var fontFamily in embeddedChineseFonts)
+                {
+                    it.Add(new()
+                    {
+                        FontFamily = fontFamily,
+                        UnicodeRange = cjkUnicodeRanges,
+                    });
+                }
+            }).ToArray(),
         });
         builder.With(new MacOSPlatformOptions
         {

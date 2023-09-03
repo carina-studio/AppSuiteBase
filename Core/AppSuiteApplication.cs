@@ -216,6 +216,20 @@ namespace CarinaStudio.AppSuite
                     app.Logger.LogTrace("Downloading dotTrace: {progress:F2}%", value);
             }
         }
+        
+        
+        // Implementation of initial settings.
+        class InitSettingsImpl : PersistentSettings
+        {
+            // Constructor.
+            public InitSettingsImpl() : base(JsonSettingsSerializer.Default)
+            { }
+
+            // Implementations.
+            protected override void OnUpgrade(int oldVersion)
+            { }
+            public override int Version => 1;
+        }
 
 
         /// <summary>
@@ -374,6 +388,8 @@ namespace CarinaStudio.AppSuite
         static readonly SettingKey<string> AppVersionKey = new("ApplicationVersion", "");
         static double CachedCustomScreenScaleFactor = double.NaN;
         static readonly SettingKey<bool> DoNotPromptBeforeTakingMemorySnapshotKey = new("DoNotPromptBeforeTakingMemorySnapshot", false);
+        static readonly string InitSettingsFilePath = Path.Combine(AppDirectoryPath, "InitSettings.json");
+        static InitSettingsImpl? InitSettingsInstance;
         static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new("IsAcceptNonStableApplicationUpdateInitialized", false);
         static readonly SettingKey<int> LogOutputTargetPortKey = new("LogOutputTargetPort");
         static readonly SettingKey<byte[]> MainWindowViewModelStatesKey = new("MainWindowViewModelStates", Array.Empty<byte>());
@@ -659,12 +675,40 @@ namespace CarinaStudio.AppSuite
             CultureInfo.CurrentUICulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+            
+            // load initial settings
+            Debug.WriteLine("Start loading initial settings");
+            InitSettingsInstance = new InitSettingsImpl();
+            try
+            {
+                if (System.IO.File.Exists(InitSettingsFilePath))
+                    InitSettingsInstance.Load(InitSettingsFilePath);
+                Debug.WriteLine("Complete loading initial settings");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Unable to load initial settings. {ex.GetType().Name}: {ex.Message}");
+            }
 
             // build application
             return AppBuilder.Configure<TApp>().Also(it =>
             {
+                // use default settings
                 it.LogToTrace()
                     .UsePlatformDetect();
+                
+                // load embedded chinese fonts
+                var embeddedChineseFonts = new List<FontFamily>(4).Also(it =>
+                {
+                    if (InitSettingsInstance.GetValueOrDefault(InitSettingKeys.UseEmbeddedFontsForChinese))
+                    {
+                        var baseUri = new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts", UriKind.Absolute);
+                        it.Add(new(baseUri, "#Noto Sans TC"));
+                        it.Add(new(baseUri, "#Noto Sans SC"));
+                    }
+                });
+                
+                // setup platform specific settings
                 var cjkUnicodeRanges = new UnicodeRange(new UnicodeRangeSegment[]
                 {
                     // ReSharper disable CommentTypo
@@ -677,11 +721,13 @@ namespace CarinaStudio.AppSuite
                     // ReSharper restore CommentTypo
                 });
                 if (Platform.IsWindows)
-                    SetupWindowsAppBuilder(it, cjkUnicodeRanges);
+                    SetupWindowsAppBuilder(it, cjkUnicodeRanges, embeddedChineseFonts);
                 else if (Platform.IsMacOS)
-                    SetupMacOSAppBuilder(it);
+                    SetupMacOSAppBuilder(it, cjkUnicodeRanges, embeddedChineseFonts);
                 else if (Platform.IsLinux)
-                    SetupLinuxAppBuilder(it, cjkUnicodeRanges);
+                    SetupLinuxAppBuilder(it, cjkUnicodeRanges, embeddedChineseFonts);
+                
+                // custom settings
                 setupAction?.Invoke(it);
             });
         }
@@ -1422,6 +1468,12 @@ namespace CarinaStudio.AppSuite
         /// Get information of hardware.
         /// </summary>
         public HardwareInfo HardwareInfo => this.hardwareInfo ?? throw new InvalidOperationException("Application is not initialized yet.");
+
+
+        /// <summary>
+        /// Initial settings.
+        /// </summary>
+        internal ISettings InitSettings => InitSettingsInstance ?? throw new InvalidOperationException();
 
 
         /// <summary>
@@ -3350,6 +3402,36 @@ namespace CarinaStudio.AppSuite
             catch (Exception ex)
             {
                 this.Logger.LogError(ex, "Failed to save configuration to '{configurationFilePath}'", this.configurationFilePath);
+            }
+        }
+        
+        
+        /// <summary>
+        /// Save <see cref="InitSettings"/> to file.
+        /// </summary>
+        /// <returns>Task of saving.</returns>
+        internal async Task SaveInitSettingsAsync()
+        {
+            // check state
+            this.VerifyAccess();
+            if (this.settings == null)
+                return;
+            if (this.IsCleanMode)
+            {
+                this.Logger.LogWarning("Skip saving initial settings in clean mode");
+                return;
+            }
+
+            // save
+            this.Logger.LogDebug("Start saving initial settings");
+            try
+            {
+                await InitSettingsInstance!.SaveAsync(InitSettingsFilePath);
+                this.Logger.LogDebug("Complete saving initial settings");
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Failed to save initial settings to '{filePath}'", InitSettingsFilePath);
             }
         }
 

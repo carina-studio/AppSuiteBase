@@ -5,6 +5,7 @@ using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -185,7 +186,7 @@ unsafe partial class AppSuiteApplication
     
     
     // Setup AppBuilder for Windows.
-    static void SetupWindowsAppBuilder(AppBuilder builder, UnicodeRange cjkUnicodeRanges)
+    static void SetupWindowsAppBuilder(AppBuilder builder, UnicodeRange cjkUnicodeRanges, IList<FontFamily> embeddedChineseFonts)
     {
         builder.ConfigureFonts(fontManager =>
         {
@@ -195,31 +196,39 @@ unsafe partial class AppSuiteApplication
         });
         builder.With(new FontManagerOptions
         {
-            // ReSharper disable StringLiteralTypo
-            FontFallbacks = new FontFallback[]
+            FontFallbacks = new List<FontFallback>(8).Also(it =>
             {
-                new()
+                foreach (var fontFamily in embeddedChineseFonts)
+                {
+                    it.Add(new()
+                    {
+                        FontFamily = fontFamily,
+                        UnicodeRange = cjkUnicodeRanges,
+                    });
+                }
+                // ReSharper disable StringLiteralTypo
+                it.Add(new()
                 {
                     FontFamily = new("Microsoft JhengHei UI"),
                     UnicodeRange = cjkUnicodeRanges,
-                },
-                new()
+                });
+                it.Add(new()
                 {
                     FontFamily = new("Microsoft YaHei UI"),
                     UnicodeRange = cjkUnicodeRanges,
-                },
-                new()
+                });
+                it.Add(new()
                 {
                     FontFamily = new("PMingLiU"),
                     UnicodeRange = cjkUnicodeRanges,
-                },
-                new()
+                });
+                it.Add(new()
                 {
                     FontFamily = new("MingLiU"),
                     UnicodeRange = cjkUnicodeRanges,
-                }
-            },
-            // ReSharper restore StringLiteralTypo
+                });
+                // ReSharper restore StringLiteralTypo
+            }).ToArray(),
         });
     }
 
