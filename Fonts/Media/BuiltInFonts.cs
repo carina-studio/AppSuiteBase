@@ -14,6 +14,8 @@ public static class BuiltInFonts
     static readonly Uri baseResourceUri = new($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}/Resources/Fonts/");
     static IList<FontFamily>? fontFamilies;
     static FontFamily? ibmPlexMono;
+    static FontFamily? notoSansSC;
+    static FontFamily? notoSansTC;
     static FontFamily? roboto;
     static FontFamily? robotoMono;
     static FontFamily? sourceCodePro;
@@ -22,35 +24,49 @@ public static class BuiltInFonts
     /// <summary>
     /// Get all built-in font families.
     /// </summary>
-    public static IList<FontFamily> FontFamilies { get => fontFamilies ?? ListExtensions.AsReadOnly(new FontFamily[]
-    {
-        IBMPlexMono,
-        Roboto,
-        RobotoMono,
-        SourceCodePro,
-    }).Also(it => fontFamilies = it); }
+    public static IList<FontFamily> FontFamilies =>
+        // ReSharper disable once InvokeAsExtensionMethod
+        fontFamilies ?? ListExtensions.AsReadOnly(new[]
+        {
+            IBMPlexMono,
+            Roboto,
+            RobotoMono,
+            SourceCodePro,
+        }).Also(it => fontFamilies = it);
 
 
     /// <summary>
     /// IBM Plex Mono.
     /// </summary>
-    public static FontFamily IBMPlexMono { get => ibmPlexMono ?? new FontFamily(baseResourceUri, "#IBM Plex Mono").Also(it => ibmPlexMono = it); }
+    public static FontFamily IBMPlexMono => ibmPlexMono ?? new FontFamily(baseResourceUri, "#IBM Plex Mono").Also(it => ibmPlexMono = it);
+    
+    
+    /// <summary>
+    /// Noto Sans Traditional Chinese.
+    /// </summary>
+    public static FontFamily NotoSansTC => notoSansTC ?? new FontFamily(baseResourceUri, "#Noto Sans TC").Also(it => notoSansTC = it);
+    
+    
+    /// <summary>
+    /// Noto Sans Simplified Chinese.
+    /// </summary>
+    public static FontFamily NotoSansSC => notoSansSC ?? new FontFamily(baseResourceUri, "#Noto Sans SC").Also(it => notoSansSC = it);
 
 
     /// <summary>
     /// Roboto.
     /// </summary>
-    public static FontFamily Roboto { get => roboto ?? new FontFamily(baseResourceUri, "#Roboto").Also(it => roboto = it); }
+    public static FontFamily Roboto => roboto ?? new FontFamily(baseResourceUri, "#Roboto").Also(it => roboto = it);
 
 
     /// <summary>
     /// Roboto Mono.
     /// </summary>
-    public static FontFamily RobotoMono { get => robotoMono ?? new FontFamily(baseResourceUri, "#Roboto Mono").Also(it => robotoMono = it); }
+    public static FontFamily RobotoMono => robotoMono ?? new FontFamily(baseResourceUri, "#Roboto Mono").Also(it => robotoMono = it);
 
 
     /// <summary>
     /// Source Code Pro.
     /// </summary>
-    public static FontFamily SourceCodePro { get => sourceCodePro ?? new FontFamily(baseResourceUri, "#Source Code Pro").Also(it => sourceCodePro = it); }
+    public static FontFamily SourceCodePro => sourceCodePro ?? new FontFamily(baseResourceUri, "#Source Code Pro").Also(it => sourceCodePro = it);
 }

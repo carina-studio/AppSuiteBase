@@ -27,6 +27,10 @@
 		<AvaloniaResource Include="Resources/Fonts/IBMPlexMono-Light.ttf" />
 		<AvaloniaResource Include="Resources/Fonts/IBMPlexMono-LightItalic.ttf" />
 		<AvaloniaResource Include="Resources/Fonts/IBMPlexMono-Regular.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/NotoSansSC-Bold.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/NotoSansSC-Regular.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/NotoSansTC-Bold.ttf" />
+		<AvaloniaResource Include="Resources/Fonts/NotoSansTC-Regular.ttf" />
 		<AvaloniaResource Include="Resources/Fonts/Roboto-Bold.ttf" />
 		<AvaloniaResource Include="Resources/Fonts/Roboto-BoldItalic.ttf" />
 		<AvaloniaResource Include="Resources/Fonts/Roboto-Italic.ttf" />
