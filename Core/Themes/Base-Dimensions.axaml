@@ -308,12 +308,12 @@
 	<sys:Double x:Key="Double/SelfTestingWindow.Width">600</sys:Double>
 	
 	<!-- Shadow -->
-	<BoxShadows x:Key="BoxShadows/Shadow">0 0 15 0 #2f000000</BoxShadows>
-	<BoxShadows x:Key="BoxShadows/Shadow.Heavy">0 0 20 0 #4f000000</BoxShadows>
-	<BoxShadows x:Key="BoxShadows/Shadow.Inner">inset 0 0 15 0 #2f000000</BoxShadows>
-	<BoxShadows x:Key="BoxShadows/Shadow.Inner.Heavy">inset 0 0 20 0 #4f000000</BoxShadows>
-	<BoxShadows x:Key="BoxShadows/Shadow.Inner.Light">inset 0 0 10 0 #1f000000</BoxShadows>
-	<BoxShadows x:Key="BoxShadows/Shadow.Light">0 0 10 0 #1f000000</BoxShadows>
+	<BoxShadows x:Key="BoxShadows/Shadow">0 0 15 0 #47000000</BoxShadows>
+	<BoxShadows x:Key="BoxShadows/Shadow.Heavy">0 0 20 0 #50000000</BoxShadows>
+	<BoxShadows x:Key="BoxShadows/Shadow.Inner">inset 0 0 15 0 #47000000</BoxShadows>
+	<BoxShadows x:Key="BoxShadows/Shadow.Inner.Heavy">inset 0 0 20 0 #50000000</BoxShadows>
+	<BoxShadows x:Key="BoxShadows/Shadow.Inner.Light">inset 0 0 10 0 #40000000</BoxShadows>
+	<BoxShadows x:Key="BoxShadows/Shadow.Light">0 0 10 0 #40000000</BoxShadows>
 	<sys:Double x:Key="Double/Shadow.Size">15</sys:Double>
 	<sys:Double x:Key="Double/Shadow.Size.Heavy">20</sys:Double>
 	<sys:Double x:Key="Double/Shadow.Size.Light">10</sys:Double>

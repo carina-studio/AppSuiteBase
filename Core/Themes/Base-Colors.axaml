@@ -240,27 +240,30 @@
 	
 	<!-- Shadow -->
 	<GradientStops x:Key="GradientStops/Shadow">
-		<GradientStop Color="#17000000" Offset="0.0"/>
-		<GradientStop Color="#0b000000" Offset="0.2"/>
-		<GradientStop Color="#05000000" Offset="0.4"/>
-		<GradientStop Color="#02000000" Offset="0.6"/>
-		<GradientStop Color="#01000000" Offset="0.8"/>
-		<GradientStop Color="#00000000" Offset="1.0"/>
-	</GradientStops>
-	<GradientStops x:Key="GradientStops/Shadow.Heavy">
-		<GradientStop Color="#27000000" Offset="0.0"/>
-		<GradientStop Color="#13000000" Offset="0.17"/>
-		<GradientStop Color="#09000000" Offset="0.33"/>
+		<GradientStop Color="#23000000" Offset="0.0"/>
+		<GradientStop Color="#11000000" Offset="0.17"/>
+		<GradientStop Color="#08000000" Offset="0.33"/>
 		<GradientStop Color="#04000000" Offset="0.5"/>
 		<GradientStop Color="#02000000" Offset="0.67"/>
 		<GradientStop Color="#01000000" Offset="0.83"/>
 		<GradientStop Color="#00000000" Offset="1.0"/>
 	</GradientStops>
+	<GradientStops x:Key="GradientStops/Shadow.Heavy">
+		<GradientStop Color="#28000000" Offset="0.0"/>
+		<GradientStop Color="#14000000" Offset="0.17"/>
+		<GradientStop Color="#0a000000" Offset="0.33"/>
+		<GradientStop Color="#05000000" Offset="0.5"/>
+		<GradientStop Color="#02000000" Offset="0.67"/>
+		<GradientStop Color="#01000000" Offset="0.83"/>
+		<GradientStop Color="#00000000" Offset="1.0"/>
+	</GradientStops>
 	<GradientStops x:Key="GradientStops/Shadow.Light">
-		<GradientStop Color="#0f000000" Offset="0.0"/>
-		<GradientStop Color="#07000000" Offset="0.25"/>
-		<GradientStop Color="#03000000" Offset="0.5"/>
-		<GradientStop Color="#01000000" Offset="0.75"/>
+		<GradientStop Color="#20000000" Offset="0.0"/>
+		<GradientStop Color="#10000000" Offset="0.17"/>
+		<GradientStop Color="#08000000" Offset="0.33"/>
+		<GradientStop Color="#04000000" Offset="0.5"/>
+		<GradientStop Color="#02000000" Offset="0.67"/>
+		<GradientStop Color="#01000000" Offset="0.83"/>
 		<GradientStop Color="#00000000" Offset="1.0"/>
 	</GradientStops>
 	<LinearGradientBrush x:Key="Brush/Shadow.Bottom" EndPoint="0%,100%" GradientStops="{StaticResource GradientStops/Shadow}" StartPoint="0%,0%"/>
