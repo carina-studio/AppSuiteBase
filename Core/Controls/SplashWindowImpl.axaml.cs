@@ -22,7 +22,7 @@ namespace CarinaStudio.AppSuite.Controls;
 class SplashWindowImpl : Avalonia.Controls.Window
 	{
 		// Constants.
-		const int  MaxShowingRetryingDuration = 1000;
+		const int MaxShowingRetryingDuration = 1000;
 		const int RetryShowingDelay = 100;
 
 
@@ -112,7 +112,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 				control.Opacity = versionOpacity;
 				(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 			});
-			this.Get<Control>("messagePanel").Let(control =>
+			this.Get<Control>("messageTextBlock").Let(control =>
 			{
 				control.Opacity = 1;
 				(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
@@ -130,7 +130,6 @@ class SplashWindowImpl : Avalonia.Controls.Window
 		this.progressBar = this.Get<ProgressBar>(nameof(progressBar));
 		if (Platform.IsWindows)
 		{
-			this.Get<Control>("messagePanel").SetValue(Avalonia.Controls.TextBlock.FontWeightProperty, FontWeight.Bold);
 			if (!Platform.IsWindows8OrAbove)
 			{
 				this.Get<Panel>("rootPanel").Margin = default;
@@ -158,15 +157,9 @@ class SplashWindowImpl : Avalonia.Controls.Window
 		set
 		{
 			this.accentColor = value;
-			var lightColor = Color.FromArgb(value.A, 
-				(byte)(value.R * 0.4 + 255 * 0.6 + 0.5),
-				(byte)(value.G * 0.4 + 255 * 0.6 + 0.5),
-				(byte)(value.B * 0.4 + 255 * 0.6 + 0.5)
-			);
+			this.Resources["AccentColor60"] = Color.FromArgb((byte)(value.A * 0.60 + 0.5), value.R, value.G, value.B);
 			this.Resources["AccentColor30"] = Color.FromArgb((byte)(value.A * 0.30 + 0.5), value.R, value.G, value.B);
 			this.Resources["AccentColor00"] = Color.FromArgb(0, value.R, value.G, value.B);
-			this.Resources["AccentColorLight40"] = Color.FromArgb((byte)(lightColor.A * 0.4 + 0.5), lightColor.R, lightColor.G, lightColor.B);
-			this.Resources["AccentColorLight00"] = Color.FromArgb(0, lightColor.R, lightColor.G, lightColor.B);
 			this.progressBar.Foreground = new SolidColorBrush(value);
 		}
 	}
@@ -330,7 +323,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 							taskSource.SetResult();
 						}
 					};
-					it.Duration = TimeSpan.FromMilliseconds(Math.Abs(it.StartValue - it.EndValue) * 800);
+					it.Duration = TimeSpan.FromMilliseconds(Math.Abs(it.StartValue - it.EndValue) * 500);
 					it.Interpolator = Interpolators.SlowDeceleration;
 					it.ProgressChanged += (_, _) => this.progressBar.Value = it.Value;
 					it.Start();
