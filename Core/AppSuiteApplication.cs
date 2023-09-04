@@ -4241,6 +4241,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public bool UseEmbeddedFontsForChinese { get; } = InitSettingsInstance!.GetValueOrDefault(InitSettingKeys.UseEmbeddedFontsForChinese);
+
+
+        /// <inheritdoc/>
         public abstract DocumentSource? UserAgreement { get; }
 
 
