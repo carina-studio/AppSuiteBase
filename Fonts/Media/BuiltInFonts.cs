@@ -14,6 +14,8 @@ public static class BuiltInFonts
     static readonly Uri baseResourceUri = new($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}/Resources/Fonts/");
     static IList<FontFamily>? fontFamilies;
     static FontFamily? ibmPlexMono;
+    static FontFamily? notoSansSC;
+    static FontFamily? notoSansTC;
     static FontFamily? roboto;
     static FontFamily? robotoMono;
     static FontFamily? sourceCodePro;
@@ -27,6 +29,8 @@ public static class BuiltInFonts
         fontFamilies ?? ListExtensions.AsReadOnly(new[]
         {
             IBMPlexMono,
+            NotoSansSC,
+            NotoSansTC,
             Roboto,
             RobotoMono,
             SourceCodePro,
@@ -37,6 +41,18 @@ public static class BuiltInFonts
     /// IBM Plex Mono.
     /// </summary>
     public static FontFamily IBMPlexMono => ibmPlexMono ?? new FontFamily(baseResourceUri, "#IBM Plex Mono").Also(it => ibmPlexMono = it);
+    
+    
+    /// <summary>
+    /// Noto Sans Simplified Chinese.
+    /// </summary>
+    public static FontFamily NotoSansSC => notoSansSC ?? new FontFamily(new($"avares://CarinaStudio.AppSuite.Core/Fonts/"), "#Noto Sans SC").Also(it => notoSansSC = it);
+    
+    
+    /// <summary>
+    /// Noto Sans Traditional Chinese.
+    /// </summary>
+    public static FontFamily NotoSansTC => notoSansTC ?? new FontFamily(new($"avares://CarinaStudio.AppSuite.Core/Fonts/"), "#Noto Sans TC").Also(it => notoSansTC = it);
     
 
     /// <summary>
