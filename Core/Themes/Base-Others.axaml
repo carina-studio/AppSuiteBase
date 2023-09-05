@@ -23,7 +23,7 @@
 	</ItemsPanelTemplate>
 
 	<!-- MainWindow -->
-	<sys:TimeSpan x:Key="TimeSpan/MainWindow.ContentPaddingTransition">0:0:0.8</sys:TimeSpan>
+	<sys:TimeSpan x:Key="TimeSpan/MainWindow.ContentPaddingTransition">0:0:0.5</sys:TimeSpan>
 	
 	<!-- NotificationPresenter -->
 	<StaticResourceExtension x:Key="TimeSpan/NotificationPresenter.Notification" ResourceKey="TimeSpan/Animation"/>

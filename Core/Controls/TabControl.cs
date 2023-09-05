@@ -7,6 +7,7 @@ using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 using CarinaStudio.Animation;
+using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using CarinaStudio.VisualTree;
 using CarinaStudio.Windows.Input;
@@ -618,9 +619,7 @@ namespace CarinaStudio.AppSuite.Controls
                     return new Thickness();
                 }
                 var sysChromeSize = ExtendedClientAreaWindowConfiguration.SystemChromeWidth;
-                var reservedSize = (this.TryFindResource("Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace", out var res) && res is double doubleValue)
-                    ? doubleValue
-                    : 0.0;
+                var reservedSize = this.FindResourceOrDefault("Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace", 0.0);
                 if (ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtRight)
                     return new Thickness(0, 0, sysChromeSize + reservedSize, 0);
                 return new Thickness(sysChromeSize, 0, reservedSize, 0);
@@ -634,14 +633,16 @@ namespace CarinaStudio.AppSuite.Controls
             }
             if (animate)
             {
-                var duration = (this.TryFindResource("TimeSpan/Animation.Fast", out var res) && res is TimeSpan timeSpanValue)
-                    ? timeSpanValue
-                    : TimeSpan.FromMilliseconds(250);
+                var duration = this.FindResourceOrDefault("TimeSpan/Animation", TimeSpan.FromMilliseconds(500));
                 this.tabStripScrollViewerMarginAnimator = new ThicknessAnimator(this.tabStripScrollViewer.Margin, margin).Also(it =>
                 {
-                    it.Completed += (_, _) => this.tabStripScrollViewerMarginAnimator = null;
+                    it.Completed += (_, _) =>
+                    {
+                        this.tabStripScrollViewer.Margin = it.Value;
+                        this.tabStripScrollViewerMarginAnimator = null;
+                    };
                     it.Duration = duration;
-                    it.Interpolator = Interpolators.Deceleration;
+                    it.Interpolator = Interpolators.FastDeceleration;
                     it.ProgressChanged += (_, _) => this.tabStripScrollViewer.Margin = it.Value;
                     it.Start();
                 });

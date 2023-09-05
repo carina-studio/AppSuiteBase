@@ -9,6 +9,7 @@ using CarinaStudio.AppSuite.Net;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Configuration;
+using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using Microsoft.Extensions.Logging;
@@ -232,9 +233,8 @@ namespace CarinaStudio.AppSuite.Controls
                     this.contentPaddingAnimator = new ThicknessAnimator(this.contentPresenter.Padding, margin).Also(it =>
                     {
                         it.Completed += (_, _) => this.contentPresenter.Padding = it.EndValue;
-                        if (this.TryFindResource("TimeSpan/MainWindow.ContentPaddingTransition", out var res) && res is TimeSpan duration)
-                            it.Duration = duration;
-                        it.Interpolator = Interpolators.Deceleration;
+                        it.Duration = this.FindResourceOrDefault("TimeSpan/MainWindow.ContentPaddingTransition", TimeSpan.FromMilliseconds(500));
+                        it.Interpolator = Interpolators.FastDeceleration;
                         it.ProgressChanged += (_, _) => this.contentPresenter.Padding = it.Value;
                         it.Start();
                     });
@@ -350,7 +350,7 @@ namespace CarinaStudio.AppSuite.Controls
                         // save window state
                         this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, windowState);
                     }
-                    if (windowState == WindowState.FullScreen)
+                    if (windowState == WindowState.FullScreen || Platform.IsMacOS)
                         this.updateContentPaddingAction.Reschedule();
                     else
                         this.updateContentPaddingAction.Reschedule(UpdateContentPaddingDelay);
