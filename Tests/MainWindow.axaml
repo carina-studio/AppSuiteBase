@@ -721,13 +721,19 @@
 						<TextBlock Text="Expander"/>
 					</TabItem.Header>
 					<StackPanel Background="{DynamicResource Brush/WorkingArea.Panel.Background}">
-						<Expander Header="Expander" HorizontalAlignment="Left" Margin="10" Width="200">
+						<Expander HorizontalAlignment="Left" Margin="10" Width="200">
+							<Expander.Header>
+								<TextBlock HorizontalAlignment="Right" Text="Expander"/>
+							</Expander.Header>
 							<Button Content="Button" Margin="30"/>
 						</Expander>
 						<Expander Background="{x:Null}" Header="Expander" HorizontalAlignment="Left" Margin="10" Padding="0" Width="200">
 							<Border BorderBrush="{DynamicResource Brush/Control.Border}" BorderThickness="{DynamicResource Thickness/Control.Border}" CornerRadius="{DynamicResource ControlCornerRadiusBottom}">
 								<Button Content="Button" Margin="30"/>
 							</Border>
+						</Expander>
+						<Expander Header="Expander" ExpandDirection="Up" HorizontalAlignment="Left" Margin="10" Width="200">
+							<Button Content="Button" Margin="30"/>
 						</Expander>
 						<Expander Header="Disabled" HorizontalAlignment="Left" IsEnabled="False" Margin="10" Width="200">
 							<Button Content="Button" Margin="30"/>

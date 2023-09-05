@@ -993,8 +993,8 @@
 					<Grid ColumnDefinitions="*,Auto">
 						<ContentPresenter x:Name="PART_ContentPresenter"
 										Margin="{TemplateBinding Padding}"
-										HorizontalAlignment="Left"
-										HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+										HorizontalAlignment="Stretch"
+										HorizontalContentAlignment="Stretch"
 										VerticalContentAlignment="Center"
 										Background="Transparent"
 										BorderBrush="Transparent"
