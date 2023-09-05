@@ -90,7 +90,7 @@
 	<Color x:Key="Color/ThemeModeTest.Color">#70332211</Color>
 
 	<!-- ToolBar -->
-	<Color x:Key="Color/ToolBar.Background">#e0e0e0</Color>
+	<Color x:Key="Color/ToolBar.Background">#dddddd</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#c7c7c7</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#b7b7b7</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Transparent">#00c7c7c7</Color>
@@ -116,7 +116,7 @@
 
 	<!-- WorkingArea -->
 	<Color x:Key="Color/WorkingArea.Background">#eeeeee</Color>
-	<Color x:Key="Color/WorkingArea.Panel.Background">#dadada</Color>
-	<Color x:Key="Color/WorkingArea.Panel.Border">#d0d0d0</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Background">#e0e0e0</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Border">#d3d3d3</Color>
 	
 </ResourceDictionary>
