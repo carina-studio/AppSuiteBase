@@ -2544,7 +2544,7 @@
 									<MultiBinding Converter="{x:Static converters:TabItemWidthConverter.Default}">
 										<Binding RelativeSource="{RelativeSource AncestorType={x:Type TabControl}}"/>
 										<Binding RelativeSource="{RelativeSource AncestorType={x:Type controls:TabStripScrollViewer}}"/>
-										<Binding Path="Items.Count" RelativeSource="{RelativeSource AncestorType={x:Type TabControl}}"/> <!-- Triggered by change of Items.Count -->
+										<Binding Path="ItemCount" RelativeSource="{RelativeSource AncestorType={x:Type TabControl}}"/> <!-- Triggered by change of ItemCount -->
 										<Binding Path="Bounds" RelativeSource="{RelativeSource AncestorType={x:Type controls:TabStripScrollViewer}}"/> <!-- Triggered by change of Bounds -->
 									</MultiBinding>
 								</Border.Width>
