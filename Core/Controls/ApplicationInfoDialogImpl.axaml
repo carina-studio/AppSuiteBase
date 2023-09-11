@@ -18,6 +18,17 @@
 		Name="window"
         Classes="Dialog"
         Width="{DynamicResource Double/ApplicationInfoDialog.Width}">
+	
+	<Window.Styles>
+		<Style Selector=":is(Control).Shadowed">
+			<Setter Property="Effect">
+				<DropShadowEffect BlurRadius="{StaticResource Double/ApplicationInfoDialog.AppTitle.Shadow.BlurRadius}" 
+				                  Color="{DynamicResource Color/ApplicationInfoDialog.AppTitle.Shadow}"
+				                  OffsetX="0"
+				                  OffsetY="0"/>
+			</Setter>
+		</Style>
+	</Window.Styles>
 
 	<DockPanel>
 
@@ -69,13 +80,13 @@
 						<Border x:CompileBindings="False">
 							<StackPanel Orientation="Vertical" VerticalAlignment="Center">
 								<StackPanel Margin="{StaticResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Orientation="Horizontal">
-									<SelectableTextBlock FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Text="{Binding Name}" VerticalAlignment="Center"/>
-									<StackPanel Name="badgesPanel" Height="{StaticResource Double/ApplicationInfoDialog.AppBadge.Size}" Orientation="Horizontal" VerticalAlignment="Center"/>
+									<SelectableTextBlock Classes="Shadowed" FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Text="{Binding Name}" VerticalAlignment="Center"/>
+									<StackPanel Name="badgesPanel" Classes="Shadowed" Height="{StaticResource Double/ApplicationInfoDialog.AppBadge.Size}" Orientation="Horizontal" VerticalAlignment="Center"/>
 								</StackPanel>
 								<WrapPanel Orientation="Horizontal">
-									<SelectableTextBlock FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" Opacity="{StaticResource Double/ApplicationInfoDialog.AppVersion.Opacity}" Text="{Binding $parent[Window].VersionString}" VerticalAlignment="Center"/>
-									<TextBlock FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Margin="5,0,5,0" Text="|" VerticalAlignment="Center"/>
-									<abControls:LinkTextBlock Command="{Binding $parent[Window].ShowApplicationChangeList}" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{DynamicResource String/ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
+									<SelectableTextBlock Classes="Shadowed" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" Opacity="{StaticResource Double/ApplicationInfoDialog.AppVersion.Opacity}" Text="{Binding $parent[Window].VersionString}" VerticalAlignment="Center"/>
+									<TextBlock Classes="Shadowed" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Margin="5,0,5,0" Text="|" VerticalAlignment="Center"/>
+									<abControls:LinkTextBlock Classes="Shadowed" Command="{Binding $parent[Window].ShowApplicationChangeList}" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{DynamicResource String/ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
 								</WrapPanel>
 							</StackPanel>
 						</Border>

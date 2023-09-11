@@ -1,5 +1,8 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	
+	<!-- ApplicationInfoDialog -->
+	<Color x:Key="Color/ApplicationInfoDialog.AppTitle.Shadow">#ffffff</Color>
 
 	<!-- Button -->
 	<Color x:Key="Color/Button.Background">#fbfbfb</Color>

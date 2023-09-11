@@ -10,6 +10,9 @@
 	<SolidColorBrush x:Key="Brush/Accent.Light.1" Color="{DynamicResource SystemAccentColorLight1}"/>
 	<SolidColorBrush x:Key="Brush/Accent.Light.2" Color="{DynamicResource SystemAccentColorLight2}"/>
 	<SolidColorBrush x:Key="Brush/Accent.Light.3" Color="{DynamicResource SystemAccentColorLight3}"/>
+	
+	<!-- ApplicationInfoDialog -->
+	<Color x:Key="Color/ApplicationInfoDialog.AppTitle.Shadow">#ee000000</Color>
 
 	<!-- AppSuiteApplication -->
 	<Color x:Key="Color/AppSuiteApplication.MacOSDockTile.Progress.Background">#af000000</Color>
