@@ -8,6 +8,8 @@ using System.Management;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite
 {
@@ -19,14 +21,18 @@ namespace CarinaStudio.AppSuite
         // Native symbols.
         [DllImport("Kernel32")]
         static extern bool GetPhysicallyInstalledSystemMemory(out ulong TotalMemoryInKilobytes);
+        
+        
+        // Static fields.
+        static ILogger? StaticLogger;
 
 
         // Fields.
         readonly IAppSuiteApplication app;
-        readonly ScheduledAction checkGraphicsCardAction;
-        readonly ManagementEventWatcher? graphicsCardWatcher;
-        readonly ILogger logger;
-        readonly SingleThreadSynchronizationContext hwCheckingSyncContext = new("Hardware info checker");
+        bool hasDedicatedGraphicsCard;
+        Task<bool>? initCheckGraphicsCardTask;
+        Task<long?>? initCheckPhysicalMemoryTask;
+        long? totalPhysicalMemory;
 
 
         // Constructor.
@@ -34,173 +40,197 @@ namespace CarinaStudio.AppSuite
         {
             // setup fields
             this.app = app;
-            this.checkGraphicsCardAction = new(this.hwCheckingSyncContext, () => this.CheckGraphicsCard(false));
-            this.logger = app.LoggerFactory.CreateLogger(nameof(HardwareInfo));
 
             // start checking graphics card
-            this.CheckGraphicsCard(true);
+            this.initCheckGraphicsCardTask = CheckGraphicsCardAsync();
+            this.initCheckGraphicsCardTask.GetAwaiter().OnCompleted(() =>
+            {
+                this.hasDedicatedGraphicsCard = this.initCheckGraphicsCardTask.Result;
+                this.initCheckGraphicsCardTask = null;
+            });
 
-            // get physical memory
-            this.CheckPhysicalMemory();
+            // start checking physical memory
+            this.initCheckPhysicalMemoryTask = CheckPhysicalMemoryAsync();
+            this.initCheckPhysicalMemoryTask.GetAwaiter().OnCompleted(() =>
+            {
+                this.totalPhysicalMemory = this.initCheckPhysicalMemoryTask.Result;
+                this.initCheckPhysicalMemoryTask = null;
+            });
 
             // start monitoring hardware change
             if (Platform.IsWindows)
             {
+                ThreadPool.QueueUserWorkItem(_ =>
+                {
 #pragma warning disable CA1416
-                this.graphicsCardWatcher = new ManagementEventWatcher("SELECT * FROM Win32_VideoController");
-                this.graphicsCardWatcher.EventArrived += (_, e) => this.checkGraphicsCardAction.Schedule();
+                    var graphicsCardWatcher = new ManagementEventWatcher("SELECT * FROM Win32_VideoController");
+                    graphicsCardWatcher.EventArrived += async (_, _) =>
+                    {
+                        var hasGraphicsCard = await CheckGraphicsCardAsync();
+                        this.app.SynchronizationContext.Post(() =>
+                        {
+                            if (this.hasDedicatedGraphicsCard != hasGraphicsCard)
+                            {
+                                this.Logger.LogTrace("Dedicated graphics card: {hasDedicatedGraphicsCard}", hasGraphicsCard);
+                                this.hasDedicatedGraphicsCard = hasGraphicsCard;
+                                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasDedicatedGraphicsCard)));
+                            }
+                        });
+                    };
 #pragma warning restore CA1416
+                }, null);
             }
         }
-
-
+        
+        
         // Check graphics card.
-        void CheckGraphicsCard(bool isInitCheck)
+        static Task<bool> CheckGraphicsCardAsync()
         {
-            var hasDedicatedGraphicsCard = (bool?)null;
-            if (Platform.IsWindows)
+            if (Platform.IsNotWindows)
+                return Task.FromResult(false);
+            return Task.Run(() =>
             {
-#pragma warning disable CA1416
                 try
                 {
+#pragma warning disable CA1416
                     using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController");
                     foreach (var obj in searcher.Get())
                     {
-                        obj["Description"]?.ToString()?.Let(it =>
+                        var hasDedicatedGraphicsCard = obj["Description"].ToString()?.Let(it =>
                         {
                             it = it.ToLower();
-                            if (it.StartsWith("nvidia") || it.Contains(" wddm "))
-                            {
-                                hasDedicatedGraphicsCard = true;
-                            }
-                        });
-                        if (hasDedicatedGraphicsCard == true)
-                            break;
+                            return it.StartsWith("nvidia") || it.Contains(" wddm ");
+                        }) ?? false;
+                        if (hasDedicatedGraphicsCard)
+                            return true;
                     }
+#pragma warning restore CA1416
                 }
                 catch (Exception ex)
                 {
-                    this.logger.LogError(ex, "Failed to check graphics card");
+                    StaticLogger ??= AppSuiteApplication.CurrentOrNull?.LoggerFactory.CreateLogger(nameof(HardwareInfo));
+                    StaticLogger?.LogError(ex, "Failed to check graphics card");
                 }
-#pragma warning restore CA1416
-            }
-            if (isInitCheck)
-            {
-                this.logger.LogTrace("Dedicated graphics card: {hasDedicatedGraphicsCard}", hasDedicatedGraphicsCard);
-                this.HasDedicatedGraphicsCard = hasDedicatedGraphicsCard;
-            }
-            else
-            {
-                this.app.SynchronizationContext.Post(() =>
-                {
-                    if (this.HasDedicatedGraphicsCard != hasDedicatedGraphicsCard)
-                    {
-                        this.logger.LogTrace("Dedicated graphics card: {hasDedicatedGraphicsCard}", hasDedicatedGraphicsCard);
-                        this.HasDedicatedGraphicsCard = hasDedicatedGraphicsCard;
-                        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasDedicatedGraphicsCard)));
-                    }
-                });
-            }
+                return false;
+            });
         }
 
 
         // Check physical memory.
-        void CheckPhysicalMemory()
+        static Task<long?> CheckPhysicalMemoryAsync()
         {
-            var physicalMemorySize = (long?)null;
+            StaticLogger ??= AppSuiteApplication.CurrentOrNull?.LoggerFactory.CreateLogger(nameof(HardwareInfo));
             if (Platform.IsWindows)
             {
                 try
                 {
                     if (GetPhysicallyInstalledSystemMemory(out var totalMemoryKB))
-                        physicalMemorySize = (long)totalMemoryKB << 10;
-                    else
-                        this.logger.LogError("Unable to get total physical memory on Windows");
+                        return Task.FromResult<long?>((long)totalMemoryKB << 10);
+                    StaticLogger?.LogError("Unable to get total physical memory on Windows");
                 }
                 catch (Exception ex)
                 {
-                    this.logger.LogError(ex, "Unable to get total physical memory on Windows");
+                    StaticLogger?.LogError(ex, "Unable to get total physical memory on Windows");
                 }
+                return Task.FromResult<long?>(null);
             }
-            else if (Platform.IsLinux)
+            if (Platform.IsLinux)
             {
-                try
+                return Task.Run(() =>
                 {
-                    using var reader = new StreamReader("/proc/meminfo", Encoding.UTF8);
-                    var regex = new Regex("^[\\s]*MemTotal\\:[\\s]*(?<Size>[\\d]+)[\\s]*(?<Unit>[\\w]+)", RegexOptions.IgnoreCase);
-                    var line = reader.ReadLine();
-                    while (line is not null)
+                    try
                     {
-                        var match = regex.Match(line);
-                        if (match.Success && long.TryParse(match.Groups["Size"].Value, out var size))
-                        {
-                            physicalMemorySize = match.Groups["Unit"].Value.ToLower() switch
-                            {
-                                "kb" => size << 10,
-                                _ => null,
-                            };
-                            break;
-                        }
-                        line = reader.ReadLine();
-                    }
-                    if (physicalMemorySize == null)
-                        this.logger.LogWarning("Unable to get total physical memory on Linux");
-                }
-                catch (Exception ex)
-                {
-                    this.logger.LogError(ex, "Unable to get total physical memory on Linux");
-                }
-            }
-            else if (Platform.IsMacOS)
-            {
-                try
-                {
-                    using var process = Process.Start(new ProcessStartInfo()
-                    {
-                        Arguments = "hw.memsize",
-                        CreateNoWindow = true,
-                        FileName = "sysctl",
-                        RedirectStandardOutput = true,
-                        UseShellExecute = false,
-                    });
-                    if (process != null)
-                    {
-                        using var reader = process.StandardOutput;
-                        var regex = new Regex("^[\\s]*hw\\.memsize[\\s]*:[\\s]*(?<Size>[\\d]+)", RegexOptions.IgnoreCase);
+                        using var reader = new StreamReader("/proc/meminfo", Encoding.UTF8);
+                        var physicalMemorySize = default(long?);
+                        var regex = new Regex("^[\\s]*MemTotal\\:[\\s]*(?<Size>[\\d]+)[\\s]*(?<Unit>[\\w]+)", RegexOptions.IgnoreCase);
                         var line = reader.ReadLine();
                         while (line is not null)
                         {
                             var match = regex.Match(line);
                             if (match.Success && long.TryParse(match.Groups["Size"].Value, out var size))
                             {
-                                physicalMemorySize = size;
+                                physicalMemorySize = match.Groups["Unit"].Value.ToLower() switch
+                                {
+                                    "kb" => size << 10,
+                                    _ => null,
+                                };
                                 break;
                             }
                             line = reader.ReadLine();
                         }
-                        if (physicalMemorySize == null)
-                            this.logger.LogWarning("Unable to get total physical memory on macOS");
+                        if (!physicalMemorySize.HasValue)
+                            StaticLogger?.LogWarning("Unable to get total physical memory on Linux");
+                        return physicalMemorySize;
                     }
-                    else
-                        this.logger.LogWarning("Unable to start process to get total physical memory on macOS");
-                }
-                catch (Exception ex)
-                {
-                    this.logger.LogError(ex, "Unable to get total physical memory on macOS");
-                }
+                    catch (Exception ex)
+                    {
+                        StaticLogger?.LogError(ex, "Unable to get total physical memory on Linux");
+                        return null;
+                    }
+                });
             }
-            if (this.TotalPhysicalMemory != physicalMemorySize)
+            if (Platform.IsMacOS)
             {
-                this.TotalPhysicalMemory = physicalMemorySize;
-                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TotalPhysicalMemory)));
+                return Task.Run(() =>
+                {
+                    try
+                    {
+                        using var process = Process.Start(new ProcessStartInfo()
+                        {
+                            Arguments = "hw.memsize",
+                            CreateNoWindow = true,
+                            FileName = "sysctl",
+                            RedirectStandardOutput = true,
+                            UseShellExecute = false,
+                        });
+                        if (process != null)
+                        {
+                            using var reader = process.StandardOutput;
+                            var physicalMemorySize = default(long?);
+                            var regex = new Regex("^[\\s]*hw\\.memsize[\\s]*:[\\s]*(?<Size>[\\d]+)", RegexOptions.IgnoreCase);
+                            var line = reader.ReadLine();
+                            while (line is not null)
+                            {
+                                var match = regex.Match(line);
+                                if (match.Success && long.TryParse(match.Groups["Size"].Value, out var size))
+                                {
+                                    physicalMemorySize = size;
+                                    break;
+                                }
+                                line = reader.ReadLine();
+                            }
+                            if (!physicalMemorySize.HasValue)
+                                StaticLogger?.LogWarning("Unable to get total physical memory on macOS");
+                            return physicalMemorySize;
+                        }
+                        StaticLogger?.LogWarning("Unable to start process to get total physical memory on macOS");
+                    }
+                    catch (Exception ex)
+                    {
+                        StaticLogger?.LogError(ex, "Unable to get total physical memory on macOS");
+                    }
+                    return null;
+                });
             }
+            return Task.FromResult<long?>(null);
         }
 
 
         /// <summary>
         /// Check whether at least one dedicated graphics has been attached to device or not.
         /// </summary>
-        public bool? HasDedicatedGraphicsCard { get; private set; }
+        public bool? HasDedicatedGraphicsCard
+        {
+            get
+            {
+                this.initCheckGraphicsCardTask?.Wait();
+                return this.hasDedicatedGraphicsCard;
+            }
+        }
+        
+        
+        // Logger
+        ILogger Logger => StaticLogger ??= this.app.LoggerFactory.CreateLogger(nameof(HardwareInfo));
 
 
         /// <summary>
@@ -212,6 +242,13 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get size of total physical memory on device in bytes.
         /// </summary>
-        public long? TotalPhysicalMemory{ get; private set; }
+        public long? TotalPhysicalMemory
+        {
+            get
+            {
+                this.initCheckPhysicalMemoryTask?.Wait();
+                return this.totalPhysicalMemory;
+            }
+        }
     }
 }

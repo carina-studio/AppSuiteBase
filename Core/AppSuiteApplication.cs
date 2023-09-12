@@ -50,6 +50,7 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.IO;
+using NLog.Config;
 
 namespace CarinaStudio.AppSuite
 {
@@ -371,9 +372,23 @@ namespace CarinaStudio.AppSuite
         static readonly SettingKey<string> AgreedUserAgreementVersionKey = new("AgreedUserAgreementVersion", "");
         static readonly string AppDirectoryPath = Global.Run(() =>
         {
+            // get path from main module
+            if (Platform.IsWindows)
+            {
+                var fileNameBuffer = new StringBuilder(256);
+                var size = Native.Win32.GetModuleFileName(default, fileNameBuffer, (uint)fileNameBuffer.Capacity);
+                if (size <= fileNameBuffer.Capacity)
+                {
+                    var fileName = fileNameBuffer.ToString();
+                    if (Path.GetFileNameWithoutExtension(fileName) != "dotnet")
+                        return Path.GetDirectoryName(fileName) ?? "";
+                }
+            }
             var mainModule = Process.GetCurrentProcess().MainModule;
             if (mainModule != null && Path.GetFileNameWithoutExtension(mainModule.FileName) != "dotnet")
                 return Path.GetDirectoryName(mainModule.FileName) ?? "";
+            
+            // get path from assembly
 #pragma warning disable SYSLIB0044
             var codeBase = Assembly.GetEntryAssembly()?.GetName().CodeBase;
 #pragma warning restore SYSLIB0044
@@ -458,30 +473,17 @@ namespace CarinaStudio.AppSuite
         {
             // get time for performance check
             this.creationTime = this.stopWatch.ElapsedMilliseconds;
+            
+            // check first launch
+            this.IsFirstLaunch = Global.RunOrDefault(() => !System.IO.File.Exists(this.persistentStateFilePath), true);
 
             // create logger
-            LogManager.Configuration = new NLog.Config.LoggingConfiguration().Also(it =>
+            LogManager.Configuration = new LoggingConfiguration().Also(it =>
             {
-                var fileTarget = new NLog.Targets.FileTarget("file")
-                {
-                    ArchiveAboveSize = 10L << 20, // 10 MB per log file
-                    ArchiveFileKind = NLog.Targets.FilePathKind.Absolute,
-                    ArchiveFileName = Path.Combine(this.RootPrivateDirectoryPath, "Log", "log.txt"),
-                    ArchiveNumbering = NLog.Targets.ArchiveNumberingMode.Sequence,
-                    FileName = Path.Combine(this.RootPrivateDirectoryPath, "Log", "log.txt"),
-                    // ReSharper disable StringLiteralTypo
-                    Layout = "${longdate} ${pad:padding=-5:inner=${processid}} ${pad:padding=-4:inner=${threadid}} ${pad:padding=-5:inner=${level:uppercase=true}} ${logger:shortName=true}: ${message} ${exception:format=tostring}",
-                    // ReSharper restore StringLiteralTypo
-                    MaxArchiveFiles = 10,
-                };
-                var rule = new NLog.Config.LoggingRule("logToFile").Also(rule =>
-                {
-                    rule.LoggerNamePattern = "*";
-                    rule.SetLoggingLevels(NLog.LogLevel.Trace, NLog.LogLevel.Error);
-                    rule.Targets.Add(fileTarget);
-                });
-                it.AddTarget(fileTarget);
-                it.LoggingRules.Add(rule);
+                if (this.IsFirstLaunch)
+                    ThreadPool.QueueUserWorkItem(s => this.SetupLogFileTarget((LoggingConfiguration)s!), it);
+                else
+                    this.SetupLogFileTarget(it);
             });
             // ReSharper disable VirtualMemberCallInConstructor
             this.LoggerFactory = new LoggerFactory(new[] { this.OnCreateLoggerProvider() });
@@ -1797,7 +1799,12 @@ namespace CarinaStudio.AppSuite
         /// Load <see cref="PersistentState"/> from file.
         /// </summary>
         /// <returns>Task of loading.</returns>
-        public async Task LoadPersistentStateAsync()
+        public Task LoadPersistentStateAsync() =>
+            this.LoadPersistentStateAsync(false);
+
+
+        // Load persistent state from file.
+        async Task LoadPersistentStateAsync(bool isFirstLoad)
         {
             // check performance
             var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
@@ -1820,7 +1827,8 @@ namespace CarinaStudio.AppSuite
             try
             {
                 // load from file
-                await this.persistentState.LoadAsync(this.persistentStateFilePath);
+                if (!isFirstLoad || !this.IsFirstLaunch)
+                    await this.persistentState.LoadAsync(this.persistentStateFilePath);
                 this.Logger.LogDebug("Complete loading persistent state");
 
                 // save immediately for first launch
@@ -2285,7 +2293,7 @@ namespace CarinaStudio.AppSuite
             }, RoutingStrategies.Direct);
 
             // start loading persistent state and settings
-            this.loadingInitPersistentStateTask = this.LoadPersistentStateAsync();
+            this.loadingInitPersistentStateTask = this.LoadPersistentStateAsync(true);
             this.loadingInitSettingsTask = this.LoadSettingsAsync();
 
             // create hardware and process information
@@ -2308,31 +2316,10 @@ namespace CarinaStudio.AppSuite
             }
 
             // check first launch
-            try
-            {
-                var isFirstLaunch = false;
-                var syncLock = new object();
-                lock (syncLock)
-                {
-                    ThreadPool.QueueUserWorkItem(_ =>
-                    {
-                        isFirstLaunch = !System.IO.File.Exists(this.persistentStateFilePath);
-                        lock (syncLock)
-                            Monitor.Pulse(syncLock);
-                    });
-                    if (!Monitor.Wait(syncLock, 5000))
-                        throw new TimeoutException("Timeout waiting for checking first launch");
-                }
-                this.IsFirstLaunch = isFirstLaunch;
-                if (isFirstLaunch)
-                    this.Logger.LogWarning("This is the first launch");
-                else
-                    this.Logger.LogTrace("This is not the first launch");
-            }
-            catch (Exception ex)
-            {
-                this.Logger.LogError(ex, "Error occurred while checking first launch");
-            }
+            if (this.IsFirstLaunch)
+                this.Logger.LogWarning("This is the first launch");
+            else
+                this.Logger.LogTrace("This is not the first launch");
 
             // check privacy policy version
             if (this.PrivacyPolicyVersion == null)
@@ -3554,6 +3541,67 @@ namespace CarinaStudio.AppSuite
         protected virtual int SettingsVersion { get; } = 2;
 
 
+        // Setup file target for log output.
+        void SetupLogFileTarget(LoggingConfiguration config)
+        {
+            // create target
+            var fileTarget = new NLog.Targets.FileTarget("file")
+            {
+                ArchiveAboveSize = 10L << 20, // 10 MB per log file
+                ArchiveFileKind = NLog.Targets.FilePathKind.Absolute,
+                ArchiveFileName = Path.Combine(this.RootPrivateDirectoryPath, "Log", "log.txt"),
+                ArchiveNumbering = NLog.Targets.ArchiveNumberingMode.Sequence,
+                FileName = Path.Combine(this.RootPrivateDirectoryPath, "Log", "log.txt"),
+                // ReSharper disable StringLiteralTypo
+                Layout = "${longdate} ${pad:padding=-5:inner=${processid}} ${pad:padding=-4:inner=${threadid}} ${pad:padding=-5:inner=${level:uppercase=true}} ${logger:shortName=true}: ${message} ${exception:format=tostring}",
+                // ReSharper restore StringLiteralTypo
+                MaxArchiveFiles = 10,
+            };
+            
+            // setup rule
+            var rule = new LoggingRule("logToFile").Also(rule =>
+            {
+                rule.LoggerNamePattern = "*";
+                rule.SetLoggingLevels(NLog.LogLevel.Trace, NLog.LogLevel.Error);
+                rule.Targets.Add(fileTarget);
+            });
+            config.AddTarget(fileTarget);
+            config.LoggingRules.Add(rule);
+            
+            // update loggers
+            LogManager.ReconfigExistingLoggers();
+        }
+
+
+        // Setup network target for log output.
+        void SetupLogNetworkTarget(LoggingConfiguration config, int port)
+        {
+            // create target
+            var target = config.AllTargets.FirstOrDefault(it => it.Name == "outputToLocalhost") as NLog.Targets.NLogViewerTarget;
+            target ??= new NLog.Targets.NLogViewerTarget("outputToLocalhost")
+            {
+                Address = new NLog.Layouts.SimpleLayout($"tcp://127.0.0.1:{port}"),
+                NewLine = true,
+            };
+            config.RemoveTarget("outputToLocalhost");
+            config.AddTarget(target);
+            this.Logger.LogWarning("Set log output target to tcp://127.0.0.1:{port}", port);
+
+            // setup rule
+            config.RemoveRuleByName("outputToLocalhost");
+            config.LoggingRules.Add(new NLog.Config.LoggingRule().Also(it =>
+            {
+                it.EnableLoggingForLevels(NLog.LogLevel.Trace, NLog.LogLevel.Fatal);
+                it.LoggerNamePattern = "*";
+                it.RuleName = "outputToLocalhost";
+                it.Targets.Add(target);
+            }));
+
+            // update loggers
+            LogManager.ReconfigExistingLoggers();
+        }
+
+
         /// <summary>
 		/// Show application info dialog.
 		/// </summary>
@@ -4256,7 +4304,7 @@ namespace CarinaStudio.AppSuite
         void UpdateLogOutputToLocalhost()
         {
             // check performance
-            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+            var time = this.IsDebugMode && !this.IsFirstLaunch ? this.stopWatch.ElapsedMilliseconds : 0L;
 
             // get port
             var port = this.PersistentState.GetValueOrDefault(LogOutputTargetPortKey);
@@ -4273,28 +4321,10 @@ namespace CarinaStudio.AppSuite
             }
 
             // setup target
-            var target = config.AllTargets.FirstOrDefault(it => it.Name == "outputToLocalhost") as NLog.Targets.NLogViewerTarget;
-            target ??= new NLog.Targets.NLogViewerTarget("outputToLocalhost")
-            {
-                Address = new NLog.Layouts.SimpleLayout($"tcp://127.0.0.1:{port}"),
-                NewLine = true,
-            };
-            config.RemoveTarget("outputToLocalhost");
-            config.AddTarget(target);
-            this.Logger.LogWarning("Set log output target to tcp://127.0.0.1:{port}", port);
-
-            // setup rule
-            config.RemoveRuleByName("outputToLocalhost");
-            config.LoggingRules.Add(new NLog.Config.LoggingRule().Also(it =>
-            {
-                it.EnableLoggingForLevels(NLog.LogLevel.Trace, NLog.LogLevel.Fatal);
-                it.LoggerNamePattern = "*";
-                it.RuleName = "outputToLocalhost";
-                it.Targets.Add(target);
-            }));
-
-            // update loggers
-            LogManager.ReconfigExistingLoggers();
+            if (this.IsFirstLaunch)
+                ThreadPool.QueueUserWorkItem(_ => this.SetupLogNetworkTarget(LogManager.Configuration, port), null);
+            else
+                this.SetupLogNetworkTarget(LogManager.Configuration, port);
 
             // check performance
             if (time > 0)

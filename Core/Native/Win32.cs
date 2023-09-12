@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace CarinaStudio.AppSuite.Native
 {
@@ -35,6 +36,10 @@ namespace CarinaStudio.AppSuite.Native
             MINIMIZEBOX	= 0x00020000,
             SYSMENU	= 0x00080000,
         }
+
+
+        [DllImport("Kernel32")]
+        public static extern uint GetModuleFileName(IntPtr hModule, StringBuilder lpFilename, uint nSize);
 
 
         [DllImport("User32")]
