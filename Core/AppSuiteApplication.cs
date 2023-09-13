@@ -466,15 +466,27 @@ namespace CarinaStudio.AppSuite
         readonly ObservableList<Avalonia.Controls.Window> windows = new();
 
 
+        // Static initializer.
+        static AppSuiteApplication()
+        {
+            LogToConsole("Initialize AppSuiteApplication type");
+        }
+
+
         /// <summary>
         /// Initialize new <see cref="AppSuiteApplication"/> instance.
         /// </summary>
         protected AppSuiteApplication()
         {
+            LogToConsole("Initialize AppSuiteApplication instance [start]");
+            
             // get time for performance check
             this.creationTime = this.stopWatch.ElapsedMilliseconds;
             
             // check first launch
+            // ReSharper disable VirtualMemberCallInConstructor
+            this.persistentStateFilePath = Path.Combine(this.RootPrivateDirectoryPath, "PersistentState.json");
+            // ReSharper restore VirtualMemberCallInConstructor
             this.IsFirstLaunch = Global.RunOrDefault(() => !System.IO.File.Exists(this.persistentStateFilePath), true);
 
             // create logger
@@ -514,7 +526,6 @@ namespace CarinaStudio.AppSuite
             // get file paths
             // ReSharper disable VirtualMemberCallInConstructor
             this.configurationFilePath = Path.Combine(this.RootPrivateDirectoryPath, "ConfigOverride.json");
-            this.persistentStateFilePath = Path.Combine(this.RootPrivateDirectoryPath, "PersistentState.json");
             this.settingsFilePath = Path.Combine(this.RootPrivateDirectoryPath, "Settings.json");
             // ReSharper restore VirtualMemberCallInConstructor
 
@@ -535,6 +546,8 @@ namespace CarinaStudio.AppSuite
             CultureInfo.CurrentUICulture = this.cultureInfo;
             CultureInfo.DefaultThreadCurrentCulture = this.cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = this.cultureInfo;
+            
+            LogToConsole("Initialize AppSuiteApplication instance [end]");
         }
 
 
@@ -668,6 +681,8 @@ namespace CarinaStudio.AppSuite
         /// <returns></returns>
         protected static AppBuilder BuildApplication<TApp>(Action<AppBuilder>? setupAction = null) where TApp: AppSuiteApplication, new()
         {
+            LogToConsole("Build application [start]");
+            
             // apply screen scale factor
             if (Platform.IsLinux)
                 ApplyScreenScaleFactorOnLinux();
@@ -731,6 +746,8 @@ namespace CarinaStudio.AppSuite
                 
                 // custom settings
                 setupAction?.Invoke(it);
+                
+                LogToConsole("Build application [end]");
             });
         }
 
@@ -2084,6 +2101,39 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Write log to standard output.
+        /// </summary>
+        /// <param name="message">Message.</param>
+        protected static unsafe void LogToConsole(string? message)
+        {
+            if (string.IsNullOrEmpty(message))
+                return;
+            var isMultiLine = false;
+            fixed (void* p = message)
+            {
+                var charPtr = (char*)p;
+                for (var i = message.Length; i > 0; --i, ++charPtr)
+                {
+                    if (*charPtr == '\n')
+                    {
+                        isMultiLine = true;
+                        break;
+                    }
+                }
+            }
+            if (isMultiLine)
+            {
+                var prefix = $"[{DateTime.Now:HH:mm:ss.fff}] ";
+                var lines = message.Split('\n');
+                foreach (var line in lines)
+                    Console.WriteLine($"{prefix}{line}");
+            }
+            else
+                Console.WriteLine($"[{DateTime.Now:HH:mm:ss.fff}] {message}");
+        }
+
+
+        /// <summary>
         /// Get list of main windows.
         /// </summary>
         public IList<MainWindow> MainWindows { get; }
@@ -2181,6 +2231,8 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         public override void OnFrameworkInitializationCompleted()
         {
+            LogToConsole("Avalonia framework initialization completed");
+            
             // check performance
             this.frameworkInitializedTime = this.stopWatch.ElapsedMilliseconds;
             this.Logger.LogTrace("[Performance] Took {duration} ms to initialize Avalonia framework", this.frameworkInitializedTime - this.creationTime);
@@ -2639,6 +2691,8 @@ namespace CarinaStudio.AppSuite
         /// <returns>Task of preparation.</returns>
         protected virtual async Task OnPrepareStartingAsync()
         {
+            LogToConsole("Prepare starting");
+            
             // start log output to localhost
             this.logOutputTargetPort = this.PersistentState.GetValueOrDefault(LogOutputTargetPortKey);
             if (this.logOutputTargetPort == 0)
@@ -2716,6 +2770,7 @@ namespace CarinaStudio.AppSuite
             var showSplashWindow = this.IsSplashWindowNeeded && this.Settings.GetValueOrDefault(SettingKeys.LaunchWithSplashWindow);
             if (showSplashWindow)
             {
+                LogToConsole("Show splash window");
                 time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
                 var splashWindowParams = this.OnPrepareSplashWindow();
                 if (time > 0)

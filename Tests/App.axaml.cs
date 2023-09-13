@@ -90,6 +90,16 @@ namespace CarinaStudio.AppSuite.Tests
 
         readonly List<ExternalDependency> externalDependencies = new();
 
+        static App()
+        {
+            LogToConsole("Initialize App type");
+        }
+
+        public App()
+        {
+            LogToConsole("Initialize App instance");
+        }
+
         protected override bool AllowMultipleMainWindows => true;
 
 
@@ -142,6 +152,8 @@ namespace CarinaStudio.AppSuite.Tests
 
         protected override async Task OnPrepareStartingAsync()
         {
+            LogToConsole("Prepare starting (App)");
+            
             this.externalDependencies.Add(new DotNet7ExternalDependency(this));
             this.externalDependencies.Add(new ExecutableExternalDependency(this, "dotnet", ExternalDependencyPriority.Optional, "dotnet", new Uri("https://dotnet.microsoft.com/"), new Uri("https://dotnet.microsoft.com/download")));
             this.externalDependencies.Add(new ExecutableExternalDependency(this, "bash", ExternalDependencyPriority.RequiredByFeatures, "bash", null, new Uri("https://www.gnu.org/software/bash/")));
