@@ -19,6 +19,44 @@
 	<Window.Resources>
 		<sys:String x:Key="String/MessageDialog.Message">This is a message dialog!</sys:String>
 		<sys:String x:Key="String/MessageDialog.Result">The result is {0}</sys:String>
+		
+		<ContextMenu x:Key="contextMenu" Placement="Bottom">
+			<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Horizontal}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Horizontal}">
+				<MenuItem.Icon>
+					<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Horizontal}"/>
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Vertical}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Vertical}">
+				<MenuItem.Icon>
+					<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Vertical}"/>
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Tile}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Tile}">
+				<MenuItem.Icon>
+					<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Tile}"/>
+				</MenuItem.Icon>
+			</MenuItem>
+			<Separator/>
+			<MenuItem Header="Item" InputGesture="Ctrl+Z">
+				<MenuItem.Icon>
+					<Image Classes="MenuItem_Icon" Source="{DynamicResource Image/Icon.OK}"/>
+				</MenuItem.Icon>
+			</MenuItem>
+			<Separator/>
+			<MenuItem Header="Item" IsEnabled="False">
+				<MenuItem.Icon>
+					<Image Classes="MenuItem_Icon" Source="{DynamicResource Image/Icon.Update}"/>
+				</MenuItem.Icon>
+			</MenuItem>
+			<MenuItem Header="Item">
+				<MenuItem Header="Sub Item"/>
+				<MenuItem Header="Sub Item"/>
+				<Separator/>
+				<MenuItem Header="Sub Item"/>
+				<MenuItem Header="Sub Item"/>
+			</MenuItem>
+			<MenuItem Header="Item"/>
+		</ContextMenu>
 	</Window.Resources>
 	
 	<Window.Styles>

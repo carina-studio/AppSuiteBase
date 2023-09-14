@@ -661,7 +661,10 @@ namespace CarinaStudio.AppSuite.Tests
 
         public void Test()
         {
-            _ = this.Application.TakeMemorySnapshotAsync(this);
+            var button = this.Get<Button>("testButton1");
+            var menu = (ContextMenu)this.Resources["contextMenu"]!;
+            menu.Open(button);
+            //_ = this.Application.TakeMemorySnapshotAsync(this);
             //_ = new EnableRunningScriptDialog().ShowDialog(this);
         }
 

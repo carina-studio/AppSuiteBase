@@ -1257,7 +1257,8 @@ namespace CarinaStudio.AppSuite
                     var screenScaling = (hostWindow.Screens.ScreenFromWindow(hostWindow) ?? hostWindow.Screens.Primary)?.Scaling ?? 1.0;
                     var hostWindowRect = hostWindow.PointToScreen(default).Let(it => new Rect(new(it.X / screenScaling, it.Y / screenScaling), hostWindow.Bounds.Size));
                     var topLevelPosition = topLevel.PointToScreen(default).Let(it => new Point(it.X / screenScaling, it.Y / screenScaling));
-                    var anchorRect = popup.Placement == PlacementMode.Pointer
+                    var placement = popup.Placement;
+                    var anchorRect = placement == PlacementMode.Pointer
 #pragma warning disable CS0618
                         ? positionParams.AnchorRectangle.Let(it => new Rect(topLevelPosition.X + it.X, topLevelPosition.Y + it.Y, it.Width, it.Height))
                         : positionParams.AnchorRectangle.Let(it =>
@@ -1272,14 +1273,30 @@ namespace CarinaStudio.AppSuite
                         bindingToken.Dispose();
                     if (popupVertOffsetBindings.TryGetValue(popup, out bindingToken))
                         bindingToken.Dispose();
-                    if (hostWindowRect.Center.X >= anchorRect.Center.X)
-                        popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset - 15), BindingPriority.Animation);
-                    else
-                        popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset + 15), BindingPriority.Animation);
-                    if (hostWindowRect.Center.Y >= anchorRect.Center.Y)
-                        popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset - 15), BindingPriority.Animation);
-                    else
-                        popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset + 15), BindingPriority.Animation);
+                    switch (placement)
+                    {
+                        case PlacementMode.Bottom:
+                        case PlacementMode.Top:
+                            break;
+                        default:
+                            if (hostWindowRect.Center.X >= anchorRect.Center.X)
+                                popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset - 15), BindingPriority.Animation);
+                            else
+                                popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset + 15), BindingPriority.Animation);
+                            break;
+                    }
+                    switch (placement)
+                    {
+                        case PlacementMode.Left:
+                        case PlacementMode.Right:
+                            break;
+                        default:
+                            if (hostWindowRect.Center.Y >= anchorRect.Center.Y)
+                                popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset - 15), BindingPriority.Animation);
+                            else
+                                popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset + 15), BindingPriority.Animation);
+                            break;
+                    }
                     
                     // intercept pointer pressed event
                     (topLevelInputManagerField.GetValue(hostWindow) as IInputManager)?.Let(inputManager =>
@@ -1291,44 +1308,6 @@ namespace CarinaStudio.AppSuite
                     });
                 });
             });
-            
-            // close popup when clicking on its shadows
-            /*
-            InputElement.PointerPressedEvent.AddClassHandler(typeof(Control), (s, e) =>
-            {
-                // get size of shadow
-                if (((PointerPressedEventArgs)e).GetCurrentPoint((Control)s).Properties.IsRightButtonPressed)
-                    return;
-                if (s is not Popup popup)
-                    return;
-                Thickness shadowMargin;
-                if (popup.Child is ContextMenu contextMenu)
-                {
-                    using var childrenEnumerator = contextMenu.GetVisualChildren().GetEnumerator();
-                    if (!childrenEnumerator.MoveNext() || childrenEnumerator.Current is not Border border)
-                        return;
-                    shadowMargin = border.Margin;
-                }
-                else if (popup.Child is Border border)
-                    shadowMargin = border.Margin;
-                else
-                    return;
-                if (shadowMargin == default)
-                    return;
-                
-                // close if pointer pressed on shadow
-                var position = ((PointerPressedEventArgs)e).GetCurrentPoint(popup).Position;
-                var popupSize = popup.Bounds.Size;
-                if (position.X < shadowMargin.Left 
-                    || position.X >= popupSize.Width - shadowMargin.Right
-                    || position.Y < shadowMargin.Top
-                    || position.Y >= popupSize.Height - shadowMargin.Bottom)
-                {
-                    e.Handled = true;
-                    popup.Close();
-                }
-            }, RoutingStrategies.Tunnel);
-            */
 
             // add to top styles
             this.Styles.Add(this.extraStyles);
