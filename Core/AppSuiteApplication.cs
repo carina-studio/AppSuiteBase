@@ -1191,7 +1191,7 @@ namespace CarinaStudio.AppSuite
                 }
             }
             
-            // move popup to correct position according to its shadows
+            // animate popup and move it to correct position according to its shadows
             var popupPositionParamsField = typeof(PopupRoot).GetField("_positionerParameters", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new NotSupportedException();
             if (popupPositionParamsField.FieldType != typeof(PopupPositionerParameters))
                 throw new NotSupportedException();
@@ -1200,8 +1200,25 @@ namespace CarinaStudio.AppSuite
             var processPopupRawInputHandlerTokens = new Dictionary<Popup, IDisposable>();
             Popup.IsOpenProperty.Changed.Subscribe(e =>
             {
+                // check event source
                 if (e.Sender is not Popup popup)
                     return;
+                
+                // find root border
+                Border rootBorder;
+                if (popup.Child is ContextMenu contextMenu)
+                {
+                    using var childrenEnumerator = contextMenu.GetVisualChildren().GetEnumerator();
+                    if (!childrenEnumerator.MoveNext() || childrenEnumerator.Current is not Border border)
+                        return;
+                    rootBorder = border;
+                }
+                else if (popup.Child is Border border)
+                    rootBorder = border;
+                else
+                    return;
+                
+                // handle closing popup
                 if (!e.NewValue.Value)
                 {
                     if (popupHorzOffsetBindings.TryGetValue(popup, out var bindingToken))
@@ -1219,10 +1236,33 @@ namespace CarinaStudio.AppSuite
                         processPopupRawInputHandlerTokens.Remove(popup);
                         handlerToken.Dispose();
                     }
+                    var transitions = rootBorder.Transitions;
+                    rootBorder.Transitions = null;
+                    rootBorder.Opacity = this.FindResourceOrDefault("Double/Popup.InitialOpacity", 0.0);
+                    rootBorder.Transitions = transitions;
+                    (rootBorder.RenderTransform as ScaleTransform)?.Let(it =>
+                    {
+                        var transitions = it.Transitions;
+                        var scaling = this.FindResourceOrDefault("Double/Popup.InitialScaling", 0.9);
+                        it.Transitions = null;
+                        it.ScaleX = scaling;
+                        it.ScaleY = scaling;
+                        it.Transitions = transitions;
+                    });
                     return;
                 }
+                
+                // handle opening popup
                 (popup.Host as PopupRoot)?.Let(hostWindow =>
                 {
+                    // animate
+                    rootBorder.Opacity = 1;
+                    (rootBorder.RenderTransform as ScaleTransform)?.Let(it =>
+                    {
+                        it.ScaleX = 1;
+                        it.ScaleY = 1;
+                    });
+                    
                     // check state
                     if (popup.Parent is not Control target)
                     {
@@ -1237,18 +1277,7 @@ namespace CarinaStudio.AppSuite
                             return;
                         topLevel = targetTopLevel;
                     }
-                    Thickness shadowMargin;
-                    if (popup.Child is ContextMenu contextMenu)
-                    {
-                        using var childrenEnumerator = contextMenu.GetVisualChildren().GetEnumerator();
-                        if (!childrenEnumerator.MoveNext() || childrenEnumerator.Current is not Border border)
-                            return;
-                        shadowMargin = border.Margin;
-                    }
-                    else if (popup.Child is Border border)
-                        shadowMargin = border.Margin;
-                    else
-                        return;
+                    var shadowMargin = rootBorder.Margin;
                     if (shadowMargin == default)
                         return;
                     
@@ -1273,6 +1302,7 @@ namespace CarinaStudio.AppSuite
                         bindingToken.Dispose();
                     if (popupVertOffsetBindings.TryGetValue(popup, out bindingToken))
                         bindingToken.Dispose();
+                    var shadowLength = this.FindResourceOrDefault("Double/Popup.ShadowLength", 15.0);
                     switch (placement)
                     {
                         case PlacementMode.Bottom:
@@ -1280,9 +1310,9 @@ namespace CarinaStudio.AppSuite
                             break;
                         default:
                             if (hostWindowRect.Center.X >= anchorRect.Center.X)
-                                popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset - 15), BindingPriority.Animation);
+                                popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset - shadowLength), BindingPriority.Animation);
                             else
-                                popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset + 15), BindingPriority.Animation);
+                                popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset + shadowLength), BindingPriority.Animation);
                             break;
                     }
                     switch (placement)
@@ -1292,9 +1322,9 @@ namespace CarinaStudio.AppSuite
                             break;
                         default:
                             if (hostWindowRect.Center.Y >= anchorRect.Center.Y)
-                                popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset - 15), BindingPriority.Animation);
+                                popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset - shadowLength), BindingPriority.Animation);
                             else
-                                popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset + 15), BindingPriority.Animation);
+                                popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset + shadowLength), BindingPriority.Animation);
                             break;
                     }
                     

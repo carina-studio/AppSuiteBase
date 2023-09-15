@@ -278,6 +278,12 @@
 	<sys:Double x:Key="Double/PathEnvVarEditorDialog.MinHeight">300</sys:Double>
 	<sys:Double x:Key="Double/PathEnvVarEditorDialog.MinWidth">200</sys:Double>
 	<sys:Double x:Key="Double/PathEnvVarEditorDialog.Width">400</sys:Double>
+	
+	<!-- Popup -->
+	<sys:Double x:Key="Double/Popup.InitialOpacity">0</sys:Double>
+	<sys:Double x:Key="Double/Popup.InitialScaling">0.95</sys:Double>
+	<sys:Double x:Key="Double/Popup.ShadowLength">15</sys:Double>
+	<Thickness x:Key="Thickness/Popup.Shadow.Margin">15</Thickness>
 
 	<!-- ScrollBar -->
 	<CornerRadius x:Key="CornerRadius/ScrollBar">7</CornerRadius>

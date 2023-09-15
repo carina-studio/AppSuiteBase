@@ -385,7 +385,23 @@
 	<!-- ContextMenu -->
 	<Style Selector="ContextMenu /template/ Border">
 		<Setter Property="BoxShadow" Value="{DynamicResource BoxShadows/Shadow}"/>
-		<Setter Property="Margin" Value="15"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Popup.Shadow.Margin}"/>
+		<Setter Property="Opacity" Value="{StaticResource Double/Popup.InitialOpacity}"/>
+		<Setter Property="RenderTransform">
+			<ScaleTransform ScaleX="{StaticResource Double/Popup.InitialScaling}" ScaleY="{StaticResource Double/Popup.InitialScaling}">
+				<ScaleTransform.Transitions>
+					<Transitions>
+						<DoubleTransition Property="ScaleX" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
+						<DoubleTransition Property="ScaleY" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
+					</Transitions>
+				</ScaleTransform.Transitions>
+			</ScaleTransform>
+		</Setter>
+		<Setter Property="Transitions">
+			<Transitions>
+				<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
+			</Transitions>
+		</Setter>
 	</Style>
 
 	<!-- DatePicker -->
@@ -1716,7 +1732,23 @@
 	<!-- Popup -->
 	<Style Selector="Popup > Border">
 		<Setter Property="BoxShadow" Value="{DynamicResource BoxShadows/Shadow}"/>
-		<Setter Property="Margin" Value="15"/>
+		<Setter Property="Margin" Value="{StaticResource Thickness/Popup.Shadow.Margin}"/>
+		<Setter Property="Opacity" Value="{StaticResource Double/Popup.InitialOpacity}"/>
+		<Setter Property="RenderTransform">
+			<ScaleTransform ScaleX="{StaticResource Double/Popup.InitialScaling}" ScaleY="{StaticResource Double/Popup.InitialScaling}">
+				<ScaleTransform.Transitions>
+					<Transitions>
+						<DoubleTransition Property="ScaleX" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
+						<DoubleTransition Property="ScaleY" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
+					</Transitions>
+				</ScaleTransform.Transitions>
+			</ScaleTransform>
+		</Setter>
+		<Setter Property="Transitions">
+			<Transitions>
+				<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
+			</Transitions>
+		</Setter>
 	</Style>
 
 	<!-- RepeatButton -->
