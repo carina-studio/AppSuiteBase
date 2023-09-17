@@ -589,8 +589,6 @@
 	<Style Selector="Grid.Dialog_IconText_Container">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.IconText.Margin}"/>
 	</Style>
-	<Style Selector="Grid.Dialog_IconText_Container_Description">
-	</Style>
 	<Style Selector="Grid.Dialog_Item_Container">
 		<Setter Property="ClipToBounds" Value="True"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight}"/>
@@ -828,6 +826,7 @@
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Description}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
@@ -836,7 +835,8 @@
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
-		<Setter Property="Padding" Value="{DynamicResource Dialog.TextBlock.Padding.Description}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
@@ -844,6 +844,7 @@
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Warning}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
