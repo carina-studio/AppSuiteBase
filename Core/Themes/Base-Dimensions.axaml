@@ -315,6 +315,7 @@
 	<sys:Double x:Key="Double/SelfTestingWindow.Width">600</sys:Double>
 	
 	<!-- Shadow -->
+	<BoxShadows x:Key="BoxShadows/None">0 0 0 0 #00000000</BoxShadows>
 	<BoxShadows x:Key="BoxShadows/Shadow">0 0 15 0 #47000000</BoxShadows>
 	<BoxShadows x:Key="BoxShadows/Shadow.Heavy">0 0 20 0 #50000000</BoxShadows>
 	<BoxShadows x:Key="BoxShadows/Shadow.Inner">inset 0 0 15 0 #47000000</BoxShadows>
