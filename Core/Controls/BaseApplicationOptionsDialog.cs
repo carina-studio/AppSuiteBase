@@ -1,8 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
-using CarinaStudio.Threading;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,20 +12,12 @@ namespace CarinaStudio.AppSuite.Controls;
 /// </summary>
 public abstract class BaseApplicationOptionsDialog : InputDialog<IAppSuiteApplication>
 {
-    /// <summary>
-    /// Define <see cref="HasNavigationBar"/> property.
-    /// </summary>
-    public static readonly StyledProperty<bool> HasNavigationBarProperty = AvaloniaProperty.Register<BaseApplicationOptionsDialog, bool>(nameof(HasNavigationBar), false);
-      
-        
     // Static fields.
     static int OpenedDialogCount;
 
 
     // Fields.
     readonly TaskCompletionSource<ApplicationOptionsDialogResult> closingTaskSource = new();
-    readonly int navigationBarUpdateDelay;
-    readonly ScheduledAction updateNavigationBarAction;
 
 
     /// <summary>
@@ -39,21 +29,9 @@ public abstract class BaseApplicationOptionsDialog : InputDialog<IAppSuiteApplic
         this.BindToResource(HeightProperty, "Double/ApplicationOptionsDialog.Height");
         this.BindToResource(MinHeightProperty, "Double/ApplicationOptionsDialog.MinHeight");
         this.BindToResource(MinWidthProperty, "Double/ApplicationOptionsDialog.MinWidth");
-        this.navigationBarUpdateDelay = this.Application.Configuration.GetValueOrDefault(ConfigurationKeys.DialogNavigationBarUpdateDelay);
         this.SizeToContent = SizeToContent.Manual;
         this.BindToResource(TitleProperty, "String/ApplicationOptions");
-        this.updateNavigationBarAction = new(this.OnUpdateNavigationBar);
         this.BindToResource(WidthProperty, "Double/ApplicationOptionsDialog.Width");
-    }
-
-
-    /// <summary>
-    /// Get or set whether navigation bar is available in dialog or not.
-    /// </summary>
-    public bool HasNavigationBar
-    {
-        get => this.GetValue(HasNavigationBarProperty);
-        set => this.SetValue(HasNavigationBarProperty, value);
     }
 
 
@@ -61,17 +39,6 @@ public abstract class BaseApplicationOptionsDialog : InputDialog<IAppSuiteApplic
     /// Check whether at least one <see cref="BaseApplicationOptionsDialog"/> instance is opened or not.
     /// </summary>
     public static bool HasOpenedDialogs => OpenedDialogCount > 0;
-
-
-    /// <summary>
-    /// Invalidate navigation bar and update later.
-    /// </summary>
-    protected void InvalidateNavigationBar()
-    {
-        this.VerifyAccess();
-        if (this.GetValue(HasNavigationBarProperty) && this.IsOpened)
-            this.updateNavigationBarAction.Schedule(this.navigationBarUpdateDelay);
-    }
 
 
     /// <inheritdoc/>
@@ -134,38 +101,19 @@ public abstract class BaseApplicationOptionsDialog : InputDialog<IAppSuiteApplic
 
 
     /// <inheritdoc/>
-    protected override void OnOpening(EventArgs e)
-    {
-        base.OnOpening(e);
-        if (this.GetValue(HasNavigationBarProperty))
-            this.updateNavigationBarAction.Schedule();
-    }
-
-
-    /// <inheritdoc/>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
         if (change.Property == HasNavigationBarProperty)
         {
+            if (this.IsOpened)
+                return;
             if ((bool)change.NewValue!)
-            {
-                if (!this.IsOpened)
-                    this.BindToResource(WidthProperty, "Double/ApplicationOptionsDialog.Width.WithNavigationBar");
-                else
-                    this.updateNavigationBarAction.Reschedule();
-            }
-            else if (!this.IsOpened)
+                this.BindToResource(WidthProperty, "Double/ApplicationOptionsDialog.Width.WithNavigationBar");
+            else
                 this.BindToResource(WidthProperty, "Double/ApplicationOptionsDialog.Width");
         }
     }
-    
-    
-    /// <summary>
-    /// Called to update navigation bar.
-    /// </summary>
-    protected virtual void OnUpdateNavigationBar()
-    { }
 
 
     /// <summary>

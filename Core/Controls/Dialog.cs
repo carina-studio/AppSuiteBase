@@ -1,6 +1,9 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using CarinaStudio.Configuration;
+using CarinaStudio.Threading;
 using System;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -10,9 +13,17 @@ namespace CarinaStudio.AppSuite.Controls
     /// </summary>
     public abstract class Dialog : CarinaStudio.Controls.Dialog<IAppSuiteApplication>
     {
+        /// <summary>
+        /// Define <see cref="HasNavigationBar"/> property.
+        /// </summary>
+        public static readonly StyledProperty<bool> HasNavigationBarProperty = AvaloniaProperty.Register<Dialog, bool>(nameof(HasNavigationBar), false);
+        
+        
         // Fields.
+        int navigationBarUpdateDelay;
         INameScope? templateNameScope;
         TutorialPresenter? tutorialPresenter;
+        ScheduledAction? updateNavigationBarAction;
         
         
         /// <summary>
@@ -22,6 +33,32 @@ namespace CarinaStudio.AppSuite.Controls
         {
             _ = new WindowContentFadingHelper(this);
             this.Title = this.Application.Name;
+        }
+        
+        
+        /// <summary>
+        /// Get or set whether navigation bar is available in dialog or not.
+        /// </summary>
+        public bool HasNavigationBar
+        {
+            get => this.GetValue(HasNavigationBarProperty);
+            set => this.SetValue(HasNavigationBarProperty, value);
+        }
+        
+        
+        /// <summary>
+        /// Invalidate navigation bar and update later.
+        /// </summary>
+        protected void InvalidateNavigationBar()
+        {
+            this.VerifyAccess();
+            if (this.GetValue(HasNavigationBarProperty) && this.IsOpened)
+            {
+                if (this.navigationBarUpdateDelay == 0)
+                    this.navigationBarUpdateDelay = this.Application.Configuration.GetValueOrDefault(ConfigurationKeys.DialogNavigationBarUpdateDelay);
+                this.updateNavigationBarAction ??= new(this.OnUpdateNavigationBar);
+                this.updateNavigationBarAction.Schedule(this.navigationBarUpdateDelay);
+            }
         }
 
 
@@ -39,6 +76,9 @@ namespace CarinaStudio.AppSuite.Controls
         {
             // call base
             base.OnClosed(e);
+            
+            // cancel updating navigation bar
+            this.updateNavigationBarAction?.Cancel();
 
             // [Workaround] Prevent Window leak by child controls
             this.SynchronizationContext.Post(_ => this.Content = null, null);
@@ -52,6 +92,40 @@ namespace CarinaStudio.AppSuite.Controls
             if (e.Key == Key.Escape && !e.Handled)
                 this.Close();
         }
+        
+        
+        /// <inheritdoc/>
+        protected override void OnOpening(EventArgs e)
+        {
+            base.OnOpening(e);
+            if (this.GetValue(HasNavigationBarProperty))
+            {
+                this.updateNavigationBarAction ??= new(this.OnUpdateNavigationBar);
+                this.updateNavigationBarAction.Schedule();
+            }
+        }
+        
+        
+        /// <inheritdoc/>
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+            if (change.Property == HasNavigationBarProperty)
+            {
+                if ((bool)change.NewValue! && this.IsOpened)
+                {
+                    this.updateNavigationBarAction ??= new(this.OnUpdateNavigationBar);
+                    this.updateNavigationBarAction.Reschedule();
+                }
+            }
+        }
+        
+        
+        /// <summary>
+        /// Called to update navigation bar.
+        /// </summary>
+        protected virtual void OnUpdateNavigationBar()
+        { }
 
 
         /// <summary>
