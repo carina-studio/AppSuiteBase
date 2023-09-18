@@ -26,8 +26,11 @@
 	<Thickness x:Key="Thickness/ApplicationInfoDialog.AppTitle.Margin">0,0,0,5</Thickness>
 
 	<!-- ApplicationOptionsDialog -->
-	<sys:Double x:Key="Double/ApplicationOptionsDialog.Content.MaxHeight">500</sys:Double>
-	<sys:Double x:Key="Double/ApplicationOptionsDialog.Width">600</sys:Double>
+	<sys:Double x:Key="Double/ApplicationOptionsDialog.Height">600</sys:Double>
+	<sys:Double x:Key="Double/ApplicationOptionsDialog.MinHeight">300</sys:Double>
+	<sys:Double x:Key="Double/ApplicationOptionsDialog.MinWidth">300</sys:Double>
+	<sys:Double x:Key="Double/ApplicationOptionsDialog.Width">580</sys:Double>
+	<sys:Double x:Key="Double/ApplicationOptionsDialog.Width.WithNavigationBar">630</sys:Double>
 
 	<!-- ApplicationUpdateDialog -->
 	<sys:Double x:Key="Double/ApplicationUpdateDialog.Width">500</sys:Double>

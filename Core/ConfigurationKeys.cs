@@ -40,6 +40,10 @@ public abstract class ConfigurationKeys
     /// </summary>
     public static readonly SettingKey<int> DelayToPerformFullGCWhenUserInteractionStopped = new(nameof(DelayToPerformFullGCWhenUserInteractionStopped), 60000);
     /// <summary>
+    /// Delay before updating navigation bar in dialog.
+    /// </summary>
+    public static readonly SettingKey<int> DialogNavigationBarUpdateDelay = new(nameof(DialogNavigationBarUpdateDelay), 100);
+    /// <summary>
     /// Interval of checking whether script running is completed or not.
     /// </summary>
     public static readonly SettingKey<int> ScriptCompletionCheckingInterval = new(nameof(ScriptCompletionCheckingInterval), 3000);
