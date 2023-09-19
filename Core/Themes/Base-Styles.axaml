@@ -2759,15 +2759,6 @@
 		<!-- [Workaround] -->
 		<Setter Property="Foreground" Value="{DynamicResource TextControlForegroundDisabled}" />
 	</Style>
-	<Style Selector="TextBox.WithInPlaceAction">
-		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.Padding.WithInPlaceAction.1}"/>
-	</Style>
-	<Style Selector="TextBox.With2InPlaceActions">
-		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.Padding.WithInPlaceAction.2}"/>
-	</Style>
-	<Style Selector="TextBox.With3InPlaceActions">
-		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.Padding.WithInPlaceAction.3}"/>
-	</Style>
 	<Style Selector="ToggleButton.TextBox_InPlaceAction">
 		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundTransparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
@@ -2970,30 +2961,6 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="TextBox.ToolBar_TextBox:disabled">
-		<Setter Property="IsHitTestVisible" Value="False"/>
-	</Style>
-	<Style Selector="TextBox.ToolBar_TextBox_WithInPlaceAction">
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.Padding.WithInPlaceAction.1}"/>
-		<Setter Property="VerticalAlignment" Value="Center"/>
-	</Style>
-	<Style Selector="TextBox.ToolBar_TextBox_WithInPlaceAction:disabled">
-		<Setter Property="IsHitTestVisible" Value="False"/>
-	</Style>
-	<Style Selector="TextBox.ToolBar_TextBox_With2InPlaceActions">
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.Padding.WithInPlaceAction.2}"/>
-		<Setter Property="VerticalAlignment" Value="Center"/>
-	</Style>
-	<Style Selector="TextBox.ToolBar_TextBox_With2InPlaceActions:disabled">
-		<Setter Property="IsHitTestVisible" Value="False"/>
-	</Style>
-	<Style Selector="TextBox.ToolBar_TextBox_With3InPlaceActions">
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
-		<Setter Property="Padding" Value="{DynamicResource Thickness/TextBox.Padding.WithInPlaceAction.3}"/>
-		<Setter Property="VerticalAlignment" Value="Center"/>
-	</Style>
-	<Style Selector="TextBox.ToolBar_TextBox_With3InPlaceActions:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
 	<Style Selector="ToggleButton.ToolBar_DropDownButton">

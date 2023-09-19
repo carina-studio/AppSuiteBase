@@ -237,12 +237,15 @@
 													</ToggleButton>
 
 													<Panel>
-														<TextBox Classes="ToolBar_TextBox_WithInPlaceAction" Width="100"/>
-														<StackPanel Classes="TextBox_InPlaceActions">
-															<ToggleButton Classes="TextBox_InPlaceAction">
-																<Image Classes="Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
-															</ToggleButton>
-														</StackPanel>
+														<TextBox Classes="ToolBar_TextBox" Width="100">
+															<TextBox.InnerRightContent>
+																<StackPanel Classes="TextBox_InPlaceActions">
+																	<ToggleButton Classes="TextBox_InPlaceAction">
+																		<Image Classes="Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
+																	</ToggleButton>
+																</StackPanel>
+															</TextBox.InnerRightContent>
+														</TextBox>
 													</Panel>
 													<TextBox Classes="ToolBar_TextBox" Width="50" IsEnabled="False"/>
 
@@ -279,17 +282,18 @@
 
 												</StackPanel>
 
-												<Panel Grid.Column="1">
-													<TextBox Name="toolBarTextBox" Classes="ToolBar_TextBox_With2InPlaceActions" Watermark="TextBox with in-place actions"/>
-													<StackPanel Classes="TextBox_InPlaceActions">
-														<Button Classes="TextBox_InPlaceAction">
-															<Image Classes="Icon" Source="{DynamicResource Image/Icon.Save}"/>
-														</Button>
-														<Button Classes="TextBox_InPlaceAction">
-															<Image Classes="Icon" Source="{DynamicResource Image/Icon.Close}"/>
-														</Button>
-													</StackPanel>
-												</Panel>
+												<TextBox Name="toolBarTextBox" Classes="ToolBar_TextBox" Grid.Column="1" Watermark="TextBox with in-place actions">
+													<TextBox.InnerRightContent>
+														<StackPanel Classes="TextBox_InPlaceActions">
+															<Button Classes="TextBox_InPlaceAction">
+																<Image Classes="Icon" Source="{DynamicResource Image/Icon.Save}"/>
+															</Button>
+															<Button Classes="TextBox_InPlaceAction">
+																<Image Classes="Icon" Source="{DynamicResource Image/Icon.Close}"/>
+															</Button>
+														</StackPanel>
+													</TextBox.InnerRightContent>
+												</TextBox>
 
 												<StackPanel Grid.Column="2" HorizontalAlignment="Stretch" Orientation="Horizontal">
 													<Button Classes="ToolBar_Button">
