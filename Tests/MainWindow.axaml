@@ -137,7 +137,7 @@
 						</Grid>
 					</TabItem.Header>
 
-					<ScrollViewer HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Disabled">
+					<ScrollViewer Name="scrollViewer" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Disabled">
 						<StackPanel Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalAlignment="Stretch" Orientation="Vertical">
 
 							<StackPanel.ContextMenu>
@@ -208,7 +208,7 @@
 									</Menu>
 
 									<!-- Toolbar -->
-									<Border Classes="ToolBar">
+									<Border Name="toolBar" Classes="ToolBar">
 										<appControls:ToolBarScrollViewer Name="toolBarScrollViewer">
 											<Grid Background="{x:Static Brushes.Transparent}" ColumnDefinitions="Auto,*,Auto">
 												<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
@@ -573,7 +573,7 @@
 							</Border>
 							
 							<!-- Buttons -->
-							<WrapPanel Orientation="Horizontal">
+							<WrapPanel Name="buttonsPanel" Orientation="Horizontal">
 								<Button Content="Button" Margin="5"/>
 								<Button Content="Button" IsEnabled="False" Margin="5"/>
 								<Button Classes="accent" Content="Button" Margin="5"/>

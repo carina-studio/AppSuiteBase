@@ -661,9 +661,10 @@ namespace CarinaStudio.AppSuite.Tests
 
         public void Test()
         {
-            var button = this.Get<Button>("testButton1");
-            var menu = (ContextMenu)this.Resources["contextMenu"]!;
-            menu.Open(button);
+            this.Get<ScrollViewer>("scrollViewer").SmoothScrollToContent(this.Get<Visual>("buttonsPanel"));
+            //var button = this.Get<Button>("testButton1");
+            //var menu = (ContextMenu)this.Resources["contextMenu"]!;
+            //menu.Open(button);
             //_ = this.Application.TakeMemorySnapshotAsync(this);
             //_ = new EnableRunningScriptDialog().ShowDialog(this);
         }
