@@ -100,7 +100,7 @@ public static class ScrollViewerExtensions
                 };
             }
             if (scrollToCenter)
-                return contentBounds.Center.X - viewportSize.Width / 2;
+                return (leftInScrollViewer + rightInScrollViewer) / 2 - viewportSize.Width / 2;
             if (leftInScrollViewer < offset.X)
                 return leftInScrollViewer;
             return rightInScrollViewer - viewportSize.Width;
@@ -112,7 +112,7 @@ public static class ScrollViewerExtensions
             if (contentBounds.Height > viewportSize.Height)
                 return topInScrollViewer;
             if (scrollToCenter)
-                return contentBounds.Center.Y - viewportSize.Height / 2;
+                return (topInScrollViewer + bottomInScrollViewer) / 2 - viewportSize.Height / 2;
             if (topInScrollViewer < offset.Y)
                 return topInScrollViewer;
             return bottomInScrollViewer - viewportSize.Height;
