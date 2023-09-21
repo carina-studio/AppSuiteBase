@@ -1275,8 +1275,14 @@
 	<DrawingImage x:Key="Image/Icon.Script">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Script}"/>
 	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Script.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Script}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Script.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Script.Outline}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Script.Outline.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Script.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Search" Drawing="{StaticResource Drawing/Icon.Search}"/>
 	<DrawingImage x:Key="Image/Icon.Search.Light">
@@ -1343,8 +1349,14 @@
 	<DrawingImage x:Key="Image/Icon.Tool">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Tool}"/>
 	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Tool.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Tool}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Tool.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Tool.Outline}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Tool.Outline.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Tool.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.TransferDown">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.TransferDown}"/>
