@@ -93,7 +93,7 @@
 		</Border>
 
 		<!-- Content -->
-		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="{StaticResource Double/ExternalDependenciesDialog.Content.MaxHeight}">
+		<ScrollViewer Name="scrollViewer" HorizontalScrollBarVisibility="Disabled" MaxHeight="{StaticResource Double/ExternalDependenciesDialog.Content.MaxHeight}">
 			<StackPanel Name="externalDependenciesPanel" Background="{x:Static Brushes.Transparent}" Classes="Dialog_ContentPanel_WithItemsGroups"/>
 		</ScrollViewer>
 

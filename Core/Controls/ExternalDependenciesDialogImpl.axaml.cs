@@ -4,7 +4,6 @@ using Avalonia.Data.Converters;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using CarinaStudio.VisualTree;
 using System;
@@ -177,7 +176,7 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 			}
 			panel.AddHandler(PointerPressedEvent, (_, e) =>
 			{
-				if (e.Source is not Avalonia.Controls.SelectableTextBlock)
+				if (e.Source is not SelectableTextBlock)
 					panel.Focus();
 			}, RoutingStrategies.Tunnel);
 		});
@@ -257,10 +256,10 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 		{
 			this.externalDependenciesPanel.Children.FirstOrDefault(it => it.DataContext == extDependency)?.Let(extDependencyItemPanel =>
 			{
-				var headerBorder = ((Visual)extDependencyItemPanel).FindDescendantOfTypeAndName<Border>("headerBorder");
-				if (headerBorder != null)
+				var headerBorder = extDependencyItemPanel.FindDescendantOfTypeAndName<Border>("headerBorder");
+				if (headerBorder is not null)
 				{
-					this.ScrollToControl(headerBorder);
+					this.Get<ScrollViewer>("scrollViewer").ScrollToContent(headerBorder);
 					this.AnimateHeader(headerBorder);
 				}
 			});

@@ -17,7 +17,8 @@ namespace CarinaStudio.AppSuite.Controls;
 public static class ScrollViewerExtensions
 {
     // Static fields.
-    static readonly Dictionary<ScrollViewer, DoubleAnimator> ScrollViewerScrollingAnimators = new();
+    static readonly Dictionary<ScrollViewer, DoubleAnimator> SmoothScrollingAnimators = new();
+    static readonly Dictionary<ScrollViewer, Vector> SmoothScrollingTargetOffsets = new();
     
     
     /// <summary>
@@ -125,8 +126,9 @@ public static class ScrollViewerExtensions
             return;
 
         // cancel previous scrolling
-        if (ScrollViewerScrollingAnimators.TryGetValue(scrollViewer, out var prevAnimator))
+        if (SmoothScrollingAnimators.TryGetValue(scrollViewer, out var prevAnimator))
             prevAnimator.Cancel();
+        SmoothScrollingTargetOffsets.Remove(scrollViewer);
 
         // scroll to content
         if (smoothly)
@@ -139,19 +141,21 @@ public static class ScrollViewerExtensions
             {
                 it.Cancelled += (_, _) =>
                 {
-                    if (ScrollViewerScrollingAnimators.TryGetValue(scrollViewer, out var currentAnimator)
+                    if (SmoothScrollingAnimators.TryGetValue(scrollViewer, out var currentAnimator)
                         && currentAnimator == it)
                     {
-                        ScrollViewerScrollingAnimators.Remove(scrollViewer);
+                        SmoothScrollingAnimators.Remove(scrollViewer);
+                        SmoothScrollingTargetOffsets.Remove(scrollViewer);
                         scrollViewer.RemoveHandler(ScrollViewer.PointerPressedEvent, OnPointerPressedOnScrollViewer);
                     }
                 };
                 it.Completed += (_, _) =>
                 {
-                    if (ScrollViewerScrollingAnimators.TryGetValue(scrollViewer, out var currentAnimator)
+                    if (SmoothScrollingAnimators.TryGetValue(scrollViewer, out var currentAnimator)
                         && currentAnimator == it)
                     {
-                        ScrollViewerScrollingAnimators.Remove(scrollViewer);
+                        SmoothScrollingAnimators.Remove(scrollViewer);
+                        SmoothScrollingTargetOffsets.Remove(scrollViewer);
                         scrollViewer.Offset = new(newOffsetX, newOffsetY);
                         scrollViewer.RemoveHandler(ScrollViewer.PointerPressedEvent, OnPointerPressedOnScrollViewer);
                     }
@@ -161,7 +165,8 @@ public static class ScrollViewerExtensions
                 it.ProgressChanged += (_, _) => { scrollViewer.Offset = new(offset.X + diffX * it.Progress, offset.Y + diffY * it.Progress); };
             });
             scrollViewer.AddHandler(ScrollViewer.PointerPressedEvent, OnPointerPressedOnScrollViewer, RoutingStrategies.Tunnel);
-            ScrollViewerScrollingAnimators[scrollViewer] = animator;
+            SmoothScrollingAnimators[scrollViewer] = animator;
+            SmoothScrollingTargetOffsets[scrollViewer] = new(newOffsetX, newOffsetY);
             animator.Start();
         }
         else
@@ -177,4 +182,14 @@ public static class ScrollViewerExtensions
     /// <param name="scrollToCenter">True to scroll content to center of viewport.</param>
     public static void SmoothScrollToContent(this ScrollViewer scrollViewer, Visual content, bool scrollToCenter = true) =>
         ScrollToContent(scrollViewer, content, true, scrollToCenter);
+
+
+    /// <summary>
+    /// Try getting target offset of smooth scrolling.
+    /// </summary>
+    /// <param name="scrollViewer"><see cref="ScrollViewer"/>.</param>
+    /// <param name="offset">Target offset.</param>
+    /// <returns>True if tar offset got successfully.</returns>
+    public static bool TryGetSmoothScrollingTargetOffset(this ScrollViewer scrollViewer, out Vector offset) =>
+        SmoothScrollingTargetOffsets.TryGetValue(scrollViewer, out offset);
 }

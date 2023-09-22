@@ -1,9 +1,6 @@
-using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
 using Avalonia.Media;
-using Avalonia.VisualTree;
-using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using System;
 
@@ -51,8 +48,8 @@ public static class DialogExtensions
             duration = default;
         if (HeaderBackgroundTransition == null || HeaderBorderBrushTransition == null)
         {
-            HeaderBackgroundTransition ??= new BrushTransition() { Duration = duration.GetValueOrDefault(), Property = Border.BackgroundProperty };
-            HeaderBorderBrushTransition ??= new BrushTransition() { Duration = duration.GetValueOrDefault(), Property = Border.BorderBrushProperty };
+            HeaderBackgroundTransition ??= new BrushTransition { Duration = duration.GetValueOrDefault(), Property = Border.BackgroundProperty };
+            HeaderBorderBrushTransition ??= new BrushTransition { Duration = duration.GetValueOrDefault(), Property = Border.BorderBrushProperty };
         }
         var transitions = header.Transitions;
         if (transitions == null)
@@ -81,7 +78,7 @@ public static class DialogExtensions
     /// </summary>
     /// <param name="dialog">Dialog.</param>
     /// <param name="textBlock">Text block to animate.</param>
-    public static void AnimateTextBlock<TDialog>(this TDialog dialog, Avalonia.Controls.TextBlock textBlock) where TDialog : Avalonia.Controls.Window, IApplicationObject
+    public static void AnimateTextBlock<TDialog>(this TDialog dialog, TextBlock textBlock) where TDialog : Avalonia.Controls.Window, IApplicationObject
     {
         // get application
         if (dialog.Application is not IAvaloniaApplication avnApp)
@@ -98,7 +95,7 @@ public static class DialogExtensions
         // prepare transitions
         if (!avnApp.TryFindResource("TimeSpan/Animation", out TimeSpan? duration))
             duration = default;
-        TextBlockBackgroundTransition ??= new BrushTransition() { Duration = duration.GetValueOrDefault(), Property = Avalonia.Controls.TextBlock.BackgroundProperty };
+        TextBlockBackgroundTransition ??= new BrushTransition { Duration = duration.GetValueOrDefault(), Property = TextBlock.BackgroundProperty };
         var transitions = textBlock.Transitions;
         if (transitions == null)
         {
@@ -120,60 +117,5 @@ public static class DialogExtensions
             transitions.Remove(TextBlockBackgroundTransition);
             textBlock.Background = null;
         }, (int)duration.GetValueOrDefault().TotalMilliseconds);
-    }
-
-
-    /// <summary>
-    /// Scroll to given control.
-    /// </summary>
-    /// <param name="dialog">Dialog.</param>
-    /// <param name="control">Control to scroll to.</param>
-    public static void ScrollToControl<TDialog>(this TDialog dialog, Control control) where TDialog : Avalonia.Controls.Window, IApplicationObject
-    {
-        var scrollViewer = dialog.FindDescendantOfType<ScrollViewer>();
-        if (scrollViewer != null)
-            ScrollToControl(dialog, scrollViewer, control);
-    }
-
-
-    /// <summary>
-    /// Scroll to given control.
-    /// </summary>
-    /// <param name="dialog">Dialog.</param>
-    /// <param name="scrollViewer">Scroll viewer.</param>
-    /// <param name="control">Control to scroll to.</param>
-    public static void ScrollToControl<TDialog>(this TDialog dialog, ScrollViewer scrollViewer, Control control) where TDialog : Avalonia.Controls.Window, IApplicationObject
-    {
-        var scrollViewerOpacity = scrollViewer.Opacity;
-        scrollViewer.Opacity = 0;
-        dialog.SynchronizationContext.Post(() =>
-        {
-            // get position of control in scroll viewer
-            var offsetY = control.Bounds.Top;
-            var parent = control.Parent;
-            while (parent != null && parent != scrollViewer)
-            {
-                if (parent is Visual visual)
-                    offsetY += visual.Bounds.Top;
-                parent = parent.Parent;
-            }
-            if (parent != scrollViewer)
-            {
-                scrollViewer.Opacity = scrollViewerOpacity;
-                return;
-            }
-            if (control.Margin.Top <= 0.01)
-                offsetY -= 10;
-
-            // scroll to control
-            var extent = scrollViewer.Extent;
-            var viewport = scrollViewer.Viewport;
-            if (offsetY + viewport.Height > extent.Height)
-                offsetY = extent.Height - viewport.Height;
-            else if (offsetY < 0)
-                offsetY = 0;
-            scrollViewer.Offset = new(0, offsetY);
-            scrollViewer.Opacity = scrollViewerOpacity;
-        });
     }
 }
