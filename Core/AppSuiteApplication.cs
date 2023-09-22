@@ -423,6 +423,7 @@ namespace CarinaStudio.AppSuite
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
         readonly Styles extraStyles = new();
         long frameworkInitializedTime;
+        DispatcherFrame? guardedDispatcherFrame;
         HardwareInfo? hardwareInfo;
         bool isCompactStyles;
         bool isRestartAsAdminRequested;
@@ -1462,6 +1463,34 @@ namespace CarinaStudio.AppSuite
                 (byte)(Math.Min(255, b * scale * 255) + 0.5)
             );
         }
+        
+        
+        // Main loop with proper exception handling.
+        void GuardedMainLoop()
+        {
+            this.Logger.LogWarning("Enter guarded main loop");
+            while (true)
+            {
+                try
+                {
+                    this.guardedDispatcherFrame = new();
+                    Dispatcher.UIThread.PushFrame(this.guardedDispatcherFrame);
+                }
+                catch (Exception ex)
+                {
+                    if (this.guardedDispatcherFrame?.Continue != true)
+                        break;
+                    this.Logger.LogError(ex, "Exception occurred in guarded main loop");
+                    if (this.OnExceptionOccurredInGuardedMainLoop(ex))
+                        this.Logger.LogWarning("Exception was handled");
+                    else
+                        throw;
+                }
+                if (this.guardedDispatcherFrame?.Continue != true)
+                    break;
+            }
+            this.Logger.LogWarning("Exit guarded main loop");
+        }
 
 
         /// <inheritdoc/>
@@ -2236,6 +2265,14 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Called when unhandled exception was thrown in guarded main loop.
+        /// </summary>
+        /// <param name="ex">Exception.</param>
+        /// <returns>True if exception was handled properly.</returns>
+        protected virtual bool OnExceptionOccurredInGuardedMainLoop(Exception ex) => false;
+
+
+        /// <summary>
         /// Called when Avalonia framework initialized.
         /// </summary>
         public override void OnFrameworkInitializationCompleted()
@@ -2397,8 +2434,11 @@ namespace CarinaStudio.AppSuite
                 this.IsUserAgreementAgreed = true;
                 this.OnPropertyChanged(nameof(IsUserAgreementAgreed));
             }
+            
+            // enter guarded main loop later
+            this.SynchronizationContext.Post(this.GuardedMainLoop);
 
-            // prepare
+            // prepare (will be run in guarded main loop)
             this.SynchronizationContext.Post(async () =>
             {
                 // check state
@@ -3653,7 +3693,7 @@ namespace CarinaStudio.AppSuite
 
             // setup rule
             config.RemoveRuleByName("outputToLocalhost");
-            config.LoggingRules.Add(new NLog.Config.LoggingRule().Also(it =>
+            config.LoggingRules.Add(new LoggingRule().Also(it =>
             {
                 it.EnableLoggingForLevels(NLog.LogLevel.Trace, NLog.LogLevel.Fatal);
                 it.LoggerNamePattern = "*";
@@ -4002,7 +4042,7 @@ namespace CarinaStudio.AppSuite
                 }
                 return;
             }
-            else if (isFirstCall)
+            if (isFirstCall)
             {
                 this.Logger.LogWarning($"Clear main window view-model states because of shutting down without main windows");
                 this.PersistentState.ResetValue(MainWindowViewModelStatesKey);
@@ -4017,6 +4057,13 @@ namespace CarinaStudio.AppSuite
             {
                 this.Logger.LogWarning("Shut down");
                 (this.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
+            }
+            
+            // exit guarded main loop
+            if (this.guardedDispatcherFrame is not null)
+            {
+                this.Logger.LogWarning("Request exiting guarded main loop");
+                this.guardedDispatcherFrame.Continue = false;
             }
 
             // restart application
