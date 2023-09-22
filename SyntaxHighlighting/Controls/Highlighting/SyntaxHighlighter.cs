@@ -136,6 +136,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     FontWeight fontWeight = FontWeight.Normal;
     IBrush? foreground;
     IDisposable foregroundPropertyChangedHandlerToken = EmptyDisposable.Default;
+    readonly bool isDebugMode = IAppSuiteApplication.CurrentOrNull?.IsDebugMode == true;
     double letterSpacing;
     double lineHeight = double.NaN;
     double maxHeight = double.PositiveInfinity;
@@ -607,6 +608,20 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             lineHeight: this.lineHeight, 
             letterSpacing: this.letterSpacing
         );
+        if (this.isDebugMode)
+        {
+            var textLines = this.textLayout.TextLines;
+            for (var lineIndex = textLines.Count - 1; lineIndex >= 0; --lineIndex)
+            {
+                var textRuns = textLines[lineIndex].TextRuns;
+                for (var runIndex = textRuns.Count - 1; runIndex >= 0; --runIndex)
+                {
+                    var textRun = textRuns[runIndex];
+                    if (textRun is ShapedTextRun shapedTextRun && textRun.Length > 0 && shapedTextRun.ShapedBuffer.Length == 0)
+                        throw new InternalStateCorruptedException($"Text run with empty shaped buffer created at line {lineIndex} run {runIndex}, text: '{new string(textRun.Text.ToArray())}'.");
+                }
+            }
+        }
         return this.textLayout;
     }
 
