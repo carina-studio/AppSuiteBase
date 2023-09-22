@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.VisualTree;
@@ -28,11 +27,11 @@ public static class ScrollViewerExtensions
     /// <param name="content">Content.</param>
     /// <param name="scrollToCenter">True to scroll content to center of viewport.</param>
     public static void ScrollToContent(this ScrollViewer scrollViewer, Visual content, bool scrollToCenter = true) =>
-        ScrollToContent(scrollViewer, content, false, scrollToCenter);
+        ScrollToContent(scrollViewer, content, TimeSpan.Zero, scrollToCenter);
     
     
     // Scroll given content into viewport ofScrollViewer.
-    static void ScrollToContent(ScrollViewer scrollViewer, Visual content, bool smoothly, bool scrollToCenter)
+    static void ScrollToContent(ScrollViewer scrollViewer, Visual content, TimeSpan duration, bool scrollToCenter)
     {
         // check parameter
         if (scrollViewer == content)
@@ -131,46 +130,65 @@ public static class ScrollViewerExtensions
         SmoothScrollingTargetOffsets.Remove(scrollViewer);
 
         // scroll to content
-        if (smoothly)
+        if (duration.TotalMilliseconds > 0)
         {
-            var app = IAppSuiteApplication.CurrentOrNull;
             var animator = default(DoubleAnimator);
-            void OnPointerPressedOnScrollViewer(object? sender, PointerPressedEventArgs e) =>
+            void OnPointerPressed(object? sender, RoutedEventArgs e) =>
                 animator?.Cancel();
+            void OnPointerWheelChanged(object? sender, RoutedEventArgs e) =>
+                animator?.Cancel();
+            var extentChangedObserverToken = scrollViewer.GetObservable(ScrollViewer.ExtentProperty).Subscribe(_ => animator?.Cancel());
+            var viewportChangedObserverToken = scrollViewer.GetObservable(ScrollViewer.ViewportProperty).Subscribe(_ => animator?.Cancel());
             animator = new DoubleAnimator(0, 1).Also(it =>
             {
                 it.Cancelled += (_, _) =>
                 {
-                    if (SmoothScrollingAnimators.TryGetValue(scrollViewer, out var currentAnimator)
-                        && currentAnimator == it)
+                    if (SmoothScrollingAnimators.TryGetValue(scrollViewer, out var currentAnimator) && currentAnimator == it)
                     {
                         SmoothScrollingAnimators.Remove(scrollViewer);
                         SmoothScrollingTargetOffsets.Remove(scrollViewer);
-                        scrollViewer.RemoveHandler(ScrollViewer.PointerPressedEvent, OnPointerPressedOnScrollViewer);
                     }
+                    scrollViewer.RemoveHandler(ScrollViewer.PointerPressedEvent, OnPointerPressed);
+                    scrollViewer.RemoveHandler(ScrollViewer.PointerWheelChangedEvent, OnPointerWheelChanged);
+                    extentChangedObserverToken.Dispose();
+                    viewportChangedObserverToken.Dispose();
                 };
                 it.Completed += (_, _) =>
                 {
-                    if (SmoothScrollingAnimators.TryGetValue(scrollViewer, out var currentAnimator)
-                        && currentAnimator == it)
+                    if (SmoothScrollingAnimators.TryGetValue(scrollViewer, out var currentAnimator) && currentAnimator == it)
                     {
                         SmoothScrollingAnimators.Remove(scrollViewer);
                         SmoothScrollingTargetOffsets.Remove(scrollViewer);
                         scrollViewer.Offset = new(newOffsetX, newOffsetY);
-                        scrollViewer.RemoveHandler(ScrollViewer.PointerPressedEvent, OnPointerPressedOnScrollViewer);
                     }
+                    scrollViewer.RemoveHandler(ScrollViewer.PointerPressedEvent, OnPointerPressed);
+                    scrollViewer.RemoveHandler(ScrollViewer.PointerWheelChangedEvent, OnPointerWheelChanged);
+                    extentChangedObserverToken.Dispose();
+                    viewportChangedObserverToken.Dispose();
                 };
-                it.Duration = app?.FindResourceOrDefault<TimeSpan?>("TimeSpan/Animation") ?? TimeSpan.FromMilliseconds(500);
-                it.Interpolator = Interpolators.FastDeceleration;
+                it.Duration = duration;
+                it.Interpolator = SmoothScrollingInterpolation;
                 it.ProgressChanged += (_, _) => { scrollViewer.Offset = new(offset.X + diffX * it.Progress, offset.Y + diffY * it.Progress); };
             });
-            scrollViewer.AddHandler(ScrollViewer.PointerPressedEvent, OnPointerPressedOnScrollViewer, RoutingStrategies.Tunnel);
+            scrollViewer.AddHandler(ScrollViewer.PointerPressedEvent, OnPointerPressed, RoutingStrategies.Tunnel);
+            scrollViewer.AddHandler(ScrollViewer.PointerWheelChangedEvent, OnPointerWheelChanged, RoutingStrategies.Tunnel);
             SmoothScrollingAnimators[scrollViewer] = animator;
             SmoothScrollingTargetOffsets[scrollViewer] = new(newOffsetX, newOffsetY);
             animator.Start();
         }
         else
             scrollViewer.Offset = new(newOffsetX, newOffsetY);
+    }
+
+
+    // Interpolation of smooth scrolling (cubic bezier).
+    static double SmoothScrollingInterpolation(double p)
+    {
+        // start: (0, 0)
+        // control-1: (0.5, 0)
+        // control-2: (0.5, 1)
+        // end: (1, 1)
+        return (3 * p * p * (1 - p)) + (p * p * p);
     }
 
 
@@ -181,7 +199,21 @@ public static class ScrollViewerExtensions
     /// <param name="content">Content.</param>
     /// <param name="scrollToCenter">True to scroll content to center of viewport.</param>
     public static void SmoothScrollToContent(this ScrollViewer scrollViewer, Visual content, bool scrollToCenter = true) =>
-        ScrollToContent(scrollViewer, content, true, scrollToCenter);
+        ScrollToContent(scrollViewer, 
+            content, 
+            IAppSuiteApplication.CurrentOrNull?.FindResourceOrDefault<TimeSpan?>("TimeSpan/Animation") ?? TimeSpan.FromMilliseconds(500), 
+            scrollToCenter);
+    
+    
+    /// <summary>
+    /// Scroll given content smoothly into viewport of <see cref="ScrollViewer"/>.
+    /// </summary>
+    /// <param name="scrollViewer"><see cref="ScrollViewer"/>.</param>
+    /// <param name="content">Content.</param>
+    /// <param name="duration">Duration of scrolling.</param>
+    /// <param name="scrollToCenter">True to scroll content to center of viewport.</param>
+    public static void SmoothScrollToContent(this ScrollViewer scrollViewer, Visual content, TimeSpan duration, bool scrollToCenter = true) =>
+        ScrollToContent(scrollViewer, content, duration, scrollToCenter);
 
 
     /// <summary>
