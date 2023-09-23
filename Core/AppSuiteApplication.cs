@@ -1468,6 +1468,11 @@ namespace CarinaStudio.AppSuite
         // Main loop with proper exception handling.
         void GuardedMainLoop()
         {
+            if (Platform.IsMacOS)
+            {
+                this.Logger.LogWarning("Guarded main loop is unsupported on current platform");
+                return;
+            }
             this.Logger.LogWarning("Enter guarded main loop");
             while (true)
             {
