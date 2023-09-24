@@ -259,7 +259,7 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 				var headerBorder = extDependencyItemPanel.FindDescendantOfTypeAndName<Border>("headerBorder");
 				if (headerBorder is not null)
 				{
-					this.Get<ScrollViewer>("scrollViewer").ScrollToContent(headerBorder);
+					CarinaStudio.Controls.ScrollViewerExtensions.ScrollIntoView(this.Get<ScrollViewer>("scrollViewer"), headerBorder, true);
 					this.AnimateHeader(headerBorder);
 				}
 			});
