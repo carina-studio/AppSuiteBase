@@ -6,6 +6,10 @@
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceInclude Source="/Themes/Base-Dimensions.axaml"/>
 	</ResourceDictionary.MergedDictionaries>
+	
+	<!-- AddTabItemButton -->
+	<sys:Double x:Key="Double/AddTabItemButton.Size">26</sys:Double>
+	<Thickness x:Key="Thickness/AddTabItemButton.Padding">5</Thickness>
 
 	<!-- BrowseButton -->
 	<sys:Double x:Key="Double/BrowseButton.Icon.Size">12</sys:Double>
