@@ -12,7 +12,7 @@ namespace CarinaStudio.AppSuite.Controls;
 public static class ScrollViewerExtensions
 {
     // Static fields.
-    static readonly Func<double, double> SmoothScrollingInterpolator = Interpolators.CreateCubicBezierInterpolator(0.6, 0, 0.4, 1);
+    static readonly Func<double, double> SmoothScrollingInterpolator = Interpolators.CreateCubicBezierInterpolator(0.7, 0, 0.3, 1);
 
 
     /// <summary>
