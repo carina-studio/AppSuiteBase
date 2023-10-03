@@ -149,6 +149,10 @@
 
 	<!-- Overlay -->
 	<CornerRadius x:Key="OverlayCornerRadius">0</CornerRadius>
+	
+	<!-- Popup -->
+	<sys:Double x:Key="Double/Popup.ShadowLength">8</sys:Double>
+	<Thickness x:Key="Thickness/Popup.Shadow.Margin">8</Thickness>
 
 	<!-- ScrollViewer -->
 	<Thickness x:Key="Thickness/ScrollViewer.ScrollBar.Margin.Horizontal">0</Thickness>

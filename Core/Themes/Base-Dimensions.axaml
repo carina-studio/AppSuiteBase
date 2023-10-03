@@ -285,8 +285,8 @@
 	<!-- Popup -->
 	<sys:Double x:Key="Double/Popup.InitialOpacity">0</sys:Double>
 	<sys:Double x:Key="Double/Popup.InitialScaling">0.95</sys:Double>
-	<sys:Double x:Key="Double/Popup.ShadowLength">15</sys:Double>
-	<Thickness x:Key="Thickness/Popup.Shadow.Margin">15</Thickness>
+	<sys:Double x:Key="Double/Popup.ShadowLength">10</sys:Double>
+	<Thickness x:Key="Thickness/Popup.Shadow.Margin">10</Thickness>
 
 	<!-- ScrollBar -->
 	<CornerRadius x:Key="CornerRadius/ScrollBar">7</CornerRadius>
