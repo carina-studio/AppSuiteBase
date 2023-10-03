@@ -119,7 +119,10 @@ class SplashWindowImpl : Avalonia.Controls.Window
 				control.PropertyChanged += (_, e) =>
 				{
 					if (e.Property == OpacityProperty && Math.Abs(1 - (double)e.NewValue!) <= double.Epsilon * 2)
+					{
+						this.ActivateAndBringToFront();
 						Dispatcher.UIThread.Post(() => this.initAnimationTaskCompletionSource.TrySetResult());
+					}
 				};
 			});
 		});
@@ -277,6 +280,9 @@ class SplashWindowImpl : Avalonia.Controls.Window
 		// show window
 		this.stopwatch.Start();
 		this.showAction.Schedule();
+		
+		// bring to front
+		this.ActivateAndBringToFront();
 	}
 
 
