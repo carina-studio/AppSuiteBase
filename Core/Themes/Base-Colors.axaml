@@ -369,10 +369,10 @@
 	<StaticResourceExtension x:Key="ToggleButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
 	<StaticResourceExtension x:Key="ToggleButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
 	<StaticResourceExtension x:Key="ToggleButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
-	<SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource SystemAccentColor}" />
-	<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedDisabled" Color="{DynamicResource SystemAccentColor}" Opacity="0.5"/>
-	<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{DynamicResource SystemAccentColorLight1}" />
-	<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{DynamicResource SystemAccentColorDark1}"/>
+	<SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource SystemAccentColorDark2}" />
+	<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedDisabled" Color="{DynamicResource SystemAccentColorDark2}" Opacity="0.5"/>
+	<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{DynamicResource SystemAccentColor}" />
+	<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{DynamicResource SystemAccentColorDark3}"/>
 	<StaticResourceExtension x:Key="ToggleButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
 	<StaticResourceExtension x:Key="ToggleButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
 	<StaticResourceExtension x:Key="ToggleButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>

@@ -1720,6 +1720,40 @@
 	<!-- NumericUpDown -->
 	<Style Selector="NumericUpDown">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<ButtonSpinner Name="PART_Spinner"
+				               Background="{TemplateBinding Background}"
+				               BorderThickness="{TemplateBinding BorderThickness}"
+				               BorderBrush="{TemplateBinding BorderBrush}"
+				               CornerRadius="{TemplateBinding CornerRadius}"
+				               Padding="0"
+				               MinWidth="0"
+				               HorizontalContentAlignment="Stretch"
+				               VerticalContentAlignment="Stretch"
+				               AllowSpin="{TemplateBinding AllowSpin}"
+				               ShowButtonSpinner="{TemplateBinding ShowButtonSpinner}"
+				               DataValidationErrors.Errors="{TemplateBinding (DataValidationErrors.Errors)}"
+				               ButtonSpinnerLocation="{TemplateBinding ButtonSpinnerLocation}">
+					<TextBox Name="PART_TextBox"
+					         Background="{DynamicResource ButtonBackgroundTransparent}"
+					         BorderBrush="Transparent"
+					         Margin="-1"
+					         Padding="{TemplateBinding Padding}"
+					         MinWidth="0"
+					         Foreground="{TemplateBinding Foreground}"
+					         FontSize="{TemplateBinding FontSize}"
+					         Watermark="{TemplateBinding Watermark}"
+					         IsReadOnly="{TemplateBinding IsReadOnly}"
+					         VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+					         HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+					         Text="{TemplateBinding Text}"
+					         TextAlignment="{TemplateBinding TextAlignment}"
+					         AcceptsReturn="False"
+					         TextWrapping="NoWrap" />
+				</ButtonSpinner>
+			</ControlTemplate>
+		</Setter>
 	</Style>
 	<Style Selector="NumericUpDown[ButtonSpinnerLocation=Left] /template/ TextBox#PART_TextBox">
 		<Setter Property="BorderBrush" Value="{x:Null}"/>
@@ -2828,13 +2862,9 @@
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Button.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Button.Padding}"/>
-		<Setter Property="Transitions" Value="{x:Null}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
-	</Style>
-	<Style Selector="Button.ToolBar_Button /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Transitions" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="Button.ToolBar_Button:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
@@ -3006,9 +3036,6 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
-	</Style>
-	<Style Selector="ToggleButton.ToolBar_ToggleButton /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Transitions" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="ToggleButton.ToolBar_ToggleButton:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>

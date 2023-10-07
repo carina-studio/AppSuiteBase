@@ -5,7 +5,7 @@
 	<!-- Animation -->
 	<Easing x:Key="Easing/Animation">ExponentialEaseOut</Easing>
 	<sys:TimeSpan x:Key="TimeSpan/Animation">0:0:0.5</sys:TimeSpan>
-	<sys:TimeSpan x:Key="TimeSpan/Animation.Fast">0:0:0.2</sys:TimeSpan>
+	<sys:TimeSpan x:Key="TimeSpan/Animation.Fast">0:0:0.3</sys:TimeSpan>
 	<sys:TimeSpan x:Key="TimeSpan/Animation.Slow">0:0:0.8</sys:TimeSpan>
 
 	<!-- ApplicationInfoDialog -->

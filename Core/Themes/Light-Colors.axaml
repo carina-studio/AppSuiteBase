@@ -91,6 +91,11 @@
 
 	<!-- ThemeModeTest -->
 	<Color x:Key="Color/ThemeModeTest.Color">#70332211</Color>
+	
+	<!-- ToggleButton -->
+	<SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{DynamicResource SystemAccentColorDark1}" />
+	<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedDisabled" Color="{DynamicResource SystemAccentColorDark1}" Opacity="0.5"/>
+	<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{DynamicResource SystemAccentColorDark2}"/>
 
 	<!-- ToolBar -->
 	<Color x:Key="Color/ToolBar.Background">#dddddd</Color>
