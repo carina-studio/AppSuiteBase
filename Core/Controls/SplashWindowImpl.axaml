@@ -106,10 +106,10 @@
 
 			<!-- Background -->
 			<Border Name="backgroundBorder" Background="{DynamicResource Brush/SplashWindow.Background}" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" BoxShadow="{StaticResource BoxShadows/SplashWindow}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
-			<Border Name="backgroundOverlayBorder" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" CornerRadius="{StaticResource CornerRadius/SplashWindow}" Opacity="0">
+			<Border Name="backgroundOverlayBorder" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" CornerRadius="{Binding #backgroundBorder.CornerRadius}" Opacity="0">
 				<Panel>
-					<Border Background="{DynamicResource Brush/SplashWindow.Background.Accent}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
-					<Border Background="{DynamicResource Brush/SplashWindow.Background.SpotLight}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
+					<Border Background="{DynamicResource Brush/SplashWindow.Background.Accent}" CornerRadius="{Binding #backgroundBorder.CornerRadius}"/>
+					<Border Background="{DynamicResource Brush/SplashWindow.Background.SpotLight}" CornerRadius="{Binding #backgroundBorder.CornerRadius}"/>
 				</Panel>
 				<Border.Transitions>
 					<Transitions>
@@ -117,7 +117,7 @@
 					</Transitions>
 				</Border.Transitions>
 			</Border>
-			<Border BorderBrush="{x:Null}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{StaticResource CornerRadius/SplashWindow}">
+			<Border BorderBrush="{x:Null}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{Binding #backgroundBorder.CornerRadius}">
 				<Image Margin="{StaticResource Thickness/SplashWindow.BackgroundImage.Margin}" OpacityMask="{Binding $parent[Window].BackgroundImageOpacityMask}" Source="{Binding $parent[Window].BackgroundImage}" Stretch="UniformToFill" StretchDirection="Both"/>
 			</Border>
 			
@@ -277,12 +277,12 @@
 			</Grid>
 
 			<!-- Progress -->
-			<Border BorderBrush="{x:Null}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{StaticResource CornerRadius/SplashWindow}" Height="50" VerticalAlignment="Bottom">
-				<ProgressBar Name="progressBar" Background="{x:Null}" Maximum="1" Value="0" VerticalAlignment="Bottom"/>
+			<Border BorderBrush="{x:Null}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{Binding #backgroundBorder.CornerRadius}" Height="50" VerticalAlignment="Bottom">
+				<ProgressBar Name="progressBar" Background="{x:Null}" Margin="-10,0,-10,0" Maximum="1" Value="0" VerticalAlignment="Bottom"/>
 			</Border>
 
 			<!-- Border -->
-			<Border Name="border" BorderBrush="{DynamicResource Brush/SplashWindow.Border}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
+			<Border Name="border" BorderBrush="{DynamicResource Brush/SplashWindow.Border}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" CornerRadius="{Binding #backgroundBorder.CornerRadius}"/>
 
 		</Panel>
 	</Border>

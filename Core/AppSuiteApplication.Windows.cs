@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Fonts;
+using CarinaStudio.AppSuite.Native;
+using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
@@ -10,7 +12,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
-using CarinaStudio.AppSuite.Native;
 
 namespace CarinaStudio.AppSuite;
 
@@ -131,7 +132,7 @@ unsafe partial class AppSuiteApplication
     
     
     // Setup AppBuilder for Windows.
-    static void SetupWindowsAppBuilder(AppBuilder builder, UnicodeRange cjkUnicodeRanges, IList<FontFamily> embeddedChineseFonts)
+    static void SetupWindowsAppBuilder(AppBuilder builder, ISettings initSettings, UnicodeRange cjkUnicodeRanges, IList<FontFamily> embeddedChineseFonts)
     {
         builder.ConfigureFonts(fontManager =>
         {
@@ -175,6 +176,13 @@ unsafe partial class AppSuiteApplication
                 // ReSharper restore StringLiteralTypo
             }).ToArray(),
         });
+        if (initSettings.GetValueOrDefault(InitSettingKeys.DisableAngle))
+        {
+            builder.With(new Win32PlatformOptions
+            {
+                RenderingMode = new[] { Win32RenderingMode.Wgl, Win32RenderingMode.Software }
+            });
+        }
     }
 
 

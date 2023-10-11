@@ -30,6 +30,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         
         
         // Static fields.
+        static bool? InitDisableAngle;
         static bool? InitUseEmbeddedFontsForChinese;
 
 
@@ -57,7 +58,10 @@ namespace CarinaStudio.AppSuite.ViewModels
             (this.Application as AppSuiteApplication)?.InitSettings.Let(initSettings =>
             {
                 initSettings.SettingChanged += this.OnInitSettingsChanged;
+                InitDisableAngle ??= initSettings.GetValueOrDefault(InitSettingKeys.DisableAngle);
                 InitUseEmbeddedFontsForChinese ??= initSettings.GetValueOrDefault(InitSettingKeys.UseEmbeddedFontsForChinese);
+                this.IsDisableAngleSupported = Platform.IsWindows;
+                this.IsDisableAngleChanged = InitDisableAngle != initSettings.GetValueOrDefault(InitSettingKeys.DisableAngle);
                 this.IsUseEmbeddedFontsForChineseSupported = true;
                 this.IsUseEmbeddedFontsForChineseChanged = InitUseEmbeddedFontsForChinese != initSettings.GetValueOrDefault(InitSettingKeys.UseEmbeddedFontsForChinese);
             });
@@ -206,6 +210,16 @@ namespace CarinaStudio.AppSuite.ViewModels
             get => this.Settings.GetValueOrDefault(SettingKeys.DefaultScriptLanguage);
             set => this.Settings.SetValue<ScriptLanguage>(SettingKeys.DefaultScriptLanguage, value);
         }
+        
+        
+        /// <summary>
+        /// Do not using ANGLE for rendering (only for Windows).
+        /// </summary>
+        public bool DisableAngle
+        {
+            get => (this.Application as AppSuiteApplication)?.InitSettings.GetValueOrDefault(InitSettingKeys.DisableAngle) ?? false;
+            set => (this.Application as AppSuiteApplication)?.InitSettings.Let(it => it.SetValue<bool>(InitSettingKeys.DisableAngle, value));
+        }
 
 
         /// <inheritdoc/>
@@ -280,6 +294,18 @@ namespace CarinaStudio.AppSuite.ViewModels
         /// Check whether custom screen scale factor is supported or not.
         /// </summary>
         public bool IsCustomScreenScaleFactorSupported { get; }
+        
+        
+        /// <summary>
+        /// Check whether <see cref="DisableAngle"/> has been changed before restarting application or not.
+        /// </summary>
+        public bool IsDisableAngleChanged { get; private set; }
+        
+        
+        /// <summary>
+        /// Check whether <see cref="DisableAngle"/> is supported or not.
+        /// </summary>
+        public bool IsDisableAngleSupported { get; private set; }
 
 
         /// <summary>
@@ -313,7 +339,7 @@ namespace CarinaStudio.AppSuite.ViewModels
         
         
         /// <summary>
-        /// Check whether <see cref="UseEmbeddedFontsForChinese"/> has been changed before restarting main windows or not.
+        /// Check whether <see cref="UseEmbeddedFontsForChinese"/> has been changed before restarting application or not.
         /// </summary>
         public bool IsUseEmbeddedFontsForChineseChanged { get; private set; }
         
@@ -394,7 +420,17 @@ namespace CarinaStudio.AppSuite.ViewModels
         void OnInitSettingsChanged(object? sender, SettingChangedEventArgs e)
         {
             var key = e.Key;
-            if (key == InitSettingKeys.UseEmbeddedFontsForChinese)
+            if (key == InitSettingKeys.DisableAngle)
+            {
+                this.OnPropertyChanged(nameof(DisableAngle));
+                var isChanged = InitDisableAngle.GetValueOrDefault() != (bool)e.Value;
+                if (this.IsDisableAngleChanged != isChanged)
+                {
+                    this.IsDisableAngleChanged = isChanged;
+                    this.OnPropertyChanged(nameof(IsDisableAngleChanged));
+                }
+            }
+            else if (key == InitSettingKeys.UseEmbeddedFontsForChinese)
             {
                 this.OnPropertyChanged(nameof(UseEmbeddedFontsForChinese));
                 var isChanged = InitUseEmbeddedFontsForChinese.GetValueOrDefault() != (bool)e.Value;

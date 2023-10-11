@@ -133,7 +133,8 @@ class SplashWindowImpl : Avalonia.Controls.Window
 		this.progressBar = this.Get<ProgressBar>(nameof(progressBar));
 		if (Platform.IsWindows)
 		{
-			if (!Platform.IsWindows8OrAbove)
+			if (!Platform.IsWindows8OrAbove
+			    || (IAppSuiteApplication.CurrentOrNull as AppSuiteApplication)?.AllowTransparentWindows == false)
 			{
 				this.Get<Panel>("rootPanel").Margin = default;
 				this.Get<Border>("backgroundBorder").Let(it =>
@@ -141,8 +142,6 @@ class SplashWindowImpl : Avalonia.Controls.Window
 					it.BoxShadow = default;
 					it.CornerRadius = default;
 				});
-				this.Get<Border>("backgroundOverlayBorder").CornerRadius = default;
-				this.Get<Border>("border").CornerRadius = default;
 			}
 		}
 		this.Styles.Add((Avalonia.Styling.IStyle)(app?.EffectiveThemeMode switch

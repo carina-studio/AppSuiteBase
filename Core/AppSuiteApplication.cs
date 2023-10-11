@@ -672,6 +672,12 @@ namespace CarinaStudio.AppSuite
         /// Check whether multiple main windows are allowed or not.
         /// </summary>
         protected virtual bool AllowMultipleMainWindows => false;
+        
+        
+        /// <summary>
+        /// Check whether transparent Window(s) are allowed or not.
+        /// </summary>
+        public bool AllowTransparentWindows { get; private set; }
 
 
         /// <summary>
@@ -739,7 +745,7 @@ namespace CarinaStudio.AppSuite
                     // ReSharper restore CommentTypo
                 });
                 if (Platform.IsWindows)
-                    SetupWindowsAppBuilder(it, cjkUnicodeRanges, embeddedChineseFonts);
+                    SetupWindowsAppBuilder(it, InitSettingsInstance, cjkUnicodeRanges, embeddedChineseFonts);
                 else if (Platform.IsMacOS)
                     SetupMacOSAppBuilder(it, cjkUnicodeRanges, embeddedChineseFonts);
                 else if (Platform.IsLinux)
@@ -1176,11 +1182,11 @@ namespace CarinaStudio.AppSuite
                             return;
                         if (shadowMargin == default)
                             return;
-                
+
                         // close if pointer pressed on shadow
                         var position = (Point)rawPointerPositionProperty.GetValue(pointerEventArgs)!;
                         var hostWindowSize = hostWindow.Bounds.Size;
-                        if (position.X < shadowMargin.Left 
+                        if (position.X < shadowMargin.Left
                             || position.X >= hostWindowSize.Width - shadowMargin.Right
                             || position.Y < shadowMargin.Top
                             || position.Y >= hostWindowSize.Height - shadowMargin.Bottom)
@@ -1191,7 +1197,7 @@ namespace CarinaStudio.AppSuite
                     }
                 }
             }
-            
+
             // animate popup and move it to correct position according to its shadows
             var popupPositionParamsField = typeof(PopupRoot).GetField("_positionerParameters", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new NotSupportedException();
             if (popupPositionParamsField.FieldType != typeof(PopupPositionerParameters))
@@ -1204,7 +1210,7 @@ namespace CarinaStudio.AppSuite
                 // check event source
                 if (e.Sender is not Popup popup)
                     return;
-                
+
                 // find root border
                 Border rootBorder;
                 if (popup.Child is ContextMenu contextMenu)
@@ -1218,7 +1224,7 @@ namespace CarinaStudio.AppSuite
                     rootBorder = border;
                 else
                     return;
-                
+
                 // handle closing popup
                 if (!e.NewValue.Value)
                 {
@@ -1252,10 +1258,14 @@ namespace CarinaStudio.AppSuite
                     });
                     return;
                 }
-                
+
                 // handle opening popup
                 (popup.Host as PopupRoot)?.Let(hostWindow =>
                 {
+                    // setup background if transparent windows are not allowed
+                    if (!this.AllowTransparentWindows)
+                        hostWindow.Bind(PopupRoot.BackgroundProperty, new Binding { Source = rootBorder, Path = nameof(Border.Background)});
+                    
                     // animate
                     rootBorder.Opacity = 1;
                     (rootBorder.RenderTransform as ScaleTransform)?.Let(it =>
@@ -1263,7 +1273,7 @@ namespace CarinaStudio.AppSuite
                         it.ScaleX = 1;
                         it.ScaleY = 1;
                     });
-                    
+
                     // check state
                     if (popup.Parent is not Control target)
                     {
@@ -1281,7 +1291,7 @@ namespace CarinaStudio.AppSuite
                     var shadowMargin = rootBorder.Margin;
                     if (shadowMargin == default)
                         return;
-                    
+
                     // calculate positions on screen
                     var positionParams = (PopupPositionerParameters)popupPositionParamsField.GetValue(hostWindow)!;
                     var screenScaling = (hostWindow.Screens.ScreenFromWindow(hostWindow) ?? hostWindow.Screens.Primary)?.Scaling ?? 1.0;
@@ -1328,7 +1338,7 @@ namespace CarinaStudio.AppSuite
                                 popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset + shadowLength), BindingPriority.Animation);
                             break;
                     }
-                    
+
                     // intercept pointer pressed event
                     (topLevelInputManagerField.GetValue(hostWindow) as IInputManager)?.Let(inputManager =>
                     {
@@ -2328,6 +2338,15 @@ namespace CarinaStudio.AppSuite
 
             // allow requesting restoring main windows
             this.canRequestRestoringMainWindows = true;
+            
+            // check init settings
+            if (this.InitSettings.GetValueOrDefault(InitSettingKeys.DisableAngle) && Platform.IsWindows)
+            {
+                this.Logger.LogWarning("Disallow transparent windows because rendering through ANGLE has been disabled");
+                this.AllowTransparentWindows = false;
+            }
+            else
+                this.AllowTransparentWindows = true;
 
             // parse arguments
             if (desktopLifetime != null)
@@ -4649,9 +4668,29 @@ namespace CarinaStudio.AppSuite
                     this.Logger.LogTrace("[Performance] Took {time} ms to load default theme", currentTime - subTime);
                     subTime = currentTime;
                 }
+                if (!this.AllowTransparentWindows)
+                {
+                    var noTransparentWindowsStyles = new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
+                    {
+                        Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/Base-NoTransparentWindows.axaml"),
+                    };
+                    if (this.styles is Styles styles)
+                        styles.Add(noTransparentWindowsStyles);
+                    else
+                    {
+                        this.styles = new Styles().Also(styles =>
+                        {
+                            styles.Add(this.styles);
+                            styles.Add(noTransparentWindowsStyles);
+                        });
+                    }
+                }
                 this.styles = this.OnLoadTheme(themeMode, useCompactUI)?.Let(it =>
                 {
-                    var styles = new Styles()
+                    var styles = (this.styles as Styles)?.Also(styles =>
+                    {
+                        styles.Add(it);
+                    }) ?? new Styles()
                     {
                         this.styles,
                         it,

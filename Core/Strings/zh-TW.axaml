@@ -21,6 +21,8 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.CpuUsage">處理器使用率</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DeactivateProduct">停用並取消授權…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DeviceName">裝置名稱</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.DisableAngle">不使用 ANGLE 繪製使用者介面</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.DisableAngle.Description">避免在部分顯示卡上的繪製問題，但會影響部分視覺效果。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DonateWithPayPal">使用 PayPal 贊助</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">匯出應用程式日誌…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExternalDependencies">外部相依性…</sys:String>

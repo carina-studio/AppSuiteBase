@@ -22,6 +22,8 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.CpuUsage.Format">{0:F2}%</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DeactivateProduct">Deactivate…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DeviceName">Device name</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.DisableAngle">Do not use ANGLE to render UI</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.DisableAngle.Description">Preventing rendering issues on some graphic cards, but some of visual effects will be affected.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DonateWithPayPal">Donate with PayPal</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">Export application logs…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExternalDependencies">External dependencies…</sys:String>

@@ -35,6 +35,7 @@
 		<AvaloniaResource Include="Themes/Base-Compact.axaml" />
 		<AvaloniaResource Include="Themes/Base-Dimensions.axaml" />
 		<AvaloniaResource Include="Themes/Base-Dimensions-Compact.axaml" />
+		<AvaloniaResource Include="Themes/Base-NoTransparentWindows.axaml" />
 		<AvaloniaResource Include="Themes/Base-OSX.axaml" />
 		<AvaloniaResource Include="Themes/Base-Others.axaml" />
 		<AvaloniaResource Include="Themes/Base-Styles.axaml" />
