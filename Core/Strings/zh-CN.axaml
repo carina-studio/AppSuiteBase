@@ -21,8 +21,6 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.CpuUsage">处理器使用率</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DeactivateProduct">停用并取消授权…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DeviceName">设备名称</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.DisableAngle">不使用 ANGLE 绘制用户介面</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.DisableAngle.Description">避免在部分显示卡上的绘制问题，但会影响部分视觉效果。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DonateWithPayPal">使用 PayPal 赞助</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">导出应用程序日志…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExternalDependencies">外部依赖…</sys:String>
@@ -71,6 +69,8 @@
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">用户界面缩放比例</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR 工具尚未安装。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">默认脚本语言</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DisableAngle">不使用 ANGLE 绘制用户介面</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DisableAngle.Description">避免在部分显示卡上的绘制问题，但会影响部分视觉效果。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">系统支持情况下使用模糊玻璃窗口背景</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">启用脚本运行</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">缩排空白字符数</sys:String>
