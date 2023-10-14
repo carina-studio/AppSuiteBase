@@ -48,6 +48,18 @@ public abstract class ConfigurationKeys
     /// </summary>
     public static readonly SettingKey<int> ScriptCompletionCheckingInterval = new(nameof(ScriptCompletionCheckingInterval), 3000);
     /// <summary>
+    /// Whether FPS debug overlay is shown on main window or not.
+    /// </summary>
+    public static readonly SettingKey<bool> ShowFpsDebugOverlay = new(nameof(ShowFpsDebugOverlay), false);
+    /// <summary>
+    /// Whether layout time graph debug overlay is shown on main window or not.
+    /// </summary>
+    public static readonly SettingKey<bool> ShowLayoutTimeGraphDebugOverlay = new(nameof(ShowLayoutTimeGraphDebugOverlay), false);
+    /// <summary>
+    /// Whether render time graph debug overlay is shown on main window or not.
+    /// </summary>
+    public static readonly SettingKey<bool> ShowRenderTimeGraphDebugOverlay = new(nameof(ShowRenderTimeGraphDebugOverlay), false);
+    /// <summary>
     /// Timeout before notifying user that network connection is needed for product activation.
     /// </summary>
     public static readonly SettingKey<int> TimeoutToNotifyNetworkConnectionForProductActivation = new(nameof(TimeoutToNotifyNetworkConnectionForProductActivation), 3 * 60 * 1000);

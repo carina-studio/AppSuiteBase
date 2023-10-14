@@ -4,6 +4,7 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Platform;
+using Avalonia.Rendering;
 using CarinaStudio.Animation;
 using CarinaStudio.AppSuite.Net;
 using CarinaStudio.AppSuite.Product;
@@ -360,6 +361,9 @@ namespace CarinaStudio.AppSuite.Controls
                 this.UpdateExtendClientAreaChromeHints(false);
             });
             isSubscribing = false;
+            
+            // setup debug overlays
+            this.UpdateDebugOverlays();
         }
         
         
@@ -651,7 +655,15 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         /// <param name="e">Event data.</param>
         protected virtual void OnConfigurationChanged(SettingChangedEventArgs e)
-        { }
+        {
+            var key = e.Key;
+            if (key == ConfigurationKeys.ShowFpsDebugOverlay
+                || key == ConfigurationKeys.ShowLayoutTimeGraphDebugOverlay
+                || key == ConfigurationKeys.ShowRenderTimeGraphDebugOverlay)
+            {
+                this.UpdateDebugOverlays();
+            }
+        }
 
 
         /// <summary>
@@ -1138,6 +1150,21 @@ namespace CarinaStudio.AppSuite.Controls
                 this.SetAndRaise(AreInitialDialogsClosedProperty, ref this.areInitialDialogsClosed, true);
                 this.OnInitialDialogsClosed();
             }
+        }
+        
+        
+        // Update rendered debug overlays.
+        void UpdateDebugOverlays()
+        {
+            var overlays = RendererDebugOverlays.None;
+            var config = this.Configuration;
+            if (config.GetValueOrDefault(ConfigurationKeys.ShowFpsDebugOverlay))
+                overlays |= RendererDebugOverlays.Fps;
+            if (config.GetValueOrDefault(ConfigurationKeys.ShowLayoutTimeGraphDebugOverlay))
+                overlays |= RendererDebugOverlays.LayoutTimeGraph;
+            if (config.GetValueOrDefault(ConfigurationKeys.ShowRenderTimeGraphDebugOverlay))
+                overlays |= RendererDebugOverlays.RenderTimeGraph;
+            this.RendererDiagnostics.DebugOverlays = overlays;
         }
 
 
