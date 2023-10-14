@@ -49,7 +49,12 @@
 						<!-- Items with ToggleSwitch -->
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
 							<StackPanel Classes="Dialog_Item_Text_Container">
-								<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+									<Button Classes="Dialog_Info_Button">
+										<Image Classes="Icon" Source="{DynamicResource Image/Icon.Information.Outline}"/>
+									</Button>
+								</StackPanel>
 								<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
 							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" Grid.Column="1"/>
@@ -58,9 +63,9 @@
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-								<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" Text="Google" Uri="http://www.google.com/"/>
+								<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" IsVisible="{Binding #toggleSwitch1.IsChecked}" Text="Google" Uri="http://www.google.com/"/>
 							</StackPanel>
-							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" Grid.Column="1" IsChecked="True"/>
+							<ToggleSwitch Name="toggleSwitch1" Classes="Dialog_Item_ToggleSwitch" Grid.Column="1" IsChecked="True"/>
 						</Grid>
 						<Separator Classes="Dialog_Item_Separator"/>
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
@@ -70,7 +75,12 @@
 						<Separator Classes="Dialog_Item_Separator"/>
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
 							<StackPanel Classes="Dialog_Item_Text_Container">
-								<TextBlock Classes="Dialog_TextBlock_Label" Text="Label with looooooooooooooooooooooog text"/>
+								<WrapPanel Background="Gray">
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="Label with looooooooooooooooooooooog text"/>
+									<Button Classes="Dialog_Info_Button">
+										<Image Classes="Icon" Source="{DynamicResource Image/Icon.Question.Outline}"/>
+									</Button>
+								</WrapPanel>
 								<TextBlock Classes="Dialog_TextBlock_Description" Text="Description with looooooooooooooooooooooog text"/>
 							</StackPanel>
 							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" Grid.Column="1"/>

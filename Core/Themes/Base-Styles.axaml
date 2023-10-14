@@ -528,6 +528,26 @@
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="Button.Dialog_Info_Button">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Cursor" Value="Hand"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Label}"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.InfoButton.Margin}"/>
+		<Setter Property="Padding" Value="0"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Label}"/>
+	</Style>
+	<Style Selector="Button.Dialog_Info_Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+	</Style>
+	<Style Selector="Button.Dialog_Info_Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+	</Style>
+	<Style Selector="Button.Dialog_Info_Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+	</Style>
 	<Style Selector="Button.Dialog_Item_Button">
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>

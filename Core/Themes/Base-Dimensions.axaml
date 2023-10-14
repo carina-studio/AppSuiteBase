@@ -84,7 +84,7 @@
 	<sys:Double x:Key="Double/Dialog.Icon.Size.Description">14</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Icon.Size.Large">40</sys:Double>
 	<sys:Double x:Key="Double/Dialog.IconControlButton.Icon.Size">14</sys:Double>
-	<sys:Double x:Key="Double/Dialog.Item.MinHeight">40</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Item.MinHeight">42</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Item.MinHeight.Small">14</sys:Double>
 	<sys:Double x:Key="Double/Dialog.ItemSeparator.Stroke">1</sys:Double>
 	<sys:Double x:Key="Double/Dialog.ListActionButton.MinWidth">80</sys:Double>
@@ -116,6 +116,7 @@
 	<Thickness x:Key="Thickness/Dialog.Icon.Margin.Large">0,0,20,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.IconControlButton.Padding">8</Thickness>
 	<Thickness x:Key="Thickness/Dialog.IconText.Margin">0,1,0,1</Thickness>
+	<Thickness x:Key="Thickness/Dialog.InfoButton.Margin">0,0,5,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ItemSeparator.Border">0,1,0,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ItemSeparator.Margin">0,7,0,7</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ItemSeparator.Margin.Inner">0,5,0,5</Thickness>
