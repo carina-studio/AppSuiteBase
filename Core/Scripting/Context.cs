@@ -4,8 +4,10 @@ using CarinaStudio.Collections;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +19,96 @@ namespace CarinaStudio.AppSuite.Scripting;
 /// </summary>
 public class Context : IContext
 {
+    // Data of context.
+    class DataImpl : IDictionary<string, object>
+    {
+        // Fields.
+        readonly ConcurrentDictionary<string, object> dictionary = new();
+
+        /// <inheritdoc/>
+        public void Add(KeyValuePair<string, object> item)
+        {
+            if (this.dictionary.TryAdd(item.Key, item.Value))
+                throw new ArgumentException($"Value with key '{item.Key}' is already added before.");
+        }
+        
+        /// <inheritdoc/>
+        public void Add(string key, object value)
+        {
+            if (this.dictionary.TryAdd(key, value))
+                throw new ArgumentException($"Value with key '{key}' is already added before.");
+        }
+
+        /// <inheritdoc/>
+        public void Clear() =>
+            this.dictionary.Clear();
+
+        /// <inheritdoc/>
+        public bool Contains(KeyValuePair<string, object> item)
+        {
+            if (this.dictionary.TryGetValue(item.Key, out var value))
+                return value.Equals(item.Value);
+            return false;
+        }
+        
+        /// <inheritdoc/>
+        public bool ContainsKey(string key) =>
+            this.dictionary.ContainsKey(key);
+
+        /// <inheritdoc/>
+        public void CopyTo(KeyValuePair<string, object>[] array, int arrayIndex) =>
+            ((IDictionary<string, object>)this.dictionary).CopyTo(array, arrayIndex);
+
+        /// <inheritdoc/>
+        public int Count => this.dictionary.Count;
+        
+        /// <inheritdoc/>
+        public IEnumerator<KeyValuePair<string, object>> GetEnumerator() =>
+            this.dictionary.GetEnumerator();
+
+        /// <inheritdoc/>
+        IEnumerator IEnumerable.GetEnumerator() =>
+            this.dictionary.GetEnumerator();
+        
+        /// <inheritdoc/>
+        public bool IsReadOnly => false;
+        
+        /// <inheritdoc/>
+        public ICollection<string> Keys => this.dictionary.Keys;
+        
+        public bool Remove(KeyValuePair<string, object> item) =>
+            ((IDictionary<string, object>)this.dictionary).Remove(item);
+        
+        /// <inheritdoc/>
+        public bool Remove(string key) =>
+            ((IDictionary<string, object>)this.dictionary).Remove(key);
+        
+        /// <inheritdoc/>
+        public object this[string key]
+        {
+            get => this.dictionary[key];
+            set => this.dictionary[key] = value;
+        }
+
+        // Try adding value.
+        [Obsolete("Use Add() or indexer instead.")]
+        public bool TryAdd(string key, object value) =>
+            this.dictionary.TryAdd(key, value);
+        
+        /// <inheritdoc/>
+        public bool TryGetValue(string key, [NotNullWhen(true)] out object? value) =>
+            this.dictionary.TryGetValue(key, out value);
+
+        // Try removing value.
+        [Obsolete("Use Remove() instead.")]
+        public bool TryRemove(string key, [NotNullWhen(true)] out object? value) =>
+            this.dictionary.TryRemove(key, out value);
+
+        /// <inheritdoc/>
+        public ICollection<object> Values => this.dictionary.Values;
+    }
+    
+    
     // Fields.
     volatile ConcurrentDictionary<string, string>? defaultStringTable;
     volatile ConcurrentDictionary<string, IDictionary<string, string>>? stringTablesWithCulture;
@@ -65,7 +157,7 @@ public class Context : IContext
 
 
     /// <inheritdoc/>
-    public IDictionary<string, object> Data { get; } = new ConcurrentDictionary<string, object>();
+    public IDictionary<string, object> Data { get; } = new DataImpl();
     
     
     /// <inheritdoc/>
@@ -146,7 +238,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         MessageDialogButtons.OKCancel
         or MessageDialogButtons.YesNoCancel => MessageDialogResult.Cancel,
         MessageDialogButtons.YesNo => MessageDialogResult.No,
-        _ => throw new NotImplementedException(),
+        _ => throw new ArgumentException($"Unknown type of message dialog buttons: {buttons}."),
     };
 
 
