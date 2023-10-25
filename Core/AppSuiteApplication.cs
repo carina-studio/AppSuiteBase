@@ -423,7 +423,6 @@ namespace CarinaStudio.AppSuite
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
         readonly Styles extraStyles = new();
         long frameworkInitializedTime;
-        DispatcherFrame? guardedDispatcherFrame;
         HardwareInfo? hardwareInfo;
         bool isCompactStyles;
         bool isRestartAsAdminRequested;
@@ -685,7 +684,8 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="setupAction">Action to do further setup.</param>
         /// <typeparam name="TApp">Type of application.</typeparam>
-        /// <returns></returns>
+        /// <returns><see cref="AppBuilder"/>.</returns>
+        [Obsolete("Use BuildApplicationAndStart() instead.")]
         protected static AppBuilder BuildApplication<TApp>(Action<AppBuilder>? setupAction = null) where TApp: AppSuiteApplication, new()
         {
             LogToConsole("Build application [start]");
@@ -756,6 +756,71 @@ namespace CarinaStudio.AppSuite
                 
                 LogToConsole("Build application [end]");
             });
+        }
+
+
+        /// <summary>
+        /// Build application and start running.
+        /// </summary>
+        /// <param name="args">Arguments to launch application.</param>
+        /// <param name="setupAction">Action to do further setup.</param>
+        /// <typeparam name="TApp">Type of application.</typeparam>
+        /// <returns>Exit code of application.</returns>
+        protected static int BuildApplicationAndStart<TApp>(string[] args, Action<AppBuilder>? setupAction = null) where TApp : AppSuiteApplication, new()
+        {
+#pragma warning disable CS0618
+            var builder = BuildApplication<TApp>(setupAction);
+#pragma warning restore CS0618
+            var app = default(Avalonia.Application);
+            var asApp = default(IAppSuiteApplication);
+            var asAppImpl = default(AppSuiteApplication);
+            var logger = default(Microsoft.Extensions.Logging.ILogger);
+            var exitCode = 0;
+            var forceThrowingException = false;
+            void SetupAppAndLogger()
+            {
+                if (app is not null)
+                    return;
+                app = builder.Instance;
+                asApp = app as IAppSuiteApplication;
+                asAppImpl = app as AppSuiteApplication;
+                logger = asApp?.LoggerFactory.CreateLogger(asApp.GetType().Name);
+            }
+            while (true)
+            {
+                SetupAppAndLogger();
+                try
+                {
+                    if (app?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+                    {
+                        var startMethod = desktopLifetime.GetType().GetMethod("Start", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                        if (startMethod is null)
+                        {
+                            forceThrowingException = true;
+                            throw new InvalidOperationException("Unable to get Start() method to restart application lifetime.");
+                        }
+                        logger?.LogWarning("Restart application lifetime");
+                        exitCode = (int)startMethod.Invoke(desktopLifetime, new object?[] { args })!;
+                    }
+                    else
+                        exitCode = builder.StartWithClassicDesktopLifetime(args);
+                }
+                catch (Exception ex)
+                {
+                    SetupAppAndLogger();
+                    logger?.LogError(ex, "Unhandled exception occurred in application lifetime");
+                    if (forceThrowingException)
+                        throw;
+                    if (asAppImpl?.OnExceptionOccurredInApplicationLifetime(ex) != true)
+                        throw;
+                    logger?.LogWarning("Exception was handled");
+                }
+                SetupAppAndLogger();
+                if (asApp?.IsShutdownStarted == false)
+                    continue;
+                logger?.LogWarning("Application lifetime was exited with code {code}", exitCode);
+                return exitCode;
+            }
         }
 
 
@@ -1472,39 +1537,6 @@ namespace CarinaStudio.AppSuite
                 (byte)(Math.Min(255, g * scale * 255) + 0.5), 
                 (byte)(Math.Min(255, b * scale * 255) + 0.5)
             );
-        }
-        
-        
-        // Main loop with proper exception handling.
-        void GuardedMainLoop()
-        {
-            if (Platform.IsMacOS)
-            {
-                this.Logger.LogWarning("Guarded main loop is unsupported on current platform");
-                return;
-            }
-            this.Logger.LogWarning("Enter guarded main loop");
-            while (true)
-            {
-                try
-                {
-                    this.guardedDispatcherFrame = new();
-                    Dispatcher.UIThread.PushFrame(this.guardedDispatcherFrame);
-                }
-                catch (Exception ex)
-                {
-                    if (this.guardedDispatcherFrame?.Continue != true)
-                        break;
-                    this.Logger.LogError(ex, "Exception occurred in guarded main loop");
-                    if (this.OnExceptionOccurredInGuardedMainLoop(ex))
-                        this.Logger.LogWarning("Exception was handled");
-                    else
-                        throw;
-                }
-                if (this.guardedDispatcherFrame?.Continue != true)
-                    break;
-            }
-            this.Logger.LogWarning("Exit guarded main loop");
         }
 
 
@@ -2280,11 +2312,11 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
-        /// Called when unhandled exception was thrown in guarded main loop.
+        /// Called when unhandled exception was thrown in application lifetime.
         /// </summary>
         /// <param name="ex">Exception.</param>
         /// <returns>True if exception was handled properly.</returns>
-        protected virtual bool OnExceptionOccurredInGuardedMainLoop(Exception ex) => false;
+        protected virtual bool OnExceptionOccurredInApplicationLifetime(Exception ex) => false;
 
 
         /// <summary>
@@ -2458,9 +2490,6 @@ namespace CarinaStudio.AppSuite
                 this.IsUserAgreementAgreed = true;
                 this.OnPropertyChanged(nameof(IsUserAgreementAgreed));
             }
-            
-            // enter guarded main loop later
-            this.SynchronizationContext.Post(this.GuardedMainLoop);
 
             // prepare (will be run in guarded main loop)
             this.SynchronizationContext.Post(async () =>
@@ -4081,13 +4110,6 @@ namespace CarinaStudio.AppSuite
             {
                 this.Logger.LogWarning("Shut down");
                 (this.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.Shutdown();
-            }
-            
-            // exit guarded main loop
-            if (this.guardedDispatcherFrame is not null)
-            {
-                this.Logger.LogWarning("Request exiting guarded main loop");
-                this.guardedDispatcherFrame.Continue = false;
             }
 
             // restart application

@@ -125,7 +125,7 @@ namespace CarinaStudio.AppSuite.Tests
         [STAThread]
         static void Main(string[] args)
         {
-            BuildApplication<App>().StartWithClassicDesktopLifetime(args);
+            BuildApplicationAndStart<App>(args);
         }
 
 
@@ -133,6 +133,9 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         protected override ViewModel OnCreateMainWindowViewModel(JsonElement? savedState) => new Workspace(savedState);
+
+
+        //protected override bool OnExceptionOccurredInApplicationLifetime(Exception ex) => true;
 
 
         protected override void OnNewInstanceLaunched(IDictionary<string, object> launchOptions)
