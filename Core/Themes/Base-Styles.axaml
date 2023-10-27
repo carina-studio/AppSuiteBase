@@ -2865,7 +2865,9 @@
 	<!-- ToolBar -->
 	<Style Selector="Border.ToolBar">
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Background}"/>
+		<Setter Property="MinHeight" Value="{DynamicResource Double/ToolBar.MinSize}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Padding}"/>
+		<Setter Property="MinWidth" Value="{DynamicResource Double/ToolBar.MinSize}"/>
 	</Style>
 	<Style Selector="Border.ToolBar_NotificationIndicator">
 		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
@@ -2873,6 +2875,12 @@
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
+	</Style>
+	<Style Selector="Border.ToolBar_Small">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Background}"/>
+		<Setter Property="MinHeight" Value="{DynamicResource Double/ToolBar.MinSize.Small}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Padding.Small}"/>
+		<Setter Property="MinWidth" Value="{DynamicResource Double/ToolBar.MinSize.Small}"/>
 	</Style>
 	<Style Selector="Button.ToolBar_Button">
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Transparent}"/>
@@ -2896,6 +2904,30 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.PointerOver}"/>
 	</Style>
 	<Style Selector="Button.ToolBar_Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Pressed}"/>
+	</Style>
+	<Style Selector="Button.ToolBar_Button_Small">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size.Small}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Button.Margin.Small}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Button.Padding.Small}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size.Small}"/>
+	</Style>
+	<Style Selector="Button.ToolBar_Button_Small:disabled">
+		<Setter Property="IsHitTestVisible" Value="False"/>
+	</Style>
+	<Style Selector="Button.ToolBar_Button_Small:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="Button.ToolBar_Button_Small:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.PointerOver}"/>
+	</Style>
+	<Style Selector="Button.ToolBar_Button_Small:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Pressed}"/>
 	</Style>
 	<Style Selector="Button.ToolBar_Button_WithDropDownButton">
@@ -2985,6 +3017,33 @@
 	<Style Selector="RepeatButton.ToolBar_RepeatButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Pressed}"/>
 	</Style>
+	<Style Selector="RepeatButton.ToolBar_RepeatButton_Small">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size.Small}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Button.Margin.Small}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Button.Padding.Small}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size.Small}"/>
+	</Style>
+	<Style Selector="RepeatButton.ToolBar_RepeatButton_Small /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Transitions" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="RepeatButton.ToolBar_RepeatButton_Small:disabled">
+		<Setter Property="IsHitTestVisible" Value="False"/>
+	</Style>
+	<Style Selector="RepeatButton.ToolBar_RepeatButton_Small:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="RepeatButton.ToolBar_RepeatButton_Small:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.PointerOver}"/>
+	</Style>
+	<Style Selector="RepeatButton.ToolBar_RepeatButton_Small:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Pressed}"/>
+	</Style>
 	<Style Selector="Separator.ToolBar_Separator">
 		<Setter Property="Background" Value="{DynamicResource Brush/Separator.Background}"/>
 		<Setter Property="Height" Value="NaN"/>
@@ -2999,11 +3058,32 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Separator.Margin}"/>
 		<Setter Property="Width" Value="NaN"/>
 	</Style>
+	<Style Selector="Separator.ToolBar_Separator_Horizontal_Small">
+		<Setter Property="Background" Value="{DynamicResource Brush/Separator.Background}"/>
+		<Setter Property="Height" Value="1"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Separator.Margin.Small}"/>
+		<Setter Property="Width" Value="NaN"/>
+	</Style>
+	<Style Selector="Separator.ToolBar_Separator_Small">
+		<Setter Property="Background" Value="{DynamicResource Brush/Separator.Background}"/>
+		<Setter Property="Height" Value="NaN"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Separator.Margin.Small}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="Width" Value="1"/>
+	</Style>
 	<Style Selector="TextBlock.ToolBar_TextBlock">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.TextBlock.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector="TextBlock.ToolBar_TextBlock:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<Style Selector="TextBlock.ToolBar_TextBlock_Small">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.TextBlock.Margin.Small}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="TextBlock.ToolBar_TextBlock_Small:disabled">
 		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="TextBox.ToolBar_TextBox">
@@ -3073,6 +3153,36 @@
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
 	</Style>
 	<Style Selector="ToggleButton.ToolBar_ToggleButton:checked:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPressed}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton_Small">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size.Small}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Button.Margin.Small}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Button.Padding.Small}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size.Small}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton_Small:disabled">
+		<Setter Property="IsHitTestVisible" Value="False"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton_Small:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton_Small:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.PointerOver}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton_Small:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Pressed}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton_Small:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton_Small:checked:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPressed}"/>
 	</Style>
 

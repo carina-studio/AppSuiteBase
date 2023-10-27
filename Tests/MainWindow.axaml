@@ -208,7 +208,7 @@
 									</Menu>
 
 									<!-- Toolbar -->
-									<Border Name="toolBar" Classes="ToolBar">
+									<Border Name="toolBar" BorderBrush="{DynamicResource Brush/ToolBar.Border}" BorderThickness="0,0,0,1" Classes="ToolBar">
 										<appControls:ToolBarScrollViewer Name="toolBarScrollViewer">
 											<Grid Background="{x:Static Brushes.Transparent}" ColumnDefinitions="Auto,*,Auto">
 												<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
@@ -310,6 +310,39 @@
 												</StackPanel>
 											</Grid>
 										</appControls:ToolBarScrollViewer>
+									</Border>
+									
+									<!-- Toolbar (Small) -->
+									<Border Classes="ToolBar_Small" BorderBrush="{DynamicResource Brush/ToolBar.Border}" BorderThickness="0,0,0,1">
+										<StackPanel Orientation="Horizontal">
+											
+											<Button Classes="ToolBar_Button_Small" Command="{Binding $parent[Window].ShowAppInfoDialogCommand}" ToolTip.Tip="Tool tip">
+												<Image Classes="Icon" Source="{StaticResource Image/Icon.Panel.Right}"/>
+											</Button>
+											<Button Classes="ToolBar_Button_Small" ToolTip.Tip="Tool tip">
+												<Image Classes="Icon" Source="{StaticResource Image/Icon.Sliders}"/>
+											</Button>
+											<Button Classes="ToolBar_Button_Small">
+												<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
+											</Button>
+											
+											<Separator Classes="ToolBar_Separator_Small"/>
+											
+											<ToggleButton Classes="ToolBar_ToggleButton_Small" ToolTip.Tip="This is tooltip">
+												<Image Classes="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
+											</ToggleButton>
+
+											<RepeatButton Classes="ToolBar_RepeatButton_Small" ToolTip.Tip="This is tooltip">
+												<Image Classes="Icon" Source="{StaticResource Image/Icon.Add}"/>
+											</RepeatButton>
+											
+											<TextBlock Classes="ToolBar_TextBlock_Small" Text="Text"/>
+											
+											<RepeatButton Classes="ToolBar_RepeatButton_Small" ToolTip.Tip="This is tooltip">
+												<Image Classes="Icon" Source="{StaticResource Image/Icon.File.Outline}"/>
+											</RepeatButton>
+											
+										</StackPanel>
 									</Border>
 									
 								</StackPanel>
@@ -841,7 +874,7 @@
 					</TabItem.Header>
 					<DockPanel Background="{DynamicResource Brush/WorkingArea.Background}">
 						
-						<Border Classes="ToolBar" DockPanel.Dock="Left" HorizontalAlignment="Left" ZIndex="1">
+						<Border Classes="ToolBar" BorderBrush="{DynamicResource Brush/ToolBar.Border}" BorderThickness="0,0,1,0" DockPanel.Dock="Left" HorizontalAlignment="Left" ZIndex="1">
 							<appControls:ToolBarScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
 								<StackPanel Background="{x:Static Brushes.Transparent}">
 									<Button Classes="ToolBar_Button">
@@ -858,6 +891,29 @@
 									</Button>
 									<Separator Classes="ToolBar_Separator_Horizontal"/>
 									<Button Classes="ToolBar_Button">
+										<Image Classes="Icon" Source="{StaticResource Image/Icon.More}"/>
+									</Button>
+								</StackPanel>
+							</appControls:ToolBarScrollViewer>
+						</Border>
+						
+						<Border Classes="ToolBar_Small" BorderBrush="{DynamicResource Brush/ToolBar.Border}" BorderThickness="0,0,1,0" DockPanel.Dock="Left" HorizontalAlignment="Left" ZIndex="1">
+							<appControls:ToolBarScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
+								<StackPanel Background="{x:Static Brushes.Transparent}">
+									<Button Classes="ToolBar_Button_Small">
+										<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
+									</Button>
+									<Button Classes="ToolBar_Button_Small">
+										<Image Classes="Icon" Source="{StaticResource Image/Icon.OpenFile}"/>
+									</Button>
+									<Button Classes="ToolBar_Button_Small">
+										<Image Classes="Icon" Source="{StaticResource Image/Icon.Save}"/>
+									</Button>
+									<Button Classes="ToolBar_Button_Small">
+										<Image Classes="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
+									</Button>
+									<Separator Classes="ToolBar_Separator_Horizontal_Small"/>
+									<Button Classes="ToolBar_Button_Small">
 										<Image Classes="Icon" Source="{StaticResource Image/Icon.More}"/>
 									</Button>
 								</StackPanel>

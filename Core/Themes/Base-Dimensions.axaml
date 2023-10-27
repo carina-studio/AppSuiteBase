@@ -389,25 +389,34 @@
 
 	<!-- ToolBar -->
 	<sys:Double x:Key="Double/ToolBar.DropDownButton.Icon.Size">8</sys:Double>
-	<sys:Double x:Key="Double/ToolBar.Button.Icon.Size">18</sys:Double>
+	<sys:Double x:Key="Double/ToolBar.Button.Icon.Size">16</sys:Double>
+	<sys:Double x:Key="Double/ToolBar.Button.Icon.Size.Small">14</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.Button.Size">32</sys:Double>
+	<sys:Double x:Key="Double/ToolBar.Button.Size.Small">24</sys:Double>
+	<sys:Double x:Key="Double/ToolBar.MinSize">39</sys:Double> <!-- Button size + Padding + Border -->
+	<sys:Double x:Key="Double/ToolBar.MinSize.Small">31</sys:Double> <!-- Button size + Padding + Border -->
 	<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Size">8</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Offset">3</sys:Double>
 	<Thickness x:Key="Thickness/ToolBar.Button.Margin">2</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Button.Margin.Small">1,0,1,0</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Button.Margin.WithDropDownButton">2,2,0,2</Thickness>
-	<Thickness x:Key="Thickness/ToolBar.Button.Padding">7</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Button.Padding">8</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Button.Padding.Small">5</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.DropDownButton.Margin">0,2,2,2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.DropDownButton.Padding">4</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Item.Margin">2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Padding">3</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Padding.Small">3</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Separator.Margin">3</Thickness>
-	<Thickness x:Key="Thickness/ToolBar.TextBlock.Margin">4,2,2,2</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Small">2</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.TextBlock.Margin">2</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.TextBlock.Margin.Small">1</Thickness>
 
 	<!-- ToolBarScrollViewer -->
 	<sys:Double x:Key="Double/ToolBarScrollViewer.MaxEdgeFadingSize">20</sys:Double>
 	<sys:Double x:Key="Double/ToolBarScrollViewer.ScrollingButton.Icon.Size">10</sys:Double>
 	<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Margin">3</Thickness>
-	<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Padding">5</Thickness>
+	<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Padding">4</Thickness>
 
 	<!-- ToolTip -->
 	<CornerRadius x:Key="CornerRadius/ToolTip">4</CornerRadius>
