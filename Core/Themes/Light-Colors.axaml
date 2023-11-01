@@ -18,17 +18,18 @@
 	<!-- ComboBox -->
 	<SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#ffffff"/>
 	<SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#cccccc"/>
+	<SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="{DynamicResource Color/Control.Border.Dark}"/>
 
 	<!-- ComboBoxItem -->
 	<SolidColorBrush x:Key="Brush/ComboBoxItem.Foreground.Selected" Color="#ffffff"/>
 
 	<!-- Control -->
-	<Color x:Key="Color/Control.Border">#37000000</Color>
-	<Color x:Key="Color/Control.Border.Dark">#40000000</Color>
-	<Color x:Key="Color/Control.Border.Dark.Transparent">#00000000</Color>
-	<Color x:Key="Color/Control.Border.Light">#20000000</Color>
-	<Color x:Key="Color/Control.Border.Light.Transparent">#00000000</Color>
-	<Color x:Key="Color/Control.Border.Transparent">#00000000</Color>
+	<Color x:Key="Color/Control.Border">#b0b0b0</Color>
+	<Color x:Key="Color/Control.Border.Dark">#878787</Color>
+	<Color x:Key="Color/Control.Border.Dark.Transparent">#00878787</Color>
+	<Color x:Key="Color/Control.Border.Light">#bfbfbf</Color>
+	<Color x:Key="Color/Control.Border.Light.Transparent">#00bfbfbf</Color>
+	<Color x:Key="Color/Control.Border.Transparent">#00b0b0b0</Color>
 
 	<!-- Dialog -->
 	<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#e0e0e0</Color>
@@ -39,8 +40,7 @@
 	<Color x:Key="Color/Dialog.TextBlock.Foreground.Description">#7f000000</Color>
 
 	<!-- Expander -->
-	<StaticResourceExtension x:Key="ExpanderBackground" ResourceKey="Color/Button.Background"/>
-	<SolidColorBrush x:Key="ExpanderDropDownBackground" Color="#5fffffff"/>
+	<StaticResourceExtension x:Key="ExpanderContentBackground" ResourceKey="Color/Button.Background"/>
 
 	<!-- FullWindowTutorialPresenter -->
 	<Color x:Key="Color/FullWindowTutorialPresenter.Background">#cfffffff</Color>
