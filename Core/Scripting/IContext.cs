@@ -1,6 +1,7 @@
-using System;
 using CarinaStudio.AppSuite.Controls;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace CarinaStudio.AppSuite.Scripting;
@@ -63,6 +64,44 @@ public interface IContext
 /// </summary>
 public interface IUserInteractiveContext : IContext
 {
+    /// <summary>
+    /// Show dialog to let user select one or more items from list of items.
+    /// </summary>
+    /// <param name="message">Message.</param>
+    /// <param name="items">List of items.</param>
+    /// <returns>Indices of selected items.</returns>
+    IList<int> ShowMultipleItemsSelectionDialog(object? message, IList items);
+    
+    
+    /// <summary>
+    /// Show dialog to let user select one or more items from list of items.
+    /// </summary>
+    /// <param name="message">Message.</param>
+    /// <param name="items">List of items.</param>
+    /// <param name="defaultItemIndex">Index of default item.</param>
+    /// <returns>Indices of selected items.</returns>
+    IList<int> ShowMultipleItemsSelectionDialog(object? message, IList items, int defaultItemIndex);
+    
+    
+    /// <summary>
+    /// Show dialog to let user select an item from list of items.
+    /// </summary>
+    /// <param name="message">Message.</param>
+    /// <param name="items">List of items.</param>
+    /// <returns>Index of selected item, or -1 if no item selected.</returns>
+    int ShowSingleItemSelectionDialog(object? message, IList items);
+    
+    
+    /// <summary>
+    /// Show dialog to let user select an item from list of items.
+    /// </summary>
+    /// <param name="message">Message.</param>
+    /// <param name="items">List of items.</param>
+    /// <param name="defaultItemIndex">Index of default item.</param>
+    /// <returns>Index of selected item, or -1 if no item selected.</returns>
+    int ShowSingleItemSelectionDialog(object? message, IList items, int defaultItemIndex);
+    
+    
     /// <summary>
     /// Show message dialog.
     /// </summary>

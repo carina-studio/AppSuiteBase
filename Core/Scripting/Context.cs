@@ -1,3 +1,4 @@
+using Avalonia.Threading;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.AppSuite.Diagnostics;
 using CarinaStudio.Collections;
@@ -240,6 +241,12 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         MessageDialogButtons.YesNo => MessageDialogResult.No,
         _ => throw new ArgumentException($"Unknown type of message dialog buttons: {buttons}."),
     };
+    
+    
+    /// <summary>
+    /// Check whether showing item selection dialog is allowed or not.
+    /// </summary>
+    public bool IsShowingItemSelectionDialogAllowed { get; private set; } = true;
 
 
     /// <summary>
@@ -254,6 +261,138 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
     public bool IsShowingTextInputDialogAllowed { get; private set; } = true;
     
     
+    /// <inheritdoc/>
+    public IList<int> ShowMultipleItemsSelectionDialog(object? message, IList items) =>
+        this.ShowMultipleItemsSelectionDialog(message, items, -1);
+
+
+    /// <inheritdoc/>
+    public IList<int> ShowMultipleItemsSelectionDialog(object? message, IList items, int defaultItemIndex)
+    {
+        if (!this.IsShowingItemSelectionDialogAllowed || items.Count == 0)
+            return Array.Empty<int>();
+        var selectedItems = default(IList<object?>);
+        var defaultItem = defaultItemIndex >= 0 && defaultItemIndex < items.Count
+            ? items[defaultItemIndex]
+            : null;
+        if (this.Application.CheckAccess())
+        {
+            var frame = new DispatcherFrame();
+            Dispatcher.UIThread.Post(async () =>
+            {
+                selectedItems = await this.ShowMultipleItemsSelectionDialogAsync(message, items, defaultItem);
+                frame.Continue = false;
+            });
+            Dispatcher.UIThread.PushFrame(frame);
+        }
+        else
+        {
+            new object().Lock(syncLock =>
+            {
+                this.Application.SynchronizationContext.Post(async () =>
+                {
+                    selectedItems = await this.ShowMultipleItemsSelectionDialogAsync(message, items, defaultItem);
+                    lock (syncLock)
+                        Monitor.Pulse(syncLock);
+                });
+                Monitor.Wait(syncLock);
+            });
+        }
+        if (selectedItems is null || selectedItems.Count == 0)
+            return Array.Empty<int>();
+        var selectedIndices = new List<int>(selectedItems.Count);
+        for (var i = 0; i < selectedItems.Count; ++i)
+        {
+            var index = items.IndexOf(selectedItems[i]);
+            if (index >= 0)
+                selectedIndices.Add(index);
+        }
+        return selectedIndices;
+    }
+    
+    
+    // Show dialog to select multiple items.
+    async Task<IList<object?>?> ShowMultipleItemsSelectionDialogAsync(object? message, IList items, object? defaultItem)
+    {
+        var window = this.Application.LatestActiveMainWindow;
+        if (window is null)
+            return null;
+        var dialog = new ItemSelectionDialog
+        {
+            CanSelectMultipleItems = true,
+            DefaultItem = defaultItem,
+            DoNotAskAgain = false,
+            Items = items,
+            Message = message,
+        };
+        var selectedItems = await dialog.ShowDialog(window);
+        this.IsShowingItemSelectionDialogAllowed = dialog.DoNotAskAgain != true;
+        return selectedItems;
+    }
+
+
+    /// <inheritdoc/>
+    public int ShowSingleItemSelectionDialog(object? message, IList items) =>
+        this.ShowSingleItemSelectionDialog(message, items, -1);
+
+
+    /// <inheritdoc/>
+    public int ShowSingleItemSelectionDialog(object? message, IList items, int defaultItemIndex)
+    {
+        if (!this.IsShowingItemSelectionDialogAllowed || items.Count == 0)
+            return -1;
+        var selectedItem = default(object);
+        var defaultItem = defaultItemIndex >= 0 && defaultItemIndex < items.Count
+            ? items[defaultItemIndex]
+            : null;
+        if (this.Application.CheckAccess())
+        {
+            var frame = new DispatcherFrame();
+            Dispatcher.UIThread.Post(async () =>
+            {
+                selectedItem = await this.ShowSingleItemSelectionDialogAsync(message, items, defaultItem);
+                frame.Continue = false;
+            });
+            Dispatcher.UIThread.PushFrame(frame);
+        }
+        else
+        {
+            new object().Lock(syncLock =>
+            {
+                this.Application.SynchronizationContext.Post(async () =>
+                {
+                    selectedItem = await this.ShowSingleItemSelectionDialogAsync(message, items, defaultItem);
+                    lock (syncLock)
+                        Monitor.Pulse(syncLock);
+                });
+                Monitor.Wait(syncLock);
+            });
+        }
+        if (selectedItem is null)
+            return -1;
+        return items.IndexOf(selectedItem);
+    }
+    
+    
+    // Show dialog to select single item.
+    async Task<object?> ShowSingleItemSelectionDialogAsync(object? message, IList items, object? defaultItem)
+    {
+        var window = this.Application.LatestActiveMainWindow;
+        if (window is null)
+            return null;
+        var dialog = new ItemSelectionDialog
+        {
+            DefaultItem = defaultItem,
+            DoNotAskAgain = false,
+            Items = items,
+            Message = message,
+        };
+        var selectedItems = await dialog.ShowDialog(window);
+        this.IsShowingItemSelectionDialogAllowed = dialog.DoNotAskAgain != true;
+        return selectedItems.IsNullOrEmpty() ? null : selectedItems[0];
+    }
+
+
     /// <inheritdoc/>
     public MessageDialogResult ShowMessageDialog(object? message) =>
         this.ShowMessageDialog(message, MessageDialogIcon.Information, MessageDialogButtons.OK);
@@ -272,26 +411,13 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         var result = GetDefaultMessageDialogResult(buttons);
         if (this.Application.CheckAccess())
         {
-            var window = this.Application.LatestActiveMainWindow;
-            if (window != null)
+            var frame = new DispatcherFrame();
+            this.Application.SynchronizationContext.Post(async () =>
             {
-                var taskCompletionSource = new TaskCompletionSource();
-                this.Application.SynchronizationContext.Post(async () =>
-                {
-                    var dialog = new MessageDialog
-                    {
-                        Buttons = buttons,
-                        DoNotAskOrShowAgain = false,
-                        Icon = icon,
-                        Message = message,
-                    };
-                    result = await dialog.ShowDialog(window);
-                    this.IsShowingMessageDialogAllowed = !dialog.DoNotAskOrShowAgain.GetValueOrDefault();
-                    taskCompletionSource.SetResult();
-                });
-                while (!taskCompletionSource.Task.IsCompleted)
-                    Avalonia.Threading.Dispatcher.UIThread.RunJobs();
-            }
+                result = await this.ShowMessageDialogAsync(message, icon, buttons);
+                frame.Continue = false;
+            });
+            Dispatcher.UIThread.PushFrame(frame);
         }
         else
         {
@@ -299,25 +425,32 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
             {
                 this.Application.SynchronizationContext.Post(async () =>
                 {
-                    var window = this.Application.LatestActiveMainWindow;
-                    if (window != null)
-                    {
-                        var dialog = new MessageDialog
-                        {
-                            Buttons = buttons,
-                            DoNotAskOrShowAgain = false,
-                            Icon = icon,
-                            Message = message,
-                        };
-                        result = await dialog.ShowDialog(window);
-                        this.IsShowingMessageDialogAllowed = !dialog.DoNotAskOrShowAgain.GetValueOrDefault();
-                    }
+                    result = await this.ShowMessageDialogAsync(message, icon, buttons);
                     lock (syncLock)
                         Monitor.Pulse(syncLock);
                 });
                 Monitor.Wait(syncLock);
             });
         }
+        return result;
+    }
+    
+    
+    // Show message dialog.
+    async Task<MessageDialogResult> ShowMessageDialogAsync(object? message, MessageDialogIcon icon, MessageDialogButtons buttons)
+    {
+        var window = this.Application.LatestActiveMainWindow;
+        if (window is null)
+            return GetDefaultMessageDialogResult(buttons);
+        var dialog = new MessageDialog
+        {
+            Buttons = buttons,
+            DoNotAskOrShowAgain = false,
+            Icon = icon,
+            Message = message,
+        };
+        var result = await dialog.ShowDialog(window);
+        this.IsShowingMessageDialogAllowed = !dialog.DoNotAskOrShowAgain.GetValueOrDefault();
         return result;
     }
     
@@ -335,26 +468,13 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         var result = (string?)null;
         if (this.Application.CheckAccess())
         {
-            var window = this.Application.LatestActiveMainWindow;
-            if (window != null)
+            var frame = new DispatcherFrame();
+            Dispatcher.UIThread.Post(async () =>
             {
-                var taskCompletionSource = new TaskCompletionSource();
-                this.Application.SynchronizationContext.Post(async () =>
-                {
-                    var dialog = new TextInputDialog()
-                    {
-                        CheckBoxMessage = this.Application.GetObservableString("Common.DoNotShowAgain"),
-                        IsCheckBoxChecked = false,
-                        InitialText = initialText,
-                        Message = message,
-                    };
-                    result = await dialog.ShowDialog(window);
-                    this.IsShowingTextInputDialogAllowed = !dialog.IsCheckBoxChecked.GetValueOrDefault();
-                    taskCompletionSource.SetResult();
-                });
-                while (!taskCompletionSource.Task.IsCompleted)
-                    Avalonia.Threading.Dispatcher.UIThread.RunJobs();
-            }
+                result = await this.ShowTextInputDialogAsync(message, initialText);
+                frame.Continue = false;
+            });
+            Dispatcher.UIThread.PushFrame(frame);
         }
         else
         {
@@ -362,25 +482,32 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
             {
                 this.Application.SynchronizationContext.Post(async () =>
                 {
-                    var window = this.Application.LatestActiveMainWindow;
-                    if (window != null)
-                    {
-                        var dialog = new TextInputDialog()
-                        {
-                            CheckBoxMessage = this.Application.GetObservableString("Common.DoNotShowAgain"),
-                            IsCheckBoxChecked = false,
-                            InitialText = initialText,
-                            Message = message,
-                        };
-                        result = await dialog.ShowDialog(window);
-                        this.IsShowingTextInputDialogAllowed = !dialog.IsCheckBoxChecked.GetValueOrDefault();
-                    }
+                    result = await this.ShowTextInputDialogAsync(message, initialText);
                     lock (syncLock)
                         Monitor.Pulse(syncLock);
                 });
                 Monitor.Wait(syncLock);
             });
         }
+        return result;
+    }
+    
+    
+    // Show dialog to input text.
+    async Task<string?> ShowTextInputDialogAsync(object? message, string? initialText)
+    {
+        var window = this.Application.LatestActiveMainWindow;
+        if (window is null)
+            return null;
+        var dialog = new TextInputDialog()
+        {
+            CheckBoxMessage = this.Application.GetObservableString("Common.DoNotShowAgain"),
+            IsCheckBoxChecked = false,
+            InitialText = initialText,
+            Message = message,
+        };
+        var result = await dialog.ShowDialog(window);
+        this.IsShowingTextInputDialogAllowed = !dialog.IsCheckBoxChecked.GetValueOrDefault();
         return result;
     }
 }
