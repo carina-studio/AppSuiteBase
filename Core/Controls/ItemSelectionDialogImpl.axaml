@@ -1,0 +1,50 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="using:CarinaStudio.AppSuite.Controls"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="CarinaStudio.AppSuite.Controls.ItemSelectionDialogImpl"
+        Classes="Dialog"
+        SizeToContent="WidthAndHeight">
+
+	<DockPanel>
+
+		<!-- Control buttons -->
+		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
+			<StackPanel Classes="Dialog_ControlButtonsPanel">
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].GenerateResultCommand}" Content="{DynamicResource String/Common.OK}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.Cancel}"/>
+			</StackPanel>
+		</Border>
+
+		<!-- Content -->
+		<Grid Classes="Dialog_ContentPanel" 
+		      MaxWidth="{DynamicResource Double/ItemSelectionDialog.Content.MaxWidth}"
+		      MinWidth="{DynamicResource Double/ItemSelectionDialog.Content.MinWidth}"
+		      RowDefinitions="Auto,*,Auto">
+			
+			<!-- Message -->
+			<TextBlock Classes="Dialog_TextBlock_Label"
+			           MaxLines="3"
+			           Text="{Binding $parent[Window].Message}"
+			           TextTrimming="CharacterEllipsis"
+			           TextWrapping="Wrap"/>
+
+			<!-- Items -->
+			<controls:ListBox Name="itemsListBox" 
+			                  Grid.Row="1" 
+			                  MaxHeight="{DynamicResource Double/ItemSelectionDialog.Items.MaxHeight}"
+			                  MinHeight="{DynamicResource Double/ItemSelectionDialog.Items.MinHeight}"/>
+			
+			<!-- Do not ask again -->
+			<StackPanel Name="doNotAskAgainCheckBoxPanel" Grid.Row="2" IsVisible="False">
+				<Separator Classes="Dialog_Separator"/>
+				<CheckBox Name="doNotAskAgainCheckBox" Classes="Dialog_CheckBox" Content="{DynamicResource String/Common.DoNotAskAgain}"/>
+			</StackPanel>
+			
+		</Grid>
+		
+	</DockPanel>
+	
+</Window>

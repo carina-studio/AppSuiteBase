@@ -280,6 +280,10 @@
 
 	<!-- IPAddressTextBox -->
 	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 or IPv6</sys:String>
+	
+	<!-- ItemSelectionDialog -->
+	<sys:String x:Key="String/ItemSelectionDialog.SelectOneItem">Please select an item:</sys:String>
+	<sys:String x:Key="String/ItemSelectionDialog.SelectOneOrMoreItems">Please select items:</sys:String>
 
 	<!-- LocalizationTest -->
 	<sys:String x:Key="String/LocalizationTest.String">English</sys:String>

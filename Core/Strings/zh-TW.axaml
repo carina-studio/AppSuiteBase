@@ -274,6 +274,10 @@
 
 	<!-- IPAddressTextBox -->
 	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 或 IPv6</sys:String>
+	
+	<!-- ItemSelectionDialog -->
+	<sys:String x:Key="String/ItemSelectionDialog.SelectOneItem">請選擇一個項目：</sys:String>
+	<sys:String x:Key="String/ItemSelectionDialog.SelectOneOrMoreItems">請選擇一個或多個項目：</sys:String>
 
 	<!-- LocalizationTest -->
 	<sys:String x:Key="String/LocalizationTest.String">正體中文</sys:String>
