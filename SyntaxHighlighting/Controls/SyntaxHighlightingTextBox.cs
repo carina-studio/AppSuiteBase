@@ -29,6 +29,14 @@ public class SyntaxHighlightingTextBox : TextBox
     {
         this.PseudoClasses.Add(":syntaxHighlighted");
         this.PseudoClasses.Add(":syntaxHighlightingTextBox");
+        this.PastingFromClipboard += (_, e) =>
+        {
+            TopLevel.GetTopLevel(this)?.Clipboard?.LetAsync(async clipboard =>
+            {
+                this.OnPastingFromClipboard(await clipboard.GetTextAsync());
+            });
+            e.Handled = true;
+        };
     }
 
 
@@ -57,6 +65,21 @@ public class SyntaxHighlightingTextBox : TextBox
         this.textPresenter = e.NameScope.Find<Presenters.SyntaxHighlightingTextPresenter>("PART_TextPresenter");
         if (this.textPresenter != null)
             this.textPresenter.DefinitionSet = this.definitionSet;
+    }
+    
+    
+    /// <summary>
+    /// Called when pasting text from clipboard
+    /// </summary>
+    /// <param name="text">The text from clipboard.</param>
+    protected virtual void OnPastingFromClipboard(string? text)
+    {
+        if (text is null)
+            return;
+        if (this.AcceptsReturn)
+            this.SelectedText = text;
+        else
+            this.SelectedText = text.RemoveLineBreaks();
     }
 
 
