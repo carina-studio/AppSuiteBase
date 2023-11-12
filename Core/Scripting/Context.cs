@@ -262,12 +262,12 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
     
     
     /// <inheritdoc/>
-    public IList<int> ShowMultipleItemsSelectionDialog(object? message, IList items) =>
+    public IList<int> ShowMultipleItemsSelectionDialog(string? message, IList items) =>
         this.ShowMultipleItemsSelectionDialog(message, items, -1);
 
 
     /// <inheritdoc/>
-    public IList<int> ShowMultipleItemsSelectionDialog(object? message, IList items, int defaultItemIndex)
+    public IList<int> ShowMultipleItemsSelectionDialog(string? message, IList items, int defaultItemIndex)
     {
         if (!this.IsShowingItemSelectionDialogAllowed || items.Count == 0)
             return Array.Empty<int>();
@@ -312,7 +312,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
     
     
     // Show dialog to select multiple items.
-    async Task<IList<object?>?> ShowMultipleItemsSelectionDialogAsync(object? message, IList items, object? defaultItem)
+    async Task<IList<object?>?> ShowMultipleItemsSelectionDialogAsync(string? message, IList items, object? defaultItem)
     {
         var window = this.Application.LatestActiveMainWindow;
         if (window is null)
@@ -332,12 +332,12 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
 
 
     /// <inheritdoc/>
-    public int ShowSingleItemSelectionDialog(object? message, IList items) =>
+    public int ShowSingleItemSelectionDialog(string? message, IList items) =>
         this.ShowSingleItemSelectionDialog(message, items, -1);
 
 
     /// <inheritdoc/>
-    public int ShowSingleItemSelectionDialog(object? message, IList items, int defaultItemIndex)
+    public int ShowSingleItemSelectionDialog(string? message, IList items, int defaultItemIndex)
     {
         if (!this.IsShowingItemSelectionDialogAllowed || items.Count == 0)
             return -1;

@@ -70,7 +70,7 @@ public interface IUserInteractiveContext : IContext
     /// <param name="message">Message.</param>
     /// <param name="items">List of items.</param>
     /// <returns>Indices of selected items.</returns>
-    IList<int> ShowMultipleItemsSelectionDialog(object? message, IList items);
+    IList<int> ShowMultipleItemsSelectionDialog(string? message, IList items);
     
     
     /// <summary>
@@ -80,7 +80,7 @@ public interface IUserInteractiveContext : IContext
     /// <param name="items">List of items.</param>
     /// <param name="defaultItemIndex">Index of default item.</param>
     /// <returns>Indices of selected items.</returns>
-    IList<int> ShowMultipleItemsSelectionDialog(object? message, IList items, int defaultItemIndex);
+    IList<int> ShowMultipleItemsSelectionDialog(string? message, IList items, int defaultItemIndex);
     
     
     /// <summary>
@@ -89,7 +89,7 @@ public interface IUserInteractiveContext : IContext
     /// <param name="message">Message.</param>
     /// <param name="items">List of items.</param>
     /// <returns>Index of selected item, or -1 if no item selected.</returns>
-    int ShowSingleItemSelectionDialog(object? message, IList items);
+    int ShowSingleItemSelectionDialog(string? message, IList items);
     
     
     /// <summary>
@@ -99,7 +99,7 @@ public interface IUserInteractiveContext : IContext
     /// <param name="items">List of items.</param>
     /// <param name="defaultItemIndex">Index of default item.</param>
     /// <returns>Index of selected item, or -1 if no item selected.</returns>
-    int ShowSingleItemSelectionDialog(object? message, IList items, int defaultItemIndex);
+    int ShowSingleItemSelectionDialog(string? message, IList items, int defaultItemIndex);
     
     
     /// <summary>
