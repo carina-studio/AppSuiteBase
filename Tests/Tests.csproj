@@ -7,7 +7,7 @@
 		<RootNamespace>CarinaStudio.AppSuite.Tests</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Tests</AssemblyName>
 		<StartupObject>CarinaStudio.AppSuite.Tests.App</StartupObject>
-		<TargetFrameworks>net7.0</TargetFrameworks>
+		<TargetFrameworks>net8.0</TargetFrameworks>
 		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
 		<AvaloniaNameGeneratorFilterByNamespace>Dummy</AvaloniaNameGeneratorFilterByNamespace> <!-- Prevent generating InitializeComponents() and fields -->
 	</PropertyGroup>
