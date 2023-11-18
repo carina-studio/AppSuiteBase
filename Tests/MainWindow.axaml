@@ -606,7 +606,7 @@
 							</Border>
 							
 							<!-- Buttons -->
-							<WrapPanel Name="buttonsPanel" Orientation="Horizontal">
+							<WrapPanel Name="buttonsPanel" Background="{DynamicResource MenuFlyoutPresenterBackground}" Orientation="Horizontal" >
 								<Button Content="Button" Margin="5"/>
 								<Button Content="Button" IsEnabled="False" Margin="5"/>
 								<Button Classes="accent" Content="Button" Margin="5"/>
@@ -800,7 +800,10 @@
 							<Expander.Header>
 								<TextBlock HorizontalAlignment="Right" Text="Expander"/>
 							</Expander.Header>
-							<Button Content="Button" Margin="30"/>
+							<StackPanel>
+								<TextBox Margin="5"/>
+								<Button Content="Button" Margin="30,10,0,0"/>
+							</StackPanel>
 						</Expander>
 						<Expander Background="{x:Null}" Header="Expander" HorizontalAlignment="Left" Margin="10" Padding="0" Width="200">
 							<Border BorderBrush="{DynamicResource Brush/Control.Border}" BorderThickness="{DynamicResource Thickness/Control.Border}" CornerRadius="{DynamicResource ControlCornerRadiusBottom}">
