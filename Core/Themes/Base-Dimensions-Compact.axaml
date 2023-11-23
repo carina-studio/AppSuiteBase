@@ -216,6 +216,7 @@
 	<Thickness x:Key="Thickness/ToolBar.Item.Margin">1</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Padding">2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Padding.Small">2</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.ProgressRing.Margin">7,0,7,0</Thickness> <!-- Button Padding + Button Margin -->
 	<Thickness x:Key="Thickness/ToolBar.Separator.Margin">2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Small">1</Thickness>
 	

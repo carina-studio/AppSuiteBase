@@ -2401,6 +2401,24 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 	</Style>
+	<Style Selector="abControls|ProgressRing.StatusBar_ProgressRing">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin}"/>
+		<Setter Property="RingThickness" Value="{DynamicResource Double/StatusBar.ProgressRing.RingThickness}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+	</Style>
+	<Style Selector="abControls|ProgressRing.StatusBar_ProgressRingWithText">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin.WithText}"/>
+		<Setter Property="RingThickness" Value="{DynamicResource Double/StatusBar.ProgressRing.RingThickness}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+	</Style>
 	<Style Selector="RepeatButton.StatusBar_RepeatButton">
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
@@ -2988,6 +3006,12 @@
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
+	</Style>
+	<Style Selector="abControls|ProgressRing.ToolBar_ProgressRing">
+		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.ProgressRing.Margin}"/>
+		<Setter Property="RingThickness" Value="{DynamicResource Double/ToolBar.ProgressRing.RingThickness}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
 	</Style>
 	<Style Selector="RepeatButton.ToolBar_RepeatButton">

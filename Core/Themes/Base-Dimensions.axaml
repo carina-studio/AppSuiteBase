@@ -343,6 +343,7 @@
 	<!-- StatusBar -->
 	<sys:Double x:Key="Double/StatusBar.DropDownIcon.Size">8</sys:Double>
 	<sys:Double x:Key="Double/StatusBar.Icon.Size">14</sys:Double>
+	<sys:Double x:Key="Double/StatusBar.ProgressRing.RingThickness">3</sys:Double>
 	<Thickness x:Key="Thickness/StatusBar.Button.Padding">5,0,5,0</Thickness>
 	<Thickness x:Key="Thickness/StatusBar.DropDownIcon.Margin">5,0,1,0</Thickness>
 	<Thickness x:Key="Thickness/StatusBar.Icon.Margin">1,0,1,0</Thickness>
@@ -403,6 +404,7 @@
 	<sys:Double x:Key="Double/ToolBar.MinSize.Small">31</sys:Double> <!-- Button size + Padding + Border -->
 	<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Size">8</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Offset">3</sys:Double>
+	<sys:Double x:Key="Double/ToolBar.ProgressRing.RingThickness">3</sys:Double>
 	<Thickness x:Key="Thickness/ToolBar.Button.Margin">2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Button.Margin.Small">1,0,1,0</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Button.Margin.WithDropDownButton">2,2,0,2</Thickness>
@@ -413,6 +415,7 @@
 	<Thickness x:Key="Thickness/ToolBar.Item.Margin">2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Padding">3</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Padding.Small">3</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.ProgressRing.Margin">10</Thickness> <!-- Button Padding + Button Margin -->
 	<Thickness x:Key="Thickness/ToolBar.Separator.Margin">3</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Small">2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.TextBlock.Margin">2</Thickness>

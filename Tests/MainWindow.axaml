@@ -96,6 +96,10 @@
 						</DrawingImage>
 					</Image>
 					<TextBlock Classes="StatusBar_TextBlock" Text="Text of icon"/>
+					
+					<Separator Classes="StatusBar_Separator"/>
+					<abControls:ProgressRing Classes="StatusBar_ProgressRingWithText" IsIndeterminate="True"/>
+					<TextBlock Classes="StatusBar_TextBlock" Text="Text of progress"/>
 
 					<Separator Classes="StatusBar_Separator"/>
 					<TextBlock Classes="StatusBar_TextBlock" Text="Text with arrow"/>
@@ -225,6 +229,8 @@
 													<Button Classes="ToolBar_Button" IsEnabled="{Binding #toolBarToggleButton.IsChecked}">
 														<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
 													</Button>
+													
+													<abControls:ProgressRing Classes="ToolBar_ProgressRing" IsIndeterminate="True"/>
 
 													<Button Classes="ToolBar_Button_WithDropDownButton">
 														<Image Classes="Icon" Source="{StaticResource Image/Icon.Star}"/>
