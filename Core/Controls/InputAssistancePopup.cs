@@ -5,6 +5,7 @@ using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
 using CarinaStudio.Controls;
+using System;
 
 namespace CarinaStudio.AppSuite.Controls;
 
@@ -51,4 +52,8 @@ public class InputAssistancePopup : Popup
             this.ItemListBox.ItemsPanel = template;
         base.OnAttachedToLogicalTree(e);
     }
+
+
+    /// <inheritdoc/>
+    protected override Type StyleKeyOverride => typeof(Popup);
 }
