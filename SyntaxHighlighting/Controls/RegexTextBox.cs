@@ -104,9 +104,7 @@ namespace CarinaStudio.AppSuite.Controls
 					|| this.groupingConstructsPopup?.IsOpen == true
 					|| this.predefinedGroupsPopup?.IsOpen == true)
 				{
-					this.escapedCharactersPopup?.Close();
-					this.groupingConstructsPopup?.Close();
-					this.predefinedGroupsPopup?.Close();
+					this.CloseAssistanceMenus();
 					this.showAssistanceMenuAction!.Schedule();
 					return;
 				}
@@ -218,6 +216,18 @@ namespace CarinaStudio.AppSuite.Controls
 			if (y == null)
 				return false;
 			return x.ToString() == y.ToString() && x.Options == y.Options;
+		}
+
+
+		/// <summary>
+		/// Close all assistance menus.
+		/// </summary>
+		public void CloseAssistanceMenus()
+		{
+			this.escapedCharactersPopup?.Close();
+			this.groupingConstructsPopup?.Close();
+			this.predefinedGroupsPopup?.Close();
+			this.showAssistanceMenuAction.Cancel();
 		}
 
 
@@ -548,12 +558,7 @@ namespace CarinaStudio.AppSuite.Controls
 			SynchronizationContext.Current?.PostDelayed(() =>
 			{
 				if (!this.IsFocused)
-				{
-					this.escapedCharactersPopup?.Close();
-					this.groupingConstructsPopup?.Close();
-					this.predefinedGroupsPopup?.Close();
-					this.showAssistanceMenuAction.Cancel();
-				}
+					this.CloseAssistanceMenus();
 			}, 200);
 			base.OnLostFocus(e);
 		}
@@ -699,12 +704,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 			// show/hide menu
 			if (e.Key == Key.Escape)
-			{
-				this.escapedCharactersPopup?.Close();
-				this.groupingConstructsPopup?.Close();
-				this.predefinedGroupsPopup?.Close();
-				this.showAssistanceMenuAction.Cancel();
-			}
+				this.CloseAssistanceMenus();
 			else if (!isKeyForAssistantPopup)
 				this.showAssistanceMenuAction.Reschedule(50);
 		}

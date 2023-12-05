@@ -69,11 +69,10 @@ public class StringInterpolationFormatTextBox : TextBox
 			// close menu first
 			if (this.predefinedVarsPopup?.IsOpen == true)
 			{
-				this.predefinedVarsPopup?.Close();
+				this.CloseAssistanceMenus();
 				this.showAssistanceMenuAction!.Schedule();
 				return;
 			}
-			this.predefinedVarsPopup?.Close();
 			var (start, end) = this.GetSelection();
 			if (!this.IsEffectivelyVisible || start != end)
 				return;
@@ -123,6 +122,16 @@ public class StringInterpolationFormatTextBox : TextBox
 				this.showAssistanceMenuAction.Schedule();
 		});
 		isSubscribed = true;
+    }
+    
+    
+    /// <summary>
+    /// Close all assistance menus.
+    /// </summary>
+    public void CloseAssistanceMenus()
+    {
+	    this.predefinedVarsPopup?.Close();
+	    this.showAssistanceMenuAction.Cancel();
     }
 
 
@@ -398,10 +407,7 @@ public class StringInterpolationFormatTextBox : TextBox
 
 		// show/hide menu
 		if (e.Key == Key.Escape)
-		{
-			this.predefinedVarsPopup?.Close();
-			this.showAssistanceMenuAction.Cancel();
-		}
+			this.CloseAssistanceMenus();
 		else if (!isKeyForAssistantPopup)
 			this.showAssistanceMenuAction.Reschedule(50);
 	}
@@ -436,10 +442,7 @@ public class StringInterpolationFormatTextBox : TextBox
 		SynchronizationContext.Current?.PostDelayed(() =>
 		{
 			if (!this.IsFocused)
-			{
-				this.predefinedVarsPopup?.Close();
-				this.showAssistanceMenuAction.Cancel();
-			}
+				this.CloseAssistanceMenus();
 		}, 200);
 		base.OnLostFocus(e);
 	}
