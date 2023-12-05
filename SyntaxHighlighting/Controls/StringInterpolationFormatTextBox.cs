@@ -126,6 +126,12 @@ public class StringInterpolationFormatTextBox : TextBox
     
     
     /// <summary>
+    /// Raised when one of assistance menus has been opened.
+    /// </summary>
+    public event EventHandler? AssistanceMenuOpened;
+    
+    
+    /// <summary>
     /// Close all assistance menus.
     /// </summary>
     public void CloseAssistanceMenus()
@@ -534,6 +540,7 @@ public class StringInterpolationFormatTextBox : TextBox
 					SynchronizationContext.Current?.Post(() => this.Focus());
 				}, RoutingStrategies.Tunnel);
 			});
+			menu.Opened += (_, _) => this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
 			menu.PlacementAnchor = PopupAnchor.BottomLeft;
 			menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
 			menu.PlacementGravity = PopupGravity.BottomRight;

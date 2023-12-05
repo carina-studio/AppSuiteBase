@@ -208,6 +208,12 @@ namespace CarinaStudio.AppSuite.Controls
 		}
 
 
+		/// <summary>
+		/// Raised when one of assistance menus has been opened.
+		/// </summary>
+		public event EventHandler? AssistanceMenuOpened;
+
+
 		/// <inheritdoc/>
 		protected override bool CheckObjectEquality(Regex? x, Regex? y)
 		{
@@ -888,6 +894,7 @@ namespace CarinaStudio.AppSuite.Controls
 						SynchronizationContext.Current?.Post(() => this.Focus());
 					}, RoutingStrategies.Tunnel);
 				});
+				menu.Opened += (_, _) => this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;
 				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
 				menu.PlacementGravity = PopupGravity.BottomRight;
@@ -928,6 +935,7 @@ namespace CarinaStudio.AppSuite.Controls
 						SynchronizationContext.Current?.Post(() => this.Focus());
 					}, RoutingStrategies.Tunnel);
 				});
+				menu.Opened += (_, _) => this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;
 				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
 				menu.PlacementGravity = PopupGravity.BottomRight;
@@ -962,6 +970,7 @@ namespace CarinaStudio.AppSuite.Controls
 						SynchronizationContext.Current?.Post(() => this.Focus());
 					}, RoutingStrategies.Tunnel);
 				});
+				menu.Opened += (_, _) => this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
 				menu.PlacementAnchor = PopupAnchor.BottomLeft;
 				menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
 				menu.PlacementGravity = PopupGravity.BottomRight;
