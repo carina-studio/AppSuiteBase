@@ -800,17 +800,35 @@ namespace CarinaStudio.AppSuite
                             throw new InvalidOperationException("Unable to get Start() method to restart application lifetime.");
                         }
                         logger?.LogWarning("Restart application lifetime");
-                        exitCode = (int)startMethod.Invoke(desktopLifetime, new object?[] { args })!;
+                        try
+                        {
+                            exitCode = (int)startMethod.Invoke(desktopLifetime, new object?[] { args })!;
+                        }
+                        catch (TargetInvocationException ex)
+                        {
+                            if (ex.InnerException is not null)
+                            {
+                                logger?.LogError(ex, "Unhandled exception occurred in application lifetime");
+                                if (asAppImpl?.OnExceptionOccurredInApplicationLifetime(ex.InnerException) != true)
+                                {
+                                    forceThrowingException = true;
+                                    throw;
+                                }
+                                logger?.LogWarning("Exception was handled");
+                            }
+                            else
+                                throw;
+                        }
                     }
                     else
                         exitCode = builder.StartWithClassicDesktopLifetime(args);
                 }
                 catch (Exception ex)
                 {
-                    SetupAppAndLogger();
-                    logger?.LogError(ex, "Unhandled exception occurred in application lifetime");
                     if (forceThrowingException)
                         throw;
+                    SetupAppAndLogger();
+                    logger?.LogError(ex, "Unhandled exception occurred in application lifetime");
                     if (asAppImpl?.OnExceptionOccurredInApplicationLifetime(ex) != true)
                         throw;
                     logger?.LogWarning("Exception was handled");

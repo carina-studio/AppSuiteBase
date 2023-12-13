@@ -135,7 +135,12 @@ namespace CarinaStudio.AppSuite.Tests
         protected override ViewModel OnCreateMainWindowViewModel(JsonElement? savedState) => new Workspace(savedState);
 
 
-        //protected override bool OnExceptionOccurredInApplicationLifetime(Exception ex) => true;
+        protected override bool OnExceptionOccurredInApplicationLifetime(Exception ex)
+        {
+            if (ex.Message == "test")
+                return true;
+            return false;
+        }
 
 
         protected override void OnNewInstanceLaunched(IDictionary<string, object> launchOptions)
