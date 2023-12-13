@@ -140,6 +140,8 @@
 	<sys:String x:Key="String/Common.Agree">Agree</sys:String>
 	<sys:String x:Key="String/Common.Allow">Allow</sys:String>
 	<sys:String x:Key="String/Common.Allow.WithDialog">Allow…</sys:String>
+	<sys:String x:Key="String/Common.Apply">Apply</sys:String>
+	<sys:String x:Key="String/Common.Apply.WithDialog">Apply…</sys:String>
 	<sys:String x:Key="String/Common.BuiltIn">Built-in</sys:String>
 	<sys:String x:Key="String/Common.Cancel">Cancel</sys:String>
 	<sys:String x:Key="String/Common.Clear">Clear</sys:String>
@@ -147,6 +149,8 @@
 	<sys:String x:Key="String/Common.CloseTab">Close tab</sys:String>
 	<sys:String x:Key="String/Common.CloseTab.WithGesture">Close tab (Ctrl+W)</sys:String>
 	<sys:String x:Key="String/Common.CloseWindow">Close window</sys:String>
+	<sys:String x:Key="String/Common.Complete">Complete</sys:String>
+	<sys:String x:Key="String/Common.Complete.WithDialog">Complete…</sys:String>
 	<sys:String x:Key="String/Common.Continue">Continue</sys:String>
 	<sys:String x:Key="String/Common.Continue.WithDialog">Continue…</sys:String>
 	<sys:String x:Key="String/Common.ContinueToUse">Continue to use</sys:String>

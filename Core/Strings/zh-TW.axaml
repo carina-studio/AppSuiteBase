@@ -134,6 +134,8 @@
 	<sys:String x:Key="String/Common.Agree">同意</sys:String>
 	<sys:String x:Key="String/Common.Allow">允許</sys:String>
 	<sys:String x:Key="String/Common.Allow.WithDialog">允許…</sys:String>
+	<sys:String x:Key="String/Common.Apply">套用</sys:String>
+	<sys:String x:Key="String/Common.Apply.WithDialog">套用…</sys:String>
 	<sys:String x:Key="String/Common.BuiltIn">內建</sys:String>
 	<sys:String x:Key="String/Common.Cancel">取消</sys:String>
 	<sys:String x:Key="String/Common.Clear">清除</sys:String>
@@ -141,6 +143,8 @@
 	<sys:String x:Key="String/Common.CloseTab">關閉分頁</sys:String>
 	<sys:String x:Key="String/Common.CloseTab.WithGesture">關閉分頁 (Ctrl+W)</sys:String>
 	<sys:String x:Key="String/Common.CloseWindow">關閉視窗</sys:String>
+	<sys:String x:Key="String/Common.Complete">完成</sys:String>
+	<sys:String x:Key="String/Common.Complete.WithDialog">完成…</sys:String>
 	<sys:String x:Key="String/Common.Continue">繼續</sys:String>
 	<sys:String x:Key="String/Common.Continue.WithDialog">繼續…</sys:String>
 	<sys:String x:Key="String/Common.ContinueToUse">繼續使用</sys:String>
