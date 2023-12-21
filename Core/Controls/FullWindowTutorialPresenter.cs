@@ -18,7 +18,10 @@ namespace CarinaStudio.AppSuite.Controls;
 public class FullWindowTutorialPresenter : TutorialPresenter
 {
     // Fields.
-    readonly Pen anchorBorderPen = new();
+    readonly SolidColorBrush anchorBorderBrush = new();
+    readonly Pen anchorBorderPen;
+    readonly SolidColorBrush anchorOuterBorderBrush = new();
+    readonly Pen anchorOuterBorderPen;
     Rect anchorBounds;
     IDisposable? anchorBoundsObserverToken;
     DoubleAnimator? backgroundAnimator;
@@ -42,8 +45,10 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     /// </summary>
     public FullWindowTutorialPresenter()
     {
-        this.anchorBorderPen.Bind(Pen.BrushProperty, this.GetResourceObservable("Brush/Accent"));
-        this.anchorBorderPen.Thickness = 2;
+        this.anchorBorderBrush.BindToResource(SolidColorBrush.ColorProperty, this, "Color/Accent");
+        this.anchorBorderPen = new(this.anchorBorderBrush, 2, lineJoin: PenLineJoin.Round);
+        this.anchorOuterBorderBrush.Color = Color.FromArgb(127, 255, 255, 255);
+        this.anchorOuterBorderPen = new(this.anchorOuterBorderBrush, 3, lineJoin: PenLineJoin.Round);
         this.backgroundPropertyChangedHandler = this.OnBackgroundPropertyChanged;
         this.updateTutorialPositionAction = new(this.UpdateTutorialPosition);
         this.GetObservable(BackgroundProperty).Subscribe(background =>
@@ -55,7 +60,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter
         });
         this.GetObservable(BoundsProperty).Subscribe(_ =>
         {
-            if (this.CurrentTutorial != null)
+            if (this.CurrentTutorial is not null)
                 this.updateTutorialPositionAction.Schedule();
         });
     }
@@ -138,7 +143,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     {
         // hide
         this.backgroundAnimator?.Cancel();
-        if (this.root != null)
+        if (this.root is not null)
         {
             this.backgroundAnimator = new DoubleAnimator(this.root.Opacity, 0).Also(animator =>
             {
@@ -194,7 +199,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     // Handle key down event.
     void OnPreviewKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Tab && !e.Handled && this.CurrentTutorial != null)
+        if (e.Key == Key.Tab && !e.Handled && this.CurrentTutorial is not null)
         {
             Global.Run(() =>
             {
@@ -221,7 +226,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     // Handle pointer moved event.
     void OnPreviewPointerMoved(object? sender, PointerEventArgs e)
     {
-        if (!this.isPointerMovedAfterShowingTutorial && this.CurrentTutorial != null)
+        if (!this.isPointerMovedAfterShowingTutorial && this.CurrentTutorial is not null)
         {
             this.isPointerMovedAfterShowingTutorial = true;
             this.dismissControl?.FindDescendantOfTypeAndName<Avalonia.Controls.Presenters.ContentPresenter>("PART_ContentPresenter")?.Let(it => 
@@ -239,7 +244,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     {
         // show
         this.backgroundAnimator?.Cancel();
-        if (this.root != null)
+        if (this.root is not null)
         {
             this.root.IsVisible = true;
             if (this.root.Opacity >= 0.95)
@@ -277,7 +282,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter
         this.isPointerMovedAfterShowingTutorial = false;
 
         // setup tutorial and its position
-        if (this.tutorialContainer != null)
+        if (this.tutorialContainer is not null)
         {
             this.tutorialContainer.Opacity = 0;
             this.updateTutorialPositionAction.Schedule();
@@ -298,7 +303,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter
         // setup focus
         this.SynchronizationContext.Post(() =>
         {
-            if (this.CurrentTutorial == null)
+            if (this.CurrentTutorial is null)
                 return;
             if (this.dismissControl?.IsEffectivelyVisible == true 
                 && this.dismissControl.IsEffectivelyEnabled)
@@ -310,7 +315,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter
             {
                 this.skipAllTutorialsControl.Focus();
             }
-            else if (this.tutorialContainer != null)
+            else if (this.tutorialContainer is not null)
                 this.tutorialContainer.Focus();
             else
                 this.Focus();
@@ -330,27 +335,33 @@ public class FullWindowTutorialPresenter : TutorialPresenter
             return;
 
         // get state
-        var brush = this.backgroundBrush;
-        if (brush is null)
+        var backgroundBrush = this.backgroundBrush;
+        if (backgroundBrush is null)
             return;
-        var bounds = this.Bounds;
-        var anchorBounds = this.anchorBounds;
-        (brush as Brush)?.Let(it =>
+        var backgroundBrushImpl = backgroundBrush as Brush;
+        var opacity = backgroundBrushImpl?.Let(it =>
         {
             var baseOpacity = (this.Background as Brush)?.Opacity ?? 1.0;
-            it.Opacity = (this.backgroundAnimator?.Value ?? 1.0) * baseOpacity;
-        });
+            var opacity = (this.backgroundAnimator?.Value ?? 1.0) * baseOpacity;
+            it.Opacity = opacity;
+            return opacity;
+        }) ?? (this.backgroundAnimator?.Value ?? 1.0);
+        var bounds = this.Bounds;
+        var anchorBounds = this.anchorBounds;
 
         // draw 
         if (anchorBounds.Width <= 0 || anchorBounds.Height <= 0)
-            context.DrawRectangle(brush, null, bounds);
+            context.DrawRectangle(backgroundBrush, null, bounds);
         else
         {
-            context.DrawRectangle(brush, null, new(bounds.X, bounds.Y, bounds.Width, anchorBounds.Y));
-            context.DrawRectangle(brush, null, new(bounds.X, anchorBounds.Y, anchorBounds.X, anchorBounds.Height));
-            context.DrawRectangle(brush, null, new(anchorBounds.Right, anchorBounds.Y, bounds.Width - anchorBounds.Right, anchorBounds.Height));
-            context.DrawRectangle(brush, null, new(bounds.X, anchorBounds.Bottom, bounds.Width, bounds.Height - anchorBounds.Bottom));
+            context.DrawRectangle(backgroundBrush, null, new(bounds.X, bounds.Y, bounds.Width, anchorBounds.Y));
+            context.DrawRectangle(backgroundBrush, null, new(bounds.X, anchorBounds.Y, anchorBounds.X, anchorBounds.Height));
+            context.DrawRectangle(backgroundBrush, null, new(anchorBounds.Right, anchorBounds.Y, bounds.Width - anchorBounds.Right, anchorBounds.Height));
+            context.DrawRectangle(backgroundBrush, null, new(bounds.X, anchorBounds.Bottom, bounds.Width, bounds.Height - anchorBounds.Bottom));
             context.DrawRectangle(Brushes.Transparent, null, anchorBounds);
+            this.anchorBorderBrush.Opacity = opacity;
+            this.anchorOuterBorderBrush.Opacity = opacity;
+            context.DrawRectangle(null, this.anchorOuterBorderPen, anchorBounds);
             context.DrawRectangle(null, this.anchorBorderPen, anchorBounds);
         }
     }
@@ -364,7 +375,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     void UpdateTutorialPosition()
     {
         var tutorial = this.CurrentTutorial;
-        if (tutorial == null)
+        if (tutorial is null)
             return;
         this.tutorialContainer?.Let(it =>
         {
