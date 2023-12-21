@@ -134,8 +134,8 @@
 	<sys:String x:Key="String/Common.Agree">同意</sys:String>
 	<sys:String x:Key="String/Common.Allow">允许</sys:String>
 	<sys:String x:Key="String/Common.Allow.WithDialog">允许…</sys:String>
-	<sys:String x:Key="String/Common.Apply">套用</sys:String>
-	<sys:String x:Key="String/Common.Apply.WithDialog">套用…</sys:String>
+	<sys:String x:Key="String/Common.Apply">应用</sys:String>
+	<sys:String x:Key="String/Common.Apply.WithDialog">应用…</sys:String>
 	<sys:String x:Key="String/Common.BuiltIn">内建</sys:String>
 	<sys:String x:Key="String/Common.Cancel">取消</sys:String>
 	<sys:String x:Key="String/Common.Clear">清除</sys:String>
