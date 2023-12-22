@@ -75,11 +75,13 @@
 		<DropShadowEffect x:Key="Effect/SplashWindow.Shadow" BlurRadius="{StaticResource Double/SplashWindow.Shadow.BlurRadius}" Color="{DynamicResource Color/SplashWindow.Shadow}" OffsetX="0" OffsetY="0"/>
 		<Thickness x:Key="Thickness/SplashWindow.BackgroundImage.Margin">0,0,0,-70</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Border">1</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Copyright.Margin">0,3,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">0,0,15,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Margin">10</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Padding">30</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Title.Margin">0,0,0,5</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Version.Margin">0,3,0,0</Thickness>
 		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1</sys:TimeSpan>
 
 	</Window.Resources>
@@ -192,7 +194,8 @@
 					<TextBlock Name="versionTextBlock" 
 					           Effect="{StaticResource Effect/SplashWindow.Shadow}" 
 					           FontSize="{StaticResource Double/SplashWindow.Version.FontSize}" 
-					           Grid.Row="1" 
+					           Grid.Row="1"
+					           Margin="{StaticResource Thickness/SplashWindow.Version.Margin}"
 					           Opacity="0" 
 					           Text="{Binding $parent[Window].Version}" 
 					           TextTrimming="CharacterEllipsis">
@@ -222,7 +225,8 @@
 					<TextBlock Name="copyrightTextBlock" 
 					           Effect="{StaticResource Effect/SplashWindow.Shadow}" 
 					           FontSize="{StaticResource Double/SplashWindow.Copyright.FontSize}" 
-					           Grid.Row="2" 
+					           Grid.Row="2"
+					           Margin="{StaticResource Thickness/SplashWindow.Copyright.Margin}"
 					           Opacity="0" 
 					           Text="{Binding $parent[Window].Copyright, Mode=OneTime}"
 					           TextTrimming="CharacterEllipsis">
