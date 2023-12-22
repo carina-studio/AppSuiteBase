@@ -163,15 +163,15 @@ public class RegexTextBox : ObjectTextBox<Regex>
 			}
 
 			// open menu
-			if (popupToOpen != null)
+			if (popupToOpen is not null)
 			{
-				var padding = this.Padding;
-				var caretRect = this.textPresenter?.Let(it =>
-					it.TextLayout.HitTestTextPosition(Math.Max(0, it.CaretIndex - 1))
-				) ?? new Rect();
-				popupToOpen.PlacementRect = new Rect(caretRect.Left + padding.Left, caretRect.Top + padding.Top, caretRect.Width, caretRect.Height);
-				popupToOpen.PlacementTarget = this;
-				popupToOpen.Open();
+				var caretBounds = this.GetCaretBounds();
+				if (caretBounds.HasValue)
+				{
+					popupToOpen.PlacementRect = caretBounds.Value;
+					popupToOpen.PlacementTarget = this;
+					popupToOpen.Open();
+				}
 			}
 		});
 
@@ -343,6 +343,20 @@ public class RegexTextBox : ObjectTextBox<Regex>
 				});
 				it.DataContext = group;
 			});
+
+
+	/// <summary>
+	/// Get bounds of caret related to the control.
+	/// </summary>
+	/// <returns>Bounds of caret related to the control.</returns>
+	public Rect? GetCaretBounds()
+	{
+		if (this.textPresenter is null)
+			return null;
+		var padding = this.Padding;
+		var caretRect = this.textPresenter.TextLayout.HitTestTextPosition(Math.Max(0, this.textPresenter.CaretIndex - 1));
+		return new Rect(caretRect.Left + padding.Left, caretRect.Top + padding.Top, caretRect.Width, caretRect.Height);
+	}
 	
 
 	// Get keyword of grouping construct.
