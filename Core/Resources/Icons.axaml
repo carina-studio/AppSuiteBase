@@ -10,6 +10,8 @@
 	<Geometry x:Key="Geometry/Icon.AddTab">M3,3A2,2 0 0,0 1,5V19A2,2 0 0,0 3,21H21A2,2 0 0,0 23,19V5A2,2 0 0,0 21,3H3M3,5H13V9H21V19H3V5M10,10V13H7V15H10V18H12V15H15V13H12V10H10Z</Geometry>
 	<Geometry x:Key="Geometry/Icon.AddWindow">M9 10V8h2v2h2v2h-2v2H9v-2H7v-2h2zM0 3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3zm2 2v12h16V5H2z</Geometry>
 	<Geometry x:Key="Geometry/Icon.Administrator">M12,12H19C18.47,16.11 15.72,19.78 12,20.92V12H5V6.3L12,3.19M12,1L3,5V11C3,16.55 6.84,21.73 12,23C17.16,21.73 21,16.55 21,11V5L12,1Z</Geometry>
+	<Geometry x:Key="Geometry/Icon.Alert">M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z</Geometry>
+	<Geometry x:Key="Geometry/Icon.Alert.Outline">M11,15H13V17H11V15M11,7H13V13H11V7M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20Z</Geometry>
 	<Geometry x:Key="Geometry/Icon.Analysis">M9.98,6.685 L15.33,6.685 A0.6657,-0.6657 0 0 0 16,6.02 A6.015,-6.015 0 0 0 9.98,0.004376 A0.6657,-0.6657 0 0 0 9.315,0.6701 L9.315,6.02 A0.6657,-0.6657 0 0 0 9.98,6.685 z M10.65,1.392 A4.676,-4.676 0 0 1 14.61,5.354 L10.65,5.354 z M15.26,8.025 L8.721,8.025 A0.7298,-0.7298 0 0 1 7.991,7.295 L7.991,0.7422 A0.7379,-0.7379 0 0 0 7.173,0.004376 A8.02,-8.02 0 1 0 16,8.827 A0.7379,-0.7379 0 0 0 15.26,8.025 z</Geometry>
 	<GeometryGroup x:Key="Geometry/Icon.Analysis.Outline">
 		<StreamGeometry>M7.96875 0.96875C7.7305 0.875291 7.44058 0.88953 7.1875 1C2.24539 3.15721-0.632568 8.34759 0.125 13.6875C0.882573 19.0275 5.09043 23.2095 10.4375 23.9062C15.7846 24.603 20.9624 21.6239 23.0625 16.6562C23.2776 16.1476 23.0399 15.5901 22.5312 15.375C22.0226 15.1599 21.4338 15.3976 21.2188 15.9062C19.4687 20.0461 15.1745 22.4869 10.7188 21.9062C6.26296 21.3256 2.7251 17.8564 2.09375 13.4062C1.4624 8.95601 3.88155 4.64143 8 2.84375C8.50617 2.62281 8.75219 2.00617 8.53125 1.5C8.42078 1.24692 8.207 1.06221 7.96875 0.96875Z</StreamGeometry>
@@ -393,6 +395,27 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.AddWindow}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Administrator" Drawing="{StaticResource Drawing/Icon.Administrator}"/>
+	<DrawingImage x:Key="Image/Icon.Alert">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Alert}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Alert.Colored">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z"/>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Alert}" Geometry="{StaticResource Geometry/Icon.Alert}"/>
+		</DrawingGroup>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Alert.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Alert}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Alert.Outline">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Alert.Outline}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Alert.Outline.Colored">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Alert}" Geometry="{StaticResource Geometry/Icon.Alert.Outline}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Alert.Outline.Light">
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Alert.Outline}"/>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Analysis">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Analysis}"/>
 	</DrawingImage>

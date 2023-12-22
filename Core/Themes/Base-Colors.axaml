@@ -152,6 +152,7 @@
 	
 	<!-- Icon -->
 	<Color x:Key="Color/Icon">#000000</Color>
+	<Color x:Key="Color/Icon.Alert">#ff3232</Color>
 	<Color x:Key="Color/Icon.CPlusPlus.Dark">#004482</Color>
 	<Color x:Key="Color/Icon.CPlusPlus.Light">#659ad2</Color>
 	<Color x:Key="Color/Icon.CPlusPlus.Middle">#00599c</Color>
@@ -160,7 +161,7 @@
 	<Color x:Key="Color/Icon.CSharp.Middle">#7f3a86</Color>
 	<Color x:Key="Color/Icon.Dark">#000000</Color>
 	<SolidColorBrush x:Key="Brush/Icon.Dialog.Description" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Description}"/>
-	<Color x:Key="Color/Icon.Error">#ff3232</Color>
+	<StaticResourceExtension x:Key="Color/Icon.Error" ResourceKey="Color/Icon.Alert"/>
 	<Color x:Key="Color/Icon.Information">#288acc</Color>
 	<Color x:Key="Color/Icon.Inverse">#ffffff</Color>
 	<Color x:Key="Color/Icon.JavaScript">#e6bb00</Color>
@@ -174,6 +175,7 @@
 	<Color x:Key="Color/Icon.Warning">#ff8432</Color>
 	<SolidColorBrush x:Key="Brush/Icon" Color="{DynamicResource Color/Icon}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Active" Color="{DynamicResource Color/Accent}"/>
+	<SolidColorBrush x:Key="Brush/Icon.Alert" Color="{DynamicResource Color/Icon.Alert}"/>
 	<SolidColorBrush x:Key="Brush/Icon.CPlusPlus.Dark" Color="{DynamicResource Color/Icon.CPlusPlus.Dark}"/>
 	<SolidColorBrush x:Key="Brush/Icon.CPlusPlus.Light" Color="{DynamicResource Color/Icon.CPlusPlus.Light}"/>
 	<SolidColorBrush x:Key="Brush/Icon.CPlusPlus.Middle" Color="{DynamicResource Color/Icon.CPlusPlus.Middle}"/>
