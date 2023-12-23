@@ -55,6 +55,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	enum GroupingConstruct
 	{
 		NamedGroup,
+		// ReSharper disable once IdentifierTypo
 		NoncapturingGroup,
 		ZeroWidthPositiveLookaheadAssertion,
 		ZeroWidthNegativeLookaheadAssertion,
@@ -78,8 +79,12 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	readonly ObservableList<RegexGroup> predefinedGroups = new();
 	InputAssistancePopup? predefinedGroupsPopup;
 	readonly Queue<ListBoxItem> recycledListBoxItems = new();
+	Range<int> selectedGroupNameRange;
+	Range<int> selectedPhraseRange;
 	readonly ScheduledAction showAssistanceMenuAction;
 	TextPresenter? textPresenter;
+	// ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+	readonly ScheduledAction updateSelectedTokensAction;
 
 
 	/// <summary>
@@ -126,29 +131,28 @@ public class RegexTextBox : ObjectTextBox<Regex>
 						return;
 				}
 			}
+			
+			// update selected tokens if needed
+			this.updateSelectedTokensAction!.ExecuteIfScheduled();
 
 			// show predefined groups menu
 			var text = this.Text ?? "";
 			var textLength = text.Length;
 			var popupToOpen = (Popup?)null;
-			if (this.predefinedGroups.IsNotEmpty())
+			if (this.predefinedGroups.IsNotEmpty() && this.selectedGroupNameRange.IsClosed)
 			{
-				var (groupStart, groupEnd) = this.GetGroupNameSelection(text);
-				if (groupStart >= 0)
-				{
-					var filterText = this.Text?[groupStart..groupEnd]?.ToLower() ?? "";
-					this.filteredPredefinedGroups.Clear();
-					if (string.IsNullOrEmpty(filterText))
-						this.filteredPredefinedGroups.AddAll(this.predefinedGroups);
-					else
-						this.filteredPredefinedGroups.AddAll(this.predefinedGroups.Where(it => it.Name.ToLower().Contains(filterText)));
-					if (this.filteredPredefinedGroups.IsNotEmpty())
-						popupToOpen = this.SetupPredefinedGroupsPopup();
-				}
+				var filterText = this.Text?[this.selectedGroupNameRange.Start!.Value..this.selectedGroupNameRange.End!.Value]?.ToLower() ?? "";
+				this.filteredPredefinedGroups.Clear();
+				if (string.IsNullOrEmpty(filterText))
+					this.filteredPredefinedGroups.AddAll(this.predefinedGroups);
+				else
+					this.filteredPredefinedGroups.AddAll(this.predefinedGroups.Where(it => it.Name.ToLower().Contains(filterText)));
+				if (this.filteredPredefinedGroups.IsNotEmpty())
+					popupToOpen = this.SetupPredefinedGroupsPopup();
 			}
 
 			// show grouping constructs menu
-			if (popupToOpen == null && start >= 2 && start < textLength 
+			if (popupToOpen is null && start >= 2 && start < textLength 
 				&& text[start - 1] == '?' && text[start - 2] == '(' && text[start] == ')')
 			{
 				popupToOpen = this.SetupGroupingConstructsPopup();
@@ -158,7 +162,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 			if (this.isBackSlashPressed)
 			{
 				this.isBackSlashPressed = false;
-				if (popupToOpen == null && start > 0 && text[start - 1] == '\\' && (start <= 1 || text[start - 2] != '\\'))
+				if (popupToOpen is null && start > 0 && text[start - 1] == '\\' && (start <= 1 || text[start - 2] != '\\'))
 					popupToOpen = this.SetupEscapedCharactersPopup();
 			}
 
@@ -174,6 +178,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 				}
 			}
 		});
+		this.updateSelectedTokensAction = new(this.UpdateSelectedTokens);
 
 		// observe self properties
 		var isSubscribed = false;
@@ -197,12 +202,23 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		this.GetObservable(SelectionEndProperty).Subscribe(_ =>
 		{
 			if (isSubscribed)
+			{
+				this.updateSelectedTokensAction.Schedule();
 				this.showAssistanceMenuAction.Schedule();
+			}
 		});
 		this.GetObservable(SelectionStartProperty).Subscribe(_ =>
 		{
 			if (isSubscribed)
+			{
+				this.updateSelectedTokensAction.Schedule();
 				this.showAssistanceMenuAction.Schedule();
+			}
+		});
+		this.GetObservable(TextProperty).Subscribe(_ =>
+		{
+			if (isSubscribed)
+				this.updateSelectedTokensAction.Schedule();
 		});
 		isSubscribed = true;
 	}
@@ -370,32 +386,6 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		GroupingConstruct.ZeroWidthPositiveLookbehindAssertion => "<=",
 		_ => throw new NotSupportedException(),
 	};
-	
-
-	// Get selection range of group name.
-	(int, int) GetGroupNameSelection() =>
-		this.GetGroupNameSelection(this.Text ?? "");
-	(int, int) GetGroupNameSelection(string text)
-	{
-		var textLength = text.Length;
-		var selectionStart = Math.Min(this.SelectionStart, this.SelectionEnd) - 1;
-		if (selectionStart < 0)
-			return (-1, -1);
-		while (selectionStart >= 0 && text[selectionStart] != '<')
-		{
-			if (text[selectionStart] == '>')
-				return (-1, -1);
-			--selectionStart;
-		}
-		if (selectionStart < 2 || text[selectionStart - 1] != '?' || text[selectionStart - 2] != '(')
-			return (-1, -1);
-		for (var selectionEnd = selectionStart + 1; selectionEnd < textLength; ++selectionEnd)
-		{
-			if (text[selectionEnd] == '>')
-				return (selectionStart + 1, selectionEnd);
-		}
-		return (selectionStart + 1, textLength);
-	}
 
 
 	// Get current selection range
@@ -432,11 +422,11 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	// Input given group name.
 	void InputGroupName(string name)
 	{
-		var (start, end) = this.GetGroupNameSelection();
-		if (start >= 0)
+		var groupNameRange = RegexSyntaxHighlighting.FindGroupNameRange(this.Text, Math.Min(this.SelectionStart, this.SelectionEnd));
+		if (groupNameRange.IsClosed)
 		{
-			this.SelectionStart = start;
-			this.SelectionEnd = end;
+			this.SelectionStart = groupNameRange.Start!.Value;
+			this.SelectionEnd = groupNameRange.End!.Value;
 			this.SelectedText = name;
 			if (this.SelectionEnd < (this.Text?.Length ?? 0))
 			{
@@ -992,6 +982,47 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		});
 		rootPanel.Children.Insert(0, this.predefinedGroupsPopup);
 		return this.predefinedGroupsPopup;
+	}
+	
+	
+	// Update tokens around current selection.
+	void UpdateSelectedTokens()
+	{
+		// get text and selection
+		var text = this.Text;
+		var textLength = text?.Length ?? 0;
+		var (selectionStart, selectionEnd) = this.GetSelection();
+		var hasSelection = selectionEnd - selectionStart > 0;
+		
+		// find range of group name
+		this.selectedGroupNameRange = hasSelection
+			? default
+			: RegexSyntaxHighlighting.FindGroupNameRange(text, selectionStart);
+		
+		// find range of character classes
+		var selectedCharacterClassesRange = hasSelection 
+			? default 
+			: RegexSyntaxHighlighting.FindCharacterClassesRange(text, selectionStart);
+		
+		// find range of quantifier
+		var selectedQuantifierRange = hasSelection 
+			? default 
+			: RegexSyntaxHighlighting.FindQuantifierRange(text, selectionStart);
+
+		// find range of phrase
+		if (hasSelection 
+		    || textLength <= 0
+		    || selectedCharacterClassesRange.IsClosed 
+		    || this.selectedGroupNameRange.IsClosed
+		    || selectedQuantifierRange.IsClosed)
+		{
+			this.selectedPhraseRange = default;
+		}
+		else
+			this.selectedPhraseRange = RegexSyntaxHighlighting.FindPhraseRange(text, selectionStart);
+#if DEBUG
+		System.Diagnostics.Debug.WriteLine($"CharClasses: {selectedCharacterClassesRange}, GroupName: {this.selectedGroupNameRange}, Phrase: {this.selectedPhraseRange}");
+#endif
 	}
 
 
