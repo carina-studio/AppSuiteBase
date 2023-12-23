@@ -109,8 +109,10 @@ public class StringInterpolationFormatTextBox : TextBox
 			}
 		});
 
-		// observe self properties
+		// attach to self
 		var isSubscribed = false;
+		this.AddHandler(KeyDownEvent, this.OnPreviewKeyDown, RoutingStrategies.Tunnel);
+		this.AddHandler(KeyUpEvent, this.OnPreviewKeyUp, RoutingStrategies.Tunnel);
 		this.GetObservable(SelectionEndProperty).Subscribe(_ =>
 		{
 			if (isSubscribed)
@@ -354,7 +356,6 @@ public class StringInterpolationFormatTextBox : TextBox
 		// delete more characters
 		var isBackspace = e.Key == Key.Back;
 		var isDelete = e.Key == Key.Delete;
-		var isKeyForAssistantPopup = false;
 		if (isBackspace || isDelete)
 		{
 			var (selectionStart, selectionEnd) = this.GetSelection();
@@ -390,46 +391,9 @@ public class StringInterpolationFormatTextBox : TextBox
                 e.Handled = true;
 			}
 		}
-		else
-		{
-			switch (e.Key)
-			{
-				case Key.Down:
-				case Key.FnDownArrow:
-					if (this.predefinedVarsPopup?.IsOpen == true)
-					{
-						this.predefinedVarsPopup.ItemListBox.SelectNextItem();
-						isKeyForAssistantPopup = true;
-						e.Handled = true;
-					}
-					break;
-				case Key.Enter:
-					if (this.predefinedVarsPopup?.IsOpen == true)
-					{
-						isKeyForAssistantPopup = true;
-						e.Handled = true;
-					}
-					break;
-				case Key.FnUpArrow:
-				case Key.Up:
-					if (this.predefinedVarsPopup?.IsOpen == true)
-					{
-						this.predefinedVarsPopup.ItemListBox.SelectPreviousItem();
-						isKeyForAssistantPopup = true;
-						e.Handled = true;
-					}
-					break;
-			}
-		}
 
 		// call base
 		base.OnKeyDown(e);
-
-		// show/hide menu
-		if (e.Key == Key.Escape)
-			this.CloseAssistanceMenus();
-		else if (!isKeyForAssistantPopup)
-			this.showAssistanceMenuAction.Reschedule(50);
 	}
 
 
@@ -440,18 +404,6 @@ public class StringInterpolationFormatTextBox : TextBox
 		{
 			this.isEscapeKeyHandled = false;
 			e.Handled = true;
-		}
-		else if (e.Key == Key.Enter)
-		{
-			if (this.predefinedVarsPopup?.IsOpen == true)
-			{
-				(this.predefinedVarsPopup.ItemListBox.SelectedItem as ListBoxItem)?.Let(item =>
-				{
-					if (item.DataContext is StringInterpolationVariable variable)
-						this.InputVariableName(variable.Name);
-				});
-				this.predefinedVarsPopup?.Close();
-			}
 		}
 	}
 
@@ -471,6 +423,82 @@ public class StringInterpolationFormatTextBox : TextBox
     // Called when predefined variables changed.
 	void OnPredefinedVarsChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
 		this.showAssistanceMenuAction.Schedule();
+	
+	// Called before handling key down event by children.
+	void OnPreviewKeyDown(object? sender, KeyEventArgs e)
+	{
+		// handle key
+		var isKeyForAssistantPopup = false;
+		switch (e.Key)
+		{
+			case Key.Down:
+			case Key.FnDownArrow:
+				if (this.predefinedVarsPopup?.IsOpen == true)
+				{
+					this.predefinedVarsPopup.ItemListBox.SelectNextItem();
+					isKeyForAssistantPopup = true;
+					e.Handled = true;
+				}
+				break;
+			case Key.Enter:
+				if (this.predefinedVarsPopup?.IsOpen == true)
+				{
+					isKeyForAssistantPopup = true;
+					e.Handled = true;
+				}
+				break;
+			case Key.FnUpArrow:
+			case Key.Up:
+				if (this.predefinedVarsPopup?.IsOpen == true)
+				{
+					this.predefinedVarsPopup.ItemListBox.SelectPreviousItem();
+					isKeyForAssistantPopup = true;
+					e.Handled = true;
+				}
+				break;
+		}
+		
+		// show/hide menu
+		if (e.Key == Key.Escape)
+			this.CloseAssistanceMenus();
+		else if (!isKeyForAssistantPopup)
+		{
+			switch (e.Key)
+			{
+				case Key.LeftAlt:
+				case Key.LeftCtrl:
+				case Key.LeftShift:
+				case Key.LWin:
+				case Key.RightAlt:
+				case Key.RightCtrl:
+				case Key.RightShift:
+				case Key.RWin:
+					break;
+				default:
+					this.showAssistanceMenuAction.Reschedule(50);
+					break;
+			}
+		}
+	}
+
+
+	// Called before handling key up event by children.
+	void OnPreviewKeyUp(object? sender, KeyEventArgs e)
+	{
+		if (e.Key == Key.Enter)
+		{
+			if (this.predefinedVarsPopup?.IsOpen == true)
+			{
+				(this.predefinedVarsPopup.ItemListBox.SelectedItem as ListBoxItem)?.Let(item =>
+				{
+					if (item.DataContext is StringInterpolationVariable variable)
+						this.InputVariableName(variable.Name);
+				});
+				this.CloseAssistanceMenus();
+				e.Handled = true;
+			}
+		}
+	}
 
 
     /// <inheritdoc/>

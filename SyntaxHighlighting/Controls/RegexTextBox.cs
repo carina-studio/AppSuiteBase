@@ -180,13 +180,15 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		});
 		this.updateSelectedTokensAction = new(this.UpdateSelectedTokens);
 
-		// observe self properties
+		// attach to self
 		var isSubscribed = false;
 		this.GetObservable(IgnoreCaseProperty).Subscribe(_ =>
 		{
 			if (isSubscribed)
 				this.Validate();
 		});
+		this.AddHandler(KeyDownEvent, this.OnPreviewKeyDown, RoutingStrategies.Tunnel);
+		this.AddHandler(KeyUpEvent, this.OnPreviewKeyUp, RoutingStrategies.Tunnel);
 		this.GetObservable(ObjectProperty).Subscribe(o =>
 		{
 			if (o is Regex regex && ((regex.Options & RegexOptions.IgnoreCase) != 0) != this.IgnoreCase)
@@ -580,7 +582,6 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		// delete more characters
 		var isBackspace = e.Key == Key.Back;
 		var isDelete = e.Key == Key.Delete;
-		var isKeyForAssistantPopup = false;
 		if (isBackspace || isDelete)
 		{
 			var selectionStart = this.SelectionStart;
@@ -651,72 +652,9 @@ public class RegexTextBox : ObjectTextBox<Regex>
 					break;
 			}
 		}
-		else
-		{
-			switch (e.Key)
-			{
-				case Key.Down:
-				case Key.FnDownArrow:
-					if (this.escapedCharactersPopup?.IsOpen == true)
-					{
-						this.escapedCharactersPopup.ItemListBox.SelectNextItem();
-						isKeyForAssistantPopup = true;
-						e.Handled = true;
-					}
-					else if (this.groupingConstructsPopup?.IsOpen == true)
-					{
-						this.groupingConstructsPopup.ItemListBox.SelectNextItem();
-						isKeyForAssistantPopup = true;
-						e.Handled = true;
-					}
-					else if (this.predefinedGroupsPopup?.IsOpen == true)
-					{
-						this.predefinedGroupsPopup.ItemListBox.SelectNextItem();
-						isKeyForAssistantPopup = true;
-						e.Handled = true;
-					}
-					break;
-				case Key.Enter:
-					if (this.escapedCharactersPopup?.IsOpen == true
-						|| this.groupingConstructsPopup?.IsOpen == true
-						|| this.predefinedGroupsPopup?.IsOpen == true)
-					{
-						isKeyForAssistantPopup = true;
-						e.Handled = true;
-					}
-					break;
-				case Key.FnUpArrow:
-				case Key.Up:
-					if (this.escapedCharactersPopup?.IsOpen == true)
-					{
-						this.escapedCharactersPopup.ItemListBox.SelectPreviousItem();
-						isKeyForAssistantPopup = true;
-						e.Handled = true;
-					}
-					else if (this.groupingConstructsPopup?.IsOpen == true)
-					{
-						this.groupingConstructsPopup.ItemListBox.SelectPreviousItem();
-						isKeyForAssistantPopup = true;
-						e.Handled = true;
-					}
-					else if (this.predefinedGroupsPopup?.IsOpen == true)
-					{
-						this.predefinedGroupsPopup.ItemListBox.SelectPreviousItem();
-						isKeyForAssistantPopup = true;
-						e.Handled = true;
-					}
-					break;
-			}
-		}
 
 		// call base
 		base.OnKeyDown(e);
-
-		// show/hide menu
-		if (e.Key == Key.Escape)
-			this.CloseAssistanceMenus();
-		else if (!isKeyForAssistantPopup)
-			this.showAssistanceMenuAction.Reschedule(50);
 	}
 
 
@@ -728,7 +666,103 @@ public class RegexTextBox : ObjectTextBox<Regex>
 			this.isEscapeKeyHandled = false;
 			e.Handled = true;
 		}
-		else if (e.Key == Key.Enter)
+		base.OnKeyUp(e);
+	}
+
+
+	// Called when predefined groups changed.
+	void OnPredefinedGroupChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
+		this.showAssistanceMenuAction.Schedule();
+
+
+	// Called before handling key down event by children.
+	void OnPreviewKeyDown(object? sender, KeyEventArgs e)
+	{
+		// handle key
+		var isKeyForAssistantPopup = false;
+		switch (e.Key)
+		{
+			case Key.Down:
+			case Key.FnDownArrow:
+				if (this.escapedCharactersPopup?.IsOpen == true)
+				{
+					this.escapedCharactersPopup.ItemListBox.SelectNextItem();
+					isKeyForAssistantPopup = true;
+					e.Handled = true;
+				}
+				else if (this.groupingConstructsPopup?.IsOpen == true)
+				{
+					this.groupingConstructsPopup.ItemListBox.SelectNextItem();
+					isKeyForAssistantPopup = true;
+					e.Handled = true;
+				}
+				else if (this.predefinedGroupsPopup?.IsOpen == true)
+				{
+					this.predefinedGroupsPopup.ItemListBox.SelectNextItem();
+					isKeyForAssistantPopup = true;
+					e.Handled = true;
+				}
+				break;
+			case Key.Enter:
+				if (this.escapedCharactersPopup?.IsOpen == true
+				    || this.groupingConstructsPopup?.IsOpen == true
+				    || this.predefinedGroupsPopup?.IsOpen == true)
+				{
+					isKeyForAssistantPopup = true;
+					e.Handled = true;
+				}
+				break;
+			case Key.FnUpArrow:
+			case Key.Up:
+				if (this.escapedCharactersPopup?.IsOpen == true)
+				{
+					this.escapedCharactersPopup.ItemListBox.SelectPreviousItem();
+					isKeyForAssistantPopup = true;
+					e.Handled = true;
+				}
+				else if (this.groupingConstructsPopup?.IsOpen == true)
+				{
+					this.groupingConstructsPopup.ItemListBox.SelectPreviousItem();
+					isKeyForAssistantPopup = true;
+					e.Handled = true;
+				}
+				else if (this.predefinedGroupsPopup?.IsOpen == true)
+				{
+					this.predefinedGroupsPopup.ItemListBox.SelectPreviousItem();
+					isKeyForAssistantPopup = true;
+					e.Handled = true;
+				}
+				break;
+		}
+		
+		// show/hide menu
+		if (e.Key == Key.Escape)
+			this.CloseAssistanceMenus();
+		else if (!isKeyForAssistantPopup)
+		{
+			switch (e.Key)
+			{
+				case Key.LeftAlt:
+				case Key.LeftCtrl:
+				case Key.LeftShift:
+				case Key.LWin:
+				case Key.RightAlt:
+				case Key.RightCtrl:
+				case Key.RightShift:
+				case Key.RWin:
+					break;
+				default:
+					this.showAssistanceMenuAction.Reschedule(50);
+					break;
+			}
+		}
+	}
+	
+	
+	// Called before handling key up event by children.
+	void OnPreviewKeyUp(object? sender, KeyEventArgs e)
+	{
+		if (e.Key == Key.Enter)
 		{
 			if (this.escapedCharactersPopup?.IsOpen == true)
 			{
@@ -737,7 +771,8 @@ public class RegexTextBox : ObjectTextBox<Regex>
 					if (item.DataContext is char c)
 						this.InputString(c.ToString());
 				});
-				this.escapedCharactersPopup?.Close();
+				this.CloseAssistanceMenus();
+				e.Handled = true;
 			}
 			else if (this.groupingConstructsPopup?.IsOpen == true)
 			{
@@ -746,7 +781,8 @@ public class RegexTextBox : ObjectTextBox<Regex>
 					if (item.DataContext is GroupingConstruct groupingConstruct)
 						this.InputGroupingConstruct(groupingConstruct);
 				});
-				this.groupingConstructsPopup?.Close();
+				this.CloseAssistanceMenus();
+				e.Handled = true;
 			}
 			else if (this.predefinedGroupsPopup?.IsOpen == true)
 			{
@@ -755,15 +791,11 @@ public class RegexTextBox : ObjectTextBox<Regex>
 					if (item.DataContext is RegexGroup group)
 						this.InputGroupName(group.Name);
 				});
-				this.predefinedGroupsPopup?.Close();
+				this.CloseAssistanceMenus();
+				e.Handled = true;
 			}
 		}
 	}
-
-
-	// Called when predefined groups changed.
-	void OnPredefinedGroupChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
-		this.showAssistanceMenuAction.Schedule();
 
 
 	/// <inheritdoc/>
