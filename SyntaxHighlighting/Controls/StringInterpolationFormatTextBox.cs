@@ -10,6 +10,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.VisualTree;
+using CarinaStudio.AppSuite.Controls.Highlighting;
 using CarinaStudio.Collections;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
@@ -82,10 +83,10 @@ public class StringInterpolationFormatTextBox : TextBox
 			var popupToOpen = (Popup?)null;
 			if (this.predefinedVars.IsNotEmpty())
 			{
-				var (varStart, varEnd) = this.GetVariableNameSelection(text);
-				if (varStart >= 0)
+				var varNameRange = StringInterpolationFormatSyntaxHighlighting.FindVariableNameRange(text, start);
+				if (varNameRange.IsClosed)
 				{
-					var filterText = this.Text?[varStart..varEnd]?.ToLower() ?? "";
+					var filterText = this.Text?[(varNameRange.Start!.Value + 1)..(varNameRange.End!.Value - 1)]?.ToLower() ?? "";
 					this.filteredPredefinedVars.Clear();
 					if (string.IsNullOrEmpty(filterText))
 						this.filteredPredefinedVars.AddAll(this.predefinedVars);
@@ -211,43 +212,17 @@ public class StringInterpolationFormatTextBox : TextBox
 	}
 
 
-    // Get selection range of variable name.
-    (int, int) GetVariableNameSelection() =>
-        this.GetVariableNameSelection(this.Text ?? "");
-	(int, int) GetVariableNameSelection(string text)
-	{
-		var textLength = text.Length;
-		var selectionStart = Math.Min(this.SelectionStart, this.SelectionEnd) - 1;
-		if (selectionStart < 0)
-			return (-1, -1);
-		while (selectionStart >= 0 && text[selectionStart] != '{')
-		{
-            var c = text[selectionStart];
-			if (c == '}' || c == ':' || c == ',')
-				return (-1, -1);
-			--selectionStart;
-		}
-		if (selectionStart < 0)
-			return (-1, -1);
-		for (var selectionEnd = selectionStart + 1; selectionEnd < textLength; ++selectionEnd)
-		{
-            var c = text[selectionEnd];
-			if (c == '}' || c == ':' || c == ',')
-				return (selectionStart + 1, selectionEnd);
-		}
-		return (selectionStart + 1, textLength);
-	}
-
-
     // Input given variable name.
 	void InputVariableName(string name)
 	{
-		var (start, end) = this.GetVariableNameSelection();
-		if (start >= 0)
+		var text = this.Text;
+		var varNameRange = StringInterpolationFormatSyntaxHighlighting.FindVariableNameRange(text, Math.Min(this.SelectionStart, this.SelectionEnd));
+		if (varNameRange.IsClosed)
 		{
-			this.SelectionStart = start;
-			this.SelectionEnd = end;
-			this.SelectedText = name;
+			var endingChar = text![varNameRange.End!.Value - 1];
+			this.SelectionStart = varNameRange.Start!.Value;
+			this.SelectionEnd = varNameRange.End!.Value;
+			this.SelectedText = $"{{{name}{endingChar}";
 			if (this.SelectionEnd < (this.Text?.Length ?? 0))
 			{
 				++this.SelectionEnd;
@@ -280,7 +255,7 @@ public class StringInterpolationFormatTextBox : TextBox
 				if (this.isSyntaxHighlightingEnabled)
 				{
 					AppSuiteApplication.CurrentOrNull?.Let(app =>
-						shTextPresenter.DefinitionSet = Highlighting.StringInterpolationFormatSyntaxHighlighting.CreateDefinitionSet(app));
+						shTextPresenter.DefinitionSet = StringInterpolationFormatSyntaxHighlighting.CreateDefinitionSet(app));
 				}
 				else
 					shTextPresenter.DefinitionSet = null;
@@ -297,7 +272,7 @@ public class StringInterpolationFormatTextBox : TextBox
 		if (this.isSyntaxHighlightingEnabled && textPresenter is Presenters.SyntaxHighlightingTextPresenter shTextPresenter)
 		{
 			AppSuiteApplication.CurrentOrNull?.Let(app =>
-				shTextPresenter.DefinitionSet = Highlighting.StringInterpolationFormatSyntaxHighlighting.CreateDefinitionSet(app));
+				shTextPresenter.DefinitionSet = StringInterpolationFormatSyntaxHighlighting.CreateDefinitionSet(app));
 		}
 	}
 
@@ -495,7 +470,6 @@ public class StringInterpolationFormatTextBox : TextBox
 						this.InputVariableName(variable.Name);
 				});
 				this.CloseAssistanceMenus();
-				e.Handled = true;
 			}
 		}
 	}

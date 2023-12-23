@@ -772,7 +772,6 @@ public class RegexTextBox : ObjectTextBox<Regex>
 						this.InputString(c.ToString());
 				});
 				this.CloseAssistanceMenus();
-				e.Handled = true;
 			}
 			else if (this.groupingConstructsPopup?.IsOpen == true)
 			{
@@ -782,7 +781,6 @@ public class RegexTextBox : ObjectTextBox<Regex>
 						this.InputGroupingConstruct(groupingConstruct);
 				});
 				this.CloseAssistanceMenus();
-				e.Handled = true;
 			}
 			else if (this.predefinedGroupsPopup?.IsOpen == true)
 			{
@@ -792,7 +790,6 @@ public class RegexTextBox : ObjectTextBox<Regex>
 						this.InputGroupName(group.Name);
 				});
 				this.CloseAssistanceMenus();
-				e.Handled = true;
 			}
 		}
 	}

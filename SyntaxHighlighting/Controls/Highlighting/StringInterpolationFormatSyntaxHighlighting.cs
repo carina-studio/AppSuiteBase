@@ -1,5 +1,4 @@
 using Avalonia.Media;
-using CarinaStudio.Controls;
 using System.Text.RegularExpressions;
 
 namespace CarinaStudio.AppSuite.Controls.Highlighting;
@@ -75,5 +74,44 @@ public static class StringInterpolationFormatSyntaxHighlighting
 
         // complete
         return definitionSet;
+    }
+
+
+    /// <summary>
+    /// Find the range of variable name around given position.
+    /// </summary>
+    /// <param name="text">The text.</param>
+    /// <param name="index">Index of position in the text.</param>
+    /// <returns>The range of variable name.</returns>
+    public static unsafe Range<int> FindVariableNameRange(string? text, int index)
+    {
+        if (text is null)
+            return default;
+        var textLength = text.Length;
+        var start = index - 1;
+        if (start < 0)
+            return default;
+        fixed (char* p = text)
+        {
+            if (p is null)
+                return default;
+            var cPtr = p;
+            while (start >= 0 && cPtr[start] != '{')
+            {
+                var c = cPtr[start];
+                if (c == '}' || c == ':' || c == ',')
+                    return default;
+                --start;
+            }
+            if (start < 0)
+                return default;
+            for (var end = start + 1; end < textLength; ++end)
+            {
+                var c = cPtr[end];
+                if (c == '}' || c == ':' || c == ',')
+                    return (start, end + 1);
+            }
+            return default;
+        }
     }
 }
