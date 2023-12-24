@@ -1,9 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
-using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -123,8 +123,11 @@ class TextInputDialogImpl : InputDialog
 	{
 		this.HideCaptionButtons();
 		base.OnOpened(e);
-		this.textBox.SelectAll();
-		this.textBox.Focus();
+		this.SynchronizationContext.Post(() =>
+		{
+			this.textBox.SelectAll();
+			this.textBox.Focus();
+		});
 	}
 
 

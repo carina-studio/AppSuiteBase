@@ -26,7 +26,6 @@ public abstract class DocumentSource : BaseApplicationObject<IAppSuiteApplicatio
     /// <summary>
     /// Get or set culture of document.
     /// </summary>
-    /// <value></value>
     public ApplicationCulture Culture
     {
         get => this.culture;
@@ -81,7 +80,7 @@ public static class DocumentSourceExtensions
     public static bool SetToCurrentCulture(this DocumentSource source)
     {
         // get current culture
-        var cultureName = AppSuiteApplication.CurrentOrNull?.CultureInfo?.Name;
+        var cultureName = AppSuiteApplication.CurrentOrNull?.CultureInfo.Name;
         if (string.IsNullOrEmpty(cultureName))
             return false;
         

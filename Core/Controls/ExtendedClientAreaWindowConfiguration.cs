@@ -1,6 +1,5 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using System;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -53,19 +52,19 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Check whether <see cref="SystemChromePlacement"/> is <see cref="PlacementMode.Left"/> or not.
         /// </summary>
-        public static bool IsSystemChromePlacedAtLeft { get => SystemChromePlacement == PlacementMode.Left; }
+        public static bool IsSystemChromePlacedAtLeft => SystemChromePlacement == PlacementMode.Left;
 
 
         /// <summary>
         /// Check whether <see cref="SystemChromePlacement"/> is <see cref="PlacementMode.Right"/> or not.
         /// </summary>
-        public static bool IsSystemChromePlacedAtRight { get => SystemChromePlacement == PlacementMode.Right; }
+        public static bool IsSystemChromePlacedAtRight => SystemChromePlacement == PlacementMode.Right;
 
 
         /// <summary>
         /// Check whether system chrome is visible when <see cref="Avalonia.Controls.Window.WindowState"/> is <see cref="WindowState.FullScreen"/> or not.
         /// </summary>
-        public static bool IsSystemChromeVisibleInFullScreen { get; } = false;
+        public static bool IsSystemChromeVisibleInFullScreen => false;
 
 
         /// <summary>

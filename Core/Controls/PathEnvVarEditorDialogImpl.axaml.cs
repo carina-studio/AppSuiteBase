@@ -24,6 +24,7 @@ class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 
 
 	// Fields.
+	// ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
 	readonly Avalonia.Controls.ListBox customPathListBox;
 	readonly Avalonia.Controls.ListBox pathListBox;
 	readonly SortedObservableList<string> paths = new((lhs, rhs) => string.Compare(lhs, rhs, true, CultureInfo.InvariantCulture));

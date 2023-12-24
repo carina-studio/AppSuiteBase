@@ -96,16 +96,16 @@ namespace CarinaStudio.AppSuite.Controls
 		// Key of setting.
 		public SettingKey? SettingKey
 		{
-			get => this.GetValue<SettingKey?>(SettingKeyProperty);
-			set => this.SetValue<SettingKey?>(SettingKeyProperty, value);
+			get => this.GetValue(SettingKeyProperty);
+			set => this.SetValue(SettingKeyProperty, value);
 		}
 
 
 		// Settings.
 		public new ISettings? Settings
 		{
-			get => this.GetValue<ISettings?>(SettingsProperty);
-			set => this.SetValue<ISettings?>(SettingsProperty, value);
+			get => this.GetValue(SettingsProperty);
+			set => this.SetValue(SettingsProperty, value);
 		}
 
 

@@ -1,5 +1,4 @@
 using CarinaStudio.Threading;
-using System;
 
 namespace CarinaStudio.AppSuite.Controls;
 

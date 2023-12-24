@@ -26,6 +26,7 @@ namespace CarinaStudio.AppSuite.Controls
         Control? content;
         DoubleAnimator? contentFadingAnimator;
         Control? contentFadingOverlay;
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         readonly ScheduledAction fadeInContentAction;
 
 
@@ -43,7 +44,7 @@ namespace CarinaStudio.AppSuite.Controls
                     : new DoubleAnimator(this.content.AsNonNull().Opacity, 1.0);
                 this.contentFadingAnimator.Let(it =>
                 {
-                    it.Completed += (_, e) =>
+                    it.Completed += (_, _) =>
                     {
                         if (this.contentFadingOverlay != null)
                         {
@@ -58,7 +59,7 @@ namespace CarinaStudio.AppSuite.Controls
                     };
                     it.Duration = ContentFadeInDuration;
                     it.Interpolator = Interpolators.Deceleration;
-                    it.ProgressChanged += (_, e) =>
+                    it.ProgressChanged += (_, _) =>
                     {
                         if (this.contentFadingOverlay != null)
                             this.contentFadingOverlay.Opacity = it.Value;
@@ -75,7 +76,7 @@ namespace CarinaStudio.AppSuite.Controls
             });
 
             // attach to window
-            window.Closed += (_, e) => this.fadeInContentAction.Cancel();
+            window.Closed += (_, _) => this.fadeInContentAction.Cancel();
             window.GetObservable(Window.ContentProperty).Subscribe(content =>
             {
                 this.fadeInContentAction.Cancel();
@@ -106,7 +107,7 @@ namespace CarinaStudio.AppSuite.Controls
                         : new DoubleAnimator(this.content.AsNonNull().Opacity, ContentFadeOutOpacity);
                     this.contentFadingAnimator.Let(it =>
                     {
-                        it.Completed += (_, e) =>
+                        it.Completed += (_, _) =>
                         {
                             if (this.contentFadingOverlay != null)
                                 this.contentFadingOverlay.Opacity = it.EndValue;
@@ -118,7 +119,7 @@ namespace CarinaStudio.AppSuite.Controls
                         };
                         it.Duration = ContentFadeOutDuration;
                         it.Interpolator = Interpolators.Deceleration;
-                        it.ProgressChanged += (_, e) =>
+                        it.ProgressChanged += (_, _) =>
                         {
                             if (this.contentFadingOverlay != null)
                                 this.contentFadingOverlay.Opacity = it.Value;

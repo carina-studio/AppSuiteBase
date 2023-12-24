@@ -104,10 +104,8 @@ namespace CarinaStudio.AppSuite.Controls
             var app = AppSuiteApplication.CurrentOrNull;
             this.minuteTextBlock?.Let(textBlock =>
             {
-                textBlock.Text = this.SelectedTime?.Let(it =>
-                {
-                    return app?.GetFormattedString("TimePicker.MinuteFormat", it.Minutes);
-                }) ?? app?.GetString("TimePicker.Minute");
+                textBlock.Text = this.SelectedTime?.Let(it => 
+                    app?.GetFormattedString("TimePicker.MinuteFormat", it.Minutes)) ?? app?.GetString("TimePicker.Minute");
             });
         }
 

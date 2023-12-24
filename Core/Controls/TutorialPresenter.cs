@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Controls.Primitives;
-using Avalonia.LogicalTree;
 using Avalonia.VisualTree;
 using System;
 using System.Threading;
@@ -27,7 +26,7 @@ public abstract class TutorialPresenter : TemplatedControl, ITutorialPresenter
     /// <summary>
     /// Initialize new <see cref="TutorialPresenter"/> instance.
     /// </summary>
-    public TutorialPresenter()
+    protected TutorialPresenter()
     {
         this.SynchronizationContext = SynchronizationContext.Current ?? throw new InvalidOperationException("No synchronization context on current thread.");
     }
@@ -44,7 +43,7 @@ public abstract class TutorialPresenter : TemplatedControl, ITutorialPresenter
         
         // dismiss
         this.OnDismissTutorial(tutorial);
-        this.SetAndRaise<Tutorial?>(CurrentTutorialProperty, ref this.currentTutorial, null);
+        this.SetAndRaise(CurrentTutorialProperty, ref this.currentTutorial, null);
         tutorial.Cancel();
     }
 
@@ -52,7 +51,7 @@ public abstract class TutorialPresenter : TemplatedControl, ITutorialPresenter
     /// <summary>
     /// Get <see cref="Tutorial"/> which is currently shown to user.
     /// </summary>
-    public Tutorial? CurrentTutorial { get => this.currentTutorial; }
+    public Tutorial? CurrentTutorial => this.currentTutorial;
 
 
     /// <summary>
@@ -68,7 +67,7 @@ public abstract class TutorialPresenter : TemplatedControl, ITutorialPresenter
         
         // dismiss
         this.OnDismissTutorial(tutorial);
-        this.SetAndRaise<Tutorial?>(CurrentTutorialProperty, ref this.currentTutorial, null);
+        this.SetAndRaise(CurrentTutorialProperty, ref this.currentTutorial, null);
         tutorial.Dismiss();
     }
 
@@ -78,7 +77,7 @@ public abstract class TutorialPresenter : TemplatedControl, ITutorialPresenter
     {
         base.OnAttachedToVisualTree(e);
         this.attachedWindow = this.FindAncestorOfType<Avalonia.Controls.Window>();
-        this.hasDialogsObserverToken = (this.attachedWindow as CarinaStudio.Controls.Window)?.GetObservable(CarinaStudio.Controls.Window.HasDialogsProperty)?.Subscribe(this.OnHasDialogsChanged);
+        this.hasDialogsObserverToken = (this.attachedWindow as CarinaStudio.Controls.Window)?.GetObservable(CarinaStudio.Controls.Window.HasDialogsProperty).Subscribe(this.OnHasDialogsChanged);
     }
 
 
@@ -143,7 +142,7 @@ public abstract class TutorialPresenter : TemplatedControl, ITutorialPresenter
         // show tutorial
         tutorial.Show(this);
         this.OnShowTutorial(tutorial);
-        this.SetAndRaise<Tutorial?>(CurrentTutorialProperty, ref this.currentTutorial, tutorial);
+        this.SetAndRaise(CurrentTutorialProperty, ref this.currentTutorial, tutorial);
 
         // complete
         return true;
