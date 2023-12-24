@@ -509,9 +509,10 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		public void ShowApplicationChangeList()
         {
-			_ = new DocumentViewerDialog()
+			_ = new DocumentViewerWindow
 			{
 				DocumentSource = this.Application.ChangeList,
+				Topmost = this.Topmost,
 			}.ShowDialog(this);
 		}
 

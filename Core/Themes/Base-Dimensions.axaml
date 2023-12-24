@@ -143,12 +143,12 @@
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Label">0,1,10,1</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TreeView.Margin">-1,1,0,1</Thickness>
 
-	<!-- DocumentViewerDialog -->
-	<sys:Double x:Key="Double/DocumentViewerDialog.Height">600</sys:Double>
-	<sys:Double x:Key="Double/DocumentViewerDialog.MinHeight">200</sys:Double>
-	<sys:Double x:Key="Double/DocumentViewerDialog.MinWidth">200</sys:Double>
-	<sys:Double x:Key="Double/DocumentViewerDialog.Width">800</sys:Double>
-	<GridLength x:Key="GridLength/DocumentViewerDialog.ToolBar.LeftPadding">8</GridLength> <!-- (Thickness/MarkdownViewer.Padding).Left - (Thickness/ToolBar.TextBlock.Margin).Left - (Thickness/ToolBar.Padding).Left -->
+	<!-- DocumentViewerWindow -->
+	<sys:Double x:Key="Double/DocumentViewerWindow.Height">600</sys:Double>
+	<sys:Double x:Key="Double/DocumentViewerWindow.MinHeight">200</sys:Double>
+	<sys:Double x:Key="Double/DocumentViewerWindow.MinWidth">200</sys:Double>
+	<sys:Double x:Key="Double/DocumentViewerWindow.Width">800</sys:Double>
+	<GridLength x:Key="GridLength/DocumentViewerWindow.ToolBar.LeftPadding">8</GridLength> <!-- (Thickness/MarkdownViewer.Padding).Left - (Thickness/ToolBar.TextBlock.Margin).Left - (Thickness/ToolBar.Padding).Left -->
 
 	<!-- Expander -->
 	<sys:Double x:Key="Double/Expander.Chevron.Size">10</sys:Double>

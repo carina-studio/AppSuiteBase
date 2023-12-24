@@ -31,7 +31,7 @@
 			<Border Classes="ToolBar" DockPanel.Dock="Top">
 				<Grid>
 					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="{StaticResource GridLength/DocumentViewerDialog.ToolBar.LeftPadding}"/>
+						<ColumnDefinition Width="{StaticResource GridLength/DocumentViewerWindow.ToolBar.LeftPadding}"/>
 						<ColumnDefinition Width="*"/>
 						<ColumnDefinition Width="Auto"/>
 					</Grid.ColumnDefinitions>

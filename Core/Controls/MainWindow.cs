@@ -1094,9 +1094,10 @@ namespace CarinaStudio.AppSuite.Controls
                 if (changeList != null)
                 {
                     this.PersistentState.SetValue<string>(LatestAppChangeListShownVersionKey, changeListVersion.ToString());
-                    await new DocumentViewerDialog()
+                    await new DocumentViewerWindow
                     {
                         DocumentSource = changeList,
+                        Topmost = this.Topmost,
                     }.ShowDialog(this);
                     this.isShowingInitialDialogs = false;
                     return;

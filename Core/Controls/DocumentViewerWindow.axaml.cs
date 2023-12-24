@@ -7,18 +7,25 @@ using System;
 namespace CarinaStudio.AppSuite.Controls;
 
 /// <summary>
-/// Dialog to show document.
+/// Window to show document.
 /// </summary>
-class DocumentViewerDialogImpl : Dialog
+public class DocumentViewerWindow : Dialog
 {
+    /// <summary>
+    /// Define <see cref="Message"/> property.
+    /// </summary>
+    public static readonly StyledProperty<string?> MessageProperty = AvaloniaProperty.Register<DocumentViewerWindow, string?>(nameof(Message));
+    
+    
     // Static fields.
-    static readonly StyledProperty<FontFamily> DocumentFontFamilyProperty = AvaloniaProperty.Register<DocumentViewerDialogImpl, FontFamily>(nameof(DocumentFontFamily), FontFamily.Default);
-    static readonly StyledProperty<Uri?> DocumentUriProperty = AvaloniaProperty.Register<DocumentViewerDialogImpl, Uri?>("DocumentUri");
-    public static readonly StyledProperty<string?> MessageProperty = AvaloniaProperty.Register<DocumentViewerDialogImpl, string?>(nameof(Message));
+    static readonly StyledProperty<FontFamily> DocumentFontFamilyProperty = AvaloniaProperty.Register<DocumentViewerWindow, FontFamily>(nameof(DocumentFontFamily), FontFamily.Default);
+    static readonly StyledProperty<Uri?> DocumentUriProperty = AvaloniaProperty.Register<DocumentViewerWindow, Uri?>("DocumentUri");
 
 
-    // Constructor.
-    public DocumentViewerDialogImpl()
+    /// <summary>
+    /// Initialize new <see cref="DocumentViewerWindow"/> instance.
+    /// </summary>
+    public DocumentViewerWindow()
     {
         AvaloniaXamlLoader.Load(this);
         this.Title = this.Application.Name;
