@@ -29,12 +29,41 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Markup.Xaml.Styling;
 using CarinaStudio.AppSuite.IO;
+using System.Threading;
 using TabControl = Avalonia.Controls.TabControl;
 
 namespace CarinaStudio.AppSuite.Tests
 {
     partial class MainWindow : Controls.MainWindow<App, Workspace>, INotificationPresenter
     {
+        class PhraseInputAssistanceProvider : IPhraseInputAssistanceProvider
+        {
+            public async Task<IList<string>> SelectCandidatePhrasesAsync(string prefix, string? postfix, CancellationToken cancellationToken)
+            {
+                if (prefix.Length > 5)
+                {
+                    await Task.Delay(200, cancellationToken);
+                    return new[]
+                    {
+                        $"{prefix[^5..]}-{postfix}",
+                        $"{prefix[^5..]}--{postfix}",
+                        $"{prefix[^5..]}---{postfix}",
+                    };
+                }
+                else
+                {
+                    await Task.Delay(50, cancellationToken);
+                    return new[]
+                    {
+                        $"{prefix}-{postfix}",
+                        $"{prefix}--{postfix}",
+                        $"{prefix}---{postfix}",
+                    };
+                }
+            }
+        }
+        
+        
         const string TabItemKey = "TabItem";
 
 
@@ -105,6 +134,7 @@ namespace CarinaStudio.AppSuite.Tests
                 // make a reference from RegexTextBox to MainWindow
                 it.GetObservable(RegexTextBox.IsTextValidProperty).Subscribe(_ =>
                 { });
+                it.PhraseInputAssistanceProvider = new PhraseInputAssistanceProvider();
             });
 
             var syntaxHighlightingDefSet = new SyntaxHighlightingDefinitionSet("C#").Also(defSet =>

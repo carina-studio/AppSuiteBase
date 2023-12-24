@@ -2,7 +2,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Input;
@@ -24,6 +23,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -49,6 +49,10 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	/// Property of <see cref="Object"/>.
 	/// </summary>
 	public static readonly new DirectProperty<RegexTextBox, Regex?> ObjectProperty = AvaloniaProperty.RegisterDirect<RegexTextBox, Regex?>(nameof(Object), t => t.Object, (t, o) => t.Object = o);
+	/// <summary>
+	/// Property of <see cref="PhraseInputAssistanceProvider"/>.
+	/// </summary>
+	public static readonly DirectProperty<RegexTextBox, IPhraseInputAssistanceProvider?> PhraseInputAssistanceProviderProperty = AvaloniaProperty.RegisterDirect<RegexTextBox, IPhraseInputAssistanceProvider?>(nameof(PhraseInputAssistanceProvider), t => t.phraseInputAssistanceProvider, (t, o) => t.PhraseInputAssistanceProvider = o);
 
 
 	// Grouping construct.
@@ -69,6 +73,9 @@ public class RegexTextBox : ObjectTextBox<Regex>
 
 
 	// Fields.
+	readonly ObservableList<string> candidatePhrases = new();
+	CancellationTokenSource? candidatePhrasesSelectionCTS;
+	InputAssistancePopup? candidatePhrasesPopup;
 	InputAssistancePopup? escapedCharactersPopup;
 	readonly ObservableList<ListBoxItem> filteredPredefinedGroupListBoxItems = new();
 	readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new((x, y) => string.Compare(x.Name, y.Name, true, CultureInfo.InvariantCulture));
@@ -76,6 +83,8 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	bool isBackSlashPressed;
 	bool isEscapeKeyHandled;
 	bool isSyntaxHighlightingEnabled = true;
+	bool isTextInputtedBeforeOpeningAssistanceMenu;
+	IPhraseInputAssistanceProvider? phraseInputAssistanceProvider;
 	readonly ObservableList<RegexGroup> predefinedGroups = new();
 	InputAssistancePopup? predefinedGroupsPopup;
 	readonly Queue<ListBoxItem> recycledListBoxItems = new();
@@ -105,8 +114,9 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		this.showAssistanceMenuAction = new ScheduledAction(() =>
 		{
 			// close menu first
-			if (this.escapedCharactersPopup?.IsOpen == true
-				|| this.groupingConstructsPopup?.IsOpen == true
+			if (this.candidatePhrasesPopup?.IsOpen == true 
+			    || this.escapedCharactersPopup?.IsOpen == true
+			    || this.groupingConstructsPopup?.IsOpen == true
 				|| this.predefinedGroupsPopup?.IsOpen == true)
 			{
 				this.CloseAssistanceMenus();
@@ -165,16 +175,29 @@ public class RegexTextBox : ObjectTextBox<Regex>
 				if (popupToOpen is null && start > 0 && text[start - 1] == '\\' && (start <= 1 || text[start - 2] != '\\'))
 					popupToOpen = this.SetupEscapedCharactersPopup();
 			}
+			
+			// show phrases menu
+			if (popupToOpen is null 
+			    && this.selectedPhraseRange.IsClosed 
+			    && this.phraseInputAssistanceProvider is not null
+			    && this.isTextInputtedBeforeOpeningAssistanceMenu)
+			{
+				popupToOpen = this.SetupCandidatePhrasesPopup();
+			}
 
 			// open menu
+			this.isTextInputtedBeforeOpeningAssistanceMenu = false;
 			if (popupToOpen is not null)
 			{
-				var caretBounds = this.GetCaretBounds();
-				if (caretBounds.HasValue)
+				if (popupToOpen == this.candidatePhrasesPopup)
+					this.OpenCandidatePhrasesMenu();
+				else
 				{
-					popupToOpen.PlacementRect = caretBounds.Value;
-					popupToOpen.PlacementTarget = this;
-					popupToOpen.Open();
+					this.GetCaretBounds()?.Let(caretBounds =>
+					{
+						popupToOpen.PlacementRect = caretBounds.Inflate(this.FindResourceOrDefault<double>("Double/InputAssistancePopup.Offset"));
+						popupToOpen.Open();
+					});
 				}
 			}
 		});
@@ -186,6 +209,14 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		{
 			if (isSubscribed)
 				this.Validate();
+		});
+		this.GetObservable(IsInputAssistanceEnabledProperty).Subscribe(isEnabled =>
+		{
+			if (isSubscribed && !isEnabled)
+			{
+				this.isTextInputtedBeforeOpeningAssistanceMenu = false;
+				this.CloseAssistanceMenus();
+			}
 		});
 		this.AddHandler(KeyDownEvent, this.OnPreviewKeyDown, RoutingStrategies.Tunnel);
 		this.AddHandler(KeyUpEvent, this.OnPreviewKeyUp, RoutingStrategies.Tunnel);
@@ -230,6 +261,18 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	/// Raised when one of assistance menus has been opened.
 	/// </summary>
 	public event EventHandler? AssistanceMenuOpened;
+	
+	
+	// Cancel candidate phrases selection.
+	void CancelSelectingCandidatePhrases()
+	{
+		if (this.candidatePhrasesSelectionCTS is not null)
+		{
+			this.candidatePhrasesSelectionCTS.Cancel();
+			this.candidatePhrasesSelectionCTS.Dispose();
+			this.candidatePhrasesSelectionCTS = null;
+		}
+	}
 
 
 	/// <inheritdoc/>
@@ -248,6 +291,8 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	/// </summary>
 	public void CloseAssistanceMenus()
 	{
+		this.CancelSelectingCandidatePhrases();
+		this.candidatePhrasesPopup?.Close();
 		this.escapedCharactersPopup?.Close();
 		this.groupingConstructsPopup?.Close();
 		this.predefinedGroupsPopup?.Close();
@@ -443,6 +488,59 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	/// Command to input group name.
 	/// </summary>
 	public ICommand InputGroupNameCommand { get; }
+
+
+	// Input a phrase.
+	unsafe void InputPhrase(string phrase)
+	{
+		// check state
+		this.updateSelectedTokensAction.ExecuteIfScheduled();
+		var selectedPhraseRange = this.selectedPhraseRange;
+		if (!selectedPhraseRange.IsClosed)
+			return;
+		var text = this.Text;
+		if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(phrase))
+			return;
+
+		// find proper selection
+		var selection = (text.AsMemory(), phrase.AsMemory()).PinAs((char* textPtr, char* phrasePtr) =>
+		{
+			// get state
+			var phraseLength = phrase.Length;
+			var (selectionStart, selectionEnd) = this.GetSelection();
+			
+			// find selection start
+			var newSelectionStart = phraseLength >= (selectionStart - selectedPhraseRange.Start!.Value)
+				? selectedPhraseRange.Start!.Value
+				: selectionStart - phraseLength;
+			while (newSelectionStart < selectionStart)
+			{
+				var isPrefixMatched = true;
+				for (var i = newSelectionStart; i < selectionStart; ++i)
+				{
+					if (textPtr[i] != phrasePtr[i - newSelectionStart])
+					{
+						isPrefixMatched = false;
+						break;
+					}
+				}
+				if (isPrefixMatched)
+					break;
+				++newSelectionStart;
+			}
+			
+			// complete
+			return new Range<int>(newSelectionStart, Math.Max(newSelectionStart, selectionEnd));
+		});
+		
+		// insert phrase
+		if (selection.IsClosed)
+		{
+			this.SelectionStart = selection.Start!.Value;
+			this.SelectionEnd = selection.End!.Value;
+		}
+		this.SelectedText = phrase;
+	}
 
 
 	// Input given string.
@@ -651,6 +749,8 @@ public class RegexTextBox : ObjectTextBox<Regex>
 					}
 					break;
 			}
+			if (isBackspace)
+				this.isTextInputtedBeforeOpeningAssistanceMenu = true;
 		}
 
 		// call base
@@ -684,6 +784,12 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		{
 			case Key.Down:
 			case Key.FnDownArrow:
+				if (this.candidatePhrasesPopup?.IsOpen == true)
+				{
+					this.candidatePhrasesPopup.ItemListBox.SelectNextItem();
+					isKeyForAssistantPopup = true;
+					e.Handled = true;
+				}
 				if (this.escapedCharactersPopup?.IsOpen == true)
 				{
 					this.escapedCharactersPopup.ItemListBox.SelectNextItem();
@@ -704,7 +810,8 @@ public class RegexTextBox : ObjectTextBox<Regex>
 				}
 				break;
 			case Key.Enter:
-				if (this.escapedCharactersPopup?.IsOpen == true
+				if (this.candidatePhrasesPopup?.IsOpen == true 
+				    || this.escapedCharactersPopup?.IsOpen == true
 				    || this.groupingConstructsPopup?.IsOpen == true
 				    || this.predefinedGroupsPopup?.IsOpen == true)
 				{
@@ -714,6 +821,12 @@ public class RegexTextBox : ObjectTextBox<Regex>
 				break;
 			case Key.FnUpArrow:
 			case Key.Up:
+				if (this.candidatePhrasesPopup?.IsOpen == true)
+				{
+					this.candidatePhrasesPopup.ItemListBox.SelectPreviousItem();
+					isKeyForAssistantPopup = true;
+					e.Handled = true;
+				}
 				if (this.escapedCharactersPopup?.IsOpen == true)
 				{
 					this.escapedCharactersPopup.ItemListBox.SelectPreviousItem();
@@ -764,6 +877,12 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	{
 		if (e.Key == Key.Enter)
 		{
+			if (this.candidatePhrasesPopup?.IsOpen == true)
+			{
+				if (this.candidatePhrasesPopup.ItemListBox.SelectedItem is string phrase)
+					this.InputPhrase(phrase);
+				this.CloseAssistanceMenus();
+			}
 			if (this.escapedCharactersPopup?.IsOpen == true)
 			{
 				(this.escapedCharactersPopup.ItemListBox.SelectedItem as ListBoxItem)?.Let(item =>
@@ -802,6 +921,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		var s = e.Text;
 		if (this.IsReadOnly || !this.IsInputAssistanceEnabled || string.IsNullOrEmpty(s))
 		{
+			this.isTextInputtedBeforeOpeningAssistanceMenu = false;
 			base.OnTextInput(e);
 			return;
 		}
@@ -880,7 +1000,98 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		}
 
 		// show assistance menu
+		this.isTextInputtedBeforeOpeningAssistanceMenu = true;
 		this.showAssistanceMenuAction.Reschedule();
+	}
+	
+	
+	// Select candidate phrases and open the menu.
+	async void OpenCandidatePhrasesMenu()
+	{
+		// cancel current selection
+		this.CancelSelectingCandidatePhrases();
+		
+		// check state
+		if (this.phraseInputAssistanceProvider is null)
+		{
+			this.candidatePhrasesPopup?.Close();
+			this.candidatePhrases.Clear();
+			return;
+		}
+		
+		// check selection
+		var (selectionStart, selectionEnd) = this.GetSelection();
+		if (selectionStart != selectionEnd)
+		{
+			this.candidatePhrasesPopup?.Close();
+			this.candidatePhrases.Clear();
+			return;
+		}
+		
+		// get prefix and postfix to select phrases
+		this.updateSelectedTokensAction.ExecuteIfScheduled();
+		var selectedPhraseRange = this.selectedPhraseRange;
+		if (!selectedPhraseRange.IsClosed || selectionStart <= selectedPhraseRange.Start)
+		{
+			this.candidatePhrasesPopup?.Close();
+			this.candidatePhrases.Clear();
+			return;
+		}
+		var text = this.Text.AsNonNull();
+		var prefix = text[selectedPhraseRange.Start!.Value..selectionStart];
+		var postfix = selectionStart < selectedPhraseRange.End
+			? text[selectionStart..selectedPhraseRange.End!.Value]
+			: null;
+		
+		// select phrases
+		IList<string> selectedPhrases;
+		var cts = new CancellationTokenSource();
+		this.candidatePhrasesSelectionCTS = cts;
+		try
+		{
+			selectedPhrases = await this.phraseInputAssistanceProvider.SelectCandidatePhrasesAsync(prefix, postfix, cts.Token);
+		}
+		catch (Exception ex)
+		{
+			if (ex is not TaskCanceledException && this.candidatePhrasesSelectionCTS == cts)
+				throw;
+			selectedPhrases = Array.Empty<string>();
+		}
+		if (this.candidatePhrasesSelectionCTS != cts)
+			return;
+		this.candidatePhrasesSelectionCTS.Dispose();
+		this.candidatePhrasesSelectionCTS = null;
+		
+		// open menu
+		this.candidatePhrases.Clear();
+		this.candidatePhrases.AddRange(selectedPhrases);
+		if (this.candidatePhrases.IsNotEmpty())
+		{
+			this.SetupCandidatePhrasesPopup().Let(popup =>
+			{
+				this.GetCaretBounds()?.Let(caretBounds =>
+				{
+					popup.PlacementRect = caretBounds.Inflate(this.FindResourceOrDefault<double>("Double/InputAssistancePopup.Offset"));
+					popup.Open();
+				});
+			});
+		}
+	}
+
+
+	/// <summary>
+	/// Get or set <see cref="IPhraseInputAssistanceProvider"/> for phrase input assistance.
+	/// </summary>
+	public IPhraseInputAssistanceProvider? PhraseInputAssistanceProvider
+	{
+		get => this.phraseInputAssistanceProvider;
+		set
+		{
+			this.VerifyAccess();
+			if (this.phraseInputAssistanceProvider == value)
+				return;
+			this.SetAndRaise(PhraseInputAssistanceProviderProperty, ref this.phraseInputAssistanceProvider, value);
+		}
 	}
 
 
@@ -893,6 +1104,37 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	/// <inheritdoc/>
 	protected override void RaiseObjectChanged(Regex? oldValue, Regex? newValue) =>
 		this.RaisePropertyChanged(ObjectProperty, oldValue, newValue);
+	
+	
+	// Setup menu for candidate phrases.
+	InputAssistancePopup SetupCandidatePhrasesPopup()
+	{
+		if (this.candidatePhrasesPopup != null)
+			return this.candidatePhrasesPopup;
+		var rootPanel = this.FindDescendantOfType<Panel>().AsNonNull();
+		this.candidatePhrasesPopup = new InputAssistancePopup().Also(menu =>
+		{
+			menu.Closed += (_, _) => this.CancelSelectingCandidatePhrases();
+			menu.ItemListBox.Let(it =>
+			{
+				it.DoubleClickOnItem += (_, e) =>
+				{
+					menu.Close();
+					if (e.Item is string phrase)
+						this.InputPhrase(phrase);
+				};
+				it.ItemsSource = this.candidatePhrases;
+				it.AddHandler(PointerPressedEvent, (_, _) =>
+				{
+					SynchronizationContext.Current?.Post(() => this.Focus());
+				}, RoutingStrategies.Tunnel);
+			});
+			menu.Opened += (_, _) => this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
+			menu.PlacementTarget = this;
+		});
+		rootPanel.Children.Insert(0, this.candidatePhrasesPopup);
+		return this.candidatePhrasesPopup;
+	}
 
 
 	// Setup menu for escaped characters.
@@ -928,10 +1170,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 				}, RoutingStrategies.Tunnel);
 			});
 			menu.Opened += (_, _) => this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
-			menu.PlacementAnchor = PopupAnchor.BottomLeft;
-			menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
-			menu.PlacementGravity = PopupGravity.BottomRight;
-			menu.Placement = PlacementMode.AnchorAndGravity;
+			menu.PlacementTarget = this;
 		});
 		rootPanel.Children.Insert(0, this.escapedCharactersPopup);
 		return this.escapedCharactersPopup;
@@ -969,10 +1208,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 				}, RoutingStrategies.Tunnel);
 			});
 			menu.Opened += (_, _) => this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
-			menu.PlacementAnchor = PopupAnchor.BottomLeft;
-			menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
-			menu.PlacementGravity = PopupGravity.BottomRight;
-			menu.Placement = PlacementMode.AnchorAndGravity;
+			menu.PlacementTarget = this;
 		});
 		rootPanel.Children.Insert(0, this.groupingConstructsPopup);
 		return this.groupingConstructsPopup;
@@ -1004,10 +1240,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 				}, RoutingStrategies.Tunnel);
 			});
 			menu.Opened += (_, _) => this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
-			menu.PlacementAnchor = PopupAnchor.BottomLeft;
-			menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
-			menu.PlacementGravity = PopupGravity.BottomRight;
-			menu.Placement = PlacementMode.AnchorAndGravity;
+			menu.PlacementTarget = this;
 		});
 		rootPanel.Children.Insert(0, this.predefinedGroupsPopup);
 		return this.predefinedGroupsPopup;
@@ -1029,12 +1262,12 @@ public class RegexTextBox : ObjectTextBox<Regex>
 			: RegexSyntaxHighlighting.FindGroupNameRange(text, selectionStart);
 		
 		// find range of character classes
-		var selectedCharacterClassesRange = hasSelection 
+		var selectedCharacterClassesRange = hasSelection || this.selectedGroupNameRange.IsClosed
 			? default 
 			: RegexSyntaxHighlighting.FindCharacterClassesRange(text, selectionStart);
 		
 		// find range of quantifier
-		var selectedQuantifierRange = hasSelection 
+		var selectedQuantifierRange = hasSelection || this.selectedGroupNameRange.IsClosed || selectedCharacterClassesRange.IsClosed
 			? default 
 			: RegexSyntaxHighlighting.FindQuantifierRange(text, selectionStart);
 
@@ -1050,7 +1283,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		else
 			this.selectedPhraseRange = RegexSyntaxHighlighting.FindPhraseRange(text, selectionStart);
 #if DEBUG
-		System.Diagnostics.Debug.WriteLine($"CharClasses: {selectedCharacterClassesRange}, GroupName: {this.selectedGroupNameRange}, Phrase: {this.selectedPhraseRange}");
+		System.Diagnostics.Debug.WriteLine($"CharClasses: {selectedCharacterClassesRange}, GroupName: {this.selectedGroupNameRange}, Phrase: {this.selectedPhraseRange}, Quantifier: {selectedQuantifierRange}");
 #endif
 	}
 

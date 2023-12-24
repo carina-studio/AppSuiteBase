@@ -200,6 +200,8 @@
 
 	<!-- InputAssistancePopup -->
 	<sys:Double x:Key="Double/InputAssistancePopup.Content.MaxHeight">370</sys:Double>
+	<sys:Double x:Key="Double/InputAssistancePopup.Content.MinWidth">200</sys:Double>
+	<sys:Double x:Key="Double/InputAssistancePopup.Offset">5</sys:Double>
 	<Thickness x:Key="Thickness/InputAssistancePopup.Padding">0</Thickness>
 	
 	<!-- ItemSelectionDialog -->

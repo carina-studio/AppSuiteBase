@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
@@ -24,18 +25,21 @@ public class InputAssistancePopup : Popup
         {
             it.Background = Brushes.Transparent;
 			it.BorderThickness = new Thickness(0);
-            it.Bind(MaxHeightProperty, this.GetResourceObservable("Double/InputAssistancePopup.Content.MaxHeight"));
+            it.BindToResource(MaxHeightProperty, "Double/InputAssistancePopup.Content.MaxHeight");
+            it.BindToResource(MinWidthProperty, "Double/InputAssistancePopup.Content.MinWidth");
         });
         this.Child = new Border().Also(it =>
         {
-            it.Bind(Border.BackgroundProperty, this.GetResourceObservable("MenuFlyoutPresenterBackground"));
-            it.Bind(Border.BorderBrushProperty, this.GetResourceObservable("MenuFlyoutPresenterBorderBrush"));
-            it.Bind(Border.BorderThicknessProperty, this.GetResourceObservable("MenuFlyoutPresenterBorderThemeThickness"));
+            it.BindToResource(Border.BackgroundProperty, "MenuFlyoutPresenterBackground");
+            it.BindToResource(Border.BorderBrushProperty, "MenuFlyoutPresenterBorderBrush");
+            it.BindToResource(Border.BorderThicknessProperty, "MenuFlyoutPresenterBorderThemeThickness");
             it.Child = this.ItemListBox;
-            it.Bind(Border.CornerRadiusProperty, this.GetResourceObservable("OverlayCornerRadius"));
-            it.Bind(Border.PaddingProperty, this.GetResourceObservable("Thickness/InputAssistancePopup.Padding"));
+            it.BindToResource(Border.CornerRadiusProperty, "OverlayCornerRadius");
+            it.BindToResource(Border.PaddingProperty, "Thickness/InputAssistancePopup.Padding");
         });
         this.Opened += (_ , _) => this.ItemListBox.SelectFirstItem();
+        this.Placement = PlacementMode.Bottom;
+        this.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
     }
 
 

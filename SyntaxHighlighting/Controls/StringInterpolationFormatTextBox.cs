@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Input;
@@ -100,13 +99,11 @@ public class StringInterpolationFormatTextBox : TextBox
 			// open menu
 			if (popupToOpen is not null)
 			{
-				var caretBounds = this.GetCaretBounds();
-				if (caretBounds.HasValue)
+				this.GetCaretBounds()?.Let(caretBounds =>
 				{
-					popupToOpen.PlacementRect = caretBounds.Value;
-					popupToOpen.PlacementTarget = this;
+					popupToOpen.PlacementRect = caretBounds.Inflate(this.FindResourceOrDefault<double>("Double/InputAssistancePopup.Offset"));
 					popupToOpen.Open();
-				}
+				});
 			}
 		});
 
@@ -557,10 +554,7 @@ public class StringInterpolationFormatTextBox : TextBox
 				}, RoutingStrategies.Tunnel);
 			});
 			menu.Opened += (_, _) => this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
-			menu.PlacementAnchor = PopupAnchor.BottomLeft;
-			menu.PlacementConstraintAdjustment = PopupPositionerConstraintAdjustment.FlipY | PopupPositionerConstraintAdjustment.ResizeY | PopupPositionerConstraintAdjustment.SlideX;
-			menu.PlacementGravity = PopupGravity.BottomRight;
-			menu.Placement = PlacementMode.AnchorAndGravity;
+			menu.PlacementTarget = this;
 		});
 		rootPanel.Children.Insert(0, this.predefinedVarsPopup);
 		return this.predefinedVarsPopup;
