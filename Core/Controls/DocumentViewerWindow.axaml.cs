@@ -56,6 +56,25 @@ public class DocumentViewerWindow : Dialog
         get => this.GetValue(MessageProperty);
         set => this.SetValue(MessageProperty, value);
     }
+    
+    
+    // Called when application strings updated.
+    void OnApplicationStringsUpdated(object? sender, EventArgs e)
+    {
+        this.DocumentSource?.Let(source =>
+        {
+            source.SetToCurrentCulture();
+            this.SetValue(DocumentUriProperty, source.Uri);
+        });
+    }
+
+
+    /// <inheritdoc/>
+    protected override void OnClosed(EventArgs e)
+    {
+        this.Application.StringsUpdated -= this.OnApplicationStringsUpdated;
+        base.OnClosed(e);
+    }
 
 
     /// <inheritdoc/>
@@ -64,6 +83,8 @@ public class DocumentViewerWindow : Dialog
         base.OnOpened(e);
         if (this.DocumentSource is null)
             this.SynchronizationContext.Post(this.Close);
+        else
+            this.Application.StringsUpdated += this.OnApplicationStringsUpdated;
     }
 
 
