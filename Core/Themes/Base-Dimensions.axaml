@@ -235,14 +235,14 @@
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.List.Text.Margin">12,3,0,3</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.ListMarker.Margin">0,3,12,3</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading1">0,18,0,10</Thickness>
-	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading2">0,18,0,8</Thickness>
-	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading3">0,17,0,6</Thickness>
-	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading4">0,17,0,5</Thickness>
-	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading5">0,16,0,4</Thickness>
-	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading6">0,16,0,3</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading2">0,16,0,8</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading3">0,14,0,6</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading4">0,12,0,4</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading5">0,10,0,3</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading6">0,8,0,2</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Text.Margin">0,3,0,13</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Padding">15,12,15,12</Thickness>
-	<Thickness x:Key="Thickness/MarkdownViewer.Padding.StartsWithHeading">15,-2,15,12</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Padding.StartsWithHeading">15,-6,15,12</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Rule.Margin">0,3,0,13</Thickness>
 
 	<!-- Menu -->

@@ -55,6 +55,14 @@
 
 	<!-- ListBoxItem -->
 	<SolidColorBrush x:Key="Brush/ListBoxItem.Foreground.Selected" Color="#ffffff"/>
+	
+	<!-- MarkdownViewer -->
+	<Color x:Key="Color/MarkdownViewer.Markdown.Heading1.Foreground">#000000</Color>
+	<Color x:Key="Color/MarkdownViewer.Markdown.Heading2.Foreground">#53a66f</Color>
+	<Color x:Key="Color/MarkdownViewer.Markdown.Heading3.Foreground">#17a682</Color>
+	<Color x:Key="Color/MarkdownViewer.Markdown.Heading4.Foreground">#178da6</Color>
+	<Color x:Key="Color/MarkdownViewer.Markdown.Heading5.Foreground">#1c56cc</Color>
+	<Color x:Key="Color/MarkdownViewer.Markdown.Heading6.Foreground">#644c99</Color>
 
 	<!-- Menu -->
 	<Color x:Key="Color/Menu.Background">#dddddd</Color>

@@ -45,6 +45,14 @@
 	<Color x:Key="Color/Icon.CSharp.Light">#b35eae</Color>
 	<Color x:Key="Color/Icon.CSharp.Middle">#9c48a6</Color>
 	<Color x:Key="Color/Icon.Inverse">#000000</Color>
+	
+	<!-- MarkdownViewer -->
+	<Color x:Key="Color/MarkdownViewer.Markdown.Heading1.Foreground">#ffffff</Color>
+	<Color x:Key="Color/MarkdownViewer.Markdown.Heading2.Foreground">#73e699</Color>
+	<Color x:Key="Color/MarkdownViewer.Markdown.Heading3.Foreground">#1ccca0</Color>
+	<Color x:Key="Color/MarkdownViewer.Markdown.Heading4.Foreground">#20c4e6</Color>
+	<Color x:Key="Color/MarkdownViewer.Markdown.Heading5.Foreground">#236cff</Color>
+	<Color x:Key="Color/MarkdownViewer.Markdown.Heading6.Foreground">#a77fff</Color>
 
 	<!-- Menu -->
 	<Color x:Key="Color/Menu.Background">#2c2c2c</Color>
