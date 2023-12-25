@@ -4,9 +4,11 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml.Styling;
+using CarinaStudio.Windows.Input;
 using ColorTextBlock.Avalonia;
 using Markdown.Avalonia;
 using System;
+using System.Linq;
 
 namespace CarinaStudio.AppSuite.Controls;
 
@@ -77,10 +79,11 @@ public unsafe class MarkdownViewer : TemplatedControl
     {
         base.OnApplyTemplate(e);
         this.presenter = e.NameScope.Find<MarkdownScrollViewer>("PART_MarkdownPresenter");
-        if (this.presenter != null)
+        if (this.presenter is not null)
         {
             // [Workaround] Need to use separate styles for each MarkdownScrollViewer to prevent crashing after changing theme mode.
             var baseUri = new Uri($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}/");
+            this.presenter.Engine.HyperlinkCommand = new Command<object?>(this.OnHyperlinkClicked);
             this.presenter.MarkdownStyle = new StyleInclude(baseUri)
             {
                 Source = new(baseUri, "/Themes/Base-Styles-Markdown.axaml"),
@@ -113,7 +116,7 @@ public unsafe class MarkdownViewer : TemplatedControl
             var fieldInfo = typeof(MarkdownScrollViewer).GetField("_viewer", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
             this.scrollViewer = fieldInfo?.GetValue(this.presenter) as ScrollViewer;
         }
-        if (this.scrollViewer != null)
+        if (this.scrollViewer is not null)
         {
             this.scrollViewer.GetObservable(ScrollViewer.ContentProperty).Subscribe(content =>
             {
@@ -123,6 +126,47 @@ public unsafe class MarkdownViewer : TemplatedControl
             this.scrollViewer.HorizontalScrollBarVisibility = this.GetValue(HorizontalScrollBarVisibilityProperty);
             this.scrollViewer.VerticalScrollBarVisibility = this.GetValue(VerticalScrollBarVisibilityProperty);
         }
+    }
+
+
+    // Called when user clicked a hyperlink.
+    void OnHyperlinkClicked(object? parameter)
+    {
+        // check target
+        var target = parameter as string;
+        if (string.IsNullOrEmpty(target))
+            return;
+        
+        // open link directly
+        if (target[0] != '#')
+        {
+            Platform.OpenLink(target);
+            return;
+        }
+        
+        // scroll to heading text
+        (this.scrollViewer?.Content as Panel)?.Let(panel =>
+        {
+            target = target[1..];
+            var headingControl = panel.Children.Let(children =>
+            {
+                foreach (var child in children)
+                {
+                    if (child is CTextBlock cTextBlock && cTextBlock.Classes?.FirstOrDefault(it => it.StartsWith("Heading")) is not null)
+                    {
+                        var anchorName = cTextBlock.Text.ToLower().Replace(' ', '-');
+                        if (anchorName == target || $"-{anchorName}" == target /* [Workaround] Extra '-' may be added by markdown editor */)
+                            return cTextBlock;
+                    }
+                }
+                return null;
+            });
+            if (headingControl is not null)
+            {
+                var bounds = headingControl.Bounds.Inflate(headingControl.Margin);
+                this.scrollViewer!.Offset = new(0, bounds.Y + this.scrollViewer!.Padding.Top);
+            }
+        });
     }
 
 
