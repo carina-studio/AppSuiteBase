@@ -216,12 +216,14 @@
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading4.Foreground">#ffffff</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading5.Foreground">#ffffff</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading6.Foreground">#ffffff</Color>
+	<Color x:Key="Color/MarkdownViewer.Markdown.InlineCode.Background">#aaaaaa</Color>
 	<SolidColorBrush x:Key="Brush/MarkdownViewer.Markdown.Heading1.Foreground" Color="{DynamicResource Color/MarkdownViewer.Markdown.Heading1.Foreground}"/>
 	<SolidColorBrush x:Key="Brush/MarkdownViewer.Markdown.Heading2.Foreground" Color="{DynamicResource Color/MarkdownViewer.Markdown.Heading2.Foreground}"/>
 	<SolidColorBrush x:Key="Brush/MarkdownViewer.Markdown.Heading3.Foreground" Color="{DynamicResource Color/MarkdownViewer.Markdown.Heading3.Foreground}"/>
 	<SolidColorBrush x:Key="Brush/MarkdownViewer.Markdown.Heading4.Foreground" Color="{DynamicResource Color/MarkdownViewer.Markdown.Heading4.Foreground}"/>
 	<SolidColorBrush x:Key="Brush/MarkdownViewer.Markdown.Heading5.Foreground" Color="{DynamicResource Color/MarkdownViewer.Markdown.Heading5.Foreground}"/>
 	<SolidColorBrush x:Key="Brush/MarkdownViewer.Markdown.Heading6.Foreground" Color="{DynamicResource Color/MarkdownViewer.Markdown.Heading6.Foreground}"/>
+	<SolidColorBrush x:Key="Brush/MarkdownViewer.Markdown.InlineCode.Background" Color="{DynamicResource Color/MarkdownViewer.Markdown.InlineCode.Background}"/>
 	
 	<!-- Menu -->
 	<Color x:Key="Color/Menu.Background">#ffffff</Color>

@@ -53,6 +53,7 @@
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading4.Foreground">#20c4e6</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading5.Foreground">#236cff</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading6.Foreground">#a77fff</Color>
+	<Color x:Key="Color/MarkdownViewer.Markdown.InlineCode.Background">#444444</Color>
 
 	<!-- Menu -->
 	<Color x:Key="Color/Menu.Background">#2c2c2c</Color>
