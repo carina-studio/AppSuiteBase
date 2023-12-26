@@ -37,4 +37,15 @@ public static class ScrollViewerExtensions
     /// <param name="scrollToCenter">True to scroll content to center of viewport.</param>
     public static void SmoothScrollIntoView(this ScrollViewer scrollViewer, Visual visual, TimeSpan duration, bool scrollToCenter = true) =>
         scrollViewer.SmoothScrollIntoView(visual, duration, SmoothScrollingInterpolator, scrollToCenter);
+
+
+    /// <summary>
+    /// Scroll to given offset smoothly.
+    /// </summary>
+    /// <param name="scrollViewer"><see cref="ScrollViewer"/>.</param>
+    /// <param name="offset">Target offset.</param>
+    public static void SmoothScrollTo(this ScrollViewer scrollViewer, Vector offset) =>
+        scrollViewer.SmoothScrollTo(offset,
+            IAppSuiteApplication.CurrentOrNull?.FindResourceOrDefault<TimeSpan?>("TimeSpan/Animation") ?? TimeSpan.FromMilliseconds(500),
+            SmoothScrollingInterpolator);
 }

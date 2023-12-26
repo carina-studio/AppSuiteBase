@@ -164,7 +164,7 @@ public unsafe class MarkdownViewer : TemplatedControl
             if (headingControl is not null)
             {
                 var bounds = headingControl.Bounds.Inflate(headingControl.Margin);
-                this.scrollViewer!.Offset = new(0, bounds.Y + this.scrollViewer!.Padding.Top);
+                this.scrollViewer!.SmoothScrollTo(new(0, bounds.Y + this.scrollViewer!.Padding.Top));
             }
         });
     }
