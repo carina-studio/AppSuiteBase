@@ -285,6 +285,8 @@
 													</RepeatButton>
 
 													<TextBlock Classes="ToolBar_TextBlock" IsEnabled="False" Text="test:"/>
+													
+													<TextBox Classes="ToolBar_TextBox" IsEnabled="False" Text="Hello"/>
 
 												</StackPanel>
 

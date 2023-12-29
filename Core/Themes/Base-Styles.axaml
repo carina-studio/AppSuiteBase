@@ -2827,10 +2827,6 @@
 			</ControlTemplate>
 		</Setter>
 	</Style>
-	<Style Selector="TextBox:disabled">
-		<!-- [Workaround] -->
-		<Setter Property="Foreground" Value="{DynamicResource TextControlForegroundDisabled}" />
-	</Style>
 	<Style Selector="ToggleButton.TextBox_InPlaceAction">
 		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundTransparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
