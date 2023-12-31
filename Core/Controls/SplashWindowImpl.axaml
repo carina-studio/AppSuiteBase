@@ -59,6 +59,30 @@
 				<Color x:Key="Color/SplashWindow.Shadow">#ffffff</Color>
 			</Styles.Resources>
 		</Styles>
+		
+		<!-- Linux resources -->
+		<Styles x:Key="linuxTheme">
+			<Styles.Resources>
+				<Thickness x:Key="Thickness/SplashWindow.Copyright.Margin">0,1,0,0</Thickness>
+				<Thickness x:Key="Thickness/SplashWindow.Version.Margin">0,1,0,0</Thickness>
+			</Styles.Resources>
+		</Styles>
+		
+		<!-- macOS resources -->
+		<Styles x:Key="macOSTheme">
+			<Styles.Resources>
+				<Thickness x:Key="Thickness/SplashWindow.Copyright.Margin">0,3,0,0</Thickness>
+				<Thickness x:Key="Thickness/SplashWindow.Version.Margin">0,3,0,0</Thickness>
+			</Styles.Resources>
+		</Styles>
+		
+		<!-- Windows resources -->
+		<Styles x:Key="windowsTheme">
+			<Styles.Resources>
+				<Thickness x:Key="Thickness/SplashWindow.Copyright.Margin">0,1,0,0</Thickness>
+				<Thickness x:Key="Thickness/SplashWindow.Version.Margin">0,1,0,0</Thickness>
+			</Styles.Resources>
+		</Styles>
 
 		<!-- Other resources -->
 		<BoxShadows x:Key="BoxShadows/SplashWindow">0 0 10 0 #9f000000</BoxShadows>
@@ -75,13 +99,11 @@
 		<DropShadowEffect x:Key="Effect/SplashWindow.Shadow" BlurRadius="{StaticResource Double/SplashWindow.Shadow.BlurRadius}" Color="{DynamicResource Color/SplashWindow.Shadow}" OffsetX="0" OffsetY="0"/>
 		<Thickness x:Key="Thickness/SplashWindow.BackgroundImage.Margin">0,0,0,-70</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Border">1</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Copyright.Margin">0,3,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">0,0,15,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Margin">10</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Padding">30</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Title.Margin">0,0,0,5</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Version.Margin">0,3,0,0</Thickness>
 		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1</sys:TimeSpan>
 
 	</Window.Resources>
