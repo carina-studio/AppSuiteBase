@@ -217,7 +217,7 @@
 					           Effect="{StaticResource Effect/SplashWindow.Shadow}" 
 					           FontSize="{StaticResource Double/SplashWindow.Version.FontSize}" 
 					           Grid.Row="1"
-					           Margin="{StaticResource Thickness/SplashWindow.Version.Margin}"
+					           Margin="{DynamicResource Thickness/SplashWindow.Version.Margin}"
 					           Opacity="0" 
 					           Text="{Binding $parent[Window].Version}" 
 					           TextTrimming="CharacterEllipsis">
@@ -248,7 +248,7 @@
 					           Effect="{StaticResource Effect/SplashWindow.Shadow}" 
 					           FontSize="{StaticResource Double/SplashWindow.Copyright.FontSize}" 
 					           Grid.Row="2"
-					           Margin="{StaticResource Thickness/SplashWindow.Copyright.Margin}"
+					           Margin="{DynamicResource Thickness/SplashWindow.Copyright.Margin}"
 					           Opacity="0" 
 					           Text="{Binding $parent[Window].Copyright, Mode=OneTime}"
 					           TextTrimming="CharacterEllipsis">
