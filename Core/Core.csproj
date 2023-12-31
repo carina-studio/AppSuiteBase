@@ -76,10 +76,6 @@
 		<PackageReference Include="System.Management" Version="8.0.0" />
 		<PackageReference Include="System.Security.Principal.Windows" Version="6.0.0-preview.5.21301.5" />
 	</ItemGroup>
-
-	<ItemGroup Condition="$(TargetFramework.Contains('6.0'))">
-		<PackageReference Include="Mono.Posix" Version="7.1.0-final.1.21458.1" />
-	</ItemGroup>
 	
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
