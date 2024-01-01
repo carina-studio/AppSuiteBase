@@ -81,7 +81,7 @@
 
 	<!-- StatusBar -->
 	<Color x:Key="Color/StatusBar.Background.Inactive">#8a8a8a</Color>
-	<StaticResourceExtension x:Key="Color/StatusBar.Border" ResourceKey="SystemAccentColorDark1"/>
+	<StaticResourceExtension x:Key="Color/StatusBar.Border" ResourceKey="Color/Shadow.Darken"/>
 
 	<!-- TabControl -->
 	<Color x:Key="Color/TabControl.TabStrip.Border">#c7c7c7</Color>
