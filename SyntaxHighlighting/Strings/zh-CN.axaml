@@ -7,7 +7,7 @@
 
 	<!-- GroupingConstruct -->
 	<sys:String x:Key="String/GroupingConstruct.NamedGroup">具名群组</sys:String>
-	<sys:String x:Key="String/GroupingConstruct.NoncapturingGroup">不具名群组 (不撷取内容)</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.NoncapturingGroup">匿名群组 (不撷取内容)</sys:String>
 	<sys:String x:Key="String/GroupingConstruct.ZeroWidthNegativeLookaheadAssertion">负向后行断言 (Negative Lookahead)</sys:String>
 	<sys:String x:Key="String/GroupingConstruct.ZeroWidthNegativeLookbehindAssertion">负向先行断言 (Negative Lookbehind)</sys:String>
 	<sys:String x:Key="String/GroupingConstruct.ZeroWidthPositiveLookaheadAssertion">正向后行断言 (Positive Lookahead)</sys:String>
