@@ -70,6 +70,16 @@ namespace CarinaStudio.AppSuite.ViewModels
 			this.StartUpdatingCommand = new Command(this.StartUpdating, this.canStartUpdating);
 			this.ReportUpdateInfo();
 		}
+		
+		
+		/// <summary>
+		/// Get or set whether to accept application update with non-stable version or not.
+		/// </summary>
+		public bool AcceptNonStableApplicationUpdate
+		{
+			get => this.Settings.GetValueOrDefault(SettingKeys.AcceptNonStableApplicationUpdate);
+			set => this.Settings.SetValue<bool>(SettingKeys.AcceptNonStableApplicationUpdate, value);
+		}
 
 
 		// Cancel auto updating.
@@ -312,7 +322,9 @@ namespace CarinaStudio.AppSuite.ViewModels
         protected override void OnSettingChanged(SettingChangedEventArgs e)
         {
             base.OnSettingChanged(e);
-			if (e.Key == SettingKeys.NotifyApplicationUpdate)
+            if (e.Key == SettingKeys.AcceptNonStableApplicationUpdate)
+	            this.OnPropertyChanged(nameof(AcceptNonStableApplicationUpdate));
+			else if (e.Key == SettingKeys.NotifyApplicationUpdate)
 				this.OnPropertyChanged(nameof(NotifyApplicationUpdate));
 		}
 

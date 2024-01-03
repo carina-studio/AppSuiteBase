@@ -166,42 +166,47 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			if (sender is not ApplicationUpdater updater)
 				return;
-			if (e.PropertyName == nameof(ApplicationUpdater.IsPreparingForUpdate)
-				&& !updater.IsPreparingForUpdate
-				&& this.isClosingRequested)
+			switch (e.PropertyName)
 			{
-				if (this.closingTaskSource.TrySetResult(ApplicationUpdateDialogResult.UpdatingCancelled))
-					this.Close(ApplicationUpdateDialogResult.UpdatingCancelled);
-			}
-			else if (e.PropertyName == nameof(ApplicationUpdater.IsLatestVersion))
-			{
-				this.SynchronizationContext.Post(() =>
-				{
-					if (!updater.IsLatestVersion)
+				case nameof(ApplicationUpdater.AcceptNonStableApplicationUpdate):
+					updater.CheckForUpdateCommand.TryExecute();
+					break;
+				case nameof(ApplicationUpdater.IsPreparingForUpdate):
+					if (!updater.IsPreparingForUpdate && this.isClosingRequested)
 					{
-						this.FindControl<Button>("startUpdatingButton")?.Let(it =>
-						{
-							if (it.IsEffectivelyVisible)
-								it.Focus();
-						});
-						this.FindControl<Button>("downloadUpdatePackageButton")?.Let(it =>
-						{
-							if (it.IsEffectivelyVisible)
-								it.Focus();
-						});
+						if (this.closingTaskSource.TrySetResult(ApplicationUpdateDialogResult.UpdatingCancelled))
+							this.Close(ApplicationUpdateDialogResult.UpdatingCancelled);
 					}
-				});
+					break;
+				case nameof(ApplicationUpdater.IsLatestVersion):
+					this.SynchronizationContext.Post(() =>
+					{
+						if (!updater.IsLatestVersion)
+						{
+							this.FindControl<Button>("startUpdatingButton")?.Let(it =>
+							{
+								if (it.IsEffectivelyVisible)
+									it.Focus();
+							});
+							this.FindControl<Button>("downloadUpdatePackageButton")?.Let(it =>
+							{
+								if (it.IsEffectivelyVisible)
+									it.Focus();
+							});
+						}
+					});
+					break;
+				case nameof(ApplicationUpdater.IsShutdownNeededToContinueUpdate):
+					if (updater.IsShutdownNeededToContinueUpdate)
+					{
+						this.Close(ApplicationUpdateDialogResult.ShutdownNeeded);
+						this.closingTaskSource.TrySetResult(ApplicationUpdateDialogResult.ShutdownNeeded);
+					}
+					break;
+				case nameof(ApplicationUpdater.UpdateVersion):
+					this.UpdateLatestNotifiedInfo();
+					break;
 			}
-			else if (e.PropertyName == nameof(ApplicationUpdater.IsShutdownNeededToContinueUpdate))
-			{
-				if (updater.IsShutdownNeededToContinueUpdate)
-				{
-					this.Close(ApplicationUpdateDialogResult.ShutdownNeeded);
-					this.closingTaskSource.TrySetResult(ApplicationUpdateDialogResult.ShutdownNeeded);
-				}
-			}
-			else if (e.PropertyName == nameof(ApplicationUpdater.UpdateVersion))
-				this.UpdateLatestNotifiedInfo();
 		}
 
 

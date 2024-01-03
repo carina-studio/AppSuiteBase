@@ -3,9 +3,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:abControls="using:CarinaStudio.Controls"
-		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
-        xmlns:ia="using:Avalonia.Xaml.Interactivity"
-        xmlns:iaCore="using:Avalonia.Xaml.Interactions.Core"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.ApplicationUpdateDialogImpl"
         Classes="Dialog"
@@ -28,7 +25,7 @@
 		</Border>
 
 		<!-- Content -->
-		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*">
+		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*" RowDefinitions="Auto,*">
 
 			<!-- Icon -->
 			<Panel IsVisible="{Binding !IsCheckingForUpdate}" VerticalAlignment="Top">
@@ -59,17 +56,18 @@
 					<Separator Classes="Dialog_Separator_Small"/>
 					<ProgressBar IsIndeterminate="{Binding !IsUpdatePreparationProgressAvailable}" Maximum="100" Value="{Binding UpdatePreparationProgressPercentage}"/>
 				</StackPanel>
-
-				<!-- Setting -->
-				<StackPanel IsVisible="{Binding !IsPreparingForUpdate}">
-					<Separator Classes="Dialog_Separator"/>
-					<CheckBox Classes="Dialog_CheckBox" Content="{DynamicResource String/ApplicationOptions.NotifyApplicationUpdate}" IsChecked="{Binding NotifyApplicationUpdate, Mode=TwoWay}"/>
-					<Grid ColumnDefinitions="Auto,*">
-						<Border Margin="{StaticResource Thickness/Dialog.Icon.Margin}" Width="{DynamicResource Double/Dialog.Icon.Size}"/>
-						<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" Margin="{StaticResource Thickness/Dialog.TextBlock.Margin.Description.BelowCheckBox}" Text="{DynamicResource String/ApplicationUpdateDialog.NotifyApplicationUpdate.Description}" VerticalAlignment="Top"/>
-					</Grid>
-				</StackPanel>
 				
+			</StackPanel>
+			
+			<!-- Settings -->
+			<StackPanel Grid.Column="1" Grid.Row="1" IsVisible="{Binding !IsPreparingForUpdate}">
+				<Separator Classes="Dialog_Separator"/>
+				<CheckBox Classes="Dialog_CheckBox" Content="{DynamicResource String/ApplicationOptions.NotifyApplicationUpdate}" IsChecked="{Binding NotifyApplicationUpdate, Mode=TwoWay}"/>
+				<CheckBox Classes="Dialog_CheckBox" Content="{DynamicResource String/ApplicationOptions.AcceptNonStableApplicationUpdate}" IsChecked="{Binding AcceptNonStableApplicationUpdate, Mode=TwoWay}" IsEnabled="{Binding !IsCheckingForUpdate}"/>
+				<Grid ColumnDefinitions="Auto,*">
+					<Border Margin="{StaticResource Thickness/Dialog.Icon.Margin}" Width="{DynamicResource Double/Dialog.Icon.Size}"/>
+					<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" Margin="{StaticResource Thickness/Dialog.TextBlock.Margin.Description.BelowCheckBox}" Text="{DynamicResource String/ApplicationUpdateDialog.AcceptNonStableApplicationUpdate.Description}" VerticalAlignment="Top"/>
+				</Grid>
 			</StackPanel>
 			
 		</Grid>

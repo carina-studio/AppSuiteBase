@@ -98,12 +98,12 @@
 	<sys:String x:Key="String/ApplicationReleasingType.Stable">正式版</sys:String>
 
 	<!-- ApplicationUpdateDialog -->
+	<sys:String x:Key="String/ApplicationUpdateDialog.AcceptNonStableApplicationUpdate.Description">您也可以在应用程序选项中变更这些设置。</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckForUpdate">检查更新</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckingForUpdate">正在检查更新…</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.DownloadUpdatePackage">下载更新</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.LatestVersion">{0} 已经是最新版本。</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.NewVersionFound">已经有新的 {0} 版本：{1}</sys:String>
-	<sys:String x:Key="String/ApplicationUpdateDialog.NotifyApplicationUpdate.Description">您也可以在应用程序选项中变更此设定。</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.ReleasePage">此更新的详细资讯</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.StartUpdating">更新</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.Title">应用程序更新</sys:String>
