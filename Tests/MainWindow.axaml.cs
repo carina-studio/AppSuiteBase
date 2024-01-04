@@ -46,7 +46,7 @@ namespace CarinaStudio.AppSuite.Tests
                     return new[]
                     {
                         $"{prefix[^5..]}-{postfix}",
-                        $"{prefix[^5..]}--{postfix}",
+                        $"{prefix[^5..].ToUpper()}--{postfix}",
                         $"{prefix[^5..]}---{postfix}",
                     };
                 }
@@ -56,7 +56,7 @@ namespace CarinaStudio.AppSuite.Tests
                     return new[]
                     {
                         $"{prefix}-{postfix}",
-                        $"{prefix}--{postfix}",
+                        $"{prefix.ToUpper()}--{postfix}",
                         $"{prefix}---{postfix}",
                     };
                 }

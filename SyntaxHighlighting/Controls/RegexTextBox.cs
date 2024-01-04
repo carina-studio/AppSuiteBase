@@ -511,6 +511,9 @@ public class RegexTextBox : ObjectTextBox<Regex>
 			return;
 
 		// find proper selection
+		Func<char, char, bool> checkCharEquality = this.IgnoreCase
+			? static (x, y) => char.ToLowerInvariant(x) == char.ToLowerInvariant(y)
+			: static (x, y) => x == y;
 		var selection = (text.AsMemory(), phrase.AsMemory()).PinAs((char* textPtr, char* phrasePtr) =>
 		{
 			// get state
@@ -526,7 +529,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 				var isPrefixMatched = true;
 				for (var i = newSelectionStart; i < selectionStart; ++i)
 				{
-					if (textPtr[i] != phrasePtr[i - newSelectionStart])
+					if (!checkCharEquality(textPtr[i], phrasePtr[i - newSelectionStart]))
 					{
 						isPrefixMatched = false;
 						break;
