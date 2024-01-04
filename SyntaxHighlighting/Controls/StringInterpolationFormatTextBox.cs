@@ -31,6 +31,10 @@ namespace CarinaStudio.AppSuite.Controls;
 public class StringInterpolationFormatTextBox : TextBox
 {
 	/// <summary>
+	/// Property of <see cref="HasOpenedAssistanceMenus"/>.
+	/// </summary>
+	public static readonly DirectProperty<StringInterpolationFormatTextBox, bool> HasOpenedAssistanceMenusProperty = AvaloniaProperty.RegisterDirect<StringInterpolationFormatTextBox, bool>(nameof(HasOpenedAssistanceMenus), tb => tb.hasOpenedAssistanceMenus);
+	/// <summary>
 	/// Property of <see cref="IsSyntaxHighlightingEnabled"/>.
 	/// </summary>
 	public static readonly DirectProperty<StringInterpolationFormatTextBox, bool> IsSyntaxHighlightingEnabledProperty = AvaloniaProperty.RegisterDirect<StringInterpolationFormatTextBox, bool>(nameof(IsSyntaxHighlightingEnabled), tb => tb.isSyntaxHighlightingEnabled, (tb, e) => tb.IsSyntaxHighlightingEnabled = e);
@@ -43,6 +47,7 @@ public class StringInterpolationFormatTextBox : TextBox
     // Fields.
     readonly ObservableList<ListBoxItem> filteredPredefinedVarListBoxItems = new();
     readonly SortedObservableList<StringInterpolationVariable> filteredPredefinedVars = new((x, y) => string.Compare(x.Name, y.Name, true, CultureInfo.InvariantCulture));
+    bool hasOpenedAssistanceMenus;
 	bool isEscapeKeyHandled;
 	bool isSyntaxHighlightingEnabled = true;
     readonly ObservableList<StringInterpolationVariable> predefinedVars = new();
@@ -67,7 +72,7 @@ public class StringInterpolationFormatTextBox : TextBox
         this.showAssistanceMenuAction = new ScheduledAction(() =>
 		{
 			// close menu first
-			if (this.predefinedVarsPopup?.IsOpen == true)
+			if (this.hasOpenedAssistanceMenus)
 			{
 				this.CloseAssistanceMenus();
 				this.showAssistanceMenuAction!.Schedule();
@@ -207,6 +212,12 @@ public class StringInterpolationFormatTextBox : TextBox
 			return (start, end);
 		return (end, start);
 	}
+	
+	
+	/// <summary>
+	/// Check whether at least one assistance menu has been opened or not.
+	/// </summary>
+	public bool HasOpenedAssistanceMenus => this.hasOpenedAssistanceMenus;
 
 
     // Input given variable name.
@@ -537,6 +548,7 @@ public class StringInterpolationFormatTextBox : TextBox
 		var rootPanel = this.FindDescendantOfType<Panel>().AsNonNull();
 		this.predefinedVarsPopup = new InputAssistancePopup().Also(menu =>
 		{
+			menu.Closed += (_, _) => this.UpdateHasOpenedAssistanceMenus();
 			menu.ItemListBox.Let(it =>
 			{
 				Grid.SetIsSharedSizeScope(it, true);
@@ -553,7 +565,11 @@ public class StringInterpolationFormatTextBox : TextBox
 					SynchronizationContext.Current?.Post(() => this.Focus());
 				}, RoutingStrategies.Tunnel);
 			});
-			menu.Opened += (_, _) => this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
+			menu.Opened += (_, _) =>
+			{
+				this.UpdateHasOpenedAssistanceMenus();
+				this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
+			};
 			menu.PlacementTarget = this;
 		});
 		rootPanel.Children.Insert(0, this.predefinedVarsPopup);
@@ -563,6 +579,19 @@ public class StringInterpolationFormatTextBox : TextBox
 
     /// <inheritdox/>
     protected override Type StyleKeyOverride => typeof(TextBox);
+    
+    
+    // Check whether at least one assistance has been opened or not.
+    bool UpdateHasOpenedAssistanceMenus()
+    {
+	    if (this.predefinedVarsPopup?.IsOpen == true)
+	    {
+		    this.SetAndRaise(HasOpenedAssistanceMenusProperty, ref this.hasOpenedAssistanceMenus, true);
+		    return true;
+	    }
+	    this.SetAndRaise(HasOpenedAssistanceMenusProperty, ref this.hasOpenedAssistanceMenus, false);
+	    return false;
+    }
 }
 
 

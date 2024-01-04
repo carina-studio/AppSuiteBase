@@ -34,6 +34,10 @@ namespace CarinaStudio.AppSuite.Controls;
 public class RegexTextBox : ObjectTextBox<Regex>
 {
 	/// <summary>
+	/// Property of <see cref="HasOpenedAssistanceMenus"/>.
+	/// </summary>
+	public static readonly DirectProperty<RegexTextBox, bool> HasOpenedAssistanceMenusProperty = AvaloniaProperty.RegisterDirect<RegexTextBox, bool>(nameof(HasOpenedAssistanceMenus), tb => tb.hasOpenedAssistanceMenus);
+	/// <summary>
 	/// Property of <see cref="IgnoreCase"/>.
 	/// </summary>
 	public static readonly StyledProperty<bool> IgnoreCaseProperty = AvaloniaProperty.Register<RegexTextBox, bool>(nameof(IgnoreCase), true);
@@ -80,6 +84,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	readonly ObservableList<ListBoxItem> filteredPredefinedGroupListBoxItems = new();
 	readonly SortedObservableList<RegexGroup> filteredPredefinedGroups = new((x, y) => string.Compare(x.Name, y.Name, true, CultureInfo.InvariantCulture));
 	InputAssistancePopup? groupingConstructsPopup;
+	bool hasOpenedAssistanceMenus;
 	bool isBackSlashPressed;
 	bool isEscapeKeyHandled;
 	bool isSyntaxHighlightingEnabled = true;
@@ -114,10 +119,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		this.showAssistanceMenuAction = new ScheduledAction(() =>
 		{
 			// close menu first
-			if (this.candidatePhrasesPopup?.IsOpen == true 
-			    || this.escapedCharactersPopup?.IsOpen == true
-			    || this.groupingConstructsPopup?.IsOpen == true
-				|| this.predefinedGroupsPopup?.IsOpen == true)
+			if (this.hasOpenedAssistanceMenus)
 			{
 				this.CloseAssistanceMenus();
 				this.showAssistanceMenuAction!.Schedule();
@@ -444,6 +446,12 @@ public class RegexTextBox : ObjectTextBox<Regex>
 			return (start, end);
 		return (end, start);
 	}
+
+
+	/// <summary>
+	/// Check whether at least one assistance menu has been opened or not.
+	/// </summary>
+	public bool HasOpenedAssistanceMenus => this.hasOpenedAssistanceMenus;
 
 
     /// <summary>
@@ -1114,7 +1122,11 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		var rootPanel = this.FindDescendantOfType<Panel>().AsNonNull();
 		this.candidatePhrasesPopup = new InputAssistancePopup().Also(menu =>
 		{
-			menu.Closed += (_, _) => this.CancelSelectingCandidatePhrases();
+			menu.Closed += (_, _) =>
+			{
+				this.UpdateHasOpenedAssistanceMenus();
+				this.CancelSelectingCandidatePhrases();
+			};
 			menu.ItemListBox.Let(it =>
 			{
 				it.DoubleClickOnItem += (_, e) =>
@@ -1129,7 +1141,11 @@ public class RegexTextBox : ObjectTextBox<Regex>
 					SynchronizationContext.Current?.Post(() => this.Focus());
 				}, RoutingStrategies.Tunnel);
 			});
-			menu.Opened += (_, _) => this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
+			menu.Opened += (_, _) =>
+			{
+				this.UpdateHasOpenedAssistanceMenus();
+				this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
+			};
 			menu.PlacementTarget = this;
 		});
 		rootPanel.Children.Insert(0, this.candidatePhrasesPopup);
@@ -1145,6 +1161,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		var rootPanel = this.FindDescendantOfType<Panel>().AsNonNull();
 		this.escapedCharactersPopup = new InputAssistancePopup().Also(menu =>
 		{
+			menu.Closed += (_, _) => this.UpdateHasOpenedAssistanceMenus();
 			menu.ItemListBox.Let(it =>
 			{
 				Grid.SetIsSharedSizeScope(it, true);
@@ -1169,7 +1186,11 @@ public class RegexTextBox : ObjectTextBox<Regex>
 					SynchronizationContext.Current?.Post(() => this.Focus());
 				}, RoutingStrategies.Tunnel);
 			});
-			menu.Opened += (_, _) => this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
+			menu.Opened += (_, _) =>
+			{
+				this.UpdateHasOpenedAssistanceMenus();
+				this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
+			};
 			menu.PlacementTarget = this;
 		});
 		rootPanel.Children.Insert(0, this.escapedCharactersPopup);
@@ -1185,6 +1206,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		var rootPanel = this.FindDescendantOfType<Panel>().AsNonNull();
 		this.groupingConstructsPopup = new InputAssistancePopup().Also(menu =>
 		{
+			menu.Closed += (_, _) => this.UpdateHasOpenedAssistanceMenus();
 			menu.ItemListBox.Let(it =>
 			{
 				Grid.SetIsSharedSizeScope(it, true);
@@ -1207,7 +1229,11 @@ public class RegexTextBox : ObjectTextBox<Regex>
 					SynchronizationContext.Current?.Post(() => this.Focus());
 				}, RoutingStrategies.Tunnel);
 			});
-			menu.Opened += (_, _) => this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
+			menu.Opened += (_, _) =>
+			{
+				this.UpdateHasOpenedAssistanceMenus();
+				this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
+			};
 			menu.PlacementTarget = this;
 		});
 		rootPanel.Children.Insert(0, this.groupingConstructsPopup);
@@ -1223,6 +1249,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		var rootPanel = this.FindDescendantOfType<Panel>().AsNonNull();
 		this.predefinedGroupsPopup = new InputAssistancePopup().Also(menu =>
 		{
+			menu.Closed += (_, _) => this.UpdateHasOpenedAssistanceMenus();
 			menu.ItemListBox.Let(it =>
 			{
 				Grid.SetIsSharedSizeScope(it, true);
@@ -1239,11 +1266,31 @@ public class RegexTextBox : ObjectTextBox<Regex>
 					SynchronizationContext.Current?.Post(() => this.Focus());
 				}, RoutingStrategies.Tunnel);
 			});
-			menu.Opened += (_, _) => this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
+			menu.Opened += (_, _) =>
+			{
+				this.UpdateHasOpenedAssistanceMenus();
+				this.AssistanceMenuOpened?.Invoke(this, EventArgs.Empty);
+			};
 			menu.PlacementTarget = this;
 		});
 		rootPanel.Children.Insert(0, this.predefinedGroupsPopup);
 		return this.predefinedGroupsPopup;
+	}
+	
+	
+	// Check whether at least one assistance has been opened or not.
+	bool UpdateHasOpenedAssistanceMenus()
+	{
+		if (this.candidatePhrasesPopup?.IsOpen == true 
+		    || this.escapedCharactersPopup?.IsOpen == true
+		    || this.groupingConstructsPopup?.IsOpen == true
+		    || this.predefinedGroupsPopup?.IsOpen == true)
+		{
+			this.SetAndRaise(HasOpenedAssistanceMenusProperty, ref this.hasOpenedAssistanceMenus, true);
+			return true;
+		}
+		this.SetAndRaise(HasOpenedAssistanceMenusProperty, ref this.hasOpenedAssistanceMenus, false);
+		return false;
 	}
 	
 	
