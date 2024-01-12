@@ -36,7 +36,7 @@ class ShowMainWindowsTest : TestCase
             var result = await this.Application.ShowMainWindowAsync(window =>
             {
                 this.createdMainWindows.Add(window);
-                window.Closed += (_, e) =>
+                window.Closed += (_, _) =>
                 {
                     this.createdMainWindows.Remove(window);
                 };
@@ -45,13 +45,13 @@ class ShowMainWindowsTest : TestCase
                 else
                     throw new AssertionException("View-model of main window was not created as expected.");
             });
-            Assert.IsTrue(result, "Failed to create main window.");
+            Assert.That(result, "Failed to create main window.");
         }
         await WaitForConditionAsync(() => this.createdMainWindows.Count == TestMainWindowCount,
             $"{this.createdMainWindows.Count} main window(s) created, {TestMainWindowCount} expected.",
             cancellationToken);
-        Assert.AreEqual(TestMainWindowCount, viewModels.Count, "{0} view-model(s) created, {1} expected.", viewModels.Count, TestMainWindowCount);
-        Assert.AreEqual(initMainWindowCount + TestMainWindowCount, this.Application.MainWindows.Count, "Total {0} main window(s), {1} expected.", this.Application.MainWindows.Count, initMainWindowCount + TestMainWindowCount);
+        Assert.That(TestMainWindowCount == viewModels.Count, $"{viewModels.Count} view-model(s) created, {TestMainWindowCount} expected.");
+        Assert.That(initMainWindowCount + TestMainWindowCount == this.Application.MainWindows.Count, $"Total {this.Application.MainWindows.Count} main window(s), {initMainWindowCount + TestMainWindowCount} expected.");
 
         // close main windows
         foreach (var window in this.createdMainWindows.ToArray())
@@ -59,7 +59,7 @@ class ShowMainWindowsTest : TestCase
         await WaitForConditionAsync(() => this.createdMainWindows.IsEmpty(),
             $"{this.createdMainWindows.Count} main window(s) could not be closed.",
             cancellationToken);
-        Assert.AreEqual(initMainWindowCount, this.Application.MainWindows.Count, "Total {0} main window(s), {1} expected.", this.Application.MainWindows.Count, initMainWindowCount);
+        Assert.That(initMainWindowCount == this.Application.MainWindows.Count, $"Total {this.Application.MainWindows.Count} main window(s), {initMainWindowCount} expected.");
 
         // check view-models
         var isDisposedProperty = typeof(ViewModel).GetProperty("IsDisposed", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).AsNonNull();

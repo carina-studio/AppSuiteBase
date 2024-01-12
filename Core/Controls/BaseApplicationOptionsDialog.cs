@@ -1,7 +1,9 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Controls;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,6 +25,7 @@ public abstract class BaseApplicationOptionsDialog : InputDialog<IAppSuiteApplic
     /// <summary>
     /// Initialize new <see cref="BaseApplicationOptionsDialog"/> instance.
     /// </summary>
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(ApplicationOptions))]
     protected BaseApplicationOptionsDialog()
     {
         this.Classes.Add("Dialog");
@@ -44,7 +47,7 @@ public abstract class BaseApplicationOptionsDialog : InputDialog<IAppSuiteApplic
     /// <inheritdoc/>
     protected override Task<object?> GenerateResultAsync(CancellationToken cancellationToken)
     {
-        if (this.DataContext is not ViewModels.ApplicationOptions options)
+        if (this.DataContext is not ApplicationOptions options)
         {
             this.closingTaskSource.SetResult(ApplicationOptionsDialogResult.None);
             return Task.FromResult((object?)ApplicationOptionsDialogResult.None);
@@ -69,7 +72,7 @@ public abstract class BaseApplicationOptionsDialog : InputDialog<IAppSuiteApplic
     /// <inheritdoc/>
     protected override void OnClosed(EventArgs e)
     {
-        (this.DataContext as ViewModels.ApplicationOptions)?.Dispose();
+        (this.DataContext as ApplicationOptions)?.Dispose();
         --OpenedDialogCount;
         this.closingTaskSource.TrySetResult(ApplicationOptionsDialogResult.None);
         base.OnClosed(e);
@@ -80,7 +83,7 @@ public abstract class BaseApplicationOptionsDialog : InputDialog<IAppSuiteApplic
     /// Called to create view-model of dialog.
     /// </summary>
     /// <returns>View-model of dialog.</returns>
-    protected abstract ViewModels.ApplicationOptions OnCreateViewModel();
+    protected abstract ApplicationOptions OnCreateViewModel();
 
 
     /// <inheritdoc/>

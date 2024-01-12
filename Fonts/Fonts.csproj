@@ -46,5 +46,12 @@
 		<AvaloniaResource Include="Resources/Fonts/SourceCodePro-LightItalic.ttf" />
 		<AvaloniaResource Include="Resources/Fonts/SourceCodePro-Regular.ttf" />
 	</ItemGroup>
+	
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+			<_Parameter1>IsTrimmable</_Parameter1>
+			<_Parameter2>True</_Parameter2>
+		</AssemblyAttribute>
+	</ItemGroup>
 
 </Project>

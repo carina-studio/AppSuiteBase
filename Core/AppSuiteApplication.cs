@@ -51,6 +51,7 @@ using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.IO;
 using NLog.Config;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CarinaStudio.AppSuite
 {
@@ -1702,6 +1703,21 @@ namespace CarinaStudio.AppSuite
 
         /// <inheritdoc/>
         public bool IsUserInteractive { get; private set; }
+        
+        
+        // Touch compiled Avalonia XAML to prevent being trimmed.
+        static void KeepCompiledAvaloniaXaml()
+        {
+            static void KeepTypeFromTrimming(Assembly assembly, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] string typeName)
+            {
+                var type = assembly.GetType(typeName);
+                if (type is null)
+                    throw new InternalStateCorruptedException("Compiled Avalonia XAML not found.");
+            }
+            var assembly = Assembly.GetCallingAssembly();
+            KeepTypeFromTrimming(assembly, "CompiledAvaloniaXaml.!AvaloniaResources");
+            KeepTypeFromTrimming(assembly, "CompiledAvaloniaXaml.!XamlLoader");
+        }
 
 
         /// <inheritdoc/>
@@ -2809,9 +2825,14 @@ namespace CarinaStudio.AppSuite
         /// Called to prepare application after Avalonia framework initialized.
         /// </summary>
         /// <returns>Task of preparation.</returns>
+        [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors, typeof(ColorPicker))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors, typeof(DataGrid))]
         protected virtual async Task OnPrepareStartingAsync()
         {
             LogToConsole("Prepare starting");
+
+            // prevent trimming compiled Avalonia XAML
+            KeepCompiledAvaloniaXaml();
             
             // start log output to localhost
             this.logOutputTargetPort = this.PersistentState.GetValueOrDefault(LogOutputTargetPortKey);
@@ -2879,10 +2900,6 @@ namespace CarinaStudio.AppSuite
             // create base theme
             var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
             this.Styles.Add(new FluentTheme());
-            this.Styles.Add(new StyleInclude(new Uri("avares://CarinaStudio.AppBase.Avalonia"))
-            {
-                Source = new("/Theme/Default.axaml", UriKind.Relative)
-            });
             if (time > 0)
                 this.Logger.LogTrace("[Performance] Took {duration} ms to create base theme", this.stopWatch.ElapsedMilliseconds - time);
 

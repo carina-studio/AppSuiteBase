@@ -24,13 +24,13 @@ class RestartMainWindowsTest : TestCase
     {
         // restart main windows
         var result = await this.Application.RestartRootWindowsAsync();
-        Assert.IsTrue(result, "Unable to restart main window(s)");
+        Assert.That(result, "Unable to restart main window(s)");
 
         // wait for restarting main windows
         await WaitForConditionAsync(() => this.Application.MainWindows.Count == this.mainWindowCount,
             $"{this.Application.MainWindows.Count} main window(s) restarted, {this.mainWindowCount} expected.",
             cancellationToken);
-        Assert.AreEqual(this.mainWindowCount, this.Application.MainWindows.Count, "{0} main window(s) restarted, {1} expected.", this.Application.MainWindows.Count, this.mainWindowCount);
+        Assert.That(this.mainWindowCount == this.Application.MainWindows.Count, $"{this.Application.MainWindows.Count} main window(s) restarted, {this.mainWindowCount} expected.");
 
         // check view-models
         await WaitForConditionAsync(() =>
@@ -52,13 +52,13 @@ class RestartMainWindowsTest : TestCase
     {
         var mainWindows = this.Application.MainWindows;
         this.mainWindowCount = mainWindows.Count;
-        Assert.NotZero(mainWindowCount, "No main window to test");
+        Assert.That(mainWindowCount > 0, "No main window to test");
         foreach (var mainWindow in mainWindows)
         {
             if (mainWindow.DataContext is ViewModel viewModel)
                 this.viewModels.Add(viewModel);
         }
-        Assert.IsNotEmpty(this.viewModels, "No view-model of main window to test");
+        Assert.That(this.viewModels.IsNotEmpty(), "No view-model of main window to test");
         return Task.CompletedTask;
     }
 

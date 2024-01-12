@@ -72,9 +72,9 @@ class LocalizationTest : TestCase
                 this.Application.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, appCulture);
             }
             await Task.Delay(1000, cancellationToken);
-            Assert.IsTrue(isTestStringChanged, $"Did not receive change notification after changing culture to '{appCulture}'.");
-            Assert.AreEqual(expectedString, latestNotifiedTestString, "String from observer is incorrect");
-            Assert.AreEqual(expectedString, this.Application.GetString("LocalizationTest.String"), "String is incorrect");
+            Assert.That(isTestStringChanged, $"Did not receive change notification after changing culture to '{appCulture}'.");
+            Assert.That(expectedString == latestNotifiedTestString, "String from observer is incorrect");
+            Assert.That(expectedString == this.Application.GetString("LocalizationTest.String"), "String is incorrect");
             var appCultureInfo = await appCulture.ToCultureInfoAsync();
             var currentCulture = CultureInfo.CurrentCulture;
             var currentUICulture = CultureInfo.CurrentUICulture;
@@ -86,10 +86,10 @@ class LocalizationTest : TestCase
                 taskCompletionSource.TrySetResult();
             });
             await taskCompletionSource.Task;
-            Assert.AreEqual(appCultureInfo.Name, currentCulture.Name, "CultureInfo.CurrentCulture is incorrect");
-            Assert.AreEqual(appCultureInfo.Name, currentUICulture.Name, "CultureInfo.CurrentUICulture is incorrect");
-            Assert.AreEqual(appCultureInfo.Name, CultureInfo.DefaultThreadCurrentCulture?.Name, "CultureInfo.DefaultThreadCurrentCulture is incorrect");
-            Assert.AreEqual(appCultureInfo.Name, CultureInfo.DefaultThreadCurrentUICulture?.Name, "CultureInfo.DefaultThreadCurrentUICulture is incorrect");
+            Assert.That(appCultureInfo.Name == currentCulture.Name, "CultureInfo.CurrentCulture is incorrect");
+            Assert.That(appCultureInfo.Name == currentUICulture.Name, "CultureInfo.CurrentUICulture is incorrect");
+            Assert.That(appCultureInfo.Name == CultureInfo.DefaultThreadCurrentCulture?.Name, "CultureInfo.DefaultThreadCurrentCulture is incorrect");
+            Assert.That(appCultureInfo.Name == CultureInfo.DefaultThreadCurrentUICulture?.Name, "CultureInfo.DefaultThreadCurrentUICulture is incorrect");
         }
     }
 

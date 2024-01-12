@@ -8,6 +8,7 @@ using CarinaStudio.Threading;
 using CarinaStudio.VisualTree;
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -44,35 +45,6 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 				break;
 		}
 		return brush;
-	});
-
-
-	// Converter to convert from state to icon.
-	public static readonly IValueConverter StateIconConverter = new FuncValueConverter<ExternalDependencyState, IImage?>(state =>
-	{
-		var app = AppSuiteApplication.CurrentOrNull;
-		if (app == null)
-			return null;
-		IImage? icon;
-		switch (state)
-		{
-			case ExternalDependencyState.Available:
-				app.TryFindResource("Image/Icon.OK.Outline.Colored", out icon);
-				break;
-			case ExternalDependencyState.CheckingForAvailability:
-				app.TryFindResource("Image/Icon.Waiting.Outline", out icon);
-				break;
-			case ExternalDependencyState.Unavailable:
-				app.TryFindResource("Image/Icon.Warning.Outline.Colored", out icon);
-				break;
-			case ExternalDependencyState.Unknown:
-				app.TryFindResource("Image/Icon.Question.Outline", out icon);
-				break;
-			default: 
-				app.TryFindResource("Image/Icon.Information.Outline", out icon);
-				break;
-		}
-		return icon;
 	});
 
 
@@ -120,6 +92,10 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 
 
 	// Constructor.
+	[DynamicDependency(nameof(Download))]
+	[DynamicDependency(nameof(EditPathEnvironmentVariable))]
+	[DynamicDependency(nameof(Refresh))]
+	[DynamicDependency(nameof(ShowDetails))]
 	public ExternalDependenciesDialogImpl()
 	{
 		AvaloniaXamlLoader.Load(this);

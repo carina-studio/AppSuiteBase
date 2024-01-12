@@ -35,7 +35,7 @@ class ThemeModeTest : TestCase
             shouldSystemThemeModeSupported = false;
         if (shouldSystemThemeModeSupported)
         {
-            Assert.IsTrue(this.Application.IsSystemThemeModeSupported, "System theme mode should be supported.");
+            Assert.That(this.Application.IsSystemThemeModeSupported, "System theme mode should be supported.");
             if (this.Application is AppSuiteApplication appSuiteApp)
             {
                 var sysThemeMode = await appSuiteApp.GetSystemThemeModeAsync();
@@ -51,11 +51,11 @@ class ThemeModeTest : TestCase
                             cancellationToken);
                     }
                 }
-                Assert.AreEqual(sysThemeMode, this.Application.EffectiveThemeMode, "System theme mode is not an expected value.");
+                Assert.That(sysThemeMode == this.Application.EffectiveThemeMode, "System theme mode is not an expected value.");
             }
         }
         else
-            Assert.IsFalse(this.Application.IsSystemThemeModeSupported, "System theme mode should not be supported.");
+            Assert.That(!this.Application.IsSystemThemeModeSupported, "System theme mode should not be supported.");
         
         // check dark mode
         if (this.Application.Settings.GetValueOrDefault(SettingKeys.ThemeMode) != ThemeMode.Dark)
@@ -71,7 +71,7 @@ class ThemeModeTest : TestCase
             }
         }
         var color = this.Application.FindResourceOrDefault<Color>("Color/ThemeModeTest.Color");
-        Assert.AreEqual(TestColorDark, color, "Content of dark theme is incorrect.");
+        Assert.That(TestColorDark == color, "Content of dark theme is incorrect.");
 
         // check light mode
         this.Application.Settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, ThemeMode.Light);
@@ -84,7 +84,7 @@ class ThemeModeTest : TestCase
                 cancellationToken);
         }
         color = this.Application.FindResourceOrDefault<Color>("Color/ThemeModeTest.Color");
-        Assert.AreEqual(TestColorLight, color, "Content of light theme is incorrect.");
+        Assert.That(TestColorLight == color, "Content of light theme is incorrect.");
     }
 
 

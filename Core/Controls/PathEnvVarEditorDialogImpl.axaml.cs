@@ -8,6 +8,7 @@ using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Windows.Input;
 
@@ -31,6 +32,8 @@ class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 
 
 	// Constructor.
+	[DynamicDependency(nameof(AddPath))]
+	[DynamicDependency(nameof(SaveAndClose))]
 	public PathEnvVarEditorDialogImpl()
 	{
 		this.CustomPaths = ListExtensions.AsReadOnly(new SortedObservableList<string>(CommandSearchPaths.CustomPaths));

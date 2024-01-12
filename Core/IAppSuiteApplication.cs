@@ -274,7 +274,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Raised when start loading string resources for given culture.
         /// </summary>
-        event EventHandler<IAppSuiteApplication, CultureInfo> LoadingStrings;
+        event EventHandler<IAppSuiteApplication, CultureInfo>? LoadingStrings;
 
 
         /// <summary>

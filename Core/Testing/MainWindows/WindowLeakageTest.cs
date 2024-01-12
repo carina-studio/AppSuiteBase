@@ -38,7 +38,7 @@ class WindowLeakageTest : TestCase
                     window.Close();
                 }, 2000 + random.Next(2000));
             });
-            Assert.IsTrue(result, "Unable to create main window for test.");
+            Assert.That(result, "Unable to create main window for test.");
         }
         await WaitForConditionAsync(() => this.createdMainWindows.IsEmpty(), $"{this.createdMainWindows.Count} main window(s) cannot be close properly.", 30000, cancellationToken);
 
@@ -49,7 +49,7 @@ class WindowLeakageTest : TestCase
             this.Application.PerformGC(GCCollectionMode.Forced);
             for (var i = mainWindowRefs.Count - 1; i >= 0; --i)
             {
-                if (!mainWindowRefs[i].TryGetTarget(out var window))
+                if (!mainWindowRefs[i].TryGetTarget(out _))
                     mainWindowRefs.RemoveAt(i);
             }
             if (mainWindowRefs.Count <= 3)

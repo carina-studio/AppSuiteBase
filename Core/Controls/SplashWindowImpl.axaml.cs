@@ -12,6 +12,7 @@ using CarinaStudio.Data.Converters;
 using CarinaStudio.Threading;
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -20,10 +21,10 @@ namespace CarinaStudio.AppSuite.Controls;
 /// Splash window when launching application.
 /// </summary>
 class SplashWindowImpl : Avalonia.Controls.Window
-	{
-		// Constants.
-		const int MaxShowingRetryingDuration = 1000;
-		const int RetryShowingDelay = 100;
+{
+	// Constants.
+	const int MaxShowingRetryingDuration = 1000;
+	const int RetryShowingDelay = 100;
 
 
 	// Static fields.
@@ -51,6 +52,9 @@ class SplashWindowImpl : Avalonia.Controls.Window
 	/// <summary>
 	/// Initialize new <see cref="SplashWindowImpl"/>.
 	/// </summary>
+	[DynamicDependency(nameof(ApplicationName))]
+	[DynamicDependency(nameof(Copyright))]
+	[DynamicDependency(nameof(Version))]
 	public SplashWindowImpl()
 	{
 		var app = IAppSuiteApplication.CurrentOrNull as AppSuiteApplication;

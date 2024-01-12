@@ -6,6 +6,7 @@ using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -75,6 +76,7 @@ class MessageDialogImpl : Dialog
 
 
 	// Constructor.
+	[DynamicDependency(nameof(SelectResultCommand))]
 	public MessageDialogImpl()
 	{
 		this.SelectResultCommand = new Command<MessageDialogResult?>(this.SelectResult);

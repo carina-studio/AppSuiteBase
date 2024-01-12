@@ -35,7 +35,7 @@
 			<TreeView Name="testCasesTreeView" Grid.ColumnSpan="3">
 				<TreeView.DataTemplates>
 
-					<!-- TestCaseCategroy -->
+					<!-- TestCaseCategory -->
 					<TreeDataTemplate DataType="{x:Type testing:TestCaseCategory}" ItemsSource="{Binding TestCases}">
 						<Grid Name="rootPanel" Background="{x:Static Brushes.Transparent}" ColumnDefinitions="*,Auto">
 							<Border Classes="InPlaceAction_Reserved"/>
@@ -74,7 +74,7 @@
 									</controls:Image>
 								</Button>
 							</StackPanel>
-							<TextBlock Foreground="{DynamicResource Brush/Icon.Error}" Grid.Column="1" Grid.Row="1" IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" Text="{Binding Error.Message}" TextTrimming="CharacterEllipsis"/>
+							<TextBlock Foreground="{DynamicResource Brush/Icon.Error}" Grid.Column="1" Grid.Row="1" IsVisible="{Binding Error, Converter={x:Static ObjectConverters.IsNotNull}}" Text="{Binding Error.Message, FallbackValue={x:Null}}" TextTrimming="CharacterEllipsis"/>
 						</Grid>
 					</DataTemplate>
 
@@ -90,7 +90,7 @@
 					</MultiBinding>
 				</Separator.IsVisible>
 			</Separator>
-			<abControls:FormattedTextBlock Name="runningTestCaseInfoTextBlock" Classes="Dialog_TextBlock" Arg1="{Binding RunningTestCase.Name, Source={x:Static testing:TestManager.Default}}" Format="{DynamicResource String/SelfTestingWindow.RunningTestCaseInfo}" Grid.Row="2" IsVisible="{Binding RunningTestCase, Source={x:Static testing:TestManager.Default}, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+			<abControls:FormattedTextBlock Name="runningTestCaseInfoTextBlock" Classes="Dialog_TextBlock" Arg1="{Binding RunningTestCase.Name, Source={x:Static testing:TestManager.Default}, FallbackValue={x:Null}}" Format="{DynamicResource String/SelfTestingWindow.RunningTestCaseInfo}" Grid.Row="2" IsVisible="{Binding RunningTestCase, Source={x:Static testing:TestManager.Default}, Converter={x:Static ObjectConverters.IsNotNull}}"/>
 			<Separator Classes="Dialog_Separator_Small" Grid.Column="1" Grid.Row="2" IsVisible="{Binding #runningTestCaseInfoTextBlock.IsVisible}"/>
 			<abControls:FormattedTextBlock Name="waitingTestCasesInfoTextBlock" Classes="Dialog_TextBlock" Arg1="{Binding TestCaseWaitingCount, Source={x:Static testing:TestManager.Default}}" Format="{DynamicResource String/SelfTestingWindow.WaitingTestCasesInfo}" Grid.Column="2" Grid.Row="2" IsVisible="{Binding TestCaseWaitingCount, Source={x:Static testing:TestManager.Default}, Converter={x:Static abConverters:NumberConverters.IsNonZero}}"/>
 

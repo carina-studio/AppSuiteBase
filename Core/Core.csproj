@@ -23,34 +23,6 @@
 		<AvaloniaResource Include="Fonts/NotoSansSC-Regular.ttf" />
 		<AvaloniaResource Include="Fonts/NotoSansTC-Bold.ttf" />
 		<AvaloniaResource Include="Fonts/NotoSansTC-Regular.ttf" />
-		<AvaloniaResource Include="Resources/Icons.axaml" />
-		<AvaloniaResource Include="Strings/Default.axaml" />
-		<AvaloniaResource Include="Strings/Default-OSX.axaml" />
-		<AvaloniaResource Include="Strings/Default-Linux.axaml" />
-		<AvaloniaResource Include="Strings/zh-TW.axaml" />
-		<AvaloniaResource Include="Strings/zh-TW-OSX.axaml" />
-		<AvaloniaResource Include="Strings/zh-TW-Linux.axaml" />
-		<AvaloniaResource Include="Themes/Base.axaml" />
-		<AvaloniaResource Include="Themes/Base-Colors.axaml" />
-		<AvaloniaResource Include="Themes/Base-Compact.axaml" />
-		<AvaloniaResource Include="Themes/Base-Dimensions.axaml" />
-		<AvaloniaResource Include="Themes/Base-Dimensions-Compact.axaml" />
-		<AvaloniaResource Include="Themes/Base-NoTransparentWindows.axaml" />
-		<AvaloniaResource Include="Themes/Base-OSX.axaml" />
-		<AvaloniaResource Include="Themes/Base-Others.axaml" />
-		<AvaloniaResource Include="Themes/Base-Styles.axaml" />
-		<AvaloniaResource Include="Themes/Base-Styles-Markdown.axaml" />
-		<AvaloniaResource Include="Themes/Base-Windows7.axaml" />
-		<AvaloniaResource Include="Themes/Dark.axaml" />
-		<AvaloniaResource Include="Themes/Dark-Colors.axaml" />
-		<AvaloniaResource Include="Themes/Dark-Compact.axaml" />
-		<AvaloniaResource Include="Themes/Dark-OSX.axaml" />
-		<AvaloniaResource Include="Themes/Dark-Windows7.axaml" />
-		<AvaloniaResource Include="Themes/Light.axaml" />
-		<AvaloniaResource Include="Themes/Light-Colors.axaml" />
-		<AvaloniaResource Include="Themes/Light-Compact.axaml" />
-		<AvaloniaResource Include="Themes/Light-OSX.axaml" />
-		<AvaloniaResource Include="Themes/Light-Windows7.axaml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -72,12 +44,16 @@
 		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="8.0.0" />
 		<PackageReference Include="NLog" Version="5.2.7" />
 		<PackageReference Include="NLog.Extensions.Logging" Version="5.3.5" />
-		<PackageReference Include="NUnit" Version="3.13.3" />
+		<PackageReference Include="NUnit" Version="4.0.1" />
 		<PackageReference Include="System.Management" Version="8.0.0" />
 		<PackageReference Include="System.Security.Principal.Windows" Version="6.0.0-preview.5.21301.5" />
 	</ItemGroup>
 	
 	<ItemGroup>
+		<AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+			<_Parameter1>IsTrimmable</_Parameter1>
+			<_Parameter2>True</_Parameter2>
+		</AssemblyAttribute>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>$(AssemblyName).Tests</_Parameter1>
 		</AssemblyAttribute>

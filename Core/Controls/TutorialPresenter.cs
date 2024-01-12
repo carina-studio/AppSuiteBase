@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.VisualTree;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -26,6 +27,8 @@ public abstract class TutorialPresenter : TemplatedControl, ITutorialPresenter
     /// <summary>
     /// Initialize new <see cref="TutorialPresenter"/> instance.
     /// </summary>
+    [DynamicDependency(nameof(DismissTutorial))]
+    [DynamicDependency(nameof(RequestSkippingAllTutorials))]
     protected TutorialPresenter()
     {
         this.SynchronizationContext = SynchronizationContext.Current ?? throw new InvalidOperationException("No synchronization context on current thread.");

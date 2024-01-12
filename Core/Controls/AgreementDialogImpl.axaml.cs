@@ -7,6 +7,7 @@ using CarinaStudio.Collections;
 using CarinaStudio.Threading;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CarinaStudio.AppSuite.Controls;
 
@@ -35,6 +36,7 @@ class AgreementDialogImpl : Dialog
 
 
     // Constructor.
+    [DynamicDependency(nameof(Agree))]
     public AgreementDialogImpl()
     {
         AvaloniaXamlLoader.Load(this);

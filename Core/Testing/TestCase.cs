@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,6 +26,7 @@ public abstract class TestCase : BaseApplicationObject<IAppSuiteApplication>, IN
     /// <param name="app">Application.</param>
     /// <param name="categoryName">Name of category.</param>
     /// <param name="name">Name.</param>
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(NUnit.Framework.Internal.TestExecutionContext))]
     protected TestCase(IAppSuiteApplication app, string? categoryName, string name) : base(app)
     {
         this.CategoryName = string.IsNullOrWhiteSpace(categoryName) ? TestCaseCategoryNames.Unclassified : categoryName;
@@ -196,6 +198,7 @@ public abstract class TestCase : BaseApplicationObject<IAppSuiteApplication>, IN
             }
             catch (Exception ex)
             {
+                this.Logger.LogError(ex, "Error occurred while setting up the test");
                 this.Error = ex;
                 return true;
             }
@@ -209,7 +212,10 @@ public abstract class TestCase : BaseApplicationObject<IAppSuiteApplication>, IN
             catch (Exception ex)
             {
                 if (ex is not TaskCanceledException)
+                {
+                    this.Logger.LogError(ex, "Failed");
                     this.Error = ex;
+                }
             }
         }
         finally

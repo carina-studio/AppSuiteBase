@@ -6,6 +6,7 @@ using CarinaStudio.AppSuite.Testing;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -54,16 +55,20 @@ class SelfTestingWindowImpl : Window<IAppSuiteApplication>
     }
 
 
-    // Static fields.
-    //
-
-
     // Fields.
     readonly TestManager testManager = TestManager.Default;
     readonly TreeView testCasesTreeView;
 
 
     // Constructor.
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(TestCase))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(TestCaseCategory))]
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(TestManager))]
+    [DynamicDependency(nameof(CancelAllTestCases))]
+    [DynamicDependency(nameof(CancelTestCaseCommand))]
+    [DynamicDependency(nameof(RunAllTestCases))]
+    [DynamicDependency(nameof(RunTestCaseCommand))]
+    [DynamicDependency(nameof(RunTestCasesInCategoryCommand))]
     public SelfTestingWindowImpl()
     {
         //this.testManager.AddTestCase(typeof(DummyTestCase));

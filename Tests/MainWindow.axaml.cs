@@ -29,6 +29,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Markup.Xaml.Styling;
 using CarinaStudio.AppSuite.IO;
+using CarinaStudio.AppSuite.Media;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using TabControl = Avalonia.Controls.TabControl;
 
@@ -88,6 +90,33 @@ namespace CarinaStudio.AppSuite.Tests
         readonly ObservableList<TabItem> tabItems = new();
 
 
+        [DynamicDependency(nameof(AppSuiteApplication.ShowSelfTestingWindow), typeof(AppSuiteApplication))]
+        [DynamicDependency(nameof(ApplicationOptions))]
+        [DynamicDependency(nameof(EditConfiguration))]
+        [DynamicDependency(nameof(FindCommandPath))]
+        [DynamicDependency(nameof(ImageIdList))]
+        [DynamicDependency(nameof(OpenFileForSyntaxHighlightingTextBlocks))]
+        [DynamicDependency(nameof(RegexSyntaxHighlightingDefinitionSet))]
+        [DynamicDependency(nameof(RestartApp))]
+        [DynamicDependency(nameof(SelectedImage))]
+        [DynamicDependency(nameof(SelectedImageId))]
+        [DynamicDependency(nameof(ShowAppInfoDialog))]
+        [DynamicDependency(nameof(ShowAppUpdateDialog))]
+        [DynamicDependency(nameof(ShowExternalDependenciesDialog))]
+        [DynamicDependency(nameof(ShowMessageDialog))]
+        [DynamicDependency(nameof(ShowNotification))]
+        [DynamicDependency(nameof(ShowAppInfoDialogCommand))]
+        [DynamicDependency(nameof(ShowTestDialog))]
+        [DynamicDependency(nameof(ShowTextInputDialog))]
+        [DynamicDependency(nameof(ShowTutorialCommand))]
+        [DynamicDependency(nameof(Shutdown))]
+        [DynamicDependency(nameof(StringItems))]
+        [DynamicDependency(nameof(SwitchAppCulture))]
+        [DynamicDependency(nameof(SwitchTheme))]
+        [DynamicDependency(nameof(SwitchUsingCompactUI))]
+        [DynamicDependency(nameof(Test))]
+        [DynamicDependency(nameof(Test2))]
+        [DynamicDependency(nameof(UpdateTaskbarIconProgressState))]
         public MainWindow()
         {
             this.ShowAppInfoDialogCommand = new Command(() => this.ShowAppInfoDialog(), this.canShowAppInfo);

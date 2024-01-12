@@ -18,6 +18,7 @@ using CarinaStudio.Data.Converters;
 using CarinaStudio.IO;
 using CarinaStudio.Threading;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,6 +85,15 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Constructor.
+		[DynamicDependency(nameof(DeactivateProduct))]
+		[DynamicDependency(nameof(ExportLogs))]
+		[DynamicDependency(nameof(RestartInDebugMode))]
+		[DynamicDependency(nameof(ShowApplicationChangeList))]
+		[DynamicDependency(nameof(ShowAppUpdateDialog))]
+		[DynamicDependency(nameof(ShowExternalDependencies))]
+		[DynamicDependency(nameof(ShowPrivacyPolicy))]
+		[DynamicDependency(nameof(ShowUserAgreement))]
+		[DynamicDependency(nameof(TakeMemorySnapshot))]
 		public ApplicationInfoDialogImpl()
 		{
 			// check proprietary application

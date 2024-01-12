@@ -1,7 +1,9 @@
 using Avalonia.Markup.Xaml.Styling;
 using CarinaStudio.Threading;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -35,9 +37,12 @@ public static class SyntaxHighlighting
             return Task.CompletedTask;
         }
         SyntaxHighlighting.app = app;
+        
+        // prevent trimming compiled Avalonia XAML
+        KeepCompiledAvaloniaXaml();
 
         // load base strings
-        var baseUri = new Uri($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}");
+        var baseUri = new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}");
         app.AddCustomResource(new ResourceInclude(baseUri)
         {
             Source = new("Strings/Default.axaml", UriKind.Relative)
@@ -68,6 +73,21 @@ public static class SyntaxHighlighting
         // complete
         return Task.CompletedTask;
     }
+    
+    
+    // Touch compiled Avalonia XAML to prevent being trimmed.
+    static void KeepCompiledAvaloniaXaml()
+    {
+        static void KeepTypeFromTrimming(Assembly assembly, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] string typeName)
+        {
+            var type = assembly.GetType(typeName);
+            if (type is null)
+                throw new InternalStateCorruptedException("Compiled Avalonia XAML not found.");
+        }
+        var assembly = Assembly.GetCallingAssembly();
+        KeepTypeFromTrimming(assembly, "CompiledAvaloniaXaml.!AvaloniaResources");
+        KeepTypeFromTrimming(assembly, "CompiledAvaloniaXaml.!XamlLoader");
+    }
 
 
     // Update strings for current culture.
@@ -80,7 +100,7 @@ public static class SyntaxHighlighting
         var stringResources = Global.Run(() =>
         {
             var name = cultureInfo.Name;
-            var baseUri = new Uri($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}");
+            var baseUri = new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}");
             if (name.StartsWith("zh-"))
             {
                 if (name.EndsWith("TW"))
@@ -101,7 +121,7 @@ public static class SyntaxHighlighting
         var themeMode = app!.EffectiveThemeMode;
         if (resourcesToken != null && resourcesThemeMode == themeMode)
             return;
-        var baseUri = new Uri($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}");
+        var baseUri = new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}");
         resourcesToken = resourcesToken.DisposeAndReturnNull();
         resourcesToken = app.AddCustomResource(themeMode switch
         {

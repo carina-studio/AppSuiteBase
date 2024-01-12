@@ -7,6 +7,7 @@ using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls
@@ -32,6 +33,7 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <summary>
 		/// Initialize new <see cref="ApplicationUpdateDialogImpl"/> instance.
 		/// </summary>
+		[DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(ApplicationUpdater))]
 		public ApplicationUpdateDialogImpl()
 		{
 			AvaloniaXamlLoader.Load(this);

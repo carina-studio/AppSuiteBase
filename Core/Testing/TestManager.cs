@@ -45,7 +45,7 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
     /// Add a test case.
     /// </summary>
     /// <param name="type">Type of test case.</param>
-    public void AddTestCase(Type type)
+    public void AddTestCase([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] Type type)
     {
         this.VerifyAccess();
         if (!typeof(TestCase).IsAssignableFrom(type))
@@ -114,7 +114,7 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
     /// <summary>
     /// Get default instance.
     /// </summary>
-    public static TestManager Default { get => DefaultInstance ?? throw new InvalidOperationException(); }
+    public static TestManager Default => DefaultInstance ?? throw new InvalidOperationException();
 
 
     // Get or create category of test case.
@@ -122,7 +122,7 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
     {
         if (this.testCaseCategories == null)
             throw new InvalidOperationException();
-        var index = this.testCaseCategories.BinarySearch<TestCaseCategory, string>(name, it => it.Name, (lhs, rhs) => string.Compare(lhs, rhs));
+        var index = this.testCaseCategories.BinarySearch<TestCaseCategory, string>(name, it => it.Name, string.CompareOrdinal);
         if (index >= 0)
             return this.testCaseCategories[index];
         return new TestCaseCategory(name).Also(it => this.testCaseCategories.Add(it));
@@ -271,7 +271,7 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
             if (this.roTestCaseCategories != null)
                 return this.roTestCaseCategories;
             this.VerifyAccess();
-            this.testCaseCategories = new((lhs, rhs) => string.Compare(lhs.Name, rhs.Name));
+            this.testCaseCategories = new((lhs, rhs) => string.CompareOrdinal(lhs.Name, rhs.Name));
             foreach (var type in this.testCaseTypes)
             {
                 if (this.TryCreateTestCase(type, out var testCase))
@@ -286,7 +286,7 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
     /// <summary>
     /// Get number of test cases which are waiting to be run.
     /// </summary>
-    public int TestCaseWaitingCount { get => this.testCasesToRun.Count; }
+    public int TestCaseWaitingCount => this.testCasesToRun.Count;
 
 
     // Try creating test case.

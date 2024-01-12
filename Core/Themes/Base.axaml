@@ -13,6 +13,7 @@
 	</Styles.Resources>
 
 	<!-- Styles -->
+	<StyleInclude Source="avares://CarinaStudio.AppBase.Avalonia/Theme/Default.axaml"/>
 	<StyleInclude Source="/Themes/Base-Styles.axaml"/>
 	
 </Styles>
