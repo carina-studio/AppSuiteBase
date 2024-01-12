@@ -84,6 +84,7 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Constructor.
+		[DynamicDependency(nameof(Copyright))]
 		[DynamicDependency(nameof(DeactivateProduct))]
 		[DynamicDependency(nameof(ExportLogs))]
 		[DynamicDependency(nameof(RestartInDebugMode))]
