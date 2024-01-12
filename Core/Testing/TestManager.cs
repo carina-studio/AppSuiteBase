@@ -45,7 +45,7 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
     /// Add a test case.
     /// </summary>
     /// <param name="type">Type of test case.</param>
-    public void AddTestCase([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] Type type)
+    public void AddTestCase([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.PublicConstructors)] Type type)
     {
         this.VerifyAccess();
         if (!typeof(TestCase).IsAssignableFrom(type))
@@ -274,8 +274,10 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
             this.testCaseCategories = new((lhs, rhs) => string.CompareOrdinal(lhs.Name, rhs.Name));
             foreach (var type in this.testCaseTypes)
             {
+#pragma warning disable IL2072
                 if (this.TryCreateTestCase(type, out var testCase))
                     this.GetOrCreateTestCaseCategory(testCase.CategoryName).AddTestCase(testCase);
+#pragma warning restore IL2072
             }
             this.roTestCaseCategories = ListExtensions.AsReadOnly(this.testCaseCategories);
             return this.roTestCaseCategories;
@@ -290,7 +292,7 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
 
 
     // Try creating test case.
-    bool TryCreateTestCase(Type type, [NotNullWhen(true)] out TestCase? testCase)
+    bool TryCreateTestCase([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.PublicConstructors)] Type type, [NotNullWhen(true)] out TestCase? testCase)
     {
         try
         {

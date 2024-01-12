@@ -1348,7 +1348,7 @@ namespace CarinaStudio.AppSuite
                 {
                     // setup background if transparent windows are not allowed
                     if (!this.AllowTransparentWindows)
-                        hostWindow.Bind(PopupRoot.BackgroundProperty, new Binding { Source = rootBorder, Path = nameof(Border.Background)});
+                        hostWindow.Bind(PopupRoot.BackgroundProperty, rootBorder.GetObservable(Border.BackgroundProperty));
                     
                     // animate
                     rootBorder.Opacity = 1;
@@ -1710,7 +1710,9 @@ namespace CarinaStudio.AppSuite
         {
             static void KeepTypeFromTrimming(Assembly assembly, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] string typeName)
             {
+#pragma warning disable IL2026
                 var type = assembly.GetType(typeName);
+#pragma warning restore IL2026
                 if (type is null)
                     throw new InternalStateCorruptedException("Compiled Avalonia XAML not found.");
             }
@@ -2166,7 +2168,9 @@ namespace CarinaStudio.AppSuite
         {
             try
             {
+#pragma warning disable IL2026
                 var resources = new ResourceInclude(new Uri($"{uri.Scheme}://{uri.Host}"));
+#pragma warning restore IL2026
                 return resources.Also(it =>
                 {
                     it.Source = uri;
@@ -2940,10 +2944,12 @@ namespace CarinaStudio.AppSuite
                 this.UpdateSplashWindowMessage(this.GetStringNonNull("AppSuiteApplication.LoadingTheme"));
                 await this.splashWindow!.WaitForRenderingAsync();
             }
+#pragma warning disable IL2026
             this.Resources.MergedDictionaries.Add(new ResourceInclude(new Uri("avares://CarinaStudio.AppSuite.Core"))
             {
                 Source = new Uri("Resources/Icons.axaml", UriKind.Relative)
             });
+#pragma warning restore IL2026
 
             // start initializing network manager
             if (showSplashWindow)
@@ -2974,7 +2980,7 @@ namespace CarinaStudio.AppSuite
             try
             {
                 var pmType = this.ProductManagerImplType;
-                if (pmType != null)
+                if (pmType is not null)
                 {
                     if (pmType.Assembly.GetName().FullName.StartsWith("CarinaStudio.AppSuite.Product,"))
                     {
@@ -3361,6 +3367,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get type of implementation of <see cref="IProductManager"/>.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.PublicProperties)]
         // ReSharper disable UnassignedGetOnlyAutoProperty
         protected virtual Type? ProductManagerImplType { get; }
         // ReSharper restore UnassignedGetOnlyAutoProperty
@@ -3681,6 +3688,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get type of implementation of <see cref="IScriptManager"/>.
         /// </summary>
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)]
         // ReSharper disable UnassignedGetOnlyAutoProperty
         protected virtual Type? ScriptManagerImplType { get; }
         // ReSharper restore UnassignedGetOnlyAutoProperty
@@ -4691,21 +4699,25 @@ namespace CarinaStudio.AppSuite
 
                 // load styles
                 var subTime = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+#pragma warning disable IL2026
                 this.styles = new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
                 {
                     Source = useCompactUI
                         ? new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}-Compact.axaml")
                         : new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}.axaml"),
                 };
+#pragma warning restore IL2026
                 if (Platform.WindowsVersion == WindowsVersion.Windows7) // Windows 7 specific styles
                 {
                     this.styles = new Styles().Also(styles =>
                     {
                         styles.Add(this.styles);
+#pragma warning disable IL2026
                         styles.Add(new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
                         {
                             Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}-Windows7.axaml"),
                         });
+#pragma warning restore IL2026
                     });
                 }
                 else if (Platform.IsMacOS)
@@ -4713,10 +4725,12 @@ namespace CarinaStudio.AppSuite
                     this.styles = new Styles().Also(styles =>
                     {
                         styles.Add(this.styles);
+#pragma warning disable IL2026
                         styles.Add(new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
                         {
                             Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}-OSX.axaml"),
                         });
+#pragma warning restore IL2026
                     });
                 }
                 if (subTime > 0)
@@ -4727,10 +4741,12 @@ namespace CarinaStudio.AppSuite
                 }
                 if (!this.AllowTransparentWindows)
                 {
+#pragma warning disable IL2026
                     var noTransparentWindowsStyles = new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
                     {
-                        Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/Base-NoTransparentWindows.axaml"),
+                        Source = new Uri("avares://CarinaStudio.AppSuite.Core/Themes/Base-NoTransparentWindows.axaml"),
                     };
+#pragma warning restore IL2026
                     if (this.styles is Styles styles)
                         styles.Add(noTransparentWindowsStyles);
                     else

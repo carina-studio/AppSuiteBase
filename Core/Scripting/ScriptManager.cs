@@ -2,6 +2,7 @@ using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
@@ -14,7 +15,7 @@ namespace CarinaStudio.AppSuite.Scripting;
 /// </summary>
 public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScriptManager
 {
-    // Statis fields.
+    // Static fields.
     static ScriptManager? DefaultInstance;
     static ILogger? Logger;
 
@@ -55,11 +56,11 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
     /// <summary>
     /// Get default instance.
     /// </summary>
-    public static ScriptManager Default { get => DefaultInstance ?? throw new InvalidOperationException(); }
-    
+    public static ScriptManager Default => DefaultInstance ?? throw new InvalidOperationException();
+
 
     // Initialize asynchronously.
-    internal static async Task InitializeAsync(IAppSuiteApplication app, Type? implType)
+    internal static async Task InitializeAsync(IAppSuiteApplication app, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type? implType)
     {
         // check state
         app.VerifyAccess();
@@ -149,8 +150,8 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
 
 
     /// <inheritdoc/>
-    public int RunningScriptCount { get => this.implementation?.RunningScriptCount ?? 0; }
-    
+    public int RunningScriptCount => this.implementation?.RunningScriptCount ?? 0;
+
 
     /// <inheritdoc/>
     public void SaveScript(IScript script, Utf8JsonWriter writer)
@@ -166,7 +167,7 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
 
 
     /// <inheritdoc/>
-    public double ScriptRunningLoading { get => this.implementation?.ScriptRunningLoading ?? 0; }
+    public double ScriptRunningLoading => this.implementation?.ScriptRunningLoading ?? 0;
 
 
     /// <inheritdoc/>

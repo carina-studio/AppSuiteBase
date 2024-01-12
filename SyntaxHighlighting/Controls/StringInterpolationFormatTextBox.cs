@@ -17,6 +17,7 @@ using CarinaStudio.Windows.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -147,6 +148,8 @@ public class StringInterpolationFormatTextBox : TextBox
 
 
     // Create listbox item for given variable.
+    [DynamicDependency(nameof(StringInterpolationVariable.DisplayName), typeof(StringInterpolationVariable))]
+    [DynamicDependency(nameof(StringInterpolationVariable.Name), typeof(StringInterpolationVariable))]
 	ListBoxItem CreateListBoxItem(StringInterpolationVariable variable) =>
 		this.recycledListBoxItems.Count > 0
 			? this.recycledListBoxItems.Dequeue().Also(it => it.DataContext = variable)
@@ -165,22 +168,26 @@ public class StringInterpolationFormatTextBox : TextBox
 					panel.ColumnDefinitions.Add(new(0, GridUnitType.Auto));
 					panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
 					{
-						it.Bind(Avalonia.Controls.TextBlock.FontFamilyProperty, new Binding() { Path = nameof(FontFamily), Source = this });
-						it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding() { Path = nameof(StringInterpolationVariable.Name) });
+						it.Bind(Avalonia.Controls.TextBlock.FontFamilyProperty, this.GetObservable(FontFamilyProperty));
+#pragma warning disable IL2026
+						it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding { Path = nameof(StringInterpolationVariable.Name) });
+#pragma warning restore IL2026
 						it.VerticalAlignment = VerticalAlignment.Center;
 					}));
 					var displayNameTextBlock = new Avalonia.Controls.TextBlock().Also(it =>
 					{
-						it.Bind(Avalonia.Controls.TextBlock.IsVisibleProperty, new Binding() { Path = nameof(StringInterpolationVariable.DisplayName), Converter = StringConverters.IsNotNullOrEmpty });
-                        it.Bind(Avalonia.Controls.TextBlock.OpacityProperty, this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity"));
-						it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding() { Path = nameof(StringInterpolationVariable.DisplayName) });
+#pragma warning disable IL2026
+						it.Bind(IsVisibleProperty, new Binding { Path = nameof(StringInterpolationVariable.DisplayName), Converter = StringConverters.IsNotNullOrEmpty });
+                        it.Bind(OpacityProperty, this.GetResourceObservable("Double/TextBox.Assistance.MenuItem.Description.Opacity"));
+						it.Bind(Avalonia.Controls.TextBlock.TextProperty, new Binding { Path = nameof(StringInterpolationVariable.DisplayName) });
+#pragma warning restore IL2026
 						it.VerticalAlignment = VerticalAlignment.Center;
 						Grid.SetColumn(it, 2);
 					});
 					panel.Children.Add(new Separator().Also(it => 
 					{
 						it.Classes.Add("Dialog_Separator");
-						it.Bind(IsVisibleProperty, new Binding() { Path = nameof(IsVisible), Source = displayNameTextBlock});
+						it.Bind(IsVisibleProperty, displayNameTextBlock.GetObservable(IsVisibleProperty));
 						Grid.SetColumn(it, 1);
 					}));
 					panel.Children.Add(displayNameTextBlock);

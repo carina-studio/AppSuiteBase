@@ -121,6 +121,7 @@ public class Context : IContext
     /// </summary>
     /// <param name="app">Application.</param>
     /// <param name="loggerName">Name for logger.</param>
+    [RequiresUnreferencedCode("Unreferenced code is required for checking caller.")]
     public Context(IAppSuiteApplication app, string loggerName)
     {
         Guard.VerifyInternalCall();
@@ -138,6 +139,7 @@ public class Context : IContext
     /// <summary>
     /// Dispose and clear all values from <see cref="Data"/>.
     /// </summary>
+    [RequiresUnreferencedCode("Unreferenced code is required for checking caller.")]
     public void ClearAndDisposeData()
     {
         Guard.VerifyInternalCall();
@@ -228,6 +230,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
     /// </summary>
     /// <param name="app">Application.</param>
     /// <param name="loggerName">Name for logger.</param>
+    [RequiresUnreferencedCode("Unreferenced code is required for checking caller.")]
     public UserInteractiveContext(IAppSuiteApplication app, string loggerName) : base(app, loggerName)
     { }
 

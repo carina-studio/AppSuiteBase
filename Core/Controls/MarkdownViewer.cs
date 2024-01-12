@@ -84,10 +84,12 @@ public unsafe class MarkdownViewer : TemplatedControl
             // [Workaround] Need to use separate styles for each MarkdownScrollViewer to prevent crashing after changing theme mode.
             var baseUri = new Uri($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}/");
             this.presenter.Engine.HyperlinkCommand = new Command<object?>(this.OnHyperlinkClicked);
+#pragma warning disable IL2026
             this.presenter.MarkdownStyle = new StyleInclude(baseUri)
             {
                 Source = new(baseUri, "/Themes/Base-Styles-Markdown.axaml"),
             };
+#pragma warning restore IL2026
             this.presenter.GetObservable(MarkdownScrollViewer.MarkdownProperty).Subscribe(markdown =>
             {
                 var startsWithHeading = false;

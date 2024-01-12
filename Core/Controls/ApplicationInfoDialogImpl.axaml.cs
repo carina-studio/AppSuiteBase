@@ -3,7 +3,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
-using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
@@ -383,7 +382,7 @@ namespace CarinaStudio.AppSuite.Controls
 								stackPanel.Children.Add(new Line().Also(it =>
 								{
 									it.Classes.Add("Dialog_Item_Separator_Inner");
-									it.Bind(IsVisibleProperty, new Binding { Source = deactivateButton, Path = nameof(IsVisible) });
+									it.Bind(IsVisibleProperty, deactivateButton.GetObservable(IsVisibleProperty));
 								}));
 								stackPanel.Children.Add(deactivateButton);
 								this.ShowProductInfo(stackPanel);

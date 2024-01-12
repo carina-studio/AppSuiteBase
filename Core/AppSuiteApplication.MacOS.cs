@@ -15,6 +15,7 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -101,7 +102,7 @@ partial class AppSuiteApplication
             if (this.baseAppDelegate?.Class.HasMethod(cmd) == true)
                 this.baseAppDelegate.SendMessage(cmd, args);
         }
-        T SendMessageToBaseAppDelegateWithResult<T>(ObjCSelector cmd, T defaultResult, params object?[] args)
+        T SendMessageToBaseAppDelegateWithResult<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.PublicConstructors)] T>(ObjCSelector cmd, T defaultResult, params object?[] args)
         {
             if (this.baseAppDelegate?.Class.HasMethod(cmd) == true)
             {
@@ -407,12 +408,12 @@ partial class AppSuiteApplication
                     };
 
                     // prepare progress background
-                    using var progressBackgroundPaint = new SKPaint()
+                    using var progressBackgroundPaint = new SKPaint().Setup(it =>
                     {
-                        Color = new(progressBackgroundColor.R, progressBackgroundColor.G, progressBackgroundColor.B, progressBackgroundColor.A),
-                        IsAntialias = true,
-                        Style = SKPaintStyle.Fill,
-                    };
+                        it.Color = new(progressBackgroundColor.R, progressBackgroundColor.G, progressBackgroundColor.B, progressBackgroundColor.A);
+                        it.IsAntialias = true;
+                        it.Style = SKPaintStyle.Fill;
+                    });
                     var progressBackgroundWidth = (int)(dockTileWidth * 0.65 + 0.5);
                     var progressBackgroundHeight = (int)(dockTileHeight * 0.1 + 0.5);
                     var progressBackgroundLeft = (dockTileWidth - progressBackgroundWidth) >> 1;
@@ -421,12 +422,12 @@ partial class AppSuiteApplication
 
                     // prepare progress foreground
                     var progress = window?.TaskbarIconProgress ?? 0;
-                    using var progressForegroundPaint = new SKPaint()
+                    using var progressForegroundPaint = new SKPaint().Setup(it =>
                     {
-                        Color = new(progressForegroundColor.R, progressForegroundColor.G, progressForegroundColor.B, progressForegroundColor.A),
-                        IsAntialias = true,
-                        Style = SKPaintStyle.Fill,
-                    };
+                        it.Color = new(progressForegroundColor.R, progressForegroundColor.G, progressForegroundColor.B, progressForegroundColor.A);
+                        it.IsAntialias = true;
+                        it.Style = SKPaintStyle.Fill;
+                    });
                     var progressBorderWidth = (int)(progressBackgroundHeight * 0.15 + 0.5);
                     var progressForegroundWidth = (int)((progressBackgroundWidth - progressBorderWidth - progressBorderWidth) * progress + 0.5);
                     var progressForegroundHeight = progressBackgroundHeight - progressBorderWidth - progressBorderWidth;

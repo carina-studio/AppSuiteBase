@@ -187,13 +187,16 @@ unsafe partial class AppSuiteApplication
 
 
     // Setup related objects for taskbar.
+    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Win32.ITaskbarList3))]
     [MemberNotNullWhen(true, nameof(windowsTaskbarList))]
     bool SetupWindowsTaskbarList()
     {
         if (this.windowsTaskbarList != null)
             return true;
         Win32.CoInitialize();
+#pragma warning disable IL2050
         var result = Win32.CoCreateInstance(in Win32.CLSID_TaskBarList, null, Win32.CLSCTX.INPROC_SERVER, in Win32.IID_TaskBarList3, out var obj);
+#pragma warning restore IL2050
         if (obj == null)
         {
             this.Logger.LogError("Unable to create ITaskBarList3 object, result: {result}", result);

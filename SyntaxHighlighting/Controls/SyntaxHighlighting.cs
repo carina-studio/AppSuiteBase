@@ -43,16 +43,20 @@ public static class SyntaxHighlighting
 
         // load base strings
         var baseUri = new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}");
+#pragma warning disable IL2026
         app.AddCustomResource(new ResourceInclude(baseUri)
         {
             Source = new("Strings/Default.axaml", UriKind.Relative)
         });
+#pragma warning restore IL2026
 
         // load base styles
+#pragma warning disable IL2026
         app.AddCustomStyle(new StyleInclude(baseUri)
         {
             Source = new("Themes/Base.axaml", UriKind.Relative)
         });
+#pragma warning restore IL2026
 
         // load strings
 #pragma warning disable CS8622
@@ -80,7 +84,9 @@ public static class SyntaxHighlighting
     {
         static void KeepTypeFromTrimming(Assembly assembly, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] string typeName)
         {
+#pragma warning disable IL2026
             var type = assembly.GetType(typeName);
+#pragma warning restore IL2026
             if (type is null)
                 throw new InternalStateCorruptedException("Compiled Avalonia XAML not found.");
         }
@@ -103,9 +109,11 @@ public static class SyntaxHighlighting
             var baseUri = new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}");
             if (name.StartsWith("zh-"))
             {
+#pragma warning disable IL2026
                 if (name.EndsWith("TW"))
                     return new ResourceInclude(baseUri) { Source = new("Strings/zh-TW.axaml", UriKind.Relative) };
                 return new ResourceInclude(baseUri) { Source = new("Strings/zh-CN.axaml", UriKind.Relative) };
+#pragma warning restore IL2026
             }
             return null;
         });
@@ -123,11 +131,13 @@ public static class SyntaxHighlighting
             return;
         var baseUri = new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}");
         resourcesToken = resourcesToken.DisposeAndReturnNull();
+#pragma warning disable IL2026
         resourcesToken = app.AddCustomResource(themeMode switch
         {
             ThemeMode.Light => new ResourceInclude(baseUri) { Source = new("Themes/Light.axaml", UriKind.Relative) },
             _ => new ResourceInclude(baseUri) { Source = new("Themes/Dark.axaml", UriKind.Relative) },
         });
+#pragma warning restore IL2026
         resourcesThemeMode = themeMode;
     }
 

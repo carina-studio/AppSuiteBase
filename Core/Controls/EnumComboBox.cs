@@ -123,7 +123,9 @@ namespace CarinaStudio.AppSuite.Controls
 				{
 					return new TextBlock().Also(it =>
 					{
+#pragma warning disable IL2026
 						it.Bind(TextBlock.TextProperty, new Binding { Converter = this.enumConverter });
+#pragma warning restore IL2026
 						it.TextTrimming = Avalonia.Media.TextTrimming.CharacterEllipsis;
 					});
 				}, true);
