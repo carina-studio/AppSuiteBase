@@ -1,23 +1,22 @@
 ﻿using System;
 
-namespace CarinaStudio.AppSuite
+namespace CarinaStudio.AppSuite;
+
+/// <summary>
+/// Theme mode.
+/// </summary>
+public enum ThemeMode
 {
     /// <summary>
-    /// Theme mode.
+    /// System.
     /// </summary>
-    public enum ThemeMode
-    {
-        /// <summary>
-        /// System.
-        /// </summary>
-        System,
-        /// <summary>
-        /// Dark.
-        /// </summary>
-        Dark,
-        /// <summary>
-        /// Light.
-        /// </summary>
-        Light,
-    }
+    System,
+    /// <summary>
+    /// Dark.
+    /// </summary>
+    Dark,
+    /// <summary>
+    /// Light.
+    /// </summary>
+    Light,
 }

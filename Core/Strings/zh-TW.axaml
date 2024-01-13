@@ -116,6 +116,7 @@
 	<sys:String x:Key="String/ApplicationUpdater.ReleasePage">新版本中的變更</sys:String>
 
 	<!-- AppSuiteApplication -->
+	<sys:String x:Key="String/AppSuiteApplication.AbnormalUIResponse.Message">{0} 的使用者介面似乎無法正確的回應，您是否要嘗試重新啟動應用程式以解決此問題？</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.InitializingComponents">初始化元件</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">載入佈景主題</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Description">擷取記憶體快照期間應用程式將停止回應數十秒至數分鐘。</sys:String>
