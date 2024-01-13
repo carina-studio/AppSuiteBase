@@ -807,10 +807,23 @@ namespace CarinaStudio.AppSuite
                         }
                         catch (TargetInvocationException ex)
                         {
-                            if (ex.InnerException is not null)
+                            if (ex.InnerException is Exception innerEx)
                             {
                                 logger?.LogError(ex, "Unhandled exception occurred in application lifetime");
-                                if (asAppImpl?.OnExceptionOccurredInApplicationLifetime(ex.InnerException) != true)
+                                LogToConsole($"Unhandled exception occurred in application lifetime: {innerEx.GetType().Name}, {innerEx.Message}");
+                                LogToConsole(innerEx.StackTrace);
+                                if (asAppImpl is not null)
+                                {
+                                    var handled = asAppImpl.OnExceptionOccurredInApplicationLifetime(innerEx);
+                                    var e = new IAppSuiteApplication.ExceptionEventArgs(innerEx) { Handled = handled };
+                                    asAppImpl.ExceptionOccurredInApplicationLifetime?.Invoke(asAppImpl, e);
+                                    if (!handled && !e.Handled)
+                                    {
+                                        forceThrowingException = true;
+                                        throw;
+                                    }
+                                }
+                                else
                                 {
                                     forceThrowingException = true;
                                     throw;
@@ -830,7 +843,17 @@ namespace CarinaStudio.AppSuite
                         throw;
                     SetupAppAndLogger();
                     logger?.LogError(ex, "Unhandled exception occurred in application lifetime");
-                    if (asAppImpl?.OnExceptionOccurredInApplicationLifetime(ex) != true)
+                    LogToConsole($"Unhandled exception occurred in application lifetime: {ex.GetType().Name}, {ex.Message}");
+                    LogToConsole(ex.StackTrace);
+                    if (asAppImpl is not null)
+                    {
+                        var handled = asAppImpl.OnExceptionOccurredInApplicationLifetime(ex);
+                        var e = new IAppSuiteApplication.ExceptionEventArgs(ex) { Handled = handled };
+                        asAppImpl.ExceptionOccurredInApplicationLifetime?.Invoke(asAppImpl, e);
+                        if (!handled && !e.Handled)
+                            throw;
+                    }
+                    else
                         throw;
                     logger?.LogWarning("Exception was handled");
                 }
@@ -1507,6 +1530,10 @@ namespace CarinaStudio.AppSuite
                 this.OnBackgroundModeEntered();
             return this.IsBackgroundMode;
         }
+
+
+        /// <inheritdoc/>
+        public event EventHandler<IAppSuiteApplication.ExceptionEventArgs>? ExceptionOccurredInApplicationLifetime;
 
 
         // Exit background mode.

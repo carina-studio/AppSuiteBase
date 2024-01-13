@@ -14,6 +14,30 @@ namespace CarinaStudio.AppSuite
     public interface IAppSuiteApplication : IAvaloniaApplication
     {
         /// <summary>
+        /// Data for exception related events.
+        /// </summary>
+        public class ExceptionEventArgs : EventArgs
+        {
+            /// <summary>
+            /// Initialize new <see cref="ExceptionEventArgs"/> instance.
+            /// </summary>
+            /// <param name="ex">Exception.</param>
+            public ExceptionEventArgs(Exception ex) =>
+                this.Exception = ex;
+            
+            /// <summary>
+            /// Get exception.
+            /// </summary>
+            public Exception Exception { get; }
+            
+            /// <summary>
+            /// Get or set whether exception has been handled or not.
+            /// </summary>
+            public bool Handled { get; set; }
+        }
+        
+        
+        /// <summary>
         /// Activate Pro version.
         /// </summary>
         /// <param name="window">Window.</param>
@@ -158,6 +182,12 @@ namespace CarinaStudio.AppSuite
         /// Get version to identify the collection of external dependencies.
         /// </summary>
         int ExternalDependenciesVersion { get; }
+
+
+        /// <summary>
+        /// Raised when unhandled exception occurred in application lifetime.
+        /// </summary>
+        event EventHandler<ExceptionEventArgs>? ExceptionOccurredInApplicationLifetime;
 
 
         /// <summary>

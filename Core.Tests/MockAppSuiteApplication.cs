@@ -149,6 +149,10 @@ namespace CarinaStudio.AppSuite
 
         /// <inheritdoc/>
         public double EffectiveCustomScreenScaleFactor => double.NaN;
+        
+        
+        /// <inheritdoc/>
+        public virtual event EventHandler<IAppSuiteApplication.ExceptionEventArgs>? ExceptionOccurredInApplicationLifetime;
 
 
         /// <inheritdoc/>
