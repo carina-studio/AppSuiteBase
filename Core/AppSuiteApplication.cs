@@ -2687,7 +2687,7 @@ namespace CarinaStudio.AppSuite
             this.windows.Remove(mainWindow);
             mainWindow.Closed -= this.OnMainWindowClosed;
 
-            this.Logger.LogDebug("Main window closed, {count} remains", this.mainWindows.Count);
+            this.Logger.LogDebug("Main window {id:x8} closed, {count} remains", mainWindow.GetHashCode(), this.mainWindows.Count);
 
             // perform operations
             await this.OnMainWindowClosedAsync(mainWindow, mainWindowHolder.ViewModel);
@@ -4020,7 +4020,7 @@ namespace CarinaStudio.AppSuite
                 this.OnMainWindowActivationChanged(mainWindow, value);
             }));
 
-            this.Logger.LogDebug("Show main window, {count} created", this.mainWindows.Count);
+            this.Logger.LogDebug("Show main window {id:x8}, {count} created", mainWindow.GetHashCode(), this.mainWindows.Count);
 
             // show main window
             await this.ShowMainWindowAsync(mainWindowHolder);
@@ -4031,12 +4031,12 @@ namespace CarinaStudio.AppSuite
         // Show given main window.
         async Task ShowMainWindowAsync(MainWindowHolder mainWindowHolder)
         {
-            if (mainWindowHolder.Window == null)
+            if (mainWindowHolder.Window is null)
             {
                 this.Logger.LogError("No main window instance created to show");
                 return;
             }
-            if (this.splashWindow != null)
+            if (this.splashWindow is not null)
             {
                 var duration = (this.stopWatch.ElapsedMilliseconds - this.splashWindowShownTime);
                 this.Logger.LogTrace("[Performance] Took {duration} ms between showing splash window and main window", duration);
@@ -4061,13 +4061,14 @@ namespace CarinaStudio.AppSuite
                 // setup data context
                 dispatcher.Post(() =>
                 {
+                    this.Logger.LogWarning("Set view-model from {st}", Environment.StackTrace);
                     if (!mainWindowHolder.Window.IsClosed)
                     {
                         var startTime = this.stopWatch.ElapsedMilliseconds;
                         mainWindowHolder.Window.DataContext = mainWindowHolder.ViewModel;
-                        this.Logger.LogTrace("[Performance] Took {duration} ms to set view-model to main window", this.stopWatch.ElapsedMilliseconds - startTime);
+                        this.Logger.LogTrace("[Performance] Took {duration} ms to set view-model to main window {id:x8}", this.stopWatch.ElapsedMilliseconds - startTime, mainWindowHolder.Window.GetHashCode());
                     }
-                }, DispatcherPriority.Render);
+                });
                 
                 // notify window created
                 dispatcher.Post(() =>
@@ -4077,18 +4078,19 @@ namespace CarinaStudio.AppSuite
                         mainWindowHolder.WindowCreatedAction(mainWindowHolder.Window);
                         mainWindowHolder.WindowCreatedAction = null;
                     }
-                }, DispatcherPriority.Render);
+                });
                 
                 // show window
                 dispatcher.Post(() =>
                 {
                     if (!mainWindowHolder.Window.IsClosed)
                     {
+                        this.Logger.LogTrace("Show main window {id:x8}", mainWindowHolder.Window.GetHashCode());
                         var startTime = this.stopWatch.ElapsedMilliseconds;
                         mainWindowHolder.Window.Show();
-                        this.Logger.LogTrace("[Performance] Took {duration} ms to show main window", this.stopWatch.ElapsedMilliseconds - startTime);
+                        this.Logger.LogTrace("[Performance] Took {duration} ms to show main window {id:x8}", this.stopWatch.ElapsedMilliseconds - startTime, mainWindowHolder.Window.GetHashCode());
                     }
-                }, DispatcherPriority.Render);
+                });
                 
                 // close splash window and stop tracing
                 dispatcher.Post(() =>

@@ -54,6 +54,7 @@ class ShowMainWindowsTest : TestCase
         Assert.That(initMainWindowCount + TestMainWindowCount == this.Application.MainWindows.Count, $"Total {this.Application.MainWindows.Count} main window(s), {initMainWindowCount + TestMainWindowCount} expected.");
 
         // close main windows
+        await Task.Delay(1000, cancellationToken);
         foreach (var window in this.createdMainWindows.ToArray())
             window.Close();
         await WaitForConditionAsync(() => this.createdMainWindows.IsEmpty(),
