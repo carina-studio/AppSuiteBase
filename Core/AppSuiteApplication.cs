@@ -4061,7 +4061,6 @@ namespace CarinaStudio.AppSuite
                 // setup data context
                 dispatcher.Post(() =>
                 {
-                    this.Logger.LogWarning("Set view-model from {st}", Environment.StackTrace);
                     if (!mainWindowHolder.Window.IsClosed)
                     {
                         var startTime = this.stopWatch.ElapsedMilliseconds;
