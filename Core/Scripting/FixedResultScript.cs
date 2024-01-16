@@ -5,20 +5,22 @@ using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Scripting;
 
-/// <summary>
-/// Empty script.
-/// </summary>
-class EmptyScript : IScript
+class FixedResultScript : IScript
 {
     // Static fields.
     static readonly IList<ICompilationResult> EmptyCompilationResults = Array.Empty<ICompilationResult>();
+    
+    
+    // Fields.
+    readonly object? result;
 
 
     // Constructor.
-    public EmptyScript(IAppSuiteApplication app, ScriptLanguage language)
+    public FixedResultScript(IAppSuiteApplication app, ScriptLanguage language, object? result)
     {
         this.Application = app;
         this.Language = language;
+        this.result = result;
         this.Source = "";
     }
 
@@ -43,9 +45,8 @@ class EmptyScript : IScript
 
     /// <inheritdoc/>
     public bool Equals(IScript? script) =>
-        script is not null
-        && script.IsEmpty
-        && script.Language == this.Language;
+        script is FixedResultScript fixedResultScript
+        && (this.result?.Equals(fixedResultScript.result) ?? fixedResultScript.result is null);
     
 
     /// <inheritdoc/>
@@ -63,11 +64,11 @@ class EmptyScript : IScript
 
 
     /// <inheritdoc/>
-    public bool HasRuntimeError => true;
+    public bool HasRuntimeError => false;
 
 
     /// <inheritdoc/>
-    public bool IsEmpty => true;
+    public bool IsEmpty => false;
 
 
     /// <inheritdoc/>
@@ -83,13 +84,27 @@ class EmptyScript : IScript
 
 
     /// <inheritdoc/>
-    public Task<R> RunAsync<R>(IContext context, CancellationToken cancellationToken = default) =>
-        throw new ScriptException("Cannot run empty script.");
+    public Task<R> RunAsync<R>(IContext context, CancellationToken cancellationToken = default)
+    {
+        if (this.result is null)
+        {
+            if (typeof(R).IsClass)
+#pragma warning disable CS8600
+#pragma warning disable CS8604
+                return Task.FromResult<R>((R)(object?)null);
+#pragma warning restore CS8600
+#pragma warning restore CS8604
+            return Task.FromException<R>(new ScriptException($"Cannot cast result from Null to {typeof(R).Name}."));
+        }
+        if (this.result is R targetResult)
+            return Task.FromResult(targetResult);
+        return Task.FromException<R>(new ScriptException($"Cannot cast result from {this.result.GetType().Name} to {typeof(R).Name}."));
+    }
     
 
     /// <inheritdoc/>
     public IScript Share() =>
-        new EmptyScript(this.Application, this.Language);
+        new FixedResultScript(this.Application, this.Language, this.result);
 
 
     /// <inheritdoc/>

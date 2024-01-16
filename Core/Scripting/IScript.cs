@@ -1,6 +1,8 @@
 using CarinaStudio.Configuration;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
@@ -110,6 +112,15 @@ public enum ScriptLanguage
 /// </summary>
 public static class ScriptExtensions
 {
+    // Constants.
+    const int CachedCancellationTokenSourcesCapacity = 16;
+    
+    
+    // Fields.
+    static readonly ConcurrentStack<CancellationTokenSource> cachedCancellationTokenSources = new();
+    static Stopwatch? stopwatch;
+    
+    
     /// <summary>
     /// Check whether at least one compilation or runtime error had occurred or not.
     /// </summary>
@@ -145,11 +156,27 @@ public static class ScriptExtensions
     /// <param name="cancellationCheck">Function to check whether script running should be cancelled or not.</param>
     public static void Run(this IScript script, IContext context, Func<bool>? cancellationCheck = null)
     {
+        // check state
         if (cancellationCheck?.Invoke() == true)
             return;
-        using var cancellationTokenSource = new CancellationTokenSource();
+        
+        // create cancellation token
+        if (!cachedCancellationTokenSources.TryPop(out var cancellationTokenSource))
+            cancellationTokenSource = new();
+        
+        // start running
         var checkingInternal = Math.Max(1000, script.Application.Configuration.GetValueOrDefault(ConfigurationKeys.ScriptCompletionCheckingInterval));
         var runningTask = script.RunAsync<object?>(context, cancellationTokenSource.Token);
+        
+        // wait for completion
+        stopwatch ??= new Stopwatch().Also(it => it.Start());
+        var startTime = stopwatch.ElapsedMilliseconds;
+        do
+        {
+            if (runningTask.IsCompleted)
+                break;
+            Thread.Yield();
+        } while ((stopwatch.ElapsedMilliseconds - startTime) < 100);
         while (!runningTask.IsCompleted)
         {
             if (runningTask.Wait(checkingInternal))
@@ -157,9 +184,12 @@ public static class ScriptExtensions
             if (cancellationCheck?.Invoke() == true)
             {
                 cancellationTokenSource.Cancel();
+                cancellationTokenSource.Dispose();
                 return;
             }
         }
+        
+        // complete running
         try
         {
             _ = runningTask.Result;
@@ -169,8 +199,15 @@ public static class ScriptExtensions
             if (ex is AggregateException && ex.InnerException != null)
                 ex = ex.InnerException;
             if (ex is ScriptException)
-                throw ex;
+                throw;
             throw new ScriptException(ex.Message, -1, -1, ex);
+        }
+        finally
+        {
+            if (!cancellationTokenSource.IsCancellationRequested && cachedCancellationTokenSources.Count < CachedCancellationTokenSourcesCapacity)
+                cachedCancellationTokenSources.Push(cancellationTokenSource);
+            else
+                cancellationTokenSource.Dispose();
         }
     }
 
@@ -185,21 +222,40 @@ public static class ScriptExtensions
     /// <returns>Returned value from script.</returns>
     public static R? Run<R>(this IScript script, IContext context, Func<bool>? cancellationCheck = null)
     {
+        // check state
         if (cancellationCheck?.Invoke() == true)
             return default;
-        using var cancellationTokenSource = new CancellationTokenSource();
+        
+        // create cancellation token
+        if (!cachedCancellationTokenSources.TryPop(out var cancellationTokenSource))
+            cancellationTokenSource = new();
+        
+        // start running
         var checkingInternal = Math.Max(1000, script.Application.Configuration.GetValueOrDefault(ConfigurationKeys.ScriptCompletionCheckingInterval));
         var runningTask = script.RunAsync<R>(context, cancellationTokenSource.Token);
+        
+        // wait for completion
+        stopwatch ??= new Stopwatch().Also(it => it.Start());
+        var startTime = stopwatch.ElapsedMilliseconds;
+        do
+        {
+            if (runningTask.IsCompleted)
+                break;
+            Thread.Yield();
+        } while ((stopwatch.ElapsedMilliseconds - startTime) < 100);
         while (!runningTask.IsCompleted)
         {
-            if (runningTask.Wait(checkingInternal))
-                break;
             if (cancellationCheck?.Invoke() == true)
             {
                 cancellationTokenSource.Cancel();
+                cancellationTokenSource.Dispose();
                 return default;
             }
+            if (runningTask.Wait(checkingInternal))
+                break;
         }
+        
+        // complete running
         try
         {
             return runningTask.Result;
@@ -209,8 +265,15 @@ public static class ScriptExtensions
             if (ex is AggregateException && ex.InnerException != null)
                 ex = ex.InnerException;
             if (ex is ScriptException)
-                throw ex;
+                throw;
             throw new ScriptException(ex.Message, -1, -1, ex);
+        }
+        finally
+        {
+            if (!cancellationTokenSource.IsCancellationRequested && cachedCancellationTokenSources.Count < CachedCancellationTokenSourcesCapacity)
+                cachedCancellationTokenSources.Push(cancellationTokenSource);
+            else
+                cancellationTokenSource.Dispose();
         }
     }
 

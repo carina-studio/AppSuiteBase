@@ -110,6 +110,17 @@ public static class ScriptManagerExtensions
     /// <returns>Empty script.</returns>
     public static IScript CreateEmptyScript(this IScriptManager scriptManager, ScriptLanguage language) =>
         new EmptyScript(scriptManager.Application, language);
+    
+    
+    /// <summary>
+    /// Create script which generates fixed result.
+    /// </summary>
+    /// <param name="scriptManager"><see cref="IScriptManager"/>.</param>
+    /// <param name="language">Language.</param>
+    /// <param name="result">Result.</param>
+    /// <returns>Script with fixed result.</returns>
+    public static IScript CreateFixedResultScript<R>(this IScriptManager scriptManager, ScriptLanguage language, R result) =>
+        new FixedResultScript(scriptManager.Application, language, result);
 
 
     /// <summary>
@@ -135,7 +146,7 @@ public static class ScriptManagerExtensions
                     throw new TaskCanceledException();
             }
             return null;
-        });
+        }, cancellationToken);
         if (stream == null)
             throw new IOException($"Unable to open file '{fileName}' to load script.");
         if (cancellationToken.IsCancellationRequested)
@@ -170,7 +181,7 @@ public static class ScriptManagerExtensions
                 jsonDocument?.Dispose();
                 throw;
             }
-        });
+        }, cancellationToken);
         if (cancellationToken.IsCancellationRequested)
         {
             jsonDocument?.Dispose();
@@ -206,7 +217,7 @@ public static class ScriptManagerExtensions
                     throw new TaskCanceledException();
             }
             return null;
-        });
+        }, cancellationToken);
         if (stream == null)
             throw new IOException($"Unable to open file '{fileName}' to save script.");
         if (cancellationToken.IsCancellationRequested)
