@@ -427,6 +427,7 @@ namespace CarinaStudio.AppSuite
         long frameworkInitializedTime;
         HardwareInfo? hardwareInfo;
         bool isCompactStyles;
+        bool isCriticalShutdownStarted;
         bool isRestartAsAdminRequested;
         bool isRestartingRootWindowsRequested;
         bool isRestartRequested;
@@ -1640,6 +1641,10 @@ namespace CarinaStudio.AppSuite
         public bool IsCleanMode { get; private set; }
 
 
+        /// <inheritdoc/>
+        public bool IsCriticalShutdownStarted => this.isCriticalShutdownStarted;
+
+
         /// <summary>
         /// Check whether application is running in debug mode or not.
         /// </summary>
@@ -2309,7 +2314,7 @@ namespace CarinaStudio.AppSuite
                 this.Restart(this.CreateApplicationArgsBuilder().Also(it =>
                 {
                     it.RestoringMainWindows = true;
-                }));
+                }), this.IsRunningAsAdministrator, true);
             }
         }
 
@@ -2393,10 +2398,14 @@ namespace CarinaStudio.AppSuite
         /// Called to dispose view-model of main window.
         /// </summary>
         /// <param name="viewModel">View-model to dispose.</param>
+        /// <param name="isCritical">True if disposing view-model for critical reason.</param>
         /// <returns>Task of disposing view-model.</returns>
-        protected virtual async Task OnDisposeMainWindowViewModelAsync(ViewModel viewModel)
+        protected virtual async Task OnDisposeMainWindowViewModelAsync(ViewModel viewModel, bool isCritical = false)
         {
-            await viewModel.WaitForNecessaryTasksAsync();
+            if (isCritical)
+                this.Logger.LogWarning("Skip waiting for necessary tasks of view-model of main window because of critical case");
+            else
+                await viewModel.WaitForNecessaryTasksAsync();
             viewModel.Dispose();
         }
 
@@ -2736,13 +2745,13 @@ namespace CarinaStudio.AppSuite
             }
 
             // dispose view model
-            await this.OnDisposeMainWindowViewModelAsync(mainWindowHolder.ViewModel);
+            await this.OnDisposeMainWindowViewModelAsync(mainWindowHolder.ViewModel, this.isCriticalShutdownStarted);
 
             // remove from window list
             this.mainWindowHolders.Remove(mainWindow);
 
             // enter background mode or shut down
-            if (!this.EnterBackgroundMode() && this.mainWindowHolders.IsEmpty() && this.windows.IsEmpty())
+            if (!this.EnterBackgroundMode() && this.mainWindowHolders.IsEmpty() && this.windows.IsEmpty() && !this.isCriticalShutdownStarted)
             {
                 this.Logger.LogWarning("All main windows were closed, start shutting down");
                 this.Shutdown();
@@ -2759,7 +2768,10 @@ namespace CarinaStudio.AppSuite
         protected virtual async Task OnMainWindowClosedAsync(MainWindow mainWindow, ViewModel viewModel)
         {
             // save settings
-            await this.SaveSettingsAsync();
+            if (this.isCriticalShutdownStarted)
+                this.Logger.LogWarning("Skip saving settings because of shutting down for critical reason");
+            else
+                await this.SaveSettingsAsync();
         }
 
 
@@ -2806,15 +2818,16 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Called to perform asynchronous operations before shutting down.
         /// </summary>
+        /// <param name="isCritical">True if shutting down for critical reason.</param>
         /// <returns>Task of performing operations.</returns>
-        protected virtual async Task OnPrepareShuttingDownAsync()
+        protected virtual async Task OnPrepareShuttingDownAsync(bool isCritical)
         {
             // dispose pending view-model of main windows
             if (this.pendingMainWindowHolders.IsNotEmpty())
             {
                 this.Logger.LogWarning("Dispose {count} pending view-model of main windows before shutting down", this.pendingMainWindowHolders.Count);
                 foreach (var mainWindowHolder in this.pendingMainWindowHolders)
-                    await this.OnDisposeMainWindowViewModelAsync(mainWindowHolder.ViewModel);
+                    await this.OnDisposeMainWindowViewModelAsync(mainWindowHolder.ViewModel, isCritical);
                 this.pendingMainWindowHolders.Clear();
             }
 
@@ -2837,13 +2850,17 @@ namespace CarinaStudio.AppSuite
             }
             
             // save initial settings
-            await this.SaveInitSettingsAsync();
+            await this.SaveInitSettingsAsync(isCritical);
 
             // save configuration
-            await this.SaveConfigurationAsync();
+            await this.SaveConfigurationAsync(isCritical);
 
             // save persistent state
-            await this.SavePersistentStateAsync();
+            await this.SavePersistentStateAsync(isCritical);
+            
+            // save settings
+            if (isCritical)
+                await this.SaveSettingsAsync(true);
         }
 
 
@@ -3512,7 +3529,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public bool Restart(ApplicationArgsBuilder argsBuilder, bool asAdministrator)
+        public bool Restart(ApplicationArgsBuilder argsBuilder, bool asAdministrator, bool isCritical = false)
         {
             // check state
             this.VerifyAccess();
@@ -3534,7 +3551,7 @@ namespace CarinaStudio.AppSuite
             this.restartArgs = argsBuilder.Clone();
 
             // shutdown to restart
-            this.Shutdown();
+            this.Shutdown(0, isCritical);
             return true;
         }
 
@@ -3622,7 +3639,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Save configuration.
-        async Task SaveConfigurationAsync()
+        async Task SaveConfigurationAsync(bool isCritical = false)
         {
             // check state
             if (this.configuration is not ConfigurationImpl config)
@@ -3634,10 +3651,18 @@ namespace CarinaStudio.AppSuite
             }
 
             // save
-            this.Logger.LogDebug("Start saving configuration");
             try
             {
-                await config.SaveAsync(this.configurationFilePath);
+                if (isCritical)
+                {
+                    this.Logger.LogWarning("Start saving configuration for critical reason");
+                    config.Save(this.configurationFilePath);
+                }
+                else
+                {
+                    this.Logger.LogDebug("Start saving configuration");
+                    await config.SaveAsync(this.configurationFilePath);
+                }
                 this.Logger.LogDebug("Complete saving configuration");
             }
             catch (Exception ex)
@@ -3651,11 +3676,11 @@ namespace CarinaStudio.AppSuite
         /// Save <see cref="InitSettings"/> to file.
         /// </summary>
         /// <returns>Task of saving.</returns>
-        internal async Task SaveInitSettingsAsync()
+        internal async Task SaveInitSettingsAsync(bool isCritical = false)
         {
             // check state
             this.VerifyAccess();
-            if (this.settings == null)
+            if (this.settings is null)
                 return;
             if (this.IsCleanMode)
             {
@@ -3664,10 +3689,18 @@ namespace CarinaStudio.AppSuite
             }
 
             // save
-            this.Logger.LogDebug("Start saving initial settings");
             try
             {
-                await InitSettingsInstance!.SaveAsync(InitSettingsFilePath);
+                if (isCritical)
+                {
+                    this.Logger.LogWarning("Start saving initial settings for critical reason");
+                    InitSettingsInstance!.Save(InitSettingsFilePath);
+                }
+                else
+                {
+                    this.Logger.LogDebug("Start saving initial settings");
+                    await InitSettingsInstance!.SaveAsync(InitSettingsFilePath);
+                }
                 this.Logger.LogDebug("Complete saving initial settings");
             }
             catch (Exception ex)
@@ -3677,15 +3710,12 @@ namespace CarinaStudio.AppSuite
         }
 
 
-        /// <summary>
-        /// Save <see cref="PersistentState"/> to file.
-        /// </summary>
-        /// <returns>Task of saving.</returns>
-        public async Task SavePersistentStateAsync()
+        /// <inheritdoc/>
+        public async Task SavePersistentStateAsync(bool isCritical = false)
         {
             // check state
             this.VerifyAccess();
-            if (this.persistentState == null)
+            if (this.persistentState is null)
                 return;
             if (this.IsCleanMode)
             {
@@ -3694,10 +3724,18 @@ namespace CarinaStudio.AppSuite
             }
 
             // save
-            this.Logger.LogDebug("Start saving persistent state");
             try
             {
-                await this.persistentState.SaveAsync(this.persistentStateFilePath);
+                if (isCritical)
+                {
+                    this.Logger.LogWarning("Start saving persistent state for critical reason");
+                    this.persistentState.Save(this.persistentStateFilePath);
+                }
+                else
+                {
+                    this.Logger.LogDebug("Start saving persistent state");
+                    await this.persistentState.SaveAsync(this.persistentStateFilePath);
+                }
                 this.Logger.LogDebug("Complete saving persistent state");
             }
             catch (Exception ex)
@@ -3707,15 +3745,12 @@ namespace CarinaStudio.AppSuite
         }
 
 
-        /// <summary>
-        /// Save <see cref="Settings"/> to file.
-        /// </summary>
-        /// <returns>Task of saving.</returns>
-        public async Task SaveSettingsAsync()
+        /// <inheritdoc/>
+        public async Task SaveSettingsAsync(bool isCritical = false)
         {
             // check state
             this.VerifyAccess();
-            if (this.settings == null)
+            if (this.settings is null)
                 return;
             if (this.IsCleanMode)
             {
@@ -3724,10 +3759,18 @@ namespace CarinaStudio.AppSuite
             }
 
             // save
-            this.Logger.LogDebug("Start saving settings");
             try
             {
-                await this.settings.SaveAsync(this.settingsFilePath);
+                if (isCritical)
+                {
+                    this.Logger.LogWarning("Start saving settings for critical reason");
+                    this.settings.Save(this.settingsFilePath);
+                }
+                else
+                {
+                    this.Logger.LogDebug("Start saving settings");
+                    await this.settings.SaveAsync(this.settingsFilePath);
+                }
                 this.Logger.LogDebug("Complete saving settings");
             }
             catch (Exception ex)
@@ -4133,16 +4176,15 @@ namespace CarinaStudio.AppSuite
         }
 
 
-        /// <summary>
-        /// Close all main windows and shut down application.
-        /// </summary>
-        /// <param name="delay">Delay to start shutting down process in milliseconds.</param>
-        public async void Shutdown(int delay = 0)
+        /// <inheritdoc/>
+        public async void Shutdown(int delay = 0, bool isCritical = false)
         {
             // check state
             this.VerifyAccess();
 
             // update state
+            if (isCritical)
+                this.Logger.LogWarning("Shut down for critical reason");
             if (this.shutdownSource == ShutdownSource.None)
                 this.shutdownSource = ShutdownSource.Application;
             switch (this.shutdownSource)
@@ -4155,20 +4197,30 @@ namespace CarinaStudio.AppSuite
                     break;
             }
             bool isFirstCall = !this.isShutdownStarted;
-            if (isFirstCall)
+            if (!this.isShutdownStarted)
             {
+                if (isCritical)
+                    this.isCriticalShutdownStarted = true;
                 this.isShutdownStarted = true;
+                if (isCritical)
+                    this.OnPropertyChanged(nameof(IsCriticalShutdownStarted));
                 this.OnPropertyChanged(nameof(IsShutdownStarted));
+            }
+            else if (isCritical && !this.isCriticalShutdownStarted)
+            {
+                this.isCriticalShutdownStarted = true;
+                this.OnPropertyChanged(nameof(IsCriticalShutdownStarted));
             }
 
             // delay
-            if (isFirstCall && delay > 0)
+            if (!isCritical && isFirstCall && delay > 0)
             {
                 this.Logger.LogWarning("Delay {delay} ms before starting shutting down process", delay);
                 await Task.Delay(delay);
             }
 
             // close all main windows
+            var areMainWindowVmStateSaved = false;
             if (this.mainWindowHolders.IsNotEmpty()) // check 'mainWindowHolders' because it will be updated after all tasks of closing main window are completed
             {
                 if (isFirstCall && this.mainWindows.IsNotEmpty())
@@ -4186,20 +4238,32 @@ namespace CarinaStudio.AppSuite
                         }
                         stateWriter.WriteEndArray();
                     }
-                    this.Logger.LogWarning($"Save main window view-model states");
+                    this.Logger.LogWarning("Save main window view-model states");
                     this.PersistentState.SetValue<byte[]>(MainWindowViewModelStatesKey, stateStream.ToArray());
+                    areMainWindowVmStateSaved = true;
                 }
-                return;
+                if (!isCritical)
+                    return;
             }
-            if (isFirstCall)
+            if (isFirstCall && !areMainWindowVmStateSaved)
             {
-                this.Logger.LogWarning($"Clear main window view-model states because of shutting down without main windows");
+                this.Logger.LogWarning("Clear main window view-model states because of shutting down without main windows");
                 this.PersistentState.ResetValue(MainWindowViewModelStatesKey);
             }
 
             // prepare
-            this.Logger.LogWarning("Prepare shutting down");
-            await this.OnPrepareShuttingDownAsync();
+            if (isCritical)
+            {
+                this.Logger.LogWarning("Prepare shutting down for critical reason");
+                var task = this.OnPrepareShuttingDownAsync(true);
+                if (!task.IsCompleted)
+                    throw new InvalidOperationException("Cannot perform asynchronous OnPrepareShuttingDownAsync() when shutting down for critical reason");
+            }
+            else
+            {
+                this.Logger.LogWarning("Prepare shutting down");
+                await this.OnPrepareShuttingDownAsync(false);
+            }
 
             // shut down Avalonia
             if (Platform.IsNotMacOS)

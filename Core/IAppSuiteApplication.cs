@@ -206,6 +206,12 @@ namespace CarinaStudio.AppSuite
         /// Check whether application is launched in clean mode or not.
         /// </summary>
         bool IsCleanMode { get; }
+        
+        
+        /// <summary>
+        /// Check whether shutting down for critical case/reason has been started or not.
+        /// </summary>
+        bool IsCriticalShutdownStarted { get; }
 
 
         /// <summary>
@@ -402,8 +408,9 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="argsBuilder">Builder to build arguments to restart.</param>
         /// <param name="asAdministrator">True to restart application as Administrator/Superuser.</param>
+        /// <param name="isCritical">True if restarting for critical reason.</param>
         /// <returns>True if restarting has been accepted.</returns>
-        bool Restart(ApplicationArgsBuilder argsBuilder, bool asAdministrator = false);
+        bool Restart(ApplicationArgsBuilder argsBuilder, bool asAdministrator = false, bool isCritical = false);
 
 
         /// <summary>
@@ -424,15 +431,17 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Save <see cref="IApplication.PersistentState"/> to file.
         /// </summary>
+        /// <param name="isCritical">True if saving persistent state for critical reason.</param>
         /// <returns>Task of saving.</returns>
-        Task SavePersistentStateAsync();
+        Task SavePersistentStateAsync(bool isCritical = false);
 
 
         /// <summary>
         /// Save <see cref="IApplication.Settings"/> to file.
         /// </summary>
+        /// <param name="isCritical">True if saving settings for critical reason.</param>
         /// <returns>Task of saving.</returns>
-        Task SaveSettingsAsync();
+        Task SaveSettingsAsync(bool isCritical = false);
 
 
         /// <summary>
@@ -464,7 +473,8 @@ namespace CarinaStudio.AppSuite
         /// Close all main windows and shut down application.
         /// </summary>
         /// <param name="delay">Delay before start process of shutting down in milliseconds.</param>
-        void Shutdown(int delay = 0);
+        /// <param name="isCritical">True if shutting down is caused by critical reason.</param>
+        void Shutdown(int delay = 0, bool isCritical = false);
 
 
         /// <summary>
