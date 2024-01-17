@@ -55,6 +55,15 @@ partial class AppSuiteApplication
                 {
                     ((AppSuiteApplication)Current).macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
                 });
+                cls.DefineMethod<IntPtr>("applicationDidHide:", (_, cmd, notification) =>
+                {
+                    ((AppSuiteApplication)Current).macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
+                });
+                // ReSharper disable once StringLiteralTypo
+                cls.DefineMethod<IntPtr>("applicationDidUnhide:", (_, cmd, notification) =>
+                {
+                    ((AppSuiteApplication)Current).macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
+                });
                 cls.DefineMethod<IntPtr, NSApplication.TerminateReply>("applicationShouldTerminate:", (_, cmd, app) =>
                 {
                     return ((AppSuiteApplication)Current).macOSAppDelegate.Let(it =>
@@ -76,10 +85,7 @@ partial class AppSuiteApplication
                 });
                 cls.DefineMethod<IntPtr, bool, bool>("applicationShouldHandleReopen:hasVisibleWindows:", (_, cmd, app, flag) =>
                 {
-                    var asApp = (AppSuiteApplication)IAppSuiteApplication.Current;
-                    asApp.macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, app, flag);
-                    if (asApp.IsBackgroundMode)
-                        asApp.OnTryExitingBackgroundMode();
+                    ((AppSuiteApplication)Current).macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, app, flag);
                     return true;
                 });
                 cls.DefineMethod<IntPtr>("applicationWillFinishLaunching:", (_, cmd, notification) =>

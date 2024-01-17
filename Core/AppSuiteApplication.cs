@@ -386,14 +386,14 @@ namespace CarinaStudio.AppSuite
                 }
             }
             var mainModule = Process.GetCurrentProcess().MainModule;
-            if (mainModule != null && Path.GetFileNameWithoutExtension(mainModule.FileName) != "dotnet")
+            if (mainModule is not null && Path.GetFileNameWithoutExtension(mainModule.FileName) != "dotnet")
                 return Path.GetDirectoryName(mainModule.FileName) ?? "";
             
             // get path from assembly
 #pragma warning disable SYSLIB0044
             var codeBase = Assembly.GetEntryAssembly()?.GetName().CodeBase;
 #pragma warning restore SYSLIB0044
-            if (codeBase != null && codeBase.StartsWith("file://") && codeBase.Length > 7)
+            if (codeBase is not null && codeBase.StartsWith("file://") && codeBase.Length > 7)
             {
                 if (Platform.IsWindows)
                     return Path.GetDirectoryName(codeBase[8..^0].Replace('/', '\\')) ?? Environment.CurrentDirectory;
@@ -1016,7 +1016,7 @@ namespace CarinaStudio.AppSuite
             if (!this.Configuration.GetValueOrDefault(ConfigurationKeys.ForceAcceptingAppUpdateInfo) && selectedAppUpdateInfo.Version <= this.Assembly.GetName().Version)
             {
                 this.Logger.LogInformation("This is the latest application");
-                if (this.UpdateInfo != null)
+                if (this.UpdateInfo is not null)
                 {
                     this.UpdateInfo = null;
                     this.OnPropertyChanged(nameof(UpdateInfo));
@@ -1065,7 +1065,7 @@ namespace CarinaStudio.AppSuite
         // Create server stream for multi-instances.
         bool CreateMultiInstancesServerStream(bool canRetry, bool printErrorStackTrace)
         {
-            if (this.multiInstancesServerStream != null)
+            if (this.multiInstancesServerStream is not null)
                 return true;
             if (this.IsShutdownStarted)
             {
@@ -1247,7 +1247,7 @@ namespace CarinaStudio.AppSuite
             {
                 var control = s as Control;
                 var pointer = ((PointerPressedEventArgs)e).GetCurrentPoint(control);
-                if (pointer.Properties.IsRightButtonPressed && (control?.ContextFlyout != null || control?.ContextMenu != null))
+                if (pointer.Properties.IsRightButtonPressed && (control?.ContextFlyout is not null || control?.ContextMenu is not null))
                     control.Focus();
             }, RoutingStrategies.Tunnel);
 
@@ -2016,7 +2016,7 @@ namespace CarinaStudio.AppSuite
                     _ = this.SavePersistentStateAsync();
                 }
             }
-            else if (currentVersion != null)
+            else if (currentVersion is not null)
             {
                 this.PreviousVersion = null;
                 this.persistentState.SetValue<string>(AppVersionKey, currentVersion.ToString());
@@ -2032,13 +2032,13 @@ namespace CarinaStudio.AppSuite
                         return v;
                     return null;
                 });
-                if (agreedVersion != null)
+                if (agreedVersion is not null)
                 {
                     this.AgreedPrivacyPolicyVersion = agreedVersion;
                     this.OnPropertyChanged(nameof(AgreedPrivacyPolicyVersion));
                 }
-                bool isAgreed = (agreedVersion != null && agreedVersion >= version);
-                if (agreedVersion != null)
+                bool isAgreed = (agreedVersion is not null && agreedVersion >= version);
+                if (agreedVersion is not null)
                 {
                     if (!this.IsPrivacyPolicyAgreedBefore)
                     {
@@ -2076,13 +2076,13 @@ namespace CarinaStudio.AppSuite
                         return v;
                     return null;
                 });
-                if (agreedVersion != null)
+                if (agreedVersion is not null)
                 {
                     this.AgreedUserAgreementVersion = agreedVersion;
                     this.OnPropertyChanged(nameof(AgreedUserAgreementVersion));
                 }
-                bool isAgreed = (agreedVersion != null && agreedVersion >= version);
-                if (agreedVersion != null)
+                bool isAgreed = (agreedVersion is not null && agreedVersion >= version);
+                if (agreedVersion is not null)
                 {
                     if (!this.IsUserAgreementAgreedBefore)
                     {
@@ -2434,7 +2434,7 @@ namespace CarinaStudio.AppSuite
 
             // start multi-instances server or send arguments to server
             var desktopLifetime = (this.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime);
-            if (!this.IsMultipleProcessesSupported && desktopLifetime != null)
+            if (!this.IsMultipleProcessesSupported && desktopLifetime is not null)
             {
                 this.multiInstancesServerStreamName = this.Name.Let(it =>
                 {
@@ -2480,7 +2480,7 @@ namespace CarinaStudio.AppSuite
                 this.AllowTransparentWindows = true;
 
             // parse arguments
-            if (desktopLifetime != null)
+            if (desktopLifetime is not null)
             {
                 this.LaunchOptions = this.ParseArguments(desktopLifetime.Args ?? Array.Empty<string>());
                 if (this.LaunchOptions.TryGetValue(LaunchOptionKeys.IsCleanModeRequested, out bool isCleanMode) && isCleanMode)
@@ -2525,6 +2525,17 @@ namespace CarinaStudio.AppSuite
             // setup NSApplication and dock tile on macOS
             if (Platform.IsMacOS)
                 this.SetupMacOSApp();
+            
+            // handle application icon click
+            // ReSharper disable once IdentifierTypo
+            if (desktopLifetime is IActivatableApplicationLifetime activatableApplicationLifetime)
+            {
+                activatableApplicationLifetime.Activated += (_, e) =>
+                {
+                    if (e.Kind == ActivationKind.Reopen && this.IsBackgroundMode)
+                        this.OnTryExitingBackgroundMode();
+                };
+            }
 
             // start monitoring windows.
             Avalonia.Controls.Window.WindowClosedEvent.AddClassHandler(typeof(Avalonia.Controls.Window), (sender, _) =>
@@ -2554,7 +2565,7 @@ namespace CarinaStudio.AppSuite
             this.processInfo = new ProcessInfo(this);
 
             // attach to lifetime
-            if (desktopLifetime != null)
+            if (desktopLifetime is not null)
             {
                 desktopLifetime.ShutdownMode = ShutdownMode.OnExplicitShutdown;
                 desktopLifetime.ShutdownRequested += (_, _) =>
@@ -2575,7 +2586,7 @@ namespace CarinaStudio.AppSuite
                 this.Logger.LogTrace("This is not the first launch");
 
             // check privacy policy version
-            if (this.PrivacyPolicyVersion == null)
+            if (this.PrivacyPolicyVersion is null)
             {
                 this.Logger.LogWarning("No Privacy Policy");
                 this.IsPrivacyPolicyAgreed = true;
@@ -2583,14 +2594,14 @@ namespace CarinaStudio.AppSuite
             }
 
             // check user agreement version
-            if (this.UserAgreementVersion == null)
+            if (this.UserAgreementVersion is null)
             {
                 this.Logger.LogWarning("No User Agreement");
                 this.IsUserAgreementAgreed = true;
                 this.OnPropertyChanged(nameof(IsUserAgreementAgreed));
             }
 
-            // prepare (will be run in guarded main loop)
+            // prepare
             this.SynchronizationContext.Post(async () =>
             {
                 // check state
@@ -2667,7 +2678,7 @@ namespace CarinaStudio.AppSuite
                     return;
                 if (this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
                 {
-                    if (mainWindowHolder.ActiveListNode.List != null)
+                    if (mainWindowHolder.ActiveListNode.List is not null)
                         this.activeMainWindowList.Remove(mainWindowHolder.ActiveListNode);
                     this.activeMainWindowList.AddFirst(mainWindowHolder.ActiveListNode);
                     this.OnPropertyChanged(nameof(LatestActiveMainWindow));
@@ -2690,7 +2701,7 @@ namespace CarinaStudio.AppSuite
                 this.OnPropertyChanged(nameof(LatestActiveMainWindow));
                 this.updateMacOSAppDockTileProgressAction?.Schedule();
             }
-            else if (mainWindowHolder.ActiveListNode.List != null)
+            else if (mainWindowHolder.ActiveListNode.List is not null)
                 this.activeMainWindowList.Remove(mainWindowHolder.ActiveListNode);
             this.mainWindows.Remove(mainWindow);
             this.windows.Remove(mainWindow);
@@ -2842,7 +2853,7 @@ namespace CarinaStudio.AppSuite
 
             // close server stream for multi-instances
             this.multiInstancesServerCancellationTokenSource.Cancel();
-            if (this.multiInstancesServerStream != null)
+            if (this.multiInstancesServerStream is not null)
             {
                 this.Logger.LogWarning("Close multi-instances server stream");
                 Global.RunWithoutError(() => this.multiInstancesServerStream.Close());
@@ -2933,12 +2944,12 @@ namespace CarinaStudio.AppSuite
             });
 
             // complete loading persistent state and settings
-            if (this.loadingInitPersistentStateTask != null)
+            if (this.loadingInitPersistentStateTask is not null)
             {
                 await this.loadingInitPersistentStateTask;
                 this.loadingInitPersistentStateTask = null;
             }
-            if (this.loadingInitSettingsTask != null)
+            if (this.loadingInitSettingsTask is not null)
             {
                 await this.loadingInitSettingsTask!;
                 this.loadingInitSettingsTask = null;
@@ -3069,7 +3080,7 @@ namespace CarinaStudio.AppSuite
             { 
                 this.Logger.LogError(ex, "Failed to create implementation of product manager");
             }
-            if (this.productManager == null)
+            if (this.productManager is null)
             {
                 this.Logger.LogDebug("Use mock product manager");
                 this.productManager = new MockProductManager(this);
@@ -3095,7 +3106,7 @@ namespace CarinaStudio.AppSuite
             // load saved states
             using var stateStream = new MemoryStream(this.PersistentState.GetValueOrDefault(MainWindowViewModelStatesKey));
             var jsonDocument = await Global.RunOrDefaultAsync(async () => await JsonDocument.ParseAsync(stateStream));
-            if (jsonDocument == null)
+            if (jsonDocument is null)
             {
                 this.Logger.LogWarning("No main windows to restore");
                 return false;
@@ -3196,7 +3207,7 @@ namespace CarinaStudio.AppSuite
         /// <returns>True if background mode has been exited successfully.</returns>
         protected virtual bool OnTryExitingBackgroundMode()
         { 
-            if (this.LatestActiveWindow != null)
+            if (this.LatestActiveWindow is not null)
             {
                 // ReSharper disable InvokeAsExtensionMethod
                 Controls.WindowExtensions.ActivateAndBringToFront(this.LatestActiveWindow);
@@ -3319,7 +3330,7 @@ namespace CarinaStudio.AppSuite
             if (window is MainWindow mainWindow && this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
             {
                 // add main window to active list
-                if (mainWindowHolder.ActiveListNode.List == null)
+                if (mainWindowHolder.ActiveListNode.List is null)
                 {
                     this.activeMainWindowList.AddLast(mainWindowHolder.ActiveListNode);
                     if (this.activeMainWindowList.Count == 1)
@@ -3327,7 +3338,7 @@ namespace CarinaStudio.AppSuite
                 }
 
                 // make it as latest active window
-                if (this.LatestActiveWindow == null)
+                if (this.LatestActiveWindow is null)
                 {
                     this.LatestActiveWindow = window;
                     this.OnPropertyChanged(nameof(LatestActiveWindow));
@@ -3385,7 +3396,7 @@ namespace CarinaStudio.AppSuite
                     GC.Collect(Math.Min(1, GC.MaxGeneration), GCCollectionMode.Default, true);
                     break;
             }
-            if (stopwatch != null)
+            if (stopwatch is not null)
             {
                 this.Logger.LogTrace("[Performance] Took {time} ms to perform GC with mode {mode}", stopwatch.ElapsedMilliseconds, collectionMode);
                 stopwatch.Stop();
@@ -3454,7 +3465,7 @@ namespace CarinaStudio.AppSuite
         {
             this.VerifyAccess();
             var productId = this.ProVersionProductId;
-            if (productId != null)
+            if (productId is not null)
                 this.ProductManager.PurchaseProduct(productId, window);
         }
 
@@ -3609,7 +3620,7 @@ namespace CarinaStudio.AppSuite
             this.isRestartingRootWindowsRequested = true;
             foreach (var window in this.windows)
             {
-                if (window.Parent != null)
+                if (window.Parent is not null)
                     continue;
                 if (window is MainWindow mainWindow && this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
                     mainWindowHolder.IsRestartingRequested = true;
@@ -3909,7 +3920,7 @@ namespace CarinaStudio.AppSuite
         {
             // wait for current dialog
             this.VerifyAccess();
-            if (this.appInfoDialog != null
+            if (this.appInfoDialog is not null
                 && this.appInfoDialog.Activate())
             {
                 await this.appInfoDialog.WaitForClosingDialogAsync();
@@ -3946,7 +3957,7 @@ namespace CarinaStudio.AppSuite
         {
             // wait for current dialog
             ApplicationUpdateDialogResult result;
-            if (this.appUpdateDialog != null
+            if (this.appUpdateDialog is not null
                 && this.appUpdateDialog.Activate())
             {
                 result = await this.appUpdateDialog.WaitForClosingDialogAsync();
@@ -4006,14 +4017,14 @@ namespace CarinaStudio.AppSuite
             if (mainWindowCount > 0 && !this.AllowMultipleMainWindows)
             {
                 this.Logger.LogError("Multiple main windows are not allowed");
-                if (viewModel != null)
+                if (viewModel is not null)
                     _ = this.OnDisposeMainWindowViewModelAsync(viewModel);
                 return false;
             }
 
             // update message on splash window
             this.UpdateSplashWindowMessage(this.GetStringNonNull("SplashWindow.ShowingMainWindow"));
-            if (this.splashWindow != null)
+            if (this.splashWindow is not null)
             {
                 if (!double.IsNaN(this.splashWindow.Progress) && this.splashWindow.Progress < 0.99)
                     this.splashWindow.Progress = 1.0;
@@ -4026,7 +4037,7 @@ namespace CarinaStudio.AppSuite
 
             // create view-model
             var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
-            if (viewModel == null)
+            if (viewModel is null)
             {
                 viewModel = this.OnCreateMainWindowViewModel(null);
                 if (time > 0)
@@ -4158,7 +4169,7 @@ namespace CarinaStudio.AppSuite
             this.VerifyAccess();
             if (!this.IsTestingMode)
                 return false;
-            if (this.selfTestingWindow != null)
+            if (this.selfTestingWindow is not null)
             {
                 // ReSharper disable InvokeAsExtensionMethod
                 Controls.WindowExtensions.ActivateAndBringToFront(this.selfTestingWindow);
@@ -4684,10 +4695,10 @@ namespace CarinaStudio.AppSuite
             var resourceUpdated = false;
             if (this.cultureInfo.Name != "en-US")
             {
-                if (this.stringResource == null || !Equals(this.stringResourceCulture, this.cultureInfo))
+                if (this.stringResource is null || !Equals(this.stringResourceCulture, this.cultureInfo))
                 {
                     // remove previous resource
-                    if (this.stringResource != null)
+                    if (this.stringResource is not null)
                     {
                         this.Resources.MergedDictionaries.Remove(this.stringResource);
                         this.stringResource = null;
@@ -4696,12 +4707,12 @@ namespace CarinaStudio.AppSuite
 
                     // load built-in resource
                     var builtInResource = this.LoadStringResource(new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}.axaml"));
-                    if (builtInResource != null)
+                    if (builtInResource is not null)
                     {
                         if (Platform.IsLinux)
                         {
                             var builtInResourcesForOS = this.LoadStringResource(new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}-Linux.axaml"));
-                            if (builtInResourcesForOS != null)
+                            if (builtInResourcesForOS is not null)
                             {
                                 builtInResource = new ResourceDictionary().Also(it =>
                                 {
@@ -4715,7 +4726,7 @@ namespace CarinaStudio.AppSuite
                         else if (Platform.IsMacOS)
                         {
                             var builtInResourcesForOS = this.LoadStringResource(new Uri($"avares://CarinaStudio.AppSuite.Core/Strings/{this.cultureInfo.Name}-OSX.axaml"));
-                            if (builtInResourcesForOS != null)
+                            if (builtInResourcesForOS is not null)
                             {
                                 builtInResource = new ResourceDictionary().Also(it =>
                                 {
@@ -4742,7 +4753,7 @@ namespace CarinaStudio.AppSuite
                     }
 
                     // merge resources
-                    if (builtInResource != null || resource != null)
+                    if (builtInResource is not null || resource is not null)
                     {
                         this.stringResource = new ResourceDictionary();
                         builtInResource?.Let(it => this.stringResource.MergedDictionaries.Add(it));
@@ -4758,7 +4769,7 @@ namespace CarinaStudio.AppSuite
                     resourceUpdated = true;
                 }
             }
-            else if (this.stringResource != null)
+            else if (this.stringResource is not null)
             {
                 this.Resources.MergedDictionaries.Remove(this.stringResource);
                 resourceUpdated = true;
@@ -4790,7 +4801,7 @@ namespace CarinaStudio.AppSuite
 
             // update styles
             var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
-            if (this.styles == null 
+            if (this.styles is null 
                 || this.stylesThemeMode != themeMode
                 || this.isCompactStyles != useCompactUI)
             {
@@ -4808,7 +4819,7 @@ namespace CarinaStudio.AppSuite
                 }
                 
                 // remove current styles
-                if (this.styles != null)
+                if (this.styles is not null)
                 {
                     this.Styles.Remove(this.styles);
                     this.styles = null;
@@ -4915,7 +4926,7 @@ namespace CarinaStudio.AppSuite
             if (this.Styles.TryGetResource("Color/Accent", out Color? color))
             {
                 // create resources
-                if (this.accentColorResources == null)
+                if (this.accentColorResources is null)
                 {
                     this.accentColorResources = new ResourceDictionary();
                     this.Resources.MergedDictionaries.Add(this.accentColorResources);
@@ -5009,7 +5020,7 @@ namespace CarinaStudio.AppSuite
         // Wait for client of multi-instances and handle incoming messages.
         async void WaitForMultiInstancesClient()
         {
-            if (this.multiInstancesServerStream == null)
+            if (this.multiInstancesServerStream is null)
             {
                 this.Logger.LogError("No multi-instances server stream");
                 return;
