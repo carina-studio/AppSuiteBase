@@ -9,7 +9,7 @@
         <!-- Other information -->
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Authors>Carina Studio</Authors>
-        <AppBaseVersion>2.1.31.116-rc</AppBaseVersion>
+        <AppBaseVersion>2.1.32.117-rc</AppBaseVersion>
         <AvaloniaVersion>11.0.6</AvaloniaVersion>
         <AvaloniaXamlBehaviorsVersion>11.0.6</AvaloniaXamlBehaviorsVersion>
         <AvaloniaNameGeneratorFilterByNamespace>Dummy</AvaloniaNameGeneratorFilterByNamespace> <!-- Prevent generating InitializeComponents() and fields -->
