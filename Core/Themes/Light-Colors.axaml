@@ -17,30 +17,34 @@
 	
 	<!-- ComboBox -->
 	<SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#ffffff"/>
-	<SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#cccccc"/>
+	<SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#c7c7c7"/>
+	<SolidColorBrush x:Key="ComboBoxBackgroundDisabled" Color="#eeeeee"/>
+	<SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="#f4f4f4"/>
 	<SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="{DynamicResource Color/Control.Border.Dark}"/>
+	<SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="#e7e7e7"/>
+	<SolidColorBrush x:Key="ComboBoxItemBackgroundPressed" Color="#e0e0e0"/>
 
 	<!-- ComboBoxItem -->
 	<SolidColorBrush x:Key="Brush/ComboBoxItem.Foreground.Selected" Color="#ffffff"/>
 
 	<!-- Control -->
-	<Color x:Key="Color/Control.Border">#b0b0b0</Color>
-	<Color x:Key="Color/Control.Border.Dark">#878787</Color>
-	<Color x:Key="Color/Control.Border.Dark.Transparent">#00878787</Color>
-	<Color x:Key="Color/Control.Border.Light">#bfbfbf</Color>
-	<Color x:Key="Color/Control.Border.Light.Transparent">#00bfbfbf</Color>
-	<Color x:Key="Color/Control.Border.Transparent">#00b0b0b0</Color>
+	<Color x:Key="Color/Control.Border">#c4c4c4</Color>
+	<Color x:Key="Color/Control.Border.Dark">#a7a7a7</Color>
+	<Color x:Key="Color/Control.Border.Dark.Transparent">#00a7a7a7</Color>
+	<Color x:Key="Color/Control.Border.Light">#d7d7d7</Color>
+	<Color x:Key="Color/Control.Border.Light.Transparent">#00d7d7d7</Color>
+	<Color x:Key="Color/Control.Border.Transparent">#00c4c4c4</Color>
 
 	<!-- Dialog -->
-	<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#e0e0e0</Color>
-	<Color x:Key="Color/Dialog.ControlButtonsPanel.Border">#d0d0d0</Color>
+	<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#f0f0f0</Color>
+	<Color x:Key="Color/Dialog.ControlButtonsPanel.Border">#dddddd</Color>
 	<Color x:Key="Color/Dialog.ItemSeparator">#20000000</Color>
 	<Color x:Key="Color/Dialog.ItemsGroup.Background">#5fffffff</Color>
 	<Color x:Key="Color/Dialog.ItemsGroup.Border">#37000000</Color>
 	<Color x:Key="Color/Dialog.TextBlock.Foreground.Description">#7f000000</Color>
 
 	<!-- Expander -->
-	<SolidColorBrush x:Key="ExpanderContentBackground" Color="#6fffffff"/>
+	<SolidColorBrush x:Key="ExpanderContentBackground" Color="#7fffffff"/>
 
 	<!-- FullWindowTutorialPresenter -->
 	<Color x:Key="Color/FullWindowTutorialPresenter.Background">#cfffffff</Color>
@@ -66,9 +70,11 @@
 	<Color x:Key="Color/MarkdownViewer.Markdown.InlineCode.Background">#dddddd</Color>
 
 	<!-- Menu -->
-	<Color x:Key="Color/Menu.Background">#dddddd</Color>
+	<Color x:Key="Color/Menu.Background">#f7f7f7</Color>
 	
 	<!-- MenuFlyout -->
+	<SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="#e7e7e7"/>
+	<SolidColorBrush x:Key="MenuFlyoutItemBackgroundPressed" Color="#e0e0e0"/>
 	<SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#ffffff"/>
 	<SolidColorBrush x:Key="MenuFlyoutPresenterBorderBrush" Color="#c7c7c7"/>
 
@@ -84,18 +90,20 @@
 	<StaticResourceExtension x:Key="Color/StatusBar.Border" ResourceKey="Color/Shadow.Darken"/>
 
 	<!-- TabControl -->
-	<Color x:Key="Color/TabControl.TabStrip.Border">#c7c7c7</Color>
+	<Color x:Key="Color/TabControl.TabStrip.Border">#d0d0d0</Color>
 
 	<!-- TabItem -->
-	<Color x:Key="Color/TabItem.Header.Background">#00dddddd</Color>
-	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#dddddd</Color>
-	<Color x:Key="Color/TabItem.Header.Background.Selected">#dddddd</Color>
-	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#c0c0c0</Color>
-	<Color x:Key="Color/TabItem.Header.Border.Selected">#c7c7c7</Color>
+	<Color x:Key="Color/TabItem.Header.Background">#00f7f7f7</Color>
+	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#ffffff</Color>
+	<Color x:Key="Color/TabItem.Header.Background.Selected">#f7f7f7</Color>
+	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#e0e0e0</Color>
+	<Color x:Key="Color/TabItem.Header.Border.Selected">#d0d0d0</Color>
 
 	<!-- TextBox -->
 	<SolidColorBrush x:Key="Brush/TextBox.Foreground.Selected" Color="#ffffff"/>
 	<StaticResourceExtension x:Key="Brush/TextBox.SelectionForeground" ResourceKey="SystemControlHighlightAltAltHighBrush"/>
+	<SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="#eeeeee"/>
+	<SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#f4f4f4"/>
 	<SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{StaticResource Color/Control.Border.Dark}"/>
 
 	<!-- ThemeModeTest -->
@@ -107,11 +115,11 @@
 	<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{DynamicResource SystemAccentColorDark2}"/>
 
 	<!-- ToolBar -->
-	<Color x:Key="Color/ToolBar.Background">#dddddd</Color>
-	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#c7c7c7</Color>
-	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#b7b7b7</Color>
-	<Color x:Key="Color/ToolBar.Button.Background.Transparent">#00c7c7c7</Color>
-	<Color x:Key="Color/ToolBar.Border">#cccccc</Color>
+	<Color x:Key="Color/ToolBar.Background">#f7f7f7</Color>
+	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#e0e0e0</Color>
+	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#d7d7d7</Color>
+	<Color x:Key="Color/ToolBar.Button.Background.Transparent">#00d7d7d7</Color>
+	<Color x:Key="Color/ToolBar.Border">#dddddd</Color>
 	
 	<!-- ToolTip -->
 	<Color x:Key="Color/ToolTip.Border">#cccccc</Color>
@@ -124,16 +132,16 @@
     <SolidColorBrush x:Key="ValueTextBoxBackgroundInvalidPointerOver" Color="#ffd9d9"/>
 
 	<!-- Window -->
-	<Color x:Key="Color/Window.Background">#f0f0f0</Color>
+	<Color x:Key="Color/Window.Background">#f7f7f7</Color>
 	<Color x:Key="Color/Window.Background.Tabbed">#ffffff</Color>
-	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#a7e7e7e7</Color>
-	<Color x:Key="Color/Window.Background.Transparent">#a7f0f0f0</Color>
+	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#a7ffffff</Color>
+	<Color x:Key="Color/Window.Background.Transparent">#a7f7f7f7</Color>
 	<Color x:Key="Color/Window.ContentFadingOverlay">#ffffff</Color>
 	<Color x:Key="Color/Window.TitleBar">#f7f7f7</Color>
 
 	<!-- WorkingArea -->
-	<Color x:Key="Color/WorkingArea.Background">#eeeeee</Color>
-	<Color x:Key="Color/WorkingArea.Panel.Background">#e0e0e0</Color>
-	<Color x:Key="Color/WorkingArea.Panel.Border">#d3d3d3</Color>
+	<Color x:Key="Color/WorkingArea.Background">#fafafa</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Background">#f7f7f7</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Border">#dddddd</Color>
 	
 </ResourceDictionary>

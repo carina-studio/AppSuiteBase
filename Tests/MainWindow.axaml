@@ -457,7 +457,7 @@
 							<NumericUpDown HorizontalAlignment="Left" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
 
 							<Panel HorizontalAlignment="Left" Margin="5">
-								<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" HorizontalAlignment="Left" Padding="5">
+								<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" BorderBrush="{DynamicResource Brush/WorkingArea.Panel.Border}" BorderThickness="1" BoxShadow="{DynamicResource BoxShadows/Shadow.Light}" HorizontalAlignment="Left" Padding="5">
 									<StackPanel>
 										<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5,0,0,0"/>
 										<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ProcessId, StringFormat={}PID: {0}}" Margin="5,5,0,0"/>
@@ -476,7 +476,6 @@
 										<TextBlock Text="{Binding $parent[Window].Application.IsDebugMode, StringFormat={}IsDebugMode: {0}}" Margin="5,5,0,0"/>
 									</StackPanel>
 								</Border>
-								<Line Classes="Shadow" Stroke="{DynamicResource Brush/WorkingArea.Panel.Border}" VerticalAlignment="Bottom"/>
 							</Panel>
 
 							<abControls:IntegerTextBox Name="integerTextBox" HorizontalAlignment="Left" IsNullValueAllowed="False" Margin="5,5,0,0" Minimum="1" Width="200" Watermark="Integer"/>

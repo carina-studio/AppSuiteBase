@@ -2566,7 +2566,7 @@
 						<DockPanel ClipToBounds="False">
 							<Panel ClipToBounds="False" DockPanel.Dock="Top">
 								<Border BorderBrush="{DynamicResource Brush/TabControl.TabStrip.Border}" BorderThickness="0,0,0,1" IsHitTestVisible="False"/>
-								<Border Classes="Shadow_Top_Light" VerticalAlignment="Bottom"/>
+								<Border Classes="Shadow_Top_Light" Margin="0,0,0,1" VerticalAlignment="Bottom"/>
 								<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" Background="{x:Null}" ClipToBounds="False" Padding="{DynamicResource Thickness/TabControl.TabStrip.Padding}">
 									<ItemsPresenter Name="PART_ItemsPresenter"
 									                ClipToBounds="False"
