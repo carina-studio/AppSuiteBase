@@ -80,8 +80,8 @@
 	<Color x:Key="Color/TabItem.Header.Border.Selected">#444444</Color>
 
 	<!-- TextBox -->
-	<SolidColorBrush x:Key="TextControlBackground" Color="#1c1c1c"/>
-	<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#171717"/>
+	<SolidColorBrush x:Key="TextControlBackground" Color="#222222"/>
+	<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#1a1a1a"/>
 	<SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#303030"/>
 	<SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{StaticResource Color/Control.Border.Light}"/>
 
@@ -94,6 +94,7 @@
 	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#171717</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Transparent">#00404040</Color>
 	<Color x:Key="Color/ToolBar.Border">#404040</Color>
+	<Color x:Key="Color/ToolBar.TextBox.Background">#292929</Color>
 
 	<!-- ToolTip -->
 	<Color x:Key="Color/ToolTip.Background">#272727</Color>
@@ -101,8 +102,8 @@
 
 	<!-- Window -->
 	<Color x:Key="Color/Window.Background">#272727</Color>
-	<Color x:Key="Color/Window.Background.Tabbed">#373737</Color>
-	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#b7171717</Color>
+	<Color x:Key="Color/Window.Background.Tabbed">#404040</Color>
+	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#b7404040</Color>
 	<Color x:Key="Color/Window.Background.Transparent">#b7272727</Color>
 	<Color x:Key="Color/Window.ContentFadingOverlay">#df000000</Color>
 	<Color x:Key="Color/Window.TitleBar">#171717</Color>

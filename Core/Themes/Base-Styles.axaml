@@ -3107,6 +3107,7 @@
 		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="TextBox.ToolBar_TextBox">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.TextBox.Background}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Item.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>

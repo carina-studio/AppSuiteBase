@@ -120,6 +120,7 @@
 	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#d7d7d7</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Transparent">#00d7d7d7</Color>
 	<Color x:Key="Color/ToolBar.Border">#dddddd</Color>
+	<Color x:Key="Color/ToolBar.TextBox.Background">#fbfbfb</Color>
 	
 	<!-- ToolTip -->
 	<Color x:Key="Color/ToolTip.Border">#cccccc</Color>
@@ -133,8 +134,8 @@
 
 	<!-- Window -->
 	<Color x:Key="Color/Window.Background">#f7f7f7</Color>
-	<Color x:Key="Color/Window.Background.Tabbed">#ffffff</Color>
-	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#a7ffffff</Color>
+	<Color x:Key="Color/Window.Background.Tabbed">#eeeeee</Color>
+	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#a7eeeeee</Color>
 	<Color x:Key="Color/Window.Background.Transparent">#a7f7f7f7</Color>
 	<Color x:Key="Color/Window.ContentFadingOverlay">#ffffff</Color>
 	<Color x:Key="Color/Window.TitleBar">#f7f7f7</Color>

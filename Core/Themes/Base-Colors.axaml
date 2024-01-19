@@ -409,11 +409,13 @@
 	<SolidColorBrush x:Key="Brush/ToolBar.Button.Background.Pressed" Color="{DynamicResource Color/ToolBar.Button.Background.Pressed}"/>
 	<SolidColorBrush x:Key="Brush/ToolBar.Button.Background.Transparent" Color="{DynamicResource Color/ToolBar.Button.Background.Transparent}"/>
 	<SolidColorBrush x:Key="Brush/ToolBar.Border" Color="{DynamicResource Color/ToolBar.Border}"/>
+	<SolidColorBrush x:Key="Brush/ToolBar.TextBox.Background" Color="{DynamicResource Color/ToolBar.TextBox.Background}"/>
 	<Color x:Key="Color/ToolBar.Background">#ffffff</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#ffffff</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#ffffff</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Transparent">#00ffffff</Color>
 	<Color x:Key="Color/ToolBar.Border">#ffffff</Color>
+	<Color x:Key="Color/ToolBar.TextBox.Background">#00000000</Color>
 	
 	<!-- ToolTip -->
 	<Color x:Key="Color/ToolTip.Background">#ffffff</Color>
