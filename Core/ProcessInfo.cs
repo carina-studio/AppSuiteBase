@@ -56,7 +56,7 @@ public class ProcessInfo : INotifyPropertyChanged
     const int ProcessInfoUpdateIntervalBG = 10000;
 	const int ProcessInfoUpdateIntervalHF = 1500;
 	const int ProcessInfoUpdateIntervalHFInDebugMode = 1000;
-	const long TryRecoverDispatcherStateInterval = 9000;
+	const long TryRecoverDispatcherStateInterval = 6000;
 	const int UIResponseCheckingInterval = 3000;
 	const int UIResponseCheckingIntervalBG = 10000;
 	const int UIResponseCheckingIntervalHF = 1000;
