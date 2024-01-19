@@ -1,4 +1,5 @@
-﻿using CarinaStudio.AppSuite.Controls;
+﻿using Avalonia.Threading;
+using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.Collections;
 using CarinaStudio.IO;
 using CarinaStudio.Threading;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 
@@ -54,6 +56,7 @@ public class ProcessInfo : INotifyPropertyChanged
     const int ProcessInfoUpdateIntervalBG = 10000;
 	const int ProcessInfoUpdateIntervalHF = 1500;
 	const int ProcessInfoUpdateIntervalHFInDebugMode = 1000;
+	const long TryRecoverDispatcherStateInterval = 9000;
 	const int UIResponseCheckingInterval = 3000;
 	const int UIResponseCheckingIntervalBG = 10000;
 	const int UIResponseCheckingIntervalHF = 1000;
@@ -78,6 +81,13 @@ public class ProcessInfo : INotifyPropertyChanged
     // Constructor.
     internal ProcessInfo(IAppSuiteApplication app)
     {
+	    // guard to check workaround
+	    typeof(Dispatcher).Assembly.GetName().Version?.Let(version =>
+	    {
+		    if (version.Major > 11 || version.Build > 7)
+			    throw new Exception("Need to check workaround of recovering state of Dispatcher.");
+	    });
+	    
         // setup fields and properties
         this.app = app;
 		this.logger = app.LoggerFactory.CreateLogger(nameof(ProcessInfo));
@@ -271,6 +281,7 @@ public class ProcessInfo : INotifyPropertyChanged
 		var totalDuration = 0L;
 		var checkingCount = 0;
 		var normalUIResponseStartTime = 0L;
+		var isRecoveringDispatcherState = false;
 		var isReportingAbnormalUIResponse = false;
 		var syncLock = new object();
 		while (true)
@@ -303,6 +314,27 @@ public class ProcessInfo : INotifyPropertyChanged
 					totalDuration = 0;
 					checkingCount = 0;
 					++checkingId;
+					if ((stopWatch.ElapsedMilliseconds - normalUIResponseStartTime) >= TryRecoverDispatcherStateInterval && !isRecoveringDispatcherState) // [Workaround] https://github.com/AvaloniaUI/Avalonia/pull/14229
+					{
+						var signaledField = typeof(Dispatcher).GetField("_signaled", BindingFlags.Instance | BindingFlags.NonPublic);
+						if (signaledField is not null)
+						{
+							if ((bool)signaledField.GetValue(Dispatcher.UIThread)!)
+							{
+								this.logger.LogWarning("Try recovering state of Dispatcher");
+								isRecoveringDispatcherState = true;
+								signaledField.SetValue(Dispatcher.UIThread, false);
+								Dispatcher.UIThread.Post(() =>
+								{
+									isRecoveringDispatcherState = false;
+								}, DispatcherPriority.Background);
+							}
+							else
+								this.logger.LogWarning("Unable to try recovering state of Dispatcher");
+						}
+						else
+							this.logger.LogWarning("Field not found in Dispatcher to try recovering state of Dispatcher");
+					}
 					if ((stopWatch.ElapsedMilliseconds - normalUIResponseStartTime) >= AbnormalUIResponseInterval)
 					{
 						this.logger.LogWarning("Abnormal UI response detected");
