@@ -20,13 +20,13 @@
 	<Color x:Key="Color/Control.Border">#404040</Color>
 	<Color x:Key="Color/Control.Border.Dark">#2d2d2d</Color>
 	<Color x:Key="Color/Control.Border.Dark.Transparent">#002d2d2d</Color>
-	<Color x:Key="Color/Control.Border.Light">#474747</Color>
-	<Color x:Key="Color/Control.Border.Light.Transparent">#00474747</Color>
+	<Color x:Key="Color/Control.Border.Light">#4a4a4a</Color>
+	<Color x:Key="Color/Control.Border.Light.Transparent">#004a4a4a</Color>
 	<Color x:Key="Color/Control.Border.Transparent">#00404040</Color>
 
 	<!-- Dialog -->
-	<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#141414</Color>
-	<Color x:Key="Color/Dialog.ControlButtonsPanel.Border">#242424</Color>
+	<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#222222</Color>
+	<Color x:Key="Color/Dialog.ControlButtonsPanel.Border">#404040</Color>
 	<Color x:Key="Color/Dialog.ItemSeparator">#17ffffff</Color>
 	<Color x:Key="Color/Dialog.ItemsGroup.Background">#3f000000</Color>
 	<Color x:Key="Color/Dialog.ItemsGroup.Border">#1effffff</Color>
@@ -56,7 +56,7 @@
 	<Color x:Key="Color/MarkdownViewer.Markdown.InlineCode.Background">#444444</Color>
 
 	<!-- Menu -->
-	<Color x:Key="Color/Menu.Background">#2c2c2c</Color>
+	<Color x:Key="Color/Menu.Background">#303030</Color>
 	
 	<!-- MenuFlyout -->
 	<SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#272727"/>
@@ -70,14 +70,14 @@
 	<StaticResourceExtension x:Key="Color/StatusBar.Border" ResourceKey="Color/Shadow.Lighten"/>
 
 	<!-- TabControl -->
-	<Color x:Key="Color/TabControl.TabStrip.Border">#404040</Color>
+	<Color x:Key="Color/TabControl.TabStrip.Border">#444444</Color>
 
 	<!-- TabItem -->
-	<Color x:Key="Color/TabItem.Header.Background">#002c2c2c</Color>
-	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#2c2c2c</Color>
-	<Color x:Key="Color/TabItem.Header.Background.Selected">#2c2c2c</Color>
-	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#474747</Color>
-	<Color x:Key="Color/TabItem.Header.Border.Selected">#404040</Color>
+	<Color x:Key="Color/TabItem.Header.Background">#00303030</Color>
+	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#303030</Color>
+	<Color x:Key="Color/TabItem.Header.Background.Selected">#303030</Color>
+	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#444444</Color>
+	<Color x:Key="Color/TabItem.Header.Border.Selected">#444444</Color>
 
 	<!-- TextBox -->
 	<SolidColorBrush x:Key="TextControlBackground" Color="#1c1c1c"/>
@@ -89,27 +89,27 @@
 	<Color x:Key="Color/ThemeModeTest.Color">#7faabbcc</Color>
 
 	<!-- ToolBar -->
-	<Color x:Key="Color/ToolBar.Background">#2c2c2c</Color>
+	<Color x:Key="Color/ToolBar.Background">#303030</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#404040</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#171717</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Transparent">#00404040</Color>
-	<Color x:Key="Color/ToolBar.Border">#3c3c3c</Color>
+	<Color x:Key="Color/ToolBar.Border">#404040</Color>
 
 	<!-- ToolTip -->
 	<Color x:Key="Color/ToolTip.Background">#272727</Color>
-	<Color x:Key="Color/ToolTip.Border">#1d1d1d</Color>
+	<Color x:Key="Color/ToolTip.Border">#444444</Color>
 
 	<!-- Window -->
-	<Color x:Key="Color/Window.Background">#202020</Color>
+	<Color x:Key="Color/Window.Background">#272727</Color>
 	<Color x:Key="Color/Window.Background.Tabbed">#373737</Color>
 	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#b7171717</Color>
-	<Color x:Key="Color/Window.Background.Transparent">#b7202020</Color>
+	<Color x:Key="Color/Window.Background.Transparent">#b7272727</Color>
 	<Color x:Key="Color/Window.ContentFadingOverlay">#df000000</Color>
 	<Color x:Key="Color/Window.TitleBar">#171717</Color>
 
 	<!-- WorkingArea -->
-	<Color x:Key="Color/WorkingArea.Background">#202020</Color>
-	<Color x:Key="Color/WorkingArea.Panel.Background">#272727</Color>
-	<Color x:Key="Color/WorkingArea.Panel.Border">#373737</Color>
+	<Color x:Key="Color/WorkingArea.Background">#272727</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Background">#2a2a2a</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Border">#404040</Color>
 	
 </ResourceDictionary>
