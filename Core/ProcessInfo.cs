@@ -50,16 +50,17 @@ public class ProcessInfo : INotifyPropertyChanged
 
 
     // Constants.
-    const long AbnormalUIResponseInterval = 15000;
+    const long AbnormalUIResponseCounter = 3;
     const int FirstUpdateDelay = 10000;
 	const int ProcessInfoUpdateInterval = 3000;
     const int ProcessInfoUpdateIntervalBG = 10000;
 	const int ProcessInfoUpdateIntervalHF = 1500;
 	const int ProcessInfoUpdateIntervalHFInDebugMode = 1000;
-	const long TryRecoverDispatcherStateInterval = 6000;
+	const long TryRecoverDispatcherStateCounter = 1;
 	const int UIResponseCheckingInterval = 3000;
 	const int UIResponseCheckingIntervalBG = 10000;
 	const int UIResponseCheckingIntervalHF = 1000;
+	const int UIResponseTimeout = 3000;
 
 
     // Fields.
@@ -276,11 +277,10 @@ public class ProcessInfo : INotifyPropertyChanged
 	[DoesNotReturn]
 	void UIResponseCheckingThreadEntry()
 	{
-		var stopWatch = new Stopwatch().Also(it => it.Start());
 		var checkingId = 1L;
 		var totalDuration = 0L;
 		var checkingCount = 0;
-		var normalUIResponseStartTime = 0L;
+		var uiNotRespondingCount = 0;
 		var isRecoveringDispatcherState = false;
 		var isReportingAbnormalUIResponse = false;
 		var syncLock = new object();
@@ -301,9 +301,13 @@ public class ProcessInfo : INotifyPropertyChanged
 							Monitor.Pulse(syncLock);
 					}
 				});
-				if (Monitor.Wait(syncLock, 3000))
+				if (Monitor.Wait(syncLock, UIResponseTimeout))
 				{
-					normalUIResponseStartTime = stopWatch.ElapsedMilliseconds;
+					if (uiNotRespondingCount > 0)
+					{
+						uiNotRespondingCount = 0;
+						this.logger.LogWarning("UI starts responding");
+					}
 					totalDuration += duration;
 					++checkingCount;
 					++checkingId;
@@ -311,10 +315,11 @@ public class ProcessInfo : INotifyPropertyChanged
 				else
 				{
 					this.logger.LogWarning("UI is not responding");
+					++uiNotRespondingCount;
 					totalDuration = 0;
 					checkingCount = 0;
 					++checkingId;
-					if ((stopWatch.ElapsedMilliseconds - normalUIResponseStartTime) >= TryRecoverDispatcherStateInterval && !isRecoveringDispatcherState) // [Workaround] https://github.com/AvaloniaUI/Avalonia/pull/14229
+					if (uiNotRespondingCount >= TryRecoverDispatcherStateCounter && !isRecoveringDispatcherState) // [Workaround] https://github.com/AvaloniaUI/Avalonia/pull/14229
 					{
 						var signaledField = typeof(Dispatcher).GetField("_signaled", BindingFlags.Instance | BindingFlags.NonPublic);
 						if (signaledField is not null)
@@ -326,6 +331,7 @@ public class ProcessInfo : INotifyPropertyChanged
 								signaledField.SetValue(Dispatcher.UIThread, false);
 								Dispatcher.UIThread.Post(() =>
 								{
+									this.logger.LogWarning("Dispatcher state recovering completed");
 									isRecoveringDispatcherState = false;
 								}, DispatcherPriority.Background);
 							}
@@ -335,11 +341,10 @@ public class ProcessInfo : INotifyPropertyChanged
 						else
 							this.logger.LogWarning("Field not found in Dispatcher to try recovering state of Dispatcher");
 					}
-					if ((stopWatch.ElapsedMilliseconds - normalUIResponseStartTime) >= AbnormalUIResponseInterval)
+					if (uiNotRespondingCount > AbnormalUIResponseCounter && !isReportingAbnormalUIResponse)
 					{
 						this.logger.LogWarning("Abnormal UI response detected");
-						normalUIResponseStartTime = stopWatch.ElapsedMilliseconds;
-						if (!isReportingAbnormalUIResponse && this.app is AppSuiteApplication asApp)
+						if (this.app is AppSuiteApplication asApp)
 						{
 							isReportingAbnormalUIResponse = true;
 							asApp.SynchronizationContext.Post(() =>
