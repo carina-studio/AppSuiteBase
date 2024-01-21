@@ -922,6 +922,7 @@
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Label}"/>
 		<!--Setter Property="FontWeight" Value="Bold"/-->
+		<Setter Property="HorizontalAlignment" Value="Left"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Label}"/>
 		<Setter Property="MaxLines" Value="2"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Label}"/>

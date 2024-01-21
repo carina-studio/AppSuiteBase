@@ -24,7 +24,7 @@
 			</StackPanel>
 		</Border>
 
-		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="500" VerticalScrollBarVisibility="Auto">
+		<ScrollViewer Name="scrollViewer" HorizontalScrollBarVisibility="Disabled" MaxHeight="500" VerticalScrollBarVisibility="Auto">
 			<StackPanel Classes="Dialog_ContentPanel_WithItemsGroups">
 
 				<Border Classes="Dialog_ItemsGroup_Header">

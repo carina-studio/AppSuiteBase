@@ -3,6 +3,8 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using CarinaStudio.Threading;
 using System;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace CarinaStudio.AppSuite.Controls;
 
@@ -14,6 +16,7 @@ public static class DialogExtensions
     // Static fields.
     static BrushTransition? HeaderBackgroundTransition;
     static BrushTransition? HeaderBorderBrushTransition;
+    static readonly Dictionary<TextBlock, CancellationTokenSource> TextBlockAnimationCancellationTokenSources = new();
     static BrushTransition? TextBlockBackgroundTransition;
 
 
@@ -34,7 +37,7 @@ public static class DialogExtensions
             headerClass = "Header1";
         else if (header.Classes.Contains("Dialog_TextBlock_Header2"))
             headerClass = "Header2";
-        if (headerClass == null)
+        if (headerClass is null)
             return;
         
         // setup initial brushes
@@ -46,13 +49,13 @@ public static class DialogExtensions
         // prepare transitions
         if (!avnApp.TryFindResource("TimeSpan/Animation", out TimeSpan? duration))
             duration = default;
-        if (HeaderBackgroundTransition == null || HeaderBorderBrushTransition == null)
+        if (HeaderBackgroundTransition is null || HeaderBorderBrushTransition is null)
         {
             HeaderBackgroundTransition ??= new BrushTransition { Duration = duration.GetValueOrDefault(), Property = Border.BackgroundProperty };
             HeaderBorderBrushTransition ??= new BrushTransition { Duration = duration.GetValueOrDefault(), Property = Border.BorderBrushProperty };
         }
         var transitions = header.Transitions;
-        if (transitions == null)
+        if (transitions is null)
         {
             transitions = new();
             header.Transitions = transitions;
@@ -85,19 +88,30 @@ public static class DialogExtensions
             return;
 
         // check class of header
-        if (!textBlock.Classes.Contains("Dialog_TextBlock"))
+        if (!textBlock.Classes.Contains("Dialog_TextBlock")
+            && !textBlock.Classes.Contains("Dialog_TextBlock_Label"))
+        {
             return;
+        }
         
+        // cancel current animation
+        if (TextBlockAnimationCancellationTokenSources.Remove(textBlock, out var cancellationTokenSource))
+            cancellationTokenSource.Cancel();
+
         // setup initial brushes
-        if (avnApp.TryFindResource($"Brush/Dialog.TextBlock.Background.Focused", out IBrush? brush))
-            textBlock.Background = brush;
+        var brush = avnApp.FindResourceOrDefault<IBrush?>("Brush/Dialog.TextBlock.Background.Focused");
+        var transparentBrush = (brush as ISolidColorBrush)?.Let(solidColorBrush =>
+        {
+            var color = solidColorBrush.Color;
+            return (IBrush)new SolidColorBrush(Color.FromArgb(0, color.R, color.G, color.B));
+        }) ?? Brushes.Transparent;
+        textBlock.Background = transparentBrush;
         
         // prepare transitions
-        if (!avnApp.TryFindResource("TimeSpan/Animation", out TimeSpan? duration))
-            duration = default;
-        TextBlockBackgroundTransition ??= new BrushTransition { Duration = duration.GetValueOrDefault(), Property = TextBlock.BackgroundProperty };
+        var duration = avnApp.FindResourceOrDefault<TimeSpan>("TimeSpan/Animation.Fast");
+        TextBlockBackgroundTransition ??= new BrushTransition { Duration = duration, Property = TextBlock.BackgroundProperty };
         var transitions = textBlock.Transitions;
-        if (transitions == null)
+        if (transitions is null)
         {
             transitions = new();
             textBlock.Transitions = transitions;
@@ -105,17 +119,34 @@ public static class DialogExtensions
         transitions.Add(TextBlockBackgroundTransition);
         
         // animate
-        if (brush is ISolidColorBrush solidColorBrush)
-        {
-            var color = solidColorBrush.Color;
-            textBlock.Background = new SolidColorBrush(Color.FromArgb(0, color.R, color.G, color.B));
-        }
-        else
-            textBlock.Background = Brushes.Transparent;
+        var durationMillis = (int)duration.TotalMilliseconds;
+        cancellationTokenSource = new();
+        TextBlockAnimationCancellationTokenSources[textBlock] = cancellationTokenSource;
+        textBlock.Background = brush;
         avnApp.SynchronizationContext.PostDelayed(() =>
         {
-            transitions.Remove(TextBlockBackgroundTransition);
-            textBlock.Background = null;
-        }, (int)duration.GetValueOrDefault().TotalMilliseconds);
+            if (!cancellationTokenSource.IsCancellationRequested)
+                textBlock.Background = transparentBrush;
+        }, durationMillis);
+        avnApp.SynchronizationContext.PostDelayed(() =>
+        {
+            if (!cancellationTokenSource.IsCancellationRequested)
+                textBlock.Background = brush;
+        }, durationMillis * 2);
+        avnApp.SynchronizationContext.PostDelayed(() =>
+        {
+            if (!cancellationTokenSource.IsCancellationRequested)
+                textBlock.Background = transparentBrush;
+        }, durationMillis * 3);
+        avnApp.SynchronizationContext.PostDelayed(() =>
+        {
+            if (!cancellationTokenSource.IsCancellationRequested)
+            {
+                transitions.Remove(TextBlockBackgroundTransition);
+                textBlock.Background = null;
+                TextBlockAnimationCancellationTokenSources.Remove(textBlock);
+            }
+            cancellationTokenSource.Dispose();
+        }, durationMillis * 4);
     }
 }

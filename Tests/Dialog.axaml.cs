@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.AppSuite.ViewModels;
+using ScrollViewerExtensions = CarinaStudio.Controls.ScrollViewerExtensions;
 
 namespace CarinaStudio.AppSuite.Tests
 {
@@ -25,12 +26,10 @@ namespace CarinaStudio.AppSuite.Tests
         {
             base.OnOpened(e);
             /*
-            var textBlock = this.FindControl<TextBlock>("radioButtonLabel");
-            if (textBlock != null)
-            {
-                this.ScrollToControl(textBlock);
-                this.AnimateTextBlock(textBlock);
-            }
+            var scrollViewer = this.Get<ScrollViewer>("scrollViewer");
+            var textBlock = this.Get<TextBlock>("radioButtonLabel");
+            ScrollViewerExtensions.ScrollIntoView(scrollViewer, textBlock, true);
+            this.AnimateTextBlock(textBlock);
             */
         }
 
