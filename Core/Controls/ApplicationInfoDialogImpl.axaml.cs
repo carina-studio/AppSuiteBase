@@ -8,7 +8,9 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using CarinaStudio.AppSuite.Converters;
+using CarinaStudio.AppSuite.Net;
 using CarinaStudio.AppSuite.Product;
+using CarinaStudio.AppSuite.Scripting;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
@@ -84,6 +86,9 @@ namespace CarinaStudio.AppSuite.Controls
 
 
 		// Constructor.
+		[DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(NetworkManager))]
+		[DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(ProcessInfo))]
+		[DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(ScriptManager))]
 		[DynamicDependency(nameof(Copyright))]
 		[DynamicDependency(nameof(DeactivateProduct))]
 		[DynamicDependency(nameof(ExportLogs))]
