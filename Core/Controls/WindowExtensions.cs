@@ -66,7 +66,7 @@ namespace CarinaStudio.AppSuite.Controls
 				var style = (Win32.WS)Win32.GetWindowLong(handle, Win32.GWL.STYLE);
 				if (style == default)
 					return;
-				Win32.SetWindowLong(handle, Win32.GWL.STYLE, (nint)(style & ~Win32.WS.SYSMENU));
+				Win32.SetWindowLong(handle, Win32.GWL.STYLE, (int)(style & ~Win32.WS.SYSMENU));
 			}
 			else if (Platform.IsMacOS)
 			{

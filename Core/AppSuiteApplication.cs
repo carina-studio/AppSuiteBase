@@ -809,23 +809,12 @@ namespace CarinaStudio.AppSuite
                         }
                         catch (TargetInvocationException ex)
                         {
-                            if (ex.InnerException is Exception innerEx)
+                            if (ex.InnerException is { } innerEx)
                             {
                                 logger?.LogError(ex, "Unhandled exception occurred in application lifetime");
                                 LogToConsole($"Unhandled exception occurred in application lifetime: {innerEx.GetType().Name}, {innerEx.Message}");
                                 LogToConsole(innerEx.StackTrace);
-                                if (asAppImpl is not null)
-                                {
-                                    var handled = asAppImpl.OnExceptionOccurredInApplicationLifetime(innerEx);
-                                    var e = new IAppSuiteApplication.ExceptionEventArgs(innerEx) { Handled = handled };
-                                    asAppImpl.ExceptionOccurredInApplicationLifetime?.Invoke(asAppImpl, e);
-                                    if (!handled && !e.Handled)
-                                    {
-                                        forceThrowingException = true;
-                                        throw;
-                                    }
-                                }
-                                else
+                                if (asAppImpl is null || !asAppImpl.HandleExceptionOccurredInApplicationLifetime(innerEx))
                                 {
                                     forceThrowingException = true;
                                     throw;
@@ -847,15 +836,7 @@ namespace CarinaStudio.AppSuite
                     logger?.LogError(ex, "Unhandled exception occurred in application lifetime");
                     LogToConsole($"Unhandled exception occurred in application lifetime: {ex.GetType().Name}, {ex.Message}");
                     LogToConsole(ex.StackTrace);
-                    if (asAppImpl is not null)
-                    {
-                        var handled = asAppImpl.OnExceptionOccurredInApplicationLifetime(ex);
-                        var e = new IAppSuiteApplication.ExceptionEventArgs(ex) { Handled = handled };
-                        asAppImpl.ExceptionOccurredInApplicationLifetime?.Invoke(asAppImpl, e);
-                        if (!handled && !e.Handled)
-                            throw;
-                    }
-                    else
+                    if (asAppImpl is null || !asAppImpl.HandleExceptionOccurredInApplicationLifetime(ex))
                         throw;
                     logger?.LogWarning("Exception was handled");
                 }
@@ -1251,10 +1232,21 @@ namespace CarinaStudio.AppSuite
                     control.Focus();
             }, RoutingStrategies.Tunnel);
 
-            // [Workaround] Prevent tooltip stays open after changing focus to another window
-            if (Platform.IsMacOS)
+            // 1. [Workaround] Prevent tooltip stays open after changing focus to another window
+            // 2. Attach WndProc to host window of ToolTip.
+            if (Platform.IsWindows)
+            {
+                var popupHostField = typeof(ToolTip).GetField("_popupHost", BindingFlags.Instance | BindingFlags.NonPublic).AsNonNull();
+                var toolTopProperty = (AttachedProperty<ToolTip?>)typeof(ToolTip).GetField("ToolTipProperty", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static)!.GetValue(null).AsNonNull();
+                ToolTip.IsOpenProperty.Changed.Subscribe(e =>
+                {
+                    if (e.NewValue.Value && e.Sender.GetValue(toolTopProperty) is { } toolTip && popupHostField.GetValue(toolTip) is TopLevel topLevel)
+                        AttachWndProc(topLevel);
+                });
+            }
+            else if (Platform.IsMacOS)
                 DefineExtraStylesForMacOS();
-            
+
             // close popup when clicking on its shadows
             var topLevelInputManagerField = typeof(TopLevel).GetField("_inputManager", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new NotSupportedException();
             if (topLevelInputManagerField.FieldType != typeof(IInputManager))
@@ -1307,7 +1299,8 @@ namespace CarinaStudio.AppSuite
                 }
             }
 
-            // animate popup and move it to correct position according to its shadows
+            // 1. Animate popup and move it to correct position according to its shadows.
+            // 2. Attach WndProc to host window of Popup.
             var popupPositionParamsField = typeof(PopupRoot).GetField("_positionerParameters", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new NotSupportedException();
             if (popupPositionParamsField.FieldType != typeof(PopupPositionerParameters))
                 throw new NotSupportedException();
@@ -1319,6 +1312,10 @@ namespace CarinaStudio.AppSuite
                 // check event source
                 if (e.Sender is not Popup popup)
                     return;
+
+                // attach WndProc
+                if (Platform.IsWindows && popup.Host is TopLevel popupTopLevel && e.NewValue.Value)
+                    this.AttachWndProc(popupTopLevel);
 
                 // find root border
                 Border rootBorder;
@@ -1360,7 +1357,7 @@ namespace CarinaStudio.AppSuite
                 }
 
                 // handle opening popup
-                (popup.Host as PopupRoot)?.Let(hostWindow =>
+                if (popup.Host is PopupRoot hostWindow)
                 {
                     // setup background if transparent windows are not allowed
                     if (!this.AllowTransparentWindows)
@@ -1440,14 +1437,12 @@ namespace CarinaStudio.AppSuite
                     }
 
                     // intercept pointer pressed event
-                    (topLevelInputManagerField.GetValue(hostWindow) as IInputManager)?.Let(inputManager =>
+                    if (topLevelInputManagerField.GetValue(hostWindow) is IInputManager inputManager
+                        && processRawInputEventProperty.GetValue(inputManager) is IObservable<RawInputEventArgs> process)
                     {
-                        (processRawInputEventProperty.GetValue(inputManager) as IObservable<RawInputEventArgs>)?.Let(process =>
-                        {
-                            processPopupRawInputHandlerTokens[popup] = process.Subscribe(e => OnProcessPopupRootRawPointerEvent(hostWindow, popup, e));
-                        });
-                    });
-                });
+                        processPopupRawInputHandlerTokens[popup] = process.Subscribe(e => OnProcessPopupRootRawPointerEvent(hostWindow, popup, e));
+                    }
+                }
             });
 
             // add to top styles
@@ -1604,6 +1599,16 @@ namespace CarinaStudio.AppSuite
             if (Platform.IsLinux)
                 return this.GetLinuxThemeModeAsync();
             return Task.FromResult(this.FallbackThemeMode);
+        }
+
+
+        // Try handling exception occurred in application lifetime.
+        bool HandleExceptionOccurredInApplicationLifetime(Exception ex)
+        {
+            var handled = this.OnExceptionOccurredInApplicationLifetime(ex);
+            var e = new IAppSuiteApplication.ExceptionEventArgs(ex) { Handled = handled };
+            this.ExceptionOccurredInApplicationLifetime?.Invoke(this, e);
+            return handled || e.Handled;
         }
 
 
@@ -3297,10 +3302,13 @@ namespace CarinaStudio.AppSuite
         {
             // setup window
             if (Platform.IsWindows)
+            {
+                this.AttachWndProc(window);
                 this.ApplyThemeModeOnWindows(window);
+            }
 
             // attach to window
-            var tokens = new List<IDisposable>() 
+            var tokens = new List<IDisposable>
             {
                 window.GetObservable(Avalonia.Controls.Window.IsActiveProperty).Subscribe(isActive =>
                 {

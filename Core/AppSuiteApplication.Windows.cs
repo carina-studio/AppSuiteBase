@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Fonts;
 using CarinaStudio.AppSuite.Native;
@@ -18,15 +19,18 @@ namespace CarinaStudio.AppSuite;
 unsafe partial class AppSuiteApplication
 {
     // Fields.
+    readonly Dictionary<TopLevel, nint> baseWndProcPointers = new();
     Win32.ITaskbarList3? windowsTaskbarList;
+    // ReSharper disable once CollectionNeverQueried.Local
+    readonly Dictionary<TopLevel, Win32.WNDPROC> wndProcStubDelegates = new();
 
 
     // Apply current theme mode on given window.
-    void ApplyThemeModeOnWindows(Avalonia.Controls.Window window)
+    void ApplyThemeModeOnWindows(Window window)
     {
         if (!Platform.IsWindows11OrAbove)
             return;
-        if (window.IsExtendedIntoWindowDecorations || window.SystemDecorations == Avalonia.Controls.SystemDecorations.None)
+        if (window.IsExtendedIntoWindowDecorations || window.SystemDecorations == SystemDecorations.None)
             return;
         var hWnd = (window.TryGetPlatformHandle()?.Handle).GetValueOrDefault();
         if (hWnd != default)
@@ -60,6 +64,76 @@ unsafe partial class AppSuiteApplication
                 Marshal.SetLastSystemError(0);
             }
         }
+    }
+    
+    
+    // Attach window procedure to given TopLevel.
+    void AttachWndProc(TopLevel topLevel)
+    {
+        // get handle
+        var hWnd = topLevel.TryGetPlatformHandle()?.Handle ?? default;
+        if (hWnd == default)
+        {
+            this.Logger.LogError("No handle for TopLevel {id:x8} to attach WndProc", topLevel.GetHashCode());
+            return;
+        }
+
+        // get current window procedure
+        var baseWndProc = Win32.GetWindowLongPtr(hWnd, Win32.GWL.WNDPROC);
+        if (baseWndProc == default)
+        {
+            this.Logger.LogError("Base WndProc not found for TopLevel {id:x8} to attach WndProc", topLevel.GetHashCode());
+            return;
+        }
+        this.baseWndProcPointers.Add(topLevel, baseWndProc);
+
+        // prepare stub to attach window procedure
+        IntPtr WndProcStub(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam)
+        {
+            try
+            {
+                return Win32.CallWindowProc(baseWndProc, hWnd, Msg, wParam, lParam);
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogWarning(ex, "Unhandled exception occurred in application lifetime caught by WndProc of TopLevel {id:x8}", topLevel.GetHashCode());
+                LogToConsole($"Unhandled exception occurred in application lifetime caught by WndProc of TopLevel {topLevel.GetHashCode():x8}: {ex.GetType().Name}, {ex.Message}");
+                LogToConsole(ex.StackTrace);
+                if (!this.HandleExceptionOccurredInApplicationLifetime(ex))
+                    throw;
+                this.Logger.LogWarning("Exception was handled");
+                return Win32.DefWindowProc(hWnd, Msg, wParam, lParam);
+            }
+        }
+        var wndProcStub = new Win32.WNDPROC(WndProcStub);
+        this.wndProcStubDelegates.Add(topLevel, wndProcStub); // keep delegate from GC
+
+        // attach window procedure
+        this.Logger.LogTrace("Attach WndProc to TopLevel {id:x8}", topLevel.GetHashCode());
+        Win32.SetWindowLongPtr(hWnd, Win32.GWL.WNDPROC, wndProcStub);
+        topLevel.Closed += this.OnTopLevelClosedToDetachWndProc;
+    }
+    
+    
+    // Detach window procedure from given TopLevel.
+    void DetachWndProc(TopLevel topLevel)
+    {
+        // get handle
+        var hWnd = topLevel.TryGetPlatformHandle()?.Handle ?? default;
+        
+        // get base window procedure
+        if (!this.baseWndProcPointers.Remove(topLevel, out var baseWndProc))
+        {
+            this.Logger.LogError("Base WndProc not found for TopLevel {id:x8} to detach WndProc", topLevel.GetHashCode());
+            return;
+        }
+        
+        // detach window procedure
+        this.Logger.LogTrace("Detach WndProc from TopLevel {id:x8}", topLevel.GetHashCode());
+        if (hWnd != default)
+            Win32.SetWindowLongPtr(hWnd, Win32.GWL.WNDPROC, baseWndProc);
+        this.wndProcStubDelegates.Remove(topLevel);
+        topLevel.Closed -= this.OnTopLevelClosedToDetachWndProc;
     }
 
 
@@ -111,6 +185,14 @@ unsafe partial class AppSuiteApplication
     void OnMainWindowActivationChangedOnWindows()
     {
         _ = this.UpdateSystemThemeModeAsync(true); // in case of system event was not received
+    }
+
+
+    // Called after closing TopLevel which is needed to be detached from WndProc.
+    void OnTopLevelClosedToDetachWndProc(object? sender, EventArgs e)
+    {
+        if (Platform.IsWindows && sender is TopLevel topLevel)
+            this.DetachWndProc(topLevel);
     }
 
 
@@ -191,19 +273,19 @@ unsafe partial class AppSuiteApplication
     [MemberNotNullWhen(true, nameof(windowsTaskbarList))]
     bool SetupWindowsTaskbarList()
     {
-        if (this.windowsTaskbarList != null)
+        if (this.windowsTaskbarList is not null)
             return true;
         Win32.CoInitialize();
 #pragma warning disable IL2050
         var result = Win32.CoCreateInstance(in Win32.CLSID_TaskBarList, null, Win32.CLSCTX.INPROC_SERVER, in Win32.IID_TaskBarList3, out var obj);
 #pragma warning restore IL2050
-        if (obj == null)
+        if (obj is null)
         {
             this.Logger.LogError("Unable to create ITaskBarList3 object, result: {result}", result);
             return false;
         }
         this.windowsTaskbarList = obj as Win32.ITaskbarList3;
-        if (this.windowsTaskbarList == null)
+        if (this.windowsTaskbarList is null)
         {
             this.Logger.LogError("Unable to get implementation of ITaskBarList3");
             return false;

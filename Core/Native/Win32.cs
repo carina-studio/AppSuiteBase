@@ -92,6 +92,9 @@ static unsafe class Win32
     }
 
 
+    public delegate nint WNDPROC(nint hWnd, uint Msg, nint wParam, nint lParam);
+
+
     [Flags]
     public enum WS : int
     {
@@ -102,12 +105,20 @@ static unsafe class Win32
     }
     
     
+    [DllImport("User32", SetLastError = true)]
+    public static extern nint CallWindowProc(nint lpPrevWndFunc, nint hWnd, uint Msg, nint wParam, nint lParam);
+    
+    
     [DllImport("Ole32", SetLastError = true)]
     public static extern int CoCreateInstance(in Guid rclsid, [MarshalAs(UnmanagedType.IUnknown)] object? pUnkOuter, CLSCTX dwClsContext, in Guid riid, [MarshalAs(UnmanagedType.IUnknown)] out object? ppv);
     
     
     [DllImport("Ole32", SetLastError = true)]
     public static extern int CoInitialize(IntPtr pvReserved = default);
+    
+    
+    [DllImport("User32", SetLastError = true)]
+    public static extern nint DefWindowProc(nint hWnd, uint Msg, nint wParam, nint lParam);
     
     
     [DllImport("Dwmapi", SetLastError = true)]
@@ -119,7 +130,11 @@ static unsafe class Win32
 
 
     [DllImport("User32", SetLastError = true)]
-    public static extern nint GetWindowLong(IntPtr hWnd, GWL nIndex);
+    public static extern int GetWindowLong(IntPtr hWnd, GWL nIndex);
+    
+    
+    [DllImport("User32", SetLastError = true)]
+    public static extern nint GetWindowLongPtr(IntPtr hWnd, GWL nIndex);
 
 
     [DllImport("User32", SetLastError = true)]
@@ -131,6 +146,14 @@ static unsafe class Win32
 
 
     [DllImport("User32", SetLastError = true)]
-    public static extern nint SetWindowLong(IntPtr hWnd, GWL nIndex, nint dwNewLong);
+    public static extern int SetWindowLong(IntPtr hWnd, GWL nIndex, int dwNewLong);
+    
+    
+    [DllImport("User32", SetLastError = true)]
+    public static extern nint SetWindowLongPtr(IntPtr hWnd, GWL nIndex, nint dwNewLong);
+    
+    
+    [DllImport("User32", SetLastError = true)]
+    public static extern nint SetWindowLongPtr(IntPtr hWnd, GWL nIndex, [MarshalAs(UnmanagedType.FunctionPtr)] WNDPROC dwNewLong);
 }
 
