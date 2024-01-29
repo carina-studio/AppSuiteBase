@@ -16,12 +16,12 @@ public class DialogItemGrid : Grid
         this.Classes.Add("Dialog_Item_Container");
         this.ColumnDefinitions.Add(new()
         {
-            MinWidth = AppSuiteApplication.CurrentOrNull?.FindResourceOrDefault("Double/Dialog.Control.MinWidth", 0.0) ?? 0.0,
-            Width = new(1, GridUnitType.Star),
+            Width = new(1, GridUnitType.Auto),
         });
         this.ColumnDefinitions.Add(new()
         {
-            Width = new(1, GridUnitType.Auto),
+            MinWidth = AppSuiteApplication.CurrentOrNull?.FindResourceOrDefault("Double/Dialog.Control.MinWidth", 0.0) ?? 0.0,
+            Width = new(1, GridUnitType.Star),
         });
     }
 

@@ -114,13 +114,13 @@
 						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with TextBox -->
-						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="Auto,*">
+						<appControls:DialogItemGrid ClipToBounds="False">
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
 							<TextBox Classes="Dialog_Item_TextBox" Grid.Column="1"/>
-						</Grid>
+						</appControls:DialogItemGrid>
 						<Separator Classes="Dialog_Item_Separator"/>
 						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto,Auto,Auto">
 							<StackPanel Classes="Dialog_Item_Text_Container">
