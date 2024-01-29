@@ -29,13 +29,17 @@ partial class AppSuiteApplication
     // Apply given screen scale factor for Linux.
     static unsafe void ApplyScreenScaleFactorOnLinux()
     {
+        // [Workaround] Ignore unsupported distributions
+        if (Platform.LinuxDistribution == LinuxDistribution.Ubuntu)
+            return;
+        
         // setup GDK
         if (!InitializeGdk())
             return;
         
         // get all monitors
         var display = getDefaultGdkDisplay();
-        if (display == null)
+        if (display is null)
             return;
         
         // set environment variable
@@ -46,18 +50,18 @@ partial class AppSuiteApplication
             var monitor = getGdkMonitor(display, i);
             /*
             var monitorModelPtr = getGdkMonitorModel(monitor);
-            if (monitorModelPtr == null && i > 0)
+            if (monitorModelPtr is null && i > 0)
                 continue;
             */
             var scaleFactor = Math.Max(1, getGdkMonitorScaleFactor(monitor));
             /*
             if (valueBuilder.Length > 0)
                 valueBuilder.Append(';');
-            valueBuilder.Append(monitorModelPtr != null ? new string(monitorModelPtr) : "default");
+            valueBuilder.Append(monitorModelPtr is not null ? new string(monitorModelPtr) : "default");
             valueBuilder.Append('=');
             valueBuilder.Append(scaleFactor);
             */
-            if (scaleFactor >= 1 && scaleFactor < minScaleFactor)
+            if (scaleFactor < minScaleFactor)
                 minScaleFactor = scaleFactor;
         }
         if (minScaleFactor < int.MaxValue)
