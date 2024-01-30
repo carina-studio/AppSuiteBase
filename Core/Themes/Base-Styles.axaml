@@ -448,10 +448,12 @@
 	</Style>
 	<Style Selector="Border.Dialog_Item_Container">
 		<Setter Property="ClipToBounds" Value="True"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight}"/>
 	</Style>
 	<Style Selector="Border.Dialog_Item_Container_Small">
 		<Setter Property="ClipToBounds" Value="True"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight.Small}"/>
 	</Style>
 	<Style Selector="Border.Dialog_ItemsGroup_Container">
@@ -611,10 +613,12 @@
 	</Style>
 	<Style Selector="Grid.Dialog_Item_Container">
 		<Setter Property="ClipToBounds" Value="True"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight}"/>
 	</Style>
 	<Style Selector="Grid.Dialog_Item_Container_Small">
 		<Setter Property="ClipToBounds" Value="True"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight.Small}"/>
 	</Style>
 	<Style Selector=":is(Image).Dialog_Icon">
@@ -744,10 +748,12 @@
 	</Style>
 	<Style Selector="Panel.Dialog_Item_Container">
 		<Setter Property="ClipToBounds" Value="True"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight}"/>
 	</Style>
 	<Style Selector="Panel.Dialog_Item_Container_Small">
 		<Setter Property="ClipToBounds" Value="True"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/Dialog.Item.MinHeight.Small}"/>
 	</Style>
 	<Style Selector="RadioButton.Dialog_RadioButton">
@@ -933,6 +939,7 @@
 	<Style Selector="TextBox.Dialog_Item_TextBox">
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="HorizontalContentAlignment" Value="Right"/>
 		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
 		<Setter Property="Padding" Value="0"/>
 		<Setter Property="TextAlignment" Value="Right"/>
