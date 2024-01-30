@@ -47,7 +47,7 @@
 						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Items with ToggleSwitch -->
-						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+						<appControls:DialogItemGrid>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<StackPanel Orientation="Horizontal">
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
@@ -58,22 +58,22 @@
 								<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
 							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" Grid.Column="1"/>
-						</Grid>
+						</appControls:DialogItemGrid>
 						<Separator Classes="Dialog_Item_Separator"/>
-						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+						<appControls:DialogItemGrid>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" IsVisible="{Binding #toggleSwitch1.IsChecked}" Text="Google" Uri="http://www.google.com/"/>
 							</StackPanel>
 							<ToggleSwitch Name="toggleSwitch1" Classes="Dialog_Item_ToggleSwitch" Grid.Column="1" IsChecked="True"/>
-						</Grid>
+						</appControls:DialogItemGrid>
 						<Separator Classes="Dialog_Item_Separator"/>
-						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+						<appControls:DialogItemGrid>
 							<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" Grid.Column="1" IsEnabled="False"/>
-						</Grid>
+						</appControls:DialogItemGrid>
 						<Separator Classes="Dialog_Item_Separator"/>
-						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+						<appControls:DialogItemGrid>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<WrapPanel Background="Gray">
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="Label with looooooooooooooooooooooog text"/>
@@ -84,11 +84,11 @@
 								<TextBlock Classes="Dialog_TextBlock_Description" Text="Description with looooooooooooooooooooooog text"/>
 							</StackPanel>
 							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" Grid.Column="1"/>
-						</Grid>
+						</appControls:DialogItemGrid>
 						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with ComboBox -->
-						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+						<appControls:DialogItemGrid>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
@@ -98,9 +98,9 @@
 								<ComboBoxItem>Item 2</ComboBoxItem>
 								<ComboBoxItem>Item 3___</ComboBoxItem>
 							</ComboBox>
-						</Grid>
+						</appControls:DialogItemGrid>
 						<Separator Classes="Dialog_Item_Separator"/>
-						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+						<appControls:DialogItemGrid>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
@@ -110,7 +110,7 @@
 								<ComboBoxItem>Item 2</ComboBoxItem>
 								<ComboBoxItem>Item 3___</ComboBoxItem>
 							</ComboBox>
-						</Grid>
+						</appControls:DialogItemGrid>
 						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with TextBox -->
@@ -132,12 +132,13 @@
 							<TextBox Name="itemTextBox1" Classes="Dialog_Item_TextBox" Grid.Column="3" IsEnabled="False" Text="Text"/>
 						</Grid>
 						<Line Classes="Dialog_Item_Separator"/>
-						<Grid Classes="Dialog_Item_Container">
+						<appControls:DialogItemGrid ClipToBounds="False">
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
-						</Grid>
+							<TextBox Classes="Dialog_Item_TextBox" Grid.Column="1" Watermark="Watermark"/>
+						</appControls:DialogItemGrid>
 						<Line Classes="Dialog_Item_Separator_Inner"/>
 						<TextBox Classes="Dialog_Item_TextBox" Grid.Column="1" Height="100" TextAlignment="Left"/>
 						<Line Classes="Dialog_Item_Separator"/>
