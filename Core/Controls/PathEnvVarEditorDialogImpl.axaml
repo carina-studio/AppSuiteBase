@@ -22,7 +22,7 @@
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
 			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].AddPath}" Content="{DynamicResource String/PathEnvVarEditorDialog.AddPath.WithDialog}">
+				<Button Classes="Dialog_ControlButton" Command="{Binding #window.AddPath}" Content="{DynamicResource String/PathEnvVarEditorDialog.AddPath.WithDialog}">
 					<Button.IsEnabled>
 						<MultiBinding Converter="{x:Static aConverters:BoolConverters.And}">
 							<Binding Path="!IsRefreshingPaths" ElementName="window"/>
@@ -31,7 +31,7 @@
 					</Button.IsEnabled>
 				</Button>
 				<Separator Classes="Dialog_Separator_Small"/>
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].SaveAndClose}" Content="{DynamicResource String/Common.OK}">
+				<Button Classes="Dialog_ControlButton" Command="{Binding #window.SaveAndClose}" Content="{DynamicResource String/Common.OK}">
 					<Button.IsEnabled>
 						<MultiBinding Converter="{x:Static aConverters:BoolConverters.And}">
 							<Binding Path="!IsRefreshingPaths" ElementName="window"/>
@@ -39,7 +39,7 @@
 						</MultiBinding>
 					</Button.IsEnabled>
 				</Button>
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.Cancel}" IsEnabled="{Binding !$parent[Window].IsSavingPaths}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding #window.Close}" Content="{DynamicResource String/Common.Cancel}" IsEnabled="{Binding !#window.IsSavingPaths}"/>
 			</StackPanel>
 		</Border>
 
@@ -48,7 +48,7 @@
 
 			<!-- System paths -->
 			<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/PathEnvVarEditorDialog.Paths}"/>
-			<controls:ListBox Name="pathListBox" Classes="Dialog_ListBox" Grid.Row="1" ItemsSource="{Binding $parent[Window].SystemPaths}">
+			<controls:ListBox Name="pathListBox" Classes="Dialog_ListBox" Grid.Row="1" ItemsSource="{Binding #window.SystemPaths}">
 				<controls:ListBox.ItemsPanel>
 					<ItemsPanelTemplate>
 						<StackPanel/>
@@ -60,17 +60,17 @@
 							<abControls:TextBlock Classes="ListBoxItem_TextBlock" Text="{Binding}"/>
 							<Border Classes="InPlaceAction_Reserved" Grid.ColumnSpan="2"/>
 							<StackPanel Grid.Column="1" IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}" Orientation="Horizontal">
-								<Button Classes="InPlaceAction_Button" Command="{Binding $parent[Window].RemovePathCommand}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{DynamicResource String/Common.Delete}">
+								<Button Classes="InPlaceAction_Button" Command="{Binding #window.RemovePathCommand}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{DynamicResource String/Common.Delete}">
 									<controls:Image Classes="InPlaceAction_Icon">
 										<DrawingImage>
-											<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Delete}"/>
+											<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Delete.Outline}"/>
 										</DrawingImage>
 									</controls:Image>
 								</Button>
-								<Button Classes="InPlaceAction_Button" Command="{Binding $parent[Window].EditPathCommand}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{DynamicResource String/Common.Edit}">
+								<Button Classes="InPlaceAction_Button" Command="{Binding #window.EditPathCommand}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{DynamicResource String/Common.Edit}">
 									<controls:Image Classes="InPlaceAction_Icon">
 										<DrawingImage>
-											<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Edit}"/>
+											<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Edit.Outline}"/>
 										</DrawingImage>
 									</controls:Image>
 								</Button>
@@ -81,10 +81,10 @@
 			</controls:ListBox>
 
 			<!-- Custom paths -->
-			<StackPanel Grid.Row="2" IsVisible="{Binding $parent[Window].CustomPaths.Count}">
+			<StackPanel Grid.Row="2" IsVisible="{Binding #window.CustomPaths.Count}">
 				<Separator Classes="Dialog_Separator_Small"/>
 				<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/PathEnvVarEditorDialog.CustomPaths}"/>
-				<ListBox Name="customPathListBox" Classes="Dialog_ListBox" Height="{StaticResource Double/PathEnvVarEditorDialog.CustomPaths.Height}" ItemsSource="{Binding $parent[Window].CustomPaths}">
+				<ListBox Name="customPathListBox" Classes="Dialog_ListBox" Height="{StaticResource Double/PathEnvVarEditorDialog.CustomPaths.Height}" ItemsSource="{Binding #window.CustomPaths}">
 					<ListBox.ItemsPanel>
 						<ItemsPanelTemplate>
 							<StackPanel/>
