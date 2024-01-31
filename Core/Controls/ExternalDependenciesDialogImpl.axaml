@@ -49,7 +49,7 @@
 									</MultiBinding>
 								</TextBlock.Text>
 							</TextBlock>
-							<StackPanel x:CompileBindings="False" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+							<StackPanel x:CompileBindings="False" Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
 
 								<!-- Download -->
 								<Button Name="downloadButton" 
@@ -59,7 +59,14 @@
 									CommandParameter="{Binding}"
 									IsVisible="{Binding State, Converter={x:Static abConverters:ObjectConverters.IsEquivalentTo}, ConverterParameter={x:Static as:ExternalDependencyState.Unavailable}}" 
 									VerticalAlignment="Center"/>
-								<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #downloadButton.IsVisible}"/>
+								<Separator Classes="Dialog_Separator_Small">
+									<Separator.IsVisible>
+										<MultiBinding Converter="{x:Static BoolConverters.And}">
+											<Binding Path="IsVisible" ElementName="detailsButton"/>
+											<Binding Path="IsVisible" ElementName="downloadButton"/>
+										</MultiBinding>
+									</Separator.IsVisible>
+								</Separator>
 
 								<!-- Details -->
 								<Button Name="detailsButton" 
