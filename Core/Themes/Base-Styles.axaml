@@ -939,7 +939,6 @@
 	<Style Selector="TextBox.Dialog_Item_TextBox">
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
-		<Setter Property="HorizontalContentAlignment" Value="Right"/>
 		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
 		<Setter Property="Padding" Value="0"/>
 		<Setter Property="TextAlignment" Value="Right"/>
@@ -2793,7 +2792,7 @@
 												Text="{TemplateBinding Watermark}"
 												TextAlignment="{TemplateBinding TextAlignment}"
 												TextWrapping="{TemplateBinding TextWrapping}"
-												HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+												HorizontalAlignment="{TemplateBinding TextAlignment, Converter={x:Static converters:TextAlignmentConverters.ToHorizontalAlignment}}"
 												VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
 											<TextBlock.IsVisible>
 												<MultiBinding Converter="{x:Static BoolConverters.And}">
@@ -2832,6 +2831,9 @@
 				</Panel>
 			</ControlTemplate>
 		</Setter>
+	</Style>
+	<Style Selector=":is(TextBox)[FlowDirection=RightToLeft] /template/ TextBlock#PART_Watermark">
+		<Setter Property="HorizontalAlignment" Value="{TemplateBinding TextAlignment, Converter={x:Static converters:TextAlignmentConverters.ToHorizontalAlignmentRTL}}"/>
 	</Style>
 	<Style Selector="ToggleButton.TextBox_InPlaceAction">
 		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundTransparent}"/>
