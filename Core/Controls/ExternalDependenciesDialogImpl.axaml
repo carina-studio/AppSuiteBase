@@ -22,25 +22,26 @@
 					<StackPanel>
 
 						<!-- Description -->
-						<controls:CompactDialogItemBorder Name="descriptionItem" 
-							IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+						<controls:DialogItem Name="descriptionItem" 
+							IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+							ItemSize="Small">
 
 							<SelectableTextBlock Classes="Dialog_TextBlock" 
 								Text="{Binding Description}" 
 								TextTrimming="CharacterEllipsis" 
 								TextWrapping="Wrap"/>
 
-						</controls:CompactDialogItemBorder>
+						</controls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator" IsVisible="{ReflectionBinding #descriptionItem.IsVisible}"/>
 
 						<!-- Priority -->
-						<controls:CompactDialogItemBorder>
+						<controls:DialogItem ItemSize="Small">
 							<TextBlock Classes="Dialog_TextBlock" Text="{Binding Priority, Converter={x:Static controls:ExternalDependenciesDialogImpl.PriorityConverter}}"/>
-						</controls:CompactDialogItemBorder>
+						</controls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- State & Download -->
-						<controls:DialogItemGrid>
+						<controls:DialogItem>
 							<TextBlock Classes="Dialog_TextBlock" Foreground="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateBrushConverter}}">
 								<TextBlock.Text>
 									<MultiBinding Converter="{x:Static controls:ExternalDependenciesDialogImpl.StateConverter}">
@@ -49,7 +50,7 @@
 									</MultiBinding>
 								</TextBlock.Text>
 							</TextBlock>
-							<StackPanel x:CompileBindings="False" Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+							<StackPanel x:CompileBindings="False" HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
 
 								<!-- Download -->
 								<Button Name="downloadButton" 
@@ -78,7 +79,7 @@
 									VerticalAlignment="Center"/>
 
 							</StackPanel>
-						</controls:DialogItemGrid>
+						</controls:DialogItem>
 
 					</StackPanel>
 				</Border>

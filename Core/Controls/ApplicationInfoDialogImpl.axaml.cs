@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 using Avalonia.Data.Converters;
+using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
@@ -125,7 +126,7 @@ namespace CarinaStudio.AppSuite.Controls
 			this.SetValue(HasUserAgreementProperty, this.Application.UserAgreementVersion != null && this.Application.UserAgreement != null);
 
 			// check MAC address
-			Net.NetworkManager.Default.PrimaryPhysicalAddress?.Let(address =>
+			NetworkManager.Default.PrimaryPhysicalAddress?.Let(address =>
 			{
 				var buffer = new StringBuilder();
 				foreach (var b in address.GetAddressBytes())
@@ -366,8 +367,9 @@ namespace CarinaStudio.AppSuite.Controls
 							panel.Children.Add(new StackPanel().Also(stackPanel =>
 							{
 								stackPanel.Tag = productId;
-								stackPanel.Children.Add(new CompactDialogItemGrid().Also(itemPanel =>
+								stackPanel.Children.Add(new DialogItem().Also(itemPanel =>
 								{
+									itemPanel.ItemSize = DialogItemSize.Small;
 									itemPanel.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
 									{
 										it.Classes.Add("Dialog_TextBlock_Label");
@@ -375,6 +377,7 @@ namespace CarinaStudio.AppSuite.Controls
 									itemPanel.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
 									{
 										it.Classes.Add("Dialog_TextBlock");
+										it.HorizontalAlignment = HorizontalAlignment.Right;
 										it.TextTrimming = TextTrimming.CharacterEllipsis;
 										Grid.SetColumn(it, 1);
 									}));
@@ -410,8 +413,9 @@ namespace CarinaStudio.AppSuite.Controls
 							panel.Children.Add(new Separator().Also(it => it.Classes.Add("Dialog_Item_Separator")));
 						var assemblyName = assembly.GetName();
 						var assemblyVersion = assemblyName.Version ?? new Version();
-						panel.Children.Add(new CompactDialogItemGrid().Also(it =>
+						panel.Children.Add(new DialogItem().Also(it =>
 						{
+							it.ItemSize = DialogItemSize.Small;
 							it.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
 							{
 								it.Classes.Add("Dialog_TextBlock_Label");
@@ -424,6 +428,7 @@ namespace CarinaStudio.AppSuite.Controls
 							{
 								it.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
 								{
+									it.HorizontalAlignment = HorizontalAlignment.Right;
 									it.Text = assemblyVersion.ToString();
 									Grid.SetColumn(it, 1);
 								}));

@@ -4,7 +4,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:abControls="using:CarinaStudio.Controls"
 		xmlns:appControls="using:CarinaStudio.AppSuite.Controls"
-		xmlns:as="using:CarinaStudio.AppSuite"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Tests.Dialog"
 		CanResize="True"
@@ -47,7 +46,7 @@
 						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Items with ToggleSwitch -->
-						<appControls:DialogItemGrid>
+						<appControls:DialogItem>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<StackPanel Orientation="Horizontal">
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
@@ -57,23 +56,23 @@
 								</StackPanel>
 								<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
-							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" Grid.Column="1"/>
-						</appControls:DialogItemGrid>
+							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch"/>
+						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
-						<appControls:DialogItemGrid>
+						<appControls:DialogItem>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" IsVisible="{Binding #toggleSwitch1.IsChecked}" Text="Google" Uri="http://www.google.com/"/>
 							</StackPanel>
-							<ToggleSwitch Name="toggleSwitch1" Classes="Dialog_Item_ToggleSwitch" Grid.Column="1" IsChecked="True"/>
-						</appControls:DialogItemGrid>
+							<ToggleSwitch Name="toggleSwitch1" Classes="Dialog_Item_ToggleSwitch" IsChecked="True"/>
+						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
-						<appControls:DialogItemGrid>
+						<appControls:DialogItem>
 							<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" Grid.Column="1" IsEnabled="False"/>
-						</appControls:DialogItemGrid>
+							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" IsEnabled="False"/>
+						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
-						<appControls:DialogItemGrid>
+						<appControls:DialogItem>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<WrapPanel Background="Gray">
 									<TextBlock Classes="Dialog_TextBlock_Label" Text="Label with looooooooooooooooooooooog text"/>
@@ -83,97 +82,107 @@
 								</WrapPanel>
 								<TextBlock Classes="Dialog_TextBlock_Description" Text="Description with looooooooooooooooooooooog text"/>
 							</StackPanel>
-							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" Grid.Column="1"/>
-						</appControls:DialogItemGrid>
+							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch"/>
+						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with ComboBox -->
-						<appControls:DialogItemGrid>
+						<appControls:DialogItem>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
-							<ComboBox Classes="Dialog_Item_ComboBox" Grid.Column="1" SelectedIndex="1">
+							<ComboBox Classes="Dialog_Item_ComboBox" SelectedIndex="1">
 								<ComboBoxItem>Item 1</ComboBoxItem>
 								<ComboBoxItem>Item 2</ComboBoxItem>
 								<ComboBoxItem>Item 3___</ComboBoxItem>
 							</ComboBox>
-						</appControls:DialogItemGrid>
+						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
-						<appControls:DialogItemGrid>
+						<appControls:DialogItem>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
-							<ComboBox Classes="Dialog_Item_ComboBox" Grid.Column="1" IsEnabled="False" SelectedIndex="1">
+							<ComboBox Classes="Dialog_Item_ComboBox" IsEnabled="False" SelectedIndex="1">
 								<ComboBoxItem>Item 1</ComboBoxItem>
 								<ComboBoxItem>Item 2</ComboBoxItem>
 								<ComboBoxItem>Item 3___</ComboBoxItem>
 							</ComboBox>
-						</appControls:DialogItemGrid>
+						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with TextBox -->
-						<appControls:DialogItemGrid ClipToBounds="False">
+						<appControls:DialogItem>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
-							<TextBox Classes="Dialog_Item_TextBox" Grid.Column="1"/>
-						</appControls:DialogItemGrid>
+							<TextBox Classes="Dialog_Item_TextBox"/>
+						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
-						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto,Auto,Auto">
+						<appControls:DialogItem>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
-							<ToggleButton Content="IsEnabled" Grid.Column="1" IsChecked="{Binding #itemTextBox1.IsEnabled, Mode=TwoWay}"/>
-							<Separator Classes="Dialog_Separator_Small" Grid.Column="2"/>
-							<TextBox Name="itemTextBox1" Classes="Dialog_Item_TextBox" Grid.Column="3" IsEnabled="False" Text="Text"/>
-						</Grid>
+							<TextBox Classes="Dialog_Item_TextBox"/>
+						</appControls:DialogItem>
+						<Separator Classes="Dialog_Item_Separator"/>
+						<appControls:DialogItem>
+							<Grid ColumnDefinitions="*,Auto,Auto">
+								<StackPanel Classes="Dialog_Item_Text_Container">
+									<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+									<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+								</StackPanel>
+								<ToggleButton Content="IsEnabled" Grid.Column="1" IsChecked="{Binding #itemTextBox1.IsEnabled, Mode=TwoWay}"/>
+								<Separator Classes="Dialog_Separator_Small" Grid.Column="2"/>
+							</Grid>
+							<TextBox Name="itemTextBox1" Classes="Dialog_Item_TextBox" IsEnabled="False" Text="Text"/>
+						</appControls:DialogItem>
 						<Line Classes="Dialog_Item_Separator"/>
-						<appControls:DialogItemGrid ClipToBounds="False">
+						<appControls:DialogItem>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
-							<TextBox Classes="Dialog_Item_TextBox" Grid.Column="1" Watermark="Watermark"/>
-						</appControls:DialogItemGrid>
+							<TextBox Classes="Dialog_Item_TextBox" Watermark="Watermark"/>
+						</appControls:DialogItem>
 						<Line Classes="Dialog_Item_Separator_Inner"/>
-						<TextBox Classes="Dialog_Item_TextBox" Grid.Column="1" Height="100" TextAlignment="Left"/>
+						<TextBox Classes="Dialog_Item_TextBox" Height="100" TextAlignment="Left"/>
 						<Line Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with NumericUpDown -->
-						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+						<appControls:DialogItem>
 							<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-							<NumericUpDown Classes="Dialog_Item_NumericUpDown" Grid.Column="1" Maximum="100" Minimum="0" Value="50"/>
-						</Grid>
+							<NumericUpDown Classes="Dialog_Item_NumericUpDown" Maximum="100" Minimum="0" Value="50"/>
+						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
-						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+						<appControls:DialogItem>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
-							<NumericUpDown Classes="Dialog_Item_NumericUpDown" Grid.Column="1" IsEnabled="False" Maximum="100" Minimum="0" Value="50"/>
-						</Grid>
+							<NumericUpDown Classes="Dialog_Item_NumericUpDown" IsEnabled="False" Maximum="100" Minimum="0" Value="50"/>
+						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with Slider -->
-						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+						<appControls:DialogItem>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
-							<Slider Classes="Dialog_Item_Slider" Grid.Column="1" TickFrequency="10"/>
-						</Grid>
+							<Slider Classes="Dialog_Item_Slider" TickFrequency="10"/>
+						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
-						<Grid Classes="Dialog_Item_Container" ColumnDefinitions="*,Auto">
+						<appControls:DialogItem>
 							<StackPanel Classes="Dialog_Item_Text_Container">
 								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
 								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
 							</StackPanel>
-							<Slider Classes="Dialog_Item_Slider" Grid.Column="1" TickPlacement="None"/>
-						</Grid>
+							<Slider Classes="Dialog_Item_Slider" TickPlacement="None"/>
+						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 
 						<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
@@ -224,7 +233,7 @@
 				<Separator Classes="Dialog_Separator_Large"/>
 
 				<StackPanel Grid.IsSharedSizeScope="True">
-					<Grid Classes="Dialog_Item_Container">
+					<Grid>
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition SharedSizeGroup="label" Width="Auto"/>
 							<ColumnDefinition Width="*"/>
@@ -233,7 +242,7 @@
 						<TextBox Classes="Dialog_TextBox" Grid.Column="1"/>
 					</Grid>
 					<!--Separator Classes="Dialog_Item_Separator"/-->
-					<Grid Classes="Dialog_Item_Container">
+					<Grid>
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition SharedSizeGroup="label" Width="Auto"/>
 							<ColumnDefinition Width="*"/>
