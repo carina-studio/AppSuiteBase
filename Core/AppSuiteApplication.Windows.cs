@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Fonts;
+using Avalonia.Threading;
 using CarinaStudio.AppSuite.Native;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
@@ -132,7 +133,7 @@ unsafe partial class AppSuiteApplication
         this.Logger.LogTrace("Detach WndProc from TopLevel {id:x8}", topLevel.GetHashCode());
         if (hWnd != default)
             Win32.SetWindowLongPtr(hWnd, Win32.GWL.WNDPROC, baseWndProc);
-        this.wndProcStubDelegates.Remove(topLevel);
+        Dispatcher.UIThread.Post(() => this.wndProcStubDelegates.Remove(topLevel), DispatcherPriority.Background);
         topLevel.Closed -= this.OnTopLevelClosedToDetachWndProc;
     }
 
