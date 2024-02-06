@@ -482,7 +482,7 @@
 							<TextBlock Text="{Binding #integerTextBox.Value, StringFormat={}Value: {0}}" HorizontalAlignment="Left" Margin="5,0,0,5"/>
 
 							<abControls:FormattedTextBlock Arg1="{Binding #regexTextBox.HasOpenedAssistanceMenus}" Format="{}HasOpenedAssistanceMenus: {0}" Margin="5,5,5,2"/>
-							<appControls:RegexTextBox Name="regexTextBox" Height="60" HorizontalAlignment="Left" Margin="5" TextWrapping="Wrap" Width="200">
+							<appControls:RegexTextBox Name="regexTextBox" Height="60" HorizontalAlignment="Left" Margin="5" TextAlignment="Right" TextWrapping="Wrap" Width="200">
 								<appControls:RegexTextBox.PredefinedGroups>
 									<appControls:RegexGroup Name="Group1"/>
 									<appControls:RegexGroup Name="Group2"/>
