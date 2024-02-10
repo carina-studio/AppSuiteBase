@@ -88,7 +88,7 @@ namespace CarinaStudio.AppSuite.Controls
             if (Platform.IsWindows)
                 return 135; // Windows 8+, managed chrome
             if (Platform.IsMacOS)
-                return 80;
+                return 70;
             return 0;
         });
     }

@@ -832,6 +832,9 @@ namespace CarinaStudio.AppSuite.Controls
 
             // check Pro-version
             this.CheckIsReactivatingProVersionNeeded();
+            
+            // restart window state
+            this.RestoreToSavedWindowState();
         }
 
 
@@ -903,7 +906,11 @@ namespace CarinaStudio.AppSuite.Controls
         {
             var savedWindowState = this.restoredWindowState;
             if (savedWindowState == WindowState.FullScreen)
+            {
+                if (!this.IsOpened)
+                    savedWindowState = WindowState.Normal;
                 this.UpdateExtendClientAreaChromeHints(true); // [Workaround] Prevent making title bar be transparent
+            }
             if (this.WindowState != savedWindowState)
             {
                 this.WindowState = savedWindowState; // Size will also be restored in OnPropertyChanged()
@@ -1177,8 +1184,14 @@ namespace CarinaStudio.AppSuite.Controls
             if (this.ExtendClientAreaToDecorationsHint)
             {
                 var hints = ExtendClientAreaChromeHints.PreferSystemChrome;
-                if (Platform.IsMacOS && !willBeFullScreen && this.WindowState != WindowState.FullScreen)
+                if (Platform.IsMacOS 
+                    && !willBeFullScreen 
+                    && this.WindowState != WindowState.FullScreen)
+                {
                     hints |= ExtendClientAreaChromeHints.OSXThickTitleBar;
+                }
+                //else if (!this.Application.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface))
+                    //hints |= ExtendClientAreaChromeHints.OSXThickTitleBar;
                 this.ExtendClientAreaChromeHints = hints;
             }
         }
