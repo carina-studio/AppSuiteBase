@@ -16,7 +16,7 @@ namespace CarinaStudio.AppSuite.Controls
             if (Platform.IsWindows)
                 return new Thickness(0, 6, 0, 0); // Windows 10
             if (Platform.IsMacOS)
-                return new Thickness(0, 2, 0, 0);
+                return new Thickness(0, 1, 0, 0);
             return new Thickness();
         });
 
@@ -26,7 +26,9 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public static Thickness ContentPaddingInMaximized { get; } = Global.Run(() =>
         {
-            if (!Platform.IsWindows)
+            if (Platform.IsMacOS)
+                return new Thickness(0, 1, 0, 0);
+            if (!Platform.IsNotWindows)
                 return new Thickness();
             if (Platform.IsWindows10OrAbove)
                 return new Thickness(6); // Windows 10

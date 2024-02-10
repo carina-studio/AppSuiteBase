@@ -2629,23 +2629,69 @@
 									</MultiBinding>
 								</Border.Width>
 								<Panel ClipToBounds="False">
-									<Border Background="{x:Null}" BoxShadow="{DynamicResource BoxShadows/Shadow.Light}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsSelected}"/>
-									<Border Background="{DynamicResource Brush/TabItem.Header.Background}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding !$parent[TabItem].IsSelected}" Margin="0,0,0,1"/>
-									<Border Background="{DynamicResource Brush/TabItem.Header.Background.PointerOver}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsPointerOver}" Opacity="{Binding $parent[TabItem].IsPointerOver, Converter={x:Static converters:TabItemOpacityConverters.IsPointerOverToOpacity}}" Margin="0,0,0,1">
+									<Border Background="{x:Null}" 
+									        BoxShadow="{DynamicResource BoxShadows/Shadow.Light}" 
+									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
+									        IsVisible="{TemplateBinding IsSelected}"/>
+									<Border Background="{DynamicResource Brush/TabItem.Header.Background}" 
+									        BorderBrush="{DynamicResource Brush/TabItem.Header.Border}" 
+									        BorderThickness="1,0,1,0" 
+									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
+									        IsVisible="{TemplateBinding IsSelected}"
+									        Margin="0,0,0,1"/>
+									<Border Background="{DynamicResource Brush/TabItem.Header.Background.PointerOver}" 
+									        BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}"
+									        BorderThickness="1,0,1,0" 
+									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"
+									        IsVisible="{TemplateBinding IsPointerOver}" 
+									        Opacity="{TemplateBinding IsPointerOver, Converter={x:Static converters:TabItemOpacityConverters.IsPointerOverToOpacity}}" 
+									        Margin="0,0,0,1">
 										<Border.Transitions>
 											<Transitions>
 												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Border.Transitions>
 									</Border>
-									<Border Background="{DynamicResource Brush/TabItem.Header.Background.Selected}" BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" BorderThickness="1,1,1,0" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" IsVisible="{Binding $parent[TabItem].IsSelected}" Opacity="{Binding $parent[TabItem].IsSelected, Converter={x:Static converters:TabItemOpacityConverters.IsSelectedToOpacity}}">
+									<Border Background="{DynamicResource Brush/TabItem.Header.Background.Selected}" 
+									        BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" 
+									        BorderThickness="1,0,1,0" 
+									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
+									        IsVisible="{TemplateBinding IsSelected}" 
+									        Opacity="{TemplateBinding IsSelected, Converter={x:Static converters:TabItemOpacityConverters.IsSelectedToOpacity}}">
 										<Border.Transitions>
 											<Transitions>
 												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Border.Transitions>
 									</Border>
-									<ContentPresenter Content="{TemplateBinding Header}" ContentTemplate="{TemplateBinding HeaderTemplate}" Height="{DynamicResource Double/TabItem.Header.Content.Height}" HorizontalAlignment="Stretch" Margin="{DynamicResource Thickness/TabItem.Header.Padding}" VerticalAlignment="Center"/>
+									<ContentPresenter Content="{TemplateBinding Header}" 
+									                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+									                  Height="{DynamicResource Double/TabItem.Header.Content.Height}" 
+									                  HorizontalAlignment="Stretch" 
+									                  Margin="{DynamicResource Thickness/TabItem.Header.Padding}" 
+									                  VerticalAlignment="Center"/>
+									<Rectangle Fill="{DynamicResource Brush/Accent}"
+									           Height="3"
+									           HorizontalAlignment="Stretch"
+									           IsVisible="{TemplateBinding IsSelected}"
+									           Margin="1,0,1,0"
+									           Opacity="{TemplateBinding IsSelected, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacity}}"
+									           VerticalAlignment="Top">
+										<Rectangle.RenderTransform>
+											<ScaleTransform ScaleX="{Binding $parent[TabItem].IsSelected, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacity}}">
+												<ScaleTransform.Transitions>
+													<Transitions>
+														<DoubleTransition Property="ScaleX" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
+													</Transitions>
+												</ScaleTransform.Transitions>
+											</ScaleTransform>
+										</Rectangle.RenderTransform>
+										<Rectangle.Transitions>
+											<Transitions>
+												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
+											</Transitions>
+										</Rectangle.Transitions>
+									</Rectangle>
 								</Panel>
 							</Border>
 							
