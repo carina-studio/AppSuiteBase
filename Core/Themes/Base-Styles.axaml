@@ -2670,13 +2670,20 @@
 									                  HorizontalAlignment="Stretch" 
 									                  Margin="{DynamicResource Thickness/TabItem.Header.Padding}" 
 									                  VerticalAlignment="Center"/>
-									<Rectangle Fill="{DynamicResource Brush/Accent}"
-									           Height="3"
+									<Rectangle Height="3"
 									           HorizontalAlignment="Stretch"
 									           IsVisible="{TemplateBinding IsSelected}"
 									           Margin="1,0,1,0"
 									           Opacity="{TemplateBinding IsSelected, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacity}}"
 									           VerticalAlignment="Top">
+										<Rectangle.Fill>
+											<LinearGradientBrush EndPoint="100%,0%" StartPoint="0%,0%">
+												<GradientStop Offset="0" Color="{DynamicResource Color/Accent.Transparent}"/>
+												<GradientStop Offset="0.2" Color="{DynamicResource Color/Accent}"/>
+												<GradientStop Offset="0.8" Color="{DynamicResource Color/Accent}"/>
+												<GradientStop Offset="1" Color="{DynamicResource Color/Accent.Transparent}"/>
+											</LinearGradientBrush>
+										</Rectangle.Fill>
 										<Rectangle.RenderTransform>
 											<ScaleTransform ScaleX="{Binding $parent[TabItem].IsSelected, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacity}}">
 												<ScaleTransform.Transitions>
