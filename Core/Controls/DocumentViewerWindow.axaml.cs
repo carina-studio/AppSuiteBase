@@ -45,7 +45,7 @@ public class DocumentViewerWindow : Dialog
     /// <summary>
     /// Get or set source of document to be shown.
     /// </summary>
-    public DocumentSource? DocumentSource { get; set; }
+    public DocumentSource? DocumentSource { get; init; }
 
 
     /// <summary>

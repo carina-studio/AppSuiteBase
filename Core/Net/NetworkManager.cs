@@ -91,7 +91,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
                 try
                 {
                     var success = await Task.Run(() =>
-                        ping.Send(server, 5000, pingData)?.Status == IPStatus.Success);
+                        ping.Send(server, 5000, pingData).Status == IPStatus.Success);
                     if (success)
                     {
                         this.logger.LogTrace("Network connection checked by '{server}'", server);
@@ -135,7 +135,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
             {
                 try
                 {
-                    using var stream = await Task.Run(async () => 
+                    await using var stream = await Task.Run(async () => 
                         await httpClient.GetStreamAsync(server));
                     using var reader = new StreamReader(stream, Encoding.UTF8);
                     var match = IPv4Regex.Match(await reader.ReadToEndAsync());

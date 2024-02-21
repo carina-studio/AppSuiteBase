@@ -1,6 +1,5 @@
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
-using System;
 using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
@@ -16,7 +15,7 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
 {
     // Fields.
     string id;
-    volatile ILogger? logger;
+    ILogger? logger;
     string? name;
 
 
@@ -68,7 +67,7 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
 
 
     /// <inheritdoc/>
-    public TaskFactory IOTaskFactory { get => ProfileExtensions.IOTaskFactory; }
+    public TaskFactory IOTaskFactory => ProfileExtensions.IOTaskFactory;
 
 
     /// <summary>

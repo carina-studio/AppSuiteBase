@@ -18,7 +18,6 @@ partial class AppSuiteApplication
     static unsafe delegate*unmanaged[Cdecl]<void*> getDefaultGdkDisplay;
     static unsafe delegate*unmanaged[Cdecl]<void*, int, void*> getGdkMonitor;
     static unsafe delegate*unmanaged[Cdecl]<void*, int> getGdkMonitorCount;
-    static unsafe delegate*unmanaged[Cdecl]<void*, sbyte*> getGdkMonitorModel;
     static unsafe delegate*unmanaged[Cdecl]<void*, int> getGdkMonitorScaleFactor;
 
 
@@ -147,12 +146,6 @@ partial class AppSuiteApplication
             return false;
         }
         getGdkMonitor = (delegate*unmanaged[Cdecl]<void*, int, void*>)funcPtr;
-        if (!NativeLibrary.TryGetExport(libHandle, "gdk_monitor_get_model", out funcPtr))
-        {
-            Console.Error.WriteLine("Unable to find gdk_monitor_get_model().");
-            return false;
-        }
-        getGdkMonitorModel = (delegate*unmanaged[Cdecl]<void*, sbyte*>)funcPtr;
         if (!NativeLibrary.TryGetExport(libHandle, "gdk_monitor_get_scale_factor", out funcPtr))
         {
             Console.Error.WriteLine("Unable to find gdk_monitor_get_scale_factor().");

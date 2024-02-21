@@ -216,7 +216,7 @@ public static class CommandSearchPaths
 				{
 					using var reader = new StreamReader("/etc/paths");
 					var path = reader.ReadLine();
-					while (path != null)
+					while (path is not null)
 					{
 						if (cancellationToken.IsCancellationRequested)
 							throw new TaskCanceledException();
@@ -283,9 +283,9 @@ public static class CommandSearchPaths
 					{
 						// generate paths file
 						var tempPathsFile = Path.GetTempFileName().Also(it => tempFilePaths.Add(it));
-						using (var stream = new FileStream(tempPathsFile, FileMode.Create, FileAccess.ReadWrite))
+						await using (var stream = new FileStream(tempPathsFile, FileMode.Create, FileAccess.ReadWrite))
 						{
-							using var writer = new StreamWriter(stream, Encoding.UTF8);
+							await using var writer = new StreamWriter(stream, Encoding.UTF8);
 							for (int i = 0, count = sortedPaths.Length; i < count; ++i)
 							{
 								if (i > 0)
@@ -297,9 +297,9 @@ public static class CommandSearchPaths
 						// generate apple script file
                         var title = AppSuiteApplication.CurrentOrNull?.GetString("CommandSearchPaths.UpdateSystemPaths") ?? "Update paths defined by system";
 						var tempScriptFile = Path.GetTempFileName().Also(it => tempFilePaths.Add(it));
-						using (var stream = new FileStream(tempScriptFile, FileMode.Create, FileAccess.ReadWrite))
+						await using (var stream = new FileStream(tempScriptFile, FileMode.Create, FileAccess.ReadWrite))
 						{
-							using var writer = new StreamWriter(stream, Encoding.UTF8);
+							await using var writer = new StreamWriter(stream, Encoding.UTF8);
 							writer.Write($"do shell script \"mv -f '{tempPathsFile}' '/etc/paths'\"");
 							writer.Write($" with prompt \"{title}\"");
 							writer.Write($" with administrator privileges");
@@ -319,7 +319,7 @@ public static class CommandSearchPaths
 							RedirectStandardOutput = true,
 							UseShellExecute = false,
 						});
-						if (process != null)
+						if (process is not null)
 						{
 							await process.WaitForExitAsync(CancellationToken.None);
 							return process.ExitCode == 0;
@@ -367,7 +367,7 @@ public static class CommandSearchPaths
 								UseShellExecute = true,
 								Verb = "runas",
 							});
-							if (process != null)
+							if (process is not null)
 							{
 								await process.WaitForExitAsync(CancellationToken.None);
 								if (process.ExitCode != 0)

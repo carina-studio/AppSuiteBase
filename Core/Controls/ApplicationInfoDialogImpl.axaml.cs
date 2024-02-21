@@ -540,11 +540,8 @@ class ApplicationInfoDialogImpl : Dialog
 	/// <summary>
 	/// Show application update dialog.
 	/// </summary>
-	public void ShowAppUpdateDialog()
-	{
-		if (this.Application is IAppSuiteApplication asApp)
-			_ = asApp.CheckForApplicationUpdateAsync(this, true);
-	}
+	public void ShowAppUpdateDialog() =>
+		this.Application.CheckForApplicationUpdateAsync(this, true);
 
 
 	/// <summary>

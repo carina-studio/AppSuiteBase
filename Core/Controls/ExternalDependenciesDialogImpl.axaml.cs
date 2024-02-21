@@ -26,7 +26,7 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	public static readonly IValueConverter StateBrushConverter = new FuncValueConverter<ExternalDependencyState, IBrush?>(state =>
 	{
 		var app = AppSuiteApplication.CurrentOrNull;
-		if (app == null)
+		if (app is null)
 			return null;
 		IBrush? brush;
 		switch (state)
@@ -52,7 +52,7 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	public static readonly IMultiValueConverter StateConverter = new FuncMultiValueConverter<object, string?>(values =>
 	{
 		var app = AppSuiteApplication.CurrentOrNull;
-		if (app == null)
+		if (app is null)
 			return null;
 		var type = ExternalDependencyType.Software;
 		var state = ExternalDependencyState.Unknown;
@@ -195,7 +195,7 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	/// <summary>
 	/// External dependency to be focused when showing dialog.
 	/// </summary>
-	public ExternalDependency? FocusedExternalDependency { get; set; }
+	public ExternalDependency? FocusedExternalDependency { get; init; }
 
 
 	/// <inheritdoc/>

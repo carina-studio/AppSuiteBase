@@ -80,7 +80,7 @@ class TextInputDialogImpl : InputDialog
 	public bool? IsCheckBoxChecked 
 	{ 
 		get => this.isCheckBoxChecked;
-		set
+		init
 		{
 			if (this.isCheckBoxChecked == value)
 				return;

@@ -55,9 +55,9 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     {
         // check state
         this.VerifyAccess();
-        if (profile.Manager != null)
+        if (profile.Manager is not null)
         {
-            if (object.ReferenceEquals(profile.Manager, this))
+            if (ReferenceEquals(profile.Manager, this))
                 throw new InvalidOperationException("The profile is already added to this manager.");
             throw new InvalidOperationException("The profile is already added to another manager.");
         }
@@ -95,7 +95,7 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         var result = string.Compare(lhs.Name, rhs.Name, true, CultureInfo.InvariantCulture);
         if (result != 0)
             return result;
-        return lhs.Id.CompareTo(rhs.Id);
+        return string.CompareOrdinal(lhs.Id, rhs.Id);
     }
 
 
@@ -350,12 +350,11 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         this.VerifyAccess();
         
         // remove profile
-        if (!object.ReferenceEquals(profile.Manager, this) || !this.profilesById.Remove(profile.Id))
+        if (!ReferenceEquals(profile.Manager, this) || !this.profilesById.Remove(profile.Id))
             return false;
-        if (deleteFile)
-            this.Logger.LogTrace("Remove profile '{profileName}' ({profileId})", profile.Name, profile.Id);
-        else
-            this.Logger.LogTrace("Remove profile '{profileName}' ({profileId}) without deleting file", profile.Name, profile.Id);
+        this.Logger.LogTrace(deleteFile 
+            ? "Remove profile '{profileName}' ({profileId})" 
+            : "Remove profile '{profileName}' ({profileId}) without deleting file", profile.Name, profile.Id);
         this.removingProfileHandlers?.Invoke(this, profile);
         this.profiles.Remove(profile);
         this.profilesToSave.Remove(profile);
@@ -450,7 +449,7 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     protected void ScheduleSavingProfile(TProfile profile)
     {
         this.VerifyAccess();
-        if (!object.ReferenceEquals(profile.Manager, this))
+        if (!ReferenceEquals(profile.Manager, this))
             throw new ArgumentException("Profile is not managed by the manager.");
         if (this.Application.IsCleanMode)
         {
@@ -503,7 +502,7 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     {
         this.VerifyAccess();
         this.Initialize();
-        if (this.initializationTask != null)
+        if (this.initializationTask is not null)
         {
             await this.initializationTask;
             this.initializationTask = null;

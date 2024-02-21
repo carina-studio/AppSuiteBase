@@ -113,7 +113,7 @@ class MessageDialogImpl : Dialog
 	/// <summary>
 	/// Get or set buttons.
 	/// </summary>
-	public MessageDialogButtons Buttons { get; set; } = MessageDialogButtons.OK;
+	public MessageDialogButtons Buttons { get; init; } = MessageDialogButtons.OK;
 
 
 	/// <summary>
@@ -139,7 +139,7 @@ class MessageDialogImpl : Dialog
 	/// <summary>
 	/// Custom icon.
 	/// </summary>
-	public IImage? CustomIcon { get; set; }
+	public IImage? CustomIcon { get; init; }
 
 
 	/// <summary>
@@ -175,7 +175,7 @@ class MessageDialogImpl : Dialog
 	/// <summary>
 	/// Default dialog result.
 	/// </summary>
-	public MessageDialogResult? DefaultResult { get; set; }
+	public MessageDialogResult? DefaultResult { get; init; }
 
 
 	/// <summary>
@@ -221,7 +221,7 @@ class MessageDialogImpl : Dialog
 	/// <summary>
 	/// Get or set icon.
 	/// </summary>
-	public new MessageDialogIcon Icon { get; set; } = MessageDialogIcon.Information;
+	public new MessageDialogIcon Icon { get; init; } = MessageDialogIcon.Information;
 
 
 	// Get IImage according to Icon.
@@ -266,7 +266,7 @@ class MessageDialogImpl : Dialog
 	// Called when closing.
 	protected override void OnClosing(WindowClosingEventArgs e)
 	{
-		if (this.result == null)
+		if (this.result is null)
 			e.Cancel = true;
 		base.OnClosing(e);
 	}
@@ -405,7 +405,7 @@ class MessageDialogImpl : Dialog
 	// Select result.
 	void SelectResult(MessageDialogResult? result)
 	{
-		if (result != null)
+		if (result is not null)
 		{
 			this.result = result;
 			if (this.doNotAskOrShowAgainPanel.IsVisible)

@@ -108,6 +108,7 @@ partial class AppSuiteApplication
             if (this.baseAppDelegate?.Class.HasMethod(cmd) == true)
                 this.baseAppDelegate.SendMessage(cmd, args);
         }
+        // ReSharper disable once UnusedMethodReturnValue.Local
         T SendMessageToBaseAppDelegateWithResult<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.PublicConstructors)] T>(ObjCSelector cmd, T defaultResult, params object?[] args)
         {
             if (this.baseAppDelegate?.Class.HasMethod(cmd) == true)

@@ -88,6 +88,7 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
     /// <summary>
     /// Get URI for details of external dependency.
     /// </summary>
+    // ReSharper disable once UnassignedGetOnlyAutoProperty
     public virtual Uri? DetailsUri { get; }
 
 
@@ -100,6 +101,7 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
     /// <summary>
     /// Get URI for downloading and installation of external dependency.
     /// </summary>
+    // ReSharper disable once UnassignedGetOnlyAutoProperty
     public virtual Uri? InstallationUri { get; }
 
 
@@ -190,7 +192,7 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
 
 
     /// <summary>
-    /// Get type of external denepdency.
+    /// Get type of external dependency.
     /// </summary>
     public ExternalDependencyType Type { get; }
 

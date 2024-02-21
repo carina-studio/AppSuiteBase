@@ -63,7 +63,7 @@ public static class ProfileManagerExtensions
                 idBuffer[i] = n <= 9 ? (char)('0' + n) : (char)('a' + (n - 10));
             }
             var id = new string(idBuffer);
-            if (manager.GetProfileOrDefault(id) == null)
+            if (manager.GetProfileOrDefault(id) is null)
                 return id;
         }
     }

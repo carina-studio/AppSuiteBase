@@ -82,7 +82,7 @@ public static class ProfileExtensions
             if (CarinaStudio.IO.File.TryOpenReadWrite(fileName, 5000, out var stream))
                 return stream.AsNonNull();
             throw new IOException($"Unable to open file '{fileName}'.");
-        });
+        }, cancellationToken);
         if (cancellationToken.IsCancellationRequested)
         {
             Global.RunWithoutErrorAsync(stream.Close);

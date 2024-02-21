@@ -887,10 +887,9 @@ namespace CarinaStudio.AppSuite
             });
             if (this.IsRestartingRootWindowsNeeded != isRestartingNeeded)
             {
-                if (isRestartingNeeded)
-                    this.Logger.LogWarning("Need to restart root windows");
-                else
-                    this.Logger.LogWarning("No need to restart root windows");
+                this.Logger.LogWarning(isRestartingNeeded 
+                    ? "Need to restart root windows" 
+                    : "No need to restart root windows");
                 this.IsRestartingRootWindowsNeeded = isRestartingNeeded;
                 this.OnPropertyChanged(nameof(IsRestartingRootWindowsNeeded));
             }
@@ -1374,7 +1373,7 @@ namespace CarinaStudio.AppSuite
                     // check state
                     if (popup.Parent is not Control target)
                     {
-                        if (popup.PlacementTarget is not Control placementTarget)
+                        if (popup.PlacementTarget is not { } placementTarget)
                             return;
                         target = placementTarget;
                     }
@@ -1555,7 +1554,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get fall-back theme mode if <see cref="IsSystemThemeModeSupported"/> is false.
         /// </summary>
-        public virtual ThemeMode FallbackThemeMode { get; } = Platform.IsMacOS ? ThemeMode.Light : ThemeMode.Dark;
+        protected virtual ThemeMode FallbackThemeMode { get; } = Platform.IsMacOS ? ThemeMode.Light : ThemeMode.Dark;
 
 
         // Transform RGB color values.
@@ -4246,7 +4245,7 @@ namespace CarinaStudio.AppSuite
                 {
                     this.Logger.LogWarning("Close {count} main window(s) to shut down", this.mainWindows.Count);
                     using var stateStream = new MemoryStream();
-                    using (var stateWriter = new Utf8JsonWriter(stateStream))
+                    await using (var stateWriter = new Utf8JsonWriter(stateStream))
                     {
                         stateWriter.WriteStartArray();
                         foreach (var mainWindow in this.mainWindows.ToArray())
@@ -4296,10 +4295,9 @@ namespace CarinaStudio.AppSuite
             {
                 try
                 {
-                    if (this.isRestartAsAdminRequested)
-                        this.Logger.LogWarning("Restart as administrator/superuser");
-                    else
-                        this.Logger.LogWarning("Restart");
+                    this.Logger.LogWarning(this.isRestartAsAdminRequested 
+                        ? "Restart as administrator/superuser" 
+                        : "Restart");
                     var process = new Process().Also(process =>
                     {
                         process.StartInfo.Let(it =>

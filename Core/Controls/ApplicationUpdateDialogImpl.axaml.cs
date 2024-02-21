@@ -43,7 +43,7 @@ namespace CarinaStudio.AppSuite.Controls
 		/// <summary>
 		/// Get or set whether performing update checking when opening dialog or not.
 		/// </summary>
-		public bool CheckForUpdateWhenOpening { get; set; }
+		public bool CheckForUpdateWhenOpening { get; init; }
 
 
 		/// <summary>
@@ -51,7 +51,7 @@ namespace CarinaStudio.AppSuite.Controls
 		/// </summary>
 		public void DownloadUpdatePackage()
 		{
-			if (this.attachedAppUpdater != null && this.attachedAppUpdater.UpdatePackageUri != null)
+			if (this.attachedAppUpdater is not null && this.attachedAppUpdater.UpdatePackageUri is not null)
 			{
 				Platform.OpenLink(this.attachedAppUpdater.UpdatePackageUri);
 				this.Close();
@@ -80,7 +80,7 @@ namespace CarinaStudio.AppSuite.Controls
 		// Called when closing.
 		protected override void OnClosing(WindowClosingEventArgs e)
 		{
-			if (this.attachedAppUpdater != null)
+			if (this.attachedAppUpdater is not null)
 			{
 				if (this.attachedAppUpdater.IsPreparingForUpdate)
 				{
@@ -108,13 +108,13 @@ namespace CarinaStudio.AppSuite.Controls
 		protected override void OnDataContextChanged(EventArgs e)
 		{
 			base.OnDataContextChanged(e);
-			if (this.attachedAppUpdater != null)
+			if (this.attachedAppUpdater is not null)
 			{
 				this.attachedAppUpdater.ErrorMessageGenerated -= this.OnErrorMessageGenerated;
 				this.attachedAppUpdater.PropertyChanged -= this.OnUpdaterPropertyChanged;
 			}
 			this.attachedAppUpdater = this.DataContext as ApplicationUpdater;
-			if (this.attachedAppUpdater != null)
+			if (this.attachedAppUpdater is not null)
 			{
 				this.attachedAppUpdater.ErrorMessageGenerated += this.OnErrorMessageGenerated;
 				this.attachedAppUpdater.PropertyChanged += this.OnUpdaterPropertyChanged;
@@ -126,7 +126,7 @@ namespace CarinaStudio.AppSuite.Controls
 		protected override void OnOpened(EventArgs e)
 		{
 			// check for update
-			if (this.CheckForUpdateWhenOpening && this.attachedAppUpdater != null)
+			if (this.CheckForUpdateWhenOpening && this.attachedAppUpdater is not null)
 				this.attachedAppUpdater.CheckForUpdateCommand.TryExecute();
 			
 			// setup default button
@@ -215,9 +215,8 @@ namespace CarinaStudio.AppSuite.Controls
 		// Update latest info shown to user.
 		void UpdateLatestNotifiedInfo()
         {
-			if (this.attachedAppUpdater == null)
-				return;
-			UpdateLatestNotifiedInfo(this.PersistentState, this.attachedAppUpdater.UpdateVersion);
+			if (this.attachedAppUpdater is not null)
+				UpdateLatestNotifiedInfo(this.PersistentState, this.attachedAppUpdater.UpdateVersion);
 		}
 		public static void UpdateLatestNotifiedInfo(ISettings persistentState, Version? version)
 		{
