@@ -262,14 +262,17 @@ class ApplicationInfoDialogImpl : Dialog
 			return;
 
 		// export
+		var processingDialog = new ProcessingDialog().Also(it => it.ShowDialog(this));
+		await Task.Delay(500);
 		var success = await appInfo.ExportLogs(fileName);
+		processingDialog.Complete();
 
 		// show result
 		if (!this.IsOpened)
 			return;
 		if (success)
 		{
-			_ = new MessageDialog()
+			_ = new MessageDialog
 			{
 				Icon = MessageDialogIcon.Success,
 				Message = this.Application.GetString("ApplicationInfoDialog.SucceededToExportAppLogs"),
@@ -277,7 +280,7 @@ class ApplicationInfoDialogImpl : Dialog
 		}
 		else
 		{
-			_ = new MessageDialog()
+			_ = new MessageDialog
 			{
 				Icon = MessageDialogIcon.Error,
 				Message = this.Application.GetString("ApplicationInfoDialog.FailedToExportAppLogs"),
