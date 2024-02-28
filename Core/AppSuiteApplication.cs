@@ -4535,6 +4535,12 @@ namespace CarinaStudio.AppSuite
             // take snapshot
             if (!string.IsNullOrEmpty(fileName))
             {
+                var processingDialog = new ProcessingDialog().Also(it =>
+                {
+                    it.Message = this.GetObservableString("AppSuiteApplication.TakeMemorySnapshot.Processing");
+                    it.ShowDialog(window);
+                });
+                await Task.Delay(500, CancellationToken.None);
                 var prepared = await preparationTask.LetAsync(async it =>
                 {
                     try
@@ -4551,6 +4557,7 @@ namespace CarinaStudio.AppSuite
                 });
                 if (prepared && this.TakeMemorySnapshot(fileName))
                 {
+                    processingDialog.Complete();
                     await new MessageDialog
                     {
                         Icon = MessageDialogIcon.Success,
@@ -4562,6 +4569,7 @@ namespace CarinaStudio.AppSuite
                     }.ShowDialog(window);
                     return true;
                 }
+                processingDialog.Complete();
                 await new MessageDialog
                 {
                     Icon = MessageDialogIcon.Error,

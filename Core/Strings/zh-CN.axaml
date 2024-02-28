@@ -120,6 +120,7 @@
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">载入布景主题</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Description">撷取内存快照期间应用程序将停止响应数十秒至数分钟。</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Failed">无法撷取内存快照</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Processing">正在撷取内存快照，过程中应用程序将停止响应…</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Succeeded">内存快照撷取完成并存放至 '{0}'。</sys:String>
 
 	<!-- CommandSearchPaths -->
