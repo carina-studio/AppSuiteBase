@@ -232,12 +232,8 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 		{
 			this.externalDependenciesPanel.Children.FirstOrDefault(it => it.DataContext == extDependency)?.Let(extDependencyItemPanel =>
 			{
-				var headerBorder = extDependencyItemPanel.FindDescendantOfTypeAndName<Border>("headerBorder");
-				if (headerBorder is not null)
-				{
-					CarinaStudio.Controls.ScrollViewerExtensions.ScrollIntoView(this.Get<ScrollViewer>("scrollViewer"), headerBorder, true);
-					this.AnimateHeader(headerBorder);
-				}
+				CarinaStudio.Controls.ScrollViewerExtensions.ScrollIntoView(this.Get<ScrollViewer>("scrollViewer"), extDependencyItemPanel, true);
+				this.AnimateItem(extDependencyItemPanel);
 			});
 		});
 		this.checkCanCloseAction.Execute();

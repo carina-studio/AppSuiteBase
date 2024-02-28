@@ -29,7 +29,7 @@ namespace CarinaStudio.AppSuite.Tests
             var scrollViewer = this.Get<ScrollViewer>("scrollViewer");
             var textBlock = this.Get<TextBlock>("radioButtonLabel");
             ScrollViewerExtensions.ScrollIntoView(scrollViewer, textBlock, true);
-            this.AnimateTextBlock(textBlock);
+            this.AnimateItem(textBlock);
             */
         }
 
