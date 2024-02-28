@@ -87,7 +87,7 @@ namespace CarinaStudio.AppSuite.Tests
         readonly Avalonia.Controls.TextBlock syntaxHighlightingRefTextBlock;
         readonly SyntaxHighlightingTextBlock syntaxHighlightingTextBlock;
         readonly SyntaxHighlightingTextBox syntaxHighlightingTextBox;
-        readonly ObservableList<TabItem> tabItems = new();
+        readonly ObservableList<Avalonia.Controls.TabItem> tabItems = new();
 
 
         [DynamicDependency(nameof(AppSuiteApplication.ShowSelfTestingWindow), typeof(AppSuiteApplication))]
@@ -245,7 +245,7 @@ namespace CarinaStudio.AppSuite.Tests
             });
 
             var tabControl = this.FindControl<TabControl>("tabControl").AsNonNull();
-            this.tabItems.AddRange(tabControl.Items!.Cast<TabItem>());
+            this.tabItems.AddRange(tabControl.Items!.Cast<Avalonia.Controls.TabItem>());
             tabControl.Items.Clear();
             tabControl.ItemsSource = this.tabItems;
             (this.tabItems[0].Header as Control)?.Let(it => this.Application.EnsureClosingToolTipIfWindowIsInactive(it));
@@ -348,7 +348,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         void OnDragLeaveTabItem(object? sender, TabItemEventArgs e)
         {
-            if (e.Item is not TabItem tabItem)
+            if (e.Item is not Avalonia.Controls.TabItem tabItem)
                 return;
             ItemInsertionIndicator.SetInsertingItemAfter(tabItem, false);
             ItemInsertionIndicator.SetInsertingItemBefore(tabItem, false);
@@ -362,7 +362,7 @@ namespace CarinaStudio.AppSuite.Tests
             //if (tabItems != null && e.ItemIndex < tabItems.Count - 1)
             //(sender as Controls.TabControl)?.Let(it => it.SelectedIndex = e.ItemIndex);
 
-            if (!e.Data.TryGetData<TabItem>(TabItemKey, out var tabItem) || tabItem == null)
+            if (!e.Data.TryGetData<Avalonia.Controls.TabItem>(TabItemKey, out var tabItem) || tabItem == null)
                 return;
 
             if (tabItem == e.Item)
@@ -418,13 +418,13 @@ namespace CarinaStudio.AppSuite.Tests
 
         void OnDropOnTabItem(object? sender, DragOnTabItemEventArgs e)
         {
-            if (e.Item is not TabItem tabItem)
+            if (e.Item is not Avalonia.Controls.TabItem tabItem)
                 return;
 
             ItemInsertionIndicator.SetInsertingItemAfter(tabItem, false);
             ItemInsertionIndicator.SetInsertingItemBefore(tabItem, false);
 
-            if (!e.Data.TryGetData<TabItem>(TabItemKey, out var item) || item == null || item == tabItem)
+            if (!e.Data.TryGetData<Avalonia.Controls.TabItem>(TabItemKey, out var item) || item == null || item == tabItem)
                 return;
 
             var srcIndex = tabItems.IndexOf(item);

@@ -12,27 +12,30 @@ static class TabItemWidthConverter
 {
     // Fields.
     static IAvaloniaApplication? app;
-    static Thickness emptyTabItemPadding;
-    static Thickness itemsPanelMargin;
-    static double maxTabItemWidth;
-    static double minTabItemWidth;
-    static Thickness tabItemMargin;
+    static CachedResource<Thickness>? emptyTabItemPadding;
+    static CachedResource<Thickness>? itemsPanelMargin;
+    static CachedResource<double>? maxTabItemWidth;
+    static CachedResource<double>? minTabItemWidth;
+    static CachedResource<Thickness>? separatorMargin;
+    static CachedResource<Thickness>? tabItemMargin;
 
 
     // Default instance.
     public static readonly IMultiValueConverter Default = new FuncMultiValueConverter<object?, double>(values =>
     {
-        if (app == null)
+        var resourceHost = app as IResourceHost ?? AppSuiteApplication.CurrentOrNull?.Let(it =>
         {
-            app = AppSuiteApplication.CurrentOrNull;
-            if (app == null)
-                return double.PositiveInfinity;
-            emptyTabItemPadding = app.FindResourceOrDefault<Thickness>("Thickness/TabItem.Header.Padding");
-            itemsPanelMargin = app.FindResourceOrDefault<Thickness>("Thickness/TabControl.TabStrip.Panel.Margin");
-            maxTabItemWidth = app.FindResourceOrDefault<double>("Double/TabItem.Header.MaxWidth", 300);
-            minTabItemWidth = app.FindResourceOrDefault<double>("Double/TabItem.Header.MinWidth", 150);
-            tabItemMargin = app.FindResourceOrDefault<Thickness>("Thickness/TabItem.Header.Margin");
-        }
+            app = it;
+            return it as IResourceHost;
+        });
+        if (resourceHost is null)
+            return double.PositiveInfinity;
+        emptyTabItemPadding ??= new(resourceHost, "Thickness/TabItem.Header.Padding");
+        itemsPanelMargin ??= new(resourceHost, "Thickness/TabControl.TabStrip.Panel.Margin");
+        maxTabItemWidth ??= new(resourceHost, "Double/TabItem.Header.MaxWidth");
+        minTabItemWidth ??= new(resourceHost, "Double/TabItem.Header.MinWidth");
+        tabItemMargin ??= new(resourceHost, "Thickness/TabItem.Header.Margin");
+        separatorMargin ??= new(resourceHost, "Thickness/TabItem.Header.Separator.Margin");
         var valueList = values as IList<object?> ?? values.ToArray();
         if (valueList.Count >= 2
             && valueList[0] is TabControl tabControl
@@ -43,8 +46,8 @@ static class TabItemWidthConverter
             var margin = tabItemsContainer.Margin;
             var padding = tabStrip.Padding;
             var tabStripWidth = (tabStrip.Bounds.Width 
-                                 - margin.Left - padding.Left - itemsPanelMargin.Left
-                                 - padding.Right - margin.Right - itemsPanelMargin.Right
+                                 - margin.Left - padding.Left - itemsPanelMargin.Value.Left
+                                 - padding.Right - margin.Right - itemsPanelMargin.Value.Right
                                  - 1);
             if (tabStripWidth <= 0)
                 return 0;
@@ -59,14 +62,11 @@ static class TabItemWidthConverter
                     {
                         if (tabItem.Classes.Contains("Empty"))
                         {
-                            (tabItem.Header as Control)?.Let(it =>
+                            if (tabItem.Header is Control emptyTabItemHeader && emptyTabItemHeader.IsMeasureValid)
                             {
-                                if (it.IsMeasureValid)
-                                {
-                                    var margin = it.Margin;
-                                    tabStripWidth -= (it.Bounds.Width + emptyTabItemPadding.Left + margin.Left + margin.Right + emptyTabItemPadding.Right);
-                                }
-                            });
+                                var margin = emptyTabItemHeader.Margin;
+                                tabStripWidth -= (emptyTabItemHeader.Bounds.Width + emptyTabItemPadding.Value.Left + margin.Left + margin.Right + emptyTabItemPadding.Value.Right);
+                            }
                         }
                         else
                             ++count;
@@ -78,8 +78,8 @@ static class TabItemWidthConverter
                 return double.PositiveInfinity;
 
             // calculate width
-            var width = (int)(tabStripWidth / tabItemCount - tabItemMargin.Left - tabItemMargin.Right - 0.5);
-            return Math.Max(Math.Min(width, maxTabItemWidth), minTabItemWidth);
+            var width = (int)(tabStripWidth / tabItemCount - tabItemMargin.Value.Left - tabItemMargin.Value.Right - separatorMargin.Value.Left - separatorMargin.Value.Right - 1 /* Width of separator */ - 0.5);
+            return Math.Max(Math.Min(width, maxTabItemWidth.Value), minTabItemWidth.Value);
         }
         return double.PositiveInfinity;
     });

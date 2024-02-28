@@ -78,6 +78,7 @@
 	<Color x:Key="Color/TabItem.Header.Background.Selected">#303030</Color>
 	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#444444</Color>
 	<Color x:Key="Color/TabItem.Header.Border.Selected">#444444</Color>
+	<Color x:Key="Color/TabItem.Header.Separator">#17ffffff</Color>
 
 	<!-- TextBox -->
 	<SolidColorBrush x:Key="TextControlBackground" Color="#222222"/>

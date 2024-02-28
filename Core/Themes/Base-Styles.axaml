@@ -2610,14 +2610,53 @@
 				<ControlTemplate>
 					<Border Background="{x:Static Brushes.Transparent}" ClipToBounds="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 						<DockPanel ClipToBounds="False" VerticalAlignment="Stretch">
+							
+							<Panel DockPanel.Dock="Left">
+								<Border BorderThickness="1,0,0,0"
+								        Opacity="0"/>
+								<Border BorderBrush="{DynamicResource Brush/TabItem.Header.Separator}"
+								        BorderThickness="1,0,0,0"
+								        DockPanel.Dock="Left"
+								        Margin="{DynamicResource Thickness/TabItem.Header.Separator.Margin}">
+									<Border.IsVisible>
+										<MultiBinding Converter="{x:Static BoolConverters.And}">
+											<Binding Path="!IsPointerOver" RelativeSource="{RelativeSource TemplatedParent}"/>
+											<Binding Path="!IsSelected" RelativeSource="{RelativeSource TemplatedParent}"/>
+											<Binding Path="!IsFirstItem" RelativeSource="{RelativeSource TemplatedParent}" FallbackValue="False"/>
+											<Binding Path="!IsPreviousItemPointerOver" RelativeSource="{RelativeSource TemplatedParent}" FallbackValue="False"/>
+											<Binding Path="!IsPreviousItemSelected" RelativeSource="{RelativeSource TemplatedParent}" FallbackValue="False"/>
+										</MultiBinding>
+									</Border.IsVisible>
+								</Border>
+							</Panel>
 
-							<Border DockPanel.Dock="Left" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemBefore}" Margin="{DynamicResource Thickness/TabItem.InsertionIndicator.Margin}">
-								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
-							</Border>
+							<DockPanel DockPanel.Dock="Left"
+							           IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemBefore}">
+								<Border BorderBrush="{DynamicResource Brush/TabItem.Header.Separator}"
+								        BorderThickness="1,0,0,0"
+								        DockPanel.Dock="Right"
+								        Margin="{DynamicResource Thickness/TabItem.Header.Separator.Margin}"/>
+								<Border Margin="{DynamicResource Thickness/TabItem.InsertionIndicator.Margin}">
+									<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" 
+									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
+									        Margin="{DynamicResource Thickness/TabItem.Header.Margin}" 
+									        Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
+								</Border>
+							</DockPanel>
 
-							<Border DockPanel.Dock="Right" IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemAfter}" Margin="{DynamicResource Thickness/TabItem.InsertionIndicator.Margin}">
-								<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
-							</Border>
+							<DockPanel DockPanel.Dock="Right"
+							           IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemAfter}" >
+								<Border BorderBrush="{DynamicResource Brush/TabItem.Header.Separator}"
+								        BorderThickness="1,0,0,0"
+								        DockPanel.Dock="Left"
+								        Margin="{DynamicResource Thickness/TabItem.Header.Separator.Margin}"/>
+								<Border Margin="{DynamicResource Thickness/TabItem.InsertionIndicator.Margin}">
+									<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" 
+									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
+									        Margin="{DynamicResource Thickness/TabItem.Header.Margin}" 
+									        Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
+								</Border>
+							</DockPanel>
 							
 							<Border Name="PART_ContentContainer" ClipToBounds="False" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" VerticalAlignment="Bottom">
 								<Border.Width>
@@ -2670,7 +2709,7 @@
 									                  HorizontalAlignment="Stretch" 
 									                  Margin="{DynamicResource Thickness/TabItem.Header.Padding}" 
 									                  VerticalAlignment="Center"/>
-									<Rectangle Height="3"
+									<!--Rectangle Height="2"
 									           HorizontalAlignment="Stretch"
 									           IsVisible="{TemplateBinding IsSelected}"
 									           Margin="1,0,1,0"
@@ -2689,6 +2728,7 @@
 												<ScaleTransform.Transitions>
 													<Transitions>
 														<DoubleTransition Property="ScaleX" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
+														<DoubleTransition Property="ScaleY" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
 													</Transitions>
 												</ScaleTransform.Transitions>
 											</ScaleTransform>
@@ -2698,7 +2738,7 @@
 												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Rectangle.Transitions>
-									</Rectangle>
+									</Rectangle-->
 								</Panel>
 							</Border>
 							

@@ -13,6 +13,7 @@ using CarinaStudio.VisualTree;
 using CarinaStudio.Windows.Input;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 
@@ -39,7 +40,8 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Fields.
-        INotifyCollectionChanged? attachedItems;
+        INotifyCollectionChanged? attachedItemsSource;
+        readonly Dictionary<Avalonia.Controls.TabItem, List<IDisposable>> attachedTabItemObserverTokens = new();
         Window? attachedWindow;
         object? draggingOverItem;
         int draggingOverItemIndex = -1;
@@ -97,13 +99,24 @@ namespace CarinaStudio.AppSuite.Controls
             });
             this.GetObservable(ItemsSourceProperty).Subscribe(items =>
             {
-                if (this.attachedItems != null)
+                if (this.attachedItemsSource != null)
                 {
-                    this.attachedItems.CollectionChanged -= this.OnItemsChanged;
-                    this.attachedItems = null;
+                    this.attachedItemsSource.CollectionChanged -= this.OnItemsChanged;
+                    this.attachedItemsSource = null;
+                    foreach (var tabItem in this.attachedTabItemObserverTokens.Keys.ToArray())
+                        this.DetachFromTabItem(tabItem);
                 }
-                this.attachedItems = (items as INotifyCollectionChanged)?.Also(it =>
+                this.attachedItemsSource = (items as INotifyCollectionChanged)?.Also(it =>
                     it.CollectionChanged += this.OnItemsChanged);
+                if (items is not null)
+                {
+                    foreach (var item in items)
+                    {
+                        if (item is Avalonia.Controls.TabItem tabItem)
+                            this.AttachToTabItem(tabItem);
+                    }
+                    this.UpdateExtendedTabItemStates();
+                }
             });
             this.GetObservable(SelectedIndexProperty).Subscribe(_ =>
             {
@@ -111,6 +124,49 @@ namespace CarinaStudio.AppSuite.Controls
                     this.scrollToSelectedItemAction.Schedule();
             });
             isSubscribed = true;
+        }
+        
+        
+        // Attach to given TabItem.
+        void AttachToTabItem(Avalonia.Controls.TabItem tabItem)
+        {
+            if (attachedTabItemObserverTokens.TryGetValue(tabItem, out var observerTokens))
+                return;
+            var isAttaching = true;
+            observerTokens = new()
+            {
+                tabItem.GetObservable(IsPointerOverProperty).Subscribe(isPointerOver =>
+                {
+                    if (!isAttaching)
+                        this.OnTabItemPointerOverChanged(tabItem, isPointerOver);
+                }),
+                tabItem.GetObservable(IsSelectedProperty).Subscribe(isSelected =>
+                {
+                    if (!isAttaching)
+                        this.OnTabItemSelectedChanged(tabItem, isSelected);
+                }),
+            };
+            isAttaching = false;
+            attachedTabItemObserverTokens[tabItem] = observerTokens;
+        }
+        
+        
+        // Detach from given TabItem.
+        void DetachFromTabItem(Avalonia.Controls.TabItem tabItem)
+        {
+            if (!attachedTabItemObserverTokens.Remove(tabItem, out var observerTokens))
+                return;
+            foreach (var token in observerTokens)
+                token.Dispose();
+            if (tabItem is TabItem extendedTabItem)
+            {
+                extendedTabItem.IsFirstItem = false;
+                extendedTabItem.IsLastItem = false;
+                extendedTabItem.IsNextItemPointerOver = false;
+                extendedTabItem.IsNextItemSelected = false;
+                extendedTabItem.IsPreviousItemPointerOver = false;
+                extendedTabItem.IsPreviousItemSelected = false;
+            }
         }
 
 
@@ -435,16 +491,54 @@ namespace CarinaStudio.AppSuite.Controls
         // Called when element in Items has been changed.
         void OnItemsChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Move)
+            switch (e.Action)
             {
-                // [Workaround] Prevent selecting items more than one
-                this.Items.Let(it =>
-                {
-                    var selectedIndex = this.SelectedIndex;
-                    for (var i = it.Count - 1 ; i >= 0 ; --i)
-                        (it[i] as TabItem)?.Let(tabItem => tabItem.IsSelected = (i == selectedIndex));
-                });
+                case NotifyCollectionChangedAction.Add:
+                    foreach (var item in e.NewItems!)
+                    {
+                        if (item is Avalonia.Controls.TabItem tabItem)
+                            this.AttachToTabItem(tabItem);
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Move:
+                    // [Workaround] Prevent selecting items more than one
+                    this.Items.Let(it =>
+                    {
+                        var selectedIndex = this.SelectedIndex;
+                        for (var i = it.Count - 1 ; i >= 0 ; --i)
+                            (it[i] as TabItem)?.Let(tabItem => tabItem.IsSelected = (i == selectedIndex));
+                    });
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    foreach (var item in e.OldItems!)
+                    {
+                        if (item is Avalonia.Controls.TabItem tabItem)
+                            this.DetachFromTabItem(tabItem);
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Replace:
+                    foreach (var item in e.OldItems!)
+                    {
+                        if (item is Avalonia.Controls.TabItem tabItem)
+                            this.DetachFromTabItem(tabItem);
+                    }
+                    foreach (var item in e.NewItems!)
+                    {
+                        if (item is Avalonia.Controls.TabItem tabItem)
+                            this.AttachToTabItem(tabItem);
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    foreach (var tabItem in this.attachedTabItemObserverTokens.Keys.ToArray())
+                        this.DetachFromTabItem(tabItem);
+                    foreach (var item in this.Items)
+                    {
+                        if (item is Avalonia.Controls.TabItem tabItem)
+                            this.AttachToTabItem(tabItem);
+                    }
+                    break;
             }
+            this.UpdateExtendedTabItemStates();
         }
 
 
@@ -509,6 +603,34 @@ namespace CarinaStudio.AppSuite.Controls
             this.pointerPressedItem = null;
             this.pointerPressedItemIndex = -1;
             this.pointerPressedPosition = null;
+        }
+        
+        
+        // Called when TabItem.IsPointerOver changed.
+        void OnTabItemPointerOverChanged(Avalonia.Controls.TabItem tabItem, bool isPointerOver)
+        {
+            var index = this.Items.IndexOf(tabItem);
+            if (index < 0)
+                return;
+            var items = this.Items;
+            if (index > 0 && items[index - 1] is TabItem prevExtendedTabItem)
+                prevExtendedTabItem.IsNextItemPointerOver = isPointerOver;
+            if (index < items.Count - 1 && items[index + 1] is TabItem nextExtendedTabItem)
+                nextExtendedTabItem.IsPreviousItemPointerOver = isPointerOver;
+        }
+        
+        
+        // Called when TabItem.IsSelected changed.
+        void OnTabItemSelectedChanged(Avalonia.Controls.TabItem tabItem, bool isSelected)
+        {
+            var index = this.Items.IndexOf(tabItem);
+            if (index < 0)
+                return;
+            var items = this.Items;
+            if (index > 0 && items[index - 1] is TabItem prevExtendedTabItem)
+                prevExtendedTabItem.IsNextItemSelected = isSelected;
+            if (index < items.Count - 1 && items[index + 1] is TabItem nextExtendedTabItem)
+                nextExtendedTabItem.IsPreviousItemSelected = isSelected;
         }
 
 
@@ -600,6 +722,45 @@ namespace CarinaStudio.AppSuite.Controls
         /// Get width or height of tab strip.
         /// </summary>
         public double TabStripSize => this.tabStripSize;
+        
+        
+        // Update states of extended TabItems.
+        void UpdateExtendedTabItemStates()
+        {
+            var items = this.Items;
+            var itemCount = items.Count;
+            if (itemCount <= 0)
+                return;
+            var nextTabItem = default(Avalonia.Controls.TabItem);
+            var prevTabItem = itemCount >= 2 
+                ? items[^2] as Avalonia.Controls.TabItem
+                : null;
+            for (var i = itemCount - 1; i >= 0; --i)
+            {
+                var tabItem = items[i] as Avalonia.Controls.TabItem;
+                try
+                {
+                    if (tabItem is null)
+                        continue;
+                    if (tabItem is TabItem extendedTabItem)
+                    {
+                        extendedTabItem.IsFirstItem = (i == 0);
+                        extendedTabItem.IsLastItem = (i == itemCount - 1);
+                        extendedTabItem.IsNextItemPointerOver = (nextTabItem?.IsPointerOver == true);
+                        extendedTabItem.IsNextItemSelected = (nextTabItem?.IsSelected == true);
+                        extendedTabItem.IsPreviousItemPointerOver = (prevTabItem?.IsPointerOver == true);
+                        extendedTabItem.IsPreviousItemSelected = (prevTabItem?.IsSelected == true);
+                    }
+                }
+                finally
+                {
+                    nextTabItem = tabItem;
+                    prevTabItem = i >= 2
+                        ? items[i - 2] as Avalonia.Controls.TabItem
+                        : null;
+                }
+            }
+        }
 
 
         // Update margin of tab strip.

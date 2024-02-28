@@ -3,8 +3,8 @@
 		xmlns:sys="using:System">
 
 	<!-- AddTabItemButton -->
-	<sys:Double x:Key="Double/AddTabItemButton.Size">32</sys:Double>
-	<Thickness x:Key="Thickness/AddTabItemButton.Padding">8</Thickness>
+	<sys:Double x:Key="Double/AddTabItemButton.Size">28</sys:Double>
+	<Thickness x:Key="Thickness/AddTabItemButton.Padding">7</Thickness>
 
 	<!-- AgreementDialog -->
 	<sys:Double x:Key="Double/AgreementDialog.Height">600</sys:Double>
@@ -380,6 +380,7 @@
 	<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Margin">1,0,1,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Padding">15,9,15,7</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Separator.Margin">0,9,0,7</Thickness>
 	<Thickness x:Key="Thickness/TabItem.InsertionIndicator.Margin">0,2,0,0</Thickness>
 
 	<!-- TextBox -->

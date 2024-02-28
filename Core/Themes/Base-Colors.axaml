@@ -356,12 +356,14 @@
 	<SolidColorBrush x:Key="Brush/TabItem.Header.Border.PointerOver" Color="{DynamicResource Color/TabItem.Header.Border.PointerOver}"/>
 	<SolidColorBrush x:Key="Brush/TabItem.Header.Border.Selected" Color="{DynamicResource Color/TabItem.Header.Border.Selected}"/>
 	<SolidColorBrush x:Key="Brush/TabItem.Header.InsertionIndicator.Background" Color="{DynamicResource Color/Accent}" Opacity="0.7"/>
+	<SolidColorBrush x:Key="Brush/TabItem.Header.Separator" Color="{DynamicResource Color/TabItem.Header.Separator}"/>
 	<Color x:Key="Color/TabItem.Header.Background">#ffffff</Color>
 	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#ffffff</Color>
 	<Color x:Key="Color/TabItem.Header.Background.Selected">#ffffff</Color>
 	<Color x:Key="Color/TabItem.Header.Border">#00000000</Color>
 	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#00000000</Color>
 	<Color x:Key="Color/TabItem.Header.Border.Selected">#00000000</Color>
+	<Color x:Key="Color/TabItem.Header.Separator">#00000000</Color>
 	
 	<!-- TextBox -->
 	<StaticResourceExtension x:Key="TextControlBackground" ResourceKey="ButtonBackground"/>

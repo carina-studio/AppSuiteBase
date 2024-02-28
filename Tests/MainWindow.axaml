@@ -129,7 +129,7 @@
 		<Panel ClipToBounds="False">
 			<appControls:TabControl Name="tabControl" DragDrop.AllowDrop="True" DragEnterItem="OnDragEnterTabItem" DragLeaveItem="OnDragLeaveTabItem" DragOverItem="OnDragOverTabItem" DropOnItem="OnDropOnTabItem" ItemDragged="OnTabItemDragged">
 
-				<TabItem>
+				<appControls:TabItem>
 
 					<TabItem.Header>
 						<Grid ColumnDefinitions="Auto,*,Auto" ToolTip.Tip="This is tooltip">
@@ -798,9 +798,9 @@
 						</StackPanel>
 					</ScrollViewer>
 
-				</TabItem>
+				</appControls:TabItem>
 
-				<TabItem>
+				<appControls:TabItem>
 					<TabItem.Header>
 						<TextBlock Text="Expander"/>
 					</TabItem.Header>
@@ -829,9 +829,9 @@
 							<Button Content="Button" Margin="30"/>
 						</Expander>
 					</StackPanel>
-				</TabItem>
+				</appControls:TabItem>
 
-				<TabItem>
+				<appControls:TabItem>
 					<TabItem.Header>
 						<TextBlock Text="TreeView"/>
 					</TabItem.Header>
@@ -861,9 +861,9 @@
 							</TreeViewItem>
 						</TreeView>
 					</StackPanel>
-				</TabItem>
+				</appControls:TabItem>
 
-				<TabItem>
+				<appControls:TabItem>
 					<TabItem.Header>
 						<TextBlock Text="GroupBox"/>
 					</TabItem.Header>
@@ -878,9 +878,9 @@
 							<Button Content="Button"/>
 						</appControls:GroupBox>
 					</StackPanel>
-				</TabItem>
+				</appControls:TabItem>
 
-				<TabItem>
+				<appControls:TabItem>
 					<TabItem.Header>
 						<TextBlock Text="ToolBar"/>
 					</TabItem.Header>
@@ -941,9 +941,9 @@
 						</Border>
 						
 					</DockPanel>
-				</TabItem>
+				</appControls:TabItem>
 
-				<TabItem>
+				<appControls:TabItem>
 					<TabItem.Header>
 						<TextBlock Text="Tutorial"/>
 					</TabItem.Header>
@@ -961,9 +961,9 @@
 						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10,80,10,10" VerticalAlignment="Center"/>
 						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom"/>
 					</Panel>
-				</TabItem>
+				</appControls:TabItem>
 
-				<TabItem>
+				<appControls:TabItem>
 					<TabItem.Header>
 						<TextBlock Text="Images"/>
 					</TabItem.Header>
@@ -989,9 +989,9 @@
 							<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].SelectedImage.Size.Width, FallbackValue=0}" Arg2="{Binding $parent[Window].SelectedImage.Size.Height, FallbackValue=0}" Format="{}{0:F2}x{1:F2}" Margin="10"/>
 						</StackPanel>
 					</Grid>
-				</TabItem>
+				</appControls:TabItem>
 
-				<TabItem>
+				<appControls:TabItem>
 					<TabItem.Header>
 						<TextBlock Text="BrowseButton"/>
 					</TabItem.Header>
@@ -1019,9 +1019,9 @@
 							</StackPanel>
 						</Grid>
 					</StackPanel>
-				</TabItem>
+				</appControls:TabItem>
 
-				<TabItem>
+				<appControls:TabItem>
 					<TabItem.Header>
 						<TextBlock Text="Syntax Highlighting"/>
 					</TabItem.Header>
@@ -1050,11 +1050,11 @@
 							</StackPanel>
 						</ScrollViewer>
 					</StackPanel>
-				</TabItem>
+				</appControls:TabItem>
 
-				<TabItem Header="Markdown">
+				<appControls:TabItem Header="Markdown">
 					<appControls:MarkdownViewer HorizontalScrollBarVisibility="Disabled" Margin="10" Source="avares://CarinaStudio.AppSuite.Tests/Document.md"/>
-				</TabItem>
+				</appControls:TabItem>
 
 				<TabItem Classes="Empty">
 					<TabItem.Header>
