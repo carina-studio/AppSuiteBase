@@ -138,6 +138,7 @@
 	<Color x:Key="Color/Window.Background.Tabbed">#eeeeee</Color>
 	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#a7eeeeee</Color>
 	<Color x:Key="Color/Window.Background.Transparent">#a7f7f7f7</Color>
+	<Color x:Key="Color/Window.Border">#cccccc</Color>
 	<Color x:Key="Color/Window.ContentFadingOverlay">#ffffff</Color>
 	<Color x:Key="Color/Window.TitleBar">#f7f7f7</Color>
 

@@ -208,6 +208,7 @@
 	<sys:String x:Key="String/Common.Paste.WithGesture">Paste (Ctrl+V)</sys:String>
 	<sys:String x:Key="String/Common.PrivacyPolicy">Privacy Policy</sys:String>
 	<sys:String x:Key="String/Common.PrivacyPolicy.WithDialog">Privacy Policy…</sys:String>
+	<sys:String x:Key="String/Common.Processing">Processing…</sys:String>
 	<sys:String x:Key="String/Common.Reactivate">Reactivate</sys:String>
 	<sys:String x:Key="String/Common.Reactivate.WithDialog">Reactivate…</sys:String>
 	<sys:String x:Key="String/Common.Refresh">Refresh</sys:String>

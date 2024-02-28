@@ -106,6 +106,7 @@
 	<Color x:Key="Color/Window.Background.Tabbed">#404040</Color>
 	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#b7404040</Color>
 	<Color x:Key="Color/Window.Background.Transparent">#b7272727</Color>
+	<Color x:Key="Color/Window.Border">#444444</Color>
 	<Color x:Key="Color/Window.ContentFadingOverlay">#df000000</Color>
 	<Color x:Key="Color/Window.TitleBar">#171717</Color>
 

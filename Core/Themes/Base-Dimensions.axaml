@@ -299,6 +299,10 @@
 	<sys:Double x:Key="Double/Popup.InitialScaling">0.95</sys:Double>
 	<sys:Double x:Key="Double/Popup.ShadowLength">10</sys:Double>
 	<Thickness x:Key="Thickness/Popup.Shadow.Margin">10</Thickness>
+	
+	<!-- ProcessingDialog -->
+	<CornerRadius x:Key="CornerRadius/ProcessingDialog">10</CornerRadius>
+	<sys:Double x:Key="Double/ProcessingDialog.MinWidth">200</sys:Double>
 
 	<!-- ScrollBar -->
 	<CornerRadius x:Key="CornerRadius/ScrollBar">7</CornerRadius>

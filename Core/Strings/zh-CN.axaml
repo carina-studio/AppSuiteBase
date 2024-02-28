@@ -202,6 +202,7 @@
 	<sys:String x:Key="String/Common.Paste.WithGesture">粘贴 (Ctrl+V)</sys:String>
 	<sys:String x:Key="String/Common.PrivacyPolicy">隐私权政策</sys:String>
 	<sys:String x:Key="String/Common.PrivacyPolicy.WithDialog">隐私权政策…</sys:String>
+	<sys:String x:Key="String/Common.Processing">处理中…</sys:String>
 	<sys:String x:Key="String/Common.Reactivate">重新启用</sys:String>
 	<sys:String x:Key="String/Common.Reactivate.WithDialog">重新启用…</sys:String>
 	<sys:String x:Key="String/Common.Refresh">重新整理</sys:String>
