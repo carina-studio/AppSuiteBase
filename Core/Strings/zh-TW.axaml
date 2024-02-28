@@ -71,7 +71,6 @@
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">預設腳本語言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle">不使用 ANGLE 繪製使用者介面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle.Description">避免在部分顯示卡上的繪製問題，但會影響部分視覺效果。</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">系統支援時使用模糊玻璃視窗背景</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">啟用腳本執行</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">縮排空白字元數</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">啟動應用程式時顯示啟動畫面</sys:String>

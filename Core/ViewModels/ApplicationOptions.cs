@@ -243,16 +243,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
 
 
     /// <summary>
-    /// Get or set whether to enable blurry window background if available or not.
-    /// </summary>
-    public bool EnableBlurryBackground
-    {
-        get => this.Settings.GetValueOrDefault(SettingKeys.EnableBlurryBackground);
-        set => this.Settings.SetValue<bool>(SettingKeys.EnableBlurryBackground, value);
-    }
-
-
-    /// <summary>
     /// Get or set whether script running is enabled or not.
     /// </summary>
     public bool EnableRunningScript
@@ -488,8 +478,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
             this.OnPropertyChanged(nameof(Culture));
         else if (key == SettingKeys.DefaultScriptLanguage)
             this.OnPropertyChanged(nameof(DefaultScriptLanguage));
-        else if (key == SettingKeys.EnableBlurryBackground)
-            this.OnPropertyChanged(nameof(EnableBlurryBackground));
         else if (key == SettingKeys.EnableRunningScript)
             this.OnPropertyChanged(nameof(EnableRunningScript));
         else if (key == SettingKeys.IndentationSizeInScript)

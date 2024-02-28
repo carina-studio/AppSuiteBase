@@ -77,7 +77,6 @@
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">Default language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle">Do not use ANGLE to render UI</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle.Description">Preventing rendering issues on some graphic cards, but some of visual effects will be affected.</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.EnableBlurryBackground">Use blurry window background if supported by system</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">Enable scripting</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">Size of indentation</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">Show splash screen when launching</sys:String>

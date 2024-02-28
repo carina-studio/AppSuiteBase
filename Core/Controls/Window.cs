@@ -30,6 +30,7 @@ namespace CarinaStudio.AppSuite.Controls
 
         // Fields.
         readonly ScheduledAction checkSystemChromeVisibilityAction;
+        // ReSharper disable once NotAccessedField.Local
         readonly WindowContentFadingHelper contentFadingHelper;
         Tutorial? currentTutorial;
         IDisposable? currentTutorialObserverToken;
@@ -201,28 +202,8 @@ namespace CarinaStudio.AppSuite.Controls
         /// Called to select transparency level to apply on window.
         /// </summary>
         /// <returns>Transparency level.</returns>
-        protected virtual WindowTransparencyLevel OnSelectTransparentLevelHint()
-        {
-            if (!this.IsActive 
-                || this.contentFadingHelper.IsFadingContent
-                || !this.Settings.GetValueOrDefault(SettingKeys.EnableBlurryBackground)
-                || this.currentTutorial != null)
-            {
-                return WindowTransparencyLevel.None;
-            }
-            if (Platform.IsLinux)
-                return WindowTransparencyLevel.None;
-            if (Platform.IsMacOS)
-                return WindowTransparencyLevel.AcrylicBlur;
-            if (Platform.IsWindows)
-            {
-                if (this.Application.HardwareInfo.HasDedicatedGraphicsCard == true)
-                    return WindowTransparencyLevel.AcrylicBlur;
-                if (Platform.IsWindows11OrAbove)
-                    return WindowTransparencyLevel.Mica;
-            }
-            return WindowTransparencyLevel.None;
-        }
+        protected virtual WindowTransparencyLevel OnSelectTransparentLevelHint() =>
+            WindowTransparencyLevel.None;
 
 
         // Called when application setting changed.
@@ -234,10 +215,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         /// <param name="e">Event data.</param>
         protected virtual void OnSettingChanged(SettingChangedEventArgs e)
-        {
-            if (e.Key == SettingKeys.EnableBlurryBackground)
-                this.InvalidateTransparencyLevelHint();
-        }
+        { }
 
 
         /// <inheritdoc/>

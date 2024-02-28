@@ -1,5 +1,6 @@
 ﻿using CarinaStudio.AppSuite.Scripting;
 using CarinaStudio.Configuration;
+using System;
 
 namespace CarinaStudio.AppSuite;
 
@@ -24,12 +25,6 @@ public sealed class SettingKeys
     /// Default language of script.
     /// </summary>
     public static readonly SettingKey<ScriptLanguage> DefaultScriptLanguage = new(nameof(DefaultScriptLanguage), ScriptLanguage.CSharp);
-
-
-    /// <summary>
-    /// Enable blurry window background if available.
-    /// </summary>
-    public static readonly SettingKey<bool> EnableBlurryBackground = new(nameof(EnableBlurryBackground), true);
 
 
     /// <summary>
