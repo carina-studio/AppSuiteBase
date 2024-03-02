@@ -2767,6 +2767,41 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+	<Style Selector="TabItem.EmptyWithSeparator">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate>
+					<DockPanel VerticalAlignment="Stretch">
+						
+						<Panel DockPanel.Dock="Left">
+							<Border BorderThickness="1,0,0,0"
+							        Opacity="0"/>
+							<Border BorderBrush="{DynamicResource Brush/TabItem.Header.Separator}"
+							        BorderThickness="1,0,0,0"
+							        DockPanel.Dock="Left"
+							        Margin="{DynamicResource Thickness/TabItem.Header.Separator.Margin}">
+								<Border.IsVisible>
+									<MultiBinding Converter="{x:Static BoolConverters.And}">
+										<Binding Path="!IsFirstItem" RelativeSource="{RelativeSource TemplatedParent}" FallbackValue="False"/>
+										<Binding Path="!IsPreviousItemPointerOver" RelativeSource="{RelativeSource TemplatedParent}" FallbackValue="False"/>
+										<Binding Path="!IsPreviousItemSelected" RelativeSource="{RelativeSource TemplatedParent}" FallbackValue="False"/>
+									</MultiBinding>
+								</Border.IsVisible>
+							</Border>
+						</Panel>
+						
+						<ContentPresenter ClipToBounds="False" 
+						                  Content="{TemplateBinding Header}" 
+						                  ContentTemplate="{TemplateBinding HeaderTemplate}" 
+						                  Height="{DynamicResource Double/TabItem.Header.Content.Height}" 
+						                  HorizontalAlignment="Center" 
+						                  Margin="{DynamicResource Thickness/TabItem.Header.Padding}" 
+						                  VerticalAlignment="Center"/>
+					</DockPanel>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 	<Style Selector="TextBlock.TabItem_TextBlock">
 		<Setter Property="TextWrapping" Value="NoWrap"/>
 		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>

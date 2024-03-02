@@ -1056,13 +1056,13 @@
 					<appControls:MarkdownViewer HorizontalScrollBarVisibility="Disabled" Margin="10" Source="avares://CarinaStudio.AppSuite.Tests/Document.md"/>
 				</appControls:TabItem>
 
-				<TabItem Classes="Empty">
+				<appControls:TabItem Classes="EmptyWithSeparator">
 					<TabItem.Header>
 						<Button Classes="AddTabItem">
 							<Image Classes="Icon" Source="{DynamicResource Image/Icon.Add}"/>
 						</Button>
 					</TabItem.Header>
-				</TabItem>
+				</appControls:TabItem>
 
 			</appControls:TabControl>
 			

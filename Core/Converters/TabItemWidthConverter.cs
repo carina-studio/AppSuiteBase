@@ -60,7 +60,7 @@ static class TabItemWidthConverter
                 {
                     if (item is TabItem tabItem)
                     {
-                        if (tabItem.Classes.Contains("Empty"))
+                        if (tabItem.Classes.Contains("Empty") || tabItem.Classes.Contains("EmptyWithSeparator"))
                         {
                             if (tabItem.Header is Control emptyTabItemHeader && emptyTabItemHeader.IsMeasureValid)
                             {
