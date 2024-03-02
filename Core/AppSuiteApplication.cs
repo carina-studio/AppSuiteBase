@@ -415,6 +415,7 @@ namespace CarinaStudio.AppSuite
         MessageDialog? abnormalUIResponseMessageDialog;
         ResourceDictionary? accentColorResources;
         readonly LinkedList<MainWindowHolder> activeMainWindowList = new();
+        WindowIcon? appIcon;
         ApplicationInfoDialog? appInfoDialog;
         ApplicationUpdateDialog? appUpdateDialog;
         bool canRequestRestoringMainWindows;
@@ -680,6 +681,17 @@ namespace CarinaStudio.AppSuite
         /// Check whether transparent Window(s) are allowed or not.
         /// </summary>
         public bool AllowTransparentWindows { get; private set; }
+
+        
+        /// <inheritdoc/>
+        public WindowIcon ApplicationIcon
+        {
+            get
+            {
+                this.appIcon ??= this.OpenApplicationIconStream().Use(it => new WindowIcon(it));
+                return this.appIcon;
+            }
+        }
 
 
         /// <summary>
@@ -3355,6 +3367,23 @@ namespace CarinaStudio.AppSuite
 
             // exit background mode
             this.ExitBackgroundMode();
+        }
+        
+        
+        /// <summary>
+        /// Open the stream of application icon.
+        /// </summary>
+        /// <returns>Stream of application icon.</returns>
+        protected internal virtual Stream OpenApplicationIconStream()
+        {
+            var assembly = Assembly.GetEntryAssembly().AsNonNull();
+            var uri = new Uri($"avares://{assembly.GetName().Name}/{this.Name}.ico");
+            if (AssetLoader.Exists(uri))
+                return AssetLoader.Open(uri);
+            uri = new Uri($"avares://{assembly.GetName().Name}/AppIcon.ico");
+            if (AssetLoader.Exists(uri))
+                return AssetLoader.Open(uri);
+            throw new NotImplementedException("Cannot open stream of application icon.");
         }
 
 

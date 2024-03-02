@@ -85,6 +85,11 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
+    public virtual WindowIcon ApplicationIcon =>
+        throw new NotImplementedException();
+
+
+    /// <inheritdoc/>
     public Assembly Assembly { get; } = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
 
 

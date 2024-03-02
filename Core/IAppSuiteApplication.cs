@@ -83,6 +83,12 @@ namespace CarinaStudio.AppSuite
         /// Called when user agree the User Agreement.
         /// </summary>
         void AgreeUserAgreement();
+        
+        
+        /// <summary>
+        /// Get application icon.
+        /// </summary>
+        WindowIcon ApplicationIcon { get; }
 
 
         /// <summary>
