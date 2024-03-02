@@ -1,6 +1,5 @@
 ﻿using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform;
 using CarinaStudio.Collections;
 using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
@@ -182,17 +181,10 @@ public class ApplicationInfo : ViewModel<IAppSuiteApplication>
         {
             if (this.icon is not null)
                 return this.icon;
-            this.icon = Global.Run(() =>
-            {
-                var assembly = Assembly.GetEntryAssembly().AsNonNull();
-                var uri = new Uri($"avares://{assembly.GetName().Name}/{this.Application.Name}.ico");
-                if (AssetLoader.Exists(uri))
-                    return AssetLoader.Open(uri).Use(stream => new Bitmap(stream));
-                uri = new Uri($"avares://{assembly.GetName().Name}/AppIcon.ico");
-                if (AssetLoader.Exists(uri))
-                    return AssetLoader.Open(uri).Use(stream => new Bitmap(stream));
+            if (this.Application is AppSuiteApplication asApp)
+                this.icon = asApp.OpenApplicationIconStream().Use(it => new Bitmap(it));
+            else
                 throw new NotImplementedException("Cannot load default icon.");
-            });
             return this.icon;
         }
     }
