@@ -44,6 +44,10 @@ public abstract class ConfigurationKeys
     /// </summary>
     public static readonly SettingKey<int> DialogNavigationBarUpdateDelay = new(nameof(DialogNavigationBarUpdateDelay), 100);
     /// <summary>
+    /// Whether content of window should be blurred when one or more dialogs are showing or not.
+    /// </summary>
+    public static readonly SettingKey<bool> MakeContentBlurredWhenShowingDialog = new(nameof(MakeContentBlurredWhenShowingDialog), true);
+    /// <summary>
     /// Interval of checking whether script running is completed or not.
     /// </summary>
     public static readonly SettingKey<int> ScriptCompletionCheckingInterval = new(nameof(ScriptCompletionCheckingInterval), 3000);

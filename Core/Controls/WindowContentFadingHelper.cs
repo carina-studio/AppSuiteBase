@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Media;
 using CarinaStudio.Animation;
+using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
 using System;
 using System.ComponentModel;
@@ -13,6 +15,7 @@ namespace CarinaStudio.AppSuite.Controls
     class WindowContentFadingHelper : INotifyPropertyChanged
     {
         // Constants.
+        const double ContentBlurRadius = 6;
         const double ContentFadeOutOpacity = 0.2;
 
 
@@ -23,11 +26,14 @@ namespace CarinaStudio.AppSuite.Controls
 
 
         // Fields.
+        BlurEffect? contentBlurEffect;
         Control? content;
         DoubleAnimator? contentFadingAnimator;
         Control? contentFadingOverlay;
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         readonly ScheduledAction fadeInContentAction;
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+        bool isContentBlurred;
 
 
         // Constructor.
@@ -36,7 +42,7 @@ namespace CarinaStudio.AppSuite.Controls
             // create scheduled action
             this.fadeInContentAction = new ScheduledAction(() =>
             {
-                if (this.content == null && this.contentFadingOverlay == null)
+                if (this.content is null && this.contentFadingOverlay is null)
                     return;
                 this.contentFadingAnimator?.Cancel();
                 this.contentFadingAnimator = this.contentFadingOverlay != null
@@ -53,6 +59,12 @@ namespace CarinaStudio.AppSuite.Controls
                         }
                         else if (this.content != null)
                             this.content.Opacity = it.EndValue;
+                        if (this.isContentBlurred)
+                        {
+                            if (this.content?.Effect == this.contentBlurEffect)
+                                this.content!.Effect = null;
+                            this.contentBlurEffect!.Radius = 0;
+                        }
                         this.contentFadingAnimator = null;
                         this.IsFadingContent = false;
                         this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFadingContent)));
@@ -65,6 +77,8 @@ namespace CarinaStudio.AppSuite.Controls
                             this.contentFadingOverlay.Opacity = it.Value;
                         else if (this.content != null)
                             this.content.Opacity = it.Value;
+                        if (this.isContentBlurred)
+                            this.contentBlurEffect!.Radius = 1 - (ContentBlurRadius * it.Progress);
                     };
                     it.Start();
                 });
@@ -91,28 +105,33 @@ namespace CarinaStudio.AppSuite.Controls
                     this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFadingContent)));
                 }
                 this.content = content as Control;
-                if (this.content != null && this.contentFadingOverlay == null)
+                if (this.content != null && this.contentFadingOverlay is null)
                     this.content.Opacity = window.HasDialogs ? ContentFadeOutOpacity : 1.0;
             });
             window.GetObservable(CarinaStudio.Controls.Window.HasDialogsProperty).Subscribe(hasDialogs =>
             {
-                if (this.content == null && this.contentFadingOverlay == null)
+                if (this.content is null && this.contentFadingOverlay is null)
                     return;
                 if (hasDialogs)
                 {
+                    this.isContentBlurred = IAppSuiteApplication.CurrentOrNull?.Configuration.GetValueOrDefault(ConfigurationKeys.MakeContentBlurredWhenShowingDialog) ?? false;
+                    if (this.isContentBlurred)
+                        this.contentBlurEffect ??= new();
                     this.fadeInContentAction.Cancel();
                     this.contentFadingAnimator?.Cancel();
-                    this.contentFadingAnimator = this.contentFadingOverlay != null
+                    this.contentFadingAnimator = this.contentFadingOverlay is not null
                         ? new DoubleAnimator(this.contentFadingOverlay.Opacity, 1 - ContentFadeOutOpacity)
                         : new DoubleAnimator(this.content.AsNonNull().Opacity, ContentFadeOutOpacity);
                     this.contentFadingAnimator.Let(it =>
                     {
                         it.Completed += (_, _) =>
                         {
-                            if (this.contentFadingOverlay != null)
+                            if (this.contentFadingOverlay is not null)
                                 this.contentFadingOverlay.Opacity = it.EndValue;
-                            else if (this.content != null)
+                            else if (this.content is not null)
                                 this.content.Opacity = it.EndValue;
+                            if (this.isContentBlurred)
+                                this.contentBlurEffect!.Radius = ContentBlurRadius;
                             this.contentFadingAnimator = null;
                             this.IsFadingContent = false;
                             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFadingContent)));
@@ -121,14 +140,18 @@ namespace CarinaStudio.AppSuite.Controls
                         it.Interpolator = Interpolators.Deceleration;
                         it.ProgressChanged += (_, _) =>
                         {
-                            if (this.contentFadingOverlay != null)
+                            if (this.contentFadingOverlay is not null)
                                 this.contentFadingOverlay.Opacity = it.Value;
-                            else if (this.content != null)
+                            else if (this.content is not null)
                                 this.content.Opacity = it.Value;
+                            if (this.isContentBlurred)
+                                this.contentBlurEffect!.Radius = ContentBlurRadius * it.Progress;
                         };
                         it.Start();
-                        if (this.contentFadingOverlay != null)
+                        if (this.contentFadingOverlay is not null)
                             this.contentFadingOverlay.IsVisible = true;
+                        if (this.content is not null && this.isContentBlurred)
+                            this.content.Effect ??= this.contentBlurEffect;
                     });
                     if (!this.IsFadingContent)
                     {
@@ -149,7 +172,7 @@ namespace CarinaStudio.AppSuite.Controls
             window.TemplateApplied += (_, e) =>
             {
                 this.fadeInContentAction.Cancel();
-                if (this.contentFadingAnimator != null)
+                if (this.contentFadingAnimator is not null)
                 {
                     this.contentFadingAnimator.Cancel();
                     this.contentFadingAnimator = null;
@@ -160,9 +183,9 @@ namespace CarinaStudio.AppSuite.Controls
                     this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFadingContent)));
                 }
                 this.contentFadingOverlay = e.NameScope.Find<Control>("PART_ContentFadingOverlay");
-                if (this.contentFadingOverlay != null)
+                if (this.contentFadingOverlay is not null)
                 {
-                    if (this.content != null)
+                    if (this.content is not null)
                         this.content.Opacity = 1;
                     this.contentFadingOverlay.Opacity = window.HasDialogs ? 1 - ContentFadeOutOpacity : 0;
                 }
