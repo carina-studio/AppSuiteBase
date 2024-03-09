@@ -221,8 +221,10 @@
 	<Thickness x:Key="Thickness/ToolBar.Padding">2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Padding.Small">2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.ProgressRing.Margin">7,0,7,0</Thickness> <!-- Button Padding + Button Margin -->
-	<Thickness x:Key="Thickness/ToolBar.Separator.Margin">2</Thickness>
-	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Small">1</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Horizontal">5,2,5,2</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Horizontal.Small">3,1,3,1</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Vertical">2,5,2,5</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Vertical.Small">1,3,1,3</Thickness>
 	
 	<!-- ToolBarScrollViewer -->
 	<Thickness x:Key="Thickness/ToolBarScrollViewer.ScrollingButton.Margin">2</Thickness>

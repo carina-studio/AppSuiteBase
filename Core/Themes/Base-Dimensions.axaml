@@ -417,7 +417,7 @@
 	<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Offset">3</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.ProgressRing.RingThickness">3</sys:Double>
 	<Thickness x:Key="Thickness/ToolBar.Button.Margin">2</Thickness>
-	<Thickness x:Key="Thickness/ToolBar.Button.Margin.Small">1,0,1,0</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Button.Margin.Small">1</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Button.Margin.WithDropDownButton">2,2,0,2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Button.Padding">8</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Button.Padding.Small">5</Thickness>
@@ -427,8 +427,10 @@
 	<Thickness x:Key="Thickness/ToolBar.Padding">3</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Padding.Small">3</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.ProgressRing.Margin">10</Thickness> <!-- Button Padding + Button Margin -->
-	<Thickness x:Key="Thickness/ToolBar.Separator.Margin">3</Thickness>
-	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Small">2</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Horizontal">6,3,6,3</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Horizontal.Small">4,2,4,2</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Vertical">3,6,3,6</Thickness>
+	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Vertical.Small">2,4,2,4</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.TextBlock.Margin">2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.TextBlock.Margin.Small">1</Thickness>
 

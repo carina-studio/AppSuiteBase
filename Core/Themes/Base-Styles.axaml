@@ -3168,7 +3168,7 @@
 	<Style Selector="Separator.ToolBar_Separator">
 		<Setter Property="Background" Value="{DynamicResource Brush/Separator.Background}"/>
 		<Setter Property="Height" Value="NaN"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Separator.Margin}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Separator.Margin.Vertical}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="1"/>
 	</Style>
@@ -3176,20 +3176,20 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Separator.Background}"/>
 		<Setter Property="Height" Value="1"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Separator.Margin}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Separator.Margin.Horizontal}"/>
 		<Setter Property="Width" Value="NaN"/>
 	</Style>
 	<Style Selector="Separator.ToolBar_Separator_Horizontal_Small">
 		<Setter Property="Background" Value="{DynamicResource Brush/Separator.Background}"/>
 		<Setter Property="Height" Value="1"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Separator.Margin.Small}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Separator.Margin.Horizontal.Small}"/>
 		<Setter Property="Width" Value="NaN"/>
 	</Style>
 	<Style Selector="Separator.ToolBar_Separator_Small">
 		<Setter Property="Background" Value="{DynamicResource Brush/Separator.Background}"/>
 		<Setter Property="Height" Value="NaN"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Separator.Margin.Small}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Separator.Margin.Vertical.Small}"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="1"/>
 	</Style>
