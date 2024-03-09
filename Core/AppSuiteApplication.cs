@@ -899,9 +899,10 @@ namespace CarinaStudio.AppSuite
             });
             if (this.IsRestartingRootWindowsNeeded != isRestartingNeeded)
             {
-                this.Logger.LogWarning(isRestartingNeeded 
-                    ? "Need to restart root windows" 
-                    : "No need to restart root windows");
+                if (isRestartingNeeded)
+                    this.Logger.LogWarning("Need to restart root windows");
+                else
+                    this.Logger.LogWarning("No need to restart root windows");
                 this.IsRestartingRootWindowsNeeded = isRestartingNeeded;
                 this.OnPropertyChanged(nameof(IsRestartingRootWindowsNeeded));
             }
@@ -4324,9 +4325,10 @@ namespace CarinaStudio.AppSuite
             {
                 try
                 {
-                    this.Logger.LogWarning(this.isRestartAsAdminRequested 
-                        ? "Restart as administrator/superuser" 
-                        : "Restart");
+                    if (this.isRestartAsAdminRequested)
+                        this.Logger.LogWarning("Restart as administrator/superuser");
+                    else
+                        this.Logger.LogWarning("Restart");
                     var process = new Process().Also(process =>
                     {
                         process.StartInfo.Let(it =>
@@ -4878,20 +4880,7 @@ namespace CarinaStudio.AppSuite
                         : new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}.axaml"),
                 };
 #pragma warning restore IL2026
-                if (Platform.WindowsVersion == WindowsVersion.Windows7) // Windows 7 specific styles
-                {
-                    this.styles = new Styles().Also(styles =>
-                    {
-                        styles.Add(this.styles);
-#pragma warning disable IL2026
-                        styles.Add(new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
-                        {
-                            Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}-Windows7.axaml"),
-                        });
-#pragma warning restore IL2026
-                    });
-                }
-                else if (Platform.IsMacOS)
+                if (Platform.IsMacOS)
                 {
                     this.styles = new Styles().Also(styles =>
                     {
@@ -4934,11 +4923,7 @@ namespace CarinaStudio.AppSuite
                     var styles = (this.styles as Styles)?.Also(styles =>
                     {
                         styles.Add(it);
-                    }) ?? new Styles
-                    {
-                        this.styles,
-                        it,
-                    };
+                    }) ?? [ this.styles, it ];
                     if (subTime > 0)
                     {
                         var currentTime = this.stopWatch.ElapsedMilliseconds;
