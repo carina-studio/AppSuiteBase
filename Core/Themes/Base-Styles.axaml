@@ -2712,26 +2712,18 @@
 									                  HorizontalAlignment="Stretch" 
 									                  Margin="{DynamicResource Thickness/TabItem.Header.Padding}" 
 									                  VerticalAlignment="Center"/>
-									<!--Rectangle Height="2"
+									<Rectangle Fill="{DynamicResource Brush/Accent}"
+									           Height="{DynamicResource Double/TabItem.Header.ColorBar.Height}"
 									           HorizontalAlignment="Stretch"
 									           IsVisible="{TemplateBinding IsSelected}"
-									           Margin="1,0,1,0"
+									           Margin="{DynamicResource Thickness/TabItem.Header.ColorBar.Margin}"
 									           Opacity="{TemplateBinding IsSelected, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacity}}"
 									           VerticalAlignment="Top">
-										<Rectangle.Fill>
-											<LinearGradientBrush EndPoint="100%,0%" StartPoint="0%,0%">
-												<GradientStop Offset="0" Color="{DynamicResource Color/Accent.Transparent}"/>
-												<GradientStop Offset="0.2" Color="{DynamicResource Color/Accent}"/>
-												<GradientStop Offset="0.8" Color="{DynamicResource Color/Accent}"/>
-												<GradientStop Offset="1" Color="{DynamicResource Color/Accent.Transparent}"/>
-											</LinearGradientBrush>
-										</Rectangle.Fill>
 										<Rectangle.RenderTransform>
 											<ScaleTransform ScaleX="{Binding $parent[TabItem].IsSelected, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacity}}">
 												<ScaleTransform.Transitions>
 													<Transitions>
 														<DoubleTransition Property="ScaleX" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
-														<DoubleTransition Property="ScaleY" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
 													</Transitions>
 												</ScaleTransform.Transitions>
 											</ScaleTransform>
@@ -2741,7 +2733,7 @@
 												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Rectangle.Transitions>
-									</Rectangle-->
+									</Rectangle>
 								</Panel>
 							</Border>
 							
