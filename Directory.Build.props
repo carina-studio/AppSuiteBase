@@ -11,7 +11,7 @@
         <Authors>Carina Studio</Authors>
         <AppBaseVersion>2.2.0.1-dev</AppBaseVersion>
         <AvaloniaVersion>11.0.10</AvaloniaVersion>
-        <AvaloniaXamlBehaviorsVersion>11.0.6</AvaloniaXamlBehaviorsVersion>
+        <AvaloniaXamlBehaviorsVersion>11.0.10</AvaloniaXamlBehaviorsVersion>
         <AvaloniaNameGeneratorFilterByNamespace>Dummy</AvaloniaNameGeneratorFilterByNamespace> <!-- Prevent generating InitializeComponents() and fields -->
 		<Company>Carina Studio</Company>
         <Copyright>©2021-2024 Carina Studio</Copyright>
