@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:media="using:CarinaStudio.AppSuite.Media">
 	
 	<!-- ApplicationInfoDialog -->
 	<Color x:Key="Color/ApplicationInfoDialog.AppTitle.Shadow">#ffffff</Color>
@@ -134,8 +135,20 @@
     <SolidColorBrush x:Key="ValueTextBoxBackgroundInvalidPointerOver" Color="#ffd9d9"/>
 
 	<!-- Window -->
+	<DrawingBrush x:Key="Brush/Window.Background.Tabbed" Stretch="Fill">
+		<DrawingBrush.Drawing>
+			<ImageDrawing Rect="{x:Static media:WindowBackgroundImage.Bounds}">
+				<ImageDrawing.ImageSource>
+					<media:WindowBackgroundImage DarkColor="{DynamicResource Color/Window.Background.Tabbed.Dark}"
+					                             LightColor="{DynamicResource Color/Window.Background.Tabbed.Light}"/>
+				</ImageDrawing.ImageSource>
+			</ImageDrawing>
+		</DrawingBrush.Drawing>
+	</DrawingBrush>
 	<Color x:Key="Color/Window.Background">#f7f7f7</Color>
 	<Color x:Key="Color/Window.Background.Tabbed">#eeeeee</Color>
+	<Color x:Key="Color/Window.Background.Tabbed.Dark">#e6e6e6</Color>
+	<Color x:Key="Color/Window.Background.Tabbed.Light">#f7f7f7</Color>
 	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#a7eeeeee</Color>
 	<Color x:Key="Color/Window.Background.Transparent">#a7f7f7f7</Color>
 	<Color x:Key="Color/Window.Border">#cccccc</Color>
@@ -143,8 +156,21 @@
 	<Color x:Key="Color/Window.TitleBar">#f7f7f7</Color>
 
 	<!-- WorkingArea -->
+	<DrawingBrush x:Key="Brush/WorkingArea.Background" Stretch="Fill">
+		<DrawingBrush.Drawing>
+			<ImageDrawing Rect="{x:Static media:WindowBackgroundImage.Bounds}">
+				<ImageDrawing.ImageSource>
+					<media:WindowBackgroundImage DarkColor="{DynamicResource Color/WorkingArea.Background.Dark}"
+					                             LightColor="{DynamicResource Color/WorkingArea.Background.Light}"
+					                             Orientation="Vertical"/>
+				</ImageDrawing.ImageSource>
+			</ImageDrawing>
+		</DrawingBrush.Drawing>
+	</DrawingBrush>
 	<Color x:Key="Color/WorkingArea.Background">#fafafa</Color>
-	<Color x:Key="Color/WorkingArea.Panel.Background">#f7f7f7</Color>
+	<Color x:Key="Color/WorkingArea.Background.Dark">#f3f3f3</Color>
+	<Color x:Key="Color/WorkingArea.Background.Light">#ffffff</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Background">#f3f3f3</Color>
 	<Color x:Key="Color/WorkingArea.Panel.Border">#dddddd</Color>
 	
 </ResourceDictionary>

@@ -8,6 +8,7 @@
 		xmlns:app="using:CarinaStudio.AppSuite"
 		xmlns:appControls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:appConverters="using:CarinaStudio.AppSuite.Converters"
+        xmlns:appMedia="using:CarinaStudio.AppSuite.Media"
 		xmlns:sys="using:System"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Tests.MainWindow"
@@ -141,8 +142,8 @@
 						</Grid>
 					</TabItem.Header>
 
-					<ScrollViewer Name="scrollViewer" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Disabled">
-						<StackPanel Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalAlignment="Stretch" Orientation="Vertical">
+					<ScrollViewer Name="scrollViewer" Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Disabled">
+						<StackPanel Background="{x:Static Brushes.Transparent}" HorizontalAlignment="Stretch" Orientation="Vertical">
 
 							<StackPanel.ContextMenu>
 								<ContextMenu>

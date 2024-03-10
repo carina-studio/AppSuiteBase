@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:media="using:CarinaStudio.AppSuite.Media">
 
 	<!-- Button -->
 	<Color x:Key="Color/Button.Background">#2d2d2d</Color>
@@ -102,8 +103,22 @@
 	<Color x:Key="Color/ToolTip.Border">#444444</Color>
 
 	<!-- Window -->
+	<DrawingBrush x:Key="Brush/Window.Background.Tabbed" Stretch="Fill">
+		<DrawingBrush.Drawing>
+			<ImageDrawing Rect="{x:Static media:WindowBackgroundImage.Bounds}">
+				<ImageDrawing.ImageSource>
+					<media:WindowBackgroundImage DarkColor="{DynamicResource Color/Window.Background.Tabbed.Dark}"
+					                             LightColor="{DynamicResource Color/Window.Background.Tabbed.Light}"/>
+				</ImageDrawing.ImageSource>
+			</ImageDrawing>
+		</DrawingBrush.Drawing>
+	</DrawingBrush>
 	<Color x:Key="Color/Window.Background">#272727</Color>
+	<Color x:Key="Color/Window.Background.Dark">#202020</Color>
+	<Color x:Key="Color/Window.Background.Light">#2f2f2f</Color>
 	<Color x:Key="Color/Window.Background.Tabbed">#404040</Color>
+	<Color x:Key="Color/Window.Background.Tabbed.Dark">#373737</Color>
+	<Color x:Key="Color/Window.Background.Tabbed.Light">#474747</Color>
 	<Color x:Key="Color/Window.Background.Tabbed.Transparent">#b7404040</Color>
 	<Color x:Key="Color/Window.Background.Transparent">#b7272727</Color>
 	<Color x:Key="Color/Window.Border">#444444</Color>
@@ -111,8 +126,21 @@
 	<Color x:Key="Color/Window.TitleBar">#171717</Color>
 
 	<!-- WorkingArea -->
+	<DrawingBrush x:Key="Brush/WorkingArea.Background" Stretch="Fill">
+		<DrawingBrush.Drawing>
+			<ImageDrawing Rect="{x:Static media:WindowBackgroundImage.Bounds}">
+				<ImageDrawing.ImageSource>
+					<media:WindowBackgroundImage DarkColor="{DynamicResource Color/WorkingArea.Background.Dark}"
+					                             LightColor="{DynamicResource Color/WorkingArea.Background.Light}"
+					                             Orientation="Vertical"/>
+				</ImageDrawing.ImageSource>
+			</ImageDrawing>
+		</DrawingBrush.Drawing>
+	</DrawingBrush>
 	<Color x:Key="Color/WorkingArea.Background">#272727</Color>
-	<Color x:Key="Color/WorkingArea.Panel.Background">#2a2a2a</Color>
+	<Color x:Key="Color/WorkingArea.Background.Dark">#1f1f1f</Color>
+	<Color x:Key="Color/WorkingArea.Background.Light">#2f2f2f</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Background">#2f2f2f</Color>
 	<Color x:Key="Color/WorkingArea.Panel.Border">#404040</Color>
 	
 </ResourceDictionary>
