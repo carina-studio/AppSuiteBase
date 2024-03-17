@@ -24,7 +24,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     readonly Pen anchorOuterBorderPen;
     Rect anchorBounds;
     IDisposable? anchorBoundsObserverToken;
-    DoubleAnimator? backgroundAnimator;
+    DoubleRenderingAnimator? backgroundAnimator;
     IBrush? backgroundBrush;
     // ReSharper disable PrivateFieldCanBeConvertedToLocalVariable
     readonly EventHandler<AvaloniaPropertyChangedEventArgs> backgroundPropertyChangedHandler;
@@ -143,9 +143,9 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     {
         // hide
         this.backgroundAnimator?.Cancel();
-        if (this.root is not null)
+        if (this.root is not null && TopLevel.GetTopLevel(this) is { } topLevel)
         {
-            this.backgroundAnimator = new DoubleAnimator(this.root.Opacity, 0).Also(animator =>
+            this.backgroundAnimator = new DoubleRenderingAnimator(topLevel, this.root.Opacity, 0).Also(animator =>
             {
                 animator.Cancelled += (_, _) =>
                 {
@@ -244,14 +244,14 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     {
         // show
         this.backgroundAnimator?.Cancel();
-        if (this.root is not null)
+        if (this.root is not null && TopLevel.GetTopLevel(this) is { } topLevel)
         {
             this.root.IsVisible = true;
             if (this.root.Opacity >= 0.95)
                 this.root.Opacity = 1;
             else
             {
-                this.backgroundAnimator = new DoubleAnimator(this.root.Opacity, 1).Also(animator =>
+                this.backgroundAnimator = new DoubleRenderingAnimator(topLevel, this.root.Opacity, 1).Also(animator =>
                 {
                     animator.Completed += (_, _) => this.root.Opacity = animator.EndValue;
                     animator.Duration = (TimeSpan)this.FindResource("TimeSpan/Animation").AsNonNull();

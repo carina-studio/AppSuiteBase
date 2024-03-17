@@ -42,7 +42,7 @@ namespace CarinaStudio.AppSuite.Controls
         // Fields.
         INotifyCollectionChanged? attachedItemsSource;
         readonly Dictionary<Avalonia.Controls.TabItem, List<IDisposable>> attachedTabItemObserverTokens = new();
-        Window? attachedWindow;
+        TopLevel? attachedTopLevel;
         object? draggingOverItem;
         int draggingOverItemIndex = -1;
         object? pointerPressedItem;
@@ -56,7 +56,7 @@ namespace CarinaStudio.AppSuite.Controls
         ItemsPresenter? tabItemsPresenter;
         TabStripScrollViewer? tabStripScrollViewer;
         double tabStripSize = -1;
-        ThicknessAnimator? tabStripScrollViewerMarginAnimator;
+        ThicknessRenderingAnimator? tabStripScrollViewerMarginAnimator;
         readonly ScheduledAction updateTabStripScrollViewerMarginAction;
 
 
@@ -67,7 +67,7 @@ namespace CarinaStudio.AppSuite.Controls
         {
             this.scrollTabStripLeftByButtonAction = new ScheduledAction(() =>
             {
-                if (this.scrollTabStripLeftButton != null)
+                if (this.scrollTabStripLeftButton is not null)
                 {
                     this.scrollTabStripLeftButton.Command?.TryExecute();
                     this.scrollTabStripLeftByButtonAction?.Reschedule(ScrollTabStripByButtonInterval);
@@ -75,7 +75,7 @@ namespace CarinaStudio.AppSuite.Controls
             });
             this.scrollTabStripRightByButtonAction = new ScheduledAction(() =>
             {
-                if (this.scrollTabStripRightButton != null)
+                if (this.scrollTabStripRightButton is not null)
                 {
                     this.scrollTabStripRightButton.Command?.TryExecute();
                     this.scrollTabStripRightByButtonAction?.Reschedule(ScrollTabStripByButtonInterval);
@@ -99,7 +99,7 @@ namespace CarinaStudio.AppSuite.Controls
             });
             this.GetObservable(ItemsSourceProperty).Subscribe(items =>
             {
-                if (this.attachedItemsSource != null)
+                if (this.attachedItemsSource is not null)
                 {
                     this.attachedItemsSource.CollectionChanged -= this.OnItemsChanged;
                     this.attachedItemsSource = null;
@@ -133,8 +133,8 @@ namespace CarinaStudio.AppSuite.Controls
             if (attachedTabItemObserverTokens.TryGetValue(tabItem, out var observerTokens))
                 return;
             var isAttaching = true;
-            observerTokens = new()
-            {
+            observerTokens = 
+            [
                 tabItem.GetObservable(IsPointerOverProperty).Subscribe(isPointerOver =>
                 {
                     if (!isAttaching)
@@ -145,7 +145,7 @@ namespace CarinaStudio.AppSuite.Controls
                     if (!isAttaching)
                         this.OnTabItemSelectedChanged(tabItem, isSelected);
                 }),
-            };
+            ];
             isAttaching = false;
             attachedTabItemObserverTokens[tabItem] = observerTokens;
         }
@@ -178,7 +178,7 @@ namespace CarinaStudio.AppSuite.Controls
             item = null;
             headerVisual = null;
             var itemsPanel = this.tabItemsPresenter?.FindDescendantOfType<Panel>();
-            if (itemsPanel == null)
+            if (itemsPanel is null)
                 return false;
             var index = Global.Run(() =>
             {
@@ -204,7 +204,7 @@ namespace CarinaStudio.AppSuite.Controls
                     return it[index];
                 return null;
             });
-            if (item != null)
+            if (item is not null)
             {
                 itemIndex = index;
                 headerVisual = itemsPanel.Children[index].GetVisualChildren().FirstOrDefault()?.Let(it => 
@@ -244,7 +244,7 @@ namespace CarinaStudio.AppSuite.Controls
                     return it[index];
                 return null;
             });
-            if (item != null)
+            if (item is not null)
             {
                 itemIndex = index;
                 return true;
@@ -296,7 +296,7 @@ namespace CarinaStudio.AppSuite.Controls
         // Leave the item which is currently dragging over.
         void LeaveDraggingOverItem()
         {
-            if (this.draggingOverItem != null)
+            if (this.draggingOverItem is not null)
             {
                 this.DragLeaveItem?.Invoke(this, new TabItemEventArgs(this.draggingOverItemIndex, this.draggingOverItem));
                 this.draggingOverItem = null;
@@ -348,7 +348,7 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
         {
             base.OnAttachedToVisualTree(e);
-            this.attachedWindow = this.FindLogicalAncestorOfType<Window>()?.Also(it =>
+            this.attachedTopLevel = TopLevel.GetTopLevel(this)?.Also(it =>
             {
                 it.PropertyChanged += this.OnWindowPropertyChanged;
             });
@@ -374,10 +374,10 @@ namespace CarinaStudio.AppSuite.Controls
         /// <inheritdoc/>
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
         {
-            this.attachedWindow?.Let(it =>
+            this.attachedTopLevel?.Let(it =>
             {
                 it.PropertyChanged -= this.OnWindowPropertyChanged;
-                this.attachedWindow = null;
+                this.attachedTopLevel = null;
             });
             this.Items.CollectionChanged -= this.OnItemsChanged;
             this.updateTabStripScrollViewerMarginAction.Cancel();
@@ -413,7 +413,7 @@ namespace CarinaStudio.AppSuite.Controls
             e.DragEffects = DragDropEffects.None;
 
             // scroll tab strip left or right
-            if (this.scrollTabStripLeftButton != null)
+            if (this.scrollTabStripLeftButton is not null)
             {
                 var position = e.GetPosition(this.scrollTabStripLeftButton);
                 var bounds = this.scrollTabStripLeftButton.Bounds;
@@ -425,7 +425,7 @@ namespace CarinaStudio.AppSuite.Controls
                     return;
                 }
             }
-            if (this.scrollTabStripRightButton != null)
+            if (this.scrollTabStripRightButton is not null)
             {
                 var position = e.GetPosition(this.scrollTabStripRightButton);
                 var bounds = this.scrollTabStripRightButton.Bounds;
@@ -441,16 +441,16 @@ namespace CarinaStudio.AppSuite.Controls
             this.scrollTabStripRightByButtonAction.Cancel();
 
             // find tab item which data is dragged over
-            if (!this.FindItemDraggedOver(e, out var itemIndex, out var item, out var headerVisual) || item == null || headerVisual == null)
+            if (!this.FindItemDraggedOver(e, out var itemIndex, out var item, out var headerVisual) || item is null || headerVisual is null)
             {
                 this.LeaveDraggingOverItem();
                 return;
             }
 
             // leave and enter item
-            if (this.draggingOverItem != null && this.draggingOverItem != item)
+            if (this.draggingOverItem is not null && this.draggingOverItem != item)
                 this.LeaveDraggingOverItem();
-            if (this.draggingOverItem == null)
+            if (this.draggingOverItem is null)
             {
                 this.DragEnterItem?.Invoke(this, new DragOnTabItemEventArgs(e, itemIndex, item, headerVisual));
                 this.draggingOverItem = item;
@@ -477,7 +477,7 @@ namespace CarinaStudio.AppSuite.Controls
                 return;
 
             // find tab item which data is dragged over
-            if (!this.FindItemDraggedOver(e, out var itemIndex, out var item, out var headerVisual) || item == null || headerVisual == null)
+            if (!this.FindItemDraggedOver(e, out var itemIndex, out var item, out var headerVisual) || item is null || headerVisual is null)
                 return;
 
             // raise event
@@ -546,7 +546,7 @@ namespace CarinaStudio.AppSuite.Controls
         void OnPreviewPointerMove(object? sender, PointerEventArgs e)
         {
             // check state
-            if (!this.pointerPressedPosition.HasValue || this.pointerPressedItem == null)
+            if (!this.pointerPressedPosition.HasValue || this.pointerPressedItem is null)
                 return;
 
             // check moving distance
@@ -682,7 +682,7 @@ namespace CarinaStudio.AppSuite.Controls
         void ScrollHeaderIntoViewCore(int itemIndex)
         {
             // check state
-            if (this.tabStripScrollViewer == null || this.tabItemsPresenter == null)
+            if (this.tabStripScrollViewer is null || this.tabItemsPresenter is null)
                 return;
 
             // find tab item header
@@ -692,14 +692,14 @@ namespace CarinaStudio.AppSuite.Controls
                     return panel.Children[itemIndex];
                 return null;
             });
-            if (tabItemHeader == null)
+            if (tabItemHeader is null)
                 return;
 
             // scroll into viewport
             var tabItemHeaderBounds = tabItemHeader.Bounds;
             var left = tabItemHeaderBounds.Left + this.tabItemsPresenter.Bounds.Left;
             var parent = this.tabItemsPresenter.Parent;
-            while (parent != this.tabStripScrollViewer && parent != null)
+            while (parent != this.tabStripScrollViewer && parent is not null)
             {
                 if (parent is Visual visual)
                     left += visual.Bounds.Left;
@@ -767,14 +767,16 @@ namespace CarinaStudio.AppSuite.Controls
         void UpdateTabStripScrollViewerMargin(bool animate)
         {
             // check state
-            if (this.attachedWindow == null || this.tabStripScrollViewer == null)
+            if (this.attachedTopLevel is null || this.tabStripScrollViewer is null)
                 return;
 
             // calculate margin
             var margin = Global.Run(() =>
             {
-                if (!this.attachedWindow.ExtendClientAreaToDecorationsHint
-                    || !this.attachedWindow.IsSystemChromeVisibleInClientArea
+                if (this.attachedTopLevel is not Window window)
+                    return new Thickness();
+                if (!window.ExtendClientAreaToDecorationsHint
+                    || !window.IsSystemChromeVisibleInClientArea
                     || !this.IsFullWindowMode)
                 {
                     return new Thickness();
@@ -787,15 +789,15 @@ namespace CarinaStudio.AppSuite.Controls
             });
 
             // update margin
-            if (this.tabStripScrollViewerMarginAnimator != null)
+            if (this.tabStripScrollViewerMarginAnimator is not null)
             {
                 this.tabStripScrollViewerMarginAnimator.Cancel();
                 this.tabStripScrollViewerMarginAnimator = null;
             }
-            if (animate)
+            if (animate && this.attachedTopLevel is { } topLevel)
             {
                 var duration = this.FindResourceOrDefault("TimeSpan/Animation", TimeSpan.FromMilliseconds(500));
-                this.tabStripScrollViewerMarginAnimator = new ThicknessAnimator(this.tabStripScrollViewer.Margin, margin).Also(it =>
+                this.tabStripScrollViewerMarginAnimator = new ThicknessRenderingAnimator(topLevel, this.tabStripScrollViewer.Margin, margin).Also(it =>
                 {
                     it.Completed += (_, _) =>
                     {

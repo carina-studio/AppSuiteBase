@@ -42,7 +42,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 	Uri? iconUri;
 	readonly TaskCompletionSource initAnimationTaskCompletionSource = new(); 
 	TaskCompletionSource? progressAnimationTaskSource;
-	DoubleAnimator? progressAnimator;
+	DoubleRenderingAnimator? progressAnimator;
 	readonly ProgressBar progressBar;
 	TaskCompletionSource? renderingTaskSource;
 	readonly ScheduledAction showAction;
@@ -321,7 +321,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 			{
 				this.progressBar.IsIndeterminate = false;
 				this.progressAnimationTaskSource ??= new();
-				this.progressAnimator = new DoubleAnimator(this.progressBar.Value, Math.Max(0, Math.Min(1, value))).Also(it =>
+				this.progressAnimator = new DoubleRenderingAnimator(this, this.progressBar.Value, Math.Max(0, Math.Min(1, value))).Also(it =>
 				{
 					it.Completed += async (_, _) => 
 					{

@@ -28,7 +28,7 @@ namespace CarinaStudio.AppSuite.Controls
         // Fields.
         BlurEffect? contentBlurEffect;
         Control? content;
-        DoubleAnimator? contentFadingAnimator;
+        DoubleRenderingAnimator? contentFadingAnimator;
         Control? contentFadingOverlay;
         // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         readonly ScheduledAction fadeInContentAction;
@@ -46,8 +46,8 @@ namespace CarinaStudio.AppSuite.Controls
                     return;
                 this.contentFadingAnimator?.Cancel();
                 this.contentFadingAnimator = this.contentFadingOverlay != null
-                    ? new DoubleAnimator(this.contentFadingOverlay.Opacity, 0)
-                    : new DoubleAnimator(this.content.AsNonNull().Opacity, 1.0);
+                    ? new DoubleRenderingAnimator(window, this.contentFadingOverlay.Opacity, 0)
+                    : new DoubleRenderingAnimator(window, this.content.AsNonNull().Opacity, 1.0);
                 this.contentFadingAnimator.Let(it =>
                 {
                     it.Completed += (_, _) =>
@@ -120,8 +120,8 @@ namespace CarinaStudio.AppSuite.Controls
                     this.fadeInContentAction.Cancel();
                     this.contentFadingAnimator?.Cancel();
                     this.contentFadingAnimator = this.contentFadingOverlay is not null
-                        ? new DoubleAnimator(this.contentFadingOverlay.Opacity, 1 - ContentFadeOutOpacity)
-                        : new DoubleAnimator(this.content.AsNonNull().Opacity, ContentFadeOutOpacity);
+                        ? new DoubleRenderingAnimator(window, this.contentFadingOverlay.Opacity, 1 - ContentFadeOutOpacity)
+                        : new DoubleRenderingAnimator(window, this.content.AsNonNull().Opacity, ContentFadeOutOpacity);
                     this.contentFadingAnimator.Let(it =>
                     {
                         it.Completed += (_, _) =>

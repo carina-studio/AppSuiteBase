@@ -70,7 +70,7 @@ namespace CarinaStudio.AppSuite.Controls
         Notification? appUpdateNotification;
         bool areInitialDialogsClosed;
         Thickness contentPadding;
-        ThicknessAnimator? contentPaddingAnimator;
+        ThicknessRenderingAnimator? contentPaddingAnimator;
         ContentPresenter? contentPresenter;
         bool hasMultipleMainWindows;
         bool isClosingScheduled;
@@ -106,7 +106,7 @@ namespace CarinaStudio.AppSuite.Controls
                 // ReSharper disable once SuspiciousTypeConversion.Global
                 var notificationPresenter = this as INotificationPresenter;
                 var useNotification = notificationPresenter is not null;
-				if (productId == null 
+				if (productId is null 
 					|| !this.IsActive
 					|| (!useNotification && this.HasDialogs)
 					|| IsNetworkConnForActivatingProVersionNotified
@@ -158,7 +158,7 @@ namespace CarinaStudio.AppSuite.Controls
                 if (this.Application is not AppSuiteApplication asApp)
                     return;
                 var productId = asApp.ProVersionProductId;
-				if (productId == null 
+				if (productId is null 
                     || !IsReactivatingProVersionNeeded
 					|| this.HasDialogs 
 					|| !this.IsActive 
@@ -210,7 +210,7 @@ namespace CarinaStudio.AppSuite.Controls
                     return;
 
                 // check content
-                if (this.contentPresenter == null)
+                if (this.contentPresenter is null)
                     return;
 
                 // cancel current animation
@@ -231,7 +231,7 @@ namespace CarinaStudio.AppSuite.Controls
                 }
                 else
                 {
-                    this.contentPaddingAnimator = new ThicknessAnimator(this.contentPresenter.Padding, margin).Also(it =>
+                    this.contentPaddingAnimator = new ThicknessRenderingAnimator(this, this.contentPresenter.Padding, margin).Also(it =>
                     {
                         it.Completed += (_, _) => this.contentPresenter.Padding = it.EndValue;
                         it.Duration = this.FindResourceOrDefault("TimeSpan/MainWindow.ContentPaddingTransition", TimeSpan.FromMilliseconds(500));
@@ -278,7 +278,7 @@ namespace CarinaStudio.AppSuite.Controls
                         this.restartingRootWindowsAction.Reschedule(RestartingMainWindowsDelay);
                     if (!this.AreInitialDialogsClosed)
                         this.showInitDialogsAction.Schedule();
-                    if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId != null)
+                    if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId is not null)
                     {
                         if (!this.notifyNetworkConnForActivatingProVersionAction.IsScheduled 
                             && !NetworkManager.Default.IsNetworkConnected
@@ -309,7 +309,7 @@ namespace CarinaStudio.AppSuite.Controls
                         this.SynchronizationContext.Post(() => 
                             _ = this.NotifyApplicationUpdateFoundAsync(false));
                     } 
-                    if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId != null)
+                    if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId is not null)
                     {
                         if (!this.notifyNetworkConnForActivatingProVersionAction.IsScheduled
                             && !NetworkManager.Default.IsNetworkConnected
@@ -439,7 +439,7 @@ namespace CarinaStudio.AppSuite.Controls
             if (this.Application is not AppSuiteApplication asApp)
                 return;
             var productId = asApp.ProVersionProductId;
-			if (productId != null)
+			if (productId is not null)
 			{
 				if (NetworkManager.Default.IsNetworkConnected)
                 {
@@ -479,7 +479,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Check whether extending client area to title bar is allowed or not.
         /// </summary>
-        public virtual bool IsExtendingClientAreaAllowed { get; } = true;
+        public virtual bool IsExtendingClientAreaAllowed => true;
 
 
         // Layout main windows.
@@ -879,7 +879,7 @@ namespace CarinaStudio.AppSuite.Controls
                 && double.IsFinite(this.restoredHeight))
             {
                 var screen = this.Screens.ScreenFromWindow(this) ?? this.Screens.Primary;
-                if (screen == null)
+                if (screen is null)
                 {
                     this.Logger.LogWarning("Cannot find screen for restoring size of window");
                     return;
@@ -980,7 +980,7 @@ namespace CarinaStudio.AppSuite.Controls
             if (!this.PersistentState.GetValueOrDefault(IsUsingCompactUIConfirmedKey))
             {
                 var screen = this.Screens.ScreenFromWindow(this) ?? this.Screens.ScreenFromVisual(this) ?? this.Screens.Primary;
-                if (screen != null)
+                if (screen is not null)
                 {
                     var pixelDensity = screen.Scaling;
                     var sizeToUseCompactUI = this.Configuration.GetValueOrDefault(ConfigurationKeys.WorkingAreaSizeToSuggestUsingCompactUI);
@@ -1021,7 +1021,7 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 this.Logger.LogDebug("Show User Agreement dialog");
                 var documentSource = app.UserAgreement;
-                if (documentSource != null)
+                if (documentSource is not null)
                 {
                     this.isShowingInitialDialogs = true;
                     var dialog = new AgreementDialog()
@@ -1054,7 +1054,7 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 this.Logger.LogDebug("Show Privacy Policy dialog");
                 var documentSource = app.PrivacyPolicy;
-                if (documentSource != null)
+                if (documentSource is not null)
                 {
                     this.isShowingInitialDialogs = true;
                     var dialog = new AgreementDialog()
@@ -1091,14 +1091,14 @@ namespace CarinaStudio.AppSuite.Controls
             });
             var changeListVersion = app.Assembly.GetName().Version?.Let(it =>
                 new Version(it.Major, it.Minor));
-            if (changeListVersion != null && changeListVersion > changeListShownVersion)
+            if (changeListVersion is not null && changeListVersion > changeListShownVersion)
             {
                 this.Logger.LogDebug("Show application change list dialog");
 
                 // show change list
                 this.isShowingInitialDialogs = true;
                 var changeList = app.ChangeList;
-                if (changeList != null)
+                if (changeList is not null)
                 {
                     this.PersistentState.SetValue<string>(LatestAppChangeListShownVersionKey, changeListVersion.ToString());
                     await new DocumentViewerWindow
@@ -1228,13 +1228,13 @@ namespace CarinaStudio.AppSuite.Controls
             // observe self properties
             this.GetObservable(DataContextProperty).Subscribe(dataContext =>
             {
-                if (this.attachedViewModel != null)
+                if (this.attachedViewModel is not null)
                 {
                     this.OnDetachFromViewModel(this.attachedViewModel);
                     this.attachedViewModel = null;
                 }
                 this.attachedViewModel = dataContext as TViewModel;
-                if (this.attachedViewModel != null)
+                if (this.attachedViewModel is not null)
                     this.OnAttachToViewModel(this.attachedViewModel);
             });
         }
