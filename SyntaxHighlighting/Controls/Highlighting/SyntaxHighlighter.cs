@@ -409,6 +409,8 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     // Create text properties for given range of text.
     void CreateTextProperties(int start, int end, TextRunProperties runProperties, TextRunProperties selectionRunProperties, IList<ValueSpan<TextRunProperties>> textProperties)
     {
+        textProperties.Add(new(start, end - start, runProperties));
+        /*
         var selectionStart = this.selectionStart;
         var selectionEnd = this.selectionEnd;
         if (selectionEnd < selectionStart)
@@ -436,6 +438,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 textProperties.Add(new(selectionEnd, end - selectionEnd, runProperties));
             }
         }
+        */
     }
 
 

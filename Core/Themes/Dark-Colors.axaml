@@ -62,6 +62,9 @@
 	<!-- MenuFlyout -->
 	<SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#272727"/>
 	<SolidColorBrush x:Key="MenuFlyoutPresenterBorderBrush" Color="{DynamicResource Color/ToolTip.Border}"/>
+	
+	<!-- SelectableTextBlock -->
+	<SolidColorBrush x:Key="Brush/SelectableTextBlock.Selection.Background" Color="{DynamicResource SystemAccentColor}" Opacity="0.75" />
 
 	<!-- Separator -->
 	<Color x:Key="Color/Separator.Background">#4fffffff</Color>
@@ -86,6 +89,7 @@
 	<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#1a1a1a"/>
 	<SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#303030"/>
 	<SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{StaticResource Color/Control.Border.Light}"/>
+	<SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="{DynamicResource Color/Accent}" Opacity="0.75"/>
 
 	<!-- ThemeModeTest -->
 	<Color x:Key="Color/ThemeModeTest.Color">#7faabbcc</Color>

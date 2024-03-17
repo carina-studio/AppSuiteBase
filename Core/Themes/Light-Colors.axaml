@@ -82,6 +82,9 @@
 	<!-- ObjectTextBox -->
     <SolidColorBrush x:Key="ObjectTextBoxBackgroundInvalid" Color="#ffcccc"/>
     <SolidColorBrush x:Key="ObjectTextBoxBackgroundInvalidPointerOver" Color="#ffd9d9"/>
+	
+	<!-- SelectableTextBlock -->
+	<SolidColorBrush x:Key="Brush/SelectableTextBlock.Selection.Background" Color="{DynamicResource SystemAccentColor}" Opacity="0.44" />
 
 	<!-- Separator -->
 	<Color x:Key="Color/Separator.Background">#4f000000</Color>
@@ -102,11 +105,10 @@
 	<Color x:Key="Color/TabItem.Header.Separator">#17000000</Color>
 
 	<!-- TextBox -->
-	<SolidColorBrush x:Key="Brush/TextBox.Foreground.Selected" Color="#ffffff"/>
-	<StaticResourceExtension x:Key="Brush/TextBox.SelectionForeground" ResourceKey="SystemControlHighlightAltAltHighBrush"/>
 	<SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="#eeeeee"/>
 	<SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#f4f4f4"/>
 	<SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{StaticResource Color/Control.Border.Dark}"/>
+	<SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="{DynamicResource Color/Accent}" Opacity="0.44"/>
 
 	<!-- ThemeModeTest -->
 	<Color x:Key="Color/ThemeModeTest.Color">#70332211</Color>

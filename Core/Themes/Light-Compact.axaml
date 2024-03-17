@@ -47,11 +47,6 @@
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/ListBoxItem.Foreground.Selected}" />
 	</Style>
 
-	<!-- TextBox -->
-	<Style Selector="TextBox">
-		<Setter Property="SelectionForegroundBrush" Value="{DynamicResource Brush/TextBox.Foreground.Selected}" />
-	</Style>
-
 	<!-- TreeViewItem -->
 	<Style Selector="TreeViewItem:pressed /template/ Border#PART_LayoutRoot:pointerover > ContentPresenter#PART_HeaderPresenter">
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/TreeViewItem.Foreground.Selected}" />
