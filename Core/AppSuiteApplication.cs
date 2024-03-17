@@ -2898,7 +2898,7 @@ namespace CarinaStudio.AppSuite
         /// <returns>Parameters of splash window.</returns>
         protected virtual SplashWindowParams OnPrepareSplashWindow() => new SplashWindowParams().Also((ref SplashWindowParams it) =>
         {
-            it.BackgroundImageOpacity = 0.2;
+            it.BackgroundImageOpacity = 1;
             it.BackgroundImageUri = Global.Run(() =>
             {
                 var uri = new Uri($"avares://{this.Assembly.GetName().Name}/SplashWindowBackground.jpg");
@@ -2919,6 +2919,7 @@ namespace CarinaStudio.AppSuite
                     return uri;
                 throw new NotSupportedException("Cannot get default icon.");
             });
+            it.MessageColor = Colors.White;
         });
 
 
@@ -3023,6 +3024,7 @@ namespace CarinaStudio.AppSuite
                     BackgroundImageOpacity = splashWindowParams.BackgroundImageOpacity,
                     BackgroundImageUri = splashWindowParams.BackgroundImageUri,
                     IconUri = splashWindowParams.IconUri,
+                    MessageColor = splashWindowParams.MessageColor,
                 };
                 if (time > 0)
                 {

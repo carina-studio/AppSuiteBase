@@ -28,11 +28,13 @@ class SplashWindowImpl : Avalonia.Controls.Window
 
 
 	// Static fields.
+	static readonly DirectProperty<SplashWindowImpl, Color> AccentColorProperty = AvaloniaProperty.RegisterDirect<SplashWindowImpl, Color>(nameof(AccentColor), w => w.accentColor);
 	static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
-	static readonly StyledProperty<IBrush?> BackgroundImageOpacityMaskProperty = AvaloniaProperty.Register<SplashWindowImpl, IBrush?>(nameof(BackgroundImageOpacityMask));
+	static readonly DirectProperty<SplashWindowImpl, double> BackgroundImageOpacityProperty = AvaloniaProperty.RegisterDirect<SplashWindowImpl, double>(nameof(BackgroundImageOpacity), w => w.backgroundImageOpacity);
 	static readonly StyledProperty<IImage?> BackgroundImageProperty = AvaloniaProperty.Register<SplashWindowImpl, IImage?>(nameof(BackgroundImage));
 	static readonly StyledProperty<Bitmap?> IconBitmapProperty = AvaloniaProperty.Register<SplashWindowImpl, Bitmap?>(nameof(IconBitmap));
 	static readonly StyledProperty<string> MessageProperty = AvaloniaProperty.Register<SplashWindowImpl, string>(nameof(Message), " ", coerce: (_, it) => string.IsNullOrEmpty(it) ? " " : it);
+	static readonly StyledProperty<Color> MessageColorProperty = AvaloniaProperty.Register<SplashWindowImpl, Color>(nameof(MessageColor));
 
 
 	// Fields.
@@ -94,8 +96,6 @@ class SplashWindowImpl : Avalonia.Controls.Window
 			// show content
 			var versionOpacity = this.FindResourceOrDefault("Double/ApplicationInfoDialog.AppVersion.Opacity", 0.75);
 			((Control)this.Content.AsNonNull()).Opacity = 1;
-			this.Get<Control>("backgroundOverlayBorder").Let(control =>
-				control.Opacity = 1);
 			this.Get<Control>("iconImage").Let(control =>
 			{
 				control.Opacity = 1;
@@ -116,7 +116,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 				control.Opacity = versionOpacity;
 				(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
 			});
-			this.Get<Control>("messageTextBlock").Let(control =>
+			this.Get<Control>("messageContainer").Let(control =>
 			{
 				control.Opacity = 1;
 				(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
@@ -125,7 +125,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 					if (e.Property == OpacityProperty && Math.Abs(1 - (double)e.NewValue!) <= double.Epsilon * 2)
 					{
 						this.ActivateAndBringToFront();
-						Dispatcher.UIThread.Post(() => this.initAnimationTaskCompletionSource.TrySetResult());
+						this.RequestAnimationFrame(_ => this.initAnimationTaskCompletionSource.TrySetResult());
 					}
 				};
 			});
@@ -167,10 +167,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 		get => this.accentColor;
 		set
 		{
-			this.accentColor = value;
-			this.Resources["AccentColor60"] = Color.FromArgb((byte)(value.A * 0.60 + 0.5), value.R, value.G, value.B);
-			this.Resources["AccentColor30"] = Color.FromArgb((byte)(value.A * 0.30 + 0.5), value.R, value.G, value.B);
-			this.Resources["AccentColor00"] = Color.FromArgb(0, value.R, value.G, value.B);
+			this.SetAndRaise(AccentColorProperty, ref this.accentColor, value);
 			this.progressBar.Foreground = new SolidColorBrush(value);
 		}
 	}
@@ -194,21 +191,9 @@ class SplashWindowImpl : Avalonia.Controls.Window
 				value = 0;
 			else if (value > 1)
 				value = 1;
-			this.backgroundImageOpacity = value;
-			this.SetValue(BackgroundImageOpacityMaskProperty, new RadialGradientBrush().Also(it =>
-			{
-				it.Center = new(0.5, 1.0, RelativeUnit.Relative);
-				it.GradientOrigin = it.Center;
-				it.GradientStops.Add(new(Color.FromArgb((byte)(255 * value + 0.5), 255, 255, 255), 0));
-				it.GradientStops.Add(new(Color.FromArgb(0, 255, 255, 255), 1));
-				it.Radius = 0.6;
-			}));
+			this.SetAndRaise(BackgroundImageOpacityProperty, ref this.backgroundImageOpacity, value);
 		}
 	}
-
-
-	// Opacity mask of background image.
-	public IBrush? BackgroundImageOpacityMask => this.GetValue(BackgroundImageOpacityMaskProperty);
 
 
 	// Get or set URI of background image.
@@ -266,6 +251,16 @@ class SplashWindowImpl : Avalonia.Controls.Window
 	{
 		get => this.GetValue(MessageProperty);
 		set => this.SetValue(MessageProperty, value);
+	}
+	
+	
+	/// <summary>
+	/// Get or set color of message to show.
+	/// </summary>
+	public Color MessageColor
+	{
+		get => this.GetValue(MessageColorProperty);
+		set => this.SetValue(MessageColorProperty, value);
 	}
 
 

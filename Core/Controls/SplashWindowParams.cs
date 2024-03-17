@@ -30,5 +30,11 @@ namespace CarinaStudio.AppSuite.Controls
         /// URI of application icon.
         /// </summary>
         public Uri? IconUri { get; set; }
+        
+        
+        /// <summary>
+        /// Color of message.
+        /// </summary>
+        public Color MessageColor { get; set; }
     }
 }
