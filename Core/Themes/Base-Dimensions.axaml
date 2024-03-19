@@ -71,7 +71,7 @@
 	<CornerRadius x:Key="ControlCornerRadiusRight">0,4,4,0</CornerRadius>
 	<CornerRadius x:Key="ControlCornerRadiusTop">4,4,0,0</CornerRadius>
 	<Thickness x:Key="Thickness/Control.Border">1</Thickness>
-	<Thickness x:Key="Thickness/Control.Border.Focused">2</Thickness>
+	<Thickness x:Key="Thickness/Control.Border.Focused">1</Thickness>
 
 	<!-- Dialog -->
 	<CornerRadius x:Key="CornerRadius/Dialog.ItemsGroup">8</CornerRadius>

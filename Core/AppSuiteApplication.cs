@@ -1154,46 +1154,45 @@ namespace CarinaStudio.AppSuite
                 return;
 
             // get resources
-            var duration = this.TryFindResource<TimeSpan>("TimeSpan/Animation", out var timeSpanRes) ? timeSpanRes.Value : default;
-            var durationFast = this.TryFindResource("TimeSpan/Animation.Fast", out timeSpanRes) ? timeSpanRes.Value : default;
-            var easing = this.TryFindResource<Easing>("Easing/Animation", out var easingRes) ? easingRes : new LinearEasing();
+            var duration = this.FindResourceOrDefault<TimeSpan>("TimeSpan/Animation");
+            var easing = this.FindResourceOrDefault<Easing>("Easing/Animation", new LinearEasing());
 
             // define styles
 #if APPLY_CONTROL_BRUSH_ANIMATIONS
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Button))
-                .Template().Name("PART_ContentPresenter"), durationFast));
+                .Template().Name("PART_ContentPresenter"), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ButtonSpinner))
-                .Template().Name("PART_IncreaseButton"), durationFast));
+                .Template().Name("PART_IncreaseButton"), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ButtonSpinner))
-                .Template().Name("PART_DecreaseButton"), durationFast));
+                .Template().Name("PART_DecreaseButton"), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ComboBox))
-                .Template().Name("Background"), durationFast));
+                .Template().Name("Background"), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.DatePicker))
-                .Template().Name("FlyoutButton"), durationFast));
+                .Template().Name("FlyoutButton"), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Expander))
-                .Template().Name("ExpanderHeader").Template().Name("ToggleButtonBackground"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ListBox)), durationFast));
+                .Template().Name("ExpanderHeader").Template().Name("ToggleButtonBackground"), duration));
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ListBox)), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(RepeatButton))
-                .Template().Name("PART_ContentPresenter"), durationFast));
+                .Template().Name("PART_ContentPresenter"), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ScrollBar))
-                .Template().OfType(typeof(RepeatButton)).Class("line").Template().Name("Root"), durationFast));
+                .Template().OfType(typeof(RepeatButton)).Class("line").Template().Name("Root"), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ScrollBar))
-                .Template().OfType(typeof(Thumb)).Class("thumb"), durationFast));
+                .Template().OfType(typeof(Thumb)).Class("thumb"), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Slider))
-                .Template().Name("SliderContainer"), durationFast));
+                .Template().Name("SliderContainer"), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Slider))
-                .Template().Name("PART_IncreaseButton"), durationFast));
+                .Template().Name("PART_IncreaseButton"), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Slider))
-                .Template().Name("PART_DecreaseButton"), durationFast));
+                .Template().Name("PART_DecreaseButton"), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(TextBox))
-                .Template().Name("PART_BorderElement"), durationFast));
-            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Thumb)), durationFast));
+                .Template().Name("PART_BorderElement"), duration));
+            this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Thumb)), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.TimePicker))
-                .Template().Name("FlyoutButton"), durationFast));
+                .Template().Name("FlyoutButton"), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ToggleButton))
-                .Template().Name("PART_ContentPresenter"), durationFast));
+                .Template().Name("PART_ContentPresenter"), duration));
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ToggleSwitch))
-                .Template().Name("OuterBorder"), durationFast));
+                .Template().Name("OuterBorder"), duration));
 #endif
 #if APPLY_ITEM_BRUSH_ANIMATIONS
             this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.ComboBoxItem))
@@ -1208,7 +1207,7 @@ namespace CarinaStudio.AppSuite
             {
                 style.Setters.Add(new Setter(Animatable.TransitionsProperty, new Transitions().Also(transitions =>
                 {
-                    transitions.Add(new BrushTransition()
+                    transitions.Add(new BrushTransition
                     {
                         Duration = duration,
                         Easing = easing,
