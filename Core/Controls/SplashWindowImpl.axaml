@@ -39,6 +39,7 @@
 				</LinearGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#ffffff"/>
 				<Color x:Key="Color/SplashWindow.Shadow">#000000</Color>
+				<sys:Double x:Key="Double/SplashWindow.TopBar.Opacity">0.75</sys:Double>
 			</Styles.Resources>
 		</Styles>
 
@@ -61,6 +62,7 @@
 				</LinearGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#222222"/>
 				<Color x:Key="Color/SplashWindow.Shadow">#ffffff</Color>
+				<sys:Double x:Key="Double/SplashWindow.TopBar.Opacity">0.85</sys:Double>
 			</Styles.Resources>
 		</Styles>
 		
@@ -90,7 +92,7 @@
 
 		<!-- Other resources -->
 		<BoxShadows x:Key="BoxShadows/SplashWindow">0 0 10 0 #9f000000</BoxShadows>
-		<CornerRadius x:Key="CornerRadius/SplashWindow">0</CornerRadius>
+		<CornerRadius x:Key="CornerRadius/SplashWindow">5</CornerRadius>
 		<sys:Double x:Key="Double/SplashWindow.ContentAnimation.Translation">25</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Copyright.FontSize">12</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Icon.Size">60</sys:Double>
@@ -134,11 +136,13 @@
 
 			<!-- Background -->
 			<Border Name="backgroundBorder" Background="{DynamicResource Brush/SplashWindow.Background}" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" BoxShadow="{StaticResource BoxShadows/SplashWindow}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
-			<Rectangle Height="{StaticResource Double/SplashWindow.TopBar.Size}" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-				<Rectangle.Fill>
-					<SolidColorBrush Color="{Binding #window.AccentColor}"/>
-				</Rectangle.Fill>
-			</Rectangle>
+			<Border BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{StaticResource CornerRadius/SplashWindow}">
+				<Rectangle Height="{StaticResource Double/SplashWindow.TopBar.Size}" HorizontalAlignment="Stretch" Opacity="{DynamicResource Double/SplashWindow.TopBar.Opacity}" VerticalAlignment="Top">
+					<Rectangle.Fill>
+						<SolidColorBrush Color="{Binding #window.AccentColor}"/>
+					</Rectangle.Fill>
+				</Rectangle>
+			</Border>
 			<Border BorderBrush="{x:Null}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{Binding #backgroundBorder.CornerRadius}">
 				<Image Margin="{StaticResource Thickness/SplashWindow.BackgroundImage.Margin}" Opacity="{Binding #window.BackgroundImageOpacity}" Source="{Binding #window.BackgroundImage}" Stretch="UniformToFill" StretchDirection="Both"/>
 			</Border>
