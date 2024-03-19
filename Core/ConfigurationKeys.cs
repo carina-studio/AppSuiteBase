@@ -1,4 +1,5 @@
 using CarinaStudio.Configuration;
+using System.Runtime.InteropServices;
 
 namespace CarinaStudio.AppSuite;
 
@@ -46,7 +47,7 @@ public abstract class ConfigurationKeys
     /// <summary>
     /// Whether content of window should be blurred when one or more dialogs are showing or not.
     /// </summary>
-    public static readonly SettingKey<bool> MakeContentBlurredWhenShowingDialog = new(nameof(MakeContentBlurredWhenShowingDialog), true);
+    public static readonly SettingKey<bool> MakeContentBlurredWhenShowingDialog = new(nameof(MakeContentBlurredWhenShowingDialog), Platform.IsMacOS && RuntimeInformation.ProcessArchitecture == Architecture.Arm64);
     /// <summary>
     /// Interval of checking whether script running is completed or not.
     /// </summary>
