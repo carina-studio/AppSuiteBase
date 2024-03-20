@@ -1537,7 +1537,8 @@
 					BorderThickness="{TemplateBinding BorderThickness}"
 					CornerRadius="{TemplateBinding CornerRadius}">
 					<md:MarkdownScrollViewer Name="PART_MarkdownPresenter"
-						Source="{TemplateBinding Source}"/>
+					                         SelectionEnabled="{TemplateBinding IsSelectionEnabled}"
+					                         Source="{TemplateBinding Source}"/>
 				</Border>
 			</ControlTemplate>
 		</Setter>

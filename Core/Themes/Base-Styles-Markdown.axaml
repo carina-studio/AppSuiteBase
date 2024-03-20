@@ -1,5 +1,6 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:ca="using:ColorTextBlock.Avalonia"
 		xmlns:mdControls="using:Markdown.Avalonia.Controls">
 
@@ -52,9 +53,11 @@
 	</Style>
 	<Style Selector="ca|CTextBlock">
 		<Setter Property="ClipToBounds" Value="False"/>
+		<Setter Property="Cursor" Value="{Binding Path=IsSelectionEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:MarkdownViewer}}, Converter={x:Static controls:MarkdownViewer.IsSelectionEnabledToCursorConverter}}"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Text}"/>
 		<Setter Property="LineSpacing" Value="{DynamicResource Double/MarkdownViewer.Markdown.Text.LineSpacing}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Text.Margin}"/>
+		<Setter Property="SelectionBrush" Value="{DynamicResource Brush/SelectableTextBlock.Selection.Background}"/>
 	</Style>
 	<Style Selector=".List ca|CTextBlock">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.List.Text.Margin}"/>
@@ -95,4 +98,5 @@
 		<Setter Property="Foreground" Value="{DynamicResource Brush/MarkdownViewer.Markdown.Heading6.Foreground}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading6}"/>
 	</Style>
+	
 </Styles>
