@@ -233,7 +233,7 @@
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Blockquote.Margin">0,3,0,13</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Blockquote.Padding">16,13,16,3</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.InlineCode.Margin">1,0,1,0</Thickness>
-	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.InlineCode.Padding">3,0,3,0</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.InlineCode.Padding">3,5,3,0</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.List.Margin">28,3,0,13</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.List.Text.Margin">12,3,0,3</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.ListMarker.Margin">0,3,12,3</Thickness>
