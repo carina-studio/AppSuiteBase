@@ -2686,12 +2686,11 @@
 									        BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}"
 									        BorderThickness="1,0,1,0" 
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"
-									        IsVisible="{TemplateBinding IsPointerOver}" 
 									        Opacity="{TemplateBinding IsPointerOver, Converter={x:Static converters:TabItemOpacityConverters.IsPointerOverToOpacity}}" 
 									        Margin="0,0,0,1">
 										<Border.Transitions>
 											<Transitions>
-												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
+												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Border.Transitions>
 									</Border>
@@ -2699,11 +2698,10 @@
 									        BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" 
 									        BorderThickness="1,0,1,0" 
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
-									        IsVisible="{TemplateBinding IsSelected}" 
 									        Opacity="{TemplateBinding IsSelected, Converter={x:Static converters:TabItemOpacityConverters.IsSelectedToOpacity}}">
 										<Border.Transitions>
 											<Transitions>
-												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
+												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Border.Transitions>
 									</Border>
