@@ -20,7 +20,7 @@ namespace CarinaStudio.AppSuite.Controls
         // Fields.
         ScrollContentPresenter? contentPresenter;
         private double maxEdgeFadingSize;
-        VectorAnimator? offsetAnimator;
+        VectorRenderingAnimator? offsetAnimator;
         private readonly LinearGradientBrush opacityMackBrush = new LinearGradientBrush().Also(it =>
         {
             it.EndPoint = new(1.0, 0.0, RelativeUnit.Relative);
@@ -34,6 +34,7 @@ namespace CarinaStudio.AppSuite.Controls
         Control? scrollLeftButton;
         Control? scrollRightButton;
         Control? scrollUpButton;
+        TopLevel? topLevel;
 
 
         /// <summary>
@@ -156,11 +157,29 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
+        /// <inheritdoc/>
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            base.OnAttachedToVisualTree(e);
+            this.topLevel = TopLevel.GetTopLevel(this);
+        }
+
+
+        /// <inheritdoc/>
+        protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            this.topLevel = null;
+            base.OnDetachedFromVisualTree(e);
+        }
+
+
         // Scroll by given offset.
         void ScrollBy(double offsetX, double offsetY)
         {
-            // check thread
+            // check state
             this.VerifyAccess();
+            if (this.topLevel is null)
+                return;
 
             // get current offset
             var currentOffset = this.offsetAnimator?.EndValue ?? this.Offset;
@@ -195,7 +214,7 @@ namespace CarinaStudio.AppSuite.Controls
                     return timeSpan;
                 return TimeSpan.FromMilliseconds(250);
             }) ?? TimeSpan.FromMilliseconds(250);
-            this.offsetAnimator = new VectorAnimator(currentOffset, new Vector(targetOffsetX, targetOffsetY)).Also(it =>
+            this.offsetAnimator = new VectorRenderingAnimator(this.topLevel, currentOffset, new Vector(targetOffsetX, targetOffsetY)).Also(it =>
             {
                 it.Completed += (_, _) => this.offsetAnimator = null;
                 it.Duration = duration;

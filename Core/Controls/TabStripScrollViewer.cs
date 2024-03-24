@@ -18,7 +18,7 @@ class TabStripScrollViewer : ScrollViewer
     ScrollContentPresenter? contentPresenter;
     Thickness itemsPanelMargin;
     double maxEdgeFadingSize;
-    VectorAnimator? offsetAnimator;
+    VectorRenderingAnimator? offsetAnimator;
     readonly LinearGradientBrush opacityMackBrush = new LinearGradientBrush().Also(it =>
     {
         it.EndPoint = new(1.0, 0.0, RelativeUnit.Relative);
@@ -30,6 +30,7 @@ class TabStripScrollViewer : ScrollViewer
         it.GradientStops.Add(new(Colors.Transparent, 1.0));
         it.StartPoint = new(0.0, 0.0, RelativeUnit.Relative);
     });
+    TopLevel? topLevel;
 
 
     // Constructor.
@@ -179,6 +180,22 @@ class TabStripScrollViewer : ScrollViewer
         base.OnAttachedToLogicalTree(e);
         this.maxEdgeFadingSize = this.FindResourceOrDefault("Double/TabControl.TabStrip.MaxEdgeFadingSize", 20.0);
     }
+    
+    
+    /// <inheritdoc/>
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        this.topLevel = TopLevel.GetTopLevel(this);
+    }
+
+
+    /// <inheritdoc/>
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        this.topLevel = null;
+        base.OnDetachedFromVisualTree(e);
+    }
 
 
     /// <inheritdoc/>
@@ -199,6 +216,10 @@ class TabStripScrollViewer : ScrollViewer
     // Scroll by given offset.
     public void ScrollBy(double offset)
     {
+        // check state
+        if (this.topLevel is null)
+            return;
+        
         // get current offset
         var currentOffset = this.offsetAnimator?.EndValue ?? this.Offset;
 
@@ -221,7 +242,7 @@ class TabStripScrollViewer : ScrollViewer
                 return timeSpan;
             return TimeSpan.FromMilliseconds(250);
         }) ?? TimeSpan.FromMilliseconds(250);
-        this.offsetAnimator = new VectorAnimator(currentOffset, new Vector(targetOffsetX, currentOffset.Y)).Also(it =>
+        this.offsetAnimator = new VectorRenderingAnimator(this.topLevel, currentOffset, new Vector(targetOffsetX, currentOffset.Y)).Also(it =>
         {
             it.Completed += (_, _) => this.offsetAnimator = null;
             it.Duration = duration;
