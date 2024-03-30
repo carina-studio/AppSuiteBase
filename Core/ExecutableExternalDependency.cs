@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -58,6 +59,7 @@ public class ExecutableExternalDependency : ExternalDependency
             exeNames.Add($"{this.ExecutableName}.sh");
         }
         var paths = await IO.CommandSearchPaths.GetPathsAsync();
+        Logger.LogDebug("Start checking [{exeNames}] in {pathCount} path(s)", exeNames, paths.Count);
         return await Task.Run(() =>
         {
             foreach (var directoryPath in paths)
@@ -66,9 +68,13 @@ public class ExecutableExternalDependency : ExternalDependency
                 {
                     string commandFile = Path.Combine(directoryPath, exeName);
                     if (File.Exists(commandFile))
+                    {
+                        Logger.LogDebug("'{exeName}' found in '{dir}'", exeName, directoryPath);
                         return true;
+                    }
                 }
             }
+            Logger.LogWarning("[{exeNames}] not found in all paths", exeNames);
             return false;
         }, CancellationToken.None);
     }

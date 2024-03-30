@@ -1,4 +1,5 @@
 using CarinaStudio.Threading;
+using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
     string? description;
     bool isFirstAvailabilityCheck = true;
     bool isDescriptionValid;
+    ILogger? logger;
     string? name;
     ExternalDependencyState state = ExternalDependencyState.Unknown;
 
@@ -57,7 +59,8 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
             this.isFirstAvailabilityCheck = false;
         try
         {
-            this.State = (await this.OnCheckAvailabilityAsync())
+            Logger.LogDebug("Check availability");
+            this.State = await this.OnCheckAvailabilityAsync()
                 ? ExternalDependencyState.Available
                 : ExternalDependencyState.Unavailable;
         }
@@ -110,6 +113,19 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
     /// </summary>
     public void InvalidateAvailability() =>
         this.checkAvailabilityAction.Schedule();
+
+
+    /// <summary>
+    /// Get logger.
+    /// </summary>
+    protected ILogger Logger
+    {
+        get
+        {
+            logger ??= this.Application.LoggerFactory.CreateLogger(this.GetType().Name);
+            return logger;
+        }
+    }
 
 
     /// <summary>
