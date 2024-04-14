@@ -139,7 +139,7 @@
 	<!-- Window -->
 	<DrawingBrush x:Key="Brush/Window.Background.Tabbed" Stretch="Fill">
 		<DrawingBrush.Drawing>
-			<ImageDrawing Rect="{x:Static media:WindowBackgroundImage.Bounds}">
+			<ImageDrawing Rect="{x:Static media:WindowBackgroundImage.HorizontalBounds}">
 				<ImageDrawing.ImageSource>
 					<media:WindowBackgroundImage DarkColor="{DynamicResource Color/Window.Background.Tabbed.Dark}"
 					                             LightColor="{DynamicResource Color/Window.Background.Tabbed.Light}"/>
@@ -160,7 +160,7 @@
 	<!-- WorkingArea -->
 	<DrawingBrush x:Key="Brush/WorkingArea.Background" Stretch="Fill">
 		<DrawingBrush.Drawing>
-			<ImageDrawing Rect="{x:Static media:WindowBackgroundImage.Bounds}">
+			<ImageDrawing Rect="{x:Static media:WindowBackgroundImage.VerticalBounds}">
 				<ImageDrawing.ImageSource>
 					<media:WindowBackgroundImage DarkColor="{DynamicResource Color/WorkingArea.Background.Dark}"
 					                             LightColor="{DynamicResource Color/WorkingArea.Background.Light}"

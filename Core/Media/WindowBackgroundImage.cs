@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Layout;
 using Avalonia.Media;
@@ -16,6 +17,7 @@ public class WindowBackgroundImage : AvaloniaObject, IImage
      * Fixed height of image.
      */
     public const double Height = 128;
+
     /**
      * Fixed width of image.
      */
@@ -23,25 +25,37 @@ public class WindowBackgroundImage : AvaloniaObject, IImage
 
 
     /// <summary>
-    /// Fixed bounds of image.
+    /// Fixed bounds of image with <see cref="Avalonia.Layout.Orientation.Horizontal"/> orientation.
     /// </summary>
-    public static readonly Rect Bounds = new Rect(0, 0, Width, Height);
+    public static readonly Rect HorizontalBounds = new(0, 0, Width, 1);
+
     /// <summary>
     /// Define <see cref="DarkColor"/> property.
     /// </summary>
-    public static readonly StyledProperty<Color> DarkColorProperty = AvaloniaProperty.Register<WindowBackgroundImage, Color>(nameof(DarkColor), Colors.Black);
+    public static readonly StyledProperty<Color> DarkColorProperty =
+        AvaloniaProperty.Register<WindowBackgroundImage, Color>(nameof(DarkColor), Colors.Black);
+
     /// <summary>
     /// Define <see cref="LightColor"/> property.
     /// </summary>
-    public static readonly StyledProperty<Color> LightColorProperty = AvaloniaProperty.Register<WindowBackgroundImage, Color>(nameof(LightColor), Colors.White);
+    public static readonly StyledProperty<Color> LightColorProperty =
+        AvaloniaProperty.Register<WindowBackgroundImage, Color>(nameof(LightColor), Colors.White);
+
     /// <summary>
     /// Define <see cref="Orientation"/> property.
     /// </summary>
-    public static readonly StyledProperty<Orientation> OrientationProperty = AvaloniaProperty.Register<WindowBackgroundImage, Orientation>(nameof(Orientation), Orientation.Horizontal);
-    
-    
+    public static readonly StyledProperty<Orientation> OrientationProperty =
+        AvaloniaProperty.Register<WindowBackgroundImage, Orientation>(nameof(Orientation), Orientation.Horizontal);
+
+    /// <summary>
+    /// Fixed bounds of image with <see cref="Avalonia.Layout.Orientation.Vertical"/> orientation.
+    /// </summary>
+    public static readonly Rect VerticalBounds = new(0, 0, 1, Height);
+
+
     // Drawing operation.
-    class DrawingOperation(Color darkColor, Color lightColor, Orientation orientation, Rect destRect) : ICustomDrawOperation
+    class DrawingOperation(Color darkColor, Color lightColor, Orientation orientation, Rect destRect)
+        : ICustomDrawOperation
     {
         // Fields.
         SKPaint? paint;
@@ -84,7 +98,7 @@ public class WindowBackgroundImage : AvaloniaObject, IImage
                     new SKColorF(darkColor.R / 255f, darkColor.G / 255f, darkColor.B / 255f, darkColor.A / 255f)
                 ],
                 SKColorSpace.CreateSrgb(),
-                [ 0f, 1 ],
+                [0f, 1],
                 SKShaderTileMode.Clamp
             );
             this.paint ??= new SKPaint().Also(it =>
@@ -92,19 +106,21 @@ public class WindowBackgroundImage : AvaloniaObject, IImage
                 it.IsDither = true;
                 it.Shader = this.shader;
             });
-            canvas.DrawRect(new((float)destRect.Left, (float)destRect.Top, (float)destRect.Right, (float)destRect.Bottom), this.paint);
+            canvas.DrawRect(
+                new((float)destRect.Left, (float)destRect.Top, (float)destRect.Right, (float)destRect.Bottom),
+                this.paint);
         }
 
         /// <inheritdoc/>
         public Rect Bounds => destRect;
     }
-    
-    
+
+
     /// <inheritdoc/>
     public void Draw(DrawingContext context, Rect sourceRect, Rect destRect)
     {
         context.Custom(new DrawingOperation(
-            this.GetValue(DarkColorProperty), 
+            this.GetValue(DarkColorProperty),
             this.GetValue(LightColorProperty),
             this.GetValue(OrientationProperty),
             destRect));
@@ -119,8 +135,8 @@ public class WindowBackgroundImage : AvaloniaObject, IImage
         get => this.GetValue(DarkColorProperty);
         set => this.SetValue(DarkColorProperty, value);
     }
-    
-    
+
+
     /// <summary>
     /// Get or set light color.
     /// </summary>
@@ -139,8 +155,13 @@ public class WindowBackgroundImage : AvaloniaObject, IImage
         get => this.GetValue(OrientationProperty);
         set => this.SetValue(OrientationProperty, value);
     }
-    
+
 
     /// <inheritdoc/>
-    public Size Size => new(Width, Height);
+    public Size Size => GetValue(OrientationProperty) switch
+    {
+        Orientation.Horizontal => new(Width, 1),
+        Orientation.Vertical => new(1, Height),
+        _ => throw new NotSupportedException(),
+    };
 }

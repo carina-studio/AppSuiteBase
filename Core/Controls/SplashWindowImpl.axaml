@@ -25,7 +25,7 @@
 			<Styles.Resources>
 				<DrawingBrush x:Key="Brush/SplashWindow.Background" Stretch="Fill">
 					<DrawingBrush.Drawing>
-						<ImageDrawing Rect="{x:Static media:WindowBackgroundImage.Bounds}">
+						<ImageDrawing Rect="{x:Static media:WindowBackgroundImage.HorizontalBounds}">
 							<ImageDrawing.ImageSource>
 								<media:WindowBackgroundImage DarkColor="#222222"
 								                             LightColor="#333333"/>
@@ -48,7 +48,7 @@
 			<Styles.Resources>
 				<DrawingBrush x:Key="Brush/SplashWindow.Background" Stretch="Fill">
 					<DrawingBrush.Drawing>
-						<ImageDrawing Rect="{x:Static media:WindowBackgroundImage.Bounds}">
+						<ImageDrawing Rect="{x:Static media:WindowBackgroundImage.HorizontalBounds}">
 							<ImageDrawing.ImageSource>
 								<media:WindowBackgroundImage DarkColor="#cccccc"
 								                             LightColor="#eeeeee"/>
