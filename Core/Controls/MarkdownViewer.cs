@@ -33,7 +33,7 @@ public unsafe class MarkdownViewer : TemplatedControl
     /// <summary>
     /// Define <see cref="IsSelectionEnabled"/> property.
     /// </summary>
-    public static readonly StyledProperty<bool> IsSelectionEnabledProperty = AvaloniaProperty.Register<MarkdownViewer, bool>(nameof(IsSelectionEnabled), true);
+    public static readonly StyledProperty<bool> IsSelectionEnabledProperty = AvaloniaProperty.Register<MarkdownViewer, bool>(nameof(IsSelectionEnabled), false);
     /// <summary>
     /// <see cref="IValueConverter"/> to convert from <see cref="IsSelectionEnabled"/> to proper <see cref="Cursor"/> of element.
     /// </summary>
