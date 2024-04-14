@@ -29,7 +29,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 
 	// Static fields.
 	static readonly DirectProperty<SplashWindowImpl, Color> AccentColorProperty = AvaloniaProperty.RegisterDirect<SplashWindowImpl, Color>(nameof(AccentColor), w => w.accentColor);
-	static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
+	static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(IAppSuiteApplication.Current, typeof(ApplicationReleasingType));
 	static readonly DirectProperty<SplashWindowImpl, double> BackgroundImageOpacityProperty = AvaloniaProperty.RegisterDirect<SplashWindowImpl, double>(nameof(BackgroundImageOpacity), w => w.backgroundImageOpacity);
 	static readonly StyledProperty<IImage?> BackgroundImageProperty = AvaloniaProperty.Register<SplashWindowImpl, IImage?>(nameof(BackgroundImage));
 	static readonly StyledProperty<Bitmap?> IconBitmapProperty = AvaloniaProperty.Register<SplashWindowImpl, Bitmap?>(nameof(IconBitmap));
@@ -96,6 +96,10 @@ class SplashWindowImpl : Avalonia.Controls.Window
 			// show content
 			var versionOpacity = this.FindResourceOrDefault("Double/ApplicationInfoDialog.AppVersion.Opacity", 0.75);
 			((Control)this.Content.AsNonNull()).Opacity = 1;
+			this.Get<Control>("colorBar").Let(control =>
+			{
+				(control.RenderTransform as ScaleTransform)?.Let(it => it.ScaleY = 1);
+			});
 			this.Get<Control>("iconImage").Let(control =>
 			{
 				control.Opacity = 1;

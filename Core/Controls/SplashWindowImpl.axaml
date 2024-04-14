@@ -93,6 +93,8 @@
 		<!-- Other resources -->
 		<BoxShadows x:Key="BoxShadows/SplashWindow">0 0 10 0 #9f000000</BoxShadows>
 		<CornerRadius x:Key="CornerRadius/SplashWindow">5</CornerRadius>
+		<CornerRadius x:Key="CornerRadius/SplashWindow.ColorBar">0,5,5,0</CornerRadius>
+		<sys:Double x:Key="Double/SplashWindow.ColorBar.Size">10</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.ContentAnimation.Translation">25</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Copyright.FontSize">12</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Icon.Size">60</sys:Double>
@@ -100,17 +102,17 @@
 		<sys:Double x:Key="Double/SplashWindow.Shadow.BlurRadius">10</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Title.FontSize">18</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Title.MaxWidth">355</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.TopBar.Size">4</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Version.FontSize">12</sys:Double>
 		<DropShadowEffect x:Key="Effect/SplashWindow.Message.Shadow" BlurRadius="5" Color="#000000" OffsetX="0" OffsetY="0"/>
 		<DropShadowEffect x:Key="Effect/SplashWindow.Shadow" BlurRadius="{StaticResource Double/SplashWindow.Shadow.BlurRadius}" Color="{DynamicResource Color/SplashWindow.Shadow}" OffsetX="0" OffsetY="0"/>
 		<Thickness x:Key="Thickness/SplashWindow.BackgroundImage.Margin">0,100,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Border">0</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.ColorBar.Margin">0,20,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">0,0,15,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Margin">10</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Padding">30,20,30,30</Thickness>
-		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1</sys:TimeSpan>
+		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1.2</sys:TimeSpan>
 
 	</Window.Resources>
 
@@ -136,15 +138,32 @@
 
 			<!-- Background -->
 			<Border Name="backgroundBorder" Background="{DynamicResource Brush/SplashWindow.Background}" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" BoxShadow="{StaticResource BoxShadows/SplashWindow}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
-			<Border BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{StaticResource CornerRadius/SplashWindow}">
-				<Rectangle Height="{StaticResource Double/SplashWindow.TopBar.Size}" HorizontalAlignment="Stretch" Opacity="{DynamicResource Double/SplashWindow.TopBar.Opacity}" VerticalAlignment="Top">
-					<Rectangle.Fill>
-						<SolidColorBrush Color="{Binding #window.AccentColor}"/>
-					</Rectangle.Fill>
-				</Rectangle>
-			</Border>
 			<Border BorderBrush="{x:Null}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{Binding #backgroundBorder.CornerRadius}">
 				<Image Margin="{StaticResource Thickness/SplashWindow.BackgroundImage.Margin}" Opacity="{Binding #window.BackgroundImageOpacity}" Source="{Binding #window.BackgroundImage}" Stretch="UniformToFill" StretchDirection="Both"/>
+			</Border>
+			
+			<!-- Color bar -->
+			<Border Name="colorBar" 
+			        CornerRadius="{DynamicResource CornerRadius/SplashWindow.ColorBar}"
+			        Height="{DynamicResource Double/SplashWindow.Icon.Size}"
+			        HorizontalAlignment="Left" 
+			        Margin="{DynamicResource Thickness/SplashWindow.ColorBar.Margin}"
+			        VerticalAlignment="Top"
+			        Width="{DynamicResource Double/SplashWindow.ColorBar.Size}">
+				<Border.Background>
+					<SolidColorBrush Color="{Binding #window.AccentColor}"/>
+				</Border.Background>
+				<Border.RenderTransform>
+					<ScaleTransform ScaleY="0">
+						<ScaleTransform.Transitions>
+							<Transitions>
+								<DoubleTransition Property="ScaleY" 
+								                  Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" 
+								                  Easing="ExponentialEaseOut"/>
+							</Transitions>
+						</ScaleTransform.Transitions>
+					</ScaleTransform>
+				</Border.RenderTransform>
 			</Border>
 			
 			<!-- Content -->
