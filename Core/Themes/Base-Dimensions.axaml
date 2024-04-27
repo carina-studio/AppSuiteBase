@@ -136,6 +136,7 @@
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">-12,0,-12,8</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.ItemsGroupHeader">0,0,0,10</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Label">0,1,0,1</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Label.WithControlBelow">0,1,0,3</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Description">0,1,10,1</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">12,11,12,11</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">12,7,12,7</Thickness>
@@ -346,8 +347,8 @@
 	<sys:Double x:Key="Double/Shadow.Size.Light">10</sys:Double>
 
 	<!-- Slider -->
-	<sys:Double x:Key="SliderPreContentMargin">0</sys:Double>
-	<sys:Double x:Key="SliderPostContentMargin">0</sys:Double>
+	<GridLength x:Key="SliderPreContentMargin">0</GridLength>
+	<GridLength x:Key="SliderPostContentMargin">0</GridLength>
 
 	<!-- StatusBar -->
 	<sys:Double x:Key="Double/StatusBar.DropDownIcon.Size">8</sys:Double>

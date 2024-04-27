@@ -2543,15 +2543,14 @@ namespace CarinaStudio.AppSuite
                 this.SetupMacOSApp();
             
             // handle application icon click
-            // ReSharper disable once IdentifierTypo
-            if (desktopLifetime is IActivatableApplicationLifetime activatableApplicationLifetime)
+            this.TryGetFeature<IActivatableLifetime>()?.Let(lifetime =>
             {
-                activatableApplicationLifetime.Activated += (_, e) =>
+                lifetime.Activated += (_, e) =>
                 {
                     if (e.Kind == ActivationKind.Reopen && this.IsBackgroundMode)
                         this.OnTryExitingBackgroundMode();
                 };
-            }
+            });
 
             // start monitoring windows.
             Avalonia.Controls.Window.WindowClosedEvent.AddClassHandler(typeof(Avalonia.Controls.Window), (sender, _) =>

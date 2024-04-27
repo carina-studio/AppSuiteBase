@@ -71,7 +71,7 @@
 	<Thickness x:Key="Thickness/Dialog.ListActionButton.Padding">5,2,5,2</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ListActionButton.Margin">3,3,0,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,1,0,0</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Label">0</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Label.WithControlBelow">0,1,0,2</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">10,6,10,6</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">10,6,10,6</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">-10,0,-10,5</Thickness>

@@ -20,7 +20,7 @@
 
 		<!-- Content -->
 		<StackPanel Classes="Dialog_ContentPanel" Orientation="Vertical">
-			<TextBlock Name="messageTextBlock" Classes="Dialog_TextBlock_Label" IsVisible="{Binding $parent[Window].Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Text="{Binding $parent[Window].Message}"/>
+			<TextBlock Name="messageTextBlock" Classes="Dialog_TextBlock_LabelWithControlBelow" IsVisible="{Binding $parent[Window].Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Text="{Binding $parent[Window].Message}"/>
 			<TextBox Name="textBox" Classes="Dialog_TextBox" Grid.Column="1" MaxLength="{Binding $parent[Window].MaxTextLength}" Text="{Binding $parent[Window].Text, Mode=TwoWay}"/>
 			<StackPanel Name="checkBoxPanel" IsVisible="False">
 				<Separator Classes="Dialog_Separator"/>
