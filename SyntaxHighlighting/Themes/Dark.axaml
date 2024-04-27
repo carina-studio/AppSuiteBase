@@ -29,7 +29,6 @@
 	<SolidColorBrush x:Key="Brush/RegexSyntaxHighlighting.UnicodeCategories">#00ccaf</SolidColorBrush>
 
 	<!-- SelectableSyntaxHighlightingTextBlock -->
-	<SolidColorBrush x:Key="Brush/SelectableSyntaxHighlightingTextBlock.Selection.Background" Color="{DynamicResource SystemAccentColor}" />
 	<StaticResource x:Key="Brush/SelectableSyntaxHighlightingTextBlock.Selection.Foreground" ResourceKey="TextControlForeground" />
 
 	<!-- StringInterpolationFormatSyntaxHighlighting -->

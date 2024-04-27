@@ -20,14 +20,11 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
     /// Property of <see cref="DefinitionSet"/>.
     /// </summary>
     public static readonly DirectProperty<SelectableSyntaxHighlightingTextBlock, SyntaxHighlightingDefinitionSet?> DefinitionSetProperty = AvaloniaProperty.RegisterDirect<SelectableSyntaxHighlightingTextBlock, SyntaxHighlightingDefinitionSet?>(nameof(DefinitionSet), t => t.syntaxHighlighter.DefinitionSet, (t, ds) => t.syntaxHighlighter.DefinitionSet = ds);
-    /// <summary>
-    /// Property of <see cref="SelectionForegroundBrush"/>.
-    /// </summary>
-    public static readonly DirectProperty<SelectableSyntaxHighlightingTextBlock, IBrush?> SelectionForegroundBrushProperty = AvaloniaProperty.RegisterDirect<SelectableSyntaxHighlightingTextBlock, IBrush?>(nameof(SelectionForegroundBrush), t => t.syntaxHighlighter.SelectionForeground, (t, b) => t.syntaxHighlighter.SelectionForeground = b);
-
+    
 
     // Fields.
     InlineCollection? attachedInlines;
+    // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
     readonly ScheduledAction invalidateVisualAction;
     bool isArranging;
     bool isCreatingTextLayout;
@@ -59,6 +56,14 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
                 }
             }
         });
+        this.GetObservable(SelectionBrushProperty).Subscribe(brush =>
+        {
+            this.syntaxHighlighter.SelectionBackground = brush;
+        });
+        this.GetObservable(SelectionForegroundBrushProperty).Subscribe(brush =>
+        {
+            this.syntaxHighlighter.SelectionForeground = brush;
+        });
         this.GetObservable(SelectionEndProperty).Subscribe(end =>
         {
             this.syntaxHighlighter.SelectionEnd = end;
@@ -78,8 +83,10 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
             var property = e.Property;
             if (property == SyntaxHighlighter.DefinitionSetProperty)
                 this.RaisePropertyChanged(DefinitionSetProperty, (SyntaxHighlightingDefinitionSet?)e.OldValue, (SyntaxHighlightingDefinitionSet?)e.NewValue);
+            else if (property == SyntaxHighlighter.SelectionBackgroundProperty)
+                this.SetValue(SelectionBrushProperty, (IBrush?)e.NewValue);
             else if (property == SyntaxHighlighter.SelectionForegroundProperty)
-                this.RaisePropertyChanged(SelectionForegroundBrushProperty, (IBrush?)e.OldValue, (IBrush?)e.NewValue);
+                this.SetValue(SelectionForegroundBrushProperty, (IBrush?)e.NewValue);
         };
         this.syntaxHighlighter.TextLayoutInvalidated += (_, _) =>
         {
@@ -188,16 +195,6 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
             this.Inlines.Clear();
             throw new InvalidOperationException();
         }
-    }
-
-
-    /// <summary>
-    /// Get or set brush of foreground of selected text.
-    /// </summary>
-    public IBrush? SelectionForegroundBrush
-    {
-        get => this.syntaxHighlighter.SelectionForeground;
-        set => this.syntaxHighlighter.SelectionForeground = value;
     }
     
     

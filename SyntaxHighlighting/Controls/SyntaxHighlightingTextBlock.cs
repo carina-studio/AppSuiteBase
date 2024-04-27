@@ -23,6 +23,7 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock
 
     // Fields.
     InlineCollection? attachedInlines;
+    // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
     readonly ScheduledAction invalidateVisualAction;
     bool isArranging;
     bool isCreatingTextLayout;
@@ -178,5 +179,5 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock
     /// <summary>
     /// Get <see cref="SyntaxHighlighter"/> used by the control.
     /// </summary>
-    protected SyntaxHighlighter SyntaxHighlighter { get => this.syntaxHighlighter; }
+    protected SyntaxHighlighter SyntaxHighlighter => this.syntaxHighlighter;
 }
