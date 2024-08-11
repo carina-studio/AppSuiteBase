@@ -61,15 +61,11 @@ namespace CarinaStudio.AppSuite
     public abstract partial class AppSuiteApplication : Application, IAppSuiteApplication
     {
         // Implementation of ILogSink to get logs from Avalonia.
-        class AvaloniaLogSink : Avalonia.Logging.ILogSink
+        class AvaloniaLogSink(IAppSuiteApplication app) : Avalonia.Logging.ILogSink
         {
             // Fields.
-            readonly Microsoft.Extensions.Logging.ILogger logger;
+            readonly Microsoft.Extensions.Logging.ILogger logger = app.LoggerFactory.CreateLogger("Avalonia");
 
-            // Constructor.
-            public AvaloniaLogSink(IAppSuiteApplication app) =>
-                this.logger = app.LoggerFactory.CreateLogger("Avalonia");
-            
             // Convert from Avalonia log level.
             Microsoft.Extensions.Logging.LogLevel ConvertToLogLevel(Avalonia.Logging.LogEventLevel level) => level switch
             {
@@ -129,12 +125,8 @@ namespace CarinaStudio.AppSuite
 
 
         // Implementation of Configuration.
-        class ConfigurationImpl : PersistentSettings
+        class ConfigurationImpl() : PersistentSettings(JsonSettingsSerializer.Default)
         {
-            // Constructor.
-            public ConfigurationImpl() : base(JsonSettingsSerializer.Default)
-            { }
-
             // Implementations.
             protected override void OnUpgrade(int oldVersion)
             { }
@@ -143,55 +135,26 @@ namespace CarinaStudio.AppSuite
 
 
         // Token of custom resources.
-        class CustomResourceToken : IDisposable
+        class CustomResourceToken(AppSuiteApplication app, IResourceProvider resources) : IDisposable
         {
-            // Fields.
-            readonly AppSuiteApplication app;
-            readonly IResourceProvider resource;
-
-            // Constructor.
-            public CustomResourceToken(AppSuiteApplication app, IResourceProvider resources)
-            {
-                this.app = app;
-                this.resource = resources;
-            }
-
             // Dispose.
             public void Dispose() =>
-                this.app.RemoveCustomResource(this.resource);
+                app.RemoveCustomResource(resources);
         }
 
 
         // Token of custom style.
-        class CustomStyleToken : IDisposable
+        class CustomStyleToken(AppSuiteApplication app, IStyle style) : IDisposable
         {
-            // Fields.
-            readonly AppSuiteApplication app;
-            readonly IStyle style;
-
-            // Constructor.
-            public CustomStyleToken(AppSuiteApplication app, IStyle style)
-            {
-                this.app = app;
-                this.style = style;
-            }
-
             // Dispose.
             public void Dispose() =>
-                this.app.RemoveCustomStyle(this.style);
+                app.RemoveCustomStyle(style);
         }
         
         
         // Class to receive call-back of downloading dotMemory.
-        class DotMemoryDownloadingProgressCallback : IProgress<double>
+        class DotMemoryDownloadingProgressCallback(AppSuiteApplication app) : IProgress<double>
         {
-            // Fields.
-            readonly AppSuiteApplication app;
-            
-            // Constructor.
-            public DotMemoryDownloadingProgressCallback(AppSuiteApplication app) =>
-                this.app = app;
-            
             /// <inheritdoc/>
             public void Report(double value)
             {
@@ -202,15 +165,8 @@ namespace CarinaStudio.AppSuite
         
         
         // Class to receive call-back of downloading dotTrace.
-        class DotTraceDownloadingProgressCallback : IProgress<double>
+        class DotTraceDownloadingProgressCallback(AppSuiteApplication app) : IProgress<double>
         {
-            // Fields.
-            readonly AppSuiteApplication app;
-            
-            // Constructor.
-            public DotTraceDownloadingProgressCallback(AppSuiteApplication app) =>
-                this.app = app;
-            
             /// <inheritdoc/>
             public void Report(double value)
             {
@@ -221,12 +177,8 @@ namespace CarinaStudio.AppSuite
         
         
         // Implementation of initial settings.
-        class InitSettingsImpl : PersistentSettings
+        class InitSettingsImpl() : PersistentSettings(JsonSettingsSerializer.Default)
         {
-            // Constructor.
-            public InitSettingsImpl() : base(JsonSettingsSerializer.Default)
-            { }
-
             // Implementations.
             protected override void OnUpgrade(int oldVersion)
             { }
@@ -280,38 +232,20 @@ namespace CarinaStudio.AppSuite
 
 
         // Implementation of PersistentState.
-        class PersistentStateImpl : PersistentSettings
+        class PersistentStateImpl(AppSuiteApplication app) : PersistentSettings(JsonSettingsSerializer.Default)
         {
-            // Fields.
-            readonly AppSuiteApplication app;
-
-            // Constructor.
-            public PersistentStateImpl(AppSuiteApplication app) : base(JsonSettingsSerializer.Default)
-            {
-                this.app = app;
-            }
-
             // Implementations.
-            protected override void OnUpgrade(int oldVersion) => this.app.OnUpgradePersistentState(this, oldVersion, this.Version);
-            public override int Version => this.app.PersistentStateVersion;
+            protected override void OnUpgrade(int oldVersion) => app.OnUpgradePersistentState(this, oldVersion, this.Version);
+            public override int Version => app.PersistentStateVersion;
         }
 
 
         // Implementation of Settings.
-        class SettingsImpl : PersistentSettings
+        class SettingsImpl(AppSuiteApplication app) : PersistentSettings(JsonSettingsSerializer.Default)
         {
-            // Fields.
-            readonly AppSuiteApplication app;
-
-            // Constructor.
-            public SettingsImpl(AppSuiteApplication app) : base(JsonSettingsSerializer.Default)
-            {
-                this.app = app;
-            }
-
             // Implementations.
-            protected override void OnUpgrade(int oldVersion) => this.app.OnUpgradeSettings(this, oldVersion, this.Version);
-            public override int Version => this.app.SettingsVersion;
+            protected override void OnUpgrade(int oldVersion) => app.OnUpgradeSettings(this, oldVersion, this.Version);
+            public override int Version => app.SettingsVersion;
         }
 
 
@@ -325,20 +259,11 @@ namespace CarinaStudio.AppSuite
         
         
         // Session of tracing.
-        class TracingSession : IDisposable
+        class TracingSession(AppSuiteApplication app) : IDisposable
         {
-            // Fields.
-            readonly AppSuiteApplication app;
-            
-            // Constructor.
-            public TracingSession(AppSuiteApplication app)
-            {
-                this.app = app;
-            }
-            
             // Dispose.
             public void Dispose() =>
-                this.app.StopTracing(this);
+                app.StopTracing(this);
         }
 
 
@@ -408,7 +333,7 @@ namespace CarinaStudio.AppSuite
         static InitSettingsImpl? InitSettingsInstance;
         static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new("IsAcceptNonStableApplicationUpdateInitialized", false);
         static readonly SettingKey<int> LogOutputTargetPortKey = new("LogOutputTargetPort");
-        static readonly SettingKey<byte[]> MainWindowViewModelStatesKey = new("MainWindowViewModelStates", Array.Empty<byte>());
+        static readonly SettingKey<byte[]> MainWindowViewModelStatesKey = new("MainWindowViewModelStates", []);
 
 
         // Fields.
@@ -786,78 +711,7 @@ namespace CarinaStudio.AppSuite
 #pragma warning disable CS0618
             var builder = BuildApplication<TApp>(setupAction);
 #pragma warning restore CS0618
-            var app = default(Avalonia.Application);
-            var asApp = default(IAppSuiteApplication);
-            var asAppImpl = default(AppSuiteApplication);
-            var logger = default(Microsoft.Extensions.Logging.ILogger);
-            var exitCode = 0;
-            var forceThrowingException = false;
-            void SetupAppAndLogger()
-            {
-                if (app is not null)
-                    return;
-                app = builder.Instance;
-                asApp = app as IAppSuiteApplication;
-                asAppImpl = app as AppSuiteApplication;
-                logger = asApp?.LoggerFactory.CreateLogger(asApp.GetType().Name);
-            }
-            while (true)
-            {
-                SetupAppAndLogger();
-                try
-                {
-                    if (app?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
-                    {
-                        var startMethod = desktopLifetime.GetType().GetMethod("Start", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-                        if (startMethod is null)
-                        {
-                            forceThrowingException = true;
-                            throw new InvalidOperationException("Unable to get Start() method to restart application lifetime.");
-                        }
-                        logger?.LogWarning("Restart application lifetime");
-                        try
-                        {
-                            exitCode = (int)startMethod.Invoke(desktopLifetime, new object?[] { args })!;
-                        }
-                        catch (TargetInvocationException ex)
-                        {
-                            if (ex.InnerException is { } innerEx)
-                            {
-                                logger?.LogError(ex, "Unhandled exception occurred in application lifetime");
-                                LogToConsole($"Unhandled exception occurred in application lifetime: {innerEx.GetType().Name}, {innerEx.Message}");
-                                LogToConsole(innerEx.StackTrace);
-                                if (asAppImpl is null || !asAppImpl.HandleExceptionOccurredInApplicationLifetime(innerEx))
-                                {
-                                    forceThrowingException = true;
-                                    throw;
-                                }
-                                logger?.LogWarning("Exception was handled");
-                            }
-                            else
-                                throw;
-                        }
-                    }
-                    else
-                        exitCode = builder.StartWithClassicDesktopLifetime(args);
-                }
-                catch (Exception ex)
-                {
-                    if (forceThrowingException)
-                        throw;
-                    SetupAppAndLogger();
-                    logger?.LogError(ex, "Unhandled exception occurred in application lifetime");
-                    LogToConsole($"Unhandled exception occurred in application lifetime: {ex.GetType().Name}, {ex.Message}");
-                    LogToConsole(ex.StackTrace);
-                    if (asAppImpl is null || !asAppImpl.HandleExceptionOccurredInApplicationLifetime(ex))
-                        throw;
-                    logger?.LogWarning("Exception was handled");
-                }
-                SetupAppAndLogger();
-                if (asApp?.IsShutdownStarted == false)
-                    continue;
-                logger?.LogWarning("Application lifetime was exited with code {code}", exitCode);
-                return exitCode;
-            }
+            return builder.StartWithClassicDesktopLifetime(args);
         }
 
 
@@ -2439,6 +2293,20 @@ namespace CarinaStudio.AppSuite
         {
             LogToConsole("Avalonia framework initialization completed");
             
+            // setup unhandled exception handler.
+            Dispatcher.UIThread.UnhandledException += (_, e) =>
+            {
+                var ex = e.Exception;
+                Logger.LogError(ex, "Unhandled exception occurred in application lifetime");
+                LogToConsole($"Unhandled exception occurred in application lifetime: {ex.GetType().Name}, {ex.Message}");
+                LogToConsole(ex.StackTrace);
+                if (HandleExceptionOccurredInApplicationLifetime(ex))
+                {
+                    Logger.LogWarning("Exception was handled");
+                    e.Handled = true;
+                }
+            };
+            
             // check performance
             this.frameworkInitializedTime = this.stopWatch.ElapsedMilliseconds;
             this.Logger.LogTrace("[Performance] Took {duration} ms to initialize Avalonia framework", this.frameworkInitializedTime - this.creationTime);
@@ -2475,7 +2343,7 @@ namespace CarinaStudio.AppSuite
                     this.WaitForMultiInstancesClient();
                 else
                 {
-                    this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args ?? Array.Empty<string>());
+                    this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args ?? []);
                     this.SynchronizationContext.Post(() => desktopLifetime.Shutdown());
                     return;
                 }
@@ -2496,7 +2364,7 @@ namespace CarinaStudio.AppSuite
             // parse arguments
             if (desktopLifetime is not null)
             {
-                this.LaunchOptions = this.ParseArguments(desktopLifetime.Args ?? Array.Empty<string>());
+                this.LaunchOptions = this.ParseArguments(desktopLifetime.Args ?? []);
                 if (this.LaunchOptions.TryGetValue(LaunchOptionKeys.IsCleanModeRequested, out bool isCleanMode) && isCleanMode)
                 {
                     this.Logger.LogWarning("Launch in clean mode");
