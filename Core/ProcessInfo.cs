@@ -10,7 +10,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace CarinaStudio.AppSuite;
@@ -20,11 +19,6 @@ namespace CarinaStudio.AppSuite;
 /// </summary>
 public class ProcessInfo : INotifyPropertyChanged
 {
-	// Native symbols.
-	[DllImport("/usr/lib/libSystem.dylib")]
-    static extern int mach_timebase_info(out mach_timebase_info_t info);
-
-
 	// Token for high-frequency update.
 	class HighFrequencyUpdateToken : IDisposable
 	{
@@ -34,19 +28,6 @@ public class ProcessInfo : INotifyPropertyChanged
 		public void Dispose() =>
 			this.processInfo.OnHfTokenDisposed(this);
 	}
-
-
-	// Time-base information for macOS.
-#pragma warning disable IDE1006
-    // ReSharper disable IdentifierTypo
-	[StructLayout(LayoutKind.Sequential)]
-    struct mach_timebase_info_t
-    {
-        public readonly uint numer;
-        public readonly uint denom;
-    }
-    // ReSharper restore IdentifierTypo
-#pragma warning restore IDE1006
 
 
     // Constants.
@@ -69,7 +50,6 @@ public class ProcessInfo : INotifyPropertyChanged
 	volatile bool isFirstUpdate = true;
 	long latestGCCount;
 	readonly ILogger logger;
-	mach_timebase_info_t macOSTimebaseInfo;
 	long previousProcessInfoUpdateTime;
 	TimeSpan previousTotalProcessorTime;
 	readonly Process process = Process.GetCurrentProcess();
@@ -434,20 +414,6 @@ public class ProcessInfo : INotifyPropertyChanged
 			{
 				var processorTime = (totalProcessorTime - this.previousTotalProcessorTime);
 				var updateInterval = (updateTime - this.previousProcessInfoUpdateTime);
-				/* [Workaround] Fix CPU time on macOS
-				 * Please refer to 'Apply Timebase Information to Mach Absolute Time Values' section in https://developer.apple.com/documentation/apple-silicon/addressing-architectural-differences-in-your-macos-code
-				 * (Issue still exists on .NET 7 RC2)
-				 */
-				if (Platform.IsMacOS)
-				{
-					ref var timebaseInfo = ref this.macOSTimebaseInfo;
-#pragma warning disable CA1806
-					if (timebaseInfo.denom == 0)
-						mach_timebase_info(out timebaseInfo);
-#pragma warning restore CA1806
-					if (timebaseInfo.denom > 0)
-						processorTime = processorTime * timebaseInfo.numer / timebaseInfo.denom;
-				}
 				cpuUsagePercentage = (processorTime.TotalMilliseconds * 100.0 / updateInterval);
 				if (Platform.IsNotMacOS)
 					cpuUsagePercentage /= Environment.ProcessorCount;
