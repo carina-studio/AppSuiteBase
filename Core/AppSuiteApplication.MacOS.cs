@@ -245,13 +245,34 @@ partial class AppSuiteApplication
         {
             FontFallbacks = new List<FontFallback>(8).Also(it =>
             {
-                foreach (var fontFamily in embeddedChineseFonts)
+                if (embeddedChineseFonts.IsNotEmpty())
                 {
-                    it.Add(new()
+                    foreach (var fontFamily in embeddedChineseFonts)
                     {
-                        FontFamily = fontFamily,
-                        UnicodeRange = cjkUnicodeRanges,
-                    });
+                        it.Add(new()
+                        {
+                            FontFamily = fontFamily,
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                    }
+                }
+                else
+                {
+                    FontFamily[] chineseFonts =
+                    [
+                        new FontFamily("蘋方-繁"),
+                        new FontFamily("苹方-简"),
+                        new FontFamily("黑體-繁"),
+                        new FontFamily("黑体-简"),
+                    ];
+                    foreach (var fontFamily in chineseFonts)
+                    {
+                        it.Add(new()
+                        {
+                            FontFamily = fontFamily,
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                    }
                 }
             }).ToArray(),
         });
