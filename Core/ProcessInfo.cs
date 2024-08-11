@@ -85,7 +85,7 @@ public class ProcessInfo : INotifyPropertyChanged
 	    // guard to check workaround
 	    typeof(Dispatcher).Assembly.GetName().Version?.Let(version =>
 	    {
-		    if (version.Major > 11 || version.Build > 7)
+		    if (version.Major > 11 || version.Build > 13)
 			    throw new Exception("Need to check workaround of recovering state of Dispatcher.");
 	    });
 	    
