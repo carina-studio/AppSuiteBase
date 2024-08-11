@@ -1255,8 +1255,6 @@ namespace CarinaStudio.AppSuite
                         AttachWndProc(topLevel);
                 });
             }
-            else if (Platform.IsMacOS)
-                DefineExtraStylesForMacOS();
 
             // close popup when clicking on its shadows
             var topLevelInputManagerField = typeof(TopLevel).GetField("_inputManager", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new NotSupportedException();

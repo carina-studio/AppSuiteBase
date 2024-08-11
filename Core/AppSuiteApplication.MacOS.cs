@@ -151,52 +151,6 @@ partial class AppSuiteApplication
     }
 
 
-    // Define extra styles by code for macOS.
-    static void DefineExtraStylesForMacOS()
-    {
-        var templateAppliedHandler = new EventHandler<RoutedEventArgs>((sender, _) =>
-        {
-            if (sender is Control control)
-            {
-                // Monitor Window.IsActive
-                var isAttachingToWindow = false;
-                var emptyTip = new FixedObservableValue<object?>(null);
-                var emptyTipBindingToken = default(IDisposable);
-                var windowIsActiveObserver = new Observer<bool>(isActive =>
-                {
-                    if (isAttachingToWindow)
-                        return;
-                    if (isActive)
-                        emptyTipBindingToken = emptyTipBindingToken.DisposeAndReturnNull();
-                    else if (emptyTipBindingToken is null)
-                        emptyTipBindingToken = control.Bind(ToolTip.TipProperty, emptyTip, BindingPriority.Animation);
-                });
-                var windowIsActiveObserverToken = default(IDisposable);
-                void DetachFromWindow()
-                {
-                    windowIsActiveObserverToken = windowIsActiveObserverToken.DisposeAndReturnNull();
-                    emptyTipBindingToken = emptyTipBindingToken.DisposeAndReturnNull();
-                }
-                void AttachToWindow()
-                {
-                    (TopLevel.GetTopLevel(control) as Window)?.Also(it =>
-                    {
-                        isAttachingToWindow = true;
-                        windowIsActiveObserverToken = it.GetObservable(Window.IsActiveProperty).Subscribe(windowIsActiveObserver);
-                        if (!it.IsActive && emptyTipBindingToken is null)
-                            emptyTipBindingToken = control.Bind(ToolTip.TipProperty, emptyTip, BindingPriority.Animation);
-                        isAttachingToWindow = false;
-                    });
-                }
-                control.AttachedToLogicalTree += (_, _) => AttachToWindow();
-                control.DetachedFromVisualTree += (_, _) => DetachFromWindow();
-                AttachToWindow();
-            }
-        });
-        Button.TemplateAppliedEvent.AddClassHandler(typeof(Button), templateAppliedHandler);
-    }
-
-
     /// <summary>
     /// [Workaround] Ensure that tooltip of given control will be closed if its window is inactive.
     /// </summary>
