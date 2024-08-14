@@ -21,7 +21,6 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Avalonia.Media;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -905,6 +904,11 @@ namespace CarinaStudio.AppSuite.Controls
         // Restore to saved window state if available.
         bool RestoreToSavedWindowState()
         {
+            typeof(Avalonia.Controls.Window).Assembly.GetName().Version?.Let(version =>
+            {
+                if (version.Major > 11 || version.Minor > 1 || version.Build > 3)
+                    throw new Exception("Need to check workaround of restoring window to Maximized on Windows.");
+            });
             var savedWindowState = this.restoredWindowState;
             if (savedWindowState == WindowState.FullScreen)
             {
@@ -914,7 +918,10 @@ namespace CarinaStudio.AppSuite.Controls
             }
             if (this.WindowState != savedWindowState)
             {
-                this.WindowState = savedWindowState; // Size will also be restored in OnPropertyChanged()
+                if (Platform.IsWindows && savedWindowState == WindowState.Maximized && !IsOpened)
+                    this.WindowState = WindowState.Normal; // [Workaround] Need to maximize window after opening to prevent system chrome not showing properly
+                else
+                    this.WindowState = savedWindowState; // Size will also be restored in OnPropertyChanged()
                 return true;
             }
             return false;
