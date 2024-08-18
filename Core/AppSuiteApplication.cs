@@ -520,11 +520,40 @@ namespace CarinaStudio.AppSuite
             // setup global exception handler
             AppDomain.CurrentDomain.UnhandledException += (_, e) =>
             {
+                var logger = this.Logger;
+                var processInfo = this.processInfo;
+                var osName = Platform.IsWindows
+                    ? "Windows"
+                    : Platform.IsMacOS
+                        ? "macOS"
+                        : Platform.IsLinux
+                            ? $"Linux ({Platform.LinuxDistribution}, {Platform.LinuxDesktop})"
+                            : "Unknown";
+                logger.LogError("***** Unhandled application exception *****");
+                logger.LogError("Name: {name}", this.Name);
+                logger.LogError("Version: {name}", this.Assembly.GetName().Version);
+                if (processInfo != null)
+                {
+                    logger.LogError("Process Memory: {memory}", processInfo.PrivateMemoryUsage?.ToFileSizeString() ?? "N/A");
+                    logger.LogError("Managed Heap: {used}/{total}", processInfo.ManagedHeapUsage?.ToFileSizeString() ?? "N/A", processInfo.ManagedHeapUsage?.ToFileSizeString() ?? "N/A");
+                }
+                logger.LogError("Operation System: {osName} {version}", osName, Environment.OSVersion.Version);
                 var exceptionObj = e.ExceptionObject;
                 if (exceptionObj is Exception exception)
-                    this.Logger.LogError(exception, "***** Unhandled application exception *****");
+                {
+                    logger.LogError("Exception: ({ex}) {message}", exceptionObj.GetType().FullName, exception.Message);
+                    logger.LogError("{stackTrace}", exception.StackTrace);
+                    var innerException = exception.InnerException;
+                    while (innerException != null)
+                    {
+                        logger.LogError("Inner Exception: ({ex}) {message}", innerException.GetType().FullName, innerException.Message);
+                        logger.LogError("{stackTrace}", innerException.StackTrace);
+                        innerException = innerException.InnerException;
+                    }
+                }
                 else
-                    this.Logger.LogError("***** Unhandled application exception ***** {exceptionObj}", exceptionObj);
+                    logger.LogError("Exception object: {exceptionObj}", exceptionObj);
+                logger.LogError("*******************************************");
             };
 
             // get file paths
