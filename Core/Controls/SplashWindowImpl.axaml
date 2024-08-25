@@ -2,7 +2,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:media="using:CarinaStudio.AppSuite.Media"
 		xmlns:sys="using:System"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.SplashWindowImpl"
@@ -23,21 +22,17 @@
 		<!-- Dark theme -->
 		<Styles x:Key="darkTheme">
 			<Styles.Resources>
-				<DrawingBrush x:Key="Brush/SplashWindow.Background" Stretch="Fill">
-					<DrawingBrush.Drawing>
-						<ImageDrawing Rect="{x:Static media:WindowBackgroundImage.HorizontalBounds}">
-							<ImageDrawing.ImageSource>
-								<media:WindowBackgroundImage DarkColor="#222222"
-								                             LightColor="#333333"/>
-							</ImageDrawing.ImageSource>
-						</ImageDrawing>
-					</DrawingBrush.Drawing>
-				</DrawingBrush>
+				<SolidColorBrush x:Key="Brush/SplashWindow.Background" Color="#222222"/>
 				<LinearGradientBrush x:Key="Brush/SplashWindow.Border" EndPoint="0%,100%" StartPoint="0%,0%">
 					<GradientStop Offset="0" Color="#444444"/>
 					<GradientStop Offset="1" Color="#171717"/>
 				</LinearGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#ffffff"/>
+				<LinearGradientBrush x:Key="Brush/SplashWindow.Title.Background" EndPoint="0%,100%" StartPoint="0%,0%">
+					<GradientStop Offset="0" Color="#ef222222"/>
+					<GradientStop Offset="0.5" Color="#9f222222"/>
+					<GradientStop Offset="1" Color="#00222222"/>
+				</LinearGradientBrush>
 				<Color x:Key="Color/SplashWindow.Shadow">#000000</Color>
 				<sys:Double x:Key="Double/SplashWindow.TopBar.Opacity">0.75</sys:Double>
 			</Styles.Resources>
@@ -46,21 +41,17 @@
 		<!-- Light theme -->
 		<Styles x:Key="lightTheme">
 			<Styles.Resources>
-				<DrawingBrush x:Key="Brush/SplashWindow.Background" Stretch="Fill">
-					<DrawingBrush.Drawing>
-						<ImageDrawing Rect="{x:Static media:WindowBackgroundImage.HorizontalBounds}">
-							<ImageDrawing.ImageSource>
-								<media:WindowBackgroundImage DarkColor="#cccccc"
-								                             LightColor="#eeeeee"/>
-							</ImageDrawing.ImageSource>
-						</ImageDrawing>
-					</DrawingBrush.Drawing>
-				</DrawingBrush>
+				<SolidColorBrush x:Key="Brush/SplashWindow.Background" Color="#eeeeee"/>
 				<LinearGradientBrush x:Key="Brush/SplashWindow.Border" EndPoint="0%,100%" StartPoint="0%,0%">
 					<GradientStop Offset="0" Color="#f0f0f0"/>
 					<GradientStop Offset="1" Color="#e0e0e0"/>
 				</LinearGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#222222"/>
+				<LinearGradientBrush x:Key="Brush/SplashWindow.Title.Background" EndPoint="0%,100%" StartPoint="0%,0%">
+					<GradientStop Offset="0" Color="#eeeeee"/>
+					<GradientStop Offset="0.5" Color="#7feeeeee"/>
+					<GradientStop Offset="1" Color="#00eeeeee"/>
+				</LinearGradientBrush>
 				<Color x:Key="Color/SplashWindow.Shadow">#ffffff</Color>
 				<sys:Double x:Key="Double/SplashWindow.TopBar.Opacity">0.85</sys:Double>
 			</Styles.Resources>
@@ -77,8 +68,8 @@
 		<!-- macOS resources -->
 		<Styles x:Key="macOSTheme">
 			<Styles.Resources>
-				<Thickness x:Key="Thickness/SplashWindow.Copyright.Margin">0,3,0,0</Thickness>
-				<Thickness x:Key="Thickness/SplashWindow.Version.Margin">0,3,0,0</Thickness>
+				<Thickness x:Key="Thickness/SplashWindow.Copyright.Margin">0,5,0,0</Thickness>
+				<Thickness x:Key="Thickness/SplashWindow.Version.Margin">0,5,0,0</Thickness>
 			</Styles.Resources>
 		</Styles>
 		
@@ -92,26 +83,28 @@
 
 		<!-- Other resources -->
 		<BoxShadows x:Key="BoxShadows/SplashWindow">0 0 10 0 #9f000000</BoxShadows>
-		<CornerRadius x:Key="CornerRadius/SplashWindow">5</CornerRadius>
+		<CornerRadius x:Key="CornerRadius/SplashWindow">10</CornerRadius>
 		<CornerRadius x:Key="CornerRadius/SplashWindow.ColorBar">0,5,5,0</CornerRadius>
+		<CornerRadius x:Key="CornerRadius/SplashWindow.Title.Background">10,10,0,0</CornerRadius>
 		<sys:Double x:Key="Double/SplashWindow.ColorBar.Size">10</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.ContentAnimation.Translation">25</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Copyright.FontSize">12</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Icon.Size">60</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Message.FontSize">12</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Shadow.BlurRadius">10</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.Title.Background.Height">240</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Title.FontSize">18</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Title.MaxWidth">355</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Version.FontSize">12</sys:Double>
 		<DropShadowEffect x:Key="Effect/SplashWindow.Message.Shadow" BlurRadius="5" Color="#000000" OffsetX="0" OffsetY="0"/>
 		<DropShadowEffect x:Key="Effect/SplashWindow.Shadow" BlurRadius="{StaticResource Double/SplashWindow.Shadow.BlurRadius}" Color="{DynamicResource Color/SplashWindow.Shadow}" OffsetX="0" OffsetY="0"/>
-		<Thickness x:Key="Thickness/SplashWindow.BackgroundImage.Margin">0,100,0,0</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.BackgroundImage.Margin">0,0,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Border">0</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.ColorBar.Margin">0,20,0,0</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">0,0,15,0</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.ColorBar.Margin">0,30,0,0</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">5,0,20,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Margin">10</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Padding">30,20,30,30</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Padding">30,30,30,30</Thickness>
 		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1.2</sys:TimeSpan>
 
 	</Window.Resources>
@@ -141,6 +134,10 @@
 			<Border BorderBrush="{x:Null}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{Binding #backgroundBorder.CornerRadius}">
 				<Image Margin="{StaticResource Thickness/SplashWindow.BackgroundImage.Margin}" Opacity="{Binding #window.BackgroundImageOpacity}" Source="{Binding #window.BackgroundImage}" Stretch="UniformToFill" StretchDirection="Both"/>
 			</Border>
+			<Border Background="{DynamicResource Brush/SplashWindow.Title.Background}"
+			        CornerRadius="{StaticResource CornerRadius/SplashWindow.Title.Background}"
+			        Height="{StaticResource Double/SplashWindow.Title.Background.Height}" 
+			        VerticalAlignment="Top"/>
 			
 			<!-- Color bar -->
 			<Border Name="colorBar" 
@@ -335,7 +332,7 @@
 
 			<!-- Progress -->
 			<Border BorderBrush="{x:Null}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{Binding #backgroundBorder.CornerRadius}" Height="50" VerticalAlignment="Bottom">
-				<ProgressBar Name="progressBar" Background="{x:Null}" Margin="-10,0,-10,-2" Maximum="1" Value="0" VerticalAlignment="Bottom"/>
+				<ProgressBar Name="progressBar" Background="{x:Null}" Margin="-10,0,-10,-1" Maximum="1" Value="0" VerticalAlignment="Bottom"/>
 			</Border>
 
 			<!-- Border -->

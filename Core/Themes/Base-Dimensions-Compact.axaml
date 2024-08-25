@@ -163,15 +163,15 @@
 	<Thickness x:Key="Thickness/ScrollViewer.ScrollBar.Margin.Vertical">0</Thickness>
 	
 	<!-- Shadow -->
-	<BoxShadows x:Key="BoxShadows/Shadow">0 0 8 0 #50000000</BoxShadows>
+	<BoxShadows x:Key="BoxShadows/Shadow">0 0 6 0 #50000000</BoxShadows>
 	<BoxShadows x:Key="BoxShadows/Shadow.Heavy">0 0 8 0 #60000000</BoxShadows>
-	<BoxShadows x:Key="BoxShadows/Shadow.Inner">inset 0 0 8 0 #50000000</BoxShadows>
+	<BoxShadows x:Key="BoxShadows/Shadow.Inner">inset 0 0 6 0 #50000000</BoxShadows>
 	<BoxShadows x:Key="BoxShadows/Shadow.Inner.Heavy">inset 0 0 8 0 #60000000</BoxShadows>
-	<BoxShadows x:Key="BoxShadows/Shadow.Inner.Light">inset 0 0 8 0 #40000000</BoxShadows>
-	<BoxShadows x:Key="BoxShadows/Shadow.Light">0 0 8 0 #40000000</BoxShadows>
-	<sys:Double x:Key="Double/Shadow.Size">8</sys:Double>
+	<BoxShadows x:Key="BoxShadows/Shadow.Inner.Light">inset 0 0 4 0 #27000000</BoxShadows>
+	<BoxShadows x:Key="BoxShadows/Shadow.Light">0 0 4 0 #27000000</BoxShadows>
+	<sys:Double x:Key="Double/Shadow.Size">6</sys:Double>
 	<sys:Double x:Key="Double/Shadow.Size.Heavy">8</sys:Double>
-	<sys:Double x:Key="Double/Shadow.Size.Light">8</sys:Double>
+	<sys:Double x:Key="Double/Shadow.Size.Light">4</sys:Double>
 
 	<!-- StatusBar -->
 	<Thickness x:Key="Thickness/StatusBar.Item.Margin">1,3,1,3</Thickness>
@@ -181,15 +181,15 @@
 	<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Padding">5,2,5,2</Thickness>
 
 	<!-- TabItem -->
-	<CornerRadius x:Key="CornerRadius/TabItem.Header">0</CornerRadius>
+	<CornerRadius x:Key="CornerRadius/TabItem.Header">4,4,0,0</CornerRadius>
 	<sys:Double x:Key="Double/TabItem.Header.ColorBar.Height">3</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.FontSize">14</sys:Double>
-	<sys:Double x:Key="Double/TabItem.Header.Height">32</sys:Double>
+	<sys:Double x:Key="Double/TabItem.Header.Height">34</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.InsertionIndicator.Width">20</sys:Double>
 	<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">8,0,0,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">4</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,8,0</Thickness>
-	<Thickness x:Key="Thickness/TabItem.Header.Padding">12,7,12,5</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Padding">12,8,12,6</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Separator.Margin">0,7,0,5</Thickness>
 
 	<!-- TextBox -->

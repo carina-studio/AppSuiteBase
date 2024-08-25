@@ -94,7 +94,7 @@
 						VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
 						Width="{DynamicResource Double/ButtonSpinner.Button.Icon.Size}">
 
-						<ContentPresenter
+						<ContentPresenter x:Name="PART_Content"
 							Content="{TemplateBinding Content}"
 							ContentTemplate="{TemplateBinding ContentTemplate}"/>
 					</Viewbox>
@@ -112,6 +112,9 @@
 		<Setter Property="Background" Value="{DynamicResource RepeatButtonBackgroundDisabled}" />
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource RepeatButtonForegroundDisabled}" />
     </Style>
+	<Style Selector="ButtonSpinner /template/ RepeatButton:disabled /template/ ContentPresenter#PART_Content">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}" />
+	</Style>
 	<Style Selector="ButtonSpinner[ButtonSpinnerLocation=Left] /template/ RepeatButton#PART_DecreaseButton">
 		<Setter Property="BorderThickness" Value="{Binding $parent[ButtonSpinner].BorderThickness, Converter={x:Static converters:ThicknessConverters.Right}}"/>
 	</Style>
@@ -2585,7 +2588,7 @@
 		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
 	</Style>
 	<Style Selector="Button.TabItem_Button">
-		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundTransparent}"/>
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Content.Height}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Button.Margin}"/>
@@ -2596,6 +2599,12 @@
 	</Style>
 	<Style Selector="Button.TabItem_Button:pointerover">
 		<Setter Property="Opacity" Value="1"/>
+	</Style>
+	<Style Selector="Button.TabItem_Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+	</Style>
+	<Style Selector="Button.TabItem_Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
 	</Style>
 	<Style Selector=":is(Image).TabItem_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
@@ -2708,7 +2717,7 @@
 									</Border>
 									<Border Background="{DynamicResource Brush/TabItem.Header.Background.Selected}" 
 									        BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" 
-									        BorderThickness="1,0,1,0" 
+									        BorderThickness="1,1,1,0" 
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
 									        Opacity="{TemplateBinding IsSelected, Converter={x:Static converters:TabItemOpacityConverters.IsSelectedToOpacity}}">
 										<Border.Transitions>
@@ -2723,7 +2732,7 @@
 									                  HorizontalAlignment="Stretch" 
 									                  Margin="{DynamicResource Thickness/TabItem.Header.Padding}" 
 									                  VerticalAlignment="Center"/>
-									<Rectangle Fill="{DynamicResource Brush/Accent}"
+									<!--Rectangle Fill="{DynamicResource Brush/Accent}"
 									           Height="{DynamicResource Double/TabItem.Header.ColorBar.Height}"
 									           HorizontalAlignment="Stretch"
 									           IsVisible="{TemplateBinding IsSelected}"
@@ -2744,7 +2753,7 @@
 												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
 											</Transitions>
 										</Rectangle.Transitions>
-									</Rectangle>
+									</Rectangle-->
 								</Panel>
 							</Border>
 							

@@ -623,7 +623,6 @@
 								<Button Classes="accent" Content="Button" IsEnabled="False" Margin="5"/>
 								<Button Margin="5">
 									<Grid ColumnDefinitions="Auto,*">
-										<PathIcon Data=""/>
 										<Image Classes="Button_Icon" Source="{DynamicResource Image/Icon.Folder.Outline}"/>
 										<TextBlock Classes="Button_Text" Grid.Column="1" Text="Button"/>
 									</Grid>

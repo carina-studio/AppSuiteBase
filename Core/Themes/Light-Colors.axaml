@@ -94,14 +94,14 @@
 	<StaticResourceExtension x:Key="Color/StatusBar.Border" ResourceKey="Color/Shadow.Darken"/>
 
 	<!-- TabControl -->
-	<Color x:Key="Color/TabControl.TabStrip.Border">#d0d0d0</Color>
+	<Color x:Key="Color/TabControl.TabStrip.Border">#d7d7d7</Color>
 
 	<!-- TabItem -->
 	<Color x:Key="Color/TabItem.Header.Background">#00f7f7f7</Color>
 	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#ffffff</Color>
 	<Color x:Key="Color/TabItem.Header.Background.Selected">#f7f7f7</Color>
 	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#e0e0e0</Color>
-	<Color x:Key="Color/TabItem.Header.Border.Selected">#d0d0d0</Color>
+	<Color x:Key="Color/TabItem.Header.Border.Selected">#d7d7d7</Color>
 	<Color x:Key="Color/TabItem.Header.Separator">#17000000</Color>
 
 	<!-- TextBox -->

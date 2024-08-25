@@ -30,20 +30,11 @@
 	<SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="{DynamicResource Color/Button.Background.PointerOver}"/>
 	<SolidColorBrush x:Key="ButtonBackgroundPressed" Color="{DynamicResource Color/Button.Background.Pressed}"/>
 	<SolidColorBrush x:Key="ButtonBackgroundTransparent" Color="{DynamicResource Color/Button.Background.Transparent}"/>
-	<LinearGradientBrush x:Key="ButtonBorderBrush" EndPoint="0%,100%" StartPoint="0%,0%">
-		<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border.Light}"/>
-		<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border.Dark}"/>
-	</LinearGradientBrush>
-	<LinearGradientBrush x:Key="ButtonBorderBrushTransparent" EndPoint="0%,100%" StartPoint="0%,0%">
-		<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border.Light.Transparent}"/>
-		<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border.Dark.Transparent}"/>
-	</LinearGradientBrush>
+	<SolidColorBrush x:Key="ButtonBorderBrush" Color="{DynamicResource Color/Control.Border}"/>
+	<SolidColorBrush x:Key="ButtonBorderBrushTransparent" Color="{DynamicResource Color/Control.Border.Transparent}"/>
 	<StaticResourceExtension x:Key="ButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrush"/>
 	<StaticResourceExtension x:Key="ButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
-	<LinearGradientBrush x:Key="ButtonBorderBrushPressed" EndPoint="0%,100%" StartPoint="0%,0%">
-		<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border.Dark}"/>
-		<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border.Dark}"/>
-	</LinearGradientBrush>
+	<SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="{DynamicResource Color/Control.Border.Dark}"/>
 	<Color x:Key="Color/Button.Background">#ffffff</Color>
 	<Color x:Key="Color/Button.Background.Disabled">#ffffff</Color>
 	<Color x:Key="Color/Button.Background.PointerOver">#ffffff</Color>

@@ -8,10 +8,7 @@
 	<Color x:Key="Color/Button.Background.PointerOver">#3d3d3d</Color>
 	<Color x:Key="Color/Button.Background.Pressed">#202020</Color>
 	<Color x:Key="Color/Button.Background.Transparent">#002d2d2d</Color>
-	<LinearGradientBrush x:Key="ButtonBorderBrush" EndPoint="0%,100%" StartPoint="0%,0%">
-		<GradientStop Offset="0" Color="{DynamicResource Color/Control.Border}"/>
-		<GradientStop Offset="1" Color="{DynamicResource Color/Control.Border.Dark}"/>
-	</LinearGradientBrush>
+	<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{DynamicResource Color/Control.Border.Light}"/>
 	
 	<!-- ComboBox -->
 	<SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#272727"/>
