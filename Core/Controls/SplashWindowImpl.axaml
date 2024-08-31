@@ -61,7 +61,7 @@
 		<Styles x:Key="linuxTheme">
 			<Styles.Resources>
 				<Thickness x:Key="Thickness/SplashWindow.Copyright.Margin">0,1,0,0</Thickness>
-				<Thickness x:Key="Thickness/SplashWindow.Version.Margin">0,1,0,0</Thickness>
+				<Thickness x:Key="Thickness/SplashWindow.Version.Margin">0,3,0,0</Thickness>
 			</Styles.Resources>
 		</Styles>
 		
@@ -77,7 +77,7 @@
 		<Styles x:Key="windowsTheme">
 			<Styles.Resources>
 				<Thickness x:Key="Thickness/SplashWindow.Copyright.Margin">0,1,0,0</Thickness>
-				<Thickness x:Key="Thickness/SplashWindow.Version.Margin">0,1,0,0</Thickness>
+				<Thickness x:Key="Thickness/SplashWindow.Version.Margin">0,3,0,0</Thickness>
 			</Styles.Resources>
 		</Styles>
 
@@ -86,14 +86,14 @@
 		<CornerRadius x:Key="CornerRadius/SplashWindow">10</CornerRadius>
 		<CornerRadius x:Key="CornerRadius/SplashWindow.ColorBar">0,5,5,0</CornerRadius>
 		<CornerRadius x:Key="CornerRadius/SplashWindow.Title.Background">10,10,0,0</CornerRadius>
-		<sys:Double x:Key="Double/SplashWindow.ColorBar.Size">10</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.ColorBar.Height">60</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.ColorBar.Width">10</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.ContentAnimation.Translation">25</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Copyright.FontSize">12</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Icon.Size">60</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Message.FontSize">12</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Shadow.BlurRadius">10</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Title.Background.Height">240</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Title.FontSize">18</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.Title.FontSize">36</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Title.MaxWidth">355</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Version.FontSize">12</sys:Double>
 		<DropShadowEffect x:Key="Effect/SplashWindow.Message.Shadow" BlurRadius="5" Color="#000000" OffsetX="0" OffsetY="0"/>
@@ -101,10 +101,9 @@
 		<Thickness x:Key="Thickness/SplashWindow.BackgroundImage.Margin">0,0,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Border">0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.ColorBar.Margin">0,30,0,0</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Icon.Margin">5,0,20,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Margin">10</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Padding">30,30,30,30</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Padding">60,30,60,30</Thickness>
 		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1.2</sys:TimeSpan>
 
 	</Window.Resources>
@@ -142,11 +141,11 @@
 			<!-- Color bar -->
 			<Border Name="colorBar" 
 			        CornerRadius="{DynamicResource CornerRadius/SplashWindow.ColorBar}"
-			        Height="{DynamicResource Double/SplashWindow.Icon.Size}"
+			        Height="{StaticResource Double/SplashWindow.ColorBar.Height}"
 			        HorizontalAlignment="Left" 
-			        Margin="{DynamicResource Thickness/SplashWindow.ColorBar.Margin}"
+			        Margin="{StaticResource Thickness/SplashWindow.ColorBar.Margin}"
 			        VerticalAlignment="Top"
-			        Width="{DynamicResource Double/SplashWindow.ColorBar.Size}">
+			        Width="{StaticResource Double/SplashWindow.ColorBar.Width}">
 				<Border.Background>
 					<SolidColorBrush Color="{Binding #window.AccentColor}"/>
 				</Border.Background>
@@ -164,39 +163,10 @@
 			</Border>
 			
 			<!-- Content -->
-			<Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Stretch" Margin="{StaticResource Thickness/SplashWindow.Padding}" RowDefinitions="Auto,*" VerticalAlignment="Stretch">
-
-				<!-- Icon -->
-				<Image Name="iconImage" 
-				       Grid.Column="0" 
-				       Height="{StaticResource Double/SplashWindow.Icon.Size}" 
-				       Margin="{StaticResource Thickness/SplashWindow.Icon.Margin}" 
-				       Opacity="0" 
-				       Source="{Binding #window.IconBitmap}" 
-				       Width="{DynamicResource Double/SplashWindow.Icon.Size}" 
-				       VerticalAlignment="Center">
-					<Image.RenderTransform>
-						<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
-							<TranslateTransform.Transitions>
-								<Transitions>
-									<DoubleTransition Property="X" 
-									                  Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" 
-									                  Easing="ExponentialEaseOut"/>
-								</Transitions>
-							</TranslateTransform.Transitions>
-						</TranslateTransform>
-					</Image.RenderTransform>
-					<Image.Transitions>
-						<Transitions>
-							<DoubleTransition Property="Opacity" 
-							                  Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" 
-							                  Easing="ExponentialEaseOut"/>
-						</Transitions>
-					</Image.Transitions>
-				</Image>
+			<Grid HorizontalAlignment="Stretch" Margin="{StaticResource Thickness/SplashWindow.Padding}" RowDefinitions="Auto,*" VerticalAlignment="Stretch">
 
 				<!-- Title and version -->
-				<Grid Grid.Column="1" HorizontalAlignment="Left" RowDefinitions="Auto,Auto,*" VerticalAlignment="Center">
+				<Grid HorizontalAlignment="Left" RowDefinitions="Auto,Auto,*" VerticalAlignment="Center">
 					
 					<!-- Title -->
 					<TextBlock Name="titleTextBlock" 
@@ -207,6 +177,35 @@
 					           MaxWidth="{StaticResource Double/SplashWindow.Title.MaxWidth}" 
 					           Opacity="0" 
 					           Text="{Binding #window.ApplicationName}" 
+					           TextTrimming="CharacterEllipsis">
+						<TextBlock.RenderTransform>
+							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
+								<TranslateTransform.Transitions>
+									<Transitions>
+										<DoubleTransition Property="X" 
+										                  Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" 
+										                  Easing="ExponentialEaseOut"/>
+									</Transitions>
+								</TranslateTransform.Transitions>
+							</TranslateTransform>
+						</TextBlock.RenderTransform>
+						<TextBlock.Transitions>
+							<Transitions>
+								<DoubleTransition Property="Opacity" 
+								                  Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" 
+								                  Easing="ExponentialEaseOut"/>
+							</Transitions>
+						</TextBlock.Transitions>
+					</TextBlock>
+					
+					<!-- Version -->
+					<TextBlock Name="versionTextBlock" 
+					           Effect="{StaticResource Effect/SplashWindow.Shadow}" 
+					           FontSize="{StaticResource Double/SplashWindow.Version.FontSize}" 
+					           Grid.Row="1"
+					           Margin="{DynamicResource Thickness/SplashWindow.Version.Margin}"
+					           Opacity="0" 
+					           Text="{Binding #window.Version}" 
 					           TextTrimming="CharacterEllipsis">
 						<TextBlock.RenderTransform>
 							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
@@ -230,14 +229,14 @@
 						</TextBlock.Transitions>
 					</TextBlock>
 					
-					<!-- Version -->
-					<TextBlock Name="versionTextBlock" 
+					<!-- Copyright -->
+					<TextBlock Name="copyrightTextBlock" 
 					           Effect="{StaticResource Effect/SplashWindow.Shadow}" 
-					           FontSize="{StaticResource Double/SplashWindow.Version.FontSize}" 
-					           Grid.Row="1"
-					           Margin="{DynamicResource Thickness/SplashWindow.Version.Margin}"
+					           FontSize="{StaticResource Double/SplashWindow.Copyright.FontSize}" 
+					           Grid.Row="2"
+					           Margin="{DynamicResource Thickness/SplashWindow.Copyright.Margin}"
 					           Opacity="0" 
-					           Text="{Binding #window.Version}" 
+					           Text="{Binding #window.Copyright, Mode=OneTime}"
 					           TextTrimming="CharacterEllipsis">
 						<TextBlock.RenderTransform>
 							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
@@ -261,43 +260,11 @@
 						</TextBlock.Transitions>
 					</TextBlock>
 					
-					<!-- Copyright -->
-					<TextBlock Name="copyrightTextBlock" 
-					           Effect="{StaticResource Effect/SplashWindow.Shadow}" 
-					           FontSize="{StaticResource Double/SplashWindow.Copyright.FontSize}" 
-					           Grid.Row="2"
-					           Margin="{DynamicResource Thickness/SplashWindow.Copyright.Margin}"
-					           Opacity="0" 
-					           Text="{Binding #window.Copyright, Mode=OneTime}"
-					           TextTrimming="CharacterEllipsis">
-						<TextBlock.RenderTransform>
-							<TranslateTransform X="{StaticResource Double/SplashWindow.ContentAnimation.Translation}">
-								<TranslateTransform.Transitions>
-									<Transitions>
-										<DoubleTransition Property="X" 
-										                  Delay="0:0:0.2" 
-										                  Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" 
-										                  Easing="ExponentialEaseOut"/>
-									</Transitions>
-								</TranslateTransform.Transitions>
-							</TranslateTransform>
-						</TextBlock.RenderTransform>
-						<TextBlock.Transitions>
-							<Transitions>
-								<DoubleTransition Property="Opacity" 
-								                  Delay="0:0:0.2" 
-								                  Duration="{StaticResource TimeSpan/SplashWindow.ContentAnimation}" 
-								                  Easing="ExponentialEaseOut"/>
-							</Transitions>
-						</TextBlock.Transitions>
-					</TextBlock>
-					
 				</Grid>
 
 				<!-- Message -->
 				<Panel Name="messageContainer"
 				       ClipToBounds="False"
-				       Grid.ColumnSpan="4" 
 				       Grid.Row="1" 
 				       HorizontalAlignment="Center" 
 				       Margin="{StaticResource Thickness/SplashWindow.Message.Margin}" 

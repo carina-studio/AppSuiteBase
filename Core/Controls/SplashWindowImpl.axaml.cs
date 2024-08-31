@@ -100,11 +100,6 @@ class SplashWindowImpl : Avalonia.Controls.Window
 			{
 				(control.RenderTransform as ScaleTransform)?.Let(it => it.ScaleY = 1);
 			});
-			this.Get<Control>("iconImage").Let(control =>
-			{
-				control.Opacity = 1;
-				(control.RenderTransform as TranslateTransform)?.Let(it => it.X = 0);
-			});
 			this.Get<Control>("titleTextBlock").Let(control =>
 			{
 				control.Opacity = 1;
