@@ -2555,6 +2555,8 @@ namespace CarinaStudio.AppSuite
                     this.OnWindowOpened(window);
                 }
             }, RoutingStrategies.Direct);
+            if (Platform.IsWindows)
+                this.AttachToMessageWindow();
 
             // start loading persistent state and settings
             this.loadingInitPersistentStateTask = this.LoadPersistentStateAsync(true);
