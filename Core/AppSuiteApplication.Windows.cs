@@ -20,10 +20,11 @@ namespace CarinaStudio.AppSuite;
 unsafe partial class AppSuiteApplication
 {
     // Fields.
-    readonly Dictionary<TopLevel, nint> baseWndProcPointers = new();
+    readonly Dictionary<object, nint> baseWndProcPointers = new();
+    bool isMessageWindowWndProcAttached = false;
     Win32.ITaskbarList3? windowsTaskbarList;
     // ReSharper disable once CollectionNeverQueried.Local
-    readonly Dictionary<TopLevel, Win32.WNDPROC> wndProcStubDelegates = new();
+    readonly Dictionary<object, Win32.WNDPROC> wndProcStubDelegates = new();
 
 
     // Apply current theme mode on given window.
@@ -66,16 +67,43 @@ unsafe partial class AppSuiteApplication
             }
         }
     }
-    
-    
-    // Attach window procedure to given TopLevel.
-    void AttachWndProc(TopLevel topLevel)
+
+
+    // Attach to internal message window to catch unhandled exception.
+    void AttachToMessageWindow()
     {
-        // get handle
-        var hWnd = topLevel.TryGetPlatformHandle()?.Handle ?? default;
+        if (this.isMessageWindowWndProcAttached)
+            return;
+        var win32PlatformType = typeof(Win32PlatformOptions).Assembly.GetType("Avalonia.Win32.Win32Platform") ?? throw new PlatformNotSupportedException("Class Avalonia.Win32.Win32Platform not found.");
+        var instanceField = win32PlatformType.GetField("s_instance", BindingFlags.Static | BindingFlags.NonPublic) ?? throw new PlatformNotSupportedException("Field Avalonia.Win32.Win32Platform.s_instance not found.");
+        var messageHwndField = win32PlatformType.GetField("_hwnd", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new PlatformNotSupportedException("Field Avalonia.Win32.Win32Platform._hwnd not found.");
+        var hWnd = (IntPtr)messageHwndField.GetValue(instanceField.GetValue(null))!;
+        if (hWnd != default)
+        {
+            AttachWndProc(hWnd);
+            this.isMessageWindowWndProcAttached = true;
+        }
+        else
+            Logger.LogError("No message window to attach WndProc");
+    }
+    
+    
+    // Attach window procedure to given window.
+    void AttachWndProc(object window)
+    {
+        // check handle
+        var topLevel = window as TopLevel;
+        var hWnd = default(IntPtr);
+        if (topLevel is not null)
+            hWnd = topLevel.TryGetPlatformHandle()?.Handle ?? default;
+        else if (window is IntPtr intPtr)
+            hWnd = intPtr;
         if (hWnd == default)
         {
-            this.Logger.LogError("No handle for TopLevel {id:x8} to attach WndProc", topLevel.GetHashCode());
+            if (topLevel is not null)
+                this.Logger.LogError("No handle for TopLevel {id:x8} to attach WndProc", topLevel.GetHashCode());
+            else
+                this.Logger.LogError("No handle for {window} to attach WndProc", window);
             return;
         }
 
@@ -83,10 +111,13 @@ unsafe partial class AppSuiteApplication
         var baseWndProc = Win32.GetWindowLongPtr(hWnd, Win32.GWL.WNDPROC);
         if (baseWndProc == default)
         {
-            this.Logger.LogError("Base WndProc not found for TopLevel {id:x8} to attach WndProc", topLevel.GetHashCode());
+            if (topLevel is not null)
+                this.Logger.LogError("Base WndProc not found for TopLevel {id:x8} to attach WndProc", topLevel.GetHashCode());
+            else
+                this.Logger.LogError("Base WndProc not found for window {hWnd} to attach WndProc", hWnd);
             return;
         }
-        this.baseWndProcPointers.Add(topLevel, baseWndProc);
+        this.baseWndProcPointers.Add(window, baseWndProc);
 
         // prepare stub to attach window procedure
         IntPtr WndProcStub(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam)
@@ -97,8 +128,16 @@ unsafe partial class AppSuiteApplication
             }
             catch (Exception ex)
             {
-                this.Logger.LogWarning(ex, "Unhandled exception occurred in application lifetime caught by WndProc of TopLevel {id:x8}", topLevel.GetHashCode());
-                LogToConsole($"Unhandled exception occurred in application lifetime caught by WndProc of TopLevel {topLevel.GetHashCode():x8}: {ex.GetType().Name}, {ex.Message}");
+                if (topLevel is not null)
+                {
+                    this.Logger.LogWarning(ex, "Unhandled exception occurred in application lifetime caught by WndProc of TopLevel {id:x8}", topLevel.GetHashCode());
+                    LogToConsole($"Unhandled exception occurred in application lifetime caught by WndProc of TopLevel {topLevel.GetHashCode():x8}: {ex.GetType().Name}, {ex.Message}");
+                }
+                else
+                {
+                    this.Logger.LogWarning(ex, "Unhandled exception occurred in application lifetime caught by WndProc of window {hWnd}", hWnd);
+                    LogToConsole($"Unhandled exception occurred in application lifetime caught by WndProc of window {hWnd}: {ex.GetType().Name}, {ex.Message}");
+                }
                 LogToConsole(ex.StackTrace);
                 if (!this.HandleExceptionOccurredInApplicationLifetime(ex))
                     throw;
@@ -107,15 +146,23 @@ unsafe partial class AppSuiteApplication
             }
         }
         var wndProcStub = new Win32.WNDPROC(WndProcStub);
-        this.wndProcStubDelegates.Add(topLevel, wndProcStub); // keep delegate from GC
+        this.wndProcStubDelegates.Add(window, wndProcStub); // keep delegate from GC
 
         // attach window procedure
-        this.Logger.LogTrace("Attach WndProc to TopLevel {id:x8}", topLevel.GetHashCode());
-        Win32.SetWindowLongPtr(hWnd, Win32.GWL.WNDPROC, wndProcStub);
-        topLevel.Closed += this.OnTopLevelClosedToDetachWndProc;
+        if (topLevel is not null)
+        {
+            this.Logger.LogTrace("Attach WndProc to TopLevel {id:x8}", topLevel.GetHashCode());
+            Win32.SetWindowLongPtr(hWnd, Win32.GWL.WNDPROC, wndProcStub);
+            topLevel.Closed += this.OnTopLevelClosedToDetachWndProc;
+        }
+        else
+        {
+            this.Logger.LogTrace("Attach WndProc to window {hWnd}", hWnd);
+            Win32.SetWindowLongPtr(hWnd, Win32.GWL.WNDPROC, wndProcStub);
+        }
     }
-    
-    
+
+
     // Detach window procedure from given TopLevel.
     void DetachWndProc(TopLevel topLevel)
     {
