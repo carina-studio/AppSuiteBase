@@ -329,6 +329,7 @@ namespace CarinaStudio.AppSuite
         static readonly SettingKey<string> AppVersionKey = new("ApplicationVersion", "");
         static double CachedCustomScreenScaleFactor = double.NaN;
         static readonly SettingKey<bool> DoNotPromptBeforeTakingMemorySnapshotKey = new("DoNotPromptBeforeTakingMemorySnapshot", false);
+        static bool ForceThrowingUnhandledException = false;
         static readonly string InitSettingsFilePath = Path.Combine(AppDirectoryPath, "InitSettings.json");
         static InitSettingsImpl? InitSettingsInstance;
         static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new("IsAcceptNonStableApplicationUpdateInitialized", false);
@@ -740,7 +741,77 @@ namespace CarinaStudio.AppSuite
 #pragma warning disable CS0618
             var builder = BuildApplication<TApp>(setupAction);
 #pragma warning restore CS0618
-            return builder.StartWithClassicDesktopLifetime(args);
+            var app = default(Avalonia.Application);
+            var asApp = default(IAppSuiteApplication);
+            var asAppImpl = default(AppSuiteApplication);
+            var logger = default(Microsoft.Extensions.Logging.ILogger);
+            var exitCode = 0;
+            void SetupAppAndLogger()
+            {
+                if (app is not null)
+                    return;
+                app = builder.Instance;
+                asApp = app as IAppSuiteApplication;
+                asAppImpl = app as AppSuiteApplication;
+                logger = asApp?.LoggerFactory.CreateLogger(asApp.GetType().Name);
+            }
+            while (true)
+            {
+                SetupAppAndLogger();
+                try
+                {
+                    if (app?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+                    {
+                        var startMethod = desktopLifetime.GetType().GetMethod("Start", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                        if (startMethod is null)
+                        {
+                            ForceThrowingUnhandledException = true;
+                            throw new InvalidOperationException("Unable to get Start() method to restart application lifetime.");
+                        }
+                        logger?.LogWarning("Restart application lifetime");
+                        try
+                        {
+                            exitCode = (int)startMethod.Invoke(desktopLifetime, [args])!;
+                        }
+                        catch (TargetInvocationException ex)
+                        {
+                            if (!ForceThrowingUnhandledException && ex.InnerException is { } innerEx)
+                            {
+                                logger?.LogError(ex, "Unhandled exception occurred in application lifetime");
+                                LogToConsole($"Unhandled exception occurred in application lifetime: {innerEx.GetType().Name}, {innerEx.Message}");
+                                LogToConsole(innerEx.StackTrace);
+                                if (asAppImpl is null || !asAppImpl.HandleExceptionOccurredInApplicationLifetime(innerEx))
+                                {
+                                    ForceThrowingUnhandledException = true;
+                                    throw;
+                                }
+                                logger?.LogWarning("Exception was handled");
+                            }
+                            else
+                                throw;
+                        }
+                    }
+                    else
+                        exitCode = builder.StartWithClassicDesktopLifetime(args);
+                }
+                catch (Exception ex)
+                {
+                    if (ForceThrowingUnhandledException)
+                        throw;
+                    SetupAppAndLogger();
+                    logger?.LogError(ex, "Unhandled exception occurred in application lifetime");
+                    LogToConsole($"Unhandled exception occurred in application lifetime: {ex.GetType().Name}, {ex.Message}");
+                    LogToConsole(ex.StackTrace);
+                    if (asAppImpl is null || !asAppImpl.HandleExceptionOccurredInApplicationLifetime(ex))
+                        throw;
+                    logger?.LogWarning("Exception was handled");
+                }
+                SetupAppAndLogger();
+                if (asApp?.IsShutdownStarted == false)
+                    continue;
+                logger?.LogWarning("Application lifetime was exited with code {code}", exitCode);
+                return exitCode;
+            }
         }
 
 
@@ -2312,7 +2383,24 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <param name="ex">Exception.</param>
         /// <returns>True if exception was handled properly.</returns>
-        protected virtual bool OnExceptionOccurredInApplicationLifetime(Exception ex) => false;
+        protected virtual bool OnExceptionOccurredInApplicationLifetime(Exception ex)
+        {
+            if (ex is IndexOutOfRangeException)
+            {
+                var stackTrace = ex.StackTrace ?? "";
+                if (stackTrace.Contains("at Avalonia.Media.GlyphRun.FindNearestCharacterHit("))
+                {
+                    this.Logger.LogWarning("Ignore IndexOutOfRangeException thrown by GlyphRun.FindNearestCharacterHit() caused by unknown reason");
+                    return true;
+                }
+                if (stackTrace.Contains(" at Avalonia.Media.GlyphRun.GetDistanceFromCharacterHit("))
+                {
+                    this.Logger.LogWarning("Ignore IndexOutOfRangeException thrown by GlyphRun.GetDistanceFromCharacterHit() caused by unknown reason");
+                    return true;
+                }
+            }
+            return false;
+        }
 
 
         /// <summary>
@@ -2326,14 +2414,16 @@ namespace CarinaStudio.AppSuite
             Dispatcher.UIThread.UnhandledException += (_, e) =>
             {
                 var ex = e.Exception;
-                Logger.LogError(ex, "Unhandled exception occurred in application lifetime");
-                LogToConsole($"Unhandled exception occurred in application lifetime: {ex.GetType().Name}, {ex.Message}");
+                Logger.LogError(ex, "Unhandled exception occurred in dispatcher");
+                LogToConsole($"Unhandled exception occurred in dispatcher: {ex.GetType().Name}, {ex.Message}");
                 LogToConsole(ex.StackTrace);
                 if (HandleExceptionOccurredInApplicationLifetime(ex))
                 {
                     Logger.LogWarning("Exception was handled");
                     e.Handled = true;
                 }
+                else
+                    ForceThrowingUnhandledException = true;
             };
             
             // check performance
