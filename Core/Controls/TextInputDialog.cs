@@ -128,7 +128,7 @@ public class TextInputDialog : CommonDialog<string?>
         using var checkBoxMessageBindingToken = this.BindValueToDialog(dialog, TextInputDialogImpl.CheckBoxMessageProperty, this.checkBoxMessage);
         using var messageBindingToken = this.BindValueToDialog(dialog, TextInputDialogImpl.MessageProperty, this.message);
         dialog.Text = this.initialText;
-        using var titleBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
+        using var titleBindingToken = this.BindValueToDialog(dialog, Avalonia.Controls.Window.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
         var result = await (owner != null
             ? dialog.ShowDialog<string?>(owner)
             : dialog.ShowDialog<string?>());

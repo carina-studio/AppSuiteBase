@@ -61,7 +61,7 @@ namespace CarinaStudio.AppSuite.Controls
                             this.content.Opacity = it.EndValue;
                         if (this.isContentBlurred)
                         {
-                            if (this.content?.Effect == this.contentBlurEffect)
+                            if (ReferenceEquals(this.content?.Effect, this.contentBlurEffect))
                                 this.content!.Effect = null;
                             this.contentBlurEffect!.Radius = 0;
                         }
@@ -91,7 +91,7 @@ namespace CarinaStudio.AppSuite.Controls
 
             // attach to window
             window.Closed += (_, _) => this.fadeInContentAction.Cancel();
-            window.GetObservable(Window.ContentProperty).Subscribe(content =>
+            window.GetObservable(ContentControl.ContentProperty).Subscribe(content =>
             {
                 this.fadeInContentAction.Cancel();
                 if (this.contentFadingAnimator != null)

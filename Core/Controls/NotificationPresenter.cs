@@ -55,7 +55,7 @@ public class NotificationPresenter : TemplatedControl, INotificationPresenter
     {
         // check state
         this.VerifyAccess();
-        if (notification.Presenter is NotificationPresenter currentPresenter)
+        if (notification.Presenter is { } currentPresenter)
         {
             if (currentPresenter == this)
                 return;

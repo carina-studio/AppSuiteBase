@@ -24,7 +24,7 @@ namespace CarinaStudio.AppSuite.Controls
             base.OnApplyTemplate(e);
 
             // get application
-            var app = AppSuiteApplication.CurrentOrNull;
+            var app = Application.CurrentOrNull;
 
             // setup day text
             e.NameScope.Find<TextBlock>("DayText")?.Also(it =>
@@ -86,14 +86,14 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
         {
             base.OnAttachedToLogicalTree(e);
-            AppSuiteApplication.CurrentOrNull?.Let(it => it.StringsUpdated += this.OnAppStringsUpdated);
+            Application.CurrentOrNull?.Let(it => it.StringsUpdated += this.OnAppStringsUpdated);
         }
 
 
         /// <inheritdoc/>
         protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
         {
-            AppSuiteApplication.CurrentOrNull?.Let(it => it.StringsUpdated -= this.OnAppStringsUpdated);
+            Application.CurrentOrNull?.Let(it => it.StringsUpdated -= this.OnAppStringsUpdated);
             base.OnDetachedFromLogicalTree(e);
         }
 

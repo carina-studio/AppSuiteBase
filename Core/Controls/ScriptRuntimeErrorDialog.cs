@@ -56,7 +56,7 @@ public class ScriptRuntimeErrorDialog : CommonDialog<object?>
     /// <inheritdoc/>
     protected override async Task<object?> ShowDialogCore(Avalonia.Controls.Window? owner)
     {
-        var app = AppSuiteApplication.CurrentOrNull;
+        var app = Application.CurrentOrNull;
         if (this.error == null || app == null)
             return null;
         var result = await new MessageDialog()

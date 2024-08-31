@@ -265,7 +265,7 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 		using var doNotAskOrShowAgainDesBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.DoNotAskOrShowAgainDescriptionProperty, this.doNotAskOrShowAgainDescription);
 		using var messageBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.MessageProperty, this.message);
 		using var secondaryMessageBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.SecondaryMessageProperty, this.secondaryMessage);
-		using var titleBindingToken = this.BindValueToDialog(dialog, MessageDialogImpl.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
+		using var titleBindingToken = this.BindValueToDialog(dialog, Avalonia.Controls.Window.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
 		var result = owner != null
 			? await dialog.ShowDialog<MessageDialogResult>(owner)
 			: await dialog.ShowDialog<MessageDialogResult>();

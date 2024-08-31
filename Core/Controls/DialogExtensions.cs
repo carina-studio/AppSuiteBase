@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
 using CarinaStudio.Controls;
@@ -35,7 +36,7 @@ public static class DialogExtensions
         ItemOpacityTransition ??= new DoubleTransition
         {
             Duration = duration, 
-            Property = Control.OpacityProperty
+            Property = Visual.OpacityProperty
         };
         var transitions = item.Transitions ?? new Transitions().Also(it =>
         {

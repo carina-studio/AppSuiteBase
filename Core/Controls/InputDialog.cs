@@ -111,7 +111,7 @@ public abstract class InputDialog : CarinaStudio.Controls.InputDialog<IAppSuiteA
             var control = this.inputControlToAcceptEnterKey;
             this.inputControlToAcceptEnterKey = null;
             this.isEnterKeyClickedOnInputControl = false;
-            if (!e.Handled && e.Source == control && control != null)
+            if (!e.Handled && ReferenceEquals(e.Source, control) && control is not null)
                 this.OnEnterKeyClickedOnInputControl(control);
         }
     }

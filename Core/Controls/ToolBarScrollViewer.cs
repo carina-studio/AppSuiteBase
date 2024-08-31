@@ -208,7 +208,7 @@ namespace CarinaStudio.AppSuite.Controls
                 targetOffsetY = extent.Height - viewport.Height;
 
             // animate offset
-            var duration = AppSuiteApplication.CurrentOrNull?.FindResource("TimeSpan/Animation.Fast").Let(it =>
+            var duration = Application.CurrentOrNull?.FindResource("TimeSpan/Animation.Fast").Let(it =>
             {
                 if (it is TimeSpan timeSpan)
                     return timeSpan;

@@ -240,7 +240,7 @@ namespace CarinaStudio.AppSuite.Controls
         internal protected double TaskbarIconProgress
         {
             get => this.taskbarIconProgress;
-            set
+            protected set
             {
                 this.VerifyAccess();
                 if (!double.IsFinite(value))
@@ -264,7 +264,7 @@ namespace CarinaStudio.AppSuite.Controls
         internal protected TaskbarIconProgressState TaskbarIconProgressState
         {
             get => this.taskbarIconProgressState;
-            set
+            protected set
             {
                 this.VerifyAccess();
                 if (this.taskbarIconProgressState == value)

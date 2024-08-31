@@ -74,7 +74,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// <summary>
         /// Get latest time of showing update info to user.
         /// </summary>
-        public static DateTime? LatestShownTime => AppSuiteApplication.Current.PersistentState.GetValueOrDefault(ApplicationUpdateDialogImpl.LatestNotifiedTimeKey);
+        public static DateTime? LatestShownTime => Application.Current.PersistentState.GetValueOrDefault(ApplicationUpdateDialogImpl.LatestNotifiedTimeKey);
 
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace CarinaStudio.AppSuite.Controls
         {
             get
             {
-                var str = AppSuiteApplication.Current.PersistentState.GetValueOrDefault(ApplicationUpdateDialogImpl.LatestNotifiedVersionKey);
+                var str = Application.Current.PersistentState.GetValueOrDefault(ApplicationUpdateDialogImpl.LatestNotifiedVersionKey);
                 if (Version.TryParse(str, out var version))
                     return version;
                 return null;
@@ -97,7 +97,7 @@ namespace CarinaStudio.AppSuite.Controls
         /// </summary>
         public static void ResetLatestShownInfo()
         {
-            AppSuiteApplication.Current.PersistentState.Let(it =>
+            Application.Current.PersistentState.Let(it =>
             {
                 it.ResetValue(ApplicationUpdateDialogImpl.LatestNotifiedTimeKey);
                 it.ResetValue(ApplicationUpdateDialogImpl.LatestNotifiedVersionKey);

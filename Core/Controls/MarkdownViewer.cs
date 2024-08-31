@@ -75,7 +75,7 @@ public unsafe class MarkdownViewer : TemplatedControl
     static MarkdownViewer()
     {
         var handCursor = new Cursor(StandardCursorType.Hand);
-        CHyperlink.IsUnderlineProperty.Changed.Subscribe(e =>
+        CInline.IsUnderlineProperty.Changed.Subscribe(e =>
         {
             if (e.Sender is CHyperlink hyperlink)
             {
@@ -97,7 +97,7 @@ public unsafe class MarkdownViewer : TemplatedControl
             it.Items.Add(new MenuItem().Also(it =>
             {
                 it.Command = this.CopySelectedTextCommand;
-                it.Bind(MenuItem.HeaderProperty, this.GetResourceObservable("String/Common.Copy"));
+                it.Bind(HeaderedItemsControl.HeaderProperty, this.GetResourceObservable("String/Common.Copy"));
                 it.InputGesture = KeyGestures.Copy;
             }));
         });
@@ -131,10 +131,9 @@ public unsafe class MarkdownViewer : TemplatedControl
         });
         this.GetObservable(IsSelectionEnabledProperty).Subscribe(isEnabled =>
         {
-            if (isEnabled)
-                this.contextMenuValueToken = this.SetValue(ContextMenuProperty, this.contextMenu, BindingPriority.Template);
-            else
-                this.contextMenuValueToken = this.contextMenuValueToken.DisposeAndReturnNull();
+            this.contextMenuValueToken = isEnabled 
+                ? this.SetValue(ContextMenuProperty, this.contextMenu, BindingPriority.Template) 
+                : this.contextMenuValueToken.DisposeAndReturnNull();
         });
         this.GetObservable(PaddingProperty).Subscribe(padding =>
         {

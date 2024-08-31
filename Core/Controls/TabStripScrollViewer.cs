@@ -236,7 +236,7 @@ class TabStripScrollViewer : ScrollViewer
             targetOffsetX = extent.Width - viewport.Width;
 
         // animate offset
-        var duration = AppSuiteApplication.CurrentOrNull?.FindResource("TimeSpan/Animation.Fast").Let(it =>
+        var duration = Application.CurrentOrNull?.FindResource("TimeSpan/Animation.Fast").Let(it =>
         {
             if (it is TimeSpan timeSpan)
                 return timeSpan;

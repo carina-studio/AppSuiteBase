@@ -35,7 +35,7 @@ public class InputAssistancePopup : Popup
             it.BindToResource(Border.BorderThicknessProperty, "MenuFlyoutPresenterBorderThemeThickness");
             it.Child = this.ItemListBox;
             it.BindToResource(Border.CornerRadiusProperty, "OverlayCornerRadius");
-            it.BindToResource(Border.PaddingProperty, "Thickness/InputAssistancePopup.Padding");
+            it.BindToResource(Decorator.PaddingProperty, "Thickness/InputAssistancePopup.Padding");
         });
         this.Opened += (_ , _) => this.ItemListBox.SelectFirstItem();
         this.Placement = PlacementMode.Bottom;

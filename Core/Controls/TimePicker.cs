@@ -65,14 +65,14 @@ namespace CarinaStudio.AppSuite.Controls
         protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
         {
             base.OnAttachedToLogicalTree(e);
-            AppSuiteApplication.CurrentOrNull?.Let(it => it.StringsUpdated += this.OnAppStringsUpdated);
+            Application.CurrentOrNull?.Let(it => it.StringsUpdated += this.OnAppStringsUpdated);
         }
 
 
         /// <inheritdoc/>
         protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
         {
-            AppSuiteApplication.CurrentOrNull?.Let(it => it.StringsUpdated -= this.OnAppStringsUpdated);
+            Application.CurrentOrNull?.Let(it => it.StringsUpdated -= this.OnAppStringsUpdated);
             base.OnDetachedFromLogicalTree(e);
         }
 
@@ -80,7 +80,7 @@ namespace CarinaStudio.AppSuite.Controls
         // Show hour of selected time.
         void OverrideHourText()
         {
-            var app = AppSuiteApplication.CurrentOrNull;
+            var app = Application.CurrentOrNull;
             this.hourTextBlock?.Let(textBlock =>
             {
                 textBlock.Text = this.SelectedTime?.Let(it =>
@@ -101,7 +101,7 @@ namespace CarinaStudio.AppSuite.Controls
         // Show minute of selected time.
         void OverrideMinuteText()
         {
-            var app = AppSuiteApplication.CurrentOrNull;
+            var app = Application.CurrentOrNull;
             this.minuteTextBlock?.Let(textBlock =>
             {
                 textBlock.Text = this.SelectedTime?.Let(it => 

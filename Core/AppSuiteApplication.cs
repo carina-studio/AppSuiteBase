@@ -321,8 +321,8 @@ namespace CarinaStudio.AppSuite
             if (codeBase is not null && codeBase.StartsWith("file://") && codeBase.Length > 7)
             {
                 if (Platform.IsWindows)
-                    return Path.GetDirectoryName(codeBase[8..^0].Replace('/', '\\')) ?? Environment.CurrentDirectory;
-                return Path.GetDirectoryName(codeBase[7..^0]) ?? Environment.CurrentDirectory;
+                    return Path.GetDirectoryName(codeBase[8..].Replace('/', '\\')) ?? Environment.CurrentDirectory;
+                return Path.GetDirectoryName(codeBase[7..]) ?? Environment.CurrentDirectory;
             }
             return Environment.CurrentDirectory;
         });
@@ -1324,7 +1324,7 @@ namespace CarinaStudio.AppSuite
                 {
                     // setup background if transparent windows are not allowed
                     if (!this.AllowTransparentWindows)
-                        hostWindow.Bind(PopupRoot.BackgroundProperty, rootBorder.GetObservable(Border.BackgroundProperty));
+                        hostWindow.Bind(TemplatedControl.BackgroundProperty, rootBorder.GetObservable(Border.BackgroundProperty));
                     
                     // animate
                     rootBorder.Opacity = 1;
@@ -2602,6 +2602,7 @@ namespace CarinaStudio.AppSuite
             }
 
             // prepare
+            // ReSharper disable once AsyncVoidLambda
             this.SynchronizationContext.Post(async () =>
             {
                 // check state
@@ -3189,6 +3190,7 @@ namespace CarinaStudio.AppSuite
             {
                 if ((ThemeMode)e.Value == ThemeMode.System)
                 {
+                    // ReSharper disable once AsyncVoidLambda
                     Dispatcher.UIThread.Post(async () =>
                     {
                         await this.UpdateSystemThemeModeAsync(false);
@@ -3307,7 +3309,7 @@ namespace CarinaStudio.AppSuite
             // attach to window
             var tokens = new List<IDisposable>
             {
-                window.GetObservable(Avalonia.Controls.Window.IsActiveProperty).Subscribe(isActive =>
+                window.GetObservable(WindowBase.IsActiveProperty).Subscribe(isActive =>
                 {
                     if (isActive)
                     {
@@ -4091,7 +4093,7 @@ namespace CarinaStudio.AppSuite
             this.mainWindows.Add(mainWindow);
             this.windows.Add(mainWindow);
             mainWindow.Closed += this.OnMainWindowClosed;
-            mainWindow.GetObservable(Avalonia.Controls.Window.IsActiveProperty).Subscribe(new Observer<bool>(value =>
+            mainWindow.GetObservable(WindowBase.IsActiveProperty).Subscribe(new Observer<bool>(value =>
             {
                 this.OnMainWindowActivationChanged(mainWindow, value);
             }));
@@ -4365,7 +4367,7 @@ namespace CarinaStudio.AppSuite
             try
             {
                 lock (this.tracingSyncLock)
-                    DotTrace.EnsurePrerequisiteAsync(progress: new DotTraceDownloadingProgressCallback(this), downloadTo: this.DotTraceRootDirectoryPath).Wait();
+                    DotTrace.InitAsync(progress: new DotTraceDownloadingProgressCallback(this), downloadTo: this.DotTraceRootDirectoryPath).Wait();
             }
             catch (Exception ex)
             {
@@ -4456,7 +4458,7 @@ namespace CarinaStudio.AppSuite
             this.Logger.LogTrace("Prepare taking memory snapshot");
             try
             {
-                DotMemory.EnsurePrerequisiteAsync(progress: new DotMemoryDownloadingProgressCallback(this), downloadTo: this.DotMemoryRootDirectoryPath).Wait();
+                DotMemory.InitAsync(progress: new DotMemoryDownloadingProgressCallback(this), downloadTo: this.DotMemoryRootDirectoryPath).Wait();
             }
             catch (Exception ex)
             {
@@ -4509,7 +4511,7 @@ namespace CarinaStudio.AppSuite
             // start preparation of taking snapshot
             this.Logger.LogTrace("Prepare taking memory snapshot");
             var cancellationTokenSource = new CancellationTokenSource();
-            var preparationTask = DotMemory.EnsurePrerequisiteAsync(cancellationTokenSource.Token, progress: new DotMemoryDownloadingProgressCallback(this), downloadTo: this.DotMemoryRootDirectoryPath);
+            var preparationTask = DotMemory.InitAsync(cancellationTokenSource.Token, progress: new DotMemoryDownloadingProgressCallback(this), downloadTo: this.DotMemoryRootDirectoryPath);
             
             // notify user about taking memory snapshot
             if (!this.PersistentState.GetValueOrDefault(DoNotPromptBeforeTakingMemorySnapshotKey))
@@ -4529,13 +4531,13 @@ namespace CarinaStudio.AppSuite
             var fileName = (await window.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
             {
                 DefaultExtension = ".dmw",
-                FileTypeChoices = new[]
-                {
+                FileTypeChoices =
+                [
                     new FilePickerFileType("DotMemory Workspace")
                     {
-                        Patterns = new[] { "*.dmw" },
+                        Patterns = ["*.dmw"],
                     }
-                },
+                ],
                 ShowOverwritePrompt = true,
                 SuggestedFileName = $"{this.Name}-{DateTime.Now:yyyyMMdd-HHmmss}.dmw",
             })).Let(it =>

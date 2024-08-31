@@ -153,6 +153,7 @@ namespace CarinaStudio.AppSuite.Controls
                     }.ShowDialog(null);
                 }
             });
+            // ReSharper disable once AsyncVoidLambda
             this.reactivateProVersionAction = new(async () =>
 			{
                 if (this.Application is not AppSuiteApplication asApp)

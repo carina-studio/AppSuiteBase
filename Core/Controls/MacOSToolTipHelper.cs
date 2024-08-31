@@ -31,7 +31,7 @@ class MacOSToolTipHelper
         (TopLevel.GetTopLevel(control) as Window)?.Let(window =>
         {
             this.windowRef = new(window);
-            this.isWindowActiveObserverToken = window.GetObservable(Avalonia.Controls.Window.IsActiveProperty).Subscribe(this.isWindowActiveObserver);
+            this.isWindowActiveObserverToken = window.GetObservable(WindowBase.IsActiveProperty).Subscribe(this.isWindowActiveObserver);
         });
 
         // monitor window change
@@ -72,7 +72,7 @@ class MacOSToolTipHelper
             this.windowRef = null;
         else
             this.windowRef = new(newWindow);
-        this.isWindowActiveObserverToken = newWindow?.GetObservable(Avalonia.Controls.Window.IsActiveProperty).Subscribe(this.isWindowActiveObserver);
+        this.isWindowActiveObserverToken = newWindow?.GetObservable(WindowBase.IsActiveProperty).Subscribe(this.isWindowActiveObserver);
         ToolTip.SetIsOpen(control, false);
     }
     
