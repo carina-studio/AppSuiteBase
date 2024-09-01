@@ -288,12 +288,12 @@
 	<LinearGradientBrush x:Key="Brush/Shadow.Bottom" EndPoint="0%,100%" GradientStops="{StaticResource GradientStops/Shadow}" StartPoint="0%,0%"/>
 	<LinearGradientBrush x:Key="Brush/Shadow.Bottom.Heavy" EndPoint="0%,100%" GradientStops="{StaticResource GradientStops/Shadow.Heavy}" StartPoint="0%,0%"/>
 	<LinearGradientBrush x:Key="Brush/Shadow.Bottom.Light" EndPoint="0%,100%" GradientStops="{StaticResource GradientStops/Shadow.Light}" StartPoint="0%,0%"/>
-	<RadialGradientBrush x:Key="Brush/Shadow.BottomLeft.Outer" Center="100%,0%" GradientOrigin="100%,0%" GradientStops="{StaticResource GradientStops/Shadow}" Radius="1"/>
-	<RadialGradientBrush x:Key="Brush/Shadow.BottomLeft.Outer.Heavy" Center="100%,0%" GradientOrigin="100%,0%" GradientStops="{StaticResource GradientStops/Shadow.Heavy}" Radius="1"/>
-	<RadialGradientBrush x:Key="Brush/Shadow.BottomLeft.Outer.Light" Center="100%,0%" GradientOrigin="100%,0%" GradientStops="{StaticResource GradientStops/Shadow.Light}" Radius="1"/>
-	<RadialGradientBrush x:Key="Brush/Shadow.BottomRight.Outer" Center="0%,0%" GradientOrigin="0%,0%" GradientStops="{StaticResource GradientStops/Shadow}" Radius="1"/>
-	<RadialGradientBrush x:Key="Brush/Shadow.BottomRight.Outer.Heavy" Center="0%,0%" GradientOrigin="0%,0%" GradientStops="{StaticResource GradientStops/Shadow.Heavy}" Radius="1"/>
-	<RadialGradientBrush x:Key="Brush/Shadow.BottomRight.Outer.Light" Center="0%,0%" GradientOrigin="0%,0%" GradientStops="{StaticResource GradientStops/Shadow.Light}" Radius="1"/>
+	<RadialGradientBrush x:Key="Brush/Shadow.BottomLeft.Outer" Center="100%,0%" GradientOrigin="100%,0%" GradientStops="{StaticResource GradientStops/Shadow}" RadiusX="100%" RadiusY="100%"/>
+	<RadialGradientBrush x:Key="Brush/Shadow.BottomLeft.Outer.Heavy" Center="100%,0%" GradientOrigin="100%,0%" GradientStops="{StaticResource GradientStops/Shadow.Heavy}" RadiusX="100%" RadiusY="100%"/>
+	<RadialGradientBrush x:Key="Brush/Shadow.BottomLeft.Outer.Light" Center="100%,0%" GradientOrigin="100%,0%" GradientStops="{StaticResource GradientStops/Shadow.Light}" RadiusX="100%" RadiusY="100%"/>
+	<RadialGradientBrush x:Key="Brush/Shadow.BottomRight.Outer" Center="0%,0%" GradientOrigin="0%,0%" GradientStops="{StaticResource GradientStops/Shadow}" RadiusX="100%" RadiusY="100%"/>
+	<RadialGradientBrush x:Key="Brush/Shadow.BottomRight.Outer.Heavy" Center="0%,0%" GradientOrigin="0%,0%" GradientStops="{StaticResource GradientStops/Shadow.Heavy}" RadiusX="100%" RadiusY="100%"/>
+	<RadialGradientBrush x:Key="Brush/Shadow.BottomRight.Outer.Light" Center="0%,0%" GradientOrigin="0%,0%" GradientStops="{StaticResource GradientStops/Shadow.Light}" RadiusX="100%" RadiusY="100%"/>
 	<LinearGradientBrush x:Key="Brush/Shadow.Left" EndPoint="0%,0%" GradientStops="{StaticResource GradientStops/Shadow}" StartPoint="100%,0%"/>
 	<LinearGradientBrush x:Key="Brush/Shadow.Left.Heavy" EndPoint="0%,0%" GradientStops="{StaticResource GradientStops/Shadow.Heavy}" StartPoint="100%,0%"/>
 	<LinearGradientBrush x:Key="Brush/Shadow.Left.Light" EndPoint="0%,0%" GradientStops="{StaticResource GradientStops/Shadow.Light}" StartPoint="100%,0%"/>
@@ -303,12 +303,12 @@
 	<LinearGradientBrush x:Key="Brush/Shadow.Top" EndPoint="0%,0%" GradientStops="{StaticResource GradientStops/Shadow}" StartPoint="0%,100%"/>
 	<LinearGradientBrush x:Key="Brush/Shadow.Top.Heavy" EndPoint="0%,0%" GradientStops="{StaticResource GradientStops/Shadow.Heavy}" StartPoint="0%,100%"/>
 	<LinearGradientBrush x:Key="Brush/Shadow.Top.Light" EndPoint="0%,0%" GradientStops="{StaticResource GradientStops/Shadow.Light}" StartPoint="0%,100%"/>
-	<RadialGradientBrush x:Key="Brush/Shadow.TopLeft.Outer" Center="100%,100%" GradientOrigin="100%,100%" GradientStops="{StaticResource GradientStops/Shadow}" Radius="1"/>
-	<RadialGradientBrush x:Key="Brush/Shadow.TopLeft.Outer.Heavy" Center="100%,100%" GradientOrigin="100%,100%" GradientStops="{StaticResource GradientStops/Shadow.Heavy}" Radius="1"/>
-	<RadialGradientBrush x:Key="Brush/Shadow.TopLeft.Outer.Light" Center="100%,100%" GradientOrigin="100%,100%" GradientStops="{StaticResource GradientStops/Shadow.Light}" Radius="1"/>
-	<RadialGradientBrush x:Key="Brush/Shadow.TopRight.Outer" Center="0%,100%" GradientOrigin="0%,100%" GradientStops="{StaticResource GradientStops/Shadow}" Radius="1"/>
-	<RadialGradientBrush x:Key="Brush/Shadow.TopRight.Outer.Heavy" Center="0%,100%" GradientOrigin="0%,100%" GradientStops="{StaticResource GradientStops/Shadow.Heavy}" Radius="1"/>
-	<RadialGradientBrush x:Key="Brush/Shadow.TopRight.Outer.Light" Center="0%,100%" GradientOrigin="0%,100%" GradientStops="{StaticResource GradientStops/Shadow.Light}" Radius="1"/>
+	<RadialGradientBrush x:Key="Brush/Shadow.TopLeft.Outer" Center="100%,100%" GradientOrigin="100%,100%" GradientStops="{StaticResource GradientStops/Shadow}" RadiusX="100%" RadiusY="100%"/>
+	<RadialGradientBrush x:Key="Brush/Shadow.TopLeft.Outer.Heavy" Center="100%,100%" GradientOrigin="100%,100%" GradientStops="{StaticResource GradientStops/Shadow.Heavy}" RadiusX="100%" RadiusY="100%"/>
+	<RadialGradientBrush x:Key="Brush/Shadow.TopLeft.Outer.Light" Center="100%,100%" GradientOrigin="100%,100%" GradientStops="{StaticResource GradientStops/Shadow.Light}" RadiusX="100%" RadiusY="100%"/>
+	<RadialGradientBrush x:Key="Brush/Shadow.TopRight.Outer" Center="0%,100%" GradientOrigin="0%,100%" GradientStops="{StaticResource GradientStops/Shadow}" RadiusX="100%" RadiusY="100%"/>
+	<RadialGradientBrush x:Key="Brush/Shadow.TopRight.Outer.Heavy" Center="0%,100%" GradientOrigin="0%,100%" GradientStops="{StaticResource GradientStops/Shadow.Heavy}" RadiusX="100%" RadiusY="100%"/>
+	<RadialGradientBrush x:Key="Brush/Shadow.TopRight.Outer.Light" Center="0%,100%" GradientOrigin="0%,100%" GradientStops="{StaticResource GradientStops/Shadow.Light}" RadiusX="100%" RadiusY="100%"/>
 	<SolidColorBrush x:Key="Brush/Shadow.Darken" Color="{DynamicResource Color/Shadow.Darken}"/>
 	<SolidColorBrush x:Key="Brush/Shadow.Lighten" Color="{DynamicResource Color/Shadow.Lighten}"/>
 	<Color x:Key="Color/Shadow.Darken">#1f000000</Color>
