@@ -53,16 +53,13 @@
 						</LinearGradientBrush>
 					</Border.Background>
 				</Border>
-				<Border Height="{Binding #window.Width}" RenderTransformOrigin="50%,0%" VerticalAlignment="Top">
+				<Border Height="{Binding #window.Width}" VerticalAlignment="Top">
 					<Border.Background>
-						<RadialGradientBrush Center="80%,0%" GradientOrigin="80%,0%" Radius="0.5">
+						<RadialGradientBrush Center="70%,0%" GradientOrigin="70%,0%" RadiusX="70%" RadiusY="20%">
 							<GradientStop Color="#37ffffff" Offset="0"/>
 							<GradientStop Color="#00ffffff" Offset="1"/>
 						</RadialGradientBrush>
 					</Border.Background>
-					<Border.RenderTransform>
-						<ScaleTransform ScaleY="0.4"/>
-					</Border.RenderTransform>
 				</Border>
 
 				<!-- Content -->

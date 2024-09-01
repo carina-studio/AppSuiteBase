@@ -91,19 +91,17 @@
 		<sys:Double x:Key="Double/SplashWindow.ContentAnimation.Translation">25</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Copyright.FontSize">12</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Message.FontSize">12</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Shadow.BlurRadius">10</sys:Double>
-		<sys:Double x:Key="Double/SplashWindow.Title.Background.Height">240</sys:Double>
+		<sys:Double x:Key="Double/SplashWindow.Title.Background.Height">250</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Title.FontSize">36</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Title.MaxWidth">355</sys:Double>
 		<sys:Double x:Key="Double/SplashWindow.Version.FontSize">12</sys:Double>
 		<DropShadowEffect x:Key="Effect/SplashWindow.Message.Shadow" BlurRadius="5" Color="#000000" OffsetX="0" OffsetY="0"/>
-		<DropShadowEffect x:Key="Effect/SplashWindow.Shadow" BlurRadius="{StaticResource Double/SplashWindow.Shadow.BlurRadius}" Color="{DynamicResource Color/SplashWindow.Shadow}" OffsetX="0" OffsetY="0"/>
 		<Thickness x:Key="Thickness/SplashWindow.BackgroundImage.Margin">0,0,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Border">0</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.ColorBar.Margin">0,30,0,0</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.ColorBar.Margin">0,40,0,0</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Margin">10</Thickness>
 		<Thickness x:Key="Thickness/SplashWindow.Message.Margin">0,30,0,0</Thickness>
-		<Thickness x:Key="Thickness/SplashWindow.Padding">60,30,60,30</Thickness>
+		<Thickness x:Key="Thickness/SplashWindow.Padding">60,40,60,30</Thickness>
 		<sys:TimeSpan x:Key="TimeSpan/SplashWindow.ContentAnimation">0:0:1.2</sys:TimeSpan>
 
 	</Window.Resources>
@@ -132,6 +130,17 @@
 			<Border Name="backgroundBorder" Background="{DynamicResource Brush/SplashWindow.Background}" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" BoxShadow="{StaticResource BoxShadows/SplashWindow}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
 			<Border BorderBrush="{x:Null}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{Binding #backgroundBorder.CornerRadius}">
 				<Image Margin="{StaticResource Thickness/SplashWindow.BackgroundImage.Margin}" Opacity="{Binding #window.BackgroundImageOpacity}" Source="{Binding #window.BackgroundImage}" Stretch="UniformToFill" StretchDirection="Both"/>
+			</Border>
+			<Border>
+				<Border.Background>
+					<RadialGradientBrush Center="70%,20%" 
+					                     GradientOrigin="70%,20%" 
+					                     RadiusX="70%" 
+					                     RadiusY="50%">
+						<GradientStop Color="#37ffffff" Offset="0"/>
+						<GradientStop Color="#00ffffff" Offset="1"/>
+					</RadialGradientBrush>
+				</Border.Background>
 			</Border>
 			<Border Background="{DynamicResource Brush/SplashWindow.Title.Background}"
 			        CornerRadius="{StaticResource CornerRadius/SplashWindow.Title.Background}"
@@ -170,7 +179,6 @@
 					
 					<!-- Title -->
 					<TextBlock Name="titleTextBlock" 
-					           Effect="{StaticResource Effect/SplashWindow.Shadow}" 
 					           FontSize="{DynamicResource Double/SplashWindow.Title.FontSize}" 
 					           FontWeight="Bold" 
 					           Margin="{StaticResource Thickness/SplashWindow.Title.Margin}" 
@@ -200,7 +208,6 @@
 					
 					<!-- Version -->
 					<TextBlock Name="versionTextBlock" 
-					           Effect="{StaticResource Effect/SplashWindow.Shadow}" 
 					           FontSize="{StaticResource Double/SplashWindow.Version.FontSize}" 
 					           Grid.Row="1"
 					           Margin="{DynamicResource Thickness/SplashWindow.Version.Margin}"
@@ -231,7 +238,6 @@
 					
 					<!-- Copyright -->
 					<TextBlock Name="copyrightTextBlock" 
-					           Effect="{StaticResource Effect/SplashWindow.Shadow}" 
 					           FontSize="{StaticResource Double/SplashWindow.Copyright.FontSize}" 
 					           Grid.Row="2"
 					           Margin="{DynamicResource Thickness/SplashWindow.Copyright.Margin}"
