@@ -72,14 +72,14 @@ class SplashWindowImpl : Avalonia.Controls.Window
 		{
 			// get screen info
 			var screen = this.Screens.ScreenFromWindow(this);
-			if (screen == null && this.stopwatch.ElapsedMilliseconds < MaxShowingRetryingDuration)
+			if (screen is null && this.stopwatch.ElapsedMilliseconds < MaxShowingRetryingDuration)
 			{
 				this.showAction?.Schedule(RetryShowingDelay);
 				return;
 			}
 
 			// move to center of screen
-			if (screen != null)
+			if (screen is not null)
 			{
 				var screenBounds = screen.WorkingArea;
 				var scaling = screen.Scaling;
@@ -95,7 +95,6 @@ class SplashWindowImpl : Avalonia.Controls.Window
 
 			// show content
 			var versionOpacity = this.FindResourceOrDefault("Double/ApplicationInfoDialog.AppVersion.Opacity", 0.75);
-			((Control)this.Content.AsNonNull()).Opacity = 1;
 			this.Get<Control>("colorBar").Let(control =>
 			{
 				(control.RenderTransform as ScaleTransform)?.Let(it => it.ScaleY = 1);
@@ -205,7 +204,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 			if (this.backgroundImageUri == value)
 				return;
 			this.backgroundImageUri = value;
-			if (value != null)
+			if (value is not null)
 			{
 				this.SetValue(BackgroundImageProperty, AssetLoader.Open(value).Use(stream => 
 					new Bitmap(stream)));
@@ -234,7 +233,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 			if (this.iconUri == value)
 				return;
 			this.iconUri = value;
-			value ??= new Uri($"avares://{AppSuiteApplication.Current.Assembly.GetName()}/AppIcon.ico");
+			value ??= new Uri($"avares://{IAppSuiteApplication.Current.Assembly.GetName()}/AppIcon.ico");
 			this.Icon = AssetLoader.Open(value).Use(stream =>
 				new WindowIcon(stream));
 			this.SetValue(IconBitmapProperty, AssetLoader.Open(value).Use(stream =>
@@ -293,7 +292,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 	{
 		get 
 		{
-			if (this.progressAnimator != null)
+			if (this.progressAnimator is not null)
 				return progressAnimator.EndValue;
 			return this.progressBar.IsIndeterminate ? double.NaN : this.progressBar.Value;
 		}
@@ -305,7 +304,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 			{
 				this.progressBar.IsIndeterminate = true;
 				this.progressAnimator = null;
-				if (this.progressAnimationTaskSource != null)
+				if (this.progressAnimationTaskSource is not null)
 				{
 					this.progressAnimationTaskSource.SetResult();
 					this.progressAnimationTaskSource = null;
@@ -325,7 +324,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 							return;
 						this.progressAnimator = null;
 						var taskSource = this.progressAnimationTaskSource;
-						if (taskSource != null)
+						if (taskSource is not null)
 						{
 							this.progressAnimationTaskSource = null;
 							taskSource.SetResult();
@@ -345,11 +344,11 @@ class SplashWindowImpl : Avalonia.Controls.Window
 	public override void Render(DrawingContext context)
 	{
 		base.Render(context);
-		if (this.renderingTaskSource != null)
+		if (this.renderingTaskSource is not null)
 		{
 			Dispatcher.UIThread.Post(() =>
 			{
-				if (this.renderingTaskSource != null)
+				if (this.renderingTaskSource is not null)
 				{
 					this.renderingTaskSource.TrySetResult();
 					this.renderingTaskSource = null;
@@ -368,7 +367,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 	// Wait for completion of animation.
 	public Task WaitForAnimationAsync()
 	{
-		if (this.progressAnimationTaskSource == null)
+		if (this.progressAnimationTaskSource is null)
 			return Task.CompletedTask;
 		return this.progressAnimationTaskSource.Task;
 	}
@@ -382,7 +381,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 	// Wait for completion of next rendering.
 	public Task WaitForRenderingAsync()
 	{
-		if (this.renderingTaskSource == null)
+		if (this.renderingTaskSource is null)
 		{
 			this.renderingTaskSource = new();
 			this.InvalidateVisual();

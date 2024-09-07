@@ -29,9 +29,9 @@
 				</LinearGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#ffffff"/>
 				<LinearGradientBrush x:Key="Brush/SplashWindow.Title.Background" EndPoint="0%,100%" StartPoint="0%,0%">
-					<GradientStop Offset="0" Color="#ef222222"/>
-					<GradientStop Offset="0.5" Color="#9f222222"/>
-					<GradientStop Offset="1" Color="#00222222"/>
+					<GradientStop Offset="0" Color="#ef111111"/>
+					<GradientStop Offset="0.5" Color="#9f111111"/>
+					<GradientStop Offset="1" Color="#00111111"/>
 				</LinearGradientBrush>
 				<Color x:Key="Color/SplashWindow.Shadow">#000000</Color>
 				<sys:Double x:Key="Double/SplashWindow.TopBar.Opacity">0.75</sys:Double>
@@ -116,22 +116,29 @@
 	</Window.Styles>
 
 	<!-- Content -->
-	<Border Opacity="0">
-		
-		<Border.Transitions>
-			<Transitions>
-				<DoubleTransition Property="Opacity" Duration="0:0:1.2" Easing="ExponentialEaseOut"/>
-			</Transitions>
-		</Border.Transitions>
+	<Border>
 
 		<Panel Name="rootPanel" Margin="{StaticResource Thickness/SplashWindow.Margin}">
 
 			<!-- Background -->
-			<Border Name="backgroundBorder" Background="{DynamicResource Brush/SplashWindow.Background}" BorderBrush="{x:Static Brushes.Transparent}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" BoxShadow="{StaticResource BoxShadows/SplashWindow}" CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
-			<Border BorderBrush="{x:Null}" BorderThickness="{StaticResource Thickness/SplashWindow.Border}" ClipToBounds="True" CornerRadius="{Binding #backgroundBorder.CornerRadius}">
-				<Image Margin="{StaticResource Thickness/SplashWindow.BackgroundImage.Margin}" Opacity="{Binding #window.BackgroundImageOpacity}" Source="{Binding #window.BackgroundImage}" Stretch="UniformToFill" StretchDirection="Both"/>
+			<Border Name="backgroundBorder" 
+			        Background="{DynamicResource Brush/SplashWindow.Background}" 
+			        BorderBrush="{x:Static Brushes.Transparent}" 
+			        BorderThickness="{StaticResource Thickness/SplashWindow.Border}" 
+			        BoxShadow="{StaticResource BoxShadows/SplashWindow}" 
+			        CornerRadius="{StaticResource CornerRadius/SplashWindow}"/>
+			<Border BorderBrush="{x:Null}" 
+			        BorderThickness="{StaticResource Thickness/SplashWindow.Border}" 
+			        ClipToBounds="True" 
+			        CornerRadius="{Binding #backgroundBorder.CornerRadius}">
+				<Image Margin="{StaticResource Thickness/SplashWindow.BackgroundImage.Margin}" 
+				       Opacity="{Binding #window.BackgroundImageOpacity}" 
+				       Source="{Binding #window.BackgroundImage}" 
+				       Stretch="UniformToFill" 
+				       StretchDirection="Both"/>
 			</Border>
-			<Border>
+			<Border ClipToBounds="True" 
+			        CornerRadius="{Binding #backgroundBorder.CornerRadius}">
 				<Border.Background>
 					<RadialGradientBrush Center="70%,20%" 
 					                     GradientOrigin="70%,20%" 
