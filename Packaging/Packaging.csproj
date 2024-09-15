@@ -8,7 +8,7 @@
 		<AssemblyName>CarinaStudio.AppSuite.Packaging</AssemblyName>
 		<Nullable>enable</Nullable>
 		<DocumentationFile>CarinaStudio.AppSuite.Packaging.xml</DocumentationFile>
-		<TargetFrameworks>net6.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
 		<Authors>Carina Studio</Authors>
 		<Company>Carina Studio</Company>
 		<Copyright>©2022 Carina Studio</Copyright>

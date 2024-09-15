@@ -41,12 +41,14 @@
 		<PackageReference Include="JetBrains.Profiler.SelfApi" Version="2.5.10" />
 		<PackageReference Include="Markdown.Avalonia.Tight" Version="11.0.3-a1" />
 		<PackageReference Include="Microsoft.Win32.Registry" Version="6.0.0-preview.5.21301.5" />
-		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="8.0.0" />
-		<PackageReference Include="NLog" Version="5.3.3" />
-		<PackageReference Include="NLog.Extensions.Logging" Version="5.3.12" />
+		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="9.0.0-rc.1.24431.7" />
+		<PackageReference Include="NLog" Version="5.3.4" />
+		<PackageReference Include="NLog.Extensions.Logging" Version="5.3.13" />
 		<PackageReference Include="NUnit" Version="4.2.2" />
-		<PackageReference Include="System.Management" Version="8.0.0" />
+		<PackageReference Include="System.Management" Version="9.0.0-rc.1.24431.7" />
+		<PackageReference Include="System.Net.Http" Version="4.3.4" />
 		<PackageReference Include="System.Security.Principal.Windows" Version="6.0.0-preview.5.21301.5" />
+		<PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
 	</ItemGroup>
 	
 	<ItemGroup>

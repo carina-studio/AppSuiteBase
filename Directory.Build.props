@@ -19,7 +19,7 @@
 		<Nullable>enable</Nullable>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/carina-studio/AppSuiteBase/</PackageProjectUrl>
-		<TargetFrameworks>net8.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
 
     </PropertyGroup>
 </Project>

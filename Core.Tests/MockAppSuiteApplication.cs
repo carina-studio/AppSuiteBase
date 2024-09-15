@@ -41,7 +41,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
     /// <summary>
     /// Initialize new <see cref="MockAppSuiteApplication"/> instance.
     /// </summary>
-    protected internal MockAppSuiteApplication()
+    internal protected MockAppSuiteApplication()
     {
         this.HardwareInfo = new HardwareInfo(this);
         this.ProcessInfo = new ProcessInfo(this);
@@ -157,8 +157,10 @@ public class MockAppSuiteApplication : IAppSuiteApplication
     
     
     /// <inheritdoc/>
+#pragma warning disable CS0067
     public virtual event EventHandler<IAppSuiteApplication.ExceptionEventArgs>? ExceptionOccurredInApplicationLifetime;
-
+#pragma warning restore CS0067
+    
 
     /// <inheritdoc/>
     public virtual ThemeMode EffectiveThemeMode => ThemeMode.Dark;
