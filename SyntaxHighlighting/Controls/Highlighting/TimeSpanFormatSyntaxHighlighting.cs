@@ -1,5 +1,4 @@
 using Avalonia.Media;
-using CarinaStudio.Controls;
 using System;
 using System.Text.RegularExpressions;
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Testing.Common;
 
-class ThemeModeTest : TestCase
+class ThemeModeTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategoryNames.Common, "Theme Mode")
 {
     // Static fields.
     static readonly Color TestColorDark = new(0x7f, 0xaa, 0xbb, 0xcc);
@@ -15,12 +15,7 @@ class ThemeModeTest : TestCase
 
     // Fields.
     ThemeMode initThemeMode;
-
-
-    // Constructor.
-    public ThemeModeTest(IAppSuiteApplication app) : base(app, TestCaseCategoryNames.Common, "Theme Mode")
-    { }
-
+    
 
     /// <inheritdoc/>
     protected override async Task OnRunAsync(CancellationToken cancellationToken)

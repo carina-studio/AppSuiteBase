@@ -29,18 +29,20 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
     // Static fields.
     static NetworkManager? DefaultInstance;
     static readonly Regex IPv4Regex = new("(?<Address>\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})");
-    static readonly string[] PingTargetAddresses = {
+    static readonly string[] PingTargetAddresses = 
+    [
         "208.67.222.222", // OpenDNS
         "208.67.220.220", // OpenDNS
         "1.1.1.1", // Cloudflare
         "1.0.0.1", // Cloudflare
         "8.8.8.8", // Google DNS
         "8.8.4.4", // Google DNS
-    };
-    static readonly string[] PublicIPCheckingServers = {
+    ];
+    static readonly string[] PublicIPCheckingServers =
+    [
         "https://ipv4.icanhazip.com/",
         "http://checkip.dyndns.org/",
-    };
+    ];
 
 
     // Fields.
@@ -162,13 +164,13 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         }
 
         // update state
-        if (ipAddress != this.IPAddress)
+        if (!Equals(ipAddress, this.IPAddress))
         {
             this.logger.LogTrace("IPv4 address: {ipAddress}", ipAddress);
             this.IPAddress = ipAddress;
             this.PropertyChanged?.Invoke(this, new(nameof(IPAddress)));
         }
-        if (publicIPAddress != this.PublicIPAddress)
+        if (!Equals(publicIPAddress, this.PublicIPAddress))
         {
             this.logger.LogTrace("Public IPv4 address: {publicIPAddress}", publicIPAddress);
             this.PublicIPAddress = publicIPAddress;

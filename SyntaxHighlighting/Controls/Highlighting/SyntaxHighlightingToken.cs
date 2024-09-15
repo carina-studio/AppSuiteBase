@@ -56,6 +56,6 @@ public class SyntaxHighlightingToken : SyntaxHighlightingDefinition
     /// <inheritdoc/>
     public override string ToString() =>
         string.IsNullOrEmpty(this.Name)
-            ? $"{{{this.pattern?.ToString()}}}"
-            : $"[{this.Name}]{{{this.pattern?.ToString()}}}";
+            ? $"{{{this.pattern}}}"
+            : $"[{this.Name}]{{{this.pattern}}}";
 }

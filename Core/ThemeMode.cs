@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CarinaStudio.AppSuite;
+﻿namespace CarinaStudio.AppSuite;
 
 /// <summary>
 /// Theme mode.

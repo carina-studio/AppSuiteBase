@@ -51,6 +51,7 @@ namespace CarinaStudio.AppSuite.Converters
 					{
 						return convertible.ToDouble(null);
 					}
+					// ReSharper disable once EmptyGeneralCatchClause
 					catch
 					{ }
 				}
@@ -94,6 +95,7 @@ namespace CarinaStudio.AppSuite.Converters
 					{
 						return convertible.ToDouble(null);
 					}
+					// ReSharper disable once EmptyGeneralCatchClause
 					catch
 					{ }
 				}

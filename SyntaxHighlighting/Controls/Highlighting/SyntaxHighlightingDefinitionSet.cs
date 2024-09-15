@@ -13,7 +13,6 @@ namespace CarinaStudio.AppSuite.Controls.Highlighting;
 public sealed class SyntaxHighlightingDefinitionSet
 {
     // Fields.
-    readonly HashSet<SyntaxHighlightingSpan> attachedSpanDefinitions = new();
     readonly Dictionary<object, HashSet<SyntaxHighlightingToken>> attachedTokenDefinitions = new();
     readonly ObservableList<SyntaxHighlightingSpan> spanDefinitions = new();
     readonly ObservableList<SyntaxHighlightingToken> tokenDefinitions = new();
@@ -95,13 +94,13 @@ public sealed class SyntaxHighlightingDefinitionSet
     /// <summary>
     /// Check whether at least one token or span definition has been added to the set or not.
     /// </summary>
-    public bool HasDefinitions { get => this.tokenDefinitions.IsNotEmpty() || this.spanDefinitions.IsNotEmpty(); }
+    public bool HasDefinitions => this.tokenDefinitions.IsNotEmpty() || this.spanDefinitions.IsNotEmpty();
 
 
     /// <summary>
     /// Check whether at least one token or span definition in the set is valid or not.
     /// </summary>
-    public bool HasValidDefinitions { get => this.validDefinitionsCount > 0; }
+    public bool HasValidDefinitions => this.validDefinitionsCount > 0;
 
 
     /// <summary>
@@ -165,8 +164,11 @@ public sealed class SyntaxHighlightingDefinitionSet
                 });
                 break;
             case NotifyCollectionChangedAction.Reset:
-                foreach (var definition in this.attachedSpanDefinitions.ToArray())
-                    this.DetachFromSpanDefinition(definition);
+                foreach (var key in this.attachedTokenDefinitions.Keys.ToArray())
+                {
+                    if (key is SyntaxHighlightingSpan span)
+                        this.DetachFromSpanDefinition(span);
+                }
                 foreach (var definition in this.spanDefinitions)
                     this.AttachToSpanDefinition(definition);
                 break;
@@ -180,9 +182,9 @@ public sealed class SyntaxHighlightingDefinitionSet
     {
         if (sender is not IList<SyntaxHighlightingToken> tokenDefinitions)
             return;
-        var owner = tokenDefinitions == this.tokenDefinitions
+        var owner = ReferenceEquals(tokenDefinitions, this.tokenDefinitions)
             ? (object?)this
-            : this.spanDefinitions.FirstOrDefault(it => tokenDefinitions == it.TokenDefinitions);
+            : this.spanDefinitions.FirstOrDefault(it => ReferenceEquals(tokenDefinitions, it.TokenDefinitions));
         if (owner == null || !this.attachedTokenDefinitions.TryGetValue(owner, out var attachedTokenDefinitions))
             return;
         switch (e.Action)
@@ -235,13 +237,13 @@ public sealed class SyntaxHighlightingDefinitionSet
     /// <summary>
     /// Get list of span definitions.
     /// </summary>
-    public IList<SyntaxHighlightingSpan> SpanDefinitions { get => this.spanDefinitions; }
-    
+    public IList<SyntaxHighlightingSpan> SpanDefinitions => this.spanDefinitions;
+
 
     /// <summary>
     /// Get list of token definitions.
     /// </summary>
-    public IList<SyntaxHighlightingToken> TokenDefinitions { get => this.tokenDefinitions; }
+    public IList<SyntaxHighlightingToken> TokenDefinitions => this.tokenDefinitions;
 
 
     /// <inheritdoc/>

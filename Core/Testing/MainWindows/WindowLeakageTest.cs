@@ -8,16 +8,11 @@ using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Testing.MainWindows;
 
-class WindowLeakageTest : TestCase
+class WindowLeakageTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategoryNames.MainWindows, "Window Leakage")
 {
     // Fields.
     readonly List<CarinaStudio.Controls.Window> createdMainWindows = new();
-
-
-    // Constructor.
-    public WindowLeakageTest(IAppSuiteApplication app) : base(app, TestCaseCategoryNames.MainWindows, "Window Leakage")
-    { }
-
+    
 
     /// <inheritdoc/>
     protected override async Task OnRunAsync(CancellationToken cancellationToken)

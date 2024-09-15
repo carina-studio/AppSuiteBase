@@ -60,7 +60,7 @@ public abstract class SyntaxHighlightingDefinition : INotifyPropertyChanged
         get => this.background;
         set
         {
-            if (this.background == value)
+            if (ReferenceEquals(this.background, value))
                 return;
             this.backgroundPropertyChangedHandlerToken.Dispose();
             (value as AvaloniaObject)?.Let(it => 
@@ -150,9 +150,9 @@ public abstract class SyntaxHighlightingDefinition : INotifyPropertyChanged
         get => this.foreground;
         set
         {
-            if (this.foreground == value)
-                return;
-           this.foregroundPropertyChangedHandlerToken.Dispose();
+            if (ReferenceEquals(this.foreground, value))
+                return; 
+            this.foregroundPropertyChangedHandlerToken.Dispose();
             (value as AvaloniaObject)?.Let(it => 
                 this.foregroundPropertyChangedHandlerToken = it.AddWeakEventHandler<AvaloniaPropertyChangedEventArgs>(nameof(AvaloniaObject.PropertyChanged), this.OnBrushPropertyChanged));
             this.foreground = value;
@@ -165,7 +165,7 @@ public abstract class SyntaxHighlightingDefinition : INotifyPropertyChanged
     /// <summary>
     /// Check whether the definition is valid or not.
     /// </summary>
-    public bool IsValid { get => this.isValid; }
+    public bool IsValid => this.isValid;
 
 
     /// <summary>
@@ -177,9 +177,9 @@ public abstract class SyntaxHighlightingDefinition : INotifyPropertyChanged
     // Called when property of attached brush has been changed.
     void OnBrushPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
-        if (sender == this.background)
+        if (ReferenceEquals(sender, this.background))
             this.OnPropertyChanged(nameof(Background));
-        else if (sender == this.foreground)
+        else if (ReferenceEquals(sender, this.foreground))
             this.OnPropertyChanged(nameof(Foreground));
     }
 

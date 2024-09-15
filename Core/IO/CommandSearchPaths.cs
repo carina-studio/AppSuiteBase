@@ -254,7 +254,7 @@ public static class CommandSearchPaths
     {
         get
         {
-            logger ??= AppSuiteApplication.CurrentOrNull?.LoggerFactory.CreateLogger(nameof(CommandSearchPaths));
+            logger ??= IAppSuiteApplication.CurrentOrNull?.LoggerFactory.CreateLogger(nameof(CommandSearchPaths));
             return logger;
         }
     }
@@ -295,7 +295,7 @@ public static class CommandSearchPaths
 						}
 
 						// generate apple script file
-                        var title = AppSuiteApplication.CurrentOrNull?.GetString("CommandSearchPaths.UpdateSystemPaths") ?? "Update paths defined by system";
+                        var title = IAppSuiteApplication.CurrentOrNull?.GetString("CommandSearchPaths.UpdateSystemPaths") ?? "Update paths defined by system";
 						var tempScriptFile = Path.GetTempFileName().Also(it => tempFilePaths.Add(it));
 						await using (var stream = new FileStream(tempScriptFile, FileMode.Create, FileAccess.ReadWrite))
 						{

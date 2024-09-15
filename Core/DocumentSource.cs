@@ -9,20 +9,13 @@ namespace CarinaStudio.AppSuite;
 /// <summary>
 /// Source of document.
 /// </summary>
-public abstract class DocumentSource : BaseApplicationObject<IAppSuiteApplication>, INotifyPropertyChanged
+/// <param name="app">Application.</param>
+public abstract class DocumentSource(IAppSuiteApplication app) : BaseApplicationObject<IAppSuiteApplication>(app), INotifyPropertyChanged
 {
     // Fields.
     ApplicationCulture culture = ApplicationCulture.System;
 
-
-    /// <summary>
-    /// Initialize new <see cref="DocumentSource"/> instance.
-    /// </summary>
-    /// <param name="app">Application.</param>
-    protected DocumentSource(IAppSuiteApplication app) : base(app)
-    { }
-
-
+    
     /// <summary>
     /// Get or set culture of document.
     /// </summary>
@@ -80,7 +73,7 @@ public static class DocumentSourceExtensions
     public static bool SetToCurrentCulture(this DocumentSource source)
     {
         // get current culture
-        var cultureName = AppSuiteApplication.CurrentOrNull?.CultureInfo.Name;
+        var cultureName = IAppSuiteApplication.CurrentOrNull?.CultureInfo.Name;
         if (string.IsNullOrEmpty(cultureName))
             return false;
         

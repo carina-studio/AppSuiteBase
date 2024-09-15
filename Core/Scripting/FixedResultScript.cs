@@ -5,28 +5,18 @@ using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Scripting;
 
-class FixedResultScript : IScript
+class FixedResultScript(IAppSuiteApplication app, ScriptLanguage language, object? result) : IScript
 {
     // Static fields.
     static readonly IList<ICompilationResult> EmptyCompilationResults = Array.Empty<ICompilationResult>();
     
     
     // Fields.
-    readonly object? result;
-
-
-    // Constructor.
-    public FixedResultScript(IAppSuiteApplication app, ScriptLanguage language, object? result)
-    {
-        this.Application = app;
-        this.Language = language;
-        this.result = result;
-        this.Source = "";
-    }
+    readonly object? result = result;
 
 
     /// <inheritdoc/>
-    public IAppSuiteApplication Application { get; }
+    public IAppSuiteApplication Application { get; } = app;
 
 
     /// <inheritdoc/>
@@ -76,7 +66,7 @@ class FixedResultScript : IScript
 
 
     /// <inheritdoc/>
-    public ScriptLanguage Language { get; }
+    public ScriptLanguage Language { get; } = language;
 
 
     /// <inheritdoc/>
@@ -108,5 +98,5 @@ class FixedResultScript : IScript
 
 
     /// <inheritdoc/>
-    public string Source { get; }
+    public string Source { get; } = "";
 }

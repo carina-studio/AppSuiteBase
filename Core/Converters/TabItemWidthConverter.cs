@@ -23,7 +23,7 @@ static class TabItemWidthConverter
     // Default instance.
     public static readonly IMultiValueConverter Default = new FuncMultiValueConverter<object?, double>(values =>
     {
-        var resourceHost = app as IResourceHost ?? AppSuiteApplication.CurrentOrNull?.Let(it =>
+        var resourceHost = app as IResourceHost ?? IAppSuiteApplication.CurrentOrNull?.Let(it =>
         {
             app = it;
             return it as IResourceHost;

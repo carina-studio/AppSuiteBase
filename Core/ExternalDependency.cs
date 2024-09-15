@@ -31,6 +31,7 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
     /// <param name="priority">Priority of dependency.</param>
     protected ExternalDependency(IAppSuiteApplication app, string id, ExternalDependencyType type, ExternalDependencyPriority priority) : base(app)
     {
+        // ReSharper disable once AsyncVoidLambda
         this.checkAvailabilityAction = new(async () =>
         {
             if (this.state == ExternalDependencyState.CheckingForAvailability)

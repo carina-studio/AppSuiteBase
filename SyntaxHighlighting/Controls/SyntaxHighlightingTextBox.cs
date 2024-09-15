@@ -76,10 +76,9 @@ public class SyntaxHighlightingTextBox : TextBox
     {
         if (text is null)
             return;
-        if (this.AcceptsReturn)
-            this.SelectedText = text;
-        else
-            this.SelectedText = text.RemoveLineBreaks();
+        this.SelectedText = this.AcceptsReturn 
+            ? text
+            : text.RemoveLineBreaks();
     }
 
 

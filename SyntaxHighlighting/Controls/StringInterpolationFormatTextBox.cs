@@ -93,6 +93,7 @@ public class StringInterpolationFormatTextBox : TextBox
 				{
 					var filterText = this.Text?[(varNameRange.Start!.Value + 1)..(varNameRange.End!.Value - 1)]?.ToLower() ?? "";
 					this.filteredPredefinedVars.Clear();
+					// ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
 					if (string.IsNullOrEmpty(filterText))
 						this.filteredPredefinedVars.AddAll(this.predefinedVars);
 					else
@@ -269,7 +270,7 @@ public class StringInterpolationFormatTextBox : TextBox
 			{
 				if (this.isSyntaxHighlightingEnabled)
 				{
-					AppSuiteApplication.CurrentOrNull?.Let(app =>
+					IAppSuiteApplication.CurrentOrNull?.Let(app =>
 						shTextPresenter.DefinitionSet = StringInterpolationFormatSyntaxHighlighting.CreateDefinitionSet(app));
 				}
 				else
@@ -286,7 +287,7 @@ public class StringInterpolationFormatTextBox : TextBox
 		this.textPresenter = e.NameScope.Find<TextPresenter>("PART_TextPresenter");
 		if (this.isSyntaxHighlightingEnabled && textPresenter is Presenters.SyntaxHighlightingTextPresenter shTextPresenter)
 		{
-			AppSuiteApplication.CurrentOrNull?.Let(app =>
+			IAppSuiteApplication.CurrentOrNull?.Let(app =>
 				shTextPresenter.DefinitionSet = StringInterpolationFormatSyntaxHighlighting.CreateDefinitionSet(app));
 		}
 	}

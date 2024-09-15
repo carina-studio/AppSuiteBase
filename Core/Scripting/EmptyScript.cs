@@ -8,23 +8,14 @@ namespace CarinaStudio.AppSuite.Scripting;
 /// <summary>
 /// Empty script.
 /// </summary>
-class EmptyScript : IScript
+class EmptyScript(IAppSuiteApplication app, ScriptLanguage language) : IScript
 {
     // Static fields.
     static readonly IList<ICompilationResult> EmptyCompilationResults = Array.Empty<ICompilationResult>();
 
-
-    // Constructor.
-    public EmptyScript(IAppSuiteApplication app, ScriptLanguage language)
-    {
-        this.Application = app;
-        this.Language = language;
-        this.Source = "";
-    }
-
-
+    
     /// <inheritdoc/>
-    public IAppSuiteApplication Application { get; }
+    public IAppSuiteApplication Application { get; } = app;
 
 
     /// <inheritdoc/>
@@ -75,7 +66,7 @@ class EmptyScript : IScript
 
 
     /// <inheritdoc/>
-    public ScriptLanguage Language { get; }
+    public ScriptLanguage Language { get; } = language;
 
 
     /// <inheritdoc/>
@@ -93,5 +84,5 @@ class EmptyScript : IScript
 
 
     /// <inheritdoc/>
-    public string Source { get; }
+    public string Source { get; } = "";
 }

@@ -23,36 +23,25 @@ public interface IScriptRunningHost : IApplicationObject<IAppSuiteApplication>
 /// <summary>
 /// Data for event of runtime error of script.
 /// </summary>
-public class ScriptRuntimeErrorEventArgs : EventArgs
+/// <param name="scriptContainer">The object which contains/owns the script.</param>
+/// <param name="script">The script which causes the runtime error.</param>
+/// <param name="error">The error occurred while running script.</param>
+public class ScriptRuntimeErrorEventArgs(object? scriptContainer, IScript script, Exception error) : EventArgs
 {
-    /// <summary>
-    /// Initialize new <see cref="ScriptRuntimeErrorEventArgs"/> instance.
-    /// </summary>
-    /// <param name="scriptContainer">The object which contains/owns the script.</param>
-    /// <param name="script">The script which causes the runtime error.</param>
-    /// <param name="error">The error occurred while running script.</param>
-    public ScriptRuntimeErrorEventArgs(object? scriptContainer, IScript script, Exception error)
-    {
-        this.Error = error;
-        this.Script = script;
-        this.ScriptContainer = scriptContainer;
-    }
-
-
     /// <summary>
     /// Get the error occurred while running script.
     /// </summary>
-    public Exception Error { get; }
+    public Exception Error { get; } = error;
 
 
     /// <summary>
     /// Get the script which causes the runtime error.
     /// </summary>
-    public IScript Script { get; }
+    public IScript Script { get; } = script;
 
 
     /// <summary>
     /// Get the object which contains/owns the script.
     /// </summary>
-    public object? ScriptContainer { get; }
+    public object? ScriptContainer { get; } = scriptContainer;
 }

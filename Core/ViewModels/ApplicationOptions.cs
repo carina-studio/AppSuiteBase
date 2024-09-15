@@ -22,11 +22,11 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// <summary>
     /// <see cref="IValueConverter"/> to convert from <see cref="ApplicationCulture"/> to <see cref="string"/>.
     /// </summary>
-    public static readonly IValueConverter ApplicationCultureConverter = new Converters.EnumConverter(AppSuiteApplication.CurrentOrNull, typeof(ApplicationCulture));
+    public static readonly IValueConverter ApplicationCultureConverter = new Converters.EnumConverter(IAppSuiteApplication.CurrentOrNull, typeof(ApplicationCulture));
     /// <summary>
     /// <see cref="IValueConverter"/> to convert from <see cref="ThemeMode"/> to <see cref="string"/>.
     /// </summary>
-    public static readonly IValueConverter ThemeModeConverter = new Converters.EnumConverter(AppSuiteApplication.CurrentOrNull, typeof(ThemeMode));
+    public static readonly IValueConverter ThemeModeConverter = new Converters.EnumConverter(IAppSuiteApplication.CurrentOrNull, typeof(ThemeMode));
     
     
     // Static fields.

@@ -7,13 +7,8 @@ namespace CarinaStudio.AppSuite.Testing;
 /// <summary>
 /// Empty test case.
 /// </summary>
-class EmptyTest : TestCase
+class EmptyTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategoryNames.Unclassified, "Empty")
 {
-    // Constructor.
-    public EmptyTest(IAppSuiteApplication app) : base(app, TestCaseCategoryNames.Unclassified, "Empty")
-    { }
-
-
     /// <inheritdoc/>
     protected override Task OnRunAsync(CancellationToken cancellationToken)
     {

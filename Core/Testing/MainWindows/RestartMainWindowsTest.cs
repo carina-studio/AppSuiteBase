@@ -7,17 +7,12 @@ using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Testing.MainWindows;
 
-class RestartMainWindowsTest : TestCase
+class RestartMainWindowsTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategoryNames.MainWindows, "Restart Main Windows")
 {
     // Fields.
     int mainWindowCount;
     readonly List<ViewModel> viewModels = new();
-
-
-    // Constructor.
-    public RestartMainWindowsTest(IAppSuiteApplication app) : base(app, TestCaseCategoryNames.MainWindows, "Restart Main Windows")
-    { }
-
+    
 
     /// <inheritdoc/>
     protected override async Task OnRunAsync(CancellationToken cancellationToken)

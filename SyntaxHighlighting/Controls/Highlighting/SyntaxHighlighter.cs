@@ -184,7 +184,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         set
         {
             this.VerifyAccess();
-            if (this.background == value)
+            if (ReferenceEquals(this.background, value))
                 return;
             this.backgroundPropertyChangedHandlerToken.Dispose();
             (value as AvaloniaObject)?.Let(it => 
@@ -996,7 +996,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         set
         {
             this.VerifyAccess();
-            if (this.foreground == value)
+            if (ReferenceEquals(this.foreground, value))
                 return;
             this.foregroundPropertyChangedHandlerToken.Dispose();
             (value as AvaloniaObject)?.Let(it => 
@@ -1169,7 +1169,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         set
         {
             this.VerifyAccess();
-            if (this.selectionBackground == value)
+            if (ReferenceEquals(this.selectionBackground, value))
                 return;
             this.selectionBackgroundPropertyChangedHandlerToken.Dispose();
             (value as AvaloniaObject)?.Let(it => 
@@ -1208,7 +1208,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         set
         {
             this.VerifyAccess();
-            if (this.selectionForeground == value)
+            if (ReferenceEquals(this.selectionForeground, value))
                 return;
             this.selectionForegroundPropertyChangedHandlerToken.Dispose();
             (value as AvaloniaObject)?.Let(it => 

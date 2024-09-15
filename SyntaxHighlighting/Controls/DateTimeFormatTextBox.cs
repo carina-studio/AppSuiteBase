@@ -66,7 +66,7 @@ public class DateTimeFormatTextBox : ObjectTextBox<string>
             {
                 if (this.isSyntaxHighlightingEnabled)
                 {
-                    AppSuiteApplication.CurrentOrNull?.Let(app =>
+                    IAppSuiteApplication.CurrentOrNull?.Let(app =>
                         shTextPresenter.DefinitionSet = DateTimeFormatSyntaxHighlighting.CreateDefinitionSet(app));
                 }
                 else
@@ -83,7 +83,7 @@ public class DateTimeFormatTextBox : ObjectTextBox<string>
         this.textPresenter = e.NameScope.Find<TextPresenter>("PART_TextPresenter");
         if (this.isSyntaxHighlightingEnabled && textPresenter is Presenters.SyntaxHighlightingTextPresenter shTextPresenter)
         {
-            AppSuiteApplication.CurrentOrNull?.Let(app =>
+            IAppSuiteApplication.CurrentOrNull?.Let(app =>
                 shTextPresenter.DefinitionSet = DateTimeFormatSyntaxHighlighting.CreateDefinitionSet(app));
         }
     }

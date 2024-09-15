@@ -18,13 +18,10 @@ namespace CarinaStudio.AppSuite;
 public class ProcessInfo : INotifyPropertyChanged
 {
 	// Token for high-frequency update.
-	class HighFrequencyUpdateToken : IDisposable
+	class HighFrequencyUpdateToken(ProcessInfo processInfo) : IDisposable
 	{
-		readonly ProcessInfo processInfo;
-		public HighFrequencyUpdateToken(ProcessInfo processInfo) =>
-			this.processInfo = processInfo;
 		public void Dispose() =>
-			this.processInfo.OnHfTokenDisposed(this);
+			processInfo.OnHfTokenDisposed(this);
 	}
 
 

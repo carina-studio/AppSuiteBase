@@ -61,11 +61,11 @@ class MockScript : IScript
 
 
     /// <inheritdoc/>
-    public bool HasCompilationError { get => false; }
-    
+    public bool HasCompilationError => false;
+
 
     /// <inheritdoc/>
-    public bool HasRuntimeError { get => true; }
+    public bool HasRuntimeError => true;
 
 
     /// <inheritdoc/>

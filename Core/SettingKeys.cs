@@ -7,6 +7,8 @@ namespace CarinaStudio.AppSuite;
 /// <summary>
 /// Default keys of setting.
 /// </summary>
+// ReSharper disable once ConvertToStaticClass
+// ReSharper disable once ClassNeverInstantiated.Global
 public sealed class SettingKeys
 {
     /// <summary>

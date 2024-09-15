@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Testing.Common;
 
-class LocalizationTest : TestCase
+class LocalizationTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategoryNames.Common, "Localization")
 {
     // Static fields.
     static readonly Dictionary<ApplicationCulture, string> TestStrings = new()
@@ -22,12 +22,7 @@ class LocalizationTest : TestCase
 
     // Fields.
     ApplicationCulture initAppCulture;
-
-
-    // Constructor.
-    public LocalizationTest(IAppSuiteApplication app) : base(app, TestCaseCategoryNames.Common, "Localization")
-    { }
-
+    
 
     /// <inheritdoc/>
     protected override async Task OnRunAsync(CancellationToken cancellationToken)

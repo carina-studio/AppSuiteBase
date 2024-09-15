@@ -853,6 +853,7 @@ namespace CarinaStudio.AppSuite
             });
             if (this.IsRestartingRootWindowsNeeded != isRestartingNeeded)
             {
+                // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                 if (isRestartingNeeded)
                     this.Logger.LogWarning("Need to restart root windows");
                 else
@@ -3363,7 +3364,7 @@ namespace CarinaStudio.AppSuite
         /// Open the stream of application icon.
         /// </summary>
         /// <returns>Stream of application icon.</returns>
-        protected internal virtual Stream OpenApplicationIconStream()
+        internal protected virtual Stream OpenApplicationIconStream()
         {
             var assembly = Assembly.GetEntryAssembly().AsNonNull();
             var uri = new Uri($"avares://{assembly.GetName().Name}/{this.Name}.ico");
@@ -4314,6 +4315,7 @@ namespace CarinaStudio.AppSuite
             {
                 try
                 {
+                    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (this.isRestartAsAdminRequested)
                         this.Logger.LogWarning("Restart as administrator/superuser");
                     else

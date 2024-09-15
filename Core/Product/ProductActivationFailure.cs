@@ -10,7 +10,7 @@ public enum ProductActivationFailure
     /// </summary>
     Unknown,
     /// <summary>
-    /// Networn connection is unavailable.
+    /// Network connection is unavailable.
     /// </summary>
     NoNetworkConnection,
     /// <summary>

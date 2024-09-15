@@ -193,13 +193,8 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
 
 
 // Mock implementation of IProductManager.
-class MockProductManager : BaseApplicationObject<IAppSuiteApplication>, IProductManager
+class MockProductManager(IAppSuiteApplication app) : BaseApplicationObject<IAppSuiteApplication>(app), IProductManager
 {
-    // Constructor.
-    public MockProductManager(IAppSuiteApplication app) : base(app)
-    { }
-
-
     /// <inheritdoc/>
     public Task ActivateProductAsync(string id, Window? window) => Task.CompletedTask;
 

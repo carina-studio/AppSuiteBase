@@ -14,27 +14,19 @@ namespace CarinaStudio.AppSuite.Scripting;
 public class Application : IApplication
 {
     // SynchronizationContext to prevent crashing by unhandled exception.
-    class GuardedSynchronizationContext : SynchronizationContext
+    class GuardedSynchronizationContext(Application app) : SynchronizationContext
     {
         // Fields.
-        readonly Application app;
-        readonly SynchronizationContext syncContext;
-
-        // Constructor.
-        public GuardedSynchronizationContext(Application app)
-        {
-            this.app = app;
-            this.syncContext = app.app.SynchronizationContext;
-        }
+        readonly SynchronizationContext syncContext = app.app.SynchronizationContext;
 
         /// <inheritdoc/>
         public override SynchronizationContext CreateCopy() =>
-            new GuardedSynchronizationContext(this.app);
+            new GuardedSynchronizationContext(app);
 
         /// <inheritdoc/>
         public override void Post(SendOrPostCallback d, object? state)
         {
-            var callerStackTrace = this.app.IsDebugMode ? Environment.StackTrace : null;
+            var callerStackTrace = app.IsDebugMode ? Environment.StackTrace : null;
             this.syncContext.Post(s =>
             {
                 try
@@ -44,9 +36,9 @@ public class Application : IApplication
                 catch (Exception ex)
                 {
                     if (string.IsNullOrEmpty(callerStackTrace))
-                        this.app.Logger.LogError(ex, "Unhandled exception occurred in action posted by script");
+                        app.Logger.LogError(ex, "Unhandled exception occurred in action posted by script");
                     else
-                        this.app.Logger.LogError(ex, "Unhandled exception occurred in action posted by script. Call stack:\n{stackTrace}", callerStackTrace);
+                        app.Logger.LogError(ex, "Unhandled exception occurred in action posted by script. Call stack:\n{stackTrace}", callerStackTrace);
                 }
             }, state);
         }

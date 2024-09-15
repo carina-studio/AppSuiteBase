@@ -9,7 +9,7 @@ namespace CarinaStudio.AppSuite.Testing.Common;
 /// <summary>
 /// Empty test case.
 /// </summary>
-class AppLifetimeExceptionTest : TestCase
+class AppLifetimeExceptionTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategoryNames.Common, "Application Lifetime Exception")
 {
     // Constants.
     const string TestExceptionMessage = "This is the test exception.";
@@ -18,12 +18,7 @@ class AppLifetimeExceptionTest : TestCase
     // Fields.
     Exception? exception;
     
-    
-    // Constructor.
-    public AppLifetimeExceptionTest(IAppSuiteApplication app) : base(app, TestCaseCategoryNames.Common, "Application Lifetime Exception")
-    { }
-    
-    
+
     // Called when exception occurred in application lifetime.
     void OnExceptionOccurredInApplicationLifetime(object? sender, IAppSuiteApplication.ExceptionEventArgs e)
     {

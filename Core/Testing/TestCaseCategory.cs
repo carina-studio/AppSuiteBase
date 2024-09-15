@@ -1,6 +1,7 @@
 using CarinaStudio.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace CarinaStudio.AppSuite.Testing;
 
@@ -14,7 +15,7 @@ public class TestCaseCategory : INotifyPropertyChanged
     readonly HashSet<TestCase> succeededTestCases = new();
     readonly SortedObservableList<TestCase> testCases = new((lhs, rhs) =>
     {
-        var result = string.Compare(lhs.Name, rhs.Name, true);
+        var result = string.Compare(lhs.Name, rhs.Name, true, CultureInfo.InvariantCulture);
         if (result != 0)
             return result;
         return lhs.GetHashCode() - rhs.GetHashCode();
@@ -40,7 +41,7 @@ public class TestCaseCategory : INotifyPropertyChanged
     /// <summary>
     /// Get number of failed test cases.
     /// </summary>
-    public int FailedTestCaseCount { get => this.failedTestCases.Count; }
+    public int FailedTestCaseCount => this.failedTestCases.Count;
 
 
     /// <summary>
@@ -84,7 +85,7 @@ public class TestCaseCategory : INotifyPropertyChanged
     /// <summary>
     /// Get number of succeeded test cases.
     /// </summary>
-    public int SucceededTestCaseCount { get => this.succeededTestCases.Count; }
+    public int SucceededTestCaseCount => this.succeededTestCases.Count;
 
 
     /// <summary>

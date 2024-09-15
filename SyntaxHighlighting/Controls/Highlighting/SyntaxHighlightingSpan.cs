@@ -83,6 +83,6 @@ public class SyntaxHighlightingSpan : SyntaxHighlightingDefinition
     /// <inheritdoc/>
     public override string ToString() =>
         string.IsNullOrEmpty(this.Name)
-            ? $"{{{this.startPattern?.ToString()}}}-{{{this.endPattern?.ToString()}}}"
-            : $"[{this.Name}]{{{this.startPattern?.ToString()}}}-{{{this.endPattern?.ToString()}}}";
+            ? $"{{{this.startPattern}}}-{{{this.endPattern}}}"
+            : $"[{this.Name}]{{{this.startPattern}}}-{{{this.endPattern}}}";
 }

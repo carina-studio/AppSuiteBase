@@ -12,7 +12,7 @@ namespace CarinaStudio.AppSuite.Converters
 		/// <summary>
 		/// Default instance.
 		/// </summary>
-		public static readonly IValueConverter Default = new TimeSpanConverter(AppSuiteApplication.CurrentOrNull);
+		public static readonly IValueConverter Default = new TimeSpanConverter(IAppSuiteApplication.CurrentOrNull);
 
 
 		// Fields.

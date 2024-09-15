@@ -5,116 +5,115 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CarinaStudio.AppSuite
+namespace CarinaStudio.AppSuite;
+
+/// <summary>
+/// Application culture.
+/// </summary>
+public enum ApplicationCulture
 {
 	/// <summary>
-	/// Application culture.
+	/// System.
 	/// </summary>
-	public enum ApplicationCulture
-	{
-		/// <summary>
-		/// System.
-		/// </summary>
-		System,
-		/// <summary>
-		/// English (US).
-		/// </summary>
-		EN_US,
-		/// <summary>
-		/// Chinese (Taiwan).
-		/// </summary>
-		ZH_TW,
-		/// <summary>
-		/// Chinese (Simplified).
-		/// </summary>
-		ZH_CN,
-	}
+	System,
+	/// <summary>
+	/// English (US).
+	/// </summary>
+	EN_US,
+	/// <summary>
+	/// Chinese (Taiwan).
+	/// </summary>
+	ZH_TW,
+	/// <summary>
+	/// Chinese (Simplified).
+	/// </summary>
+	ZH_CN,
+}
+
+
+/// <summary>
+/// Extensions for <see cref="ApplicationCulture"/>.
+/// </summary>
+public static class ApplicationCultureExtensions
+{
+	// Static fields.
+	static volatile CultureInfo? CachedMacOSSysCultureInfo;
+	static readonly Regex IetfLangTagRegex = new("^(?<Language>[^\\-]+)\\-((?<Script>[^\\-]+)\\-)?(?<Region>[^\\-]+)$");
+	static readonly Regex MacOSSysLangRegex = new("^[\\s]*\"(?<Language>[^\"]*)\"");
 
 
 	/// <summary>
-	/// Extensions for <see cref="ApplicationCulture"/>.
+	/// Convert to <see cref="CultureInfo"/> asynchronously.
 	/// </summary>
-	public static class ApplicationCultureExtensions
+	/// <param name="culture"><see cref="ApplicationCulture"/>.</param>
+	/// <param name="invalidateSysCultureInfo">True to invalidate system culture info before conversion.</param>
+	/// <returns><see cref="CultureInfo"/>.</returns>
+	public static async Task<CultureInfo> ToCultureInfoAsync(this ApplicationCulture culture, bool invalidateSysCultureInfo = false)
     {
-		// Static fields.
-		static volatile CultureInfo? CachedMacOSSysCultureInfo;
-		static readonly Regex IetfLangTagRegex = new("^(?<Language>[^\\-]+)\\-((?<Script>[^\\-]+)\\-)?(?<Region>[^\\-]+)$");
-		static readonly Regex MacOSSysLangRegex = new("^[\\s]*\"(?<Language>[^\"]*)\"");
-
-
-		/// <summary>
-		/// Convert to <see cref="CultureInfo"/> asynchronously.
-		/// </summary>
-		/// <param name="culture"><see cref="ApplicationCulture"/>.</param>
-		/// <param name="invalidateSysCultureInfo">True to invalidate system culture info before conversion.</param>
-		/// <returns><see cref="CultureInfo"/>.</returns>
-		public static async Task<CultureInfo> ToCultureInfoAsync(this ApplicationCulture culture, bool invalidateSysCultureInfo = false)
-        {
-			if (culture == ApplicationCulture.System)
+		if (culture == ApplicationCulture.System)
+		{
+			if (Platform.IsMacOS)
 			{
-				if (Platform.IsMacOS)
+				if (invalidateSysCultureInfo || CachedMacOSSysCultureInfo == null)
 				{
-					if (invalidateSysCultureInfo || CachedMacOSSysCultureInfo == null)
+					return await Task.Run(() =>
 					{
-						return await Task.Run(() =>
+						try
 						{
-							try
+							using var process = Process.Start(new ProcessStartInfo()
 							{
-								using var process = Process.Start(new ProcessStartInfo()
+								Arguments = "read -g AppleLanguages",
+								CreateNoWindow = true,
+								FileName = "defaults",
+								RedirectStandardOutput = true,
+								UseShellExecute = false,
+							});
+							if (process != null)
+							{
+								using var reader = process.StandardOutput;
+								var line = reader.ReadLine();
+								while (line != null)
 								{
-									Arguments = "read -g AppleLanguages",
-									CreateNoWindow = true,
-									FileName = "defaults",
-									RedirectStandardOutput = true,
-									UseShellExecute = false,
-								});
-								if (process != null)
-								{
-									using var reader = process.StandardOutput;
-									var line = reader.ReadLine();
-									while (line != null)
+									var match = MacOSSysLangRegex.Match(line);
+									if (match.Success)
 									{
-										var match = MacOSSysLangRegex.Match(line);
+										match = IetfLangTagRegex.Match(match.Groups["Language"].Value);
 										if (match.Success)
 										{
-											match = IetfLangTagRegex.Match(match.Groups["Language"].Value);
-											if (match.Success)
+											try
 											{
-												try
-												{
-												
-													CachedMacOSSysCultureInfo = CultureInfo.GetCultureInfo($"{match.Groups["Language"].Value}-{match.Groups["Region"].Value}");
-													break;
-												}
-												// ReSharper disable once EmptyGeneralCatchClause
-												catch
-												{ }
+											
+												CachedMacOSSysCultureInfo = CultureInfo.GetCultureInfo($"{match.Groups["Language"].Value}-{match.Groups["Region"].Value}");
+												break;
 											}
+											// ReSharper disable once EmptyGeneralCatchClause
+											catch
+											{ }
 										}
-										line = reader.ReadLine();
 									}
+									line = reader.ReadLine();
 								}
 							}
-							// ReSharper disable once EmptyGeneralCatchClause
-							catch
-							{ }
-							return CachedMacOSSysCultureInfo ?? CultureInfo.InstalledUICulture;
-						}, CancellationToken.None);
-					}
+						}
+						// ReSharper disable once EmptyGeneralCatchClause
+						catch
+						{ }
+						return CachedMacOSSysCultureInfo ?? CultureInfo.InstalledUICulture;
+					}, CancellationToken.None);
 				}
-				return CultureInfo.InstalledUICulture;
 			}
-			var nameBuilder = new StringBuilder(culture.ToString());
-			for (var i = 0; i < nameBuilder.Length; ++i)
+			return CultureInfo.InstalledUICulture;
+		}
+		var nameBuilder = new StringBuilder(culture.ToString());
+		for (var i = 0; i < nameBuilder.Length; ++i)
+		{
+			if (nameBuilder[i] == '_')
 			{
-				if (nameBuilder[i] == '_')
-				{
-					nameBuilder[i] = '-';
-					break;
-				}
-				nameBuilder[i] = char.ToLowerInvariant(nameBuilder[i]);
+				nameBuilder[i] = '-';
+				break;
 			}
-			return CultureInfo.GetCultureInfo(nameBuilder.ToString());
-        }
+			nameBuilder[i] = char.ToLowerInvariant(nameBuilder[i]);
+		}
+		return CultureInfo.GetCultureInfo(nameBuilder.ToString());
     }
 }

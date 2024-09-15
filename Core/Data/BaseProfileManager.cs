@@ -148,14 +148,14 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
                     continue;
                 if (fileInfo.Length == 0)
                 {
-                    this.Logger.LogWarning("Delete empty file '{fileName}'.", fileName);
+                    this.Logger.LogWarning("Delete empty file '{fileName}'", fileName);
                     try
                     {
                         fileInfo.Delete();
                     }
                     catch (Exception ex)
                     {
-                        this.Logger.LogError(ex, "Failed to delete empty file '{fileName}'.", fileName);
+                        this.Logger.LogError(ex, "Failed to delete empty file '{fileName}'", fileName);
                     }
                     continue;
                 }
@@ -352,9 +352,11 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         // remove profile
         if (!ReferenceEquals(profile.Manager, this) || !this.profilesById.Remove(profile.Id))
             return false;
-        this.Logger.LogTrace(deleteFile 
-            ? "Remove profile '{profileName}' ({profileId})" 
-            : "Remove profile '{profileName}' ({profileId}) without deleting file", profile.Name, profile.Id);
+        // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+        if (deleteFile)
+            this.Logger.LogTrace("Remove profile '{profileName}' ({profileId})", profile.Name, profile.Id);
+        else
+            this.Logger.LogTrace("Remove profile '{profileName}' ({profileId}) without deleting file", profile.Name, profile.Id);
         this.removingProfileHandlers?.Invoke(this, profile);
         this.profiles.Remove(profile);
         this.profilesToSave.Remove(profile);

@@ -156,6 +156,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 			{
 				var filterText = this.Text?[this.selectedGroupNameRange.Start!.Value..this.selectedGroupNameRange.End!.Value]?.ToLower() ?? "";
 				this.filteredPredefinedGroups.Clear();
+				// ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
 				if (string.IsNullOrEmpty(filterText))
 					this.filteredPredefinedGroups.AddAll(this.predefinedGroups);
 				else
@@ -223,9 +224,9 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		});
 		this.AddHandler(KeyDownEvent, this.OnPreviewKeyDown, RoutingStrategies.Tunnel);
 		this.AddHandler(KeyUpEvent, this.OnPreviewKeyUp, RoutingStrategies.Tunnel);
-		this.GetObservable(ObjectProperty).Subscribe(o =>
+		this.GetObservable(ObjectProperty).Subscribe(regex =>
 		{
-			if (o is Regex regex && ((regex.Options & RegexOptions.IgnoreCase) != 0) != this.IgnoreCase)
+			if (regex is {} && ((regex.Options & RegexOptions.IgnoreCase) != 0) != this.IgnoreCase)
 			{
 				var options = regex.Options;
 				if (this.IgnoreCase)
@@ -601,7 +602,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 			{
 				if (this.isSyntaxHighlightingEnabled)
 				{
-					AppSuiteApplication.CurrentOrNull?.Let(app =>
+					IAppSuiteApplication.CurrentOrNull?.Let(app =>
 						shTextPresenter.DefinitionSet = RegexSyntaxHighlighting.CreateDefinitionSet(app));
 				}
 				else
@@ -626,7 +627,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		this.textPresenter = e.NameScope.Find<TextPresenter>("PART_TextPresenter");
 		if (this.isSyntaxHighlightingEnabled && textPresenter is SyntaxHighlightingTextPresenter shTextPresenter)
 		{
-			AppSuiteApplication.CurrentOrNull?.Let(app =>
+			IAppSuiteApplication.CurrentOrNull?.Let(app =>
 				shTextPresenter.DefinitionSet = RegexSyntaxHighlighting.CreateDefinitionSet(app));
 		}
 	}

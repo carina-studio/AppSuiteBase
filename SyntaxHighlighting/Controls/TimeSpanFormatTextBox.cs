@@ -56,7 +56,7 @@ public class TimeSpanFormatTextBox : ObjectTextBox<string>
             {
                 if (this.isSyntaxHighlightingEnabled)
                 {
-                    AppSuiteApplication.CurrentOrNull?.Let(app =>
+                    IAppSuiteApplication.CurrentOrNull?.Let(app =>
                         shTextPresenter.DefinitionSet = TimeSpanFormatSyntaxHighlighting.CreateDefinitionSet(app));
                 }
                 else
@@ -81,7 +81,7 @@ public class TimeSpanFormatTextBox : ObjectTextBox<string>
         this.textPresenter = e.NameScope.Find<TextPresenter>("PART_TextPresenter");
         if (this.isSyntaxHighlightingEnabled && textPresenter is Presenters.SyntaxHighlightingTextPresenter shTextPresenter)
         {
-            AppSuiteApplication.CurrentOrNull?.Let(app =>
+            IAppSuiteApplication.CurrentOrNull?.Let(app =>
                 shTextPresenter.DefinitionSet = TimeSpanFormatSyntaxHighlighting.CreateDefinitionSet(app));
         }
     }

@@ -6,15 +6,8 @@ using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Testing.Data;
 
-class MockProfileManager : BaseProfileManager<IAppSuiteApplication, MockProfile>, IDisposable
+class MockProfileManager(IAppSuiteApplication app) : BaseProfileManager<IAppSuiteApplication, MockProfile>(app), IDisposable
 {
-    // Constructor.
-    public MockProfileManager(IAppSuiteApplication app) : base(app)
-    { 
-        this.ProfilesDirectory = Path.Combine(this.Application.RootPrivateDirectoryPath, "__Mock_Profiles__");
-    }
-
-
     /// <inheritdoc/>
     public void Dispose()
     {
@@ -30,5 +23,5 @@ class MockProfileManager : BaseProfileManager<IAppSuiteApplication, MockProfile>
 
 
     /// <inheritdoc/>
-    protected override string ProfilesDirectory { get; }
+    protected override string ProfilesDirectory { get; } = Path.Combine(app.RootPrivateDirectoryPath, "__Mock_Profiles__");
 }

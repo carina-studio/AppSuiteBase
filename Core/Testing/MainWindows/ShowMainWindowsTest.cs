@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Testing.MainWindows;
 
-class ShowMainWindowsTest : TestCase
+class ShowMainWindowsTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategoryNames.MainWindows, "Show Main Windows")
 {
     // Constants.
     const int TestMainWindowCount = 4;
@@ -16,12 +16,7 @@ class ShowMainWindowsTest : TestCase
 
     // Fields.
     readonly List<Avalonia.Controls.Window> createdMainWindows = new();
-
-
-    // Constructor.
-    public ShowMainWindowsTest(IAppSuiteApplication app) : base(app, TestCaseCategoryNames.MainWindows, "Show Main Windows")
-    { }
-
+    
 
     /// <inheritdoc/>
     protected override async Task OnRunAsync(CancellationToken cancellationToken)

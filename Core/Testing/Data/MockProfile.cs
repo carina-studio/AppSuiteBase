@@ -3,13 +3,8 @@ using System.Text.Json;
 
 namespace CarinaStudio.AppSuite.Testing.Data;
 
-class MockProfile : BaseProfile<IAppSuiteApplication>
+class MockProfile(IAppSuiteApplication app, string id, bool isBuiltIn) : BaseProfile<IAppSuiteApplication>(app, id, isBuiltIn)
 {
-    // Constructor.
-    public MockProfile(IAppSuiteApplication app, string id, bool isBuiltIn) : base(app, id, isBuiltIn)
-    { }
-
-
     /// <inheritdoc/>
     public override bool Equals(IProfile<IAppSuiteApplication>? profile)
     {

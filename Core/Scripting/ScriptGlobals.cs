@@ -23,15 +23,21 @@ public class ScriptGlobals<TContext> where TContext : IContext
     }
 
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Get application.
+    /// </summary>
     public IApplication App { get; }
 
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Get cancellation token of running script.
+    /// </summary>
     public CancellationToken CancellationToken { get; }
 
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Get context.
+    /// </summary>
     public TContext Context { get; }   
 
 

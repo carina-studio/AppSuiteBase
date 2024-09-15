@@ -1,7 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
-using CarinaStudio.Controls;
 using System.Collections.Generic;
 
 namespace CarinaStudio.AppSuite.Converters;
@@ -13,7 +12,7 @@ static class WindowBackgroundConverters
     /// </summary>
     public static readonly IValueConverter Default = new FuncValueConverter<IReadOnlyList<WindowTransparencyLevel>?, IBrush?>(levels =>
     {
-        var app = AppSuiteApplication.CurrentOrNull;
+        var app = IAppSuiteApplication.CurrentOrNull;
         if (app is null)
             return null;
         if (levels is null || levels.Count == 0 || levels[0] == WindowTransparencyLevel.None)
@@ -27,7 +26,7 @@ static class WindowBackgroundConverters
     /// </summary>
     public static readonly IValueConverter Tabbed = new FuncValueConverter<IReadOnlyList<WindowTransparencyLevel>?, IBrush?>(levels =>
     {
-        var app = AppSuiteApplication.CurrentOrNull;
+        var app = IAppSuiteApplication.CurrentOrNull;
         if (app is null)
             return null;
         if (levels is null || levels.Count == 0 || levels[0] == WindowTransparencyLevel.None)
