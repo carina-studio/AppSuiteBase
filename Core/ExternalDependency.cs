@@ -43,7 +43,7 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
         this.Id = id;
         this.Priority = priority;
         this.Type = type;
-        app.AddWeakEventHandler(nameof(IApplication.StringsUpdated), this.OnAppStringsUpdated);
+        app.AddWeakEventHandler<IApplication>(nameof(IApplication.StringsUpdated), this.OnAppStringsUpdated);
         this.InvalidateAvailability();
     }
 

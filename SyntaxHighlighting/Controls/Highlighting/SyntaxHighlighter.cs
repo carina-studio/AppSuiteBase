@@ -188,7 +188,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 return;
             this.backgroundPropertyChangedHandlerToken.Dispose();
             (value as AvaloniaObject)?.Let(it => 
-                this.backgroundPropertyChangedHandlerToken = it.AddWeakEventHandler<AvaloniaPropertyChangedEventArgs>(nameof(AvaloniaObject.PropertyChanged), this.OnBrushPropertyChanged));
+                this.backgroundPropertyChangedHandlerToken = it.AddWeakEventHandler<AvaloniaObject, AvaloniaPropertyChangedEventArgs>(nameof(AvaloniaObject.PropertyChanged), this.OnBrushPropertyChanged));
             this.SetAndRaise(BackgroundProperty, ref this.background, value);
             this.InvalidateTextProperties();
         }
@@ -1000,7 +1000,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 return;
             this.foregroundPropertyChangedHandlerToken.Dispose();
             (value as AvaloniaObject)?.Let(it => 
-                this.foregroundPropertyChangedHandlerToken = it.AddWeakEventHandler<AvaloniaPropertyChangedEventArgs>(nameof(AvaloniaObject.PropertyChanged), this.OnBrushPropertyChanged));
+                this.foregroundPropertyChangedHandlerToken = it.AddWeakEventHandler<AvaloniaObject, AvaloniaPropertyChangedEventArgs>(nameof(PropertyChanged), this.OnBrushPropertyChanged));
             this.SetAndRaise(ForegroundProperty, ref this.foreground, value);
             this.InvalidateTextProperties();
         }
@@ -1173,7 +1173,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 return;
             this.selectionBackgroundPropertyChangedHandlerToken.Dispose();
             (value as AvaloniaObject)?.Let(it => 
-                this.selectionBackgroundPropertyChangedHandlerToken = it.AddWeakEventHandler<AvaloniaPropertyChangedEventArgs>(nameof(AvaloniaObject.PropertyChanged), this.OnBrushPropertyChanged));
+                this.selectionBackgroundPropertyChangedHandlerToken = it.AddWeakEventHandler<AvaloniaObject, AvaloniaPropertyChangedEventArgs>(nameof(PropertyChanged), this.OnBrushPropertyChanged));
             this.SetAndRaise(SelectionBackgroundProperty, ref this.selectionBackground, value);
             if (this.selectionStart != this.selectionEnd)
                 this.InvalidateTextProperties();
@@ -1212,7 +1212,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 return;
             this.selectionForegroundPropertyChangedHandlerToken.Dispose();
             (value as AvaloniaObject)?.Let(it => 
-                this.selectionForegroundPropertyChangedHandlerToken = it.AddWeakEventHandler<AvaloniaPropertyChangedEventArgs>(nameof(AvaloniaObject.PropertyChanged), this.OnBrushPropertyChanged));
+                this.selectionForegroundPropertyChangedHandlerToken = it.AddWeakEventHandler<AvaloniaObject, AvaloniaPropertyChangedEventArgs>(nameof(PropertyChanged), this.OnBrushPropertyChanged));
             this.SetAndRaise(SelectionForegroundProperty, ref this.selectionForeground, value);
             if (this.selectionStart != this.selectionEnd)
                 this.InvalidateTextProperties();
