@@ -6,6 +6,7 @@
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
 		xmlns:input="using:CarinaStudio.AppSuite.Input"
+        xmlns:xaml="using:CarinaStudio.AppSuite.Xaml"
 		xmlns:md="using:Markdown.Avalonia">
 
 	<!-- AddTabItemButton -->
@@ -120,21 +121,11 @@
 	</Style>
 	<Style Selector="ButtonSpinner[ButtonSpinnerLocation=Left] /template/ RepeatButton#PART_IncreaseButton">
 		<Setter Property="BorderThickness" Value="{Binding $parent[ButtonSpinner].BorderThickness, Converter={x:Static converters:ThicknessConverters.Right}}"/>
-		<Setter Property="CornerRadius">
-			<MultiBinding Converter="{x:Static converters:CornerRadiusConverters.InnerLeft}">
-				<TemplateBinding Property="BorderThickness"/>
-				<TemplateBinding Property="CornerRadius"/>
-			</MultiBinding>
-		</Setter>
+		<Setter Property="CornerRadius" Value="{xaml:MultiBinding {TemplateBinding BorderThickness}, {TemplateBinding CornerRadius}, Converter={x:Static converters:CornerRadiusConverters.InnerLeft}}"/>
 	</Style>
 	<Style Selector="ButtonSpinner[ButtonSpinnerLocation=Right] /template/ RepeatButton#PART_DecreaseButton">
 		<Setter Property="BorderThickness" Value="{Binding $parent[ButtonSpinner].BorderThickness, Converter={x:Static converters:ThicknessConverters.Left}}"/>
-		<Setter Property="CornerRadius">
-			<MultiBinding Converter="{x:Static converters:CornerRadiusConverters.InnerRight}">
-				<TemplateBinding Property="BorderThickness"/>
-				<TemplateBinding Property="CornerRadius"/>
-			</MultiBinding>
-		</Setter>
+		<Setter Property="CornerRadius" Value="{xaml:MultiBinding {TemplateBinding BorderThickness}, {TemplateBinding CornerRadius}, Converter={x:Static converters:CornerRadiusConverters.InnerRight}}"/>
 	</Style>
 	<Style Selector="ButtonSpinner[ButtonSpinnerLocation=Right] /template/ RepeatButton#PART_IncreaseButton">
 		<Setter Property="BorderThickness" Value="{Binding $parent[ButtonSpinner].BorderThickness, Converter={x:Static converters:ThicknessConverters.Left}}"/>
@@ -410,14 +401,14 @@
 	<!-- DatePicker -->
 	<Style Selector="DatePicker">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
-		<Setter Property="DayFormat" Value="{DynamicResource String/DatePicker.DayFormat}"/>
-		<Setter Property="MonthFormat" Value="{DynamicResource String/DatePicker.MonthFormat}"/>
-		<Setter Property="YearFormat" Value="{DynamicResource String/DatePicker.YearFormat}"/>
+		<Setter Property="DayFormat" Value="{xaml:StringResource DatePicker.DayFormat}"/>
+		<Setter Property="MonthFormat" Value="{xaml:StringResource DatePicker.MonthFormat}"/>
+		<Setter Property="YearFormat" Value="{xaml:StringResource DatePicker.YearFormat}"/>
 	</Style>
 
 	<!-- DateTimeTextBox -->
 	<Style Selector="TextBox:dateTimeTextBox">
-		<Setter Property="Watermark" Value="{DynamicResource String/DateTimeTextBox.Watermark}"/>
+		<Setter Property="Watermark" Value="{xaml:StringResource DateTimeTextBox.Watermark}"/>
 	</Style>
 
 	<!-- Dialog -->
