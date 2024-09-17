@@ -91,13 +91,6 @@ unsafe partial class AppSuiteApplication
     // Attach window procedure to given window.
     void AttachWndProc(object window)
     {
-        // check workaround
-        typeof(TopLevel).Assembly.GetName().Version?.Let(version =>
-        {
-            if (version.Major > 11 || version.Minor > 1 || version.Build > 3)
-                throw new Exception("Need to check workaround of catching unhandled exception in dialog on Windows.");
-        });
-
         // check handle
         var topLevel = window as TopLevel;
         var hWnd = default(IntPtr);

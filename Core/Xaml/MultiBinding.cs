@@ -1,6 +1,7 @@
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
+using Avalonia.Styling;
 using System;
 using System.Collections.Generic;
 
@@ -67,14 +68,19 @@ public class MultiBinding(IList<IBinding> bindings): MarkupExtension
 
 
     /// <inheritdoc/>
-    public override object ProvideValue(IServiceProvider provider) =>
-        new Avalonia.Data.MultiBinding
+    public override object ProvideValue(IServiceProvider provider)
+    {
+        var target = (IProvideValueTarget)provider.GetService(typeof(IProvideValueTarget))!;
+        if (target.TargetObject is Setter)
+            throw new NotSupportedException($"Cannot use {nameof(MultiBinding)} markup extension in style setter.");
+        return new Avalonia.Data.MultiBinding
         {
             Bindings = bindings,
             Converter = this.Converter,
             FallbackValue = this.FallbackValue,
             StringFormat = this.StringFormat,
         };
+    }
 
 
     /// <summary>

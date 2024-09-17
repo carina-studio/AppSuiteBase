@@ -121,11 +121,11 @@
 	</Style>
 	<Style Selector="ButtonSpinner[ButtonSpinnerLocation=Left] /template/ RepeatButton#PART_IncreaseButton">
 		<Setter Property="BorderThickness" Value="{Binding $parent[ButtonSpinner].BorderThickness, Converter={x:Static converters:ThicknessConverters.Right}}"/>
-		<Setter Property="CornerRadius" Value="{xaml:MultiBinding {TemplateBinding BorderThickness}, {TemplateBinding CornerRadius}, Converter={x:Static converters:CornerRadiusConverters.InnerLeft}}"/>
+		<Setter Property="CornerRadius" Value="{Binding $parent[ButtonSpinner], Converter={x:Static converters:ButtonSpinnerConverters.LeftButtonCornerRadius}}"/>
 	</Style>
 	<Style Selector="ButtonSpinner[ButtonSpinnerLocation=Right] /template/ RepeatButton#PART_DecreaseButton">
 		<Setter Property="BorderThickness" Value="{Binding $parent[ButtonSpinner].BorderThickness, Converter={x:Static converters:ThicknessConverters.Left}}"/>
-		<Setter Property="CornerRadius" Value="{xaml:MultiBinding {TemplateBinding BorderThickness}, {TemplateBinding CornerRadius}, Converter={x:Static converters:CornerRadiusConverters.InnerRight}}"/>
+		<Setter Property="CornerRadius" Value="{Binding $parent[ButtonSpinner], Converter={x:Static converters:ButtonSpinnerConverters.RightButtonCornerRadius}}"/>
 	</Style>
 	<Style Selector="ButtonSpinner[ButtonSpinnerLocation=Right] /template/ RepeatButton#PART_IncreaseButton">
 		<Setter Property="BorderThickness" Value="{Binding $parent[ButtonSpinner].BorderThickness, Converter={x:Static converters:ThicknessConverters.Left}}"/>
