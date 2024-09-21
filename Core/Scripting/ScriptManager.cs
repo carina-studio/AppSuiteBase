@@ -60,18 +60,19 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
 
 
     // Initialize asynchronously.
+    [RequiresUnreferencedCode("Create internal component.")]
     internal static async Task InitializeAsync(IAppSuiteApplication app, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicMethods)] Type? implType)
     {
         // check state
         app.VerifyAccess();
-        if (DefaultInstance != null)
+        if (DefaultInstance is not null)
             throw new InvalidOperationException();
         
         // create logger
         Logger = app.LoggerFactory.CreateLogger(nameof(ScriptManager));
         
         // create implementation
-        if (implType != null)
+        if (implType is not null)
         {
             if (!typeof(IScriptManager).IsAssignableFrom(implType))
             {
@@ -86,7 +87,7 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
         }
         var implementation = Global.Run(() =>
         {
-            if (implType == null)
+            if (implType is null)
             {
                 Logger.LogWarning("No implementation specified");
                 return null;
@@ -99,7 +100,7 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
             },
             ex => Logger.LogError(ex, "Failed to create implementation"));
         });
-        if (implementation == null)
+        if (implementation is null)
         {
             DefaultInstance = new(app, null);
             return;
@@ -107,7 +108,7 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
         
         // initialize
         var initAsyncMethod = implType!.GetMethod("InitializeAsync");
-        if (initAsyncMethod != null)
+        if (initAsyncMethod is not null)
         {
             var initAsyncResult = initAsyncMethod.Invoke(implementation, Array.Empty<object>());
             if (initAsyncResult is Task task)
@@ -134,7 +135,7 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
     /// <inheritdoc/>
     public Task<TextReader> OpenLogReaderAsync(CancellationToken cancellationToken = default)
     {
-        if (this.implementation != null)
+        if (this.implementation is not null)
             return this.implementation.OpenLogReaderAsync(cancellationToken);
         return Task.FromResult<TextReader>(new StringReader(""));
     }
@@ -156,7 +157,7 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
     /// <inheritdoc/>
     public void SaveScript(IScript script, Utf8JsonWriter writer)
     {
-        if (this.implementation != null)
+        if (this.implementation is not null)
             this.implementation?.SaveScript(script, writer);
         else
         {

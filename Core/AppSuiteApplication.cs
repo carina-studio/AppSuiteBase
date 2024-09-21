@@ -1699,19 +1699,23 @@ namespace CarinaStudio.AppSuite
         
         
         // Touch compiled Avalonia XAML to prevent being trimmed.
+        [RequiresUnreferencedCode("Load Avalonia resource dynamically.")]
         static void KeepCompiledAvaloniaXaml()
         {
             static void KeepTypeFromTrimming(Assembly assembly, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] string typeName)
             {
-#pragma warning disable IL2026
-                var type = assembly.GetType(typeName);
-#pragma warning restore IL2026
-                if (type is null)
+                if (assembly.GetType(typeName) is null)
                     throw new InternalStateCorruptedException("Compiled Avalonia XAML not found.");
             }
             var assembly = Assembly.GetCallingAssembly();
             KeepTypeFromTrimming(assembly, "CompiledAvaloniaXaml.!AvaloniaResources");
             KeepTypeFromTrimming(assembly, "CompiledAvaloniaXaml.!XamlLoader");
+            var appAssembly = Assembly.GetEntryAssembly();
+            if (!ReferenceEquals(assembly, appAssembly) && appAssembly is not null)
+            {
+                KeepTypeFromTrimming(appAssembly, "CompiledAvaloniaXaml.!AvaloniaResources");
+                KeepTypeFromTrimming(appAssembly, "CompiledAvaloniaXaml.!XamlLoader");
+            }
         }
 
 
@@ -2606,7 +2610,7 @@ namespace CarinaStudio.AppSuite
 
             // prepare
             // ReSharper disable once AsyncVoidLambda
-            this.SynchronizationContext.Post(async () =>
+            this.SynchronizationContext.Post([RequiresUnreferencedCode("")] async () =>
             {
                 // check state
                 if (this.IsShutdownStarted)
@@ -2916,6 +2920,7 @@ namespace CarinaStudio.AppSuite
         /// <returns>Task of preparation.</returns>
         [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors, typeof(ColorPicker))]
         [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors, typeof(DataGrid))]
+        [RequiresUnreferencedCode("Create internal components.")]
         protected virtual async Task OnPrepareStartingAsync()
         {
             LogToConsole("Prepare starting");

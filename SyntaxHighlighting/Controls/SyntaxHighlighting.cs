@@ -26,6 +26,7 @@ public static class SyntaxHighlighting
     /// </summary>
     /// <param name="app">Application.</param>
     /// <returns>Task of initialization.</returns>
+    [RequiresUnreferencedCode("Load Avalonia resource dynamically.")]
     public static Task InitializeAsync(IAppSuiteApplication app)
     {
         // check state
@@ -80,14 +81,13 @@ public static class SyntaxHighlighting
     
     
     // Touch compiled Avalonia XAML to prevent being trimmed.
+    [RequiresUnreferencedCode("Load Avalonia resource dynamically.")]
     static void KeepCompiledAvaloniaXaml()
     {
+        [RequiresUnreferencedCode("Load Avalonia XAML resources dynamically.")]
         static void KeepTypeFromTrimming(Assembly assembly, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] string typeName)
         {
-#pragma warning disable IL2026
-            var type = assembly.GetType(typeName);
-#pragma warning restore IL2026
-            if (type is null)
+            if (assembly.GetType(typeName) is null)
                 throw new InternalStateCorruptedException("Compiled Avalonia XAML not found.");
         }
         var assembly = Assembly.GetCallingAssembly();
