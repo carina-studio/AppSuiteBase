@@ -1,22 +1,17 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using Avalonia.Data.Converters;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml.Styling;
 using CarinaStudio.AppSuite.Input;
 using CarinaStudio.Windows.Input;
-using ColorDocument.Avalonia;
 using ColorTextBlock.Avalonia;
 using Markdown.Avalonia;
 using System;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -35,15 +30,6 @@ public unsafe class MarkdownViewer : TemplatedControl
     /// </summary>
     public static readonly StyledProperty<bool> IsSelectionEnabledProperty = AvaloniaProperty.Register<MarkdownViewer, bool>(nameof(IsSelectionEnabled), false);
     /// <summary>
-    /// <see cref="IValueConverter"/> to convert from <see cref="IsSelectionEnabled"/> to proper <see cref="Cursor"/> of element.
-    /// </summary>
-    public static readonly IValueConverter IsSelectionEnabledToCursorConverter = new FuncValueConverter<bool, Cursor>(isSelectable =>
-    {
-        if (isSelectable)
-            return new Cursor(StandardCursorType.Ibeam);
-        return new Cursor(StandardCursorType.Arrow);
-    });
-    /// <summary>
     /// Define <see cref="SelectedText"/> property.
     /// </summary>
     public static readonly DirectProperty<MarkdownViewer, string?> SelectedTextProperty = AvaloniaProperty.RegisterDirect<MarkdownViewer, string?>(nameof(SelectedText), v => v.selectedText);
@@ -55,10 +41,6 @@ public unsafe class MarkdownViewer : TemplatedControl
     /// Define <see cref="VerticalScrollBarVisibility"/> property.
     /// </summary>
     public static readonly StyledProperty<ScrollBarVisibility> VerticalScrollBarVisibilityProperty = AvaloniaProperty.Register<MarkdownViewer, ScrollBarVisibility>(nameof(VerticalScrollBarVisibility), ScrollBarVisibility.Auto);
-    
-    
-    // Static fields.
-    static FieldInfo? documentField;
 
 
     // Fields.
@@ -101,29 +83,6 @@ public unsafe class MarkdownViewer : TemplatedControl
                 it.InputGesture = KeyGestures.Copy;
             }));
         });
-        this.AddHandler(KeyDownEvent, (_, e) =>
-        {
-            var ctrlKey = Platform.IsMacOS ? KeyModifiers.Meta : KeyModifiers.Control;
-            if ((e.KeyModifiers & ctrlKey) != 0)
-            {
-                switch (e.Key)
-                {
-                    case Key.C:
-                        this.CopySelectedText();
-                        e.Handled = true;
-                        break;
-                }
-            }
-        }, RoutingStrategies.Tunnel);
-        this.AddHandler(PointerPressedEvent, (_, e) =>
-        {
-            var point = e.GetCurrentPoint(this);
-            if (!point.Properties.IsLeftButtonPressed 
-                && this.InputHitTest(point.Position) is ScrollContentPresenter)
-            {
-                this.Document?.UnSelect();
-            }
-        }, RoutingStrategies.Tunnel);
         this.GetObservable(HorizontalScrollBarVisibilityProperty).Subscribe(visibility =>
         {
             if (this.scrollViewer != null)
@@ -149,31 +108,14 @@ public unsafe class MarkdownViewer : TemplatedControl
     
     
     // Copy selected text.
-    Task CopySelectedText()
-    {
-        if (!string.IsNullOrEmpty(this.selectedText))
-            return TopLevel.GetTopLevel(this)?.Clipboard?.SetTextAsync(this.selectedText) ?? Task.CompletedTask;
-        return Task.CompletedTask;
-    }
+    void CopySelectedText() =>
+        this.presenter?.CopySelectedText();
 
 
     /// <summary>
     /// Command to copy selected text.
     /// </summary>
     public ICommand CopySelectedTextCommand { get; }
-
-
-    // Get root document.    
-    DocumentElement? Document
-    {
-        get
-        {
-            if (this.presenter is null)
-                return null;
-            documentField ??= typeof(MarkdownScrollViewer).GetField("_document", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            return documentField?.GetValue(this.presenter) as DocumentElement;
-        }
-    }
 
 
     /// <inheritdoc/>
@@ -193,8 +135,6 @@ public unsafe class MarkdownViewer : TemplatedControl
                 Source = new(baseUri, "/Themes/Base-Styles-Markdown.axaml"),
             };
 #pragma warning restore IL2026
-            this.presenter.AddHandler(PointerPressedEvent, (_, _) => this.UpdateSelectedText(), RoutingStrategies.Tunnel);
-            this.presenter.AddHandler(PointerReleasedEvent, (_, _) => this.UpdateSelectedText(), RoutingStrategies.Tunnel);
             this.presenter.GetObservable(MarkdownScrollViewer.MarkdownProperty).Subscribe(markdown =>
             {
                 var startsWithHeading = false;
@@ -220,12 +160,17 @@ public unsafe class MarkdownViewer : TemplatedControl
                 else if (!this.PseudoClasses.Contains(":startsWithHeading"))
                     this.PseudoClasses.Add(":startsWithHeading");
             });
-            var fieldInfo = typeof(MarkdownScrollViewer).GetField("_viewer", BindingFlags.Instance | BindingFlags.NonPublic);
+            this.presenter.GetObservable(MarkdownScrollViewer.SelectedTextProperty).Subscribe(text =>
+            {
+                SetAndRaise(SelectedTextProperty, ref this.selectedText, text);
+                this.canCopySelectedText.Update(!string.IsNullOrEmpty(text));
+            });
+        var fieldInfo = typeof(MarkdownScrollViewer).GetField("_viewer", BindingFlags.Instance | BindingFlags.NonPublic);
             this.scrollViewer = fieldInfo?.GetValue(this.presenter) as ScrollViewer;
         }
         if (this.scrollViewer is not null)
         {
-            this.scrollViewer.GetObservable(ScrollViewer.ContentProperty).Subscribe(content =>
+            this.scrollViewer.GetObservable(ContentControl.ContentProperty).Subscribe(content =>
             {
                 if (content is Control control)
                     control.Margin = Padding;
@@ -233,7 +178,6 @@ public unsafe class MarkdownViewer : TemplatedControl
             this.scrollViewer.HorizontalScrollBarVisibility = this.GetValue(HorizontalScrollBarVisibilityProperty);
             this.scrollViewer.VerticalScrollBarVisibility = this.GetValue(VerticalScrollBarVisibilityProperty);
         }
-        this.UpdateSelectedText();
     }
 
 
@@ -311,22 +255,6 @@ public unsafe class MarkdownViewer : TemplatedControl
     {
         get => this.GetValue(SourceProperty);
         set => this.SetValue(SourceProperty, value);
-    }
-    
-    
-    // Update selected text.
-    void UpdateSelectedText()
-    {
-        // get selected text
-        var selectedText = this.Document?.GetSelectedText();
-        if (string.IsNullOrEmpty(selectedText))
-            selectedText = null;
-        else if (selectedText[^1] == '\n')
-            selectedText = selectedText[..^1];
-        
-        // update state
-        this.SetAndRaise(SelectedTextProperty, ref this.selectedText, selectedText);
-        this.canCopySelectedText.Update(!string.IsNullOrEmpty(selectedText));
     }
 
 
