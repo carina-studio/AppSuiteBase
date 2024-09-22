@@ -1207,12 +1207,37 @@ namespace CarinaStudio.AppSuite
             // 2. Attach WndProc to host window of ToolTip.
             if (Platform.IsWindows)
             {
-                var popupHostField = typeof(ToolTip).GetField("_popupHost", BindingFlags.Instance | BindingFlags.NonPublic).AsNonNull();
+                FieldInfo? popupField;
+                FieldInfo? popupOpenStateField;
+                PropertyInfo? popupOpenStatePopupHostProperty;
+                FieldInfo? popupHostField;
+                if (this.CheckAvaloniaVersion(11, 2))
+                {
+                    popupField = typeof(ToolTip).GetField("_popup", BindingFlags.Instance | BindingFlags.NonPublic).AsNonNull();
+                    popupOpenStateField = typeof(Popup).GetField("_openState", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).AsNonNull();
+                    popupOpenStatePopupHostProperty = typeof(Popup).GetNestedType("PopupOpenState", BindingFlags.NonPublic | BindingFlags.Public)!.GetProperty("PopupHost", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).AsNonNull();
+                    popupHostField = null;
+                }
+                else
+                {
+                    popupField = null;
+                    popupOpenStateField = null;
+                    popupOpenStatePopupHostProperty = null;
+                    popupHostField = typeof(ToolTip).GetField("_popupHost", BindingFlags.Instance | BindingFlags.NonPublic).AsNonNull();
+                }
                 var toolTopProperty = (AttachedProperty<ToolTip?>)typeof(ToolTip).GetField("ToolTipProperty", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static)!.GetValue(null).AsNonNull();
                 ToolTip.IsOpenProperty.Changed.Subscribe(e =>
                 {
-                    if (e.NewValue.Value && e.Sender.GetValue(toolTopProperty) is { } toolTip && popupHostField.GetValue(toolTip) is TopLevel topLevel)
-                        AttachWndProc(topLevel);
+                    if (e.NewValue.Value && e.Sender.GetValue(toolTopProperty) is { } toolTip)
+                    {
+                        var topLevel = popupField is not null
+                                       && popupField.GetValue(toolTip) is Popup popup
+                                       && popupOpenStateField!.GetValue(popup) is { } popupOpenState
+                            ? popupOpenStatePopupHostProperty!.GetValue(popupOpenState) as TopLevel
+                            : popupHostField!.GetValue(toolTip) as TopLevel;
+                        if (topLevel is not null)
+                            AttachWndProc(topLevel);
+                    }
                 });
             }
 

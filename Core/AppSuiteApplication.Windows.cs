@@ -91,6 +91,10 @@ unsafe partial class AppSuiteApplication
     // Attach window procedure to given window.
     void AttachWndProc(object window)
     {
+        // check state
+        if (this.baseWndProcPointers.ContainsKey(window))
+            return;
+        
         // check handle
         var topLevel = window as TopLevel;
         var hWnd = default(IntPtr);
