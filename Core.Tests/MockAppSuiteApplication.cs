@@ -87,6 +87,10 @@ public class MockAppSuiteApplication : IAppSuiteApplication
     /// <inheritdoc/>
     public virtual WindowIcon ApplicationIcon =>
         throw new NotImplementedException();
+    
+    
+    /// <inheritdoc/>
+    public Version AvaloniaVersion { get; } = typeof(Avalonia.Application).Assembly.GetName().Version ?? throw new NotSupportedException("Unable to get version of Avalonia.");
 
 
     /// <inheritdoc/>

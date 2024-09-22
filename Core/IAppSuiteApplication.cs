@@ -89,6 +89,12 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// Get application icon.
     /// </summary>
     WindowIcon ApplicationIcon { get; }
+    
+    
+    /// <summary>
+    /// Get version of Avalonia.
+    /// </summary>
+    Version AvaloniaVersion { get; }
 
 
     /// <summary>
@@ -653,6 +659,29 @@ public static class AppSuiteApplicationExtensions
 {
     // Fields.
     static Uri? baseAvaloniaResourceUri;
+
+
+    /// <summary>
+    /// Check whether the version of Avalonia is equivalent to or greater than given version or not.
+    /// </summary>
+    /// <param name="app"><see cref="IAppSuiteApplication"/>.</param>
+    /// <param name="major">Major version.</param>
+    /// <param name="minor">Minor version.</param>
+    /// <param name="build">Build number.</param>
+    /// <returns>True if the version of Avalonia is equivalent to or greater than given version.</returns>
+    public static bool CheckAvaloniaVersion(this IAppSuiteApplication app, int major, int minor, int build = 0)
+    {
+        var version = app.AvaloniaVersion;
+        if (version.Major > major)
+            return true;
+        if (version.Major < major)
+            return false;
+        if (version.Minor > minor)
+            return true;
+        if (version.Minor < minor)
+            return false;
+        return version.Build >= build;
+    }
 
 
     /// <summary>

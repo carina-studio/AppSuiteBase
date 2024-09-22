@@ -649,6 +649,10 @@ namespace CarinaStudio.AppSuite
         }
 
 
+        /// <inheritdoc/>
+        public Version AvaloniaVersion { get; } = typeof(Avalonia.Application).Assembly.GetName().Version ?? throw new NotSupportedException("Unable to get version of Avalonia.");
+
+
         /// <summary>
         /// Build application.
         /// </summary>
@@ -1102,6 +1106,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Define extra styles by code.
+        [RequiresUnreferencedCode("Get internal state from Avalonia.")]
         void DefineExtraStyles()
         {
             // check state
@@ -1265,12 +1270,44 @@ namespace CarinaStudio.AppSuite
 
             // 1. Animate popup and move it to correct position according to its shadows.
             // 2. Attach WndProc to host window of Popup.
-            var popupPositionParamsField = typeof(PopupRoot).GetField("_positionerParameters", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new NotSupportedException();
-            if (popupPositionParamsField.FieldType != typeof(PopupPositionerParameters))
-                throw new NotSupportedException();
+            FieldInfo? popupPositionRequestField;
+            FieldInfo? popupPositionParamsField;
+            PropertyInfo? anchorRectProperty;
+            if (this.CheckAvaloniaVersion(11, 2))
+            {
+                var popupPositionRequestType = typeof(Avalonia.Application).Assembly.GetType("Avalonia.Controls.Primitives.PopupPositioning.PopupPositionRequest") ?? throw new NotSupportedException();
+                popupPositionParamsField = null;
+                popupPositionRequestField = typeof(PopupRoot).GetField("_popupPositionRequest", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new NotSupportedException();
+                if (popupPositionRequestField.FieldType != popupPositionRequestType)
+                    throw new NotSupportedException();
+                anchorRectProperty = popupPositionRequestType.GetProperty("AnchorRect", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public) ?? throw new NotSupportedException();
+                if (anchorRectProperty.PropertyType != typeof(Rect?))
+                    throw new NotSupportedException();
+            }
+            else
+            {
+                popupPositionRequestField = null;
+                anchorRectProperty = null;
+                popupPositionParamsField = typeof(PopupRoot).GetField("_positionerParameters", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new NotSupportedException();
+                if (popupPositionParamsField.FieldType != typeof(PopupPositionerParameters))
+                    throw new NotSupportedException();
+            }
             var popupHorzOffsetBindings = new Dictionary<Popup, IDisposable>();
             var popupVertOffsetBindings = new Dictionary<Popup, IDisposable>();
             var processPopupRawInputHandlerTokens = new Dictionary<Popup, IDisposable>();
+            var latestPointerPositions = new Dictionary<TopLevel, Point>();
+            if (popupPositionRequestField is not null)
+            {
+                InputElement.PointerReleasedEvent.AddClassHandler<TopLevel>((topLevel, e) =>
+                {
+                    if (!topLevel.IsLoaded)
+                        return;
+                    if (!latestPointerPositions.ContainsKey(topLevel))
+                        topLevel.Unloaded += (_, _) => latestPointerPositions.Remove(topLevel);
+                    var point = e.GetCurrentPoint(topLevel);
+                    latestPointerPositions[topLevel] = point.Position;
+                }, RoutingStrategies.Tunnel);
+            }
             Popup.IsOpenProperty.Changed.Subscribe(e =>
             {
                 // check event source
@@ -1354,20 +1391,44 @@ namespace CarinaStudio.AppSuite
                         return;
 
                     // calculate positions on screen
-                    var positionParams = (PopupPositionerParameters)popupPositionParamsField.GetValue(hostWindow)!;
+                    object? positionRequest;
+                    PopupPositionerParameters? positionParams;
+                    if (popupPositionRequestField is not null)
+                    {
+                        positionRequest = popupPositionRequestField.GetValue(hostWindow);
+                        positionParams = null;
+                    }
+                    else
+                    {
+                        positionParams = (PopupPositionerParameters)popupPositionParamsField!.GetValue(hostWindow)!;
+                        positionRequest = null;
+                    }
                     var screenScaling = (hostWindow.Screens.ScreenFromWindow(hostWindow) ?? hostWindow.Screens.Primary)?.Scaling ?? 1.0;
                     var hostWindowRect = hostWindow.PointToScreen(default).Let(it => new Rect(new(it.X / screenScaling, it.Y / screenScaling), hostWindow.Bounds.Size));
                     var topLevelPosition = topLevel.PointToScreen(default).Let(it => new Point(it.X / screenScaling, it.Y / screenScaling));
                     var placement = popup.Placement;
-                    var anchorRect = placement == PlacementMode.Pointer
+                    var anchorRect = Global.Run(() =>
 #pragma warning disable CS0618
-                        ? positionParams.AnchorRectangle.Let(it => new Rect(topLevelPosition.X + it.X, topLevelPosition.Y + it.Y, it.Width, it.Height))
-                        : positionParams.AnchorRectangle.Let(it =>
-                        {
-                            var pointOnScreen = topLevel.PointToScreen(it.TopLeft);
-                            return new Rect(pointOnScreen.X / screenScaling, pointOnScreen.Y / screenScaling, it.Width, it.Height);
-                        });
+                            anchorRectProperty is null
+                                ? positionParams?.AnchorRectangle
+                                : positionRequest is not null
+                                    ? anchorRectProperty.GetValue(positionRequest) as Rect?
+                                    : null
 #pragma warning restore CS0618
+                    )?.Let(it =>
+                        placement == PlacementMode.Pointer
+                            ? Global.Run(() =>
+                            {
+                                if (latestPointerPositions.TryGetValue(topLevel, out var pointerPosition))
+                                    return new Rect(topLevelPosition.X + pointerPosition.X, topLevelPosition.Y + pointerPosition.Y, 1, 1);
+                                return new Rect(topLevelPosition.X + it.X, topLevelPosition.Y + it.Y, it.Width, it.Height);
+                            })
+                            : Global.Run(() =>
+                            {
+                                var pointOnScreen = topLevel.PointToScreen(it.TopLeft);
+                                return new Rect(pointOnScreen.X / screenScaling, pointOnScreen.Y / screenScaling, it.Width, it.Height);
+                            })
+                    );
 
                     // update offset
                     if (popupHorzOffsetBindings.TryGetValue(popup, out var bindingToken))
@@ -1381,10 +1442,13 @@ namespace CarinaStudio.AppSuite
                         case PlacementMode.Top:
                             break;
                         default:
-                            if (hostWindowRect.Center.X >= anchorRect.Center.X)
-                                popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset - shadowLength), BindingPriority.Animation);
-                            else
-                                popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset + shadowLength), BindingPriority.Animation);
+                            if (anchorRect.HasValue)
+                            {
+                                if (hostWindowRect.Center.X >= anchorRect.Value.Center.X)
+                                    popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset - shadowLength), BindingPriority.Animation);
+                                else
+                                    popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset + shadowLength), BindingPriority.Animation);
+                            }
                             break;
                     }
                     switch (placement)
@@ -1393,10 +1457,13 @@ namespace CarinaStudio.AppSuite
                         case PlacementMode.Right:
                             break;
                         default:
-                            if (hostWindowRect.Center.Y >= anchorRect.Center.Y)
-                                popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset - shadowLength), BindingPriority.Animation);
-                            else
-                                popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset + shadowLength), BindingPriority.Animation);
+                            if (anchorRect.HasValue)
+                            {
+                                if (hostWindowRect.Center.Y >= anchorRect.Value.Center.Y)
+                                    popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset - shadowLength), BindingPriority.Animation);
+                                else
+                                    popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset + shadowLength), BindingPriority.Animation);
+                            }
                             break;
                     }
 
@@ -2696,6 +2763,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Called when main window closed.
+        [RequiresUnreferencedCode("")]
         async void OnMainWindowClosed(object? sender, EventArgs e)
         {
             // detach from main window
@@ -3112,6 +3180,7 @@ namespace CarinaStudio.AppSuite
         /// Called to restore main windows asynchronously when starting application.
         /// </summary>
         /// <returns>Task of restoring main windows. The result will be True if main windows have been restored successfully.</returns>
+        [RequiresUnreferencedCode("")]
         protected virtual async Task<bool> OnRestoreMainWindowsAsync()
         {
             // load saved states
@@ -4026,16 +4095,19 @@ namespace CarinaStudio.AppSuite
         /// Show main window asynchronously.
         /// </summary>
         /// <returns>Task of showing main window.</returns>
+        [RequiresUnreferencedCode("")]
         public Task<bool> ShowMainWindowAsync() =>
             this.ShowMainWindowAsync(null, null);
 
 
         /// <inheritdoc/>
+        [RequiresUnreferencedCode("")]
         public Task<bool> ShowMainWindowAsync(Action<MainWindow>? windowCreatedAction) => 
             this.ShowMainWindowAsync(null, windowCreatedAction);
 
 
         // Create and show main window.
+        [RequiresUnreferencedCode("Get internal state from Avalonia.")]
         async Task<bool> ShowMainWindowAsync(ViewModel? viewModel, Action<MainWindow>? windowCreatedAction)
         {
             // check state
@@ -4834,6 +4906,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Update styles.
+        [RequiresUnreferencedCode("Get internal state from Avalonia.")]
         void UpdateStyles()
         {
             // get theme mode
