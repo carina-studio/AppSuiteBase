@@ -62,6 +62,12 @@ public class MultiBinding(IList<IBinding> bindings): MarkupExtension
     
     
     /// <summary>
+    /// Get or set passed to <see cref="Converter"/>.
+    /// </summary>
+    public object? ConverterParameter { get; set; }
+    
+    
+    /// <summary>
     /// Get or set fallback value.
     /// </summary>
     public required object FallbackValue { get; set; }
@@ -77,6 +83,7 @@ public class MultiBinding(IList<IBinding> bindings): MarkupExtension
         {
             Bindings = bindings,
             Converter = this.Converter,
+            ConverterParameter = this.ConverterParameter,
             FallbackValue = this.FallbackValue,
             StringFormat = this.StringFormat,
         };
