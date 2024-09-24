@@ -197,28 +197,22 @@ public unsafe class MarkdownViewer : TemplatedControl
         }
         
         // scroll to heading text
-        (this.scrollViewer?.Content as Panel)?.Let(panel =>
+        target = target[1..];
+        var headingControl = this.presenter?.FindControl(it =>
         {
-            target = target[1..];
-            var headingControl = panel.Children.Let(children =>
+            if (it is CTextBlock cTextBlock && cTextBlock.Classes.FirstOrDefault(it => it.StartsWith("Heading")) is not null)
             {
-                foreach (var child in children)
-                {
-                    if (child is CTextBlock cTextBlock && cTextBlock.Classes?.FirstOrDefault(it => it.StartsWith("Heading")) is not null)
-                    {
-                        var anchorName = cTextBlock.Text.ToLower().Replace(' ', '-');
-                        if (anchorName == target || $"-{anchorName}" == target /* [Workaround] Extra '-' may be added by markdown editor */)
-                            return cTextBlock;
-                    }
-                }
-                return null;
-            });
-            if (headingControl is not null)
-            {
-                var bounds = headingControl.Bounds.Inflate(headingControl.Margin);
-                this.scrollViewer!.SmoothScrollTo(new(0, bounds.Y + this.scrollViewer!.Padding.Top));
+                var anchorName = cTextBlock.Text.ToLower().Replace(' ', '-');
+                if (anchorName == target || $"-{anchorName}" == target /* [Workaround] Extra '-' may be added by markdown editor */)
+                    return true;
             }
+            return false;
         });
+        if (headingControl is not null)
+        {
+            var bounds = headingControl.Bounds.Inflate(headingControl.Margin);
+            this.scrollViewer!.SmoothScrollTo(new(0, bounds.Y + this.scrollViewer!.Padding.Top));
+        }
     }
 
 
