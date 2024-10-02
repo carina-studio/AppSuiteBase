@@ -375,7 +375,7 @@
 	<sys:Double x:Key="Double/TabItem.Header.ColorBar.Height">2</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.Content.Height">20</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.FontSize">14</sys:Double>
-	<sys:Double x:Key="Double/TabItem.Header.Height">35</sys:Double>
+	<sys:Double x:Key="Double/TabItem.Header.Height">40</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.Icon.Size">14</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.InsertionIndicator.Width">20</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.MaxWidth">250</sys:Double>
@@ -393,6 +393,7 @@
 	<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>
 	<sys:Double x:Key="TextControlThemeMinHeight">0</sys:Double>
 	<Thickness x:Key="TextControlThemePadding">6</Thickness>
+	<sys:Double x:Key="Double/TextBox.BoxShadow.Radius.Focused">6</sys:Double>
 	<sys:Double x:Key="Double/TextBox.InPlaceAction.Size">20</sys:Double>
 	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Padding">4</Thickness>
 	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Margin">1,0,1,0</Thickness>

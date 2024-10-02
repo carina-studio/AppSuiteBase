@@ -184,7 +184,7 @@
 	<CornerRadius x:Key="CornerRadius/TabItem.Header">4,4,0,0</CornerRadius>
 	<sys:Double x:Key="Double/TabItem.Header.ColorBar.Height">3</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.FontSize">14</sys:Double>
-	<sys:Double x:Key="Double/TabItem.Header.Height">34</sys:Double>
+	<sys:Double x:Key="Double/TabItem.Header.Height">36</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.InsertionIndicator.Width">20</sys:Double>
 	<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">8,0,0,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">4</Thickness>
@@ -195,6 +195,7 @@
 	<!-- TextBox -->
 	<sys:Double x:Key="TextControlThemeMinHeight">0</sys:Double>
 	<Thickness x:Key="TextControlThemePadding">4,3,4,3</Thickness>
+	<sys:Double x:Key="Double/TextBox.BoxShadow.Radius.Focused">5</sys:Double>
 	<sys:Double x:Key="Double/TextBox.InPlaceAction.Size">18</sys:Double>
 	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Padding">3</Thickness>
 	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Margin">1,0,1,0</Thickness>

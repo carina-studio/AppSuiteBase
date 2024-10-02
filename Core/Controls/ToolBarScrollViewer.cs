@@ -6,9 +6,6 @@ using CarinaStudio.Animation;
 using CarinaStudio.Threading;
 using System;
 using Avalonia.Controls.Presenters;
-using Avalonia.LogicalTree;
-using Avalonia.Media;
-using CarinaStudio.Controls;
 
 namespace CarinaStudio.AppSuite.Controls
 {
@@ -19,9 +16,10 @@ namespace CarinaStudio.AppSuite.Controls
     {
         // Fields.
         ScrollContentPresenter? contentPresenter;
-        private double maxEdgeFadingSize;
+        //double maxEdgeFadingSize;
         VectorRenderingAnimator? offsetAnimator;
-        private readonly LinearGradientBrush opacityMackBrush = new LinearGradientBrush().Also(it =>
+        /*
+        readonly LinearGradientBrush opacityMackBrush = new LinearGradientBrush().Also(it =>
         {
             it.EndPoint = new(1.0, 0.0, RelativeUnit.Relative);
             it.GradientStops.Add(new(Colors.Transparent, 0.0));
@@ -30,6 +28,7 @@ namespace CarinaStudio.AppSuite.Controls
             it.GradientStops.Add(new(Colors.Transparent, 1.0));
             it.StartPoint = new(0.0, 0.0, RelativeUnit.Relative);
         });
+        */
         Control? scrollDownButton;
         Control? scrollLeftButton;
         Control? scrollRightButton;
@@ -68,6 +67,7 @@ namespace CarinaStudio.AppSuite.Controls
                     this.Offset = new Vector(offset.X, extent.Height - viewport.Height);
                 }
             });
+            /*
             var updateOpacityMaskAction = new ScheduledAction(() =>
             {
                 var size = this.Bounds.Size;
@@ -103,31 +103,32 @@ namespace CarinaStudio.AppSuite.Controls
                 }
                 this.contentPresenter?.InvalidateVisual();
             });
+            */
             
             // attach to self
             this.GetObservable(ExtentProperty).Subscribe(_ =>
             {
                 correctOffsetAction.Schedule();
-                updateOpacityMaskAction.Schedule();
+                //updateOpacityMaskAction.Schedule();
             });
             this.GetObservable(HorizontalScrollBarVisibilityProperty).Subscribe(visibility =>
             {
                 if (this.contentPresenter is not null)
                     this.contentPresenter.CanHorizontallyScroll = visibility == ScrollBarVisibility.Visible;
-                updateOpacityMaskAction.Schedule();
+                //updateOpacityMaskAction.Schedule();
             });
-            this.GetObservable(OffsetProperty).Subscribe(_ => updateOpacityMaskAction.Schedule());
-            this.SizeChanged += (_, _) => updateOpacityMaskAction.Schedule();
+            //this.GetObservable(OffsetProperty).Subscribe(_ => updateOpacityMaskAction.Schedule());
+            //this.SizeChanged += (_, _) => updateOpacityMaskAction.Schedule();
             this.GetObservable(VerticalScrollBarVisibilityProperty).Subscribe(visibility =>
             {
                 if (this.contentPresenter is not null)
                     this.contentPresenter.CanVerticallyScroll = visibility == ScrollBarVisibility.Visible;
-                updateOpacityMaskAction.Schedule();
+                //updateOpacityMaskAction.Schedule();
             });
             this.GetObservable(ViewportProperty).Subscribe(_ =>
             {
                 correctOffsetAction.Schedule();
-                updateOpacityMaskAction.Schedule();
+                //updateOpacityMaskAction.Schedule();
             });
         }
 
@@ -140,7 +141,7 @@ namespace CarinaStudio.AppSuite.Controls
             {
                 it.CanHorizontallyScroll = this.HorizontalScrollBarVisibility == ScrollBarVisibility.Visible;
                 it.CanVerticallyScroll = this.VerticalScrollBarVisibility == ScrollBarVisibility.Visible;
-                it.OpacityMask = this.opacityMackBrush;
+                //it.OpacityMask = this.opacityMackBrush;
             });
             this.scrollDownButton = e.NameScope.Find<Control>("PART_ScrollDownButton");
             this.scrollLeftButton = e.NameScope.Find<Control>("PART_ScrollLeftButton");
@@ -149,12 +150,14 @@ namespace CarinaStudio.AppSuite.Controls
         }
         
         
+        /*
         /// <inheritdoc/>
         protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
         {
             base.OnAttachedToLogicalTree(e);
             this.maxEdgeFadingSize = this.FindResourceOrDefault("Double/ToolBarScrollViewer.MaxEdgeFadingSize", 20.0);
         }
+        */
 
 
         /// <inheritdoc/>

@@ -77,6 +77,18 @@
 	</Style>
 
 	<!-- ButtonSpinner -->
+	<Style Selector="ButtonSpinner /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="ClipToBounds" Value="False"/>
+	</Style>
+	<Style Selector="ButtonSpinner /template/ DockPanel">
+		<Setter Property="ClipToBounds" Value="False"/>
+	</Style>
+	<Style Selector="ButtonSpinner /template/ Border">
+		<Setter Property="ClipToBounds" Value="False"/>
+	</Style>
+	<Style Selector="ButtonSpinner /template/ DataValidationErrors">
+		<Setter Property="ClipToBounds" Value="False"/>
+	</Style>
 	<Style Selector="ButtonSpinner /template/ RepeatButton">
 		<Setter Property="Template">
 			<ControlTemplate>
@@ -1722,12 +1734,14 @@
 	<!-- NumericUpDown -->
 	<Style Selector="NumericUpDown">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="Template">
 			<ControlTemplate>
 				<ButtonSpinner Name="PART_Spinner"
 				               Background="{TemplateBinding Background}"
 				               BorderThickness="{TemplateBinding BorderThickness}"
 				               BorderBrush="{TemplateBinding BorderBrush}"
+				               ClipToBounds="False"
 				               CornerRadius="{TemplateBinding CornerRadius}"
 				               Padding="0"
 				               MinWidth="0"
@@ -2847,6 +2861,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
 	<Style Selector=":is(TextBox)">
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="ContextFlyout" Value="{x:Null}"/>
 		<Setter Property="ContextMenu">
 			<ContextMenu>
@@ -2861,7 +2876,7 @@
 		<Setter Property="SelectionForegroundBrush" Value="{DynamicResource Brush/TextBox.SelectionForeground}"/>
 		<Setter Property="Template">
 			<ControlTemplate TargetType="{x:Type TextBox}">
-				<Panel>
+				<Panel ClipToBounds="False">
 					<Border
 						Name="PART_BorderElement"
 						Background="{TemplateBinding Background}"
@@ -2936,6 +2951,15 @@
 			</ControlTemplate>
 		</Setter>
 	</Style>
+	<Style Selector=":is(TextBox):focus /template/ Border#PART_BorderElement">
+		<Setter Property="BoxShadow" Value="{Binding $parent[TextBox], Converter={x:Static converters:TextBoxConverters.FocusedBoxShadowConverter}}"/>
+	</Style>
+	<Style Selector=":is(TextBox):invalidObjectTextBoxText /template/ Border#PART_BorderElement">
+		<Setter Property="BoxShadow" Value="{Binding $parent[TextBox], Converter={x:Static converters:TextBoxConverters.FocusedBoxShadowConverter}, ConverterParameter=Error}"/>
+	</Style>
+	<Style Selector=":is(TextBox):invalidValueTextBoxText /template/ Border#PART_BorderElement">
+		<Setter Property="BoxShadow" Value="{Binding $parent[TextBox], Converter={x:Static converters:TextBoxConverters.FocusedBoxShadowConverter}, ConverterParameter=Error}"/>
+	</Style>
 	<Style Selector=":is(TextBox)[FlowDirection=RightToLeft] /template/ TextBlock#PART_Watermark">
 		<Setter Property="HorizontalAlignment" Value="{TemplateBinding TextAlignment, Converter={x:Static converters:TextAlignmentConverters.ToHorizontalAlignmentRTL}}"/>
 	</Style>
@@ -2991,6 +3015,7 @@
 	<!-- ToolBar -->
 	<Style Selector="Border.ToolBar">
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Background}"/>
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/ToolBar.MinSize}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Padding}"/>
 		<Setter Property="MinWidth" Value="{DynamicResource Double/ToolBar.MinSize}"/>
@@ -3328,12 +3353,14 @@
 	</Style>
 	<Style Selector="controls|ToolBarScrollViewer">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="HorizontalScrollBarVisibility" Value="Visible"/>
 		<Setter Property="Template">
 			<ControlTemplate>
-				<Panel Background="{TemplateBinding Background}">
+				<Panel Background="{TemplateBinding Background}" ClipToBounds="False">
 					<ScrollContentPresenter Name="PART_ContentPresenter"
-                        Margin="{TemplateBinding Padding}">
+					                        ClipToBounds="False"
+					                        Margin="{TemplateBinding Padding}">
 						<ScrollContentPresenter.GestureRecognizers>
 							<ScrollGestureRecognizer
 								CanHorizontallyScroll="{Binding #PART_ContentPresenter.CanHorizontallyScroll}"

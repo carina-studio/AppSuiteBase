@@ -192,7 +192,7 @@
 
 							<!-- Menu and ToolBar -->
 							<Panel>
-								<StackPanel>
+								<StackPanel ClipToBounds="False">
 									
 									<Menu>
 
@@ -215,9 +215,9 @@
 									<!-- Toolbar -->
 									<Border Name="toolBar" BorderBrush="{DynamicResource Brush/ToolBar.Border}" BorderThickness="0,0,0,1" Classes="ToolBar">
 										<appControls:ToolBarScrollViewer Name="toolBarScrollViewer">
-											<Grid Background="{x:Static Brushes.Transparent}" ColumnDefinitions="Auto,*,Auto">
-												<StackPanel HorizontalAlignment="Stretch" Orientation="Horizontal">
-
+											<Grid Background="{x:Static Brushes.Transparent}" ClipToBounds="False" ColumnDefinitions="Auto,*,Auto">
+												<StackPanel ClipToBounds="False" HorizontalAlignment="Stretch" Orientation="Horizontal">
+													
 													<Button Classes="ToolBar_Button" Command="{Binding $parent[Window].ShowAppInfoDialogCommand}" ToolTip.Tip="Tool tip">
 														<Image Classes="Icon" Source="{StaticResource Image/Icon.Panel.Right}"/>
 													</Button>
@@ -243,7 +243,7 @@
 														</Panel>
 													</ToggleButton>
 
-													<Panel>
+													<Panel ClipToBounds="False">
 														<TextBox Classes="ToolBar_TextBox" Width="100">
 															<TextBox.InnerRightContent>
 																<StackPanel Classes="TextBox_InPlaceActions">
@@ -455,7 +455,7 @@
 							<ScrollBar AllowAutoHide="False" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" ViewportSize="10" Width="300"/>
 
 							<TextBlock Text="{DynamicResource String/ApplicationOptions.LogOutputTargetPort}" Margin="5,5,5,0"/>
-							<NumericUpDown HorizontalAlignment="Left" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
+							<NumericUpDown HorizontalAlignment="Left" Margin="5,0,0,0" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
 
 							<Panel HorizontalAlignment="Left" Margin="5">
 								<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" BorderBrush="{DynamicResource Brush/WorkingArea.Panel.Border}" BorderThickness="1" BoxShadow="{DynamicResource BoxShadows/Shadow.Light}" HorizontalAlignment="Left" Padding="5">

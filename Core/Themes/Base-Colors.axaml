@@ -365,6 +365,8 @@
 	<SolidColorBrush x:Key="Brush/TextBox.Foreground.Error" Color="{DynamicResource Color/TextBox.Foreground.Error}"/>
 	<SolidColorBrush x:Key="Brush/TextBox.SelectionForeground" Color="{DynamicResource SystemBaseHighColor}"/>
 	<SolidColorBrush x:Key="Brush/TextBox.SelectionForeground.Error" Color="{DynamicResource Color/TextBox.SelectionForeground.Error}"/>
+	<Color x:Key="Color/TextBox.BoxShadow.Error">#ff0000</Color>
+	<StaticResourceExtension x:Key="Color/TextBox.BoxShadow.Focused" ResourceKey="Color/Accent"/>
 	<Color x:Key="Color/TextBox.Foreground.Error">#ff0000</Color>
 	<Color x:Key="Color/TextBox.SelectionForeground.Error">#ffbfbf</Color>
 	
