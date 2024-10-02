@@ -41,6 +41,7 @@
 		<PackageReference Include="CarinaStudio.Markdown.Avalonia.Tight" Version="11.0.3.924-a1" />
 		<PackageReference Include="JetBrains.Profiler.SelfApi" Version="2.5.12-preview1" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.0-rc.1.24431.7" />
+		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="9.0.0-rc.1.24452.1" />
 		<PackageReference Include="Microsoft.Win32.Registry" Version="6.0.0-preview.5.21301.5" />
 		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="9.0.0-rc.1.24431.7" />
 		<PackageReference Include="NLog" Version="5.3.4" />
