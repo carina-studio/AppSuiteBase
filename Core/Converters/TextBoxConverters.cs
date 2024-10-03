@@ -19,7 +19,9 @@ public static class TextBoxConverters
         var borderThickness = textBox.BorderThickness;
         if (borderThickness.Left <= 0 && borderThickness.Top <= 0 && borderThickness.Right <= 0 && borderThickness.Bottom <= 0)
             return default;
-        if (IAppSuiteApplication.CurrentOrNull is not { } app || !app.TryFindResource("Double/TextBox.BoxShadow.Radius.Focused", out double? radius))
+        if (IAppSuiteApplication.CurrentOrNull is not { } app 
+            || !app.TryFindResource("Double/TextBox.BoxShadow.Radius.Focused", out double? radius)
+            || !app.TryFindResource("Double/TextBox.BoxShadow.Spread.Focused", out double? spread))
             return default;
         var color = parameter switch
         {
@@ -34,6 +36,7 @@ public static class TextBoxConverters
         {
             Blur = radius.Value,
             Color = color,
+            Spread = spread.Value,
         };
         return new BoxShadows(boxShadow);
     });

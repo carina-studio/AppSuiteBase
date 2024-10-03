@@ -394,6 +394,7 @@
 	<sys:Double x:Key="TextControlThemeMinHeight">0</sys:Double>
 	<Thickness x:Key="TextControlThemePadding">6</Thickness>
 	<sys:Double x:Key="Double/TextBox.BoxShadow.Radius.Focused">6</sys:Double>
+	<sys:Double x:Key="Double/TextBox.BoxShadow.Spread.Focused">1</sys:Double>
 	<sys:Double x:Key="Double/TextBox.InPlaceAction.Size">20</sys:Double>
 	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Padding">4</Thickness>
 	<Thickness x:Key="Thickness/TextBox.InPlaceAction.Margin">1,0,1,0</Thickness>
