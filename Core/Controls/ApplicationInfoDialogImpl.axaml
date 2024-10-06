@@ -10,6 +10,7 @@
 		xmlns:net="using:CarinaStudio.AppSuite.Net"
 		xmlns:scripting="using:CarinaStudio.AppSuite.Scripting"
 		xmlns:sys="using:System"
+        xmlns:xaml="using:CarinaStudio.AppSuite.Xaml"
         xmlns:vm="using:CarinaStudio.AppSuite.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.ApplicationInfoDialogImpl"
@@ -28,6 +29,10 @@
 				                  OffsetY="0"/>
 			</Setter>
 		</Style>
+		<Style Selector="Separator.TextSeparator">
+			<Setter Property="Height" Value="1"/>
+			<Setter Property="Width" Value="2"/>
+		</Style>
 	</Window.Styles>
 
 	<DockPanel>
@@ -35,8 +40,8 @@
 		<!-- Control buttons -->
 		<Border x:CompileBindings="False" Classes="Dialog_ControlButtonsPanel">
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].ShowAppUpdateDialog}" Content="{DynamicResource String/ApplicationInfoDialog.ShowAppUpdateDialog}"/>
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.OK}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].ShowAppUpdateDialog}" Content="{xaml:StringResource ApplicationInfoDialog.ShowAppUpdateDialog}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{xaml:StringResource Common.OK}"/>
 			</StackPanel>
 		</Border>
 
@@ -83,7 +88,7 @@
 								<WrapPanel Orientation="Horizontal">
 									<SelectableTextBlock Classes="Shadowed" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" Opacity="{StaticResource Double/ApplicationInfoDialog.AppVersion.Opacity}" Text="{Binding $parent[Window].VersionString}" VerticalAlignment="Center"/>
 									<TextBlock Classes="Shadowed" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Margin="5,0,5,0" Text="|" VerticalAlignment="Center"/>
-									<abControls:LinkTextBlock Classes="Shadowed" Command="{Binding $parent[Window].ShowApplicationChangeList}" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{DynamicResource String/ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
+									<abControls:LinkTextBlock Classes="Shadowed" Command="{Binding $parent[Window].ShowApplicationChangeList}" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding $parent[Window].HasApplicationChangeList}" Text="{xaml:StringResource ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
 								</WrapPanel>
 							</StackPanel>
 						</Border>
@@ -92,20 +97,19 @@
 					<Separator Classes="Dialog_Separator_Large"/>
 
 					<!-- Open source attribution -->
-					<WrapPanel Name="openSourceAttrPanel" Orientation="Horizontal">
-						<StackPanel.IsVisible>
-							<MultiBinding Converter="{x:Static BoolConverters.And}">
-								<Binding Path="IsOpenSourceBased"/>
-								<Binding Path="GitHubProjectUri" Converter="{x:Static ObjectConverters.IsNotNull}"/>
-							</MultiBinding>
-						</StackPanel.IsVisible>
+					<WrapPanel Name="openSourceAttrPanel"
+					           IsVisible="{xaml:AndBindings 
+					               {Binding IsOpenSourceBased},
+					               {Binding GitHubProjectUri, Converter={x:Static ObjectConverters.IsNotNull}}
+					           }"
+					           Orientation="Horizontal">
 						<TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
-						<Separator Classes="Dialog_Separator_Small"/>
-						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section1}" VerticalAlignment="Center"/>
-						<Separator Classes="Dialog_Separator_Small"/>
-						<abControls:LinkTextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section2}" Uri="{Binding GitHubProjectUri}" VerticalAlignment="Center"/>
-						<Separator Classes="Dialog_Separator_Small"/>
-						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section3}" VerticalAlignment="Center"/>
+						<Separator Classes="TextSeparator"/>
+						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.OpenSourceBased.Section1}" VerticalAlignment="Center"/>
+						<Separator Classes="TextSeparator"/>
+						<abControls:LinkTextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.OpenSourceBased.Section2}" Uri="{Binding GitHubProjectUri}" VerticalAlignment="Center"/>
+						<Separator Classes="TextSeparator"/>
+						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.OpenSourceBased.Section3}" VerticalAlignment="Center"/>
 					</WrapPanel>
 					<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #openSourceAttrPanel.IsVisible}"/>
 
@@ -116,34 +120,50 @@
 								<iaCore:ChangePropertyAction PropertyName="IsVisible" Value="True"/>
 							</iaCore:DataTriggerBehavior>
 						</ia:Interaction.Behaviors>
-						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon}" VerticalAlignment="Center"/>
-						<abControls:LinkTextBlock IsVisible="False" Text=" Freepik " Uri="https://www.freepik.com/" VerticalAlignment="Center">
+						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon}" VerticalAlignment="Center"/>
+						<Separator Classes="TextSeparator"/>
+						<abControls:LinkTextBlock IsVisible="False" Text="Freepik" Uri="https://www.freepik.com/" VerticalAlignment="Center">
 							<ia:Interaction.Behaviors>
 								<iaCore:DataTriggerBehavior Binding="{Binding IconCreator}" Value="Freepik">
 									<iaCore:ChangePropertyAction PropertyName="IsVisible" Value="True"/>
 								</iaCore:DataTriggerBehavior>
 							</ia:Interaction.Behaviors>
 						</abControls:LinkTextBlock>
-						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon}" VerticalAlignment="Center"/>
-						<abControls:LinkTextBlock Text=" Flaticon " Uri="https://www.flaticon.com/" VerticalAlignment="Center"/>
-						<TextBlock Text="{DynamicResource String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon}" VerticalAlignment="Center"/>
+						<Separator Classes="TextSeparator"/>
+						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon}" VerticalAlignment="Center"/>
+						<Separator Classes="TextSeparator"/>
+						<abControls:LinkTextBlock Text="Flaticon" Uri="https://www.flaticon.com/" VerticalAlignment="Center"/>
+						<Separator Classes="TextSeparator"/>
+						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon}" VerticalAlignment="Center"/>
 					</WrapPanel>
 					<Separator Classes="Dialog_Separator"/>
 
 					<!-- Copyright -->
+					<WrapPanel>
+						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.PoweredBy.Section1}" VerticalAlignment="Center"/>
+						<Separator Classes="TextSeparator"/>
+						<abControls:LinkTextBlock Text=".NET" Uri="https://dotnet.microsoft.com/" VerticalAlignment="Center"/>
+						<Separator Classes="TextSeparator"/>
+						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.PoweredBy.Section2}" VerticalAlignment="Center"/>
+						<Separator Classes="TextSeparator"/>
+						<abControls:LinkTextBlock Text="Avalonia" Uri="https://avaloniaui.net/" VerticalAlignment="Center"/>
+						<Separator Classes="TextSeparator"/>
+						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.PoweredBy.Section3}" VerticalAlignment="Center"/>
+					</WrapPanel>
+					<Separator Classes="Dialog_Separator_Small"/>
 					<TextBlock x:CompileBindings="False" Text="{Binding $parent[Window].Copyright, Mode=OneTime}"/>
 					<Separator Classes="Dialog_Separator_Large"/>
 
 					<!-- System info -->
 					<Border Classes="Dialog_ItemsGroup_Header">
-						<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{DynamicResource String/ApplicationInfoDialog.SystemInformation}"/>
+						<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{xaml:StringResource ApplicationInfoDialog.SystemInformation}"/>
 					</Border>
 					<Border Classes="Dialog_ItemsGroup_Container">
 						<StackPanel>
 
 							<!-- Device name -->
 							<controls:DialogItem ItemSize="Small">
-								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.DeviceName}"/>
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.DeviceName}"/>
 								<SelectableTextBlock HorizontalAlignment="Right" 
 								                     Text="{x:Static sys:Environment.MachineName}" 
 								                     TextTrimming="CharacterEllipsis"/>
@@ -152,7 +172,7 @@
 
 							<!-- Operating system -->
 							<controls:DialogItem ItemSize="Small">
-								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.OperatingSystem}"/>
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.OperatingSystem}"/>
 								<SelectableTextBlock HorizontalAlignment="Right" 
 								                     Text="{Binding OperatingSystemDescription}" 
 								                     TextTrimming="CharacterEllipsis"/>
@@ -161,7 +181,7 @@
 
 							<!-- Framework version -->
 							<controls:DialogItem ItemSize="Small">
-								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.FrameworkVersion}"/>
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.FrameworkVersion}"/>
 								<SelectableTextBlock HorizontalAlignment="Right" 
 								                     Text="{Binding FrameworkVersion}" 
 								                     TextTrimming="CharacterEllipsis"/>
@@ -171,7 +191,7 @@
 							<!-- Processor count -->
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding $parent[Window].Application.IsDebugMode}">
 								<controls:DialogItem ItemSize="Small">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ProcessorCount}"/>
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.ProcessorCount}"/>
 									<SelectableTextBlock HorizontalAlignment="Right" 
 									                     Text="{Binding Source={x:Static sys:Environment.ProcessorCount}}" 
 									                     TextTrimming="CharacterEllipsis"/>
@@ -182,7 +202,7 @@
 							<!-- Total physical memory -->
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding $parent[Window].HasTotalPhysicalMemory}">
 								<controls:DialogItem ItemSize="Small">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.TotalPhysicalMemory}"/>
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.TotalPhysicalMemory}"/>
 									<SelectableTextBlock HorizontalAlignment="Right" 
 									                     Text="{Binding $parent[Window].Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" 
 									                     TextTrimming="CharacterEllipsis"/>
@@ -192,11 +212,11 @@
 
 							<!-- Network connection -->
 							<controls:DialogItem ItemSize="Small">
-								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.NetworkConnection}"/>
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.NetworkConnection}"/>
 								<Panel>
-									<SelectableTextBlock IsVisible="{Binding !IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" Text="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Disconnected}" TextTrimming="CharacterEllipsis"/>
+									<SelectableTextBlock IsVisible="{Binding !IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" Text="{xaml:StringResource ApplicationInfoDialog.NetworkConnection.Disconnected}" TextTrimming="CharacterEllipsis"/>
 									<abControls:FormattedSelectableTextBlock Arg1="{Binding PublicIPAddress, Source={x:Static net:NetworkManager.Default}}" 
-									                                         Format="{DynamicResource String/ApplicationInfoDialog.NetworkConnection.Format}" 
+									                                         Format="{xaml:StringResource ApplicationInfoDialog.NetworkConnection.Format}" 
 									                                         HorizontalAlignment="Right" 
 									                                         IsVisible="{Binding IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" 
 									                                         TextTrimming="CharacterEllipsis"/>
@@ -204,20 +224,18 @@
 							</controls:DialogItem>
 
 							<!-- Primary network interface -->
-							<StackPanel x:CompileBindings="False">
-								<StackPanel.IsVisible>
-									<MultiBinding Converter="{x:Static BoolConverters.And}">
-										<Binding Path="PrimaryNetworkInterfacePhysicalAddress" ElementName="window" Converter="{x:Static StringConverters.IsNotNullOrEmpty}"/>
-										<Binding Path="Application.IsDebugMode" ElementName="window"/>
-									</MultiBinding>
-								</StackPanel.IsVisible>
+							<StackPanel x:CompileBindings="False" 
+							            IsVisible="{xaml:AndBindings 
+											{Binding #window.PrimaryNetworkInterfacePhysicalAddress, Converter={x:Static StringConverters.IsNotNullOrEmpty}},
+											{Binding #window.Application.IsDebugMode}
+										}">
 								<Separator Classes="Dialog_Item_Separator"/>
 								<controls:DialogItem ItemSize="Small">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.PrimaryNetworkInterface}"/>
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.PrimaryNetworkInterface}"/>
 									<abControls:FormattedSelectableTextBlock Arg1="{Binding PrimaryInterfaceName, Source={x:Static net:NetworkManager.Default}}" 
 									                                         Arg2="{Binding PrimaryInterfaceType, Converter={x:Static controls:ApplicationInfoDialogImpl.NetworkInterfaceTypeConverter}, Source={x:Static net:NetworkManager.Default}}" 
 									                                         Arg3="{Binding $parent[Window].PrimaryNetworkInterfacePhysicalAddress}" 
-									                                         Format="{DynamicResource String/ApplicationInfoDialog.PrimaryNetworkInterface.Format}" 
+									                                         Format="{xaml:StringResource ApplicationInfoDialog.PrimaryNetworkInterface.Format}" 
 									                                         HorizontalAlignment="Right" 
 									                                         TextTrimming="CharacterEllipsis"/>
 								</controls:DialogItem>
@@ -229,9 +247,9 @@
 								<!-- Screen pixel density -->
 								<Separator Classes="Dialog_Item_Separator"/>
 								<controls:DialogItem ItemSize="Small">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.Screen.PixelDensity}"/>
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.Screen.PixelDensity}"/>
 									<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].ScreenPixelDensity}" 
-									                                         Format="{DynamicResource String/ApplicationInfoDialog.Screen.PixelDensity.Format}" 
+									                                         Format="{xaml:StringResource ApplicationInfoDialog.Screen.PixelDensity.Format}" 
 									                                         HorizontalAlignment="Right"
 									                                         TextTrimming="CharacterEllipsis"/>
 								</controls:DialogItem>
@@ -239,10 +257,10 @@
 								<!-- Screen size -->
 								<Separator Classes="Dialog_Item_Separator"/>
 								<controls:DialogItem ItemSize="Small">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.Screen.Size}"/>
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.Screen.Size}"/>
 									<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].PhysicalScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" 
 									                                         Arg2="{Binding $parent[Window].ScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" 
-									                                         Format="{DynamicResource String/ApplicationInfoDialog.Screen.Size.Format}"
+									                                         Format="{xaml:StringResource ApplicationInfoDialog.Screen.Size.Format}"
 									                                         HorizontalAlignment="Right"
 									                                         TextTrimming="CharacterEllipsis"/>
 								</controls:DialogItem>
@@ -250,10 +268,10 @@
 								<!-- Working area -->
 								<Separator Classes="Dialog_Item_Separator"/>
 								<controls:DialogItem ItemSize="Small">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.Screen.WorkingArea}"/>
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.Screen.WorkingArea}"/>
 									<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].PhysicalScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" 
 									                                         Arg2="{Binding $parent[Window].ScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" 
-									                                         Format="{DynamicResource String/ApplicationInfoDialog.Screen.WorkingArea.Format}" 
+									                                         Format="{xaml:StringResource ApplicationInfoDialog.Screen.WorkingArea.Format}" 
 									                                         HorizontalAlignment="Right"
 									                                         TextTrimming="CharacterEllipsis"/>
 								</controls:DialogItem>
@@ -265,14 +283,14 @@
 
 					<!-- Process info -->
 					<Border Classes="Dialog_ItemsGroup_Header">
-						<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{DynamicResource String/ApplicationInfoDialog.ProcessInformation}"/>
+						<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{xaml:StringResource ApplicationInfoDialog.ProcessInformation}"/>
 					</Border>
 					<Border x:CompileBindings="False" Classes="Dialog_ItemsGroup_Container">
 						<StackPanel>
 
 							<!-- Process ID -->
 							<controls:DialogItem ItemSize="Small">
-								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ProcessId}"/>
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.ProcessId}"/>
 								<SelectableTextBlock HorizontalAlignment="Right"
 								                     Text="{Binding $parent[Window].Application.ProcessInfo.ProcessId, Mode=OneTime}" 
 								                     TextTrimming="CharacterEllipsis"/>
@@ -281,7 +299,7 @@
 
 							<!-- Thread count -->
 							<controls:DialogItem ItemSize="Small">
-								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ThreadCount}"/>
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.ThreadCount}"/>
 								<SelectableTextBlock HorizontalAlignment="Right"
 								                     Text="{Binding $parent[Window].Application.ProcessInfo.ThreadCount}" 
 								                     TextTrimming="CharacterEllipsis"/>
@@ -290,9 +308,9 @@
 
 							<!-- CPU usage -->
 							<controls:DialogItem ItemSize="Small">
-								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.CpuUsage}"/>
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.CpuUsage}"/>
 								<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage}" 
-								                                         Format="{DynamicResource String/ApplicationInfoDialog.CpuUsage.Format}" 
+								                                         Format="{xaml:StringResource ApplicationInfoDialog.CpuUsage.Format}" 
 								                                         HorizontalAlignment="Right"
 								                                         TextTrimming="CharacterEllipsis"/>
 							</controls:DialogItem>
@@ -300,7 +318,7 @@
 
 							<!-- Private memory usage -->
 							<controls:DialogItem ItemSize="Small">
-								<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.PrivateMemoryUsage}"/>
+								<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.PrivateMemoryUsage}"/>
 								<SelectableTextBlock HorizontalAlignment="Right"
 								                     Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static converters:FileSizeConverter.Default}}" 
 								                     TextTrimming="CharacterEllipsis"/>
@@ -312,7 +330,7 @@
 								<!-- Managed heap size -->
 								<Separator Classes="Dialog_Item_Separator"/>
 								<controls:DialogItem ItemSize="Small">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ManagedHeapSize}"/>
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.ManagedHeapSize}"/>
 									<SelectableTextBlock HorizontalAlignment="Right"
 									                     Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapSize, Converter={x:Static converters:FileSizeConverter.Default}}" 
 									                     TextTrimming="CharacterEllipsis"/>
@@ -321,7 +339,7 @@
 								<!-- Managed heap usage -->
 								<Separator Classes="Dialog_Item_Separator"/>
 								<controls:DialogItem ItemSize="Small">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ManagedHeapUsage}"/>
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.ManagedHeapUsage}"/>
 									<SelectableTextBlock HorizontalAlignment="Right"
 									                     Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static converters:FileSizeConverter.Default}}" 
 									                     TextTrimming="CharacterEllipsis"/>
@@ -330,9 +348,9 @@
 								<!-- GC frequency -->
 								<Separator Classes="Dialog_Item_Separator"/>
 								<controls:DialogItem ItemSize="Small">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.GCFrequency}"/>
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.GCFrequency}"/>
 									<abControls:FormattedSelectableTextBlock Arg1="{Binding $parent[Window].Application.ProcessInfo.GCFrequency}" 
-									                                         Format="{DynamicResource String/ApplicationInfoDialog.GCFrequency.Format}" 
+									                                         Format="{xaml:StringResource ApplicationInfoDialog.GCFrequency.Format}" 
 									                                         HorizontalAlignment="Right"
 									                                         TextTrimming="CharacterEllipsis"/>
 								</controls:DialogItem>
@@ -340,7 +358,7 @@
 								<!-- Finalization pending count -->
 								<Separator Classes="Dialog_Item_Separator"/>
 								<controls:DialogItem ItemSize="Small">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.FinalizationPendingCount}"/>
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.FinalizationPendingCount}"/>
 									<SelectableTextBlock HorizontalAlignment="Right"
 									                     Text="{Binding $parent[Window].Application.ProcessInfo.FinalizationPendingCount}" 
 									                     TextTrimming="CharacterEllipsis"/>
@@ -354,7 +372,7 @@
 								<!-- Running script count -->
 								<Separator Classes="Dialog_Item_Separator"/>
 								<controls:DialogItem ItemSize="Small">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.RunningScriptCount}"/>
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.RunningScriptCount}"/>
 									<SelectableTextBlock HorizontalAlignment="Right"
 									                     Text="{Binding RunningScriptCount, Source={x:Static scripting:ScriptManager.Default}}" 
 									                     TextTrimming="CharacterEllipsis"/>
@@ -363,7 +381,7 @@
 								<!-- Script running loading -->
 								<Separator Classes="Dialog_Item_Separator"/>
 								<controls:DialogItem ItemSize="Small">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="{DynamicResource String/ApplicationInfoDialog.ScriptRunningLoading}"/>
+									<TextBlock Classes="Dialog_TextBlock_Label" Text="{xaml:StringResource ApplicationInfoDialog.ScriptRunningLoading}"/>
 									<SelectableTextBlock HorizontalAlignment="Right"
 									                     Text="{Binding ScriptRunningLoading, Source={x:Static scripting:ScriptManager.Default}, Converter={x:Static converters:RatioToPercentageConverter.Default}}" 
 									                     TextTrimming="CharacterEllipsis"/>
@@ -378,7 +396,7 @@
 					<!-- Activated products -->
 					<StackPanel Name="productListSectionPanel">
 						<Border Classes="Dialog_ItemsGroup_Header">
-							<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{DynamicResource String/ApplicationInfoDialog.Products}"/>
+							<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{xaml:StringResource ApplicationInfoDialog.Products}"/>
 						</Border>
 						<Border Classes="Dialog_ItemsGroup_Container">
 							<StackPanel Name="productListPanel"/>
@@ -388,7 +406,7 @@
 
 					<!-- Assemblies (Header) -->
 					<Border Classes="Dialog_ItemsGroup_Header">
-						<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{DynamicResource String/ApplicationInfoDialog.Assemblies}"/>
+						<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{xaml:StringResource ApplicationInfoDialog.Assemblies}"/>
 					</Border>
 					<Border Classes="Dialog_ItemsGroup_Container">
 						<StackPanel>
@@ -402,7 +420,7 @@
 					
 					<!-- Other information -->
 					<Border Classes="Dialog_ItemsGroup_Header">
-						<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{DynamicResource String/ApplicationInfoDialog.Other}"/>
+						<TextBlock Classes="Dialog_ItemsGroup_Header" Text="{xaml:StringResource ApplicationInfoDialog.Other}"/>
 					</Border>
 					<Border Classes="Dialog_ItemsGroup_Container">
 						<StackPanel>
@@ -411,7 +429,7 @@
 							<StackPanel IsVisible="{Binding PayPalUri, Converter={x:Static ObjectConverters.IsNotNull}}">
 								<StackPanel Classes="Dialog_IconText_Container">
 									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PayPal.Outline.Colored}"/>
-									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{DynamicResource String/ApplicationInfoDialog.DonateWithPayPal}" Uri="{Binding PayPalUri}"/>
+									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="{xaml:StringResource ApplicationInfoDialog.DonateWithPayPal}" Uri="{Binding PayPalUri}"/>
 								</StackPanel>
 								<Separator Classes="Dialog_Separator_Small"/>
 							</StackPanel>
@@ -420,7 +438,7 @@
 							<StackPanel IsVisible="{Binding WebsiteUri, Converter={x:Static ObjectConverters.IsNotNull}}">
 								<StackPanel Classes="Dialog_IconText_Container">
 									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Website}"/>
-									<abControls:FormattedLinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Arg1="{Binding Application.Name}" Format="{DynamicResource String/ApplicationInfoDialog.Website}" Uri="{Binding WebsiteUri}"/>
+									<abControls:FormattedLinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Arg1="{Binding Application.Name}" Format="{xaml:StringResource ApplicationInfoDialog.Website}" Uri="{Binding WebsiteUri}"/>
 								</StackPanel>
 								<Separator Classes="Dialog_Separator_Small"/>
 							</StackPanel>
@@ -429,7 +447,7 @@
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding $parent[Window].HasUserAgreement}">
 								<StackPanel Classes="Dialog_IconText_Container">
 									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.UserAgreement.Outline}"/>
-									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowUserAgreement}" Text="{DynamicResource String/Common.UserAgreement.WithDialog}"/>
+									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowUserAgreement}" Text="{xaml:StringResource Common.UserAgreement.WithDialog}"/>
 								</StackPanel>
 								<Separator Classes="Dialog_Separator_Small"/>
 							</StackPanel>
@@ -438,7 +456,7 @@
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding $parent[Window].HasPrivacyPolicy}">
 								<StackPanel Classes="Dialog_IconText_Container">
 									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PrivacyPolicy.Outline}"/>
-									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowPrivacyPolicy}" Text="{DynamicResource String/Common.PrivacyPolicy.WithDialog}"/>
+									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowPrivacyPolicy}" Text="{xaml:StringResource Common.PrivacyPolicy.WithDialog}"/>
 								</StackPanel>
 								<Separator Classes="Dialog_Separator_Small"/>
 							</StackPanel>
@@ -447,7 +465,7 @@
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding $parent[Window].HasExternalDependencies}">
 								<StackPanel Classes="Dialog_IconText_Container">
 									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Dependencies}"/>
-									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowExternalDependencies}" Text="{DynamicResource String/ApplicationInfoDialog.ExternalDependencies}"/>
+									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ShowExternalDependencies}" Text="{xaml:StringResource ApplicationInfoDialog.ExternalDependencies}"/>
 								</StackPanel>
 								<Separator Classes="Dialog_Separator_Small"/>
 							</StackPanel>
@@ -456,7 +474,7 @@
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding !$parent[Window].Application.IsDebugMode}">
 								<StackPanel Classes="Dialog_IconText_Container">
 									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Debug.Outline}"/>
-									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].RestartInDebugMode}" Text="{DynamicResource String/ApplicationInfoDialog.RestartInDebugMode}"/>
+									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].RestartInDebugMode}" Text="{xaml:StringResource ApplicationInfoDialog.RestartInDebugMode}"/>
 								</StackPanel>
 								<Separator Classes="Dialog_Separator_Small"/>
 							</StackPanel>
@@ -464,7 +482,7 @@
 							<!-- Export logs -->
 							<StackPanel Classes="Dialog_IconText_Container">
 								<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Export}"/>
-								<abControls:LinkTextBlock x:CompileBindings="False" Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ExportLogs}" Text="{DynamicResource String/ApplicationInfoDialog.ExportAppLogs}"/>
+								<abControls:LinkTextBlock x:CompileBindings="False" Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].ExportLogs}" Text="{xaml:StringResource ApplicationInfoDialog.ExportAppLogs}"/>
 							</StackPanel>
 							
 							<!-- Take memory snapshot -->
@@ -472,7 +490,7 @@
 								<Separator Classes="Dialog_Separator_Small"/>
 								<StackPanel Classes="Dialog_IconText_Container">
 									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Memory.Outline}"/>
-									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].TakeMemorySnapshot}" Text="{DynamicResource String/Common.TakeMemorySnapshot.WithDialog}"/>
+									<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Command="{Binding $parent[Window].TakeMemorySnapshot}" Text="{xaml:StringResource Common.TakeMemorySnapshot.WithDialog}"/>
 								</StackPanel>
 							</StackPanel>
 

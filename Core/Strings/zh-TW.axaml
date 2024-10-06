@@ -17,6 +17,9 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section1">是基於</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section2">開放原始碼專案</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section3">所開發的的應用程式。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.PoweredBy.Section1">此軟體由</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.PoweredBy.Section2">及</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.PoweredBy.Section3">提供基礎支援。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">偵錯模式可以讓應用程式輸出更多的執行期間資訊至日誌，甚至提供應用程式內部功能調整。下次您自行啟動應用程式時將自動離開偵錯模式。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.CpuUsage">處理器使用率</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DeactivateProduct">停用並取消授權…</sys:String>
