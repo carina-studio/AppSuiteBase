@@ -103,6 +103,7 @@
 
 	<!-- ListBoxItem -->
 	<CornerRadius x:Key="CornerRadius/ListBoxItem">1</CornerRadius>
+	<sys:Double x:Key="Double/ListBoxItem.InsertionIndicator.Size">3</sys:Double>
 	<Thickness x:Key="Thickness/ListBoxItem.Icon.Margin">0,0,7,0</Thickness>
 	<Thickness x:Key="Thickness/ListBoxItem.Margin">0</Thickness>
 	<Thickness x:Key="Thickness/ListBoxItem.Padding">6,4,15,4</Thickness>

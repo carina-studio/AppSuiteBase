@@ -25,6 +25,20 @@ public class ItemInsertionIndicator
 
 
     /// <summary>
+    /// Clear insertion state from all realized containers in given <see cref="ItemsControl"/>.
+    /// </summary>
+    /// <param name="itemsControl"><see cref="ItemsControl"/>.</param>
+    public static void ClearInsertingItems(ItemsControl itemsControl)
+    {
+        foreach (var container in itemsControl.GetRealizedContainers())
+        {
+            container.SetValue(IsInsertingItemAfterProperty, false);
+            container.SetValue(IsInsertingItemBeforeProperty, false);
+        }
+    }
+
+
+    /// <summary>
     /// Get whether indicator of inserting item after current item is visible or not.
     /// </summary>
     /// <param name="control"><see cref="Control"/>.</param>

@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
@@ -30,8 +31,11 @@ using System.Windows.Input;
 using Avalonia.Markup.Xaml.Styling;
 using CarinaStudio.AppSuite.IO;
 using CarinaStudio.AppSuite.Media;
+using System.Collections;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
+using ListBox = CarinaStudio.AppSuite.Controls.ListBox;
 using TabControl = Avalonia.Controls.TabControl;
 
 namespace CarinaStudio.AppSuite.Tests
@@ -157,6 +161,61 @@ namespace CarinaStudio.AppSuite.Tests
             this.integerTextBox = this.FindControl<IntegerTextBox>(nameof(integerTextBox)).AsNonNull();
             this.integerTextBox2 = this.FindControl<IntegerTextBox>(nameof(integerTextBox2)).AsNonNull();
             this.ipAddressTextBox = this.FindControl<IPAddressTextBox>(nameof(ipAddressTextBox)).AsNonNull();
+            this.Get<ListBox>("listBox1").Also(it =>
+            {
+                var items = (AvaloniaList<object>)it.ItemsSource!;
+                ListBoxItemDragging.SetItemDraggingEnabled(it, true);
+                it.AddHandler(ListBoxItemDragging.ItemDragCancelledEvent, (sender, e) =>
+                {
+                    Debug.WriteLine($"ItemDragCancelled: {e.StartItemIndex}, {e.ItemIndex}");
+                    ItemInsertionIndicator.ClearInsertingItems(it);
+                });
+                it.AddHandler(ListBoxItemDragging.ItemDraggedEvent, (sender, e) =>
+                {
+                    Debug.WriteLine($"ItemDragged: {e.StartItemIndex}, {e.ItemIndex}");
+                    if (e.PreviousItemIndex >= 0)
+                    {
+                        if (it.ContainerFromIndex(e.PreviousItemIndex) is { } container)
+                        {
+                            ItemInsertionIndicator.SetInsertingItemAfter(container, false);
+                            ItemInsertionIndicator.SetInsertingItemBefore(container, false);
+                        }
+                    }
+                    if (e.ItemIndex < e.StartItemIndex)
+                    {
+                        if (it.ContainerFromIndex(e.ItemIndex) is { } container)
+                            ItemInsertionIndicator.SetInsertingItemBefore(container, true);
+                    }
+                    else if (e.ItemIndex > e.StartItemIndex)
+                    {
+                        if (it.ContainerFromIndex(e.ItemIndex) is { } container)
+                            ItemInsertionIndicator.SetInsertingItemAfter(container, true);
+                    }
+                });
+                it.AddHandler(ListBoxItemDragging.ItemDragLeavedEvent, (sender, e) =>
+                {
+                    Debug.WriteLine($"ItemDragLeaved: {e.StartItemIndex}, {e.ItemIndex}");
+                    if (e.PreviousItemIndex >= 0 && it.ContainerFromIndex(e.PreviousItemIndex) is { } container)
+                    {
+                        ItemInsertionIndicator.SetInsertingItemAfter(container, false);
+                        ItemInsertionIndicator.SetInsertingItemBefore(container, false);
+                    }
+                });
+                it.AddHandler(ListBoxItemDragging.ItemDragStartedEvent, (sender, e) =>
+                {
+                    Debug.WriteLine($"ItemDragStarted: {e.StartItemIndex}, {e.ItemIndex}");
+                });
+                it.AddHandler(ListBoxItemDragging.ItemDroppedEvent, (sender, e) =>
+                {
+                    Debug.WriteLine($"ItemDropped: {e.StartItemIndex}, {e.ItemIndex}");
+                    ItemInsertionIndicator.ClearInsertingItems(it);
+                    if (e.ItemIndex >= 0 && e.ItemIndex != e.StartItemIndex)
+                    {
+                        items.Move(e.StartItemIndex, e.ItemIndex);
+                        it.SelectedIndex = e.ItemIndex;
+                    }
+                });
+            });
             this.notificationPresenter = this.Get<NotificationPresenter>(nameof(notificationPresenter));
             this.Get<RegexTextBox>("regexTextBox").Also(it =>
             {

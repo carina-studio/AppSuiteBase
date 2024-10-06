@@ -1504,6 +1504,34 @@
 		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ListBoxItem}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/ListBoxItem.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ListBoxItem.Padding}"/>
+		<Setter Property="Template">
+			<ControlTemplate TargetType="{x:Type ListBoxItem}">
+				<DockPanel>
+					<Border Background="{DynamicResource SystemControlHighlightListAccentLowBrush}"
+					        CornerRadius="{DynamicResource ControlCornerRadius}"
+					        DockPanel.Dock="Top"
+					        Height="{DynamicResource Double/ListBoxItem.InsertionIndicator.Size}"
+					        IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemBefore}"
+					        Margin="{TemplateBinding Margin, Converter={x:Static converters:ThicknessConverters.Bottom}}"/>
+					<Border Background="{DynamicResource SystemControlHighlightListAccentLowBrush}"
+					        CornerRadius="{DynamicResource ControlCornerRadius}"
+					        DockPanel.Dock="Bottom"
+					        Height="{DynamicResource Double/ListBoxItem.InsertionIndicator.Size}"
+					        IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemAfter}"
+					        Margin="{TemplateBinding Margin, Converter={x:Static converters:ThicknessConverters.Top}}"/>
+					<ContentPresenter Name="PART_ContentPresenter"
+					                  Background="{TemplateBinding Background}"
+					                  BorderBrush="{TemplateBinding BorderBrush}"
+					                  BorderThickness="{TemplateBinding BorderThickness}"
+					                  CornerRadius="{TemplateBinding CornerRadius}"
+					                  ContentTemplate="{TemplateBinding ContentTemplate}"
+					                  Content="{TemplateBinding Content}"
+					                  Padding="{TemplateBinding Padding}"
+					                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+					                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" />
+				</DockPanel>
+			</ControlTemplate>
+		</Setter>
 	</Style>
 	<Style Selector="Border.ListBoxItem_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/ListBoxItem.Icon.Size}"/>

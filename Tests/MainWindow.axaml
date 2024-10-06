@@ -9,6 +9,7 @@
 		xmlns:appControls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:appConverters="using:CarinaStudio.AppSuite.Converters"
         xmlns:appMedia="using:CarinaStudio.AppSuite.Media"
+        xmlns:avCollections="using:Avalonia.Collections"
 		xmlns:sys="using:System"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Tests.MainWindow"
@@ -717,23 +718,23 @@
 								<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
 							</Border>
 
-							<appControls:ListBox DoubleClickOnItem="OnListBoxDoubleClickOnItem" HorizontalAlignment="Left" Width="150" Margin="5" SelectionMode="Multiple">
-								<ListBoxItem>
-									<appControls:SyntaxHighlightingTextBlock DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="[0-9]abc(123)"/>
-								</ListBoxItem>
-								<ListBoxItem>
-									<Grid ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch">
-										<TextBlock Text="Item 1" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
-										<appControls:Image Classes="Icon" Grid.Column="1" Height="14" VerticalAlignment="Center" Width="14">
-											<DrawingImage>
-												<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Star}"/>
-											</DrawingImage>
-										</appControls:Image>
-									</Grid>
-								</ListBoxItem>
-								<ListBoxItem>Item 2 Item 2 Item 2 Item 2 Item 2</ListBoxItem>
-								<ListBoxItem IsEnabled="False">Item 3</ListBoxItem>
-								<ListBoxItem>Item 4 Item 4 Item 4 Item 4 Item 4</ListBoxItem>
+							<appControls:ListBox Name="listBox1" DoubleClickOnItem="OnListBoxDoubleClickOnItem" HorizontalAlignment="Left" Width="150" Margin="5" SelectionMode="Multiple">
+								<appControls:ListBox.ItemsSource>
+									<avCollections:AvaloniaList x:TypeArguments="sys:Object">
+										<appControls:SyntaxHighlightingTextBlock DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="[0-9]abc(123)"/>
+										<Grid ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch">
+											<TextBlock Text="Item 1" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+											<appControls:Image Classes="Icon" Grid.Column="1" Height="14" VerticalAlignment="Center" Width="14">
+												<DrawingImage>
+													<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Star}"/>
+												</DrawingImage>
+											</appControls:Image>
+										</Grid>
+										<sys:String>Item 2 Item 2 Item 2 Item 2 Item 2</sys:String>
+										<TextBlock IsEnabled="False">Item 3</TextBlock>
+										<sys:String>Item 4 Item 4 Item 4 Item 4 Item 4</sys:String>
+									</avCollections:AvaloniaList>
+								</appControls:ListBox.ItemsSource>
 							</appControls:ListBox>
 
 							<appControls:ListBox HorizontalAlignment="Left" ItemsSource="{Binding $parent[Window].StringItems}" Width="150" Margin="5" SelectionMode="Multiple">
