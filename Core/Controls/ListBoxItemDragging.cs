@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.VisualTree;
+using CarinaStudio.Input;
 using System;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -116,8 +116,7 @@ public class ListBoxItemDragging
     {
         if (!point.Properties.IsLeftButtonPressed)
             return -1;
-        var listBoxItem = (listBox.InputHitTest(point.Position) as Visual)?.FindAncestorOfType<ListBoxItem>();
-        if (listBoxItem is null || !ReferenceEquals(listBoxItem.FindAncestorOfType<ListBox>(), listBox))
+        if (listBox.InputHitTest<ListBoxItem>(point.Position) is not { } listBoxItem)
             return -1;
         return listBox.IndexFromContainer(listBoxItem);
     }
@@ -188,14 +187,18 @@ public class ListBoxItemDragging
             if (index < 0)
             {
                 var position = point.Position;
-                if (hasPrevItem && (position.X < 0 || position.X >= listBox.Width || position.Y < 0 || position.Y >= listBox.Height))
+                if (hasPrevItem)
                 {
-                    draggingInfo.LastItemIndex = -1;
-                    var dragEventArgs = new ListBoxItemDragEventArgs(draggingInfo.StartItemIndex, draggingInfo.StartItem, -1, null, prevIndex, prevItem, point.Position, e.KeyModifiers)
+                    var bounds = listBox.Bounds;
+                    if (position.X < 0 || position.X >= bounds.Width || position.Y < 0 || position.Y >= bounds.Height)
                     {
-                        RoutedEvent = ItemDragLeavedEvent
-                    };
-                    listBox.RaiseEvent(dragEventArgs);
+                        draggingInfo.LastItemIndex = -1;
+                        var dragEventArgs = new ListBoxItemDragEventArgs(draggingInfo.StartItemIndex, draggingInfo.StartItem, -1, null, prevIndex, prevItem, point.Position, e.KeyModifiers)
+                        {
+                            RoutedEvent = ItemDragLeavedEvent
+                        };
+                        listBox.RaiseEvent(dragEventArgs);
+                    }
                 }
                 return;
             }
