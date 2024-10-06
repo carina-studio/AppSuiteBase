@@ -284,9 +284,9 @@ public class ListBoxItemDragging
     /// <summary>
     /// Enable of disable item dragging.
     /// </summary>
-    /// <param name="listBox"><see cref="ListBox"/>.</param>
+    /// <param name="listBox"><see cref="Avalonia.Controls.ListBox"/>.</param>
     /// <param name="isEnabled">True to enable item dragging.</param>
-    public static void SetItemDraggingEnabled(ListBox listBox, bool isEnabled) =>
+    public static void SetItemDraggingEnabled(Avalonia.Controls.ListBox listBox, bool isEnabled) =>
         listBox.SetValue(IsItemDraggingEnabledProperty, isEnabled);
 }
 
