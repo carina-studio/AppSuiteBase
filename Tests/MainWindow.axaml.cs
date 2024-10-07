@@ -168,38 +168,14 @@ namespace CarinaStudio.AppSuite.Tests
                 it.AddHandler(ListBoxItemDragging.ItemDragCancelledEvent, (sender, e) =>
                 {
                     Debug.WriteLine($"ItemDragCancelled: {e.StartItemIndex}, {e.ItemIndex}");
-                    ItemInsertionIndicator.ClearInsertingItems(it);
                 });
                 it.AddHandler(ListBoxItemDragging.ItemDraggedEvent, (sender, e) =>
                 {
                     Debug.WriteLine($"ItemDragged: {e.StartItemIndex}, {e.ItemIndex}");
-                    if (e.PreviousItemIndex >= 0)
-                    {
-                        if (it.ContainerFromIndex(e.PreviousItemIndex) is { } container)
-                        {
-                            ItemInsertionIndicator.SetInsertingItemAfter(container, false);
-                            ItemInsertionIndicator.SetInsertingItemBefore(container, false);
-                        }
-                    }
-                    if (e.ItemIndex < e.StartItemIndex)
-                    {
-                        if (it.ContainerFromIndex(e.ItemIndex) is { } container)
-                            ItemInsertionIndicator.SetInsertingItemBefore(container, true);
-                    }
-                    else if (e.ItemIndex > e.StartItemIndex)
-                    {
-                        if (it.ContainerFromIndex(e.ItemIndex) is { } container)
-                            ItemInsertionIndicator.SetInsertingItemAfter(container, true);
-                    }
                 });
                 it.AddHandler(ListBoxItemDragging.ItemDragLeavedEvent, (sender, e) =>
                 {
                     Debug.WriteLine($"ItemDragLeaved: {e.StartItemIndex}, {e.ItemIndex}");
-                    if (e.PreviousItemIndex >= 0 && it.ContainerFromIndex(e.PreviousItemIndex) is { } container)
-                    {
-                        ItemInsertionIndicator.SetInsertingItemAfter(container, false);
-                        ItemInsertionIndicator.SetInsertingItemBefore(container, false);
-                    }
                 });
                 it.AddHandler(ListBoxItemDragging.ItemDragStartedEvent, (sender, e) =>
                 {
@@ -208,7 +184,6 @@ namespace CarinaStudio.AppSuite.Tests
                 it.AddHandler(ListBoxItemDragging.ItemDroppedEvent, (sender, e) =>
                 {
                     Debug.WriteLine($"ItemDropped: {e.StartItemIndex}, {e.ItemIndex}");
-                    ItemInsertionIndicator.ClearInsertingItems(it);
                     if (e.ItemIndex >= 0 && e.ItemIndex != e.StartItemIndex)
                     {
                         items.Move(e.StartItemIndex, e.ItemIndex);

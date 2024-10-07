@@ -107,6 +107,8 @@ public class ListBoxItemDragging
             RoutedEvent = ItemDragCancelledEvent
         };
         listBox.RaiseEvent(e);
+        if (!e.Handled)
+            ItemInsertionIndicator.ClearInsertingItems(listBox);
         return true;
     }
 
@@ -193,11 +195,19 @@ public class ListBoxItemDragging
                     if (position.X < 0 || position.X >= bounds.Width || position.Y < 0 || position.Y >= bounds.Height)
                     {
                         draggingInfo.LastItemIndex = -1;
+                        var container = hasPrevItem
+                            ? listBox.ContainerFromIndex(prevIndex)
+                            : null;
                         var dragEventArgs = new ListBoxItemDragEventArgs(draggingInfo.StartItemIndex, draggingInfo.StartItem, -1, null, prevIndex, prevItem, point.Position, e.KeyModifiers)
                         {
                             RoutedEvent = ItemDragLeavedEvent
                         };
                         listBox.RaiseEvent(dragEventArgs);
+                        if (!dragEventArgs.Handled && container is not null)
+                        {
+                            ItemInsertionIndicator.SetInsertingItemAfter(container, false);
+                            ItemInsertionIndicator.SetInsertingItemBefore(container, false);
+                        }
                     }
                 }
                 return;
@@ -207,11 +217,27 @@ public class ListBoxItemDragging
             if (prevIndex != index)
             {
                 draggingInfo.LastItemIndex = index;
+                var prevContainer = hasPrevItem
+                    ? listBox.ContainerFromIndex(prevIndex)
+                    : null;
+                var container = listBox.ContainerFromIndex(index);
                 var dragEventArgs = new ListBoxItemDragEventArgs(draggingInfo.StartItemIndex, draggingInfo.StartItem, index, listBox.Items[index], prevIndex, prevItem, point.Position, e.KeyModifiers)
                 {
                     RoutedEvent = ItemDraggedEvent
                 };
                 listBox.RaiseEvent(dragEventArgs);
+                if (!dragEventArgs.Handled)
+                {
+                    if (prevContainer is not null)
+                    {
+                        ItemInsertionIndicator.SetInsertingItemAfter(prevContainer, false);
+                        ItemInsertionIndicator.SetInsertingItemBefore(prevContainer, false);
+                    }
+                    if (index < draggingInfo.StartItemIndex && container is not null)
+                        ItemInsertionIndicator.SetInsertingItemBefore(container, true);
+                    else if (index > draggingInfo.StartItemIndex && container is not null)
+                        ItemInsertionIndicator.SetInsertingItemAfter(container, true);
+                }
             }
         }
         else
@@ -268,8 +294,11 @@ public class ListBoxItemDragging
             return;
         var point = e.GetCurrentPoint(listBox);
         var index = draggingInfo.LastItemIndex;
-        var item = index >= 0 && index < listBox.Items.Count 
+        var item = index >= 0 && index < listBox.ItemCount 
             ? listBox.Items[index] 
+            : null;
+        var container = index >= 0 && index < listBox.ItemCount  
+            ? listBox.ContainerFromIndex(index)
             : null;
         var dragEventArgs = index >= 0 && index < listBox.Items.Count 
             ? new ListBoxItemDragEventArgs(draggingInfo.StartItemIndex, draggingInfo.StartItem, index, item, index, item, point.Position, e.KeyModifiers)
@@ -281,6 +310,11 @@ public class ListBoxItemDragging
                 RoutedEvent = ItemDragCancelledEvent
             };
         listBox.RaiseEvent(dragEventArgs);
+        if (!dragEventArgs.Handled && container is not null)
+        {
+            ItemInsertionIndicator.SetInsertingItemAfter(container, false);
+            ItemInsertionIndicator.SetInsertingItemBefore(container, false);
+        }
     }
     
     
