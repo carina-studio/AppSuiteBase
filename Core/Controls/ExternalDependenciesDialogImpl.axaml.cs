@@ -5,7 +5,6 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using CarinaStudio.Threading;
-using CarinaStudio.VisualTree;
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;

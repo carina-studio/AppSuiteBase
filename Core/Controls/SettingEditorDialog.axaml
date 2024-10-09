@@ -6,6 +6,7 @@
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.SettingEditorDialog"
+        Name="dialog"
         Classes="Dialog"
         SizeToContent="Height"
         Width="350">
@@ -15,15 +16,15 @@
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
 			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].ResetValue}" Content="{DynamicResource String/Common.Reset}"/>
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].UpdateValue}" Content="{DynamicResource String/Common.OK}"/>
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.Cancel}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.ResetValue}" Content="{DynamicResource String/Common.Reset}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.UpdateValue}" Content="{Binding #dialog.OKButtonText}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.Close}" Content="{DynamicResource String/Common.Cancel}"/>
 			</StackPanel>
 		</Border>
 
 		<!-- Content -->
 		<StackPanel Classes="Dialog_ContentPanel" Orientation="Vertical">
-			<TextBlock Classes="Dialog_TextBlock" Text="{Binding $parent[Window].SettingKey.Name}"/>
+			<TextBlock Classes="Dialog_TextBlock" Text="{Binding #dialog.SettingKey.Name, FallbackValue={x:Null}}"/>
 			<controls:EnumComboBox Name="enumComboBox" Classes="Dialog_ComboBox" IsVisible="False"/>
 			<abControls:IntegerTextBox Name="integerTextBox" Classes="Dialog_TextBox" IsVisible="False"/>
 			<NumericUpDown Name="numericUpDown" Classes="Dialog_NumericUpDown" IsVisible="False"/>

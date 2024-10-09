@@ -3,8 +3,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:abControls="using:CarinaStudio.Controls"
-		xmlns:aConverters="using:Avalonia.Data.Converters"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
+        xmlns:xaml="using:CarinaStudio.AppSuite.Xaml"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.PathEnvVarEditorDialogImpl"
 		Name="window"
@@ -21,24 +21,22 @@
 
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
-			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-				<Button Classes="Dialog_ControlButton" Command="{Binding #window.AddPath}" Content="{DynamicResource String/PathEnvVarEditorDialog.AddPath.WithDialog}">
-					<Button.IsEnabled>
-						<MultiBinding Converter="{x:Static aConverters:BoolConverters.And}">
-							<Binding Path="!IsRefreshingPaths" ElementName="window"/>
-							<Binding Path="!IsSavingPaths" ElementName="window"/>
-						</MultiBinding>
-					</Button.IsEnabled>
-				</Button>
+			<StackPanel Classes="Dialog_ControlButtonsPanel">
+				<Button Classes="Dialog_ControlButton" 
+				        Command="{Binding #window.AddPath}" 
+				        Content="{DynamicResource String/PathEnvVarEditorDialog.AddPath.WithDialog}"
+				        IsEnabled="{xaml:AndBindings
+				            {Binding !#window.IsRefreshingPaths},
+				            {Binding !#window.IsSavingPaths}
+				        }"/>
 				<Separator Classes="Dialog_Separator_Small"/>
-				<Button Classes="Dialog_ControlButton" Command="{Binding #window.SaveAndClose}" Content="{DynamicResource String/Common.OK}">
-					<Button.IsEnabled>
-						<MultiBinding Converter="{x:Static aConverters:BoolConverters.And}">
-							<Binding Path="!IsRefreshingPaths" ElementName="window"/>
-							<Binding Path="!IsSavingPaths" ElementName="window"/>
-						</MultiBinding>
-					</Button.IsEnabled>
-				</Button>
+				<Button Classes="Dialog_ControlButton" 
+				        Command="{Binding #window.SaveAndClose}" 
+				        Content="{Binding #window.OKButtonText}"
+				        IsEnabled="{xaml:AndBindings
+				            {Binding !#window.IsRefreshingPaths},
+				            {Binding !#window.IsSavingPaths}
+				        }"/>
 				<Button Classes="Dialog_ControlButton" Command="{Binding #window.Close}" Content="{DynamicResource String/Common.Cancel}" IsEnabled="{Binding !#window.IsSavingPaths}"/>
 			</StackPanel>
 		</Border>

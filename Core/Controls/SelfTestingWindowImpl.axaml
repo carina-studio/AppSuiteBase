@@ -22,7 +22,7 @@
 
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
-			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+			<StackPanel Classes="Dialog_ControlButtonsPanel">
 				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].RunAllTestCases}" Content="{DynamicResource String/SelfTestingWindow.RunAllTestCases}"/>
 				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].CancelAllTestCases}" Content="{DynamicResource String/SelfTestingWindow.CancelAllTestCases}"/>
 			</StackPanel>

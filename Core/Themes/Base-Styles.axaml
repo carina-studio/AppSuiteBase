@@ -445,7 +445,6 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/Dialog.ControlButtonsPanel.Background}"/>
 		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Dialog.ControlButtonsPanel.Border}"/>
 		<Setter Property="BorderThickness" Value="1"/>
-		<Setter Property="BoxShadow" Value="{DynamicResource BoxShadows/Shadow.Light}"/>
 		<Setter Property="DockPanel.Dock" Value="Bottom"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="Margin" Value="-1,0,-1,-1"/>
@@ -802,7 +801,7 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding.WithItemsGroups.Right}"/>
 	</Style>
 	<Style Selector="StackPanel.Dialog_ControlButtonsPanel">
-		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="Orientation" Value="Horizontal"/>
 	</Style>
 	<Style Selector="StackPanel.Dialog_FullWidthControl_Container">

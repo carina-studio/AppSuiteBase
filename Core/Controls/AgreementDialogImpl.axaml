@@ -5,6 +5,7 @@
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.AgreementDialogImpl"
+        Name="dialog"
 		CanResize="True"
 		Classes="Dialog"
 		Height="{StaticResource Double/AgreementDialog.Height}"
@@ -17,10 +18,10 @@
 
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
-			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Agree}" Content="{DynamicResource String/Common.OK}" IsVisible="{Binding $parent[Window].IsAgreedBefore}"/>
-				<Button Name="agreeButton" Classes="Dialog_AccentControlButton" Command="{Binding $parent[Window].Agree}" Content="{DynamicResource String/Common.Agree}" IsVisible="{Binding !$parent[Window].IsAgreedBefore}"/>
-				<Button Classes="Dialog_AccentControlButton" Command="{Binding $parent[Window].Decline}" Content="{DynamicResource String/Common.Decline}" IsVisible="{Binding !$parent[Window].IsAgreedBefore}"/>
+			<StackPanel Classes="Dialog_ControlButtonsPanel">
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Agree}" Content="{Binding #dialog.OKButtonText}" IsVisible="{Binding $parent[Window].IsAgreedBefore}"/>
+				<Button Name="agreeButton" Classes="Dialog_AccentControlButton" Command="{Binding $parent[Window].Agree}" Content="{DynamicResource String/Common.Agree}" IsVisible="{Binding !#dialog.IsAgreedBefore}"/>
+				<Button Classes="Dialog_AccentControlButton" Command="{Binding $parent[Window].Decline}" Content="{DynamicResource String/Common.Decline}" IsVisible="{Binding !#dialog.IsAgreedBefore}"/>
 			</StackPanel>
 		</Border>
 
@@ -37,10 +38,10 @@
 					</Grid.ColumnDefinitions>
 
 					<!-- Message -->
-					<TextBlock Classes="ToolBar_TextBlock" Grid.Column="1" IsVisible="{Binding $self.Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Text="{Binding $parent[Window].Message}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+					<TextBlock Classes="ToolBar_TextBlock" Grid.Column="1" IsVisible="{Binding $self.Text, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Text="{Binding #dialog.Message}" TextWrapping="Wrap" VerticalAlignment="Center"/>
 
 					<!-- Culture -->
-					<ComboBox Name="cultureComboBox" Classes="ToolBar_ComboBox" Grid.Column="2" ItemsSource="{Binding $parent[Window].Cultures}" SelectedItem="{Binding $parent[Window].Culture, Mode=TwoWay}" VerticalAlignment="Bottom">
+					<ComboBox Name="cultureComboBox" Classes="ToolBar_ComboBox" Grid.Column="2" ItemsSource="{Binding #dialog.Cultures}" SelectedItem="{Binding #dialog.Culture, Mode=TwoWay}" VerticalAlignment="Bottom">
 						<ComboBox.ItemTemplate>
 							<DataTemplate>
 								<TextBlock Text="{Binding Converter={x:Static controls:AgreementDialogImpl.CultureConverter}}"/>
@@ -52,7 +53,7 @@
 			</Border>
 
 			<!-- Document -->
-			<controls:MarkdownViewer BorderThickness="0" HorizontalScrollBarVisibility="Disabled" TextElement.FontFamily="{Binding $parent[Window].DocumentFontFamily}" Source="{Binding $parent[Window].DocumentUri}"/>
+			<controls:MarkdownViewer BorderThickness="0" HorizontalScrollBarVisibility="Disabled" TextElement.FontFamily="{Binding #dialog.DocumentFontFamily}" Source="{Binding #dialog.DocumentUri}"/>
 
 		</DockPanel>
 		

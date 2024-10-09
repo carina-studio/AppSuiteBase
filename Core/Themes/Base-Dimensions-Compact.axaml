@@ -60,7 +60,7 @@
 	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding.WithItemsGroups.Right">10,15,25,15</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ControlButton.Margin">2,0,2,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ControlButton.Padding">5,2,5,2</Thickness>
-	<Thickness x:Key="Thickness/Dialog.ControlButtonsPanel.Padding">18,10,18,10</Thickness>
+	<Thickness x:Key="Thickness/Dialog.ControlButtonsPanel.Padding">13,10,13,10</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ItemSeparator.Margin">0,6,0,6</Thickness>
 	<Thickness x:Key="Thickness/Dialog.Icon.Margin.Description">0,0,8,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.Icon.Margin.Large">0,0,15,0</Thickness>

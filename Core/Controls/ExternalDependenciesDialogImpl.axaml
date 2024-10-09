@@ -7,6 +7,7 @@
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.ExternalDependenciesDialogImpl"
+        Name="dialog"
 		Classes="Dialog"
         Title="{DynamicResource String/ExternalDependenciesDialog.Title}"
 		Width="{StaticResource Double/ExternalDependenciesDialog.Width}">
@@ -56,7 +57,7 @@
 								<Button Name="downloadButton" 
 									Classes="Dialog_Item_Button" 
 									Content="{DynamicResource String/ExternalDependenciesDialog.ExternalDependency.Install}" 
-									Command="{Binding $parent[Window].Download}" 
+									Command="{Binding #dialog.Download}" 
 									CommandParameter="{Binding}"
 									IsVisible="{Binding State, Converter={x:Static abConverters:ObjectConverters.IsEquivalentTo}, ConverterParameter={x:Static as:ExternalDependencyState.Unavailable}}" 
 									VerticalAlignment="Center"/>
@@ -73,7 +74,7 @@
 								<Button Name="detailsButton" 
 									Classes="Dialog_Item_Button"
 									Content="{DynamicResource String/Common.Details}" 
-									Command="{Binding $parent[Window].ShowDetails}" 
+									Command="{Binding #dialog.ShowDetails}" 
 									CommandParameter="{Binding}"
 									IsVisible="{Binding DetailsUri, Converter={x:Static ObjectConverters.IsNotNull}}"
 									VerticalAlignment="Center"/>
@@ -92,11 +93,11 @@
 
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
-			<StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-				<Button Name="editPathEnvVarButton" Classes="Dialog_ControlButton" Command="{Binding $parent[Window].EditPathEnvironmentVariable}" Content="{DynamicResource String/ExternalDependenciesDialog.EditPathEnvVar}" IsVisible="{x:Static controls:PathEnvVarEditorDialog.IsSupported}"/>
+			<StackPanel Classes="Dialog_ControlButtonsPanel">
+				<Button Name="editPathEnvVarButton" Classes="Dialog_ControlButton" Command="{Binding #dialog.EditPathEnvironmentVariable}" Content="{DynamicResource String/ExternalDependenciesDialog.EditPathEnvVar}" IsVisible="{x:Static controls:PathEnvVarEditorDialog.IsSupported}"/>
 					<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #editPathEnvVarButton.IsVisible}"/>
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Refresh}" Content="{DynamicResource String/Common.Refresh}"/>
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.OK}" IsEnabled="{Binding $parent[Window].CanClose}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.Refresh}" Content="{DynamicResource String/Common.Refresh}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.Close}" Content="{Binding #dialog.OKButtonText}" IsEnabled="{Binding #dialog.CanClose}"/>
 			</StackPanel>
 		</Border>
 
