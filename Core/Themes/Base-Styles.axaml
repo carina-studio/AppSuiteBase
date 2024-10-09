@@ -3616,4 +3616,19 @@
 		<Setter Property="Background" Value="{Binding $self.TransparencyLevelHint, Converter={x:Static converters:WindowBackgroundConverters.Tabbed}}"/>
 	</Style>
 	
+	<!-- WizardDialog -->
+	<Style Selector="Border.WizardDialog_Page_Title">
+		<Setter Property="Background" Value="{DynamicResource Brush/WizardDialog.PageTitle.Background}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/WizardDialog.PageTitle.Border}"/>
+		<Setter Property="BorderThickness" Value="0,0,0,1"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/WizardDialog.PageHeader.Padding}"/>
+	</Style>
+	<Style Selector=":is(TextBlock).WizardDialog_Page_Title">
+		<Setter Property="FontSize" Value="{DynamicResource Double/WizardDialog.TextBlock.FontSize.PageHeader}"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="MaxLines" Value="1"/>
+		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	
 </Styles>

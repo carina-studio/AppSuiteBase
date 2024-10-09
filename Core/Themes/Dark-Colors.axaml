@@ -125,6 +125,10 @@
 	<Color x:Key="Color/Window.Border">#444444</Color>
 	<Color x:Key="Color/Window.ContentFadingOverlay">#df000000</Color>
 	<Color x:Key="Color/Window.TitleBar">#171717</Color>
+	
+	<!-- WizardDialog -->
+	<Color x:Key="Color/WizardDialog.PageTitle.Background">#2a2a2a</Color>
+	<Color x:Key="Color/WizardDialog.PageTitle.Border">#404040</Color>
 
 	<!-- WorkingArea -->
 	<DrawingBrush x:Key="Brush/WorkingArea.Background" Stretch="Fill">

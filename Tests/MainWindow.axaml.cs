@@ -666,6 +666,11 @@ namespace CarinaStudio.AppSuite.Tests
             else if (result == ApplicationOptionsDialogResult.RestartApplicationNeeded)
                 this.Application.Restart();
         }
+        
+        public async void ShowTestWizardDialog()
+        {
+            _ = await new TestWizardDialog().ShowDialog<object?>(this);
+        }
 
         public async void ShowTextInputDialog()
         {

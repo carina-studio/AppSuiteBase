@@ -452,6 +452,12 @@
 	<Color x:Key="Color/Window.Border">#ffffff</Color>
 	<Color x:Key="Color/Window.ContentFadingOverlay">#ffffff</Color>
 	<Color x:Key="Color/Window.TitleBar">#ffffff</Color>
+	
+	<!-- WizardDialog -->
+	<SolidColorBrush x:Key="Brush/WizardDialog.PageTitle.Background" Color="{DynamicResource Color/WizardDialog.PageTitle.Background}"/>
+	<SolidColorBrush x:Key="Brush/WizardDialog.PageTitle.Border" Color="{DynamicResource Color/WizardDialog.PageTitle.Border}"/>
+	<Color x:Key="Color/WizardDialog.PageTitle.Background">#ffffff</Color>
+	<Color x:Key="Color/WizardDialog.PageTitle.Border">#ffffff</Color>
 
 	<!-- WorkingArea -->
 	<SolidColorBrush x:Key="Brush/WorkingArea.Background" Color="{DynamicResource Color/WorkingArea.Background}"/>

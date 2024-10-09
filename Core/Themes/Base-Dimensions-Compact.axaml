@@ -245,5 +245,9 @@
 	<Thickness x:Key="Thickness/TreeViewItem.Icon.Margin">0,0,5,0</Thickness>
 	<Thickness x:Key="Thickness/TreeViewItem.Margin">0</Thickness>
 	<Thickness x:Key="Thickness/TreeViewItem.Padding">0,4,15,4</Thickness>
+	
+	<!-- WizardDialog -->
+	<sys:Double x:Key="Double/WizardDialog.TextBlock.FontSize.PageHeader">18</sys:Double>
+	<StaticResourceExtension x:Key="Thickness/WizardDialog.PageHeader.Padding" ResourceKey="Thickness/Dialog.ContentPanel.Padding"/>
 
 </ResourceDictionary>

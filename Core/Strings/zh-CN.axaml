@@ -386,4 +386,8 @@
 	<!-- UriTextBox -->
 	<sys:String x:Key="String/UriTextBox.Watermark">网址 (URI)</sys:String>
 	
+	<!-- WizardDialog -->
+	<sys:String x:Key="String/WizardDialog.GoToNextPage">下一页</sys:String>
+	<sys:String x:Key="String/WizardDialog.GoToPreviousPage">上一页</sys:String>
+	
 </ResourceDictionary>

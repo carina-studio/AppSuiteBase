@@ -1,0 +1,56 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="CarinaStudio.AppSuite.Tests.TestWizardDialog"
+        Name="dialog"
+		Classes="Dialog"
+        Title="Wizard"
+		Width="400">
+
+	<DockPanel>
+
+		<Border Classes="Dialog_ControlButtonsPanel">
+			<StackPanel Classes="Dialog_ControlButtonsPanel">
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].GoToPreviousPageCommand}" Content="{Binding #dialog.GoToPreviousPageButtonText}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].GoToNextPageCommand}" Content="{Binding #dialog.GoToNextPageButtonText}"/>
+				<Separator Classes="Dialog_ControlButton_Separator"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{Binding #dialog.CancelButtonText}"/>
+			</StackPanel>
+		</Border>
+
+		<Panel>
+			
+			<DockPanel Name="page1" IsVisible="True">
+				<Border Classes="WizardDialog_Page_Title" DockPanel.Dock="Top">
+					<TextBlock Classes="WizardDialog_Page_Title" Text="Page 1"/>
+				</Border>
+				<Border Classes="Dialog_ContentPanel" BorderBrush="Red" BorderThickness="1" Height="100">
+					<TextBlock HorizontalAlignment="Center" Text="content" VerticalAlignment="Center"/>
+				</Border>
+			</DockPanel>
+		
+			<DockPanel Name="page2" IsVisible="False">
+				<Border Classes="WizardDialog_Page_Title" DockPanel.Dock="Top">
+					<TextBlock Classes="WizardDialog_Page_Title" Text="Page 2"/>
+				</Border>
+				<Border Classes="Dialog_ContentPanel" BorderBrush="Green" BorderThickness="1" Height="200">
+					<TextBlock HorizontalAlignment="Center" Text="content" VerticalAlignment="Center"/>
+				</Border>
+			</DockPanel>
+		
+			<DockPanel Name="page3" IsVisible="False">
+				<Border Classes="WizardDialog_Page_Title" DockPanel.Dock="Top">
+					<TextBlock Classes="WizardDialog_Page_Title" Text="Page 3"/>
+				</Border>
+				<Border Classes="Dialog_ContentPanel" BorderBrush="Blue" BorderThickness="1" Height="150">
+					<TextBlock HorizontalAlignment="Center" Text="content" VerticalAlignment="Center"/>
+				</Border>
+			</DockPanel>
+			
+		</Panel>
+		
+	</DockPanel>
+	
+</Window>
