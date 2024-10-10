@@ -79,6 +79,7 @@
 
 	<!-- DocumentViewerWindow -->
 	<GridLength x:Key="GridLength/DocumentViewerWindow.ToolBar.LeftPadding">6</GridLength> <!-- (Thickness/MarkdownViewer.Padding).Left - (Thickness/ToolBar.TextBlock.Margin).Left - (Thickness/ToolBar.Padding).Left -->
+	<GridLength x:Key="GridLength/DocumentViewerWindow.ToolBar.RightPadding">9</GridLength> <!-- (Thickness/MarkdownViewer.Padding).Right - (Thickness/ToolBar.Item.Margin).Right - (Thickness/ToolBar.Padding).Right -->
 
 	<!-- Expander -->
 	<sys:Double x:Key="Double/Expander.Chevron.Size">10</sys:Double>

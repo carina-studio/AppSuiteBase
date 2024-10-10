@@ -21,24 +21,28 @@
 
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
-			<StackPanel Classes="Dialog_ControlButtonsPanel">
-				<Button Classes="Dialog_ControlButton" 
-				        Command="{Binding #window.AddPath}" 
-				        Content="{DynamicResource String/PathEnvVarEditorDialog.AddPath.WithDialog}"
-				        IsEnabled="{xaml:AndBindings
-				            {Binding !#window.IsRefreshingPaths},
-				            {Binding !#window.IsSavingPaths}
-				        }"/>
-				<Separator Classes="Dialog_Separator_Small"/>
-				<Button Classes="Dialog_ControlButton" 
-				        Command="{Binding #window.SaveAndClose}" 
-				        Content="{Binding #window.OKButtonText}"
-				        IsEnabled="{xaml:AndBindings
-				            {Binding !#window.IsRefreshingPaths},
-				            {Binding !#window.IsSavingPaths}
-				        }"/>
-				<Button Classes="Dialog_ControlButton" Command="{Binding #window.Close}" Content="{DynamicResource String/Common.Cancel}" IsEnabled="{Binding !#window.IsSavingPaths}"/>
-			</StackPanel>
+			<Grid Classes="Dialog_ControlButtonsPanel" ColumnDefinitions="Auto,*">
+				<StackPanel Classes="Dialog_ControlButtonsPanel">
+					<Button Classes="Dialog_ControlButton" 
+					        Command="{Binding #window.AddPath}" 
+					        Content="{DynamicResource String/PathEnvVarEditorDialog.AddPath.WithDialog}"
+					        IsEnabled="{xaml:AndBindings
+					            {Binding !#window.IsRefreshingPaths},
+					            {Binding !#window.IsSavingPaths}
+					        }"/>
+					<Separator Classes="Dialog_Separator_Small"/>
+				</StackPanel>
+				<StackPanel Classes="Dialog_ControlButtonsPanel" Grid.Column="1">
+					<Button Classes="Dialog_ControlButton" 
+					        Command="{Binding #window.SaveAndClose}" 
+					        Content="{Binding #window.OKButtonText}"
+					        IsEnabled="{xaml:AndBindings
+					            {Binding !#window.IsRefreshingPaths},
+					            {Binding !#window.IsSavingPaths}
+					        }"/>
+					<Button Classes="Dialog_ControlButton" Command="{Binding #window.Close}" Content="{Binding #window.CancelButtonText}" IsEnabled="{Binding !#window.IsSavingPaths}"/>
+				</StackPanel>
+			</Grid>
 		</Border>
 
 		<!-- Content -->

@@ -32,6 +32,7 @@
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="{StaticResource GridLength/DocumentViewerWindow.ToolBar.LeftPadding}"/>
 						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="{StaticResource GridLength/DocumentViewerWindow.ToolBar.RightPadding}"/>
 					</Grid.ColumnDefinitions>
 
 					<!-- Message -->

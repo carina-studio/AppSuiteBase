@@ -93,12 +93,16 @@
 
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
-			<StackPanel Classes="Dialog_ControlButtonsPanel">
-				<Button Name="editPathEnvVarButton" Classes="Dialog_ControlButton" Command="{Binding #dialog.EditPathEnvironmentVariable}" Content="{DynamicResource String/ExternalDependenciesDialog.EditPathEnvVar}" IsVisible="{x:Static controls:PathEnvVarEditorDialog.IsSupported}"/>
+			<Grid Classes="Dialog_ControlButtonsPanel" ColumnDefinitions="Auto,*">
+				<StackPanel Classes="Dialog_ControlButtonsPanel">
+					<Button Name="editPathEnvVarButton" Classes="Dialog_ControlButton" Command="{Binding #dialog.EditPathEnvironmentVariable}" Content="{DynamicResource String/ExternalDependenciesDialog.EditPathEnvVar}" IsVisible="{x:Static controls:PathEnvVarEditorDialog.IsSupported}"/>
 					<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #editPathEnvVarButton.IsVisible}"/>
-				<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.Refresh}" Content="{DynamicResource String/Common.Refresh}"/>
-				<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.Close}" Content="{Binding #dialog.OKButtonText}" IsEnabled="{Binding #dialog.CanClose}"/>
-			</StackPanel>
+				</StackPanel>
+				<StackPanel Classes="Dialog_ControlButtonsPanel" Grid.Column="1">
+					<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.Refresh}" Content="{DynamicResource String/Common.Refresh}"/>
+					<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.Close}" Content="{Binding #dialog.OKButtonText}" IsEnabled="{Binding #dialog.CanClose}"/>
+				</StackPanel>
+			</Grid>
 		</Border>
 
 		<!-- Content -->

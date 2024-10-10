@@ -26,6 +26,10 @@ public abstract class InputDialog : CarinaStudio.Controls.InputDialog<IAppSuiteA
     /// </summary>
     public static readonly StyledProperty<bool> HasNavigationBarProperty = AvaloniaProperty.Register<InputDialog, bool>(nameof(HasNavigationBar), false);
     /// <summary>
+    /// Define <see cref="HelpButtonText"/> property.
+    /// </summary>
+    public static readonly DirectProperty<InputDialog, string?> HelpButtonTextProperty = AvaloniaProperty.RegisterDirect<InputDialog, string?>(nameof(HelpButtonText), d => d.helpButtonText);
+    /// <summary>
     /// Define <see cref="OKButtonText"/> property.
     /// </summary>
     public static readonly DirectProperty<InputDialog, string?> OKButtonTextProperty = AvaloniaProperty.RegisterDirect<InputDialog, string?>(nameof(OKButtonText), d => d.okButtonText);
@@ -34,6 +38,7 @@ public abstract class InputDialog : CarinaStudio.Controls.InputDialog<IAppSuiteA
     // Fields.
     string? cancelButtonText;
     bool canClose = true;
+    string? helpButtonText;
     Control? inputControlToAcceptEnterKey;
     bool isEnterKeyClickedOnInputControl;
     bool isEnterKeyDownOnInputControl;
@@ -86,6 +91,12 @@ public abstract class InputDialog : CarinaStudio.Controls.InputDialog<IAppSuiteA
         get => this.GetValue(HasNavigationBarProperty);
         set => this.SetValue(HasNavigationBarProperty, value);
     }
+    
+    
+    /// <summary>
+    /// Get default text for help button.
+    /// </summary>
+    public string? HelpButtonText => this.helpButtonText;
 
 
     /// <summary>
@@ -271,6 +282,7 @@ public abstract class InputDialog : CarinaStudio.Controls.InputDialog<IAppSuiteA
     protected virtual void OnUpdateButtonTexts()
     {
         this.SetAndRaise(CancelButtonTextProperty, ref this.cancelButtonText, this.Application.GetString("Common.Cancel"));
+        this.SetAndRaise(HelpButtonTextProperty, ref this.helpButtonText, this.Application.GetString("Common.Help"));
         this.SetAndRaise(OKButtonTextProperty, ref this.okButtonText, this.Application.GetString("Common.OK"));
     }
     

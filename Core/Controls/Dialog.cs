@@ -14,9 +14,17 @@ namespace CarinaStudio.AppSuite.Controls;
 public abstract class Dialog : CarinaStudio.Controls.Dialog<IAppSuiteApplication>
 {
     /// <summary>
+    /// Define <see cref="CancelButtonText"/> property.
+    /// </summary>
+    public static readonly DirectProperty<Dialog, string?> CancelButtonTextProperty = AvaloniaProperty.RegisterDirect<Dialog, string?>(nameof(CancelButtonText), d => d.cancelButtonText);
+    /// <summary>
     /// Define <see cref="HasNavigationBar"/> property.
     /// </summary>
     public static readonly StyledProperty<bool> HasNavigationBarProperty = AvaloniaProperty.Register<Dialog, bool>(nameof(HasNavigationBar), false);
+    /// <summary>
+    /// Define <see cref="HelpButtonText"/> property.
+    /// </summary>
+    public static readonly DirectProperty<Dialog, string?> HelpButtonTextProperty = AvaloniaProperty.RegisterDirect<Dialog, string?>(nameof(HelpButtonText), d => d.helpButtonText);
     /// <summary>
     /// Define <see cref="OKButtonText"/> property.
     /// </summary>
@@ -24,6 +32,8 @@ public abstract class Dialog : CarinaStudio.Controls.Dialog<IAppSuiteApplication
     
     
     // Fields.
+    string? cancelButtonText;
+    string? helpButtonText;
     int navigationBarUpdateDelay;
     string? okButtonText;
     INameScope? templateNameScope;
@@ -44,6 +54,12 @@ public abstract class Dialog : CarinaStudio.Controls.Dialog<IAppSuiteApplication
     
     
     /// <summary>
+    /// Get default text for cancel button.
+    /// </summary>
+    public string? CancelButtonText => this.cancelButtonText;
+    
+    
+    /// <summary>
     /// Get or set whether navigation bar is available in dialog or not.
     /// </summary>
     public bool HasNavigationBar
@@ -51,6 +67,12 @@ public abstract class Dialog : CarinaStudio.Controls.Dialog<IAppSuiteApplication
         get => this.GetValue(HasNavigationBarProperty);
         set => this.SetValue(HasNavigationBarProperty, value);
     }
+    
+    
+    /// <summary>
+    /// Get default text for help button.
+    /// </summary>
+    public string? HelpButtonText => this.helpButtonText;
     
     
     /// <summary>
@@ -178,6 +200,8 @@ public abstract class Dialog : CarinaStudio.Controls.Dialog<IAppSuiteApplication
     /// </summary>
     protected virtual void OnUpdateButtonTexts()
     {
+        this.SetAndRaise(CancelButtonTextProperty, ref this.cancelButtonText, this.Application.GetString("Common.Cancel"));
+        this.SetAndRaise(HelpButtonTextProperty, ref this.helpButtonText, this.Application.GetString("Common.Help"));
         this.SetAndRaise(OKButtonTextProperty, ref this.okButtonText, this.Application.GetString("Common.OK"));
     }
     

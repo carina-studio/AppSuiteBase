@@ -585,6 +585,9 @@
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
 	</Style>
+	<Style Selector="Grid.Dialog_ControlButtonsPanel">
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+	</Style>
 	<Style Selector="Grid.Dialog_ContentPanel">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding}"/>
 	</Style>
