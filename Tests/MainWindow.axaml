@@ -404,10 +404,10 @@
 							</Button>
 							<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
 							
-							<!-- Text blocks -->
+							<!-- Line height -->
 							<StackPanel Orientation="Horizontal" Margin="5">
 								<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Top">
-									<TextBlock  Text="English"/>
+									<TextBlock Text="English"/>
 								</Border>
 								<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Top">
 									<TextBlock Text="繁體中文"/>
@@ -416,7 +416,13 @@
 									<TextBlock Text="カタカナ"/>
 								</Border>
 							</StackPanel>
-							
+							<StackPanel Orientation="Horizontal" Margin="5">
+								<TextBox Text="English" VerticalAlignment="Top"/>
+								<TextBox Text="繁體中文" VerticalAlignment="Top"/>
+								<TextBox Text="カタカナ" VerticalAlignment="Top"/>
+								<TextBox AcceptsReturn="True" Height="100" Margin="5,0,0,0" VerticalAlignment="Top" Width="300"/>
+							</StackPanel>
+						
 							<!-- Shadows -->
 							<WrapPanel>
 								<Panel Height="100" HorizontalAlignment="Left" Margin="5" Width="100">

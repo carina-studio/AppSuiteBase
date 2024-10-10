@@ -145,12 +145,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 					it.CornerRadius = default;
 				});
 			}
-			this.Styles.Add((Avalonia.Styling.IStyle)this.Resources["windowsTheme"].AsNonNull());
 		}
-		else if (Platform.IsMacOS)
-			this.Styles.Add((Avalonia.Styling.IStyle)this.Resources["macOSTheme"].AsNonNull());
-		else if (Platform.IsLinux)
-			this.Styles.Add((Avalonia.Styling.IStyle)this.Resources["linuxTheme"].AsNonNull());
 		this.Styles.Add((Avalonia.Styling.IStyle)(app?.EffectiveThemeMode switch
 		{
 			ThemeMode.Light => this.Resources["lightTheme"].AsNonNull(),
