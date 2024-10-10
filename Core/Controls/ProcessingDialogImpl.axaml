@@ -43,7 +43,7 @@
 				<Separator Classes="Dialog_Separator_Large"/>
 				<Button Classes="Dialog_ControlButton" 
 				        Command="{Binding #dialog.Cancel}"
-				        Content="{DynamicResource String/Common.Cancel}"
+				        Content="{Binding #dialog.CancelButtonText}"
 				        HorizontalAlignment="Center"
 				        IsEnabled="{Binding !#dialog.IsCancellationRequested}"
 				        Margin="0"/>

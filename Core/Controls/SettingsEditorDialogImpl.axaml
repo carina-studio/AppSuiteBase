@@ -14,10 +14,15 @@
 
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
-			<StackPanel Classes="Dialog_ControlButtonsPanel">
-				<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.ResetValues}" Content="{DynamicResource String/Common.Reset}"/>
-				<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.Close}" Content="{Binding #dialog.OKButtonText}"/>
-			</StackPanel>
+			<Grid Classes="Dialog_ControlButtonsPanel" ColumnDefinitions="Auto,*">
+				<StackPanel Classes="Dialog_ControlButtonsPanel">
+					<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.ResetValues}" Content="{DynamicResource String/Common.Reset}"/>
+					<Separator Classes="Dialog_Separator_Small"/>
+				</StackPanel>
+				<Panel Classes="Dialog_ControlButtonsPanel" Grid.Column="1">
+					<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.Close}" Content="{Binding #dialog.OKButtonText}"/>
+				</Panel>
+			</Grid>
 		</Border>
 
 		<!-- Content -->

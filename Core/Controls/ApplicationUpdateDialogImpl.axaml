@@ -5,6 +5,7 @@
 		xmlns:abControls="using:CarinaStudio.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.ApplicationUpdateDialogImpl"
+        Name="dialog"
         Classes="Dialog"
 		ShowInTaskbar="True"
         Title="{DynamicResource String/ApplicationUpdateDialog.Title}"
@@ -17,10 +18,10 @@
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
 				<Button Classes="Dialog_ControlButton" Command="{Binding CheckForUpdateCommand}" Content="{DynamicResource String/ApplicationUpdateDialog.CheckForUpdate}" IsEnabled="{Binding !IsPreparingForUpdate}"/>
 				<Panel IsVisible="{Binding !IsLatestVersion}">
-					<Button Name="downloadUpdatePackageButton" Classes="Dialog_AccentControlButton" Command="{Binding $parent[Window].DownloadUpdatePackage}" Content="{DynamicResource String/ApplicationUpdateDialog.DownloadUpdatePackage}" IsVisible="{Binding !IsAutoUpdateSupported}"/>
+					<Button Name="downloadUpdatePackageButton" Classes="Dialog_AccentControlButton" Command="{Binding #dialog.DownloadUpdatePackage}" Content="{DynamicResource String/ApplicationUpdateDialog.DownloadUpdatePackage}" IsVisible="{Binding !IsAutoUpdateSupported}"/>
 					<Button Name="startUpdatingButton" Classes="Dialog_AccentControlButton" Command="{Binding StartUpdatingCommand}" Content="{DynamicResource String/ApplicationUpdateDialog.StartUpdating}" IsVisible="{Binding IsAutoUpdateSupported}"/>
 				</Panel>
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.Cancel}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.Close}" Content="{Binding #dialog.CancelButtonText}"/>
 			</StackPanel>
 		</Border>
 
@@ -41,9 +42,9 @@
 				<Panel IsVisible="{Binding !IsPreparingForUpdate}">
 					<Panel IsVisible="{Binding !IsCheckingForUpdate}">
 						<TextBlock Opacity="0" Text=" "/> <!-- [Workaround] Reserve space to prevent unexpected layout -->
-						<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.Name}" FontWeight="Bold" Format="{DynamicResource String/ApplicationUpdateDialog.LatestVersion}" IsVisible="{Binding IsLatestVersion}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+						<abControls:FormattedTextBlock Arg1="{Binding #dialog.Application.Name}" FontWeight="Bold" Format="{DynamicResource String/ApplicationUpdateDialog.LatestVersion}" IsVisible="{Binding IsLatestVersion}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
 						<StackPanel IsVisible="{Binding !IsLatestVersion}" Orientation="Vertical">
-							<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].Application.Name}" Arg2="{Binding UpdateVersion}" FontWeight="Bold" Format="{DynamicResource String/ApplicationUpdateDialog.NewVersionFound}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+							<abControls:FormattedTextBlock Arg1="{Binding #dialog.Application.Name}" Arg2="{Binding UpdateVersion}" FontWeight="Bold" Format="{DynamicResource String/ApplicationUpdateDialog.NewVersionFound}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
 							<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" IsVisible="{Binding HasReleasePageUri}" Text="{DynamicResource String/ApplicationUpdateDialog.ReleasePage}" Uri="{Binding ReleasePageUri}"/>
 						</StackPanel>
 					</Panel>

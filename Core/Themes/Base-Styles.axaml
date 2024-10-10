@@ -731,6 +731,9 @@
 	<Style Selector="Panel.Dialog_ContentPanel_WithItemsGroups_Right">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ContentPanel.Padding.WithItemsGroups.Right}"/>
 	</Style>
+	<Style Selector="Panel.Dialog_ControlButtonsPanel">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+	</Style>
 	<Style Selector="Panel.Dialog_FullWidthControl_Container">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.FullWidthControl.Margin}"/>
 	</Style>
