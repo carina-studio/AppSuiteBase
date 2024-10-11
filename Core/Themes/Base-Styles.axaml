@@ -2991,13 +2991,13 @@
 		</Setter>
 	</Style>
 	<Style Selector=":is(TextBox):focus /template/ Border#PART_BorderElement">
-		<Setter Property="BoxShadow" Value="{Binding $parent[TextBox], Converter={x:Static converters:TextBoxConverters.FocusedBoxShadowConverter}}"/>
+		<Setter Property="BoxShadow" Value="{Binding $parent[TextBox], Converter={x:Static converters:TemplatedControlConverters.FocusedBoxShadow}}"/>
 	</Style>
 	<Style Selector=":is(TextBox):invalidObjectTextBoxText /template/ Border#PART_BorderElement">
-		<Setter Property="BoxShadow" Value="{Binding $parent[TextBox], Converter={x:Static converters:TextBoxConverters.FocusedBoxShadowConverter}, ConverterParameter=Error}"/>
+		<Setter Property="BoxShadow" Value="{Binding $parent[TextBox], Converter={x:Static converters:TemplatedControlConverters.FocusedBoxShadow}, ConverterParameter=Error}"/>
 	</Style>
 	<Style Selector=":is(TextBox):invalidValueTextBoxText /template/ Border#PART_BorderElement">
-		<Setter Property="BoxShadow" Value="{Binding $parent[TextBox], Converter={x:Static converters:TextBoxConverters.FocusedBoxShadowConverter}, ConverterParameter=Error}"/>
+		<Setter Property="BoxShadow" Value="{Binding $parent[TextBox], Converter={x:Static converters:TemplatedControlConverters.FocusedBoxShadow}, ConverterParameter=Error}"/>
 	</Style>
 	<Style Selector=":is(TextBox)[FlowDirection=RightToLeft] /template/ TextBlock#PART_Watermark">
 		<Setter Property="HorizontalAlignment" Value="{TemplateBinding TextAlignment, Converter={x:Static converters:TextAlignmentConverters.ToHorizontalAlignmentRTL}}"/>
