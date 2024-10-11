@@ -422,6 +422,22 @@
 								<TextBox Text="カタカナ" VerticalAlignment="Top"/>
 								<TextBox AcceptsReturn="True" Height="100" Margin="5,0,0,0" VerticalAlignment="Top" Width="300"/>
 							</StackPanel>
+							
+							<!-- Slider -->
+							<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
+								<Slider Maximum="100" Minimum="0" TickFrequency="10" TickPlacement="Outside" Width="200"/>
+							</Border>
+							<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
+								<Slider Maximum="100" Minimum="0" TickFrequency="10" TickPlacement="TopLeft" Width="200"/>
+							</Border>
+							<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
+								<Slider Maximum="100" Minimum="0" TickFrequency="10" TickPlacement="None" Width="200">
+									<Slider.Resources>
+										<GridLength x:Key="SliderPostContentMargin">0</GridLength>
+										<GridLength x:Key="SliderPreContentMargin">0</GridLength>
+									</Slider.Resources>
+								</Slider>
+							</Border>
 						
 							<!-- Shadows -->
 							<WrapPanel>

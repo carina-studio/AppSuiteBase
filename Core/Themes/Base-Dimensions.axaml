@@ -349,8 +349,12 @@
 	<sys:Double x:Key="Double/Shadow.Size.Light">5</sys:Double>
 
 	<!-- Slider -->
-	<GridLength x:Key="SliderPreContentMargin">0</GridLength>
-	<GridLength x:Key="SliderPostContentMargin">0</GridLength>
+	<sys:Double x:Key="SliderHorizontalHeight">0</sys:Double>
+	<sys:Double x:Key="SliderHorizontalThumbHeight">14</sys:Double>
+	<sys:Double x:Key="SliderHorizontalThumbWidth">14</sys:Double>
+	<sys:Double x:Key="SliderVerticalThumbHeight">14</sys:Double>
+	<sys:Double x:Key="SliderVerticalThumbWidth">14</sys:Double>
+	<sys:Double x:Key="SliderVerticalWidth">0</sys:Double>
 
 	<!-- StatusBar -->
 	<sys:Double x:Key="Double/StatusBar.DropDownIcon.Size">8</sys:Double>

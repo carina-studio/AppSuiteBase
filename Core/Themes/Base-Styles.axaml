@@ -780,13 +780,13 @@
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width.Small}"/>
 	</Style>
 	<Style Selector="Slider.Dialog_Item_Slider">
-		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="TickPlacement" Value="Outside"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
 	</Style>
 	<Style Selector="Slider.Dialog_Slider">
-		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
 		<Setter Property="TickPlacement" Value="Outside"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
