@@ -1457,7 +1457,7 @@ namespace CarinaStudio.AppSuite
                             })
                             : Global.Run(() =>
                             {
-                                var target = targetProperty!.GetValue(positionRequest) as Visual;
+                                var target = targetProperty?.GetValue(positionRequest) as Visual;
                                 var pointOnScreen = target?.PointToScreen(default) ?? topLevel.PointToScreen(it.TopLeft);
                                 return new Rect(pointOnScreen.X / screenScaling, pointOnScreen.Y / screenScaling, it.Width, it.Height);
                             })
