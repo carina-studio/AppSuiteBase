@@ -1106,6 +1106,8 @@ namespace CarinaStudio.AppSuite
 
 
         // Define extra styles by code.
+        [DynamicDependency(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields, typeof(PopupRoot))]
+        [DynamicDependency(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties, "Avalonia.Controls.Primitives.PopupPositioning.PopupPositionRequest", "Avalonia.Controls")]
         [RequiresUnreferencedCode("Get internal state from Avalonia.")]
         void DefineExtraStyles()
         {
@@ -1298,6 +1300,7 @@ namespace CarinaStudio.AppSuite
             FieldInfo? popupPositionRequestField;
             FieldInfo? popupPositionParamsField;
             PropertyInfo? anchorRectProperty;
+            PropertyInfo? targetProperty;
             if (this.CheckAvaloniaVersion(11, 2))
             {
                 var popupPositionRequestType = typeof(Avalonia.Application).Assembly.GetType("Avalonia.Controls.Primitives.PopupPositioning.PopupPositionRequest") ?? throw new NotSupportedException();
@@ -1308,11 +1311,15 @@ namespace CarinaStudio.AppSuite
                 anchorRectProperty = popupPositionRequestType.GetProperty("AnchorRect", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public) ?? throw new NotSupportedException();
                 if (anchorRectProperty.PropertyType != typeof(Rect?))
                     throw new NotSupportedException();
+                targetProperty = popupPositionRequestType.GetProperty("Target", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public) ?? throw new NotSupportedException();
+                if (targetProperty.PropertyType != typeof(Visual))
+                    throw new NotSupportedException();
             }
             else
             {
                 popupPositionRequestField = null;
                 anchorRectProperty = null;
+                targetProperty = null;
                 popupPositionParamsField = typeof(PopupRoot).GetField("_positionerParameters", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new NotSupportedException();
                 if (popupPositionParamsField.FieldType != typeof(PopupPositionerParameters))
                     throw new NotSupportedException();
@@ -1450,7 +1457,8 @@ namespace CarinaStudio.AppSuite
                             })
                             : Global.Run(() =>
                             {
-                                var pointOnScreen = topLevel.PointToScreen(it.TopLeft);
+                                var target = targetProperty!.GetValue(positionRequest) as Visual;
+                                var pointOnScreen = target?.PointToScreen(default) ?? topLevel.PointToScreen(it.TopLeft);
                                 return new Rect(pointOnScreen.X / screenScaling, pointOnScreen.Y / screenScaling, it.Width, it.Height);
                             })
                     );
