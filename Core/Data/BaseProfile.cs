@@ -16,6 +16,7 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
     // Fields.
     string id;
     ILogger? logger;
+    readonly Lock loggerLock = new();
     string? name;
 
 
@@ -88,7 +89,7 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
     {
         get
         {
-            return this.logger ?? this.Lock(() =>
+            return this.logger ?? this.loggerLock.Lock(() =>
             {
                 this.logger ??= this.Application.LoggerFactory.CreateLogger(this.GetType().Name);
                 return logger;

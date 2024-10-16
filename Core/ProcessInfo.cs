@@ -41,6 +41,7 @@ public class ProcessInfo : INotifyPropertyChanged
     // Fields.
     readonly IAppSuiteApplication app;
 	readonly List<HighFrequencyUpdateToken> hfUpdateTokens = new();
+	readonly Lock hfUpdateTokensLock = new();
 	volatile bool isFirstUpdate = true;
 	long latestGCCount;
 	readonly ILogger logger;
@@ -190,11 +191,11 @@ public class ProcessInfo : INotifyPropertyChanged
 	{
 		this.app.VerifyAccess();
 		var isFirstToken = false;
-		var token = this.hfUpdateTokens.Lock(it =>
+		var token = this.hfUpdateTokensLock.Lock(() =>
 		{
 			var token = new HighFrequencyUpdateToken(this);
-			it.Add(token);
-			isFirstToken = it.Count == 1;
+			this.hfUpdateTokens.Add(token);
+			isFirstToken = this.hfUpdateTokens.Count == 1;
 			return token;
 		});
 		if (isFirstToken && !this.isFirstUpdate)

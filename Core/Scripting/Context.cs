@@ -113,7 +113,7 @@ public class Context : IContext
     // Fields.
     volatile ConcurrentDictionary<string, string>? defaultStringTable;
     volatile ConcurrentDictionary<string, IDictionary<string, string>>? stringTablesWithCulture;
-    readonly object stringTableSyncLock = new();
+    readonly Lock stringTableSyncLock = new();
 
 
     /// <summary>
@@ -196,10 +196,13 @@ public class Context : IContext
     // ReSharper disable NonAtomicCompoundOperator
     public void PrepareStrings(string? cultureName, Action<IDictionary<string, string>> preparation)
     {
-        if (cultureName == null)
+        if (cultureName is null)
         {
-            lock (this.stringTableSyncLock)
+            if (this.defaultStringTable is null)
+            {
+                using var _ = this.stringTableSyncLock.EnterScope();
                 this.defaultStringTable ??= new();
+            }
             preparation(this.defaultStringTable);
         }
         else
@@ -281,6 +284,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         if (this.Application.CheckAccess())
         {
             var frame = new DispatcherFrame();
+            // ReSharper disable once AsyncVoidLambda
             Dispatcher.UIThread.Post(async () =>
             {
                 selectedItems = await this.ShowMultipleItemsSelectionDialogAsync(message, items, defaultItem);
@@ -292,6 +296,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         {
             new object().Lock(syncLock =>
             {
+                // ReSharper disable once AsyncVoidLambda
                 this.Application.SynchronizationContext.Post(async () =>
                 {
                     selectedItems = await this.ShowMultipleItemsSelectionDialogAsync(message, items, defaultItem);
@@ -351,6 +356,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         if (this.Application.CheckAccess())
         {
             var frame = new DispatcherFrame();
+            // ReSharper disable once AsyncVoidLambda
             Dispatcher.UIThread.Post(async () =>
             {
                 selectedItem = await this.ShowSingleItemSelectionDialogAsync(message, items, defaultItem);
@@ -362,6 +368,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         {
             new object().Lock(syncLock =>
             {
+                // ReSharper disable once AsyncVoidLambda
                 this.Application.SynchronizationContext.Post(async () =>
                 {
                     selectedItem = await this.ShowSingleItemSelectionDialogAsync(message, items, defaultItem);
@@ -415,6 +422,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         if (this.Application.CheckAccess())
         {
             var frame = new DispatcherFrame();
+            // ReSharper disable once AsyncVoidLambda
             this.Application.SynchronizationContext.Post(async () =>
             {
                 result = await this.ShowMessageDialogAsync(message, icon, buttons);
@@ -426,6 +434,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         {
             new object().Lock(syncLock =>
             {
+                // ReSharper disable once AsyncVoidLambda
                 this.Application.SynchronizationContext.Post(async () =>
                 {
                     result = await this.ShowMessageDialogAsync(message, icon, buttons);
@@ -472,6 +481,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         if (this.Application.CheckAccess())
         {
             var frame = new DispatcherFrame();
+            // ReSharper disable once AsyncVoidLambda
             Dispatcher.UIThread.Post(async () =>
             {
                 result = await this.ShowTextInputDialogAsync(message, initialText);
@@ -483,6 +493,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         {
             new object().Lock(syncLock =>
             {
+                // ReSharper disable once AsyncVoidLambda
                 this.Application.SynchronizationContext.Post(async () =>
                 {
                     result = await this.ShowTextInputDialogAsync(message, initialText);
