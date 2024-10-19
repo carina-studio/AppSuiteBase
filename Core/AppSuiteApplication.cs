@@ -51,6 +51,7 @@ using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.IO;
 using NLog.Config;
+using RangeSlider.Avalonia.Themes.Fluent;
 using System.Diagnostics.CodeAnalysis;
 
 namespace CarinaStudio.AppSuite
@@ -3065,11 +3066,17 @@ namespace CarinaStudio.AppSuite
                 }
             });
 
-            // create base theme
+            // create base themes
             var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
             this.Styles.Add(new FluentTheme());
             if (time > 0)
-                this.Logger.LogTrace("[Performance] Took {duration} ms to create base theme", this.stopWatch.ElapsedMilliseconds - time);
+            {
+                this.Logger.LogTrace("[Performance] Took {duration} ms to create fluent theme", this.stopWatch.ElapsedMilliseconds - time);
+                time = this.stopWatch.ElapsedMilliseconds;
+            }
+            this.Styles.Add(new RangeSliderTheme());
+            if (time > 0)
+                this.Logger.LogTrace("[Performance] Took {duration} ms to create range slider theme", this.stopWatch.ElapsedMilliseconds - time);
 
             // show splash window
             var showSplashWindow = this.IsSplashWindowNeeded && this.Settings.GetValueOrDefault(SettingKeys.LaunchWithSplashWindow);
