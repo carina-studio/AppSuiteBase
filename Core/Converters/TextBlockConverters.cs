@@ -8,18 +8,9 @@ namespace CarinaStudio.AppSuite.Converters;
 /// </summary>
 public static class TextBlockConverters
 {
+    // [Workaround] To keep line height same across platforms.
     /// <summary>
     /// Converter to convert from font size to line height.
     /// </summary>
-    public static readonly IValueConverter FontSizeToLineHeight;
-    
-    
-    // Static constructor.
-    static TextBlockConverters()
-    {
-        // [Workaround] Line height will be different between non-CJK and CJK texts
-        FontSizeToLineHeight = IAppSuiteApplication.CurrentOrNull?.CheckAvaloniaVersion(11, 2) == true
-            ? new FuncValueConverter<double, double>(fontSize => Math.Ceiling(fontSize * 1.28))
-            : new FuncValueConverter<double, double>(_ => double.NaN);
-    }
+    public static readonly IValueConverter FontSizeToLineHeight = new FuncValueConverter<double, double>(fontSize => Math.Ceiling(fontSize * 1.28));
 }

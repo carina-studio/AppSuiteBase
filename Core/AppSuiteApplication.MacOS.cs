@@ -280,6 +280,14 @@ partial class AppSuiteApplication
         {
             DisableDefaultApplicationMenuItems = true,
         });
+        builder.With(new AvaloniaNativePlatformOptions
+        {
+            // [Workaround] To prevent Popup rendering issue (https://github.com/AvaloniaUI/Avalonia/issues/17262)
+            RenderingMode = [
+                AvaloniaNativeRenderingMode.OpenGl,
+                AvaloniaNativeRenderingMode.Software
+            ]
+        });
     }
 
 
