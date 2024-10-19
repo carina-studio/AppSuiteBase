@@ -338,7 +338,6 @@ namespace CarinaStudio.AppSuite
 
 
         // Fields.
-        MessageDialog? abnormalUIResponseMessageDialog;
         ResourceDictionary? accentColorResources;
         readonly LinkedList<MainWindowHolder> activeMainWindowList = new();
         WindowIcon? appIcon;
@@ -2362,34 +2361,8 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Called when abnormal UI response detected.
         /// </summary>
-        internal protected virtual async void OnAbnormalUIResponse()
-        {
+        internal protected virtual void OnAbnormalUIResponse() =>
             this.Logger.LogWarning("Abnormal UI response detected");
-            if (this.abnormalUIResponseMessageDialog is not null)
-                return;
-            this.abnormalUIResponseMessageDialog = new MessageDialog
-            {
-                Buttons = MessageDialogButtons.YesNo,
-                CustomIcon = this.FindResourceOrDefault<IImage>("Image/Icon.Alert.Colored"),
-                DefaultResult = MessageDialogResult.Yes,
-                Icon = MessageDialogIcon.Custom,
-                Message = new FormattedString().Also(it =>
-                {
-                    it.Arg1 = this.Name;
-                    it.Bind(FormattedString.FormatProperty, this.GetObservableString("AppSuiteApplication.AbnormalUIResponse.Message"));
-                }),
-            };
-            var result = await this.abnormalUIResponseMessageDialog.ShowDialog(null);
-            this.abnormalUIResponseMessageDialog = null;
-            if (result == MessageDialogResult.Yes)
-            {
-                this.Logger.LogWarning("Restart application because of abnormal UI response");
-                this.Restart(this.CreateApplicationArgsBuilder().Also(it =>
-                {
-                    it.RestoringMainWindows = true;
-                }), this.IsRunningAsAdministrator, true);
-            }
-        }
 
 
         /// <summary>
@@ -2498,7 +2471,7 @@ namespace CarinaStudio.AppSuite
                     this.Logger.LogWarning("Ignore IndexOutOfRangeException thrown by GlyphRun.FindNearestCharacterHit() caused by unknown reason");
                     return true;
                 }
-                if (stackTrace.Contains(" at Avalonia.Media.GlyphRun.GetDistanceFromCharacterHit("))
+                if (stackTrace.Contains("at Avalonia.Media.GlyphRun.GetDistanceFromCharacterHit("))
                 {
                     this.Logger.LogWarning("Ignore IndexOutOfRangeException thrown by GlyphRun.GetDistanceFromCharacterHit() caused by unknown reason");
                     return true;
