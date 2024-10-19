@@ -258,10 +258,11 @@
 	<!-- ComboBox -->
 	<Style Selector="ComboBox">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
+		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="Template">
 			<ControlTemplate>
-				<DataValidationErrors>
-					<Grid ColumnDefinitions="*,26">
+				<DataValidationErrors ClipToBounds="False">
+					<Grid ClipToBounds="False" ColumnDefinitions="*,26">
 						<Border x:Name="Background"
 								Grid.Column="0"
 								Grid.ColumnSpan="2"
@@ -345,6 +346,18 @@
 				</DataValidationErrors>
 			</ControlTemplate>
 		</Setter>
+	</Style>
+	<Style Selector="ComboBox[IsDropDownOpen=True] /template/ Border#Background">
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent}"/>
+		<Setter Property="BoxShadow" Value="{Binding $self, Converter={x:Static converters:BorderConverters.FocusedBoxShadow}}"/>
+	</Style>
+	<Style Selector="ComboBox:focus-visible /template/ Border#Background">
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent}"/>
+		<Setter Property="BoxShadow" Value="{Binding $self, Converter={x:Static converters:BorderConverters.FocusedBoxShadow}}"/>
+	</Style>
+	<Style Selector="ComboBox:pressed /template/ Border#Background">
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Accent}"/>
+		<Setter Property="BoxShadow" Value="{Binding $self, Converter={x:Static converters:BorderConverters.FocusedBoxShadow}}"/>
 	</Style>
 
 	<!-- ComboBoxItem -->
