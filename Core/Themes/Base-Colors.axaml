@@ -259,15 +259,6 @@
 	
 	<!-- Shadow -->
 	<GradientStops x:Key="GradientStops/Shadow">
-		<GradientStop Color="#23000000" Offset="0.0"/>
-		<GradientStop Color="#11000000" Offset="0.17"/>
-		<GradientStop Color="#08000000" Offset="0.33"/>
-		<GradientStop Color="#04000000" Offset="0.5"/>
-		<GradientStop Color="#02000000" Offset="0.67"/>
-		<GradientStop Color="#01000000" Offset="0.83"/>
-		<GradientStop Color="#00000000" Offset="1.0"/>
-	</GradientStops>
-	<GradientStops x:Key="GradientStops/Shadow.Heavy">
 		<GradientStop Color="#28000000" Offset="0.0"/>
 		<GradientStop Color="#14000000" Offset="0.17"/>
 		<GradientStop Color="#0a000000" Offset="0.33"/>
@@ -276,13 +267,21 @@
 		<GradientStop Color="#01000000" Offset="0.83"/>
 		<GradientStop Color="#00000000" Offset="1.0"/>
 	</GradientStops>
-	<GradientStops x:Key="GradientStops/Shadow.Light">
-		<GradientStop Color="#20000000" Offset="0.0"/>
-		<GradientStop Color="#10000000" Offset="0.17"/>
-		<GradientStop Color="#08000000" Offset="0.33"/>
-		<GradientStop Color="#04000000" Offset="0.5"/>
-		<GradientStop Color="#02000000" Offset="0.67"/>
+	<GradientStops x:Key="GradientStops/Shadow.Heavy">
+		<GradientStop Color="#30000000" Offset="0.0"/>
+		<GradientStop Color="#18000000" Offset="0.17"/>
+		<GradientStop Color="#0c000000" Offset="0.33"/>
+		<GradientStop Color="#06000000" Offset="0.5"/>
+		<GradientStop Color="#03000000" Offset="0.67"/>
 		<GradientStop Color="#01000000" Offset="0.83"/>
+		<GradientStop Color="#00000000" Offset="1.0"/>
+	</GradientStops>
+	<GradientStops x:Key="GradientStops/Shadow.Light">
+		<GradientStop Color="#13000000" Offset="0.0"/>
+		<GradientStop Color="#09000000" Offset="0.2"/>
+		<GradientStop Color="#04000000" Offset="0.4"/>
+		<GradientStop Color="#02000000" Offset="0.6"/>
+		<GradientStop Color="#01000000" Offset="0.8"/>
 		<GradientStop Color="#00000000" Offset="1.0"/>
 	</GradientStops>
 	<LinearGradientBrush x:Key="Brush/Shadow.Bottom" EndPoint="0%,100%" GradientStops="{StaticResource GradientStops/Shadow}" StartPoint="0%,0%"/>
@@ -335,8 +334,14 @@
 	<SolidColorBrush x:Key="Brush/StatusBar.ToggleButton.Background.Checked" Color="{DynamicResource Color/StatusBar.ToggleButton.Background.Checked}"/>
 	
 	<!-- TabControl -->
+	<StaticResourceExtension x:Key="Brush/TabControl.TabStrip.Background" ResourceKey="Color/Accent"/>
 	<SolidColorBrush x:Key="Brush/TabControl.TabStrip.Border" Color="{DynamicResource Color/TabControl.TabStrip.Border}"/>
 	<Color x:Key="Color/TabControl.TabStrip.Border">#00000000</Color>
+	<LinearGradientBrush x:Key="OpacityMask/TabControl.TabStrip.Background" EndPoint="100%,100%" StartPoint="0%,0%">
+		<GradientStop Color="#1f000000" Offset="0"/>
+		<GradientStop Color="#3f000000" Offset="0.5"/>
+		<GradientStop Color="#07000000" Offset="1"/>
+	</LinearGradientBrush>
 	
 	<!-- TabItem -->
 	<SolidColorBrush x:Key="TabItemHeaderSelectedPipeFill">#00000000</SolidColorBrush>

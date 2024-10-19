@@ -377,7 +377,7 @@
 	<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Padding">5</Thickness>
 
 	<!-- TabItem -->
-	<CornerRadius x:Key="CornerRadius/TabItem.Header">5,5,0,0</CornerRadius>
+	<CornerRadius x:Key="CornerRadius/TabItem.Header">7,7,0,0</CornerRadius>
 	<sys:Double x:Key="Double/TabItem.Header.ColorBar.Height">2</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.Content.Height">20</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.FontSize">14</sys:Double>
@@ -392,8 +392,8 @@
 	<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Margin">1,3,1,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Padding">15,8,15,7</Thickness>
-	<Thickness x:Key="Thickness/TabItem.Header.Separator.Margin">0,9,0,7</Thickness>
-	<Thickness x:Key="Thickness/TabItem.InsertionIndicator.Margin">0,0,0,0</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Separator.Margin">0,10,0,8</Thickness>
+	<Thickness x:Key="Thickness/TabItem.InsertionIndicator.Margin">0,3,0,0</Thickness>
 
 	<!-- TextBox -->
 	<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>

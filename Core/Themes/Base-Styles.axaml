@@ -2516,9 +2516,6 @@
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
-	<Style Selector="RepeatButton.TabStripScroller > ContentPresenter">
-		<Setter Property="BoxShadow" Value="{DynamicResource BoxShadows/Shadow.Light}"/>
-	</Style>
 	<Style Selector="controls|TabStripScrollViewer">
 		<Setter Property="HorizontalScrollBarVisibility" Value="Visible"/>
 		<Setter Property="Template">
@@ -2594,8 +2591,8 @@
 							VerticalAlignment="{TemplateBinding VerticalAlignment}">
 						<DockPanel ClipToBounds="False">
 							<Panel ClipToBounds="False" DockPanel.Dock="Top">
+								<Border Background="{DynamicResource Brush/TabControl.TabStrip.Background}" IsHitTestVisible="False" OpacityMask="{DynamicResource OpacityMask/TabControl.TabStrip.Background}"/>
 								<Border BorderBrush="{DynamicResource Brush/TabControl.TabStrip.Border}" BorderThickness="0,0,0,1" IsHitTestVisible="False"/>
-								<Border Classes="Shadow_Top_Light" Margin="0,0,0,1" VerticalAlignment="Bottom"/>
 								<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" 
 								                               Background="{x:Null}" 
 								                               ClipToBounds="False" 
@@ -2732,21 +2729,20 @@
 								</Border.Width>
 								<Panel ClipToBounds="False">
 									<Border Background="{x:Null}" 
-									        BoxShadow="{DynamicResource BoxShadows/Shadow.Light}" 
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
 									        IsVisible="{TemplateBinding IsSelected}"/>
-									<Border Background="{DynamicResource Brush/TabItem.Header.Background}" 
+									<!--Border Background="{DynamicResource Brush/TabItem.Header.Background}" 
 									        BorderBrush="{DynamicResource Brush/TabItem.Header.Border}" 
 									        BorderThickness="1,0,1,0" 
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
 									        IsVisible="{TemplateBinding IsSelected}"
-									        Margin="0,0,0,1"/>
+									        Margin="0,0,0,1"/-->
 									<Border Background="{DynamicResource Brush/TabItem.Header.Background.PointerOver}" 
 									        BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}"
 									        BorderThickness="1,0,1,0" 
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"
 									        Opacity="{TemplateBinding IsPointerOver, Converter={x:Static converters:TabItemOpacityConverters.IsPointerOverToOpacity}}" 
-									        Margin="0,0,0,1">
+									        Margin="0,1,0,1">
 										<Border.Transitions>
 											<Transitions>
 												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>

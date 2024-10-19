@@ -71,14 +71,19 @@
 	<StaticResourceExtension x:Key="Color/StatusBar.Border" ResourceKey="Color/Shadow.Lighten"/>
 
 	<!-- TabControl -->
-	<Color x:Key="Color/TabControl.TabStrip.Border">#444444</Color>
+	<Color x:Key="Color/TabControl.TabStrip.Border">#555555</Color>
+	<LinearGradientBrush x:Key="OpacityMask/TabControl.TabStrip.Background" EndPoint="100%,100%" StartPoint="0%,0%">
+		<GradientStop Color="#17000000" Offset="0"/>
+		<GradientStop Color="#2f000000" Offset="0.5"/>
+		<GradientStop Color="#04000000" Offset="1"/>
+	</LinearGradientBrush>
 
 	<!-- TabItem -->
 	<Color x:Key="Color/TabItem.Header.Background">#00303030</Color>
-	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#303030</Color>
+	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#af303030</Color>
 	<Color x:Key="Color/TabItem.Header.Background.Selected">#303030</Color>
 	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#444444</Color>
-	<Color x:Key="Color/TabItem.Header.Border.Selected">#444444</Color>
+	<Color x:Key="Color/TabItem.Header.Border.Selected">#555555</Color>
 	<Color x:Key="Color/TabItem.Header.Separator">#17ffffff</Color>
 
 	<!-- TextBox -->

@@ -183,7 +183,7 @@
 	<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Padding">5,2,5,2</Thickness>
 
 	<!-- TabItem -->
-	<CornerRadius x:Key="CornerRadius/TabItem.Header">4,4,0,0</CornerRadius>
+	<CornerRadius x:Key="CornerRadius/TabItem.Header">5,5,0,0</CornerRadius>
 	<sys:Double x:Key="Double/TabItem.Header.ColorBar.Height">3</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.FontSize">14</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.Height">36</sys:Double>
