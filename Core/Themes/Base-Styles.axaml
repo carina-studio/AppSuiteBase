@@ -1128,7 +1128,7 @@
 			<ControlTemplate>
 				<Panel Name="PART_Root">
 					<controls:Image Name="PART_Background"/>
-					<Border Name="PART_TutorialContainer" Background="{DynamicResource ToolTipBackground}" BorderBrush="{DynamicResource ToolTipBorderBrush}" BorderThickness="1" BoxShadow="{DynamicResource BoxShadows/Shadow}" CornerRadius="{DynamicResource ControlCornerRadius}" Padding="{DynamicResource Thickness/FullWindowTutorialPresenter.Tutorial.Padding}">
+					<Border Name="PART_TutorialContainer" Background="{DynamicResource ToolTipBackground}" BorderBrush="{DynamicResource ToolTipBorderBrush}" BorderThickness="1" BoxShadow="{DynamicResource BoxShadows/Shadow}" CornerRadius="{DynamicResource OverlayCornerRadius}" Padding="{DynamicResource Thickness/FullWindowTutorialPresenter.Tutorial.Padding}">
 						<Border.RenderTransform>
 							<ScaleTransform ScaleX="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.InitScaleX}" ScaleY="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.InitScaleY}">
 								<ScaleTransform.Transitions>
@@ -1658,7 +1658,7 @@
 				        BorderBrush="{DynamicResource ToolTipBorderBrush}"
 				        BorderThickness="1"
 				        BoxShadow="{DynamicResource BoxShadows/Shadow}"
-				        CornerRadius="{DynamicResource ControlCornerRadius}" 
+				        CornerRadius="{DynamicResource OverlayCornerRadius}" 
 				        Margin="{DynamicResource Thickness/NotificationPresenter.Notification.Margin}"
 				        Opacity="0"
 				        Padding="{DynamicResource Thickness/NotificationPresenter.Notification.Padding}"
