@@ -764,18 +764,12 @@ namespace CarinaStudio.AppSuite
                 SetupAppAndLogger();
                 try
                 {
-                    if (app?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
+                    if (app?.ApplicationLifetime is ClassicDesktopStyleApplicationLifetime desktopLifetime)
                     {
-                        var startMethod = desktopLifetime.GetType().GetMethod("Start", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-                        if (startMethod is null)
-                        {
-                            ForceThrowingUnhandledException = true;
-                            throw new InvalidOperationException("Unable to get Start() method to restart application lifetime.");
-                        }
                         logger?.LogWarning("Restart application lifetime");
                         try
                         {
-                            exitCode = (int)startMethod.Invoke(desktopLifetime, [args])!;
+                            exitCode = desktopLifetime.Start(args);
                         }
                         catch (TargetInvocationException ex)
                         {
