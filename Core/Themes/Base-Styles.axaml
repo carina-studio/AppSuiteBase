@@ -2348,6 +2348,82 @@
 		<Setter Property="StartPoint" Value="0,0"/>
 		<Setter Property="Stroke" Value="{DynamicResource Brush/Shadow.Lighten}"/>
 	</Style>
+	
+	<!-- SplitButton -->
+	<Style Selector="SplitButton">
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Grid ColumnDefinitions="*,Auto,Auto">
+		          <Button Name="PART_PrimaryButton"
+		                  Grid.Column="0"
+		                  Theme="{StaticResource FluentSplitButtonComponent}"
+		                  MinWidth="{DynamicResource SplitButtonPrimaryButtonSize}"
+		                  Foreground="{TemplateBinding Foreground}"
+		                  Background="{TemplateBinding Background}"
+		                  BorderThickness="{TemplateBinding BorderThickness, Converter={x:Static converters:ThicknessConverters.NoRight}}"
+		                  BorderBrush="{TemplateBinding BorderBrush}"
+		                  Content="{TemplateBinding Content}"
+		                  ContentTemplate="{TemplateBinding ContentTemplate}"
+		                  Command="{TemplateBinding Command}"
+		                  CommandParameter="{TemplateBinding CommandParameter}"
+		                  CornerRadius="{TemplateBinding CornerRadius, Converter={x:Static converters:CornerRadiusConverters.Left}}"
+		                  HorizontalAlignment="Stretch"
+		                  VerticalAlignment="Stretch"
+		                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+		                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+		                  Padding="{TemplateBinding Padding}"
+		                  Focusable="False"
+		                  KeyboardNavigation.IsTabStop="False" />
+		          <Border Name="SeparatorBorder"
+		                  Grid.Column="1"
+		                  Width="{DynamicResource SplitButtonSeparatorWidth}"/>
+		          <Button Name="PART_SecondaryButton"
+		                  Grid.Column="2"
+		                  Theme="{StaticResource FluentSplitButtonComponent}"
+		                  BorderBrush="{TemplateBinding BorderBrush}"
+		                  Foreground="{TemplateBinding Foreground}"
+		                  Background="{TemplateBinding Background}"
+		                  BorderThickness="{TemplateBinding BorderThickness, Converter={x:Static converters:ThicknessConverters.NoLeft}}"
+		                  CornerRadius="{TemplateBinding CornerRadius, Converter={x:Static converters:CornerRadiusConverters.Right}}"
+		                  Padding="0"
+		                  HorizontalContentAlignment="Center"
+		                  VerticalContentAlignment="Center"
+		                  HorizontalAlignment="Stretch"
+		                  VerticalAlignment="Stretch"
+		                  Focusable="False"
+		                  KeyboardNavigation.IsTabStop="False">
+		            <PathIcon Name="DropDownIcon"/>
+		          </Button>
+		        </Grid>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="SplitButton /template/ PathIcon#DropDownIcon">
+		<Setter Property="Data" Value="{DynamicResource Geometry/Icon.DropDown.Down}"/>
+		<Setter Property="Height" Value="12"/>
+		<Setter Property="Width" Value="12"/>
+	</Style>
+	<Style Selector="SplitButton /template/ Button#PART_SecondaryButton">
+		<Setter Property="MinWidth" Value="{DynamicResource SplitButtonSecondaryButtonSize}"/>
+	</Style>
+	<Style Selector="SplitButton /template/ Border#SeparatorBorder">
+		<Setter Property="Background" Value="{Binding $parent[SplitButton].BorderBrush}"/>
+	</Style>
+	<Style Selector="SplitButton:checked /template/ PathIcon">
+		<Setter Property="Foreground" Value="{DynamicResource SplitButtonForegroundChecked}"/>
+	</Style>
+	<Style Selector="SplitButton:checked:flyout-open /template/ Border#SeparatorBorder">
+		<Setter Property="Background" Value="{DynamicResource SplitButtonBorderBrushCheckedPressed}"/>
+	</Style>
+	<Style Selector="SplitButton:checked:flyout-open /template/ PathIcon">
+		<Setter Property="Foreground" Value="{DynamicResource SplitButtonForegroundChecked}"/>
+	</Style>
+	<Style Selector="SplitButton:disabled /template/ PathIcon">
+		<Setter Property="Foreground" Value="{DynamicResource SplitButtonForegroundCheckedDisabled}"/>
+	</Style>
+	<Style Selector="SplitButton:flyout-open /template/ Border#SeparatorBorder">
+		<Setter Property="Background" Value="{DynamicResource SplitButtonBorderBrushPressed}"/>
+	</Style>
 
 	<!-- StatusBar -->
 	<Style Selector="Border.StatusBar">
@@ -3331,6 +3407,53 @@
 	<Style Selector="ToggleButton.ToolBar_DropDownButton:checked:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPressed}"/>
 	</Style>
+	<Style Selector="SplitButton.ToolBar_SplitButton">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Button.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Button.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="SplitButton.ToolBar_SplitButton /template/ PathIcon#DropDownIcon">
+		<Setter Property="Data" Value="{DynamicResource Geometry/Icon.DropDown.Down}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.DropDownButton.Icon.Size}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.DropDownButton.Icon.Size}"/>
+	</Style>
+	<Style Selector="SplitButton.ToolBar_SplitButton /template/ Button#PART_SecondaryButton">
+		<Setter Property="MinWidth" Value="{DynamicResource Double/ToolBar.SplitButton.SecondaryButton.MinWidth}"/>
+	</Style>
+	<Style Selector="SplitButton.ToolBar_SplitButton /template/ Border#SeparatorBorder">
+		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="SplitButton.ToolBar_SplitButton:checked:flyout-open /template/ Border#SeparatorBorder">
+    	<Setter Property="Background" Value="{x:Null}"/>
+    </Style>
+	<Style Selector="SplitButton.ToolBar_SplitButton:disabled">
+		<Setter Property="IsHitTestVisible" Value="False"/>
+	</Style>
+	<Style Selector="SplitButton.ToolBar_SplitButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="SplitButton.ToolBar_SplitButton:flyout-open /template/ Border#SeparatorBorder">
+		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="SplitButton.ToolBar_SplitButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.PointerOver}"/>
+	</Style>
+	<Style Selector="SplitButton.ToolBar_SplitButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Pressed}"/>
+	</Style>
+	<Style Selector="SplitButton.ToolBar_SplitButton:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
+	</Style>
+	<Style Selector="SplitButton.ToolBar_SplitButton:checked:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPressed}"/>
+	</Style>
+	
 	<Style Selector="ToggleButton.ToolBar_ToggleButton">
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>

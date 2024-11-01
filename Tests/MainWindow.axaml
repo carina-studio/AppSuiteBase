@@ -265,6 +265,16 @@
 													<RepeatButton Classes="ToolBar_RepeatButton" ToolTip.Tip="This is tooltip">
 														<Image Classes="Icon" Source="{StaticResource Image/Icon.Add}"/>
 													</RepeatButton>
+													
+													<appControls:ToggleSplitButton Classes="ToolBar_SplitButton">
+														<Image Classes="Icon" Source="{StaticResource Image/Icon.Information}"/>
+														<appControls:ToggleSplitButton.DropDownMenu>
+															<ContextMenu>
+																<MenuItem Header="Item 1"/>
+																<MenuItem Header="Item 2"/>
+															</ContextMenu>
+														</appControls:ToggleSplitButton.DropDownMenu>
+													</appControls:ToggleSplitButton>
 
 													<Separator Classes="ToolBar_Separator"/>
 
@@ -698,6 +708,30 @@
 								<ToggleButton Content="ToggleButton" IsChecked="True" IsEnabled="False" Margin="5"/>
 								<RepeatButton Content="RepeatButton" Margin="5"/>
 								<RepeatButton Content="RepeatButton" IsEnabled="False" Margin="5"/>
+								<appControls:SplitButton Content="SplitButton" Margin="5">
+									<appControls:SplitButton.DropDownMenu>
+										<ContextMenu>
+											<MenuItem Header="Item 1"/>
+											<MenuItem Header="Item 2"/>
+											<Separator/>
+											<MenuItem Header="Item 3"/>
+										</ContextMenu>
+									</appControls:SplitButton.DropDownMenu>
+								</appControls:SplitButton>
+								<appControls:SplitButton Content="SplitButton" IsEnabled="False" Margin="5"/>
+								<appControls:ToggleSplitButton Content="ToggleSplitButton" Margin="5">
+									<appControls:ToggleSplitButton.DropDownMenu>
+										<ContextMenu>
+											<MenuItem Header="Item 1"/>
+											<MenuItem Header="Item 2"/>
+											<Separator/>
+											<MenuItem Header="Item 3"/>
+										</ContextMenu>
+									</appControls:ToggleSplitButton.DropDownMenu>
+								</appControls:ToggleSplitButton>
+								<appControls:ToggleSplitButton Content="ToggleSplitButton" IsEnabled="False" Margin="5"/>
+								<appControls:ToggleSplitButton Content="ToggleSplitButton" IsChecked="True" IsEnabled="False" Margin="5"/>
+								<appControls:ToggleSplitButton Content="ToggleSplitButton" IsChecked="True" Margin="5"/>
 							</WrapPanel>
 
 							<WrapPanel Orientation="Horizontal">

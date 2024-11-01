@@ -312,6 +312,24 @@
 	<SolidColorBrush x:Key="Brush/Shadow.Lighten" Color="{DynamicResource Color/Shadow.Lighten}"/>
 	<Color x:Key="Color/Shadow.Darken">#1f000000</Color>
 	<Color x:Key="Color/Shadow.Lighten">#3fffffff</Color>
+	
+	<!-- SplitButton -->
+	<StaticResourceExtension x:Key="SplitButtonBackground" ResourceKey="ButtonBackground"/>
+	<SolidColorBrush x:Key="SplitButtonBackgroundChecked" Color="{DynamicResource SystemAccentColorDark2}"/>
+	<SolidColorBrush x:Key="SplitButtonBackgroundCheckedDisabled" Color="{DynamicResource SystemAccentColorDark2}" Opacity="0.5"/>
+	<SolidColorBrush x:Key="SplitButtonBackgroundCheckedPointerOver" Color="{DynamicResource SystemAccentColor}"/>
+	<SolidColorBrush x:Key="SplitButtonBackgroundCheckedPressed" Color="{DynamicResource SystemAccentColorDark3}"/>
+	<StaticResourceExtension x:Key="SplitButtonBackgroundDisabled" ResourceKey="ButtonBackgroundDisabled"/>
+	<StaticResourceExtension x:Key="SplitButtonBackgroundPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
+	<StaticResourceExtension x:Key="SplitButtonBackgroundPressed" ResourceKey="ButtonBackgroundPressed"/>
+	<StaticResourceExtension x:Key="SplitButtonBorderBrush" ResourceKey="ButtonBorderBrush"/>
+	<StaticResourceExtension x:Key="SplitButtonBorderBrushChecked" ResourceKey="ButtonBorderBrushPressed"/>
+	<StaticResourceExtension x:Key="SplitButtonBorderBrushCheckedDisabled" ResourceKey="ButtonBorderBrushPressed"/>
+	<StaticResourceExtension x:Key="SplitButtonBorderBrushCheckedPointerOver" ResourceKey="ButtonBorderBrushPressed"/>
+	<StaticResourceExtension x:Key="SplitButtonBorderBrushCheckedPressed" ResourceKey="ButtonBorderBrushPressed"/>
+	<StaticResourceExtension x:Key="SplitButtonBorderBrushDisabled" ResourceKey="ButtonBorderBrushDisabled"/>
+	<StaticResourceExtension x:Key="SplitButtonBorderBrushPointerOver" ResourceKey="ButtonBorderBrush"/>
+	<StaticResourceExtension x:Key="SplitButtonBorderBrushPressed" ResourceKey="ButtonBorderBrushPressed"/>
 
 	<!-- StatusBar -->
 	<StaticResourceExtension x:Key="Color/StatusBar.Background" ResourceKey="SystemAccentColorDark1"/>
