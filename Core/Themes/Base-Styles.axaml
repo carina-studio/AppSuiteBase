@@ -991,6 +991,10 @@
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="SplitButton.Dialog_Item_SplitButton">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
 	<Style Selector="ToggleButton.Dialog_Item_ToggleButton">
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
@@ -3435,25 +3439,24 @@
 	<Style Selector="SplitButton.ToolBar_SplitButton:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
-	<Style Selector="SplitButton.ToolBar_SplitButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
+	<Style Selector="SplitButton.ToolBar_SplitButton:disabled /template/ ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="SplitButton.ToolBar_SplitButton:flyout-open /template/ Border#SeparatorBorder">
 		<Setter Property="Background" Value="{x:Null}"/>
 	</Style>
-	<Style Selector="SplitButton.ToolBar_SplitButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+	<Style Selector="SplitButton.ToolBar_SplitButton /template/ Button:pointerover /template/ ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.PointerOver}"/>
 	</Style>
-	<Style Selector="SplitButton.ToolBar_SplitButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
+	<Style Selector="SplitButton.ToolBar_SplitButton /template/ Button:pressed /template/ ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Pressed}"/>
 	</Style>
-	<Style Selector="SplitButton.ToolBar_SplitButton:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
+	<Style Selector="SplitButton.ToolBar_SplitButton:checked /template/ Button:pointerover /template/ ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource SplitButtonBackgroundCheckedPointerOver}"/>
 	</Style>
-	<Style Selector="SplitButton.ToolBar_SplitButton:checked:pressed /template/ ContentPresenter#PART_ContentPresenter">
-		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPressed}"/>
+	<Style Selector="SplitButton.ToolBar_SplitButton:checked /template/ Button:pressed /template/ ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource SplitButtonBackgroundCheckedPressed}"/>
 	</Style>
-	
 	<Style Selector="ToggleButton.ToolBar_ToggleButton">
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
