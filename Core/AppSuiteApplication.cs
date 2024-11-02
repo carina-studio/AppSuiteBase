@@ -2508,7 +2508,7 @@ namespace CarinaStudio.AppSuite
 
             // start multi-instances server or send arguments to server
             var desktopLifetime = (this.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime);
-            if (!this.IsMultipleProcessesSupported && desktopLifetime is not null)
+            if (!this.IsMultipleProcessesSupported && desktopLifetime is not null && Platform.IsNotMacOS)
             {
                 this.multiInstancesServerStreamName = this.Name.Let(it =>
                 {
@@ -2525,7 +2525,7 @@ namespace CarinaStudio.AppSuite
                 if (Platform.IsNotWindows)
                 {
                     // [workaround] treat process as client first because limitation of max server instance seems not working on Linux
-                    if (this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args ?? Array.Empty<string>()))
+                    if (this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args ?? []))
                     {
                         this.SynchronizationContext.Post(() => desktopLifetime.Shutdown());
                         return;
