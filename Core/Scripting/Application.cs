@@ -73,12 +73,17 @@ public class Application : IApplication
 
     /// <inheritdoc/>
     public CultureInfo CultureInfo => this.app.CultureInfo;
+    
+    
+    /// <inheritdoc/>
+    public int ExecuteCommand(string command, CancellationToken cancellationToken = default) =>
+        this.ExecuteCommand(command, fallbackSearchPaths: null, cancellationToken);
 
 
     /// <inheritdoc/>
-    public int ExecuteCommand(string command, CancellationToken cancellationToken = default)
+    public int ExecuteCommand(string command, string[]? fallbackSearchPaths, CancellationToken cancellationToken = default)
     {
-        var startInfo = PrepareExecutingCommand(command, cancellationToken);
+        var startInfo = PrepareExecutingCommand(command, fallbackSearchPaths, cancellationToken);
         return Process.Start(startInfo)?.Use(process =>
         {
             if (cancellationToken.IsCancellationRequested)
@@ -93,9 +98,14 @@ public class Application : IApplication
 
 
     /// <inheritdoc/>
-    public int ExecuteCommand(string command, Action<Process, CancellationToken> action, CancellationToken cancellationToken = default)
+    public int ExecuteCommand(string command, Action<Process, CancellationToken> action, CancellationToken cancellationToken = default) =>
+        this.ExecuteCommand(command, null, action, cancellationToken);
+
+
+    /// <inheritdoc/>
+    public int ExecuteCommand(string command, string[]? fallbackSearchPaths, Action<Process, CancellationToken> action, CancellationToken cancellationToken = default)
     {
-        var startInfo = PrepareExecutingCommand(command, cancellationToken).Also(it =>
+        var startInfo = PrepareExecutingCommand(command, fallbackSearchPaths, cancellationToken).Also(it =>
         {
             it.RedirectStandardError = true;
             it.RedirectStandardInput = true;
@@ -113,11 +123,16 @@ public class Application : IApplication
             return process.ExitCode;
         }) ?? throw new InvalidOperationException($"Unable to execute command '{startInfo.FileName}'.");
     }
+    
+    
+    /// <inheritdoc/>
+    public string? FindCommandPath(string command, CancellationToken cancellationToken = default) =>
+        IO.CommandSearchPaths.FindCommandPath(command, cancellationToken: cancellationToken);
 
 
     /// <inheritdoc/>
-    public string? FindCommandPath(string command, CancellationToken cancellationToken = default) =>
-        IO.CommandSearchPaths.FindCommandPath(command, cancellationToken);
+    public string? FindCommandPath(string command, string[]? fallbackSearchPaths, CancellationToken cancellationToken = default) =>
+        IO.CommandSearchPaths.FindCommandPath(command, fallbackSearchPaths, cancellationToken);
     
     
     /// <inheritdoc/>
@@ -191,7 +206,7 @@ public class Application : IApplication
     
     
     // Prepare executing command.
-    static ProcessStartInfo PrepareExecutingCommand(string command, CancellationToken cancellationToken)
+    static ProcessStartInfo PrepareExecutingCommand(string command, string[]? fallbackSearchPaths, CancellationToken cancellationToken)
     {
         // check state
         if (cancellationToken.IsCancellationRequested)
@@ -207,7 +222,7 @@ public class Application : IApplication
         var args = command[(fileNameGroup.Index + fileNameGroup.Length)..];
         
         // find command path
-        var commandPath = IO.CommandSearchPaths.FindCommandPath(fileName, cancellationToken);
+        var commandPath = IO.CommandSearchPaths.FindCommandPath(fileName, fallbackSearchPaths, cancellationToken);
         if (commandPath == null)
             throw new InvalidOperationException($"Command '{fileName}' not found.");
         

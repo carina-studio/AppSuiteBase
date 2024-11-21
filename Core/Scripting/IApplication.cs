@@ -26,6 +26,16 @@ public interface IApplication
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Exit code of command.</returns>
     int ExecuteCommand(string command, CancellationToken cancellationToken = default);
+    
+    
+    /// <summary>
+    /// Execute external command.
+    /// </summary>
+    /// <param name="command">Command.</param>
+    /// <param name="fallbackSearchPaths">Fall-back paths to search command if it cannot be found in default paths.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Exit code of command.</returns>
+    int ExecuteCommand(string command, string[]? fallbackSearchPaths, CancellationToken cancellationToken = default);
 
 
     /// <summary>
@@ -39,12 +49,33 @@ public interface IApplication
     
     
     /// <summary>
+    /// Execute external command.
+    /// </summary>
+    /// <param name="command">Command.</param>
+    /// <param name="fallbackSearchPaths">Fall-back paths to search command if it cannot be found in default paths.</param>
+    /// <param name="action">Action to interact with process of external command.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Exit code of command.</returns>
+    int ExecuteCommand(string command, string[]? fallbackSearchPaths, Action<Process, CancellationToken> action, CancellationToken cancellationToken = default);
+    
+    
+    /// <summary>
     /// Find valid path of command to execute.
     /// </summary>
     /// <param name="command">Command.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Path of command or Null if command cannot be found.</returns>
     string? FindCommandPath(string command, CancellationToken cancellationToken = default);
+    
+    
+    /// <summary>
+    /// Find valid path of command to execute.
+    /// </summary>
+    /// <param name="command">Command.</param>
+    /// <param name="fallbackSearchPaths">Fall-back paths to search command if it cannot be found in default paths.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Path of command or Null if command cannot be found.</returns>
+    string? FindCommandPath(string command, string[]? fallbackSearchPaths, CancellationToken cancellationToken = default);
 
 
     /// <summary>
