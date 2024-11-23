@@ -38,25 +38,6 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock
     {
         // create actions
         this.invalidateVisualAction = new(this.InvalidateVisual);
-
-        // attach to self members
-        this.GetObservable(InlinesProperty).Subscribe(inlines =>
-        {
-            if (this.attachedInlines != null)
-                this.attachedInlines.CollectionChanged -= this.OnInlinesChanged;
-            this.attachedInlines = inlines;
-            if (inlines != null)
-            {
-                inlines.CollectionChanged += this.OnInlinesChanged;
-                if (inlines.IsNotEmpty())
-                {
-                    inlines.Clear();
-                    throw new InvalidOperationException();
-                }
-            }
-        });
-        this.GetObservable(TextProperty).Subscribe(text =>
-            this.syntaxHighlighter.Text = text);
         
         // attach to syntax highlighter
         this.syntaxHighlighter.PropertyChanged += (_, e) =>
@@ -170,8 +151,34 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock
             throw new InvalidOperationException();
         }
     }
-    
-    
+
+
+    /// <inheritdoc/>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        var property = change.Property;
+        if (property == InlinesProperty)
+        {
+            var inlines = change.NewValue as InlineCollection;
+            if (this.attachedInlines != null)
+                this.attachedInlines.CollectionChanged -= this.OnInlinesChanged;
+            this.attachedInlines = inlines;
+            if (inlines is not null)
+            {
+                inlines.CollectionChanged += this.OnInlinesChanged;
+                if (inlines.IsNotEmpty())
+                {
+                    inlines.Clear();
+                    throw new InvalidOperationException();
+                }
+            }
+        }
+        else if (property == TextProperty)
+            this.syntaxHighlighter.Text = change.NewValue as string;
+    }
+
+
     /// <inheritdoc/>
     protected override Type StyleKeyOverride => typeof(SyntaxHighlightingTextBlock);
 

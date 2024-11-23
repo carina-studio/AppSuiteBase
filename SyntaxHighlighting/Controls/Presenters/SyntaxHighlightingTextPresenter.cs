@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Media;
 using Avalonia.Media.TextFormatting;
 using CarinaStudio.AppSuite.Controls.Highlighting;
 using CarinaStudio.Threading;
@@ -17,12 +18,13 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
 
 
     // Fields.
+    readonly ScheduledAction correctCaretIndexAction;
     bool isArranging;
     bool isCreatingTextLayout;
     bool isMeasuring;
     readonly SyntaxHighlighter syntaxHighlighter = new()
     {
-        TextTrimming = Avalonia.Media.TextTrimming.None,
+        TextTrimming = TextTrimming.None,
     };
 
 
@@ -32,7 +34,7 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
     public SyntaxHighlightingTextPresenter()
     {
         // setup actions
-        var correctCaretIndexAction = new ScheduledAction(() =>
+        this.correctCaretIndexAction = new(() =>
         {
             if (this.SelectionStart != this.SelectionEnd)
                 return;
@@ -40,25 +42,6 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
                 this.CaretIndex = this.SelectionStart;
         });
         var invalidateVisualAction = new ScheduledAction(this.InvalidateVisual);
-
-        // attach to self members
-        this.GetObservable(PreeditTextProperty).Subscribe(text =>
-            this.syntaxHighlighter.PreeditText = text);
-        this.GetObservable(SelectionEndProperty).Subscribe(end =>
-        {
-            System.Diagnostics.Debug.WriteLine("SelectionEnd: " + end);
-            this.syntaxHighlighter.SelectionEnd = end;
-            correctCaretIndexAction.Schedule();
-        });
-        this.GetObservable(SelectionForegroundBrushProperty).Subscribe(brush =>
-            this.syntaxHighlighter.SelectionForeground = brush);
-        this.GetObservable(SelectionStartProperty).Subscribe(start =>
-        {
-            this.syntaxHighlighter.SelectionStart = start;
-            correctCaretIndexAction.Schedule();
-        });
-        this.GetObservable(TextProperty).Subscribe(text =>
-            this.syntaxHighlighter.Text = text);
         
         // attach to syntax highlighter
         this.syntaxHighlighter.PropertyChanged += (_, e) =>
@@ -157,6 +140,30 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         {
             this.isMeasuring = false;
         }
+    }
+
+
+    /// <inheritdoc/>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        var property = change.Property;
+        if (property == PreeditTextProperty)
+            this.syntaxHighlighter.PreeditText = change.NewValue as string;
+        else if (property == SelectionEndProperty)
+        {
+            this.syntaxHighlighter.SelectionEnd = (int)change.NewValue!;
+            this.correctCaretIndexAction.Schedule();
+        }
+        else if (property == SelectionForegroundBrushProperty)
+            this.syntaxHighlighter.SelectionForeground = change.NewValue as IBrush;
+        else if (property == SelectionStartProperty)
+        {
+            this.syntaxHighlighter.SelectionStart = (int)change.NewValue!;
+            this.correctCaretIndexAction.Schedule();
+        }
+        else if (property == TextProperty)
+            this.syntaxHighlighter.Text = change.NewValue as string;
     }
 
 

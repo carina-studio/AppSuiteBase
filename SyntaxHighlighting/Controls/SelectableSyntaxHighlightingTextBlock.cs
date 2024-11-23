@@ -39,43 +39,6 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
     {
         // create actions
         this.invalidateVisualAction = new(this.InvalidateVisual);
-
-        // attach to self members
-        this.GetObservable(InlinesProperty).Subscribe(inlines =>
-        {
-            if (this.attachedInlines != null)
-                this.attachedInlines.CollectionChanged -= this.OnInlinesChanged;
-            this.attachedInlines = inlines;
-            if (inlines != null)
-            {
-                inlines.CollectionChanged += this.OnInlinesChanged;
-                if (inlines.IsNotEmpty())
-                {
-                    inlines.Clear();
-                    throw new InvalidOperationException();
-                }
-            }
-        });
-        this.GetObservable(SelectionBrushProperty).Subscribe(brush =>
-        {
-            this.syntaxHighlighter.SelectionBackground = brush;
-        });
-        this.GetObservable(SelectionForegroundBrushProperty).Subscribe(brush =>
-        {
-            this.syntaxHighlighter.SelectionForeground = brush;
-        });
-        this.GetObservable(SelectionEndProperty).Subscribe(end =>
-        {
-            this.syntaxHighlighter.SelectionEnd = end;
-            this.InvalidateTextLayout();
-        });
-        this.GetObservable(SelectionStartProperty).Subscribe(start =>
-        {
-            this.syntaxHighlighter.SelectionStart = start;
-            this.InvalidateTextLayout();
-        });
-        this.GetObservable(TextProperty).Subscribe(text =>
-            this.syntaxHighlighter.Text = text);
         
         // attach to syntax highlighter
         this.syntaxHighlighter.PropertyChanged += (_, e) =>
@@ -196,8 +159,48 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
             throw new InvalidOperationException();
         }
     }
-    
-    
+
+
+    /// <inheritdoc/>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        var property = change.Property;
+        if (property == InlinesProperty)
+        {
+            var inlines = change.NewValue as InlineCollection;
+            if (this.attachedInlines is not null)
+                this.attachedInlines.CollectionChanged -= this.OnInlinesChanged;
+            this.attachedInlines = inlines;
+            if (inlines is not null)
+            {
+                inlines.CollectionChanged += this.OnInlinesChanged;
+                if (inlines.IsNotEmpty())
+                {
+                    inlines.Clear();
+                    throw new InvalidOperationException();
+                }
+            }
+        }
+        else if (property == SelectionBrushProperty)
+            this.syntaxHighlighter.SelectionBackground = change.NewValue as IBrush;
+        else if (property == SelectionForegroundBrushProperty)
+            this.syntaxHighlighter.SelectionForeground = change.NewValue as IBrush;
+        else if (property == SelectionEndProperty)
+        {
+            this.syntaxHighlighter.SelectionEnd = (int)change.NewValue!;
+            this.InvalidateTextLayout();
+        }
+        else if (property == SelectionStartProperty)
+        {
+            this.syntaxHighlighter.SelectionStart = (int)change.NewValue!;
+            this.InvalidateTextLayout();
+        }
+        else if (property == TextProperty)
+            this.syntaxHighlighter.Text = change.NewValue as string;
+    }
+
+
     /// <inheritdoc/>
     protected override Type StyleKeyOverride => typeof(SelectableSyntaxHighlightingTextBlock);
 

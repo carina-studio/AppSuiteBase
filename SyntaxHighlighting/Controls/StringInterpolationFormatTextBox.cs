@@ -70,65 +70,11 @@ public class StringInterpolationFormatTextBox : TextBox
         this.InputVariableNameCommand = new Command<string>(this.InputVariableName);
         this.MaxLength = 1024;
         this.predefinedVars.CollectionChanged += this.OnPredefinedVarsChanged;
-        this.showAssistanceMenuAction = new ScheduledAction(() =>
-		{
-			// close menu first
-			if (this.hasOpenedAssistanceMenus)
-			{
-				this.CloseAssistanceMenus();
-				this.showAssistanceMenuAction!.Schedule();
-				return;
-			}
-			var (start, end) = this.GetSelection();
-			if (!this.IsEffectivelyVisible || start != end)
-				return;
-
-			// show predefined variable menu
-			var text = this.Text ?? "";
-			var popupToOpen = (Popup?)null;
-			if (this.predefinedVars.IsNotEmpty())
-			{
-				var varNameRange = StringInterpolationFormatSyntaxHighlighting.FindVariableNameRange(text, start);
-				if (varNameRange.IsClosed)
-				{
-					var filterText = this.Text?[(varNameRange.Start!.Value + 1)..(varNameRange.End!.Value - 1)]?.ToLower() ?? "";
-					this.filteredPredefinedVars.Clear();
-					// ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-					if (string.IsNullOrEmpty(filterText))
-						this.filteredPredefinedVars.AddAll(this.predefinedVars);
-					else
-						this.filteredPredefinedVars.AddAll(this.predefinedVars.Where(it => it.Name.ToLower().Contains(filterText)));
-					if (this.filteredPredefinedVars.IsNotEmpty())
-						popupToOpen = this.SetupPredefinedVarsPopup();
-				}
-			}
-
-			// open menu
-			if (popupToOpen is not null)
-			{
-				this.GetCaretBounds()?.Let(caretBounds =>
-				{
-					popupToOpen.PlacementRect = caretBounds.Inflate(this.FindResourceOrDefault<double>("Double/InputAssistancePopup.Offset"));
-					popupToOpen.Open();
-				});
-			}
-		});
+        this.showAssistanceMenuAction = new(this.ShowAssistanceMenu);
 
 		// attach to self
-		var isSubscribed = false;
 		this.AddHandler(KeyDownEvent, this.OnPreviewKeyDown, RoutingStrategies.Tunnel);
 		this.AddHandler(KeyUpEvent, this.OnPreviewKeyUp, RoutingStrategies.Tunnel);
-		this.GetObservable(SelectionEndProperty).Subscribe(_ =>
-		{
-			if (isSubscribed)
-				this.showAssistanceMenuAction.Schedule();
-		});
-		this.GetObservable(SelectionStartProperty).Subscribe(_ =>
-		{
-			if (isSubscribed)
-				this.showAssistanceMenuAction.Schedule();
-		});
-		isSubscribed = true;
     }
     
     
@@ -491,7 +437,17 @@ public class StringInterpolationFormatTextBox : TextBox
 	}
 
 
-    /// <inheritdoc/>
+	/// <inheritdoc/>
+	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+	{
+		base.OnPropertyChanged(change);
+		var property = change.Property;
+		if (property == SelectionEndProperty || property == SelectionStartProperty)
+			this.showAssistanceMenuAction.Schedule();
+	}
+
+
+	/// <inheritdoc/>
     protected override void OnTextInput(TextInputEventArgs e)
 	{
 		// no need to handle
@@ -514,10 +470,10 @@ public class StringInterpolationFormatTextBox : TextBox
 			case '{':
 				if (prevChar1 != '\\')
 				{
-					HandleTextInputMethod ??= typeof(TextBox).GetMethod("HandleTextInput", BindingFlags.Instance | BindingFlags.NonPublic, new[] {typeof(string) });
+					HandleTextInputMethod ??= typeof(TextBox).GetMethod("HandleTextInput", BindingFlags.Instance | BindingFlags.NonPublic, [ typeof(string) ]);
 					if (HandleTextInputMethod is not null)
 					{
-						HandleTextInputMethod.Invoke(this, new object?[] { "{}" });
+						HandleTextInputMethod.Invoke(this, [ "{}" ]);
 						e.Handled = true;
 					}
 				}
@@ -583,9 +539,55 @@ public class StringInterpolationFormatTextBox : TextBox
 		rootPanel.Children.Insert(0, this.predefinedVarsPopup);
 		return this.predefinedVarsPopup;
 	}
+	
+	
+	// Show assistance menu.
+	void ShowAssistanceMenu()
+	{
+		// close menu first
+		if (this.hasOpenedAssistanceMenus)
+		{
+			this.CloseAssistanceMenus();
+			this.showAssistanceMenuAction.Schedule();
+			return;
+		}
+		var (start, end) = this.GetSelection();
+		if (!this.IsEffectivelyVisible || start != end)
+			return;
+
+		// show predefined variable menu
+		var text = this.Text ?? "";
+		var popupToOpen = (Popup?)null;
+		if (this.predefinedVars.IsNotEmpty())
+		{
+			var varNameRange = StringInterpolationFormatSyntaxHighlighting.FindVariableNameRange(text, start);
+			if (varNameRange.IsClosed)
+			{
+				var filterText = this.Text?[(varNameRange.Start!.Value + 1)..(varNameRange.End!.Value - 1)]?.ToLower() ?? "";
+				this.filteredPredefinedVars.Clear();
+				// ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+				if (string.IsNullOrEmpty(filterText))
+					this.filteredPredefinedVars.AddAll(this.predefinedVars);
+				else
+					this.filteredPredefinedVars.AddAll(this.predefinedVars.Where(it => it.Name.ToLower().Contains(filterText)));
+				if (this.filteredPredefinedVars.IsNotEmpty())
+					popupToOpen = this.SetupPredefinedVarsPopup();
+			}
+		}
+
+		// open menu
+		if (popupToOpen is not null)
+		{
+			this.GetCaretBounds()?.Let(caretBounds =>
+			{
+				popupToOpen.PlacementRect = caretBounds.Inflate(this.FindResourceOrDefault<double>("Double/InputAssistancePopup.Offset"));
+				popupToOpen.Open();
+			});
+		}
+	}
 
 
-    /// <inheritdox/>
+	/// <inheritdox/>
     protected override Type StyleKeyOverride => typeof(TextBox);
     
     

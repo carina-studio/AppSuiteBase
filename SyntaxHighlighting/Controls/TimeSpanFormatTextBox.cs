@@ -20,7 +20,7 @@ public class TimeSpanFormatTextBox : ObjectTextBox<string>
     /// <summary>
     /// Property of <see cref="Object"/>.
     /// </summary>
-    public static readonly new DirectProperty<TimeSpanFormatTextBox, string?> ObjectProperty = AvaloniaProperty.RegisterDirect<TimeSpanFormatTextBox, string?>(nameof(Object), t => t.Object, (t, o) => t.Object = o);
+    public static new readonly DirectProperty<TimeSpanFormatTextBox, string?> ObjectProperty = AvaloniaProperty.RegisterDirect<TimeSpanFormatTextBox, string?>(nameof(Object), t => t.Object, (t, o) => t.Object = o);
 
     
     // Fields.

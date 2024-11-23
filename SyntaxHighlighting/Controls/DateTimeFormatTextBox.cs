@@ -21,7 +21,7 @@ public class DateTimeFormatTextBox : ObjectTextBox<string>
     /// <summary>
     /// Property of <see cref="Object"/>.
     /// </summary>
-    public static readonly new DirectProperty<DateTimeFormatTextBox, string?> ObjectProperty = AvaloniaProperty.RegisterDirect<DateTimeFormatTextBox, string?>(nameof(Object), t => t.Object, (t, o) => t.Object = o);
+    public static new readonly DirectProperty<DateTimeFormatTextBox, string?> ObjectProperty = AvaloniaProperty.RegisterDirect<DateTimeFormatTextBox, string?>(nameof(Object), t => t.Object, (t, o) => t.Object = o);
 
     
     // Fields.

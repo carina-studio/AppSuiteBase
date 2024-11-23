@@ -53,7 +53,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	/// <summary>
 	/// Property of <see cref="Object"/>.
 	/// </summary>
-	public static readonly new DirectProperty<RegexTextBox, Regex?> ObjectProperty = AvaloniaProperty.RegisterDirect<RegexTextBox, Regex?>(nameof(Object), t => t.Object, (t, o) => t.Object = o);
+	public static new readonly DirectProperty<RegexTextBox, Regex?> ObjectProperty = AvaloniaProperty.RegisterDirect<RegexTextBox, Regex?>(nameof(Object), t => t.Object, (t, o) => t.Object = o);
 	/// <summary>
 	/// Property of <see cref="PhraseInputAssistanceProvider"/>.
 	/// </summary>
@@ -117,147 +117,12 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		this.InputStringCommand = new Command<string>(this.InputString);
 		this.MaxLength = 1024;
 		this.Bind(WatermarkProperty, this.GetResourceObservable("String/RegexTextBox.Watermark"));
-		this.showAssistanceMenuAction = new ScheduledAction(() =>
-		{
-			// close menu first
-			if (this.hasOpenedAssistanceMenus)
-			{
-				this.CloseAssistanceMenus();
-				this.showAssistanceMenuAction!.Schedule();
-				return;
-			}
-			var (start, end) = this.GetSelection();
-			if (!this.IsInputAssistanceEnabled || !this.IsEffectivelyVisible || start != end)
-			{
-				this.isBackSlashPressed = false;
-				return;
-			}
-			
-			// show nothing in comment
-			if (this.textPresenter is SyntaxHighlightingTextPresenter shTextPresenter)
-			{
-				shTextPresenter.FindSpanAndToken(end, out _, out var token);
-				switch (token?.Name)
-				{
-					case RegexSyntaxHighlighting.EndOfLineComment:
-					case RegexSyntaxHighlighting.InlineComment:
-						return;
-				}
-			}
-			
-			// update selected tokens if needed
-			this.updateSelectedTokensAction!.ExecuteIfScheduled();
-
-			// show predefined groups menu
-			var text = this.Text ?? "";
-			var textLength = text.Length;
-			var popupToOpen = (Popup?)null;
-			if (this.predefinedGroups.IsNotEmpty() && this.selectedGroupNameRange.IsClosed)
-			{
-				var filterText = this.Text?[this.selectedGroupNameRange.Start!.Value..this.selectedGroupNameRange.End!.Value]?.ToLower() ?? "";
-				this.filteredPredefinedGroups.Clear();
-				// ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-				if (string.IsNullOrEmpty(filterText))
-					this.filteredPredefinedGroups.AddAll(this.predefinedGroups);
-				else
-					this.filteredPredefinedGroups.AddAll(this.predefinedGroups.Where(it => it.Name.ToLower().Contains(filterText)));
-				if (this.filteredPredefinedGroups.IsNotEmpty())
-					popupToOpen = this.SetupPredefinedGroupsPopup();
-			}
-
-			// show grouping constructs menu
-			if (popupToOpen is null && start >= 2 && start < textLength 
-				&& text[start - 1] == '?' && text[start - 2] == '(' && text[start] == ')')
-			{
-				popupToOpen = this.SetupGroupingConstructsPopup();
-			}
-
-			// show escaped characters menu
-			if (this.isBackSlashPressed)
-			{
-				this.isBackSlashPressed = false;
-				if (popupToOpen is null && start > 0 && text[start - 1] == '\\' && (start <= 1 || text[start - 2] != '\\'))
-					popupToOpen = this.SetupEscapedCharactersPopup();
-			}
-			
-			// show phrases menu
-			if (popupToOpen is null 
-			    && this.selectedPhraseRange.IsClosed 
-			    && this.phraseInputAssistanceProvider is not null
-			    && this.isTextInputtedBeforeOpeningAssistanceMenu)
-			{
-				popupToOpen = this.SetupCandidatePhrasesPopup();
-			}
-
-			// open menu
-			this.isTextInputtedBeforeOpeningAssistanceMenu = false;
-			if (popupToOpen is not null)
-			{
-				if (popupToOpen == this.candidatePhrasesPopup)
-					this.OpenCandidatePhrasesMenu();
-				else
-				{
-					this.GetCaretBounds()?.Let(caretBounds =>
-					{
-						popupToOpen.PlacementRect = caretBounds.Inflate(this.FindResourceOrDefault<double>("Double/InputAssistancePopup.Offset"));
-						popupToOpen.Open();
-					});
-				}
-			}
-		});
+		this.showAssistanceMenuAction = new(this.ShowAssistanceMenu);
 		this.updateSelectedTokensAction = new(this.UpdateSelectedTokens);
 
 		// attach to self
-		var isSubscribed = false;
-		this.GetObservable(IgnoreCaseProperty).Subscribe(_ =>
-		{
-			if (isSubscribed)
-				this.Validate();
-		});
-		this.GetObservable(IsInputAssistanceEnabledProperty).Subscribe(isEnabled =>
-		{
-			if (isSubscribed && !isEnabled)
-			{
-				this.isTextInputtedBeforeOpeningAssistanceMenu = false;
-				this.CloseAssistanceMenus();
-			}
-		});
 		this.AddHandler(KeyDownEvent, this.OnPreviewKeyDown, RoutingStrategies.Tunnel);
 		this.AddHandler(KeyUpEvent, this.OnPreviewKeyUp, RoutingStrategies.Tunnel);
-		this.GetObservable(ObjectProperty).Subscribe(regex =>
-		{
-			if (regex is {} && ((regex.Options & RegexOptions.IgnoreCase) != 0) != this.IgnoreCase)
-			{
-				var options = regex.Options;
-				if (this.IgnoreCase)
-					options |= RegexOptions.IgnoreCase;
-				else
-					options &= ~RegexOptions.IgnoreCase;
-				this.Object = new Regex(regex.ToString(), options);
-			}
-		});
-		this.GetObservable(SelectionEndProperty).Subscribe(_ =>
-		{
-			if (isSubscribed)
-			{
-				this.updateSelectedTokensAction.Schedule();
-				this.showAssistanceMenuAction.Schedule();
-			}
-		});
-		this.GetObservable(SelectionStartProperty).Subscribe(_ =>
-		{
-			if (isSubscribed)
-			{
-				this.updateSelectedTokensAction.Schedule();
-				this.showAssistanceMenuAction.Schedule();
-			}
-		});
-		this.GetObservable(TextProperty).Subscribe(_ =>
-		{
-			if (isSubscribed)
-				this.updateSelectedTokensAction.Schedule();
-		});
-		isSubscribed = true;
 	}
 
 
@@ -934,6 +799,43 @@ public class RegexTextBox : ObjectTextBox<Regex>
 
 
 	/// <inheritdoc/>
+	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+	{
+		base.OnPropertyChanged(change);
+		var property = change.Property;
+		if (property == IgnoreCaseProperty)
+			this.Validate();
+		else if (property == IsInputAssistanceEnabledProperty)
+		{
+			if (!(bool)change.NewValue!)
+			{
+				this.isTextInputtedBeforeOpeningAssistanceMenu = false;
+				this.CloseAssistanceMenus();
+			}
+		}
+		else if (property == ObjectProperty)
+		{
+			if (change.NewValue is Regex regex && ((regex.Options & RegexOptions.IgnoreCase) != 0) != this.IgnoreCase)
+			{
+				var options = regex.Options;
+				if (this.IgnoreCase)
+					options |= RegexOptions.IgnoreCase;
+				else
+					options &= ~RegexOptions.IgnoreCase;
+				this.Object = new Regex(regex.ToString(), options);
+			}
+		}
+		else if (property == SelectionEndProperty || property == SelectionStartProperty)
+		{
+			this.updateSelectedTokensAction.Schedule();
+			this.showAssistanceMenuAction.Schedule();
+		}
+		else if (property == TextProperty)
+			this.updateSelectedTokensAction.Schedule();
+	}
+
+
+	/// <inheritdoc/>
     protected override void OnTextInput(TextInputEventArgs e)
 	{
 		// no need to handle
@@ -957,13 +859,13 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		var nextChar1 = selectionEnd < textLength ? text[selectionEnd] : '\0';
 		var nextChar2 = selectionEnd < textLength - 1 ? text[selectionEnd + 1] : '\0';
 		++selectionStart;
-		HandleTextInputMethod ??= typeof(TextBox).GetMethod("HandleTextInput", BindingFlags.Instance | BindingFlags.NonPublic, new[] {typeof(string) });
+		HandleTextInputMethod ??= typeof(TextBox).GetMethod("HandleTextInput", BindingFlags.Instance | BindingFlags.NonPublic, [ typeof(string) ]);
 		switch (s[0])
 		{
 			case '(':
 				if (prevChar1 != '\\' && nextChar1 == '\0' && HandleTextInputMethod is not null)
 				{
-					HandleTextInputMethod.Invoke(this, new object?[] { "()" });
+					HandleTextInputMethod.Invoke(this, [ "()" ]);
 					e.Handled = true;
 				}
 				break;
@@ -974,7 +876,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 			case '[':
 				if (prevChar1 != '\\' && HandleTextInputMethod is not null)
 				{
-					HandleTextInputMethod.Invoke(this, new object?[] { "[]" });
+					HandleTextInputMethod.Invoke(this, [ "[]" ]);
 					e.Handled = true;
 				}
 				break;
@@ -985,7 +887,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 			case '{':
 				if (prevChar1 != '\\' && HandleTextInputMethod is not null)
 				{
-					HandleTextInputMethod.Invoke(this, new object?[] { "{}" });
+					HandleTextInputMethod.Invoke(this, [ "{}" ]);
 					e.Handled = true;
 				}
 				break;
@@ -996,7 +898,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 			case '<':
 				if (prevChar1 == '?' && prevChar2 == '(' && HandleTextInputMethod is not null)
 				{
-					HandleTextInputMethod.Invoke(this, new object?[] { "<>" });
+					HandleTextInputMethod.Invoke(this, [ "<>" ]);
 					e.Handled = true;
 				}
 				break;
@@ -1289,6 +1191,97 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	}
 	
 	
+	// Show assistance menu.
+	void ShowAssistanceMenu()
+	{
+		// close menu first
+		if (this.hasOpenedAssistanceMenus)
+		{
+			this.CloseAssistanceMenus();
+			this.showAssistanceMenuAction.Schedule();
+			return;
+		}
+		var (start, end) = this.GetSelection();
+		if (!this.IsInputAssistanceEnabled || !this.IsEffectivelyVisible || start != end)
+		{
+			this.isBackSlashPressed = false;
+			return;
+		}
+
+		// show nothing in comment
+		if (this.textPresenter is SyntaxHighlightingTextPresenter shTextPresenter)
+		{
+			shTextPresenter.FindSpanAndToken(end, out _, out var token);
+			switch (token?.Name)
+			{
+				case RegexSyntaxHighlighting.EndOfLineComment:
+				case RegexSyntaxHighlighting.InlineComment:
+					return;
+			}
+		}
+
+		// update selected tokens if needed
+		this.updateSelectedTokensAction.ExecuteIfScheduled();
+
+		// show predefined groups menu
+		var text = this.Text ?? "";
+		var textLength = text.Length;
+		var popupToOpen = (Popup?)null;
+		if (this.predefinedGroups.IsNotEmpty() && this.selectedGroupNameRange.IsClosed)
+		{
+			var filterText = this.Text?[this.selectedGroupNameRange.Start!.Value..this.selectedGroupNameRange.End!.Value]?.ToLower() ?? "";
+			this.filteredPredefinedGroups.Clear();
+			// ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+			if (string.IsNullOrEmpty(filterText))
+				this.filteredPredefinedGroups.AddAll(this.predefinedGroups);
+			else
+				this.filteredPredefinedGroups.AddAll(this.predefinedGroups.Where(it => it.Name.ToLower().Contains(filterText)));
+			if (this.filteredPredefinedGroups.IsNotEmpty())
+				popupToOpen = this.SetupPredefinedGroupsPopup();
+		}
+
+		// show grouping constructs menu
+		if (popupToOpen is null && start >= 2 && start < textLength
+		    && text[start - 1] == '?' && text[start - 2] == '(' && text[start] == ')')
+		{
+			popupToOpen = this.SetupGroupingConstructsPopup();
+		}
+
+		// show escaped characters menu
+		if (this.isBackSlashPressed)
+		{
+			this.isBackSlashPressed = false;
+			if (popupToOpen is null && start > 0 && text[start - 1] == '\\' && (start <= 1 || text[start - 2] != '\\'))
+				popupToOpen = this.SetupEscapedCharactersPopup();
+		}
+
+		// show phrases menu
+		if (popupToOpen is null
+		    && this.selectedPhraseRange.IsClosed
+		    && this.phraseInputAssistanceProvider is not null
+		    && this.isTextInputtedBeforeOpeningAssistanceMenu)
+		{
+			popupToOpen = this.SetupCandidatePhrasesPopup();
+		}
+
+		// open menu
+		this.isTextInputtedBeforeOpeningAssistanceMenu = false;
+		if (popupToOpen is not null)
+		{
+			if (popupToOpen == this.candidatePhrasesPopup)
+				this.OpenCandidatePhrasesMenu();
+			else
+			{
+				this.GetCaretBounds()?.Let(caretBounds =>
+				{
+					popupToOpen.PlacementRect = caretBounds.Inflate(this.FindResourceOrDefault<double>("Double/InputAssistancePopup.Offset"));
+					popupToOpen.Open();
+				});
+			}
+		}
+	}
+
+
 	// Check whether at least one assistance has been opened or not.
 	bool UpdateHasOpenedAssistanceMenus()
 	{
