@@ -155,19 +155,6 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 					panel.Focus();
 			}, RoutingStrategies.Tunnel);
 		});
-		this.GetObservable(IsActiveProperty).Subscribe(isActive =>
-		{
-			if (isActive)
-			{
-				if (!isFirstActivation)
-					this.Refresh(false);
-				else
-				{
-					this.Refresh(true);
-					isFirstActivation = false;
-				}
-			}
-		});
 	}
 
 
@@ -236,6 +223,26 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 			});
 		});
 		this.checkCanCloseAction.Execute();
+	}
+
+
+	/// <inheritdoc/>
+	protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+	{
+		base.OnPropertyChanged(change);
+		if (change.Property == IsActiveProperty)
+		{
+			if ((bool)change.NewValue!)
+			{
+				if (!isFirstActivation)
+					this.Refresh(false);
+				else
+				{
+					this.Refresh(true);
+					isFirstActivation = false;
+				}
+			}
+		}
 	}
 
 

@@ -98,93 +98,8 @@ namespace CarinaStudio.AppSuite.Controls
             this.LayoutMainWindowsCommand = new Command<MultiWindowLayout>(this.LayoutMainWindows, this.GetObservable(HasMultipleMainWindowsProperty));
 
             // create scheduled actions
-            this.notifyNetworkConnForActivatingProVersionAction = new(() =>
-			{
-                if (this.Application is not AppSuiteApplication asApp)
-                    return;
-                var productId = asApp.ProVersionProductId;
-                // ReSharper disable once SuspiciousTypeConversion.Global
-                var notificationPresenter = this as INotificationPresenter;
-                var useNotification = notificationPresenter is not null;
-				if (productId is null 
-					|| !this.IsActive
-					|| (!useNotification && this.HasDialogs)
-					|| IsNetworkConnForActivatingProVersionNotified
-					|| NetworkManager.Default.IsNetworkConnected
-					|| !asApp.ProductManager.TryGetProductState(productId, out var state))
-				{
-					return;
-				}
-                if (state != ProductState.Activated)
-                {
-                    this.Logger.LogTrace("No need to notify user about activating Pro-version because state of Pro-version is {state}", state);
-                    return;
-                }
-                IsNetworkConnForActivatingProVersionNotified = true;
-                if (asApp.ProductManager.IsProductActivated(productId, true))
-                {
-                    this.Logger.LogTrace("No need to notify user about activating Pro-version because Pro-version is already activated online");
-                    return;
-                }
-                // ReSharper disable once SuspiciousTypeConversion.Global
-                if (useNotification)
-                {
-                    notificationPresenter!.AddNotification(new Notification().Also(it =>
-                    {
-                        it.BindToResource(Notification.IconProperty, this, "Image/Icon.Warning.Colored");
-                        it.Bind(Notification.MessageProperty, new FormattedString().Also(it =>
-                        {
-                            it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{productId}"));
-                            it.Bind(FormattedString.FormatProperty, asApp.GetObservableString("MainWindow.NetworkConnectionNeededForProductActivation"));
-                        }));
-                        it.Timeout = null;
-                    }));
-                }
-                else
-                {
-                    _ = new MessageDialog
-                    {
-                        Icon = MessageDialogIcon.Information,
-                        Message = new FormattedString().Also(it =>
-                        {
-                            it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{productId}"));
-                            it.Bind(FormattedString.FormatProperty, asApp.GetObservableString("MainWindow.NetworkConnectionNeededForProductActivation"));
-                        }),
-                    }.ShowDialog(null);
-                }
-            });
-            // ReSharper disable once AsyncVoidLambda
-            this.reactivateProVersionAction = new(async () =>
-			{
-                if (this.Application is not AppSuiteApplication asApp)
-                    return;
-                var productId = asApp.ProVersionProductId;
-				if (productId is null 
-                    || !IsReactivatingProVersionNeeded
-					|| this.HasDialogs 
-					|| !this.IsActive 
-					|| asApp.IsActivatingProVersion
-					|| IsReactivatingProVersion)
-				{
-					return;
-				}
-				IsReactivatingProVersionNeeded = false;
-                if (asApp.ProductManager.TryGetProductState(productId, out var state))
-                {
-                    if (state == ProductState.Activated && asApp.Configuration.GetValueOrDefault(SimulationConfigurationKeys.FailToActivateProVersion))
-                        state = ProductState.Deactivated;
-                }
-                else if (asApp.Configuration.GetValueOrDefault(SimulationConfigurationKeys.FailToActivateProVersion))
-                    state = ProductState.Deactivated;
-                else
-                    return;
-				if (state == ProductState.Deactivated && await this.OnNotifyReactivatingProVersionNeededAsync())
-				{
-                    IsReactivatingProVersion = true;
-                    await asApp.ActivateProVersionAsync(this);
-                    IsReactivatingProVersion = false;
-                }
-			});
+            this.notifyNetworkConnForActivatingProVersionAction = new(this.NotifyNetworkConnectionForActivatingProVersion);
+            this.reactivateProVersionAction = new(this.ReactivateProVersion);
             this.restartingRootWindowsAction = new ScheduledAction(() =>
             {
                 if (!this.IsOpened || this.HasDialogs || !this.Application.IsRestartingRootWindowsNeeded)
@@ -201,47 +116,7 @@ namespace CarinaStudio.AppSuite.Controls
                 }
             });
             this.showInitDialogsAction = new ScheduledAction(this.ShowInitialDialogs);
-            this.updateContentPaddingAction = new ScheduledAction(() =>
-            {
-                // check state
-                if (this.IsClosed || !this.ExtendClientAreaToDecorationsHint)
-                    return;
-                var windowState = this.WindowState;
-                if (windowState == WindowState.Minimized)
-                    return;
-
-                // check content
-                if (this.contentPresenter is null)
-                    return;
-
-                // cancel current animation
-                this.contentPaddingAnimator?.Cancel();
-
-                // update content padding
-                // [Workaround] cannot use padding of window because that thickness transition doesn't work on it
-                var margin = windowState switch
-                {
-                    WindowState.FullScreen
-                    or WindowState.Maximized => ExtendedClientAreaWindowConfiguration.ContentPaddingInMaximized,
-                    _ => ExtendedClientAreaWindowConfiguration.ContentPadding,
-                };
-                if (this.isFirstContentPaddingUpdate)
-                {
-                    this.isFirstContentPaddingUpdate = false;
-                    this.contentPresenter.Padding = margin;
-                }
-                else
-                {
-                    this.contentPaddingAnimator = new ThicknessRenderingAnimator(this, this.contentPresenter.Padding, margin).Also(it =>
-                    {
-                        it.Completed += (_, _) => this.contentPresenter.Padding = it.EndValue;
-                        it.Duration = this.FindResourceOrDefault("TimeSpan/MainWindow.ContentPaddingTransition", TimeSpan.FromMilliseconds(500));
-                        it.Interpolator = Interpolators.FastDeceleration;
-                        it.ProgressChanged += (_, _) => this.contentPresenter.Padding = it.Value;
-                        it.Start();
-                    });
-                }
-            });
+            this.updateContentPaddingAction = new ScheduledAction(this.UpdateClientPadding);
 
             // restore window state
             this.PersistentState.Let(it =>
@@ -258,110 +133,6 @@ namespace CarinaStudio.AppSuite.Controls
             // extend client area if needed
             this.UpdateExtendingClientArea();
             this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome; // show system chrome when opened
-
-            // observe self properties
-            var isSubscribing = true;
-            this.GetObservable(ContentProperty).Subscribe(content =>
-            {
-                if (!this.Application.IsPrivacyPolicyAgreed || !this.Application.IsUserAgreementAgreed)
-                    (content as Control)?.Let(it => it.IsEnabled = false);
-            });
-            this.GetObservable(ExtendClientAreaToDecorationsHintProperty).Subscribe(_ =>
-            {
-                if (this.IsOpened)
-                    this.UpdateExtendClientAreaChromeHints(false);
-            });
-            this.GetObservable(HasDialogsProperty).Subscribe(hasDialogs =>
-            {
-                if (!isSubscribing && !hasDialogs)
-                {
-                    if (this.Application.IsRestartingRootWindowsNeeded)
-                        this.restartingRootWindowsAction.Reschedule(RestartingMainWindowsDelay);
-                    if (!this.AreInitialDialogsClosed)
-                        this.showInitDialogsAction.Schedule();
-                    if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId is not null)
-                    {
-                        if (!this.notifyNetworkConnForActivatingProVersionAction.IsScheduled 
-                            && !NetworkManager.Default.IsNetworkConnected
-                            && !IsNetworkConnForActivatingProVersionNotified)
-                        {
-                            this.Logger.LogTrace("All dialogs were closed, notify user about network connection for activating Pro-version");
-                            this.notifyNetworkConnForActivatingProVersionAction.Schedule();
-                        }
-                        if (IsReactivatingProVersionNeeded)
-                            this.reactivateProVersionAction.Schedule();
-                    }
-                }
-            });
-            this.GetObservable(HeightProperty).Subscribe(_ => 
-            {
-                if (isSubscribing)
-                    return;
-                this.saveWindowSizeAction.Reschedule(SaveWindowSizeDelay);
-            });
-            this.GetObservable(IsActiveProperty).Subscribe(isActive =>
-            {
-                if (isActive)
-                {
-                    if (!this.AreInitialDialogsClosed)
-                        this.showInitDialogsAction.Schedule();
-                    else
-                    {
-                        this.SynchronizationContext.Post(() => 
-                            _ = this.NotifyApplicationUpdateFoundAsync(false));
-                    } 
-                    if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId is not null)
-                    {
-                        if (!this.notifyNetworkConnForActivatingProVersionAction.IsScheduled
-                            && !NetworkManager.Default.IsNetworkConnected
-                            && !IsNetworkConnForActivatingProVersionNotified)
-                        {
-                            this.Logger.LogTrace("Window activated, notify user about network connection for activating Pro-version");
-                            this.notifyNetworkConnForActivatingProVersionAction.Schedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.TimeoutToNotifyNetworkConnectionForProductActivation));
-                        }
-                        if (IsReactivatingProVersionNeeded)
-                            this.reactivateProVersionAction.Schedule();
-                    }
-                }
-            });
-            this.GetObservable(WidthProperty).Subscribe(_ => 
-            {
-                if (isSubscribing)
-                    return;
-                this.saveWindowSizeAction.Reschedule(SaveWindowSizeDelay);
-            });
-            this.GetObservable(WindowStateProperty).Subscribe(windowState =>
-            {
-                if (isSubscribing)
-                    return;
-                if (this.IsOpened)
-                {
-                    if (windowState != WindowState.Minimized)
-                    {
-                        // [Workaround] Need to restore window state (Maximized) twice on Linux (Fedora)
-                        if (Platform.IsLinux 
-                            && windowState == WindowState.Normal
-                            && this.restoredWindowState != WindowState.Normal
-                            && (Stopwatch.ElapsedMilliseconds - this.openedTime) < RestoringWindowStateOnLinuxDuration)
-                        {
-                            this.RestoreToSavedSize();
-                            this.SynchronizationContext.PostDelayed(() => this.RestoreToSavedWindowState(), 100);
-                            return;
-                        }
-
-                        // save window state
-                        this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, windowState);
-                    }
-                    if (windowState == WindowState.FullScreen || Platform.IsMacOS)
-                        this.updateContentPaddingAction.Reschedule();
-                    else
-                        this.updateContentPaddingAction.Reschedule(UpdateContentPaddingDelay);
-                }
-                this.RestoreToSavedSize();
-                this.InvalidateTransparencyLevelHint();
-                this.UpdateExtendClientAreaChromeHints(false);
-            });
-            isSubscribing = false;
             
             // setup debug overlays
             this.UpdateDebugOverlays();
@@ -539,8 +310,8 @@ namespace CarinaStudio.AppSuite.Controls
                     return;
                 this.appUpdateNotification = new Notification().Also(notification =>
                 {
-                    notification.Actions = new[]
-                    {
+                    notification.Actions =
+                    [
                         new NotificationAction().Also(it =>
                         {
                             it.Command = new Command(() =>
@@ -550,7 +321,7 @@ namespace CarinaStudio.AppSuite.Controls
                             });
                             it.Bind(NotificationAction.NameProperty, this.Application.GetObservableString("Common.KnowMoreAbout.WithDialog"));
                         })
-                    };
+                    ];
                     notification.Dismissed += (_, _) =>
                     {
                         if (this.appUpdateNotification == notification)
@@ -575,6 +346,63 @@ namespace CarinaStudio.AppSuite.Controls
                 IsNotifyingAppUpdateFound = true;
                 await this.Application.CheckForApplicationUpdateAsync(this, false);
                 IsNotifyingAppUpdateFound = false;
+            }
+        }
+        
+        
+        // Notify user that network connection is needed for activating Pro version.
+        void NotifyNetworkConnectionForActivatingProVersion()
+        {
+            if (this.Application is not AppSuiteApplication asApp)
+                return;
+            var productId = asApp.ProVersionProductId;
+            // ReSharper disable once SuspiciousTypeConversion.Global
+            var notificationPresenter = this as INotificationPresenter;
+            if (productId is null
+                || !this.IsActive
+                || (notificationPresenter is null && this.HasDialogs)
+                || IsNetworkConnForActivatingProVersionNotified
+                || NetworkManager.Default.IsNetworkConnected
+                || !asApp.ProductManager.TryGetProductState(productId, out var state))
+            {
+                return;
+            }
+            if (state != ProductState.Activated)
+            {
+                this.Logger.LogTrace("No need to notify user about activating Pro-version because state of Pro-version is {state}", state);
+                return;
+            }
+            IsNetworkConnForActivatingProVersionNotified = true;
+            if (asApp.ProductManager.IsProductActivated(productId, true))
+            {
+                this.Logger.LogTrace("No need to notify user about activating Pro-version because Pro-version is already activated online");
+                return;
+            }
+            // ReSharper disable once SuspiciousTypeConversion.Global
+            if (notificationPresenter is not null)
+            {
+                notificationPresenter.AddNotification(new Notification().Also(it =>
+                {
+                    it.BindToResource(Notification.IconProperty, this, "Image/Icon.Warning.Colored");
+                    it.Bind(Notification.MessageProperty, new FormattedString().Also(it =>
+                    {
+                        it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{productId}"));
+                        it.Bind(FormattedString.FormatProperty, asApp.GetObservableString("MainWindow.NetworkConnectionNeededForProductActivation"));
+                    }));
+                    it.Timeout = null;
+                }));
+            }
+            else
+            {
+                _ = new MessageDialog
+                {
+                    Icon = MessageDialogIcon.Information,
+                    Message = new FormattedString().Also(it =>
+                    {
+                        it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{productId}"));
+                        it.Bind(FormattedString.FormatProperty, asApp.GetObservableString("MainWindow.NetworkConnectionNeededForProductActivation"));
+                    }),
+                }.ShowDialog(null);
             }
         }
 
@@ -733,8 +561,8 @@ namespace CarinaStudio.AppSuite.Controls
                 var taskCompletionSource = new TaskCompletionSource();
                 notificationPresenter.AddNotification(new Notification().Also(notification =>
                 {
-                    notification.Actions = new[]
-                    {
+                    notification.Actions =
+                    [
                         new NotificationAction().Also(it =>
                         {
                             it.Command = new Command(() =>
@@ -760,8 +588,8 @@ namespace CarinaStudio.AppSuite.Controls
                                 notification.Dismiss();
                             });
                             it.Bind(NotificationAction.NameProperty, asApp.GetObservableString("ApplicationInfoDialog.DeactivateProduct"));
-                        }),
-                    };
+                        })
+                    ];
                     notification.Dismissed += (_, _) => taskCompletionSource.TrySetResult();
                     notification.BindToResource(Notification.IconProperty, this, "Image/Icon.Warning.Colored");
                     notification.Bind(Notification.MessageProperty, new FormattedString().Also(it =>
@@ -860,6 +688,103 @@ namespace CarinaStudio.AppSuite.Controls
         }
 
 
+        /// <inheritdoc/>
+        protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+        {
+            base.OnPropertyChanged(change);
+            var property = change.Property;
+            if (property == ContentProperty)
+            {
+                if (!this.Application.IsPrivacyPolicyAgreed || !this.Application.IsUserAgreementAgreed)
+                    (change.NewValue as Control)?.Let(it => it.IsEnabled = false);
+            }
+            else if (property == ExtendClientAreaToDecorationsHintProperty)
+            {
+                if (this.IsOpened)
+                    this.UpdateExtendClientAreaChromeHints(false);
+            }
+            else if (property == HasDialogsProperty)
+            {
+                if (!(bool)change.NewValue!)
+                {
+                    if (this.Application.IsRestartingRootWindowsNeeded)
+                        this.restartingRootWindowsAction.Reschedule(RestartingMainWindowsDelay);
+                    if (!this.AreInitialDialogsClosed)
+                        this.showInitDialogsAction.Schedule();
+                    if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId is not null)
+                    {
+                        if (!this.notifyNetworkConnForActivatingProVersionAction.IsScheduled
+                            && !NetworkManager.Default.IsNetworkConnected
+                            && !IsNetworkConnForActivatingProVersionNotified)
+                        {
+                            this.Logger.LogTrace("All dialogs were closed, notify user about network connection for activating Pro-version");
+                            this.notifyNetworkConnForActivatingProVersionAction.Schedule();
+                        }
+                        if (IsReactivatingProVersionNeeded)
+                            this.reactivateProVersionAction.Schedule();
+                    }
+                }
+            }
+            else if (property == HeightProperty || property == WidthProperty)
+                this.saveWindowSizeAction.Reschedule(SaveWindowSizeDelay);
+            else if (property == IsActiveProperty)
+            {
+                if ((bool)change.NewValue!)
+                {
+                    if (!this.AreInitialDialogsClosed)
+                        this.showInitDialogsAction.Schedule();
+                    else
+                    {
+                        this.SynchronizationContext.Post(() =>
+                            _ = this.NotifyApplicationUpdateFoundAsync(false));
+                    }
+                    if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId is not null)
+                    {
+                        if (!this.notifyNetworkConnForActivatingProVersionAction.IsScheduled
+                            && !NetworkManager.Default.IsNetworkConnected
+                            && !IsNetworkConnForActivatingProVersionNotified)
+                        {
+                            this.Logger.LogTrace("Window activated, notify user about network connection for activating Pro-version");
+                            this.notifyNetworkConnForActivatingProVersionAction.Schedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.TimeoutToNotifyNetworkConnectionForProductActivation));
+                        }
+                        if (IsReactivatingProVersionNeeded)
+                            this.reactivateProVersionAction.Schedule();
+                    }
+                }
+            }
+            else if (property == WindowStateProperty)
+            {
+                if (this.IsOpened)
+                {
+                    var windowState = (WindowState)change.NewValue!;
+                    if (windowState != WindowState.Minimized)
+                    {
+                        // [Workaround] Need to restore window state (Maximized) twice on Linux (Fedora)
+                        if (Platform.IsLinux
+                            && windowState == WindowState.Normal
+                            && this.restoredWindowState != WindowState.Normal
+                            && (Stopwatch.ElapsedMilliseconds - this.openedTime) < RestoringWindowStateOnLinuxDuration)
+                        {
+                            this.RestoreToSavedSize();
+                            this.SynchronizationContext.PostDelayed(() => this.RestoreToSavedWindowState(), 100);
+                            return;
+                        }
+
+                        // save window state
+                        this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, windowState);
+                    }
+                    if (windowState == WindowState.FullScreen || Platform.IsMacOS)
+                        this.updateContentPaddingAction.Reschedule();
+                    else
+                        this.updateContentPaddingAction.Reschedule(UpdateContentPaddingDelay);
+                }
+                this.RestoreToSavedSize();
+                this.InvalidateTransparencyLevelHint();
+                this.UpdateExtendClientAreaChromeHints(false);
+            }
+        }
+
+
         /// <summary>
         /// Called to select transparency level.
         /// </summary>
@@ -870,6 +795,40 @@ namespace CarinaStudio.AppSuite.Controls
             or WindowState.Maximized => WindowTransparencyLevel.None,
             _ => base.OnSelectTransparentLevelHint(),
         };
+        
+        
+        // Re-activate Pro version.
+        async void ReactivateProVersion()
+        {
+            if (this.Application is not AppSuiteApplication asApp)
+                return;
+            var productId = asApp.ProVersionProductId;
+            if (productId is null 
+                || !IsReactivatingProVersionNeeded
+                || this.HasDialogs 
+                || !this.IsActive 
+                || asApp.IsActivatingProVersion
+                || IsReactivatingProVersion)
+            {
+                return;
+            }
+            IsReactivatingProVersionNeeded = false;
+            if (asApp.ProductManager.TryGetProductState(productId, out var state))
+            {
+                if (state == ProductState.Activated && asApp.Configuration.GetValueOrDefault(SimulationConfigurationKeys.FailToActivateProVersion))
+                    state = ProductState.Deactivated;
+            }
+            else if (asApp.Configuration.GetValueOrDefault(SimulationConfigurationKeys.FailToActivateProVersion))
+                state = ProductState.Deactivated;
+            else
+                return;
+            if (state == ProductState.Deactivated && await this.OnNotifyReactivatingProVersionNeededAsync())
+            {
+                IsReactivatingProVersion = true;
+                await asApp.ActivateProVersionAsync(this);
+                IsReactivatingProVersion = false;
+            }
+        }
 
 
         // Restore to saved window size if available.
@@ -1166,6 +1125,50 @@ namespace CarinaStudio.AppSuite.Controls
                 this.Logger.LogWarning("All initial dialogs closed");
                 this.SetAndRaise(AreInitialDialogsClosedProperty, ref this.areInitialDialogsClosed, true);
                 this.OnInitialDialogsClosed();
+            }
+        }
+        
+        
+        // Update padding of client.
+        void UpdateClientPadding()
+        {
+            // check state
+            if (this.IsClosed || !this.ExtendClientAreaToDecorationsHint)
+                return;
+            var windowState = this.WindowState;
+            if (windowState == WindowState.Minimized)
+                return;
+
+            // check content
+            if (this.contentPresenter is null)
+                return;
+
+            // cancel current animation
+            this.contentPaddingAnimator?.Cancel();
+
+            // update content padding
+            // [Workaround] cannot use padding of window because that thickness transition doesn't work on it
+            var margin = windowState switch
+            {
+                WindowState.FullScreen
+                    or WindowState.Maximized => ExtendedClientAreaWindowConfiguration.ContentPaddingInMaximized,
+                _ => ExtendedClientAreaWindowConfiguration.ContentPadding,
+            };
+            if (this.isFirstContentPaddingUpdate)
+            {
+                this.isFirstContentPaddingUpdate = false;
+                this.contentPresenter.Padding = margin;
+            }
+            else
+            {
+                this.contentPaddingAnimator = new ThicknessRenderingAnimator(this, this.contentPresenter.Padding, margin).Also(it =>
+                {
+                    it.Completed += (_, _) => this.contentPresenter.Padding = it.EndValue;
+                    it.Duration = this.FindResourceOrDefault("TimeSpan/MainWindow.ContentPaddingTransition", TimeSpan.FromMilliseconds(500));
+                    it.Interpolator = Interpolators.FastDeceleration;
+                    it.ProgressChanged += (_, _) => this.contentPresenter.Padding = it.Value;
+                    it.Start();
+                });
             }
         }
         

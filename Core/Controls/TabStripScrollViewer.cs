@@ -16,6 +16,7 @@ class TabStripScrollViewer : ScrollViewer
 {
     // Fields.
     ScrollContentPresenter? contentPresenter;
+    readonly ScheduledAction correctOffsetAction;
     Thickness itemsPanelMargin;
     double maxEdgeFadingSize;
     VectorRenderingAnimator? offsetAnimator;
@@ -31,132 +32,36 @@ class TabStripScrollViewer : ScrollViewer
         it.StartPoint = new(0.0, 0.0, RelativeUnit.Relative);
     });
     TopLevel? topLevel;
+    readonly ScheduledAction updateOpacityMaskAction;
 
 
     // Constructor.
     public TabStripScrollViewer()
     {
         // prepare actions
-        var correctOffsetAction = new ScheduledAction(() =>
-        {
-            var extent = this.Extent;
-            var viewport = this.Viewport;
-            var offset = this.Offset;
-            if (offset.X + viewport.Width > extent.Width && offset.X > 0)
-            {
-                if (this.offsetAnimator != null)
-                {
-                    this.offsetAnimator.Cancel();
-                    this.offsetAnimator = null;
-                }
-                this.Offset = new Vector(extent.Width - viewport.Width, 0);
-            }
-        });
-        var updateOpacityMaskAction = new ScheduledAction(() =>
-        {
-            var size = this.Bounds.Size;
-            if (size.Width <= 0 || size.Height <= 0)
-                return;
-            var brush = this.opacityMackBrush;
-            if (this.CanHorizontallyScroll)
-            {
-                if (this.CanVerticallyScroll)
-                {
-                    brush.GradientStops[1].Offset = 0.0;
-                    brush.GradientStops[2].Offset = 0.0;
-                    brush.GradientStops[3].Offset = 1.0;
-                    brush.GradientStops[4].Offset = 1.0;
-                }
-                else
-                {
-                    var offset = this.Offset;
-                    var extent = this.Extent;
-                    var viewport = this.Viewport;
-                    brush.EndPoint = new(1.0, 0.0, RelativeUnit.Relative);
-                    if (offset.X > 1)
-                    {
-                        brush.GradientStops[1].Offset = Math.Min(0.4, this.itemsPanelMargin.Left / size.Width);
-                        brush.GradientStops[2].Offset = Math.Min(0.4, (this.itemsPanelMargin.Left + Math.Min(offset.X, this.maxEdgeFadingSize)) / size.Width);
-                    }
-                    else
-                    {
-                        brush.GradientStops[1].Offset = 0.0;
-                        brush.GradientStops[2].Offset = 0.0;
-                    }
-                    if (offset.X + viewport.Width < extent.Width - 1)
-                    {
-                        brush.GradientStops[3].Offset = 1.0 - Math.Min(0.4, (this.itemsPanelMargin.Right + Math.Min(extent.Width - (offset.X + viewport.Width), this.maxEdgeFadingSize)) / size.Width);
-                        brush.GradientStops[4].Offset = 1.0 - Math.Min(0.4, this.itemsPanelMargin.Right / size.Width);
-                    }
-                    else
-                    {
-                        brush.GradientStops[3].Offset = 1.0;
-                        brush.GradientStops[4].Offset = 1.0;
-                    }
-                }
-            }
-            else if (this.CanVerticallyScroll)
-            {
-                var offset = this.Offset;
-                var extent = this.Extent;
-                var viewport = this.Viewport;
-                brush.EndPoint = new(0.0, 1.0, RelativeUnit.Relative);
-                if (offset.Y > 1)
-                {
-                    brush.GradientStops[1].Offset = Math.Min(0.4, this.itemsPanelMargin.Top / size.Height);
-                    brush.GradientStops[2].Offset = Math.Min(0.4, (this.itemsPanelMargin.Top + Math.Min(offset.Y, this.maxEdgeFadingSize)) / size.Height);
-                }
-                else
-                {
-                    brush.GradientStops[1].Offset = 0.0;
-                    brush.GradientStops[2].Offset = 0.0;
-                }
-                if (offset.Y + viewport.Height < extent.Height - 1)
-                {
-                    brush.GradientStops[3].Offset = 1.0 - Math.Min(0.4, (this.itemsPanelMargin.Bottom + Math.Min(extent.Height - (offset.Y + viewport.Height), this.maxEdgeFadingSize)) / size.Height);
-                    brush.GradientStops[4].Offset = 1.0 - Math.Min(0.4, this.itemsPanelMargin.Bottom / size.Height);
-                }
-                else
-                {
-                    brush.GradientStops[3].Offset = 1.0;
-                    brush.GradientStops[4].Offset = 1.0;
-                }
-            }
-            else
-            {
-                brush.GradientStops[1].Offset = 0.0;
-                brush.GradientStops[2].Offset = 0.0;
-                brush.GradientStops[3].Offset = 1.0;
-                brush.GradientStops[4].Offset = 1.0;
-            }
-            this.contentPresenter?.InvalidateVisual();
-        });
+        this.correctOffsetAction = new(this.CorrectOffset);
+        this.updateOpacityMaskAction = new(this.UpdateOpacityMask);
         
         // attach to self
-        this.GetObservable(ExtentProperty).Subscribe(_ =>
-        {
-            correctOffsetAction.Schedule();
-            updateOpacityMaskAction.Schedule();
-        });
-        this.GetObservable(HorizontalScrollBarVisibilityProperty).Subscribe(visibility =>
-        {
-            if (this.contentPresenter is not null)
-                this.contentPresenter.CanHorizontallyScroll = visibility == ScrollBarVisibility.Visible;
-            updateOpacityMaskAction.Schedule();
-        });
-        this.GetObservable(OffsetProperty).Subscribe(_ => updateOpacityMaskAction.Schedule());
         this.SizeChanged += (_, _) => updateOpacityMaskAction.Schedule();
-        this.GetObservable(VerticalScrollBarVisibilityProperty).Subscribe(visibility =>
+    }
+    
+    
+    // Correct offset.
+    void CorrectOffset()
+    {
+        var extent = this.Extent;
+        var viewport = this.Viewport;
+        var offset = this.Offset;
+        if (offset.X + viewport.Width > extent.Width && offset.X > 0)
         {
-            if (this.contentPresenter is not null)
-                this.contentPresenter.CanVerticallyScroll = visibility == ScrollBarVisibility.Visible;
-            updateOpacityMaskAction.Schedule();
-        });
-        this.GetObservable(ViewportProperty).Subscribe(_ =>
-        {
-            correctOffsetAction.Schedule();
-            updateOpacityMaskAction.Schedule();
-        });
+            if (this.offsetAnimator != null)
+            {
+                this.offsetAnimator.Cancel();
+                this.offsetAnimator = null;
+            }
+            this.Offset = new Vector(extent.Width - viewport.Width, 0);
+        }
     }
     
     
@@ -213,6 +118,33 @@ class TabStripScrollViewer : ScrollViewer
     }
 
 
+    /// <inheritdoc/>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        var property = change.Property;
+        if (property == ExtentProperty || property == ViewportProperty)
+        {
+            this.correctOffsetAction.Schedule();
+            this.updateOpacityMaskAction.Schedule();
+        }
+        else if (property == HorizontalScrollBarVisibilityProperty)
+        {
+            if (this.contentPresenter is not null)
+                this.contentPresenter.CanHorizontallyScroll = (ScrollBarVisibility)change.NewValue! == ScrollBarVisibility.Visible;
+            this.updateOpacityMaskAction.Schedule();
+        }
+        else if (property == OffsetProperty)
+            this.updateOpacityMaskAction.Schedule();
+        else if (property == VerticalScrollBarVisibilityProperty)
+        {
+            if (this.contentPresenter is not null)
+                this.contentPresenter.CanVerticallyScroll = (ScrollBarVisibility)change.NewValue! == ScrollBarVisibility.Visible;
+            this.updateOpacityMaskAction.Schedule();
+        }
+    }
+
+
     // Scroll by given offset.
     public void ScrollBy(double offset)
     {
@@ -263,4 +195,86 @@ class TabStripScrollViewer : ScrollViewer
     /// Scroll right.
     /// </summary>
     public void ScrollRight() => ScrollBy(100);
+    
+    
+    // Update opacity mask.
+    void UpdateOpacityMask()
+    {
+        var size = this.Bounds.Size;
+        if (size.Width <= 0 || size.Height <= 0)
+            return;
+        var brush = this.opacityMackBrush;
+        if (this.CanHorizontallyScroll)
+        {
+            if (this.CanVerticallyScroll)
+            {
+                brush.GradientStops[1].Offset = 0.0;
+                brush.GradientStops[2].Offset = 0.0;
+                brush.GradientStops[3].Offset = 1.0;
+                brush.GradientStops[4].Offset = 1.0;
+            }
+            else
+            {
+                var offset = this.Offset;
+                var extent = this.Extent;
+                var viewport = this.Viewport;
+                brush.EndPoint = new(1.0, 0.0, RelativeUnit.Relative);
+                if (offset.X > 1)
+                {
+                    brush.GradientStops[1].Offset = Math.Min(0.4, this.itemsPanelMargin.Left / size.Width);
+                    brush.GradientStops[2].Offset = Math.Min(0.4, (this.itemsPanelMargin.Left + Math.Min(offset.X, this.maxEdgeFadingSize)) / size.Width);
+                }
+                else
+                {
+                    brush.GradientStops[1].Offset = 0.0;
+                    brush.GradientStops[2].Offset = 0.0;
+                }
+                if (offset.X + viewport.Width < extent.Width - 1)
+                {
+                    brush.GradientStops[3].Offset = 1.0 - Math.Min(0.4, (this.itemsPanelMargin.Right + Math.Min(extent.Width - (offset.X + viewport.Width), this.maxEdgeFadingSize)) / size.Width);
+                    brush.GradientStops[4].Offset = 1.0 - Math.Min(0.4, this.itemsPanelMargin.Right / size.Width);
+                }
+                else
+                {
+                    brush.GradientStops[3].Offset = 1.0;
+                    brush.GradientStops[4].Offset = 1.0;
+                }
+            }
+        }
+        else if (this.CanVerticallyScroll)
+        {
+            var offset = this.Offset;
+            var extent = this.Extent;
+            var viewport = this.Viewport;
+            brush.EndPoint = new(0.0, 1.0, RelativeUnit.Relative);
+            if (offset.Y > 1)
+            {
+                brush.GradientStops[1].Offset = Math.Min(0.4, this.itemsPanelMargin.Top / size.Height);
+                brush.GradientStops[2].Offset = Math.Min(0.4, (this.itemsPanelMargin.Top + Math.Min(offset.Y, this.maxEdgeFadingSize)) / size.Height);
+            }
+            else
+            {
+                brush.GradientStops[1].Offset = 0.0;
+                brush.GradientStops[2].Offset = 0.0;
+            }
+            if (offset.Y + viewport.Height < extent.Height - 1)
+            {
+                brush.GradientStops[3].Offset = 1.0 - Math.Min(0.4, (this.itemsPanelMargin.Bottom + Math.Min(extent.Height - (offset.Y + viewport.Height), this.maxEdgeFadingSize)) / size.Height);
+                brush.GradientStops[4].Offset = 1.0 - Math.Min(0.4, this.itemsPanelMargin.Bottom / size.Height);
+            }
+            else
+            {
+                brush.GradientStops[3].Offset = 1.0;
+                brush.GradientStops[4].Offset = 1.0;
+            }
+        }
+        else
+        {
+            brush.GradientStops[1].Offset = 0.0;
+            brush.GradientStops[2].Offset = 0.0;
+            brush.GradientStops[3].Offset = 1.0;
+            brush.GradientStops[4].Offset = 1.0;
+        }
+        this.contentPresenter?.InvalidateVisual();
+    }
 }

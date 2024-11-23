@@ -83,27 +83,6 @@ public unsafe class MarkdownViewer : TemplatedControl
                 it.InputGesture = KeyGestures.Copy;
             }));
         });
-        this.GetObservable(HorizontalScrollBarVisibilityProperty).Subscribe(visibility =>
-        {
-            if (this.scrollViewer != null)
-                this.scrollViewer.HorizontalScrollBarVisibility = visibility;
-        });
-        this.GetObservable(IsSelectionEnabledProperty).Subscribe(isEnabled =>
-        {
-            this.contextMenuValueToken = isEnabled 
-                ? this.SetValue(ContextMenuProperty, this.contextMenu, BindingPriority.Template) 
-                : this.contextMenuValueToken.DisposeAndReturnNull();
-        });
-        this.GetObservable(PaddingProperty).Subscribe(padding =>
-        {
-            (this.scrollViewer?.Content as Control)?.Let(it =>
-                it.Margin = padding);
-        });
-        this.GetObservable(VerticalScrollBarVisibilityProperty).Subscribe(visibility =>
-        {
-            if (this.scrollViewer != null)
-                this.scrollViewer.VerticalScrollBarVisibility = visibility;
-        });
     }
     
     
@@ -212,6 +191,32 @@ public unsafe class MarkdownViewer : TemplatedControl
         {
             var bounds = headingControl.Bounds.Inflate(headingControl.Margin);
             this.scrollViewer!.SmoothScrollTo(new(0, bounds.Y + this.scrollViewer!.Padding.Top));
+        }
+    }
+
+
+    /// <inheritdoc/>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        var property = change.Property;
+        if (property == HorizontalScrollBarVisibilityProperty)
+        {
+            if (this.scrollViewer is not null)
+                this.scrollViewer.HorizontalScrollBarVisibility = (ScrollBarVisibility)change.NewValue!;
+        }
+        else if (property == IsSelectionEnabledProperty)
+        {
+            this.contextMenuValueToken = (bool)change.NewValue! 
+                ? this.SetValue(ContextMenuProperty, this.contextMenu, BindingPriority.Template) 
+                : this.contextMenuValueToken.DisposeAndReturnNull();
+        }
+        else if (property == PaddingProperty)
+            (this.scrollViewer?.Content as Control)?.Let(it => it.Margin = (Thickness)change.NewValue!);
+        else if (property == VerticalScrollBarVisibilityProperty)
+        {
+            if (this.scrollViewer is not null)
+                this.scrollViewer.VerticalScrollBarVisibility = (ScrollBarVisibility)change.NewValue!;
         }
     }
 

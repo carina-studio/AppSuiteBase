@@ -51,18 +51,6 @@ public class FullWindowTutorialPresenter : TutorialPresenter
         this.anchorOuterBorderPen = new(this.anchorOuterBorderBrush, 3, lineJoin: PenLineJoin.Round);
         this.backgroundPropertyChangedHandler = this.OnBackgroundPropertyChanged;
         this.updateTutorialPositionAction = new(this.UpdateTutorialPosition);
-        this.GetObservable(BackgroundProperty).Subscribe(background =>
-        {
-            this.backgroundPropertyChangedHandlerToken = this.backgroundPropertyChangedHandlerToken.DisposeAndReturnNull();
-            if (background is Brush brush)
-                this.backgroundPropertyChangedHandlerToken = brush.AddWeakEventHandler(nameof(PropertyChanged), this.backgroundPropertyChangedHandler);
-            this.CloneBackgroundBrush();
-        });
-        this.GetObservable(BoundsProperty).Subscribe(_ =>
-        {
-            if (this.CurrentTutorial is not null)
-                this.updateTutorialPositionAction.Schedule();
-        });
     }
 
 
@@ -235,6 +223,25 @@ public class FullWindowTutorialPresenter : TutorialPresenter
                 it.ClearValue(BackgroundProperty);
                 it.ClearValue(BorderBrushProperty);
             });
+        }
+    }
+
+
+    /// <inheritdoc/>
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == BackgroundProperty)
+        {
+            this.backgroundPropertyChangedHandlerToken = this.backgroundPropertyChangedHandlerToken.DisposeAndReturnNull();
+            if (change.NewValue is Brush brush)
+                this.backgroundPropertyChangedHandlerToken = brush.AddWeakEventHandler(nameof(PropertyChanged), this.backgroundPropertyChangedHandler);
+            this.CloneBackgroundBrush();
+        } 
+        else if (change.Property == BoundsProperty)
+        {
+            if (this.CurrentTutorial is not null)
+                this.updateTutorialPositionAction.Schedule();
         }
     }
 
