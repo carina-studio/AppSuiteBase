@@ -77,7 +77,7 @@ public static class CommandSearchPaths
     /// <param name="command">Command.</param>
     /// <param name="fallbackSearchPaths">Fall-back paths to search command if it cannot be found in default paths.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>Task of finding path of command.</returns>
+    /// <returns>Path of command, or Null if command not found.</returns>
     public static string? FindCommandPath(string command, IEnumerable<string>? fallbackSearchPaths = null, CancellationToken cancellationToken = default)
     {
 	    if (!command.IsValidFilePath())
@@ -103,6 +103,49 @@ public static class CommandSearchPaths
 			    if (FindCommandPath(path, command, commandPathBuffer) is { } commandPath)
 				    return commandPath;
 		    }
+	    }
+	    return null;
+    }
+
+
+    /// <summary>
+    /// Find valid path of command to execute in given directory.
+    /// </summary>
+    /// <param name="directory">Directory to search command.</param>
+    /// <param name="command">Command.</param>
+    /// <returns>Path of command, or Null if command not found.</returns>
+    public static string? FindCommandPath(string directory, string command)
+    {
+	    if (!command.IsValidFilePath())
+	    {
+		    Logger?.LogError("Invalid command: '{command}'", command);
+		    return null;
+	    }
+	    return FindCommandPath(directory, command, new());
+    }
+    
+    
+    /// <summary>
+    /// Find valid path of command to execute in given directories.
+    /// </summary>
+    /// <param name="directories">Directories to search command.</param>
+    /// <param name="command">Command.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Path of command, or Null if command not found.</returns>
+    public static string? FindCommandPath(IEnumerable<string> directories, string command, CancellationToken cancellationToken = default)
+    {
+	    if (!command.IsValidFilePath())
+	    {
+		    Logger?.LogError("Invalid command: '{command}'", command);
+		    return null;
+	    }
+	    var buffer = new StringBuilder();
+	    foreach (var directory in directories)
+	    {
+		    if (cancellationToken.IsCancellationRequested)
+			    throw new TaskCanceledException();
+		    if (FindCommandPath(directory, command, buffer) is { } commandPath)
+			    return commandPath;
 	    }
 	    return null;
     }
@@ -184,6 +227,28 @@ public static class CommandSearchPaths
     /// <returns>Task of finding path of command.</returns>
     public static Task<string?> FindCommandPathAsync(string command, IEnumerable<string>? fallbackSearchPaths = null, CancellationToken cancellationToken = default) =>
 	    Task.Run(() => FindCommandPath(command, fallbackSearchPaths, cancellationToken), cancellationToken);
+    
+    
+    /// <summary>
+    /// Find valid path of command in given directory to execute.
+    /// </summary>
+    /// <param name="directory">Directory to search command.</param>
+    /// <param name="command">Command.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Task of finding path of command.</returns>
+    public static Task<string?> FindCommandPathAsync(string directory, string command, CancellationToken cancellationToken = default) =>
+		Task.Run(() => FindCommandPath(directory, command), cancellationToken);
+    
+    
+    /// <summary>
+    /// Find valid path of command to execute in given directories.
+    /// </summary>
+    /// <param name="directories">Directories to search command.</param>
+    /// <param name="command">Command.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Task of finding path of command.</returns>
+    public static Task<string?> FindCommandPathAsync(IEnumerable<string> directories, string command, CancellationToken cancellationToken = default) =>
+	    Task.Run(() => FindCommandPath(directories, command, cancellationToken), cancellationToken);
 
 
     /// <summary>
