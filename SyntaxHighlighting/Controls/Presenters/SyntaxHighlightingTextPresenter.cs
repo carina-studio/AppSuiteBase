@@ -15,6 +15,10 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
     /// Property of <see cref="DefinitionSet"/>.
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlightingTextPresenter, SyntaxHighlightingDefinitionSet?> DefinitionSetProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingTextPresenter, SyntaxHighlightingDefinitionSet?>(nameof(DefinitionSet), t => t.syntaxHighlighter.DefinitionSet, (t, ds) => t.syntaxHighlighter.DefinitionSet = ds);
+    /// <summary>
+    /// Property of <see cref="MaxTokenCount"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlightingTextPresenter, int> MaxTokenCountProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingTextPresenter, int>(nameof(MaxTokenCount), t => t.syntaxHighlighter.MaxTokenCount, (t, count) => t.syntaxHighlighter.MaxTokenCount = count);
 
 
     // Fields.
@@ -49,6 +53,8 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
             var property = e.Property;
             if (property == SyntaxHighlighter.DefinitionSetProperty)
                 this.RaisePropertyChanged(DefinitionSetProperty, (SyntaxHighlightingDefinitionSet?)e.OldValue, (SyntaxHighlightingDefinitionSet?)e.NewValue);
+            else if (property == SyntaxHighlighter.MaxTokenCountProperty)
+                this.RaisePropertyChanged(MaxTokenCountProperty, (int)e.OldValue!, (int)e.NewValue!);
         };
         this.syntaxHighlighter.TextLayoutInvalidated += (_, _) =>
         {
@@ -124,6 +130,16 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
     /// <param name="token">Token which contains the character.</param>
     public void FindSpanAndToken(int characterIndex, out SyntaxHighlightingSpan? span, out SyntaxHighlightingToken? token) =>
         this.syntaxHighlighter.FindSpanAndToken(characterIndex, out span, out token);
+
+
+    /// <summary>
+    /// Get or set maximum number of token should be highlighted. Negative value if there is no limitation.
+    /// </summary>
+    public int MaxTokenCount
+    {
+        get => this.syntaxHighlighter.MaxTokenCount;
+        set => this.syntaxHighlighter.MaxTokenCount = value;
+    }
 
 
     /// <inheritdoc/>

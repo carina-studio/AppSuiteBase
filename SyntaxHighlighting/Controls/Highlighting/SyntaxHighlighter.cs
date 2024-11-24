@@ -67,6 +67,10 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlighter, int> MaxLinesProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, int>(nameof(MaxLines), sh => sh.maxLines, (sh, l) => sh.MaxLines = l);
     /// <summary>
+    /// Property of <see cref="MaxTokenCount"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, int> MaxTokenCountProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, int>(nameof(MaxTokenCount), sh => sh.maxTokenCount, (sh, c) => sh.MaxTokenCount = c);
+    /// <summary>
     /// Property of <see cref="MaxWidth"/>.
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlighter, double> MaxWidthProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, double>(nameof(MaxWidth), sh => sh.maxWidth, (sh, w) => sh.MaxWidth = w);
@@ -127,6 +131,10 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     // Fields.
     IBrush? background;
     IDisposable backgroundPropertyChangedHandlerToken = EmptyDisposable.Default;
+    SortedObservableList<Span>? candidateSpans;
+    readonly Dictionary<SyntaxHighlightingSpan, SortedObservableList<Token>> candidateTokens = new();
+    SortedObservableList<Token>? defaultCandidateTokens;
+    Comparison<Token>? defaultTokenComparasion;
     SyntaxHighlightingDefinitionSet? definitionSet;
     FlowDirection flowDirection = FlowDirection.LeftToRight;
     FontFamily fontFamily = FontManager.Current.DefaultFontFamily;
@@ -141,13 +149,18 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     double lineHeight = double.NaN;
     double maxHeight = double.PositiveInfinity;
     int maxLines;
+    int maxTokenCount = -1;
     double maxWidth = double.PositiveInfinity;
     string? preeditText;
+    readonly Dictionary<SyntaxHighlightingSpan, TextRunProperties> runPropertiesMap = new();
+    readonly Dictionary<SyntaxHighlightingToken, TextRunProperties> runPropertiesMapInSpan = new();
     IBrush? selectionBackground;
     IDisposable selectionBackgroundPropertyChangedHandlerToken = EmptyDisposable.Default;
     int selectionEnd;
     IBrush? selectionForeground;
     IDisposable selectionForegroundPropertyChangedHandlerToken = EmptyDisposable.Default;
+    readonly Dictionary<SyntaxHighlightingSpan, TextRunProperties> selectionRunPropertiesMap = new();
+    readonly Dictionary<SyntaxHighlightingToken, TextRunProperties> selectionRunPropertiesMapInSpan = new();
     int selectionStart;
     string? text;
     TextAlignment textAlignment = TextAlignment.Left;
@@ -156,6 +169,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     IReadOnlyList<ValueSpan<TextRunProperties>>? textProperties;
     TextTrimming textTrimming = TextTrimming.CharacterEllipsis;
     TextWrapping textWrapping = TextWrapping.NoWrap;
+    readonly Dictionary<SyntaxHighlightingSpan, Comparison<Token>> tokenComparisons = new();
 
 
     /// <summary>
@@ -218,7 +232,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         );
         
         // setup initial candidate spans
-        var candidateSpans = new SortedObservableList<Span>((lhs, rhs) =>
+        var candidateSpans = this.candidateSpans ?? new SortedObservableList<Span>((lhs, rhs) =>
         {
             var result = (rhs.Start - lhs.Start);
             if (result != 0)
@@ -228,7 +242,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 return result;
             result = this.definitionSet?.SpanDefinitions.Let(it => it.IndexOf(rhs.Definition) - it.IndexOf(lhs.Definition)) ?? 0;
             return result != 0 ? result : (rhs.GetHashCode() - lhs.GetHashCode());
-        });
+        }).Also(it => this.candidateSpans = it);
         this.definitionSet?.SpanDefinitions.Let(it =>
         {
             foreach (var spanDefinition in it)
@@ -252,100 +266,112 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         });
         
         // create text properties for each span
+        var tokenCount = 0;
+        var maxTokenCount = this.maxTokenCount;
         var textProperties = new List<ValueSpan<TextRunProperties>>();
         var textStartIndex = 0;
-        var runPropertiesMap = new Dictionary<SyntaxHighlightingSpan, TextRunProperties>();
-        var selectionRunPropertiesMap = new Dictionary<SyntaxHighlightingSpan, TextRunProperties>();
+        var runPropertiesMap = this.runPropertiesMap;
+        var selectionRunPropertiesMap = this.selectionRunPropertiesMap;
         var defaultTokenDefinitions = this.definitionSet?.TokenDefinitions ?? Array.Empty<SyntaxHighlightingToken>();
-        while (candidateSpans.IsNotEmpty())
+        try
         {
-            // get current span
-            var span = candidateSpans[^1];
-            candidateSpans.RemoveAt(candidateSpans.Count - 1);
-
-            // find next span
-            var startMatch = span.Definition.StartPattern!.Match(text, span.End);
-            Match? endMatch;
-            if (startMatch.Success)
+            while (candidateSpans.IsNotEmpty())
             {
-                endMatch = span.Definition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
-                if (endMatch.Success)
-                {
-                    candidateSpans.Add(new(
-                        span.Definition,
-                        startMatch.Index, 
-                        endMatch.Index + endMatch.Length,
-                        startMatch.Index + startMatch.Length,
-                        endMatch.Index));
-                }
-            }
-
-            // remove spans which overlaps with current span
-            for (var i = candidateSpans.Count - 1; i >= 0; --i)
-            {
-                // check overlapping
-                var removingSpan = candidateSpans[i];
-                if (removingSpan.Start >= span.End)
-                    continue;
-                candidateSpans.RemoveAt(i);
+                // get current span
+                var span = candidateSpans[^1];
+                candidateSpans.RemoveAt(candidateSpans.Count - 1);
 
                 // find next span
-                startMatch = removingSpan.Definition.StartPattern!.Match(text, span.End);
-                if (!startMatch.Success)
-                    continue;
-                endMatch = removingSpan.Definition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
-                if (endMatch.Success)
+                var startMatch = span.Definition.StartPattern!.Match(text, span.End);
+                Match? endMatch;
+                if (startMatch.Success)
                 {
-                    var j = candidateSpans.Add(new(
-                        removingSpan.Definition, 
-                        startMatch.Index, 
-                        endMatch.Index + endMatch.Length,
-                        startMatch.Index + startMatch.Length,
-                        endMatch.Index));
-                    if (j < i)
-                        ++i;
+                    endMatch = span.Definition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
+                    if (endMatch.Success)
+                    {
+                        candidateSpans.Add(new(
+                            span.Definition,
+                            startMatch.Index,
+                            endMatch.Index + endMatch.Length,
+                            startMatch.Index + startMatch.Length,
+                            endMatch.Index));
+                    }
                 }
-            }
 
-            // create text properties
-            if (!runPropertiesMap.TryGetValue(span.Definition, out var runProperties))
-            {
-                var typeface = new Typeface(
-                    span.Definition.FontFamily ?? defaultRunProperties.Typeface.FontFamily, 
-                    span.Definition.FontStyle ?? defaultRunProperties.Typeface.Style,
-                    span.Definition.FontWeight ?? defaultRunProperties.Typeface.Weight, 
-                    this.fontStretch
-                );
-                runProperties = new GenericTextRunProperties(
-                    typeface,
-                    double.IsNaN(span.Definition.FontSize) ? defaultRunProperties.FontRenderingEmSize : span.Definition.FontSize,
-                    span.Definition.TextDecorations ?? defaultRunProperties.TextDecorations,
-                    span.Definition.Foreground ?? defaultRunProperties.ForegroundBrush,
-                    span.Definition.Background ?? defaultRunProperties.BackgroundBrush
-                );
-                runPropertiesMap[span.Definition] = runProperties;
+                // remove spans which overlaps with current span
+                for (var i = candidateSpans.Count - 1; i >= 0; --i)
+                {
+                    // check overlapping
+                    var removingSpan = candidateSpans[i];
+                    if (removingSpan.Start >= span.End)
+                        continue;
+                    candidateSpans.RemoveAt(i);
+
+                    // find next span
+                    startMatch = removingSpan.Definition.StartPattern!.Match(text, span.End);
+                    if (!startMatch.Success)
+                        continue;
+                    endMatch = removingSpan.Definition.EndPattern!.Match(text, startMatch.Index + startMatch.Length);
+                    if (endMatch.Success)
+                    {
+                        var j = candidateSpans.Add(new(
+                            removingSpan.Definition,
+                            startMatch.Index,
+                            endMatch.Index + endMatch.Length,
+                            startMatch.Index + startMatch.Length,
+                            endMatch.Index));
+                        if (j < i)
+                            ++i;
+                    }
+                }
+
+                // create text properties
+                if (!runPropertiesMap.TryGetValue(span.Definition, out var runProperties))
+                {
+                    var typeface = new Typeface(
+                        span.Definition.FontFamily ?? defaultRunProperties.Typeface.FontFamily,
+                        span.Definition.FontStyle ?? defaultRunProperties.Typeface.Style,
+                        span.Definition.FontWeight ?? defaultRunProperties.Typeface.Weight,
+                        this.fontStretch
+                    );
+                    runProperties = new GenericTextRunProperties(
+                        typeface,
+                        double.IsNaN(span.Definition.FontSize) ? defaultRunProperties.FontRenderingEmSize : span.Definition.FontSize,
+                        span.Definition.TextDecorations ?? defaultRunProperties.TextDecorations,
+                        span.Definition.Foreground ?? defaultRunProperties.ForegroundBrush,
+                        span.Definition.Background ?? defaultRunProperties.BackgroundBrush
+                    );
+                    runPropertiesMap[span.Definition] = runProperties;
+                }
+                if (!selectionRunPropertiesMap.TryGetValue(span.Definition, out var selectionRunProperties))
+                {
+                    selectionRunProperties = new GenericTextRunProperties(
+                        runProperties.Typeface,
+                        runProperties.FontRenderingEmSize,
+                        runProperties.TextDecorations,
+                        this.selectionForeground ?? runProperties.ForegroundBrush,
+                        this.selectionBackground ?? runProperties.BackgroundBrush
+                    );
+                    selectionRunPropertiesMap[span.Definition] = selectionRunProperties;
+                }
+                if (textStartIndex < span.Start)
+                    CreateTextPropertiesInSpan(text, textStartIndex, span.Start, ref tokenCount, null, defaultTokenDefinitions, defaultRunProperties, defaultSelectionRunProperties, textProperties);
+                CreateTextPropertiesInSpan(text, span.Start, span.InnerStart, ref tokenCount, null, EmptyTokenDefinitions, runProperties, selectionRunProperties, textProperties);
+                CreateTextPropertiesInSpan(text, span.InnerStart, span.InnerEnd, ref tokenCount, span.Definition, span.Definition.TokenDefinitions, runProperties, selectionRunProperties, textProperties);
+                CreateTextPropertiesInSpan(text, span.InnerEnd, span.End, ref tokenCount, null, EmptyTokenDefinitions, runProperties, selectionRunProperties, textProperties);
+                textStartIndex = span.End;
+                if (maxTokenCount >= 0 && tokenCount >= maxTokenCount)
+                    break;
             }
-            if (!selectionRunPropertiesMap.TryGetValue(span.Definition, out var selectionRunProperties))
-            {
-                selectionRunProperties = new GenericTextRunProperties(
-                    runProperties.Typeface,
-                    runProperties.FontRenderingEmSize,
-                    runProperties.TextDecorations,
-                    this.selectionForeground ?? runProperties.ForegroundBrush,
-                    this.selectionBackground ?? runProperties.BackgroundBrush
-                );
-                selectionRunPropertiesMap[span.Definition] = selectionRunProperties;
-            }
-            if (textStartIndex < span.Start)
-                CreateTextPropertiesInSpan(text, textStartIndex, span.Start, defaultTokenDefinitions, defaultRunProperties, defaultSelectionRunProperties, textProperties);
-            CreateTextPropertiesInSpan(text, span.Start, span.InnerStart, EmptyTokenDefinitions, runProperties, selectionRunProperties, textProperties);
-            CreateTextPropertiesInSpan(text, span.InnerStart, span.InnerEnd, span.Definition.TokenDefinitions, runProperties, selectionRunProperties, textProperties);
-            CreateTextPropertiesInSpan(text, span.InnerEnd, span.End, EmptyTokenDefinitions, runProperties, selectionRunProperties, textProperties);
-            textStartIndex = span.End;
+            if (textStartIndex < text.Length && (maxTokenCount < 0 || tokenCount < maxTokenCount))
+                CreateTextPropertiesInSpan(text, textStartIndex, text.Length, ref tokenCount, null, defaultTokenDefinitions, defaultRunProperties, defaultSelectionRunProperties, textProperties);
         }
-        if (textStartIndex < text.Length)
-            CreateTextPropertiesInSpan(text, textStartIndex, text.Length, defaultTokenDefinitions, defaultRunProperties, defaultSelectionRunProperties, textProperties);
-        
+        finally
+        {
+            runPropertiesMap.Clear();
+            selectionRunPropertiesMap.Clear();
+        }
+
         // insert text style for preedit text
         if (!string.IsNullOrEmpty(preeditText))
         {
@@ -443,21 +469,46 @@ public sealed class SyntaxHighlighter : AvaloniaObject
 
 
     // Create text properties for a span.
-    void CreateTextPropertiesInSpan(string text, int start, int end, IList<SyntaxHighlightingToken> tokenDefinitions, TextRunProperties defaultRunProperties, TextRunProperties defaultSelectionRunProperties, IList<ValueSpan<TextRunProperties>> textProperties)
+    void CreateTextPropertiesInSpan(string text, int start, int end, ref int tokenCount, SyntaxHighlightingSpan? spanDefinition, IList<SyntaxHighlightingToken> tokenDefinitions, TextRunProperties defaultRunProperties, TextRunProperties defaultSelectionRunProperties, IList<ValueSpan<TextRunProperties>> textProperties)
     {
+        // check state
+        var maxTokenCount = this.maxTokenCount;
+        if (maxTokenCount >= 0 && tokenCount >= maxTokenCount)
+            return;
+        
         // setup initial candidate tokens
-        var tokenComparison = new Comparison<Token>((lhs, rhs) =>
+        var tokenComparison = spanDefinition is not null
+            ? this.tokenComparisons.GetValueOrDefault(spanDefinition)
+            : this.defaultTokenComparasion;
+        if (tokenComparison is null)
         {
-            var result = (rhs.Start - lhs.Start);
-            if (result != 0)
-                return result;
-            result = (lhs.End - rhs.End);
-            if (result != 0)
-                return result;
-            result = tokenDefinitions.IndexOf(rhs.Definition) - tokenDefinitions.IndexOf(lhs.Definition);
-            return result != 0 ? result : (rhs.GetHashCode() - lhs.GetHashCode());
-        });
-        var candidateTokens = new SortedObservableList<Token>(tokenComparison);
+            tokenComparison = (lhs, rhs) =>
+            {
+                var result = (rhs.Start - lhs.Start);
+                if (result != 0)
+                    return result;
+                result = (lhs.End - rhs.End);
+                if (result != 0)
+                    return result;
+                result = tokenDefinitions.IndexOf(rhs.Definition) - tokenDefinitions.IndexOf(lhs.Definition);
+                return result != 0 ? result : (rhs.GetHashCode() - lhs.GetHashCode());
+            };
+            if (spanDefinition is not null)
+                this.tokenComparisons[spanDefinition] = tokenComparison;
+            else
+                this.defaultTokenComparasion = tokenComparison;
+        }
+        var candidateTokens = spanDefinition is not null
+            ? this.candidateTokens.GetValueOrDefault(spanDefinition)
+            : this.defaultCandidateTokens;
+        if (candidateTokens is null)
+        {
+            candidateTokens = new(tokenComparison);
+            if (spanDefinition is not null)
+                this.candidateTokens[spanDefinition] = candidateTokens;
+            else
+                this.defaultCandidateTokens = candidateTokens;
+        }
         foreach (var tokenDefinition in tokenDefinitions)
         {
             if (!tokenDefinition.IsValid)
@@ -473,96 +524,107 @@ public sealed class SyntaxHighlighter : AvaloniaObject
 
         // create text runs
         var textStartIndex = start;
-        var runPropertiesMap = new Dictionary<SyntaxHighlightingToken, TextRunProperties>();
-        var selectionRunPropertiesMap = new Dictionary<SyntaxHighlightingToken, TextRunProperties>();
-        while (candidateTokens.IsNotEmpty())
+        var runPropertiesMap = this.runPropertiesMapInSpan;
+        var selectionRunPropertiesMap = this.selectionRunPropertiesMapInSpan;
+        try
         {
-            // get current token
-            var token = candidateTokens[^1];
-            candidateTokens.RemoveAt(candidateTokens.Count - 1);
-
-            // find and combine with next token if possible
-            while (true)
+            while (candidateTokens.IsNotEmpty())
             {
-                var match = token.Definition.Pattern!.Match(text, token.End);
-                if (!match.Success || match.Length <= 0)
-                    break;
-                var endIndex = match.Index + match.Length;
-                if (endIndex > end)
-                    break;
-                var nextToken = new Token(token.Definition, match.Index, match.Index + match.Length);
-                if (match.Index == token.End && match.Length > 0) // combine into single token
-                {
-                    var nextTokenIndex = candidateTokens.BinarySearch(nextToken, tokenComparison);
-                    if (nextTokenIndex == ~candidateTokens.Count)
-                    {
-                        token = new(token.Definition, token.Start, nextToken.End);
-                        continue;
-                    }
-                }
-                candidateTokens.Add(nextToken);
-                break;
-            }
+                // get current token
+                var token = candidateTokens[^1];
+                candidateTokens.RemoveAt(candidateTokens.Count - 1);
 
-            // remove tokens which overlaps with current token
-            for (var i = candidateTokens.Count - 1; i >= 0; --i)
-            {
-                // check overlapping
-                var removingToken = candidateTokens[i];
-                if (removingToken.Start >= token.End)
-                    continue;
-                candidateTokens.RemoveAt(i);
-
-                // find next token
-                var match = removingToken.Definition.Pattern!.Match(text, token.End);
-                if (match.Success && match.Length > 0)
+                // find and combine with next token if possible
+                while (true)
                 {
+                    var match = token.Definition.Pattern!.Match(text, token.End);
+                    if (!match.Success || match.Length <= 0)
+                        break;
                     var endIndex = match.Index + match.Length;
-                    if (endIndex <= end)
+                    if (endIndex > end)
+                        break;
+                    var nextToken = new Token(token.Definition, match.Index, match.Index + match.Length);
+                    if (match.Index == token.End && match.Length > 0) // combine into single token
                     {
-                        var j = candidateTokens.Add(new(removingToken.Definition, match.Index, endIndex));
-                        if (j < i)
-                            ++i;
+                        var nextTokenIndex = candidateTokens.BinarySearch(nextToken, tokenComparison);
+                        if (nextTokenIndex == ~candidateTokens.Count)
+                        {
+                            token = new(token.Definition, token.Start, nextToken.End);
+                            continue;
+                        }
+                    }
+                    candidateTokens.Add(nextToken);
+                    break;
+                }
+
+                // remove tokens which overlaps with current token
+                for (var i = candidateTokens.Count - 1; i >= 0; --i)
+                {
+                    // check overlapping
+                    var removingToken = candidateTokens[i];
+                    if (removingToken.Start >= token.End)
+                        continue;
+                    candidateTokens.RemoveAt(i);
+
+                    // find next token
+                    var match = removingToken.Definition.Pattern!.Match(text, token.End);
+                    if (match.Success && match.Length > 0)
+                    {
+                        var endIndex = match.Index + match.Length;
+                        if (endIndex <= end)
+                        {
+                            var j = candidateTokens.Add(new(removingToken.Definition, match.Index, endIndex));
+                            if (j < i)
+                                ++i;
+                        }
                     }
                 }
-            }
 
-            // create text style
-            if (!runPropertiesMap.TryGetValue(token.Definition, out var runProperties))
-            {
-                var typeface = new Typeface(
-                    token.Definition.FontFamily ?? defaultRunProperties.Typeface.FontFamily, 
-                    token.Definition.FontStyle ?? defaultRunProperties.Typeface.Style,
-                    token.Definition.FontWeight ?? defaultRunProperties.Typeface.Weight, 
-                    this.fontStretch
-                );
-                runProperties = new GenericTextRunProperties(
-                    typeface,
-                    double.IsNaN(token.Definition.FontSize) ? defaultRunProperties.FontRenderingEmSize : token.Definition.FontSize,
-                    token.Definition.TextDecorations ?? defaultRunProperties.TextDecorations,
-                    token.Definition.Foreground ?? defaultRunProperties.ForegroundBrush,
-                    token.Definition.Background ?? defaultRunProperties.BackgroundBrush
-                );
-                runPropertiesMap[token.Definition] = runProperties;
+                // create text style
+                if (!runPropertiesMap.TryGetValue(token.Definition, out var runProperties))
+                {
+                    var typeface = new Typeface(
+                        token.Definition.FontFamily ?? defaultRunProperties.Typeface.FontFamily,
+                        token.Definition.FontStyle ?? defaultRunProperties.Typeface.Style,
+                        token.Definition.FontWeight ?? defaultRunProperties.Typeface.Weight,
+                        this.fontStretch
+                    );
+                    runProperties = new GenericTextRunProperties(
+                        typeface,
+                        double.IsNaN(token.Definition.FontSize) ? defaultRunProperties.FontRenderingEmSize : token.Definition.FontSize,
+                        token.Definition.TextDecorations ?? defaultRunProperties.TextDecorations,
+                        token.Definition.Foreground ?? defaultRunProperties.ForegroundBrush,
+                        token.Definition.Background ?? defaultRunProperties.BackgroundBrush
+                    );
+                    runPropertiesMap[token.Definition] = runProperties;
+                }
+                if (!selectionRunPropertiesMap.TryGetValue(token.Definition, out var selectionRunProperties))
+                {
+                    selectionRunProperties = new GenericTextRunProperties(
+                        runProperties.Typeface,
+                        runProperties.FontRenderingEmSize,
+                        runProperties.TextDecorations,
+                        this.selectionForeground ?? defaultRunProperties.ForegroundBrush,
+                        this.selectionBackground ?? defaultRunProperties.BackgroundBrush
+                    );
+                    selectionRunPropertiesMap[token.Definition] = selectionRunProperties;
+                }
+                if (textStartIndex < token.Start)
+                    CreateTextProperties(textStartIndex, token.Start, defaultRunProperties, defaultSelectionRunProperties, textProperties);
+                CreateTextProperties(token.Start, token.End, runProperties, selectionRunProperties, textProperties);
+                ++tokenCount;
+                textStartIndex = token.End;
+                if (maxTokenCount >= 0 && tokenCount >= maxTokenCount)
+                    break;
             }
-            if (!selectionRunPropertiesMap.TryGetValue(token.Definition, out var selectionRunProperties))
-            {
-                selectionRunProperties = new GenericTextRunProperties(
-                    runProperties.Typeface,
-                    runProperties.FontRenderingEmSize,
-                    runProperties.TextDecorations,
-                    this.selectionForeground ?? defaultRunProperties.ForegroundBrush,
-                    this.selectionBackground ?? defaultRunProperties.BackgroundBrush
-                );
-                selectionRunPropertiesMap[token.Definition] = selectionRunProperties;
-            }
-            if (textStartIndex < token.Start)
-                CreateTextProperties(textStartIndex, token.Start, defaultRunProperties, defaultSelectionRunProperties, textProperties);
-            CreateTextProperties(token.Start, token.End, runProperties, selectionRunProperties, textProperties);
-            textStartIndex = token.End;
+            if (textStartIndex < end && (maxTokenCount < 0 || tokenCount < maxTokenCount))
+                CreateTextProperties(textStartIndex, end, defaultRunProperties, defaultSelectionRunProperties, textProperties);
         }
-        if (textStartIndex < end)
-            CreateTextProperties(textStartIndex, end, defaultRunProperties, defaultSelectionRunProperties, textProperties);
+        finally
+        {
+            runPropertiesMap.Clear();
+            selectionRunPropertiesMap.Clear();
+        }
     }
 
 
@@ -645,6 +707,11 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             if (value != null)
                 value.Changed += this.OnDefinitionSetChanged;
             this.SetAndRaise(DefinitionSetProperty, ref this.definitionSet, value);
+            this.candidateSpans = null;
+            this.candidateTokens.Clear();
+            this.defaultCandidateTokens = null;
+            this.defaultTokenComparasion = null;
+            this.tokenComparisons.Clear();
             this.InvalidateTextLayout();
         }
     }
@@ -1110,6 +1177,23 @@ public sealed class SyntaxHighlighter : AvaloniaObject
 
 
     /// <summary>
+    /// Get or set maximum number of token should be highlighted. Negative value if there is no limitation.
+    /// </summary>
+    public int MaxTokenCount
+    {
+        get => this.maxTokenCount;
+        set
+        {
+            this.VerifyAccess();
+            if (this.maxTokenCount == value)
+                return;
+            this.SetAndRaise(MaxTokenCountProperty, ref this.maxTokenCount, value);
+            this.InvalidateTextLayout();
+        }
+    }
+
+
+    /// <summary>
     /// Get or set maximum width of text layout.
     /// </summary>
     public double MaxWidth
@@ -1139,9 +1223,16 @@ public sealed class SyntaxHighlighter : AvaloniaObject
 
 
     // Called when definition set changed.
-    void OnDefinitionSetChanged(object? sender, EventArgs e) =>
+    void OnDefinitionSetChanged(object? sender, EventArgs e)
+    {
+        this.candidateSpans = null;
+        this.candidateTokens.Clear();
+        this.defaultCandidateTokens = null;
+        this.defaultTokenComparasion = null;
+        this.tokenComparisons.Clear();
         this.InvalidateTextProperties();
-    
+    }
+
 
     /// <summary>
     /// Get or set preedit text.

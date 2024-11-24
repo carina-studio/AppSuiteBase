@@ -15,10 +15,15 @@ public class SyntaxHighlightingTextBox : TextBox
     /// Property of <see cref="DefinitionSet"/>.
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlightingTextBox, SyntaxHighlightingDefinitionSet?> DefinitionSetProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingTextBox, SyntaxHighlightingDefinitionSet?>(nameof(DefinitionSet), t => t.definitionSet, (t, ds) => t.DefinitionSet = ds);
+    /// <summary>
+    /// Property of <see cref="MaxTokenCount"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlightingTextBox, int> MaxTokenCountProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingTextBox, int>(nameof(MaxTokenCount), t => t.maxTokenCount, (t, count) => t.MaxTokenCount = count);
 
 
     // Fields.
     SyntaxHighlightingDefinitionSet? definitionSet;
+    int maxTokenCount = -1;
     Presenters.SyntaxHighlightingTextPresenter? textPresenter;
 
 
@@ -52,8 +57,26 @@ public class SyntaxHighlightingTextBox : TextBox
             if (this.definitionSet == value)
                 return;
             this.SetAndRaise(DefinitionSetProperty, ref this.definitionSet, value);
-            if (this.textPresenter != null)
+            if (this.textPresenter is not null)
                 this.textPresenter.DefinitionSet = this.definitionSet;
+        }
+    }
+    
+    
+    /// <summary>
+    /// Get or set maximum number of token should be highlighted. Negative value if there is no limitation.
+    /// </summary>
+    public int MaxTokenCount
+    {
+        get => this.maxTokenCount;
+        set
+        {
+            this.VerifyAccess();
+            if (this.maxTokenCount == value)
+                return;
+            this.SetAndRaise(MaxTokenCountProperty, ref this.maxTokenCount, value);
+            if (this.textPresenter is not null)
+                this.textPresenter.MaxTokenCount = this.maxTokenCount;
         }
     }
 
@@ -63,8 +86,11 @@ public class SyntaxHighlightingTextBox : TextBox
     {
         base.OnApplyTemplate(e);
         this.textPresenter = e.NameScope.Find<Presenters.SyntaxHighlightingTextPresenter>("PART_TextPresenter");
-        if (this.textPresenter != null)
+        if (this.textPresenter is not null)
+        {
             this.textPresenter.DefinitionSet = this.definitionSet;
+            this.textPresenter.MaxTokenCount = this.maxTokenCount;
+        }
     }
     
     
