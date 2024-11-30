@@ -90,7 +90,8 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock
             return base.CreateTextLayout(text);
         var syntaxHighlighter = this.syntaxHighlighter;
         var definitionSet = syntaxHighlighter.DefinitionSet;
-        if (definitionSet == null || !definitionSet.HasValidDefinitions)
+        base.CreateTextLayout(text);
+        if (definitionSet is null || !definitionSet.HasValidDefinitions)
             return base.CreateTextLayout(text);
         this.isCreatingTextLayout = true;
         try
@@ -147,8 +148,8 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock
             var scale = LayoutHelper.GetLayoutScale(this);
             var padding = LayoutHelper.RoundLayoutThickness(this.Padding, scale, scale);
             var availableTextBounds = availableSize.Deflate(padding);
-            this.syntaxHighlighter.MaxWidth = availableTextBounds.Width;
-            this.syntaxHighlighter.MaxHeight = availableTextBounds.Height;
+            this.syntaxHighlighter.MaxWidth = double.IsFinite(availableTextBounds.Width) ? availableTextBounds.Width : 0;
+            this.syntaxHighlighter.MaxHeight = double.IsFinite(availableTextBounds.Height) ? availableTextBounds.Height : 0;
             return base.MeasureOverride(availableSize);
         }
         finally
@@ -177,7 +178,7 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock
         if (property == InlinesProperty)
         {
             var inlines = change.NewValue as InlineCollection;
-            if (this.attachedInlines != null)
+            if (this.attachedInlines is not null)
                 this.attachedInlines.CollectionChanged -= this.OnInlinesChanged;
             this.attachedInlines = inlines;
             if (inlines is not null)

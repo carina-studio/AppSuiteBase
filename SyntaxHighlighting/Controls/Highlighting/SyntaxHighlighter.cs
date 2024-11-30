@@ -117,11 +117,11 @@ public sealed class SyntaxHighlighter : AvaloniaObject
 
 
     // Span.
-    record Span(SyntaxHighlightingSpan Definition, int Start, int End, int InnerStart, int InnerEnd);
+    record struct Span(SyntaxHighlightingSpan Definition, int Start, int End, int InnerStart, int InnerEnd);
 
 
     // Token.
-    record Token(SyntaxHighlightingToken Definition, int Start, int End);
+    record struct Token(SyntaxHighlightingToken Definition, int Start, int End);
 
 
     // Static fields.
@@ -134,7 +134,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     SortedObservableList<Span>? candidateSpans;
     readonly Dictionary<SyntaxHighlightingSpan, SortedObservableList<Token>> candidateTokens = new();
     SortedObservableList<Token>? defaultCandidateTokens;
-    Comparison<Token>? defaultTokenComparasion;
+    Comparison<Token>? defaultTokenComparison;
     SyntaxHighlightingDefinitionSet? definitionSet;
     FlowDirection flowDirection = FlowDirection.LeftToRight;
     FontFamily fontFamily = FontManager.Current.DefaultFontFamily;
@@ -368,6 +368,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         }
         finally
         {
+            candidateSpans.Clear();
             runPropertiesMap.Clear();
             selectionRunPropertiesMap.Clear();
         }
@@ -479,7 +480,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         // setup initial candidate tokens
         var tokenComparison = spanDefinition is not null
             ? this.tokenComparisons.GetValueOrDefault(spanDefinition)
-            : this.defaultTokenComparasion;
+            : this.defaultTokenComparison;
         if (tokenComparison is null)
         {
             tokenComparison = (lhs, rhs) =>
@@ -496,7 +497,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             if (spanDefinition is not null)
                 this.tokenComparisons[spanDefinition] = tokenComparison;
             else
-                this.defaultTokenComparasion = tokenComparison;
+                this.defaultTokenComparison = tokenComparison;
         }
         var candidateTokens = spanDefinition is not null
             ? this.candidateTokens.GetValueOrDefault(spanDefinition)
@@ -543,8 +544,8 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                     var endIndex = match.Index + match.Length;
                     if (endIndex > end)
                         break;
-                    var nextToken = new Token(token.Definition, match.Index, match.Index + match.Length);
-                    if (match.Index == token.End && match.Length > 0) // combine into single token
+                    var nextToken = new Token(token.Definition, match.Index, endIndex);
+                    if (match.Index == token.End) // combine into single token
                     {
                         var nextTokenIndex = candidateTokens.BinarySearch(nextToken, tokenComparison);
                         if (nextTokenIndex == ~candidateTokens.Count)
@@ -622,6 +623,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         }
         finally
         {
+            candidateTokens.Clear();
             runPropertiesMap.Clear();
             selectionRunPropertiesMap.Clear();
         }
@@ -710,7 +712,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             this.candidateSpans = null;
             this.candidateTokens.Clear();
             this.defaultCandidateTokens = null;
-            this.defaultTokenComparasion = null;
+            this.defaultTokenComparison = null;
             this.tokenComparisons.Clear();
             this.InvalidateTextLayout();
         }
@@ -1077,7 +1079,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     // Invalidate text layout.
     void InvalidateTextLayout()
     {
-        this.textLayout = null;
+        this.textLayout = this.textLayout.DisposeAndReturnNull();
         this.TextLayoutInvalidated?.Invoke(this, EventArgs.Empty);
     }
     
@@ -1228,7 +1230,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         this.candidateSpans = null;
         this.candidateTokens.Clear();
         this.defaultCandidateTokens = null;
-        this.defaultTokenComparasion = null;
+        this.defaultTokenComparison = null;
         this.tokenComparisons.Clear();
         this.InvalidateTextProperties();
     }

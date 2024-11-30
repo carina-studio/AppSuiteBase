@@ -87,7 +87,7 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
     {
         var syntaxHighlighter = this.syntaxHighlighter;
         var definitionSet = this.syntaxHighlighter.DefinitionSet;
-        if (definitionSet == null || !definitionSet.HasValidDefinitions)
+        if (definitionSet is null || !definitionSet.HasValidDefinitions)
             return base.CreateTextLayout();
         this.isCreatingTextLayout = true;
         try
@@ -148,8 +148,8 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         this.isMeasuring = true;
         try
         {
-            this.syntaxHighlighter.MaxWidth = availableSize.Width;
-            this.syntaxHighlighter.MaxHeight = availableSize.Height;
+            this.syntaxHighlighter.MaxWidth = double.IsFinite(availableSize.Width) ? availableSize.Width : 0;
+            this.syntaxHighlighter.MaxHeight = double.IsFinite(availableSize.Height) ? availableSize.Height : 0;
             return base.MeasureOverride(availableSize);
         }
         finally

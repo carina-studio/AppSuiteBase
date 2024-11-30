@@ -91,7 +91,7 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
         var definitionSet = syntaxHighlighter.DefinitionSet;
         if (this.SelectionStart == this.SelectionEnd)
         {
-            if (definitionSet == null || !definitionSet.HasValidDefinitions)
+            if (definitionSet is null || !definitionSet.HasValidDefinitions)
                 return base.CreateTextLayout(text);
         }
         this.isCreatingTextLayout = true;
@@ -139,8 +139,8 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
             var scale = LayoutHelper.GetLayoutScale(this);
             var padding = LayoutHelper.RoundLayoutThickness(this.Padding, scale, scale);
             var availableTextBounds = availableSize.Deflate(padding);
-            this.syntaxHighlighter.MaxWidth = availableTextBounds.Width;
-            this.syntaxHighlighter.MaxHeight = availableTextBounds.Height;
+            this.syntaxHighlighter.MaxWidth = double.IsFinite(availableTextBounds.Width) ? availableTextBounds.Width : 0;
+            this.syntaxHighlighter.MaxHeight = double.IsFinite(availableTextBounds.Height) ? availableTextBounds.Height : 0;
             return base.MeasureOverride(availableSize);
         }
         finally
