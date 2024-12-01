@@ -16,6 +16,10 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlightingTextPresenter, SyntaxHighlightingDefinitionSet?> DefinitionSetProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingTextPresenter, SyntaxHighlightingDefinitionSet?>(nameof(DefinitionSet), t => t.syntaxHighlighter.DefinitionSet, (t, ds) => t.syntaxHighlighter.DefinitionSet = ds);
     /// <summary>
+    /// Property of <see cref="IsMaxTokenCountReached"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlightingTextPresenter, bool> IsMaxTokenCountReachedProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingTextPresenter, bool>(nameof(IsMaxTokenCountReached), t => t.syntaxHighlighter.IsMaxTokenCountReached);
+    /// <summary>
     /// Property of <see cref="MaxTokenCount"/>.
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlightingTextPresenter, int> MaxTokenCountProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingTextPresenter, int>(nameof(MaxTokenCount), t => t.syntaxHighlighter.MaxTokenCount, (t, count) => t.syntaxHighlighter.MaxTokenCount = count);
@@ -53,6 +57,8 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
             var property = e.Property;
             if (property == SyntaxHighlighter.DefinitionSetProperty)
                 this.RaisePropertyChanged(DefinitionSetProperty, (SyntaxHighlightingDefinitionSet?)e.OldValue, (SyntaxHighlightingDefinitionSet?)e.NewValue);
+            else if (property == SyntaxHighlighter.IsMaxTokenCountReachedProperty)
+                this.RaisePropertyChanged(IsMaxTokenCountReachedProperty, (bool)e.OldValue!, (bool)e.NewValue!);
             else if (property == SyntaxHighlighter.MaxTokenCountProperty)
                 this.RaisePropertyChanged(MaxTokenCountProperty, (int)e.OldValue!, (int)e.NewValue!);
         };
@@ -132,6 +138,12 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         this.syntaxHighlighter.FindSpanAndToken(characterIndex, out span, out token);
 
 
+    /**
+     * Check whether maximum number of token to be highlighted reached or not.
+     */
+    public bool IsMaxTokenCountReached => this.syntaxHighlighter.IsMaxTokenCountReached;
+
+
     /// <summary>
     /// Get or set maximum number of token should be highlighted. Negative value if there is no limitation.
     /// </summary>
@@ -148,8 +160,8 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         this.isMeasuring = true;
         try
         {
-            this.syntaxHighlighter.MaxWidth = double.IsFinite(availableSize.Width) ? availableSize.Width : 0;
-            this.syntaxHighlighter.MaxHeight = double.IsFinite(availableSize.Height) ? availableSize.Height : 0;
+            this.syntaxHighlighter.MaxWidth = availableSize.Width;
+            this.syntaxHighlighter.MaxHeight = availableSize.Height;
             return base.MeasureOverride(availableSize);
         }
         finally

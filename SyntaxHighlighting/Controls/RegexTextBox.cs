@@ -32,7 +32,7 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// <see cref="TextBox"/> which accept regular expression.
 /// </summary>
-public class RegexTextBox : ObjectTextBox<Regex>
+public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 {
 	/// <summary>
 	/// Property of <see cref="HasOpenedAssistanceMenus"/>.
@@ -46,10 +46,6 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	/// Property of <see cref="IsInputAssistanceEnabled"/>.
 	/// </summary>
 	public static readonly StyledProperty<bool> IsInputAssistanceEnabledProperty = AvaloniaProperty.Register<RegexTextBox, bool>(nameof(IsInputAssistanceEnabled), true);
-	/// <summary>
-	/// Property of <see cref="IsSyntaxHighlightingEnabled"/>.
-	/// </summary>
-	public static readonly DirectProperty<RegexTextBox, bool> IsSyntaxHighlightingEnabledProperty = AvaloniaProperty.RegisterDirect<RegexTextBox, bool>(nameof(IsSyntaxHighlightingEnabled), tb => tb.isSyntaxHighlightingEnabled, (tb, e) => tb.IsSyntaxHighlightingEnabled = e);
 	/// <summary>
 	/// Property of <see cref="Object"/>.
 	/// </summary>
@@ -88,7 +84,6 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	bool hasOpenedAssistanceMenus;
 	bool isBackSlashPressed;
 	bool isEscapeKeyHandled;
-	bool isSyntaxHighlightingEnabled = true;
 	bool isTextInputtedBeforeOpeningAssistanceMenu;
 	IPhraseInputAssistanceProvider? phraseInputAssistanceProvider;
 	readonly ObservableList<RegexGroup> predefinedGroups = new();
@@ -109,7 +104,6 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	{
 		SyntaxHighlighting.VerifyInitialization();
 		this.AcceptsWhiteSpaces = true;
-		this.PseudoClasses.Add(":syntaxHighlighted");
 		this.PseudoClasses.Add(":regexTextBox");
 		this.filteredPredefinedGroups.CollectionChanged += this.OnFilteredPredefinedGroupChanged;
 		this.predefinedGroups.CollectionChanged += this.OnPredefinedGroupChanged;
@@ -449,33 +443,7 @@ public class RegexTextBox : ObjectTextBox<Regex>
 		get => this.GetValue(IsInputAssistanceEnabledProperty);
 		set => this.SetValue(IsInputAssistanceEnabledProperty, value);
 	}
-
-
-	/// <summary>
-	/// Get or set whether syntax highlighting is enabled or not.
-	/// </summary>
-	public bool IsSyntaxHighlightingEnabled
-	{
-		get => this.isSyntaxHighlightingEnabled;
-		set 
-		{
-			this.VerifyAccess();
-			if (this.isSyntaxHighlightingEnabled == value)
-				return;
-			this.SetAndRaise(IsSyntaxHighlightingEnabledProperty, ref this.isSyntaxHighlightingEnabled, value);
-			if (textPresenter is SyntaxHighlightingTextPresenter shTextPresenter)
-			{
-				if (this.isSyntaxHighlightingEnabled)
-				{
-					IAppSuiteApplication.CurrentOrNull?.Let(app =>
-						shTextPresenter.DefinitionSet = RegexSyntaxHighlighting.CreateDefinitionSet(app));
-				}
-				else
-					shTextPresenter.DefinitionSet = null;
-			}
-		}
-	}
-
+	
 
 	/// <inheritdoc/>
 	public override Regex? Object
@@ -490,11 +458,6 @@ public class RegexTextBox : ObjectTextBox<Regex>
 	{
 		base.OnApplyTemplate(e);
 		this.textPresenter = e.NameScope.Find<TextPresenter>("PART_TextPresenter");
-		if (this.isSyntaxHighlightingEnabled && textPresenter is SyntaxHighlightingTextPresenter shTextPresenter)
-		{
-			IAppSuiteApplication.CurrentOrNull?.Let(app =>
-				shTextPresenter.DefinitionSet = RegexSyntaxHighlighting.CreateDefinitionSet(app));
-		}
 	}
 
 
@@ -1280,6 +1243,10 @@ public class RegexTextBox : ObjectTextBox<Regex>
 			}
 		}
 	}
+
+
+	/// <inheritdoc/>
+	protected override SyntaxHighlightingDefinitionSet SyntaxHighlightingDefinitionSet => RegexSyntaxHighlighting.CreateDefinitionSet(IAppSuiteApplication.Current);
 
 
 	// Check whether at least one assistance has been opened or not.

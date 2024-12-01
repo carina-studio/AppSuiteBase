@@ -29,16 +29,16 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// <see cref="TextBox"/> which helps user to input format of string interpolation.
 /// </summary>
-public class StringInterpolationFormatTextBox : TextBox
+public class StringInterpolationFormatTextBox : SyntaxHighlightingObjectTextBox<string>
 {
 	/// <summary>
 	/// Property of <see cref="HasOpenedAssistanceMenus"/>.
 	/// </summary>
 	public static readonly DirectProperty<StringInterpolationFormatTextBox, bool> HasOpenedAssistanceMenusProperty = AvaloniaProperty.RegisterDirect<StringInterpolationFormatTextBox, bool>(nameof(HasOpenedAssistanceMenus), tb => tb.hasOpenedAssistanceMenus);
 	/// <summary>
-	/// Property of <see cref="IsSyntaxHighlightingEnabled"/>.
+	/// Property of <see cref="Object"/>.
 	/// </summary>
-	public static readonly DirectProperty<StringInterpolationFormatTextBox, bool> IsSyntaxHighlightingEnabledProperty = AvaloniaProperty.RegisterDirect<StringInterpolationFormatTextBox, bool>(nameof(IsSyntaxHighlightingEnabled), tb => tb.isSyntaxHighlightingEnabled, (tb, e) => tb.IsSyntaxHighlightingEnabled = e);
+	public static new readonly DirectProperty<StringInterpolationFormatTextBox, string?> ObjectProperty = AvaloniaProperty.RegisterDirect<StringInterpolationFormatTextBox, string?>(nameof(Object), t => t.Object, (t, o) => t.Object = o);
 	
 	
 	// Static fields.
@@ -50,7 +50,6 @@ public class StringInterpolationFormatTextBox : TextBox
     readonly SortedObservableList<StringInterpolationVariable> filteredPredefinedVars = new((x, y) => string.Compare(x.Name, y.Name, true, CultureInfo.InvariantCulture));
     bool hasOpenedAssistanceMenus;
 	bool isEscapeKeyHandled;
-	bool isSyntaxHighlightingEnabled = true;
     readonly ObservableList<StringInterpolationVariable> predefinedVars = new();
     InputAssistancePopup? predefinedVarsPopup;
     readonly Queue<ListBoxItem> recycledListBoxItems = new();
@@ -64,7 +63,6 @@ public class StringInterpolationFormatTextBox : TextBox
     public StringInterpolationFormatTextBox()
     {
 		SyntaxHighlighting.VerifyInitialization();
-		this.PseudoClasses.Add(":syntaxHighlighted");
 		this.PseudoClasses.Add(":stringInterpolationFormatTextBox");
         this.filteredPredefinedVars.CollectionChanged += this.OnFilteredPredefinedVarsChanged;
         this.InputVariableNameCommand = new Command<string>(this.InputVariableName);
@@ -200,29 +198,11 @@ public class StringInterpolationFormatTextBox : TextBox
 	public ICommand InputVariableNameCommand { get; }
 
 
-	/// <summary>
-	/// Get or set whether syntax highlighting is enabled or not.
-	/// </summary>
-	public bool IsSyntaxHighlightingEnabled
+	/// <inheritdox/>
+	public override string? Object
 	{
-		get => this.isSyntaxHighlightingEnabled;
-		set 
-		{
-			this.VerifyAccess();
-			if (this.isSyntaxHighlightingEnabled == value)
-				return;
-			this.SetAndRaise(IsSyntaxHighlightingEnabledProperty, ref this.isSyntaxHighlightingEnabled, value);
-			if (textPresenter is Presenters.SyntaxHighlightingTextPresenter shTextPresenter)
-			{
-				if (this.isSyntaxHighlightingEnabled)
-				{
-					IAppSuiteApplication.CurrentOrNull?.Let(app =>
-						shTextPresenter.DefinitionSet = StringInterpolationFormatSyntaxHighlighting.CreateDefinitionSet(app));
-				}
-				else
-					shTextPresenter.DefinitionSet = null;
-			}
-		}
+		get => this.Text;
+		set => this.Text = value;
 	}
 
 
@@ -231,11 +211,6 @@ public class StringInterpolationFormatTextBox : TextBox
 	{
 		base.OnApplyTemplate(e);
 		this.textPresenter = e.NameScope.Find<TextPresenter>("PART_TextPresenter");
-		if (this.isSyntaxHighlightingEnabled && textPresenter is Presenters.SyntaxHighlightingTextPresenter shTextPresenter)
-		{
-			IAppSuiteApplication.CurrentOrNull?.Let(app =>
-				shTextPresenter.DefinitionSet = StringInterpolationFormatSyntaxHighlighting.CreateDefinitionSet(app));
-		}
 	}
 
 
@@ -504,7 +479,12 @@ public class StringInterpolationFormatTextBox : TextBox
 	public IList<StringInterpolationVariable> PredefinedVariables => this.predefinedVars;
 
 
-    // Setup popup of predefined variables.
+	/// <inheritdoc/>
+	protected override void RaiseObjectChanged(string? oldValue, string? newValue) =>
+		this.RaisePropertyChanged(ObjectProperty, oldValue, newValue);
+
+
+	// Setup popup of predefined variables.
 	InputAssistancePopup SetupPredefinedVarsPopup()
 	{
 		if (this.predefinedVarsPopup != null)
@@ -589,9 +569,21 @@ public class StringInterpolationFormatTextBox : TextBox
 
 	/// <inheritdox/>
     protected override Type StyleKeyOverride => typeof(TextBox);
-    
-    
-    // Check whether at least one assistance has been opened or not.
+
+
+	/// <inheritdox/>
+	protected override SyntaxHighlightingDefinitionSet SyntaxHighlightingDefinitionSet => StringInterpolationFormatSyntaxHighlighting.CreateDefinitionSet(IAppSuiteApplication.Current);
+
+
+	/// <inheritdox/>
+	protected override bool TryConvertToObject(string text, out string? obj)
+	{
+		obj = text;
+		return true;
+	}
+
+
+	// Check whether at least one assistance has been opened or not.
     bool UpdateHasOpenedAssistanceMenus()
     {
 	    if (this.predefinedVarsPopup?.IsOpen == true)

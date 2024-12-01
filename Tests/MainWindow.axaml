@@ -541,7 +541,8 @@
 							<TextBlock Text="{Binding #integerTextBox.Value, StringFormat={}Value: {0}}" HorizontalAlignment="Left" Margin="5,0,0,5"/>
 
 							<abControls:FormattedTextBlock Arg1="{Binding #regexTextBox.HasOpenedAssistanceMenus}" Format="{}HasOpenedAssistanceMenus: {0}" Margin="5,5,5,2"/>
-							<appControls:RegexTextBox Name="regexTextBox" Height="300" HorizontalAlignment="Left" Margin="5" TextWrapping="Wrap" Width="300">
+							<abControls:FormattedTextBlock Arg1="{Binding #regexTextBox.IsMaxTokenCountReached}" Format="{}IsMaxTokenCountReached: {0}" Margin="5,0,0,2"/>
+							<appControls:RegexTextBox Name="regexTextBox" Height="300" HorizontalAlignment="Left" Margin="5" MaxTokenCount="5" TextWrapping="Wrap" Width="300">
 								<appControls:RegexTextBox.PredefinedGroups>
 									<appControls:RegexGroup Name="Group1"/>
 									<appControls:RegexGroup Name="Group2"/>
@@ -581,7 +582,8 @@
 							<appControls:RegexTextBox HorizontalAlignment="Left" IsReadOnly="True" Margin="5" Text="Read-Only RegexTextBox" Width="400"/>
 
 							<abControls:FormattedTextBlock Arg1="{Binding #stringInterpolationFormatTextBox.HasOpenedAssistanceMenus}" Format="{}HasOpenedAssistanceMenus: {0}" Margin="5,5,5,2"/>
-							<appControls:StringInterpolationFormatTextBox Name="stringInterpolationFormatTextBox" Height="60" HorizontalAlignment="Left" Margin="5" TextWrapping="Wrap" Watermark="String interpolation" Width="200">
+							<abControls:FormattedTextBlock Arg1="{Binding #stringInterpolationFormatTextBox.IsMaxTokenCountReached}" Format="{}IsMaxTokenCountReached: {0}" Margin="5,0,0,2"/>
+							<appControls:StringInterpolationFormatTextBox Name="stringInterpolationFormatTextBox" Height="60" HorizontalAlignment="Left" Margin="5" MaxTokenCount="5" TextWrapping="Wrap" Watermark="String interpolation" Width="200">
 								<appControls:StringInterpolationFormatTextBox.PredefinedVariables>
 									<appControls:StringInterpolationVariable Name="Var1"/>
 									<appControls:StringInterpolationVariable Name="Var2"/>

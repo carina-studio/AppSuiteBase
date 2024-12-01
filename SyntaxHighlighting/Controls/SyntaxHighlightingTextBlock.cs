@@ -20,6 +20,10 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlightingTextBlock, SyntaxHighlightingDefinitionSet?> DefinitionSetProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingTextBlock, SyntaxHighlightingDefinitionSet?>(nameof(DefinitionSet), t => t.syntaxHighlighter.DefinitionSet, (t, ds) => t.syntaxHighlighter.DefinitionSet = ds);
     /// <summary>
+    /// Property of <see cref="IsMaxTokenCountReached"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlightingTextBlock, bool> IsMaxTokenCountReachedProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingTextBlock, bool>(nameof(IsMaxTokenCountReached), t => t.syntaxHighlighter.IsMaxTokenCountReached);
+    /// <summary>
     /// Property of <see cref="MaxTokenCount"/>.
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlightingTextBlock, int> MaxTokenCountProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingTextBlock, int>(nameof(MaxTokenCount), t => t.syntaxHighlighter.MaxTokenCount, (t, count) => t.syntaxHighlighter.MaxTokenCount = count);
@@ -49,6 +53,8 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock
             var property = e.Property;
             if (property == SyntaxHighlighter.DefinitionSetProperty)
                 this.RaisePropertyChanged(DefinitionSetProperty, (SyntaxHighlightingDefinitionSet?)e.OldValue,  (SyntaxHighlightingDefinitionSet?)e.NewValue);
+            else if (property == SyntaxHighlighter.IsMaxTokenCountReachedProperty)
+                this.RaisePropertyChanged(IsMaxTokenCountReachedProperty, (bool)e.OldValue!, (bool)e.NewValue!);
             else if (property == SyntaxHighlighter.MaxTokenCountProperty)
                 this.RaisePropertyChanged(MaxTokenCountProperty, (int)e.OldValue!, (int)e.NewValue!);
         };
@@ -127,6 +133,12 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock
         get => this.syntaxHighlighter.DefinitionSet;
         set => this.syntaxHighlighter.DefinitionSet = value;
     }
+
+
+    /**
+     * Check whether maximum number of token to be highlighted reached or not.
+     */
+    public bool IsMaxTokenCountReached => this.syntaxHighlighter.IsMaxTokenCountReached;
     
     
     /// <summary>

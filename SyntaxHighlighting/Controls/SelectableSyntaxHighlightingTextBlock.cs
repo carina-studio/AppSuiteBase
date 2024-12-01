@@ -20,6 +20,14 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
     /// Property of <see cref="DefinitionSet"/>.
     /// </summary>
     public static readonly DirectProperty<SelectableSyntaxHighlightingTextBlock, SyntaxHighlightingDefinitionSet?> DefinitionSetProperty = AvaloniaProperty.RegisterDirect<SelectableSyntaxHighlightingTextBlock, SyntaxHighlightingDefinitionSet?>(nameof(DefinitionSet), t => t.syntaxHighlighter.DefinitionSet, (t, ds) => t.syntaxHighlighter.DefinitionSet = ds);
+    /// <summary>
+    /// Property of <see cref="IsMaxTokenCountReached"/>.
+    /// </summary>
+    public static readonly DirectProperty<SelectableSyntaxHighlightingTextBlock, bool> IsMaxTokenCountReachedProperty = AvaloniaProperty.RegisterDirect<SelectableSyntaxHighlightingTextBlock, bool>(nameof(IsMaxTokenCountReached), t => t.syntaxHighlighter.IsMaxTokenCountReached);
+    /// <summary>
+    /// Property of <see cref="MaxTokenCount"/>.
+    /// </summary>
+    public static readonly DirectProperty<SelectableSyntaxHighlightingTextBlock, int> MaxTokenCountProperty = AvaloniaProperty.RegisterDirect<SelectableSyntaxHighlightingTextBlock, int>(nameof(MaxTokenCount), t => t.syntaxHighlighter.MaxTokenCount, (t, count) => t.syntaxHighlighter.MaxTokenCount = count);
     
 
     // Fields.
@@ -46,6 +54,10 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
             var property = e.Property;
             if (property == SyntaxHighlighter.DefinitionSetProperty)
                 this.RaisePropertyChanged(DefinitionSetProperty, (SyntaxHighlightingDefinitionSet?)e.OldValue, (SyntaxHighlightingDefinitionSet?)e.NewValue);
+            else if (property == SyntaxHighlighter.IsMaxTokenCountReachedProperty)
+                this.RaisePropertyChanged(IsMaxTokenCountReachedProperty, (bool)e.OldValue!, (bool)e.NewValue!);
+            else if (property == SyntaxHighlighter.MaxTokenCountProperty)
+                this.RaisePropertyChanged(MaxTokenCountProperty, (int)e.OldValue!, (int)e.NewValue!);
             else if (property == SyntaxHighlighter.SelectionBackgroundProperty)
                 this.SetValue(SelectionBrushProperty, (IBrush?)e.NewValue);
             else if (property == SyntaxHighlighter.SelectionForegroundProperty)
@@ -127,6 +139,22 @@ public class SelectableSyntaxHighlightingTextBlock : CarinaStudio.Controls.Selec
     {
         get => this.syntaxHighlighter.DefinitionSet;
         set => this.syntaxHighlighter.DefinitionSet = value;
+    }
+    
+    
+    /**
+     * Check whether maximum number of token to be highlighted reached or not.
+     */
+    public bool IsMaxTokenCountReached => this.syntaxHighlighter.IsMaxTokenCountReached;
+    
+    
+    /// <summary>
+    /// Get or set maximum number of token should be highlighted. Negative value if there is no limitation.
+    /// </summary>
+    public int MaxTokenCount
+    {
+        get => this.syntaxHighlighter.MaxTokenCount;
+        set => this.syntaxHighlighter.MaxTokenCount = value;
     }
 
 

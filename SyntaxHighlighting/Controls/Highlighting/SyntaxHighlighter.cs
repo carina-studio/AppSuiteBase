@@ -51,6 +51,10 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlighter, SyntaxHighlightingDefinitionSet?> DefinitionSetProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, SyntaxHighlightingDefinitionSet?>(nameof(DefinitionSet), sh => sh.definitionSet, (sh, ds) => sh.DefinitionSet = ds);
     /// <summary>
+    /// Property of <see cref="IsMaxTokenCountReached"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, bool> IsMaxTokenCountReachedProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, bool>(nameof(IsMaxTokenCountReached), sh => sh.isMaxTokenCountReached);
+    /// <summary>
     /// Property of <see cref="LetterSpacing"/>.
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlighter, double> LetterSpacingProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, double>(nameof(LetterSpacing), sh => sh.letterSpacing, (sh, s) => sh.LetterSpacing = s);
@@ -145,6 +149,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     IBrush? foreground;
     IDisposable foregroundPropertyChangedHandlerToken = EmptyDisposable.Default;
     readonly bool isDebugMode = IAppSuiteApplication.CurrentOrNull?.IsDebugMode == true;
+    bool isMaxTokenCountReached;
     double letterSpacing;
     double lineHeight = double.NaN;
     double maxHeight = double.PositiveInfinity;
@@ -210,7 +215,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
 
 
     // Create text properties.
-    IReadOnlyList<ValueSpan<TextRunProperties>> CreateTextProperties(TextRunProperties defaultRunProperties)
+    IReadOnlyList<ValueSpan<TextRunProperties>> CreateTextProperties(ref int tokenCount, TextRunProperties defaultRunProperties)
     {
         // check text
         var text = this.text;
@@ -266,7 +271,6 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         });
         
         // create text properties for each span
-        var tokenCount = 0;
         var maxTokenCount = this.maxTokenCount;
         var textProperties = new List<ValueSpan<TextRunProperties>>();
         var textStartIndex = 0;
@@ -363,7 +367,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 if (maxTokenCount >= 0 && tokenCount >= maxTokenCount)
                     break;
             }
-            if (textStartIndex < text.Length && (maxTokenCount < 0 || tokenCount < maxTokenCount))
+            if (textStartIndex < text.Length)
                 CreateTextPropertiesInSpan(text, textStartIndex, text.Length, ref tokenCount, null, defaultTokenDefinitions, defaultRunProperties, defaultSelectionRunProperties, textProperties);
         }
         finally
@@ -475,8 +479,11 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         // check state
         var maxTokenCount = this.maxTokenCount;
         if (maxTokenCount >= 0 && tokenCount >= maxTokenCount)
+        {
+            CreateTextProperties(start, end, defaultRunProperties, defaultSelectionRunProperties, textProperties);
             return;
-        
+        }
+
         // setup initial candidate tokens
         var tokenComparison = spanDefinition is not null
             ? this.tokenComparisons.GetValueOrDefault(spanDefinition)
@@ -545,12 +552,13 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                     if (endIndex > end)
                         break;
                     var nextToken = new Token(token.Definition, match.Index, endIndex);
-                    if (match.Index == token.End) // combine into single token
+                    if (match.Index == token.End && (maxTokenCount < 0 || tokenCount < maxTokenCount - 1)) // combine into single token
                     {
                         var nextTokenIndex = candidateTokens.BinarySearch(nextToken, tokenComparison);
                         if (nextTokenIndex == ~candidateTokens.Count)
                         {
                             token = new(token.Definition, token.Start, nextToken.End);
+                            ++tokenCount;
                             continue;
                         }
                     }
@@ -612,13 +620,18 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 }
                 if (textStartIndex < token.Start)
                     CreateTextProperties(textStartIndex, token.Start, defaultRunProperties, defaultSelectionRunProperties, textProperties);
-                CreateTextProperties(token.Start, token.End, runProperties, selectionRunProperties, textProperties);
-                ++tokenCount;
-                textStartIndex = token.End;
-                if (maxTokenCount >= 0 && tokenCount >= maxTokenCount)
+                if (maxTokenCount < 0 || tokenCount < maxTokenCount)
+                {
+                    CreateTextProperties(token.Start, token.End, runProperties, selectionRunProperties, textProperties);
+                    ++tokenCount;
+                    textStartIndex = token.End;
+                    if (maxTokenCount >= 0 && tokenCount >= maxTokenCount)
+                        break;
+                }
+                else
                     break;
             }
-            if (textStartIndex < end && (maxTokenCount < 0 || tokenCount < maxTokenCount))
+            if (textStartIndex < end)
                 CreateTextProperties(textStartIndex, end, defaultRunProperties, defaultSelectionRunProperties, textProperties);
         }
         finally
@@ -656,7 +669,12 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         );
         
         // create text runs and source
-        this.textProperties ??= this.CreateTextProperties(defaultRunProperties);
+        if (this.textProperties is null)
+        {
+            var tokenCount = 0;
+            this.textProperties = this.CreateTextProperties(ref tokenCount, defaultRunProperties);
+            this.SetAndRaise(IsMaxTokenCountReachedProperty, ref this.isMaxTokenCountReached, maxTokenCount >= 0 && tokenCount >= maxTokenCount);
+        }
 
         // create text layout
         this.textLayout = new TextLayout(
@@ -1079,7 +1097,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     // Invalidate text layout.
     void InvalidateTextLayout()
     {
-        this.textLayout = this.textLayout.DisposeAndReturnNull();
+        this.textLayout = null;
         this.TextLayoutInvalidated?.Invoke(this, EventArgs.Empty);
     }
     
@@ -1090,6 +1108,12 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         this.textProperties = null;
         this.InvalidateTextLayout();
     }
+
+
+    /**
+     * Check whether maximum number of token to be highlighted reached or not.
+     */
+    public bool IsMaxTokenCountReached => this.isMaxTokenCountReached;
 
 
     /// <summary>
