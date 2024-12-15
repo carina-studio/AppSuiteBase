@@ -215,9 +215,11 @@
 	<sys:Double x:Key="Double/ToolBar.Button.Icon.Size.Small">12</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.Button.Size">26</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.Button.Size.Small">20</sys:Double>
+	<sys:Double x:Key="Double/ToolBar.Button.Size.WithDropDownIcon">40</sys:Double> <!-- ToolBar.Button.Size + ToolBar.Button.DropDownIcon.Margin + ToolBar.DropDownButton.Icon.Size -->
 	<sys:Double x:Key="Double/ToolBar.MinSize">31</sys:Double> <!-- Button size + Padding + Border -->
 	<sys:Double x:Key="Double/ToolBar.MinSize.Small">25</sys:Double> <!-- Button size + Padding + Border -->
 	<sys:Double x:Key="Double/ToolBar.SplitButton.SecondaryButton.MinWidth">12</sys:Double> <!-- ToolBar.DropDownButton.Icon.Size + ToolBar.DropDownButton.Padding * 2 -->
+	<GridLength x:Key="GridLength/ToolBar.Button.DropDownIcon.Margin">6</GridLength>
 	<Thickness x:Key="Thickness/ToolBar.Button.Margin">1,0,1,0</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Button.Margin.WithDropDownButton">1,1,0,1</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Button.Padding">6</Thickness>

@@ -2502,7 +2502,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 	</Style>
-	<Style Selector=":is(Image).StatusBar_IconIconWithText:disabled">
+	<Style Selector=":is(Image).StatusBar_IconWithText:disabled">
 		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
 	<Style Selector="Panel.StatusBar_DropDownIcon">
@@ -2517,7 +2517,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 	</Style>
-	<Style Selector="Panel.StatusBar_IconIconWithText">
+	<Style Selector="Panel.StatusBar_IconWithText">
 		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin.WithText}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
@@ -3515,6 +3515,36 @@
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
 	</Style>
 	<Style Selector="ToggleButton.ToolBar_ToggleButton_Small:checked:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPressed}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton_WithDropDownIcon">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Button.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Button.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size.WithDropDownIcon}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton_WithDropDownIcon:disabled">
+		<Setter Property="IsHitTestVisible" Value="False"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton_WithDropDownIcon:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton_WithDropDownIcon:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.PointerOver}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton_WithDropDownIcon:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Pressed}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton_WithDropDownIcon:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}"/>
+	</Style>
+	<Style Selector="ToggleButton.ToolBar_ToggleButton_WithDropDownIcon:checked:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPressed}"/>
 	</Style>
 

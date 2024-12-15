@@ -244,6 +244,20 @@
 															<Image Classes="ToolBar_DropDownButtonIcon" IsVisible="{Binding $parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.DropDown.Down.Light}"/>
 														</Panel>
 													</ToggleButton>
+													
+													<ToggleButton Classes="ToolBar_ToggleButton_WithDropDownIcon">
+														<Panel>
+															<Grid>
+																<Grid.ColumnDefinitions>
+																	<ColumnDefinition Width="*"/>
+																	<ColumnDefinition Width="{StaticResource GridLength/ToolBar.Button.DropDownIcon.Margin}"/>
+																	<ColumnDefinition Width="Auto"/>
+																</Grid.ColumnDefinitions>
+																<Image Classes="Icon" Source="{StaticResource Image/Icon.Error}"/>
+																<Image Classes="ToolBar_DropDownButtonIcon" Grid.Column="2" Source="{StaticResource Image/Icon.DropDown.Down}"/>
+															</Grid>
+														</Panel>
+													</ToggleButton>
 
 													<Panel ClipToBounds="False">
 														<TextBox Classes="ToolBar_TextBox" Width="100">

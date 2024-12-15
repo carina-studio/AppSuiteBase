@@ -426,12 +426,14 @@
 	<sys:Double x:Key="Double/ToolBar.Button.Icon.Size.Small">14</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.Button.Size">32</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.Button.Size.Small">24</sys:Double>
+	<sys:Double x:Key="Double/ToolBar.Button.Size.WithDropDownIcon">47</sys:Double> <!-- ToolBar.Button.Size + ToolBar.Button.DropDownIcon.Margin + ToolBar.DropDownButton.Icon.Size -->
 	<sys:Double x:Key="Double/ToolBar.MinSize">39</sys:Double> <!-- Button size + Padding + Border -->
 	<sys:Double x:Key="Double/ToolBar.MinSize.Small">31</sys:Double> <!-- Button size + Padding + Border -->
 	<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Size">8</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.NotificationIndicator.Offset">3</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.ProgressRing.RingThickness">3</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.SplitButton.SecondaryButton.MinWidth">16</sys:Double> <!-- ToolBar.DropDownButton.Icon.Size + ToolBar.DropDownButton.Padding * 2 -->
+	<GridLength x:Key="GridLength/ToolBar.Button.DropDownIcon.Margin">7</GridLength>
 	<Thickness x:Key="Thickness/ToolBar.Button.Margin">2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Button.Margin.Small">1</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Button.Margin.WithDropDownButton">2,2,0,2</Thickness>
