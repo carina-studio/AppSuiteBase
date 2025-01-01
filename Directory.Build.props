@@ -2,9 +2,9 @@
     <PropertyGroup>
 
         <!-- Version -->
-        <AssemblyVersion>3.0.0.1221</AssemblyVersion>
-        <Version>3.0.0.1221</Version>
-        <PackageVersion>3.0.0.1221-dev</PackageVersion>
+        <AssemblyVersion>3.0.1.101-</AssemblyVersion>
+        <Version>3.0.1.101-</Version>
+        <PackageVersion>3.0.1.101-dev</PackageVersion>
 
         <!-- Other information -->
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -14,7 +14,7 @@
         <AvaloniaXamlBehaviorsVersion>11.1.0.7</AvaloniaXamlBehaviorsVersion>
         <AvaloniaNameGeneratorFilterByNamespace>Dummy</AvaloniaNameGeneratorFilterByNamespace> <!-- Prevent generating InitializeComponents() and fields -->
 		<Company>Carina Studio</Company>
-        <Copyright>©2021-2024 Carina Studio</Copyright>
+        <Copyright>©2021-2025 Carina Studio</Copyright>
         <Description>Base libraries for Carina Studio Application Suite.</Description>
 		<Nullable>enable</Nullable>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
