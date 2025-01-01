@@ -135,9 +135,9 @@
 							<Grid ColumnDefinitions="*,Auto,Auto">
 								<StackPanel Classes="Dialog_Item_Text_Container">
 									<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-									<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+									<SelectableTextBlock Classes="Dialog_TextBlock_Description" IsVisible="{Binding #isEnabledButton.IsChecked}" Text="Description"/>
 								</StackPanel>
-								<ToggleButton Content="IsEnabled" Grid.Column="1" IsChecked="{Binding #itemTextBox1.IsEnabled, Mode=TwoWay}"/>
+								<ToggleButton Name="isEnabledButton" Content="IsEnabled" Grid.Column="1" IsChecked="{Binding #itemTextBox1.IsEnabled, Mode=TwoWay}"/>
 								<Separator Classes="Dialog_Separator_Small" Grid.Column="2"/>
 							</Grid>
 							<TextBox Name="itemTextBox1" Classes="Dialog_Item_TextBox" IsEnabled="False" Text="Text"/>

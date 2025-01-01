@@ -84,7 +84,7 @@
 	<sys:Double x:Key="Double/Dialog.Icon.Size.Description">14</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Icon.Size.Large">40</sys:Double>
 	<sys:Double x:Key="Double/Dialog.IconControlButton.Icon.Size">14</sys:Double>
-	<sys:Double x:Key="Double/Dialog.Item.MinHeight">42</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Item.MinHeight">44</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Item.MinHeight.Small">14</sys:Double>
 	<sys:Double x:Key="Double/Dialog.ItemSeparator.Stroke">1</sys:Double>
 	<sys:Double x:Key="Double/Dialog.ListActionButton.MinWidth">80</sys:Double>

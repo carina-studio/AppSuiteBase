@@ -44,7 +44,7 @@
 	<CornerRadius x:Key="CornerRadius/Dialog.TextBlock.Header1">2</CornerRadius>
 	<CornerRadius x:Key="CornerRadius/Dialog.TextBlock.Header2">2</CornerRadius>
 	<sys:Double x:Key="Double/Dialog.ControlButton.MinWidth">80</sys:Double>
-	<sys:Double x:Key="Double/Dialog.Item.MinHeight">38</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Item.MinHeight">40</sys:Double>
 	<sys:Double x:Key="Double/Dialog.ListActionButton.MinWidth">80</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Height">13</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Height.Large">24</sys:Double>
@@ -70,10 +70,11 @@
 	<Thickness x:Key="Thickness/Dialog.FullWidthControl.Margin">-1,1,0,1</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ListActionButton.Padding">5,2,5,2</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ListActionButton.Margin">3,3,0,0</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0,1,0,0</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description">0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Label.WithControlBelow">0,1,0,2</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">10,6,10,6</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">10,6,10,6</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Label">0,0,10,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">-10,0,-10,5</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">-10,0,-10,4</Thickness>
 

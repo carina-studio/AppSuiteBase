@@ -30,7 +30,7 @@ public class DialogItem : Panel
     public DialogItem()
     {
         // setup properties
-        this.ClipToBounds = true;
+        this.ClipToBounds = false;
         this.HorizontalAlignment = HorizontalAlignment.Stretch;
         
         // setup min size
