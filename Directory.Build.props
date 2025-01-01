@@ -2,8 +2,8 @@
     <PropertyGroup>
 
         <!-- Version -->
-        <AssemblyVersion>3.0.1.101-</AssemblyVersion>
-        <Version>3.0.1.101-</Version>
+        <AssemblyVersion>3.0.1.101</AssemblyVersion>
+        <Version>3.0.1.101</Version>
         <PackageVersion>3.0.1.101-dev</PackageVersion>
 
         <!-- Other information -->
