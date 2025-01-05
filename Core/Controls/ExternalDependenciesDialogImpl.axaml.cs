@@ -18,13 +18,13 @@ namespace CarinaStudio.AppSuite.Controls;
 class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 {
 	// Converter to convert from priority to string.
-	public static readonly IValueConverter PriorityConverter = new AppSuite.Converters.EnumConverter(AppSuiteApplication.CurrentOrNull, typeof(ExternalDependencyPriority));
+	public static readonly IValueConverter PriorityConverter = new AppSuite.Converters.EnumConverter(IAppSuiteApplication.CurrentOrNull, typeof(ExternalDependencyPriority));
 
 
 	// Converter to convert from state to brush.
 	public static readonly IValueConverter StateBrushConverter = new FuncValueConverter<ExternalDependencyState, IBrush?>(state =>
 	{
-		var app = AppSuiteApplication.CurrentOrNull;
+		var app = IAppSuiteApplication.CurrentOrNull;
 		if (app is null)
 			return null;
 		IBrush? brush;
@@ -50,7 +50,7 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	// Converter to convert from state to string.
 	public static readonly IMultiValueConverter StateConverter = new FuncMultiValueConverter<object, string?>(values =>
 	{
-		var app = AppSuiteApplication.CurrentOrNull;
+		var app = IAppSuiteApplication.CurrentOrNull;
 		if (app is null)
 			return null;
 		var type = ExternalDependencyType.Software;
@@ -139,6 +139,7 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 			{
 				panel.Children.Add(template.Build(this.externalDependencies[i])!.Also(it =>
 				{
+					// ReSharper disable once AccessToModifiedClosure
 					it.DataContext = this.externalDependencies[i];
 				}));
 				if (i < count - 1)

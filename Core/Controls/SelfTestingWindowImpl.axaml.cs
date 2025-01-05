@@ -23,7 +23,7 @@ class SelfTestingWindowImpl : Window<IAppSuiteApplication>
     /// </summary>
     public static readonly IValueConverter TestCaseIconConverter = new FuncValueConverter<TestCaseState, IImage?>(state =>
     {
-        var app = AppSuiteApplication.CurrentOrNull;
+        var app = IAppSuiteApplication.CurrentOrNull;
         if (app == null)
             return null;
         return state switch
@@ -41,12 +41,8 @@ class SelfTestingWindowImpl : Window<IAppSuiteApplication>
 
 
     // Dummy test case.
-    class DummyTestCase : TestCase
+    class DummyTestCase(IAppSuiteApplication app) : TestCase(app, null, "Dummy")
     {
-        // Constructor.
-        public DummyTestCase(IAppSuiteApplication app) : base(app, null, "Dummy")
-        { }
-
         /// <inheritdoc/>
         protected override async Task OnRunAsync(CancellationToken cancellationToken)
         {

@@ -38,6 +38,7 @@ class SettingsEditorDialogImpl : Dialog
 
 
 	// Called when double click on list box.
+	// ReSharper disable once AsyncVoidMethod
 	async void OnSettingsListBoxDoubleClickOnItem(object? sender, ListBoxItemEventArgs e)
 	{
 		// find setting
@@ -46,11 +47,18 @@ class SettingsEditorDialogImpl : Dialog
 		e.Handled = true;
 
 		// edit setting
-		await new SettingEditorDialog()
+		try
 		{
-			SettingKey = setting.Item1,
-			Settings = this.Settings,
-		}.ShowDialog(this);
+			await new SettingEditorDialog
+			{
+				SettingKey = setting.Item1,
+				Settings = this.Settings,
+			}.ShowDialog(this);
+		}
+		catch
+		{
+			return;
+		}
 
 		// select item again
 		this.settingsListBox.Focus();
@@ -109,7 +117,7 @@ class SettingsEditorDialogImpl : Dialog
 
 
 	// List of key of setting.
-	public ISet<SettingKey> SettingKeys { get; set; } = new HashSet<SettingKey>().AsReadOnly();
+	public ISet<SettingKey> SettingKeys { get; init; } = new HashSet<SettingKey>().AsReadOnly();
 
 
 	/// <summary>
@@ -119,5 +127,5 @@ class SettingsEditorDialogImpl : Dialog
 
 
 	// Settings.
-	public new ISettings Settings { get; set; }
+	public new ISettings Settings { get; init; }
 }

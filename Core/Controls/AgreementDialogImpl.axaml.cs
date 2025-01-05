@@ -19,7 +19,7 @@ class AgreementDialogImpl : Dialog
     /// <summary>
     /// Converter to convert from application culture to string.
     /// </summary>
-    public static readonly IValueConverter CultureConverter = new Converters.EnumConverter(AppSuiteApplication.CurrentOrNull, typeof(ApplicationCulture));
+    public static readonly IValueConverter CultureConverter = new Converters.EnumConverter(IAppSuiteApplication.CurrentOrNull, typeof(ApplicationCulture));
 
 
     // Static fields.
@@ -85,7 +85,7 @@ class AgreementDialogImpl : Dialog
     /// <summary>
     /// Get or set source of document to be shown.
     /// </summary>
-    public DocumentSource? DocumentSource { get; set; }
+    public DocumentSource? DocumentSource { get; init; }
 
 
     /// <summary>
@@ -137,12 +137,7 @@ class AgreementDialogImpl : Dialog
             var cultures = source.SupportedCultures;
             this.SetValue(CulturesProperty, cultures);
             if (cultures.IsNotEmpty())
-            {
-                if (cultures.Contains(source.Culture))
-                    this.SetValue(CultureProperty, source.Culture);
-                else
-                    this.SetValue(CultureProperty, cultures[0]);
-            }
+                this.SetValue(CultureProperty, cultures.Contains(source.Culture) ? source.Culture : cultures[0]);
             else
                 this.Get<ComboBox>("cultureComboBox").IsVisible = false;
             

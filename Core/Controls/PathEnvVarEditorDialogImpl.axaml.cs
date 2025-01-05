@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -51,21 +52,21 @@ class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		});
 		this.pathListBox = this.Get<ListBox>(nameof(pathListBox)).Also(it =>
 		{
-			it.DoubleClickOnItem += (_, e) => this.EditPath(e.Item as string);
+			it.DoubleClickOnItem += (__, e) => _ = this.EditPath(e.Item as string);
 			it.SelectionChanged += (_, e) =>
 			{
 				if (e.AddedItems.Count > 0)
 					this.customPathListBox.SelectedItem = null;
 			};
 		});
-		this.RefreshPaths();
+		_ = this.RefreshPaths();
 	}
 
 
 	/// <summary>
 	/// Add new path.
 	/// </summary>
-	public async void AddPath()
+	public async Task AddPath()
 	{
 		var path = (await this.StorageProvider.OpenFolderPickerAsync(new()
 		{
@@ -89,7 +90,7 @@ class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 
 
 	// Edit path.
-	async void EditPath(string? path)
+	async Task EditPath(string? path)
 	{
 		if (path == null 
 			|| this.GetValue(IsRefreshingPathsProperty) 
@@ -143,7 +144,7 @@ class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 
 
 	// Refresh path list.
-	async void RefreshPaths()
+	async Task RefreshPaths()
 	{
 		this.SetValue(IsRefreshingPathsProperty, true);
 		var paths = await CommandSearchPaths.GetPathsAsync();
@@ -177,7 +178,7 @@ class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	/// <summary>
 	/// Save path to system and close dialog.
 	/// </summary>
-	public async void SaveAndClose()
+	public async Task SaveAndClose()
 	{
 		this.SetValue(IsSavingPathsProperty, true);
 		var success = await CommandSearchPaths.SetSystemPathsAsync(this.paths);

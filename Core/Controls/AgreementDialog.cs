@@ -100,9 +100,9 @@ public class AgreementDialog : CommonDialog<AgreementDialogResult>
                 ? Avalonia.Controls.WindowStartupLocation.CenterOwner
                 : Avalonia.Controls.WindowStartupLocation.CenterScreen,
         };
-        using var messageBindingToken = this.BindValueToDialog(dialog, AgreementDialogImpl.MessageProperty, this.message);
-		using var titleBindingToken = this.BindValueToDialog(dialog, Avalonia.Controls.Window.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name);
-		return await (owner != null
+        using var messageBindingToken = this.BindValueToDialog(dialog, AgreementDialogImpl.MessageProperty, this.message); 
+        using var titleBindingToken = this.BindValueToDialog(dialog, Avalonia.Controls.Window.TitleProperty, this.Title ?? Avalonia.Application.Current?.Name); 
+        return await (owner != null
 			? dialog.ShowDialog<AgreementDialogResult>(owner)
 			: dialog.ShowDialog<AgreementDialogResult>());
     }

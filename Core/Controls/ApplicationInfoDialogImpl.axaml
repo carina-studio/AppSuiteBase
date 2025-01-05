@@ -30,6 +30,7 @@
 			</Setter>
 		</Style>
 		<Style Selector="Separator.TextSeparator">
+			<Setter Property="Background" Value="{x:Null}"/>
 			<Setter Property="Height" Value="1"/>
 			<Setter Property="Width" Value="2"/>
 		</Style>

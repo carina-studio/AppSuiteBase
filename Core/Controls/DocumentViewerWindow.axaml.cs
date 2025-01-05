@@ -45,6 +45,7 @@ public class DocumentViewerWindow : Dialog
     /// <summary>
     /// Get or set source of document to be shown.
     /// </summary>
+    // ReSharper disable once PropertyCanBeMadeInitOnly.Global
     public DocumentSource? DocumentSource { get; set; }
 
 

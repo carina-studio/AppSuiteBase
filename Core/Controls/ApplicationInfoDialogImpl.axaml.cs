@@ -36,11 +36,11 @@ class ApplicationInfoDialogImpl : Dialog
 	/// <summary>
 	/// Converter to convert from <see cref="System.Net.NetworkInformation.NetworkInterfaceType"/> to string.
 	/// </summary>
-	public static readonly IValueConverter NetworkInterfaceTypeConverter = new EnumConverter(AppSuiteApplication.CurrentOrNull, typeof(System.Net.NetworkInformation.NetworkInterfaceType));
+	public static readonly IValueConverter NetworkInterfaceTypeConverter = new EnumConverter(IAppSuiteApplication.CurrentOrNull, typeof(System.Net.NetworkInformation.NetworkInterfaceType));
 
 
 	// Static fields.
-	static readonly IValueConverter AppReleasingTypeConverter = new EnumConverter(AppSuiteApplication.Current, typeof(ApplicationReleasingType));
+	static readonly IValueConverter AppReleasingTypeConverter = new EnumConverter(IAppSuiteApplication.Current, typeof(ApplicationReleasingType));
 	static readonly StyledProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
 	static readonly StyledProperty<bool> HasExternalDependenciesProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasExternalDependencies");
 	static readonly StyledProperty<bool> HasPrivacyPolicyProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasPrivacyPolicy");
@@ -232,7 +232,7 @@ class ApplicationInfoDialogImpl : Dialog
 	/// <summary>
 	/// Export application logs to file.
 	/// </summary>
-	public async void ExportLogs()
+	public async Task ExportLogs()
 	{
 		// check state
 		if (this.DataContext is not ApplicationInfo appInfo)
@@ -242,13 +242,13 @@ class ApplicationInfoDialogImpl : Dialog
 		var options = new FilePickerSaveOptions().Also(options =>
 		{
 			var dateTime = DateTime.Now;
-			options.FileTypeChoices = new[]
-			{
+			options.FileTypeChoices = 
+			[
 				new FilePickerFileType(this.Application.GetStringNonNull("FileFormat.Zip")).Also(type =>
 				{
-					type.Patterns = new[] { "*.zip" };
+					type.Patterns = [ "*.zip" ];
 				}),
-			};
+			];
 			options.SuggestedFileName = $"{this.Application.Name}-Logs-{dateTime:yyyyMMdd-HHmmss}.zip";
 		});
 		var fileName = (await this.StorageProvider.SaveFilePickerAsync(options))?.Let(it =>
@@ -488,7 +488,7 @@ class ApplicationInfoDialogImpl : Dialog
 	/// <summary>
 	/// Restart in debug mode.
 	/// </summary>
-	public async void RestartInDebugMode()
+	public async Task RestartInDebugMode()
 	{
 		// check state
 		if (this.Application.IsDebugMode)
@@ -497,7 +497,7 @@ class ApplicationInfoDialogImpl : Dialog
 		// show message
 		if (!this.PersistentState.GetValueOrDefault(IsRestartingInDebugModeConfirmationShownKey))
 		{
-			await new MessageDialog()
+			await new MessageDialog
 			{
 				Icon = MessageDialogIcon.Information,
 				Message = this.Application.GetString("ApplicationInfoDialog.ConfirmRestartingInDebugMode"),
@@ -624,7 +624,7 @@ class ApplicationInfoDialogImpl : Dialog
 	{
 		if (this.Application.UserAgreement is not { } documentSource)
 			return;
-		_ = new AgreementDialog()
+		_ = new AgreementDialog
 		{
 			DocumentSource = documentSource,
 			IsAgreedBefore = true,

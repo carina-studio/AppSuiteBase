@@ -100,7 +100,7 @@ class SettingEditorDialog : Dialog
 	public SettingKey? SettingKey
 	{
 		get => this.GetValue(SettingKeyProperty);
-		set => this.SetValue(SettingKeyProperty, value);
+		init => this.SetValue(SettingKeyProperty, value);
 	}
 
 
@@ -108,7 +108,7 @@ class SettingEditorDialog : Dialog
 	public new ISettings? Settings
 	{
 		get => this.GetValue(SettingsProperty);
-		set => this.SetValue(SettingsProperty, value);
+		init => this.SetValue(SettingsProperty, value);
 	}
 
 
