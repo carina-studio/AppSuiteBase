@@ -275,7 +275,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Ending year of copyright.
         /// </summary>
-        internal const int CopyrightEndingYear = 2024;
+        internal const int CopyrightEndingYear = 2025;
         /// <summary>
         /// Argument indicates to enable debug mode.
         /// </summary>
@@ -330,7 +330,7 @@ namespace CarinaStudio.AppSuite
         static readonly SettingKey<string> AppVersionKey = new("ApplicationVersion", "");
         static double CachedCustomScreenScaleFactor = double.NaN;
         static readonly SettingKey<bool> DoNotPromptBeforeTakingMemorySnapshotKey = new("DoNotPromptBeforeTakingMemorySnapshot", false);
-        static bool ForceThrowingUnhandledException = false;
+        static bool ForceThrowingUnhandledException;
         static readonly string InitSettingsFilePath = Path.Combine(AppDirectoryPath, "InitSettings.json");
         static InitSettingsImpl? InitSettingsInstance;
         static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new("IsAcceptNonStableApplicationUpdateInitialized", false);
@@ -428,7 +428,7 @@ namespace CarinaStudio.AppSuite
                     this.SetupLogFileTarget(it);
             });
             // ReSharper disable VirtualMemberCallInConstructor
-            this.LoggerFactory = new LoggerFactory(new[] { this.OnCreateLoggerProvider() });
+            this.LoggerFactory = new LoggerFactory([ this.OnCreateLoggerProvider() ]);
             this.Logger = this.LoggerFactory.CreateLogger(this.GetType().Name);
             // ReSharper restore VirtualMemberCallInConstructor
             this.Logger.LogDebug("Created");
@@ -707,17 +707,17 @@ namespace CarinaStudio.AppSuite
                 });
                 
                 // setup platform specific settings
-                var cjkUnicodeRanges = new UnicodeRange(new UnicodeRangeSegment[]
-                {
+                var cjkUnicodeRanges = new UnicodeRange(
+                [
                     // ReSharper disable CommentTypo
                     new(0x2e80, 0x2eff), // CJKRadicalsSupplement
                     new(0x3000, 0x303f), // CJKSymbolsandPunctuation
                     new(0x3200, 0x4dbf), // EnclosedCJKLettersandMonths, CJKCompatibility, CJKUnifiedIdeographsExtensionA
                     new(0x4e00, 0x9fff), // CJKUnifiedIdeographs
                     new(0xf900, 0xfaff), // CJKCompatibilityIdeographs
-                    new(0xfe30, 0xfe4f), // CJKCompatibilityForms
+                    new(0xfe30, 0xfe4f) // CJKCompatibilityForms
                     // ReSharper restore CommentTypo
-                });
+                ]);
                 if (Platform.IsWindows)
                     SetupWindowsAppBuilder(it, InitSettingsInstance, cjkUnicodeRanges, embeddedChineseFonts);
                 else if (Platform.IsMacOS)
@@ -2532,7 +2532,7 @@ namespace CarinaStudio.AppSuite
                     }
                 }
                 if (this.CreateMultiInstancesServerStream(true, false))
-                    this.WaitForMultiInstancesClient();
+                    _ = this.WaitForMultiInstancesClient();
                 else
                 {
                     this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args ?? []);
@@ -3151,10 +3151,10 @@ namespace CarinaStudio.AppSuite
                     if (pmType.Assembly.GetName().FullName.StartsWith("CarinaStudio.AppSuite.Product,"))
                     {
                         // initialize
-                        await (Task)pmType.GetMethod("InitializeAsync", BindingFlags.Public | BindingFlags.Static, new[]{ typeof(IAppSuiteApplication) })!.Invoke(null, new object?[] { this })!;
+                        await (Task)pmType.GetMethod("InitializeAsync", BindingFlags.Public | BindingFlags.Static, [ typeof(IAppSuiteApplication) ])!.Invoke(null, [ this ])!;
 
                         // get instance
-                        this.productManager = (IProductManager)pmType.GetProperty("Default", BindingFlags.Public | BindingFlags.Static)!.GetGetMethod()!.Invoke(null, Array.Empty<object?>())!;
+                        this.productManager = (IProductManager)pmType.GetProperty("Default", BindingFlags.Public | BindingFlags.Static)!.GetGetMethod()!.Invoke(null, [])!;
                     }
                     else
                         this.Logger.LogError("Unexpected type of implementation of product manager");
@@ -4073,8 +4073,8 @@ namespace CarinaStudio.AppSuite
             }
 
             // check for update
-			using var appUpdater = new ViewModels.ApplicationUpdater();
-            this.appUpdateDialog = new(appUpdater)
+			using var appUpdater = new ViewModels.ApplicationUpdater(); 
+            this.appUpdateDialog = new(appUpdater) 
             {
                 CheckForUpdateWhenShowing = checkAppUpdateWhenOpening
             };
@@ -5122,7 +5122,7 @@ namespace CarinaStudio.AppSuite
 
 
         // Wait for client of multi-instances and handle incoming messages.
-        async void WaitForMultiInstancesClient()
+        async Task WaitForMultiInstancesClient()
         {
             if (this.multiInstancesServerStream is null)
             {
@@ -5170,7 +5170,7 @@ namespace CarinaStudio.AppSuite
                     this.SynchronizationContext.Post(() =>
                     {
                         if (this.CreateMultiInstancesServerStream(false, true))
-                            this.WaitForMultiInstancesClient();
+                            _ = this.WaitForMultiInstancesClient();
                     });
                 }
             }
