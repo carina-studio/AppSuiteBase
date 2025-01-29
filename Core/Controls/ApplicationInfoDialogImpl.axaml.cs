@@ -173,19 +173,19 @@ class ApplicationInfoDialogImpl : Dialog
 						Native.MacOS.CGGetDisplaysWithRect(new(windowBounds.X, windowBounds.Y, windowBounds.Width, windowBounds.Height), 1, &displayId, &displayCount);
 						if (displayCount == 0)
 							displayId = Native.MacOS.CGMainDisplayID();
-					}
-					var displayModeRef = Native.MacOS.CGDisplayCopyDisplayMode(displayId);
-					if (displayModeRef != default)
-					{
-						try
+						var displayModeRef = Native.MacOS.CGDisplayCopyDisplayMode(displayId);
+						if (displayModeRef != default)
 						{
-							var displayWidth = Native.MacOS.CGDisplayModeGetPixelWidth(displayModeRef);
-							if (displayWidth > 0)
-								scaling = (double)displayWidth / screenBounds.Width;
-						}
-						finally
-						{
-							Native.MacOS.CGDisplayModeRelease(displayModeRef);
+							try
+							{
+								var displayWidth = Native.MacOS.CGDisplayModeGetPixelWidth(displayModeRef);
+								if (displayWidth > 0)
+									scaling = (double)displayWidth / screenBounds.Width;
+							}
+							finally
+							{
+								Native.MacOS.CGDisplayModeRelease(displayModeRef);
+							}
 						}
 					}
 				}
