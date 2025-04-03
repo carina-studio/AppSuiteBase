@@ -10,12 +10,13 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Authors>Carina Studio</Authors>
         <AppBaseVersion>2.2.8.128-preview</AppBaseVersion>
-        <AvaloniaVersion>11.1.5</AvaloniaVersion>
-        <AvaloniaXamlBehaviorsVersion>11.1.0.7</AvaloniaXamlBehaviorsVersion>
+        <AvaloniaVersion>11.2.0</AvaloniaVersion>
+        <AvaloniaXamlBehaviorsVersion>11.2.0.14</AvaloniaXamlBehaviorsVersion>
         <AvaloniaNameGeneratorFilterByNamespace>Dummy</AvaloniaNameGeneratorFilterByNamespace> <!-- Prevent generating InitializeComponents() and fields -->
 		<Company>Carina Studio</Company>
         <Copyright>©2021-2025 Carina Studio</Copyright>
         <Description>Base libraries for Carina Studio Application Suite.</Description>
+        <DotNetLibraryVersion>9.0.3</DotNetLibraryVersion>
 		<Nullable>enable</Nullable>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/carina-studio/AppSuiteBase/</PackageProjectUrl>

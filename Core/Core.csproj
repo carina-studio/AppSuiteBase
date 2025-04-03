@@ -40,15 +40,15 @@
 		<PackageReference Include="CarinaStudio.AppBase.MacOS" Version="$(AppBaseVersion)" />
 		<PackageReference Include="CarinaStudio.Markdown.Avalonia.Tight" Version="11.0.3.924-a1" />
 		<PackageReference Include="JetBrains.Profiler.SelfApi" Version="2.5.12" />
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.1" />
-		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="9.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="$(DotNetLibraryVersion)" />
+		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="$(DotNetLibraryVersion)" />
 		<PackageReference Include="Microsoft.Win32.Registry" Version="6.0.0-preview.5.21301.5" />
-		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="9.0.1" />
-		<PackageReference Include="NLog" Version="5.3.4" />
-		<PackageReference Include="NLog.Extensions.Logging" Version="5.3.14" />
+		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="$(DotNetLibraryVersion)" />
+		<PackageReference Include="NLog" Version="5.4.0" />
+		<PackageReference Include="NLog.Extensions.Logging" Version="5.4.0" />
 		<PackageReference Include="NUnit" Version="4.3.2" />
 		<PackageReference Include="RangeSlider.Avalonia" Version="2.1.0" />
-		<PackageReference Include="System.Management" Version="9.0.1" />
+		<PackageReference Include="System.Management" Version="$(DotNetLibraryVersion)" />
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />
 		<PackageReference Include="System.Private.Uri" Version="4.3.2" />
 		<PackageReference Include="System.Security.Principal.Windows" Version="6.0.0-preview.5.21301.5" />
