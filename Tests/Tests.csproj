@@ -29,7 +29,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="$(TargetFramework.Contains('windows'))">
-		<PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
+		<PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.5" />
 	</ItemGroup>
 	
 </Project>

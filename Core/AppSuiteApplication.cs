@@ -2988,7 +2988,6 @@ namespace CarinaStudio.AppSuite
         /// </summary>
         /// <returns>Task of preparation.</returns>
         [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors, typeof(ColorPicker))]
-        [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors, typeof(DataGrid))]
         [RequiresUnreferencedCode("Create internal components.")]
         protected virtual async Task OnPrepareStartingAsync()
         {
