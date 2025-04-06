@@ -1,7 +1,7 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:ca="using:ColorTextBlock.Avalonia"
+        xmlns:converters="using:CarinaStudio.AppSuite.Converters"
 		xmlns:mdControls="using:Markdown.Avalonia.Controls">
 
 	<Style Selector="Border.Blockquote">
@@ -15,6 +15,7 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/MarkdownViewer.Markdown.InlineCode.Background}"/>
 		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/MarkdownViewer.Markdown.InlineCode}"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Text}"/>
+		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeight}}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.InlineCode.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.InlineCode.Padding}"/>
 	</Style>
@@ -54,6 +55,7 @@
 	<Style Selector="ca|CTextBlock">
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Text}"/>
+		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeight}}"/>
 		<Setter Property="LineSpacing" Value="{DynamicResource Double/MarkdownViewer.Markdown.Text.LineSpacing}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Text.Margin}"/>
 		<Setter Property="SelectionBrush" Value="{DynamicResource Brush/SelectableTextBlock.Selection.Background}"/>
