@@ -5,8 +5,6 @@
 		xmlns:abControls="using:CarinaStudio.Controls"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
-		xmlns:ia="using:Avalonia.Xaml.Interactivity"
-        xmlns:iaCore="using:Avalonia.Xaml.Interactions.Core"
 		xmlns:net="using:CarinaStudio.AppSuite.Net"
 		xmlns:scripting="using:CarinaStudio.AppSuite.Scripting"
 		xmlns:sys="using:System"
@@ -120,21 +118,10 @@
 					<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #openSourceAttrPanel.IsVisible}"/>
 
 					<!-- App icon attribution (Flaticon) -->
-					<WrapPanel Orientation="Horizontal" IsVisible="False">
-						<ia:Interaction.Behaviors>
-							<iaCore:DataTriggerBehavior Binding="{Binding IconWebSite}" Value="Flaticon">
-								<iaCore:ChangePropertyAction PropertyName="IsVisible" Value="True"/>
-							</iaCore:DataTriggerBehavior>
-						</ia:Interaction.Behaviors>
+					<WrapPanel Orientation="Horizontal" IsVisible="{Binding IconWebSite, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:ApplicationInfo+ApplicationIconWebSite.Flaticon}}">
 						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon}" VerticalAlignment="Center"/>
 						<Separator Classes="TextSeparator"/>
-						<abControls:LinkTextBlock IsVisible="False" Text="Freepik" Uri="https://www.freepik.com/" VerticalAlignment="Center">
-							<ia:Interaction.Behaviors>
-								<iaCore:DataTriggerBehavior Binding="{Binding IconCreator}" Value="Freepik">
-									<iaCore:ChangePropertyAction PropertyName="IsVisible" Value="True"/>
-								</iaCore:DataTriggerBehavior>
-							</ia:Interaction.Behaviors>
-						</abControls:LinkTextBlock>
+						<abControls:LinkTextBlock IsVisible="{Binding IconCreator, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:ApplicationInfo+ApplicationIconCreator.Freepik}}" Text="Freepik" Uri="https://www.freepik.com/" VerticalAlignment="Center"/>
 						<Separator Classes="TextSeparator"/>
 						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon}" VerticalAlignment="Center"/>
 						<Separator Classes="TextSeparator"/>
