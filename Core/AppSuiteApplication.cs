@@ -391,7 +391,7 @@ namespace CarinaStudio.AppSuite
         ThemeMode stylesThemeMode = ThemeMode.System;
         ThemeMode systemThemeMode = ThemeMode.Dark;
         volatile TracingSession? tracingSession;
-        readonly object tracingSyncLock = new();
+        readonly Lock tracingSyncLock = new();
         readonly Dictionary<Avalonia.Controls.Window, List<IDisposable>> windowObserverTokens = new();
         readonly ObservableList<Avalonia.Controls.Window> windows = new();
 
@@ -3991,8 +3991,8 @@ namespace CarinaStudio.AppSuite
         void SetupLogNetworkTarget(LoggingConfiguration config, int port)
         {
             // create target
-            var target = config.AllTargets.FirstOrDefault(it => it.Name == "outputToLocalhost") as NLog.Targets.NLogViewerTarget;
-            target ??= new NLog.Targets.NLogViewerTarget("outputToLocalhost")
+            var target = config.AllTargets.FirstOrDefault(it => it.Name == "outputToLocalhost") as NLog.Targets.ChainsawTarget;
+            target ??= new NLog.Targets.ChainsawTarget("outputToLocalhost")
             {
                 Address = new NLog.Layouts.SimpleLayout($"tcp://127.0.0.1:{port}"),
                 NewLine = true,
@@ -4454,8 +4454,8 @@ namespace CarinaStudio.AppSuite
             this.Logger.LogTrace("Prepare for tracing");
             try
             {
-                lock (this.tracingSyncLock)
-                    DotTrace.InitAsync(progress: new DotTraceDownloadingProgressCallback(this), downloadTo: this.DotTraceRootDirectoryPath).Wait();
+                using var _ = this.tracingSyncLock.EnterScope();
+                DotTrace.InitAsync(progress: new DotTraceDownloadingProgressCallback(this), downloadTo: this.DotTraceRootDirectoryPath).Wait();
             }
             catch (Exception ex)
             {
@@ -4464,7 +4464,7 @@ namespace CarinaStudio.AppSuite
             }
             
             // start tracing
-            lock (this.tracingSyncLock)
+            using (_ = this.tracingSyncLock.EnterScope())
             {
                 if (this.tracingSession is not null)
                 {
@@ -4503,7 +4503,7 @@ namespace CarinaStudio.AppSuite
         // Stop tracing.
         void StopTracing(TracingSession session)
         {
-            lock (this.tracingSyncLock)
+            using (_ = this.tracingSyncLock.EnterScope())
             {
                 if (this.tracingSession != session)
                     return;

@@ -123,7 +123,7 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
     {
         if (this.testCaseCategories == null)
             throw new InvalidOperationException();
-        var index = this.testCaseCategories.BinarySearch<TestCaseCategory, string>(name, it => it.Name, string.CompareOrdinal);
+        var index = ((IList<TestCaseCategory>)this.testCaseCategories).BinarySearch<TestCaseCategory, string>(name, it => it.Name, string.CompareOrdinal);
         if (index >= 0)
             return this.testCaseCategories[index];
         return new TestCaseCategory(name).Also(it => this.testCaseCategories.Add(it));
@@ -297,7 +297,7 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
     {
         try
         {
-            testCase = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, new object?[] { this.Application }, this.Application.CultureInfo) as TestCase;
+            testCase = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, [ this.Application ], this.Application.CultureInfo) as TestCase;
             if (testCase != null)
             {
                 this.logger.LogDebug("Create test case '{name}' with type {type}", testCase.Name, type.Name);

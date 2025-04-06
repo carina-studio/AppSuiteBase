@@ -554,7 +554,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                     var nextToken = new Token(token.Definition, match.Index, endIndex);
                     if (match.Index == token.End && (maxTokenCount < 0 || tokenCount < maxTokenCount - 1)) // combine into single token
                     {
-                        var nextTokenIndex = candidateTokens.BinarySearch(nextToken, tokenComparison);
+                        var nextTokenIndex = ((IList<Token>)candidateTokens).BinarySearch(nextToken, tokenComparison);
                         if (nextTokenIndex == ~candidateTokens.Count)
                         {
                             token = new(token.Definition, token.Start, nextToken.End);
@@ -925,7 +925,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 var nextToken = new Token(candidateToken.Definition, match.Index, match.Index + match.Length);
                 if (match.Index == candidateToken.End && match.Length > 0) // combine into single token
                 {
-                    var nextTokenIndex = candidateTokens.BinarySearch(nextToken, tokenComparison);
+                    var nextTokenIndex = ((IList<Token>)candidateTokens).BinarySearch(nextToken, tokenComparison);
                     if (nextTokenIndex == ~candidateTokens.Count)
                     {
                         candidateToken = new(candidateToken.Definition, candidateToken.Start, nextToken.End);
