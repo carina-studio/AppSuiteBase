@@ -725,15 +725,16 @@ namespace CarinaStudio.AppSuite.Tests
         };
 
 
-        public void SwitchAppCulture()
+        public async void SwitchAppCulture()
         {
-            this.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, this.Settings.GetValueOrDefault(SettingKeys.Culture) switch
+            using var appOptions = new ApplicationOptions();
+            appOptions.Culture = appOptions.Culture switch
             {
                 ApplicationCulture.System => ApplicationCulture.EN_US,
                 ApplicationCulture.EN_US => ApplicationCulture.ZH_TW,
                 ApplicationCulture.ZH_TW => ApplicationCulture.ZH_CN,
                 _ => ApplicationCulture.System,
-            });
+            };
         }
 
 
@@ -770,13 +771,6 @@ namespace CarinaStudio.AppSuite.Tests
 
         public void Test2()
         {
-            this.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, this.Settings.GetValueOrDefault(SettingKeys.Culture) switch
-            {
-                ApplicationCulture.System => ApplicationCulture.EN_US,
-                ApplicationCulture.EN_US => ApplicationCulture.ZH_TW,
-                ApplicationCulture.ZH_TW => ApplicationCulture.ZH_CN,
-                _ => ApplicationCulture.System,
-            });
             /*
             this.Application.ShowMainWindow(window =>
             {

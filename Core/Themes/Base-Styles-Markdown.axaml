@@ -14,10 +14,12 @@
 	<Style Selector="ca|CCode">
 		<Setter Property="Background" Value="{DynamicResource Brush/MarkdownViewer.Markdown.InlineCode.Background}"/>
 		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/MarkdownViewer.Markdown.InlineCode}"/>
+		<Setter Property="MonospaceFontFamily" Value="fonts:Noto#Noto Sans Mono"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Text}"/>
 		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeight}}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.InlineCode.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.InlineCode.Padding}"/>
+		<Setter Property="TextVerticalAlignment" Value="Top"/>
 	</Style>
 	<Style Selector="ca|CHyperlink">
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Text}"/>
@@ -64,36 +66,42 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.List.Text.Margin}"/>
 	</Style>
 	<Style Selector="ca|CTextBlock.Heading1">
+		<Setter Property="FontFamily" Value="fonts:Noto#Noto Serif"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading1}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/MarkdownViewer.Markdown.Heading1.Foreground}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading1}"/>
 	</Style>
 	<Style Selector="ca|CTextBlock.Heading2">
+		<Setter Property="FontFamily" Value="fonts:Noto#Noto Serif"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading2}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/MarkdownViewer.Markdown.Heading2.Foreground}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading2}"/>
 	</Style>
 	<Style Selector="ca|CTextBlock.Heading3">
+		<Setter Property="FontFamily" Value="fonts:Noto#Noto Serif"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading3}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/MarkdownViewer.Markdown.Heading3.Foreground}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading3}"/>
 	</Style>
 	<Style Selector="ca|CTextBlock.Heading4">
+		<Setter Property="FontFamily" Value="fonts:Noto#Noto Serif"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading4}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/MarkdownViewer.Markdown.Heading4.Foreground}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading4}"/>
 	</Style>
 	<Style Selector="ca|CTextBlock.Heading5">
+		<Setter Property="FontFamily" Value="fonts:Noto#Noto Serif"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading5}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/MarkdownViewer.Markdown.Heading5.Foreground}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading5}"/>
 	</Style>
 	<Style Selector="ca|CTextBlock.Heading6">
+		<Setter Property="FontFamily" Value="fonts:Noto#Noto Serif"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading6}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/MarkdownViewer.Markdown.Heading6.Foreground}"/>

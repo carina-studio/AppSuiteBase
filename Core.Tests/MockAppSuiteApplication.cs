@@ -34,7 +34,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
     // Static fields.
     static volatile MockAppSuiteApplication? current;
-    static readonly object initSyncLock = new();
+    static readonly Lock initSyncLock = new();
     static volatile SingleThreadSynchronizationContext? synchronizationContext;
 
 
@@ -117,6 +117,10 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
     /// <inheritdoc/>
     public virtual Task<ApplicationUpdateInfo?> CheckForApplicationUpdateAsync() => Task.FromResult((ApplicationUpdateInfo?)null);
+
+
+    /// <inheritdoc/>
+    public ChineseVariant ChineseVariant => ChineseVariant.Default;
 
 
     /// <inheritdoc/>
@@ -212,7 +216,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
     {
         if (current != null)
             return current;
-        lock (initSyncLock)
+        using (var _ = initSyncLock.EnterScope())
         {
             if (current != null)
                 return current;
@@ -292,6 +296,10 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
     /// <inheritdoc/>
     public virtual Window? LatestActiveWindow => null;
+    
+    
+    /// <inheritdoc/>
+    public ChineseVariant LaunchChineseVariant => ChineseVariant.Default;
 
 
     /// <inheritdoc/>
@@ -470,7 +478,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
     /// <inheritdoc/>
     public virtual bool TryFindResource(object key, ThemeVariant? theme, [NotNullWhen(true)] out object? value)
     {
-        value = default;
+        value = null;
         return false;
     }
 

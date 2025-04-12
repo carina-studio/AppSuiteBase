@@ -17,12 +17,20 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<AvaloniaResource Include="Fonts/Inter-Bold.ttf" />
-		<AvaloniaResource Include="Fonts/Inter-Regular.ttf" />
-		<AvaloniaResource Include="Fonts/NotoSansSC-Bold.ttf" />
-		<AvaloniaResource Include="Fonts/NotoSansSC-Regular.ttf" />
-		<AvaloniaResource Include="Fonts/NotoSansTC-Bold.ttf" />
-		<AvaloniaResource Include="Fonts/NotoSansTC-Regular.ttf" />
+		<AvaloniaResource Include="Fonts/Inter/Inter-Bold.ttf" />
+		<AvaloniaResource Include="Fonts/Inter/Inter-Regular.ttf" />
+		<AvaloniaResource Include="Fonts/Noto/NotoSans-Bold.ttf" />
+		<AvaloniaResource Include="Fonts/Noto/NotoSans-Italic.ttf" />
+		<AvaloniaResource Include="Fonts/Noto/NotoSans-Regular.ttf" />
+		<AvaloniaResource Include="Fonts/Noto/NotoSansMono-Bold.ttf" />
+		<AvaloniaResource Include="Fonts/Noto/NotoSansMono-Regular.ttf" />
+		<AvaloniaResource Include="Fonts/Noto/NotoSerif-Bold.ttf" />
+		<AvaloniaResource Include="Fonts/Noto/NotoSerif-Italic.ttf" />
+		<AvaloniaResource Include="Fonts/Noto/NotoSerif-Regular.ttf" />
+		<AvaloniaResource Include="Fonts/Noto/NotoSansSC-Bold.ttf" />
+		<AvaloniaResource Include="Fonts/Noto/NotoSansSC-Regular.ttf" />
+		<AvaloniaResource Include="Fonts/Noto/NotoSansTC-Bold.ttf" />
+		<AvaloniaResource Include="Fonts/Noto/NotoSansTC-Regular.ttf" />
 	</ItemGroup>
 
 	<ItemGroup>

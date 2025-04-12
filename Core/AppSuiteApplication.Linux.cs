@@ -111,7 +111,7 @@ partial class AppSuiteApplication
     static unsafe bool InitializeGdk()
     {
         // check state
-        if (gdkLibHandle != default)
+        if (gdkLibHandle != IntPtr.Zero)
             return true;
         
         // load library
@@ -214,7 +214,7 @@ partial class AppSuiteApplication
     {
         builder.With(new FontManagerOptions
         {
-            DefaultFamilyName = $"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts/#Inter",
+            DefaultFamilyName = "fonts:Inter#Inter",
             FontFallbacks = new List<FontFallback>(8).Also(it =>
             {
                 foreach (var fontFamily in embeddedChineseFonts)
@@ -226,36 +226,75 @@ partial class AppSuiteApplication
                     });
                 }
                 // ReSharper disable StringLiteralTypo
-                it.Add(new()
+                switch (_LaunchChineseVariant)
                 {
-                    FontFamily = new("Noto Sans CJK TC"),
-                    UnicodeRange = cjkUnicodeRanges,
-                });
-                it.Add(new()
-                {
-                    FontFamily = new("Noto Sans CJK SC"),
-                    UnicodeRange = cjkUnicodeRanges,
-                });
-                it.Add(new()
-                {
-                    FontFamily = new("Noto Sans Mono CJK TC"),
-                    UnicodeRange = cjkUnicodeRanges,
-                });
-                it.Add(new()
-                {
-                    FontFamily = new("Noto Sans Mono CJK SC"),
-                    UnicodeRange = cjkUnicodeRanges,
-                });
-                it.Add(new()
-                {
-                    FontFamily = new("Noto Serif CJK TC"),
-                    UnicodeRange = cjkUnicodeRanges,
-                });
-                it.Add(new()
-                {
-                    FontFamily = new("Noto Serif CJK SC"),
-                    UnicodeRange = cjkUnicodeRanges,
-                });
+                    case ChineseVariant.Default:
+                        it.Add(new()
+                        {
+                            FontFamily = new("Noto Sans CJK SC"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        it.Add(new()
+                        {
+                            FontFamily = new("Noto Sans Mono CJK SC"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        it.Add(new()
+                        {
+                            FontFamily = new("Noto Serif CJK SC"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        it.Add(new()
+                        {
+                            FontFamily = new("Noto Sans CJK TC"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        it.Add(new()
+                        {
+                            FontFamily = new("Noto Sans Mono CJK TC"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        it.Add(new()
+                        {
+                            FontFamily = new("Noto Serif CJK TC"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        break;
+                    case ChineseVariant.Taiwan:
+                        it.Add(new()
+                        {
+                            FontFamily = new("Noto Sans CJK TC"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        it.Add(new()
+                        {
+                            FontFamily = new("Noto Sans Mono CJK TC"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        it.Add(new()
+                        {
+                            FontFamily = new("Noto Serif CJK TC"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        it.Add(new()
+                        {
+                            FontFamily = new("Noto Sans CJK SC"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        it.Add(new()
+                        {
+                            FontFamily = new("Noto Sans Mono CJK SC"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        it.Add(new()
+                        {
+                            FontFamily = new("Noto Serif CJK SC"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
                 // ReSharper restore StringLiteralTypo
             }).ToArray(),
         });

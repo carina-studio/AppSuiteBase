@@ -44,6 +44,7 @@ using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Input.Raw;
+using Avalonia.Media.Fonts;
 using Avalonia.Platform.Storage;
 using Avalonia.Themes.Fluent;
 using Avalonia.Threading;
@@ -259,6 +260,16 @@ namespace CarinaStudio.AppSuite
         }
         
         
+        // Implementation of temporary settings.
+        class TempSettingsImpl() : PersistentSettings(JsonSettingsSerializer.Default)
+        {
+            // Implementations.
+            protected override void OnUpgrade(int oldVersion)
+            { }
+            public override int Version => int.MinValue;
+        }
+        
+        
         // Session of tracing.
         class TracingSession(AppSuiteApplication app) : IDisposable
         {
@@ -303,7 +314,7 @@ namespace CarinaStudio.AppSuite
             if (Platform.IsWindows)
             {
                 var fileNameBuffer = new StringBuilder(256);
-                var size = Native.Win32.GetModuleFileName(default, fileNameBuffer, (uint)fileNameBuffer.Capacity);
+                var size = Native.Win32.GetModuleFileName(IntPtr.Zero, fileNameBuffer, (uint)fileNameBuffer.Capacity);
                 if (size <= fileNameBuffer.Capacity)
                 {
                     var fileName = fileNameBuffer.ToString();
@@ -334,8 +345,10 @@ namespace CarinaStudio.AppSuite
         static readonly string InitSettingsFilePath = Path.Combine(AppDirectoryPath, "InitSettings.json");
         static InitSettingsImpl? InitSettingsInstance;
         static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new("IsAcceptNonStableApplicationUpdateInitialized", false);
+        static ChineseVariant _LaunchChineseVariant;
         static readonly SettingKey<int> LogOutputTargetPortKey = new("LogOutputTargetPort");
         static readonly SettingKey<byte[]> MainWindowViewModelStatesKey = new("MainWindowViewModelStates", []);
+        static readonly string SettingsFilePath = Path.Combine(AppDirectoryPath, "Settings.json");
 
 
         // Fields.
@@ -379,7 +392,6 @@ namespace CarinaStudio.AppSuite
         ApplicationArgsBuilder? restartArgs;
         SelfTestingWindowImpl? selfTestingWindow;
         SettingsImpl? settings;
-        readonly string settingsFilePath;
         ShutdownSource shutdownSource = ShutdownSource.None;
         SplashWindowImpl? splashWindow;
         long splashWindowShownTime;
@@ -485,7 +497,6 @@ namespace CarinaStudio.AppSuite
             // get file paths
             // ReSharper disable VirtualMemberCallInConstructor
             this.configurationFilePath = Path.Combine(this.RootPrivateDirectoryPath, "ConfigOverride.json");
-            this.settingsFilePath = Path.Combine(this.RootPrivateDirectoryPath, "Settings.json");
             // ReSharper restore VirtualMemberCallInConstructor
 
             // check whether process is running as admin or not
@@ -496,6 +507,7 @@ namespace CarinaStudio.AppSuite
 
             // setup properties
             // ReSharper disable InvokeAsExtensionMethod
+            this.ChineseVariant = _LaunchChineseVariant;
             this.MainWindows = ListExtensions.AsReadOnly(this.mainWindows);
             this.Windows = ListExtensions.AsReadOnly(this.windows);
             // ReSharper restore InvokeAsExtensionMethod
@@ -675,17 +687,31 @@ namespace CarinaStudio.AppSuite
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
             
             // load initial settings
-            Debug.WriteLine("Start loading initial settings");
+            LogToConsole("Start loading initial settings");
             InitSettingsInstance = new InitSettingsImpl();
             try
             {
                 if (System.IO.File.Exists(InitSettingsFilePath))
                     InitSettingsInstance.Load(InitSettingsFilePath);
-                Debug.WriteLine("Complete loading initial settings");
+                LogToConsole("Complete loading initial settings");
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Unable to load initial settings. {ex.GetType().Name}: {ex.Message}");
+                LogToConsole($"Unable to load initial settings. {ex.GetType().Name}: {ex.Message}");
+            }
+            
+            // load temp settings
+            LogToConsole("Start loading temporary settings");
+            var tempSettings = new TempSettingsImpl();
+            try
+            {
+                if (System.IO.File.Exists(SettingsFilePath))
+                    tempSettings.Load(SettingsFilePath);
+                LogToConsole("Complete loading temporary settings");
+            }
+            catch (Exception ex)
+            {
+                LogToConsole($"Unable to load temporary settings. {ex.GetType().Name}: {ex.Message}");
             }
 
             // build application
@@ -695,14 +721,37 @@ namespace CarinaStudio.AppSuite
                 it.LogToTrace()
                     .UsePlatformDetect();
                 
+                // check variant of Chinese
+                _LaunchChineseVariant = tempSettings.GetValueOrDefault(SettingKeys.Culture).GetChineseVariant();
+                LogToConsole($"Chinese variant: {_LaunchChineseVariant}");
+                
+                // load embedded fonts
+                var fontBaseUri = $"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts";
+                it.ConfigureFonts(fontManager =>
+                {
+                    fontManager.AddFontCollection(new EmbeddedFontCollection(new("fonts:Inter", UriKind.Absolute), new($"{fontBaseUri}/Inter", UriKind.Absolute)));
+                    fontManager.AddFontCollection(new EmbeddedFontCollection(new("fonts:Noto", UriKind.Absolute), new($"{fontBaseUri}/Noto", UriKind.Absolute)));
+                });
+                                    
                 // load embedded chinese fonts
-                var embeddedChineseFonts = new List<FontFamily>(4).Also(it =>
+                var embeddedChineseFonts = new List<FontFamily>(2).Also(it =>
                 {
                     if (InitSettingsInstance.GetValueOrDefault(InitSettingKeys.UseEmbeddedFontsForChinese))
                     {
-                        var baseUri = new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts", UriKind.Absolute);
-                        it.Add(new(baseUri, "#Noto Sans TC"));
-                        it.Add(new(baseUri, "#Noto Sans SC"));
+                        var baseUri = new Uri($"{fontBaseUri}/Noto", UriKind.Absolute);
+                        switch (_LaunchChineseVariant)
+                        {
+                            case ChineseVariant.Default:
+                                it.Add(new(baseUri, "#Noto Sans SC"));
+                                it.Add(new(baseUri, "#Noto Sans TC"));
+                                break;
+                            case ChineseVariant.Taiwan:
+                                it.Add(new(baseUri, "#Noto Sans TC"));
+                                it.Add(new(baseUri, "#Noto Sans SC"));
+                                break;
+                            default:
+                                throw new NotImplementedException();
+                        }
                     }
                 });
                 
@@ -979,6 +1028,10 @@ namespace CarinaStudio.AppSuite
             }
             return this.UpdateInfo;
         }
+
+
+        /// <inheritdoc/>
+        public ChineseVariant ChineseVariant { get; private set; }
 
 
         /// <inheritdoc/>
@@ -1818,6 +1871,10 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
+        public ChineseVariant LaunchChineseVariant => _LaunchChineseVariant;
+
+
+        /// <inheritdoc/>
         public Avalonia.Controls.Window? LatestActiveWindow { get; private set; }
 
 
@@ -2213,12 +2270,12 @@ namespace CarinaStudio.AppSuite
             this.Logger.LogDebug("Start loading settings");
             try
             {
-                await this.settings.LoadAsync(this.settingsFilePath);
+                await this.settings.LoadAsync(SettingsFilePath);
                 this.Logger.LogDebug("Complete loading settings");
             }
             catch (Exception ex)
             {
-                this.Logger.LogError(ex, "Failed to load settings from '{settingsFilePath}'", this.settingsFilePath);
+                this.Logger.LogError(ex, "Failed to load settings from '{settingsFilePath}'", SettingsFilePath);
             }
 
             // setup accepting non-stable update
@@ -3882,18 +3939,18 @@ namespace CarinaStudio.AppSuite
                 if (isCritical)
                 {
                     this.Logger.LogWarning("Start saving settings for critical reason");
-                    this.settings.Save(this.settingsFilePath);
+                    this.settings.Save(SettingsFilePath);
                 }
                 else
                 {
                     this.Logger.LogDebug("Start saving settings");
-                    await this.settings.SaveAsync(this.settingsFilePath);
+                    await this.settings.SaveAsync(SettingsFilePath);
                 }
                 this.Logger.LogDebug("Complete saving settings");
             }
             catch (Exception ex)
             {
-                this.Logger.LogError(ex, "Failed to save settings to '{settingsFilePath}'", this.settingsFilePath);
+                this.Logger.LogError(ex, "Failed to save settings to '{settingsFilePath}'", SettingsFilePath);
             }
         }
 
@@ -3951,7 +4008,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get version of <see cref="Settings"/>.
         /// </summary>
-        protected virtual int SettingsVersion { get; } = 2;
+        protected virtual int SettingsVersion => 2;
 
 
         // Setup file target for log output.
@@ -4700,12 +4757,13 @@ namespace CarinaStudio.AppSuite
         async Task UpdateCultureInfoAsync(bool updateStringResources)
         {
             // get culture info
-            var cultureInfo = await this.Settings.GetValueOrDefault(SettingKeys.Culture).ToCultureInfoAsync(true);
+            var culture = this.Settings.GetValueOrDefault(SettingKeys.Culture);
+            var cultureInfo = await culture.GetCultureInfoAsync(true);
             cultureInfo.ClearCachedData();
             if (Equals(cultureInfo, this.cultureInfo))
                 return;
 
-            this.Logger.LogDebug("Change culture info to {cultureInfoName}", cultureInfo.Name);
+            this.Logger.LogDebug("Change culture info from {prevName} to {name}", this.cultureInfo.Name, cultureInfo.Name);
 
             // change culture info
             this.cultureInfo = cultureInfo;
@@ -4723,6 +4781,15 @@ namespace CarinaStudio.AppSuite
             // update string
             if (updateStringResources)
                 this.UpdateStringResources();
+            
+            // update chinese variant
+            var chineseVariant = culture.GetChineseVariant();
+            if (this.ChineseVariant != chineseVariant)
+            {
+                this.Logger.LogDebug("Change variant of Chinese from {prevVariant} to {variant}", this.ChineseVariant, chineseVariant);
+                this.ChineseVariant = chineseVariant;
+                this.OnPropertyChanged(nameof(ChineseVariant));
+            }
 
             // wait for completion
             await taskCompletionSource.Task;

@@ -63,14 +63,14 @@ class LocalizationTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategor
             if (this.Application.Settings.GetValueOrDefault(SettingKeys.Culture) != appCulture)
             {
                 isTestStringChanged = false;
-                latestNotifiedTestString = default;
+                latestNotifiedTestString = null;
                 this.Application.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, appCulture);
             }
             await Task.Delay(1000, cancellationToken);
             Assert.That(isTestStringChanged, $"Did not receive change notification after changing culture to '{appCulture}'.");
             Assert.That(expectedString == latestNotifiedTestString, "String from observer is incorrect");
             Assert.That(expectedString == this.Application.GetString("LocalizationTest.String"), "String is incorrect");
-            var appCultureInfo = await appCulture.ToCultureInfoAsync();
+            var appCultureInfo = await appCulture.GetCultureInfoAsync();
             var currentCulture = CultureInfo.CurrentCulture;
             var currentUICulture = CultureInfo.CurrentUICulture;
             var taskCompletionSource = new TaskCompletionSource();
@@ -85,6 +85,21 @@ class LocalizationTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategor
             Assert.That(appCultureInfo.Name == currentUICulture.Name, "CultureInfo.CurrentUICulture is incorrect");
             Assert.That(appCultureInfo.Name == CultureInfo.DefaultThreadCurrentCulture?.Name, "CultureInfo.DefaultThreadCurrentCulture is incorrect");
             Assert.That(appCultureInfo.Name == CultureInfo.DefaultThreadCurrentUICulture?.Name, "CultureInfo.DefaultThreadCurrentUICulture is incorrect");
+            switch (appCulture)
+            {
+                case ApplicationCulture.ZH_CN:
+                    Assert.That(this.Application.ChineseVariant == ChineseVariant.Default, "Variant of Chinese is incorrect");
+                    break;
+                case ApplicationCulture.ZH_TW:
+                    Assert.That(this.Application.ChineseVariant == ChineseVariant.Taiwan, "Variant of Chinese is incorrect");
+                    break;
+                default:
+                {
+                    var expectedVariant = (await ApplicationCulture.System.GetCultureInfoAsync(true)).GetChineseVariant();
+                    Assert.That(this.Application.ChineseVariant == expectedVariant, "Variant of Chinese is incorrect");
+                    break;
+                }
+            }
         }
     }
 

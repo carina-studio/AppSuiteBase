@@ -1,7 +1,5 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Fonts;
 using CarinaStudio.Collections;
@@ -235,14 +233,9 @@ partial class AppSuiteApplication
     // Setup AppBuilder for macOS.
     static void SetupMacOSAppBuilder(AppBuilder builder, UnicodeRange cjkUnicodeRanges, IList<FontFamily> embeddedChineseFonts)
     {
-        builder.ConfigureFonts(fontManager =>
-        {
-            fontManager.AddFontCollection(new EmbeddedFontCollection(
-                new Uri("fonts:Inter", UriKind.Absolute),
-                new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts", UriKind.Absolute)));
-        });
         builder.With(new FontManagerOptions
         {
+            DefaultFamilyName = "fonts:Inter#Inter",
             FontFallbacks = new List<FontFallback>(8).Also(it =>
             {
                 if (embeddedChineseFonts.IsNotEmpty())
@@ -258,13 +251,20 @@ partial class AppSuiteApplication
                 }
                 else
                 {
-                    FontFamily[] chineseFonts =
-                    [
-                        new FontFamily("蘋方-繁"),
-                        new FontFamily("苹方-简"),
-                        new FontFamily("黑體-繁"),
-                        new FontFamily("黑体-简"),
-                    ];
+                    FontFamily[] chineseFonts = _LaunchChineseVariant switch
+                    {
+                        ChineseVariant.Default =>
+                        [
+                            new FontFamily("苹方-简"),
+                            new FontFamily("黑体-简"),
+                        ],
+                        ChineseVariant.Taiwan =>
+                        [
+                            new FontFamily("蘋方-繁"),
+                            new FontFamily("黑體-繁"),
+                        ],
+                        _ => throw new NotImplementedException(),
+                    };
                     foreach (var fontFamily in chineseFonts)
                     {
                         it.Add(new()

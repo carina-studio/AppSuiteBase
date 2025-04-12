@@ -65,6 +65,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
             this.IsUseEmbeddedFontsForChineseSupported = true;
             this.IsUseEmbeddedFontsForChineseChanged = InitUseEmbeddedFontsForChinese != initSettings.GetValueOrDefault(InitSettingKeys.UseEmbeddedFontsForChinese);
         });
+        this.IsChineseVariantChanged = this.Application.ChineseVariant != this.Application.LaunchChineseVariant;
         ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged += this.OnMainWindowsChanged;
         this.Application.ProductManager.Let(it =>
         {
@@ -272,6 +273,12 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// Check whether installation of XRandR is being checked or not.
     /// </summary>
     public bool IsCheckingXRandR { get; private set; }
+    
+    
+    /// <summary>
+    /// Check whether variant of Chinese has been changed or not.
+    /// </summary>
+    public bool IsChineseVariantChanged { get; private set; }
 
 
     /// <summary>
@@ -389,7 +396,16 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     protected override void OnApplicationPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnApplicationPropertyChanged(e);
-        if (e.PropertyName == nameof(IAppSuiteApplication.CustomScreenScaleFactor))
+        if (e.PropertyName == nameof(IAppSuiteApplication.ChineseVariant))
+        {
+            var changed = this.Application.ChineseVariant != this.Application.LaunchChineseVariant;
+            if (this.IsChineseVariantChanged != changed)
+            {
+                this.IsChineseVariantChanged = changed;
+                this.OnPropertyChanged(nameof(IsChineseVariantChanged));
+            }
+        }
+        else if (e.PropertyName == nameof(IAppSuiteApplication.CustomScreenScaleFactor))
         {
             this.OnPropertyChanged(nameof(CustomScreenScaleFactor));
             var adjusted = Math.Abs(this.Application.CustomScreenScaleFactor - this.Application.EffectiveCustomScreenScaleFactor) >= 0.01;

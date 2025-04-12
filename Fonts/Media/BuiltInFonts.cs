@@ -13,13 +13,17 @@ namespace CarinaStudio.AppSuite.Media;
 public static class BuiltInFonts
 {
     // Fields.
-    static readonly Uri baseCoreResourceUri = new($"avares://CarinaStudio.AppSuite.Core/Fonts/");
+    static readonly Uri baseCoreInterResourceUri = new("avares://CarinaStudio.AppSuite.Core/Fonts/Inter");
+    static readonly Uri baseCoreNotoResourceUri = new("avares://CarinaStudio.AppSuite.Core/Fonts/Noto");
     static readonly Uri baseResourceUri = new($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}/Resources/Fonts/");
     static IList<FontFamily>? fontFamilies;
     static FontFamily? ibmPlexMono;
     static FontFamily? inter;
+    static FontFamily? notoSans;
+    static FontFamily? notoSansMono;
     static FontFamily? notoSansSC;
     static FontFamily? notoSansTC;
+    static FontFamily? notoSerif;
     static FontFamily? roboto;
     static FontFamily? robotoMono;
     static FontFamily? sourceCodePro;
@@ -30,16 +34,19 @@ public static class BuiltInFonts
     /// </summary>
     public static IList<FontFamily> FontFamilies =>
         // ReSharper disable once InvokeAsExtensionMethod
-        fontFamilies ?? ListExtensions.AsReadOnly(new[]
-        {
+        fontFamilies ?? ListExtensions.AsReadOnly(
+        [
             IBMPlexMono,
             Inter,
+            NotoSans,
+            NotoSansMono,
             NotoSansSC,
             NotoSansTC,
+            NotoSerif,
             Roboto,
             RobotoMono,
-            SourceCodePro,
-        }).Also(it => fontFamilies = it);
+            SourceCodePro
+        ]).Also(it => fontFamilies = it);
 
 
     /// <summary>
@@ -51,19 +58,37 @@ public static class BuiltInFonts
     /// <summary>
     /// Inter.
     /// </summary>
-    public static FontFamily Inter => inter ?? new FontFamily(baseCoreResourceUri, "#Inter").Also(it => inter = it);
+    public static FontFamily Inter => inter ?? new FontFamily(baseCoreInterResourceUri, "#Inter").Also(it => inter = it);
+    
+    
+    /// <summary>
+    /// Noto Sans.
+    /// </summary>
+    public static FontFamily NotoSans => notoSans ?? new FontFamily(baseCoreNotoResourceUri, "#Noto Sans").Also(it => notoSans = it);
+    
+    
+    /// <summary>
+    /// Noto Sans Mono.
+    /// </summary>
+    public static FontFamily NotoSansMono => notoSansMono ?? new FontFamily(baseCoreNotoResourceUri, "#Noto Sans Mono").Also(it => notoSansMono = it);
     
     
     /// <summary>
     /// Noto Sans Simplified Chinese.
     /// </summary>
-    public static FontFamily NotoSansSC => notoSansSC ?? new FontFamily(baseCoreResourceUri, "#Noto Sans SC").Also(it => notoSansSC = it);
+    public static FontFamily NotoSansSC => notoSansSC ?? new FontFamily(baseCoreNotoResourceUri, "#Noto Sans SC").Also(it => notoSansSC = it);
     
     
     /// <summary>
     /// Noto Sans Traditional Chinese.
     /// </summary>
-    public static FontFamily NotoSansTC => notoSansTC ?? new FontFamily(baseCoreResourceUri, "#Noto Sans TC").Also(it => notoSansTC = it);
+    public static FontFamily NotoSansTC => notoSansTC ?? new FontFamily(baseCoreNotoResourceUri, "#Noto Sans TC").Also(it => notoSansTC = it);
+    
+    
+    /// <summary>
+    /// Noto Serif.
+    /// </summary>
+    public static FontFamily NotoSerif => notoSerif ?? new FontFamily(baseCoreNotoResourceUri, "#Noto Serif").Also(it => notoSerif = it);
 
 
     /// <summary>
@@ -77,7 +102,7 @@ public static class BuiltInFonts
     {
         var uri = name switch
         {
-            nameof(Inter) or nameof(NotoSansSC) or nameof(NotoSansTC) => Global.Run(() =>
+            nameof(Inter) => Global.Run(() =>
             {
                 weight = weight switch
                 {
@@ -85,8 +110,23 @@ public static class BuiltInFonts
                     _ => FontWeight.Regular,
                 };
                 if (weight == FontWeight.Regular)
-                    return new Uri(baseCoreResourceUri, $"{name}-Regular.ttf");
-                return new Uri(baseCoreResourceUri, $"{name}-{weight}.ttf");
+                    return new Uri(baseCoreInterResourceUri, $"{name}-Regular.ttf");
+                return new Uri(baseCoreInterResourceUri, $"{name}-{weight}.ttf");
+            }),
+            nameof(NotoSans) 
+                or nameof(NotoSansMono) 
+                or nameof(NotoSansSC) 
+                or nameof(NotoSansTC)
+                or nameof(NotoSerif) => Global.Run(() =>
+            {
+                weight = weight switch
+                {
+                    FontWeight.Bold => weight,
+                    _ => FontWeight.Regular,
+                };
+                if (weight == FontWeight.Regular)
+                    return new Uri(baseCoreNotoResourceUri, $"{name}-Regular.ttf");
+                return new Uri(baseCoreNotoResourceUri, $"{name}-{weight}.ttf");
             }),
             _ => Global.Run(() =>
             {

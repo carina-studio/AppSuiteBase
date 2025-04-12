@@ -1,6 +1,5 @@
 ﻿using CarinaStudio.AppSuite.Scripting;
 using CarinaStudio.Configuration;
-using System;
 
 namespace CarinaStudio.AppSuite;
 

@@ -425,7 +425,7 @@
 							</StackPanel>
 
 							<Button Name="testButton1" Command="{Binding $parent[Window].Test}" Margin="5" ToolTip.Tip="{DynamicResource String/Common.Copy.WithGesture}">
-								<TextBlock Background="Red" BaselineOffset="5" Text="ABC abjg 中文"/>
+								<TextBlock Background="Red" BaselineOffset="5" Text="ABC abjg 中文 過骨"/>
 							</Button>
 							<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
 							

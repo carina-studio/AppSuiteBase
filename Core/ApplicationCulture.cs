@@ -43,63 +43,73 @@ public static class ApplicationCultureExtensions
 
 
 	/// <summary>
-	/// Convert to <see cref="CultureInfo"/> asynchronously.
+	/// Get corresponding variant of Chinese.
+	/// </summary>
+	/// <param name="culture"><see cref="ApplicationCulture"/>.</param>
+	/// <param name="invalidateSysCultureInfo">True to invalidate system culture info before conversion.</param>
+	/// <returns>Variant of Chinese.</returns>
+	public static ChineseVariant GetChineseVariant(this ApplicationCulture culture, bool invalidateSysCultureInfo = false) => culture switch
+	{
+		ApplicationCulture.ZH_CN => ChineseVariant.Default,
+		ApplicationCulture.ZH_TW => ChineseVariant.Taiwan,
+		_ => ApplicationCulture.System.GetCultureInfo(invalidateSysCultureInfo).GetChineseVariant(),
+	};
+
+
+	/// <summary>
+	/// Get corresponding <see cref="CultureInfo"/>.
 	/// </summary>
 	/// <param name="culture"><see cref="ApplicationCulture"/>.</param>
 	/// <param name="invalidateSysCultureInfo">True to invalidate system culture info before conversion.</param>
 	/// <returns><see cref="CultureInfo"/>.</returns>
-	public static async Task<CultureInfo> ToCultureInfoAsync(this ApplicationCulture culture, bool invalidateSysCultureInfo = false)
-    {
+	public static CultureInfo GetCultureInfo(this ApplicationCulture culture, bool invalidateSysCultureInfo = false)
+	{
 		if (culture == ApplicationCulture.System)
 		{
 			if (Platform.IsMacOS)
 			{
 				if (invalidateSysCultureInfo || CachedMacOSSysCultureInfo == null)
 				{
-					return await Task.Run(() =>
+					try
 					{
-						try
+						using var process = Process.Start(new ProcessStartInfo
 						{
-							using var process = Process.Start(new ProcessStartInfo()
+							Arguments = "read -g AppleLanguages",
+							CreateNoWindow = true,
+							FileName = "defaults",
+							RedirectStandardOutput = true,
+							UseShellExecute = false,
+						});
+						if (process != null)
+						{
+							using var reader = process.StandardOutput;
+							var line = reader.ReadLine();
+							while (line != null)
 							{
-								Arguments = "read -g AppleLanguages",
-								CreateNoWindow = true,
-								FileName = "defaults",
-								RedirectStandardOutput = true,
-								UseShellExecute = false,
-							});
-							if (process != null)
-							{
-								using var reader = process.StandardOutput;
-								var line = reader.ReadLine();
-								while (line != null)
+								var match = MacOSSysLangRegex.Match(line);
+								if (match.Success)
 								{
-									var match = MacOSSysLangRegex.Match(line);
+									match = IetfLangTagRegex.Match(match.Groups["Language"].Value);
 									if (match.Success)
 									{
-										match = IetfLangTagRegex.Match(match.Groups["Language"].Value);
-										if (match.Success)
+										try
 										{
-											try
-											{
-											
-												CachedMacOSSysCultureInfo = CultureInfo.GetCultureInfo($"{match.Groups["Language"].Value}-{match.Groups["Region"].Value}");
-												break;
-											}
-											// ReSharper disable once EmptyGeneralCatchClause
-											catch
-											{ }
+											CachedMacOSSysCultureInfo = CultureInfo.GetCultureInfo($"{match.Groups["Language"].Value}-{match.Groups["Region"].Value}");
+											break;
 										}
+										// ReSharper disable once EmptyGeneralCatchClause
+										catch
+										{ }
 									}
-									line = reader.ReadLine();
 								}
+								line = reader.ReadLine();
 							}
 						}
-						// ReSharper disable once EmptyGeneralCatchClause
-						catch
-						{ }
-						return CachedMacOSSysCultureInfo ?? CultureInfo.InstalledUICulture;
-					}, CancellationToken.None);
+					}
+					// ReSharper disable once EmptyGeneralCatchClause
+					catch
+					{ }
+					return CachedMacOSSysCultureInfo ?? CultureInfo.InstalledUICulture;
 				}
 			}
 			return CultureInfo.InstalledUICulture;
@@ -115,5 +125,15 @@ public static class ApplicationCultureExtensions
 			nameBuilder[i] = char.ToLowerInvariant(nameBuilder[i]);
 		}
 		return CultureInfo.GetCultureInfo(nameBuilder.ToString());
-    }
+	}
+
+
+	/// <summary>
+	/// Get corresponding <see cref="CultureInfo"/> asynchronously.
+	/// </summary>
+	/// <param name="culture"><see cref="ApplicationCulture"/>.</param>
+	/// <param name="invalidateSysCultureInfo">True to invalidate system culture info before conversion.</param>
+	/// <returns><see cref="CultureInfo"/>.</returns>
+	public static Task<CultureInfo> GetCultureInfoAsync(this ApplicationCulture culture, bool invalidateSysCultureInfo = false) => Task.Run(() => 
+		GetCultureInfo(culture, invalidateSysCultureInfo), CancellationToken.None);
 }

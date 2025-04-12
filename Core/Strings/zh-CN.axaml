@@ -69,6 +69,7 @@
 	<sys:String x:Key="String/ApplicationOptions">应用程序选项</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">接收非正式版本的应用程序更新</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">语言</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.Culture.ChineseVariantChanged">中文环境已改变，需要重新启动应用程序以生效。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">用户界面缩放比例</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR 工具尚未安装。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">默认脚本语言</sys:String>
@@ -292,6 +293,7 @@
 
 	<!-- MainWindow -->
 	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">已经有新的 {0} 版本。</sys:String>
+	<sys:String x:Key="String/MainWindow.ChineseVariantChanged">中文环境已改变，将重新启动应用程序以生效。</sys:String>
 	<sys:String x:Key="String/MainWindow.ConfirmLayoutingLotsOfMainWindows">排列较多数量的窗口导致不适合的排列结果，是否仍要进行排列？</sys:String>
 	<sys:String x:Key="String/MainWindow.ConfirmUsingCompactUI">您正在使用较小屏幕的设备，是否要启用紧密版面配置？您也可以在应用程序选项中变更此设置。</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows">排列窗口</sys:String>

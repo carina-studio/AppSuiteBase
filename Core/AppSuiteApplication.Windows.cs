@@ -35,12 +35,12 @@ unsafe partial class AppSuiteApplication
         if (window.IsExtendedIntoWindowDecorations || window.SystemDecorations == SystemDecorations.None)
             return;
         var hWnd = (window.TryGetPlatformHandle()?.Handle).GetValueOrDefault();
-        if (hWnd != default)
+        if (hWnd != IntPtr.Zero)
         {
             // setup window corner
             var cornerPreference = Win32.DWMWCP.ROUND;
             var result = Win32.DwmSetWindowAttribute(hWnd, Win32.DWMWA.WINDOW_CORNER_PREFERENCE, &cornerPreference, sizeof(int));
-            if (result != default)
+            if (result != IntPtr.Zero)
             {
                 this.Logger.LogWarning("Failed to set corner preference of window '{title}', result: {result}", window.Title, result);
                 Marshal.SetLastSystemError(0);
@@ -50,7 +50,7 @@ unsafe partial class AppSuiteApplication
             // enable/disable dark mode
             var darkMode = this.EffectiveThemeMode == ThemeMode.Dark;
             result = Win32.DwmSetWindowAttribute(hWnd, Win32.DWMWA.USE_IMMERSIVE_DARK_MODE, &darkMode, sizeof(int) /* size of BOOL is same as DWORD */);
-            if (result != default)
+            if (result != IntPtr.Zero)
             {
                 this.Logger.LogWarning("Failed to set dark mode of window '{title}', result: {result}", window.Title, result);
                 Marshal.SetLastSystemError(0);
@@ -60,7 +60,7 @@ unsafe partial class AppSuiteApplication
             var titleBarColor = this.FindResourceOrDefault<Color>("Color/Window.TitleBar");
             var win32Color = (titleBarColor.B << 16) | (titleBarColor.G << 8) | titleBarColor.R;
             result = Win32.DwmSetWindowAttribute(hWnd, Win32.DWMWA.CAPTION_COLOR, &win32Color, sizeof(int));
-            if (result != default)
+            if (result != IntPtr.Zero)
             {
                 this.Logger.LogWarning("Failed to set caption color of window '{title}', result: {result}", window.Title, result);
                 Marshal.SetLastSystemError(0);
@@ -78,7 +78,7 @@ unsafe partial class AppSuiteApplication
         var instanceField = win32PlatformType.GetField("s_instance", BindingFlags.Static | BindingFlags.NonPublic) ?? throw new PlatformNotSupportedException("Field Avalonia.Win32.Win32Platform.s_instance not found.");
         var messageHwndField = win32PlatformType.GetField("_hwnd", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new PlatformNotSupportedException("Field Avalonia.Win32.Win32Platform._hwnd not found.");
         var hWnd = (IntPtr)messageHwndField.GetValue(instanceField.GetValue(null))!;
-        if (hWnd != default)
+        if (hWnd != IntPtr.Zero)
         {
             AttachWndProc(hWnd);
             this.isMessageWindowWndProcAttached = true;
@@ -99,10 +99,10 @@ unsafe partial class AppSuiteApplication
         var topLevel = window as TopLevel;
         var hWnd = default(IntPtr);
         if (topLevel is not null)
-            hWnd = topLevel.TryGetPlatformHandle()?.Handle ?? default;
+            hWnd = topLevel.TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
         else if (window is IntPtr intPtr)
             hWnd = intPtr;
-        if (hWnd == default)
+        if (hWnd == IntPtr.Zero)
         {
             if (topLevel is not null)
                 this.Logger.LogError("No handle for TopLevel {id:x8} to attach WndProc", topLevel.GetHashCode());
@@ -113,7 +113,7 @@ unsafe partial class AppSuiteApplication
 
         // get current window procedure
         var baseWndProc = Win32.GetWindowLongPtr(hWnd, Win32.GWL.WNDPROC);
-        if (baseWndProc == default)
+        if (baseWndProc == IntPtr.Zero)
         {
             if (topLevel is not null)
                 this.Logger.LogError("Base WndProc not found for TopLevel {id:x8} to attach WndProc", topLevel.GetHashCode());
@@ -171,7 +171,7 @@ unsafe partial class AppSuiteApplication
     void DetachWndProc(TopLevel topLevel)
     {
         // get handle
-        var hWnd = topLevel.TryGetPlatformHandle()?.Handle ?? default;
+        var hWnd = topLevel.TryGetPlatformHandle()?.Handle ?? IntPtr.Zero;
         
         // get base window procedure
         if (!this.baseWndProcPointers.Remove(topLevel, out var baseWndProc))
@@ -182,7 +182,7 @@ unsafe partial class AppSuiteApplication
         
         // detach window procedure
         this.Logger.LogTrace("Detach WndProc from TopLevel {id:x8}", topLevel.GetHashCode());
-        if (hWnd != default)
+        if (hWnd != IntPtr.Zero)
             Win32.SetWindowLongPtr(hWnd, Win32.GWL.WNDPROC, baseWndProc);
         Dispatcher.UIThread.Post(() => this.wndProcStubDelegates.Remove(topLevel), DispatcherPriority.Background);
         topLevel.Closed -= this.OnTopLevelClosedToDetachWndProc;
@@ -268,14 +268,9 @@ unsafe partial class AppSuiteApplication
     // Setup AppBuilder for Windows.
     static void SetupWindowsAppBuilder(AppBuilder builder, ISettings initSettings, UnicodeRange cjkUnicodeRanges, IList<FontFamily> embeddedChineseFonts)
     {
-        builder.ConfigureFonts(fontManager =>
-        {
-            fontManager.AddFontCollection(new EmbeddedFontCollection(
-                new Uri("fonts:Inter", UriKind.Absolute),
-                new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts", UriKind.Absolute)));
-        });
         builder.With(new FontManagerOptions
         {
+            DefaultFamilyName = "fonts:Inter#Inter",
             FontFallbacks = new List<FontFallback>(8).Also(it =>
             {
                 foreach (var fontFamily in embeddedChineseFonts)
@@ -287,16 +282,35 @@ unsafe partial class AppSuiteApplication
                     });
                 }
                 // ReSharper disable StringLiteralTypo
-                it.Add(new()
+                switch (_LaunchChineseVariant)
                 {
-                    FontFamily = new("Microsoft JhengHei UI"),
-                    UnicodeRange = cjkUnicodeRanges,
-                });
-                it.Add(new()
-                {
-                    FontFamily = new("Microsoft YaHei UI"),
-                    UnicodeRange = cjkUnicodeRanges,
-                });
+                    case ChineseVariant.Default:
+                        it.Add(new()
+                        {
+                            FontFamily = new("Microsoft YaHei UI"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        it.Add(new()
+                        {
+                            FontFamily = new("Microsoft JhengHei UI"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        break;
+                    case ChineseVariant.Taiwan:
+                        it.Add(new()
+                        {
+                            FontFamily = new("Microsoft JhengHei UI"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        it.Add(new()
+                        {
+                            FontFamily = new("Microsoft YaHei UI"),
+                            UnicodeRange = cjkUnicodeRanges,
+                        });
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
                 it.Add(new()
                 {
                     FontFamily = new("PMingLiU"),
@@ -314,7 +328,7 @@ unsafe partial class AppSuiteApplication
         {
             builder.With(new Win32PlatformOptions
             {
-                RenderingMode = new[] { Win32RenderingMode.Wgl, Win32RenderingMode.Software }
+                RenderingMode = [ Win32RenderingMode.Wgl, Win32RenderingMode.Software ]
             });
         }
     }
@@ -353,7 +367,7 @@ unsafe partial class AppSuiteApplication
         if (!this.SetupWindowsTaskbarList())
             return;
         var hWnd = (window.TryGetPlatformHandle()?.Handle).GetValueOrDefault();
-        if (hWnd == default)
+        if (hWnd == IntPtr.Zero)
             return;
         this.windowsTaskbarList.SetProgressValue(hWnd, (ulong)(window.TaskbarIconProgress * 1000 + 0.5), 1000UL);
     }
@@ -365,7 +379,7 @@ unsafe partial class AppSuiteApplication
         if (!this.SetupWindowsTaskbarList())
             return;
         var hWnd = (window.TryGetPlatformHandle()?.Handle).GetValueOrDefault();
-        if (hWnd == default)
+        if (hWnd == IntPtr.Zero)
             return;
         this.windowsTaskbarList.SetProgressState(hWnd, window.TaskbarIconProgressState switch
         {

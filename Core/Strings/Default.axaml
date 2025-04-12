@@ -75,6 +75,7 @@
 	<sys:String x:Key="String/ApplicationOptions">Application options</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">Accept non-stable application update</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">Language</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.Culture.ChineseVariantChanged">Chinese environment has been changed, need to restart application to take effect.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">User interface scale factor</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR tool is not installed yet.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">Default language</sys:String>
@@ -298,6 +299,7 @@
 
 	<!-- MainWindow -->
 	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">New version of {0} found.</sys:String>
+	<sys:String x:Key="String/MainWindow.ChineseVariantChanged">Chinese environment has been changed, will restart application to take effect.</sys:String>
 	<sys:String x:Key="String/MainWindow.ConfirmLayoutingLotsOfMainWindows">Layouting lots of windows may cause improper result, do you still want to layout windows?</sys:String>
 	<sys:String x:Key="String/MainWindow.ConfirmUsingCompactUI">You are using device with small screen. Do you want to enable compact layout? You can also switch it in application options.</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows">Layout windows</sys:String>

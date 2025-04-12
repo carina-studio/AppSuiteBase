@@ -117,6 +117,12 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// </summary>
     /// <returns>Task to wait for checking.</returns>
     Task<ApplicationUpdateInfo?> CheckForApplicationUpdateAsync();
+    
+    
+    /// <summary>
+    /// Get current variant of Chinese.
+    /// </summary>
+    ChineseVariant ChineseVariant { get; }
 
 
     /// <summary>
@@ -302,6 +308,12 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// Get latest active window.
     /// </summary>
     Window? LatestActiveWindow { get; }
+    
+    
+    /// <summary>
+    /// Get variant of Chinese to launch application.
+    /// </summary>
+    ChineseVariant LaunchChineseVariant { get; }
 
 
     /// <summary>
