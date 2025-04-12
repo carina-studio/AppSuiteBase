@@ -31,7 +31,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     
     // Static fields.
     static bool? InitDisableAngle;
-    static bool? InitUseEmbeddedFontsForChinese;
 
 
     // Fields.
@@ -59,11 +58,8 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
         {
             initSettings.SettingChanged += this.OnInitSettingsChanged;
             InitDisableAngle ??= initSettings.GetValueOrDefault(InitSettingKeys.DisableAngle);
-            InitUseEmbeddedFontsForChinese ??= initSettings.GetValueOrDefault(InitSettingKeys.UseEmbeddedFontsForChinese);
             this.IsDisableAngleSupported = Platform.IsWindows;
             this.IsDisableAngleChanged = InitDisableAngle != initSettings.GetValueOrDefault(InitSettingKeys.DisableAngle);
-            this.IsUseEmbeddedFontsForChineseSupported = true;
-            this.IsUseEmbeddedFontsForChineseChanged = InitUseEmbeddedFontsForChinese != initSettings.GetValueOrDefault(InitSettingKeys.UseEmbeddedFontsForChinese);
         });
         this.IsChineseVariantChanged = this.Application.ChineseVariant != this.Application.LaunchChineseVariant;
         ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged += this.OnMainWindowsChanged;
@@ -76,7 +72,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
                 it.ProductActivationChanged += this.OnProductActivationStateChanged;
             }
         });
-        this.CheckXRandRAsync();
+        _ = this.CheckXRandRAsync();
     }
 
 
@@ -91,7 +87,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
 
 
     // Check installation of XRandR.
-    async void CheckXRandRAsync()
+    async Task CheckXRandRAsync()
     {
         // check platform
         if (Platform.IsNotLinux)
@@ -333,18 +329,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// Check whether <see cref="UseCompactUserInterface"/> has been changed before restarting main windows or not.
     /// </summary>
     public bool IsUseCompactUserInterfaceChanged { get; private set;}
-    
-    
-    /// <summary>
-    /// Check whether <see cref="UseEmbeddedFontsForChinese"/> has been changed before restarting application or not.
-    /// </summary>
-    public bool IsUseEmbeddedFontsForChineseChanged { get; private set; }
-    
-    
-    /// <summary>
-    /// Check whether <see cref="UseEmbeddedFontsForChinese"/> is supported or not.
-    /// </summary>
-    public bool IsUseEmbeddedFontsForChineseSupported { get; private set; }
 
 
     /// <summary>
@@ -434,16 +418,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
             {
                 this.IsDisableAngleChanged = isChanged;
                 this.OnPropertyChanged(nameof(IsDisableAngleChanged));
-            }
-        }
-        else if (key == InitSettingKeys.UseEmbeddedFontsForChinese)
-        {
-            this.OnPropertyChanged(nameof(UseEmbeddedFontsForChinese));
-            var isChanged = InitUseEmbeddedFontsForChinese.GetValueOrDefault() != (bool)e.Value;
-            if (this.IsUseEmbeddedFontsForChineseChanged != isChanged)
-            {
-                this.IsUseEmbeddedFontsForChineseChanged = isChanged;
-                this.OnPropertyChanged(nameof(IsUseEmbeddedFontsForChineseChanged));
             }
         }
     }
@@ -567,16 +541,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     {
         get => this.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface);
         set => this.Settings.SetValue<bool>(SettingKeys.UseCompactUserInterface, value);
-    }
-    
-    
-    /// <summary>
-    /// Get or set to use embedded fonts for Chinese.
-    /// </summary>
-    public bool UseEmbeddedFontsForChinese
-    {
-        get => (this.Application as AppSuiteApplication)?.InitSettings.GetValueOrDefault(InitSettingKeys.UseEmbeddedFontsForChinese) ?? false;
-        set => (this.Application as AppSuiteApplication)?.InitSettings.Let(it => it.SetValue<bool>(InitSettingKeys.UseEmbeddedFontsForChinese, value));
     }
 
 

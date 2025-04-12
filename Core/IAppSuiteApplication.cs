@@ -521,12 +521,6 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// Get latest checked application update information.
     /// </summary>
     ApplicationUpdateInfo? UpdateInfo { get; }
-    
-    
-    /// <summary>
-    /// Check whether to use embedded Chinese fonts or not.
-    /// </summary>
-    bool UseEmbeddedFontsForChinese { get; }
 
 
     /// <summary>

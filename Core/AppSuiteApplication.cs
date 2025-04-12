@@ -732,30 +732,8 @@ namespace CarinaStudio.AppSuite
                     fontManager.AddFontCollection(new EmbeddedFontCollection(new("fonts:Inter", UriKind.Absolute), new($"{fontBaseUri}/Inter", UriKind.Absolute)));
                     fontManager.AddFontCollection(new EmbeddedFontCollection(new("fonts:Noto", UriKind.Absolute), new($"{fontBaseUri}/Noto", UriKind.Absolute)));
                 });
-                                    
-                // load embedded chinese fonts
-                var embeddedChineseFonts = new List<FontFamily>(2).Also(it =>
-                {
-                    if (InitSettingsInstance.GetValueOrDefault(InitSettingKeys.UseEmbeddedFontsForChinese))
-                    {
-                        var baseUri = new Uri($"{fontBaseUri}/Noto", UriKind.Absolute);
-                        switch (_LaunchChineseVariant)
-                        {
-                            case ChineseVariant.Default:
-                                it.Add(new(baseUri, "#Noto Sans SC"));
-                                it.Add(new(baseUri, "#Noto Sans TC"));
-                                break;
-                            case ChineseVariant.Taiwan:
-                                it.Add(new(baseUri, "#Noto Sans TC"));
-                                it.Add(new(baseUri, "#Noto Sans SC"));
-                                break;
-                            default:
-                                throw new NotImplementedException();
-                        }
-                    }
-                });
                 
-                // setup platform specific settings
+                // setup font manager
                 var cjkUnicodeRanges = new UnicodeRange(
                 [
                     // ReSharper disable CommentTypo
@@ -767,12 +745,48 @@ namespace CarinaStudio.AppSuite
                     new(0xfe30, 0xfe4f) // CJKCompatibilityForms
                     // ReSharper restore CommentTypo
                 ]);
+                it.With(new FontManagerOptions
+                {
+                    DefaultFamilyName = "fonts:Inter#Inter",
+                    FontFallbacks = _LaunchChineseVariant switch
+                    {
+                        ChineseVariant.Default =>
+                        [
+                            new FontFallback
+                            {
+                                FontFamily = new("fonts:Noto#Noto Sans SC"),
+                                UnicodeRange = cjkUnicodeRanges,
+                            },
+                            new FontFallback
+                            {
+                                FontFamily = new("fonts:Noto#Noto Sans TC"),
+                                UnicodeRange = cjkUnicodeRanges,
+                            },
+                        ],
+                        ChineseVariant.Taiwan =>
+                        [
+                            new FontFallback
+                            {
+                                FontFamily = new("fonts:Noto#Noto Sans TC"),
+                                UnicodeRange = cjkUnicodeRanges,
+                            },
+                            new FontFallback
+                            {
+                                FontFamily = new("fonts:Noto#Noto Sans SC"),
+                                UnicodeRange = cjkUnicodeRanges,
+                            },
+                        ],
+                        _ => throw new NotImplementedException(),
+                    },
+                });
+                
+                // setup platform specific settings
                 if (Platform.IsWindows)
-                    SetupWindowsAppBuilder(it, InitSettingsInstance, cjkUnicodeRanges, embeddedChineseFonts);
+                    SetupWindowsAppBuilder(it, InitSettingsInstance);
                 else if (Platform.IsMacOS)
-                    SetupMacOSAppBuilder(it, cjkUnicodeRanges, embeddedChineseFonts);
+                    SetupMacOSAppBuilder(it);
                 else if (Platform.IsLinux)
-                    SetupLinuxAppBuilder(it, cjkUnicodeRanges, embeddedChineseFonts);
+                    SetupLinuxAppBuilder(it);
                 
                 // custom settings
                 setupAction?.Invoke(it);
@@ -4800,10 +4814,6 @@ namespace CarinaStudio.AppSuite
         /// Get latest checked application update information.
         /// </summary>
         public ApplicationUpdateInfo? UpdateInfo { get; private set; }
-
-
-        /// <inheritdoc/>
-        public bool UseEmbeddedFontsForChinese { get; } = InitSettingsInstance!.GetValueOrDefault(InitSettingKeys.UseEmbeddedFontsForChinese);
 
 
         /// <inheritdoc/>

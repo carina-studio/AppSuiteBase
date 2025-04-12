@@ -93,7 +93,6 @@
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">Theme</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface">Use compact layout</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface.Description">Recommended if you are using device with small screen.</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.UseEmbeddedFontsForChinese">Use built-in 'Noto Sans' font for Chinese</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UserInterface">User Interface</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">Use spaces for indentation</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillCloseAllWindowsToTakeEffect">Will close all windows to take effect.</sys:String>

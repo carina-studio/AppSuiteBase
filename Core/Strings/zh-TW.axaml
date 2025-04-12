@@ -87,7 +87,6 @@
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">佈景</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface">使用緊密版面配置</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface.Description">當您使用較小螢幕的裝置時建議使用。</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.UseEmbeddedFontsForChinese">使用內建之「思源黑體」中文字型</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UserInterface">使用者介面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">使用空白字元進行縮排</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillCloseAllWindowsToTakeEffect">將關閉所有視窗以套用。</sys:String>

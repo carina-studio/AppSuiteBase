@@ -15,12 +15,6 @@ public sealed class InitSettingKeys
     public static readonly SettingKey<bool> DisableAngle = new(nameof(DisableAngle), false);
     
     
-    /// <summary>
-    /// Use embedded fonts for Chinese.
-    /// </summary>
-    public static readonly SettingKey<bool> UseEmbeddedFontsForChinese = new(nameof(UseEmbeddedFontsForChinese), Platform.IsNotMacOS);
-    
-    
     // Constructor.
     InitSettingKeys()
     { }

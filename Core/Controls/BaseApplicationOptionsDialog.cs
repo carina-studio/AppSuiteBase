@@ -53,8 +53,7 @@ public abstract class BaseApplicationOptionsDialog : InputDialog<IAppSuiteApplic
             return Task.FromResult((object?)ApplicationOptionsDialogResult.None);
         }
         if (options.IsCustomScreenScaleFactorAdjusted
-            || (options.IsDisableAngleSupported && options.IsDisableAngleChanged)
-            || (options.IsUseEmbeddedFontsForChineseSupported && options.IsUseEmbeddedFontsForChineseChanged))
+            || (options.IsDisableAngleSupported && options.IsDisableAngleChanged))
         {
             this.closingTaskSource.SetResult(ApplicationOptionsDialogResult.RestartApplicationNeeded);
             return Task.FromResult((object?)ApplicationOptionsDialogResult.RestartApplicationNeeded);

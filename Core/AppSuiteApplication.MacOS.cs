@@ -1,8 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
-using Avalonia.Media.Fonts;
-using CarinaStudio.Collections;
 using CarinaStudio.MacOS.AppKit;
 using CarinaStudio.MacOS.CoreGraphics;
 using CarinaStudio.MacOS.ObjectiveC;
@@ -11,7 +9,6 @@ using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using SkiaSharp;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -25,14 +22,13 @@ namespace CarinaStudio.AppSuite;
 partial class AppSuiteApplication
 {
     // Application call-back for macOS.
-    class AppSuiteAppDelegate : NSObject
+    class AppSuiteAppDelegate(AppSuiteApplication app, NSObject? baseAppDelegate) : NSObject(Initialize(AppSuiteAppDelegateClass!.Allocate()), true)
     {
         // Static fields.
         static readonly Class? AppSuiteAppDelegateClass;
 
         // Fields.
-        readonly AppSuiteApplication app;
-        readonly NSObject? baseAppDelegate;
+        readonly AppSuiteApplication app = app;
 
         // Static initializer.
         static AppSuiteAppDelegate()
@@ -93,27 +89,20 @@ partial class AppSuiteApplication
             });
         }
 
-        // Constructor.
-        public AppSuiteAppDelegate(AppSuiteApplication app, NSObject? baseAppDelegate) : base(Initialize(AppSuiteAppDelegateClass!.Allocate()), true)
-        { 
-            this.app = app;
-            this.baseAppDelegate = baseAppDelegate;
-        }
-
         // Send message to base delegate.
         void SendMessageToBaseAppDelegate(ObjCSelector cmd, params object?[] args)
         {
-            if (this.baseAppDelegate?.Class.HasMethod(cmd) == true)
-                this.baseAppDelegate.SendMessage(cmd, args);
+            if (baseAppDelegate?.Class.HasMethod(cmd) == true)
+                baseAppDelegate.SendMessage(cmd, args);
         }
         // ReSharper disable once UnusedMethodReturnValue.Local
         T SendMessageToBaseAppDelegateWithResult<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.NonPublicConstructors | DynamicallyAccessedMemberTypes.PublicConstructors)] T>(ObjCSelector cmd, T defaultResult, params object?[] args)
         {
-            if (this.baseAppDelegate?.Class.HasMethod(cmd) == true)
+            if (baseAppDelegate?.Class.HasMethod(cmd) == true)
             {
                 try
                 {
-                    return this.baseAppDelegate.SendMessage<T>(cmd, args);
+                    return baseAppDelegate.SendMessage<T>(cmd, args);
                 }
                 catch (Exception ex)
                 {
@@ -174,7 +163,7 @@ partial class AppSuiteApplication
         {
             return await Task.Run(() =>
             {
-                using var process = Process.Start(new ProcessStartInfo()
+                using var process = Process.Start(new ProcessStartInfo
                 {
                     Arguments = "read -g AppleInterfaceStyle",
                     CreateNoWindow = true,
@@ -231,51 +220,8 @@ partial class AppSuiteApplication
 
 
     // Setup AppBuilder for macOS.
-    static void SetupMacOSAppBuilder(AppBuilder builder, UnicodeRange cjkUnicodeRanges, IList<FontFamily> embeddedChineseFonts)
+    static void SetupMacOSAppBuilder(AppBuilder builder)
     {
-        builder.With(new FontManagerOptions
-        {
-            DefaultFamilyName = "fonts:Inter#Inter",
-            FontFallbacks = new List<FontFallback>(8).Also(it =>
-            {
-                if (embeddedChineseFonts.IsNotEmpty())
-                {
-                    foreach (var fontFamily in embeddedChineseFonts)
-                    {
-                        it.Add(new()
-                        {
-                            FontFamily = fontFamily,
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                    }
-                }
-                else
-                {
-                    FontFamily[] chineseFonts = _LaunchChineseVariant switch
-                    {
-                        ChineseVariant.Default =>
-                        [
-                            new FontFamily("苹方-简"),
-                            new FontFamily("黑体-简"),
-                        ],
-                        ChineseVariant.Taiwan =>
-                        [
-                            new FontFamily("蘋方-繁"),
-                            new FontFamily("黑體-繁"),
-                        ],
-                        _ => throw new NotImplementedException(),
-                    };
-                    foreach (var fontFamily in chineseFonts)
-                    {
-                        it.Add(new()
-                        {
-                            FontFamily = fontFamily,
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                    }
-                }
-            }).ToArray(),
-        });
         builder.With(new MacOSPlatformOptions
         {
             DisableDefaultApplicationMenuItems = true,

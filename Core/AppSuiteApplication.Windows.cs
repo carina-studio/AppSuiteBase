@@ -1,7 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
-using Avalonia.Media.Fonts;
 using Avalonia.Threading;
 using CarinaStudio.AppSuite.Native;
 using CarinaStudio.Configuration;
@@ -21,7 +20,7 @@ unsafe partial class AppSuiteApplication
 {
     // Fields.
     readonly Dictionary<object, nint> baseWndProcPointers = new();
-    bool isMessageWindowWndProcAttached = false;
+    bool isMessageWindowWndProcAttached;
     Win32.ITaskbarList3? windowsTaskbarList;
     // ReSharper disable once CollectionNeverQueried.Local
     readonly Dictionary<object, Win32.WNDPROC> wndProcStubDelegates = new();
@@ -266,64 +265,8 @@ unsafe partial class AppSuiteApplication
     
     
     // Setup AppBuilder for Windows.
-    static void SetupWindowsAppBuilder(AppBuilder builder, ISettings initSettings, UnicodeRange cjkUnicodeRanges, IList<FontFamily> embeddedChineseFonts)
+    static void SetupWindowsAppBuilder(AppBuilder builder, ISettings initSettings)
     {
-        builder.With(new FontManagerOptions
-        {
-            DefaultFamilyName = "fonts:Inter#Inter",
-            FontFallbacks = new List<FontFallback>(8).Also(it =>
-            {
-                foreach (var fontFamily in embeddedChineseFonts)
-                {
-                    it.Add(new()
-                    {
-                        FontFamily = fontFamily,
-                        UnicodeRange = cjkUnicodeRanges,
-                    });
-                }
-                // ReSharper disable StringLiteralTypo
-                switch (_LaunchChineseVariant)
-                {
-                    case ChineseVariant.Default:
-                        it.Add(new()
-                        {
-                            FontFamily = new("Microsoft YaHei UI"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        it.Add(new()
-                        {
-                            FontFamily = new("Microsoft JhengHei UI"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        break;
-                    case ChineseVariant.Taiwan:
-                        it.Add(new()
-                        {
-                            FontFamily = new("Microsoft JhengHei UI"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        it.Add(new()
-                        {
-                            FontFamily = new("Microsoft YaHei UI"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
-                it.Add(new()
-                {
-                    FontFamily = new("PMingLiU"),
-                    UnicodeRange = cjkUnicodeRanges,
-                });
-                it.Add(new()
-                {
-                    FontFamily = new("MingLiU"),
-                    UnicodeRange = cjkUnicodeRanges,
-                });
-                // ReSharper restore StringLiteralTypo
-            }).ToArray(),
-        });
         if (initSettings.GetValueOrDefault(InitSettingKeys.DisableAngle))
         {
             builder.With(new Win32PlatformOptions

@@ -484,10 +484,6 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
-    public virtual bool UseEmbeddedFontsForChinese => false;
-
-
-    /// <inheritdoc/>
     public virtual ApplicationUpdateInfo? UpdateInfo => null;
 
 

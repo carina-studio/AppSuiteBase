@@ -1,10 +1,7 @@
 using Avalonia;
-using Avalonia.Media;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -210,94 +207,8 @@ partial class AppSuiteApplication
     
     
     // Setup AppBuilder for Linux.
-    static void SetupLinuxAppBuilder(AppBuilder builder, UnicodeRange cjkUnicodeRanges, IList<FontFamily> embeddedChineseFonts)
+    static void SetupLinuxAppBuilder(AppBuilder builder)
     {
-        builder.With(new FontManagerOptions
-        {
-            DefaultFamilyName = "fonts:Inter#Inter",
-            FontFallbacks = new List<FontFallback>(8).Also(it =>
-            {
-                foreach (var fontFamily in embeddedChineseFonts)
-                {
-                    it.Add(new()
-                    {
-                        FontFamily = fontFamily,
-                        UnicodeRange = cjkUnicodeRanges,
-                    });
-                }
-                // ReSharper disable StringLiteralTypo
-                switch (_LaunchChineseVariant)
-                {
-                    case ChineseVariant.Default:
-                        it.Add(new()
-                        {
-                            FontFamily = new("Noto Sans CJK SC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        it.Add(new()
-                        {
-                            FontFamily = new("Noto Sans Mono CJK SC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        it.Add(new()
-                        {
-                            FontFamily = new("Noto Serif CJK SC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        it.Add(new()
-                        {
-                            FontFamily = new("Noto Sans CJK TC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        it.Add(new()
-                        {
-                            FontFamily = new("Noto Sans Mono CJK TC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        it.Add(new()
-                        {
-                            FontFamily = new("Noto Serif CJK TC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        break;
-                    case ChineseVariant.Taiwan:
-                        it.Add(new()
-                        {
-                            FontFamily = new("Noto Sans CJK TC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        it.Add(new()
-                        {
-                            FontFamily = new("Noto Sans Mono CJK TC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        it.Add(new()
-                        {
-                            FontFamily = new("Noto Serif CJK TC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        it.Add(new()
-                        {
-                            FontFamily = new("Noto Sans CJK SC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        it.Add(new()
-                        {
-                            FontFamily = new("Noto Sans Mono CJK SC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        it.Add(new()
-                        {
-                            FontFamily = new("Noto Serif CJK SC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        });
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
-                // ReSharper restore StringLiteralTypo
-            }).ToArray(),
-        });
         builder.With(new X11PlatformOptions());
     }
 }
