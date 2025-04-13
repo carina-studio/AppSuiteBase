@@ -69,7 +69,6 @@
 	<sys:String x:Key="String/ApplicationOptions">應用程式選項</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">接收非正式版本的應用程式更新</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">語言</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.Culture.ChineseVariantChanged">中文環境已變更，需要重新啟動應用程式以套用。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">使用者介面縮放比例</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR 工具尚未安裝。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">預設腳本語言</sys:String>
@@ -80,6 +79,7 @@
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">啟動應用程式時顯示啟動畫面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">日誌輸出目標連接埠</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">需要重新啟動應用程式以套用。</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect.ChineseVariantChanged">中文環境已變更，需要重新啟動應用程式以套用。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NotifyApplicationUpdate">有應用程式更新時顯示通知</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Others">其他設定</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.PromptWhenScriptRuntimeErrorOccurred">執行期間發生錯誤時顯示提示</sys:String>
@@ -91,6 +91,7 @@
 	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">使用空白字元進行縮排</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillCloseAllWindowsToTakeEffect">將關閉所有視窗以套用。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">將重新啟動應用程式以套用。</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect.ChineseVariantChanged">中文環境已變更，將重新啟動應用程式以套用。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartMainWindowsToTakeEffect">將重新啟動視窗以套用。</sys:String>
 
 	<!-- ApplicationReleasingType -->

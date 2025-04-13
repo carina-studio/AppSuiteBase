@@ -75,7 +75,7 @@
 	<sys:String x:Key="String/ApplicationOptions">Application options</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">Accept non-stable application update</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">Language</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.Culture.ChineseVariantChanged">Chinese environment has been changed, need to restart application to take effect.</sys:String>
+	
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">User interface scale factor</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR tool is not installed yet.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">Default language</sys:String>
@@ -86,6 +86,7 @@
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">Show splash screen when launching</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">Target port of log output</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">Need to restart application to take effect.</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect.ChineseVariantChanged">Chinese environment has been changed, need to restart application to take effect.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NotifyApplicationUpdate">Notify when application update found</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Others">Other Settings</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.PromptWhenScriptRuntimeErrorOccurred">Prompt when runtime error occurred</sys:String>
@@ -97,6 +98,7 @@
 	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">Use spaces for indentation</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillCloseAllWindowsToTakeEffect">Will close all windows to take effect.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">Will restart application to take effect.</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect.ChineseVariantChanged">Chinese environment has been changed, will restart application to take effect.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartMainWindowsToTakeEffect">Will restart windows to take effect.</sys:String>
 
 	<!-- ApplicationReleasingType -->
