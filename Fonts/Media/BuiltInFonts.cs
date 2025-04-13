@@ -13,8 +13,8 @@ namespace CarinaStudio.AppSuite.Media;
 public static class BuiltInFonts
 {
     // Fields.
-    static readonly Uri baseCoreInterResourceUri = new("avares://CarinaStudio.AppSuite.Core/Fonts/Inter");
-    static readonly Uri baseCoreNotoResourceUri = new("avares://CarinaStudio.AppSuite.Core/Fonts/Noto");
+    static readonly Uri baseCoreInterResourceUri = new("avares://CarinaStudio.AppSuite.Core/Fonts/Inter/");
+    static readonly Uri baseCoreNotoResourceUri = new("avares://CarinaStudio.AppSuite.Core/Fonts/Noto/");
     static readonly Uri baseResourceUri = new($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}/Resources/Fonts/");
     static IList<FontFamily>? fontFamilies;
     static FontFamily? ibmPlexMono;
