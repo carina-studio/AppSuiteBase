@@ -63,11 +63,8 @@ namespace CarinaStudio.AppSuite
     public abstract partial class AppSuiteApplication : Application, IAppSuiteApplication
     {
         // Implementation of ILogSink to get logs from Avalonia.
-        class AvaloniaLogSink(IAppSuiteApplication app) : Avalonia.Logging.ILogSink
+        class AvaloniaLogSink(AppSuiteApplication app) : Avalonia.Logging.ILogSink
         {
-            // Fields.
-            readonly Microsoft.Extensions.Logging.ILogger logger = app.LoggerFactory.CreateLogger("Avalonia");
-
             // Convert from Avalonia log level.
             Microsoft.Extensions.Logging.LogLevel ConvertToLogLevel(Avalonia.Logging.LogEventLevel level) => level switch
             {
@@ -86,7 +83,7 @@ namespace CarinaStudio.AppSuite
             
             /// <inheritdoc/>
             public bool IsEnabled(Avalonia.Logging.LogEventLevel level, string area) =>
-                this.logger.IsEnabled(this.ConvertToLogLevel(level));
+                app.avaloniaLogger.IsEnabled(this.ConvertToLogLevel(level));
             
             // Whether information logging is enabled or not.
             public volatile bool IsInfoLoggingEnabled;
@@ -99,7 +96,7 @@ namespace CarinaStudio.AppSuite
             {
                 var convertedLevel = this.ConvertToLogLevel(level);
                 if (convertedLevel != Microsoft.Extensions.Logging.LogLevel.None)
-                    this.logger.Log(convertedLevel, "[{area}][{source}] {message}", area, source?.GetType().Name, messageTemplate);
+                    app.OnPrintAvaloniaLog(convertedLevel, area, source, messageTemplate);
             }
             
             /// <inheritdoc/>
@@ -108,20 +105,7 @@ namespace CarinaStudio.AppSuite
                 var convertedLevel = this.ConvertToLogLevel(level);
                 if (convertedLevel == Microsoft.Extensions.Logging.LogLevel.None)
                     return;
-                if (propertyValues.Length == 0)
-                    this.logger.Log(convertedLevel, "[{area}][{source}] messageTemplate", area, source?.GetType().Name);
-                else
-                {
-                    var newPropertyValues = new object?[propertyValues.Length + 2];
-                    newPropertyValues[0] = area;
-                    newPropertyValues[1] = source?.GetType().Name;
-                    Array.Copy(propertyValues, 0, newPropertyValues, 2, propertyValues.Length);
-#pragma warning disable CA2254
-                    // ReSharper disable TemplateIsNotCompileTimeConstantProblem
-                    this.logger.Log(convertedLevel, "[{area}][{source}] " + messageTemplate, newPropertyValues);
-                    // ReSharper restore TemplateIsNotCompileTimeConstantProblem
-#pragma warning restore CA2254
-                }
+                app.OnPrintAvaloniaLog(convertedLevel, area, source, messageTemplate, propertyValues);
             }
         }
 
@@ -339,6 +323,8 @@ namespace CarinaStudio.AppSuite
             return Environment.CurrentDirectory;
         });
         static readonly SettingKey<string> AppVersionKey = new("ApplicationVersion", "");
+        [ThreadStatic]
+        static object?[]? AvaloniaLoggingProperties;
         static double CachedCustomScreenScaleFactor = double.NaN;
         static readonly SettingKey<bool> DoNotPromptBeforeTakingMemorySnapshotKey = new("DoNotPromptBeforeTakingMemorySnapshot", false);
         static bool ForceThrowingUnhandledException;
@@ -357,6 +343,7 @@ namespace CarinaStudio.AppSuite
         WindowIcon? appIcon;
         ApplicationInfoDialog? appInfoDialog;
         ApplicationUpdateDialog? appUpdateDialog;
+        readonly Microsoft.Extensions.Logging.ILogger avaloniaLogger;
         bool canRequestRestoringMainWindows;
         ScheduledAction? checkUpdateInfoAction;
         ISettings? configuration;
@@ -442,6 +429,7 @@ namespace CarinaStudio.AppSuite
             // ReSharper disable VirtualMemberCallInConstructor
             this.LoggerFactory = new LoggerFactory([ this.OnCreateLoggerProvider() ]);
             this.Logger = this.LoggerFactory.CreateLogger(this.GetType().Name);
+            this.avaloniaLogger = this.LoggerFactory.CreateLogger("Avalonia");
             // ReSharper restore VirtualMemberCallInConstructor
             this.Logger.LogDebug("Created");
             
@@ -3254,6 +3242,34 @@ namespace CarinaStudio.AppSuite
 
 
         /// <summary>
+        /// Called to print log from Avalonia.
+        /// </summary>
+        /// <param name="level">Level.</param>
+        /// <param name="area">Area.</param>
+        /// <param name="source">Source.</param>
+        /// <param name="messageTemplate">Message template.</param>
+        /// <param name="propertyValues">Properties to log.</param>
+        protected virtual void OnPrintAvaloniaLog(Microsoft.Extensions.Logging.LogLevel level, string area, object? source, string messageTemplate, params object?[] propertyValues)
+        {
+            if (propertyValues.Length == 0)
+                this.avaloniaLogger.Log(level, "[{__area__}][{__source__}] {__message__}", area, source?.GetType().Name, messageTemplate);
+            else
+            {
+                var expandedProperties = AvaloniaLoggingProperties?.Let(it => it.Length >= propertyValues.Length + 2 ? it : null) 
+                                         ?? new object?[propertyValues.Length + 8].Also(it => AvaloniaLoggingProperties = it);
+                expandedProperties[0] = area;
+                expandedProperties[1] = source?.GetType().Name;
+                Array.Copy(propertyValues, 0, expandedProperties, 2, propertyValues.Length);
+#pragma warning disable CA2254
+                // ReSharper disable TemplateIsNotCompileTimeConstantProblem
+                this.avaloniaLogger.Log(level, "[{__area__}][{__source__}] " + messageTemplate, expandedProperties);
+                // ReSharper restore TemplateIsNotCompileTimeConstantProblem
+#pragma warning restore CA2254
+            }
+        }
+
+
+        /// <summary>
         /// Called to restore main windows asynchronously when starting application.
         /// </summary>
         /// <returns>Task of restoring main windows. The result will be True if main windows have been restored successfully.</returns>
@@ -4143,7 +4159,7 @@ namespace CarinaStudio.AppSuite
             }
 
             // check for update
-			using var appUpdater = new ViewModels.ApplicationUpdater(); 
+            using var appUpdater = new ViewModels.ApplicationUpdater(); 
             this.appUpdateDialog = new(appUpdater) 
             {
                 CheckForUpdateWhenShowing = checkAppUpdateWhenOpening
