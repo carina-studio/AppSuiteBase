@@ -6,6 +6,7 @@ PublishProfiles
 Core/CarinaStudio.AppSuite.Core.xml
 Core.Tests/CarinaStudio.AppSuite.Core.Tests.xml
 Fonts/CarinaStudio.AppSuite.Fonts.xml
+global.json
 Packaging/CarinaStudio.AppSuite.Packaging.xml
 Packages
 Performance.xlsx
