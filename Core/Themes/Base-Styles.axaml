@@ -2900,7 +2900,7 @@
 					                  ContentTemplate="{TemplateBinding HeaderTemplate}" 
 					                  Height="{DynamicResource Double/TabItem.Header.Content.Height}" 
 					                  HorizontalAlignment="Center" 
-					                  Margin="{DynamicResource Thickness/TabItem.Header.Padding}" 
+					                  Margin="{DynamicResource Thickness/TabItem.Empty.Padding}" 
 					                  VerticalAlignment="Center"/>
 				</ControlTemplate>
 			</Setter.Value>
@@ -2934,7 +2934,7 @@
 						                  ContentTemplate="{TemplateBinding HeaderTemplate}" 
 						                  Height="{DynamicResource Double/TabItem.Header.Content.Height}" 
 						                  HorizontalAlignment="Center" 
-						                  Margin="{DynamicResource Thickness/TabItem.Header.Padding}" 
+						                  Margin="{DynamicResource Thickness/TabItem.Empty.Padding}" 
 						                  VerticalAlignment="Center"/>
 					</DockPanel>
 				</ControlTemplate>

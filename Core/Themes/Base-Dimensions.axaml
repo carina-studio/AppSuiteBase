@@ -392,12 +392,13 @@
 	<sys:Double x:Key="Double/TabItem.Header.InsertionIndicator.Width">20</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.MaxWidth">250</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.MinWidth">100</sys:Double>
+	<Thickness x:Key="Thickness/TabItem.Empty.Padding">8,0,8,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">10,0,0,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">4</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.ColorBar.Margin">1,0,1,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Margin">1,3,1,0</Thickness>
-	<Thickness x:Key="Thickness/TabItem.Header.Padding">15,8,15,7</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Padding">15,10,15,9</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Separator.Margin">0,10,0,8</Thickness>
 	<Thickness x:Key="Thickness/TabItem.InsertionIndicator.Margin">0,3,0,0</Thickness>
 

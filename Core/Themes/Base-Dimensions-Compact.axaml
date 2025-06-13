@@ -195,7 +195,7 @@
 	<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">8,0,0,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">4</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,8,0</Thickness>
-	<Thickness x:Key="Thickness/TabItem.Header.Padding">12,8,12,6</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Padding">12,8,12,7</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Separator.Margin">0,7,0,5</Thickness>
 
 	<!-- TextBox -->
