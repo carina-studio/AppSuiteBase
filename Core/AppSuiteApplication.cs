@@ -1658,7 +1658,7 @@ namespace CarinaStudio.AppSuite
 
 
         /// <inheritdoc/>
-        public virtual IEnumerable<ExternalDependency> ExternalDependencies { get; } = Array.Empty<ExternalDependency>();
+        public virtual IEnumerable<ExternalDependency> ExternalDependencies { get; } = [];
 
 
         /// <inheritdoc/>
@@ -1932,7 +1932,7 @@ namespace CarinaStudio.AppSuite
                 // ReSharper disable InvokeAsExtensionMethod
                 Controls.WindowExtensions.ActivateAndBringToFront(activeMainWindow);
                 // ReSharper restore InvokeAsExtensionMethod
-                var result = await new MessageDialog()
+                var result = await new MessageDialog
                 {
                     Buttons = MessageDialogButtons.YesNo,
                     Icon = MessageDialogIcon.Question,
@@ -2642,7 +2642,7 @@ namespace CarinaStudio.AppSuite
             {
                 try
                 {
-                    LogManager.Configuration.FindRuleByName("logToFile").SetLoggingLevels(NLog.LogLevel.Debug, NLog.LogLevel.Error);
+                    LogManager.Configuration?.FindRuleByName("logToFile")?.SetLoggingLevels(NLog.LogLevel.Debug, NLog.LogLevel.Error);
                     LogManager.ReconfigExistingLoggers();
                 }
                 catch (Exception ex)
@@ -3547,7 +3547,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Get URIs of application package manifest.
         /// </summary>
-        public virtual IEnumerable<Uri> PackageManifestUris { get; } = Array.Empty<Uri>();
+        public virtual IEnumerable<Uri> PackageManifestUris { get; } = [];
 
 
         // Parse arguments to launch options.
@@ -4048,9 +4048,8 @@ namespace CarinaStudio.AppSuite
             var fileTarget = new NLog.Targets.FileTarget("file")
             {
                 ArchiveAboveSize = 10L << 20, // 10 MB per log file
-                ArchiveFileKind = NLog.Targets.FilePathKind.Absolute,
                 ArchiveFileName = Path.Combine(this.RootPrivateDirectoryPath, "Log", "log.txt"),
-                ArchiveNumbering = NLog.Targets.ArchiveNumberingMode.Sequence,
+                ArchiveSuffixFormat = "{0:00}",
                 FileName = Path.Combine(this.RootPrivateDirectoryPath, "Log", "log.txt"),
                 // ReSharper disable StringLiteralTypo
                 Layout = "${longdate} ${pad:padding=-5:inner=${processid}} ${pad:padding=-4:inner=${threadid}} ${pad:padding=-5:inner=${level:uppercase=true}} ${logger:shortName=true}: ${message} ${exception:format=tostring}",
@@ -4077,13 +4076,14 @@ namespace CarinaStudio.AppSuite
         void SetupLogNetworkTarget(LoggingConfiguration config, int port)
         {
             // create target
-            var target = config.AllTargets.FirstOrDefault(it => it.Name == "outputToLocalhost") as NLog.Targets.ChainsawTarget;
-            target ??= new NLog.Targets.ChainsawTarget("outputToLocalhost")
+            var target = config.AllTargets.FirstOrDefault(it => it.Name == "outputToLocalhost") as NLog.Targets.NetworkTarget;
+            target ??= new NLog.Targets.NetworkTarget("outputToLocalhost")
             {
-                Address = new NLog.Layouts.SimpleLayout($"tcp://127.0.0.1:{port}"),
+                Layout = new NLog.Layouts.Log4JXmlEventLayout(),
                 NewLine = true,
             };
             config.RemoveTarget("outputToLocalhost");
+            target.Address = new NLog.Layouts.SimpleLayout($"tcp://127.0.0.1:{port}");
             config.AddTarget(target);
             this.Logger.LogWarning("Set log output target to tcp://127.0.0.1:{port}", port);
 
@@ -4848,7 +4848,11 @@ namespace CarinaStudio.AppSuite
 
             // get port
             var port = this.PersistentState.GetValueOrDefault(LogOutputTargetPortKey);
-            var config = LogManager.Configuration;
+            if (LogManager.Configuration is not { } config)
+            {
+                LogToConsole("No log configuration");
+                return;
+            }
             if (port == 0 || !this.IsDebugMode)
             {
                 port = this.IsDebugMode ? this.DefaultLogOutputTargetPort : 0;
@@ -4862,9 +4866,9 @@ namespace CarinaStudio.AppSuite
 
             // setup target
             if (this.IsFirstLaunch)
-                ThreadPool.QueueUserWorkItem(_ => this.SetupLogNetworkTarget(LogManager.Configuration, port), null);
+                ThreadPool.QueueUserWorkItem(_ => this.SetupLogNetworkTarget(config, port), null);
             else
-                this.SetupLogNetworkTarget(LogManager.Configuration, port);
+                this.SetupLogNetworkTarget(config, port);
 
             // check performance
             if (time > 0)

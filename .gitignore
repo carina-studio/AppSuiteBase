@@ -13,3 +13,5 @@ Performance.xlsx
 ~$Performance.xlsx
 SyntaxHighlighting/CarinaStudio.AppSuite.SyntaxHighlighting.xml
 Tests/Properties/launchSettings.json
+*.DotSettings.user
+*.DS_Store
