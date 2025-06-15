@@ -85,8 +85,6 @@
 	<sys:String x:Key="String/ApplicationOptions.PromptWhenScriptRuntimeErrorOccurred">執行期間發生錯誤時顯示提示</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Scripting">腳本</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">佈景</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface">使用緊密版面配置</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface.Description">當您使用較小螢幕的裝置時建議使用。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UserInterface">使用者介面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">使用空白字元進行縮排</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillCloseAllWindowsToTakeEffect">將關閉所有視窗以套用。</sys:String>
@@ -295,7 +293,6 @@
 	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">已經有新的 {0} 版本。</sys:String>
 	<sys:String x:Key="String/MainWindow.ChineseVariantChanged">中文環境已變更，將重新啟動應用程式以套用。</sys:String>
 	<sys:String x:Key="String/MainWindow.ConfirmLayoutingLotsOfMainWindows">排列較多數量的視窗可能導致不適合的排列結果，是否仍要進行排列？</sys:String>
-	<sys:String x:Key="String/MainWindow.ConfirmUsingCompactUI">您正在使用較小螢幕的裝置，是否要啟用緊密版面配置？您也可以在應用程式選項中變更此設定。</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows">排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">水平排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">網格排列視窗</sys:String>

@@ -1,0 +1,51 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:aConverters="using:Avalonia.Data.Converters"
+		xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+	
+	<!-- Resources -->
+	<Styles.Resources>
+		<ResourceDictionary>
+
+			<!-- ComboBoxItem -->
+			<CornerRadius x:Key="CornerRadius/ComboBoxItem">5</CornerRadius>
+
+			<!-- Control -->
+			<CornerRadius x:Key="ControlCornerRadius">4</CornerRadius>
+			<CornerRadius x:Key="ControlCornerRadiusBottom">0,0,4,4</CornerRadius>
+			<CornerRadius x:Key="ControlCornerRadiusLeft">4,0,0,4</CornerRadius>
+			<CornerRadius x:Key="ControlCornerRadiusRight">0,4,4,0</CornerRadius>
+			<CornerRadius x:Key="ControlCornerRadiusTop">4,4,0,0</CornerRadius>
+
+			<!-- Dialog -->
+			<CornerRadius x:Key="CornerRadius/Dialog.ItemsGroup">8</CornerRadius>
+
+			<!-- ListBoxItem -->
+			<CornerRadius x:Key="CornerRadius/ListBoxItem">4</CornerRadius>
+
+			<!-- MenuItem -->
+			<CornerRadius x:Key="CornerRadius/MenuItem">5</CornerRadius>
+
+			<!-- Overlay -->
+			<CornerRadius x:Key="OverlayCornerRadius">8</CornerRadius>
+
+			<!-- ProcessingDialog -->
+			<CornerRadius x:Key="CornerRadius/ProcessingDialog">10</CornerRadius>
+
+			<!-- Slider -->
+			<sys:Double x:Key="SliderHorizontalThumbWidth">14</sys:Double>
+			<sys:Double x:Key="SliderVerticalThumbHeight">14</sys:Double>
+
+			<!-- TabItem -->
+			<CornerRadius x:Key="CornerRadius/TabItem.Header">7,7,0,0</CornerRadius>
+
+			<!-- ToolTip -->
+			<CornerRadius x:Key="CornerRadius/ToolTip">4</CornerRadius>
+
+			<!-- TreeViewItem -->
+			<CornerRadius x:Key="CornerRadius/TreeViewItem">4</CornerRadius>
+			
+		</ResourceDictionary>
+	</Styles.Resources>
+	
+</Styles>

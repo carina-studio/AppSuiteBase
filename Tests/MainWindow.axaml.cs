@@ -117,7 +117,6 @@ namespace CarinaStudio.AppSuite.Tests
         [DynamicDependency(nameof(StringItems))]
         [DynamicDependency(nameof(SwitchAppCulture))]
         [DynamicDependency(nameof(SwitchTheme))]
-        [DynamicDependency(nameof(SwitchUsingCompactUI))]
         [DynamicDependency(nameof(Test))]
         [DynamicDependency(nameof(Test2))]
         [DynamicDependency(nameof(UpdateTaskbarIconProgressState))]
@@ -747,10 +746,6 @@ namespace CarinaStudio.AppSuite.Tests
                 _ => this.Application.IsSystemThemeModeSupported ? ThemeMode.System : ThemeMode.Dark,
             });
         }
-
-
-        public void SwitchUsingCompactUI() =>
-            this.Settings.SetValue<bool>(SettingKeys.UseCompactUserInterface, !this.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface));
         
 
 #if WINDOWS

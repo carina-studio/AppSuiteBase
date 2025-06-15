@@ -59,7 +59,6 @@ public abstract class MainWindow : Window
     internal static bool IsNotifyingAppUpdateFound;
     internal static bool IsReactivatingProVersion;
     internal static bool IsReactivatingProVersionNeeded;
-    internal static readonly SettingKey<bool> IsUsingCompactUIConfirmedKey = new("MainWindow.IsUsingCompactUIConfirmed", false);
     internal static readonly SettingKey<string> LatestAppChangeListShownVersionKey = new("ApplicationChangeListDialog.LatestShownVersion", "");
     internal static readonly SettingKey<int> WindowHeightSettingKey = new("MainWindow.Height", 600);
     internal static readonly SettingKey<WindowState> WindowStateSettingKey = new("MainWindow.State", WindowState.Maximized);
@@ -981,46 +980,6 @@ public abstract class MainWindow : Window
             }
         }
 
-        // use compact UI
-        if (!this.PersistentState.GetValueOrDefault(IsUsingCompactUIConfirmedKey))
-        {
-            var screen = this.Screens.ScreenFromWindow(this) ?? this.Screens.ScreenFromVisual(this) ?? this.Screens.Primary;
-            if (screen is not null)
-            {
-                var pixelDensity = screen.Scaling;
-                var sizeToUseCompactUI = this.Configuration.GetValueOrDefault(ConfigurationKeys.WorkingAreaSizeToSuggestUsingCompactUI);
-                var workingSize = screen.WorkingArea.Size.Let(it =>
-                {
-                    if (Platform.IsMacOS)
-                        return it;
-                    return new PixelSize((int)(it.Width / pixelDensity + 0.5), (int)(it.Height / pixelDensity + 0.5));
-                });
-                if (workingSize.Width < sizeToUseCompactUI || workingSize.Height < sizeToUseCompactUI)
-                {
-                    this.isShowingInitialDialogs = true;
-                    var result = await new MessageDialog()
-                    {
-                        Buttons = MessageDialogButtons.YesNo,
-                        DefaultResult = MessageDialogResult.Yes,
-                        Icon = MessageDialogIcon.Question,
-                        Message = app.GetObservableString("MainWindow.ConfirmUsingCompactUI"),
-                    }.ShowDialog(this);
-                    this.isShowingInitialDialogs = false;
-                    this.PersistentState.SetValue<bool>(IsUsingCompactUIConfirmedKey, true);
-                    if (result == MessageDialogResult.Yes
-                        && !this.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface))
-                    {
-                        this.Settings.SetValue<bool>(SettingKeys.UseCompactUserInterface, true);
-                        this.isClosingScheduled = true;
-                        return;
-                    }
-                }
-            }
-            else
-                this.Logger.LogWarning("No screen to check using compact UI");
-            this.PersistentState.SetValue<bool>(IsUsingCompactUIConfirmedKey, true);
-        }
-
         // show user agreement
         if (!app.IsUserAgreementAgreed)
         {
@@ -1239,8 +1198,6 @@ public abstract class MainWindow : Window
             {
                 hints |= ExtendClientAreaChromeHints.OSXThickTitleBar;
             }
-            //else if (!this.Application.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface))
-                //hints |= ExtendClientAreaChromeHints.OSXThickTitleBar;
             this.ExtendClientAreaChromeHints = hints;
         }
     }

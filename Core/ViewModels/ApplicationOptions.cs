@@ -35,7 +35,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
 
     // Fields.
     readonly ThemeMode originalThemeMode;
-    readonly bool originalUsingCompactUI;
 
 
     /// <summary>
@@ -53,7 +52,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
                 it.Remove(ThemeMode.System);
         }).AsReadOnly();
         this.originalThemeMode = this.ThemeMode;
-        this.originalUsingCompactUI = this.UseCompactUserInterface;
         (this.Application as AppSuiteApplication)?.InitSettings.Let(initSettings =>
         {
             initSettings.SettingChanged += this.OnInitSettingsChanged;
@@ -326,12 +324,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
 
 
     /// <summary>
-    /// Check whether <see cref="UseCompactUserInterface"/> has been changed before restarting main windows or not.
-    /// </summary>
-    public bool IsUseCompactUserInterfaceChanged { get; private set;}
-
-
-    /// <summary>
     /// Check whether XRandR tool is installed or not.
     /// </summary>
     public bool IsXRandRInstalled { get; private set; } = true;
@@ -488,16 +480,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
                 this.OnPropertyChanged(nameof(IsThemeModeChanged));
             }
         }
-        else if (key == SettingKeys.UseCompactUserInterface)
-        {
-            this.OnPropertyChanged(nameof(UseCompactUserInterface));
-            var changed = (this.originalUsingCompactUI != (bool)e.Value);
-            if (this.IsUseCompactUserInterfaceChanged != changed)
-            {
-                this.IsUseCompactUserInterfaceChanged = changed;
-                this.OnPropertyChanged(nameof(IsUseCompactUserInterfaceChanged));
-            }
-        }
         else if (key == SettingKeys.UseSpacesForIndentationInScript)
             this.OnPropertyChanged(nameof(UseSpacesForIndentationInScript));
     }
@@ -532,16 +514,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// Get available values of <see cref="ThemeMode"/>.
     /// </summary>
     public IList<ThemeMode> ThemeModes { get; } 
-
-
-    /// <summary>
-    /// Get or set to use compact layout for user interface.
-    /// </summary>
-    public bool UseCompactUserInterface
-    {
-        get => this.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface);
-        set => this.Settings.SetValue<bool>(SettingKeys.UseCompactUserInterface, value);
-    }
 
 
     /// <summary>

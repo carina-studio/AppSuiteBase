@@ -85,8 +85,6 @@
 	<sys:String x:Key="String/ApplicationOptions.PromptWhenScriptRuntimeErrorOccurred">运行期间发生错误时显示提示</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Scripting">脚本</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">主题模式</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface">使用紧密版面配置</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.UseCompactUserInterface.Description">当您使用较小屏幕的设备时建议使用。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UserInterface">用户界面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">使用空白字符进行缩排</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillCloseAllWindowsToTakeEffect">将关闭所有窗口以套用。</sys:String>
@@ -295,7 +293,6 @@
 	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">已经有新的 {0} 版本。</sys:String>
 	<sys:String x:Key="String/MainWindow.ChineseVariantChanged">中文环境已改变，将重新启动应用程序以生效。</sys:String>
 	<sys:String x:Key="String/MainWindow.ConfirmLayoutingLotsOfMainWindows">排列较多数量的窗口导致不适合的排列结果，是否仍要进行排列？</sys:String>
-	<sys:String x:Key="String/MainWindow.ConfirmUsingCompactUI">您正在使用较小屏幕的设备，是否要启用紧密版面配置？您也可以在应用程序选项中变更此设置。</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows">排列窗口</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">水平排列窗口</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">网格排列窗口</sys:String>

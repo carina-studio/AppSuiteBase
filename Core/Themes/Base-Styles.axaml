@@ -37,6 +37,7 @@
 	<!-- Button -->
 	<Style Selector="Button">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/Button}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
@@ -130,6 +131,7 @@
 	</Style>
 	<Style Selector="ButtonSpinner[ButtonSpinnerLocation=Left] /template/ RepeatButton#PART_DecreaseButton">
 		<Setter Property="BorderThickness" Value="{Binding $parent[ButtonSpinner].BorderThickness, Converter={x:Static converters:ThicknessConverters.Right}}"/>
+		<Setter Property="CornerRadius" Value="0"/>
 	</Style>
 	<Style Selector="ButtonSpinner[ButtonSpinnerLocation=Left] /template/ RepeatButton#PART_IncreaseButton">
 		<Setter Property="BorderThickness" Value="{Binding $parent[ButtonSpinner].BorderThickness, Converter={x:Static converters:ThicknessConverters.Right}}"/>
@@ -141,6 +143,7 @@
 	</Style>
 	<Style Selector="ButtonSpinner[ButtonSpinnerLocation=Right] /template/ RepeatButton#PART_IncreaseButton">
 		<Setter Property="BorderThickness" Value="{Binding $parent[ButtonSpinner].BorderThickness, Converter={x:Static converters:ThicknessConverters.Left}}"/>
+		<Setter Property="CornerRadius" Value="0"/>
 	</Style>
 
 	<!-- BrowseButton -->
@@ -1855,6 +1858,7 @@
 	<!-- RepeatButton -->
 	<Style Selector="RepeatButton">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/Button}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Padding" Value="{DynamicResource ButtonPadding}" />
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -3126,6 +3130,7 @@
 	<!-- ToggleButton -->
 	<Style Selector="ToggleButton">
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Button.Border}"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/Button}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>

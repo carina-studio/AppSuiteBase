@@ -353,7 +353,6 @@ namespace CarinaStudio.AppSuite
         readonly Styles extraStyles = new();
         long frameworkInitializedTime;
         HardwareInfo? hardwareInfo;
-        bool isCompactStyles;
         bool isCriticalShutdownStarted;
         bool isRestartAsAdminRequested;
         bool isRestartingRootWindowsRequested;
@@ -896,9 +895,7 @@ namespace CarinaStudio.AppSuite
                         return this.systemThemeMode;
                     return it;
                 });
-                var useCompactUI = this.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface);
-                return themeMode != this.stylesThemeMode
-                    || useCompactUI != this.isCompactStyles;
+                return themeMode != this.stylesThemeMode;
             });
             if (this.IsRestartingRootWindowsNeeded != isRestartingNeeded)
             {
@@ -2793,9 +2790,8 @@ namespace CarinaStudio.AppSuite
         /// Called to load <see cref="IStyle"/> for given theme mode.
         /// </summary>
         /// <param name="themeMode">Theme mode.</param>
-        /// <param name="useCompactUI">True to use compact user interface.</param>
         /// <returns><see cref="IStyle"/>.</returns>
-        protected virtual IStyle? OnLoadTheme(ThemeMode themeMode, bool useCompactUI) => null;
+        protected virtual IStyle? OnLoadTheme(ThemeMode themeMode) => null;
 
 
         // Called when IsActive of main window changed.
@@ -3370,8 +3366,6 @@ namespace CarinaStudio.AppSuite
                 else
                     this.CheckRestartingRootWindowsNeeded();
             }
-            else if (e.Key == SettingKeys.UseCompactUserInterface)
-                this.CheckRestartingRootWindowsNeeded();
         }
 
 
@@ -5014,13 +5008,11 @@ namespace CarinaStudio.AppSuite
         {
             // get theme mode
             var themeMode = this.SelectCurrentThemeMode();
-            var useCompactUI = this.Settings.GetValueOrDefault(SettingKeys.UseCompactUserInterface);
 
             // update styles
             var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
             if (this.styles is null 
-                || this.stylesThemeMode != themeMode
-                || this.isCompactStyles != useCompactUI)
+                || this.stylesThemeMode != themeMode)
             {
                 // setup base theme
                 this.RequestedThemeVariant = themeMode switch
@@ -5047,9 +5039,7 @@ namespace CarinaStudio.AppSuite
 #pragma warning disable IL2026
                 this.styles = new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
                 {
-                    Source = useCompactUI
-                        ? new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}-Compact.axaml")
-                        : new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}.axaml"),
+                    Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}.axaml"),
                 };
 #pragma warning restore IL2026
                 if (Platform.IsMacOS)
@@ -5065,12 +5055,25 @@ namespace CarinaStudio.AppSuite
 #pragma warning restore IL2026
                     });
                 }
-                if (subTime > 0)
+                else if (Platform.IsWindows)
                 {
-                    var currentTime = this.stopWatch.ElapsedMilliseconds;
-                    this.Logger.LogTrace("[Performance] Took {time} ms to load default theme", currentTime - subTime);
-                    subTime = currentTime;
+                    this.styles = new Styles().Also(styles =>
+                    {
+                        styles.Add(this.styles);
+#pragma warning disable IL2026
+                        styles.Add(new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
+                        {
+                            Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}-Windows.axaml"),
+                        });
+#pragma warning restore IL2026
+                    });
                 }
+                if (subTime > 0)
+                    {
+                        var currentTime = this.stopWatch.ElapsedMilliseconds;
+                        this.Logger.LogTrace("[Performance] Took {time} ms to load default theme", currentTime - subTime);
+                        subTime = currentTime;
+                    }
                 if (!this.AllowTransparentWindows)
                 {
 #pragma warning disable IL2026
@@ -5090,7 +5093,7 @@ namespace CarinaStudio.AppSuite
                         });
                     }
                 }
-                this.styles = this.OnLoadTheme(themeMode, useCompactUI)?.Let(it =>
+                this.styles = this.OnLoadTheme(themeMode)?.Let(it =>
                 {
                     var styles = (this.styles as Styles)?.Also(styles =>
                     {
@@ -5107,7 +5110,6 @@ namespace CarinaStudio.AppSuite
 
                 // apply styles
                 this.Styles.Add(this.styles);
-                this.isCompactStyles = useCompactUI;
                 this.stylesThemeMode = themeMode;
                 if (subTime > 0)
                 {
