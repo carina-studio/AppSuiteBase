@@ -14,7 +14,7 @@
         <AvaloniaXamlBehaviorsVersion>11.0.10.9</AvaloniaXamlBehaviorsVersion>
         <AvaloniaNameGeneratorFilterByNamespace>Dummy</AvaloniaNameGeneratorFilterByNamespace> <!-- Prevent generating InitializeComponents() and fields -->
 		<Company>Carina Studio</Company>
-        <Copyright>©2021-2024 Carina Studio</Copyright>
+        <Copyright>©2021-2025 Carina Studio</Copyright>
         <Description>Base libraries for Carina Studio Application Suite.</Description>
 		<Nullable>enable</Nullable>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
