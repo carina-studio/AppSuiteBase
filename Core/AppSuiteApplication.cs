@@ -1295,6 +1295,9 @@ namespace CarinaStudio.AppSuite
             var processRawInputEventProperty = typeof(IInputManager).GetProperty("Process", BindingFlags.Instance | BindingFlags.Public) ?? throw new NotSupportedException();
             if (processRawInputEventProperty.PropertyType != typeof(IObservable<RawInputEventArgs>))
                 throw new NotSupportedException();
+            var inputRootProperty = typeof(RawInputEventArgs).GetProperty("Root", BindingFlags.Instance | BindingFlags.Public) ?? throw new NotSupportedException();
+            if (inputRootProperty.PropertyType != typeof(IInputRoot))
+                throw new NotSupportedException();
             var rawPointerEventTypeProperty = typeof(RawPointerEventArgs).GetProperty("Type", BindingFlags.Instance | BindingFlags.Public) ?? throw new NotSupportedException();
             if (rawPointerEventTypeProperty.PropertyType != typeof(RawPointerEventType))
                 throw new NotSupportedException();
@@ -1304,6 +1307,9 @@ namespace CarinaStudio.AppSuite
             void OnProcessPopupRootRawPointerEvent(TopLevel hostWindow, Popup popup, RawInputEventArgs e)
             {
                 if (e is not RawPointerEventArgs pointerEventArgs)
+                    return;
+                var inputRoot = inputRootProperty.GetValue(e);
+                if (!ReferenceEquals(inputRoot, hostWindow))
                     return;
                 switch ((RawPointerEventType)rawPointerEventTypeProperty.GetValue(pointerEventArgs)!)
                 {
@@ -1402,7 +1408,7 @@ namespace CarinaStudio.AppSuite
                 {
                     // setup background if transparent windows are not allowed
                     if (!this.AllowTransparentWindows)
-                        hostWindow.Bind(PopupRoot.BackgroundProperty, rootBorder.GetObservable(Border.BackgroundProperty));
+                        hostWindow.Bind(TemplatedControl.BackgroundProperty, rootBorder.GetObservable(Border.BackgroundProperty));
                     
                     // animate
                     rootBorder.Opacity = 1;
@@ -1415,7 +1421,7 @@ namespace CarinaStudio.AppSuite
                     // check state
                     if (popup.Parent is not Control target)
                     {
-                        if (popup.PlacementTarget is not Control placementTarget)
+                        if (popup.PlacementTarget is not { } placementTarget)
                             return;
                         target = placementTarget;
                     }
