@@ -9,6 +9,15 @@
 		CanResize="True"
 		Classes="Dialog"
 		Width="400">
+	
+	<Window.ContextMenu>
+		<ContextMenu>
+			<MenuItem Header="Item">
+				<MenuItem Header="Sub item 1"/>
+				<MenuItem Header="Sub item 2"/>
+			</MenuItem>
+		</ContextMenu>
+	</Window.ContextMenu>
 
 	<DockPanel>
 

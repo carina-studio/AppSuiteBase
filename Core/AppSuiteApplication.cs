@@ -1296,6 +1296,9 @@ namespace CarinaStudio.AppSuite
             var processRawInputEventProperty = typeof(IInputManager).GetProperty("Process", BindingFlags.Instance | BindingFlags.Public) ?? throw new NotSupportedException();
             if (processRawInputEventProperty.PropertyType != typeof(IObservable<RawInputEventArgs>))
                 throw new NotSupportedException();
+            var inputRootProperty = typeof(RawInputEventArgs).GetProperty("Root", BindingFlags.Instance | BindingFlags.Public) ?? throw new NotSupportedException();
+            if (inputRootProperty.PropertyType != typeof(IInputRoot))
+                throw new NotSupportedException();
             var rawPointerEventTypeProperty = typeof(RawPointerEventArgs).GetProperty("Type", BindingFlags.Instance | BindingFlags.Public) ?? throw new NotSupportedException();
             if (rawPointerEventTypeProperty.PropertyType != typeof(RawPointerEventType))
                 throw new NotSupportedException();
@@ -1305,6 +1308,9 @@ namespace CarinaStudio.AppSuite
             void OnProcessPopupRootRawPointerEvent(TopLevel hostWindow, Popup popup, RawInputEventArgs e)
             {
                 if (e is not RawPointerEventArgs pointerEventArgs)
+                    return;
+                var inputRoot = inputRootProperty.GetValue(e);
+                if (!ReferenceEquals(inputRoot, hostWindow))
                     return;
                 switch ((RawPointerEventType)rawPointerEventTypeProperty.GetValue(pointerEventArgs)!)
                 {
