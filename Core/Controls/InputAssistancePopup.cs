@@ -15,6 +15,10 @@ namespace CarinaStudio.AppSuite.Controls;
 /// </summary>
 public class InputAssistancePopup : Popup
 {
+    // Fields.
+    Avalonia.Controls.Window? attachedWindow;
+    
+    
     /// <summary>
     /// Initialize new <see cref="InputAssistancePopup"/> instance.
     /// </summary>
@@ -35,7 +39,7 @@ public class InputAssistancePopup : Popup
             it.BindToResource(Border.BorderThicknessProperty, "MenuFlyoutPresenterBorderThemeThickness");
             it.Child = this.ItemListBox;
             it.BindToResource(Border.CornerRadiusProperty, "OverlayCornerRadius");
-            it.BindToResource(Border.PaddingProperty, "Thickness/InputAssistancePopup.Padding");
+            it.BindToResource(Decorator.PaddingProperty, "Thickness/InputAssistancePopup.Padding");
         });
         this.Opened += (_ , _) => this.ItemListBox.SelectFirstItem();
         this.Placement = PlacementMode.Bottom;
@@ -54,7 +58,27 @@ public class InputAssistancePopup : Popup
     {
         if (this.TryGetResource("ItemsPanelTemplate/StackPanel", out ItemsPanelTemplate? template))
             this.ItemListBox.ItemsPanel = template;
+        this.attachedWindow = this.FindLogicalAncestorOfType<Avalonia.Controls.Window>()?.Also(window =>
+        {
+            window.Deactivated += this.OnAttachedWindowDeactivated;
+        });
         base.OnAttachedToLogicalTree(e);
+    }
+    
+    
+    // Called when window has been deactivated.
+    void OnAttachedWindowDeactivated(object? sender, EventArgs e) => this.IsOpen = false;
+
+
+    /// <inheritdoc/>
+    protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
+    {
+        this.attachedWindow = this.attachedWindow?.Let(window =>
+        {
+            window.Deactivated -= this.OnAttachedWindowDeactivated;
+            return (Avalonia.Controls.Window?)null;
+        });
+        base.OnDetachedFromLogicalTree(e);
     }
 
 
