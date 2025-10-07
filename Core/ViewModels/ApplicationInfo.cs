@@ -33,7 +33,7 @@ public class ApplicationInfo : ViewModel<IAppSuiteApplication>
 
 
     /// <summary>
-    /// Web site of application icon.
+    /// Website of application icon.
     /// </summary>
     public enum ApplicationIconWebSite
     {

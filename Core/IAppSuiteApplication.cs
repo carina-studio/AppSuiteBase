@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Styling;
+using CarinaStudio.Threading;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -94,6 +95,7 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// <summary>
     /// Get version of Avalonia.
     /// </summary>
+    [ThreadSafe]
     Version AvaloniaVersion { get; }
 
 
@@ -128,6 +130,7 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// <summary>
     /// Get application configuration.
     /// </summary>
+    [ThreadSafe]
     Configuration.ISettings Configuration { get; }
 
 
@@ -211,36 +214,42 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// <summary>
     /// Get information of hardware.
     /// </summary>
+    [ThreadSafe]
     HardwareInfo HardwareInfo { get; }
 
 
     /// <summary>
     /// Check whether application is running in background mode or not.
     /// </summary>
+    [ThreadSafe]
     bool IsBackgroundMode { get; }
 
 
     /// <summary>
     /// Check whether application is launched in clean mode or not.
     /// </summary>
+    [ThreadSafe]
     bool IsCleanMode { get; }
     
     
     /// <summary>
     /// Check whether shutting down for critical case/reason has been started or not.
     /// </summary>
+    [ThreadSafe]
     bool IsCriticalShutdownStarted { get; }
 
 
     /// <summary>
     /// Check whether application is running in debug mode or not.
     /// </summary>
+    [ThreadSafe]
     bool IsDebugMode { get; }
 
 
     /// <summary>
     /// Check whether this is the first time application launch or not.
     /// </summary>
+    [ThreadSafe]
     bool IsFirstLaunch { get; }
 
 
@@ -265,6 +274,7 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// <summary>
     /// Check whether application is running as Administrator/Superuser or not.
     /// </summary>
+    [ThreadSafe]
     bool IsRunningAsAdministrator { get; }
 
 
@@ -295,6 +305,7 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// <summary>
     /// Check whether application is running in testing mode or not.
     /// </summary>
+    [ThreadSafe]
     bool IsTestingMode { get; }
 
 
@@ -368,6 +379,7 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// <summary>
     /// Get name of application.
     /// </summary>
+    [ThreadSafe]
     string Name { get; }
 
 
@@ -387,6 +399,7 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// <summary>
     /// Get version of application in previous launch.
     /// </summary>
+    [ThreadSafe]
     Version? PreviousVersion { get; }
 
 
@@ -405,6 +418,7 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// <summary>
     /// Get information of current process.
     /// </summary>
+    [ThreadSafe]
     ProcessInfo ProcessInfo { get; }
 
 

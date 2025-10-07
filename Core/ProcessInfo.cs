@@ -242,6 +242,7 @@ public class ProcessInfo : INotifyPropertyChanged
 
 	// Entry of UI response checking thread.
 	// ReSharper disable FunctionNeverReturns
+	[CalledOnBackgroundThread]
 	[DoesNotReturn]
 	void UIResponseCheckingThreadEntry()
 	{
