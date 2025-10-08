@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
@@ -37,7 +38,7 @@ class SettingsEditorDialogImpl : Dialog
 	}
 
 
-	// Called when double click on list box.
+	// Called when double-click on list box.
 	// ReSharper disable once AsyncVoidMethod
 	async void OnSettingsListBoxDoubleClickOnItem(object? sender, ListBoxItemEventArgs e)
 	{
@@ -91,6 +92,11 @@ class SettingsEditorDialogImpl : Dialog
 	// Called when setting changed.
 	void OnSettingChanged(object? sender, SettingChangedEventArgs e)
 	{
+		if (!this.CheckAccess())
+		{
+			Dispatcher.UIThread.Post(() => this.OnSettingChanged(sender, e));
+			return;
+		}
 		for (var i = this.settingKeyValues.Count - 1 ; i >= 0 ; --i)
 		{
 			var setting = this.settingKeyValues[i];

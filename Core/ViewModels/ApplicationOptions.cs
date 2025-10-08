@@ -401,6 +401,11 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     // Called when initial settings changed.
     void OnInitSettingsChanged(object? sender, SettingChangedEventArgs e)
     {
+        if (!this.CheckAccess())
+        {
+            this.SynchronizationContext.Post(_ => this.OnInitSettingsChanged(sender, e), null);
+            return;
+        }
         var key = e.Key;
         if (key == InitSettingKeys.DisableAngle)
         {

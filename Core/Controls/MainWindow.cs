@@ -5,6 +5,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Platform;
 using Avalonia.Rendering;
+using Avalonia.Threading;
 using CarinaStudio.Animation;
 using CarinaStudio.AppSuite.Net;
 using CarinaStudio.AppSuite.Product;
@@ -503,8 +504,13 @@ public abstract class MainWindow : Window
 
 
     // Called when one of configuration has been changed.
-    void OnConfigurationChanged(object? sender, SettingChangedEventArgs e) =>
-        this.OnConfigurationChanged(e);
+    void OnConfigurationChanged(object? sender, SettingChangedEventArgs e)
+    {
+        if (this.CheckAccess())
+            this.OnConfigurationChanged(e);
+        else
+            Dispatcher.UIThread.Post(() => this.OnConfigurationChanged(e));
+    }
 
 
     /// <summary>

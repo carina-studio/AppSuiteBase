@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Threading;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
 using System;
@@ -192,7 +193,13 @@ public abstract class Window : CarinaStudio.Controls.ApplicationWindow<IAppSuite
 
 
     // Called when application setting changed.
-    void OnSettingChanged(object? sender, SettingChangedEventArgs e) => this.OnSettingChanged(e);
+    void OnSettingChanged(object? sender, SettingChangedEventArgs e)
+    {
+        if (this.CheckAccess())
+            this.OnSettingChanged(e);
+        else
+            Dispatcher.UIThread.Post(() => this.OnSettingChanged(e));
+    } 
 
 
     /// <summary>

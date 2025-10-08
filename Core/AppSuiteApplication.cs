@@ -2426,8 +2426,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
 
     // Called when one of configuration has been changed.
-    void OnConfigurationChanged(object? sender, SettingChangedEventArgs e) =>
-        this.OnConfigurationChanged(e);
+    void OnConfigurationChanged(object? sender, SettingChangedEventArgs e)
+    {
+        if (this.CheckAccess())
+            this.OnConfigurationChanged(e);
+        else
+            Dispatcher.UIThread.Post(() => this.OnConfigurationChanged(e));
+    }
 
 
     /// <summary>
@@ -3320,7 +3325,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
 
     // Called when application setting changed.
-    void OnSettingChanged(object? sender, SettingChangedEventArgs e) => this.OnSettingChanged(e);
+    void OnSettingChanged(object? sender, SettingChangedEventArgs e)
+    {
+        if (this.CheckAccess())
+            this.OnSettingChanged(e);
+        else
+            Dispatcher.UIThread.Post(() => this.OnSettingChanged(e));
+    }
 
 
     /// <summary>
