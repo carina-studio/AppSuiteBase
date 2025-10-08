@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input.Platform;
 using CarinaStudio.AppSuite.Controls.Highlighting;
 using CarinaStudio.AppSuite.Controls.Presenters;
 using System;
@@ -43,7 +44,7 @@ public class SyntaxHighlightingTextBox : TextBox
         {
             TopLevel.GetTopLevel(this)?.Clipboard?.LetAsync(async clipboard =>
             {
-                this.OnPastingFromClipboard(await clipboard.GetTextAsync());
+                this.OnPastingFromClipboard(await clipboard.TryGetTextAsync());
             });
             e.Handled = true;
         };

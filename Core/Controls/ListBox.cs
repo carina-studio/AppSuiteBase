@@ -32,7 +32,7 @@ public class ListBox : Avalonia.Controls.ListBox
 
 
     /// <summary>
-    /// Raised when double clicked on item in the control.
+    /// Raised when double-clicked on item in the control.
     /// </summary>
     public event EventHandler<ListBoxItemEventArgs>? DoubleClickOnItem;
 

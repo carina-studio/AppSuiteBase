@@ -37,6 +37,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using ListBox = CarinaStudio.AppSuite.Controls.ListBox;
 using TabControl = Avalonia.Controls.TabControl;
+using TabItem = Avalonia.Controls.TabItem;
 
 namespace CarinaStudio.AppSuite.Tests
 {
@@ -69,8 +70,7 @@ namespace CarinaStudio.AppSuite.Tests
             }
         }
         
-        
-        const string TabItemKey = "TabItem";
+        readonly DataFormat<string> TabItemDataFormat = DataFormat.CreateStringApplicationFormat("TabItem");
 
 
         static readonly StyledProperty<int> Int32Property = AvaloniaProperty.Register<MainWindow, int>("Int32", 1);
@@ -394,8 +394,14 @@ namespace CarinaStudio.AppSuite.Tests
 
             //if (tabItems != null && e.ItemIndex < tabItems.Count - 1)
             //(sender as Controls.TabControl)?.Let(it => it.SelectedIndex = e.ItemIndex);
-
-            if (!e.Data.TryGetData<Avalonia.Controls.TabItem>(TabItemKey, out var tabItem) || tabItem == null)
+            
+            var itemHandle = IntPtr.TryParse(e.DataTransfer.TryGetValue(TabItemDataFormat), out var gcHandle)
+                ? (GCHandle?)GCHandle.FromIntPtr(gcHandle)
+                : null;
+            if (itemHandle is null)
+                return;
+            var tabItem = itemHandle.Value.Target as TabItem;
+            if (tabItem is null)
                 return;
 
             if (tabItem == e.Item)
@@ -457,7 +463,13 @@ namespace CarinaStudio.AppSuite.Tests
             ItemInsertionIndicator.SetInsertingItemAfter(tabItem, false);
             ItemInsertionIndicator.SetInsertingItemBefore(tabItem, false);
 
-            if (!e.Data.TryGetData<Avalonia.Controls.TabItem>(TabItemKey, out var item) || item == null || item == tabItem)
+            var itemHandle = IntPtr.TryParse(e.DataTransfer.TryGetValue(TabItemDataFormat), out var gcHandle)
+                ? (GCHandle?)GCHandle.FromIntPtr(gcHandle)
+                : null;
+            if (itemHandle is null)
+                return;
+            var item = itemHandle.Value.Target as TabItem;
+            if (item is null || ReferenceEquals(item, tabItem))
                 return;
 
             var srcIndex = tabItems.IndexOf(item);
@@ -518,9 +530,14 @@ namespace CarinaStudio.AppSuite.Tests
 
         void OnTabItemDragged(object? sender, TabItemDraggedEventArgs e)
         {
-            var data = new DataObject();
-            data.Set(TabItemKey, e.Item);
-            DragDrop.DoDragDrop(e.PointerEventArgs, data, DragDropEffects.Move);
+            var dataTransfer = new DataTransfer();
+            var itemHandle = GCHandle.Alloc(e.Item, GCHandleType.Weak);
+            dataTransfer.Add(DataTransferItem.Create(TabItemDataFormat, GCHandle.ToIntPtr(itemHandle).ToString()));
+            DragDrop.DoDragDropAsync(e.PointerEventArgs, dataTransfer, DragDropEffects.Move)
+                .GetAwaiter().OnCompleted(() =>
+                {
+                    itemHandle.Free();
+                });
             e.Handled = true;
         }
 
