@@ -909,15 +909,7 @@ public abstract class MainWindow : Window
         }
         if (this.WindowState != savedWindowState)
         {
-            if (Platform.IsWindows 
-                && !this.Application.CheckAvaloniaVersion(11, 2)
-                && savedWindowState == WindowState.Maximized 
-                && !IsOpened)
-            {
-                this.WindowState = WindowState.Normal; // [Workaround] Need to maximize window after opening to prevent system chrome not showing properly
-            }
-            else
-                this.WindowState = savedWindowState; // Size will also be restored in OnPropertyChanged()
+            this.WindowState = savedWindowState; // Size will also be restored in OnPropertyChanged()
             return true;
         }
         return false;

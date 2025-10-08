@@ -40,7 +40,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Input.Raw;
@@ -1260,37 +1259,29 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         // 2. Attach WndProc to host window of ToolTip.
         if (Platform.IsWindows)
         {
-            FieldInfo? popupField;
-            FieldInfo? popupOpenStateField;
-            PropertyInfo? popupOpenStatePopupHostProperty;
-            FieldInfo? popupHostField;
-            if (this.CheckAvaloniaVersion(11, 2))
-            {
-                popupField = typeof(ToolTip).GetField("_popup", BindingFlags.Instance | BindingFlags.NonPublic).AsNonNull();
-                popupOpenStateField = typeof(Popup).GetField("_openState", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).AsNonNull();
-                popupOpenStatePopupHostProperty = typeof(Popup).GetNestedType("PopupOpenState", BindingFlags.NonPublic | BindingFlags.Public)!.GetProperty("PopupHost", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).AsNonNull();
-                popupHostField = null;
-            }
-            else
-            {
-                popupField = null;
-                popupOpenStateField = null;
-                popupOpenStatePopupHostProperty = null;
-                popupHostField = typeof(ToolTip).GetField("_popupHost", BindingFlags.Instance | BindingFlags.NonPublic).AsNonNull();
-            }
+            var popupField = typeof(ToolTip).GetField("_popup", BindingFlags.Instance | BindingFlags.NonPublic).AsNonNull();
+            var popupOpenStateField = typeof(Popup).GetField("_openState", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).AsNonNull();
+            var popupOpenStatePopupHostProperty = typeof(Popup).GetNestedType("PopupOpenState", BindingFlags.NonPublic | BindingFlags.Public)!.GetProperty("PopupHost", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).AsNonNull();
             var toolTopProperty = (AttachedProperty<ToolTip?>)typeof(ToolTip).GetField("ToolTipProperty", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static)!.GetValue(null).AsNonNull();
             ToolTip.IsOpenProperty.Changed.Subscribe(e =>
             {
                 if (e.NewValue.Value && e.Sender.GetValue(toolTopProperty) is { } toolTip)
                 {
-                    var topLevel = popupField is not null
-                                   && popupField.GetValue(toolTip) is Popup popup
-                                   && popupOpenStateField!.GetValue(popup) is { } popupOpenState
-                        ? popupOpenStatePopupHostProperty!.GetValue(popupOpenState) as TopLevel
-                        : popupHostField!.GetValue(toolTip) as TopLevel;
+                    var topLevel = popupField.GetValue(toolTip) is Popup popup
+                                   && popupOpenStateField.GetValue(popup) is { } popupOpenState
+                        ? popupOpenStatePopupHostProperty.GetValue(popupOpenState) as TopLevel
+                        : null;
                     if (topLevel is not null)
                         AttachWndProc(topLevel);
                 }
+            });
+        } 
+        else if (Platform.IsMacOS)
+        {
+            ToolTip.IsOpenProperty.Changed.Subscribe(e =>
+            {
+                if (e.NewValue.Value && e.Sender is Control control && TopLevel.GetTopLevel(control) is Avalonia.Controls.Window window && !window.IsActive)
+                    ToolTip.SetIsOpen(control, false);
             });
         }
 
@@ -1354,49 +1345,35 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
         // 1. Animate popup and move it to correct position according to its shadows.
         // 2. Attach WndProc to host window of Popup.
-        FieldInfo? popupPositionRequestField;
-        FieldInfo? popupPositionParamsField;
-        PropertyInfo? anchorRectProperty;
-        PropertyInfo? targetProperty;
-        if (this.CheckAvaloniaVersion(11, 2))
+        var popupPositionRequestType = typeof(Avalonia.Application).Assembly.GetType("Avalonia.Controls.Primitives.PopupPositioning.PopupPositionRequest") ?? throw new NotSupportedException();
+        var popupPositionRequestField = typeof(PopupRoot).GetField("_popupPositionRequest", BindingFlags.Instance | BindingFlags.NonPublic)?.Also(it =>
         {
-            var popupPositionRequestType = typeof(Avalonia.Application).Assembly.GetType("Avalonia.Controls.Primitives.PopupPositioning.PopupPositionRequest") ?? throw new NotSupportedException();
-            popupPositionParamsField = null;
-            popupPositionRequestField = typeof(PopupRoot).GetField("_popupPositionRequest", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new NotSupportedException();
-            if (popupPositionRequestField.FieldType != popupPositionRequestType)
+            if (it.FieldType != popupPositionRequestType)
                 throw new NotSupportedException();
-            anchorRectProperty = popupPositionRequestType.GetProperty("AnchorRect", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public) ?? throw new NotSupportedException();
-            if (anchorRectProperty.PropertyType != typeof(Rect?))
-                throw new NotSupportedException();
-            targetProperty = popupPositionRequestType.GetProperty("Target", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public) ?? throw new NotSupportedException();
-            if (targetProperty.PropertyType != typeof(Visual))
-                throw new NotSupportedException();
-        }
-        else
+        }) ?? throw new NotSupportedException();
+        var anchorRectProperty = popupPositionRequestType.GetProperty("AnchorRect", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.Also(it =>
         {
-            popupPositionRequestField = null;
-            anchorRectProperty = null;
-            targetProperty = null;
-            popupPositionParamsField = typeof(PopupRoot).GetField("_positionerParameters", BindingFlags.Instance | BindingFlags.NonPublic) ?? throw new NotSupportedException();
-            if (popupPositionParamsField.FieldType != typeof(PopupPositionerParameters))
+            if (it.PropertyType != typeof(Rect?))
                 throw new NotSupportedException();
-        }
+        }) ?? throw new NotSupportedException();
+        var targetProperty = popupPositionRequestType.GetProperty("Target", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.Also(it =>
+        {
+            if (it.PropertyType != typeof(Visual))
+                throw new NotSupportedException();
+        }) ?? throw new NotSupportedException();
         var popupHorzOffsetBindings = new Dictionary<Popup, IDisposable>();
         var popupVertOffsetBindings = new Dictionary<Popup, IDisposable>();
         var processPopupRawInputHandlerTokens = new Dictionary<Popup, IDisposable>();
         var latestPointerPositions = new Dictionary<TopLevel, Point>();
-        if (popupPositionRequestField is not null)
+        InputElement.PointerReleasedEvent.AddClassHandler<TopLevel>((topLevel, e) =>
         {
-            InputElement.PointerReleasedEvent.AddClassHandler<TopLevel>((topLevel, e) =>
-            {
-                if (!topLevel.IsLoaded)
-                    return;
-                if (!latestPointerPositions.ContainsKey(topLevel))
-                    topLevel.Unloaded += (_, _) => latestPointerPositions.Remove(topLevel);
-                var point = e.GetCurrentPoint(topLevel);
-                latestPointerPositions[topLevel] = point.Position;
-            }, RoutingStrategies.Tunnel);
-        }
+            if (!topLevel.IsLoaded)
+                return;
+            if (!latestPointerPositions.ContainsKey(topLevel))
+                topLevel.Unloaded += (_, _) => latestPointerPositions.Remove(topLevel);
+            var point = e.GetCurrentPoint(topLevel);
+            latestPointerPositions[topLevel] = point.Position;
+        }, RoutingStrategies.Tunnel);
         Popup.IsOpenProperty.Changed.Subscribe(e =>
         {
             // check event source
@@ -1480,31 +1457,14 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                     return;
 
                 // calculate positions on screen
-                object? positionRequest;
-                PopupPositionerParameters? positionParams;
-                if (popupPositionRequestField is not null)
-                {
-                    positionRequest = popupPositionRequestField.GetValue(hostWindow);
-                    positionParams = null;
-                }
-                else
-                {
-                    positionParams = (PopupPositionerParameters)popupPositionParamsField!.GetValue(hostWindow)!;
-                    positionRequest = null;
-                }
+                var positionRequest = popupPositionRequestField.GetValue(hostWindow);
                 var screenScaling = (hostWindow.Screens.ScreenFromWindow(hostWindow) ?? hostWindow.Screens.Primary)?.Scaling ?? 1.0;
                 var hostWindowRect = hostWindow.PointToScreen(default).Let(it => new Rect(new(it.X / screenScaling, it.Y / screenScaling), hostWindow.Bounds.Size));
                 var topLevelPosition = topLevel.PointToScreen(default).Let(it => new Point(it.X / screenScaling, it.Y / screenScaling));
                 var placement = popup.Placement;
-                var anchorRect = Global.Run(() =>
-#pragma warning disable CS0618
-                        anchorRectProperty is null
-                            ? positionParams?.AnchorRectangle
-                            : positionRequest is not null
-                                ? anchorRectProperty.GetValue(positionRequest) as Rect?
-                                : null
-#pragma warning restore CS0618
-                )?.Let(it =>
+                var anchorRect = (positionRequest is not null
+                    ? anchorRectProperty.GetValue(positionRequest) as Rect?
+                    : null)?.Let(it =>
                     placement == PlacementMode.Pointer
                         ? Global.Run(() =>
                         {
@@ -1514,7 +1474,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                         })
                         : Global.Run(() =>
                         {
-                            var target = targetProperty?.GetValue(positionRequest) as Visual;
+                            var target = targetProperty.GetValue(positionRequest) as Visual;
                             var pointOnScreen = target?.PointToScreen(default) ?? topLevel.PointToScreen(it.TopLeft);
                             return new Rect(pointOnScreen.X / screenScaling, pointOnScreen.Y / screenScaling, it.Width, it.Height);
                         })
