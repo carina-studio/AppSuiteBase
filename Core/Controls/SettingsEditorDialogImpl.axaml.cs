@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls;
 
@@ -36,15 +37,20 @@ class SettingsEditorDialogImpl : Dialog
 		this.Settings.SettingChanged -= this.OnSettingChanged;
 		base.OnClosed(e);
 	}
+	
+	
+	// Called when double-click on list box.
+	void OnSettingsListBoxDoubleClickOnItem(object? sender, ListBoxItemEventArgs e)
+	{
+		if (e.Item is Tuple<SettingKey, object> setting)
+			_ = this.OnSettingsListBoxDoubleClickOnItemAsync(setting, e);
+	}
 
 
 	// Called when double-click on list box.
-	// ReSharper disable once AsyncVoidMethod
-	async void OnSettingsListBoxDoubleClickOnItem(object? sender, ListBoxItemEventArgs e)
+	async Task OnSettingsListBoxDoubleClickOnItemAsync(Tuple<SettingKey, object> setting, ListBoxItemEventArgs e)
 	{
-		// find setting
-		if (e.Item is not Tuple<SettingKey, object> setting)
-			return;
+		// mark as handled
 		e.Handled = true;
 
 		// edit setting

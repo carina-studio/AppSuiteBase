@@ -362,6 +362,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     Task? loadingInitPersistentStateTask;
     Task? loadingInitSettingsTask;
     int logOutputTargetPort;
+    EventHandler? mainWindowClosedHandler;
     readonly Dictionary<MainWindow, MainWindowHolder> mainWindowHolders = new();
     readonly ObservableList<MainWindow> mainWindows = new();
     readonly CancellationTokenSource multiInstancesServerCancellationTokenSource = new();
@@ -1869,7 +1870,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
 
     /// <inheritdoc/>
-    public async void LayoutMainWindows(Screen screen, MultiWindowLayout layout, MainWindow? activeMainWindow)
+    public void LayoutMainWindows(Screen screen, MultiWindowLayout layout, MainWindow? activeMainWindow) =>
+        _ = this.LayoutMainWindowsAsync(screen, layout, activeMainWindow);
+
+
+    // Laying out main windows.
+    async Task LayoutMainWindowsAsync(Screen screen, MultiWindowLayout layout, MainWindow? activeMainWindow)
     {
         // check state
         this.VerifyAccess();
@@ -2812,12 +2818,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
 
     // Called when main window closed.
-    [RequiresUnreferencedCode("")]
-    async void OnMainWindowClosed(object? sender, EventArgs e)
+    async Task OnMainWindowClosedAsync(MainWindow mainWindow)
     {
         // detach from main window
-        if (sender is not MainWindow mainWindow)
-            return;
         if (!this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
             return;
         if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value.Window == mainWindow)
@@ -2830,7 +2833,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.activeMainWindowList.Remove(mainWindowHolder.ActiveListNode);
         this.mainWindows.Remove(mainWindow);
         this.windows.Remove(mainWindow);
-        mainWindow.Closed -= this.OnMainWindowClosed;
+        if (this.mainWindowClosedHandler is not null)
+            mainWindow.Closed -= this.mainWindowClosedHandler;
 
         this.Logger.LogDebug("Main window {id:x8} closed, {count} remains", mainWindow.GetHashCode(), this.mainWindows.Count);
 
@@ -4267,7 +4271,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         this.mainWindowHolders[mainWindow] = mainWindowHolder;
         this.mainWindows.Add(mainWindow);
         this.windows.Add(mainWindow);
-        mainWindow.Closed += this.OnMainWindowClosed;
+        mainWindow.Closed += this.mainWindowClosedHandler ?? new EventHandler((sender, e) =>
+        {
+            if (sender is MainWindow mainWindow)
+                _ = this.OnMainWindowClosedAsync(mainWindow);
+        }).Also(it => this.mainWindowClosedHandler = it);
         mainWindow.GetObservable(WindowBase.IsActiveProperty).Subscribe(new Observer<bool>(value =>
         {
             this.OnMainWindowActivationChanged(mainWindow, value);
@@ -4387,7 +4395,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
 
     /// <inheritdoc/>
-    public async void Shutdown(int delay = 0, bool isCritical = false)
+    public void Shutdown(int delay = 0, bool isCritical = false) =>
+        _ = this.ShutdownAsync(delay, isCritical);
+
+
+    // Start shutting down the application.
+    async Task ShutdownAsync(int delay, bool isCritical)
     {
         // check state
         this.VerifyAccess();

@@ -99,9 +99,9 @@ public abstract class MainWindow : Window
         this.LayoutMainWindowsCommand = new Command<MultiWindowLayout>(this.LayoutMainWindows, this.GetObservable(HasMultipleMainWindowsProperty));
 
         // create scheduled actions
-        this.notifyChineseVariantChangedAction = new(() => _ = this.NotifyChineseVariantChanged());
+        this.notifyChineseVariantChangedAction = new(this.NotifyChineseVariantChangedAsync);
         this.notifyNetworkConnForActivatingProVersionAction = new(this.NotifyNetworkConnectionForActivatingProVersion);
-        this.reactivateProVersionAction = new(this.ReactivateProVersion);
+        this.reactivateProVersionAction = new(this.ReactivateProVersionAsync);
         this.restartingRootWindowsAction = new ScheduledAction(() =>
         {
             if (!this.IsOpened || this.HasDialogs || !this.Application.IsRestartingRootWindowsNeeded)
@@ -117,7 +117,7 @@ public abstract class MainWindow : Window
                 this.PersistentState.SetValue<int>(WindowHeightSettingKey, (int)(this.Height + 0.5));
             }
         });
-        this.showInitDialogsAction = new ScheduledAction(this.ShowInitialDialogs);
+        this.showInitDialogsAction = new ScheduledAction(this.ShowInitialDialogsAsync);
         this.updateContentPaddingAction = new ScheduledAction(this.UpdateClientPadding);
 
         // restore window state
@@ -353,7 +353,7 @@ public abstract class MainWindow : Window
     
     
     // Notify user that the variant of Chinese has been changed.
-    async Task NotifyChineseVariantChanged()
+    async Task NotifyChineseVariantChangedAsync()
     {
         // check state
         if (this.Application is not AppSuiteApplication asApp)
@@ -840,7 +840,7 @@ public abstract class MainWindow : Window
     
     
     // Re-activate Pro version.
-    async void ReactivateProVersion()
+    async Task ReactivateProVersionAsync()
     {
         if (this.Application is not AppSuiteApplication asApp)
             return;
@@ -923,7 +923,7 @@ public abstract class MainWindow : Window
 
 
     // Show dialogs which are needed to be shown after showing main window.
-    async void ShowInitialDialogs()
+    async Task ShowInitialDialogsAsync()
     {
         // check state
         if (this.AreInitialDialogsClosed)

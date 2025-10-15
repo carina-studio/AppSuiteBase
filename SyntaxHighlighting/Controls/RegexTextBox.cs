@@ -890,7 +890,7 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 	
 	
 	// Select candidate phrases and open the menu.
-	async void OpenCandidatePhrasesMenu()
+	async Task OpenCandidatePhrasesMenuAsync()
 	{
 		// cancel current selection
 		this.CancelSelectingCandidatePhrases();
@@ -1232,7 +1232,7 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 		if (popupToOpen is not null)
 		{
 			if (popupToOpen == this.candidatePhrasesPopup)
-				this.OpenCandidatePhrasesMenu();
+				_ = this.OpenCandidatePhrasesMenuAsync();
 			else
 			{
 				this.GetCaretBounds()?.Let(caretBounds =>

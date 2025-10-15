@@ -67,11 +67,11 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         });
 
         // setup scheduled actions
-        this.checkNetworkConnectionAction = new(this.CheckNetworkConnection);
-        this.updateNetworkAddressesAction = new(this.UpdateNetworkAddresses);
+        this.checkNetworkConnectionAction = new(this.CheckNetworkConnectionAsync);
+        this.updateNetworkAddressesAction = new(this.UpdateNetworkAddressesAsync);
 
         // check network state
-        this.UpdateNetworkAddresses();
+        _ = this.UpdateNetworkAddressesAsync();
 
         // setup properties
         // ReSharper disable once InvokeAsExtensionMethod
@@ -80,7 +80,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
 
 
     // Check whether network connection is available or not.
-    async void CheckNetworkConnection()
+    async Task CheckNetworkConnectionAsync()
     {
         // ping
         var isConnected = false;
@@ -294,7 +294,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
 
 
     // Update network addresses.
-    async void UpdateNetworkAddresses()
+    async Task UpdateNetworkAddressesAsync()
     {
         try
         {

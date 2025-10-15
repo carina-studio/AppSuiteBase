@@ -66,8 +66,8 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 	public ApplicationUpdater() : base(IAppSuiteApplication.Current)
 	{
 		this.CancelUpdatingCommand = new Command(this.CancelUpdating, this.GetValueAsObservable(IsPreparingForUpdateProperty));
-		this.CheckForUpdateCommand = new Command(this.CheckForUpdate, this.canCheckForUpdate);
-		this.StartUpdatingCommand = new Command(this.StartUpdating, this.canStartUpdating);
+		this.CheckForUpdateCommand = new Command(this.CheckForUpdateAsync, this.canCheckForUpdate);
+		this.StartUpdatingCommand = new Command(this.StartUpdatingAsync, this.canStartUpdating);
 		this.ReportUpdateInfo();
 	}
 	
@@ -106,7 +106,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 
 
 	// Check for update.
-	async void CheckForUpdate()
+	async Task CheckForUpdateAsync()
 	{
 		// check state
 		this.VerifyAccess();
@@ -216,13 +216,19 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 		if (e.PropertyName == nameof(IAppSuiteApplication.UpdateInfo))
 			this.ReportUpdateInfo();
 	}
+	
+	
+	// Called when property of updater of AutoUpdater changed.
+	void OnAuUpdaterPropertyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		if (sender is Updater updater)
+			_ = this.OnAuUpdaterPropertyChangedAsync(updater, e);
+	}
 
 
 	// Called when property of updater of AutoUpdater changed.
-	async void OnAuUpdaterPropertyChanged(object? sender, PropertyChangedEventArgs e)
+	async Task OnAuUpdaterPropertyChangedAsync(Updater updater, PropertyChangedEventArgs e)
 	{
-		if (sender is not Updater updater)
-			return;
 		switch (e.PropertyName)
 		{
 			case nameof(Updater.DownloadedPackageSize):
@@ -245,7 +251,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 							this.Logger.LogWarning("Delete auto updater download directory '{tempDirectory}'", tempDirectory);
 							System.IO.Directory.Delete(tempDirectory, true);
 						});
-						this.OnUpdatePreparationCompleted(updater.State, updater.ApplicationDirectoryPath.AsNonNull(), updater.PackageResolver?.PackageVersion);
+						await this.OnUpdatePreparationCompletedAsync(updater.State, updater.ApplicationDirectoryPath.AsNonNull(), updater.PackageResolver?.PackageVersion);
 						break;
 					case UpdaterState.Succeeded:
 						// rename to final auto updater directory
@@ -289,12 +295,12 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 						if (this.updatePreparationCancellationTokenSource?.IsCancellationRequested == true)
 						{
 							Global.RunWithoutErrorAsync(() => System.IO.Directory.Delete(tempDirectory, true));
-							this.OnUpdatePreparationCompleted(UpdaterState.Cancelled, "", updater.PackageResolver?.PackageVersion);
+							await this.OnUpdatePreparationCompletedAsync(UpdaterState.Cancelled, "", updater.PackageResolver?.PackageVersion);
 						}
 						else if (success)
-							this.OnUpdatePreparationCompleted(UpdaterState.Succeeded, finalDirectory, updater.PackageResolver?.PackageVersion);
+							await this.OnUpdatePreparationCompletedAsync(UpdaterState.Succeeded, finalDirectory, updater.PackageResolver?.PackageVersion);
 						else
-							this.OnUpdatePreparationCompleted(UpdaterState.Failed, "", updater.PackageResolver?.PackageVersion);
+							await this.OnUpdatePreparationCompletedAsync(UpdaterState.Failed, "", updater.PackageResolver?.PackageVersion);
 						break;
 				}
 				break;
@@ -330,7 +336,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 
 
 	// Called when update preparation completed.
-	async void OnUpdatePreparationCompleted(UpdaterState state, string autoUpdaterDirectory, Version? autoUpdaterVersion)
+	async Task OnUpdatePreparationCompletedAsync(UpdaterState state, string autoUpdaterDirectory, Version? autoUpdaterVersion)
 	{
 		// release updater
 		this.auUpdater?.Let(it =>
@@ -374,13 +380,9 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 			{
 				await Task.Run(() => 
 				{
-#if NET7_0_OR_GREATER
 #pragma warning disable CA1416
 					System.IO.File.SetUnixFileMode(autoUpdaterPath, System.IO.File.GetUnixFileMode(autoUpdaterPath) | UnixFileMode.UserExecute | UnixFileMode.GroupExecute);
 #pragma warning restore CA1416
-#else
-					new UnixFileInfo(autoUpdaterPath).FileAccessPermissions |= (FileAccessPermissions.UserExecute | FileAccessPermissions.GroupExecute);
-#endif
 				});
 			}
 			catch (Exception ex)
@@ -521,7 +523,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 
 
 	// Start auto updating.
-	async void StartUpdating()
+	async Task StartUpdatingAsync()
 	{
 		// check state
 		this.VerifyAccess();
@@ -586,7 +588,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 			return;
 		if (this.updatePreparationCancellationTokenSource.IsCancellationRequested)
 		{
-			this.OnUpdatePreparationCompleted(UpdaterState.Cancelled, "", auPackageResolver.PackageVersion);
+			await this.OnUpdatePreparationCompletedAsync(UpdaterState.Cancelled, "", auPackageResolver.PackageVersion);
 			return;
 		}
 
@@ -628,7 +630,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 			return;
 		if (this.updatePreparationCancellationTokenSource.IsCancellationRequested)
 		{
-			this.OnUpdatePreparationCompleted(UpdaterState.Cancelled, "", auPackageResolver.PackageVersion);
+			await this.OnUpdatePreparationCompletedAsync(UpdaterState.Cancelled, "", auPackageResolver.PackageVersion);
 			return;
 		}
 
@@ -636,7 +638,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 		if (isAutoUpdaterInstalled)
 		{
 			this.Logger.LogDebug("Auto updater {packageVersion} is already installed before", auPackageResolver.PackageVersion);
-			this.OnUpdatePreparationCompleted(UpdaterState.Succeeded, Path.Combine(this.Application.RootPrivateDirectoryPath, $"AutoUpdater-{auPackageResolver.PackageVersion}"), auPackageResolver.PackageVersion);
+			await this.OnUpdatePreparationCompletedAsync(UpdaterState.Succeeded, Path.Combine(this.Application.RootPrivateDirectoryPath, $"AutoUpdater-{auPackageResolver.PackageVersion}"), auPackageResolver.PackageVersion);
 			return;
 		}
 
@@ -657,7 +659,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 			return;
 		if (this.updatePreparationCancellationTokenSource.IsCancellationRequested)
 		{
-			this.OnUpdatePreparationCompleted(UpdaterState.Cancelled, "", auPackageResolver.PackageVersion);
+			await this.OnUpdatePreparationCompletedAsync(UpdaterState.Cancelled, "", auPackageResolver.PackageVersion);
 			return;
 		}
 
@@ -673,7 +675,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 		if (!this.auUpdater.Start())
 		{
 			this.Logger.LogError("Failed to start downloading auto updater");
-			this.OnUpdatePreparationCompleted(UpdaterState.Failed, "", auPackageResolver.PackageVersion);
+			await this.OnUpdatePreparationCompletedAsync(UpdaterState.Failed, "", auPackageResolver.PackageVersion);
 		}
 	}
 
