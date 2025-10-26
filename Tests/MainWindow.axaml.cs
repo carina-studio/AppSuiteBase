@@ -283,6 +283,26 @@ namespace CarinaStudio.AppSuite.Tests
             tabControl.Items.Clear();
             tabControl.ItemsSource = this.tabItems;
             (this.tabItems[0].Header as Control)?.Let(it => this.Application.EnsureClosingToolTipIfWindowIsInactive(it));
+            
+            // Drag-n-Drop
+            DragDrop.SetAllowDrop(this, true);
+            this.AddHandler(DragDrop.DragEnterEvent, (_, e) =>
+            {
+                if (e.DataTransfer.HasFiles())
+                    e.DragEffects = DragDropEffects.Copy;
+            });
+            this.AddHandler(DragDrop.DragOverEvent, (_, e) =>
+            {
+                if (e.DataTransfer.HasFiles())
+                    e.DragEffects = DragDropEffects.Copy;
+            });
+            this.AddHandler(DragDrop.DropEvent, (_, e) =>
+            {
+                e.DataTransfer.TryGetLocalFilePaths()?.Let(filePaths =>
+                {
+
+                });
+            });
         }
 
 
