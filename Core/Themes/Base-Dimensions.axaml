@@ -190,6 +190,9 @@
 	<sys:Double x:Key="Double/GridSplitter.Thickness">5</sys:Double>
 
 	<!-- InPlaceAction -->
+	<CornerRadius x:Key="CornerRadius/InPlaceAction">3</CornerRadius>
+	<CornerRadius x:Key="CornerRadius/InPlaceAction.Large">7</CornerRadius>
+	<CornerRadius x:Key="CornerRadius/InPlaceAction.Medium">5</CornerRadius>
 	<sys:Double x:Key="Double/InPlaceAction.IconSize">10</sys:Double>
 	<sys:Double x:Key="Double/InPlaceAction.IconSize.Large">16</sys:Double>
 	<sys:Double x:Key="Double/InPlaceAction.IconSize.Medium">13</sys:Double>
@@ -271,6 +274,7 @@
 	<sys:Double x:Key="Double/MessageDialog.Message.MinWidth">200</sys:Double>
 	
 	<!-- NotificationPresenter -->
+	<CornerRadius x:Key="CornerRadius/NotificationPresenter.Notification.Dismiss">5</CornerRadius>
 	<sys:Double x:Key="Double/NotificationPresenter.Notification.Action.FontSize">13</sys:Double>
 	<sys:Double x:Key="Double/NotificationPresenter.Notification.Dismiss.Size">18</sys:Double>
 	<sys:Double x:Key="Double/NotificationPresenter.Notification.Icon.Size">16</sys:Double>

@@ -1335,6 +1335,7 @@
 	<Style Selector="Button.InPlaceAction_Button">
 		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/InPlaceAction}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/InPlaceAction.Padding}"/>
@@ -1356,6 +1357,7 @@
 	<Style Selector="Button.InPlaceAction_Button_Large">
 		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/InPlaceAction.Large}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/InPlaceAction.Padding.Large}"/>
@@ -1377,6 +1379,7 @@
 	<Style Selector="Button.InPlaceAction_Button_Medium">
 		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/InPlaceAction.Medium}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/InPlaceAction.Padding.Medium}"/>
@@ -1434,6 +1437,7 @@
 	<Style Selector="ToggleButton.InPlaceAction_ToggleButton">
 		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/InPlaceAction}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/InPlaceAction.Padding}"/>
@@ -1458,6 +1462,7 @@
 	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Large">
 		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/InPlaceAction.Large}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/InPlaceAction.Padding.Large}"/>
@@ -1482,6 +1487,7 @@
 	<Style Selector="ToggleButton.InPlaceAction_ToggleButton_Medium">
 		<Setter Property="Background" Value="{DynamicResource Brush/InPlaceAction.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/InPlaceAction.Medium}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/InPlaceAction.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/InPlaceAction.Padding.Medium}"/>
@@ -1741,6 +1747,7 @@
 						<Button Background="{DynamicResource ButtonBackgroundTransparent}" 
 						        BorderThickness="0" 
 						        Command="{Binding Dismiss}" 
+						        CornerRadius="{DynamicResource CornerRadius/NotificationPresenter.Notification.Dismiss}"
 						        Grid.Column="2" 
 						        Grid.RowSpan="2"
 						        Height="{DynamicResource Double/NotificationPresenter.Notification.Dismiss.Size}"

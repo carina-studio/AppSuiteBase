@@ -611,6 +611,7 @@
 
 							<appControls:TimeSpanFormatTextBox HorizontalAlignment="Left" Margin="5" Width="250"/>
 
+							<!-- In-place actions -->
 							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
 								<StackPanel Orientation="Horizontal">
 									<Button Classes="InPlaceAction_Button">
@@ -636,8 +637,6 @@
 									</ToggleButton>
 								</StackPanel>
 							</Border>
-
-							<!-- In-place actions -->
 							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
 								<StackPanel Orientation="Horizontal">
 									<Button Classes="InPlaceAction_Button_Medium">
