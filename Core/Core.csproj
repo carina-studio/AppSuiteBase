@@ -51,8 +51,8 @@
 		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="$(DotNetLibraryVersion)" />
 		<PackageReference Include="Microsoft.Win32.Registry" Version="6.0.0-preview.5.21301.5" />
 		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="$(DotNetLibraryVersion)" />
-		<PackageReference Include="NLog" Version="6.0.4" />
-		<PackageReference Include="NLog.Extensions.Logging" Version="6.0.4" />
+		<PackageReference Include="NLog" Version="6.0.5" />
+		<PackageReference Include="NLog.Extensions.Logging" Version="6.0.5" />
 		<PackageReference Include="NLog.Targets.Network" Version="6.0.3" />
 		<PackageReference Include="NUnit" Version="4.4.0" />
 		<PackageReference Include="RangeSlider.Avalonia" Version="2.1.0" />
