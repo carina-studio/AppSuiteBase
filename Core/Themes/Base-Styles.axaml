@@ -2967,6 +2967,7 @@
 	<Style Selector="Button.TextBox_InPlaceAction">
 		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundTransparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/InPlaceAction.Medium}"/>
 		<Setter Property="Focusable" Value="False"/>
 		<Setter Property="Height" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -3105,6 +3106,7 @@
 	<Style Selector="ToggleButton.TextBox_InPlaceAction">
 		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundTransparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/InPlaceAction.Medium}"/>
 		<Setter Property="Focusable" Value="False"/>
 		<Setter Property="Height" Value="{DynamicResource Double/TextBox.InPlaceAction.Size}"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
