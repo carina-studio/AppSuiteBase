@@ -1,11 +1,13 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:aConverters="using:Avalonia.Data.Converters"
 		xmlns:sys="clr-namespace:System;assembly=System.Runtime">
 	
 	<!-- Resources -->
 	<Styles.Resources>
 		<ResourceDictionary>
+			
+			<!-- Button -->
+			<CornerRadius x:Key="CornerRadius/Button">4</CornerRadius>
 
 			<!-- ComboBoxItem -->
 			<CornerRadius x:Key="CornerRadius/ComboBoxItem">5</CornerRadius>

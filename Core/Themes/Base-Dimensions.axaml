@@ -41,12 +41,14 @@
 	<Thickness x:Key="Thickness/BrowseButton.Padding">8</Thickness>
 
 	<!-- Button -->
+	<Thickness x:Key="ButtonPadding">8,4,8,4</Thickness>
 	<CornerRadius x:Key="CornerRadius/Button">8</CornerRadius>
 	<sys:Double x:Key="Double/Button.DropDownIcon.Size">12</sys:Double>
 	<sys:Double x:Key="Double/Button.Icon.Size">14</sys:Double>
 	<Thickness x:Key="Thickness/Button.Border">1</Thickness>
-	<Thickness x:Key="Thickness/Button.Icon.Margin">0,0,5,0</Thickness>
 	<Thickness x:Key="Thickness/Button.DropDownIcon.Margin">8,0,0,0</Thickness>
+	<Thickness x:Key="Thickness/Button.Icon.Margin">0,0,5,0</Thickness>
+	<StaticResourceExtension x:Key="Thickness/Button.Padding" ResourceKey="ButtonPadding"/>
 
 	<!-- ButtonSpinner -->
 	<sys:Double x:Key="Double/ButtonSpinner.Button.Icon.Size">12</sys:Double>
@@ -55,7 +57,7 @@
 	<Thickness x:Key="ComboBoxDropdownBorderPadding">4,3,4,3</Thickness>
 	<Thickness x:Key="ComboBoxDropdownBorderThickness">1</Thickness>
 	<Thickness x:Key="ComboBoxDropdownContentMargin">0</Thickness>
-	<Thickness x:Key="ComboBoxPadding">7</Thickness>
+	<Thickness x:Key="ComboBoxPadding">7,6,7,6</Thickness>
 	<sys:Double x:Key="ComboBoxMinHeight">30</sys:Double>
 
 	<!-- ComboBoxItem -->
@@ -63,7 +65,7 @@
 	<sys:Double x:Key="Double/ComboBoxItem.Icon.Size">14</sys:Double>
 	<Thickness x:Key="Thickness/ComboBoxItem.Icon.Margin">0,0,10,0</Thickness>
 	<Thickness x:Key="Thickness/ComboBoxItem.Margin">0,1,0,1</Thickness>
-	<Thickness x:Key="Thickness/ComboBoxItem.Padding">6,6,15,6</Thickness>
+	<Thickness x:Key="Thickness/ComboBoxItem.Padding">6,4,15,4</Thickness>
 
 	<!-- Control -->
 	<CornerRadius x:Key="ControlCornerRadius">6</CornerRadius>
@@ -163,7 +165,7 @@
 	<Thickness x:Key="ExpanderDropdownLeftBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderDropdownRightBorderThickness">0</Thickness>
 	<Thickness x:Key="ExpanderDropdownUpBorderThickness">0</Thickness>
-	<Thickness x:Key="ExpanderHeaderPadding">8,8,0,8</Thickness>
+	<Thickness x:Key="ExpanderHeaderPadding">8,6,0,6</Thickness>
 	<sys:Double x:Key="ExpanderMinHeight">0</sys:Double>
 	<Thickness x:Key="Thickness/Expander.Chevron.Margin">10</Thickness>
 
@@ -225,10 +227,10 @@
 	<sys:Double x:Key="Double/ListBoxItem.InsertionIndicator.Size">4</sys:Double>
 	<Thickness x:Key="Thickness/ListBoxItem.Icon.Margin">0,0,9,0</Thickness>
 	<Thickness x:Key="Thickness/ListBoxItem.Margin">0,1,0,1</Thickness>
-	<Thickness x:Key="Thickness/ListBoxItem.Padding">6,5,15,5</Thickness>
+	<Thickness x:Key="Thickness/ListBoxItem.Padding">6,4,15,4</Thickness>
 
 	<!-- MarkdownViewer -->
-	<CornerRadius x:Key="CornerRadius/MarkdownViewer.Markdown.InlineCode">2</CornerRadius>
+	<CornerRadius x:Key="CornerRadius/MarkdownViewer.Markdown.InlineCode">4</CornerRadius>
 	<sys:Double x:Key="Double/MarkdownViewer.Markdown.Heading1">24</sys:Double>
 	<sys:Double x:Key="Double/MarkdownViewer.Markdown.Heading2">20</sys:Double>
 	<sys:Double x:Key="Double/MarkdownViewer.Markdown.Heading3">18</sys:Double>
@@ -256,7 +258,7 @@
 	<Thickness x:Key="Thickness/MarkdownViewer.Rule.Margin">0,3,0,13</Thickness>
 
 	<!-- Menu -->
-	<Thickness x:Key="Thickness/Menu.MenuItem.Padding">10,5,10,5</Thickness>
+	<Thickness x:Key="Thickness/Menu.MenuItem.Padding">10,4,10,4</Thickness>
 	<Thickness x:Key="Thickness/Menu.Padding">5,3,5,3</Thickness>
 
 	<!-- MenuFlyout -->
@@ -267,7 +269,7 @@
 	<!-- MenuItem -->
 	<CornerRadius x:Key="CornerRadius/MenuItem">8</CornerRadius>
 	<sys:Double x:Key="Double/MenuItem.Icon.Size">14</sys:Double>
-	<Thickness x:Key="Thickness/MenuItem.Padding">12,6,12,6</Thickness>
+	<Thickness x:Key="Thickness/MenuItem.Padding">12,4,12,4</Thickness>
 
 	<!-- MessageDialog -->
 	<sys:Double x:Key="Double/MessageDialog.Message.MaxWidth">600</sys:Double>
@@ -410,7 +412,7 @@
 	<!-- TextBox -->
 	<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>
 	<sys:Double x:Key="TextControlThemeMinHeight">0</sys:Double>
-	<Thickness x:Key="TextControlThemePadding">6</Thickness>
+	<Thickness x:Key="TextControlThemePadding">6,5,6,5</Thickness>
 	<sys:Double x:Key="Double/TextBox.BoxShadow.Radius.Focused">6</sys:Double>
 	<sys:Double x:Key="Double/TextBox.BoxShadow.Spread.Focused">1</sys:Double>
 	<sys:Double x:Key="Double/TextBox.InPlaceAction.Size">20</sys:Double>
@@ -477,7 +479,7 @@
 	<sys:Double x:Key="Double/TreeViewItem.Icon.Size">14</sys:Double>
 	<Thickness x:Key="Thickness/TreeViewItem.Icon.Margin">0,0,9,0</Thickness>
 	<Thickness x:Key="Thickness/TreeViewItem.Margin">0,1,0,1</Thickness>
-	<Thickness x:Key="Thickness/TreeViewItem.Padding">0,5,15,5</Thickness>
+	<Thickness x:Key="Thickness/TreeViewItem.Padding">0,4,15,4</Thickness>
 	
 	<!-- WizardDialog -->
 	<sys:Double x:Key="Double/WizardDialog.TextBlock.FontSize.PageHeader">24</sys:Double>

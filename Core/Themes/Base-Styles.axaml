@@ -2366,6 +2366,7 @@
 	
 	<!-- SplitButton -->
 	<Style Selector="SplitButton">
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/Button}"/>
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Grid ColumnDefinitions="*,Auto,Auto">
