@@ -15,9 +15,13 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
 {
     // Fields.
     string id;
+#if !NET10_0_OR_GREATER
     ILogger? logger;
+#endif
     readonly Lock loggerLock = new();
+#if !NET10_0_OR_GREATER
     string? name;
+#endif
 
 
     /// <summary>
@@ -85,15 +89,24 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
     /// <summary>
     /// Get logger.
     /// </summary>
+    [ThreadSafe]
     protected ILogger Logger
     {
         get
         {
+#if NET10_0_OR_GREATER
+            return field ?? this.loggerLock.Lock(() =>
+            {
+                field ??= this.Application.LoggerFactory.CreateLogger(this.GetType().Name);
+                return field;
+            });
+#else
             return this.logger ?? this.loggerLock.Lock(() =>
             {
                 this.logger ??= this.Application.LoggerFactory.CreateLogger(this.GetType().Name);
                 return logger;
             });
+#endif
         }
     }
 
@@ -105,14 +118,24 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
     /// <inheritdoc/>
     public virtual string? Name
     {
+#if NET10_0_OR_GREATER
+        get;
+#else
         get => this.name;
+#endif
         set
         {
             this.VerifyAccess();
             this.VerifyBuiltIn();
+#if NET10_0_OR_GREATER
+            if (field == value)
+                return;
+            field = value;
+#else
             if (this.name == value)
                 return;
             this.name = value;
+#endif
             this.OnPropertyChanged(nameof(Name));
         }
     }

@@ -1,3 +1,4 @@
+using CarinaStudio.Logging;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System;

@@ -56,7 +56,7 @@ public class TimeSpanFormatTextBox : SyntaxHighlightingObjectTextBox<string>
         }
         catch
         {
-            obj = default;
+            obj = null;
             return false;
         }
     }

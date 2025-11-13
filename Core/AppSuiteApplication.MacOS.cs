@@ -1,12 +1,12 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using CarinaStudio.Logging;
 using CarinaStudio.MacOS.AppKit;
 using CarinaStudio.MacOS.CoreGraphics;
 using CarinaStudio.MacOS.ObjectiveC;
 using ObjCSelector = CarinaStudio.MacOS.ObjectiveC.Selector;
 using CarinaStudio.Threading;
-using Microsoft.Extensions.Logging;
 using SkiaSharp;
 using System;
 using System.Diagnostics;

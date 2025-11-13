@@ -4,15 +4,12 @@ using CarinaStudio.AutoUpdate.Installers;
 using CarinaStudio.AutoUpdate.Resolvers;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
+using CarinaStudio.Logging;
 using CarinaStudio.IO;
 using CarinaStudio.Net;
 using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
 using CarinaStudio.Windows.Input;
-using Microsoft.Extensions.Logging;
-#if !NET7_0_OR_GREATER
-using Mono.Unix;
-#endif
 using System;
 using System.ComponentModel;
 using System.Diagnostics;

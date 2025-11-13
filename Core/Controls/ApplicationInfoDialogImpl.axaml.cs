@@ -174,7 +174,7 @@ class ApplicationInfoDialogImpl : Dialog
 						if (displayCount == 0)
 							displayId = Native.MacOS.CGMainDisplayID();
 						var displayModeRef = Native.MacOS.CGDisplayCopyDisplayMode(displayId);
-						if (displayModeRef != default)
+						if (displayModeRef != IntPtr.Zero)
 						{
 							try
 							{

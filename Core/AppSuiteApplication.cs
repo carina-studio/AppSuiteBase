@@ -18,6 +18,7 @@ using CarinaStudio.AutoUpdate.Resolvers;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
+using CarinaStudio.Logging;
 using CarinaStudio.Net;
 using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;

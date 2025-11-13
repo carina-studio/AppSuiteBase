@@ -1,5 +1,6 @@
 ﻿using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.Collections;
+using CarinaStudio.Logging;
 using CarinaStudio.IO;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;

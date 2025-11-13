@@ -67,7 +67,7 @@ public class DateTimeFormatTextBox : SyntaxHighlightingObjectTextBox<string>
         }
         catch
         {
-            obj = default;
+            obj = null;
             return false;
         }
     }

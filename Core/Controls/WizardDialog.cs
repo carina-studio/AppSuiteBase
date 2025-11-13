@@ -1,7 +1,7 @@
 ﻿using Avalonia;
+using CarinaStudio.Logging;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -149,6 +149,7 @@ public abstract class WizardDialog : InputDialog
         
         // go to page
         this.pageChangeCancellationSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        // ReSharper disable once MethodHasAsyncOverloadWithCancellation
         this.checkPageChangeAvailabilityAction.Execute();
         try
         {
@@ -160,6 +161,7 @@ public abstract class WizardDialog : InputDialog
             if ((ex is TaskCanceledException || ex is OperationCanceledException) && this.IsClosed)
             {
                 this.Logger.LogWarning("Changing page from {prevPage} to {page} has been cancelled because dialog has been closed", prevPageIndex, pageIndex);
+                // ReSharper disable once MethodHasAsyncOverloadWithCancellation
                 this.checkPageChangeAvailabilityAction.Execute();
                 return false;
             }
@@ -171,6 +173,7 @@ public abstract class WizardDialog : InputDialog
         }
         this.Logger.LogTrace("Complete changing page from {prevPage} to {page}", prevPageIndex, pageIndex);
         this.SetAndRaise(CurrentPageIndexProperty, ref this.currentPageIndex, pageIndex);
+        // ReSharper disable once MethodHasAsyncOverloadWithCancellation
         this.checkPageChangeAvailabilityAction.Execute();
         this.InvalidateButtonTexts();
         return true;

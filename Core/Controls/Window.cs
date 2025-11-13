@@ -36,8 +36,10 @@ public abstract class Window : CarinaStudio.Controls.ApplicationWindow<IAppSuite
     Tutorial? currentTutorial;
     IDisposable? currentTutorialObserverToken;
     bool isSystemChromeVisibleInClientArea;
+#if !NET10_0_OR_GREATER
     double taskbarIconProgress;
     TaskbarIconProgressState taskbarIconProgressState = TaskbarIconProgressState.None;
+#endif
     INameScope? templateNameScope;
     TutorialPresenter? tutorialPresenter;
     readonly ScheduledAction updateTransparencyLevelAction;
@@ -231,7 +233,11 @@ public abstract class Window : CarinaStudio.Controls.ApplicationWindow<IAppSuite
     /// </summary>
     internal protected double TaskbarIconProgress
     {
+#if NET10_0_OR_GREATER
+        get;
+#else
         get => this.taskbarIconProgress;
+#endif
         protected set
         {
             this.VerifyAccess();
@@ -241,7 +247,11 @@ public abstract class Window : CarinaStudio.Controls.ApplicationWindow<IAppSuite
                 value = 0;
             else if (value > 1)
                 value = 1;
+#if NET10_0_OR_GREATER
+            field = value;
+#else
             this.taskbarIconProgress = value;
+#endif
             if (Platform.IsWindows)
                 (this.Application as AppSuiteApplication)?.UpdateWindowsTaskBarProgress(this);
             else if (Platform.IsMacOS)
@@ -255,13 +265,23 @@ public abstract class Window : CarinaStudio.Controls.ApplicationWindow<IAppSuite
     /// </summary>
     internal protected TaskbarIconProgressState TaskbarIconProgressState
     {
+#if NET10_0_OR_GREATER
+        get;
+#else
         get => this.taskbarIconProgressState;
+#endif
         protected set
         {
             this.VerifyAccess();
+#if NET10_0_OR_GREATER
+            if (field == value)
+                return;
+            field = value;
+#else
             if (this.taskbarIconProgressState == value)
                 return;
             this.taskbarIconProgressState = value;
+#endif
             if (Platform.IsWindows)
                 (this.Application as AppSuiteApplication)?.UpdateWindowsTaskBarProgressState(this);
             else if (Platform.IsMacOS)

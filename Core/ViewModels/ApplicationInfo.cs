@@ -1,9 +1,9 @@
 ﻿using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CarinaStudio.Collections;
+using CarinaStudio.Logging;
 using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IO;
