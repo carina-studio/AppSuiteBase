@@ -68,7 +68,7 @@ public static class CommandSearchPaths
     /// <summary>
     /// Get custom paths.
     /// </summary>
-    public static ISet<string> CustomPaths { get; } = SetExtensions.AsReadOnly(customPaths);
+    public static ISet<string> CustomPaths { get; } = customPaths.AsReadOnly();
     
     
     /// <summary>

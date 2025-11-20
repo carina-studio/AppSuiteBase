@@ -1,7 +1,7 @@
 using System.Threading;
 using CarinaStudio.Collections;
+using CarinaStudio.Logging;
 using CarinaStudio.Threading;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -21,7 +21,6 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
 
 
     // Fields.
-    readonly ILogger logger;
     IList<TestCaseCategory>? roTestCaseCategories;
     TestCase? runningTestCase;
     SortedObservableList<TestCaseCategory>? testCaseCategories;
@@ -32,7 +31,6 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
     // Constructor.
     TestManager(IAppSuiteApplication app) : base(app)
     { 
-        this.logger = app.LoggerFactory.CreateLogger(nameof(TestManager));
         this.AddTestCase(typeof(Common.AppLifetimeExceptionTest));
         this.AddTestCase(typeof(Common.LocalizationTest));
         this.AddTestCase(typeof(Common.ThemeModeTest));
@@ -66,13 +64,13 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
         this.VerifyAccess();
         if (this.testCasesToRun.IsNotEmpty())
         {
-            this.logger.LogWarning("Cancel {count} waiting test case(s)", this.testCasesToRun.Count);
+            this.Logger.LogWarning("Cancel {count} waiting test case(s)", this.testCasesToRun.Count);
             var node = this.testCasesToRun.First;
             while (node != null)
             {
                 var nextNode = node.Next;
                 var testCase = node.Value;
-                this.logger.LogDebug("Cancel waiting test case '{name}'", testCase.Name);
+                this.Logger.LogDebug("Cancel waiting test case '{name}'", testCase.Name);
                 this.testCasesToRun.Remove(node);
                 testCase.Cancel();
                 node = nextNode;
@@ -81,7 +79,7 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
         }
         if (this.runningTestCase != null)
         {
-            this.logger.LogWarning("Cancel running test case '{name}'", this.runningTestCase.Name);
+            this.Logger.LogWarning("Cancel running test case '{name}'", this.runningTestCase.Name);
             this.runningTestCase.Cancel();
         }
     }
@@ -97,17 +95,17 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
         this.VerifyAccess();
         if (this.testCasesToRun.Remove(testCase))
         {
-            this.logger.LogDebug("Cancel waiting test case '{name}'", testCase.Name);
+            this.Logger.LogDebug("Cancel waiting test case '{name}'", testCase.Name);
             testCase.Cancel();
             this.PropertyChanged?.Invoke(this, new(nameof(TestCaseWaitingCount)));
             return true;
         }
         if (this.runningTestCase == testCase)
         {
-            this.logger.LogWarning("Cancel running test case '{name}'", testCase.Name);
+            this.Logger.LogWarning("Cancel running test case '{name}'", testCase.Name);
             return testCase.Cancel();
         }
-        this.logger.LogWarning("Cannot cancel unknown test case '{name}'", testCase.Name);
+        this.Logger.LogWarning("Cannot cancel unknown test case '{name}'", testCase.Name);
         return false;
     }
 
@@ -123,7 +121,7 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
     {
         if (this.testCaseCategories == null)
             throw new InvalidOperationException();
-        var index = ((IList<TestCaseCategory>)this.testCaseCategories).BinarySearch<TestCaseCategory, string>(name, it => it.Name, string.CompareOrdinal);
+        var index = this.testCaseCategories.BinarySearch<TestCaseCategory, string>(name, it => it.Name, string.CompareOrdinal);
         if (index >= 0)
             return this.testCaseCategories[index];
         return new TestCaseCategory(name).Also(it => this.testCaseCategories.Add(it));
@@ -147,6 +145,10 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
     /// Check whether one or more test cases are running or not.
     /// </summary>
     public bool IsRunningTestCases { get; private set; }
+
+
+    /// <inheritdoc/>
+    protected override string LoggerCategoryName => nameof(TestManager);
 
 
     /// <summary>
@@ -196,13 +198,13 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
             return false;
         if (this.runningTestCase != null)
         {
-            this.logger.LogDebug("Add test case '{name}' to waiting queue, waiting count: {count}", testCase.Name, this.testCasesToRun.Count + 1);
+            this.Logger.LogDebug("Add test case '{name}' to waiting queue, waiting count: {count}", testCase.Name, this.testCasesToRun.Count + 1);
             this.testCasesToRun.AddLast(testCase);
             this.PropertyChanged?.Invoke(this, new(nameof(TestCaseWaitingCount)));
         }
         else
         {
-            this.logger.LogDebug("Run test case '{name}' immediately", testCase.Name);
+            this.Logger.LogDebug("Run test case '{name}' immediately", testCase.Name);
             _ = this.RunTestCaseAsync(testCase);
         }
         return true;
@@ -224,13 +226,13 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
         }
         
         // run
-        this.logger.LogDebug("Start running test case '{name}', waiting count: {count}", testCase.Name, this.testCasesToRun.Count);
+        this.Logger.LogDebug("Start running test case '{name}', waiting count: {count}", testCase.Name, this.testCasesToRun.Count);
         this.RunningTestCase = testCase;
         await Task.Delay(100, CancellationToken.None);
         await testCase.RunAsync();
         this.RunningTestCase = null;
         await Task.Delay(100, CancellationToken.None);
-        this.logger.LogDebug("Complete running test case '{name}'", testCase.Name);
+        this.Logger.LogDebug("Complete running test case '{name}'", testCase.Name);
 
         // run next test case
         if (this.testCasesToRun.IsNotEmpty())
@@ -244,7 +246,7 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
         }
         else
         {
-            this.logger.LogDebug("No more test case to run");
+            this.Logger.LogDebug("No more test case to run");
             this.IsRunningTestCases = false;
             this.PropertyChanged?.Invoke(this, new(nameof(IsRunningTestCases)));
         }
@@ -300,15 +302,15 @@ public class TestManager : BaseApplicationObject<IAppSuiteApplication>, INotifyP
             testCase = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public, null, [ this.Application ], this.Application.CultureInfo) as TestCase;
             if (testCase != null)
             {
-                this.logger.LogDebug("Create test case '{name}' with type {type}", testCase.Name, type.Name);
+                this.Logger.LogDebug("Create test case '{name}' with type {type}", testCase.Name, type.Name);
                 return true;
             }
-            this.logger.LogError("Unable to create test case with type {type}", type.Name);
+            this.Logger.LogError("Unable to create test case with type {type}", type.Name);
             return false;
         }
         catch (Exception ex)
         {
-            this.logger.LogError(ex, "Unable to create test case with type {type}", type.Name);
+            this.Logger.LogError(ex, "Unable to create test case with type {type}", type.Name);
             testCase = null;
             return false;
         }

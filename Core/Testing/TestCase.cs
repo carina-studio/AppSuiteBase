@@ -1,5 +1,4 @@
 using CarinaStudio.Logging;
-using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using System;
 using System.ComponentModel;
@@ -17,7 +16,6 @@ public abstract class TestCase : BaseApplicationObject<IAppSuiteApplication>, IN
     // Fields.
     CancellationTokenSource? cancellationTokenSource;
     Exception? error;
-    ILogger? logger;
     TestCaseState state = TestCaseState.None;
 
 
@@ -101,17 +99,8 @@ public abstract class TestCase : BaseApplicationObject<IAppSuiteApplication>, IN
     public bool IsRunnable { get; private set; } = true;
 
 
-    /// <summary>
-    /// Get logger.
-    /// </summary>
-    protected ILogger Logger
-    {
-        get
-        {
-            this.logger ??= this.Application.LoggerFactory.CreateLogger($"TestCase({this.Name})");
-            return this.logger;
-        }
-    }
+    /// <inheritdoc/>
+    protected override string LoggerCategoryName => $"TestCase({this.Name})";
 
 
     /// <summary>

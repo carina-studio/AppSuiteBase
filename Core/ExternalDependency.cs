@@ -1,6 +1,5 @@
 using CarinaStudio.Logging;
 using CarinaStudio.Threading;
-using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -18,9 +17,6 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
     string? description;
     bool isFirstAvailabilityCheck = true;
     bool isDescriptionValid;
-#if !NET10_0_OR_GREATER
-    ILogger? logger;
-#endif
     string? name;
     ExternalDependencyState state = ExternalDependencyState.Unknown;
 
@@ -117,25 +113,6 @@ public abstract class ExternalDependency : BaseApplicationObject<IAppSuiteApplic
     /// </summary>
     public void InvalidateAvailability() =>
         this.checkAvailabilityAction.Schedule();
-
-
-    /// <summary>
-    /// Get logger.
-    /// </summary>
-    [ThreadSafe]
-    protected ILogger Logger
-    {
-        get
-        {
-#if NET10_0_OR_GREATER
-            field ??= this.Application.LoggerFactory.CreateLogger(this.GetType().Name);
-            return field;
-#else
-            logger ??= this.Application.LoggerFactory.CreateLogger(this.GetType().Name);
-            return logger;
-#endif
-        }
-    }
 
 
     /// <summary>

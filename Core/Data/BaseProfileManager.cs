@@ -1,7 +1,6 @@
 using CarinaStudio.Collections;
 using CarinaStudio.Logging;
 using CarinaStudio.Threading;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -39,7 +38,6 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
     /// <param name="app">Application.</param>
     protected BaseProfileManager(TApp app) : base(app)
     {
-        this.Logger = app.LoggerFactory.CreateLogger(this.GetType().Name);
         this.profiles = new(this.CompareProfiles);
         this.Profiles = (IReadOnlyList<TProfile>)ListExtensions.AsReadOnly(this.profiles);
         this.saveProfilesAction = new(() => _ = this.SaveProfiles());
@@ -185,12 +183,6 @@ public abstract class BaseProfileManager<TApp, TProfile> : BaseApplicationObject
         }
         this.Logger.LogDebug("{profileCount} profile(s) loaded", profileCount);
     }
-
-
-    /// <summary>
-    /// Get logger.
-    /// </summary>
-    protected ILogger Logger { get; }
 
 
     /// <summary>

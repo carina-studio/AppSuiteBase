@@ -1,7 +1,6 @@
 using CarinaStudio.Collections;
 using CarinaStudio.Logging;
 using CarinaStudio.Threading;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -49,7 +48,6 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
     // Fields.
     readonly ScheduledAction checkNetworkConnectionAction;
     bool isWirelessInterfaceUp;
-    readonly ILogger logger;
     readonly ObservableList<IPAddress> ipAddresses = new();
     readonly ScheduledAction updateNetworkAddressesAction;
 
@@ -57,9 +55,6 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
     // Constructor.
     NetworkManager(IAppSuiteApplication app) : base(app)
     { 
-        // create logger
-        this.logger = app.LoggerFactory.CreateLogger(nameof(NetworkManager));
-
         // monitor network change
         Task.Run(() =>
         {
@@ -97,7 +92,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
                         ping.Send(server, 5000, pingData).Status == IPStatus.Success);
                     if (success)
                     {
-                        this.logger.LogTrace("Network connection checked by '{server}'", server);
+                        this.Logger.LogTrace("Network connection checked by '{server}'", server);
                         isConnected = true;
                         break;
                     }
@@ -105,7 +100,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
                 // ReSharper disable once EmptyGeneralCatchClause
                 catch
                 { }
-                this.logger.LogWarning("Failed to ping '{server}'", server);
+                this.Logger.LogWarning("Failed to ping '{server}'", server);
             }
         }
 
@@ -124,13 +119,13 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
                 }
                 catch (Exception ex)
                 {
-                    this.logger.LogError(ex, "Error occurred while getting active IPv4 address");
+                    this.Logger.LogError(ex, "Error occurred while getting active IPv4 address");
                     return null;
                 }
             });
             if (ipAddress == null)
             {
-                this.logger.LogError("Unable to get active IPv4 address");
+                this.Logger.LogError("Unable to get active IPv4 address");
                 ipAddress = this.IPAddress;
             }
             using var httpClient = new HttpClient();
@@ -154,7 +149,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
             }
             if (publicIPAddress == null)
             {
-                this.logger.LogError("Unable to get active IPv4 address for connection to internet");
+                this.Logger.LogError("Unable to get active IPv4 address for connection to internet");
                 publicIPAddress = this.PublicIPAddress;
             }
         }
@@ -167,20 +162,20 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         // update state
         if (!Equals(ipAddress, this.IPAddress))
         {
-            this.logger.LogTrace("IPv4 address: {ipAddress}", ipAddress);
+            this.Logger.LogTrace("IPv4 address: {ipAddress}", ipAddress);
             this.IPAddress = ipAddress;
             this.PropertyChanged?.Invoke(this, new(nameof(IPAddress)));
         }
         if (!Equals(publicIPAddress, this.PublicIPAddress))
         {
-            this.logger.LogTrace("Public IPv4 address: {publicIPAddress}", publicIPAddress);
+            this.Logger.LogTrace("Public IPv4 address: {publicIPAddress}", publicIPAddress);
             this.PublicIPAddress = publicIPAddress;
             this.PropertyChanged?.Invoke(this, new(nameof(PublicIPAddress)));
         }
         if (this.IsNetworkConnected != isConnected)
         {
             if (!isConnected)
-                this.logger.LogWarning("Network connection is down");
+                this.Logger.LogWarning("Network connection is down");
             this.IsNetworkConnected = isConnected;
             this.PropertyChanged?.Invoke(this, new(nameof(IsNetworkConnected)));
         }
@@ -249,6 +244,10 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
     /// Check whether wireless network is connected and being used or not.
     /// </summary>
     public bool IsWirelessNetworkConnected { get; private set; }
+
+
+    /// <inheritdoc/>
+    protected override string LoggerCategoryName => nameof(NetworkManager);
 
 
     // Called when network address changed.
@@ -395,7 +394,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         }
         catch (Exception ex)
         {
-            this.logger.LogError(ex, "Error occurred while updating IP addresses");
+            this.Logger.LogError(ex, "Error occurred while updating IP addresses");
         }
     }
 }

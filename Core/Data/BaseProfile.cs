@@ -1,5 +1,4 @@
 using CarinaStudio.Threading;
-using Microsoft.Extensions.Logging;
 using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
@@ -15,10 +14,6 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
 {
     // Fields.
     string id;
-#if !NET10_0_OR_GREATER
-    ILogger? logger;
-#endif
-    readonly Lock loggerLock = new();
 #if !NET10_0_OR_GREATER
     string? name;
 #endif
@@ -83,31 +78,6 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
     {
         this.VerifyAccess();
         this.OnLoad(element);
-    }
-
-
-    /// <summary>
-    /// Get logger.
-    /// </summary>
-    [ThreadSafe]
-    protected ILogger Logger
-    {
-        get
-        {
-#if NET10_0_OR_GREATER
-            return field ?? this.loggerLock.Lock(() =>
-            {
-                field ??= this.Application.LoggerFactory.CreateLogger(this.GetType().Name);
-                return field;
-            });
-#else
-            return this.logger ?? this.loggerLock.Lock(() =>
-            {
-                this.logger ??= this.Application.LoggerFactory.CreateLogger(this.GetType().Name);
-                return logger;
-            });
-#endif
-        }
     }
 
 

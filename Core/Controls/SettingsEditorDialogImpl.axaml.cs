@@ -129,12 +129,7 @@ class SettingsEditorDialogImpl : Dialog
 
 
 	// List of key of setting.
-	public ISet<SettingKey> SettingKeys { get; init; } = 
-#if NET10_0_OR_GREATER
-		SetExtensions.AsReadOnly(new HashSet<SettingKey>());
-#else
-		new HashSet<SettingKey>().AsReadOnly();
-#endif
+	public ISet<SettingKey> SettingKeys { get; init; } = new HashSet<SettingKey>().AsReadOnly();
 
 
 	/// <summary>

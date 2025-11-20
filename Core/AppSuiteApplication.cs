@@ -429,7 +429,6 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         });
         // ReSharper disable VirtualMemberCallInConstructor
         this.LoggerFactory = new LoggerFactory([ this.OnCreateLoggerProvider() ]);
-        this.Logger = this.LoggerFactory.CreateLogger(this.GetType().Name);
         this.avaloniaLogger = this.LoggerFactory.CreateLogger("Avalonia");
         // ReSharper restore VirtualMemberCallInConstructor
         this.Logger.LogDebug("Created");
@@ -2330,13 +2329,6 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             return null;
         }
     }
-
-
-    /// <summary>
-    /// Get logger.
-    /// </summary>
-    [ThreadSafe]
-    protected Microsoft.Extensions.Logging.ILogger Logger { get; }
 
 
     /// <summary>

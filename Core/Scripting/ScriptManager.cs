@@ -18,7 +18,7 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
 {
     // Static fields.
     static ScriptManager? DefaultInstance;
-    static ILogger? Logger;
+    static ILogger? StaticLogger;
 
 
     // Fields.
@@ -69,20 +69,18 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
         if (DefaultInstance is not null)
             throw new InvalidOperationException();
         
-        // create logger
-        Logger = app.LoggerFactory.CreateLogger(nameof(ScriptManager));
-        
         // create implementation
+        StaticLogger ??= app.LoggerFactory.CreateLogger(nameof(ScriptManager));
         if (implType is not null)
         {
             if (!typeof(IScriptManager).IsAssignableFrom(implType))
             {
-                Logger.LogError("Implementation '{implTypeName}' doesn't implement IScriptManager interface", implType.Name);
+                StaticLogger.LogError("Implementation '{implTypeName}' doesn't implement IScriptManager interface", implType.Name);
                 implType = null;
             }
             else if (typeof(ScriptManager).IsAssignableFrom(implType))
             {
-                Logger.LogError("Cannot use '{implTypeName}' as implementation", implType.Name);
+                StaticLogger.LogError("Cannot use '{implTypeName}' as implementation", implType.Name);
                 implType = null;
             }
         }
@@ -90,16 +88,16 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
         {
             if (implType is null)
             {
-                Logger.LogWarning("No implementation specified");
+                StaticLogger.LogWarning("No implementation specified");
                 return null;
             }
             return Global.RunOrDefault(() =>
             {
                 var impl = Activator.CreateInstance(implType, app);
-                Logger.LogDebug("Implementation created");
+                StaticLogger.LogDebug("Implementation created");
                 return impl;
             },
-            ex => Logger.LogError(ex, "Failed to create implementation"));
+            ex => StaticLogger.LogError(ex, "Failed to create implementation"));
         });
         if (implementation is null)
         {
@@ -114,10 +112,10 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
             var initAsyncResult = initAsyncMethod.Invoke(implementation, Array.Empty<object>());
             if (initAsyncResult is Task task)
                 await task;
-            Logger.LogDebug("Implementation has been initialized");
+            StaticLogger.LogDebug("Implementation has been initialized");
         }
         else
-            Logger.LogDebug("Implementation doesn't need initialization");
+            StaticLogger.LogDebug("Implementation doesn't need initialization");
 
         // create default instance
         DefaultInstance = new(app, (IScriptManager)implementation);
@@ -131,6 +129,10 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
     /// <inheritdoc/>
     public IScript LoadScript(JsonElement json, ScriptOptions options) =>
         this.implementation?.LoadScript(json, options) ?? throw new NotSupportedException();
+
+
+    /// <inheritdoc/>
+    protected override string LoggerCategoryName => nameof(ScriptManager);
 
 
     /// <inheritdoc/>
