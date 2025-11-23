@@ -25,7 +25,13 @@ public sealed class SettingKeys
     /// <summary>
     /// Default language of script.
     /// </summary>
-    public static readonly SettingKey<ScriptLanguage> DefaultScriptLanguage = new(nameof(DefaultScriptLanguage), ScriptLanguage.CSharp);
+    public static readonly SettingKey<ScriptLanguage> DefaultScriptLanguage = new(nameof(DefaultScriptLanguage), ScriptLanguage.CSharp_14);
+    
+    
+    /// <summary>
+    /// Enable ligature and contextual alternatives in script or not.
+    /// </summary>
+    public static readonly SettingKey<bool> EnableLigatureInScript = new(nameof(EnableLigatureInScript), false);
 
 
     /// <summary>

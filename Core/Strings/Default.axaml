@@ -75,12 +75,12 @@
 	<sys:String x:Key="String/ApplicationOptions">Application options</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">Accept non-stable application update</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">Language</sys:String>
-	
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">User interface scale factor</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR tool is not installed yet.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">Default language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle">Do not use ANGLE to render UI</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle.Description">Preventing rendering issues on some graphic cards, but some of visual effects will be affected.</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableLigatureInScript">Enable ligature and contextual alternatives</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">Enable scripting</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">Size of indentation</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">Show splash screen when launching</sys:String>
@@ -331,9 +331,10 @@
 	<sys:String x:Key="String/ProductState.Deactivated">Deactivated</sys:String>
 
 	<!-- ScriptLanguage -->
-	<sys:String x:Key="String/ScriptLanguage.CSharp">C# Script</sys:String>
-	<sys:String x:Key="String/ScriptLanguage.JavaScript">JavaScript (ECMAScript 5.1)</sys:String>
-	<sys:String x:Key="String/ScriptLanguage.Python">Python 3.4</sys:String>
+	<sys:String x:Key="String/ScriptLanguage.CSharp_13">C# 13 Script</sys:String>
+	<sys:String x:Key="String/ScriptLanguage.CSharp_14">C# 14 Script</sys:String>
+	<sys:String x:Key="String/ScriptLanguage.JavaScript_ES_5_1">JavaScript (ECMAScript 5.1)</sys:String>
+	<sys:String x:Key="String/ScriptLanguage.Python_3_4">Python 3.4</sys:String>
 
 	<!-- ScriptRuntimeErrorDialog -->
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.DefaultMessage">Runtime error occurred while running script:</sys:String>

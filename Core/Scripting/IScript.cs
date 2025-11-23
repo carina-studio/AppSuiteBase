@@ -95,15 +95,19 @@ public enum ScriptLanguage
     /// <summary>
     /// JavaScript (ECMAScript 5.1).
     /// </summary>
-    JavaScript,
+    JavaScript_ES_5_1,
     /// <summary>
-    /// C# script.
+    /// C# 13 script.
     /// </summary>
-    CSharp,
+    CSharp_13,
+    /// <summary>
+    /// C# 14 script.
+    /// </summary>
+    CSharp_14,
     /// <summary>
     /// Python 3.4.
     /// </summary>
-    Python,
+    Python_3_4,
 }
 
 

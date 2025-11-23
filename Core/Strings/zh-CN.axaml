@@ -74,6 +74,7 @@
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">默认脚本语言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle">不使用 ANGLE 绘制用户介面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle.Description">避免在部分显示卡上的绘制问题，但会影响部分视觉效果。</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableLigatureInScript">启用连字及情境替代字形</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">启用脚本运行</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">缩排空白字符数</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">启动应用时显示启动画面</sys:String>
@@ -324,7 +325,8 @@
 	<sys:String x:Key="String/ProductState.Deactivated">停用</sys:String>
 
 	<!-- ScriptLanguage -->
-	<sys:String x:Key="String/ScriptLanguage.CSharp">C# 脚本语言</sys:String>
+	<sys:String x:Key="String/ScriptLanguage.CSharp_13">C# 13 脚本语言</sys:String>
+	<sys:String x:Key="String/ScriptLanguage.CSharp_14">C# 14 脚本语言</sys:String>
 
 	<!-- ScriptRuntimeErrorDialog -->
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.DefaultMessage">脚本运行时发生错误：</sys:String>
