@@ -1,9 +1,13 @@
 using Avalonia.Media;
+using Avalonia.Platform;
 using CarinaStudio.Collections;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Avalonia.Platform;
+using System.Reflection;
+#if DEBUG
+using System.Linq;
+#endif
 
 namespace CarinaStudio.AppSuite.Media;
 
@@ -13,9 +17,9 @@ namespace CarinaStudio.AppSuite.Media;
 public static class BuiltInFonts
 {
     // Fields.
-    static readonly Uri baseCoreInterResourceUri = new("avares://CarinaStudio.AppSuite.Core/Fonts/Inter/");
-    static readonly Uri baseCoreNotoResourceUri = new("avares://CarinaStudio.AppSuite.Core/Fonts/Noto/");
-    static readonly Uri baseResourceUri = new($"avares://{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}/Resources/Fonts/");
+    static readonly string baseCoreInterResourceUri = "avares://CarinaStudio.AppSuite.Core/Fonts/Inter/";
+    static readonly string baseCoreNotoResourceUri = "avares://CarinaStudio.AppSuite.Core/Fonts/Noto/";
+    static readonly string baseResourceUri = $"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Resources/Fonts/";
     static IList<FontFamily>? fontFamilies;
     static FontFamily? ibmPlexMono;
     static FontFamily? inter;
@@ -52,43 +56,68 @@ public static class BuiltInFonts
     /// <summary>
     /// IBM Plex Mono.
     /// </summary>
-    public static FontFamily IBMPlexMono => ibmPlexMono ?? new FontFamily(baseResourceUri, "#IBM Plex Mono").Also(it => ibmPlexMono = it);
+    public static FontFamily IBMPlexMono => ibmPlexMono ?? new FontFamily($"{baseResourceUri}#IBM Plex Mono").Also(it => ibmPlexMono = it);
     
     
     /// <summary>
     /// Inter.
     /// </summary>
-    public static FontFamily Inter => inter ?? new FontFamily(baseCoreInterResourceUri, "#Inter").Also(it => inter = it);
+    public static FontFamily Inter => inter ?? new FontFamily($"{baseCoreInterResourceUri}#Inter").Also(it => inter = it);
     
     
     /// <summary>
     /// Noto Sans.
     /// </summary>
-    public static FontFamily NotoSans => notoSans ?? new FontFamily(baseCoreNotoResourceUri, "#Noto Sans").Also(it => notoSans = it);
+    public static FontFamily NotoSans => notoSans ?? new FontFamily($"{baseCoreNotoResourceUri}#Noto Sans").Also(it => notoSans = it);
     
     
     /// <summary>
     /// Noto Sans Mono.
     /// </summary>
-    public static FontFamily NotoSansMono => notoSansMono ?? new FontFamily(baseCoreNotoResourceUri, "#Noto Sans Mono").Also(it => notoSansMono = it);
+    public static FontFamily NotoSansMono => notoSansMono ?? new FontFamily($"{baseCoreNotoResourceUri}#Noto Sans Mono").Also(it => notoSansMono = it);
     
     
     /// <summary>
     /// Noto Sans Simplified Chinese.
     /// </summary>
-    public static FontFamily NotoSansSC => notoSansSC ?? new FontFamily(baseCoreNotoResourceUri, "#Noto Sans SC").Also(it => notoSansSC = it);
+    public static FontFamily NotoSansSC => notoSansSC ?? new FontFamily($"{baseCoreNotoResourceUri}#Noto Sans SC").Also(it => notoSansSC = it);
     
     
     /// <summary>
     /// Noto Sans Traditional Chinese.
     /// </summary>
-    public static FontFamily NotoSansTC => notoSansTC ?? new FontFamily(baseCoreNotoResourceUri, "#Noto Sans TC").Also(it => notoSansTC = it);
+    public static FontFamily NotoSansTC => notoSansTC ?? new FontFamily($"{baseCoreNotoResourceUri}#Noto Sans TC").Also(it => notoSansTC = it);
     
     
     /// <summary>
     /// Noto Serif.
     /// </summary>
-    public static FontFamily NotoSerif => notoSerif ?? new FontFamily(baseCoreNotoResourceUri, "#Noto Serif").Also(it => notoSerif = it);
+    public static FontFamily NotoSerif => notoSerif ?? new FontFamily($"{baseCoreNotoResourceUri}#Noto Serif").Also(it => notoSerif = it);
+    
+    
+#if DEBUG
+    // Static initializer.
+    static BuiltInFonts()
+    {
+        // check font families
+        foreach (var fontFamily in FontFamilies)
+        {
+            if (fontFamily.FamilyTypefaces.IsEmpty())
+                throw new ApplicationException($"Built-in font '{fontFamily.FamilyNames.FirstOrDefault(fontFamily.Name)}' does not be loaded correctly.");
+        }
+        
+        // check opening streams
+        foreach (var propertyInfo in typeof(BuiltInFonts).GetProperties(BindingFlags.Public | BindingFlags.Static))
+        {
+            if (propertyInfo.PropertyType == typeof(FontFamily))
+            {
+                using var stream = OpenStream(propertyInfo.Name);
+                // ReSharper disable once UnusedVariable
+                var canRead = stream.CanRead;
+            }
+        }
+    }
+#endif
 
 
     /// <summary>
@@ -110,8 +139,8 @@ public static class BuiltInFonts
                     _ => FontWeight.Regular,
                 };
                 if (weight == FontWeight.Regular)
-                    return new Uri(baseCoreInterResourceUri, $"{name}-Regular.ttf");
-                return new Uri(baseCoreInterResourceUri, $"{name}-{weight}.ttf");
+                    return new Uri($"{baseCoreInterResourceUri}{name}-Regular.ttf");
+                return new Uri($"{baseCoreInterResourceUri}{name}-{weight}.ttf");
             }),
             nameof(NotoSans) 
                 or nameof(NotoSansMono) 
@@ -125,8 +154,8 @@ public static class BuiltInFonts
                     _ => FontWeight.Regular,
                 };
                 if (weight == FontWeight.Regular)
-                    return new Uri(baseCoreNotoResourceUri, $"{name}-Regular.ttf");
-                return new Uri(baseCoreNotoResourceUri, $"{name}-{weight}.ttf");
+                    return new Uri($"{baseCoreNotoResourceUri}{name}-Regular.ttf");
+                return new Uri($"{baseCoreNotoResourceUri}{name}-{weight}.ttf");
             }),
             _ => Global.Run(() =>
             {
@@ -145,7 +174,7 @@ public static class BuiltInFonts
                     postfix = style == FontStyle.Normal ? "Regular" : $"{style}";
                 else
                     postfix = style == FontStyle.Normal ? $"{weight}" : $"{weight}{style}";
-                return new Uri(baseResourceUri, $"{name}-{postfix}.ttf");
+                return new Uri($"{baseResourceUri}{name}-{postfix}.ttf");
             }),
         };
         return AssetLoader.Open(uri);
@@ -155,17 +184,17 @@ public static class BuiltInFonts
     /// <summary>
     /// Roboto.
     /// </summary>
-    public static FontFamily Roboto => roboto ?? new FontFamily(baseResourceUri, "#Roboto").Also(it => roboto = it);
+    public static FontFamily Roboto => roboto ?? new FontFamily($"{baseResourceUri}#Roboto").Also(it => roboto = it);
 
 
     /// <summary>
     /// Roboto Mono.
     /// </summary>
-    public static FontFamily RobotoMono => robotoMono ?? new FontFamily(baseResourceUri, "#Roboto Mono").Also(it => robotoMono = it);
+    public static FontFamily RobotoMono => robotoMono ?? new FontFamily($"{baseResourceUri}#Roboto Mono").Also(it => robotoMono = it);
 
 
     /// <summary>
     /// Source Code Pro.
     /// </summary>
-    public static FontFamily SourceCodePro => sourceCodePro ?? new FontFamily(baseResourceUri, "#Source Code Pro").Also(it => sourceCodePro = it);
+    public static FontFamily SourceCodePro => sourceCodePro ?? new FontFamily($"{baseResourceUri}#Source Code Pro").Also(it => sourceCodePro = it);
 }
