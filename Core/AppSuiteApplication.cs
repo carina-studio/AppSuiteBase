@@ -43,6 +43,7 @@ using NLog.Extensions.Logging;
 using RangeSlider.Avalonia.Themes.Fluent;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -63,6 +64,16 @@ namespace CarinaStudio.AppSuite;
 /// </summary>
 public abstract partial class AppSuiteApplication : Application, IAppSuiteApplication
 {
+    /// <summary>
+    /// Method to parse arguments to launch application.
+    /// <param name="args">Arguments.</param>
+    /// <param name="argIndex">Index of argument to be parsed.</param>
+    /// <param name="launchOptions"><see cref="IDictionary{String,Object}"/> to keep parsed arguments as launch options.</param>
+    /// <returns>Number of consumed arguments.</returns>
+    /// </summary>
+    public delegate int ArgumentsParser(string[] args, int argIndex, IDictionary<string, object> launchOptions);
+    
+    
     // Implementation of ILogSink to get logs from Avalonia.
     class AvaloniaLogSink(AppSuiteApplication app) : Avalonia.Logging.ILogSink
     {
@@ -194,6 +205,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         /// Whether testing mode is requested or not.
         /// </summary>
         public const string IsTestingModeRequested = "IsTestingModeRequested";
+        /// <summary>
+        /// Fixed scale factor for displaying UI.
+        /// </summary>
+        public const string ScreenScaleFactor = "ScreenScaleFactor";
     }
 
 
@@ -281,6 +296,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// </summary>
     public const string RestoreMainWindowsArgument = "-restore-main-windows";
     /// <summary>
+    /// Argument indicates fixed scale factor for displaying UI.
+    /// </summary>
+    public const string ScreenScaleFactorArgument = "-screen-scale-factor";
+    /// <summary>
     /// Argument indicates to enable testing mode.
     /// </summary>
     public const string TestingArgument = "-test";
@@ -325,11 +344,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         return Environment.CurrentDirectory;
     });
     static readonly SettingKey<string> AppVersionKey = new("ApplicationVersion", "");
+    static ArgumentsParser? ArgsParser;
     [ThreadStatic]
     static object?[]? AvaloniaLoggingProperties;
     static double CachedCustomScreenScaleFactor = double.NaN;
     static readonly SettingKey<bool> DoNotPromptBeforeTakingMemorySnapshotKey = new("DoNotPromptBeforeTakingMemorySnapshot", false);
     static bool ForceThrowingUnhandledException;
+    static IDictionary<string, object>? InitLaunchOptions;
     static readonly string InitSettingsFilePath = Path.Combine(AppDirectoryPath, "InitSettings.json");
     static InitSettingsImpl? InitSettingsInstance;
     static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new("IsAcceptNonStableApplicationUpdateInitialized", false);
@@ -662,17 +683,23 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// <summary>
     /// Build application.
     /// </summary>
+    /// <param name="args">Arguments to launch application.</param>
     /// <param name="setupAction">Action to do further setup.</param>
+    /// <param name="argsParser">Method to parse arguments to launch application.</param>
     /// <typeparam name="TApp">Type of application.</typeparam>
     /// <returns><see cref="AppBuilder"/>.</returns>
     [Obsolete("Use BuildApplicationAndStart() instead.")]
-    protected static AppBuilder BuildApplication<TApp>(Action<AppBuilder>? setupAction = null) where TApp: AppSuiteApplication, new()
+    protected static AppBuilder BuildApplication<TApp>(string[] args, Action<AppBuilder>? setupAction = null, ArgumentsParser? argsParser = null) where TApp: AppSuiteApplication, new()
     {
         LogToConsole("Build application [start]");
         
+        // parse arguments
+        ArgsParser = argsParser;
+        InitLaunchOptions = ParseArguments(args, argsParser);
+        
         // apply screen scale factor
-        if (Platform.IsLinux)
-            ApplyScreenScaleFactorOnLinux();
+        if (Platform.IsLinux && InitLaunchOptions.TryGetValue(LaunchOptionKeys.ScreenScaleFactor, out double screenScaleFactor))
+            ApplyScreenScaleFactorOnLinux(screenScaleFactor);
 
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
         CultureInfo.CurrentCulture = cultureInfo;
@@ -795,12 +822,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// </summary>
     /// <param name="args">Arguments to launch application.</param>
     /// <param name="setupAction">Action to do further setup.</param>
+    /// <param name="argsParser">Method to parse arguments to launch application.</param>
     /// <typeparam name="TApp">Type of application.</typeparam>
     /// <returns>Exit code of application.</returns>
-    protected static int BuildApplicationAndStart<TApp>(string[] args, Action<AppBuilder>? setupAction = null) where TApp : AppSuiteApplication, new()
+    protected static int BuildApplicationAndStart<TApp>(string[] args, Action<AppBuilder>? setupAction = null, ArgumentsParser? argsParser = null) where TApp : AppSuiteApplication, new()
     {
 #pragma warning disable CS0618
-        var builder = BuildApplication<TApp>(setupAction);
+        var builder = BuildApplication<TApp>(args, setupAction, argsParser);
 #pragma warning restore CS0618
         var app = default(Avalonia.Application);
         var asApp = default(IAppSuiteApplication);
@@ -1871,7 +1899,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// Get options to launch application which is converted by arguments passed to application.
     /// </summary>
     // ReSharper disable once InvokeAsExtensionMethod
-    public IDictionary<string, object> LaunchOptions { get; private set; } = DictionaryExtensions.AsReadOnly(new Dictionary<string, object>());
+    public IDictionary<string, object> LaunchOptions { get; private set; } = InitLaunchOptions ?? ImmutableDictionary<string, object>.Empty;
 
 
     /// <inheritdoc/>
@@ -2616,18 +2644,16 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         else
             this.AllowTransparentWindows = true;
 
-        // parse arguments
-        if (desktopLifetime is not null)
+        // enter clean mode
+        if (this.LaunchOptions.TryGetValue(LaunchOptionKeys.IsCleanModeRequested, out bool isCleanMode) && isCleanMode)
         {
-            this.LaunchOptions = this.ParseArguments(desktopLifetime.Args ?? []);
-            if (this.LaunchOptions.TryGetValue(LaunchOptionKeys.IsCleanModeRequested, out bool isCleanMode) && isCleanMode)
-            {
-                this.Logger.LogWarning("Launch in clean mode");
-                this.IsCleanMode = isCleanMode;
-            }
-            if (!this.IsCleanMode && this.LaunchOptions.TryGetValue(LaunchOptionKeys.IsRestoringMainWindowsRequested, out bool boolValue) && boolValue)
-                this.RequestRestoringMainWindows();
+            this.Logger.LogWarning("Launch in clean mode");
+            this.IsCleanMode = isCleanMode;
         }
+        
+        // restore main windows
+        if (!this.IsCleanMode && this.LaunchOptions.TryGetValue(LaunchOptionKeys.IsRestoringMainWindowsRequested, out bool boolValue) && boolValue)
+            this.RequestRestoringMainWindows();
 
         // enter testing mode
         if (this.OnSelectEnteringTestingMode())
@@ -2930,37 +2956,6 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// <param name="launchOptions">Options to launch new instance.</param>
     protected virtual void OnNewInstanceLaunched(IDictionary<string, object> launchOptions)
     { }
-
-
-    /// <summary>
-    /// Called to parse single argument in argument list passed to application.
-    /// </summary>
-    /// <param name="args">Argument list.</param>
-    /// <param name="index">Index of argument to parse.</param>
-    /// <param name="launchOptions">Dictionary to hold parsed arguments.</param>
-    /// <returns>Index of next argument to parse.</returns>
-    protected virtual int OnParseArguments(string[] args, int index, IDictionary<string, object> launchOptions)
-    {
-        var arg = args[index];
-        switch (arg)
-        {
-            case CleanModeArgument:
-                launchOptions[LaunchOptionKeys.IsCleanModeRequested] = true;
-                break;
-            case DebugArgument:
-                launchOptions[LaunchOptionKeys.IsDebugModeRequested] = true;
-                break;
-            case RestoreMainWindowsArgument:
-                launchOptions[LaunchOptionKeys.IsRestoringMainWindowsRequested] = true;
-                break;
-            case TestingArgument:
-                launchOptions[LaunchOptionKeys.IsTestingModeRequested] = true;
-                break;
-            default:
-                return index;
-        }
-        return index + 1;
-    }
     
     
     /// <summary>
@@ -3592,20 +3587,59 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
 
     // Parse arguments to launch options.
-    IDictionary<string, object> ParseArguments(string[] args)
+    static IDictionary<string, object> ParseArguments(string[] args, ArgumentsParser? argsParser = null)
     {
         var launchOptions = new Dictionary<string, object>();
         var argCount = args.Length;
         for (var index = 0; index < argCount;)
         {
-            var nextIndex = this.OnParseArguments(args, index, launchOptions);
-            if (nextIndex > index)
-                index = nextIndex;
+            var consumedArgsCount = argsParser?.Invoke(args, index, launchOptions) ?? 0;
+            if (consumedArgsCount >= 1)
+                index += consumedArgsCount;
             else
-                ++index;
+            {
+                var arg = args[index];
+                switch (arg)
+                {
+                    case CleanModeArgument:
+                        launchOptions[LaunchOptionKeys.IsCleanModeRequested] = true;
+                        ++index;
+                        break;
+                    case DebugArgument:
+                        launchOptions[LaunchOptionKeys.IsDebugModeRequested] = true;
+                        ++index;
+                        break;
+                    case RestoreMainWindowsArgument:
+                        launchOptions[LaunchOptionKeys.IsRestoringMainWindowsRequested] = true;
+                        ++index;
+                        break;
+                    case ScreenScaleFactorArgument:
+                        if (index + 1 >= args.Length)
+                        {
+                            LogToConsole("No screen scale factor specified");
+                            ++index;
+                            break;
+                        }
+                        index += 2;
+                        if (!double.TryParse(args[index - 1], out var screenScaleFactor))
+                            LogToConsole($"Invalid screen scale factor: {args[index - 1]}");
+                        else if (!double.IsFinite(screenScaleFactor) || screenScaleFactor <= 0.0)
+                            LogToConsole($"Invalid screen scale factor: {screenScaleFactor}");
+                        else
+                            launchOptions[LaunchOptionKeys.ScreenScaleFactor] = screenScaleFactor;
+                        break;
+                    case TestingArgument:
+                        launchOptions[LaunchOptionKeys.IsTestingModeRequested] = true;
+                        ++index;
+                        break;
+                    default:
+                        LogToConsole($"Unknown argument: {arg}");
+                        ++index;
+                        break;
+                }
+            }
         }
-        // ReSharper disable once InvokeAsExtensionMethod
-        return DictionaryExtensions.AsReadOnly(launchOptions);
+        return ImmutableDictionary.CreateRange(launchOptions);
     }
 
 
@@ -5316,7 +5350,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                     argList.Add(reader.ReadString());
 
                 // parse arguments
-                return this.ParseArguments(argList.ToArray());
+                return ParseArguments(argList.ToArray(), ArgsParser);
             });
 
             // handle new instance

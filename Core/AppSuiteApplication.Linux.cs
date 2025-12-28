@@ -2,6 +2,7 @@ using Avalonia;
 using CarinaStudio.Logging;
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,45 +24,56 @@ partial class AppSuiteApplication
 
 
     // Apply given screen scale factor for Linux.
-    static unsafe void ApplyScreenScaleFactorOnLinux()
+    static unsafe void ApplyScreenScaleFactorOnLinux(double scaleFactor)
     {
         // [Workaround] Ignore unsupported distributions
-        if (Platform.LinuxDistribution == LinuxDistribution.Ubuntu)
+        if (Platform.IsNotLinux)
             return;
+        
+        // check parameter
+        if (!double.IsFinite(scaleFactor) || scaleFactor <= 0.0)
+        {
+            LogToConsole($"Invalid screen scale factor: {scaleFactor}");
+            return;
+        }
         
         // setup GDK
         if (!InitializeGdk())
             return;
-        
-        // get all monitors
-        var display = getDefaultGdkDisplay();
-        if (display is null)
-            return;
-        
+
         // set environment variable
         //var valueBuilder = new StringBuilder();
         var minScaleFactor = int.MaxValue;
-        for (var i = getGdkMonitorCount(display) - 1; i >= 0; --i)
+        var display = getDefaultGdkDisplay();
+        if (display is not null)
         {
-            var monitor = getGdkMonitor(display, i);
-            /*
-            var monitorModelPtr = getGdkMonitorModel(monitor);
-            if (monitorModelPtr is null && i > 0)
-                continue;
-            */
-            var scaleFactor = Math.Max(1, getGdkMonitorScaleFactor(monitor));
-            /*
-            if (valueBuilder.Length > 0)
-                valueBuilder.Append(';');
-            valueBuilder.Append(monitorModelPtr is not null ? new string(monitorModelPtr) : "default");
-            valueBuilder.Append('=');
-            valueBuilder.Append(scaleFactor);
-            */
-            if (scaleFactor < minScaleFactor)
-                minScaleFactor = scaleFactor;
+            for (var i = getGdkMonitorCount(display) - 1; i >= 0; --i)
+            {
+                var monitor = getGdkMonitor(display, i);
+                /*
+                var monitorModelPtr = getGdkMonitorModel(monitor);
+                if (monitorModelPtr is null && i > 0)
+                    continue;
+                */
+                var monitorScaleFactor = Math.Max(1, getGdkMonitorScaleFactor(monitor));
+                /*
+                if (valueBuilder.Length > 0)
+                    valueBuilder.Append(';');
+                valueBuilder.Append(monitorModelPtr is not null ? new string(monitorModelPtr) : "default");
+                valueBuilder.Append('=');
+                valueBuilder.Append(scaleFactor);
+                */
+                if (monitorScaleFactor < minScaleFactor)
+                    minScaleFactor = monitorScaleFactor;
+            }
         }
+        else
+            LogToConsole("Default display not found.");
         if (minScaleFactor < int.MaxValue)
-            Environment.SetEnvironmentVariable("AVALONIA_GLOBAL_SCALE_FACTOR", minScaleFactor.ToString());
+            LogToConsole($"Apply screen scale factor {scaleFactor}, detected screen scale factor: {minScaleFactor}");
+        else
+            LogToConsole($"Apply screen scale factor {scaleFactor}");
+        Environment.SetEnvironmentVariable("AVALONIA_GLOBAL_SCALE_FACTOR", scaleFactor.ToString(CultureInfo.InvariantCulture));
         //Environment.SetEnvironmentVariable("AVALONIA_SCREEN_SCALE_FACTORS", valueBuilder.ToString());
     }
 
