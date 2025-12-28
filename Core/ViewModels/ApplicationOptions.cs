@@ -235,6 +235,16 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// Get effective custom screen scale factor.
     /// </summary>
     public double EffectiveCustomScreenScaleFactor => this.Application.EffectiveCustomScreenScaleFactor;
+    
+    
+    /// <summary>
+    /// Get or set whether to enable ligature and contextual alternatives in script or not.
+    /// </summary>
+    public bool EnableLigatureInScript
+    {
+        get => this.Settings.GetValueOrDefault(SettingKeys.EnableLigatureInScript);
+        set => this.Settings.SetValue<bool>(SettingKeys.EnableLigatureInScript, value);
+    }
 
 
     /// <summary>
@@ -465,6 +475,8 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
             this.OnPropertyChanged(nameof(Culture));
         else if (key == SettingKeys.DefaultScriptLanguage)
             this.OnPropertyChanged(nameof(DefaultScriptLanguage));
+        else if (key == SettingKeys.EnableLigatureInScript)
+            this.OnPropertyChanged(nameof(EnableLigatureInScript));
         else if (key == SettingKeys.EnableRunningScript)
             this.OnPropertyChanged(nameof(EnableRunningScript));
         else if (key == SettingKeys.IndentationSizeInScript)

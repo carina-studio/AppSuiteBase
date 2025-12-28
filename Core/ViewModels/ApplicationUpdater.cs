@@ -34,6 +34,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 	// Static fields.
 	static readonly Regex AutoUpdaterDirNameRegex = new("^AutoUpdater\\-(?<Version>[\\d\\.]+)$", RegexOptions.IgnoreCase);
 	static readonly Uri AutoUpdaterPackageManifestUri = new("https://raw.githubusercontent.com/carina-studio/AutoUpdater/master/PackageManifest-Avalonia.json");
+	static readonly Version AutoUpdaterVersionSupportsAppSuiteVersion = new(2, 2, 0, 1225);
 	static readonly Version AutoUpdaterVersionSupportsBaseVersion = new(1, 1, 0, 713);
 	static readonly ObservableProperty<bool> HasReleasePageUriProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(HasReleasePageUri));
 	static readonly ObservableProperty<bool> IsCheckingForUpdateProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsCheckingForUpdate));
@@ -420,7 +421,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 					var directory = Path.GetDirectoryName(mainModule.FileName);
 					if (!Platform.IsMacOS || directory?.EndsWith(".app/Contents/MacOS") != true)
 						return directory;
-					return directory[0..^15];
+					return directory[..^15];
 				});
 
 				// prepare arguments
@@ -448,6 +449,11 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 					argsBuilder.AppendFormat(" -screen-scale-factor {0:F2}", screenScaleFactor);
 				if (this.Application.IsDebugMode)
 					argsBuilder.Append(" -debug-mode");
+				if (autoUpdaterVersion >= AutoUpdaterVersionSupportsAppSuiteVersion
+				    && this.GetType().Assembly.GetName().Version is { } asVersion)
+				{
+					argsBuilder.AppendFormat(" -app-suite-version {0}", asVersion);
+				}
 				it.Arguments = argsBuilder.ToString();
 				it.FileName = autoUpdaterPath;
 			}));

@@ -13,7 +13,7 @@
         <AvaloniaVersion>11.3.9</AvaloniaVersion>
         <AvaloniaNameGeneratorFilterByNamespace>Dummy</AvaloniaNameGeneratorFilterByNamespace> <!-- Prevent generating InitializeComponents() and fields -->
 		<Company>Carina Studio</Company>
-        <Copyright>©2021-2025 Carina Studio</Copyright>
+        <Copyright>©2021-$([System.DateTime]::Now.Year) Carina Studio</Copyright>
         <Description>Base libraries for Carina Studio Application Suite.</Description>
         <DotNetLibraryVersion>10.0.0</DotNetLibraryVersion>
 		<Nullable>enable</Nullable>
