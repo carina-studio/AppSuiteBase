@@ -5,12 +5,23 @@
 using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Primitives;
+using Avalonia.Data;
+using Avalonia.Input;
+using Avalonia.Input.Raw;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
+using Avalonia.Media.Fonts;
 using Avalonia.Platform;
+using Avalonia.Platform.Storage;
 using Avalonia.Styling;
+using Avalonia.Themes.Fluent;
+using Avalonia.Threading;
+using Avalonia.VisualTree;
+using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.Scripting;
 using CarinaStudio.AutoUpdate;
@@ -18,6 +29,7 @@ using CarinaStudio.AutoUpdate.Resolvers;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
+using CarinaStudio.IO;
 using CarinaStudio.Logging;
 using CarinaStudio.Net;
 using CarinaStudio.Threading;
@@ -26,10 +38,13 @@ using JetBrains.Profiler.SelfApi;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
 using NLog;
+using NLog.Config;
 using NLog.Extensions.Logging;
+using RangeSlider.Avalonia.Themes.Fluent;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.IO.Pipes;
@@ -39,21 +54,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Data;
-using Avalonia.Input;
-using Avalonia.Input.Raw;
-using Avalonia.Media.Fonts;
-using Avalonia.Platform.Storage;
-using Avalonia.Themes.Fluent;
-using Avalonia.Threading;
-using Avalonia.VisualTree;
-using CarinaStudio.AppSuite.Controls;
-using CarinaStudio.IO;
-using NLog.Config;
-using RangeSlider.Avalonia.Themes.Fluent;
-using System.Diagnostics.CodeAnalysis;
 using ThreadSafeAttribute = CarinaStudio.Threading.ThreadSafeAttribute;
 
 namespace CarinaStudio.AppSuite;
@@ -287,6 +287,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
 
     // Constants.
+    const int AutoSaveSettingsDelay = 1000;
     const int MinSplashWindowDuration = 2000;
 
 
@@ -344,6 +345,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     WindowIcon? appIcon;
     ApplicationInfoDialog? appInfoDialog;
     ApplicationUpdateDialog? appUpdateDialog;
+    ScheduledAction? autoSavePersistentStateAction;
+    ScheduledAction? autoSaveSettingsAction;
     readonly Microsoft.Extensions.Logging.ILogger avaloniaLogger;
     bool canRequestRestoringMainWindows;
     ScheduledAction? checkUpdateInfoAction;
@@ -373,6 +376,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     ScheduledAction? performFullGCAction;
     volatile PersistentStateImpl? persistentState;
     readonly string persistentStateFilePath;
+    int persistentStateLoadingCounter;
     long prepareStartingTime;
     volatile ProcessInfo? processInfo;
     IDisposable? processInfoHfUpdateToken;
@@ -380,6 +384,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     ApplicationArgsBuilder? restartArgs;
     SelfTestingWindowImpl? selfTestingWindow;
     volatile SettingsImpl? settings;
+    int settingsLoadingCounter;
     ShutdownSource shutdownSource = ShutdownSource.None;
     SplashWindowImpl? splashWindow;
     long splashWindowShownTime;
@@ -2100,6 +2105,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
         // load from file
         this.Logger.LogDebug("Start loading persistent state");
+        ++this.persistentStateLoadingCounter;
         try
         {
             // load from file
@@ -2117,6 +2123,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         catch (Exception ex)
         {
             this.Logger.LogError(ex, "Failed to load persistent state from '{persistentStateFilePath}'", this.persistentStateFilePath);
+        }
+        finally
+        {
+            --this.persistentStateLoadingCounter;
         }
 
         // check application version
@@ -2259,6 +2269,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
         // load from file
         this.Logger.LogDebug("Start loading settings");
+        ++this.settingsLoadingCounter;
         try
         {
             await this.settings.LoadAsync(SettingsFilePath);
@@ -2267,6 +2278,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         catch (Exception ex)
         {
             this.Logger.LogError(ex, "Failed to load settings from '{settingsFilePath}'", SettingsFilePath);
+        }
+        finally
+        {
+            --this.settingsLoadingCounter;
         }
 
         // setup accepting non-stable update
@@ -2946,6 +2961,25 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         }
         return index + 1;
     }
+    
+    
+    /// <summary>
+    /// Called when persistent state changed.
+    /// </summary>
+    /// <param name="e">Event data.</param>
+    protected virtual void OnPersistentStateChanged(SettingChangedEventArgs e)
+    {
+        if (this.persistentStateLoadingCounter <= 0)
+        {
+            if (this.autoSavePersistentStateAction is not null)
+                this.autoSavePersistentStateAction.Reschedule(AutoSaveSettingsDelay);
+            else
+            {
+                this.autoSavePersistentStateAction = new(() => this.SavePersistentStateAsync());
+                this.autoSavePersistentStateAction.Schedule(AutoSaveSettingsDelay);
+            }
+        }
+    }
 
 
     /// <summary>
@@ -3071,6 +3105,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         {
             await this.loadingInitPersistentStateTask;
             this.loadingInitPersistentStateTask = null;
+            this.PersistentState.SettingChanged += (_, e) =>
+            {
+                if (this.CheckAccess())
+                    this.OnPersistentStateChanged(e);
+                else
+                    this.SynchronizationContext.Post(() => this.OnPersistentStateChanged(e));
+            };
         }
         if (this.loadingInitSettingsTask is not null)
         {
@@ -3361,6 +3402,16 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             }
             else
                 this.CheckRestartingRootWindowsNeeded();
+        }
+        if (this.settingsLoadingCounter <= 0)
+        {
+            if (this.autoSaveSettingsAction is not null)
+                this.autoSaveSettingsAction.Reschedule(AutoSaveSettingsDelay);
+            else
+            {
+                this.autoSaveSettingsAction = new(() => this.SaveSettingsAsync());
+                this.autoSaveSettingsAction.Schedule(AutoSaveSettingsDelay);
+            }
         }
     }
 
@@ -3924,6 +3975,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.Logger.LogWarning("Skip saving persistent state in clean mode");
             return;
         }
+        
+        // cancel auto saving
+        this.autoSavePersistentStateAction?.Cancel();
 
         // save
         try
@@ -3959,6 +4013,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.Logger.LogWarning("Skip saving settings in clean mode");
             return;
         }
+        
+        // cancel pending auto save
+        this.autoSaveSettingsAction?.Cancel();
 
         // save
         try
