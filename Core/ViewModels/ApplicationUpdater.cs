@@ -413,7 +413,9 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 				});
 
 				// get screen scale factor
-				var screenScaleFactor = this.Application.CustomScreenScaleFactor;
+				var screenScaleFactor = 0.0;
+				if (Platform.IsLinux)
+					double.TryParse(Environment.GetEnvironmentVariable("AVALONIA_GLOBAL_SCALE_FACTOR"), out screenScaleFactor);
 
 				// get application directory
 				var appDirectory = Global.Run(() =>
@@ -445,7 +447,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 				});
 				if (accentColor.A > 0)
 					argsBuilder.AppendFormat(" -accent-color #{0:x2}{1:x2}{2:x2}{3:x2}", accentColor.A, accentColor.R, accentColor.G, accentColor.B);
-				if (!double.IsNaN(screenScaleFactor))
+				if (double.IsFinite(screenScaleFactor) && screenScaleFactor > 0.0)
 					argsBuilder.AppendFormat(" -screen-scale-factor {0:F2}", screenScaleFactor);
 				if (this.Application.IsDebugMode)
 					argsBuilder.Append(" -debug-mode");
