@@ -771,7 +771,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         public void SwitchTheme()
         {
-            this.Settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, this.Settings.GetValueOrDefault(SettingKeys.ThemeMode) switch
+            this.Settings.SetValue(SettingKeys.ThemeMode, this.Settings.GetValueOrDefault(SettingKeys.ThemeMode) switch
             {
                 ThemeMode.System => ThemeMode.Dark,
                 ThemeMode.Dark => ThemeMode.Light,

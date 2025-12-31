@@ -222,8 +222,8 @@ namespace CarinaStudio.AppSuite.Controls
 		{
 			if (version is not null)
 			{
-				persistentState.SetValue<DateTime>(LatestNotifiedTimeKey, DateTime.Now);
-				persistentState.SetValue<string>(LatestNotifiedVersionKey, version.ToString());
+				persistentState.SetValue(LatestNotifiedTimeKey, DateTime.Now);
+				persistentState.SetValue(LatestNotifiedVersionKey, version.ToString());
 			}
 			else
 			{

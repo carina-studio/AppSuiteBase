@@ -80,7 +80,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     public bool AcceptNonStableApplicationUpdate
     {
         get => this.Settings.GetValueOrDefault(SettingKeys.AcceptNonStableApplicationUpdate);
-        set => this.Settings.SetValue<bool>(SettingKeys.AcceptNonStableApplicationUpdate, value);
+        set => this.Settings.SetValue(SettingKeys.AcceptNonStableApplicationUpdate, value);
     }
 
 
@@ -154,7 +154,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     public ApplicationCulture Culture
     {
         get => this.Settings.GetValueOrDefault(SettingKeys.Culture);
-        set => this.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, value);
+        set => this.Settings.SetValue(SettingKeys.Culture, value);
     }
 
 
@@ -203,7 +203,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     public ScriptLanguage DefaultScriptLanguage
     {
         get => this.Settings.GetValueOrDefault(SettingKeys.DefaultScriptLanguage);
-        set => this.Settings.SetValue<ScriptLanguage>(SettingKeys.DefaultScriptLanguage, value);
+        set => this.Settings.SetValue(SettingKeys.DefaultScriptLanguage, value);
     }
     
     
@@ -213,7 +213,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     public bool DisableAngle
     {
         get => (this.Application as AppSuiteApplication)?.InitSettings.GetValueOrDefault(InitSettingKeys.DisableAngle) ?? false;
-        set => (this.Application as AppSuiteApplication)?.InitSettings.Let(it => it.SetValue<bool>(InitSettingKeys.DisableAngle, value));
+        set => (this.Application as AppSuiteApplication)?.InitSettings.Let(it => it.SetValue(InitSettingKeys.DisableAngle, value));
     }
 
 
@@ -243,7 +243,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     public bool EnableLigatureInScript
     {
         get => this.Settings.GetValueOrDefault(SettingKeys.EnableLigatureInScript);
-        set => this.Settings.SetValue<bool>(SettingKeys.EnableLigatureInScript, value);
+        set => this.Settings.SetValue(SettingKeys.EnableLigatureInScript, value);
     }
 
 
@@ -253,7 +253,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     public bool EnableRunningScript
     {
         get => this.Settings.GetValueOrDefault(SettingKeys.EnableRunningScript);
-        set => this.Settings.SetValue<bool>(SettingKeys.EnableRunningScript, value);
+        set => this.Settings.SetValue(SettingKeys.EnableRunningScript, value);
     }
 
 
@@ -269,7 +269,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     public int IndentationSizeInScript
     {
         get => this.Settings.GetValueOrDefault(SettingKeys.IndentationSizeInScript);
-        set => this.Settings.SetValue<int>(SettingKeys.IndentationSizeInScript, value);
+        set => this.Settings.SetValue(SettingKeys.IndentationSizeInScript, value);
     }
 
 
@@ -345,7 +345,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     public bool LaunchWithSplashWindow
     {
         get => this.Settings.GetValueOrDefault(SettingKeys.LaunchWithSplashWindow);
-        set => this.Settings.SetValue<bool>(SettingKeys.LaunchWithSplashWindow, value);
+        set => this.Settings.SetValue(SettingKeys.LaunchWithSplashWindow, value);
     }
 
 
@@ -371,7 +371,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     public bool NotifyApplicationUpdate
     {
         get => this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate);
-        set => this.Settings.SetValue<bool>(SettingKeys.NotifyApplicationUpdate, value);
+        set => this.Settings.SetValue(SettingKeys.NotifyApplicationUpdate, value);
     }
 
 
@@ -508,7 +508,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     public bool PromptWhenScriptRuntimeErrorOccurred
     {
         get => this.Settings.GetValueOrDefault(SettingKeys.PromptWhenScriptRuntimeErrorOccurred);
-        set => this.Settings.SetValue<bool>(SettingKeys.PromptWhenScriptRuntimeErrorOccurred, value);
+        set => this.Settings.SetValue(SettingKeys.PromptWhenScriptRuntimeErrorOccurred, value);
     }
 
 
@@ -522,7 +522,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
         {
             if (value == ThemeMode.System && !this.Application.IsSystemThemeModeSupported)
                 return;
-            this.Settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, value);
+            this.Settings.SetValue(SettingKeys.ThemeMode, value);
         }
     }
 
@@ -539,6 +539,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     public bool UseSpacesForIndentationInScript
     {
         get => this.Settings.GetValueOrDefault(SettingKeys.UseSpacesForIndentationInScript);
-        set => this.Settings.SetValue<bool>(SettingKeys.UseSpacesForIndentationInScript, value);
+        set => this.Settings.SetValue(SettingKeys.UseSpacesForIndentationInScript, value);
     }
 }

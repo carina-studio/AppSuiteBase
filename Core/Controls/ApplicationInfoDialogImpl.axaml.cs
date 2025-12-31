@@ -502,7 +502,7 @@ class ApplicationInfoDialogImpl : Dialog
 				Icon = MessageDialogIcon.Information,
 				Message = this.Application.GetString("ApplicationInfoDialog.ConfirmRestartingInDebugMode"),
 			}.ShowDialog(this);
-			this.PersistentState.SetValue<bool>(IsRestartingInDebugModeConfirmationShownKey, true);
+			this.PersistentState.SetValue(IsRestartingInDebugModeConfirmationShownKey, true);
 		}
 
 		// restart

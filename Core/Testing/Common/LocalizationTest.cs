@@ -64,7 +64,7 @@ class LocalizationTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategor
             {
                 isTestStringChanged = false;
                 latestNotifiedTestString = null;
-                this.Application.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, appCulture);
+                this.Application.Settings.SetValue(SettingKeys.Culture, appCulture);
             }
             await Task.Delay(1000, cancellationToken);
             Assert.That(isTestStringChanged, $"Did not receive change notification after changing culture to '{appCulture}'.");
@@ -115,7 +115,7 @@ class LocalizationTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategor
     /// <inheritdoc/>
     protected override Task OnTearDownAsync()
     {
-        this.Application.Settings.SetValue<ApplicationCulture>(SettingKeys.Culture, this.initAppCulture);
+        this.Application.Settings.SetValue(SettingKeys.Culture, this.initAppCulture);
         return Task.CompletedTask;
     }
 }

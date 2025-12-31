@@ -36,7 +36,7 @@ class ThemeModeTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategoryNa
                 var sysThemeMode = await appSuiteApp.GetSystemThemeModeAsync();
                 if (this.Application.Settings.GetValueOrDefault(SettingKeys.ThemeMode) != ThemeMode.System)
                 {
-                    this.Application.Settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, ThemeMode.System);
+                    this.Application.Settings.SetValue(SettingKeys.ThemeMode, ThemeMode.System);
                     if (this.Application.IsRestartingRootWindowsNeeded)
                     {
                         var mainWindowCount = this.Application.MainWindows.Count;
@@ -55,7 +55,7 @@ class ThemeModeTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategoryNa
         // check dark mode
         if (this.Application.Settings.GetValueOrDefault(SettingKeys.ThemeMode) != ThemeMode.Dark)
         {
-            this.Application.Settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, ThemeMode.Dark);
+            this.Application.Settings.SetValue(SettingKeys.ThemeMode, ThemeMode.Dark);
             if (this.Application.IsRestartingRootWindowsNeeded)
             {
                 var mainWindowCount = this.Application.MainWindows.Count;
@@ -69,7 +69,7 @@ class ThemeModeTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategoryNa
         Assert.That(TestColorDark == color, "Content of dark theme is incorrect.");
 
         // check light mode
-        this.Application.Settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, ThemeMode.Light);
+        this.Application.Settings.SetValue(SettingKeys.ThemeMode, ThemeMode.Light);
         if (this.Application.IsRestartingRootWindowsNeeded)
         {
             var mainWindowCount = this.Application.MainWindows.Count;
@@ -94,7 +94,7 @@ class ThemeModeTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategoryNa
     /// <inheritdoc/>
     protected override async Task OnTearDownAsync()
     {
-        this.Application.Settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, this.initThemeMode);
+        this.Application.Settings.SetValue(SettingKeys.ThemeMode, this.initThemeMode);
         if (this.Application.IsRestartingRootWindowsNeeded)
         {
             var mainWindowCount = this.Application.MainWindows.Count;

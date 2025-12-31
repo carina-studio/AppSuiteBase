@@ -26,7 +26,7 @@ public class EnableRunningScriptDialog : CommonDialog<bool>
         }.ShowDialog(owner);
         if (result == MessageDialogResult.OK)
         {
-            app.Settings.SetValue<bool>(SettingKeys.EnableRunningScript, true);
+            app.Settings.SetValue(SettingKeys.EnableRunningScript, true);
             return true;
         }
         return false;

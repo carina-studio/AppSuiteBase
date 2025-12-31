@@ -395,7 +395,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     string multiInstancesServerStreamName = "";
     readonly List<MainWindowHolder> pendingMainWindowHolders = new();
     ScheduledAction? performFullGCAction;
-    volatile PersistentStateImpl? persistentState;
+    volatile ISettings? persistentState;
     readonly string persistentStateFilePath;
     int persistentStateLoadingCounter;
     long prepareStartingTime;
@@ -404,7 +404,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     IProductManager? productManager;
     ApplicationArgsBuilder? restartArgs;
     SelfTestingWindowImpl? selfTestingWindow;
-    volatile SettingsImpl? settings;
+    volatile ISettings? settings;
     int settingsLoadingCounter;
     ShutdownSource shutdownSource = ShutdownSource.None;
     SplashWindowImpl? splashWindow;
@@ -604,7 +604,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         // update state and save
         this.PrivacyPolicyVersion?.Let(version =>
         {
-            this.PersistentState.SetValue<string>(AgreedPrivacyPolicyVersionKey, version.ToString());
+            this.PersistentState.SetValue(AgreedPrivacyPolicyVersionKey, version.ToString());
             _ = this.SavePersistentStateAsync();
             this.AgreedPrivacyPolicyVersion = version;
             this.OnPropertyChanged(nameof(AgreedPrivacyPolicyVersion));
@@ -637,7 +637,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         // update state and save
         this.UserAgreementVersion?.Let(version =>
         {
-            this.PersistentState.SetValue<string>(AgreedUserAgreementVersionKey, version.ToString());
+            this.PersistentState.SetValue(AgreedUserAgreementVersionKey, version.ToString());
             _ = this.SavePersistentStateAsync();
             this.AgreedUserAgreementVersion = version;
             this.OnPropertyChanged(nameof(AgreedUserAgreementVersion));
@@ -723,11 +723,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         
         // load temp settings
         LogToConsole("Start loading temporary settings");
-        var tempSettings = new TempSettingsImpl();
+        ISettings tempSettings = new TempSettingsImpl();
         try
         {
             if (System.IO.File.Exists(SettingsFilePath))
-                tempSettings.Load(SettingsFilePath);
+                ((PersistentSettings)tempSettings).Load(SettingsFilePath);
             LogToConsole("Complete loading temporary settings");
         }
         catch (Exception ex)
@@ -2138,14 +2138,14 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         {
             // load from file
             if (!isFirstLoad || !this.IsFirstLaunch)
-                await this.persistentState.LoadAsync(this.persistentStateFilePath);
+                await ((PersistentSettings)this.persistentState).LoadAsync(this.persistentStateFilePath);
             this.Logger.LogDebug("Complete loading persistent state");
 
             // save immediately for first launch
             if (this.IsFirstLaunch && this.IsMultipleProcessesSupported)
             {
                 this.Logger.LogDebug("Save persistent state for first launch");
-                await this.persistentState.SaveAsync(this.persistentStateFilePath);
+                await ((PersistentSettings)this.persistentState).SaveAsync(this.persistentStateFilePath);
             }
         }
         catch (Exception ex)
@@ -2164,14 +2164,14 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.PreviousVersion = version;
             if (currentVersion != version)
             {
-                this.persistentState.SetValue<string>(AppVersionKey, currentVersion?.ToString() ?? "");
+                this.persistentState.SetValue(AppVersionKey, currentVersion?.ToString() ?? "");
                 _ = this.SavePersistentStateAsync();
             }
         }
         else if (currentVersion is not null)
         {
             this.PreviousVersion = null;
-            this.persistentState.SetValue<string>(AppVersionKey, currentVersion.ToString());
+            this.persistentState.SetValue(AppVersionKey, currentVersion.ToString());
             _ = this.SavePersistentStateAsync();
         }
 
@@ -2300,7 +2300,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         ++this.settingsLoadingCounter;
         try
         {
-            await this.settings.LoadAsync(SettingsFilePath);
+            await ((PersistentSettings)this.settings).LoadAsync(SettingsFilePath);
             this.Logger.LogDebug("Complete loading settings");
         }
         catch (Exception ex)
@@ -2315,15 +2315,15 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         // setup accepting non-stable update
         if (!this.PersistentState.GetValueOrDefault(IsAcceptNonStableApplicationUpdateInitKey))
         {
-            this.settings.SetValue<bool>(SettingKeys.AcceptNonStableApplicationUpdate, this.ReleasingType != ApplicationReleasingType.Stable);
-            this.PersistentState.SetValue<bool>(IsAcceptNonStableApplicationUpdateInitKey, true);
+            this.settings.SetValue(SettingKeys.AcceptNonStableApplicationUpdate, this.ReleasingType != ApplicationReleasingType.Stable);
+            this.PersistentState.SetValue(IsAcceptNonStableApplicationUpdateInitKey, true);
         }
 
         // Fall-back to default theme mode if 'System' is unsupported
         if (this.settings.GetValueOrDefault(SettingKeys.ThemeMode) == ThemeMode.System
             && !this.IsSystemThemeModeSupported)
         {
-            this.settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, this.FallbackThemeMode);
+            this.settings.SetValue(SettingKeys.ThemeMode, this.FallbackThemeMode);
         }
 
         // check settings
@@ -2393,7 +2393,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (this.logOutputTargetPort == value)
                 return;
             this.logOutputTargetPort = value;
-            this.PersistentState.SetValue<int>(LogOutputTargetPortKey, value);
+            this.PersistentState.SetValue(LogOutputTargetPortKey, value);
             this.UpdateLogOutputToLocalhost();
             this.OnPropertyChanged(nameof(LogOutputTargetPort));
         }
@@ -4019,12 +4019,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (isCritical)
             {
                 this.Logger.LogWarning("Start saving persistent state for critical reason");
-                this.persistentState.Save(this.persistentStateFilePath);
+                ((PersistentSettings)this.persistentState).Save(this.persistentStateFilePath);
             }
             else
             {
                 this.Logger.LogDebug("Start saving persistent state");
-                await this.persistentState.SaveAsync(this.persistentStateFilePath);
+                await ((PersistentSettings)this.persistentState).SaveAsync(this.persistentStateFilePath);
             }
             this.Logger.LogDebug("Complete saving persistent state");
         }
@@ -4057,12 +4057,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (isCritical)
             {
                 this.Logger.LogWarning("Start saving settings for critical reason");
-                this.settings.Save(SettingsFilePath);
+                ((PersistentSettings)this.settings).Save(SettingsFilePath);
             }
             else
             {
                 this.Logger.LogDebug("Start saving settings");
-                await this.settings.SaveAsync(SettingsFilePath);
+                await ((PersistentSettings)this.settings).SaveAsync(SettingsFilePath);
             }
             this.Logger.LogDebug("Complete saving settings");
         }
@@ -4546,7 +4546,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                     stateWriter.WriteEndArray();
                 }
                 this.Logger.LogWarning("Save main window view-model states");
-                this.PersistentState.SetValue<byte[]>(MainWindowViewModelStatesKey, stateStream.ToArray());
+                this.PersistentState.SetValue(MainWindowViewModelStatesKey, stateStream.ToArray());
                 areMainWindowVmStateSaved = true;
             }
             if (!isCritical)
@@ -4797,7 +4797,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             };
             await messageDialog.ShowDialog(window);
             if (messageDialog.DoNotAskOrShowAgain == true)
-                this.PersistentState.SetValue<bool>(DoNotPromptBeforeTakingMemorySnapshotKey, true);
+                this.PersistentState.SetValue(DoNotPromptBeforeTakingMemorySnapshotKey, true);
         }
 
         // select output file

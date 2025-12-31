@@ -113,8 +113,8 @@ public abstract class MainWindow : Window
         {
             if (this.WindowState == WindowState.Normal)
             {
-                this.PersistentState.SetValue<int>(WindowWidthSettingKey, (int)(this.Width + 0.5));
-                this.PersistentState.SetValue<int>(WindowHeightSettingKey, (int)(this.Height + 0.5));
+                this.PersistentState.SetValue(WindowWidthSettingKey, (int)(this.Width + 0.5));
+                this.PersistentState.SetValue(WindowHeightSettingKey, (int)(this.Height + 0.5));
             }
         });
         this.showInitDialogsAction = new ScheduledAction(this.ShowInitialDialogsAsync);
@@ -813,7 +813,7 @@ public abstract class MainWindow : Window
                     }
 
                     // save window state
-                    this.PersistentState.SetValue<WindowState>(WindowStateSettingKey, windowState);
+                    this.PersistentState.SetValue(WindowStateSettingKey, windowState);
                 }
                 if (windowState == WindowState.FullScreen || Platform.IsMacOS)
                     this.updateContentPaddingAction.Reschedule();
@@ -967,7 +967,7 @@ public abstract class MainWindow : Window
                 };
                 var result = await dialog.ShowDialog(this);
                 if (dialog.DoNotAskOrShowAgain.GetValueOrDefault())
-                    this.PersistentState.SetValue<bool>(DoNotCheckAppRunningLocationOnMacOSKey, true);
+                    this.PersistentState.SetValue(DoNotCheckAppRunningLocationOnMacOSKey, true);
                 if (result == MessageDialogResult.Cancel)
                 {
                     app.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
@@ -1062,7 +1062,7 @@ public abstract class MainWindow : Window
             var changeList = app.ChangeList;
             if (changeList is not null)
             {
-                this.PersistentState.SetValue<string>(LatestAppChangeListShownVersionKey, changeListVersion.ToString());
+                this.PersistentState.SetValue(LatestAppChangeListShownVersionKey, changeListVersion.ToString());
                 await new DocumentViewerWindow
                 {
                     DocumentSource = changeList,
@@ -1104,13 +1104,13 @@ public abstract class MainWindow : Window
             if (hasUnavailableExtDep)
             {
                 this.Logger.LogDebug("Show external dependencies dialog");
-                this.PersistentState.SetValue<int>(ExtDepDialogShownVersionKey, app.ExternalDependenciesVersion);
+                this.PersistentState.SetValue(ExtDepDialogShownVersionKey, app.ExternalDependenciesVersion);
                 this.isShowingInitialDialogs = true;
                 await new ExternalDependenciesDialog().ShowDialog(this);
                 this.isShowingInitialDialogs = false;
                 return;
             }
-            this.PersistentState.SetValue<int>(ExtDepDialogShownVersionKey, app.ExternalDependenciesVersion);
+            this.PersistentState.SetValue(ExtDepDialogShownVersionKey, app.ExternalDependenciesVersion);
         }
 
         // all dialogs closed

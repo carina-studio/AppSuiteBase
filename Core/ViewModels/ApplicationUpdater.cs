@@ -76,7 +76,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 	public bool AcceptNonStableApplicationUpdate
 	{
 		get => this.Settings.GetValueOrDefault(SettingKeys.AcceptNonStableApplicationUpdate);
-		set => this.Settings.SetValue<bool>(SettingKeys.AcceptNonStableApplicationUpdate, value);
+		set => this.Settings.SetValue(SettingKeys.AcceptNonStableApplicationUpdate, value);
 	}
 
 
@@ -200,7 +200,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
     public bool NotifyApplicationUpdate
     {
         get => this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate);
-        set => this.Settings.SetValue<bool>(SettingKeys.NotifyApplicationUpdate, value);
+        set => this.Settings.SetValue(SettingKeys.NotifyApplicationUpdate, value);
     }
 
 
