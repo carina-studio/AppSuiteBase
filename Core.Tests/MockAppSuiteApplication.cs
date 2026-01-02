@@ -231,6 +231,11 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
+    [ThreadSafe]
+    public bool IsActive => false;
+
+
+    /// <inheritdoc/>
     public virtual bool IsBackgroundMode => false;
 
 
@@ -473,6 +478,10 @@ public class MockAppSuiteApplication : IAppSuiteApplication
     /// <inheritdoc/>
     public virtual bool TakeMemorySnapshot(string outputFileName) =>
         false;
+
+
+    /// <inheritdoc/>
+    public double TextScaleFactor => 1.0;
     
 
     /// <inheritdoc/>

@@ -7,6 +7,7 @@ using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
@@ -286,7 +287,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// <summary>
     /// Ending year of copyright.
     /// </summary>
-    internal const int CopyrightEndingYear = 2025;
+    internal const int CopyrightEndingYear = 2026;
     /// <summary>
     /// Argument indicates to enable debug mode.
     /// </summary>
@@ -307,6 +308,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
     // Constants.
     const int AutoSaveSettingsDelay = 1000;
+    const int DeactivationDelay = 300;
     const int MinSplashWindowDuration = 2000;
 
 
@@ -362,6 +364,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
     // Fields.
     ResourceDictionary? accentColorResources;
+    CancellationTokenSource? activationActionCancellationTokenSource;
     readonly LinkedList<MainWindowHolder> activeMainWindowList = new();
     WindowIcon? appIcon;
     ApplicationInfoDialog? appInfoDialog;
@@ -375,6 +378,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     readonly string configurationFilePath;
     readonly long creationTime;
     volatile CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
+    ScheduledAction? deactivateAction;
+    CancellationTokenSource? deactivationActionCancellationTokenSource;
     readonly Styles extraStyles = new();
     long frameworkInitializedTime;
     volatile HardwareInfo? hardwareInfo;
@@ -402,6 +407,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     volatile ProcessInfo? processInfo;
     IDisposable? processInfoHfUpdateToken;
     IProductManager? productManager;
+    readonly HashSet<TopLevel> readyTopLevels = new();
     ApplicationArgsBuilder? restartArgs;
     SelfTestingWindowImpl? selfTestingWindow;
     volatile ISettings? settings;
@@ -416,6 +422,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     IStyle? styles;
     ThemeMode stylesThemeMode = ThemeMode.System;
     ThemeMode systemThemeMode = ThemeMode.Dark;
+    IList<object>? textScaleFactorAwareResourceKeys;
+    ResourceDictionary? textScaleFactorAwareResources;
+    readonly Dictionary<TopLevel, IDisposable> topLevelFontSizeBindingTokens = new();
     volatile TracingSession? tracingSession;
     readonly Lock tracingSyncLock = new();
     readonly Dictionary<Avalonia.Controls.Window, List<IDisposable>> windowObserverTokens = new();
@@ -533,6 +542,45 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         CultureInfo.DefaultThreadCurrentUICulture = this.cultureInfo;
         
         LogToConsole("Initialize AppSuiteApplication instance [end]");
+    }
+    
+    
+    // Activate the application.
+    void Activate()
+    {
+        // check and update state
+        this.deactivateAction?.Cancel();
+        if (this.IsActive)
+            return;
+        this.IsActive = true;
+        this.OnPropertyChanged(nameof(IsActive));
+        if (this.deactivateAction?.IsScheduled == true)
+        {
+            this.Logger.LogWarning("Activation has been interrupted");
+            return;
+        }
+        
+        // cancel deactivation action
+        if (this.deactivationActionCancellationTokenSource is not null)
+        {
+            this.Logger.LogWarning("Cancel deactivation action");
+            this.deactivationActionCancellationTokenSource.Cancel();
+        }
+        
+        // perform activation action
+        var cancellationTokenSource = new CancellationTokenSource();
+        this.activationActionCancellationTokenSource = cancellationTokenSource;
+        var activationTask = this.OnActivatedAsync(cancellationTokenSource.Token);
+        activationTask.GetAwaiter().OnCompleted(() =>
+        {
+            if (cancellationTokenSource.IsCancellationRequested)
+                this.Logger.LogWarning("Activation action has been cancelled");
+            cancellationTokenSource.Dispose();
+            if (this.activationActionCancellationTokenSource == cancellationTokenSource)
+                this.activationActionCancellationTokenSource = null;
+            if (activationTask.IsFaulted)
+                throw activationTask.Exception?.InnerException ?? new Exception("Error occurred while performing activation action.");
+        });
     }
 
 
@@ -1162,6 +1210,45 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.OnPropertyChanged(nameof(CustomScreenScaleFactor));
         }
     }
+    
+    
+    // Deactivate the application.
+    void Deactivate()
+    {
+        // check and update state
+        if (!this.IsActive)
+            return;
+        this.deactivateAction?.Cancel();
+        this.IsActive = false;
+        this.OnPropertyChanged(nameof(IsActive));
+        if (this.IsActive)
+        {
+            this.Logger.LogWarning("Deactivation has been interrupted");
+            return;
+        }
+        
+        // cancel activation action
+        if (this.activationActionCancellationTokenSource is not null)
+        {
+            this.Logger.LogWarning("Cancel activation action");
+            this.activationActionCancellationTokenSource.Cancel();
+        }
+        
+        // perform activation action
+        var cancellationTokenSource = new CancellationTokenSource();
+        this.deactivationActionCancellationTokenSource = cancellationTokenSource;
+        var deactivationTask = this.OnDeactivatedAsync(cancellationTokenSource.Token);
+        deactivationTask.GetAwaiter().OnCompleted(() =>
+        {
+            if (cancellationTokenSource.IsCancellationRequested)
+                this.Logger.LogWarning("Deactivation action has been cancelled");
+            cancellationTokenSource.Dispose();
+            if (this.deactivationActionCancellationTokenSource == cancellationTokenSource)
+                this.deactivationActionCancellationTokenSource = null;
+            if (deactivationTask.IsFaulted)
+                throw deactivationTask.Exception?.InnerException ?? new Exception("Error occurred while performing deactivation action.");
+        });
+    }
 
 
     /// <summary>
@@ -1747,6 +1834,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// Check whether Pro-version is being activated or not.
     /// </summary>
     public bool IsActivatingProVersion { get; private set; }
+    
+    
+    /// <inheritdoc/>
+    [ThreadSafe]
+    public bool IsActive { get; private set; }
 
 
     /// <inheritdoc/>
@@ -1755,7 +1847,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
 
     /// <summary>
-    /// Check whether application can running in background mode or not.
+    /// Check whether application can run in background mode or not.
     /// </summary>
 #pragma warning disable CA1822
     [ThreadSafe]
@@ -2447,6 +2539,17 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
 
     /// <summary>
+    /// Called when at least one window of application becomes active.
+    /// </summary>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/> to cancel the action.</param>
+    /// <returns>Task of handling activation of application window.</returns>
+    protected virtual async Task OnActivatedAsync(CancellationToken cancellationToken)
+    {
+        await this.UpdateTextScaleFactorAsync(cancellationToken);
+    }
+
+
+    /// <summary>
     /// Called after entering background mode.
     /// </summary>
     protected virtual void OnBackgroundModeEntered()
@@ -2524,6 +2627,17 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// <param name="savedState">Saved state in JSON format generated by <see cref="ViewModels.MainWindowViewModel.SaveState(Utf8JsonWriter)"/>.</param>
     /// <returns>View-model.</returns>
     protected abstract ViewModel OnCreateMainWindowViewModel(JsonElement? savedState);
+    
+    
+    /// <summary>
+    /// Called when all windows of application become inactive.
+    /// </summary>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/> to cancel the action.</param>
+    /// <returns>Task of handling deactivation of application window.</returns>
+    protected virtual Task OnDeactivatedAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
 
 
     /// <summary>
@@ -2699,7 +2813,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             };
         });
 
-        // start monitoring windows.
+        // start monitoring top levels.
         Avalonia.Controls.Window.WindowClosedEvent.AddClassHandler(typeof(Avalonia.Controls.Window), (sender, _) =>
         {
             if (sender is Avalonia.Controls.Window window)
@@ -2717,6 +2831,16 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 this.OnWindowOpened(window);
             }
         }, RoutingStrategies.Direct);
+        Control.UnloadedEvent.AddClassHandler(typeof(TopLevel), (sender, _) =>
+        {
+            if (sender is TopLevel topLevel && this.readyTopLevels.Remove(topLevel))
+                this.OnTopLevelUnloaded(topLevel);
+        });
+        TemplatedControl.TemplateAppliedEvent.AddClassHandler(typeof(TopLevel), (sender, _) =>
+        {
+            if (sender is TopLevel topLevel && this.readyTopLevels.Add(topLevel))
+                this.OnTopLevelReady(topLevel);
+        });
         if (Platform.IsWindows)
             this.AttachToMessageWindow();
 
@@ -2833,11 +2957,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         if (isActive)
         {
             if (Platform.IsWindows)
-                this.OnMainWindowActivationChangedOnWindows();
+                this.OnMainWindowActivationChangedOnWindows(isActive);
             else if (Platform.IsMacOS)
-                this.OnMainWindowActivationChangedOnMacOS();
+                this.OnMainWindowActivationChangedOnMacOS(isActive);
             else if (Platform.IsLinux)
-                this.OnMainWindowActivationChangedOnLinux();
+                this.OnMainWindowActivationChangedOnLinux(isActive);
             if (this.activeMainWindowList.IsNotEmpty() && this.activeMainWindowList.First?.Value.Window == mainWindow)
                 return;
             if (this.mainWindowHolders.TryGetValue(mainWindow, out var mainWindowHolder))
@@ -3077,10 +3201,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         this.UpdateLogOutputToLocalhost();
 
         // setup scheduled actions
-        this.checkUpdateInfoAction = new(() =>
-        {
-            _ = this.CheckForApplicationUpdateAsync();
-        });
+        this.checkUpdateInfoAction = new(this.CheckForApplicationUpdateAsync);
+        this.deactivateAction = new(this.Deactivate);
         this.performFullGCAction = new(() => this.PerformGC(GCCollectionMode.Forced));
         this.stopUserInteractionAction = new(() =>
         {
@@ -3213,6 +3335,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         if (Platform.IsWindows)
             SystemEvents.UserPreferenceChanged += this.OnWindowsUserPreferenceChanged;
 #pragma warning restore CA1416
+        
+        // setup text scale factor
+        if (Platform.IsMacOS)
+            await this.UpdateTextScaleFactorAsync(CancellationToken.None);
 
         // start checking external dependencies
         var checkExtDepTasks = new List<Task>();
@@ -3357,6 +3483,53 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     }
 
 
+    /// <summary>
+    /// Called to collect all keys of resources which are text scale factor aware.
+    /// </summary>
+    /// <param name="resourceKeys"><see cref="List{T}"/> to collect keys of resources which can be scaled with text scale factor.</param>
+    protected virtual void OnSelectTextScaleFactorAwareResourceKeys(IList<object> resourceKeys)
+    {
+        resourceKeys.AddAll([
+            "Double/MarkdownViewer.Markdown.Heading1",
+            "Double/MarkdownViewer.Markdown.Heading2",
+            "Double/MarkdownViewer.Markdown.Heading3",
+            "Double/MarkdownViewer.Markdown.Heading4",
+            "Double/MarkdownViewer.Markdown.Heading5",
+            "Double/MarkdownViewer.Markdown.Heading6",
+            "Double/MarkdownViewer.Markdown.Text",
+            "Double/MarkdownViewer.Markdown.Text.LineSpacing",
+            "Thickness/MarkdownViewer.Markdown.Blockquote.Margin",
+            "Thickness/MarkdownViewer.Markdown.Blockquote.Padding",
+            "Thickness/MarkdownViewer.Markdown.InlineCode.Margin",
+            "Thickness/MarkdownViewer.Markdown.InlineCode.Padding",
+            "Thickness/MarkdownViewer.Markdown.List.Margin",
+            "Thickness/MarkdownViewer.Markdown.List.Text.Margin",
+            "Thickness/MarkdownViewer.Markdown.ListMarker.Margin",
+            "Thickness/MarkdownViewer.Markdown.Heading1",
+            "Thickness/MarkdownViewer.Markdown.Heading2",
+            "Thickness/MarkdownViewer.Markdown.Heading3",
+            "Thickness/MarkdownViewer.Markdown.Heading4",
+            "Thickness/MarkdownViewer.Markdown.Heading5",
+            "Thickness/MarkdownViewer.Markdown.Heading6",
+            "Thickness/MarkdownViewer.Markdown.Text.Margin",
+            "Thickness/MarkdownViewer.Rule.Margin",
+        ]);
+    }
+
+
+    /// <summary>
+    /// Called to select proper scale factor for specific text scale factor aware resource.
+    /// </summary>
+    /// <param name="resourceKey">Key of resource.</param>
+    /// <param name="value">Value of resource.</param>
+    /// <param name="textScaleFactor">Text scale factor.</param>
+    /// <returns>Selected scale factor for resource.</returns>
+    protected virtual double OnSelectTextScaleFactorAwareResourceScaleFactor(object resourceKey, object value, double textScaleFactor)
+    {
+        return textScaleFactor;
+    }
+
+
     // Called when application setting changed.
     void OnSettingChanged(object? sender, SettingChangedEventArgs e)
     {
@@ -3407,6 +3580,32 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 this.autoSaveSettingsAction = new(() => this.SaveSettingsAsync());
                 this.autoSaveSettingsAction.Schedule(AutoSaveSettingsDelay);
             }
+        }
+    }
+
+
+    /// <summary>
+    /// Called when text scale factor changed.
+    /// </summary>
+    /// <param name="textScaleFactor">New scale factor of text.</param>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/> to cancel related actions.</param>
+    protected virtual Task OnTextScaleFactorChangedAsync(double textScaleFactor, CancellationToken cancellationToken) => Task.CompletedTask;
+    
+    
+    // Called when a TopLevel be ready.
+    void OnTopLevelReady(TopLevel topLevel)
+    {
+        this.topLevelFontSizeBindingTokens[topLevel] = topLevel.BindToResource(TextElement.FontSizeProperty, "Double/Window.FontSize");
+    }
+    
+    
+    // Called when a TopLevel unloaded.
+    void OnTopLevelUnloaded(TopLevel topLevel)
+    {
+        if (this.topLevelFontSizeBindingTokens.TryGetValue(topLevel, out var token))
+        {
+            token.Dispose();
+            this.topLevelFontSizeBindingTokens.Remove(topLevel);
         }
     }
 
@@ -3491,10 +3690,14 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         }
 
         // enter background mode or shut down
-        if (!this.EnterBackgroundMode() && this.mainWindowHolders.IsEmpty() && this.windows.IsEmpty())
+        if (this.windows.IsEmpty())
         {
-            this.Logger.LogWarning("All windows were closed, start shutting down");
-            this.Shutdown();
+            this.deactivateAction?.Execute();
+            if (!this.EnterBackgroundMode() && this.mainWindowHolders.IsEmpty())
+            {
+                this.Logger.LogWarning("All windows were closed, start shutting down");
+                this.Shutdown();
+            }
         }
     }
 
@@ -3525,7 +3728,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                         this.OnPropertyChanged(nameof(LatestActiveWindow));
                     }
                     this.stopUserInteractionAction?.Cancel();
-                    if (!this.IsUserInteractive)
+                    this.Activate();
+                    if (!this.IsUserInteractive && this.IsActive)
                     {
                         this.Logger.LogWarning("Enter user interactive mode");
                         this.IsUserInteractive = true;
@@ -3534,7 +3738,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                     }
                 }
                 else
+                {
+                    this.deactivateAction?.Schedule(DeactivationDelay);
                     this.stopUserInteractionAction?.Reschedule(this.Configuration.GetValueOrDefault(ConfigurationKeys.UserInteractionTimeout));
+                }
             }),
         };
         this.windowObserverTokens.Add(window, tokens);
@@ -4710,6 +4917,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             }
         }
     }
+    
+    
+    /// <summary>
+    /// Get scale factor of text defined by system.
+    /// </summary>
+    [ThreadSafe]
+    public double SystemTextScaleFactor { get; private set; } = 1.0;
 
 
     /// <inheritdoc/>
@@ -4882,6 +5096,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     }
 
 
+    /// <inheritdoc/>
+    [ThreadSafe]
+    public double TextScaleFactor { get; private set; } = 1.0;
+
+
     // Update culture info according to settings.
     async Task UpdateCultureInfoAsync(bool updateStringResources)
     {
@@ -4937,7 +5156,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
     /// <inheritdoc/>
     public abstract Version? UserAgreementVersion { get; }
-
+    
 
     // Update log output.
     void UpdateLogOutputToLocalhost()
@@ -5322,6 +5541,109 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.Logger.LogTrace("[Performance] Took {time} ms to update system theme mode", time);
         }
     }
+    
+    
+    // Update text scale factor.
+    async Task UpdateTextScaleFactorAsync(CancellationToken cancellationToken)
+    {
+        // get system text scale factor
+        double systemTextScaleFactor;
+        if (Platform.IsWindows)
+            systemTextScaleFactor = 1;
+        else if (Platform.IsMacOS)
+            systemTextScaleFactor = await this.GetSystemTextScaleFactorOnMacOSAsync(cancellationToken);
+        else
+            systemTextScaleFactor = 1;
+        if (Math.Abs(this.SystemTextScaleFactor - systemTextScaleFactor) <= 0.01)
+            return;
+        this.Logger.LogTrace($"System text scale factor changed from {this.SystemTextScaleFactor} to {systemTextScaleFactor}");
+        this.SystemTextScaleFactor = systemTextScaleFactor;
+        this.OnPropertyChanged(nameof(SystemTextScaleFactor));
+
+        // select text scale factor
+        var textScaleFactor = systemTextScaleFactor;
+        if (Math.Abs(this.TextScaleFactor - textScaleFactor) < 0.01)
+            return;
+        this.Logger.LogTrace($"Change text scale factor from {this.TextScaleFactor} to {textScaleFactor}");
+        this.TextScaleFactor = textScaleFactor;
+        this.OnPropertyChanged(nameof(TextScaleFactor));
+        await this.OnTextScaleFactorChangedAsync(textScaleFactor, cancellationToken);
+        
+        // update resources
+        this.UpdateTextScaleFactorAwareResources();
+    }
+    
+    
+    // Update text scale factor aware resources.
+    void UpdateTextScaleFactorAwareResources()
+    {
+        var resourceKeys = this.textScaleFactorAwareResourceKeys ?? ImmutableList.CreateBuilder<object>().Let(builder =>
+        {
+            this.OnSelectTextScaleFactorAwareResourceKeys(builder);
+            this.textScaleFactorAwareResourceKeys = builder.ToImmutable();
+            return this.textScaleFactorAwareResourceKeys;
+        });
+        if (resourceKeys.IsEmpty())
+            return;
+        var textScaleFactor = this.TextScaleFactor;
+        var themeVariant = this.ActualThemeVariant;
+        var styles = this.Styles;
+        var resources = this.textScaleFactorAwareResources ?? new ResourceDictionary().Also(it =>
+        {
+            this.textScaleFactorAwareResources = it;
+            this.Resources.MergedDictionaries.Add(it);
+        });
+        foreach (var resourceKey in resourceKeys)
+        {
+            if (!styles.TryGetResource(themeVariant, resourceKey, out object? baseResource))
+            {
+                if (this.IsDebugMode)
+                    throw new ArgumentException($"text scale factor aware resource '{resourceKey}' not found.");
+                this.Logger.LogError("text scale factor aware resource '{key}' not found", resourceKey);
+                continue;
+            }
+            var scaleFactor = this.OnSelectTextScaleFactorAwareResourceScaleFactor(resourceKey, baseResource, textScaleFactor);
+            var scaledResource = baseResource switch
+            {
+                double doubleValue => Math.Round(doubleValue * scaleFactor),
+                // ReSharper disable once HeapView.BoxingAllocation
+                CornerRadius cornerRadius => new CornerRadius(
+                    Math.Round(cornerRadius.TopLeft * scaleFactor),
+                    Math.Round(cornerRadius.TopRight * scaleFactor),
+                    Math.Round(cornerRadius.BottomRight * scaleFactor),
+                    Math.Round(cornerRadius.BottomLeft * scaleFactor)
+                ),
+                // ReSharper disable once HeapView.BoxingAllocation
+                Thickness thickness => new Thickness(
+                    Math.Round(thickness.Left * scaleFactor),
+                    Math.Round(thickness.Top * scaleFactor),
+                    Math.Round(thickness.Right * scaleFactor),
+                    Math.Round(thickness.Bottom * scaleFactor)
+                ),
+                GridLength gridLength => Global.Run<object?>(() =>
+                {
+                    if (gridLength.IsAbsolute)
+                        return new GridLength(gridLength.Value * scaleFactor);
+                    if (this.IsDebugMode)
+                        throw new ArgumentException($"Unit of GridLength text scale factor aware resource '{resourceKey}' should be Pixel.");
+                    this.Logger.LogError("Unit of GridLength text scale factor aware resource '{key}' should be Pixel", resourceKey);
+                    return null;
+                }),
+                _ => Global.Run<object?>(() =>
+                {
+                    if (this.IsDebugMode)
+                        throw new ArgumentException($"Unknown type of text scale factor aware resource '{resourceKey}': {baseResource.GetType().Name}.");
+                    this.Logger.LogError("Unknown type of text scale factor aware resource '{key}': {type}", resourceKey, baseResource.GetType().Name);
+                    return null;
+                })
+            };
+            if (scaledResource is not null)
+                resources[resourceKey] = scaledResource;
+            else
+                resources.Remove(resourceKey);
+        }
+    }
+
 
 
     // Wait for client of multi-instances and handle incoming messages.

@@ -233,9 +233,10 @@ unsafe partial class AppSuiteApplication
 
 
     // Called when activation state of main window changed.
-    void OnMainWindowActivationChangedOnWindows()
+    void OnMainWindowActivationChangedOnWindows(bool isActive)
     {
-        _ = this.UpdateSystemThemeModeAsync(true); // in case of system event was not received
+        if (isActive)
+            _ = this.UpdateSystemThemeModeAsync(true); // in case of system event was not received
     }
 
 

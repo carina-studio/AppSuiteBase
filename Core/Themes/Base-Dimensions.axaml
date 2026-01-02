@@ -430,8 +430,6 @@
 
 	<!-- ToolBar -->
 	<sys:Double x:Key="Double/ToolBar.DropDownButton.Icon.Size">8</sys:Double>
-	<sys:Double x:Key="Double/ToolBar.Button.Icon.Size">16</sys:Double>
-	<sys:Double x:Key="Double/ToolBar.Button.Icon.Size.Small">14</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.Button.Size">32</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.Button.Size.Small">24</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.Button.Size.WithDropDownIcon">47</sys:Double> <!-- ToolBar.Button.Size + ToolBar.Button.DropDownIcon.Margin + ToolBar.DropDownButton.Icon.Size -->
@@ -452,7 +450,6 @@
 	<Thickness x:Key="Thickness/ToolBar.Item.Margin">2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Padding">3</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Padding.Small">3</Thickness>
-	<Thickness x:Key="Thickness/ToolBar.ProgressRing.Margin">10</Thickness> <!-- Button Padding + Button Margin -->
 	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Horizontal">6,3,6,3</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Horizontal.Small">4,2,4,2</Thickness>
 	<Thickness x:Key="Thickness/ToolBar.Separator.Margin.Vertical">3,6,3,6</Thickness>
@@ -480,6 +477,9 @@
 	<Thickness x:Key="Thickness/TreeViewItem.Icon.Margin">0,0,9,0</Thickness>
 	<Thickness x:Key="Thickness/TreeViewItem.Margin">0,1,0,1</Thickness>
 	<Thickness x:Key="Thickness/TreeViewItem.Padding">0,4,15,4</Thickness>
+	
+	<!-- Window -->
+	<sys:Double x:Key="Double/Window.FontSize">13</sys:Double>
 	
 	<!-- WizardDialog -->
 	<sys:Double x:Key="Double/WizardDialog.TextBlock.FontSize.PageHeader">24</sys:Double>

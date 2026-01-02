@@ -216,6 +216,13 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// </summary>
     [ThreadSafe]
     HardwareInfo HardwareInfo { get; }
+    
+    
+    /// <summary>
+    /// Check whether at least one window of application is active or not.
+    /// </summary>
+    [ThreadSafe]
+    bool IsActive { get; }
 
 
     /// <summary>
@@ -529,6 +536,13 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// <param name="outputFileName">Name of output snapshot file.</param>
     /// <returns>True if memory snapshot has been taken successfully.</returns>
     bool TakeMemorySnapshot(string outputFileName);
+    
+    
+    /// <summary>
+    /// Scale factor for text.
+    /// </summary>
+    [ThreadSafe]
+    double TextScaleFactor { get; }
 
 
     /// <summary>

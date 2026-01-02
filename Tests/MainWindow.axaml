@@ -233,7 +233,9 @@
 														<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
 													</Button>
 													
-													<abControls:ProgressRing Classes="ToolBar_ProgressRing" IsIndeterminate="True"/>
+													<Border Classes="ToolBar_IconContainer">
+														<abControls:ProgressRing Classes="ToolBar_ProgressRing" IsIndeterminate="True"/>
+													</Border>
 
 													<Button Classes="ToolBar_Button_WithDropDownButton">
 														<Image Classes="Icon" Source="{StaticResource Image/Icon.Star}"/>
@@ -302,6 +304,7 @@
 													<ComboBox Classes="ToolBar_ComboBox" Width="100" IsEnabled="False">
 														6789
 													</ComboBox>
+													<TextBox Classes="ToolBar_TextBox" Width="100"/>
 
 													<Button Classes="ToolBar_Button" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}">
 														<Image Classes="Icon" Source="{StaticResource Image/Icon.Lightbulb}"/>
@@ -1073,13 +1076,13 @@
 								<Border BorderBrush="Gray" BorderThickness="1" Height="100" Margin="10" Width="100">
 									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedImage}"/>
 								</Border>
-								<Border BorderBrush="Gray" BorderThickness="1" Height="{StaticResource Double/ToolBar.Button.Icon.Size}" Margin="10" Width="{StaticResource Double/ToolBar.Button.Icon.Size}">
+								<Border BorderBrush="Gray" BorderThickness="1" Height="{DynamicResource Double/ToolBar.Button.Size}" Margin="10" Padding="{DynamicResource Thickness/ToolBar.Button.Padding}" Width="{DynamicResource Double/ToolBar.Button.Size}">
 									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedImage}"/>
 								</Border>
-								<Border BorderBrush="Gray" BorderThickness="1" Height="{StaticResource Double/MenuItem.Icon.Size}" Margin="10" Width="{StaticResource Double/MenuItem.Icon.Size}">
+								<Border BorderBrush="Gray" BorderThickness="1" Height="{DynamicResource Double/MenuItem.Icon.Size}" Margin="10" Width="{DynamicResource Double/MenuItem.Icon.Size}">
 									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedImage}"/>
 								</Border>
-								<Border BorderBrush="Gray" BorderThickness="1" Height="{StaticResource Double/InPlaceAction.IconSize}" Margin="10" Width="{StaticResource Double/InPlaceAction.IconSize}">
+								<Border BorderBrush="Gray" BorderThickness="1" Height="{DynamicResource Double/InPlaceAction.IconSize}" Margin="10" Width="{DynamicResource Double/InPlaceAction.IconSize}">
 									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedImage}"/>
 								</Border>
 							</WrapPanel>

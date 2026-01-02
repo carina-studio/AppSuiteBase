@@ -211,9 +211,9 @@ partial class AppSuiteApplication
 
 
     // Called when IsActive of main window changed on Linux.
-    void OnMainWindowActivationChangedOnLinux()
+    void OnMainWindowActivationChangedOnLinux(bool isActive)
     {
-        if (this.IsSystemThemeModeSupportedOnLinux)
+        if (this.IsSystemThemeModeSupportedOnLinux && isActive)
             _ = this.UpdateSystemThemeModeAsync(true);
     }
     

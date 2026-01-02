@@ -112,6 +112,10 @@ partial class AppSuiteApplication
             return defaultResult;
         }
     }
+    
+    
+    // Constants.
+    const double SimulateSystemTextScaleFactorOnMacOS = double.NaN;
 
 
     // Fields.
@@ -171,7 +175,7 @@ partial class AppSuiteApplication
                     RedirectStandardError = true,
                     RedirectStandardOutput = true,
                 });
-                if (process != null)
+                if (process is not null)
                 {
                     var interfaceStyle = process.StandardOutput.ReadLine();
                     return interfaceStyle == null
@@ -196,14 +200,80 @@ partial class AppSuiteApplication
             return this.FallbackThemeMode;
         }
     }
+    
+    
+    // Get text scale factor on macOS.
+    async Task<double> GetSystemTextScaleFactorOnMacOSAsync(CancellationToken cancellationToken)
+    {
+        if (double.IsFinite(SimulateSystemTextScaleFactorOnMacOS))
+            return SimulateSystemTextScaleFactorOnMacOS;
+        try
+        {
+            return await Task.Run(async () =>
+            {
+                using var process = Process.Start(new ProcessStartInfo
+                {
+                    Arguments = "read -g UIPreferredContentSizeCategoryName",
+                    CreateNoWindow = true,
+                    FileName = "defaults",
+                    RedirectStandardError = true,
+                    RedirectStandardOutput = true,
+                });
+                if (process is not null)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    var line = await process.StandardOutput.ReadLineAsync(cancellationToken);
+                    cancellationToken.ThrowIfCancellationRequested();
+                    if (line?.StartsWith("UICTContentSizeCategory") != true)
+                    {
+                        this.Logger.LogError($"Unknown value got for text scale factor on macOS: {line}");
+                        return 1;
+                    }
+                    var fontSize = line.Substring("UICTContentSizeCategory".Length) switch
+                    {
+                        "XS" => 10,
+                        "S" => 11,
+                        "M" => 12,
+                        "L" => 13,
+                        "XL" => 14,
+                        "XXL" => 15,
+                        "XXXL" => 16,
+                        "AccessibilityM" => 20,
+                        "AccessibilityL" => 24,
+                        "AccessibilityXL" => 29,
+                        "AccessibilityXXL" => 35,
+                        "AccessibilityXXXL" => 42,
+                        _ => Global.Run(() =>
+                        {
+                            this.Logger.LogError($"Unknown value got for text scale factor on macOS: {line}");
+                            return 13;
+                        })
+                    };
+                    return fontSize / 13f;
+                }
+                this.Logger.LogError("Unable to start 'defaults' to get text scale factor on macOS");
+                return 1;
+            }, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            if (ex is TaskCanceledException)
+                throw;
+            this.Logger.LogError(ex, "Unable to text scale factor on macOS");
+            return 1f;
+        }
+    }
 
 
     // Called when IsActive of main window changed on macOS.
-    void OnMainWindowActivationChangedOnMacOS()
+    void OnMainWindowActivationChangedOnMacOS(bool isActive)
     {
-        _ = this.UpdateCultureInfoAsync(true);
-        _ = this.UpdateSystemThemeModeAsync(true);
-        this.updateMacOSAppDockTileProgressAction?.Schedule();
+        if (isActive)
+        {
+            _ = this.UpdateCultureInfoAsync(true);
+            _ = this.UpdateSystemThemeModeAsync(true);
+            this.updateMacOSAppDockTileProgressAction?.Schedule();
+        }
     }
 
 

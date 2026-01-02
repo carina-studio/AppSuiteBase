@@ -3163,12 +3163,23 @@
 		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Padding}"/>
 		<Setter Property="MinWidth" Value="{DynamicResource Double/ToolBar.MinSize}"/>
 	</Style>
-	<Style Selector="Border.ToolBar_NotificationIndicator">
-		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
+	<Style Selector="Border.ToolBar_IconContainer">
+		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Button.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Button.Padding}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+	</Style>
+	<Style Selector="Border.ToolBar_NotificationIndicator">
+		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.Button.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolBar.Button.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Size}"/>
 	</Style>
 	<Style Selector="Border.ToolBar_Small">
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Background}"/>
@@ -3277,18 +3288,8 @@
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
 	</Style>
-	<Style Selector="Panel.ToolBar_NotificationIndicator">
-		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
-		<Setter Property="HorizontalAlignment" Value="Center"/>
-		<Setter Property="IsHitTestVisible" Value="False"/>
-		<Setter Property="VerticalAlignment" Value="Center"/>
-		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
-	</Style>
 	<Style Selector="abControls|ProgressRing.ToolBar_ProgressRing">
-		<Setter Property="Height" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/ToolBar.ProgressRing.Margin}"/>
 		<Setter Property="RingThickness" Value="{DynamicResource Double/ToolBar.ProgressRing.RingThickness}"/>
-		<Setter Property="Width" Value="{DynamicResource Double/ToolBar.Button.Icon.Size}"/>
 	</Style>
 	<Style Selector="RepeatButton.ToolBar_RepeatButton">
 		<Setter Property="Background" Value="{DynamicResource Brush/ToolBar.Button.Background.Transparent}"/>

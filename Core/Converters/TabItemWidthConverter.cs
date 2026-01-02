@@ -25,6 +25,18 @@ static class TabItemWidthConverter
     {
         var resourceHost = app as IResourceHost ?? IAppSuiteApplication.CurrentOrNull?.Let(it =>
         {
+            it.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(IAppSuiteApplication.TextScaleFactor))
+                {
+                    emptyTabItemPadding = null;
+                    itemsPanelMargin = null;
+                    maxTabItemWidth = null;
+                    minTabItemWidth = null;
+                    tabItemMargin = null;
+                    separatorMargin = null;
+                }
+            };
             app = it;
             return it as IResourceHost;
         });
