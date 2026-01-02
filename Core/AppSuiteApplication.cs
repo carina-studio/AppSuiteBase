@@ -1843,6 +1843,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
     /// <inheritdoc/>
     [ThreadSafe]
+    public bool IsApplyingSystemTextScaleFactorSupported => Platform.IsMacOS;
+
+
+    /// <inheritdoc/>
+    [ThreadSafe]
     public bool IsBackgroundMode { get; private set; }
 
 
@@ -3548,6 +3553,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     {
         if (e.Key == SettingKeys.AcceptNonStableApplicationUpdate)
             _ = this.CheckForApplicationUpdateAsync();
+        else if (e.Key == SettingKeys.ApplySystemTextScaleFactor)
+            _ = this.UpdateTextScaleFactorAsync(CancellationToken.None);
         else if (e.Key == SettingKeys.Culture)
             _ = this.UpdateCultureInfoAsync(true);
         else if (e.Key == SettingKeys.ShowProcessInfo)
@@ -5554,14 +5561,15 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             systemTextScaleFactor = await this.GetSystemTextScaleFactorOnMacOSAsync(cancellationToken);
         else
             systemTextScaleFactor = 1;
-        if (Math.Abs(this.SystemTextScaleFactor - systemTextScaleFactor) <= 0.01)
-            return;
-        this.Logger.LogTrace($"System text scale factor changed from {this.SystemTextScaleFactor} to {systemTextScaleFactor}");
-        this.SystemTextScaleFactor = systemTextScaleFactor;
-        this.OnPropertyChanged(nameof(SystemTextScaleFactor));
+        if (Math.Abs(this.SystemTextScaleFactor - systemTextScaleFactor) > 0.01)
+        {
+            this.Logger.LogTrace($"System text scale factor changed from {this.SystemTextScaleFactor} to {systemTextScaleFactor}");
+            this.SystemTextScaleFactor = systemTextScaleFactor;
+            this.OnPropertyChanged(nameof(SystemTextScaleFactor));
+        }
 
         // select text scale factor
-        var textScaleFactor = systemTextScaleFactor;
+        var textScaleFactor = this.Settings.GetValueOrDefault(SettingKeys.ApplySystemTextScaleFactor) ? systemTextScaleFactor : 1.0;
         if (Math.Abs(this.TextScaleFactor - textScaleFactor) < 0.01)
             return;
         this.Logger.LogTrace($"Change text scale factor from {this.TextScaleFactor} to {textScaleFactor}");

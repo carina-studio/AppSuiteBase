@@ -68,6 +68,8 @@
 	<!-- ApplicationOptions -->
 	<sys:String x:Key="String/ApplicationOptions">應用程式選項</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">接收非正式版本的應用程式更新</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.ApplySystemTextScaleFactor">使用系統文字大小</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.ApplySystemTextScaleFactor.Description">套用系統文字大小至特定使用者介面元素。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">語言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">使用者介面縮放比例</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR 工具尚未安裝。</sys:String>

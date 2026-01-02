@@ -74,6 +74,8 @@
 	<!-- ApplicationOptions -->
 	<sys:String x:Key="String/ApplicationOptions">Application options</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">Accept non-stable application update</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.ApplySystemTextScaleFactor">Use system text size</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.ApplySystemTextScaleFactor.Description">Apply the system text size to selected parts of user interface.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">Language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">User interface scale factor</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR tool is not installed yet.</sys:String>

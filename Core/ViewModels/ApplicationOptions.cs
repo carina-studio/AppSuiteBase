@@ -82,6 +82,16 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
         get => this.Settings.GetValueOrDefault(SettingKeys.AcceptNonStableApplicationUpdate);
         set => this.Settings.SetValue(SettingKeys.AcceptNonStableApplicationUpdate, value);
     }
+    
+    
+    /// <summary>
+    /// Get or set whether the text scale factor of UI should fellow system settings or not.
+    /// </summary>
+    public bool ApplySystemTextScaleFactor
+    {
+        get => this.Settings.GetValueOrDefault(SettingKeys.ApplySystemTextScaleFactor);
+        set => this.Settings.SetValue(SettingKeys.ApplySystemTextScaleFactor, value);
+    }
 
 
     // Check installation of XRandR.
@@ -271,6 +281,12 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
         get => this.Settings.GetValueOrDefault(SettingKeys.IndentationSizeInScript);
         set => this.Settings.SetValue(SettingKeys.IndentationSizeInScript, value);
     }
+
+
+    /// <summary>
+    /// Check whether <see cref="ApplySystemTextScaleFactor"/> is supported or not.
+    /// </summary>
+    public bool IsApplyingSystemTextScaleFactorSupported => this.Application.IsApplyingSystemTextScaleFactorSupported;
 
 
     /// <summary>
@@ -471,6 +487,8 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
         var key = e.Key;
         if (key == SettingKeys.AcceptNonStableApplicationUpdate)
             this.OnPropertyChanged(nameof(AcceptNonStableApplicationUpdate));
+        else if (key == SettingKeys.ApplySystemTextScaleFactor)
+            this.OnPropertyChanged(nameof(ApplySystemTextScaleFactor));
         else if (key == SettingKeys.Culture)
             this.OnPropertyChanged(nameof(Culture));
         else if (key == SettingKeys.DefaultScriptLanguage)

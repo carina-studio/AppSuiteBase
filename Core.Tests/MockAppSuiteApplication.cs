@@ -236,6 +236,11 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
+    [ThreadSafe]
+    public bool IsApplyingSystemTextScaleFactorSupported => false;
+
+
+    /// <inheritdoc/>
     public virtual bool IsBackgroundMode => false;
 
 
@@ -273,6 +278,14 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
     /// <inheritdoc/>
     public virtual bool IsShutdownStarted => false;
+    
+    
+    /// <inheritdoc/>
+    public virtual bool IsSystemThemeModeSupported => false;
+
+
+    /// <inheritdoc/>
+    public virtual bool IsTestingMode => true;
 
 
     /// <inheritdoc/>.
@@ -285,14 +298,6 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
     /// <inheritdoc/>
     public virtual bool IsUserInteractive => false;
-
-
-    /// <inheritdoc/>
-    public virtual bool IsSystemThemeModeSupported => false;
-
-
-    /// <inheritdoc/>
-    public virtual bool IsTestingMode => true;
 
 
     /// <inheritdoc/>

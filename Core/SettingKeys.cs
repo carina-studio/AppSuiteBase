@@ -14,6 +14,12 @@ public sealed class SettingKeys
     /// Accept application update with non-stable version.
     /// </summary>
     public static readonly SettingKey<bool> AcceptNonStableApplicationUpdate = new(nameof(AcceptNonStableApplicationUpdate), true);
+    
+    
+    /// <summary>
+    /// Whether the text scale factor of UI should fellow system settings or not.
+    /// </summary>
+    public static readonly SettingKey<bool> ApplySystemTextScaleFactor = new(nameof(ApplySystemTextScaleFactor), true);
 
 
     /// <summary>

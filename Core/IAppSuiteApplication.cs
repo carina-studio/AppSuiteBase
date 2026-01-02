@@ -223,6 +223,13 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// </summary>
     [ThreadSafe]
     bool IsActive { get; }
+    
+    
+    /// <summary>
+    /// Check whether applying system text scale factor to <see cref="TextScaleFactor"/> is supported or not.
+    /// </summary>
+    [ThreadSafe]
+    bool IsApplyingSystemTextScaleFactorSupported { get; }
 
 
     /// <summary>
@@ -288,7 +295,15 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// <summary>
     /// Check whether <see cref="ThemeMode.System"/> is supported or not.
     /// </summary>
+    [ThreadSafe]
     bool IsSystemThemeModeSupported { get; }
+    
+    
+    /// <summary>
+    /// Check whether application is running in testing mode or not.
+    /// </summary>
+    [ThreadSafe]
+    bool IsTestingMode { get; }
 
 
     /// <summary>
@@ -307,13 +322,6 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// Check whether application is user interactive or not.
     /// </summary>
     bool IsUserInteractive { get; }
-
-
-    /// <summary>
-    /// Check whether application is running in testing mode or not.
-    /// </summary>
-    [ThreadSafe]
-    bool IsTestingMode { get; }
 
 
     /// <summary>
