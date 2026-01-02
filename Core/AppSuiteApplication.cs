@@ -2053,7 +2053,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             {
                 Buttons = MessageDialogButtons.YesNo,
                 Icon = MessageDialogIcon.Question,
-                Message = Avalonia.Controls.ResourceNodeExtensions.GetResourceObservable(this, "String/MainWindow.ConfirmLayoutingLotsOfMainWindows"),
+                Message = Avalonia.Controls.ResourceNodeExtensions.GetResourceObservable(this, "String/MainWindow.ConfirmLayingOutLotsOfMainWindows"),
             }.ShowDialog(activeMainWindow);
             if (result != MessageDialogResult.Yes)
                 return;

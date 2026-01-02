@@ -20,7 +20,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.PoweredBy.Section1">此軟體由</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.PoweredBy.Section2">及</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.PoweredBy.Section3">提供基礎支援。</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">偵錯模式可以讓應用程式輸出更多的執行期間資訊至日誌，甚至提供應用程式內部功能調整。下次您自行啟動應用程式時將自動離開偵錯模式。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">在偵錯模式中應用程式會輸出更多的執行期間資訊至日誌，並提供應用程式內部功能調整。偵錯模式將在下次您自行啟動應用程式時結束。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.CpuUsage">處理器使用率</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DeactivateProduct">停用並取消授權…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DeviceName">裝置名稱</sys:String>
@@ -28,7 +28,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">匯出應用程式日誌…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExternalDependencies">外部相依性…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">無法匯出應用程式日誌。</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.FinalizationPendingCount">等待解構之物件數量</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.FinalizationPendingCount">等待解構物件數量</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET 版本</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GCFrequency">垃圾收集 (GC) 每秒次數</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">GitHub 上的專案頁面</sys:String>
@@ -67,21 +67,21 @@
 
 	<!-- ApplicationOptions -->
 	<sys:String x:Key="String/ApplicationOptions">應用程式選項</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">接收非正式版本的應用程式更新</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">接收預發布版本更新</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ApplySystemTextScaleFactor">使用系統文字大小</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ApplySystemTextScaleFactor.Description">套用系統文字大小至特定使用者介面元素。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">語言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">使用者介面縮放比例</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR 工具尚未安裝。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">預設腳本語言</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.DisableAngle">不使用 ANGLE 繪製使用者介面</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DisableAngle">停止使用 ANGLE 繪製</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle.Description">避免在部分顯示卡上的繪製問題，但會影響部分視覺效果。</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.EnableLigatureInScript">啟用連字及情境替代字形</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableLigatureInScript">連字及情境替代字形</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">啟用腳本執行</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">縮排空白字元數</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">啟動應用程式時顯示啟動畫面</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">日誌輸出目標連接埠</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">需要重新啟動應用程式以套用。</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">日誌輸出連接埠</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">重新啟動應用程式以套用變更。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect.ChineseVariantChanged">中文環境已變更，需要重新啟動應用程式以套用。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NotifyApplicationUpdate">有應用程式更新時顯示通知</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Others">其他設定</sys:String>
@@ -105,10 +105,10 @@
 	<sys:String x:Key="String/ApplicationUpdateDialog.AcceptNonStableApplicationUpdate.Description">您也可以在應用程式選項中變更這些設定。</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckForUpdate">檢查更新</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckingForUpdate">正在檢查更新…</sys:String>
-	<sys:String x:Key="String/ApplicationUpdateDialog.DownloadUpdatePackage">下載更新</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.DownloadUpdatePackage">下載並安裝</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.LatestVersion">{0} 已經是最新版本。</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.NewVersionFound">已經有新的 {0} 版本：{1}</sys:String>
-	<sys:String x:Key="String/ApplicationUpdateDialog.ReleasePage">此更新的詳細資訊</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.ReleasePage">詳細更新資訊</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.StartUpdating">更新</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.Title">應用程式更新</sys:String>
 
@@ -245,7 +245,7 @@
 1.英語慣用的日期時間格式。
 2.目前語系慣用的日期時間格式。
 3.Unix 時間戳記，單位可以為秒、毫秒或微秒。
-4.格式為 'yyyyMMdd_HH:mm:ss.ffffff' 的文字，其中年份、秒、毫微秒以及 ':' 可以省略。</sys:String>
+4.格式為 'yyyyMMdd_HH:mm:ss.ffffff' 的文字，年份、秒、毫微秒以及冒號可以省略。</sys:String>
 	<sys:String x:Key="String/DateTimeTextBox.Watermark">日期與時間</sys:String>
 
 	<!-- EnableRunningScriptDialog -->
@@ -294,8 +294,8 @@
 
 	<!-- MainWindow -->
 	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">已經有新的 {0} 版本。</sys:String>
-	<sys:String x:Key="String/MainWindow.ChineseVariantChanged">中文環境已變更，將重新啟動應用程式以套用。</sys:String>
-	<sys:String x:Key="String/MainWindow.ConfirmLayoutingLotsOfMainWindows">排列較多數量的視窗可能導致不適合的排列結果，是否仍要進行排列？</sys:String>
+	<StaticResourceExtension x:Key="String/MainWindow.ChineseVariantChanged" ResourceKey="String/ApplicationOptions.WillRestartApplicationToTakeEffect.ChineseVariantChanged"/>
+	<sys:String x:Key="String/MainWindow.ConfirmLayingOutLotsOfMainWindows">排列較多數量的視窗可能導致不適合的排列結果，是否仍要進行排列？</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows">排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">水平排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">網格排列視窗</sys:String>

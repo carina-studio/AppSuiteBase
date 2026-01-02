@@ -3,7 +3,7 @@
 					xmlns:sys="using:System">
 
 	<!-- DateTimeFormatTextBox -->
-	<sys:String x:Key="String/DateTimeFormatTextBox.Watermark">Format of Date and Time</sys:String>
+	<sys:String x:Key="String/DateTimeFormatTextBox.Watermark">Date and time format</sys:String>
 
 	<!-- GroupingConstruct -->
 	<sys:String x:Key="String/GroupingConstruct.NamedGroup">Named group</sys:String>
@@ -22,9 +22,9 @@
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.S">Non-white space characters</sys:String>
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.w">Word characters</sys:String>
 	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.W">Non-word characters</sys:String>
-	<sys:String x:Key="String/RegexTextBox.Watermark">Regular Expression</sys:String>
+	<sys:String x:Key="String/RegexTextBox.Watermark">Regular expression</sys:String>
 
 	<!-- TimeSpanFormatTextBox -->
-	<sys:String x:Key="String/TimeSpanFormatTextBox.Watermark">Format of Time Span</sys:String>
+	<sys:String x:Key="String/TimeSpanFormatTextBox.Watermark">Time span format</sys:String>
 	
 </ResourceDictionary>

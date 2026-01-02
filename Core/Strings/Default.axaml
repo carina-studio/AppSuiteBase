@@ -9,18 +9,18 @@
 	<sys:String x:Key="String/ApplicationCulture.ZH_CN">Chinese Simplified</sys:String>
 
 	<!-- ApplicationInfoDialog -->
-	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">Changelist</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">List of loaded assemblies</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">Application icon is modified from icons made by</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">Changes</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">Loaded assemblies</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">Application icon is modified from icons created by</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">from</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon" xml:space="preserve">.</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section1">is an</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section2">open source project</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section3">based application.</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section1">is an application built on the</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section2">open‑source project</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section3">.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.PoweredBy.Section1">Powered by</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.PoweredBy.Section2">and</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.PoweredBy.Section3">.</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">Application will generate more runtime information to application log in Debug Mode, even provides options to enable or adjustment some internal functions. It will leave Debug Mode automatically when you launch application next time.</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">In Debug Mode, the application produces additional runtime logs and exposes options for adjusting internal functions. It will remain in Debug Mode until you manually launch it again.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.CpuUsage">CPU usage</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.CpuUsage.Format">{0:F2}%</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.DeactivateProduct">Deactivate…</sys:String>
@@ -29,14 +29,14 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">Export application logs…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ExternalDependencies">External dependencies…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">Failed to export application logs.</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.FinalizationPendingCount">Pending objects to finalize</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.FinalizationPendingCount">Pending objects for finalization</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET version</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GCFrequency">Garbage Collection (GC) per second</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GCFrequency.Format">{0:F1}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">Project page on GitHub</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">(Installed: {0})</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.ManagedHeapSize">Size of managed heap</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.ManagedHeapUsage">Usage of managed heap</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ManagedHeapSize">Managed heap size</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ManagedHeapUsage">Managed heap usage</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection">Network</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Disconnected">Disconnected</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Format">Connected ({0})</sys:String>
@@ -44,61 +44,61 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">Other information</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrimaryNetworkInterface">Primary network interface</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrimaryNetworkInterface.Format">{0} ({1}), {2}</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicyWasAgreedBefore">You have agreed the《Privacy Policy》.</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.PrivateMemoryUsage">Usage of private memory</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicyWasAgreedBefore">You have agreed to the《Privacy Policy》.</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrivateMemoryUsage">Private memory usage</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessId">Identifier (PID)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessInformation">Process information</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.ProcessorCount">Number of processors</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ProcessorCount">Processor count</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProductAuthorizationInfo">Authorized to {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Products">Products</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProprietaryVersion">(Built by Carina Studio)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.RestartInDebugMode">Restart in Debug Mode</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.RunningScriptCount">Number of running scripts</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Screen.PixelDensity">Scale factor of screen</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.RunningScriptCount">Running scripts count</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Screen.PixelDensity">Screen scale factor</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Screen.PixelDensity.Format">{0:F2}</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Screen.Size">Size of screen</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Screen.Size">Screen size</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Screen.Size.Format">{0} ({1} dip)</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Screen.WorkingArea">Working area of screen</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Screen.WorkingArea">Screen working area</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Screen.WorkingArea.Format">{0} ({1} dip)</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.ScriptRunningLoading">Loading of script running</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ScriptRunningLoading">Script execution load</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ShowAppUpdateDialog">Check for update…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">Application logs exported.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">System information</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.ThreadCount">Number of threads</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ThreadCount">Thread count</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">About {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">Physical RAM</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreementWasAgreedBefore">You have agreed the《User Agreement》.</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreementWasAgreedBefore">You have agreed to the《User Agreement》.</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Version">{0}</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.Website">Website of {0}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Website">{0} website</sys:String>
 
 	<!-- ApplicationOptions -->
 	<sys:String x:Key="String/ApplicationOptions">Application options</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">Accept non-stable application update</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">Receive pre-release updates</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ApplySystemTextScaleFactor">Use system text size</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ApplySystemTextScaleFactor.Description">Apply the system text size to selected parts of user interface.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">Language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">User interface scale factor</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR tool is not installed yet.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">Default language</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.DisableAngle">Do not use ANGLE to render UI</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.DisableAngle.Description">Preventing rendering issues on some graphic cards, but some of visual effects will be affected.</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.EnableLigatureInScript">Enable ligature and contextual alternatives</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">Enable scripting</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">Size of indentation</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DisableAngle">Disable ANGLE rendering</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DisableAngle.Description">Prevent rendering issues with certain graphics cards, but may affect some visual effects.</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableLigatureInScript">Ligatures and contextual alternatives</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">Enable script execution</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">Indent size</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">Show splash screen when launching</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">Target port of log output</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">Need to restart application to take effect.</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect.ChineseVariantChanged">Chinese environment has been changed, need to restart application to take effect.</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.NotifyApplicationUpdate">Notify when application update found</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">Log output port</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">Restart the application for the change to take effect.</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect.ChineseVariantChanged">Chinese environment changed. Restart the application to take effect.</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.NotifyApplicationUpdate">Notify when an update is found</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Others">Other Settings</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.PromptWhenScriptRuntimeErrorOccurred">Prompt when runtime error occurred</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.PromptWhenScriptRuntimeErrorOccurred">Prompt on runtime errors</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Scripting">Scripting</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.ThemeMode">Theme</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UserInterface">User Interface</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">Use spaces for indentation</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.WillCloseAllWindowsToTakeEffect">Will close all windows to take effect.</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">Will restart application to take effect.</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect.ChineseVariantChanged">Chinese environment has been changed, will restart application to take effect.</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.WillCloseAllWindowsToTakeEffect">All windows will close for the change to take effect.</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">The application will restart for the change to take effect.</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect.ChineseVariantChanged">Chinese environment changed. The application will restart to take effect.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartMainWindowsToTakeEffect">Will restart windows to take effect.</sys:String>
 
 	<!-- ApplicationReleasingType -->
@@ -108,30 +108,30 @@
 	<sys:String x:Key="String/ApplicationReleasingType.Stable">Stable</sys:String>
 
 	<!-- ApplicationUpdateDialog -->
-	<sys:String x:Key="String/ApplicationUpdateDialog.AcceptNonStableApplicationUpdate.Description">You can also change these settings in application options.</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.AcceptNonStableApplicationUpdate.Description">You can also change these settings in the application options.</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckForUpdate">Check for update</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckingForUpdate">Checking for update…</sys:String>
-	<sys:String x:Key="String/ApplicationUpdateDialog.DownloadUpdatePackage">Download update</sys:String>
-	<sys:String x:Key="String/ApplicationUpdateDialog.LatestVersion">The version of {0} is the latest.</sys:String>
-	<sys:String x:Key="String/ApplicationUpdateDialog.NewVersionFound">New version of {0} found: {1}</sys:String>
-	<sys:String x:Key="String/ApplicationUpdateDialog.ReleasePage">Details of this update</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.DownloadUpdatePackage">Download and install</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.LatestVersion">{0} is up to date.</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.NewVersionFound">A new version of {0} is available: {1}</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.ReleasePage">Update details</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.StartUpdating">Update</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.Title">Application update</sys:String>
 
 	<!-- ApplicationUpdater -->
-	<sys:String x:Key="String/ApplicationUpdater.DownloadingAutoUpdater">Downloading auto updating component ({0})…</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.DownloadingAutoUpdater">Downloading auto-update component ({0})…</sys:String>
 	<sys:String x:Key="String/ApplicationUpdater.FailedToPrepareForUpdate">Failed to prepare for update.</sys:String>
-	<sys:String x:Key="String/ApplicationUpdater.FailedToStartAutoUpdater">Failed to start auto updater.</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.FailedToStartAutoUpdater">Failed to start auto-update.</sys:String>
 	<sys:String x:Key="String/ApplicationUpdater.PreparingForUpdate">Preparing for update…</sys:String>
-	<sys:String x:Key="String/ApplicationUpdater.ReleasePage">Changes in new version</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.ReleasePage">Changes in the new version</sys:String>
 
 	<!-- AppSuiteApplication -->
 	<sys:String x:Key="String/AppSuiteApplication.InitializingComponents">Initializing components</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">Loading theme</sys:String>
-	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Description">Taking memory snapshot will cause application stop responding for tens of seconds to minutes.</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Description">Taking a memory snapshot may make the application unresponsive for tens of seconds to minutes.</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Failed">Unable to take memory snapshot.</sys:String>
-	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Processing">Taking memory snapshot. Application will stop responding during the process…</sys:String>
-	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Succeeded">Memory snapshot has been taken and saved to '{0}'.</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Processing">Taking memory snapshot. The application will stop responding during the process…</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Succeeded">The memory snapshot has been taken and saved to '{0}'.</sys:String>
 
 	<!-- CommandSearchPaths -->
 	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">Update paths defined by system</sys:String>
@@ -251,11 +251,11 @@
 1.Common date and time format in English.
 2.Common date and time format in current language.
 3.Unix timestamp in seconds/milliseconds/microseconds.
-4.Text in format 'yyyyMMdd_HH:mm:ss.ffffff'. Year, seconds, sub seconds and ':' can be eliminated.</sys:String>
+4.Text in format 'yyyyMMdd_HH:mm:ss.ffffff'. Year, seconds, subseconds and ':' are optional.</sys:String>
 	<sys:String x:Key="String/DateTimeTextBox.Watermark">Date and Time</sys:String>
 
 	<!-- EnableRunningScriptDialog -->
-	<sys:String x:Key="String/EnableRunningScriptDialog.Message">Your computer may be modified or damaged by running script. You need to review the script you wrote or imported carefully before running it. Are you sure to enable scripting?</sys:String>
+	<sys:String x:Key="String/EnableRunningScriptDialog.Message">Running scripts may modify system settings or cause damage to your computer. Please review any script you write or import carefully before running it. Do you want to enable scripting?</sys:String>
 
 	<!-- ExternalDependenciesDialog -->
 	<sys:String x:Key="String/ExternalDependenciesDialog.EditPathEnvVar">Edit PATH environment variable…</sys:String>
@@ -299,21 +299,21 @@
 	<sys:String x:Key="String/LocalizationTest.String">English</sys:String>
 
 	<!-- MainWindow -->
-	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">New version of {0} found.</sys:String>
-	<sys:String x:Key="String/MainWindow.ChineseVariantChanged">Chinese environment has been changed, will restart application to take effect.</sys:String>
-	<sys:String x:Key="String/MainWindow.ConfirmLayoutingLotsOfMainWindows">Layouting lots of windows may cause improper result, do you still want to layout windows?</sys:String>
-	<sys:String x:Key="String/MainWindow.LayoutMainWindows">Layout windows</sys:String>
-	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">Layout windows horizontally</sys:String>
+	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">A new version of {0} is available.</sys:String>
+	<StaticResourceExtension x:Key="String/MainWindow.ChineseVariantChanged" ResourceKey="String/ApplicationOptions.WillRestartApplicationToTakeEffect.ChineseVariantChanged"/>
+	<sys:String x:Key="String/MainWindow.ConfirmLayingOutLotsOfMainWindows">Laying out many windows may lead to incorrect results. Proceed with window layout?</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows">Lay out windows</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">Lay out windows horizontally</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">Tile windows</sys:String>
-	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">Layout windows vertically</sys:String>
-	<sys:String x:Key="String/MainWindow.NetworkConnectionNeededForProductActivation">In order to activate '{0}', please connect to internet or it will be deactivated temporarily after a while.</sys:String>
-	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message">You must read and agree the《Privacy Policy》before you start using {0}.</sys:String>
-	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">You must read and agree the updated《Privacy Policy》before you start using {0}.</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">Lay out windows vertically</sys:String>
+	<sys:String x:Key="String/MainWindow.NetworkConnectionNeededForProductActivation">To activate '{0}', please connect to the internet. Otherwise, it will be temporarily deactivated after a period of time.</sys:String>
+	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message">You must read and agree to the《Privacy Policy》before you start using {0}.</sys:String>
+	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">You must read and agree to the updated《Privacy Policy》before you start using {0}.</sys:String>
 	<sys:String x:Key="String/MainWindow.ReactivateProductNeeded">Unable to activate '{0}', please try activating it again.</sys:String>
-	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS">You are running {0} outside from the 'Applications' folder. We suggest moving the application into the 'Applications' folder to make sure that application can run properly without system permission issue.</sys:String>
+	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS">You are running {0} outside the 'Applications' folder. We recommend moving it into the ‘Applications’ folder to ensure it runs properly and avoids system permission issues.</sys:String>
 	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication">Close application</sys:String>
-	<sys:String x:Key="String/MainWindow.UserAgreement.Message">You must read and agree the《User Agreement》before you start using {0}.</sys:String>
-	<sys:String x:Key="String/MainWindow.UserAgreement.Message.Updated">You must read and agree the updated《User Agreement》before you start using {0}.</sys:String>
+	<sys:String x:Key="String/MainWindow.UserAgreement.Message">You must read and agree to the《User Agreement》before you start using {0}.</sys:String>
+	<sys:String x:Key="String/MainWindow.UserAgreement.Message.Updated">You must read and agree to the updated《User Agreement》before you start using {0}.</sys:String>
 
 	<!-- NetworkInterfaceType -->
 	<sys:String x:Key="String/NetworkInterfaceType.Ethernet">Ethernet</sys:String>
@@ -339,17 +339,17 @@
 	<sys:String x:Key="String/ScriptLanguage.Python_3_4">Python 3.4</sys:String>
 
 	<!-- ScriptRuntimeErrorDialog -->
-	<sys:String x:Key="String/ScriptRuntimeErrorDialog.DefaultMessage">Runtime error occurred while running script:</sys:String>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.DefaultMessage">A runtime error occurred while running script:</sys:String>
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage">{0}</sys:String>
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLine">{0} [Line {1}]</sys:String>
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLineColumn">{0} [Line {1}, Column {2}]</sys:String>
 	<StaticResourceExtension x:Key="String/ScriptRuntimeErrorDialog.PromptWhenScriptRuntimeErrorOccurred" ResourceKey="String/ApplicationOptions.PromptWhenScriptRuntimeErrorOccurred"/>
-	<sys:String x:Key="String/ScriptRuntimeErrorDialog.PromptWhenScriptRuntimeErrorOccurred.Description">You can also change the setting in application options.</sys:String>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.PromptWhenScriptRuntimeErrorOccurred.Description">You can also change the setting in the application options.</sys:String>
 
 	<!-- SelfTestingWindow -->
 	<sys:String x:Key="String/SelfTestingWindow.CancelAllTestCases">Cancel all tests</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.CancelTestCase">Cancel the test</sys:String>
-	<sys:String x:Key="String/SelfTestingWindow.NeedToWaitForRunningTestCases">You need to wait for completion of running test case(s).</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.NeedToWaitForRunningTestCases">You need to wait for the running test case(s) to complete.</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.RunAllTestCases">Run all tests</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.RunningTestCaseInfo">Running '{0}'…</sys:String>
 	<sys:String x:Key="String/SelfTestingWindow.RunTestCase">Run the test</sys:String>
@@ -383,11 +383,11 @@
 
 	<!-- TimeSpanTextBox -->
 	<sys:String x:Key="String/TimeSpanTextBox.FormatDescription">Supported formats:
-1.HH:mm:ss. For ex, 01:12:30 means 1 hour 12 minutes and 30 seconds. You can replace ':' by '-' or ' '.
-2.d.HH:mm:ss.ffffff. For ex, 2.05:12:30.5 means 2 days 5 hours 12 minutes and 30.5 seconds. You can replace ':' by '-' or ' '.
-3.Nanoseconds. For ex, 10000ns.
-4.Microseconds. For ex, 20000us.
-5.Milliseconds. For ex, 30000ms.</sys:String>
+1.HH:mm:ss. For example, 01:12:30 represents 1 hour 12 minutes and 30 seconds. The ':' may be replaced with '-' or space.
+2.d.HH:mm:ss.ffffff. For example, 2.05:12:30.5 represents 2 days, 5 hours, 12 minutes and 30.5 seconds. The ':' may be replaced with '-' or space.
+3.Nanoseconds. For example, 10000ns.
+4.Microseconds. For example, 20000us.
+5.Milliseconds. For example, 30000ms.</sys:String>
 	<sys:String x:Key="String/TimeSpanTextBox.Watermark">Time span</sys:String>
 
 	<!-- TutorialPresenter -->
