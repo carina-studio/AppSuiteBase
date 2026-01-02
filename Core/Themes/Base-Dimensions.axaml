@@ -84,10 +84,10 @@
 	<sys:Double x:Key="Double/Dialog.ControlButton.MinWidth">100</sys:Double>
 	<sys:Double x:Key="Double/Dialog.ControlButton.Separator.Width">15</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Icon.Size">16</sys:Double>
-	<sys:Double x:Key="Double/Dialog.Icon.Size.Description">13</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Icon.Size.Description">12</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Icon.Size.Large">40</sys:Double>
 	<sys:Double x:Key="Double/Dialog.IconControlButton.Icon.Size">14</sys:Double>
-	<sys:Double x:Key="Double/Dialog.Item.MinHeight">44</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Item.MinHeight">40</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Item.MinHeight.Small">14</sys:Double>
 	<sys:Double x:Key="Double/Dialog.ItemSeparator.Stroke">1</sys:Double>
 	<sys:Double x:Key="Double/Dialog.ListActionButton.MinWidth">80</sys:Double>
@@ -99,12 +99,12 @@
 	<sys:Double x:Key="Double/Dialog.Separator.Width.Large">30</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Width.Micro">3</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Width.Small">6</sys:Double>
-	<sys:Double x:Key="Double/Dialog.TextBlock.FontSize">14</sys:Double>
-	<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Description">13</sys:Double>
+	<sys:Double x:Key="Double/Dialog.TextBlock.FontSize">13</sys:Double>
+	<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Description">12</sys:Double>
 	<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Header1">15</sys:Double>
 	<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Header2">14</sys:Double>
-	<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.ItemsGroupHeader">16</sys:Double>
-	<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Label">14</sys:Double>
+	<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.ItemsGroupHeader">15</sys:Double>
+	<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.Label">13</sys:Double>
 	<Thickness x:Key="Thickness/Dialog.ContentPanel.Margin.Indented">28,0,0,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding">20</Thickness>
 	<Thickness x:Key="Thickness/Dialog.ContentPanel.Padding.WithHeader">22,20,22,20</Thickness>
@@ -137,14 +137,14 @@
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Description.BelowCheckBox">-1,-7,0,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header1">-12,0,-12,10</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Header2">-12,0,-12,8</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.ItemsGroupHeader">0,0,0,10</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.ItemsGroupHeader">0,0,0,8</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Label">0,1,0,1</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.Label.WithControlBelow">0,1,0,3</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Description">0,0,10,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header1">12,11,12,11</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Header2">12,7,12,7</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.ItemsGroupHeader">0,1,0,1</Thickness>
-	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Label">0,1,10,1</Thickness>
+	<Thickness x:Key="Thickness/Dialog.TextBlock.Padding.Label">0,0,10,0</Thickness>
 	<Thickness x:Key="Thickness/Dialog.TreeView.Margin">-1,1,0,1</Thickness>
 
 	<!-- DocumentViewerWindow -->

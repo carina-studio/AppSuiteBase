@@ -21,6 +21,8 @@
 
 			<!-- Dialog -->
 			<CornerRadius x:Key="CornerRadius/Dialog.ItemsGroup">8</CornerRadius>
+			<sys:Double x:Key="Double/Dialog.TextBlock.FontSize.ItemsGroupHeader">16</sys:Double>
+			<Thickness x:Key="Thickness/Dialog.TextBlock.Margin.ItemsGroupHeader">0,0,0,10</Thickness>
 
 			<!-- ListBoxItem -->
 			<CornerRadius x:Key="CornerRadius/ListBoxItem">4</CornerRadius>
