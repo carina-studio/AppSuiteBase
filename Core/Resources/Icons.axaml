@@ -978,7 +978,7 @@
 	<DrawingImage x:Key="Image/Icon.Key.Colored">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Key}" Geometry="{StaticResource Geometry/Icon.Key}"/>
 	</DrawingImage>
-	<DrawingImage x:Key="Image/Icon.Key.Colored.Outline">
+	<DrawingImage x:Key="Image/Icon.Key.Colored.Gradient">
 		<GeometryDrawing Geometry="{StaticResource Geometry/Icon.Key}">
 			<GeometryDrawing.Brush>
 				<LinearGradientBrush EndPoint="86.7%,76.5%" StartPoint="10.2%,30.6%">
