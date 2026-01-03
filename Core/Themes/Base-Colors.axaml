@@ -165,7 +165,7 @@
 	<Color x:Key="Color/Icon.Inverse">#ffffff</Color>
 	<Color x:Key="Color/Icon.JavaScript">#e6bb00</Color>
 	<Color x:Key="Color/Icon.Key">#ccaa00</Color>
-	<Color x:Key="Color/Icon.Key.Dark">#997f00</Color>
+	<Color x:Key="Color/Icon.Key.Dark">#b39500</Color>
 	<Color x:Key="Color/Icon.Key.Light">#ffd400</Color>
 	<Color x:Key="Color/Icon.Light">#ffffff</Color>
 	<Color x:Key="Color/Icon.Lightbulb">#ffd800</Color>
