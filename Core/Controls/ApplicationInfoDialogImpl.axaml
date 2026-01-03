@@ -115,7 +115,6 @@
 						<Separator Classes="TextSeparator"/>
 						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.OpenSourceBased.Section3}" VerticalAlignment="Center"/>
 					</WrapPanel>
-					<Separator Classes="Dialog_Separator_Small" IsVisible="{Binding #openSourceAttrPanel.IsVisible}"/>
 
 					<!-- App icon attribution (Flaticon) -->
 					<WrapPanel Orientation="Horizontal" IsVisible="{Binding IconWebSite, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:ApplicationInfo+ApplicationIconWebSite.Flaticon}}">
@@ -143,7 +142,7 @@
 						<Separator Classes="TextSeparator"/>
 						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.PoweredBy.Section3}" VerticalAlignment="Center"/>
 					</WrapPanel>
-					<Separator Classes="Dialog_Separator_Small"/>
+					<Separator Classes="Dialog_Separator"/>
 					<TextBlock x:CompileBindings="False" Text="{Binding #window.Copyright, Mode=OneTime}"/>
 					<Separator Classes="Dialog_Separator_Large"/>
 

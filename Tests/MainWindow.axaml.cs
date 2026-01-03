@@ -732,7 +732,7 @@ namespace CarinaStudio.AppSuite.Tests
                     });
                     this.ShowTutorial(nextTutorial);
                 };
-                it.Bind(Tutorial.IconProperty, this.GetResourceObservable("Image/Icon.Lightbulb.Colored"));
+                it.Bind(Tutorial.IconProperty, this.GetResourceObservable("Image/Icon.Lightbulb.Colored.Gradient"));
                 it.SkippingAllTutorialRequested += (_, e) => 
                 { };
             });

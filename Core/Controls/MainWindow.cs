@@ -329,7 +329,7 @@ public abstract class MainWindow : Window
                     if (this.appUpdateNotification == notification)
                         this.appUpdateNotification = null;
                 };
-                notification.BindToResource(Notification.IconProperty, this, "Image/Icon.Update.Colored");
+                notification.BindToResource(Notification.IconProperty, this, "Image/Icon.Update.Colored.Gradient");
                 notification.Bind(Notification.MessageProperty, new FormattedString().Also(it =>
                 {
                     it.Arg1 = this.Application.Name;
@@ -408,7 +408,7 @@ public abstract class MainWindow : Window
         {
             notificationPresenter.AddNotification(new Notification().Also(it =>
             {
-                it.BindToResource(Notification.IconProperty, this, "Image/Icon.Warning.Colored");
+                it.BindToResource(Notification.IconProperty, this, "Image/Icon.Warning.Colored.Gradient");
                 it.Bind(Notification.MessageProperty, new FormattedString().Also(it =>
                 {
                     it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{productId}"));
@@ -625,7 +625,7 @@ public abstract class MainWindow : Window
                     })
                 ];
                 notification.Dismissed += (_, _) => taskCompletionSource.TrySetResult();
-                notification.BindToResource(Notification.IconProperty, this, "Image/Icon.Warning.Colored");
+                notification.BindToResource(Notification.IconProperty, this, "Image/Icon.Warning.Colored.Gradient");
                 notification.Bind(Notification.MessageProperty, new FormattedString().Also(it =>
                 {
                     it.Bind(FormattedString.Arg1Property, asApp.GetObservableString($"Product.{productId}"));

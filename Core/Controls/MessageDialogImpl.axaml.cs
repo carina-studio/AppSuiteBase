@@ -299,7 +299,9 @@ class MessageDialogImpl : Dialog
 		var app = this.Application;
 		if (this.Icon == MessageDialogIcon.Custom)
 			this.SetValue(IconImageProperty, this.CustomIcon);
-		else if (((Avalonia.Application)app).TryFindResource<IImage>($"Image/Icon.{this.Icon}.Colored", out var image))
+		else if (app.TryFindResource($"Image/Icon.{this.Icon}.Colored.Gradient", out IImage? gradientImage))
+			this.SetValue(IconImageProperty, gradientImage);
+		else if (app.TryFindResource($"Image/Icon.{this.Icon}.Colored", out IImage? image))
 			this.SetValue(IconImageProperty, image);
 		
 		// setup "do not ask again" UI

@@ -400,6 +400,19 @@
 			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Alert}" Geometry="{StaticResource Geometry/Icon.Alert}"/>
 		</DrawingGroup>
 	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Alert.Colored.Gradient">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z"/>
+			<GeometryDrawing Geometry="{StaticResource Geometry/Icon.Alert}">
+				<GeometryDrawing.Brush>
+					<LinearGradientBrush EndPoint="70%,70%" StartPoint="30%,30%">
+						<GradientStop Offset="0" Color="{DynamicResource Color/Icon.Alert.Light}"/>
+						<GradientStop Offset="1" Color="{DynamicResource Color/Icon.Alert.Dark}"/>
+					</LinearGradientBrush>
+				</GeometryDrawing.Brush>
+			</GeometryDrawing>
+		</DrawingGroup>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Alert.Light">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Alert}"/>
 	</DrawingImage>
@@ -604,28 +617,30 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="{StaticResource Geometry/Icon.Cpu}"/>
 	</DrawingImage>
 
-	<!-- MIT License, https://www.svgrepo.com/page/licensing#MIT -->
+	<!-- CC0 License, https://github.com/dotnet/brand#CC0-1.0-1-ov-file -->
 	<DrawingImage x:Key="Image/Icon.CSharp">
 		<DrawingGroup>
-			<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="F1 M27.6947 22.9999C27.883 22.6617 28 22.2807 28 21.9385L28 10.0613C28 9.71913 27.8831 9.33818 27.6947 9L16 16L27.6947 22.9999Z F1 M17.0395 29.7433L26.9611 23.8047C27.2469 23.6336 27.5067 23.3382 27.695 23L16.0003 16L4.30566 23C4.49398 23.3382 4.75382 23.6337 5.03955 23.8047L14.9611 29.7433C15.5326 30.0855 16.468 30.0855 17.0395 29.7433Z F1 M27.6947 8.99996C27.5064 8.6617 27.2465 8.36629 26.9608 8.19521L17.0392 2.25662C16.4677 1.91446 15.5323 1.91446 14.9608 2.25662L5.03922 8.19521C4.46761 8.53729 4 9.37709 4 10.0613L4 21.9386C4 22.2807 4.11694 22.6618 4.30533 23L16 16L27.6947 8.99996Z" />
-			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Inverse}" Geometry="F1 M16.0385 24C11.6061 24 8 20.4112 8 16C8 11.5888 11.6061 8 16.0385 8C18.8458 8 21.4674 9.47569 22.919 11.8618L19.4765 13.9265C18.7492 12.736 17.4399 12 16.0385 12C13.8222 12 12.0193 13.7944 12.0193 16C12.0193 18.2056 13.8222 20 16.0385 20C17.4362 20 18.7421 19.2681 19.4707 18.0832L22.9205 20.1359C21.4692 22.5234 18.8467 24 16.0385 24Z" />
-			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Inverse}" Geometry="F0 M25.0001 13L25.0001 13.9974L22.9999 13.9974L22.9999 13L22.0001 13L22.0001 13.9974L21 13.9974L21 15L22.0001 15L22.0001 16.9948L21 16.9948L21 18L22.0001 18L22.0001 19L22.9999 19L23 18L25.0001 18L25.0001 19L25.9999 19L25.9999 18L27 18L27 17L25.9999 17L25.9999 15L27 15L27 13.9974L25.9999 13.9974L25.9999 13L25.0001 13ZM25.0001 17L25.0001 15L22.9999 15L22.9999 16.9948L25.0001 17Z" />
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="M8 24.4518V47.5458C8 50.4038 9.524 53.0458 12 54.4738L32 66.0218C34.476 67.4518 37.524 67.4518 40 66.0218L60 54.4738C62.476 53.0438 64 50.4038 64 47.5458V24.4518C64 21.5938 62.476 18.9518 60 17.5238L40 5.97777C37.524 4.54777 34.476 4.54777 32 5.97777L12 17.5238C9.524 18.9538 8 21.5938 8 24.4518Z" />
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Inverse}" Geometry="M22 32V40C22 40.53 22.21 41.04 22.586 41.414C22.962 41.79 23.47 42 24 42C24.53 42 25.04 41.79 25.414 41.414C25.79 41.038 26 40.53 26 40C26 39.47 26.21 38.96 26.586 38.586C26.962 38.21 27.47 38 28 38C28.53 38 29.04 38.21 29.414 38.586C29.79 38.962 30 39.47 30 40C30 41.592 29.368 43.118 28.242 44.242C27.116 45.368 25.59 46 24 46C22.41 46 20.882 45.368 19.758 44.242C18.632 43.116 18 41.59 18 40V32C18 30.408 18.632 28.882 19.758 27.758C20.884 26.632 22.41 26 24 26C25.59 26 27.118 26.632 28.242 27.758C29.366 28.884 30 30.41 30 32C30 32.53 29.79 33.04 29.414 33.414C29.038 33.79 28.53 34 28 34C27.47 34 26.96 33.79 26.586 33.414C26.21 33.038 26 32.53 26 32C26 31.47 25.79 30.96 25.414 30.586C25.038 30.21 24.53 30 24 30C23.47 30 22.96 30.21 22.586 30.586C22.21 30.962 22 31.47 22 32ZM54 40C54 40.53 53.79 41.04 53.414 41.414C53.038 41.79 52.53 42 52 42H50V44C50 44.53 49.79 45.04 49.414 45.414C49.038 45.788 48.53 46 48 46C47.47 46 46.96 45.79 46.586 45.414C46.212 45.038 46 44.53 46 44V42H42V44C42 44.53 41.79 45.04 41.414 45.414C41.038 45.788 40.53 46 40 46C39.47 46 38.96 45.79 38.586 45.414C38.21 45.038 38 44.53 38 44V42H36C35.47 42 34.96 41.79 34.586 41.414C34.21 41.038 34 40.53 34 40C34 39.47 34.21 38.96 34.586 38.586C34.962 38.21 35.47 38 36 38H38V34H36C35.47 34 34.96 33.79 34.586 33.414C34.21 33.038 34 32.53 34 32C34 31.47 34.21 30.96 34.586 30.586C34.962 30.21 35.47 30 36 30H38V28C38 27.47 38.21 26.96 38.586 26.586C38.962 26.21 39.47 26 40 26C40.53 26 41.04 26.21 41.414 26.586C41.79 26.962 42 27.47 42 28V30H46V28C46 27.47 46.21 26.96 46.586 26.586C46.962 26.21 47.47 26 48 26C48.53 26 49.04 26.21 49.414 26.586C49.788 26.962 50 27.47 50 28V30H52C52.53 30 53.04 30.21 53.414 30.586C53.788 30.962 54 31.47 54 32C54 32.53 53.79 33.04 53.414 33.414C53.038 33.79 52.53 34 52 34H50V38H52C52.53 38 53.04 38.21 53.414 38.586C53.788 38.962 54 39.47 54 40ZM46 34H42V38H46V34Z" />
 		</DrawingGroup>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.CSharp.Colored">
 		<DrawingGroup>
-			<GeometryDrawing Brush="{DynamicResource Brush/Icon.CSharp.Middle}" Geometry="F1 M27.6947 22.9999C27.883 22.6617 28 22.2807 28 21.9385L28 10.0613C28 9.71913 27.8831 9.33818 27.6947 9L16 16L27.6947 22.9999Z" />
-			<GeometryDrawing Brush="{DynamicResource Brush/Icon.CSharp.Dark}" Geometry="F1 M17.0395 29.7433L26.9611 23.8047C27.2469 23.6336 27.5067 23.3382 27.695 23L16.0003 16L4.30566 23C4.49398 23.3382 4.75382 23.6337 5.03955 23.8047L14.9611 29.7433C15.5326 30.0855 16.468 30.0855 17.0395 29.7433Z" />
-			<GeometryDrawing Brush="{DynamicResource Brush/Icon.CSharp.Light}" Geometry="F1 M27.6947 8.99996C27.5064 8.6617 27.2465 8.36629 26.9608 8.19521L17.0392 2.25662C16.4677 1.91446 15.5323 1.91446 14.9608 2.25662L5.03922 8.19521C4.46761 8.53729 4 9.37709 4 10.0613L4 21.9386C4 22.2807 4.11694 22.6618 4.30533 23L16 16L27.6947 8.99996Z" />
-			<GeometryDrawing Brush="#FFFFFF" Geometry="F1 M16.0385 24C11.6061 24 8 20.4112 8 16C8 11.5888 11.6061 8 16.0385 8C18.8458 8 21.4674 9.47569 22.919 11.8618L19.4765 13.9265C18.7492 12.736 17.4399 12 16.0385 12C13.8222 12 12.0193 13.7944 12.0193 16C12.0193 18.2056 13.8222 20 16.0385 20C17.4362 20 18.7421 19.2681 19.4707 18.0832L22.9205 20.1359C21.4692 22.5234 18.8467 24 16.0385 24Z" />
-			<GeometryDrawing Brush="#FFFFFF" Geometry="F0 M25.0001 13L25.0001 13.9974L22.9999 13.9974L22.9999 13L22.0001 13L22.0001 13.9974L21 13.9974L21 15L22.0001 15L22.0001 16.9948L21 16.9948L21 18L22.0001 18L22.0001 19L22.9999 19L23 18L25.0001 18L25.0001 19L25.9999 19L25.9999 18L27 18L27 17L25.9999 17L25.9999 15L27 15L27 13.9974L25.9999 13.9974L25.9999 13L25.0001 13ZM25.0001 17L25.0001 15L22.9999 15L22.9999 16.9948L25.0001 17Z" />
+			<GeometryDrawing Geometry="M8 24.4518V47.5458C8 50.4038 9.524 53.0458 12 54.4738L32 66.0218C34.476 67.4518 37.524 67.4518 40 66.0218L60 54.4738C62.476 53.0438 64 50.4038 64 47.5458V24.4518C64 21.5938 62.476 18.9518 60 17.5238L40 5.97777C37.524 4.54777 34.476 4.54777 32 5.97777L12 17.5238C9.524 18.9538 8 21.5938 8 24.4518Z">
+				<GeometryDrawing.Brush>
+					<LinearGradientBrush EndPoint="56.25%,90.97%" StartPoint="18.75%,25.69%">
+						<GradientStop Offset="0" Color="{DynamicResource Color/Icon.CSharp.Light}"/>
+						<GradientStop Offset="1" Color="{DynamicResource Color/Icon.CSharp.Dark}"/>
+					</LinearGradientBrush>
+				</GeometryDrawing.Brush>
+			</GeometryDrawing>
+			<GeometryDrawing Brush="#ffffff" Geometry="M22 32V40C22 40.53 22.21 41.04 22.586 41.414C22.962 41.79 23.47 42 24 42C24.53 42 25.04 41.79 25.414 41.414C25.79 41.038 26 40.53 26 40C26 39.47 26.21 38.96 26.586 38.586C26.962 38.21 27.47 38 28 38C28.53 38 29.04 38.21 29.414 38.586C29.79 38.962 30 39.47 30 40C30 41.592 29.368 43.118 28.242 44.242C27.116 45.368 25.59 46 24 46C22.41 46 20.882 45.368 19.758 44.242C18.632 43.116 18 41.59 18 40V32C18 30.408 18.632 28.882 19.758 27.758C20.884 26.632 22.41 26 24 26C25.59 26 27.118 26.632 28.242 27.758C29.366 28.884 30 30.41 30 32C30 32.53 29.79 33.04 29.414 33.414C29.038 33.79 28.53 34 28 34C27.47 34 26.96 33.79 26.586 33.414C26.21 33.038 26 32.53 26 32C26 31.47 25.79 30.96 25.414 30.586C25.038 30.21 24.53 30 24 30C23.47 30 22.96 30.21 22.586 30.586C22.21 30.962 22 31.47 22 32ZM54 40C54 40.53 53.79 41.04 53.414 41.414C53.038 41.79 52.53 42 52 42H50V44C50 44.53 49.79 45.04 49.414 45.414C49.038 45.788 48.53 46 48 46C47.47 46 46.96 45.79 46.586 45.414C46.212 45.038 46 44.53 46 44V42H42V44C42 44.53 41.79 45.04 41.414 45.414C41.038 45.788 40.53 46 40 46C39.47 46 38.96 45.79 38.586 45.414C38.21 45.038 38 44.53 38 44V42H36C35.47 42 34.96 41.79 34.586 41.414C34.21 41.038 34 40.53 34 40C34 39.47 34.21 38.96 34.586 38.586C34.962 38.21 35.47 38 36 38H38V34H36C35.47 34 34.96 33.79 34.586 33.414C34.21 33.038 34 32.53 34 32C34 31.47 34.21 30.96 34.586 30.586C34.962 30.21 35.47 30 36 30H38V28C38 27.47 38.21 26.96 38.586 26.586C38.962 26.21 39.47 26 40 26C40.53 26 41.04 26.21 41.414 26.586C41.79 26.962 42 27.47 42 28V30H46V28C46 27.47 46.21 26.96 46.586 26.586C46.962 26.21 47.47 26 48 26C48.53 26 49.04 26.21 49.414 26.586C49.788 26.962 50 27.47 50 28V30H52C52.53 30 53.04 30.21 53.414 30.586C53.788 30.962 54 31.47 54 32C54 32.53 53.79 33.04 53.414 33.414C53.038 33.79 52.53 34 52 34H50V38H52C52.53 38 53.04 38.21 53.414 38.586C53.788 38.962 54 39.47 54 40ZM46 34H42V38H46V34Z" />
 		</DrawingGroup>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.CSharp.Light">
 		<DrawingGroup>
-			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="F1 M27.6947 22.9999C27.883 22.6617 28 22.2807 28 21.9385L28 10.0613C28 9.71913 27.8831 9.33818 27.6947 9L16 16L27.6947 22.9999Z F1 M17.0395 29.7433L26.9611 23.8047C27.2469 23.6336 27.5067 23.3382 27.695 23L16.0003 16L4.30566 23C4.49398 23.3382 4.75382 23.6337 5.03955 23.8047L14.9611 29.7433C15.5326 30.0855 16.468 30.0855 17.0395 29.7433Z F1 M27.6947 8.99996C27.5064 8.6617 27.2465 8.36629 26.9608 8.19521L17.0392 2.25662C16.4677 1.91446 15.5323 1.91446 14.9608 2.25662L5.03922 8.19521C4.46761 8.53729 4 9.37709 4 10.0613L4 21.9386C4 22.2807 4.11694 22.6618 4.30533 23L16 16L27.6947 8.99996Z" />
-			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Dark}" Geometry="F1 M16.0385 24C11.6061 24 8 20.4112 8 16C8 11.5888 11.6061 8 16.0385 8C18.8458 8 21.4674 9.47569 22.919 11.8618L19.4765 13.9265C18.7492 12.736 17.4399 12 16.0385 12C13.8222 12 12.0193 13.7944 12.0193 16C12.0193 18.2056 13.8222 20 16.0385 20C17.4362 20 18.7421 19.2681 19.4707 18.0832L22.9205 20.1359C21.4692 22.5234 18.8467 24 16.0385 24Z" />
-			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Dark}" Geometry="F0 M25.0001 13L25.0001 13.9974L22.9999 13.9974L22.9999 13L22.0001 13L22.0001 13.9974L21 13.9974L21 15L22.0001 15L22.0001 16.9948L21 16.9948L21 18L22.0001 18L22.0001 19L22.9999 19L23 18L25.0001 18L25.0001 19L25.9999 19L25.9999 18L27 18L27 17L25.9999 17L25.9999 15L27 15L27 13.9974L25.9999 13.9974L25.9999 13L25.0001 13ZM25.0001 17L25.0001 15L22.9999 15L22.9999 16.9948L25.0001 17Z" />
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Light}" Geometry="M8 24.4518V47.5458C8 50.4038 9.524 53.0458 12 54.4738L32 66.0218C34.476 67.4518 37.524 67.4518 40 66.0218L60 54.4738C62.476 53.0438 64 50.4038 64 47.5458V24.4518C64 21.5938 62.476 18.9518 60 17.5238L40 5.97777C37.524 4.54777 34.476 4.54777 32 5.97777L12 17.5238C9.524 18.9538 8 21.5938 8 24.4518Z" />
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Dark}" Geometry="M22 32V40C22 40.53 22.21 41.04 22.586 41.414C22.962 41.79 23.47 42 24 42C24.53 42 25.04 41.79 25.414 41.414C25.79 41.038 26 40.53 26 40C26 39.47 26.21 38.96 26.586 38.586C26.962 38.21 27.47 38 28 38C28.53 38 29.04 38.21 29.414 38.586C29.79 38.962 30 39.47 30 40C30 41.592 29.368 43.118 28.242 44.242C27.116 45.368 25.59 46 24 46C22.41 46 20.882 45.368 19.758 44.242C18.632 43.116 18 41.59 18 40V32C18 30.408 18.632 28.882 19.758 27.758C20.884 26.632 22.41 26 24 26C25.59 26 27.118 26.632 28.242 27.758C29.366 28.884 30 30.41 30 32C30 32.53 29.79 33.04 29.414 33.414C29.038 33.79 28.53 34 28 34C27.47 34 26.96 33.79 26.586 33.414C26.21 33.038 26 32.53 26 32C26 31.47 25.79 30.96 25.414 30.586C25.038 30.21 24.53 30 24 30C23.47 30 22.96 30.21 22.586 30.586C22.21 30.962 22 31.47 22 32ZM54 40C54 40.53 53.79 41.04 53.414 41.414C53.038 41.79 52.53 42 52 42H50V44C50 44.53 49.79 45.04 49.414 45.414C49.038 45.788 48.53 46 48 46C47.47 46 46.96 45.79 46.586 45.414C46.212 45.038 46 44.53 46 44V42H42V44C42 44.53 41.79 45.04 41.414 45.414C41.038 45.788 40.53 46 40 46C39.47 46 38.96 45.79 38.586 45.414C38.21 45.038 38 44.53 38 44V42H36C35.47 42 34.96 41.79 34.586 41.414C34.21 41.038 34 40.53 34 40C34 39.47 34.21 38.96 34.586 38.586C34.962 38.21 35.47 38 36 38H38V34H36C35.47 34 34.96 33.79 34.586 33.414C34.21 33.038 34 32.53 34 32C34 31.47 34.21 30.96 34.586 30.586C34.962 30.21 35.47 30 36 30H38V28C38 27.47 38.21 26.96 38.586 26.586C38.962 26.21 39.47 26 40 26C40.53 26 41.04 26.21 41.414 26.586C41.79 26.962 42 27.47 42 28V30H46V28C46 27.47 46.21 26.96 46.586 26.586C46.962 26.21 47.47 26 48 26C48.53 26 49.04 26.21 49.414 26.586C49.788 26.962 50 27.47 50 28V30H52C52.53 30 53.04 30.21 53.414 30.586C53.788 30.962 54 31.47 54 32C54 32.53 53.79 33.04 53.414 33.414C53.038 33.79 52.53 34 52 34H50V38H52C52.53 38 53.04 38.21 53.414 38.586C53.788 38.962 54 39.47 54 40ZM46 34H42V38H46V34Z" />
 		</DrawingGroup>
 	</DrawingImage>
 
@@ -726,6 +741,19 @@
 		<DrawingGroup>
 			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z"/>
 			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Error}" Geometry="{StaticResource Geometry/Icon.Error}"/>
+		</DrawingGroup>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Error.Colored.Gradient">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z"/>
+			<GeometryDrawing Geometry="{StaticResource Geometry/Icon.Error}">
+				<GeometryDrawing.Brush>
+					<LinearGradientBrush EndPoint="70%,70%" StartPoint="30%,30%">
+						<GradientStop Offset="0" Color="{DynamicResource Color/Icon.Error.Light}"/>
+						<GradientStop Offset="1" Color="{DynamicResource Color/Icon.Error.Dark}"/>
+					</LinearGradientBrush>
+				</GeometryDrawing.Brush>
+			</GeometryDrawing>
 		</DrawingGroup>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Error.Light">
@@ -858,13 +886,23 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Heart}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Heart.Colored">
-		<GeometryDrawing Brush="#ff006e" Geometry="{StaticResource Geometry/Icon.Heart}"/>
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Heart}" Geometry="{StaticResource Geometry/Icon.Heart}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Heart.Colored.Gradient">
+		<GeometryDrawing Geometry="{StaticResource Geometry/Icon.Heart}">
+			<GeometryDrawing.Brush>
+				<LinearGradientBrush EndPoint="74%,74%" StartPoint="15.3%,10.2%">
+					<GradientStop Offset="0" Color="{DynamicResource Color/Icon.Heart.Light}"/>
+					<GradientStop Offset="1" Color="{DynamicResource Color/Icon.Heart.Dark}"/>
+				</LinearGradientBrush>
+			</GeometryDrawing.Brush>
+		</GeometryDrawing>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Heart.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Heart.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Heart.Outline.Colored">
-		<GeometryDrawing Brush="#ff006e" Geometry="{StaticResource Geometry/Icon.Heart.Outline}"/>
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Heart}" Geometry="{StaticResource Geometry/Icon.Heart.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.History">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.History}"/>
@@ -883,6 +921,19 @@
 		<DrawingGroup>
 			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z"/>
 			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Information}" Geometry="{StaticResource Geometry/Icon.Information}"/>
+		</DrawingGroup>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Information.Colored.Gradient">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z"/>
+			<GeometryDrawing Geometry="{StaticResource Geometry/Icon.Information}">
+				<GeometryDrawing.Brush>
+					<LinearGradientBrush EndPoint="70%,70%" StartPoint="30%,30%">
+						<GradientStop Offset="0" Color="{DynamicResource Color/Icon.Information.Light}"/>
+						<GradientStop Offset="1" Color="{DynamicResource Color/Icon.Information.Dark}"/>
+					</LinearGradientBrush>
+				</GeometryDrawing.Brush>
+			</GeometryDrawing>
 		</DrawingGroup>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Information.Light">
@@ -925,13 +976,23 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Key}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Key.Colored">
-		<GeometryDrawing Brush="#ccaa00" Geometry="{StaticResource Geometry/Icon.Key}"/>
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Key}" Geometry="{StaticResource Geometry/Icon.Key}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Key.Colored.Outline">
+		<GeometryDrawing Geometry="{StaticResource Geometry/Icon.Key}">
+			<GeometryDrawing.Brush>
+				<LinearGradientBrush EndPoint="86.7%,76.5%" StartPoint="10.2%,30.6%">
+					<GradientStop Offset="0" Color="{DynamicResource Color/Icon.Key.Light}"/>
+					<GradientStop Offset="1" Color="{DynamicResource Color/Icon.Key.Dark}"/>
+				</LinearGradientBrush>
+			</GeometryDrawing.Brush>
+		</GeometryDrawing>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Key.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Key.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Key.Outline.Colored">
-		<GeometryDrawing Brush="#ccaa00" Geometry="{StaticResource Geometry/Icon.Key.Outline}"/>
+		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Key}" Geometry="{StaticResource Geometry/Icon.Key.Outline}"/>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Lab" Drawing="{StaticResource Drawing/Icon.Lab}"/>
 	<DrawingImage x:Key="Image/Icon.Layout.Horizontal">
@@ -959,6 +1020,19 @@
 		<DrawingGroup>
 			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M26 176C26 93.1573 93.1573 26 176 26C258.843 26 326 93.1573 326 176C326 258.843 258.843 326 176 326C93.1573 326 26 258.843 26 176Z"/>
 			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Lightbulb}" Geometry="{StaticResource Geometry/Icon.Lightbulb}"/>
+		</DrawingGroup>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Lightbulb.Colored.Gradient">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M26 176C26 93.1573 93.1573 26 176 26C258.843 26 326 93.1573 326 176C326 258.843 258.843 326 176 326C93.1573 326 26 258.843 26 176Z"/>
+			<GeometryDrawing Geometry="{StaticResource Geometry/Icon.Lightbulb}">
+				<GeometryDrawing.Brush>
+					<LinearGradientBrush EndPoint="61.2%,66.3%" StartPoint="35.7%,5%">
+						<GradientStop Offset="0" Color="{DynamicResource Color/Icon.Lightbulb.Light}"/>
+						<GradientStop Offset="1" Color="{DynamicResource Color/Icon.Lightbulb.Dark}"/>
+					</LinearGradientBrush>
+				</GeometryDrawing.Brush>
+			</GeometryDrawing>
 		</DrawingGroup>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Lightbulb.Outline">
@@ -1077,6 +1151,19 @@
 		<DrawingGroup>
 			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z"/>
 			<GeometryDrawing Brush="{DynamicResource Brush/Icon.OK}" Geometry="{StaticResource Geometry/Icon.OK}"/>
+		</DrawingGroup>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.OK.Colored.Gradient">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z"/>
+			<GeometryDrawing Geometry="{StaticResource Geometry/Icon.OK}">
+				<GeometryDrawing.Brush>
+					<LinearGradientBrush EndPoint="70%,70%" StartPoint="30%,30%">
+						<GradientStop Offset="0" Color="{DynamicResource Color/Icon.OK.Light}"/>
+						<GradientStop Offset="1" Color="{DynamicResource Color/Icon.OK.Dark}"/>
+					</LinearGradientBrush>
+				</GeometryDrawing.Brush>
+			</GeometryDrawing>
 		</DrawingGroup>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.OK.Outline">
@@ -1236,6 +1323,16 @@
 	<DrawingImage x:Key="Image/Icon.PrivacyPolicy.Colored">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Warning}" Geometry="{StaticResource Geometry/Icon.PrivacyPolicy}"/>
 	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.PrivacyPolicy.Colored.Gradient">
+		<GeometryDrawing Geometry="{StaticResource Geometry/Icon.PrivacyPolicy}">
+			<GeometryDrawing.Brush>
+				<LinearGradientBrush EndPoint="70%,70%" StartPoint="30%,30%">
+					<GradientStop Offset="0" Color="{DynamicResource Color/Icon.Warning.Light}"/>
+					<GradientStop Offset="1" Color="{DynamicResource Color/Icon.Warning.Dark}"/>
+				</LinearGradientBrush>
+			</GeometryDrawing.Brush>
+		</GeometryDrawing>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.PrivacyPolicy.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.PrivacyPolicy.Outline}"/>
 	</DrawingImage>
@@ -1249,6 +1346,19 @@
 		<DrawingGroup>
 			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Professional.Foreground}" Geometry="M4.5 7L19.5 7L19.5 17L4.5 17L4.5 7Z"/>
 			<GeometryDrawing Brush="{DynamicResource Brush/Accent}" Geometry="{StaticResource Geometry/Icon.Professional}"/>
+		</DrawingGroup>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Professional.Colored.Gradient">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Professional.Foreground}" Geometry="M4.5 7L19.5 7L19.5 17L4.5 17L4.5 7Z"/>
+			<GeometryDrawing Geometry="{StaticResource Geometry/Icon.Professional}">
+				<GeometryDrawing.Brush>
+					<LinearGradientBrush EndPoint="74%,86.7%" StartPoint="28.1%,12.8%">
+						<GradientStop Offset="0" Color="{DynamicResource SystemAccentColorLight1}"/>
+						<GradientStop Offset="1" Color="{DynamicResource SystemAccentColorDark1}"/>
+					</LinearGradientBrush>
+				</GeometryDrawing.Brush>
+			</GeometryDrawing>
 		</DrawingGroup>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Python">
@@ -1270,6 +1380,19 @@
 		<DrawingGroup>
 			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z"/>
 			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Question}" Geometry="{StaticResource Geometry/Icon.Question}"/>
+		</DrawingGroup>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Question.Colored.Gradient">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z"/>
+			<GeometryDrawing Geometry="{StaticResource Geometry/Icon.Question}">
+				<GeometryDrawing.Brush>
+					<LinearGradientBrush EndPoint="70%,70%" StartPoint="30%,30%">
+						<GradientStop Offset="0" Color="{DynamicResource Color/Icon.Question.Light}"/>
+						<GradientStop Offset="1" Color="{DynamicResource Color/Icon.Question.Dark}"/>
+					</LinearGradientBrush>
+				</GeometryDrawing.Brush>
+			</GeometryDrawing>
 		</DrawingGroup>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Question.Light">
@@ -1386,6 +1509,7 @@
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.OK}"/>
 	</DrawingImage>
 	<StaticResourceExtension x:Key="Image/Icon.Success.Colored" ResourceKey="Image/Icon.OK.Colored"/>
+	<StaticResourceExtension x:Key="Image/Icon.Success.Colored.Gradient" ResourceKey="Image/Icon.OK.Colored.Gradient"/>
 	<DrawingImage x:Key="Image/Icon.Success.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.OK.Outline}"/>
 	</DrawingImage>
@@ -1446,6 +1570,19 @@
 			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Information}" Geometry="{StaticResource Geometry/Icon.Update}"/>
 		</DrawingGroup>
 	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Update.Colored.Gradient">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M16 256C16 123.452 123.452 16 256 16C388.548 16 496 123.452 496 256C496 388.548 388.548 496 256 496C123.452 496 16 388.548 16 256Z"/>
+			<GeometryDrawing Geometry="{StaticResource Geometry/Icon.Update}">
+				<GeometryDrawing.Brush>
+					<LinearGradientBrush EndPoint="70%,70%" StartPoint="30%,30%">
+						<GradientStop Offset="0" Color="{DynamicResource Color/Icon.Information.Light}"/>
+						<GradientStop Offset="1" Color="{DynamicResource Color/Icon.Information.Dark}"/>
+					</LinearGradientBrush>
+				</GeometryDrawing.Brush>
+			</GeometryDrawing>
+		</DrawingGroup>
+	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Update.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.Update.Outline}"/>
 	</DrawingImage>
@@ -1457,6 +1594,16 @@
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.UserAgreement.Colored">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon.Information}" Geometry="{StaticResource Geometry/Icon.UserAgreement}"/>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.UserAgreement.Colored.Gradient">
+		<GeometryDrawing Geometry="{StaticResource Geometry/Icon.UserAgreement}">
+			<GeometryDrawing.Brush>
+				<LinearGradientBrush EndPoint="64.3%,94.9%" StartPoint="35.7%,5.1%">
+					<GradientStop Offset="0" Color="{DynamicResource Color/Icon.Information.Light}"/>
+					<GradientStop Offset="1" Color="{DynamicResource Color/Icon.Information.Dark}"/>
+				</LinearGradientBrush>
+			</GeometryDrawing.Brush>
+		</GeometryDrawing>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.UserAgreement.Outline">
 		<GeometryDrawing Brush="{DynamicResource Brush/Icon}" Geometry="{StaticResource Geometry/Icon.UserAgreement.Outline}"/>
@@ -1487,6 +1634,19 @@
 		<DrawingGroup>
 			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M9.66449 7.96233L14.3355 7.96233L14.3355 19.737L9.66449 19.737L9.66449 7.96233Z"/>
 			<GeometryDrawing Brush="{DynamicResource Brush/Icon.Warning}" Geometry="{StaticResource Geometry/Icon.Warning}"/>
+		</DrawingGroup>
+	</DrawingImage>
+	<DrawingImage x:Key="Image/Icon.Warning.Colored.Gradient">
+		<DrawingGroup>
+			<GeometryDrawing Brush="{x:Static Brushes.White}" Geometry="M9.66449 7.96233L14.3355 7.96233L14.3355 19.737L9.66449 19.737L9.66449 7.96233Z"/>
+			<GeometryDrawing Geometry="{StaticResource Geometry/Icon.Warning}">
+				<GeometryDrawing.Brush>
+					<LinearGradientBrush EndPoint="76.5%,91.8%" StartPoint="35.7%,25.5%">
+						<GradientStop Offset="0" Color="{DynamicResource Color/Icon.Warning.Light}"/>
+						<GradientStop Offset="1" Color="{DynamicResource Color/Icon.Warning.Dark}"/>
+					</LinearGradientBrush>
+				</GeometryDrawing.Brush>
+			</GeometryDrawing>
 		</DrawingGroup>
 	</DrawingImage>
 	<DrawingImage x:Key="Image/Icon.Warning.Light">

@@ -30,8 +30,8 @@
 
 			<!-- Icon -->
 			<Panel IsVisible="{Binding !IsCheckingForUpdate}" VerticalAlignment="Top">
-				<Image Classes="Dialog_Icon_Large" Source="{DynamicResource Image/Icon.OK.Colored}" IsVisible="{Binding IsLatestVersion}"/>
-				<Image Classes="Dialog_Icon_Large" Source="{DynamicResource Image/Icon.Update.Colored}" IsVisible="{Binding !IsLatestVersion}"/>
+				<Image Classes="Dialog_Icon_Large" Source="{DynamicResource Image/Icon.OK.Colored.Gradient}" IsVisible="{Binding IsLatestVersion}"/>
+				<Image Classes="Dialog_Icon_Large" Source="{DynamicResource Image/Icon.Update.Colored.Gradient}" IsVisible="{Binding !IsLatestVersion}"/>
 			</Panel>
 			<abControls:ProgressRing Height="{StaticResource Double/Dialog.Icon.Size.Large}" IsIndeterminate="True" IsVisible="{Binding IsCheckingForUpdate}" Margin="{StaticResource Thickness/Dialog.Icon.Margin.Large}" VerticalAlignment="Top" Width="{StaticResource Double/Dialog.Icon.Size.Large}"/>
 

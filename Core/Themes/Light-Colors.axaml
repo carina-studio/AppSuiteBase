@@ -55,6 +55,8 @@
 	<Color x:Key="Color/Icon.JavaScript">#d9b000</Color>
 	<Color x:Key="Color/Icon.Inverse">#ffffff</Color>
 	<Color x:Key="Color/Icon.Lightbulb">#e5bf00</Color>
+	<Color x:Key="Color/Icon.Lightbulb.Dark">#d9b500</Color>
+	<Color x:Key="Color/Icon.Lightbulb.Light">#ffd919</Color>
 	<Color x:Key="Color/Icon.Python.Blue">#376c9a</Color>
 	<Color x:Key="Color/Icon.Python.Yellow">#d9b000</Color>
 

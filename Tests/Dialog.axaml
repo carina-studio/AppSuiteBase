@@ -219,7 +219,7 @@
 						<StackPanel Orientation="Horizontal">
 							<Border BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1" VerticalAlignment="Top">
 								<Grid ColumnDefinitions="Auto,*">
-									<Image Classes="Dialog_Icon_Description" Source="{StaticResource Image/Icon.Warning.Outline.Colored}"/>
+									<Image Classes="Dialog_Icon_Description" Source="{StaticResource Image/Icon.Warning.Outline.Colored.Gradient}"/>
 									<TextBlock Classes="Dialog_Icon_TextBlock_Description_Warning" Grid.Column="1" Text="Description (Warning)"/>
 								</Grid>
 							</Border>
