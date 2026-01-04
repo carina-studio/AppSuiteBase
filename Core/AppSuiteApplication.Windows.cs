@@ -13,6 +13,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite;
 
@@ -186,6 +188,40 @@ unsafe partial class AppSuiteApplication
         Dispatcher.UIThread.Post(() => this.wndProcStubDelegates.Remove(topLevel), DispatcherPriority.Background);
         topLevel.Closed -= this.OnTopLevelClosedToDetachWndProc;
     }
+    
+    
+#pragma warning disable CA1416
+    // Get text scale factor on macOS.
+    Task<double> GetSystemTextScaleFactorOnWindowsAsync(CancellationToken cancellationToken)
+    {
+        if (cancellationToken.IsCancellationRequested)
+            return Task.FromCanceled<double>(cancellationToken);
+        if (Platform.IsNotWindows)
+            throw new Exception();
+        try
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Accessibility");
+            var value = key?.GetValue("TextScaleFactor");
+            if (value is IConvertible convertible)
+            {
+                var textScaleFactor = convertible.ToDouble(null) / 100;
+                if (textScaleFactor > 0)
+                    return Task.FromResult(textScaleFactor);
+                this.Logger.LogError("Unexpected system text scale factor: {scaleFactor}", textScaleFactor);
+            }
+            else
+                this.Logger.LogError("Unknown type of system text scale factor: {type}", value?.GetType().Name);
+            return Task.FromResult(1.0);
+        }
+        catch (Exception ex)
+        {
+            if (ex is TaskCanceledException)
+                throw;
+            this.Logger.LogError(ex, "Unable to system text scale factor on Windows");
+            return Task.FromResult(1.0);
+        }
+    }
+#pragma warning restore CA1416
 
 
 #pragma warning disable CA1416

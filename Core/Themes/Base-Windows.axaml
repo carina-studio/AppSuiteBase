@@ -7,17 +7,17 @@
 		<ResourceDictionary>
 			
 			<!-- Button -->
-			<CornerRadius x:Key="CornerRadius/Button">4</CornerRadius>
+			<CornerRadius x:Key="CornerRadius/Button">5</CornerRadius>
 
 			<!-- ComboBoxItem -->
 			<CornerRadius x:Key="CornerRadius/ComboBoxItem">5</CornerRadius>
 
 			<!-- Control -->
-			<CornerRadius x:Key="ControlCornerRadius">4</CornerRadius>
-			<CornerRadius x:Key="ControlCornerRadiusBottom">0,0,4,4</CornerRadius>
-			<CornerRadius x:Key="ControlCornerRadiusLeft">4,0,0,4</CornerRadius>
-			<CornerRadius x:Key="ControlCornerRadiusRight">0,4,4,0</CornerRadius>
-			<CornerRadius x:Key="ControlCornerRadiusTop">4,4,0,0</CornerRadius>
+			<CornerRadius x:Key="ControlCornerRadius">5</CornerRadius>
+			<CornerRadius x:Key="ControlCornerRadiusBottom">0,0,5,5</CornerRadius>
+			<CornerRadius x:Key="ControlCornerRadiusLeft">5,0,0,5</CornerRadius>
+			<CornerRadius x:Key="ControlCornerRadiusRight">0,5,5,0</CornerRadius>
+			<CornerRadius x:Key="ControlCornerRadiusTop">5,5,0,0</CornerRadius>
 
 			<!-- Dialog -->
 			<CornerRadius x:Key="CornerRadius/Dialog.ItemsGroup">8</CornerRadius>

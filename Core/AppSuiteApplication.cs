@@ -1843,7 +1843,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
     /// <inheritdoc/>
     [ThreadSafe]
-    public bool IsApplyingSystemTextScaleFactorSupported => Platform.IsMacOS;
+    public bool IsApplyingSystemTextScaleFactorSupported => Platform.IsWindows || Platform.IsMacOS;
 
 
     /// <inheritdoc/>
@@ -5556,7 +5556,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         // get system text scale factor
         double systemTextScaleFactor;
         if (Platform.IsWindows)
-            systemTextScaleFactor = 1;
+            systemTextScaleFactor = await this.GetSystemTextScaleFactorOnWindowsAsync(cancellationToken);
         else if (Platform.IsMacOS)
             systemTextScaleFactor = await this.GetSystemTextScaleFactorOnMacOSAsync(cancellationToken);
         else

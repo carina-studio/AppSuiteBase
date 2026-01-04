@@ -205,6 +205,8 @@ partial class AppSuiteApplication
     // Get text scale factor on macOS.
     async Task<double> GetSystemTextScaleFactorOnMacOSAsync(CancellationToken cancellationToken)
     {
+        if (Platform.IsNotMacOS)
+            throw new Exception();
         if (double.IsFinite(SimulateSystemTextScaleFactorOnMacOS))
             return SimulateSystemTextScaleFactorOnMacOS;
         try
@@ -259,8 +261,8 @@ partial class AppSuiteApplication
         {
             if (ex is TaskCanceledException)
                 throw;
-            this.Logger.LogError(ex, "Unable to text scale factor on macOS");
-            return 1f;
+            this.Logger.LogError(ex, "Unable to system text scale factor on macOS");
+            return 1;
         }
     }
 
