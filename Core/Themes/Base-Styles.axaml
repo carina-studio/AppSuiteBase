@@ -687,7 +687,7 @@
 		<Setter Property="EndPoint" Value="6,0"/>
 		<Setter Property="Height" Value="1"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ItemSeparator.Margin.Inner}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ItemSeparator.Margin}"/>
 		<Setter Property="StartPoint" Value="0,0"/>
 		<Setter Property="Stretch" Value="Fill"/>
 		<Setter Property="Stroke" Value="{DynamicResource Brush/Dialog.ItemSeparator}"/>
@@ -945,7 +945,7 @@
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
-	<Style Selector="TextBox.Dialog_Item_TextBox">
+	<Style Selector=":is(TextBox).Dialog_Item_TextBox">
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
@@ -953,23 +953,29 @@
 		<Setter Property="TextAlignment" Value="Right"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
-	<Style Selector="TextBox.Dialog_Item_TextBox /template/ Border#PART_BorderElement">
+	<Style Selector=":is(TextBox).Dialog_Item_TextBox /template/ Border#PART_BorderElement">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
-	<Style Selector="TextBox.Dialog_Item_TextBox:disabled /template/ Border#PART_BorderElement">
+	<Style Selector=":is(TextBox).Dialog_Item_TextBox:disabled /template/ Border#PART_BorderElement">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
-	<Style Selector="TextBox.Dialog_Item_TextBox:focus /template/ Border#PART_BorderElement">
+	<Style Selector=":is(TextBox).Dialog_Item_TextBox:focus /template/ Border#PART_BorderElement">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
-	<Style Selector="TextBox.Dialog_Item_TextBox:pointerover /template/ Border#PART_BorderElement">
+	<Style Selector=":is(TextBox).Dialog_Item_TextBox:invalidObjectTextBoxText">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+	</Style>
+	<Style Selector=":is(TextBox).Dialog_Item_TextBox:invalidValueTextBoxText">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+	</Style>
+	<Style Selector=":is(TextBox).Dialog_Item_TextBox:pointerover /template/ Border#PART_BorderElement">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
-	<Style Selector="TextBox.Dialog_TextBox">
+	<Style Selector=":is(TextBox).Dialog_TextBox">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>

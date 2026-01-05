@@ -162,6 +162,21 @@
 						<Line Classes="Dialog_Item_Separator_Inner"/>
 						<TextBox Classes="Dialog_Item_TextBox" Height="100" TextAlignment="Left"/>
 						<Line Classes="Dialog_Item_Separator"/>
+						<appControls:DialogItem ItemSize="Small">
+							<TextBlock Classes="Dialog_TextBlock_Label" Text="IP address"/>
+							<abControls:IPAddressTextBox Classes="Dialog_Item_TextBox"/>
+						</appControls:DialogItem>
+						<Line Classes="Dialog_Item_Separator_Inner"/>
+						<appControls:DialogItem ItemSize="Small">
+							<TextBlock Classes="Dialog_TextBlock_Label" Text="IP address"/>
+							<abControls:IPAddressTextBox Classes="Dialog_Item_TextBox"/>
+						</appControls:DialogItem>
+						<Line Classes="Dialog_Item_Separator_Inner"/>
+						<appControls:DialogItem ItemSize="Small">
+							<TextBlock Classes="Dialog_TextBlock_Label" Text="Left label"/>
+							<TextBlock Classes="Dialog_TextBlock" HorizontalAlignment="Right" Text="Right label"/>
+						</appControls:DialogItem>
+						<Line Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with NumericUpDown -->
 						<appControls:DialogItem>
