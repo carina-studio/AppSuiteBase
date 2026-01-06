@@ -7,6 +7,9 @@
 	
 	<!-- Resources -->
 	<Styles.Resources>
+		
+		<!-- SyntaxHighlighter -->
+		<Color x:Key="Color/SyntaxHighlighter.SyntaxError.Underline">#ff3232</Color>
 
 		<!-- TextBox -->
 		<ControlTemplate x:Key="ControlTemplate/TextBox.WithSyntaxHighlighting" TargetType="{x:Type TextBox}">

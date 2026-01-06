@@ -17,6 +17,10 @@ public abstract class SyntaxHighlightingObjectTextBox : ObjectTextBox
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlightingObjectTextBox, bool> IsMaxTokenCountReachedProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingObjectTextBox, bool>(nameof(IsMaxTokenCountReached), t => t.IsMaxTokenCountReached);
     /// <summary>
+    /// Property of <see cref="IsSyntaxErrorIndicatorEnabled"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlightingObjectTextBox, bool> IsSyntaxErrorIndicatorEnabledProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingObjectTextBox, bool>(nameof(IsSyntaxErrorIndicatorEnabled), tb => tb.isSyntaxErrorIndicatorEnabled, (tb, e) => tb.IsSyntaxErrorIndicatorEnabled = e);
+    /// <summary>
     /// Property of <see cref="IsSyntaxHighlightingEnabled"/>.
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlightingObjectTextBox, bool> IsSyntaxHighlightingEnabledProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingObjectTextBox, bool>(nameof(IsSyntaxHighlightingEnabled), tb => tb.isSyntaxHighlightingEnabled, (tb, e) => tb.IsSyntaxHighlightingEnabled = e);
@@ -27,8 +31,10 @@ public abstract class SyntaxHighlightingObjectTextBox : ObjectTextBox
     
     
     // Fields.
+    bool isSyntaxErrorIndicatorEnabled = true;
     bool isSyntaxHighlightingEnabled = true;
     int maxTokenCount = -1;
+    Range<int> syntaxErrorRange = Range<int>.Empty;
     SyntaxHighlightingTextPresenter? textPresenter;
     
     
@@ -45,6 +51,24 @@ public abstract class SyntaxHighlightingObjectTextBox : ObjectTextBox
      * Check whether maximum number of token to be highlighted reached or not.
      */
     public bool IsMaxTokenCountReached => this.textPresenter?.IsMaxTokenCountReached ?? false;
+
+
+    /// <summary>
+    /// Get or set whether syntax error indicator is enabled or not.
+    /// </summary>
+    public bool IsSyntaxErrorIndicatorEnabled
+    {
+        get => this.isSyntaxErrorIndicatorEnabled;
+        set
+        {
+            this.VerifyAccess();
+            if (this.isSyntaxErrorIndicatorEnabled == value)
+                return;
+            this.SetAndRaise(IsSyntaxErrorIndicatorEnabledProperty, ref this.isSyntaxErrorIndicatorEnabled, value);
+            if (this.textPresenter is not null)
+                this.textPresenter.SyntaxErrorRange = value ? this.syntaxErrorRange : Range<int>.Empty;
+        }
+    }
     
     
     /// <summary>
@@ -105,6 +129,8 @@ public abstract class SyntaxHighlightingObjectTextBox : ObjectTextBox
         this.textPresenter = e.NameScope.Find<SyntaxHighlightingTextPresenter>("PART_TextPresenter");
         if (this.textPresenter is not null)
         {
+            if (this.isSyntaxErrorIndicatorEnabled)
+                this.textPresenter.SyntaxErrorRange = this.syntaxErrorRange;
             if (this.isSyntaxHighlightingEnabled)
                 this.textPresenter.DefinitionSet = this.SyntaxHighlightingDefinitionSet;
             this.textPresenter.MaxTokenCount = this.maxTokenCount;
@@ -120,6 +146,24 @@ public abstract class SyntaxHighlightingObjectTextBox : ObjectTextBox
     {
         if (e.Property == SyntaxHighlightingTextPresenter.IsMaxTokenCountReachedProperty)
             this.RaisePropertyChanged(IsMaxTokenCountReachedProperty, (bool)e.OldValue!, (bool)e.NewValue!);
+    }
+
+
+    /// <summary>
+    /// Get or set character range of syntax error.
+    /// </summary>
+    protected Range<int> SyntaxErrorRange
+    {
+        get => this.syntaxErrorRange;
+        set
+        {
+            this.VerifyAccess();
+            if (this.syntaxErrorRange == value)
+                return;
+            this.syntaxErrorRange = value;
+            if (this.textPresenter is not null && this.isSyntaxErrorIndicatorEnabled)
+                this.textPresenter.SyntaxErrorRange = value;
+        }
     }
     
     

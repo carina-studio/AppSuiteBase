@@ -99,6 +99,10 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlighter, int> SelectionStartProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, int>(nameof(SelectionStart), sh => sh.selectionStart, (sh, i) => sh.SelectionStart = i);
     /// <summary>
+    /// Property of <see cref="SyntaxErrorRange"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlighter, Range<int>> SyntaxErrorRangeProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, Range<int>>(nameof(SyntaxErrorRange), sh => sh.syntaxErrorRange, (sh, r) => sh.SyntaxErrorRange = r);
+    /// <summary>
     /// Property of <see cref="Text"/>.
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlighter, string?> TextProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlighter, string?>(nameof(Text), sh => sh.text, (sh, t) => sh.Text = t);
@@ -167,6 +171,9 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     readonly Dictionary<SyntaxHighlightingSpan, TextRunProperties> selectionRunPropertiesMap = new();
     readonly Dictionary<SyntaxHighlightingToken, TextRunProperties> selectionRunPropertiesMapInSpan = new();
     int selectionStart;
+    TextDecoration? syntaxErrorDecoration;
+    TextDecorationCollection? syntaxErrorDecorationCollection;
+    Range<int> syntaxErrorRange = Range<int>.Empty;
     string? text;
     TextAlignment textAlignment = TextAlignment.Left;
     TextDecorationCollection? textDecorations;
@@ -191,6 +198,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
         this.foregroundPropertyChangedHandlerToken.Dispose();
         this.selectionBackgroundPropertyChangedHandlerToken.Dispose();
         this.selectionForegroundPropertyChangedHandlerToken.Dispose();
+        this.syntaxErrorDecoration = null;
     }
 
 
@@ -440,7 +448,52 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     // Create text properties for given range of text.
     void CreateTextProperties(int start, int end, TextRunProperties runProperties, TextRunProperties selectionRunProperties, IList<ValueSpan<TextRunProperties>> textProperties)
     {
-        textProperties.Add(new(start, end - start, runProperties));
+        var syntaxErrorRange = this.syntaxErrorRange;
+        if (syntaxErrorRange.IsEmpty || end <= syntaxErrorRange.Start || start >= syntaxErrorRange.End)
+            textProperties.Add(new(start, end - start, runProperties));
+        else
+        {
+            var syntaxErrorStart = syntaxErrorRange.Start ?? start;
+            var syntaxErrorEnd = syntaxErrorRange.End ?? end;
+            var errorRunProperties = new GenericTextRunProperties(
+                typeface: runProperties.Typeface,
+                fontFeatures: runProperties.FontFeatures,
+                fontRenderingEmSize: runProperties.FontRenderingEmSize,
+                textDecorations: runProperties.TextDecorations?.IsEmpty() == false
+                    ? [ ..runProperties.TextDecorations, this.SyntaxErrorDecoration ]
+                    : this.syntaxErrorDecorationCollection ?? new TextDecorationCollection().Also(it =>
+                    {
+                        it.Add(this.SyntaxErrorDecoration);
+                        this.syntaxErrorDecorationCollection = it;
+                    }),
+                foregroundBrush: runProperties.ForegroundBrush,
+                backgroundBrush: runProperties.BackgroundBrush,
+                baselineAlignment: runProperties.BaselineAlignment,
+                cultureInfo: runProperties.CultureInfo
+            );
+            if (start <= syntaxErrorStart)
+            {
+                if (start < syntaxErrorStart)
+                    textProperties.Add(new(start, syntaxErrorStart - start, runProperties));
+                if (end <= syntaxErrorEnd)
+                    textProperties.Add(new(syntaxErrorStart, end - syntaxErrorStart, errorRunProperties));
+                else
+                {
+                    textProperties.Add(new(syntaxErrorStart, syntaxErrorEnd - syntaxErrorStart, errorRunProperties));
+                    textProperties.Add(new(syntaxErrorEnd, end - syntaxErrorEnd, runProperties));
+                }
+            }
+            else
+            {
+                if (end <= syntaxErrorEnd)
+                    textProperties.Add(new(start, end - start, errorRunProperties));
+                else
+                {
+                    textProperties.Add(new(start, syntaxErrorEnd - start, errorRunProperties));
+                    textProperties.Add(new(syntaxErrorEnd, end - syntaxErrorEnd, runProperties));
+                }
+            }
+        }
         /*
         var selectionStart = this.selectionStart;
         var selectionEnd = this.selectionEnd;
@@ -554,7 +607,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                     var nextToken = new Token(token.Definition, match.Index, endIndex);
                     if (match.Index == token.End && (maxTokenCount < 0 || tokenCount < maxTokenCount - 1)) // combine into single token
                     {
-                        var nextTokenIndex = ((IList<Token>)candidateTokens).BinarySearch(nextToken, tokenComparison);
+                        var nextTokenIndex = candidateTokens.BinarySearch(nextToken, tokenComparison);
                         if (nextTokenIndex == ~candidateTokens.Count)
                         {
                             token = new(token.Definition, token.Start, nextToken.End);
@@ -925,7 +978,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 var nextToken = new Token(candidateToken.Definition, match.Index, match.Index + match.Length);
                 if (match.Index == candidateToken.End && match.Length > 0) // combine into single token
                 {
-                    var nextTokenIndex = ((IList<Token>)candidateTokens).BinarySearch(nextToken, tokenComparison);
+                    var nextTokenIndex = candidateTokens.BinarySearch(nextToken, tokenComparison);
                     if (nextTokenIndex == ~candidateTokens.Count)
                     {
                         candidateToken = new(candidateToken.Definition, candidateToken.Start, nextToken.End);
@@ -1351,6 +1404,48 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             this.SetAndRaise(SelectionStartProperty, ref this.selectionStart, value);
             if (this.selectionForeground != null)
                 this.InvalidateTextProperties();
+        }
+    }
+    
+    
+    // Get text decoration for syntax error.
+    TextDecoration SyntaxErrorDecoration
+    {
+        get
+        {
+            this.syntaxErrorDecoration ??= new TextDecoration().Also(it =>
+            {
+                it.Stroke = new SolidColorBrush().Also(brush =>
+                {
+                    if (IAvaloniaApplication.CurrentOrNull is Avalonia.Application app)
+                        brush.BindToResource(SolidColorBrush.ColorProperty, app, "Color/SyntaxHighlighter.SyntaxError.Underline");
+                    else
+                        brush.Color = Colors.Red;
+                });
+                it.StrokeDashArray = [1, 1];
+                it.StrokeOffset = 3;
+                it.StrokeOffsetUnit = TextDecorationUnit.Pixel;
+                it.StrokeThickness = 2;
+                it.StrokeThicknessUnit = TextDecorationUnit.Pixel;
+            });
+            return this.syntaxErrorDecoration;
+        }
+    }
+
+
+    /// <summary>
+    /// Get or set character range of syntax error.
+    /// </summary>
+    public Range<int> SyntaxErrorRange
+    {
+        get => this.syntaxErrorRange;
+        set
+        {
+            this.VerifyAccess();
+            if (this.syntaxErrorRange == value)
+                return;
+            this.SetAndRaise(SyntaxErrorRangeProperty, ref this.syntaxErrorRange, value);
+            this.InvalidateTextProperties();
         }
     }
 

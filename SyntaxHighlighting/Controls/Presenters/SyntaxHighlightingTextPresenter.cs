@@ -23,6 +23,10 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
     /// Property of <see cref="MaxTokenCount"/>.
     /// </summary>
     public static readonly DirectProperty<SyntaxHighlightingTextPresenter, int> MaxTokenCountProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingTextPresenter, int>(nameof(MaxTokenCount), t => t.syntaxHighlighter.MaxTokenCount, (t, count) => t.syntaxHighlighter.MaxTokenCount = count);
+    /// <summary>
+    /// Property of <see cref="SyntaxErrorRange"/>.
+    /// </summary>
+    public static readonly DirectProperty<SyntaxHighlightingTextPresenter, Range<int>> SyntaxErrorRangeProperty = AvaloniaProperty.RegisterDirect<SyntaxHighlightingTextPresenter, Range<int>>(nameof(SyntaxErrorRange), t => t.syntaxHighlighter.SyntaxErrorRange, (t, r) => t.syntaxHighlighter.SyntaxErrorRange = r);
 
 
     // Fields.
@@ -61,6 +65,8 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
                 this.RaisePropertyChanged(IsMaxTokenCountReachedProperty, (bool)e.OldValue!, (bool)e.NewValue!);
             else if (property == SyntaxHighlighter.MaxTokenCountProperty)
                 this.RaisePropertyChanged(MaxTokenCountProperty, (int)e.OldValue!, (int)e.NewValue!);
+            else if (property == SyntaxHighlighter.SyntaxErrorRangeProperty)
+                this.RaisePropertyChanged(SyntaxErrorRangeProperty, (Range<int>)e.OldValue!, (Range<int>)e.NewValue!);
         };
         this.syntaxHighlighter.TextLayoutInvalidated += (_, _) =>
         {
@@ -192,6 +198,16 @@ public class SyntaxHighlightingTextPresenter : Avalonia.Controls.Presenters.Text
         }
         else if (property == TextProperty)
             this.syntaxHighlighter.Text = change.NewValue as string;
+    }
+    
+    
+    /// <summary>
+    /// Get or set character range of syntax error.
+    /// </summary>
+    public Range<int> SyntaxErrorRange
+    {
+        get => this.syntaxHighlighter.SyntaxErrorRange;
+        set => this.syntaxHighlighter.SyntaxErrorRange = value;
     }
 
 

@@ -1312,11 +1312,19 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
         try
         {
 			obj = new Regex(text, this.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None);
+			this.SyntaxErrorRange = Range<int>.Empty;
 			return true;
         }
-		catch
-        {
-			obj = null;
+		catch (Exception ex)
+		{
+			if (ex is RegexParseException regexParseEx)
+			{
+				var offset = Math.Max(0, regexParseEx.Offset - 1);
+				this.SyntaxErrorRange = new(offset, offset + 1);
+			}
+			else
+				this.SyntaxErrorRange = Range<int>.Universal;
+	        obj = null;
 			return false;
         }
     }
