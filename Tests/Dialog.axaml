@@ -168,8 +168,13 @@
 						</appControls:DialogItem>
 						<Line Classes="Dialog_Item_Separator_Inner"/>
 						<appControls:DialogItem ItemSize="Small">
-							<TextBlock Classes="Dialog_TextBlock_Label" Text="IP address"/>
-							<abControls:IPAddressTextBox Classes="Dialog_Item_TextBox"/>
+							<TextBlock Classes="Dialog_TextBlock_Label" Text="Regex"/>
+							<appControls:RegexTextBox Classes="Dialog_Item_TextBox"/>
+						</appControls:DialogItem>
+						<Line Classes="Dialog_Item_Separator_Inner"/>
+						<appControls:DialogItem ItemSize="Small">
+							<TextBlock Classes="Dialog_TextBlock_Label" Text="Date and time format"/>
+							<appControls:DateTimeFormatTextBox Classes="Dialog_Item_TextBox"/>
 						</appControls:DialogItem>
 						<Line Classes="Dialog_Item_Separator_Inner"/>
 						<appControls:DialogItem ItemSize="Small">

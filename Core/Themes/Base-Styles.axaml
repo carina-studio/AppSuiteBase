@@ -965,10 +965,22 @@
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
-	<Style Selector=":is(TextBox).Dialog_Item_TextBox:invalidObjectTextBoxText">
+	<Style Selector=":is(TextBox).Dialog_Item_TextBox:dateTimeTextBox:invalidValueTextBoxText">
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
 	</Style>
-	<Style Selector=":is(TextBox).Dialog_Item_TextBox:invalidValueTextBoxText">
+	<Style Selector=":is(TextBox).Dialog_Item_TextBox:integerTextBox:invalidValueTextBoxText">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+	</Style>
+	<Style Selector=":is(TextBox).Dialog_Item_TextBox:ipAddressTextBox:invalidObjectTextBoxText">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+	</Style>
+	<Style Selector=":is(TextBox).Dialog_Item_TextBox:realNumberTextBox:invalidValueTextBoxText">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+	</Style>
+	<Style Selector=":is(TextBox).Dialog_Item_TextBox:timeSpanTextBox:invalidValueTextBoxText">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+	</Style>
+	<Style Selector=":is(TextBox).Dialog_Item_TextBox:uriTextBox:invalidObjectTextBoxText">
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
 	</Style>
 	<Style Selector=":is(TextBox).Dialog_Item_TextBox:pointerover /template/ Border#PART_BorderElement">

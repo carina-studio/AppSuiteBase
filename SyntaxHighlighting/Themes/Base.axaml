@@ -95,7 +95,7 @@
 	</Style>
 
 	<!-- RegexTextBox -->
-	<Style Selector="TextBox:regexTextBox">
+	<Style Selector=":is(TextBox):regexTextBox">
 		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
 	</Style>
 
@@ -106,7 +106,7 @@
 	</Style>
 
 	<!-- StringInterpolationFormatTextBox -->
-	<Style Selector="TextBox:stringInterpolationFormatTextBox">
+	<Style Selector=":is(TextBox):stringInterpolationFormatTextBox">
 		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
 	</Style>
 
@@ -116,12 +116,12 @@
 	</Style>
 
 	<!-- SyntaxHighlightingTextBox -->
-	<Style Selector="TextBox:syntaxHighlighted">
+	<Style Selector=":is(TextBox):syntaxHighlighted">
 		<Setter Property="Template" Value="{StaticResource ControlTemplate/TextBox.WithSyntaxHighlighting}"/>
 	</Style>
 
 	<!-- TimeSpanFormatTextBox -->
-	<Style Selector="TextBox:timeSpanFormatTextBox">
+	<Style Selector=":is(TextBox):timeSpanFormatTextBox">
 		<Setter Property="FontFamily" Value="{x:Static media:BuiltInFonts.SourceCodePro}"/>
 	</Style>
 	
