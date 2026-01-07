@@ -400,7 +400,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     string multiInstancesServerStreamName = "";
     readonly List<MainWindowHolder> pendingMainWindowHolders = new();
     ScheduledAction? performFullGCAction;
-    volatile ISettings? persistentState;
+    volatile PersistentSettings? persistentState;
     readonly string persistentStateFilePath;
     int persistentStateLoadingCounter;
     long prepareStartingTime;
@@ -410,7 +410,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     readonly HashSet<TopLevel> readyTopLevels = new();
     ApplicationArgsBuilder? restartArgs;
     SelfTestingWindowImpl? selfTestingWindow;
-    volatile ISettings? settings;
+    volatile SettingsImpl? settings;
     int settingsLoadingCounter;
     ShutdownSource shutdownSource = ShutdownSource.None;
     SplashWindowImpl? splashWindow;
@@ -771,11 +771,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         
         // load temp settings
         LogToConsole("Start loading temporary settings");
-        ISettings tempSettings = new TempSettingsImpl();
+        var tempSettings = new TempSettingsImpl();
         try
         {
             if (System.IO.File.Exists(SettingsFilePath))
-                ((PersistentSettings)tempSettings).Load(SettingsFilePath);
+                tempSettings.Load(SettingsFilePath);
             LogToConsole("Complete loading temporary settings");
         }
         catch (Exception ex)
@@ -2235,14 +2235,14 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         {
             // load from file
             if (!isFirstLoad || !this.IsFirstLaunch)
-                await ((PersistentSettings)this.persistentState).LoadAsync(this.persistentStateFilePath);
+                await this.persistentState.LoadAsync(this.persistentStateFilePath);
             this.Logger.LogDebug("Complete loading persistent state");
 
             // save immediately for first launch
             if (this.IsFirstLaunch && this.IsMultipleProcessesSupported)
             {
                 this.Logger.LogDebug("Save persistent state for first launch");
-                await ((PersistentSettings)this.persistentState).SaveAsync(this.persistentStateFilePath);
+                await this.persistentState.SaveAsync(this.persistentStateFilePath);
             }
         }
         catch (Exception ex)
@@ -2261,14 +2261,14 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.PreviousVersion = version;
             if (currentVersion != version)
             {
-                this.persistentState.SetValue(AppVersionKey, currentVersion?.ToString() ?? "");
+                this.persistentState.SetValue<string>(AppVersionKey, currentVersion?.ToString() ?? "");
                 _ = this.SavePersistentStateAsync();
             }
         }
         else if (currentVersion is not null)
         {
             this.PreviousVersion = null;
-            this.persistentState.SetValue(AppVersionKey, currentVersion.ToString());
+            this.persistentState.SetValue<string>(AppVersionKey, currentVersion.ToString());
             _ = this.SavePersistentStateAsync();
         }
 
@@ -2397,7 +2397,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         ++this.settingsLoadingCounter;
         try
         {
-            await ((PersistentSettings)this.settings).LoadAsync(SettingsFilePath);
+            await this.settings.LoadAsync(SettingsFilePath);
             this.Logger.LogDebug("Complete loading settings");
         }
         catch (Exception ex)
@@ -2412,7 +2412,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         // setup accepting non-stable update
         if (!this.PersistentState.GetValueOrDefault(IsAcceptNonStableApplicationUpdateInitKey))
         {
-            this.settings.SetValue(SettingKeys.AcceptNonStableApplicationUpdate, this.ReleasingType != ApplicationReleasingType.Stable);
+            this.settings.SetValue<bool>(SettingKeys.AcceptNonStableApplicationUpdate, this.ReleasingType != ApplicationReleasingType.Stable);
             this.PersistentState.SetValue(IsAcceptNonStableApplicationUpdateInitKey, true);
         }
 
@@ -2420,7 +2420,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         if (this.settings.GetValueOrDefault(SettingKeys.ThemeMode) == ThemeMode.System
             && !this.IsSystemThemeModeSupported)
         {
-            this.settings.SetValue(SettingKeys.ThemeMode, this.FallbackThemeMode);
+            this.settings.SetValue<ThemeMode>(SettingKeys.ThemeMode, this.FallbackThemeMode);
         }
 
         // check settings
@@ -4233,12 +4233,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (isCritical)
             {
                 this.Logger.LogWarning("Start saving persistent state for critical reason");
-                ((PersistentSettings)this.persistentState).Save(this.persistentStateFilePath);
+                this.persistentState.Save(this.persistentStateFilePath);
             }
             else
             {
                 this.Logger.LogDebug("Start saving persistent state");
-                await ((PersistentSettings)this.persistentState).SaveAsync(this.persistentStateFilePath);
+                await this.persistentState.SaveAsync(this.persistentStateFilePath);
             }
             this.Logger.LogDebug("Complete saving persistent state");
         }
@@ -4271,12 +4271,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (isCritical)
             {
                 this.Logger.LogWarning("Start saving settings for critical reason");
-                ((PersistentSettings)this.settings).Save(SettingsFilePath);
+                this.settings.Save(SettingsFilePath);
             }
             else
             {
                 this.Logger.LogDebug("Start saving settings");
-                await ((PersistentSettings)this.settings).SaveAsync(SettingsFilePath);
+                await this.settings.SaveAsync(SettingsFilePath);
             }
             this.Logger.LogDebug("Complete saving settings");
         }
