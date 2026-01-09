@@ -3,12 +3,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:abControls="using:CarinaStudio.Controls"
+        xmlns:asXaml="using:CarinaStudio.AppSuite.Xaml"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.ApplicationUpdateDialogImpl"
         Name="dialog"
         Classes="Dialog"
 		ShowInTaskbar="True"
-        Title="{DynamicResource String/ApplicationUpdateDialog.Title}"
+        Title="{asXaml:StringResource ApplicationUpdateDialog.Title}"
         Width="{DynamicResource Double/ApplicationUpdateDialog.Width}">
 
 	<DockPanel>
@@ -16,10 +17,10 @@
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
-				<Button Classes="Dialog_ControlButton" Command="{Binding CheckForUpdateCommand}" Content="{DynamicResource String/ApplicationUpdateDialog.CheckForUpdate}" IsEnabled="{Binding !IsPreparingForUpdate}"/>
+				<Button Classes="Dialog_ControlButton" Command="{Binding CheckForUpdateCommand}" Content="{asXaml:StringResource ApplicationUpdateDialog.CheckForUpdate}" IsEnabled="{Binding !IsPreparingForUpdate}"/>
 				<Panel IsVisible="{Binding !IsLatestVersion}">
-					<Button Name="downloadUpdatePackageButton" Classes="Dialog_AccentControlButton" Command="{Binding #dialog.DownloadUpdatePackage}" Content="{DynamicResource String/ApplicationUpdateDialog.DownloadUpdatePackage}" IsVisible="{Binding !IsAutoUpdateSupported}"/>
-					<Button Name="startUpdatingButton" Classes="Dialog_AccentControlButton" Command="{Binding StartUpdatingCommand}" Content="{DynamicResource String/ApplicationUpdateDialog.StartUpdating}" IsVisible="{Binding IsAutoUpdateSupported}"/>
+					<Button Name="downloadUpdatePackageButton" Classes="Dialog_AccentControlButton" Command="{Binding #dialog.DownloadUpdatePackage}" Content="{asXaml:StringResource ApplicationUpdateDialog.DownloadUpdatePackage}" IsVisible="{Binding !IsAutoUpdateSupported}"/>
+					<Button Name="startUpdatingButton" Classes="Dialog_AccentControlButton" Command="{Binding StartUpdatingCommand}" Content="{asXaml:StringResource ApplicationUpdateDialog.StartUpdating}" IsVisible="{Binding IsAutoUpdateSupported}"/>
 				</Panel>
 				<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.Close}" Content="{Binding #dialog.CancelButtonText}"/>
 			</StackPanel>
@@ -42,13 +43,13 @@
 				<Panel IsVisible="{Binding !IsPreparingForUpdate}">
 					<Panel IsVisible="{Binding !IsCheckingForUpdate}">
 						<TextBlock Opacity="0" Text=" "/> <!-- [Workaround] Reserve space to prevent unexpected layout -->
-						<abControls:FormattedTextBlock Arg1="{Binding #dialog.Application.Name}" FontWeight="Bold" Format="{DynamicResource String/ApplicationUpdateDialog.LatestVersion}" IsVisible="{Binding IsLatestVersion}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+						<abControls:FormattedTextBlock Arg1="{Binding #dialog.Application.Name}" FontWeight="Bold" Format="{asXaml:StringResource ApplicationUpdateDialog.LatestVersion}" IsVisible="{Binding IsLatestVersion}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
 						<StackPanel IsVisible="{Binding !IsLatestVersion}" Orientation="Vertical">
-							<abControls:FormattedTextBlock Arg1="{Binding #dialog.Application.Name}" Arg2="{Binding UpdateVersion}" FontWeight="Bold" Format="{DynamicResource String/ApplicationUpdateDialog.NewVersionFound}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
-							<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" IsVisible="{Binding HasReleasePageUri}" Text="{DynamicResource String/ApplicationUpdateDialog.ReleasePage}" Uri="{Binding ReleasePageUri}"/>
+							<abControls:FormattedTextBlock Arg1="{Binding #dialog.Application.Name}" Arg2="{Binding UpdateVersionString}" FontWeight="Bold" Format="{asXaml:StringResource ApplicationUpdateDialog.NewVersionFound}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+							<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" IsVisible="{Binding HasReleasePageUri}" Text="{asXaml:StringResource ApplicationUpdateDialog.ReleasePage}" Uri="{Binding ReleasePageUri}"/>
 						</StackPanel>
 					</Panel>
-					<TextBlock IsVisible="{Binding IsCheckingForUpdate}" Text="{DynamicResource String/ApplicationUpdateDialog.CheckingForUpdate}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+					<TextBlock IsVisible="{Binding IsCheckingForUpdate}" Text="{asXaml:StringResource ApplicationUpdateDialog.CheckingForUpdate}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
 				</Panel>
 				<TextBlock IsVisible="{Binding IsPreparingForUpdate}" Text="{Binding UpdatePreparationMessage}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
 
@@ -63,11 +64,11 @@
 			<!-- Settings -->
 			<StackPanel Grid.Column="1" Grid.Row="1" IsVisible="{Binding !IsPreparingForUpdate}">
 				<Separator Classes="Dialog_Separator"/>
-				<CheckBox Classes="Dialog_CheckBox" Content="{DynamicResource String/ApplicationOptions.NotifyApplicationUpdate}" IsChecked="{Binding NotifyApplicationUpdate, Mode=TwoWay}"/>
-				<CheckBox Classes="Dialog_CheckBox" Content="{DynamicResource String/ApplicationOptions.AcceptNonStableApplicationUpdate}" IsChecked="{Binding AcceptNonStableApplicationUpdate, Mode=TwoWay}" IsEnabled="{Binding !IsCheckingForUpdate}"/>
+				<CheckBox Classes="Dialog_CheckBox" Content="{asXaml:StringResource ApplicationOptions.NotifyApplicationUpdate}" IsChecked="{Binding NotifyApplicationUpdate, Mode=TwoWay}"/>
+				<CheckBox Classes="Dialog_CheckBox" Content="{asXaml:StringResource ApplicationOptions.AcceptNonStableApplicationUpdate}" IsChecked="{Binding AcceptNonStableApplicationUpdate, Mode=TwoWay}" IsEnabled="{Binding !IsCheckingForUpdate}"/>
 				<Grid ColumnDefinitions="Auto,*">
 					<Border Margin="{StaticResource Thickness/Dialog.Icon.Margin}" Width="{DynamicResource Double/Dialog.Icon.Size}"/>
-					<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" Margin="{StaticResource Thickness/Dialog.TextBlock.Margin.Description.BelowCheckBox}" Text="{DynamicResource String/ApplicationUpdateDialog.AcceptNonStableApplicationUpdate.Description}" VerticalAlignment="Top"/>
+					<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" Margin="{StaticResource Thickness/Dialog.TextBlock.Margin.Description.BelowCheckBox}" Text="{asXaml:StringResource ApplicationUpdateDialog.AcceptNonStableApplicationUpdate.Description}" VerticalAlignment="Top"/>
 				</Grid>
 			</StackPanel>
 			

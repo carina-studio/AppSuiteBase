@@ -43,10 +43,12 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 	static readonly ObservableProperty<bool> IsShutdownNeededToContinueUpdateProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsShutdownNeededToContinueUpdate));
 	static readonly ObservableProperty<bool> IsUpdatePreparationProgressAvailableProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsUpdatePreparationProgressAvailable));
 	static readonly ObservableProperty<Uri?> ReleasePageUriProperty = ObservableProperty.Register<ApplicationUpdater, Uri?>(nameof(ReleasePageUri));
+	static readonly ObservableProperty<string?> UpdateInformationalVersionProperty = ObservableProperty.Register<ApplicationUpdater, string?>(nameof(UpdateInformationalVersion));
 	static readonly ObservableProperty<Uri?> UpdatePackageUriProperty = ObservableProperty.Register<ApplicationUpdater, Uri?>(nameof(UpdatePackageUri));
 	static readonly ObservableProperty<string?> UpdatePreparationMessageProperty = ObservableProperty.Register<ApplicationUpdater, string?>(nameof(UpdatePreparationMessage));
 	static readonly ObservableProperty<double> UpdatePreparationProgressPercentageProperty = ObservableProperty.Register<ApplicationUpdater, double>(nameof(UpdatePreparationProgressPercentage));
 	static readonly ObservableProperty<Version?> UpdateVersionProperty = ObservableProperty.Register<ApplicationUpdater, Version?>(nameof(UpdateVersion));
+	static readonly ObservableProperty<string?> UpdateVersionStringProperty = ObservableProperty.Register<ApplicationUpdater, string?>(nameof(UpdateVersionString));
 
 
 	// Fields.
@@ -511,16 +513,25 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 			this.canStartUpdating.Update(false);
 			this.packageManifestUri = null;
 			this.SetValue(IsLatestVersionProperty, true);
-			this.SetValue(ReleasePageUriProperty, null);
-			this.SetValue(UpdatePackageUriProperty, null);
-			this.SetValue(UpdateVersionProperty, null);
+			this.ResetValue(ReleasePageUriProperty);
+			this.ResetValue(UpdateInformationalVersionProperty);
+			this.ResetValue(UpdatePackageUriProperty);
+			this.ResetValue(UpdateVersionProperty);
+			this.ResetValue(UpdateVersionStringProperty);
 		}
 		else
 		{
 			this.SetValue(IsLatestVersionProperty, false);
 			this.SetValue(ReleasePageUriProperty, updateInfo.ReleasePageUri);
+			this.SetValue(UpdateInformationalVersionProperty, updateInfo.InformationalVersion);
 			this.SetValue(UpdatePackageUriProperty, updateInfo.PackageUri);
 			this.SetValue(UpdateVersionProperty, updateInfo.Version);
+			this.SetValue(UpdateVersionStringProperty, updateInfo.InformationalVersion.Let(it =>
+			{
+				if (string.IsNullOrWhiteSpace(it))
+					return updateInfo.Version.ToString();
+				return it;
+			}));
 			this.canStartUpdating.Update(IsAutoUpdateSupported && !this.IsPreparingForUpdate && !this.IsCheckingForUpdate);
 			this.packageManifestUri = updateInfo.PackageManifestUri;
 		}
@@ -689,6 +700,12 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 	/// Command to start updating application.
 	/// </summary>
 	public ICommand StartUpdatingCommand { get; }
+	
+	
+	/// <summary>
+	/// Get information version which application can be updated to.
+	/// </summary>
+	public string? UpdateInformationalVersion => this.GetValue(UpdateInformationalVersionProperty);
 
 
 	/// <summary>
@@ -710,7 +727,13 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 
 
 	/// <summary>
-	/// Get new version which application can be updated to.
+	/// Get version which application can be updated to.
 	/// </summary>
 	public Version? UpdateVersion => this.GetValue(UpdateVersionProperty);
+
+
+	/// <summary>
+	/// Get proper string to describe version which application can be updated to.
+	/// </summary>
+	public string? UpdateVersionString => this.GetValue(UpdateVersionStringProperty);
 }

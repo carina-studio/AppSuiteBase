@@ -1068,13 +1068,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
             // check version
             var packageVersion = packageResolver.PackageVersion;
-            if (packageVersion == null)
+            if (packageVersion is null)
             {
                 this.Logger.LogError("No application version gotten from {uri}", manifestUri);
                 continue;
             }
             if (selectedAppUpdateInfo == null || selectedAppUpdateInfo.Version < packageVersion)
-                selectedAppUpdateInfo = new ApplicationUpdateInfo(packageVersion, manifestUri, packageResolver.PageUri, packageResolver.PackageUri);
+                selectedAppUpdateInfo = new ApplicationUpdateInfo(packageVersion, packageResolver.PackageInformationalVersion, manifestUri, packageResolver.PageUri, packageResolver.PackageUri);
         }
 
         // release resources
@@ -5651,7 +5651,6 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 resources.Remove(resourceKey);
         }
     }
-
 
 
     // Wait for client of multi-instances and handle incoming messages.
