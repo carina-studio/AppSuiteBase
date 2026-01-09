@@ -36,12 +36,12 @@ public class PackagingTool
         var platform = args.Count > 2 ? args[0] : null;
         var prevVersionStr = args[platform != null ? 1 : 0];
         var currentVersionStr = args[platform != null ? 2 : 1];
-        if (!Version.TryParse(prevVersionStr, out var prevVersion) || prevVersion == null)
+        if (!Version.TryParse(prevVersionStr, out var prevVersion))
         {
             Console.Error.Write($"Invalid previous version '{prevVersionStr}'.");
             return PackagingResult.InvalidArgument;
         }
-        if (!Version.TryParse(currentVersionStr, out var currentVersion) || currentVersion == null)
+        if (!Version.TryParse(currentVersionStr, out var currentVersion))
         {
             Console.Error.Write($"Invalid current version '{currentVersionStr}'.");
             return PackagingResult.InvalidArgument;
@@ -74,7 +74,7 @@ public class PackagingTool
 
             // find all packages of current version
             var packageFileNameRegex = new Regex("^(?<AppName>[\\w\\d\\.]+)\\-(?<Version>[\\d\\.]+)\\-(?<PlatformId>[\\w]+\\-[\\w\\d]+)(?<FxDependent>\\-fx\\-dependent)?\\.zip$", RegexOptions.IgnoreCase);
-            var currentVersionPackageNames = new HashSet<string>(CarinaStudio.IO.PathEqualityComparer.Default).Also(it =>
+            var currentVersionPackageNames = new HashSet<string>(IO.PathEqualityComparer.Default).Also(it =>
             {
                 foreach (var path in Directory.EnumerateFiles(currentVersionDir, "*.zip"))
                 {
@@ -110,7 +110,7 @@ public class PackagingTool
                 if (!currentVersionPackageNames.Contains(currentVersionPackageName))
                     continue;
                 
-                // outout information
+                // output information
                 if (isFxDependent)
                     Console.WriteLine($"Checking diff package for {match.Groups["PlatformId"].Value} (Framework Dependent)");
                 else
@@ -193,7 +193,7 @@ public class PackagingTool
     }
 
 
-    // Create packge manifest.
+    // Create package manifest.
     PackagingResult CreatePackageManifest(IList<string> args)
     {
         if (args.Count < 1)
@@ -207,16 +207,19 @@ public class PackagingTool
             return PackagingResult.InvalidArgument;
         }
         var platform = args.Count > 2 ? args[0] : null;
-        var repositaryName = args[platform != null ? 1 : 0];
-        var versionStr = args[platform != null ? 2 : 1];
-        if (!Version.TryParse(versionStr, out var version) || version == null)
+        var repositaryName = args[platform is not null ? 1 : 0];
+        var versionStr = args[platform is not null ? 2 : 1];
+        var informationalVersion = platform is not null
+            ? (args.Count >= 4 ? args[3] : null)
+            : (args.Count >= 3 ? args[2] : null);
+        if (!Version.TryParse(versionStr, out var version))
         {
             Console.Error.Write($"Invalid version '{versionStr}'.");
             return PackagingResult.InvalidArgument;
         }
-        return this.CreatePackageManifest(platform, repositaryName, version);
+        return this.CreatePackageManifest(platform, repositaryName, version, informationalVersion);
     }
-    PackagingResult CreatePackageManifest(string? platform, string repositaryName, Version version)
+    PackagingResult CreatePackageManifest(string? platform, string repositaryName, Version version, string? informationalVersion)
     {
         try
         {
@@ -265,10 +268,12 @@ public class PackagingTool
             var manifestName = platform != null ? $"PackageManifest-{platform}.json" : "PackageManifest.json";
             Console.WriteLine($"Creating package manifest '{manifestName}'");
             using var stream = new FileStream(Path.Combine(packagesDir, manifestName), FileMode.Create, FileAccess.ReadWrite);
-            using var jsonWriter = new Utf8JsonWriter(stream, new JsonWriterOptions() { Indented = true });
+            using var jsonWriter = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = true });
             jsonWriter.WriteStartObject();
             jsonWriter.WriteString("Name", appName);
             jsonWriter.WriteString("Version", version.ToString());
+            if (!string.IsNullOrWhiteSpace(informationalVersion))
+                jsonWriter.WriteString("InformationalVersion", informationalVersion);
             jsonWriter.WriteString("PageUri", $"https://github.com/carina-studio/{repositaryName}/releases/tag/{version}");
             jsonWriter.WritePropertyName("Packages");
             jsonWriter.WriteStartArray();
@@ -314,7 +319,6 @@ public class PackagingTool
                 });
 
                 // write entry
-                var platformId = match.Groups["PlatformId"];
                 jsonWriter.WriteStartObject();
                 architecture?.Let(it => jsonWriter.WriteString("Architecture", it));
                 if (match.Groups["PrevVersion"].Success)
@@ -339,6 +343,23 @@ public class PackagingTool
             return PackagingResult.UnclassifiedError;
         }
     }
+    
+    
+    // Get current informational version of given project.
+    PackagingResult GetCurrentInformationalVersion(IList<string> args)
+    {
+        if (args.IsEmpty())
+        {
+            Console.Error.WriteLine("No project specified.");
+            return PackagingResult.InvalidArgument;
+        }
+        var result = this.GetCurrentVersion(args[0], out _, out var informationalVersion);
+        if (result == PackagingResult.Success)
+            Console.Write(informationalVersion);
+        else
+            Console.Error.Write($"Unable to get current informational version of '{args[0]}'");
+        return result;
+    }
 
 
     // Get current version of given project.
@@ -349,33 +370,41 @@ public class PackagingTool
             Console.Error.WriteLine("No project specified.");
             return PackagingResult.InvalidArgument;
         }
-        var result = this.GetCurrentVersion(args[0], out var version);
+        var result = this.GetCurrentVersion(args[0], out var version, out _);
         if (result == PackagingResult.Success)
             Console.Write(version);
         else
             Console.Error.Write($"Unable to get current version of '{args[0]}'");
         return result;
     }
-    PackagingResult GetCurrentVersion(string projectFile, out Version? version)
+    PackagingResult GetCurrentVersion(string projectFile, out Version? version, out string? informationalVersion)
     {
         version = null;
+        informationalVersion = null;
         try
         {
-            var regex = new Regex("^\\s*\\<AssemblyVersion\\>(?<Version>[^\\<]+)\\<");
+            var assemblyVersionRegex = new Regex("^\\s*\\<AssemblyVersion\\>(?<Version>[^\\<]+)\\<");
+            var infoVersionRegex = new Regex("^\\s*\\<Version\\>(?<Version>[^\\<]+)\\<");
             using var reader = new StreamReader(projectFile, Encoding.UTF8);
             var line = reader.ReadLine();
             while (line != null)
             {
-                var match = regex.Match(line);
+                var match = assemblyVersionRegex.Match(line);
                 if (match.Success)
                 {
-                    if (Version.TryParse(match.Groups["Version"].Value, out version))
-                        return PackagingResult.Success;
-                    return PackagingResult.UnclassifiedError;
+                    if (!Version.TryParse(match.Groups["Version"].Value, out version))
+                        return PackagingResult.UnclassifiedError;
                 }
+                match = infoVersionRegex.Match(line);
+                if (match.Success)
+                    informationalVersion = match.Groups["Version"].Value;
+                if (version is not null && informationalVersion is not null)
+                    return PackagingResult.Success;
                 line = reader.ReadLine();
             }
-            return PackagingResult.UnclassifiedError;
+            return version is not null
+                ? PackagingResult.Success 
+                : PackagingResult.UnclassifiedError;
         }
         catch (Exception ex)
         {
@@ -403,7 +432,7 @@ public class PackagingTool
     {
         // get current version
         version = null;
-        var result = this.GetCurrentVersion(projectFile, out var currentVersion);
+        var result = this.GetCurrentVersion(projectFile, out var currentVersion, out _);
         if (result != PackagingResult.Success)
         {
             Console.Error.Write($"Unable to get current version of '{projectFile}'");
@@ -425,6 +454,7 @@ public class PackagingTool
                 }
             }
         }
+        // ReSharper disable once EmptyGeneralCatchClause
         catch
         { }
         return PackagingResult.Success;
@@ -452,6 +482,8 @@ public class PackagingTool
                 return this.CreateDiffPackages(args.GetRangeView(1, args.Count - 1));
             case "create-package-manifest":
                 return this.CreatePackageManifest(args.GetRangeView(1, args.Count - 1));
+            case "get-current-informational-version":
+                return this.GetCurrentInformationalVersion(args.GetRangeView(1, args.Count - 1));
             case "get-current-version":
                 return this.GetCurrentVersion(args.GetRangeView(1, args.Count - 1));
             case "get-previous-version":
