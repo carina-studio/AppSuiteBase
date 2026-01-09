@@ -1,6 +1,8 @@
-﻿using Avalonia.Media;
+﻿using Avalonia.Data.Converters;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using CarinaStudio.Collections;
+using CarinaStudio.Data.Converters;
 using CarinaStudio.Logging;
 using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
@@ -11,6 +13,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.ViewModels;
@@ -42,6 +45,11 @@ public class ApplicationInfo : ViewModel<IAppSuiteApplication>
         /// </summary>
         Flaticon,
     }
+    
+    
+    // Static fields.
+    static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(IAppSuiteApplication.Current, typeof(ApplicationReleasingType));
+    static readonly Regex InformationalVersionRegex = new("^(?<Version>.+)(\\+[a-z0-9]+)$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
 
     // Fields.
@@ -70,6 +78,23 @@ public class ApplicationInfo : ViewModel<IAppSuiteApplication>
                     }
                 });
             }
+        });
+        
+        // get informational version name
+        this.InformationalVersion = Global.Run(() =>
+        {
+            var version = Assembly.GetEntryAssembly().AsNonNull().GetCustomAttribute(typeof(AssemblyInformationalVersionAttribute))?.Let(attr =>
+            {
+                var version = ((AssemblyInformationalVersionAttribute)attr).InformationalVersion;
+                var matcher = InformationalVersionRegex.Match(version);
+                if (matcher.Success)
+                    return matcher.Groups["Version"].Value;
+                return version;
+            }) ?? this.Version.ToString();
+            if (this.ReleasingType == ApplicationReleasingType.Stable)
+                return version;
+            var releasingType = AppReleasingTypeConverter.Convert<string?>(this.ReleasingType);
+            return $"{version} {releasingType}";
         });
 
         // get assemblies
@@ -200,6 +225,12 @@ public class ApplicationInfo : ViewModel<IAppSuiteApplication>
     /// Get website of application icon.
     /// </summary>
     public virtual ApplicationIconWebSite IconWebSite => ApplicationIconWebSite.Flaticon;
+    
+    
+    /// <summary>
+    /// Get informational version name.
+    /// </summary>
+    public string InformationalVersion { get; }
 
 
     /// <summary>

@@ -2550,7 +2550,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// <returns>Task of handling activation of application window.</returns>
     protected virtual async Task OnActivatedAsync(CancellationToken cancellationToken)
     {
-        await this.UpdateTextScaleFactorAsync(cancellationToken);
+        if (this.windows.IsEmpty() || this.splashWindow is null || !ReferenceEquals(this.windows[0], this.splashWindow))
+            await this.UpdateTextScaleFactorAsync(cancellationToken);
     }
 
 

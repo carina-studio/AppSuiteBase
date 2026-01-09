@@ -1,14 +1,13 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using CarinaStudio.Animation;
+using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Controls;
-using CarinaStudio.Data.Converters;
 using CarinaStudio.Threading;
 using System;
 using System.Diagnostics;
@@ -29,7 +28,6 @@ class SplashWindowImpl : Avalonia.Controls.Window
 
 	// Static fields.
 	static readonly DirectProperty<SplashWindowImpl, Color> AccentColorProperty = AvaloniaProperty.RegisterDirect<SplashWindowImpl, Color>(nameof(AccentColor), w => w.accentColor);
-	static readonly IValueConverter AppReleasingTypeConverter = new Converters.EnumConverter(IAppSuiteApplication.Current, typeof(ApplicationReleasingType));
 	static readonly DirectProperty<SplashWindowImpl, double> BackgroundImageOpacityProperty = AvaloniaProperty.RegisterDirect<SplashWindowImpl, double>(nameof(BackgroundImageOpacity), w => w.backgroundImageOpacity);
 	static readonly StyledProperty<IImage?> BackgroundImageProperty = AvaloniaProperty.Register<SplashWindowImpl, IImage?>(nameof(BackgroundImage));
 	static readonly StyledProperty<Bitmap?> IconBitmapProperty = AvaloniaProperty.Register<SplashWindowImpl, Bitmap?>(nameof(IconBitmap));
@@ -39,6 +37,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 
 	// Fields.
 	Color accentColor;
+	readonly ApplicationInfo appInfo = new();
 	double backgroundImageOpacity = 1.0;
 	Uri? backgroundImageUri;
 	Uri? iconUri;
@@ -128,9 +127,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 				};
 			});
 		});
-		this.Version = app?.GetFormattedString("ApplicationInfoDialog.Version", app.Assembly.GetName().Version).AsNonNull() ?? "";
-		if (app?.ReleasingType != ApplicationReleasingType.Stable)
-			this.Version += $" {AppReleasingTypeConverter.Convert<string?>(app?.ReleasingType)}";
+		this.Version = this.appInfo.InformationalVersion;
 		AvaloniaXamlLoader.Load(this);
 		this.progressBar = this.Get<ProgressBar>(nameof(progressBar));
 		if (Platform.IsWindows)
@@ -260,6 +257,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 	// Called when closed.
 	protected override void OnClosed(EventArgs e)
 	{
+		this.appInfo.Dispose();
 		this.progressAnimator?.Cancel();
 		this.showAction.Cancel();
 		this.stopwatch.Stop();

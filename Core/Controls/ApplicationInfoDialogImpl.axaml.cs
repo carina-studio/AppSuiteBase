@@ -16,7 +16,6 @@ using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
-using CarinaStudio.Data.Converters;
 using CarinaStudio.IO;
 using CarinaStudio.Threading;
 using System;
@@ -40,12 +39,12 @@ class ApplicationInfoDialogImpl : Dialog
 
 
 	// Static fields.
-	static readonly IValueConverter AppReleasingTypeConverter = new EnumConverter(IAppSuiteApplication.Current, typeof(ApplicationReleasingType));
 	static readonly StyledProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
 	static readonly StyledProperty<bool> HasExternalDependenciesProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasExternalDependencies");
 	static readonly StyledProperty<bool> HasPrivacyPolicyProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasPrivacyPolicy");
 	static readonly StyledProperty<bool> HasTotalPhysicalMemoryProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasTotalPhysicalMemory));
 	static readonly StyledProperty<bool> HasUserAgreementProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasUserAgreement");
+	static readonly StyledProperty<string?> InformationalVersionProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, string?>(nameof(InformationalVersion));
 	static readonly SettingKey<bool> IsRestartingInDebugModeConfirmationShownKey = new("ApplicationInfoDialog.IsRestartingInDebugModeConfirmationShown");
 	static readonly DirectProperty<ApplicationInfoDialogImpl, PixelSize> PhysicalScreenSizeProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelSize>(nameof(PhysicalScreenSize), w => w.physicalScreenSize);
 	static readonly DirectProperty<ApplicationInfoDialogImpl, PixelRect> PhysicalScreenWorkingAreaProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelRect>(nameof(PhysicalScreenWorkingArea), w => w.physicalScreenWorkingArea);
@@ -69,7 +68,6 @@ class ApplicationInfoDialogImpl : Dialog
 			return $"{size.Width:F0}x{size.Height:F0}";
 		return null;
 	});
-	static readonly StyledProperty<string?> VersionStringProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, string?>(nameof(VersionString));
 
 
 	// Fields.
@@ -295,6 +293,10 @@ class ApplicationInfoDialogImpl : Dialog
 
 	// Check whether total physical memory info is valid or not.
 	public bool HasTotalPhysicalMemory => this.GetValue(HasTotalPhysicalMemoryProperty);
+	
+	
+	// Informational version name.
+	string? InformationalVersion => this.GetValue(InformationalVersionProperty);
 
 
 	// Called when application string resources updated.
@@ -655,14 +657,9 @@ class ApplicationInfoDialogImpl : Dialog
 	{
 		if (this.DataContext is not ApplicationInfo appInfo)
 			return;
-		this.SetValue(VersionStringProperty, Global.Run(() =>
+		this.SetValue(InformationalVersionProperty, Global.Run(() =>
 		{
-			var buffer = new StringBuilder(this.Application.GetFormattedString("ApplicationInfoDialog.Version", appInfo.Version));
-			if (appInfo.ReleasingType != ApplicationReleasingType.Stable)
-			{
-				buffer.Append(' ');
-				buffer.Append(AppReleasingTypeConverter.Convert<string?>(appInfo.ReleasingType));
-			}
+			var buffer = new StringBuilder(appInfo.InformationalVersion);
 			if (this.isProprietaryApp)
 			{
 				buffer.Append(' ');
@@ -671,10 +668,6 @@ class ApplicationInfoDialogImpl : Dialog
 			return buffer.ToString();
 		}));
 	}
-
-
-    // String represent version.
-    string? VersionString => this.GetValue(VersionStringProperty);
 
 
     /// <summary>

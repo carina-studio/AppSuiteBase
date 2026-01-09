@@ -90,7 +90,7 @@
 									<StackPanel Name="badgesPanel" Classes="Shadowed" Height="{StaticResource Double/ApplicationInfoDialog.AppBadge.Size}" Orientation="Horizontal" VerticalAlignment="Center"/>
 								</StackPanel>
 								<WrapPanel Orientation="Horizontal">
-									<SelectableTextBlock Classes="Shadowed" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" Opacity="{StaticResource Double/ApplicationInfoDialog.AppVersion.Opacity}" Text="{Binding #window.VersionString}" VerticalAlignment="Center"/>
+									<SelectableTextBlock Classes="Shadowed" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" Opacity="{StaticResource Double/ApplicationInfoDialog.AppVersion.Opacity}" Text="{Binding #window.InformationalVersion}" VerticalAlignment="Center"/>
 									<TextBlock Classes="Shadowed" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding #window.HasApplicationChangeList}" Margin="5,0,5,0" Text="|" VerticalAlignment="Center"/>
 									<abControls:LinkTextBlock Classes="Shadowed" Command="{Binding #window.ShowApplicationChangeList}" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding #window.HasApplicationChangeList}" Text="{xaml:StringResource ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
 								</WrapPanel>
