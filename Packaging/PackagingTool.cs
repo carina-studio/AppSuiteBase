@@ -201,22 +201,24 @@ public class PackagingTool
             Console.Error.Write("No GitHub repositary specified.");
             return PackagingResult.InvalidArgument;
         }
-        if (args.Count < 2)
+        var versionIndex = -1;
+        Version? version = null;
+        for (var i = 1; i < Math.Min(3, args.Count); i++)
+        {
+            if (Version.TryParse(args[i], out version))
+            {
+                versionIndex = i;
+                break;
+            }
+        }
+        if (version is null)
         {
             Console.Error.Write("No version specified.");
             return PackagingResult.InvalidArgument;
         }
-        var platform = args.Count > 2 ? args[0] : null;
-        var repositaryName = args[platform is not null ? 1 : 0];
-        var versionStr = args[platform is not null ? 2 : 1];
-        var informationalVersion = platform is not null
-            ? (args.Count >= 4 ? args[3] : null)
-            : (args.Count >= 3 ? args[2] : null);
-        if (!Version.TryParse(versionStr, out var version))
-        {
-            Console.Error.Write($"Invalid version '{versionStr}'.");
-            return PackagingResult.InvalidArgument;
-        }
+        var platform = versionIndex == 2 ? args[0] : null;
+        var repositaryName = args[versionIndex - 1];
+        var informationalVersion = versionIndex + 1 < args.Count ? args[versionIndex + 1] : null;
         return this.CreatePackageManifest(platform, repositaryName, version, informationalVersion);
     }
     PackagingResult CreatePackageManifest(string? platform, string repositaryName, Version version, string? informationalVersion)
