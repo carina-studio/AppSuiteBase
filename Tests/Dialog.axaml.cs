@@ -35,10 +35,18 @@ namespace CarinaStudio.AppSuite.Tests
 
         public void Test()
         {
+            /*
             if (this.TutorialPresenter is not null)
                 _ = new MessageDialog { Icon = MessageDialogIcon.Success, Message = "TutorialPresenter found." }.ShowDialog(this);
             else
                 _ = new MessageDialog { Icon = MessageDialogIcon.Error, Message = "TutorialPresenter not found." }.ShowDialog(this);
+            */
+            if (this.Find<ScrollViewer>("scrollViewer") is { } scrollViewer 
+                && this.Find<Control>("regexItem") is { } item 
+                && this.Find<Control>("regexTextBox") is { } textBox)
+            {
+                this.HintForInput(scrollViewer, item, textBox);
+            }
         }
     }
 }

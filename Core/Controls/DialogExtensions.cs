@@ -19,6 +19,23 @@ public static class DialogExtensions
     static readonly Dictionary<Control, CancellationTokenSource> ItemAnimationCancellationTokenSources = new();
     static DoubleTransition? ItemOpacityTransition;
 
+
+    /// <summary>
+    /// Animate item of dialog to get attention of user.
+    /// </summary>
+    /// <param name="dialog">Dialog.</param>
+    /// <param name="itemName">Name of item to animate.</param>
+    /// <returns>Ture if item found and animated successfully.</returns>
+    public static bool AnimateItem(this Avalonia.Controls.Window dialog, string itemName)
+    {
+        if (dialog.Find<Control>(itemName) is { } item)
+        {
+            dialog.AnimateItem(item);
+            return true;
+        }
+        return false;
+    }
+
     
     /// <summary>
     /// Animate item of dialog to get attention of user.
@@ -97,5 +114,22 @@ public static class DialogExtensions
                 }, durationMillis);
             }
         }, durationMillis);
+    }
+
+
+    /// <summary>
+    /// Hint user to input value into specific item.
+    /// </summary>
+    /// <param name="dialog">Dialog.</param>
+    /// <param name="scrollViewer"><see cref="ScrollViewer"/> which contains the item to input.</param>
+    /// <param name="animatedItem">Item to be animated.</param>
+    /// <param name="focusedControl">Control to be focused.</param>
+    public static void HintForInput(this Avalonia.Controls.Window dialog, ScrollViewer? scrollViewer, Control? animatedItem, Control? focusedControl)
+    {
+        if ((animatedItem ?? focusedControl) is { } itemToScrollTo)
+            scrollViewer?.SmoothScrollIntoView(itemToScrollTo);
+        if (animatedItem is not null)
+            dialog.AnimateItem(animatedItem);
+        (focusedControl ?? animatedItem)?.Focus();
     }
 }
