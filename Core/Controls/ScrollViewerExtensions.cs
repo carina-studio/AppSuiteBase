@@ -21,11 +21,16 @@ public static class ScrollViewerExtensions
     /// <param name="scrollViewer"><see cref="ScrollViewer"/>.</param>
     /// <param name="visual">Content.</param>
     /// <param name="scrollToCenter">True to scroll content to center of viewport.</param>
-    public static void SmoothScrollIntoView(this ScrollViewer scrollViewer, Visual visual, bool scrollToCenter = true) =>
+    /// <param name="onCompleted">Function to be called when scrolling completed.</param>
+    /// <param name="onCancelled">Function to be called when scrolling cancelled.</param>
+    /// <returns>True if the scrolling has been started or completed successfully.</returns>
+    public static bool SmoothScrollIntoView(this ScrollViewer scrollViewer, Visual visual, bool scrollToCenter = true, Action? onCompleted = null, Action? onCancelled = null) =>
         scrollViewer.SmoothScrollIntoView(visual, 
             IAppSuiteApplication.CurrentOrNull?.FindResourceOrDefault<TimeSpan?>("TimeSpan/Animation") ?? TimeSpan.FromMilliseconds(500),
             SmoothScrollingInterpolator,
-            scrollToCenter);
+            scrollToCenter,
+            onCompleted,
+            onCancelled);
     
     
     /// <summary>
@@ -35,8 +40,11 @@ public static class ScrollViewerExtensions
     /// <param name="visual">Content.</param>
     /// <param name="duration">Duration of scrolling.</param>
     /// <param name="scrollToCenter">True to scroll content to center of viewport.</param>
-    public static void SmoothScrollIntoView(this ScrollViewer scrollViewer, Visual visual, TimeSpan duration, bool scrollToCenter = true) =>
-        scrollViewer.SmoothScrollIntoView(visual, duration, SmoothScrollingInterpolator, scrollToCenter);
+    /// <param name="onCompleted">Function to be called when scrolling completed.</param>
+    /// <param name="onCancelled">Function to be called when scrolling cancelled.</param>
+    /// <returns>True if the scrolling has been started or completed successfully.</returns>
+    public static bool SmoothScrollIntoView(this ScrollViewer scrollViewer, Visual visual, TimeSpan duration, bool scrollToCenter = true, Action? onCompleted = null, Action? onCancelled = null) =>
+        scrollViewer.SmoothScrollIntoView(visual, duration, SmoothScrollingInterpolator, scrollToCenter, onCompleted, onCancelled);
 
 
     /// <summary>
@@ -44,8 +52,13 @@ public static class ScrollViewerExtensions
     /// </summary>
     /// <param name="scrollViewer"><see cref="ScrollViewer"/>.</param>
     /// <param name="offset">Target offset.</param>
-    public static void SmoothScrollTo(this ScrollViewer scrollViewer, Vector offset) =>
+    /// <param name="onCompleted">Function to be called when scrolling completed.</param>
+    /// <param name="onCancelled">Function to be called when scrolling cancelled.</param>
+    /// <returns>True if the scrolling has been started or completed successfully.</returns>
+    public static bool SmoothScrollTo(this ScrollViewer scrollViewer, Vector offset, Action? onCompleted = null, Action? onCancelled = null) =>
         scrollViewer.SmoothScrollTo(offset,
             IAppSuiteApplication.CurrentOrNull?.FindResourceOrDefault<TimeSpan?>("TimeSpan/Animation") ?? TimeSpan.FromMilliseconds(500),
-            SmoothScrollingInterpolator);
+            SmoothScrollingInterpolator,
+            onCompleted, 
+            onCancelled);
 }

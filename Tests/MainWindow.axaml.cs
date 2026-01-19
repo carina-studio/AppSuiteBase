@@ -194,13 +194,7 @@ namespace CarinaStudio.AppSuite.Tests
                     Debug.WriteLine($"ItemDropped: {e.StartItemIndex}, {e.ItemIndex}");
                     if (e.ItemIndex >= 0 && e.ItemIndex != e.StartItemIndex)
                     {
-                        items.Move(e.StartItemIndex, e.ItemIndex);
-                        it.SelectedIndex = e.ItemIndex;
-                        Dispatcher.UIThread.Post(() =>
-                        {
-                            if (it.SelectedItem is { } selectedItem && it.ContainerFromItem(selectedItem) is { } container)
-                                container.Focus();
-                        });
+                        it.TryMoveItem<object>(e.StartItemIndex, e.ItemIndex);
                     }
                 });
             });

@@ -126,8 +126,17 @@ public static class DialogExtensions
     /// <param name="focusedControl">Control to be focused.</param>
     public static void HintForInput(this Avalonia.Controls.Window dialog, ScrollViewer? scrollViewer, Control? animatedItem, Control? focusedControl)
     {
-        if ((animatedItem ?? focusedControl) is { } itemToScrollTo)
-            scrollViewer?.SmoothScrollIntoView(itemToScrollTo);
+        if (scrollViewer is not null && (animatedItem ?? focusedControl) is { } itemToScrollTo)
+        {
+            var scrolled = scrollViewer.SmoothScrollIntoView(itemToScrollTo, onCompleted: () =>
+            {
+                if (animatedItem is not null)
+                    dialog.AnimateItem(animatedItem);
+                (focusedControl ?? animatedItem)?.Focus();
+            });
+            if (scrolled)
+                return;
+        }
         if (animatedItem is not null)
             dialog.AnimateItem(animatedItem);
         (focusedControl ?? animatedItem)?.Focus();
