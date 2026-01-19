@@ -29,6 +29,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Markup.Xaml.Styling;
+using Avalonia.Threading;
 using CarinaStudio.AppSuite.Input;
 using CarinaStudio.AppSuite.IO;
 using CarinaStudio.AppSuite.Media;
@@ -164,6 +165,13 @@ namespace CarinaStudio.AppSuite.Tests
             this.Get<ListBox>("listBox1").Also(it =>
             {
                 var items = (AvaloniaList<object>)it.ItemsSource!;
+                it.GotFocus += (_, _) => Debug.WriteLine("Got focus");
+                it.LostFocus += (_, _) =>
+                {
+                    Debug.WriteLine("Lost focus");
+                    Debug.WriteLine(Environment.StackTrace);
+                };
+                it.SelectionChanged += (_, e) => Debug.WriteLine($"Item [{it.SelectedIndex}] selected");
                 ListBoxItemDragging.SetItemDraggingEnabled(it, true);
                 it.AddHandler(ListBoxItemDragging.ItemDragCancelledEvent, (sender, e) =>
                 {
@@ -188,6 +196,11 @@ namespace CarinaStudio.AppSuite.Tests
                     {
                         items.Move(e.StartItemIndex, e.ItemIndex);
                         it.SelectedIndex = e.ItemIndex;
+                        Dispatcher.UIThread.Post(() =>
+                        {
+                            if (it.SelectedItem is { } selectedItem && it.ContainerFromItem(selectedItem) is { } container)
+                                container.Focus();
+                        });
                     }
                 });
             });

@@ -309,12 +309,12 @@ public class ListBoxItemDragging
             {
                 RoutedEvent = ItemDragCancelledEvent
             };
-        listBox.RaiseEvent(dragEventArgs);
         if (!dragEventArgs.Handled && container is not null)
         {
             ItemInsertionIndicator.SetInsertingItemAfter(container, false);
             ItemInsertionIndicator.SetInsertingItemBefore(container, false);
         }
+        listBox.RaiseEvent(dragEventArgs);
     }
     
     
