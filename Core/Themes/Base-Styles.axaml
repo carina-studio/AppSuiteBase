@@ -1206,6 +1206,7 @@
 							<Button Name="PART_Dismiss" 
 							        Background="{DynamicResource ButtonBackgroundTransparent}" 
 							        BorderThickness="0" Command="{Binding Presenter.DismissTutorial}" 
+							        CornerRadius="{DynamicResource CornerRadius/FullWindowTutorialPresenter.Tutorial.Dismiss}"
 							        Grid.Column="2" 
 							        Grid.RowSpan="2"
 							        Height="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size}"
@@ -1557,13 +1558,13 @@
 			<ControlTemplate TargetType="{x:Type ListBoxItem}">
 				<DockPanel>
 					<Border Background="{DynamicResource SystemControlHighlightListAccentLowBrush}"
-					        CornerRadius="{DynamicResource ControlCornerRadius}"
+					        CornerRadius="{DynamicResource CornerRadius/ListBoxItem.InsertionIndicator}"
 					        DockPanel.Dock="Top"
 					        Height="{DynamicResource Double/ListBoxItem.InsertionIndicator.Size}"
 					        IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemBefore}"
 					        Margin="{TemplateBinding Margin, Converter={x:Static converters:ThicknessConverters.Bottom}}"/>
 					<Border Background="{DynamicResource SystemControlHighlightListAccentLowBrush}"
-					        CornerRadius="{DynamicResource ControlCornerRadius}"
+					        CornerRadius="{DynamicResource CornerRadius/ListBoxItem.InsertionIndicator}"
 					        DockPanel.Dock="Bottom"
 					        Height="{DynamicResource Double/ListBoxItem.InsertionIndicator.Size}"
 					        IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemAfter}"

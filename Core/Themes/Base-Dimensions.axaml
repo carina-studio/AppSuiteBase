@@ -173,6 +173,7 @@
 	<sys:Double x:Key="Double/ExternalDependenciesDialog.Width">600</sys:Double>
 
 	<!-- FullWindowTutorialPresenter -->
+	<CornerRadius x:Key="CornerRadius/FullWindowTutorialPresenter.Tutorial.Dismiss">5</CornerRadius>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize">14</sys:Double>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth">250</sys:Double>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Dismiss.Size">18</sys:Double>
@@ -222,8 +223,9 @@
 
 	<!-- ListBoxItem -->
 	<CornerRadius x:Key="CornerRadius/ListBoxItem">6</CornerRadius>
+	<CornerRadius x:Key="CornerRadius/ListBoxItem.InsertionIndicator">1</CornerRadius>
 	<sys:Double x:Key="Double/ListBoxItem.Icon.Size">14</sys:Double>
-	<sys:Double x:Key="Double/ListBoxItem.InsertionIndicator.Size">4</sys:Double>
+	<sys:Double x:Key="Double/ListBoxItem.InsertionIndicator.Size">3</sys:Double>
 	<Thickness x:Key="Thickness/ListBoxItem.Icon.Margin">0,0,9,0</Thickness>
 	<Thickness x:Key="Thickness/ListBoxItem.Margin">0,1,0,1</Thickness>
 	<Thickness x:Key="Thickness/ListBoxItem.Padding">6,4,15,4</Thickness>
