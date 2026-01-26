@@ -717,6 +717,7 @@
 	<Style Selector="ListBox.Dialog_Item_ListBox">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="CornerRadius" Value="0"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ListBox.Margin}"/>
 		<Setter Property="Padding" Value="0"/>
@@ -1031,6 +1032,7 @@
 	<Style Selector="TreeView.Dialog_Item_TreeView">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="CornerRadius" Value="0"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TreeView.Margin}"/>
 		<Setter Property="Padding" Value="0"/>
