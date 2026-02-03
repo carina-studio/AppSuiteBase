@@ -427,6 +427,14 @@ public class StringInterpolationFormatTextBox : SyntaxHighlightingObjectTextBox<
 	{
 		// no need to handle
 		var s = e.Text;
+		if (s is not null && s.Length == 1)
+		{
+			switch ((int)s[0])
+			{
+				case 27: // ESC
+					return;
+			}
+		}
 		if (this.IsReadOnly || string.IsNullOrEmpty(s))
 		{
 			base.OnTextInput(e);
@@ -584,16 +592,8 @@ public class StringInterpolationFormatTextBox : SyntaxHighlightingObjectTextBox<
 
 
 	// Check whether at least one assistance has been opened or not.
-    bool UpdateHasOpenedAssistanceMenus()
-    {
-	    if (this.predefinedVarsPopup?.IsOpen == true)
-	    {
-		    this.SetAndRaise(HasOpenedAssistanceMenusProperty, ref this.hasOpenedAssistanceMenus, true);
-		    return true;
-	    }
-	    this.SetAndRaise(HasOpenedAssistanceMenusProperty, ref this.hasOpenedAssistanceMenus, false);
-	    return false;
-    }
+	void UpdateHasOpenedAssistanceMenus() =>
+		this.SetAndRaise(HasOpenedAssistanceMenusProperty, ref this.hasOpenedAssistanceMenus, this.predefinedVarsPopup?.IsOpen == true);
 }
 
 

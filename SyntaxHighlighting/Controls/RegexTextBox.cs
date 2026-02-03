@@ -803,6 +803,14 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 	{
 		// no need to handle
 		var s = e.Text;
+		if (s is not null && s.Length == 1)
+		{
+			switch ((int)s[0])
+			{
+				case 27: // ESC
+					return;
+			}
+		}
 		if (this.IsReadOnly || !this.IsInputAssistanceEnabled || string.IsNullOrEmpty(s))
 		{
 			this.isTextInputtedBeforeOpeningAssistanceMenu = false;
@@ -1250,21 +1258,20 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 
 
 	// Check whether at least one assistance has been opened or not.
-	bool UpdateHasOpenedAssistanceMenus()
+	void UpdateHasOpenedAssistanceMenus()
 	{
-		if (this.candidatePhrasesPopup?.IsOpen == true 
+		if (this.candidatePhrasesPopup?.IsOpen == true
 		    || this.escapedCharactersPopup?.IsOpen == true
 		    || this.groupingConstructsPopup?.IsOpen == true
 		    || this.predefinedGroupsPopup?.IsOpen == true)
 		{
 			this.SetAndRaise(HasOpenedAssistanceMenusProperty, ref this.hasOpenedAssistanceMenus, true);
-			return true;
 		}
-		this.SetAndRaise(HasOpenedAssistanceMenusProperty, ref this.hasOpenedAssistanceMenus, false);
-		return false;
+		else
+			this.SetAndRaise(HasOpenedAssistanceMenusProperty, ref this.hasOpenedAssistanceMenus, false);
 	}
-	
-	
+
+
 	// Update tokens around current selection.
 	void UpdateSelectedTokens()
 	{
