@@ -1,3 +1,4 @@
+using CarinaStudio.AppSuite.Diagnostics;
 using CarinaStudio.Logging;
 using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
@@ -5,6 +6,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Reflection;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,12 +24,14 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
 
 
     // Fields.
+    [Obfuscation(Exclude = false)]
     readonly IScriptManager? implementation;
 
 
     // Constructor.
     ScriptManager(IAppSuiteApplication app, IScriptManager? implementation) : base(app)
     {
+        Guard.VerifyInternalCall();
         this.implementation = implementation;
         this.IOTaskFactory = implementation?.IOTaskFactory ?? new();
         implementation?.Let(it => it.PropertyChanged += (_, e) =>
@@ -52,12 +56,19 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
     /// <inheritdoc/>
     public IScript CreateTemplateScript(ScriptLanguage language, string source, ScriptOptions options) =>
         this.implementation?.CreateTemplateScript(language, source, options) ?? new MockScript(this.Application, language, source, true, options);
-    
+
 
     /// <summary>
     /// Get default instance.
     /// </summary>
-    public static ScriptManager Default => DefaultInstance ?? throw new InvalidOperationException();
+    public static ScriptManager Default
+    {
+        get
+        {
+            Guard.VerifyInternalCall();
+            return DefaultInstance ?? throw new InvalidOperationException();
+        }
+    }
 
 
     // Initialize asynchronously.

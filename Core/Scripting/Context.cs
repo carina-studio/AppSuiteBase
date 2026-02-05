@@ -9,7 +9,9 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,6 +23,7 @@ namespace CarinaStudio.AppSuite.Scripting;
 public class Context : IContext
 {
     // Data of context.
+    [Obfuscation(Exclude = false)]
     class DataImpl : IDictionary<string, object>
     {
         // Fields.
@@ -111,8 +114,15 @@ public class Context : IContext
     
     
     // Fields.
+    [Obfuscation(Exclude = false)]
+    readonly Func<CultureInfo> cultureInfoGetter;
+    [Obfuscation(Exclude = false)]
     volatile ConcurrentDictionary<string, string>? defaultStringTable;
+    [Obfuscation(Exclude = false)]
     volatile ConcurrentDictionary<string, IDictionary<string, string>>? stringTablesWithCulture;
+    [Obfuscation(Exclude = false)] 
+    readonly Func<string, string?, string?> stringGetter;
+    [Obfuscation(Exclude = false)]
     readonly Lock stringTableSyncLock = new();
 
 
@@ -122,18 +132,14 @@ public class Context : IContext
     /// <param name="app">Application.</param>
     /// <param name="loggerName">Name for logger.</param>
     [RequiresUnreferencedCode("Unreferenced code is required for checking caller.")]
-    public Context(IAppSuiteApplication app, string loggerName)
+    public Context([Obfuscation(Exclude = false)] IAppSuiteApplication app, [Obfuscation(Exclude = false)] string loggerName)
     {
         Guard.VerifyInternalCall();
-        this.Application = app;
+        this.cultureInfoGetter = () => app.CultureInfo;
         this.Logger = ScriptManager.Default.CreateScriptLogger(loggerName);
+        // ReSharper disable once ConvertClosureToMethodGroup
+        this.stringGetter = (key, defaultValue) => app.GetString(key, defaultValue);
     }
-
-
-    /// <summary>
-    /// Get application.
-    /// </summary>
-    public IAppSuiteApplication Application { get; }
 
 
     /// <summary>
@@ -171,15 +177,14 @@ public class Context : IContext
     /// <inheritdoc/>
     public string? GetString(string key, string? defaultValue)
     {
-        var app = this.Application;
-        if (this.stringTablesWithCulture?.TryGetValue(app.CultureInfo.Name, out var t) == true
+        if (this.stringTablesWithCulture?.TryGetValue(this.cultureInfoGetter().Name, out var t) == true
             && t.TryGetValue(key, out string? s))
         {
             return s;
         }
         if (this.defaultStringTable?.TryGetValue(key, out s) == true)
             return s;
-        return app.GetString(key, defaultValue);
+        return this.stringGetter(key, defaultValue);
     }
 
 
@@ -228,6 +233,16 @@ public class Context : IContext
 /// </summary>
 public class UserInteractiveContext : Context, IUserInteractiveContext
 {
+    [Obfuscation(Exclude = false)]
+    readonly Func<Avalonia.Controls.Window?> latestActiveWindowGetter;
+    [Obfuscation(Exclude = false)]
+    readonly Func<bool> mainThreadChecker;
+    [Obfuscation(Exclude = false)]
+    readonly SynchronizationContext mainThreadSyncContext;
+    [Obfuscation(Exclude = false)] 
+    readonly Func<string, IObservable<string?>> observableStringGetter;
+
+
     /// <summary>
     /// Initialize new <see cref="UserInteractiveContext"/> instance.
     /// </summary>
@@ -235,7 +250,14 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
     /// <param name="loggerName">Name for logger.</param>
     [RequiresUnreferencedCode("Unreferenced code is required for checking caller.")]
     public UserInteractiveContext(IAppSuiteApplication app, string loggerName) : base(app, loggerName)
-    { }
+    {
+        this.latestActiveWindowGetter = () => app.LatestActiveMainWindow;
+        // ReSharper disable once ConvertClosureToMethodGroup
+        this.mainThreadChecker = () => app.CheckAccess();
+        this.mainThreadSyncContext = app.SynchronizationContext;
+        // ReSharper disable once ConvertClosureToMethodGroup
+        this.observableStringGetter = key => app.GetObservableString(key);
+    }
 
 
     // Get default result of message dialog.
@@ -281,7 +303,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         var defaultItem = defaultItemIndex >= 0 && defaultItemIndex < items.Count
             ? items[defaultItemIndex]
             : null;
-        if (this.Application.CheckAccess())
+        if (this.mainThreadChecker())
         {
             var frame = new DispatcherFrame();
             // ReSharper disable once AsyncVoidLambda
@@ -297,7 +319,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
             new object().Lock(syncLock =>
             {
                 // ReSharper disable once AsyncVoidLambda
-                this.Application.SynchronizationContext.Post(async () =>
+                this.mainThreadSyncContext.Post(async () =>
                 {
                     selectedItems = await this.ShowMultipleItemsSelectionDialogAsync(message, items, defaultItem);
                     lock (syncLock)
@@ -322,7 +344,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
     // Show dialog to select multiple items.
     async Task<IList<object?>?> ShowMultipleItemsSelectionDialogAsync(string? message, IList items, object? defaultItem)
     {
-        var window = this.Application.LatestActiveMainWindow;
+        var window = this.latestActiveWindowGetter();
         if (window is null)
             return null;
         var dialog = new ItemSelectionDialog
@@ -353,7 +375,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         var defaultItem = defaultItemIndex >= 0 && defaultItemIndex < items.Count
             ? items[defaultItemIndex]
             : null;
-        if (this.Application.CheckAccess())
+        if (this.mainThreadChecker())
         {
             var frame = new DispatcherFrame();
             // ReSharper disable once AsyncVoidLambda
@@ -369,7 +391,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
             new object().Lock(syncLock =>
             {
                 // ReSharper disable once AsyncVoidLambda
-                this.Application.SynchronizationContext.Post(async () =>
+                this.mainThreadSyncContext.Post(async () =>
                 {
                     selectedItem = await this.ShowSingleItemSelectionDialogAsync(message, items, defaultItem);
                     lock (syncLock)
@@ -387,7 +409,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
     // Show dialog to select single item.
     async Task<object?> ShowSingleItemSelectionDialogAsync(object? message, IList items, object? defaultItem)
     {
-        var window = this.Application.LatestActiveMainWindow;
+        var window = this.latestActiveWindowGetter();
         if (window is null)
             return null;
         var dialog = new ItemSelectionDialog
@@ -419,11 +441,11 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         if (!this.IsShowingMessageDialogAllowed)
             return GetDefaultMessageDialogResult(buttons);
         var result = GetDefaultMessageDialogResult(buttons);
-        if (this.Application.CheckAccess())
+        if (this.mainThreadChecker())
         {
             var frame = new DispatcherFrame();
             // ReSharper disable once AsyncVoidLambda
-            this.Application.SynchronizationContext.Post(async () =>
+            this.mainThreadSyncContext.Post(async () =>
             {
                 result = await this.ShowMessageDialogAsync(message, icon, buttons);
                 frame.Continue = false;
@@ -435,7 +457,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
             new object().Lock(syncLock =>
             {
                 // ReSharper disable once AsyncVoidLambda
-                this.Application.SynchronizationContext.Post(async () =>
+                this.mainThreadSyncContext.Post(async () =>
                 {
                     result = await this.ShowMessageDialogAsync(message, icon, buttons);
                     lock (syncLock)
@@ -451,7 +473,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
     // Show message dialog.
     async Task<MessageDialogResult> ShowMessageDialogAsync(object? message, MessageDialogIcon icon, MessageDialogButtons buttons)
     {
-        var window = this.Application.LatestActiveMainWindow;
+        var window = this.latestActiveWindowGetter();
         if (window is null)
             return GetDefaultMessageDialogResult(buttons);
         var dialog = new MessageDialog
@@ -478,7 +500,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
         if (!this.IsShowingTextInputDialogAllowed)
             return null;
         var result = (string?)null;
-        if (this.Application.CheckAccess())
+        if (this.mainThreadChecker())
         {
             var frame = new DispatcherFrame();
             // ReSharper disable once AsyncVoidLambda
@@ -494,7 +516,7 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
             new object().Lock(syncLock =>
             {
                 // ReSharper disable once AsyncVoidLambda
-                this.Application.SynchronizationContext.Post(async () =>
+                this.mainThreadSyncContext.Post(async () =>
                 {
                     result = await this.ShowTextInputDialogAsync(message, initialText);
                     lock (syncLock)
@@ -510,12 +532,12 @@ public class UserInteractiveContext : Context, IUserInteractiveContext
     // Show dialog to input text.
     async Task<string?> ShowTextInputDialogAsync(object? message, string? initialText)
     {
-        var window = this.Application.LatestActiveMainWindow;
+        var window = this.latestActiveWindowGetter();
         if (window is null)
             return null;
-        var dialog = new TextInputDialog()
+        var dialog = new TextInputDialog
         {
-            CheckBoxMessage = this.Application.GetObservableString("Common.DoNotShowAgain"),
+            CheckBoxMessage = this.observableStringGetter("Common.DoNotShowAgain"),
             IsCheckBoxChecked = false,
             InitialText = initialText,
             Message = message,

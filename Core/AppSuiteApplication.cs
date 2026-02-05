@@ -407,6 +407,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     long prepareStartingTime;
     volatile ProcessInfo? processInfo;
     IDisposable? processInfoHfUpdateToken;
+    [Obfuscation(Exclude = false)]
     IProductManager? productManager;
     readonly HashSet<TopLevel> readyTopLevels = new();
     ApplicationArgsBuilder? restartArgs;

@@ -1,8 +1,10 @@
+using CarinaStudio.AppSuite.Diagnostics;
 using CarinaStudio.Logging;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,20 +17,17 @@ namespace CarinaStudio.AppSuite.Scripting;
 public class Application : IApplication
 {
     // SynchronizationContext to prevent crashing by unhandled exception.
-    class GuardedSynchronizationContext(Application app) : SynchronizationContext
+    class GuardedSynchronizationContext(SynchronizationContext syncContext, ILogger logger, bool isDebugMode) : SynchronizationContext
     {
-        // Fields.
-        readonly SynchronizationContext syncContext = app.app.SynchronizationContext;
-
         /// <inheritdoc/>
         public override SynchronizationContext CreateCopy() =>
-            new GuardedSynchronizationContext(app);
+            new GuardedSynchronizationContext(syncContext, logger, isDebugMode);
 
         /// <inheritdoc/>
         public override void Post(SendOrPostCallback d, object? state)
         {
-            var callerStackTrace = app.IsDebugMode ? Environment.StackTrace : null;
-            this.syncContext.Post(s =>
+            var callerStackTrace = isDebugMode ? Environment.StackTrace : null;
+            syncContext.Post(s =>
             {
                 try
                 {
@@ -37,43 +36,63 @@ public class Application : IApplication
                 catch (Exception ex)
                 {
                     if (string.IsNullOrEmpty(callerStackTrace))
-                        app.Logger.LogError(ex, "Unhandled exception occurred in action posted by script");
+                        logger.LogError(ex, "Unhandled exception occurred in action posted by script");
                     else
-                        app.Logger.LogError(ex, "Unhandled exception occurred in action posted by script. Call stack:\n{stackTrace}", callerStackTrace);
+                        logger.LogError(ex, "Unhandled exception occurred in action posted by script. Call stack:\n{stackTrace}", callerStackTrace);
                 }
             }, state);
         }
 
         /// <inheritdoc/>
         public override void Send(SendOrPostCallback d, object? state) =>
-            this.syncContext.Send(d, state);
+            syncContext.Send(d, state);
 
         /// <inheritdoc/>
         public override int Wait(IntPtr[] waitHandles, bool waitAll, int millisecondsTimeout) =>
-            this.syncContext.Wait(waitHandles, waitAll, millisecondsTimeout);
+            syncContext.Wait(waitHandles, waitAll, millisecondsTimeout);
     }
 
 
     // Static fields.
+    [Obfuscation(Exclude = false)]
     static Regex? CommandFileNameRegex;
-    static volatile ILogger? StaticLogger;
+    [Obfuscation(Exclude = false)]
+    static ILogger? StaticLogger;
 
 
     // Fields.
-    readonly IAppSuiteApplication app;
-    volatile SynchronizationContext? mainThreadSyncContext;
+    [Obfuscation(Exclude = false)] 
+    readonly Func<CultureInfo> cultureInfoGetter;
+    [Obfuscation(Exclude = false)]
+    readonly Func<bool> mainThreadChecker;
+    [Obfuscation(Exclude = false)]
+    readonly SynchronizationContext mainThreadSyncContext;
+    [Obfuscation(Exclude = false)]
+    volatile SynchronizationContext? mainThreadSyncContextWrapper;
+    [Obfuscation(Exclude = false)] 
+    readonly Func<string, string?, string?> stringGetter;
 
 
     /// <summary>
     /// Initialize new <see cref="Application"/> instance.
     /// </summary>
     /// <param name="app">Application.</param>
-    public Application(IAppSuiteApplication app) =>
-        this.app = app;
-    
+    public Application([Obfuscation(Exclude = false)] IAppSuiteApplication app)
+    {
+        Guard.VerifyInternalCall();
+        this.cultureInfoGetter = () => app.CultureInfo;
+        this.IsDebugMode = app.IsDebugMode;
+        // ReSharper disable once ConvertClosureToMethodGroup
+        this.mainThreadChecker = () => app.CheckAccess();
+        this.mainThreadSyncContext = app.SynchronizationContext;
+        StaticLogger ??= app.LoggerFactory.CreateLogger("ScriptApplication");
+        // ReSharper disable once ConvertClosureToMethodGroup
+        this.stringGetter = (key, defaultString) => app.GetString(key, defaultString);
+    }
+
 
     /// <inheritdoc/>
-    public CultureInfo CultureInfo => this.app.CultureInfo;
+    public CultureInfo CultureInfo => this.cultureInfoGetter();
     
     
     /// <inheritdoc/>
@@ -153,7 +172,7 @@ public class Application : IApplication
 
     /// <inheritdoc/>
     public string? GetString(string key, string? defaultString) =>
-        this.app.GetString(key, defaultString);
+        this.stringGetter(key, defaultString);
     
     
     /// <inheritdoc/>
@@ -167,27 +186,15 @@ public class Application : IApplication
     
 
     /// <inheritdoc/>
-    public bool IsDebugMode => this.app.IsDebugMode;
+    public bool IsDebugMode { get; }
 
 
     /// <inheritdoc/>
-    public bool IsMainThread => this.app.CheckAccess();
+    public bool IsMainThread => this.mainThreadChecker();
 
 
     // Logger.
-    internal ILogger Logger
-    {
-        get
-        {
-            if (StaticLogger != null)
-                return StaticLogger;
-            // ReSharper disable NonAtomicCompoundOperator
-            lock (typeof(Application))
-                StaticLogger ??= this.app.LoggerFactory.CreateLogger("ScriptApplication");
-            // ReSharper restore NonAtomicCompoundOperator
-            return StaticLogger;
-        }
-    }
+    internal ILogger Logger => StaticLogger.AsNonNull();
 
 
     /// <inheritdoc/>
@@ -195,13 +202,13 @@ public class Application : IApplication
     { 
         get 
         {
-            if (this.mainThreadSyncContext != null)
-                return this.mainThreadSyncContext;
+            if (this.mainThreadSyncContextWrapper is not null)
+                return this.mainThreadSyncContextWrapper;
             // ReSharper disable NonAtomicCompoundOperator
             lock (this)
-                this.mainThreadSyncContext ??= new GuardedSynchronizationContext(this);
+                this.mainThreadSyncContextWrapper ??= new GuardedSynchronizationContext(this.mainThreadSyncContext, StaticLogger.AsNonNull(), IsDebugMode);
             // ReSharper restore NonAtomicCompoundOperator
-            return this.mainThreadSyncContext;
+            return this.mainThreadSyncContextWrapper;
         }
     }
     

@@ -1,3 +1,4 @@
+using CarinaStudio.AppSuite.Diagnostics;
 using CarinaStudio.Logging;
 using Microsoft.Extensions.Logging;
 using System.Threading;
@@ -18,6 +19,7 @@ public class ScriptGlobals<TContext> where TContext : IContext
     /// <param name="cancellationToken">Cancellation token.</param>
     public ScriptGlobals(IAppSuiteApplication app, TContext context, CancellationToken cancellationToken)
     {
+        Guard.VerifyInternalCall();
         this.App = new Application(app);
         this.CancellationToken = cancellationToken;
         this.Context = context;
