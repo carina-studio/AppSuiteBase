@@ -76,6 +76,7 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         static readonly StyledProperty<int> Int32Property = AvaloniaProperty.Register<MainWindow, int>("Int32", 1);
+        static readonly DirectProperty<MainWindow, IImage?> SelectedGradientImageProperty = AvaloniaProperty.RegisterDirect<MainWindow, IImage?>(nameof(SelectedGradientImage), window => window.selectedGradientImage);
         static readonly DirectProperty<MainWindow, IImage?> SelectedImageProperty = AvaloniaProperty.RegisterDirect<MainWindow, IImage?>(nameof(SelectedImage), window => window.selectedImage);
         static readonly DirectProperty<MainWindow, string?> SelectedImageIdProperty = AvaloniaProperty.RegisterDirect<MainWindow, string?>(nameof(SelectedImageId), window => window.selectedImageId);
 
@@ -88,6 +89,7 @@ namespace CarinaStudio.AppSuite.Tests
         readonly ScheduledAction logAction;
         readonly NotificationPresenter notificationPresenter;
         IDisposable? overlayResourcesToken;
+        IImage? selectedGradientImage;
         IImage? selectedImage;
         string? selectedImageId;
         readonly Avalonia.Controls.TextBlock syntaxHighlightingRefTextBlock;
@@ -527,11 +529,30 @@ namespace CarinaStudio.AppSuite.Tests
             this.SynchronizationContext.Post(() =>
             {
                 var imageId = (sender as Avalonia.Controls.ListBox)?.SelectedItem as string;
-                this.SetAndRaise<string?>(SelectedImageIdProperty, ref this.selectedImageId, imageId);
-                if (imageId != null && this.Application.TryFindResource<IImage>($"Image/{imageId}", out var image) && image != null)
-                    this.SetAndRaise<IImage?>(SelectedImageProperty, ref this.selectedImage, image);
+                this.SetAndRaise(SelectedImageIdProperty, ref this.selectedImageId, imageId);
+                if (imageId != null && this.Application.TryFindResource<IImage>($"Image/{imageId}", out var image))
+                {
+                    if (image is DrawingImage drawingImage && drawingImage.Drawing is GeometryDrawing geometryDrawing)
+                    {
+                        var gradientDrawing = new GeometryDrawing
+                        {
+                            Brush = this.Application.FindResource("Brush/Icon.Gradient.TL2BR") as IBrush,
+                            Geometry = geometryDrawing.Geometry
+                        };
+                        this.SetAndRaise(SelectedGradientImageProperty, ref this.selectedGradientImage, new DrawingImage
+                        {
+                            Drawing = gradientDrawing
+                        });
+                    }
+                    else
+                        this.SetAndRaise(SelectedGradientImageProperty, ref this.selectedGradientImage, null);
+                    this.SetAndRaise(SelectedImageProperty, ref this.selectedImage, image);
+                }
                 else
-                    this.SetAndRaise<IImage?>(SelectedImageProperty, ref this.selectedImage, null);
+                {
+                    this.SetAndRaise(SelectedGradientImageProperty, ref this.selectedGradientImage, null);
+                    this.SetAndRaise(SelectedImageProperty, ref this.selectedImage, null);
+                }
             });
 
 
@@ -599,12 +620,15 @@ namespace CarinaStudio.AppSuite.Tests
         {
             this.Application.Restart();
         }
+        
+        
+        public IImage? SelectedGradientImage => this.selectedGradientImage;
 
 
-        public IImage? SelectedImage { get => this.selectedImage; }
+        public IImage? SelectedImage => this.selectedImage;
 
 
-        public string? SelectedImageId { get => this.selectedImageId; }
+        public string? SelectedImageId => this.selectedImageId;
 
 
         void SetupCustomResource(CultureInfo cultureInfo)

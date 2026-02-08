@@ -1076,6 +1076,9 @@
 								<Border BorderBrush="Gray" BorderThickness="1" Height="100" Margin="10" Width="100">
 									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedImage}"/>
 								</Border>
+								<Border BorderBrush="Gray" BorderThickness="1" Height="100" Margin="10" Width="100">
+									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedGradientImage}"/>
+								</Border>
 								<Border BorderBrush="Gray" BorderThickness="1" Height="{DynamicResource Double/ToolBar.Button.Size}" Margin="10" Padding="{DynamicResource Thickness/ToolBar.Button.Padding}" Width="{DynamicResource Double/ToolBar.Button.Size}">
 									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedImage}"/>
 								</Border>

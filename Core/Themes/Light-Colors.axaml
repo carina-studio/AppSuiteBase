@@ -52,8 +52,10 @@
 
 	<!-- Icon -->
 	<Color x:Key="Color/Icon">#333333</Color>
-	<Color x:Key="Color/Icon.JavaScript">#d9b000</Color>
+	<Color x:Key="Color/Icon.Gradient.Dark">#171717</Color>
+	<Color x:Key="Color/Icon.Gradient.Light">#575757</Color>
 	<Color x:Key="Color/Icon.Inverse">#ffffff</Color>
+	<Color x:Key="Color/Icon.JavaScript">#d9b000</Color>
 	<Color x:Key="Color/Icon.Lightbulb">#e5bf00</Color>
 	<Color x:Key="Color/Icon.Lightbulb.Dark">#d9b500</Color>
 	<Color x:Key="Color/Icon.Lightbulb.Light">#ffd919</Color>

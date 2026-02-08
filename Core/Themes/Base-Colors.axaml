@@ -156,6 +156,8 @@
 	<StaticResourceExtension x:Key="Color/Icon.Error" ResourceKey="Color/Icon.Alert"/>
 	<StaticResourceExtension x:Key="Color/Icon.Error.Dark" ResourceKey="Color/Icon.Alert.Dark"/>
 	<StaticResourceExtension x:Key="Color/Icon.Error.Light" ResourceKey="Color/Icon.Alert.Light"/>
+	<Color x:Key="Color/Icon.Gradient.Dark">#000000</Color>
+	<Color x:Key="Color/Icon.Gradient.Light">#333333</Color>
 	<Color x:Key="Color/Icon.Heart">#ff006e</Color>
 	<Color x:Key="Color/Icon.Heart.Dark">#bf0053</Color>
 	<Color x:Key="Color/Icon.Heart.Light">#ff2684</Color>
@@ -193,6 +195,38 @@
 	<SolidColorBrush x:Key="Brush/Icon.CSharp.Light" Color="{DynamicResource Color/Icon.CSharp.Light}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Dark" Color="{DynamicResource Color/Icon.Dark}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Error" Color="{DynamicResource Color/Icon.Error}"/>
+	<LinearGradientBrush x:Key="Brush/Icon.Gradient.BL2TR" EndPoint="90%,10%" StartPoint="10%,90%">
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Light}" Offset="0"/>
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Dark}" Offset="1"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="Brush/Icon.Gradient.BR2TL" EndPoint="10%,10%" StartPoint="90%,90%">
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Light}" Offset="0"/>
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Dark}" Offset="1"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="Brush/Icon.Gradient.B2T" EndPoint="0%,10%" StartPoint="0%,90%">
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Light}" Offset="0"/>
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Dark}" Offset="1"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="Brush/Icon.Gradient.L2R" EndPoint="90%,0%" StartPoint="10%,0%">
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Light}" Offset="0"/>
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Dark}" Offset="1"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="Brush/Icon.Gradient.R2L" EndPoint="10%,0%" StartPoint="90%,0%">
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Light}" Offset="0"/>
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Dark}" Offset="1"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="Brush/Icon.Gradient.TL2BR" EndPoint="90%,90%" StartPoint="10%,10%">
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Light}" Offset="0"/>
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Dark}" Offset="1"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="Brush/Icon.Gradient.TR2BL" EndPoint="10%,90%" StartPoint="90%,10%">
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Light}" Offset="0"/>
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Dark}" Offset="1"/>
+	</LinearGradientBrush>
+	<LinearGradientBrush x:Key="Brush/Icon.Gradient.T2B" EndPoint="0%,90%" StartPoint="0%,10%">
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Light}" Offset="0"/>
+		<GradientStop Color="{DynamicResource Color/Icon.Gradient.Dark}" Offset="1"/>
+	</LinearGradientBrush>
 	<SolidColorBrush x:Key="Brush/Icon.Heart" Color="{DynamicResource Color/Icon.Heart}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Information" Color="{DynamicResource Color/Icon.Information}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Inverse" Color="{DynamicResource Color/Icon.Inverse}"/>

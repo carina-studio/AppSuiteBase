@@ -39,6 +39,8 @@
 	<Color x:Key="Color/Icon.CPlusPlus.Dark">#006acc</Color>
 	<Color x:Key="Color/Icon.CPlusPlus.Light">#6ea8e6</Color>
 	<Color x:Key="Color/Icon.CPlusPlus.Middle">#007bd9</Color>
+	<Color x:Key="Color/Icon.Gradient.Dark">#a7a7a7</Color>
+	<Color x:Key="Color/Icon.Gradient.Light">#ffffff</Color>
 	<Color x:Key="Color/Icon.Inverse">#000000</Color>
 	
 	<!-- MarkdownViewer -->
