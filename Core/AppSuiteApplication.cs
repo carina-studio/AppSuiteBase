@@ -23,7 +23,6 @@ using Avalonia.Themes.Fluent;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Controls;
-using CarinaStudio.AppSuite.Diagnostics;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.Scripting;
 using CarinaStudio.AutoUpdate;
@@ -3932,14 +3931,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
 
     /// <inheritdoc/>
-    public IProductManager ProductManager
-    {
-        get
-        {
-            Guard.VerifyInternalCall();
-            return this.productManager ?? throw new InvalidOperationException("Application is not initialized yet.");
-        }
-    }
+    public IProductManager ProductManager => this.productManager ?? throw new InvalidOperationException("Application is not initialized yet.");
 
 
     /// <summary>

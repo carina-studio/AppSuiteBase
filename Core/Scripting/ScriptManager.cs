@@ -19,7 +19,9 @@ namespace CarinaStudio.AppSuite.Scripting;
 public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScriptManager
 {
     // Static fields.
+    [Obfuscation(Exclude = false)] 
     static ScriptManager? DefaultInstance;
+    [Obfuscation(Exclude = false)] 
     static ILogger? StaticLogger;
 
 
@@ -77,14 +79,7 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
     /// <summary>
     /// Get default instance.
     /// </summary>
-    public static ScriptManager Default
-    {
-        get
-        {
-            Guard.VerifyInternalCall();
-            return DefaultInstance ?? throw new InvalidOperationException();
-        }
-    }
+    public static ScriptManager Default => DefaultInstance ?? throw new InvalidOperationException();
     
     
     // End the script context on current thread.
