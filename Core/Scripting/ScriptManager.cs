@@ -24,6 +24,10 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
 
 
     // Fields.
+    [Obfuscation(Exclude = false)] 
+    readonly MethodInfo? beginScriptContextMethod;
+    [Obfuscation(Exclude = false)] 
+    readonly MethodInfo? endScriptContextMethod;
     [Obfuscation(Exclude = false)]
     readonly IScriptManager? implementation;
 
@@ -32,10 +36,22 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
     ScriptManager(IAppSuiteApplication app, IScriptManager? implementation) : base(app)
     {
         Guard.VerifyInternalCall();
+        this.beginScriptContextMethod = implementation?.GetType().GetMethod("BeginScriptContext", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+        this.endScriptContextMethod = implementation?.GetType().GetMethod("EndScriptContext", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
         this.implementation = implementation;
         this.IOTaskFactory = implementation?.IOTaskFactory ?? new();
         implementation?.Let(it => it.PropertyChanged += (_, e) =>
             this.PropertyChanged?.Invoke(this, e));
+    }
+
+
+    // Begin the script context on current thread.
+    [Obfuscation(Exclude = false)]
+    internal bool BeginScriptContext()
+    {
+        if (this.beginScriptContextMethod is not null)
+            return (bool)this.beginScriptContextMethod.Invoke(this.implementation, null)!;
+        return false;
     }
 
 
@@ -68,6 +84,15 @@ public class ScriptManager : BaseApplicationObject<IAppSuiteApplication>, IScrip
             Guard.VerifyInternalCall();
             return DefaultInstance ?? throw new InvalidOperationException();
         }
+    }
+    
+    
+    // End the script context on current thread.
+    internal bool EndScriptContext()
+    {
+        if (this.endScriptContextMethod is not null)
+            return (bool)this.endScriptContextMethod.Invoke(this.implementation, null)!;
+        return false;
     }
 
 

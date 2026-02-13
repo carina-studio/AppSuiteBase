@@ -29,6 +29,8 @@ public class Application : IApplication
             var callerStackTrace = isDebugMode ? Environment.StackTrace : null;
             syncContext.Post(s =>
             {
+                if (!ScriptManager.Default.BeginScriptContext())
+                    throw new ScriptException("Unable to begin script context.");
                 try
                 {
                     d(s);
@@ -40,12 +42,32 @@ public class Application : IApplication
                     else
                         logger.LogError(ex, "Unhandled exception occurred in action posted by script. Call stack:\n{stackTrace}", callerStackTrace);
                 }
+                finally
+                {
+                    ScriptManager.Default.EndScriptContext();
+                }
             }, state);
         }
 
         /// <inheritdoc/>
         public override void Send(SendOrPostCallback d, object? state) =>
-            syncContext.Send(d, state);
+            syncContext.Send(s =>
+            {
+                if (!ScriptManager.Default.BeginScriptContext())
+                    throw new ScriptException("Unable to begin script context.");
+                try
+                {
+                    d(s);
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "Unhandled exception occurred in action sent by script");
+                }
+                finally
+                {
+                    ScriptManager.Default.EndScriptContext();
+                }
+            }, state);
 
         /// <inheritdoc/>
         public override int Wait(IntPtr[] waitHandles, bool waitAll, int millisecondsTimeout) =>
