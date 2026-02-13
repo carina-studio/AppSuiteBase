@@ -18,7 +18,7 @@ if %ERRORLEVEL% neq 0 (
    exit
 )
 
-dotnet pack Core -c Release -o Packages
-dotnet pack Core.Tests -c Release -o Packages
-dotnet pack Fonts -c Release -o Packages
-dotnet pack SyntaxHighlighting -c Release -o Packages
+dotnet pack Core -c Release -o Packages --no-build
+dotnet pack Core.Tests -c Release -o Packages --no-build
+dotnet pack Fonts -c Release -o Packages --no-build
+dotnet pack SyntaxHighlighting -c Release -o Packages --no-build

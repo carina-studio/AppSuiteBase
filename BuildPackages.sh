@@ -18,5 +18,5 @@ for i in "${!PROJECT_LIST[@]}"; do
     fi
 
     # Package
-    dotnet pack $PROJECT -c Release -o ./Packages
+    dotnet pack $PROJECT -c Release -o ./Packages --no-build
 done
