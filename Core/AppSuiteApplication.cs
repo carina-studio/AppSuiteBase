@@ -318,22 +318,42 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     static readonly string AppDirectoryPath = Global.Run(() =>
     {
         // get path from main module
+        string? mainModulePath = null;
         if (Platform.IsWindows)
         {
             var fileNameBuffer = new StringBuilder(256);
             var size = Native.Win32.GetModuleFileName(IntPtr.Zero, fileNameBuffer, (uint)fileNameBuffer.Capacity);
             if (size <= fileNameBuffer.Capacity)
-            {
-                var fileName = fileNameBuffer.ToString();
-                if (Path.GetFileNameWithoutExtension(fileName) != "dotnet")
-                    return Path.GetDirectoryName(fileName) ?? "";
-            }
+                mainModulePath = fileNameBuffer.ToString();
         }
-        var mainModule = Process.GetCurrentProcess().MainModule;
-        if (mainModule is not null && Path.GetFileNameWithoutExtension(mainModule.FileName) != "dotnet")
-            return Path.GetDirectoryName(mainModule.FileName) ?? "";
+        mainModulePath ??= Process.GetCurrentProcess().MainModule?.FileName;
+        var isRunByDotnet = mainModulePath is not null && Path.GetFileNameWithoutExtension(mainModulePath) == "dotnet";
+
+        // get path on macOS
+        if (Platform.IsMacOS)
+        {
+            var baseDirectory = Assembly.GetEntryAssembly()?.GetName().Name?.Let(it => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", "Carina Studio", it)) ?? Environment.CurrentDirectory;
+            var directory = isRunByDotnet ? $"{baseDirectory}-Debug" : baseDirectory;
+            if (!System.IO.Directory.Exists(directory))
+            {
+                try
+                {
+                    LogToConsole($"Create application data directory '{directory}'");
+                    System.IO.Directory.CreateDirectory(directory);
+                }
+                catch (Exception ex)
+                {
+                    LogToConsole($"Failed to create application data directory '{directory}'. {ex.GetType().Name}: {ex.Message}");
+                }
+            }
+            return directory;
+        }
         
-        // get path from assembly
+        // use path from main module
+        if (mainModulePath is not null && !isRunByDotnet)
+            return Path.GetDirectoryName(mainModulePath)!;
+        
+        // use path from assembly
 #pragma warning disable SYSLIB0044
         var codeBase = Assembly.GetEntryAssembly()?.GetName().CodeBase;
 #pragma warning restore SYSLIB0044
@@ -4814,15 +4834,23 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                     process.StartInfo.Let(it =>
                     {
                         var exeName = Process.GetCurrentProcess().MainModule?.FileName ?? "";
-                        if (exeName.EndsWith("/dotnet") || exeName.EndsWith("\\dotnet.exe", true, null))
-                            it.Arguments = $"{Environment.CommandLine} {this.restartArgs}";
-                        else
-                            it.Arguments = this.restartArgs?.ToString() ?? "";
-                        it.FileName = exeName;
-                        if (this.isRestartAsAdminRequested && Platform.IsWindows)
+                        var args = exeName.EndsWith("/dotnet") || exeName.EndsWith("\\dotnet.exe", true, null)
+                            ? $"{Environment.CommandLine} {this.restartArgs}"
+                            : this.restartArgs?.ToString() ?? "";
+                        if (Platform.IsNotMacOS)
                         {
-                            it.UseShellExecute = true;
-                            it.Verb = "runas";
+                            it.Arguments = args;
+                            it.FileName = exeName;
+                            if (this.isRestartAsAdminRequested && Platform.IsWindows)
+                            {
+                                it.UseShellExecute = true;
+                                it.Verb = "runas";
+                            }
+                        }
+                        else
+                        {
+                            it.Arguments = $"-c \"nohup /bin/sh -c 'while kill -0 {Environment.ProcessId} 2>/dev/null; do sleep 0.5; done; exec \"{exeName}\" {args} &'\"";
+                            it.FileName = "/bin/sh";
                         }
                     });
                 });

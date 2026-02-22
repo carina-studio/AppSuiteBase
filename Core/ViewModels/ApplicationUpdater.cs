@@ -28,7 +28,7 @@ namespace CarinaStudio.AppSuite.ViewModels;
 public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 {
 	// Constants.
-	const string TempAutoUpdaterDirName = "AutoUpdater-Temp";
+	static readonly string TempAutoUpdaterDirName = $"AutoUpdater-Temp-{Environment.ProcessId}";
 
 
 	// Static fields.
