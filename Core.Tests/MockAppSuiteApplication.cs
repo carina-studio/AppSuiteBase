@@ -136,6 +136,11 @@ public class MockAppSuiteApplication : IAppSuiteApplication
     /// <inheritdoc/>
     public virtual ViewModels.ApplicationOptions CreateApplicationOptionsViewModel() =>
         new();
+    
+    
+    /// <inheritdoc/>
+    public virtual ViewModels.ApplicationUpdater CreateApplicationUpdaterViewModel() => 
+        new();
 
 
     /// <inheritdoc/>

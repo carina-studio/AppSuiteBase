@@ -57,6 +57,12 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
+        class AppUpdater : ApplicationUpdater
+        {
+            protected override bool OnCheckAutoUpdateSupport(Version version) => true;
+        }
+
+
         class DotNet7ExternalDependency : ExternalDependency
         {
             public DotNet7ExternalDependency(App app) : base(app, "dotnet7", ExternalDependencyType.Configuration, ExternalDependencyPriority.RequiredByFeatures)
@@ -108,6 +114,8 @@ namespace CarinaStudio.AppSuite.Tests
         public override ApplicationInfo CreateApplicationInfoViewModel() => new AppInfo();
 
         public override ApplicationOptions CreateApplicationOptionsViewModel() => new();
+
+        public override ApplicationUpdater CreateApplicationUpdaterViewModel() => new AppUpdater();
 
         public override int DefaultLogOutputTargetPort => 5566;
 

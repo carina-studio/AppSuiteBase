@@ -39,6 +39,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 		static readonly Uri AutoUpdaterPackageManifestUri = new("https://raw.githubusercontent.com/carina-studio/AutoUpdater/master/PackageManifest-Avalonia.json");
 		static readonly Version AutoUpdaterVersionSupportsBaseVersion = new(1, 1, 0, 713);
 		static readonly ObservableProperty<bool> HasReleasePageUriProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(HasReleasePageUri));
+		static readonly ObservableProperty<bool> IsAutoUpdateSupportedProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsAutoUpdateSupported));
 		static readonly ObservableProperty<bool> IsCheckingForUpdateProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsCheckingForUpdate));
 		static readonly ObservableProperty<bool> IsLatestVersionProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsLatestVersion));
 		static readonly ObservableProperty<bool> IsPreparingForUpdateProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsPreparingForUpdate));
@@ -163,7 +164,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 		/// <summary>
 		/// Check whether auto update is supported or not.
 		/// </summary>
-		public bool IsAutoUpdateSupported => true;
+		public bool IsAutoUpdateSupported => this.GetValue(IsAutoUpdateSupportedProperty);
 
 
 		/// <summary>
@@ -300,6 +301,14 @@ namespace CarinaStudio.AppSuite.ViewModels
 					break;
 			}
 		}
+		
+		
+		/// <summary>
+		/// Called to check whether the application can be updated to specific version automatically or not.
+		/// </summary>
+		/// <param name="version">Version to upgrade to.</param>
+		/// <returns>True if the application can be updated automatically, or False otherwise.</returns>
+		protected virtual bool OnCheckAutoUpdateSupport(Version version) => true;
 
 
 		/// <summary>
@@ -504,6 +513,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 			{
 				this.canStartUpdating.Update(false);
 				this.packageManifestUri = null;
+				this.ResetValue(IsAutoUpdateSupportedProperty);
 				this.SetValue(IsLatestVersionProperty, true);
 				this.SetValue(ReleasePageUriProperty, null);
 				this.SetValue(UpdatePackageUriProperty, null);
@@ -511,6 +521,7 @@ namespace CarinaStudio.AppSuite.ViewModels
 			}
 			else
 			{
+				this.SetValue(IsAutoUpdateSupportedProperty, this.OnCheckAutoUpdateSupport(updateInfo.Version));
 				this.SetValue(IsLatestVersionProperty, false);
 				this.SetValue(ReleasePageUriProperty, updateInfo.ReleasePageUri);
 				this.SetValue(UpdatePackageUriProperty, updateInfo.PackageUri);

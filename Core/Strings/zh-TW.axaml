@@ -99,6 +99,7 @@
 
 	<!-- ApplicationUpdateDialog -->
 	<sys:String x:Key="String/ApplicationUpdateDialog.AcceptNonStableApplicationUpdate.Description">您也可以在應用程式選項中變更這些設定。</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.AutoUpdateNotSupported">因為相容性原因無法自動更新 {0}，請您自行下載並安裝新的版本。在移除現有版本之前您可以將設定匯入至新版本中。</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckForUpdate">檢查更新</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckingForUpdate">正在檢查更新…</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.DownloadUpdatePackage">下載更新</sys:String>
