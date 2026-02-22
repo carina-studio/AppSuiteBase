@@ -153,6 +153,13 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// </summary>
     /// <returns>View-model of application options.</returns>
     ViewModels.ApplicationOptions CreateApplicationOptionsViewModel();
+    
+    
+    /// <summary>
+    /// Create view-model of application updater.
+    /// </summary>
+    /// <returns>View-model of application updater.</returns>
+    ViewModels.ApplicationUpdater CreateApplicationUpdaterViewModel();
 
 
     /// <summary>

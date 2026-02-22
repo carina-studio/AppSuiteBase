@@ -1145,6 +1145,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     public abstract ViewModels.ApplicationOptions CreateApplicationOptionsViewModel();
 
 
+    /// <inheritdoc/>
+    public virtual ViewModels.ApplicationUpdater CreateApplicationUpdaterViewModel() => new();
+
+
     // Create server stream for multi-instances.
     bool CreateMultiInstancesServerStream(bool canRetry, bool printErrorStackTrace)
     {
@@ -4465,7 +4469,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         }
 
         // check for update
-        using var appUpdater = new ViewModels.ApplicationUpdater(); 
+        using var appUpdater = this.CreateApplicationUpdaterViewModel(); 
         this.appUpdateDialog = new(appUpdater) 
         {
             CheckForUpdateWhenShowing = checkAppUpdateWhenOpening

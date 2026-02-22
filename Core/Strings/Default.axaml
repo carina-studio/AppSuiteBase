@@ -109,6 +109,7 @@
 
 	<!-- ApplicationUpdateDialog -->
 	<sys:String x:Key="String/ApplicationUpdateDialog.AcceptNonStableApplicationUpdate.Description">You can also change these settings in the application options.</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.AutoUpdateNotSupported">{0} cannot be updated automatically due to compatibility issues. Please download and install the new version manually. You can import your settings before removing the current version.</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckForUpdate">Check for update</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.CheckingForUpdate">Checking for update…</sys:String>
 	<sys:String x:Key="String/ApplicationUpdateDialog.DownloadUpdatePackage">Download and install</sys:String>

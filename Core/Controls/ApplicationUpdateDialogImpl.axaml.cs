@@ -49,10 +49,18 @@ class ApplicationUpdateDialogImpl : Dialog<IAppSuiteApplication>
 	/// <summary>
 	/// Download update package.
 	/// </summary>
-	public void DownloadUpdatePackage()
+	public async Task DownloadUpdatePackage()
 	{
 		if (this.attachedAppUpdater is not null && this.attachedAppUpdater.UpdatePackageUri is not null)
 		{
+			await new MessageDialog
+			{
+				Message = new FormattedString().Also(it =>
+				{
+					it.Arg1 = this.Application.Name;
+					it.Bind(FormattedString.FormatProperty, this.Application.GetObservableString("ApplicationUpdateDialog.AutoUpdateNotSupported"));
+				})
+			}.ShowDialog(this);
 			Platform.OpenLink(this.attachedAppUpdater.UpdatePackageUri);
 			this.Close();
 			this.closingTaskSource.TrySetResult(ApplicationUpdateDialogResult.None);
