@@ -127,6 +127,7 @@
 	<sys:String x:Key="String/ApplicationUpdater.ReleasePage">Changes in the new version</sys:String>
 
 	<!-- AppSuiteApplication -->
+	<sys:String x:Key="String/AppSuiteApplication.ImportApplicationData">Import application data</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.InitializingComponents">Initializing components</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">Loading theme</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Description">Taking a memory snapshot may make the application unresponsive for tens of seconds to minutes.</sys:String>
@@ -303,6 +304,8 @@
 	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">A new version of {0} is available.</sys:String>
 	<StaticResourceExtension x:Key="String/MainWindow.ChineseVariantChanged" ResourceKey="String/ApplicationOptions.WillRestartApplicationToTakeEffect.ChineseVariantChanged"/>
 	<sys:String x:Key="String/MainWindow.ConfirmLayingOutLotsOfMainWindows">Laying out many windows may lead to incorrect results. Proceed with window layout?</sys:String>
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.Failed">Failed to import application data from '{0}'.</sys:String>
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.Succeeded">Application data was successfully imported from '{0}'.</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows">Lay out windows</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">Lay out windows horizontally</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">Tile windows</sys:String>

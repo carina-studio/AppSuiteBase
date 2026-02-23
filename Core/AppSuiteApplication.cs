@@ -191,6 +191,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     protected static class LaunchOptionKeys
     {
         /// <summary>
+        /// Path of directory to import application data from.
+        /// </summary>
+        public const string DirectoryToImportAppData = "DirectoryToImportAppData";
+        /// <summary>
         /// Whether clean mode is requested or not.
         /// </summary>
         public const string IsCleanModeRequested = "IsCleanModeRequested";
@@ -293,6 +297,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// </summary>
     public const string DebugArgument = "-debug";
     /// <summary>
+    /// Argument indicates to import application data from specific directory.
+    /// </summary>
+    public const string ImportAppDataArgument = "-import-app-data";
+    /// <summary>
     /// Argument indicates to restore main windows.
     /// </summary>
     public const string RestoreMainWindowsArgument = "-restore-main-windows";
@@ -310,11 +318,18 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     const int AutoSaveSettingsDelay = 1000;
     const int DeactivationDelay = 300;
     const int MinSplashWindowDuration = 2000;
+    const string InitSettingsFileName = "InitSettings.json";
+    const string PersistentStateFileName = "PersistentState.json";
+    const string SettingsFileName = "Settings.json";
+    const bool SimulateImportInitSettingsFailure = false;
+    const bool SimulateImportPersistentStateFailure = false;
+    const bool SimulateImportSettingsFailure = false;
 
 
     // Static fields.
     static readonly SettingKey<string> AgreedPrivacyPolicyVersionKey = new("AgreedPrivacyPolicyVersion", "");
     static readonly SettingKey<string> AgreedUserAgreementVersionKey = new("AgreedUserAgreementVersion", "");
+    static bool? AppDataImportResult;
     static readonly string AppDirectoryPath = Global.Run(() =>
     {
         // get path from main module
@@ -373,13 +388,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     static readonly SettingKey<bool> DoNotPromptBeforeTakingMemorySnapshotKey = new("DoNotPromptBeforeTakingMemorySnapshot", false);
     static bool ForceThrowingUnhandledException;
     static IDictionary<string, object>? InitLaunchOptions;
-    static readonly string InitSettingsFilePath = Path.Combine(AppDirectoryPath, "InitSettings.json");
+    static readonly string InitSettingsFilePath = Path.Combine(AppDirectoryPath, InitSettingsFileName);
     static InitSettingsImpl? InitSettingsInstance;
     static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new("IsAcceptNonStableApplicationUpdateInitialized", false);
     static ChineseVariant _LaunchChineseVariant;
     static readonly SettingKey<int> LogOutputTargetPortKey = new("LogOutputTargetPort");
     static readonly SettingKey<byte[]> MainWindowViewModelStatesKey = new("MainWindowViewModelStates", []);
-    static readonly string SettingsFilePath = Path.Combine(AppDirectoryPath, "Settings.json");
+    static readonly string SettingsFilePath = Path.Combine(AppDirectoryPath, SettingsFileName);
 
 
     // Fields.
@@ -471,9 +486,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         
         // check first launch
         // ReSharper disable VirtualMemberCallInConstructor
-        this.persistentStateFilePath = Path.Combine(this.RootPrivateDirectoryPath, "PersistentState.json");
+        this.persistentStateFilePath = Path.Combine(this.RootPrivateDirectoryPath, PersistentStateFileName);
         // ReSharper restore VirtualMemberCallInConstructor
-        this.IsFirstLaunch = Global.RunOrDefault(() => !System.IO.File.Exists(this.persistentStateFilePath), true);
+        this.IsFirstLaunch = AppDataImportResult.HasValue 
+                             || InitLaunchOptions?.ContainsKey(LaunchOptionKeys.DirectoryToImportAppData) == true
+                             || Global.RunOrDefault(() => !System.IO.File.Exists(this.persistentStateFilePath), true);
 
         // create logger
         LogManager.Configuration = new LoggingConfiguration().Also(it =>
@@ -732,6 +749,20 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// </summary>
     public bool AllowTransparentWindows { get; private set; }
 
+
+    /// <summary>
+    /// Result of importing application data.
+    /// </summary>
+    internal bool? ApplicationDataImportResult => AppDataImportResult;
+
+
+    /// <summary>
+    /// Path of directory to import application data from.
+    /// </summary>
+    internal string? ApplicationDataImportDirectory => this.LaunchOptions.TryGetValue(LaunchOptionKeys.DirectoryToImportAppData, out string directory)
+        ? directory
+        : null;
+
     
     /// <inheritdoc/>
     public WindowIcon ApplicationIcon
@@ -775,6 +806,64 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         CultureInfo.CurrentUICulture = cultureInfo;
         CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
         CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+        
+        // import settings files
+        if (InitLaunchOptions.TryGetValue(LaunchOptionKeys.DirectoryToImportAppData, out string dirToImportAppData))
+        {
+            if (System.IO.Directory.Exists(dirToImportAppData))
+            {
+                // initial settings
+                var srcFilePath = Path.Combine(dirToImportAppData, InitSettingsFileName);
+                if (System.IO.File.Exists(srcFilePath))
+                {
+                    try
+                    {
+                        LogToConsole("Import initial settings");
+#pragma warning disable CS0162 // Unreachable code detected
+                        if (SimulateImportInitSettingsFailure)
+                            throw new Exception("Simulate import failure.");
+                        System.IO.File.Copy(srcFilePath, InitSettingsFilePath, overwrite: true);
+#pragma warning restore CS0162 // Unreachable code detected
+                    }
+                    catch (Exception ex)
+                    {
+                        LogToConsole($"Failed to import initial settings. {ex.GetType().Name}: {ex.Message}");
+                        AppDataImportResult = false;
+                        if (!RestoreSettingsFileFromBackup(InitSettingsFilePath))
+                            LogToConsole("Failed to restore initial settings.");
+                    }
+                }
+                
+                // settings
+                srcFilePath = Path.Combine(dirToImportAppData, SettingsFileName);
+                if (System.IO.File.Exists(srcFilePath))
+                {
+                    try
+                    {
+                        LogToConsole("Import settings");
+#pragma warning disable CS0162 // Unreachable code detected
+                        if (SimulateImportSettingsFailure)
+                            throw new Exception("Simulate import failure.");
+                        System.IO.File.Copy(srcFilePath, SettingsFilePath, overwrite: true);
+#pragma warning restore CS0162 // Unreachable code detected
+                    }
+                    catch (Exception ex)
+                    {
+                        LogToConsole($"Failed to import settings. {ex.GetType().Name}: {ex.Message}");
+                        AppDataImportResult = false;
+                        if (!RestoreSettingsFileFromBackup(InitSettingsFilePath))
+                            LogToConsole("Failed to restore initial settings.");
+                        if (!RestoreSettingsFileFromBackup(SettingsFilePath))
+                            LogToConsole("Failed to restore settings.");
+                    }
+                }
+            }
+            else
+            {
+                LogToConsole($"Directory '{dirToImportAppData}' not found to import app data");
+                AppDataImportResult = false;
+            }
+        }
         
         // load initial settings
         LogToConsole("Start loading initial settings");
@@ -1848,6 +1937,24 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     public HardwareInfo HardwareInfo => this.hardwareInfo ?? throw new InvalidOperationException("Application is not initialized yet.");
 
 
+    //  import application data from specific directory asynchronously.
+    async Task ImportApplicationDataAsync(string directory)
+    {
+        try
+        {
+            this.Logger.LogWarning("Start importing application data from '{dir}'", directory);
+            await this.OnImportApplicationDataAsync(directory);
+            AppDataImportResult = true;
+            this.Logger.LogWarning("Complete importing application data");
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, "Error occurred while importing application data");
+            AppDataImportResult = false;
+        }
+    }
+
+
     /// <summary>
     /// Initial settings.
     /// </summary>
@@ -2874,10 +2981,15 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         });
         if (Platform.IsWindows)
             this.AttachToMessageWindow();
+        
+        // start importing application data
+        var importAppDataTask = this.LaunchOptions.TryGetValue(LaunchOptionKeys.DirectoryToImportAppData, out string dirToImportAppData) && !AppDataImportResult.HasValue
+            ? this.ImportApplicationDataAsync(dirToImportAppData)
+            : Task.CompletedTask;
 
         // start loading persistent state and settings
-        this.loadingInitPersistentStateTask = this.LoadPersistentStateAsync(true);
-        this.loadingInitSettingsTask = this.LoadSettingsAsync();
+        this.loadingInitPersistentStateTask = importAppDataTask.ContinueWith(_ => this.LoadPersistentStateAsync(true), TaskScheduler.FromCurrentSynchronizationContext()).Unwrap();
+        this.loadingInitSettingsTask = importAppDataTask.ContinueWith(_ => this.LoadSettingsAsync(), TaskScheduler.FromCurrentSynchronizationContext()).Unwrap();
 
         // create hardware and process information
         this.hardwareInfo = new HardwareInfo(this);
@@ -2955,6 +3067,38 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             // restore main windows
             if (this.IsRestoringMainWindowsRequested)
                 _ = this.OnRestoreMainWindowsAsync();
+        });
+    }
+
+
+    /// <summary>
+    /// Called to import application data from specific directory asynchronously.
+    /// </summary>
+    /// <param name="directory">Path of directory to import application data from.</param>
+    /// <returns>Task of importing application data.</returns>
+    protected virtual async Task OnImportApplicationDataAsync(string directory)
+    {
+        await Task.Run(() =>
+        {
+            var srcFilePath = Path.Combine(directory, PersistentStateFileName);
+            if (System.IO.File.Exists(srcFilePath))
+            {
+                try
+                {
+                    this.Logger.LogWarning("Import persistent state");
+#pragma warning disable CS0162 // Unreachable code detected
+                    if (SimulateImportPersistentStateFailure)
+                        throw new Exception("Simulate import failure.");
+                    System.IO.File.Copy(srcFilePath, this.persistentStateFilePath, overwrite: true);
+#pragma warning restore CS0162 // Unreachable code detected
+                }
+                catch (Exception ex)
+                {
+                    this.Logger.LogError(ex, "Failed to import persistent state");
+                    RestoreSettingsFileFromBackup(this.persistentStateFilePath);
+                    throw;
+                }
+            }
         });
     }
 
@@ -3225,6 +3369,20 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         // prevent trimming compiled Avalonia XAML
         KeepCompiledAvaloniaXaml();
         
+        // complete loading persistent state
+        if (this.loadingInitPersistentStateTask is not null)
+        {
+            await this.loadingInitPersistentStateTask;
+            this.loadingInitPersistentStateTask = null;
+            this.PersistentState.SettingChanged += (_, e) =>
+            {
+                if (this.CheckAccess())
+                    this.OnPersistentStateChanged(e);
+                else
+                    this.SynchronizationContext.Post(() => this.OnPersistentStateChanged(e));
+            };
+        }
+        
         // start log output to localhost
         this.logOutputTargetPort = this.PersistentState.GetValueOrDefault(LogOutputTargetPortKey);
         if (this.logOutputTargetPort == 0)
@@ -3248,19 +3406,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.OnUserInteractionStopped();
         });
 
-        // complete loading persistent state and settings
-        if (this.loadingInitPersistentStateTask is not null)
-        {
-            await this.loadingInitPersistentStateTask;
-            this.loadingInitPersistentStateTask = null;
-            this.PersistentState.SettingChanged += (_, e) =>
-            {
-                if (this.CheckAccess())
-                    this.OnPersistentStateChanged(e);
-                else
-                    this.SynchronizationContext.Post(() => this.OnPersistentStateChanged(e));
-            };
-        }
+        // complete loading settings
         if (this.loadingInitSettingsTask is not null)
         {
             await this.loadingInitSettingsTask!;
@@ -3849,6 +3995,25 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                         launchOptions[LaunchOptionKeys.IsDebugModeRequested] = true;
                         ++index;
                         break;
+                    case ImportAppDataArgument:
+                        if (index + 1 >= args.Length)
+                        {
+                            LogToConsole("No directory specified to import app data");
+                            ++index;
+                        }
+                        else
+                        {
+                            index += 2;
+                            var directory = args[index - 1].Let(it =>
+                                it.Length > 0 && it[^1] == Path.DirectorySeparatorChar
+                                    ? it[..^2]
+                                    : it);
+                            if (!string.IsNullOrWhiteSpace(directory) && directory.IsValidFilePath() && !PathEqualityComparer.Default.Equals(directory, AppDirectoryPath))
+                                launchOptions[LaunchOptionKeys.DirectoryToImportAppData] = directory;
+                            else
+                                LogToConsole($"Invalid directory to import app data: {directory}");
+                        }
+                        break;
                     case RestoreMainWindowsArgument:
                         launchOptions[LaunchOptionKeys.IsRestoringMainWindowsRequested] = true;
                         ++index;
@@ -4157,6 +4322,24 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             taskCompletionSource.SetResult(true);
         });
         return taskCompletionSource.Task;
+    }
+    
+    
+    // Restore specific settings file from its backup.
+    static bool RestoreSettingsFileFromBackup(string filePath)
+    {
+        try
+        {
+            var backupFilePath = $"{filePath}.backup";
+            if (System.IO.File.Exists(backupFilePath))
+                System.IO.File.Copy(backupFilePath, filePath, overwrite: true);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            LogToConsole($"Failed to restore file. {ex.GetType().Name}: {ex.Message}");
+            return false;
+        }
     }
 
 

@@ -53,17 +53,18 @@ public abstract class MainWindow : Window
     
     
     // Static fields.
-    internal static readonly SettingKey<bool> DoNotCheckAppRunningLocationOnMacOSKey = new("MainWindow.DoNotCheckAppRunningLocationOnMacOS");
-    internal static readonly SettingKey<int> ExtDepDialogShownVersionKey = new("MainWindow.ExternalDependenciesDialogShownVersion", -1);
-    internal static bool IsAppRunningLocationOnMacOSChecked;
-    internal static bool IsNetworkConnForActivatingProVersionNotified;
-    internal static bool IsNotifyingAppUpdateFound;
-    internal static bool IsReactivatingProVersion;
-    internal static bool IsReactivatingProVersionNeeded;
-    internal static readonly SettingKey<string> LatestAppChangeListShownVersionKey = new("ApplicationChangeListDialog.LatestShownVersion", "");
-    internal static readonly SettingKey<int> WindowHeightSettingKey = new("MainWindow.Height", 600);
-    internal static readonly SettingKey<WindowState> WindowStateSettingKey = new("MainWindow.State", WindowState.Maximized);
-    internal static readonly SettingKey<int> WindowWidthSettingKey = new("MainWindow.Width", 800);
+    static readonly SettingKey<bool> DoNotCheckAppRunningLocationOnMacOSKey = new("MainWindow.DoNotCheckAppRunningLocationOnMacOS");
+    static readonly SettingKey<int> ExtDepDialogShownVersionKey = new("MainWindow.ExternalDependenciesDialogShownVersion", -1);
+    static bool IsAppDataImportResultDialogShown;
+    static bool IsAppRunningLocationOnMacOSChecked;
+    static bool IsNetworkConnForActivatingProVersionNotified;
+    static bool IsNotifyingAppUpdateFound;
+    static bool IsReactivatingProVersion;
+    static bool IsReactivatingProVersionNeeded;
+    static readonly SettingKey<string> LatestAppChangeListShownVersionKey = new("ApplicationChangeListDialog.LatestShownVersion", "");
+    static readonly SettingKey<int> WindowHeightSettingKey = new("MainWindow.Height", 600);
+    static readonly SettingKey<WindowState> WindowStateSettingKey = new("MainWindow.State", WindowState.Maximized);
+    static readonly SettingKey<int> WindowWidthSettingKey = new("MainWindow.Width", 800);
     
     
     // Fields.
@@ -943,6 +944,7 @@ public abstract class MainWindow : Window
 
         // check application running location on macOS
         var app = this.Application;
+        var asApp = app as AppSuiteApplication;
         if (Platform.IsMacOS && !IsAppRunningLocationOnMacOSChecked && !this.PersistentState.GetValueOrDefault(DoNotCheckAppRunningLocationOnMacOSKey))
         {
             IsAppRunningLocationOnMacOSChecked = true;
@@ -951,7 +953,7 @@ public abstract class MainWindow : Window
                 && !Regex.IsMatch(path, @"^(/Applications|/Users/[^/]+/Applications)/.+"))
             {
                 this.isShowingInitialDialogs = true;
-                var dialog = new MessageDialog()
+                var dialog = new MessageDialog
                 {
                     Buttons = MessageDialogButtons.OKCancel,
                     CustomCancelText = app.GetObservableString("MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication"),
@@ -977,6 +979,31 @@ public abstract class MainWindow : Window
                 this.isShowingInitialDialogs = false;
             }
         }
+        
+        // show application data import result
+        if (!IsAppDataImportResultDialogShown 
+            && asApp is not null 
+            && asApp.ApplicationDataImportResult.HasValue
+            && asApp.ApplicationDataImportDirectory is { } appDataImportDirectory)
+        {
+            this.Logger.LogDebug("Show application data import result dialog");
+            this.isShowingInitialDialogs = true;
+            IsAppDataImportResultDialogShown = true;
+            var importResult = asApp.ApplicationDataImportResult.Value;
+            await new MessageDialog
+            {
+                Icon = importResult ? MessageDialogIcon.Success : MessageDialogIcon.Error,
+                Message = new FormattedString().Also(it =>
+                {
+                    it.Arg1 = appDataImportDirectory;
+                    it.Bind(FormattedString.FormatProperty, importResult 
+                        ? app.GetObservableString("MainWindow.ImportApplicationData.Succeeded")
+                        : app.GetObservableString("MainWindow.ImportApplicationData.Failed"));
+                }),
+                Title = app.GetObservableString("AppSuiteApplication.ImportApplicationData"),
+            }.ShowDialog(this);
+            this.isShowingInitialDialogs = false;
+        }
 
         // show user agreement
         if (!app.IsUserAgreementAgreed)
@@ -986,7 +1013,7 @@ public abstract class MainWindow : Window
             if (documentSource is not null)
             {
                 this.isShowingInitialDialogs = true;
-                var dialog = new AgreementDialog()
+                var dialog = new AgreementDialog
                 {
                     DocumentSource = documentSource,
                     Message = new FormattedString().Also(it =>
@@ -1019,7 +1046,7 @@ public abstract class MainWindow : Window
             if (documentSource is not null)
             {
                 this.isShowingInitialDialogs = true;
-                var dialog = new AgreementDialog()
+                var dialog = new AgreementDialog
                 {
                     DocumentSource = documentSource,
                     Message = new FormattedString().Also(it =>

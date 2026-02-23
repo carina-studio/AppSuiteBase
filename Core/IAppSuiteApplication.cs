@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Styling;
+using CarinaStudio.IO;
 using CarinaStudio.Threading;
 using System;
 using System.Collections.Generic;
@@ -603,6 +604,7 @@ public class ApplicationArgsBuilder : ICloneable, IEquatable<ApplicationArgsBuil
     /// <param name="template">Template.</param>
     public ApplicationArgsBuilder(ApplicationArgsBuilder template)
     {
+        this.DirectoryToImportAppData = template.DirectoryToImportAppData;
         this.IsCleanMode = template.IsCleanMode;
         this.IsDebugMode = template.IsDebugMode;
         this.IsTestingMode = template.IsTestingMode;
@@ -621,11 +623,18 @@ public class ApplicationArgsBuilder : ICloneable, IEquatable<ApplicationArgsBuil
     /// <inheritdoc/>
     object ICloneable.Clone() =>
         this.Clone();
+    
+    
+    /// <summary>
+    /// Get or set path of directory to import application data from.
+    /// </summary>
+    public string? DirectoryToImportAppData { get; set; }
 
 
     /// <inheritdoc/>
     public virtual bool Equals(ApplicationArgsBuilder? builder) =>
         builder is not null
+        && PathEqualityComparer.Default.Equals(this.DirectoryToImportAppData, builder.DirectoryToImportAppData)
         && this.IsCleanMode == builder.IsCleanMode
         && this.IsDebugMode == builder.IsDebugMode
         && this.IsTestingMode == builder.IsTestingMode
@@ -672,6 +681,15 @@ public class ApplicationArgsBuilder : ICloneable, IEquatable<ApplicationArgsBuil
     public override string ToString()
     {
         var buffer = new StringBuilder();
+        if (!string.IsNullOrWhiteSpace(this.DirectoryToImportAppData))
+        {
+            if (buffer.Length > 0)
+                buffer.Append(' ');
+            buffer.Append(AppSuiteApplication.ImportAppDataArgument);
+            buffer.Append(" '");
+            buffer.Append(this.DirectoryToImportAppData);
+            buffer.Append('\'');
+        }
         if (this.IsCleanMode)
         {
             if (buffer.Length > 0)
