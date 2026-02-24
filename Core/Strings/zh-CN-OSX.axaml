@@ -20,6 +20,9 @@
 
 	<!-- ExternalDependenciesDialog -->
 	<sys:String x:Key="String/ExternalDependenciesDialog.EditPathEnvVar">编辑 /etc/paths…</sys:String>
+	
+	<!-- MainWindow -->
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.ConfirmationForFirstLaunch">您是否要从另一个应用程序将数据导入？您也可以稍后从「关于」对话窗中导入应用程序数据。</sys:String>
 
 	<!-- PathEnvVarEditorDialog -->
 	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">编辑 /etc/paths</sys:String>

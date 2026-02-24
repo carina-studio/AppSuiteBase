@@ -321,6 +321,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     const string InitSettingsFileName = "InitSettings.json";
     const string PersistentStateFileName = "PersistentState.json";
     const string SettingsFileName = "Settings.json";
+    const bool SimulateFirstLaunch = false;
     const bool SimulateImportInitSettingsFailure = false;
     const bool SimulateImportPersistentStateFailure = false;
     const bool SimulateImportSettingsFailure = false;
@@ -488,9 +489,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         // ReSharper disable VirtualMemberCallInConstructor
         this.persistentStateFilePath = Path.Combine(this.RootPrivateDirectoryPath, PersistentStateFileName);
         // ReSharper restore VirtualMemberCallInConstructor
+#pragma warning disable CS0162 // Unreachable code detected
         this.IsFirstLaunch = !AppDataImportResult.HasValue 
                              && InitLaunchOptions?.ContainsKey(LaunchOptionKeys.DirectoryToImportAppData) != true
-                             && Global.RunOrDefault(() => !System.IO.File.Exists(this.persistentStateFilePath), true);
+                             && Global.RunOrDefault(() => SimulateFirstLaunch || !System.IO.File.Exists(this.persistentStateFilePath), true);
+#pragma warning restore CS0162 // Unreachable code detected
 
         // create logger
         LogManager.Configuration = new LoggingConfiguration().Also(it =>

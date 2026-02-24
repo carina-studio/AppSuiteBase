@@ -20,6 +20,9 @@
 
 	<!-- ExternalDependenciesDialog -->
 	<sys:String x:Key="String/ExternalDependenciesDialog.EditPathEnvVar">Edit /etc/paths…</sys:String>
+	
+	<!-- MainWindow -->
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.ConfirmationForFirstLaunch">Would you like to import data from another application? You can also import it later from the About dialog.</sys:String>
 
 	<!-- PathEnvVarEditorDialog -->
 	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">Edit /etc/paths</sys:String>

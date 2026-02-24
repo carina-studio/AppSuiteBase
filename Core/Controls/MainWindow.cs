@@ -57,6 +57,7 @@ public abstract class MainWindow : Window
     static readonly SettingKey<int> ExtDepDialogShownVersionKey = new("MainWindow.ExternalDependenciesDialogShownVersion", -1);
     static bool IsAppDataImportResultDialogShown;
     static bool IsAppRunningLocationOnMacOSChecked;
+    static bool IsImportAppDataDialogShown;
     static bool IsNetworkConnForActivatingProVersionNotified;
     static bool IsNotifyingAppUpdateFound;
     static bool IsReactivatingProVersion;
@@ -980,6 +981,42 @@ public abstract class MainWindow : Window
             }
         }
         
+        // import application data
+        if (app.IsFirstLaunch && !IsImportAppDataDialogShown)
+        {
+            // prepare
+            this.Logger.LogWarning("Show application data import dialog");
+            this.isShowingInitialDialogs = true;
+            IsImportAppDataDialogShown = true;
+            
+            // confirm
+            var confirmationResult = await new MessageDialog
+            {
+                Buttons = MessageDialogButtons.YesNo,
+                Icon = MessageDialogIcon.Question,
+                Message = app.GetObservableString("MainWindow.ImportApplicationData.ConfirmationForFirstLaunch"),
+                Title = app.GetObservableString("ApplicationDataImportDirectorySelectionDialog.Title")
+            }.ShowDialog(this);
+            
+            // select directory
+            var directory = confirmationResult == MessageDialogResult.Yes && !this.IsClosed
+                ? await new ApplicationDataImportDirectorySelectionDialog { ShowConfirmation = false }.ShowDialog(this)
+                : null;
+            
+            // import application data
+            if (!string.IsNullOrEmpty(directory))
+            {
+                await Task.Delay(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
+                app.Restart(new()
+                {
+                    DirectoryToImportAppData = directory
+                });
+                this.isShowingInitialDialogs = false;
+                return;
+            }
+            this.isShowingInitialDialogs = false;
+        }
+        
         // show application data import result
         if (!IsAppDataImportResultDialogShown 
             && asApp is not null 
@@ -1000,7 +1037,7 @@ public abstract class MainWindow : Window
                         ? app.GetObservableString("MainWindow.ImportApplicationData.Succeeded")
                         : app.GetObservableString("MainWindow.ImportApplicationData.Failed"));
                 }),
-                Title = app.GetObservableString("ApplicationDataImportDirectorySelectionDialog.Title"),
+                Title = app.GetObservableString("ApplicationDataImportDirectorySelectionDialog.Title")
             }.ShowDialog(this);
             this.isShowingInitialDialogs = false;
         }

@@ -306,6 +306,7 @@
 	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">已經有新的 {0} 版本。</sys:String>
 	<StaticResourceExtension x:Key="String/MainWindow.ChineseVariantChanged" ResourceKey="String/ApplicationOptions.WillRestartApplicationToTakeEffect.ChineseVariantChanged"/>
 	<sys:String x:Key="String/MainWindow.ConfirmLayingOutLotsOfMainWindows">排列較多數量的視窗可能導致不適合的排列結果，是否仍要進行排列？</sys:String>
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.ConfirmationForFirstLaunch">您是否要從另一個目錄將應用程式資料匯入？您也可以稍後從「關於」對話方塊中匯入資料。</sys:String>
 	<sys:String x:Key="String/MainWindow.ImportApplicationData.Failed">無法從「{0}」將應用程式資料匯入。</sys:String>
 	<sys:String x:Key="String/MainWindow.ImportApplicationData.Succeeded">已成功從「{0}」將應用程式資料匯入。</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows">排列視窗</sys:String>

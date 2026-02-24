@@ -312,6 +312,7 @@
 	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">A new version of {0} is available.</sys:String>
 	<StaticResourceExtension x:Key="String/MainWindow.ChineseVariantChanged" ResourceKey="String/ApplicationOptions.WillRestartApplicationToTakeEffect.ChineseVariantChanged"/>
 	<sys:String x:Key="String/MainWindow.ConfirmLayingOutLotsOfMainWindows">Laying out many windows may lead to incorrect results. Proceed with window layout?</sys:String>
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.ConfirmationForFirstLaunch">Would you like to import application data from another directory? You can also import it later from the About dialog.</sys:String>
 	<sys:String x:Key="String/MainWindow.ImportApplicationData.Failed">Failed to import application data from '{0}'.</sys:String>
 	<sys:String x:Key="String/MainWindow.ImportApplicationData.Succeeded">Application data was successfully imported from '{0}'.</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows">Lay out windows</sys:String>
