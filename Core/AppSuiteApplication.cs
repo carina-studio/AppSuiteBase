@@ -488,9 +488,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         // ReSharper disable VirtualMemberCallInConstructor
         this.persistentStateFilePath = Path.Combine(this.RootPrivateDirectoryPath, PersistentStateFileName);
         // ReSharper restore VirtualMemberCallInConstructor
-        this.IsFirstLaunch = AppDataImportResult.HasValue 
-                             || InitLaunchOptions?.ContainsKey(LaunchOptionKeys.DirectoryToImportAppData) == true
-                             || Global.RunOrDefault(() => !System.IO.File.Exists(this.persistentStateFilePath), true);
+        this.IsFirstLaunch = !AppDataImportResult.HasValue 
+                             && InitLaunchOptions?.ContainsKey(LaunchOptionKeys.DirectoryToImportAppData) != true
+                             && Global.RunOrDefault(() => !System.IO.File.Exists(this.persistentStateFilePath), true);
 
         // create logger
         LogManager.Configuration = new LoggingConfiguration().Also(it =>
@@ -3891,12 +3891,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 : Path.Combine(directory, "Contents", "MacOS");
             if (!Global.RunOrDefault(() => System.IO.File.Exists(Path.Combine(baseSettingsPath, SettingsFileName))))
             {
-                this.Logger.LogError("Settings not found in directory to import application data: {path}", directory);
+                this.Logger.LogWarning("Settings not found in directory to import application data: {path}", directory);
                 return false;
             }
             if (!Global.RunOrDefault(() => System.IO.File.Exists(Path.Combine(baseSettingsPath, PersistentStateFileName))))
             {
-                this.Logger.LogError("Persistent state not found in directory to import application data: {path}", directory);
+                this.Logger.LogWarning("Persistent state not found in directory to import application data: {path}", directory);
                 return false;
             }
 
@@ -4064,7 +4064,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                             index += 2;
                             var directory = args[index - 1].Let(it =>
                                 it.Length > 0 && it[^1] == Path.DirectorySeparatorChar
-                                    ? it[..^2]
+                                    ? it[..^1]
                                     : it);
                             if (!string.IsNullOrWhiteSpace(directory) && directory.IsValidFilePath() && !PathEqualityComparer.Default.Equals(directory, AppDirectoryPath))
                                 launchOptions[LaunchOptionKeys.DirectoryToImportAppData] = directory;

@@ -38,6 +38,8 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET 版本</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GCFrequency">垃圾收集 (GC) 每秒次数</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">GitHub 上的项目页面</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ImportApplicationData">导入应用程序数据…</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ImportApplicationData.Confirmation">将重启应用程序以导入数据。</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">(已安裝：{0})</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ManagedHeapSize">受控内存堆大小</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ManagedHeapUsage">受控内存堆使用量</sys:String>

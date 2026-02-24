@@ -1,5 +1,6 @@
 using CarinaStudio.AppSuite.Native;
 using CarinaStudio.MacOS.ObjectiveC;
+using CarinaStudio.Threading;
 using System;
 using System.Diagnostics;
 using System.Threading;
@@ -12,6 +13,25 @@ namespace CarinaStudio.AppSuite.Controls;
 /// </summary>
 public class ApplicationDataImportDirectorySelectionDialog : CommonDialog<string?>
 {
+    // Fields.
+    bool showConfirmation = true;
+
+
+    /// <summary>
+    /// Get or set whether confirmation should be shown or not before selecting the directory.
+    /// </summary>
+    public bool ShowConfirmation
+    {
+        get => this.showConfirmation;
+        set
+        {
+            this.VerifyAccess();
+            this.VerifyShowing();
+            this.showConfirmation = value;
+        }
+    }
+    
+    
     /// <inheritdoc/>
     protected override async Task<string?> ShowDialogCore(Avalonia.Controls.Window? owner)
     {
@@ -20,7 +40,7 @@ public class ApplicationDataImportDirectorySelectionDialog : CommonDialog<string
             return null;
         
         // confirm
-        if (!app.IsFirstLaunch)
+        if (this.showConfirmation)
         {
             var confirmationResult = await new MessageDialog
             {

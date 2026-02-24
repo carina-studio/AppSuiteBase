@@ -293,6 +293,33 @@ class ApplicationInfoDialogImpl : Dialog
 
 	// Check whether total physical memory info is valid or not.
 	public bool HasTotalPhysicalMemory => this.GetValue(HasTotalPhysicalMemoryProperty);
+
+
+	// Import application data from specific directory.
+	public async Task ImportApplicationData()
+	{
+		// select directory
+		var directory = await new ApplicationDataImportDirectorySelectionDialog().ShowDialog(this);
+		if (string.IsNullOrEmpty(directory) || this.IsClosed)
+			return;
+		
+		// confirm
+		var confirmationResult = await new MessageDialog
+		{
+			Buttons = MessageDialogButtons.OKCancel,
+			Icon = MessageDialogIcon.Warning,
+			Message = this.Application.GetObservableString("ApplicationInfoDialog.ImportApplicationData.Confirmation"),
+			Title = this.Application.GetObservableString("ApplicationDataImportDirectorySelectionDialog.Title")
+		}.ShowDialog(this);
+		if (confirmationResult != MessageDialogResult.OK || this.IsClosed)
+			return;
+
+		// restart to import application data
+		this.Application.Restart(new ApplicationArgsBuilder
+		{
+			DirectoryToImportAppData = directory
+		});
+	}
 	
 	
 	// Informational version name.
