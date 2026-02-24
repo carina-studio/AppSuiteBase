@@ -1,6 +1,8 @@
 using CarinaStudio.AppSuite.Native;
 using CarinaStudio.MacOS.ObjectiveC;
 using System;
+using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -14,7 +16,7 @@ public class ApplicationDataImportDirectorySelectionDialog : CommonDialog<string
     protected override async Task<string?> ShowDialogCore(Avalonia.Controls.Window? owner)
     {
         // check state
-        if (owner is null || IAppSuiteApplication.CurrentOrNull is not { } app)
+        if (owner is null || IAppSuiteApplication.CurrentOrNull is not AppSuiteApplication app)
             return null;
         
         // confirm
@@ -33,6 +35,7 @@ public class ApplicationDataImportDirectorySelectionDialog : CommonDialog<string
         }
         
         // select directory
+        string? directory;
         while (true)
         {
             Uri directoryUri;
@@ -73,7 +76,10 @@ public class ApplicationDataImportDirectorySelectionDialog : CommonDialog<string
             if (!owner.IsVisible)
                 return null;
             if (directoryUri.Scheme == "file")
-                return directoryUri.LocalPath;
+            {
+                directory = directoryUri.LocalPath;
+                break;
+            }
             await new MessageDialog
             {
                 Icon = MessageDialogIcon.Warning,
@@ -83,5 +89,39 @@ public class ApplicationDataImportDirectorySelectionDialog : CommonDialog<string
             if (!owner.IsVisible)
                 return null;
         }
+        
+        // validate directory
+        var stopWatch = new Stopwatch();
+        stopWatch.Start();
+        var processingDialog = new ProcessingDialog
+        {
+            Message = app.GetObservableString("Common.Validating")
+        };
+        _ = processingDialog.ShowDialog(owner);
+        var isValidDirectory = await app.ValidateApplicationDataImportAsync(directory, CancellationToken.None);
+        var validationDelay = 1000 - stopWatch.ElapsedMilliseconds;
+        if (validationDelay > 0)
+            await Task.Delay((int)validationDelay);
+        processingDialog.Complete();
+        if (!owner.IsVisible)
+            return null;
+        if (!isValidDirectory)
+        {
+            var confirmationResult = await new MessageDialog
+            {
+                Buttons = MessageDialogButtons.YesNo,
+                DefaultResult = MessageDialogResult.No,
+                Icon = MessageDialogIcon.Warning,
+                Message = new FormattedString().Also(it =>
+                {
+                    it.Arg1 = directory;
+                    it.Bind(FormattedString.FormatProperty, app.GetObservableString("ApplicationDataImportDirectorySelectionDialog.DirectoryValidationFailed"));
+                }),
+                Title = app.GetObservableString("ApplicationDataImportDirectorySelectionDialog.Title")
+            }.ShowDialog(owner);
+            if (confirmationResult != MessageDialogResult.Yes)
+                return null;
+        }
+        return directory;
     }
 }

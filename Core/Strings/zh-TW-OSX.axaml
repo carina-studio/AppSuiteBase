@@ -4,6 +4,7 @@
 	
 	<!-- ApplicationDataImportDirectorySelectionDialog -->
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Confirmation">當您選定應用程式後，目前的應用程式資料（包括所有設定及使用者資料）將被其中的資料所覆寫，且覆寫後將無法復原。</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.DirectoryValidationFailed">應用程式「{0}」中看起來沒有包含有效的資料，您是否仍要從其中匯入應用程式資料？</sys:String>
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.LocalDirectoriesOnly">僅允許使用本機應用程式。</sys:String>
 
 	<!-- Common -->

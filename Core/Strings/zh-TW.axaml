@@ -10,6 +10,7 @@
 	
 	<!-- ApplicationDataImportDirectorySelectionDialog -->
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Confirmation">當您選定目錄後，應用程式資料（包括所有設定及使用者資料）將被目錄內的資料所覆寫，且覆寫後將無法復原。</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.DirectoryValidationFailed">目錄「{0}」中看起來沒有包含有效的應用程式資料，您是否仍要從其中匯入應用程式資料？</sys:String>
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.LocalDirectoriesOnly">僅允許使用本機目錄。</sys:String>
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Title">匯入應用程式資料</sys:String>
 
@@ -131,7 +132,7 @@
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Description">擷取記憶體快照期間應用程式將停止回應數十秒至數分鐘。</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Failed">無法擷取記憶體快照</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Processing">正在擷取記憶體快照，過程中應用程式將停止回應…</sys:String>
-	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Succeeded">記憶體快照擷取完成並儲存至 '{0}'。</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Succeeded">記憶體快照擷取完成並儲存至「{0}」。</sys:String>
 
 	<!-- CommandSearchPaths -->
 	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">更新系統定義路徑</sys:String>
@@ -236,6 +237,7 @@
 	<sys:String x:Key="String/Common.TakeMemorySnapshot.WithDialog">擷取記憶體快照…</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement">使用者協議</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement.WithDialog">使用者協議…</sys:String>
+	<sys:String x:Key="String/Common.Validating">驗證中…</sys:String>
 	<sys:String x:Key="String/Common.Yes">是</sys:String>
 
 	<!-- DatePicker -->
@@ -302,8 +304,8 @@
 	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">已經有新的 {0} 版本。</sys:String>
 	<StaticResourceExtension x:Key="String/MainWindow.ChineseVariantChanged" ResourceKey="String/ApplicationOptions.WillRestartApplicationToTakeEffect.ChineseVariantChanged"/>
 	<sys:String x:Key="String/MainWindow.ConfirmLayingOutLotsOfMainWindows">排列較多數量的視窗可能導致不適合的排列結果，是否仍要進行排列？</sys:String>
-	<sys:String x:Key="String/MainWindow.ImportApplicationData.Failed">無法從 '{0}' 將應用程式資料匯入。</sys:String>
-	<sys:String x:Key="String/MainWindow.ImportApplicationData.Succeeded">已成功從 '{0}' 將應用程式資料匯入。</sys:String>
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.Failed">無法從「{0}」將應用程式資料匯入。</sys:String>
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.Succeeded">已成功從「{0}」將應用程式資料匯入。</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows">排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">水平排列視窗</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">網格排列視窗</sys:String>

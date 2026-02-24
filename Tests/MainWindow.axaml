@@ -769,7 +769,7 @@
 								<RadioButton Content="RadioButton" Margin="5"/>
 								<RadioButton Content="Disabled" IsEnabled="False" Margin="5"/>
 								<RadioButton Content="Disabled" IsChecked="True" IsEnabled="False" Margin="5"/>
-								<RadioButton Content="Indeternimate" IsChecked="{x:Null}" Margin="5"/>
+								<RadioButton Content="Indeterminate" IsChecked="{x:Null}" Margin="5"/>
 							</WrapPanel>
 
 							<NumericUpDown HorizontalAlignment="Left" Maximum="100" Minimum="0" Margin="5" Value="50" Width="150"/>

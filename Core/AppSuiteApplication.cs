@@ -813,7 +813,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (System.IO.Directory.Exists(dirToImportAppData))
             {
                 // initial settings
-                var srcFilePath = Path.Combine(dirToImportAppData, InitSettingsFileName);
+                var srcFilePath = Platform.IsNotMacOS
+                    ? Path.Combine(dirToImportAppData, InitSettingsFileName)
+                    : Path.Combine(dirToImportAppData, "Contents", "MacOS", InitSettingsFileName);
                 if (System.IO.File.Exists(srcFilePath))
                 {
                     try
@@ -835,7 +837,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 }
                 
                 // settings
-                srcFilePath = Path.Combine(dirToImportAppData, SettingsFileName);
+                srcFilePath = Platform.IsNotMacOS
+                    ? Path.Combine(dirToImportAppData, SettingsFileName)
+                    : Path.Combine(dirToImportAppData, "Contents", "MacOS", SettingsFileName);
                 if (System.IO.File.Exists(srcFilePath))
                 {
                     try
@@ -3080,7 +3084,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     {
         await Task.Run(() =>
         {
-            var srcFilePath = Path.Combine(directory, PersistentStateFileName);
+            var srcFilePath = Platform.IsNotMacOS
+                ? Path.Combine(directory, PersistentStateFileName)
+                : Path.Combine(directory, "Contents", "MacOS", PersistentStateFileName);
             if (System.IO.File.Exists(srcFilePath))
             {
                 try
@@ -3845,6 +3851,58 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         if (delay >= 0)
             this.performFullGCAction?.Schedule(delay);
     }
+
+
+    /// <summary>
+    /// Called to validate whether the data inside the specific directory is valid for application data import or not.
+    /// </summary>
+    /// <param name="directory">Path of directory to import application data.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Task of validation. The result will be True if the data inside the directory is valid.</returns>
+    protected virtual Task<bool> OnValidateApplicationDataImportAsync(string directory, CancellationToken cancellationToken) =>
+        Task.Run(() =>
+        {
+            // check state
+            cancellationToken.ThrowIfCancellationRequested();
+            
+            // check directory
+            if (!directory.IsValidFilePath())
+            {
+                this.Logger.LogError("Invalid directory to import application data: {path}", directory);
+                return false;
+            }
+            try
+            {
+                if (!System.IO.Directory.Exists(directory))
+                {
+                    this.Logger.LogError("Directory not found to import application data: {path}", directory);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Failed to check directory to import application data");
+                return false;
+            }
+            
+            // check settings
+            var baseSettingsPath = Platform.IsNotMacOS
+                ? directory
+                : Path.Combine(directory, "Contents", "MacOS");
+            if (!Global.RunOrDefault(() => System.IO.File.Exists(Path.Combine(baseSettingsPath, SettingsFileName))))
+            {
+                this.Logger.LogError("Settings not found in directory to import application data: {path}", directory);
+                return false;
+            }
+            if (!Global.RunOrDefault(() => System.IO.File.Exists(Path.Combine(baseSettingsPath, PersistentStateFileName))))
+            {
+                this.Logger.LogError("Persistent state not found in directory to import application data: {path}", directory);
+                return false;
+            }
+
+            // complete
+            return true;
+        }, cancellationToken);
 
 
     /// <summary>
@@ -5866,6 +5924,28 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 resources[resourceKey] = scaledResource;
             else
                 resources.Remove(resourceKey);
+        }
+    }
+
+
+    /// <summary>
+    /// Validate whether the data inside the specific directory is valid for application data import or not.
+    /// </summary>
+    /// <param name="directory">Path of directory to import application data.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Task of validation. The result will be True if the data inside the directory is valid.</returns>
+    internal async Task<bool> ValidateApplicationDataImportAsync(string directory, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        try
+        {
+            return await this.OnValidateApplicationDataImportAsync(directory, cancellationToken);
+        }
+        catch (Exception ex)
+        {
+            if (ex is not OperationCanceledException)
+                this.Logger.LogError(ex, "Failed to validate directory to import application data");
+            return false;
         }
     }
 

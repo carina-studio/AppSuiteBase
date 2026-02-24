@@ -4,6 +4,7 @@
 	
 	<!-- ApplicationDataImportDirectorySelectionDialog -->
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Confirmation">Application data, including all settings and user profiles, will be overwritten by data from the selected application. This action cannot be undone once the data has been overwritten.</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.DirectoryValidationFailed">The application '{0}' does not seem to contain valid application data. Do you still want to import data from it?</sys:String>
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.LocalDirectoriesOnly">Only local applications are allowed.</sys:String>
 
 	<!-- Common -->

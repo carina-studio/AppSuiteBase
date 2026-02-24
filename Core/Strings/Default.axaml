@@ -10,6 +10,7 @@
 	
 	<!-- ApplicationDataImportDirectorySelectionDialog -->
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Confirmation">Application data, including all settings and user profiles, will be overwritten by data from the selected directory. This action cannot be undone once the data has been overwritten.</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.DirectoryValidationFailed">The directory '{0}' does not seem to contain valid application data. Do you still want to import data from it?</sys:String>
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.LocalDirectoriesOnly">Only local directories are allowed.</sys:String>
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Title">Import application data</sys:String>
 
@@ -242,6 +243,7 @@
 	<sys:String x:Key="String/Common.TakeMemorySnapshot.WithDialog">Take memory snapshot…</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement">User Agreement</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement.WithDialog">User Agreement…</sys:String>
+	<sys:String x:Key="String/Common.Validating">Validating…</sys:String>
 	<sys:String x:Key="String/Common.Yes">Yes</sys:String>
 	
 	<!-- DatePicker -->
