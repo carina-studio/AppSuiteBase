@@ -7,6 +7,11 @@
 	<sys:String x:Key="String/ApplicationCulture.System">系统设定</sys:String>
 	<sys:String x:Key="String/ApplicationCulture.ZH_TW">繁体中文</sys:String>
 	<sys:String x:Key="String/ApplicationCulture.ZH_CN">简体中文</sys:String>
+	
+	<!-- ApplicationDataImportDirectorySelectionDialog -->
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Confirmation">当您选定目录后，应用程序数据（包括所有设置及用户资料）将被目录内的数据所覆盖，且覆盖后将无法还原。</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.LocalDirectoriesOnly">仅允许使用本地目录。</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Title">导入应用程序数据</sys:String>
 
 	<!-- ApplicationInfoDialog -->
 	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">修改列表</sys:String>
@@ -121,7 +126,6 @@
 	<sys:String x:Key="String/ApplicationUpdater.ReleasePage">新版本中的变更</sys:String>
 
 	<!-- AppSuiteApplication -->
-	<sys:String x:Key="String/AppSuiteApplication.ImportApplicationData">导入应用程序资料</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.InitializingComponents">初始化元件</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">载入布景主题</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Description">撷取内存快照期间应用程序将停止响应数十秒至数分钟。</sys:String>
@@ -298,8 +302,8 @@
 	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">已经有新的 {0} 版本。</sys:String>
 	<StaticResourceExtension x:Key="String/MainWindow.ChineseVariantChanged" ResourceKey="String/ApplicationOptions.WillRestartApplicationToTakeEffect.ChineseVariantChanged"/>
 	<sys:String x:Key="String/MainWindow.ConfirmLayingOutLotsOfMainWindows">排列较多数量的窗口导致不适合的排列结果，是否仍要进行排列？</sys:String>
-	<sys:String x:Key="String/MainWindow.ImportApplicationData.Failed">无法从 '{0}' 将应用程序资料导入。</sys:String>
-	<sys:String x:Key="String/MainWindow.ImportApplicationData.Succeeded">已成功从 '{0}' 将应用程序资料导入。</sys:String>
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.Failed">无法从 '{0}' 将应用程序数据导入。</sys:String>
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.Succeeded">已成功从 '{0}' 将应用程序数据导入。</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows">排列窗口</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">水平排列窗口</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">网格排列窗口</sys:String>

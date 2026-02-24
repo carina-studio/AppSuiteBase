@@ -1000,7 +1000,7 @@ public abstract class MainWindow : Window
                         ? app.GetObservableString("MainWindow.ImportApplicationData.Succeeded")
                         : app.GetObservableString("MainWindow.ImportApplicationData.Failed"));
                 }),
-                Title = app.GetObservableString("AppSuiteApplication.ImportApplicationData"),
+                Title = app.GetObservableString("ApplicationDataImportDirectorySelectionDialog.Title"),
             }.ShowDialog(this);
             this.isShowingInitialDialogs = false;
         }

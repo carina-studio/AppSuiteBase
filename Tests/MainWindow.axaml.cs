@@ -640,6 +640,18 @@ namespace CarinaStudio.AppSuite.Tests
             }));
         }
 
+        public async Task ShowAppDataImportDirSelectionDialog()
+        {
+            var directory = await new ApplicationDataImportDirectorySelectionDialog().ShowDialog(this);
+            if (!string.IsNullOrEmpty(directory))
+            {
+                _ = new MessageDialog
+                {
+                    Message = $"Directory '{directory}' selected"
+                }.ShowDialog(this);
+            }
+        }
+
         public async void ShowAppInfoDialog()
         {
             //this.canShowAppInfo.Update(false);
@@ -657,7 +669,7 @@ namespace CarinaStudio.AppSuite.Tests
         {
             var icon = Enum.GetValues<MessageDialogIcon>().SelectRandomElement();
             var buttons = Enum.GetValues<MessageDialogButtons>().SelectRandomElement();
-            var result = await new MessageDialog()
+            var result = await new MessageDialog
             {
                 Buttons = buttons,
                 CustomDoNotAskOrShowAgainText = "DO NOT SHOW AGAIN!!!",

@@ -7,6 +7,11 @@
 	<sys:String x:Key="String/ApplicationCulture.System">System</sys:String>
 	<sys:String x:Key="String/ApplicationCulture.ZH_TW">Chinese Traditional</sys:String>
 	<sys:String x:Key="String/ApplicationCulture.ZH_CN">Chinese Simplified</sys:String>
+	
+	<!-- ApplicationDataImportDirectorySelectionDialog -->
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Confirmation">Application data, including all settings and user profiles, will be overwritten by data from the selected directory. This action cannot be undone once the data has been overwritten.</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.LocalDirectoriesOnly">Only local directories are allowed.</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Title">Import application data</sys:String>
 
 	<!-- ApplicationInfoDialog -->
 	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">Changes</sys:String>
@@ -127,7 +132,6 @@
 	<sys:String x:Key="String/ApplicationUpdater.ReleasePage">Changes in the new version</sys:String>
 
 	<!-- AppSuiteApplication -->
-	<sys:String x:Key="String/AppSuiteApplication.ImportApplicationData">Import application data</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.InitializingComponents">Initializing components</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">Loading theme</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Description">Taking a memory snapshot may make the application unresponsive for tens of seconds to minutes.</sys:String>

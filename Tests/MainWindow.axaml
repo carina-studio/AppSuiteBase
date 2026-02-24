@@ -780,6 +780,7 @@
 								<Button Command="{Binding $parent[Window].ShowAppUpdateDialog}" Content="App Update" Margin="5"/>
 								<Button Command="{Binding $parent[Window].ShowMessageDialog}" Content="MessageDialog" Margin="5"/>
 								<Button Command="{Binding $parent[Window].ShowTextInputDialog}" Content="TextInputDialog" Margin="5"/>
+								<Button Command="{Binding $parent[Window].ShowAppDataImportDirSelectionDialog}" Content="Select dir to import app data" Margin="5"/>
 								<Button Command="{Binding $parent[Window].ShowNotification}" Content="Show Notification" Margin="5"/>
 								<Button Command="{Binding $parent[Window].ShowExternalDependenciesDialog}" Content="External Dependencies" Margin="5"/>
 								<Button Command="{Binding $parent[Window].ShowTestDialog}" Content="Test Dialog" Margin="5"/>

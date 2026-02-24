@@ -1,6 +1,10 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 					xmlns:sys="using:System">
+	
+	<!-- ApplicationDataImportDirectorySelectionDialog -->
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Confirmation">當您選定應用程式後，目前的應用程式資料（包括所有設定及使用者資料）將被其中的資料所覆寫，且覆寫後將無法復原。</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.LocalDirectoriesOnly">僅允許使用本機應用程式。</sys:String>
 
 	<!-- Common -->
 	<sys:String x:Key="String/Common.Administrator">Superuser</sys:String>
