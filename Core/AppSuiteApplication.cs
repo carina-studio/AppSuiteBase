@@ -349,7 +349,7 @@ namespace CarinaStudio.AppSuite
         /// <summary>
         /// Ending year of copyright.
         /// </summary>
-        internal const int CopyrightEndingYear = 2025;
+        internal const int CopyrightEndingYear = 2026;
         /// <summary>
         /// Argument indicates to enable debug mode.
         /// </summary>
