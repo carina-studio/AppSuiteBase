@@ -227,7 +227,10 @@
 														<Image Classes="Icon" Source="{StaticResource Image/Icon.Sliders}"/>
 													</Button>
 													<Button Classes="ToolBar_Button">
-														<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile}"/>
+														<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFile.Outline}"/>
+													</Button>
+													<Button Classes="ToolBar_Button">
+														<Image Classes="Icon" Source="{StaticResource Image/Icon.AddFolder.Outline}"/>
 													</Button>
 													<Button Classes="ToolBar_Button" IsEnabled="{Binding #toolBarToggleButton.IsChecked}">
 														<Image Classes="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
@@ -618,16 +621,16 @@
 							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
 								<StackPanel Orientation="Horizontal">
 									<Button Classes="InPlaceAction_Button">
-										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.File}"/>
+										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.File.Outline}"/>
 									</Button>
 									<Button Classes="InPlaceAction_Button">
-										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
+										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.OpenFile.Outline}"/>
 									</Button>
 									<Button Classes="InPlaceAction_Button">
-										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.Save}"/>
+										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.Save.Outline}"/>
 									</Button>
 									<Button Classes="InPlaceAction_Button" IsEnabled="False">
-										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.SaveAll}"/>
+										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.SaveAll.Outline}"/>
 									</Button>
 									<ToggleButton Classes="InPlaceAction_ToggleButton" IsEnabled="False">
 										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.More}"/>
