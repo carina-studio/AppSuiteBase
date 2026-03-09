@@ -17,6 +17,7 @@
 	<!-- ApplicationInfoDialog -->
 	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">Changes</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">Loaded assemblies</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies.Description">{0} assemblies</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">Application icon is modified from icons created by</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">from</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon" xml:space="preserve">.</sys:String>
@@ -241,6 +242,9 @@
 	<sys:String x:Key="String/Common.SelectAll.WithGesture">Select all (Ctrl+A)</sys:String>
 	<sys:String x:Key="String/Common.SelfTesting">Self testing</sys:String>
 	<sys:String x:Key="String/Common.SelfTesting.WithDialog">Self testing…</sys:String>
+	<sys:String x:Key="String/Common.ShowLess">Show less</sys:String>
+	<sys:String x:Key="String/Common.ShowMore">Show more</sys:String>
+	<sys:String x:Key="String/Common.ShowMore.WithDialog">Show more…</sys:String>
 	<sys:String x:Key="String/Common.TakeMemorySnapshot">Take memory snapshot</sys:String>
 	<sys:String x:Key="String/Common.TakeMemorySnapshot.WithDialog">Take memory snapshot…</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement">User Agreement</sys:String>

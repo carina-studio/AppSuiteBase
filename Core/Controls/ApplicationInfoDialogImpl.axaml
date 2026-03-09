@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:abControls="using:CarinaStudio.Controls"
+        xmlns:abConverters="using:CarinaStudio.Data.Converters"
 		xmlns:controls="using:CarinaStudio.AppSuite.Controls"
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
 		xmlns:net="using:CarinaStudio.AppSuite.Net"
@@ -404,7 +405,24 @@
 						<StackPanel>
 
 							<!-- Assemblies -->
-							<StackPanel Name="assembliesPanel"/>
+							<StackPanel Name="assembliesPanel" IsVisible="{Binding #window.IsAssembliesPanelExpanded}"/>
+							
+							<!-- Expand/Collapse -->
+							<Separator Classes="Dialog_Item_Separator" IsVisible="{Binding #window.IsAssembliesPanelExpanded}"/>
+							<controls:DialogItem ItemSize="Small">
+								<abControls:FormattedTextBlock Classes="Dialog_TextBlock_Label" 
+								                               Arg1="{Binding Assemblies.Count}" 
+								                               Format="{xaml:StringResource ApplicationInfoDialog.Assemblies.Description}"
+								                               Opacity="{Binding #window.IsAssembliesPanelExpanded, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacityInverted}}"/>
+								<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+									<abControls:LinkTextBlock Command="{Binding #window.ExpandAssembliesPanel}" 
+									                          HorizontalAlignment="Right" IsVisible="{Binding !#window.IsAssembliesPanelExpanded}" 
+									                          Text="{xaml:StringResource Common.ShowMore}"/>
+									<abControls:LinkTextBlock Command="{Binding #window.CollapseAssembliesPanel}" 
+									                          HorizontalAlignment="Right" IsVisible="{Binding #window.IsAssembliesPanelExpanded}" 
+									                          Text="{xaml:StringResource Common.ShowLess}"/>
+								</StackPanel>
+							</controls:DialogItem>
 
 						</StackPanel>
 					</Border>

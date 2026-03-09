@@ -45,6 +45,7 @@ class ApplicationInfoDialogImpl : Dialog
 	static readonly StyledProperty<bool> HasTotalPhysicalMemoryProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasTotalPhysicalMemory));
 	static readonly StyledProperty<bool> HasUserAgreementProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasUserAgreement");
 	static readonly StyledProperty<string?> InformationalVersionProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, string?>(nameof(InformationalVersion));
+	static readonly StyledProperty<bool> IsAssembliesPanelExpandedProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(IsAssembliesPanelExpanded));
 	static readonly SettingKey<bool> IsRestartingInDebugModeConfirmationShownKey = new("ApplicationInfoDialog.IsRestartingInDebugModeConfirmationShown");
 	static readonly DirectProperty<ApplicationInfoDialogImpl, PixelSize> PhysicalScreenSizeProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelSize>(nameof(PhysicalScreenSize), w => w.physicalScreenSize);
 	static readonly DirectProperty<ApplicationInfoDialogImpl, PixelRect> PhysicalScreenWorkingAreaProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, PixelRect>(nameof(PhysicalScreenWorkingArea), w => w.physicalScreenWorkingArea);
@@ -216,6 +217,12 @@ class ApplicationInfoDialogImpl : Dialog
 	}
 
 
+	/**
+	 * Collapse panel of loaded assemblies.
+	 */
+	public void CollapseAssembliesPanel() => this.SetValue(IsAssembliesPanelExpandedProperty, false);
+
+
 	/// <summary>
 	/// Copyright.
 	/// </summary>
@@ -225,6 +232,12 @@ class ApplicationInfoDialogImpl : Dialog
 	// Deactivate product.
 	void DeactivateProduct(string id) =>
 		this.Application.ProductManager.DeactivateAndRemoveDeviceAsync(id, this);
+	
+	
+	/**
+	 * Expand panel of loaded assemblies.
+	 */
+	public void ExpandAssembliesPanel() => this.SetValue(IsAssembliesPanelExpandedProperty, true);
 
 
 	/// <summary>
@@ -324,6 +337,12 @@ class ApplicationInfoDialogImpl : Dialog
 	
 	// Informational version name.
 	string? InformationalVersion => this.GetValue(InformationalVersionProperty);
+
+
+	/// <summary>
+	/// Check whether the panel of loaded assemblies has been expanded or not.
+	/// </summary>
+	public bool IsAssembliesPanelExpanded => this.GetValue(IsAssembliesPanelExpandedProperty);
 
 
 	// Called when application string resources updated.

@@ -17,6 +17,7 @@
 	<!-- ApplicationInfoDialog -->
 	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">變更列表</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">已載入組件列表</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies.Description">共 {0} 個組件</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">應用程式圖示修改自</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">提供並發布於</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon" xml:space="preserve">之圖示。</sys:String>
@@ -235,6 +236,9 @@
 	<sys:String x:Key="String/Common.SelectAll.WithGesture">全選 (Ctrl+A)</sys:String>
 	<sys:String x:Key="String/Common.SelfTesting">自我測試</sys:String>
 	<sys:String x:Key="String/Common.SelfTesting.WithDialog">自我測試…</sys:String>
+	<sys:String x:Key="String/Common.ShowLess">顯示較少</sys:String>
+	<sys:String x:Key="String/Common.ShowMore">顯示更多</sys:String>
+	<sys:String x:Key="String/Common.ShowMore.WithDialog">顯示更多…</sys:String>
 	<sys:String x:Key="String/Common.TakeMemorySnapshot">擷取記憶體快照</sys:String>
 	<sys:String x:Key="String/Common.TakeMemorySnapshot.WithDialog">擷取記憶體快照…</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement">使用者協議</sys:String>
