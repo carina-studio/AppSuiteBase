@@ -6,6 +6,11 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
+// Constants.
+const string IconsFilePath = "Core/Resources/Icons.axaml";
+const string IconPathInSvgPattern = "<path[\\s\\r\\n]+([\\w\\:]+=\"[^\"]*\"[\\s\\r\\n]+)*d=\"(?<Path>[^\"]+)\"";
+const string IconPathInXamlPattern = "^\\s*<(StreamGeometry|PathGeometry)\\s+x:Key=\"Geometry/(?<Key>[^\"]+)\"(\\s+[\\w\\:]+=\"[^\"]*\")*>(?<Path>[^\\<]*)";
+
 // check arguments
 if (args.Length == 0)
 {
@@ -43,7 +48,7 @@ Console.WriteLine($"{svgFilePaths.Count} SVG file(s) found.");
 
 // extract icon paths
 var iconPaths = new Dictionary<string, string>();
-var iconPathPattern = new Regex("<path\\s+d=\"(?<Path>[^\"]+)\"", RegexOptions.IgnoreCase);
+var iconPathPattern = new Regex(IconPathInSvgPattern, RegexOptions.IgnoreCase | RegexOptions.Singleline);
 var utf8 = new UTF8Encoding(false);
 foreach (var svgFilePath in svgFilePaths)
 {
@@ -62,7 +67,7 @@ foreach (var svgFilePath in svgFilePaths)
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Error.WriteLine($"Invalid ccon path in '{svgFilePath}'.");
+                Console.Error.WriteLine($"Invalid icon path in '{svgFilePath}'.");
             }
         }
         else
@@ -91,7 +96,7 @@ try
 {
     // read all lines
     var lines = new List<string>();
-    using (var reader = new StreamReader("Core/Resources/Icons.axaml", utf8))
+    using (var reader = new StreamReader(IconsFilePath, utf8))
     {
         var line = reader.ReadLine();
         while (line is not null)
@@ -103,9 +108,9 @@ try
     Console.WriteLine($"{lines.Count} line(s) read from Icons.axaml.");
     
     // import and write lines
-    var geometryPattern = new Regex("^\\s*<StreamGeometry\\s+x:Key=\"Geometry/(?<Key>[^\"]+)\">(?<Path>[^\\<]+)");
+    var geometryPattern = new Regex(IconPathInXamlPattern);
     var importCount = 0;
-    using (var writer = new StreamWriter("Core/Resources/Icons.axaml", append: false, utf8))
+    using (var writer = new StreamWriter(IconsFilePath, append: false, utf8))
     {
         foreach (var line in lines)
         {
