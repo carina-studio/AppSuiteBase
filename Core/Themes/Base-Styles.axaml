@@ -2943,8 +2943,7 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate>
-					<DockPanel VerticalAlignment="Stretch">
-						
+					<DockPanel VerticalAlignment="Stretch" Margin="{DynamicResource Thickness/AddTabItemButton.Margin}">
 						<Panel DockPanel.Dock="Left">
 							<Border BorderThickness="1,0,0,0"
 							        Opacity="0"/>
@@ -2961,7 +2960,6 @@
 								</Border.IsVisible>
 							</Border>
 						</Panel>
-						
 						<ContentPresenter ClipToBounds="False" 
 						                  Content="{TemplateBinding Header}" 
 						                  ContentTemplate="{TemplateBinding HeaderTemplate}" 
