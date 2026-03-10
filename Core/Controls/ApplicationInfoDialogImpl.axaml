@@ -55,22 +55,30 @@
 			<Panel>
 
 				<!-- Background -->
-				<Border Height="{StaticResource Double/ApplicationInfoDialog.Header.Background.Height}" VerticalAlignment="Top">
-					<Border.Background>
-						<LinearGradientBrush EndPoint="0%,100%" StartPoint="0%,0%">
-							<GradientStop Color="{DynamicResource Color/Accent.WithOpacity.0.33}" Offset="0"/>
-							<GradientStop Color="{DynamicResource Color/Accent.Transparent}" Offset="1"/>
-						</LinearGradientBrush>
-					</Border.Background>
-				</Border>
-				<Border Height="{Binding #window.Width}" VerticalAlignment="Top">
-					<Border.Background>
-						<RadialGradientBrush Center="70%,0%" GradientOrigin="70%,0%" RadiusX="70%" RadiusY="20%">
-							<GradientStop Color="#37ffffff" Offset="0"/>
-							<GradientStop Color="#00ffffff" Offset="1"/>
-						</RadialGradientBrush>
-					</Border.Background>
-				</Border>
+				<Grid Height="{StaticResource Double/ApplicationInfoDialog.Header.Background.Height}" VerticalAlignment="Top">
+					<Ellipse 
+						Fill="{DynamicResource Brush/ApplicationInfoDialog.Header.Layer1.Background}" 
+						Stroke="{DynamicResource Brush/ApplicationInfoDialog.Header.Layer1.Border}" 
+						StrokeThickness="{StaticResource Double/ApplicationInfoDialog.Header.Layer1.BorderThickness}">
+						<Ellipse.RenderTransform>
+							<TransformGroup>
+								<ScaleTransform ScaleX="3" ScaleY="2.0"/>
+								<TranslateTransform X="{StaticResource Double/ApplicationInfoDialog.Header.Layer1.Background.OffsetX}" Y="{StaticResource Double/ApplicationInfoDialog.Header.Layer1.Background.OffsetY}"/>
+							</TransformGroup>
+						</Ellipse.RenderTransform>
+					</Ellipse>
+					<Ellipse 
+						Fill="{DynamicResource Brush/ApplicationInfoDialog.Header.Layer2.Background}" 
+						Stroke="{DynamicResource Brush/ApplicationInfoDialog.Header.Layer2.Border}" 
+						StrokeThickness="{StaticResource Double/ApplicationInfoDialog.Header.Layer2.BorderThickness}">
+						<Ellipse.RenderTransform>
+							<TransformGroup>
+								<ScaleTransform ScaleX="2.0" ScaleY="2.0"/>
+								<TranslateTransform X="{StaticResource Double/ApplicationInfoDialog.Header.Layer2.Background.OffsetX}" Y="{StaticResource Double/ApplicationInfoDialog.Header.Layer2.Background.OffsetY}"/>
+							</TransformGroup>
+						</Ellipse.RenderTransform>
+					</Ellipse>
+				</Grid>
 
 				<!-- Content -->
 				<StackPanel Name="itemsPanel" Background="{x:Static Brushes.Transparent}" Classes="Dialog_ContentPanel_WithItemsGroups">
@@ -100,6 +108,7 @@
 
 					</DockPanel>
 					<Separator Classes="Dialog_Separator_Large"/>
+					<Separator Classes="Dialog_Separator"/>
 
 					<!-- Open source attribution -->
 					<WrapPanel Name="openSourceAttrPanel"
