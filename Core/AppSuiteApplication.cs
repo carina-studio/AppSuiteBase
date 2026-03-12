@@ -16,6 +16,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
 using Avalonia.Media.Fonts;
+using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
@@ -2889,6 +2890,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 this.SynchronizationContext.Post(() => desktopLifetime.Shutdown());
                 return;
             }
+        }
+        
+        // setup special resources
+        unsafe
+        {
+            var emptyRgba8888Pixel = stackalloc byte[4];
+            this.Resources["Bitmap/Empty"] = new Bitmap(PixelFormat.Rgba8888, AlphaFormat.Unpremul, (IntPtr)emptyRgba8888Pixel, new(1, 1), new(96, 96), 4);
         }
 
         // allow requesting restoring main windows

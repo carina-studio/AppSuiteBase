@@ -7,5 +7,13 @@
         <sys:String x:Key="String/ExternalDependency.dotnet">.NET</sys:String>
         <sys:String x:Key="String/ExternalDependency.dotnet.Description">Free. Cross-platform. Open source. A developer platform for building all your apps.</sys:String>
     </Application.Resources>
+    
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="Item 1" Icon="{DynamicResource Bitmap/Empty}"/>
+            <NativeMenuItemSeparator/>
+            <NativeMenuItem Header="Exit"/>
+        </NativeMenu>
+    </NativeMenu.Menu>
 
 </Application>

@@ -1,5 +1,8 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
+using CarinaStudio.AppSuite.Media;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Collections;
 using CarinaStudio.Controls;
@@ -192,6 +195,15 @@ namespace CarinaStudio.AppSuite.Tests
                 for (var i = 0; i < 1; ++i)
                     await this.ShowMainWindowAsync();
             }
+            
+            NativeMenu.GetMenu(this)?.Items.Let(items =>
+            {
+                foreach (var item in items)
+                {
+                    if (item is NativeMenuItem menuItem && menuItem.Header == "Exit")
+                        menuItem.Icon = this.FindResourceOrDefault<IImage?>("Image/Icon.Exit")?.ToNativeMenuItemIcon();
+                }
+            });
         }
 
 
