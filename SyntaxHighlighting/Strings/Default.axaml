@@ -3,28 +3,28 @@
 					xmlns:sys="using:System">
 
 	<!-- DateTimeFormatTextBox -->
-	<sys:String x:Key="String/DateTimeFormatTextBox.Watermark">Date and time format</sys:String>
+	<sys:String x:Key="String/DateTimeFormatTextBox.Watermark">Date and Time Format</sys:String>
 
 	<!-- GroupingConstruct -->
-	<sys:String x:Key="String/GroupingConstruct.NamedGroup">Named group</sys:String>
-	<sys:String x:Key="String/GroupingConstruct.NoncapturingGroup">Noncapturing group</sys:String>
-	<sys:String x:Key="String/GroupingConstruct.ZeroWidthNegativeLookaheadAssertion">Zero-width negative lookahead assertion</sys:String>
-	<sys:String x:Key="String/GroupingConstruct.ZeroWidthNegativeLookbehindAssertion">Zero-width negative lookbehind assertion</sys:String>
-	<sys:String x:Key="String/GroupingConstruct.ZeroWidthPositiveLookaheadAssertion">Zero-width positive lookahead assertion</sys:String>
-	<sys:String x:Key="String/GroupingConstruct.ZeroWidthPositiveLookbehindAssertion">Zero-width positive lookbehind assertion</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.NamedGroup">Named Group</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.NoncapturingGroup">Noncapturing Group</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthNegativeLookaheadAssertion">Zero-Width Negative Lookahead Assertion</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthNegativeLookbehindAssertion">Zero-Width Negative Lookbehind Assertion</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthPositiveLookaheadAssertion">Zero-Width Positive Lookahead Assertion</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthPositiveLookbehindAssertion">Zero-Width Positive Lookbehind Assertion</sys:String>
 
 	<!-- RegexTextBox -->
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.b">Word boundary</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.B">Non-word boundary</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.d">Decimal digit</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.D">Non-decimal digit</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.s">White space characters</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.S">Non-white space characters</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.w">Word characters</sys:String>
-	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.W">Non-word characters</sys:String>
-	<sys:String x:Key="String/RegexTextBox.Watermark">Regular expression</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.b">Word Boundary</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.B">Non-Word Boundary</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.d">Decimal Digit</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.D">Non-Decimal Digit</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.s">Whitespace Characters</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.S">Non-Whitespace Characters</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.w">Word Characters</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.W">Non-Word Characters</sys:String>
+	<sys:String x:Key="String/RegexTextBox.Watermark">Regular Expression</sys:String>
 
 	<!-- TimeSpanFormatTextBox -->
-	<sys:String x:Key="String/TimeSpanFormatTextBox.Watermark">Time span format</sys:String>
+	<sys:String x:Key="String/TimeSpanFormatTextBox.Watermark">Time Span Format</sys:String>
 	
 </ResourceDictionary>
