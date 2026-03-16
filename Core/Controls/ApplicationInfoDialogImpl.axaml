@@ -55,7 +55,7 @@
 			<Panel>
 
 				<!-- Background -->
-				<Grid Height="{StaticResource Double/ApplicationInfoDialog.Header.Background.Height}" VerticalAlignment="Top">
+				<Panel Height="{StaticResource Double/ApplicationInfoDialog.Header.Background.Height}" VerticalAlignment="Top">
 					<Ellipse 
 						Fill="{DynamicResource Brush/ApplicationInfoDialog.Header.Layer1.Background}" 
 						Stroke="{DynamicResource Brush/ApplicationInfoDialog.Header.Layer1.Border}" 
@@ -78,7 +78,15 @@
 							</TransformGroup>
 						</Ellipse.RenderTransform>
 					</Ellipse>
-				</Grid>
+				</Panel>
+				<Border Height="{Binding #window.Width}" VerticalAlignment="Top">
+					<Border.Background>
+						<RadialGradientBrush Center="70%,0%" GradientOrigin="70%,0%" RadiusX="70%" RadiusY="20%">
+							<GradientStop Color="#37ffffff" Offset="0"/>
+							<GradientStop Color="#00ffffff" Offset="1"/>
+						</RadialGradientBrush>
+					</Border.Background>
+				</Border>
 
 				<!-- Content -->
 				<StackPanel Name="itemsPanel" Background="{x:Static Brushes.Transparent}" Classes="Dialog_ContentPanel_WithItemsGroups">
