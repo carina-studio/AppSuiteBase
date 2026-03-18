@@ -275,9 +275,9 @@
 	<sys:String x:Key="String/ExternalDependency.XRandR.Description">用以侦测显示设定及套用用户介面缩放比例。安装完成后需重启应用程序。</sys:String>
 
 	<!-- ExternalDependencyPriority -->
-	<sys:String x:Key="String/ExternalDependencyPriority.Optional">这是可选择 (非必要) 的依赖</sys:String>
-	<sys:String x:Key="String/ExternalDependencyPriority.Required">这是应用程序必要的依赖</sys:String>
-	<sys:String x:Key="String/ExternalDependencyPriority.RequiredByFeatures">对部分功能为必要依赖</sys:String>
+	<sys:String x:Key="String/ExternalDependencyPriority.Optional">这是可选择 (非必要) 的依赖。</sys:String>
+	<sys:String x:Key="String/ExternalDependencyPriority.Required">这是应用程序必要的依赖。</sys:String>
+	<sys:String x:Key="String/ExternalDependencyPriority.RequiredByFeatures">对部分功能为必要依赖。</sys:String>
 
 	<!-- ExternalDependencyState -->
 	<sys:String x:Key="String/ExternalDependencyState.Available.Configuration">已完成</sys:String>
