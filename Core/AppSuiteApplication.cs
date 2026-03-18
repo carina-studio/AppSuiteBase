@@ -331,6 +331,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     // Static fields.
     static readonly SettingKey<string> AgreedPrivacyPolicyVersionKey = new("AgreedPrivacyPolicyVersion", "");
     static readonly SettingKey<string> AgreedUserAgreementVersionKey = new("AgreedUserAgreementVersion", "");
+    static Exception? AppDataImportException;
     static bool? AppDataImportResult;
     static readonly string AppDirectoryPath = Global.Run(() =>
     {
@@ -509,6 +510,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         this.avaloniaLogger = this.LoggerFactory.CreateLogger("Avalonia");
         // ReSharper restore VirtualMemberCallInConstructor
         this.Logger.LogDebug("Created");
+
+        // log error occurred while importing application data
+        if (AppDataImportException is not null)
+            this.Logger.LogError(AppDataImportException, "Error occurred when importing application data");
         
         // start tracing for launch
 #if TRACING_FOR_LAUNCH
@@ -835,6 +840,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                     {
                         LogToConsole($"Failed to import initial settings. {ex.GetType().Name}: {ex.Message}");
                         AppDataImportResult = false;
+                        AppDataImportException = ex;
                         if (!RestoreSettingsFileFromBackup(InitSettingsFilePath))
                             LogToConsole("Failed to restore initial settings.");
                     }
@@ -859,6 +865,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                     {
                         LogToConsole($"Failed to import settings. {ex.GetType().Name}: {ex.Message}");
                         AppDataImportResult = false;
+                        AppDataImportException = ex;
                         if (!RestoreSettingsFileFromBackup(InitSettingsFilePath))
                             LogToConsole("Failed to restore initial settings.");
                         if (!RestoreSettingsFileFromBackup(SettingsFilePath))
@@ -870,6 +877,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             {
                 LogToConsole($"Directory '{dirToImportAppData}' not found to import app data");
                 AppDataImportResult = false;
+                AppDataImportException = new DirectoryNotFoundException($"Directory '{dirToImportAppData}' not found.");
             }
         }
         
@@ -1959,6 +1967,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         {
             this.Logger.LogError(ex, "Error occurred while importing application data");
             AppDataImportResult = false;
+            AppDataImportException = ex;
         }
     }
 

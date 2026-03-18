@@ -5,6 +5,7 @@ using CarinaStudio.Threading;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -686,9 +687,9 @@ public class ApplicationArgsBuilder : ICloneable, IEquatable<ApplicationArgsBuil
             if (buffer.Length > 0)
                 buffer.Append(' ');
             buffer.Append(AppSuiteApplication.ImportAppDataArgument);
-            buffer.Append(" '");
-            buffer.Append(this.DirectoryToImportAppData);
-            buffer.Append('\'');
+            buffer.Append(" \"");
+            buffer.Append(this.DirectoryToImportAppData.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar));
+            buffer.Append('\"');
         }
         if (this.IsCleanMode)
         {
