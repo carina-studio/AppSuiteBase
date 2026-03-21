@@ -53,7 +53,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.Other">Other Information</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrimaryNetworkInterface">Primary Network Interface</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrimaryNetworkInterface.Format">{0} ({1}), {2}</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicyWasAgreedBefore">You have agreed to the《Privacy Policy》.</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicyWasAgreedBefore">You have agreed to the "Privacy Policy".</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.PrivateMemoryUsage">Private Memory Usage</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessId">Identifier (PID)</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ProcessInformation">Process Information</sys:String>
@@ -76,7 +76,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.ThreadCount">Thread Count</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Title">About {0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">Physical RAM</sys:String>
-	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreementWasAgreedBefore">You have agreed to the《User Agreement》.</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreementWasAgreedBefore">You have agreed to the "User Agreement".</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Version">{0}</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.Website">{0} Website</sys:String>
 
