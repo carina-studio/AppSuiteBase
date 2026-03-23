@@ -160,8 +160,8 @@ public class SyntaxHighlightingTextBlock : CarinaStudio.Controls.TextBlock
             var scale = LayoutHelper.GetLayoutScale(this);
             var padding = LayoutHelper.RoundLayoutThickness(this.Padding, scale, scale);
             var availableTextBounds = availableSize.Deflate(padding);
-            this.syntaxHighlighter.MaxWidth = double.IsFinite(availableTextBounds.Width) ? availableTextBounds.Width : 0;
-            this.syntaxHighlighter.MaxHeight = double.IsFinite(availableTextBounds.Height) ? availableTextBounds.Height : 0;
+            this.syntaxHighlighter.MaxWidth = availableTextBounds.Width;
+            this.syntaxHighlighter.MaxHeight = availableTextBounds.Height;
             return base.MeasureOverride(availableSize);
         }
         finally

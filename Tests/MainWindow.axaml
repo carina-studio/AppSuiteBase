@@ -454,6 +454,11 @@
 								<TextBox AcceptsReturn="True" Height="100" Margin="5,0,0,0" VerticalAlignment="Top" Width="300"/>
 							</StackPanel>
 							
+							<!-- Auto-Sized SyntaxHighlightingTextBlock -->
+							<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
+								<appControls:SyntaxHighlightingTextBlock Name="syntaxHighlightingTextBlock1" DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="AppSuite.+(pattern1|pattern2|pattern3)"/>
+							</Border>
+							
 							<!-- Slider -->
 							<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
 								<Slider Maximum="100" Minimum="0" TickFrequency="10" TickPlacement="Outside" Width="200"/>
