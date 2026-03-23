@@ -710,6 +710,7 @@
 	<Style Selector="abControls|LinkTextBlock.Dialog_LinkTextBlock_Description">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeightCompact}}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
@@ -850,6 +851,7 @@
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Description}"/>
+		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeightCompact}}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
@@ -859,6 +861,7 @@
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeightCompact}}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
@@ -868,6 +871,7 @@
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Warning}"/>
+		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeightCompact}}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
@@ -889,6 +893,7 @@
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Description}"/>
+		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeightCompact}}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
@@ -898,6 +903,7 @@
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeightCompact}}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
@@ -907,6 +913,7 @@
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Warning}"/>
+		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeightCompact}}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>

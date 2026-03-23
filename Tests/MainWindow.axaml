@@ -454,6 +454,50 @@
 								<TextBox AcceptsReturn="True" Height="100" Margin="5,0,0,0" VerticalAlignment="Top" Width="300"/>
 							</StackPanel>
 							
+							<!-- Dialog Item -->
+							<StackPanel HorizontalAlignment="Left" Margin="5,5,0,0" Orientation="Horizontal">
+								<Border BorderBrush="#777777" BorderThickness="1" VerticalAlignment="Top" Width="250">
+									<appControls:DialogItem>
+										<StackPanel Classes="Dialog_Item_Text_Container">
+											<TextBlock Classes="Dialog_TextBlock_Label" Text="Title"/>
+											<TextBlock Classes="Dialog_TextBlock_Description" Text="Description Description Description Description Description Description"/>
+										</StackPanel>
+									</appControls:DialogItem>
+								</Border>
+								<Border BorderBrush="#777777" BorderThickness="1" Margin="5,0,0,0" VerticalAlignment="Top" Width="250">
+									<appControls:DialogItem>
+										<StackPanel Classes="Dialog_Item_Text_Container">
+											<TextBlock Classes="Dialog_TextBlock_Label" Text="Title"/>
+											<Grid ColumnDefinitions="Auto,*">
+												<Image Classes="Dialog_Icon_Description" Source="{StaticResource Image/Icon.Information.Outline}"/>
+												<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" Text="Description Description Description Description Description Description"/>
+											</Grid>
+										</StackPanel>
+									</appControls:DialogItem>
+								</Border>
+							</StackPanel>
+							<StackPanel HorizontalAlignment="Left" Margin="5,5,0,5" Orientation="Horizontal">
+								<Border BorderBrush="#777777" BorderThickness="1" VerticalAlignment="Top" Width="250">
+									<appControls:DialogItem>
+										<StackPanel Classes="Dialog_Item_Text_Container">
+											<TextBlock Classes="Dialog_TextBlock_Label" Text="項目標題"/>
+											<TextBlock Classes="Dialog_TextBlock_Description" Text="描述文字 Description 描述文字 Description 描述文字 Description 描述文字 Description 描述文字"/>
+										</StackPanel>
+									</appControls:DialogItem>
+								</Border>
+								<Border BorderBrush="#777777" BorderThickness="1" Margin="5,0,0,0" VerticalAlignment="Top" Width="250">
+									<appControls:DialogItem>
+										<StackPanel Classes="Dialog_Item_Text_Container">
+											<TextBlock Classes="Dialog_TextBlock_Label" Text="項目標題"/>
+											<Grid ColumnDefinitions="Auto,*">
+												<Image Classes="Dialog_Icon_Description" Source="{StaticResource Image/Icon.Information.Outline}"/>
+												<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" Text="描述文字 Description 描述文字 Description 描述文字 Description 描述文字 Description 描述文字"/>
+											</Grid>
+										</StackPanel>
+									</appControls:DialogItem>
+								</Border>
+							</StackPanel>
+							
 							<!-- Auto-Sized SyntaxHighlightingTextBlock -->
 							<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
 								<appControls:SyntaxHighlightingTextBlock Name="syntaxHighlightingTextBlock1" DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="AppSuite.+(pattern1|pattern2|pattern3)"/>

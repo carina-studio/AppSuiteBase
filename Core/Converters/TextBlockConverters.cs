@@ -13,4 +13,9 @@ public static class TextBlockConverters
     /// Converter to convert from font size to line height.
     /// </summary>
     public static readonly IValueConverter FontSizeToLineHeight = new FuncValueConverter<double, double>(fontSize => Math.Ceiling(fontSize * 1.4));
+    // [Workaround] To keep line height same across platforms.
+    /// <summary>
+    /// Converter to convert from font size to compact line height.
+    /// </summary>
+    public static readonly IValueConverter FontSizeToLineHeightCompact = new FuncValueConverter<double, double>(fontSize => Math.Ceiling(fontSize * 1.2));
 }
