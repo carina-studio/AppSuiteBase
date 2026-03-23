@@ -70,7 +70,7 @@ public class DialogItem : Panel
             var childMargin = child.Margin;
             child.Arrange(new(
                 childMargin.Left,
-                (finalSize.Height - childSize.Height) / 2 + childMargin.Top,
+                (finalSize.Height - childSize.Height - childMargin.Top - childMargin.Bottom) / 2 + childMargin.Top,
                 childSize.Width,
                 childSize.Height));
             arrangeX = childSize.Width + childMargin.Left + childMargin.Right;
@@ -98,7 +98,7 @@ public class DialogItem : Panel
             };
             child.Arrange(new(
                 childX,
-                (finalSize.Height - childSize.Height) / 2 + childMargin.Top,
+                (finalSize.Height - childSize.Height - childMargin.Top - childMargin.Bottom) / 2 + childMargin.Top,
                 childWidth,
                 childSize.Height));
         }
