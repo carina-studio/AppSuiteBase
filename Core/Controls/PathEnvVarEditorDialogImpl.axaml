@@ -84,7 +84,7 @@
 
 			<!-- Custom paths -->
 			<StackPanel Grid.Row="2" IsVisible="{Binding #window.CustomPaths.Count}">
-				<Separator Classes="Dialog_Separator_Small"/>
+				<Separator Classes="Dialog_Separator"/>
 				<TextBlock Classes="Dialog_TextBlock_LabelWithControlBelow" Text="{DynamicResource String/PathEnvVarEditorDialog.CustomPaths}"/>
 				<ListBox Name="customPathListBox" Classes="Dialog_ListBox" Height="{StaticResource Double/PathEnvVarEditorDialog.CustomPaths.Height}" ItemsSource="{Binding #window.CustomPaths}">
 					<ListBox.ItemsPanel>

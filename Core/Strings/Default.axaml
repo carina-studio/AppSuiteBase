@@ -306,8 +306,8 @@
 	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 or IPv6</sys:String>
 	
 	<!-- ItemSelectionDialog -->
-	<sys:String x:Key="String/ItemSelectionDialog.SelectOneItem">Please Select an Item:</sys:String>
-	<sys:String x:Key="String/ItemSelectionDialog.SelectOneOrMoreItems">Please Select Items:</sys:String>
+	<sys:String x:Key="String/ItemSelectionDialog.SelectOneItem">Please Select an Item</sys:String>
+	<sys:String x:Key="String/ItemSelectionDialog.SelectOneOrMoreItems">Please Select Items</sys:String>
 
 	<!-- LocalizationTest -->
 	<sys:String x:Key="String/LocalizationTest.String">English</sys:String>
@@ -339,9 +339,9 @@
 
 	<!-- PathEnvVarEditorDialog -->
 	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath.WithDialog">Add…</sys:String>
-	<sys:String x:Key="String/PathEnvVarEditorDialog.CustomPaths">Default Paths:</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.CustomPaths">Default Paths</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.EditPath">Edit Directory Path</sys:String>
-	<sys:String x:Key="String/PathEnvVarEditorDialog.Paths">Added Paths:</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.Paths">Added Paths</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">Edit PATH Environment Variable</sys:String>
 
 	<!-- ProductState -->
@@ -356,7 +356,7 @@
 	<sys:String x:Key="String/ScriptLanguage.Python_3_4">Python 3.4</sys:String>
 
 	<!-- ScriptRuntimeErrorDialog -->
-	<sys:String x:Key="String/ScriptRuntimeErrorDialog.DefaultMessage">A runtime error occurred while running script:</sys:String>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.DefaultMessage">A runtime error occurred while running script.</sys:String>
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage">{0}</sys:String>
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLine">{0} [Line {1}]</sys:String>
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLineColumn">{0} [Line {1}, Column {2}]</sys:String>

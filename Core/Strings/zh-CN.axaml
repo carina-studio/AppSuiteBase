@@ -300,8 +300,8 @@
 	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 或 IPv6</sys:String>
 	
 	<!-- ItemSelectionDialog -->
-	<sys:String x:Key="String/ItemSelectionDialog.SelectOneItem">请选择一个项目：</sys:String>
-	<sys:String x:Key="String/ItemSelectionDialog.SelectOneOrMoreItems">请选择一个或多个项目：</sys:String>
+	<sys:String x:Key="String/ItemSelectionDialog.SelectOneItem">请选择一个项目</sys:String>
+	<sys:String x:Key="String/ItemSelectionDialog.SelectOneOrMoreItems">请选择一个或多个项目</sys:String>
 
 	<!-- LocalizationTest -->
 	<sys:String x:Key="String/LocalizationTest.String">简体中文</sys:String>
@@ -333,9 +333,9 @@
 
 	<!-- PathEnvVarEditorDialog -->
 	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath.WithDialog">添加…</sys:String>
-	<sys:String x:Key="String/PathEnvVarEditorDialog.CustomPaths">默认路径：</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.CustomPaths">默认路径</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.EditPath">编辑目录路径</sys:String>
-	<sys:String x:Key="String/PathEnvVarEditorDialog.Paths">已添加的路径：</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.Paths">已添加的路径</sys:String>
 	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">编辑 PATH 环境变量</sys:String>
 
 	<!-- ProductState -->
@@ -348,7 +348,7 @@
 	<sys:String x:Key="String/ScriptLanguage.CSharp_14">C# 14 脚本语言</sys:String>
 
 	<!-- ScriptRuntimeErrorDialog -->
-	<sys:String x:Key="String/ScriptRuntimeErrorDialog.DefaultMessage">脚本运行时发生错误：</sys:String>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.DefaultMessage">脚本运行时发生错误。</sys:String>
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage">{0}</sys:String>
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLine">{0} [行 {1}]</sys:String>
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLineColumn">{0} [行 {1}，字符 {2}]</sys:String>
