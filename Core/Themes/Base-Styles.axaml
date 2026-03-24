@@ -1207,6 +1207,7 @@
 							                          FontSize="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.SkipAllTutorials.FontSize}" 
 							                          Grid.Column="1" 
 							                          Grid.Row="1" 
+							                          HorizontalAlignment="Left"
 							                          IsVisible="{Binding IsSkippingAllTutorialsAllowed}" 
 							                          Margin="{DynamicResource Thickness/FullWindowTutorialPresenter.SkipAllTutorials.Margin}" 
 							                          Text="{DynamicResource String/TutorialPresenter.SkipAllTutorials}"/>

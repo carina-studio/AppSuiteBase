@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.VisualTree;
 using CarinaStudio.Animation;
@@ -37,6 +38,8 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     Control? root;
     Control? skipAllTutorialsControl;
     Control? tutorialContainer;
+    CornerRadius tutorialCornerRadius;
+    IDisposable? tutorialCornerRadiusObserverToken;
     readonly ScheduledAction updateTutorialPositionAction;
 
 
@@ -117,12 +120,32 @@ public class FullWindowTutorialPresenter : TutorialPresenter
     }
 
 
+    /// <inheritdoc/>
+    protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToLogicalTree(e);
+        this.tutorialCornerRadiusObserverToken = this.GetResourceObservable("CornerRadius/FullWindowTutorialPresenter.Tutorial").Subscribe(value =>
+        {
+            if (value is CornerRadius cornerRadius)
+                this.tutorialCornerRadius = cornerRadius;
+        });
+    }
+
+
     // Called when property pf background brush changed.
     void OnBackgroundPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         this.CloneBackgroundBrush();
         if (this.CurrentTutorial is not null)
             this.InvalidateVisual();
+    }
+
+
+    /// <inheritdoc/>
+    protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
+    {
+        this.tutorialCornerRadiusObserverToken = this.tutorialCornerRadiusObserverToken.DisposeAndReturnNull();
+        base.OnDetachedFromLogicalTree(e);
     }
 
 
@@ -361,6 +384,7 @@ public class FullWindowTutorialPresenter : TutorialPresenter
             context.DrawRectangle(backgroundBrush, null, bounds);
         else
         {
+            var cornerRadius = (this.tutorialCornerRadius.TopLeft + this.tutorialCornerRadius.TopRight + this.tutorialCornerRadius.BottomLeft + this.tutorialCornerRadius.BottomRight) / 4;
             context.DrawRectangle(backgroundBrush, null, new(bounds.X, bounds.Y, bounds.Width, anchorBounds.Y));
             context.DrawRectangle(backgroundBrush, null, new(bounds.X, anchorBounds.Y, anchorBounds.X, anchorBounds.Height));
             context.DrawRectangle(backgroundBrush, null, new(anchorBounds.Right, anchorBounds.Y, bounds.Width - anchorBounds.Right, anchorBounds.Height));
@@ -368,8 +392,8 @@ public class FullWindowTutorialPresenter : TutorialPresenter
             context.DrawRectangle(Brushes.Transparent, null, anchorBounds);
             this.anchorBorderBrush.Opacity = opacity;
             this.anchorOuterBorderBrush.Opacity = opacity;
-            context.DrawRectangle(null, this.anchorOuterBorderPen, anchorBounds);
-            context.DrawRectangle(null, this.anchorBorderPen, anchorBounds);
+            context.DrawRectangle(null, this.anchorOuterBorderPen, anchorBounds, radiusX: cornerRadius, radiusY: cornerRadius);
+            context.DrawRectangle(null, this.anchorBorderPen, anchorBounds, radiusX: cornerRadius, radiusY: cornerRadius);
         }
     }
 

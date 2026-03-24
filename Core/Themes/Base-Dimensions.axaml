@@ -180,6 +180,7 @@
 	<sys:Double x:Key="Double/ExternalDependenciesDialog.Width">600</sys:Double>
 
 	<!-- FullWindowTutorialPresenter -->
+	<StaticResourceExtension x:Key="CornerRadius/FullWindowTutorialPresenter.Tutorial" ResourceKey="ControlCornerRadius"/>
 	<CornerRadius x:Key="CornerRadius/FullWindowTutorialPresenter.Tutorial.Dismiss">5</CornerRadius>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.FontSize">14</sys:Double>
 	<sys:Double x:Key="Double/FullWindowTutorialPresenter.Tutorial.Description.MaxWidth">250</sys:Double>
