@@ -423,11 +423,11 @@ class ApplicationInfoDialogImpl : Dialog
 								itemPanel.ItemSize = DialogItemSize.Small;
 								itemPanel.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
 								{
-									it.Classes.Add("Dialog_TextBlock_Label");
+									DialogElement.SetTextRole(it, DialogTextRole.Label);
 								}));
 								itemPanel.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
 								{
-									it.Classes.Add("Dialog_TextBlock");
+									DialogElement.SetTextRole(it, DialogTextRole.Default);
 									it.HorizontalAlignment = HorizontalAlignment.Right;
 									it.TextTrimming = TextTrimming.CharacterEllipsis;
 									Grid.SetColumn(it, 1);
@@ -469,7 +469,7 @@ class ApplicationInfoDialogImpl : Dialog
 						it.ItemSize = DialogItemSize.Small;
 						it.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
 						{
-							it.Classes.Add("Dialog_TextBlock_Label");
+							DialogElement.SetTextRole(it, DialogTextRole.Label);
 							it.Text = assemblyName.Name;
 						}));
 						if (assemblyVersion.Major != 0 
@@ -479,6 +479,7 @@ class ApplicationInfoDialogImpl : Dialog
 						{
 							it.Children.Add(new Avalonia.Controls.SelectableTextBlock().Also(it =>
 							{
+								DialogElement.SetTextRole(it, DialogTextRole.Default);
 								it.HorizontalAlignment = HorizontalAlignment.Right;
 								it.Text = assemblyVersion.ToString();
 								Grid.SetColumn(it, 1);

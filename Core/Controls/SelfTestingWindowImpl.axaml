@@ -90,9 +90,9 @@
 					</MultiBinding>
 				</Separator.IsVisible>
 			</Separator>
-			<abControls:FormattedTextBlock Name="runningTestCaseInfoTextBlock" Classes="Dialog_TextBlock" Arg1="{Binding RunningTestCase.Name, Source={x:Static testing:TestManager.Default}, FallbackValue={x:Null}}" Format="{DynamicResource String/SelfTestingWindow.RunningTestCaseInfo}" Grid.Row="2" IsVisible="{Binding RunningTestCase, Source={x:Static testing:TestManager.Default}, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+			<abControls:FormattedTextBlock Name="runningTestCaseInfoTextBlock" Arg1="{Binding RunningTestCase.Name, Source={x:Static testing:TestManager.Default}, FallbackValue={x:Null}}" controls:DialogElement.TextRole="Default" Format="{DynamicResource String/SelfTestingWindow.RunningTestCaseInfo}" Grid.Row="2" IsVisible="{Binding RunningTestCase, Source={x:Static testing:TestManager.Default}, Converter={x:Static ObjectConverters.IsNotNull}}"/>
 			<Separator Classes="Dialog_Separator_Small" Grid.Column="1" Grid.Row="2" IsVisible="{Binding #runningTestCaseInfoTextBlock.IsVisible}"/>
-			<abControls:FormattedTextBlock Name="waitingTestCasesInfoTextBlock" Classes="Dialog_TextBlock" Arg1="{Binding TestCaseWaitingCount, Source={x:Static testing:TestManager.Default}}" Format="{DynamicResource String/SelfTestingWindow.WaitingTestCasesInfo}" Grid.Column="2" Grid.Row="2" IsVisible="{Binding TestCaseWaitingCount, Source={x:Static testing:TestManager.Default}, Converter={x:Static abConverters:NumberConverters.IsNonZero}}"/>
+			<abControls:FormattedTextBlock Name="waitingTestCasesInfoTextBlock" Arg1="{Binding TestCaseWaitingCount, Source={x:Static testing:TestManager.Default}}" controls:DialogElement.TextRole="Default" Format="{DynamicResource String/SelfTestingWindow.WaitingTestCasesInfo}" Grid.Column="2" Grid.Row="2" IsVisible="{Binding TestCaseWaitingCount, Source={x:Static testing:TestManager.Default}, Converter={x:Static abConverters:NumberConverters.IsNonZero}}"/>
 
 		</Grid>
 		

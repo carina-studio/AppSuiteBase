@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:abControls="using:CarinaStudio.Controls"
         xmlns:asXaml="using:CarinaStudio.AppSuite.Xaml"
+        xmlns:controls="using:CarinaStudio.AppSuite.Controls"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.ApplicationUpdateDialogImpl"
         Name="dialog"
@@ -42,16 +43,30 @@
 				<!-- Message -->
 				<Panel IsVisible="{Binding !IsPreparingForUpdate}">
 					<Panel IsVisible="{Binding !IsCheckingForUpdate}">
-						<TextBlock Opacity="0" Text=" "/> <!-- [Workaround] Reserve space to prevent unexpected layout -->
-						<abControls:FormattedTextBlock Arg1="{Binding #dialog.Application.Name}" FontWeight="Bold" Format="{asXaml:StringResource ApplicationUpdateDialog.LatestVersion}" IsVisible="{Binding IsLatestVersion}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+						<TextBlock controls:DialogElement.TextRole="Default" Opacity="0" Text=" "/> <!-- [Workaround] Reserve space to prevent unexpected layout -->
+						<abControls:FormattedTextBlock Arg1="{Binding #dialog.Application.Name}" 
+						                               controls:DialogElement.TextRole="Default" 
+						                               FontWeight="Bold" 
+						                               Format="{asXaml:StringResource ApplicationUpdateDialog.LatestVersion}" 
+						                               IsVisible="{Binding IsLatestVersion}" 
+						                               TextTrimming="CharacterEllipsis" 
+						                               TextWrapping="NoWrap"/>
 						<StackPanel IsVisible="{Binding !IsLatestVersion}" Orientation="Vertical">
-							<abControls:FormattedTextBlock Arg1="{Binding #dialog.Application.Name}" Arg2="{Binding UpdateVersionString}" FontWeight="Bold" Format="{asXaml:StringResource ApplicationUpdateDialog.NewVersionFound}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
-							<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" IsVisible="{Binding HasReleasePageUri}" Text="{asXaml:StringResource ApplicationUpdateDialog.ReleasePage}" Uri="{Binding ReleasePageUri}"/>
+							<abControls:FormattedTextBlock Arg1="{Binding #dialog.Application.Name}" 
+							                               Arg2="{Binding UpdateVersionString}" 
+							                               controls:DialogElement.TextRole="DescriptionBelowLabel" 
+							                               FontWeight="Bold" Format="{asXaml:StringResource ApplicationUpdateDialog.NewVersionFound}" 
+							                               TextTrimming="CharacterEllipsis" 
+							                               TextWrapping="NoWrap"/>
+							<abControls:LinkTextBlock controls:DialogElement.TextRole="DescriptionBelowLabel" 
+							                          IsVisible="{Binding HasReleasePageUri}"
+							                          Text="{asXaml:StringResource ApplicationUpdateDialog.ReleasePage}" 
+							                          Uri="{Binding ReleasePageUri}"/>
 						</StackPanel>
 					</Panel>
-					<TextBlock IsVisible="{Binding IsCheckingForUpdate}" Text="{asXaml:StringResource ApplicationUpdateDialog.CheckingForUpdate}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+					<TextBlock controls:DialogElement.TextRole="Default" IsVisible="{Binding IsCheckingForUpdate}" Text="{asXaml:StringResource ApplicationUpdateDialog.CheckingForUpdate}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
 				</Panel>
-				<TextBlock IsVisible="{Binding IsPreparingForUpdate}" Text="{Binding UpdatePreparationMessage}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
+				<TextBlock controls:DialogElement.TextRole="Default" IsVisible="{Binding IsPreparingForUpdate}" Text="{Binding UpdatePreparationMessage}" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"/>
 
 				<!-- Progress bar -->
 				<StackPanel IsVisible="{Binding IsPreparingForUpdate}" Orientation="Vertical">
@@ -68,7 +83,7 @@
 				<CheckBox Classes="Dialog_CheckBox" Content="{asXaml:StringResource ApplicationOptions.AcceptNonStableApplicationUpdate}" IsChecked="{Binding AcceptNonStableApplicationUpdate, Mode=TwoWay}" IsEnabled="{Binding !IsCheckingForUpdate}"/>
 				<Grid ColumnDefinitions="Auto,*">
 					<Border Margin="{StaticResource Thickness/Dialog.Icon.Margin}" Width="{DynamicResource Double/Dialog.Icon.Size}"/>
-					<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" Margin="{StaticResource Thickness/Dialog.TextBlock.Margin.Description.BelowCheckBox}" Text="{asXaml:StringResource ApplicationUpdateDialog.AcceptNonStableApplicationUpdate.Description}" VerticalAlignment="Top"/>
+					<TextBlock controls:DialogElement.TextRole="DescriptionBelowCheckBox" Grid.Column="1" Text="{asXaml:StringResource ApplicationUpdateDialog.AcceptNonStableApplicationUpdate.Description}" VerticalAlignment="Top"/>
 				</Grid>
 			</StackPanel>
 			

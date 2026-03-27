@@ -458,19 +458,19 @@
 							<StackPanel HorizontalAlignment="Left" Margin="5,5,0,0" Orientation="Horizontal">
 								<Border BorderBrush="#777777" BorderThickness="1" VerticalAlignment="Top" Width="250">
 									<appControls:DialogItem>
-										<StackPanel Classes="Dialog_Item_Text_Container">
-											<TextBlock Classes="Dialog_TextBlock_Label" Text="Title"/>
-											<TextBlock Classes="Dialog_TextBlock_Description" Text="Description Description Description Description Description Description"/>
+										<StackPanel>
+											<TextBlock appControls:DialogElement.TextRole="Label" Text="Title"/>
+											<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description Description Description Description Description Description"/>
 										</StackPanel>
 									</appControls:DialogItem>
 								</Border>
 								<Border BorderBrush="#777777" BorderThickness="1" Margin="5,0,0,0" VerticalAlignment="Top" Width="250">
 									<appControls:DialogItem>
-										<StackPanel Classes="Dialog_Item_Text_Container">
-											<TextBlock Classes="Dialog_TextBlock_Label" Text="Title"/>
+										<StackPanel>
+											<TextBlock appControls:DialogElement.TextRole="Label" Text="Title"/>
 											<Grid ColumnDefinitions="Auto,*">
 												<Image Classes="Dialog_Icon_Description" Source="{StaticResource Image/Icon.Information.Outline}"/>
-												<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" Text="Description Description Description Description Description Description"/>
+												<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Grid.Column="1" Text="Description Description Description Description Description Description"/>
 											</Grid>
 										</StackPanel>
 									</appControls:DialogItem>
@@ -479,19 +479,19 @@
 							<StackPanel HorizontalAlignment="Left" Margin="5,5,0,5" Orientation="Horizontal">
 								<Border BorderBrush="#777777" BorderThickness="1" VerticalAlignment="Top" Width="250">
 									<appControls:DialogItem>
-										<StackPanel Classes="Dialog_Item_Text_Container">
-											<TextBlock Classes="Dialog_TextBlock_Label" Text="項目標題"/>
-											<TextBlock Classes="Dialog_TextBlock_Description" Text="描述文字 Description 描述文字 Description 描述文字 Description 描述文字 Description 描述文字"/>
+										<StackPanel>
+											<TextBlock appControls:DialogElement.TextRole="Label" Text="項目標題"/>
+											<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="描述文字 Description 描述文字 Description 描述文字 Description 描述文字 Description 描述文字"/>
 										</StackPanel>
 									</appControls:DialogItem>
 								</Border>
 								<Border BorderBrush="#777777" BorderThickness="1" Margin="5,0,0,0" VerticalAlignment="Top" Width="250">
 									<appControls:DialogItem>
-										<StackPanel Classes="Dialog_Item_Text_Container">
-											<TextBlock Classes="Dialog_TextBlock_Label" Text="項目標題"/>
+										<StackPanel>
+											<TextBlock appControls:DialogElement.TextRole="Label" Text="項目標題"/>
 											<Grid ColumnDefinitions="Auto,*">
 												<Image Classes="Dialog_Icon_Description" Source="{StaticResource Image/Icon.Information.Outline}"/>
-												<TextBlock Classes="Dialog_TextBlock_Description" Grid.Column="1" Text="描述文字 Description 描述文字 Description 描述文字 Description 描述文字 Description 描述文字"/>
+												<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Grid.Column="1" Text="描述文字 Description 描述文字 Description 描述文字 Description 描述文字 Description 描述文字"/>
 											</Grid>
 										</StackPanel>
 									</appControls:DialogItem>

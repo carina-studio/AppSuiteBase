@@ -26,7 +26,7 @@
 		      RowDefinitions="Auto,*,Auto">
 			
 			<!-- Message -->
-			<TextBlock Classes="Dialog_TextBlock_Label"
+			<TextBlock controls:DialogElement.TextRole="LabelAboveInputControl"
 			           MaxLines="3"
 			           Text="{Binding #dialog.Message}"
 			           TextTrimming="CharacterEllipsis"

@@ -476,11 +476,13 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ItemsGroup.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ItemsGroup.Padding}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Dialog_ItemsGroup_Header">
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.ItemsGroupHeader}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.ItemsGroupHeader}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Dialog_TextBlock_Header1">
 		<Setter Property="Background" Value="{DynamicResource Brush/Dialog.TextBlock.Background.Header1}"/>
 		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Dialog.TextBlock.Border.Header1}"/>
@@ -490,6 +492,7 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Header1}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Header1}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Dialog_TextBlock_Header2">
 		<Setter Property="Background" Value="{DynamicResource Brush/Dialog.TextBlock.Background.Header2}"/>
 		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Dialog.TextBlock.Border.Header2}"/>
@@ -622,6 +625,7 @@
 	<Style Selector="Grid.Dialog_FullWidthControl_Container">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.FullWidthControl.Margin}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Grid.Dialog_IconText_Container">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.IconText.Margin}"/>
 	</Style>
@@ -695,18 +699,21 @@
 		<Setter Property="StrokeDashOffset" Value="0"/>
 		<Setter Property="StrokeThickness" Value="{DynamicResource Double/Dialog.ItemSeparator.Stroke}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="abControls|LinkTextBlock.Dialog_Icon_LinkTextBlock">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="abControls|LinkTextBlock.Dialog_LinkTextBlock">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="abControls|LinkTextBlock.Dialog_LinkTextBlock_Description">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
 		<Setter Property="HorizontalAlignment" Value="Left"/>
@@ -831,22 +838,130 @@
 	<Style Selector="StackPanel.Dialog_FullWidthControl_Container">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.FullWidthControl.Margin}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="StackPanel.Dialog_IconText_Container">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.IconText.Margin}"/>
 		<Setter Property="Orientation" Value="Horizontal"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="StackPanel.Dialog_IconText_Container_Description">
 		<Setter Property="Orientation" Value="Horizontal"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="StackPanel.Dialog_Item_Text_Container">
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<Style Selector=":is(TextBlock)[(controls|DialogElement.TextRole)=Default]">
+		<Setter Property="ClipToBounds" Value="False"/>
+		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin}"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector=":is(TextBlock)[(controls|DialogElement.TextRole)=DescriptionBelowCheckBox]">
+		<Setter Property="ClipToBounds" Value="False"/>
+		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Description}"/>
+		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeightCompact}}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description.BelowCheckBox}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector=":is(TextBlock)[(controls|DialogElement.TextRole)=DescriptionBelowLabel]">
+		<Setter Property="ClipToBounds" Value="False"/>
+		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Description}"/>
+		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeightCompact}}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector=":is(abControls|LinkTextBlock)[(controls|DialogElement.TextRole)=DescriptionBelowLabel]">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForeground}"/>
+	</Style>
+	<Style Selector=":is(abControls|LinkTextBlock)[(controls|DialogElement.TextRole)=DescriptionBelowLabel]:pointerover">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForegroundPointerOver}"/>
+	</Style>
+	<Style Selector=":is(abControls|LinkTextBlock)[(controls|DialogElement.TextRole)=DescriptionBelowLabel]:pressed">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForegroundPressed}"/>
+	</Style>
+	<Style Selector=":is(TextBlock)[(controls|DialogElement.TextRole)=ErrorDescriptionBelowLabel]">
+		<Setter Property="ClipToBounds" Value="False"/>
+		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeightCompact}}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector=":is(TextBlock)[(controls|DialogElement.TextRole)=ItemsGroupHeader]">
+		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.ItemsGroupHeader}"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.ItemsGroupHeader}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.ItemsGroupHeader}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector=":is(TextBlock)[(controls|DialogElement.TextRole)=Label]">
+		<Setter Property="ClipToBounds" Value="False"/>
+		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Label}"/>
+		<!--Setter Property="FontWeight" Value="Bold"/-->
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Label}"/>
+		<Setter Property="MaxLines" Value="2"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Label}"/>
+		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector=":is(TextBlock)[(controls|DialogElement.TextRole)=LabelAboveInputControl]">
+		<Setter Property="ClipToBounds" Value="False"/>
+		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Label}"/>
+		<!--Setter Property="FontWeight" Value="Bold"/-->
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Label.WithControlBelow}"/>
+		<Setter Property="MaxLines" Value="2"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Label}"/>
+		<Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector=":is(TextBlock)[(controls|DialogElement.TextRole)=LabelNextToIcon]">
+		<Setter Property="ClipToBounds" Value="False"/>
+		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Label}"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector=":is(abControls|LinkTextBlock)[(controls|DialogElement.TextRole)=LabelNextToIcon]">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForeground}"/>
+	</Style>
+	<Style Selector=":is(abControls|LinkTextBlock)[(controls|DialogElement.TextRole)=LabelNextToIcon]:pointerover">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForegroundPointerOver}"/>
+	</Style>
+	<Style Selector=":is(abControls|LinkTextBlock)[(controls|DialogElement.TextRole)=LabelNextToIcon]:pressed">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForegroundPressed}"/>
+	</Style>
+	<Style Selector=":is(TextBlock)[(controls|DialogElement.TextRole)=WarningDescriptionBelowLabel]">
+		<Setter Property="ClipToBounds" Value="False"/>
+		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Warning}"/>
+		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeightCompact}}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Description}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
+		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock">
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock_Description">
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
@@ -857,6 +972,7 @@
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock_Description_Error">
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
@@ -867,6 +983,7 @@
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBlock).Dialog_Icon_TextBlock_Description_Warning">
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
@@ -877,11 +994,13 @@
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBlock).Dialog_ItemsGroup_Header">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.ItemsGroupHeader}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBlock).Dialog_TextBlock">
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize}"/>
@@ -889,6 +1008,7 @@
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Description">
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
@@ -899,6 +1019,7 @@
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Description_Error">
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
@@ -909,6 +1030,7 @@
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Description_Warning">
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
@@ -919,16 +1041,19 @@
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Header1">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Header1}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Header2">
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Header2}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_Label">
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Label}"/>
@@ -941,6 +1066,7 @@
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBlock).Dialog_TextBlock_LabelWithControlBelow">
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Label}"/>

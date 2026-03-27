@@ -26,7 +26,7 @@
 		<!-- Content -->
 		<DockPanel>
 
-			<!-- Tool bar -->
+			<!-- Toolbar -->
 			<Border Classes="ToolBar" DockPanel.Dock="Top" IsVisible="{Binding #window.Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
 				<Grid>
 					<Grid.ColumnDefinitions>
@@ -36,7 +36,7 @@
 					</Grid.ColumnDefinitions>
 
 					<!-- Message -->
-					<TextBlock Text="{Binding #window.Message}" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center"/>
+					<TextBlock Classes="ToolBar_TextBlock" Text="{Binding #window.Message}" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center"/>
 				
 				</Grid>
 			</Border>

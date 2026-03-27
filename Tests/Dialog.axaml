@@ -35,61 +35,59 @@
 		<ScrollViewer Name="scrollViewer" HorizontalScrollBarVisibility="Disabled" MaxHeight="500" VerticalScrollBarVisibility="Auto">
 			<StackPanel Classes="Dialog_ContentPanel_WithItemsGroups">
 
-				<Border Classes="Dialog_ItemsGroup_Header">
-					<TextBlock Classes="Dialog_ItemsGroup_Header" Text="Header1"/>
-				</Border>
+				<TextBlock appControls:DialogElement.TextRole="ItemsGroupHeader" Text="Header1"/>
 
 				<Border Classes="Dialog_ItemsGroup_Container">
 					<StackPanel>
 
-						<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-						<TextBlock Classes="Dialog_TextBlock_Description" Text="Description 1"/>
+						<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
+						<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description 1"/>
 						<TextBox Classes="Dialog_Item_TextBox"/>
-						<TextBlock Classes="Dialog_TextBlock_Description" Text="Description 2"/>
+						<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description 2"/>
 						<Separator Classes="Dialog_Item_Separator"/>
 
-						<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-						<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Selectable description 1"/>
+						<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
+						<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Selectable description 1"/>
 						<ToggleSwitch Classes="Dialog_Item_ToggleSwitch"/>
-						<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Selectable description 2"/>
+						<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Selectable description 2"/>
 						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- Items with ToggleSwitch -->
 						<appControls:DialogItem>
-							<StackPanel Classes="Dialog_Item_Text_Container">
+							<StackPanel>
 								<StackPanel Orientation="Horizontal">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+									<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 									<Button Classes="Dialog_Info_Button">
 										<Image Classes="Icon" Source="{DynamicResource Image/Icon.Information.Outline}"/>
 									</Button>
 								</StackPanel>
-								<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+								<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
 							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch"/>
 						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 						<appControls:DialogItem>
-							<StackPanel Classes="Dialog_Item_Text_Container">
-								<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-								<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" IsVisible="{Binding #toggleSwitch1.IsChecked}" Text="Google" Uri="http://www.google.com/"/>
+							<StackPanel>
+								<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
+								<abControls:LinkTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" IsVisible="{Binding #toggleSwitch1.IsChecked}" Text="Google" Uri="http://www.google.com/"/>
 							</StackPanel>
 							<ToggleSwitch Name="toggleSwitch1" Classes="Dialog_Item_ToggleSwitch" IsChecked="True"/>
 						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 						<appControls:DialogItem>
-							<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+							<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" IsEnabled="False"/>
 						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 						<appControls:DialogItem>
-							<StackPanel Classes="Dialog_Item_Text_Container">
+							<StackPanel>
 								<WrapPanel Background="Gray">
-									<TextBlock Classes="Dialog_TextBlock_Label" Text="Label with looooooooooooooooooooooog text"/>
+									<TextBlock appControls:DialogElement.TextRole="Label" Text="Label with looooooooooooooooooooooog text"/>
 									<Button Classes="Dialog_Info_Button">
 										<Image Classes="Icon" Source="{DynamicResource Image/Icon.Question.Outline}"/>
 									</Button>
 								</WrapPanel>
-								<TextBlock Classes="Dialog_TextBlock_Description" Text="Description with looooooooooooooooooooooog text"/>
+								<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description with looooooooooooooooooooooog text"/>
 							</StackPanel>
 							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch"/>
 						</appControls:DialogItem>
@@ -97,9 +95,9 @@
 
 						<!-- Item with ComboBox -->
 						<appControls:DialogItem>
-							<StackPanel Classes="Dialog_Item_Text_Container">
-								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							<StackPanel>
+								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
+								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
 							<ComboBox Classes="Dialog_Item_ComboBox" SelectedIndex="1">
 								<ComboBoxItem>Item 1</ComboBoxItem>
@@ -110,9 +108,9 @@
 						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 						<appControls:DialogItem>
-							<StackPanel Classes="Dialog_Item_Text_Container">
-								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							<StackPanel>
+								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
+								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
 							<ComboBox Classes="Dialog_Item_ComboBox" IsEnabled="False" SelectedIndex="1">
 								<ComboBoxItem>Item 1</ComboBoxItem>
@@ -125,26 +123,26 @@
 
 						<!-- Item with TextBox -->
 						<appControls:DialogItem>
-							<StackPanel Classes="Dialog_Item_Text_Container">
-								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							<StackPanel>
+								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
+								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
 							<TextBox Classes="Dialog_Item_TextBox"/>
 						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 						<appControls:DialogItem>
-							<StackPanel Classes="Dialog_Item_Text_Container">
-								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							<StackPanel>
+								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
+								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
 							<TextBox Classes="Dialog_Item_TextBox"/>
 						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 						<appControls:DialogItem>
 							<Grid ColumnDefinitions="*,Auto,Auto">
-								<StackPanel Classes="Dialog_Item_Text_Container">
-									<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-									<SelectableTextBlock Classes="Dialog_TextBlock_Description" IsVisible="{Binding #isEnabledButton.IsChecked}" Text="Description"/>
+								<StackPanel>
+									<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
+									<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" IsVisible="{Binding #isEnabledButton.IsChecked}" Text="Description"/>
 								</StackPanel>
 								<ToggleButton Name="isEnabledButton" Content="IsEnabled" Grid.Column="1" IsChecked="{Binding #itemTextBox1.IsEnabled, Mode=TwoWay}"/>
 								<Separator Classes="Dialog_Separator_Small" Grid.Column="2"/>
@@ -153,9 +151,9 @@
 						</appControls:DialogItem>
 						<Line Classes="Dialog_Item_Separator"/>
 						<appControls:DialogItem>
-							<StackPanel Classes="Dialog_Item_Text_Container">
-								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							<StackPanel>
+								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
+								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
 							<TextBox Classes="Dialog_Item_TextBox" Watermark="Watermark"/>
 						</appControls:DialogItem>
@@ -163,36 +161,36 @@
 						<TextBox Classes="Dialog_Item_TextBox" Height="100" TextAlignment="Left"/>
 						<Line Classes="Dialog_Item_Separator"/>
 						<appControls:DialogItem ItemSize="Small">
-							<TextBlock Classes="Dialog_TextBlock_Label" Text="IP address"/>
+							<TextBlock appControls:DialogElement.TextRole="Label" Text="IP address"/>
 							<abControls:IPAddressTextBox Classes="Dialog_Item_TextBox"/>
 						</appControls:DialogItem>
 						<Line Classes="Dialog_Item_Separator_Inner"/>
 						<appControls:DialogItem Name="regexItem" ItemSize="Small">
-							<TextBlock Classes="Dialog_TextBlock_Label" Text="Regex"/>
+							<TextBlock appControls:DialogElement.TextRole="Label" Text="Regex"/>
 							<appControls:RegexTextBox Name="regexTextBox" Classes="Dialog_Item_TextBox"/>
 						</appControls:DialogItem>
 						<Line Classes="Dialog_Item_Separator_Inner"/>
 						<appControls:DialogItem ItemSize="Small">
-							<TextBlock Classes="Dialog_TextBlock_Label" Text="Date and time format"/>
+							<TextBlock appControls:DialogElement.TextRole="Label" Text="Date and time format"/>
 							<appControls:DateTimeFormatTextBox Classes="Dialog_Item_TextBox"/>
 						</appControls:DialogItem>
 						<Line Classes="Dialog_Item_Separator_Inner"/>
 						<appControls:DialogItem ItemSize="Small">
-							<TextBlock Classes="Dialog_TextBlock_Label" Text="Left label"/>
-							<TextBlock Classes="Dialog_TextBlock" HorizontalAlignment="Right" Text="Right label"/>
+							<TextBlock appControls:DialogElement.TextRole="Label" Text="Left label"/>
+							<TextBlock appControls:DialogElement.TextRole="Default" HorizontalAlignment="Right" Text="Right label"/>
 						</appControls:DialogItem>
 						<Line Classes="Dialog_Item_Separator"/>
 
 						<!-- Item with NumericUpDown -->
 						<appControls:DialogItem>
-							<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+							<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 							<NumericUpDown Classes="Dialog_Item_NumericUpDown" Maximum="100" Minimum="0" Value="50"/>
 						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 						<appControls:DialogItem>
-							<StackPanel Classes="Dialog_Item_Text_Container">
-								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							<StackPanel>
+								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
+								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
 							<NumericUpDown Classes="Dialog_Item_NumericUpDown" IsEnabled="False" Maximum="100" Minimum="0" Value="50"/>
 						</appControls:DialogItem>
@@ -200,26 +198,26 @@
 
 						<!-- Item with Slider -->
 						<appControls:DialogItem>
-							<StackPanel Classes="Dialog_Item_Text_Container">
-								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							<StackPanel>
+								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
+								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
 							<Slider Classes="Dialog_Item_Slider" TickFrequency="10"/>
 						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 						<appControls:DialogItem>
-							<StackPanel Classes="Dialog_Item_Text_Container">
-								<SelectableTextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
-								<SelectableTextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+							<StackPanel>
+								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
+								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
 							<Slider Classes="Dialog_Item_Slider" TickPlacement="None"/>
 						</appControls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 
-						<TextBlock Classes="Dialog_TextBlock_Label" Text="Label"/>
+						<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 						<ComboBox Classes="Dialog_ComboBox"/>
 						<Border BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1">
-							<abControls:LinkTextBlock Classes="Dialog_LinkTextBlock_Description" Text="Google" Uri="http://www.google.com/"/>
+							<abControls:LinkTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Google" Uri="http://www.google.com/"/>
 						</Border>
 						<StackPanel Orientation="Horizontal">
 							<Border BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1" VerticalAlignment="Top">
@@ -229,33 +227,33 @@
 											<GeometryDrawing Brush="{DynamicResource Brush/Icon.Dialog.Description}" Geometry="{StaticResource Geometry/Icon.Information.Outline}"/>
 										</DrawingImage>
 									</Image>
-									<TextBlock Classes="Dialog_Icon_TextBlock_Description" Grid.Column="1" Text="說明文字"/>
+									<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Grid.Column="1" Text="說明文字"/>
 								</Grid>
 							</Border>
 							<Border BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1" VerticalAlignment="Top">
-								<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+								<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</Border>
 						</StackPanel>
 						<StackPanel Orientation="Horizontal">
 							<Border BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1" VerticalAlignment="Top">
 								<Grid ColumnDefinitions="Auto,*">
 									<Image Classes="Dialog_Icon_Description" Source="{StaticResource Image/Icon.Warning.Outline.Colored.Gradient}"/>
-									<TextBlock Classes="Dialog_Icon_TextBlock_Description_Warning" Grid.Column="1" Text="Description (Warning)"/>
+									<TextBlock appControls:DialogElement.TextRole="WarningDescriptionBelowLabel" Grid.Column="1" Text="Description (Warning)"/>
 								</Grid>
 							</Border>
 							<Border BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1" VerticalAlignment="Top">
-								<TextBlock Classes="Dialog_TextBlock_Description_Warning" Text="說明文字"/>
+								<TextBlock appControls:DialogElement.TextRole="WarningDescriptionBelowLabel" Text="說明文字"/>
 							</Border>
 						</StackPanel>
 						<StackPanel Orientation="Horizontal">
 							<Border BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1" VerticalAlignment="Top">
 								<Grid ColumnDefinitions="Auto,*">
 									<Image Classes="Dialog_Icon_Description" Source="{StaticResource Image/Icon.Error.Outline.Colored}"/>
-									<TextBlock Classes="Dialog_Icon_TextBlock_Description_Error" Grid.Column="1" Text="Description (Error)"/>
+									<TextBlock appControls:DialogElement.TextRole="ErrorDescriptionBelowLabel" Grid.Column="1" Text="Description (Error)"/>
 								</Grid>
 							</Border>
 							<Border BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1" VerticalAlignment="Top">
-								<TextBlock Classes="Dialog_TextBlock_Description_Error" Text="Description"/>
+								<TextBlock appControls:DialogElement.TextRole="ErrorDescriptionBelowLabel" Text="Description"/>
 							</Border>
 						</StackPanel>
 
@@ -269,7 +267,7 @@
 							<ColumnDefinition SharedSizeGroup="label" Width="Auto"/>
 							<ColumnDefinition Width="*"/>
 						</Grid.ColumnDefinitions>
-						<TextBlock Classes="Dialog_TextBlock_Label" Text="User name"/>
+						<TextBlock appControls:DialogElement.TextRole="Label" Text="User name"/>
 						<TextBox Classes="Dialog_TextBox" Grid.Column="1"/>
 					</Grid>
 					<!--Separator Classes="Dialog_Item_Separator"/-->
@@ -278,35 +276,31 @@
 							<ColumnDefinition SharedSizeGroup="label" Width="Auto"/>
 							<ColumnDefinition Width="*"/>
 						</Grid.ColumnDefinitions>
-						<TextBlock Classes="Dialog_TextBlock_Label" Text="Password"/>
+						<TextBlock appControls:DialogElement.TextRole="Label" Text="Password"/>
 						<TextBox Classes="Dialog_TextBox" Grid.Column="1"/>
 					</Grid>
 				</StackPanel>
 				<Separator Classes="Dialog_Separator_Large"/>
 
-				<Border Classes="Dialog_ItemsGroup_Header">
-					<TextBlock Classes="Dialog_ItemsGroup_Header" Text="Header2"/>
-				</Border>
+				<TextBlock appControls:DialogElement.TextRole="ItemsGroupHeader" Text="Header2"/>
 
 				<Border Classes="Dialog_ItemsGroup_Container">
 					<StackPanel>
 
-						<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+						<TextBlock appControls:DialogElement.TextRole="Default" Text="Label"/>
 						<TextBox Classes="Dialog_TextBox"/>
-						<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+						<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 
 					</StackPanel>
 				</Border>
 				<Separator Classes="Dialog_Separator_Large"/>
 
-				<Border Classes="Dialog_ItemsGroup_Header">
-					<TextBlock Classes="Dialog_ItemsGroup_Header" Text="Header1"/>
-				</Border>
+				<TextBlock appControls:DialogElement.TextRole="ItemsGroupHeader" Text="Header1"/>
 
 				<appControls:DatePicker HorizontalAlignment="Stretch"/>
 				<Separator Classes="Dialog_Separator"/>
 				
-				<TextBlock Classes="Dialog_TextBox_Label" Text="ListBox"/>
+				<TextBlock appControls:DialogElement.TextRole="LabelAboveInputControl" Text="ListBox"/>
 				<StackPanel Classes="Dialog_FullWidthControl_Container">
 					<ListBox Classes="Dialog_Item_ListBox">
 						<ListBoxItem>Item 1</ListBoxItem>
@@ -318,7 +312,7 @@
 				</StackPanel>
 				<Separator Classes="Dialog_Separator"/>
 
-				<TextBlock Classes="Dialog_TextBox_Label" Text="ListBox"/>
+				<TextBlock appControls:DialogElement.TextRole="LabelAboveInputControl" Text="ListBox"/>
 				<Grid Classes="Dialog_FullWidthControl_Container" ColumnDefinitions="*,Auto">
 					<ListBox Classes="Dialog_ListBox">
 						<ListBoxItem>Item 1</ListBoxItem>
@@ -332,67 +326,67 @@
 				</Grid>
 				<Separator Classes="Dialog_Separator"/>
 
-				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<TextBlock appControls:DialogElement.TextRole="LabelAboveInputControl" Text="Label"/>
 				<appControls:RegexTextBox Classes="Dialog_TextBox"/>
 				<appControls:StringInterpolationFormatTextBox Classes="Dialog_TextBox"/>
 				<Separator Classes="Dialog_Separator"/>
 
-				<TextBlock Name="radioButtonLabel" Classes="Dialog_TextBlock" Text="Label"/>
+				<TextBlock Name="radioButtonLabel" appControls:DialogElement.TextRole="Label" Text="Label"/>
 				<RadioButton Classes="Dialog_RadioButton" Content="RadioButton"/>
 				<StackPanel Classes="Dialog_ContentPanel_Indented">
-					<TextBlock Classes="Dialog_TextBlock" Text="Indented content"/>
+					<TextBlock appControls:DialogElement.TextRole="Default" Text="Indented content"/>
 					<StackPanel Classes="Dialog_ContentPanel_Indented">
-						<TextBlock Classes="Dialog_TextBlock" Text="Indented content"/>
+						<TextBlock appControls:DialogElement.TextRole="Default" Text="Indented content"/>
 					</StackPanel>
 				</StackPanel>
 				<Separator Classes="Dialog_Separator"/>
 
-				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 				<CheckBox Classes="Dialog_CheckBox" Content="CheckBox"/>
 				<StackPanel Classes="Dialog_ContentPanel_Indented">
-					<TextBlock Classes="Dialog_TextBlock" Text="Indented content"/>
+					<TextBlock appControls:DialogElement.TextRole="Default" Text="Indented content"/>
 					<StackPanel Classes="Dialog_ContentPanel_Indented">
-						<TextBlock Classes="Dialog_TextBlock" Text="Indented content"/>
+						<TextBlock appControls:DialogElement.TextRole="Default" Text="Indented content"/>
 					</StackPanel>
 				</StackPanel>
 				<Separator Classes="Dialog_Separator"/>
 
 				<StackPanel Orientation="Horizontal">
 					<Image Classes="Dialog_Icon" Source="{DynamicResource Image/Icon.Information}"/>
-					<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="Icon" Uri="https://github.com/carina-studio" VerticalAlignment="Center"/>
+					<abControls:LinkTextBlock appControls:DialogElement.TextRole="LabelNextToIcon" Text="Icon" Uri="https://github.com/carina-studio" VerticalAlignment="Center"/>
 				</StackPanel>
 				<Separator Classes="Dialog_Separator_Small"/>
 				<StackPanel IsEnabled="False" Orientation="Horizontal">
 					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Add}"/>
-					<abControls:LinkTextBlock Classes="Dialog_Icon_LinkTextBlock" Text="Icon" Uri="https://github.com/carina-studio" VerticalAlignment="Center"/>
+					<abControls:LinkTextBlock appControls:DialogElement.TextRole="LabelNextToIcon" Text="Icon" Uri="https://github.com/carina-studio" VerticalAlignment="Center"/>
 				</StackPanel>
 				<Separator Classes="Dialog_Separator"/>
 				<StackPanel Orientation="Horizontal">
 					<Image Classes="Dialog_Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
-					<TextBlock Classes="Dialog_Icon_TextBlock" Text="Icon"/>
+					<TextBlock appControls:DialogElement.TextRole="LabelNextToIcon" Text="Icon"/>
 				</StackPanel>
 				<Separator Classes="Dialog_Separator"/>
 
-				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<TextBlock appControls:DialogElement.TextRole="Default" Text="Label"/>
 				<NumericUpDown Classes="Dialog_NumericUpDown"/>
 				<Separator Classes="Dialog_Separator"/>
 
-				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<TextBlock appControls:DialogElement.TextRole="Default" Text="Label"/>
 				<ListBox Classes="Dialog_ListBox" Height="100"/>
 				<Separator Classes="Dialog_Separator"/>
 
-				<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+				<TextBlock appControls:DialogElement.TextRole="Default" Text="Label"/>
 				<ToggleSwitch Classes="Dialog_ToggleSwitch"/>
-				<TextBlock Classes="Dialog_TextBlock_Description" Text="Description"/>
+				<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 				<Separator Classes="Dialog_Separator"/>
 
 				<appControls:GroupBox Header="Header" HorizontalContentAlignment="Stretch">
 					<StackPanel>
-						<TextBlock Classes="Dialog_TextBlock" Text="Theme"/>
+						<TextBlock appControls:DialogElement.TextRole="Default" Text="Theme"/>
 						<ComboBox Classes="Dialog_ComboBox" ItemsSource="{Binding ThemeModes}" SelectedItem="{Binding ThemeMode, Mode=TwoWay}"/>
 						<Separator Classes="Dialog_Separator"/>
 
-						<TextBlock Classes="Dialog_TextBlock" Text="Label"/>
+						<TextBlock appControls:DialogElement.TextRole="Default" Text="Label"/>
 						<TextBox Classes="Dialog_TextBox"/>
 					</StackPanel>
 				</appControls:GroupBox>
@@ -401,10 +395,10 @@
 				<Grid ColumnDefinitions="Auto,*">
 					<Image Classes="Dialog_Icon_Large" Source="{StaticResource Image/Icon.Information.Colored}" VerticalAlignment="Top"/>
 					<StackPanel Grid.Column="1">
-						<TextBlock Classes="Dialog_TextBlock" Text="Line1"/>
-						<TextBlock Classes="Dialog_TextBlock" Text="Line2"/>
-						<TextBlock Classes="Dialog_TextBlock" Text="Line3"/>
-						<TextBlock Classes="Dialog_TextBlock" Text="Line4"/>
+						<TextBlock appControls:DialogElement.TextRole="Default" Text="Line1"/>
+						<TextBlock appControls:DialogElement.TextRole="Default" Text="Line2"/>
+						<TextBlock appControls:DialogElement.TextRole="Default" Text="Line3"/>
+						<TextBlock appControls:DialogElement.TextRole="Default" Text="Line4"/>
 					</StackPanel>
 				</Grid>
 				

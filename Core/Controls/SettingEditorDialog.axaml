@@ -29,7 +29,7 @@
 
 		<!-- Content -->
 		<StackPanel Classes="Dialog_ContentPanel" Orientation="Vertical">
-			<TextBlock Classes="Dialog_TextBlock" Text="{Binding #dialog.SettingKey.Name, FallbackValue={x:Null}}"/>
+			<TextBlock controls:DialogElement.TextRole="Default" Text="{Binding #dialog.SettingKey.Name, FallbackValue={x:Null}}"/>
 			<controls:EnumComboBox Name="enumComboBox" Classes="Dialog_ComboBox" IsVisible="False"/>
 			<abControls:IntegerTextBox Name="integerTextBox" Classes="Dialog_TextBox" IsVisible="False"/>
 			<NumericUpDown Name="numericUpDown" Classes="Dialog_NumericUpDown" IsVisible="False"/>

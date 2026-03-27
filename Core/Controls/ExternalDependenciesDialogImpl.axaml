@@ -16,9 +16,7 @@
 	<Window.DataTemplates>
 		<DataTemplate x:CompileBindings="True" x:DataType="as:ExternalDependency" DataType="{x:Type as:ExternalDependency}">
 			<StackPanel>
-				<Border Name="headerBorder" Classes="Dialog_ItemsGroup_Header">
-					<SelectableTextBlock Classes="Dialog_ItemsGroup_Header" Text="{Binding Name}"/>
-				</Border>
+				<SelectableTextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{Binding Name}"/>
 				<Border Classes="Dialog_ItemsGroup_Container">
 					<StackPanel>
 
@@ -27,23 +25,23 @@
 							IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
 							ItemSize="Small">
 
-							<SelectableTextBlock Classes="Dialog_TextBlock" 
-								Text="{Binding Description}" 
-								TextTrimming="CharacterEllipsis" 
-								TextWrapping="Wrap"/>
+							<SelectableTextBlock controls:DialogElement.TextRole="Default" 
+							                     Text="{Binding Description}" 
+							                     TextTrimming="CharacterEllipsis" 
+							                     TextWrapping="Wrap"/>
 
 						</controls:DialogItem>
 						<Line Classes="Dialog_Item_Separator_Inner" IsVisible="{ReflectionBinding #descriptionItem.IsVisible}"/>
 
 						<!-- Priority -->
 						<controls:DialogItem ItemSize="Small">
-							<TextBlock Classes="Dialog_TextBlock" Text="{Binding Priority, Converter={x:Static controls:ExternalDependenciesDialogImpl.PriorityConverter}}"/>
+							<TextBlock controls:DialogElement.TextRole="Default" Text="{Binding Priority, Converter={x:Static controls:ExternalDependenciesDialogImpl.PriorityConverter}}"/>
 						</controls:DialogItem>
 						<Separator Classes="Dialog_Item_Separator"/>
 
 						<!-- State & Download -->
 						<controls:DialogItem>
-							<TextBlock Classes="Dialog_TextBlock" Foreground="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateBrushConverter}}">
+							<TextBlock controls:DialogElement.TextRole="Default" Foreground="{Binding State, Converter={x:Static controls:ExternalDependenciesDialogImpl.StateBrushConverter}}">
 								<TextBlock.Text>
 									<MultiBinding Converter="{x:Static controls:ExternalDependenciesDialogImpl.StateConverter}">
 										<Binding Path="Type"/>

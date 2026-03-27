@@ -49,7 +49,7 @@
 		<Grid Classes="Dialog_ContentPanel" RowDefinitions="Auto,*,Auto">
 
 			<!-- System paths -->
-			<TextBlock Classes="Dialog_TextBlock_LabelWithControlBelow" Text="{DynamicResource String/PathEnvVarEditorDialog.Paths}"/>
+			<TextBlock controls:DialogElement.TextRole="LabelAboveInputControl" Text="{DynamicResource String/PathEnvVarEditorDialog.Paths}"/>
 			<controls:ListBox Name="pathListBox" Classes="Dialog_ListBox" Grid.Row="1" ItemsSource="{Binding #window.SystemPaths}">
 				<controls:ListBox.ItemsPanel>
 					<ItemsPanelTemplate>
@@ -85,7 +85,7 @@
 			<!-- Custom paths -->
 			<StackPanel Grid.Row="2" IsVisible="{Binding #window.CustomPaths.Count}">
 				<Separator Classes="Dialog_Separator"/>
-				<TextBlock Classes="Dialog_TextBlock_LabelWithControlBelow" Text="{DynamicResource String/PathEnvVarEditorDialog.CustomPaths}"/>
+				<TextBlock controls:DialogElement.TextRole="LabelAboveInputControl" Text="{DynamicResource String/PathEnvVarEditorDialog.CustomPaths}"/>
 				<ListBox Name="customPathListBox" Classes="Dialog_ListBox" Height="{StaticResource Double/PathEnvVarEditorDialog.CustomPaths.Height}" ItemsSource="{Binding #window.CustomPaths}">
 					<ListBox.ItemsPanel>
 						<ItemsPanelTemplate>
