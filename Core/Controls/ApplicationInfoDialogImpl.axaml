@@ -42,7 +42,7 @@
 			<Grid Classes="Dialog_ControlButtonsPanel" ColumnDefinitions="Auto,*">
 				<StackPanel Classes="Dialog_ControlButtonsPanel">
 					<Button Classes="Dialog_ControlButton" Command="{Binding #window.ShowAppUpdateDialog}" Content="{xaml:StringResource ApplicationInfoDialog.ShowAppUpdateDialog}"/>
-					<Separator Classes="Dialog_Separator_Small"/>
+					<Separator controls:DialogElement.SeparatorType="Small"/>
 				</StackPanel>
 				<Panel Classes="Dialog_ControlButtonsPanel" Grid.Column="1">
 					<Button Classes="Dialog_ControlButton" Command="{Binding #window.Close}" Content="{Binding #window.OKButtonText}"/>
@@ -115,8 +115,8 @@
 						</Border>
 
 					</DockPanel>
-					<Separator Classes="Dialog_Separator_Large"/>
-					<Separator Classes="Dialog_Separator"/>
+					<Separator controls:DialogElement.SeparatorType="Large"/>
+					<Separator controls:DialogElement.SeparatorType="Default"/>
 
 					<!-- Open source attribution -->
 					<WrapPanel Name="openSourceAttrPanel"
@@ -146,7 +146,7 @@
 						<Separator Classes="TextSeparator"/>
 						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon}" VerticalAlignment="Center"/>
 					</WrapPanel>
-					<Separator Classes="Dialog_Separator"/>
+					<Separator controls:DialogElement.SeparatorType="Default"/>
 
 					<!-- Copyright -->
 					<WrapPanel>
@@ -160,9 +160,9 @@
 						<Separator Classes="TextSeparator"/>
 						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.PoweredBy.Section3}" VerticalAlignment="Center"/>
 					</WrapPanel>
-					<Separator Classes="Dialog_Separator"/>
+					<Separator controls:DialogElement.SeparatorType="Default"/>
 					<TextBlock x:CompileBindings="False" Text="{Binding #window.Copyright, Mode=OneTime}"/>
-					<Separator Classes="Dialog_Separator_Large"/>
+					<Separator controls:DialogElement.SeparatorType="Large"/>
 
 					<!-- System info -->
 					<TextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{xaml:StringResource ApplicationInfoDialog.SystemInformation}"/>
@@ -177,7 +177,7 @@
 								                     Text="{x:Static sys:Environment.MachineName}" 
 								                     TextTrimming="CharacterEllipsis"/>
 							</controls:DialogItem>
-							<Separator Classes="Dialog_Item_Separator"/>
+							<Separator controls:DialogElement.SeparatorType="Item"/>
 
 							<!-- Operating system -->
 							<controls:DialogItem ItemSize="Small">
@@ -187,7 +187,7 @@
 								                     Text="{Binding OperatingSystemDescription}" 
 								                     TextTrimming="CharacterEllipsis"/>
 							</controls:DialogItem>
-							<Separator Classes="Dialog_Item_Separator"/>
+							<Separator controls:DialogElement.SeparatorType="Item"/>
 
 							<!-- Framework version -->
 							<controls:DialogItem ItemSize="Small">
@@ -197,7 +197,7 @@
 								                     Text="{Binding FrameworkVersion}" 
 								                     TextTrimming="CharacterEllipsis"/>
 							</controls:DialogItem>
-							<Separator Classes="Dialog_Item_Separator"/>
+							<Separator controls:DialogElement.SeparatorType="Item"/>
 
 							<!-- Processor count -->
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.Application.IsDebugMode}">
@@ -208,7 +208,7 @@
 									                     Text="{Binding Source={x:Static sys:Environment.ProcessorCount}}" 
 									                     TextTrimming="CharacterEllipsis"/>
 								</controls:DialogItem>
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 							</StackPanel>
 
 							<!-- Total physical memory -->
@@ -220,7 +220,7 @@
 									                     Text="{Binding #window.Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" 
 									                     TextTrimming="CharacterEllipsis"/>
 								</controls:DialogItem>
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 							</StackPanel>
 
 							<!-- Network connection -->
@@ -243,7 +243,7 @@
 											{Binding #window.PrimaryNetworkInterfacePhysicalAddress, Converter={x:Static StringConverters.IsNotNullOrEmpty}},
 											{Binding #window.Application.IsDebugMode}
 										}">
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 								<controls:DialogItem ItemSize="Small">
 									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.PrimaryNetworkInterface}"/>
 									<abControls:FormattedSelectableTextBlock Arg1="{Binding PrimaryInterfaceName, Source={x:Static net:NetworkManager.Default}}" 
@@ -260,7 +260,7 @@
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.Application.IsDebugMode}">
 
 								<!-- Screen pixel density -->
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 								<controls:DialogItem ItemSize="Small">
 									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.Screen.PixelDensity}"/>
 									<abControls:FormattedSelectableTextBlock Arg1="{Binding #window.ScreenPixelDensity}" 
@@ -271,7 +271,7 @@
 								</controls:DialogItem>
 
 								<!-- Screen size -->
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 								<controls:DialogItem ItemSize="Small">
 									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.Screen.Size}"/>
 									<abControls:FormattedSelectableTextBlock Arg1="{Binding #window.PhysicalScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" 
@@ -283,7 +283,7 @@
 								</controls:DialogItem>
 								
 								<!-- Working area -->
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 								<controls:DialogItem ItemSize="Small">
 									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.Screen.WorkingArea}"/>
 									<abControls:FormattedSelectableTextBlock Arg1="{Binding #window.PhysicalScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" 
@@ -297,7 +297,7 @@
 							</StackPanel>
 						</StackPanel>
 					</Border>
-					<Separator Classes="Dialog_Separator_Large"/>
+					<Separator controls:DialogElement.SeparatorType="Large"/>
 
 					<!-- Process info -->
 					<TextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{xaml:StringResource ApplicationInfoDialog.ProcessInformation}"/>
@@ -312,7 +312,7 @@
 								                     Text="{Binding #window.Application.ProcessInfo.ProcessId, Mode=OneTime}" 
 								                     TextTrimming="CharacterEllipsis"/>
 							</controls:DialogItem>
-							<Separator Classes="Dialog_Item_Separator"/>
+							<Separator controls:DialogElement.SeparatorType="Item"/>
 
 							<!-- Thread count -->
 							<controls:DialogItem ItemSize="Small">
@@ -322,7 +322,7 @@
 								                     Text="{Binding #window.Application.ProcessInfo.ThreadCount}" 
 								                     TextTrimming="CharacterEllipsis"/>
 							</controls:DialogItem>
-							<Separator Classes="Dialog_Item_Separator"/>
+							<Separator controls:DialogElement.SeparatorType="Item"/>
 
 							<!-- CPU usage -->
 							<controls:DialogItem ItemSize="Small">
@@ -333,7 +333,7 @@
 								                                         HorizontalAlignment="Right"
 								                                         TextTrimming="CharacterEllipsis"/>
 							</controls:DialogItem>
-							<Separator Classes="Dialog_Item_Separator"/>
+							<Separator controls:DialogElement.SeparatorType="Item"/>
 
 							<!-- Private memory usage -->
 							<controls:DialogItem ItemSize="Small">
@@ -348,7 +348,7 @@
 							<StackPanel IsVisible="{Binding #window.Application.IsDebugMode}">
 
 								<!-- Managed heap size -->
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 								<controls:DialogItem ItemSize="Small">
 									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ManagedHeapSize}"/>
 									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
@@ -358,7 +358,7 @@
 								</controls:DialogItem>
 								
 								<!-- Managed heap usage -->
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 								<controls:DialogItem ItemSize="Small">
 									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ManagedHeapUsage}"/>
 									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
@@ -368,7 +368,7 @@
 								</controls:DialogItem>
 								
 								<!-- GC frequency -->
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 								<controls:DialogItem ItemSize="Small">
 									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.GCFrequency}"/>
 									<abControls:FormattedSelectableTextBlock Arg1="{Binding #window.Application.ProcessInfo.GCFrequency}" 
@@ -379,7 +379,7 @@
 								</controls:DialogItem>
 
 								<!-- Finalization pending count -->
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 								<controls:DialogItem ItemSize="Small">
 									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.FinalizationPendingCount}"/>
 									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
@@ -394,7 +394,7 @@
 							<StackPanel Name="scriptInfoPanel" IsVisible="False">
 
 								<!-- Running script count -->
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 								<controls:DialogItem ItemSize="Small">
 									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.RunningScriptCount}"/>
 									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
@@ -404,7 +404,7 @@
 								</controls:DialogItem>
 								
 								<!-- Script running loading -->
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 								<controls:DialogItem ItemSize="Small">
 									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ScriptRunningLoading}"/>
 									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
@@ -417,7 +417,7 @@
 
 						</StackPanel>
 					</Border>
-					<Separator Classes="Dialog_Separator_Large"/>
+					<Separator controls:DialogElement.SeparatorType="Large"/>
 
 					<!-- Activated products -->
 					<StackPanel Name="productListSectionPanel">
@@ -425,7 +425,7 @@
 						<Border Classes="Dialog_ItemsGroup_Container">
 							<StackPanel Name="productListPanel"/>
 						</Border>
-						<Separator Classes="Dialog_Separator_Large"/>
+						<Separator controls:DialogElement.SeparatorType="Large"/>
 					</StackPanel>
 
 					<!-- Assemblies (Header) -->
@@ -437,7 +437,7 @@
 							<StackPanel Name="assembliesPanel" IsVisible="{Binding #window.IsAssembliesPanelExpanded}"/>
 							
 							<!-- Expand/Collapse -->
-							<Separator Classes="Dialog_Item_Separator" IsVisible="{Binding #window.IsAssembliesPanelExpanded}"/>
+							<Separator controls:DialogElement.SeparatorType="Item" IsVisible="{Binding #window.IsAssembliesPanelExpanded}"/>
 							<controls:DialogItem ItemSize="Small">
 								<abControls:FormattedTextBlock controls:DialogElement.TextRole="Label" 
 								                               Arg1="{Binding Assemblies.Count}" 
@@ -457,7 +457,7 @@
 
 						</StackPanel>
 					</Border>
-					<Separator Classes="Dialog_Separator_Large"/>
+					<Separator controls:DialogElement.SeparatorType="Large"/>
 					
 					<!-- Other information -->
 					<TextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{xaml:StringResource ApplicationInfoDialog.Other}"/>
@@ -472,7 +472,7 @@
 										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Text="{xaml:StringResource ApplicationInfoDialog.DonateWithPayPal}" Uri="{Binding PayPalUri}"/>
 									</StackPanel>
 								</controls:DialogItem>
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 							</StackPanel>
 
 							<!-- Website -->
@@ -483,7 +483,7 @@
 										<abControls:FormattedLinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Arg1="{Binding Application.Name}" Format="{xaml:StringResource ApplicationInfoDialog.Website}" Uri="{Binding WebsiteUri}"/>
 									</StackPanel>
 								</controls:DialogItem>
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 							</StackPanel>
 
 							<!-- User agreement -->
@@ -494,7 +494,7 @@
 										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ShowUserAgreement}" Text="{xaml:StringResource Common.UserAgreement.WithDialog}"/>
 									</StackPanel>
 								</controls:DialogItem>
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 							</StackPanel>
 
 							<!-- Privacy policy -->
@@ -505,7 +505,7 @@
 										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ShowPrivacyPolicy}" Text="{xaml:StringResource Common.PrivacyPolicy.WithDialog}"/>
 									</StackPanel>
 								</controls:DialogItem>
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 							</StackPanel>
 
 							<!-- External dependencies -->
@@ -516,7 +516,7 @@
 										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ShowExternalDependencies}" Text="{xaml:StringResource ApplicationInfoDialog.ExternalDependencies}"/>
 									</StackPanel>
 								</controls:DialogItem>
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 							</StackPanel>
 
 							<!-- Restart in debug mode -->
@@ -527,7 +527,7 @@
 										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.RestartInDebugMode}" Text="{xaml:StringResource ApplicationInfoDialog.RestartInDebugMode}"/>
 									</StackPanel>
 								</controls:DialogItem>
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 							</StackPanel>
 							
 							<!-- Import application data -->
@@ -537,7 +537,7 @@
 									<abControls:LinkTextBlock x:CompileBindings="False" controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ImportApplicationData}" Text="{xaml:StringResource ApplicationInfoDialog.ImportApplicationData}"/>
 								</StackPanel>
 							</controls:DialogItem>
-							<Separator Classes="Dialog_Item_Separator"/>
+							<Separator controls:DialogElement.SeparatorType="Item"/>
 
 							<!-- Export logs -->
 							<controls:DialogItem ItemSize="Small">
@@ -549,7 +549,7 @@
 							
 							<!-- Take memory snapshot -->
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.Application.IsDebugMode}">
-								<Separator Classes="Dialog_Item_Separator"/>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
 								<controls:DialogItem ItemSize="Small">
 									<StackPanel Orientation="Horizontal">
 										<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Memory.Outline}"/>

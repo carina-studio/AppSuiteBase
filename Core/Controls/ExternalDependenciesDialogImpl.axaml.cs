@@ -146,7 +146,7 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 				{
 					panel.Children.Add(new Separator().Also(it =>
 					{
-						it.Classes.Add("Dialog_Separator_Large");
+						DialogElement.SetSeparatorType(it, DialogSeparatorType.Large);
 					}));
 				}
 			}

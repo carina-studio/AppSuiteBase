@@ -16,15 +16,15 @@
 			<StackPanel Grid.Column="1" VerticalAlignment="Center">
 				<SelectableTextBlock controls:DialogElement.TextRole="Default" FontWeight="Bold" MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].Message}" TextWrapping="WrapWithOverflow"/>
 				<StackPanel Name="secondaryMessagePanel" IsVisible="{Binding $parent[Window].SecondaryMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-					<Separator Classes="Dialog_Separator"/>
+					<Separator controls:DialogElement.SeparatorType="Default"/>
 					<SelectableTextBlock controls:DialogElement.TextRole="Default" MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].SecondaryMessage}" TextWrapping="WrapWithOverflow"/>
 				</StackPanel>
 				<StackPanel IsVisible="{Binding $parent[Window].Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-					<Separator Classes="Dialog_Separator"/>
+					<Separator controls:DialogElement.SeparatorType="Default"/>
 					<SelectableTextBlock controls:DialogElement.TextRole="DescriptionBelowLabel" MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].Description}" TextWrapping="WrapWithOverflow"/>
 				</StackPanel>
 				<StackPanel Name="doNotAskOrShowAgainPanel" IsVisible="False">
-					<Separator Classes="Dialog_Separator"/>
+					<Separator controls:DialogElement.SeparatorType="Default"/>
 					<CheckBox Name="doNotAskOrShowAgainCheckBox" Classes="Dialog_CheckBox"/>
 					<Grid ColumnDefinitions="Auto,*">
 						<Border Margin="{StaticResource Thickness/Dialog.Icon.Margin}" Width="{DynamicResource Double/Dialog.Icon.Size}"/>

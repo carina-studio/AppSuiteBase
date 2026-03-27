@@ -70,7 +70,7 @@
 
 				<!-- Progress bar -->
 				<StackPanel IsVisible="{Binding IsPreparingForUpdate}" Orientation="Vertical">
-					<Separator Classes="Dialog_Separator_Small"/>
+					<Separator controls:DialogElement.SeparatorType="Small"/>
 					<ProgressBar IsIndeterminate="{Binding !IsUpdatePreparationProgressAvailable}" Maximum="100" Value="{Binding UpdatePreparationProgressPercentage}"/>
 				</StackPanel>
 				
@@ -78,7 +78,7 @@
 			
 			<!-- Settings -->
 			<StackPanel Grid.Column="1" Grid.Row="1" IsVisible="{Binding !IsPreparingForUpdate}">
-				<Separator Classes="Dialog_Separator"/>
+				<Separator controls:DialogElement.SeparatorType="Default"/>
 				<CheckBox Classes="Dialog_CheckBox" Content="{asXaml:StringResource ApplicationOptions.NotifyApplicationUpdate}" IsChecked="{Binding NotifyApplicationUpdate, Mode=TwoWay}"/>
 				<CheckBox Classes="Dialog_CheckBox" Content="{asXaml:StringResource ApplicationOptions.AcceptNonStableApplicationUpdate}" IsChecked="{Binding AcceptNonStableApplicationUpdate, Mode=TwoWay}" IsEnabled="{Binding !IsCheckingForUpdate}"/>
 				<Grid ColumnDefinitions="Auto,*">

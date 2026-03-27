@@ -9,9 +9,22 @@ namespace CarinaStudio.AppSuite.Controls;
 public static class DialogElement
 {
     /// <summary>
+    /// Define property for type of separator in dialog.
+    /// </summary>
+    public static readonly AttachedProperty<DialogSeparatorType> SeparatorTypeProperty = AvaloniaProperty.RegisterAttached<Separator, DialogSeparatorType>("SeparatorType", typeof(DialogElement), DialogSeparatorType.None);
+    /// <summary>
     /// Define property for role of text in dialog.
     /// </summary>
     public static readonly AttachedProperty<DialogTextRole> TextRoleProperty = AvaloniaProperty.RegisterAttached<TextBlock, DialogTextRole>("TextRole", typeof(DialogElement), DialogTextRole.None);
+    
+    
+    /// <summary>
+    /// Get the type of the separator in dialog.
+    /// </summary>
+    /// <param name="separator">The <see cref="Separator"/>.</param>
+    /// <returns>The type of the separator.</returns>
+    public static DialogSeparatorType GetSeparatorType(Separator separator) => 
+        separator.GetValue(SeparatorTypeProperty);
     
     
     /// <summary>
@@ -24,12 +37,57 @@ public static class DialogElement
     
     
     /// <summary>
+    /// Set the type of the separator in dialog.
+    /// </summary>
+    /// <param name="separator">The <see cref="Separator"/>.</param>
+    /// <param name="type">The type of the separator.</param>
+    public static void SetSeparatorType(Separator separator, DialogSeparatorType type) => 
+        separator.SetValue(SeparatorTypeProperty, type);
+    
+    
+    /// <summary>
     /// Set the role of the text in dialog.
     /// </summary>
     /// <param name="textBlock"><see cref="TextBlock"/> which show the text.</param>
-    /// <param name="value">The role of the text.</param>
-    public static void SetTextRole(TextBlock textBlock, DialogTextRole value) => 
-        textBlock.SetValue(TextRoleProperty, value);
+    /// <param name="role">The role of the text.</param>
+    public static void SetTextRole(TextBlock textBlock, DialogTextRole role) => 
+        textBlock.SetValue(TextRoleProperty, role);
+}
+
+
+/// <summary>
+/// Type of separator in dialog.
+/// </summary>
+public enum DialogSeparatorType
+{
+    /// <summary>
+    /// None.
+    /// </summary>
+    None,
+    /// <summary>
+    /// Separator between items.
+    /// </summary>
+    Item,
+    /// <summary>
+    /// Separator between inner items.
+    /// </summary>
+    InnerItem,
+    /// <summary>
+    /// Separator with micro size.
+    /// </summary>
+    Micro,
+    /// <summary>
+    /// Separator with small size.
+    /// </summary>
+    Small,
+    /// <summary>
+    /// Separator with default size.
+    /// </summary>
+    Default,
+    /// <summary>
+    /// Separator with large size.
+    /// </summary>
+    Large,
 }
 
 

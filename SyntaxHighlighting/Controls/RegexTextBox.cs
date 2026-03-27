@@ -184,7 +184,7 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 				}));
 				panel.Children.Add(new Separator().Also(it => 
 				{
-					it.Classes.Add("Dialog_Separator");
+					DialogElement.SetSeparatorType(it, DialogSeparatorType.Default);
 					Grid.SetColumn(it, 1);
 				}));
 				panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
@@ -217,7 +217,7 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 				}));
 				panel.Children.Add(new Separator().Also(it => 
 				{
-					it.Classes.Add("Dialog_Separator");
+					DialogElement.SetSeparatorType(it, DialogSeparatorType.Default);
 					Grid.SetColumn(it, 1);
 				}));
 				panel.Children.Add(new Avalonia.Controls.TextBlock().Also(it =>
@@ -267,7 +267,7 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 					});
 					panel.Children.Add(new Separator().Also(it => 
 					{
-						it.Classes.Add("Dialog_Separator");
+						DialogElement.SetSeparatorType(it, DialogSeparatorType.Default);
 						it.Bind(IsVisibleProperty, displayNameTextBlock.GetObservable(IsVisibleProperty));
 						Grid.SetColumn(it, 1);
 					}));

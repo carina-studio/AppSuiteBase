@@ -30,7 +30,7 @@
 					            {Binding !#window.IsRefreshingPaths},
 					            {Binding !#window.IsSavingPaths}
 					        }"/>
-					<Separator Classes="Dialog_Separator_Small"/>
+					<Separator controls:DialogElement.SeparatorType="Small"/>
 				</StackPanel>
 				<StackPanel Classes="Dialog_ControlButtonsPanel" Grid.Column="1">
 					<Button Classes="Dialog_ControlButton" 
@@ -84,7 +84,7 @@
 
 			<!-- Custom paths -->
 			<StackPanel Grid.Row="2" IsVisible="{Binding #window.CustomPaths.Count}">
-				<Separator Classes="Dialog_Separator"/>
+				<Separator controls:DialogElement.SeparatorType="Default"/>
 				<TextBlock controls:DialogElement.TextRole="LabelAboveInputControl" Text="{DynamicResource String/PathEnvVarEditorDialog.CustomPaths}"/>
 				<ListBox Name="customPathListBox" Classes="Dialog_ListBox" Height="{StaticResource Double/PathEnvVarEditorDialog.CustomPaths.Height}" ItemsSource="{Binding #window.CustomPaths}">
 					<ListBox.ItemsPanel>

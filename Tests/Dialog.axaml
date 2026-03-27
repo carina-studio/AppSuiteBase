@@ -44,13 +44,13 @@
 						<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description 1"/>
 						<TextBox Classes="Dialog_Item_TextBox"/>
 						<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description 2"/>
-						<Separator Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 
 						<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 						<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Selectable description 1"/>
 						<ToggleSwitch Classes="Dialog_Item_ToggleSwitch"/>
 						<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Selectable description 2"/>
-						<Separator Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 
 						<!-- Items with ToggleSwitch -->
 						<appControls:DialogItem>
@@ -65,7 +65,7 @@
 							</StackPanel>
 							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch"/>
 						</appControls:DialogItem>
-						<Separator Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
 							<StackPanel>
 								<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
@@ -73,12 +73,12 @@
 							</StackPanel>
 							<ToggleSwitch Name="toggleSwitch1" Classes="Dialog_Item_ToggleSwitch" IsChecked="True"/>
 						</appControls:DialogItem>
-						<Separator Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
 							<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" IsEnabled="False"/>
 						</appControls:DialogItem>
-						<Separator Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
 							<StackPanel>
 								<WrapPanel Background="Gray">
@@ -91,7 +91,7 @@
 							</StackPanel>
 							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch"/>
 						</appControls:DialogItem>
-						<Separator Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 
 						<!-- Item with ComboBox -->
 						<appControls:DialogItem>
@@ -106,7 +106,7 @@
 								<ComboBoxItem>項目 4</ComboBoxItem>
 							</ComboBox>
 						</appControls:DialogItem>
-						<Separator Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
 							<StackPanel>
 								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
@@ -119,7 +119,7 @@
 								<ComboBoxItem>項目 4</ComboBoxItem>
 							</ComboBox>
 						</appControls:DialogItem>
-						<Separator Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 
 						<!-- Item with TextBox -->
 						<appControls:DialogItem>
@@ -129,7 +129,7 @@
 							</StackPanel>
 							<TextBox Classes="Dialog_Item_TextBox"/>
 						</appControls:DialogItem>
-						<Separator Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
 							<StackPanel>
 								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
@@ -137,7 +137,7 @@
 							</StackPanel>
 							<TextBox Classes="Dialog_Item_TextBox"/>
 						</appControls:DialogItem>
-						<Separator Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
 							<Grid ColumnDefinitions="*,Auto,Auto">
 								<StackPanel>
@@ -145,11 +145,11 @@
 									<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" IsVisible="{Binding #isEnabledButton.IsChecked}" Text="Description"/>
 								</StackPanel>
 								<ToggleButton Name="isEnabledButton" Content="IsEnabled" Grid.Column="1" IsChecked="{Binding #itemTextBox1.IsEnabled, Mode=TwoWay}"/>
-								<Separator Classes="Dialog_Separator_Small" Grid.Column="2"/>
+								<Separator appControls:DialogElement.SeparatorType="Small" Grid.Column="2"/>
 							</Grid>
 							<TextBox Name="itemTextBox1" Classes="Dialog_Item_TextBox" IsEnabled="False" Text="Text"/>
 						</appControls:DialogItem>
-						<Line Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
 							<StackPanel>
 								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
@@ -157,36 +157,36 @@
 							</StackPanel>
 							<TextBox Classes="Dialog_Item_TextBox" Watermark="Watermark"/>
 						</appControls:DialogItem>
-						<Line Classes="Dialog_Item_Separator_Inner"/>
+						<Separator appControls:DialogElement.SeparatorType="InnerItem"/>
 						<TextBox Classes="Dialog_Item_TextBox" Height="100" TextAlignment="Left"/>
-						<Line Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem ItemSize="Small">
 							<TextBlock appControls:DialogElement.TextRole="Label" Text="IP address"/>
 							<abControls:IPAddressTextBox Classes="Dialog_Item_TextBox"/>
 						</appControls:DialogItem>
-						<Line Classes="Dialog_Item_Separator_Inner"/>
+						<Separator appControls:DialogElement.SeparatorType="InnerItem"/>
 						<appControls:DialogItem Name="regexItem" ItemSize="Small">
 							<TextBlock appControls:DialogElement.TextRole="Label" Text="Regex"/>
 							<appControls:RegexTextBox Name="regexTextBox" Classes="Dialog_Item_TextBox"/>
 						</appControls:DialogItem>
-						<Line Classes="Dialog_Item_Separator_Inner"/>
+						<Separator appControls:DialogElement.SeparatorType="InnerItem"/>
 						<appControls:DialogItem ItemSize="Small">
 							<TextBlock appControls:DialogElement.TextRole="Label" Text="Date and time format"/>
 							<appControls:DateTimeFormatTextBox Classes="Dialog_Item_TextBox"/>
 						</appControls:DialogItem>
-						<Line Classes="Dialog_Item_Separator_Inner"/>
+						<Separator appControls:DialogElement.SeparatorType="InnerItem"/>
 						<appControls:DialogItem ItemSize="Small">
 							<TextBlock appControls:DialogElement.TextRole="Label" Text="Left label"/>
 							<TextBlock appControls:DialogElement.TextRole="Default" HorizontalAlignment="Right" Text="Right label"/>
 						</appControls:DialogItem>
-						<Line Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 
 						<!-- Item with NumericUpDown -->
 						<appControls:DialogItem>
 							<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 							<NumericUpDown Classes="Dialog_Item_NumericUpDown" Maximum="100" Minimum="0" Value="50"/>
 						</appControls:DialogItem>
-						<Separator Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
 							<StackPanel>
 								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
@@ -194,7 +194,7 @@
 							</StackPanel>
 							<NumericUpDown Classes="Dialog_Item_NumericUpDown" IsEnabled="False" Maximum="100" Minimum="0" Value="50"/>
 						</appControls:DialogItem>
-						<Separator Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 
 						<!-- Item with Slider -->
 						<appControls:DialogItem>
@@ -204,7 +204,7 @@
 							</StackPanel>
 							<Slider Classes="Dialog_Item_Slider" TickFrequency="10"/>
 						</appControls:DialogItem>
-						<Separator Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
 							<StackPanel>
 								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
@@ -212,7 +212,7 @@
 							</StackPanel>
 							<Slider Classes="Dialog_Item_Slider" TickPlacement="None"/>
 						</appControls:DialogItem>
-						<Separator Classes="Dialog_Item_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Item"/>
 
 						<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 						<ComboBox Classes="Dialog_ComboBox"/>
@@ -259,7 +259,7 @@
 
 					</StackPanel>
 				</Border>
-				<Separator Classes="Dialog_Separator_Large"/>
+				<Separator appControls:DialogElement.SeparatorType="Large"/>
 
 				<StackPanel Grid.IsSharedSizeScope="True">
 					<Grid>
@@ -270,7 +270,7 @@
 						<TextBlock appControls:DialogElement.TextRole="Label" Text="User name"/>
 						<TextBox Classes="Dialog_TextBox" Grid.Column="1"/>
 					</Grid>
-					<!--Separator Classes="Dialog_Item_Separator"/-->
+					<!--Separator appControls:DialogElement.SeparatorType="Item"/-->
 					<Grid>
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition SharedSizeGroup="label" Width="Auto"/>
@@ -280,7 +280,7 @@
 						<TextBox Classes="Dialog_TextBox" Grid.Column="1"/>
 					</Grid>
 				</StackPanel>
-				<Separator Classes="Dialog_Separator_Large"/>
+				<Separator appControls:DialogElement.SeparatorType="Large"/>
 
 				<TextBlock appControls:DialogElement.TextRole="ItemsGroupHeader" Text="Header2"/>
 
@@ -293,12 +293,12 @@
 
 					</StackPanel>
 				</Border>
-				<Separator Classes="Dialog_Separator_Large"/>
+				<Separator appControls:DialogElement.SeparatorType="Large"/>
 
 				<TextBlock appControls:DialogElement.TextRole="ItemsGroupHeader" Text="Header1"/>
 
 				<appControls:DatePicker HorizontalAlignment="Stretch"/>
-				<Separator Classes="Dialog_Separator"/>
+				<Separator appControls:DialogElement.SeparatorType="Default"/>
 				
 				<TextBlock appControls:DialogElement.TextRole="LabelAboveInputControl" Text="ListBox"/>
 				<StackPanel Classes="Dialog_FullWidthControl_Container">
@@ -310,7 +310,7 @@
 					</ListBox>
 					<Button Classes="Dialog_ListActionButton" Content="{DynamicResource String/Common.Add.WithDialog}"/>
 				</StackPanel>
-				<Separator Classes="Dialog_Separator"/>
+				<Separator appControls:DialogElement.SeparatorType="Default"/>
 
 				<TextBlock appControls:DialogElement.TextRole="LabelAboveInputControl" Text="ListBox"/>
 				<Grid Classes="Dialog_FullWidthControl_Container" ColumnDefinitions="*,Auto">
@@ -324,12 +324,12 @@
 						<Image Classes="BrowseButtonIcon" Source="{StaticResource Image/Icon.Add}"/>
 					</Button>
 				</Grid>
-				<Separator Classes="Dialog_Separator"/>
+				<Separator appControls:DialogElement.SeparatorType="Default"/>
 
 				<TextBlock appControls:DialogElement.TextRole="LabelAboveInputControl" Text="Label"/>
 				<appControls:RegexTextBox Classes="Dialog_TextBox"/>
 				<appControls:StringInterpolationFormatTextBox Classes="Dialog_TextBox"/>
-				<Separator Classes="Dialog_Separator"/>
+				<Separator appControls:DialogElement.SeparatorType="Default"/>
 
 				<TextBlock Name="radioButtonLabel" appControls:DialogElement.TextRole="Label" Text="Label"/>
 				<RadioButton Classes="Dialog_RadioButton" Content="RadioButton"/>
@@ -339,7 +339,7 @@
 						<TextBlock appControls:DialogElement.TextRole="Default" Text="Indented content"/>
 					</StackPanel>
 				</StackPanel>
-				<Separator Classes="Dialog_Separator"/>
+				<Separator appControls:DialogElement.SeparatorType="Default"/>
 
 				<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 				<CheckBox Classes="Dialog_CheckBox" Content="CheckBox"/>
@@ -349,48 +349,48 @@
 						<TextBlock appControls:DialogElement.TextRole="Default" Text="Indented content"/>
 					</StackPanel>
 				</StackPanel>
-				<Separator Classes="Dialog_Separator"/>
+				<Separator appControls:DialogElement.SeparatorType="Default"/>
 
 				<StackPanel Orientation="Horizontal">
 					<Image Classes="Dialog_Icon" Source="{DynamicResource Image/Icon.Information}"/>
 					<abControls:LinkTextBlock appControls:DialogElement.TextRole="LabelNextToIcon" Text="Icon" Uri="https://github.com/carina-studio" VerticalAlignment="Center"/>
 				</StackPanel>
-				<Separator Classes="Dialog_Separator_Small"/>
+				<Separator appControls:DialogElement.SeparatorType="Small"/>
 				<StackPanel IsEnabled="False" Orientation="Horizontal">
 					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Add}"/>
 					<abControls:LinkTextBlock appControls:DialogElement.TextRole="LabelNextToIcon" Text="Icon" Uri="https://github.com/carina-studio" VerticalAlignment="Center"/>
 				</StackPanel>
-				<Separator Classes="Dialog_Separator"/>
+				<Separator appControls:DialogElement.SeparatorType="Default"/>
 				<StackPanel Orientation="Horizontal">
 					<Image Classes="Dialog_Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
 					<TextBlock appControls:DialogElement.TextRole="LabelNextToIcon" Text="Icon"/>
 				</StackPanel>
-				<Separator Classes="Dialog_Separator"/>
+				<Separator appControls:DialogElement.SeparatorType="Default"/>
 
 				<TextBlock appControls:DialogElement.TextRole="Default" Text="Label"/>
 				<NumericUpDown Classes="Dialog_NumericUpDown"/>
-				<Separator Classes="Dialog_Separator"/>
+				<Separator appControls:DialogElement.SeparatorType="Default"/>
 
 				<TextBlock appControls:DialogElement.TextRole="Default" Text="Label"/>
 				<ListBox Classes="Dialog_ListBox" Height="100"/>
-				<Separator Classes="Dialog_Separator"/>
+				<Separator appControls:DialogElement.SeparatorType="Default"/>
 
 				<TextBlock appControls:DialogElement.TextRole="Default" Text="Label"/>
 				<ToggleSwitch Classes="Dialog_ToggleSwitch"/>
 				<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
-				<Separator Classes="Dialog_Separator"/>
+				<Separator appControls:DialogElement.SeparatorType="Default"/>
 
 				<appControls:GroupBox Header="Header" HorizontalContentAlignment="Stretch">
 					<StackPanel>
 						<TextBlock appControls:DialogElement.TextRole="Default" Text="Theme"/>
 						<ComboBox Classes="Dialog_ComboBox" ItemsSource="{Binding ThemeModes}" SelectedItem="{Binding ThemeMode, Mode=TwoWay}"/>
-						<Separator Classes="Dialog_Separator"/>
+						<Separator appControls:DialogElement.SeparatorType="Default"/>
 
 						<TextBlock appControls:DialogElement.TextRole="Default" Text="Label"/>
 						<TextBox Classes="Dialog_TextBox"/>
 					</StackPanel>
 				</appControls:GroupBox>
-				<Separator Classes="Dialog_Separator_Large"/>
+				<Separator appControls:DialogElement.SeparatorType="Large"/>
 
 				<Grid ColumnDefinitions="Auto,*">
 					<Image Classes="Dialog_Icon_Large" Source="{StaticResource Image/Icon.Information.Colored}" VerticalAlignment="Top"/>

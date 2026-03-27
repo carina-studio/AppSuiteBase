@@ -25,7 +25,7 @@
 			<TextBlock Name="messageTextBlock" controls:DialogElement.TextRole="LabelAboveInputControl" IsVisible="{Binding #dialog.Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Text="{Binding #dialog.Message}"/>
 			<TextBox Name="textBox" Classes="Dialog_TextBox" MaxLength="{Binding #dialog.MaxTextLength}" Text="{Binding #dialog.Text, Mode=TwoWay}"/>
 			<StackPanel Name="checkBoxPanel" IsVisible="False">
-				<Separator Classes="Dialog_Separator"/>
+				<Separator controls:DialogElement.SeparatorType="Default"/>
 				<CheckBox Name="checkBox" Classes="Dialog_CheckBox" Content="{Binding #dialog.CheckBoxMessage}"/>
 				<Grid ColumnDefinitions="Auto,*">
 					<Border Margin="{StaticResource Thickness/Dialog.Icon.Margin}" Width="{DynamicResource Double/Dialog.Icon.Size}"/>

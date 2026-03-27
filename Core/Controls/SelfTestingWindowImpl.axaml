@@ -82,7 +82,7 @@
 			</TreeView>
 
 			<!-- Test info -->
-			<Separator Classes="Dialog_Separator" Grid.ColumnSpan="3" Grid.Row="1">
+			<Separator controls:DialogElement.SeparatorType="Default" Grid.ColumnSpan="3" Grid.Row="1">
 				<Separator.IsVisible>
 					<MultiBinding Converter="{x:Static BoolConverters.Or}">
 						<Binding Path="IsVisible" ElementName="runningTestCaseInfoTextBlock"/>
@@ -91,7 +91,7 @@
 				</Separator.IsVisible>
 			</Separator>
 			<abControls:FormattedTextBlock Name="runningTestCaseInfoTextBlock" Arg1="{Binding RunningTestCase.Name, Source={x:Static testing:TestManager.Default}, FallbackValue={x:Null}}" controls:DialogElement.TextRole="Default" Format="{DynamicResource String/SelfTestingWindow.RunningTestCaseInfo}" Grid.Row="2" IsVisible="{Binding RunningTestCase, Source={x:Static testing:TestManager.Default}, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-			<Separator Classes="Dialog_Separator_Small" Grid.Column="1" Grid.Row="2" IsVisible="{Binding #runningTestCaseInfoTextBlock.IsVisible}"/>
+			<Separator controls:DialogElement.SeparatorType="Small" Grid.Column="1" Grid.Row="2" IsVisible="{Binding #runningTestCaseInfoTextBlock.IsVisible}"/>
 			<abControls:FormattedTextBlock Name="waitingTestCasesInfoTextBlock" Arg1="{Binding TestCaseWaitingCount, Source={x:Static testing:TestManager.Default}}" controls:DialogElement.TextRole="Default" Format="{DynamicResource String/SelfTestingWindow.WaitingTestCasesInfo}" Grid.Column="2" Grid.Row="2" IsVisible="{Binding TestCaseWaitingCount, Source={x:Static testing:TestManager.Default}, Converter={x:Static abConverters:NumberConverters.IsNonZero}}"/>
 
 		</Grid>

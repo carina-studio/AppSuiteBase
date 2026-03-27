@@ -687,6 +687,7 @@
 		<Setter Property="Stroke" Value="{DynamicResource Brush/Dialog.ItemSeparator}"/>
 		<Setter Property="StrokeThickness" Value="{DynamicResource Double/Dialog.ItemSeparator.Stroke}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Line.Dialog_Item_Separator_Inner">
 		<Setter Property="EndPoint" Value="6,0"/>
 		<Setter Property="Height" Value="1"/>
@@ -772,10 +773,55 @@
 		<Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 	</Style>
+	<Style Selector="Separator[(controls|DialogElement.SeparatorType)=Default]">
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width}"/>
+	</Style>
+	<Style Selector="Separator[(controls|DialogElement.SeparatorType)=InnerItem]">
+		<Setter Property="Height" Value="1"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ItemSeparator.Margin}"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Line EndPoint="6,0" 
+				      StartPoint="0,0"
+				      Stretch="Fill"
+				      Stroke="{DynamicResource Brush/Dialog.ItemSeparator}"
+				      StrokeDashArray="4,2"
+				      StrokeDashOffset="0"
+				      StrokeThickness="{DynamicResource Double/Dialog.ItemSeparator.Stroke}"/>
+			</ControlTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="Separator[(controls|DialogElement.SeparatorType)=Item]">
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Dialog.ItemSeparator}"/>
+		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Dialog.ItemSeparator.Border}"/>
+		<Setter Property="Height" Value="1"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ItemSeparator.Margin}"/>
+	</Style>
+	<Style Selector="Separator[(controls|DialogElement.SeparatorType)=Large]">
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height.Large}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width.Large}"/>
+	</Style>
+	<Style Selector="Separator[(controls|DialogElement.SeparatorType)=Micro]">
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height.Micro}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width.Micro}"/>
+	</Style>
+	<Style Selector="Separator[(controls|DialogElement.SeparatorType)=Small]">
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height.Small}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width.Small}"/>
+	</Style>
 	<Style Selector="Separator.Dialog_ControlButton_Separator">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.ControlButton.Separator.Width}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Separator.Dialog_Item_Separator">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Dialog.ItemSeparator}"/>
@@ -784,21 +830,25 @@
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ItemSeparator.Margin}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Separator.Dialog_Separator">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Separator.Dialog_Separator_Large">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height.Large}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width.Large}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Separator.Dialog_Separator_Micro">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height.Micro}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width.Micro}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Separator.Dialog_Separator_Small">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height.Small}"/>

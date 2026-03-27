@@ -40,7 +40,7 @@
 			
 			<!-- Do not ask again -->
 			<StackPanel Name="doNotAskAgainCheckBoxPanel" Grid.Row="2" IsVisible="False">
-				<Separator Classes="Dialog_Separator"/>
+				<Separator controls:DialogElement.SeparatorType="Default"/>
 				<CheckBox Name="doNotAskAgainCheckBox" Classes="Dialog_CheckBox" Content="{DynamicResource String/Common.DoNotAskAgain}"/>
 			</StackPanel>
 			

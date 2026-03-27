@@ -413,7 +413,7 @@ class ApplicationInfoDialogImpl : Dialog
 						if (panel.Children.Count > 0)
 						{
 							panel.Children.Add(new Separator().Also(it => 
-								it.Classes.Add("Dialog_Item_Separator")));
+								DialogElement.SetSeparatorType(it, DialogSeparatorType.Item)));
 						}
 						panel.Children.Add(new StackPanel().Also(stackPanel =>
 						{
@@ -439,9 +439,9 @@ class ApplicationInfoDialogImpl : Dialog
 								it.Click += (_, _) => this.DeactivateProduct(productId);
 								it.Bind(ContentProperty, this.Application.GetObservableString("ApplicationInfoDialog.DeactivateProduct"));
 							});
-							stackPanel.Children.Add(new Line().Also(it =>
+							stackPanel.Children.Add(new Separator().Also(it =>
 							{
-								it.Classes.Add("Dialog_Item_Separator_Inner");
+								DialogElement.SetSeparatorType(it, DialogSeparatorType.InnerItem);
 								it.Bind(IsVisibleProperty, deactivateButton.GetObservable(IsVisibleProperty));
 							}));
 							stackPanel.Children.Add(deactivateButton);
@@ -461,7 +461,7 @@ class ApplicationInfoDialogImpl : Dialog
 				foreach (var assembly in appInfo.Assemblies)
 				{
 					if (panel.Children.Count > 0)
-						panel.Children.Add(new Separator().Also(it => it.Classes.Add("Dialog_Item_Separator")));
+						panel.Children.Add(new Separator().Also(it => DialogElement.SetSeparatorType(it, DialogSeparatorType.Item)));
 					var assemblyName = assembly.GetName();
 					var assemblyVersion = assemblyName.Version ?? new Version();
 					panel.Children.Add(new DialogItem().Also(it =>

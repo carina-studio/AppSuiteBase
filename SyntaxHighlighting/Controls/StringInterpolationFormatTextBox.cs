@@ -131,7 +131,7 @@ public class StringInterpolationFormatTextBox : SyntaxHighlightingObjectTextBox<
 					});
 					panel.Children.Add(new Separator().Also(it => 
 					{
-						it.Classes.Add("Dialog_Separator");
+						DialogElement.SetSeparatorType(it, DialogSeparatorType.Default);
 						it.Bind(IsVisibleProperty, displayNameTextBlock.GetObservable(IsVisibleProperty));
 						Grid.SetColumn(it, 1);
 					}));
