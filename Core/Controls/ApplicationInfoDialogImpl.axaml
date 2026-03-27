@@ -468,7 +468,7 @@
 							<StackPanel IsVisible="{Binding PayPalUri, Converter={x:Static ObjectConverters.IsNotNull}}">
 								<controls:DialogItem ItemSize="Small">
 									<StackPanel Orientation="Horizontal">
-										<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PayPal.Outline.Colored}"/>
+										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.PayPal.Outline.Colored}"/>
 										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Text="{xaml:StringResource ApplicationInfoDialog.DonateWithPayPal}" Uri="{Binding PayPalUri}"/>
 									</StackPanel>
 								</controls:DialogItem>
@@ -479,7 +479,7 @@
 							<StackPanel IsVisible="{Binding WebsiteUri, Converter={x:Static ObjectConverters.IsNotNull}}">
 								<controls:DialogItem ItemSize="Small">
 									<StackPanel Orientation="Horizontal">
-										<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Website}"/>
+										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Website}"/>
 										<abControls:FormattedLinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Arg1="{Binding Application.Name}" Format="{xaml:StringResource ApplicationInfoDialog.Website}" Uri="{Binding WebsiteUri}"/>
 									</StackPanel>
 								</controls:DialogItem>
@@ -490,7 +490,7 @@
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasUserAgreement}">
 								<controls:DialogItem ItemSize="Small">
 									<StackPanel Orientation="Horizontal">
-										<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.UserAgreement.Outline}"/>
+										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.UserAgreement.Outline}"/>
 										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ShowUserAgreement}" Text="{xaml:StringResource Common.UserAgreement.WithDialog}"/>
 									</StackPanel>
 								</controls:DialogItem>
@@ -501,7 +501,7 @@
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasPrivacyPolicy}">
 								<controls:DialogItem ItemSize="Small">
 									<StackPanel Orientation="Horizontal">
-										<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.PrivacyPolicy.Outline}"/>
+										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.PrivacyPolicy.Outline}"/>
 										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ShowPrivacyPolicy}" Text="{xaml:StringResource Common.PrivacyPolicy.WithDialog}"/>
 									</StackPanel>
 								</controls:DialogItem>
@@ -512,7 +512,7 @@
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasExternalDependencies}">
 								<controls:DialogItem ItemSize="Small">
 									<StackPanel Orientation="Horizontal">
-										<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Dependencies}"/>
+										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Dependencies}"/>
 										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ShowExternalDependencies}" Text="{xaml:StringResource ApplicationInfoDialog.ExternalDependencies}"/>
 									</StackPanel>
 								</controls:DialogItem>
@@ -523,7 +523,7 @@
 							<StackPanel x:CompileBindings="False" IsVisible="{Binding !#window.Application.IsDebugMode}">
 								<controls:DialogItem ItemSize="Small">
 									<StackPanel Orientation="Horizontal">
-										<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Debug.Outline}"/>
+										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Debug.Outline}"/>
 										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.RestartInDebugMode}" Text="{xaml:StringResource ApplicationInfoDialog.RestartInDebugMode}"/>
 									</StackPanel>
 								</controls:DialogItem>
@@ -533,7 +533,7 @@
 							<!-- Import application data -->
 							<controls:DialogItem ItemSize="Small">
 								<StackPanel Orientation="Horizontal">
-									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Import}"/>
+									<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Import}"/>
 									<abControls:LinkTextBlock x:CompileBindings="False" controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ImportApplicationData}" Text="{xaml:StringResource ApplicationInfoDialog.ImportApplicationData}"/>
 								</StackPanel>
 							</controls:DialogItem>
@@ -542,7 +542,7 @@
 							<!-- Export logs -->
 							<controls:DialogItem ItemSize="Small">
 								<StackPanel Orientation="Horizontal">
-									<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Export}"/>
+									<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Export}"/>
 									<abControls:LinkTextBlock x:CompileBindings="False" controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ExportLogs}" Text="{xaml:StringResource ApplicationInfoDialog.ExportAppLogs}"/>
 								</StackPanel>
 							</controls:DialogItem>
@@ -552,7 +552,7 @@
 								<Separator controls:DialogElement.SeparatorType="Item"/>
 								<controls:DialogItem ItemSize="Small">
 									<StackPanel Orientation="Horizontal">
-										<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Memory.Outline}"/>
+										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Memory.Outline}"/>
 										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.TakeMemorySnapshot}" Text="{xaml:StringResource Common.TakeMemorySnapshot.WithDialog}"/>
 									</StackPanel>
 								</controls:DialogItem>

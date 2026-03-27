@@ -12,7 +12,7 @@
 
 		<!-- Content -->
 		<Grid Classes="Dialog_ContentPanel" ColumnDefinitions="Auto,*">
-			<Image Classes="Dialog_Icon_Large" Source="{Binding $parent[Window].IconImage}" VerticalAlignment="Top"/>
+			<Image controls:DialogElement.IconType="Large" Source="{Binding $parent[Window].IconImage}" VerticalAlignment="Top"/>
 			<StackPanel Grid.Column="1" VerticalAlignment="Center">
 				<SelectableTextBlock controls:DialogElement.TextRole="Default" FontWeight="Bold" MaxWidth="{StaticResource Double/MessageDialog.Message.MaxWidth}" MinWidth="{StaticResource Double/MessageDialog.Message.MinWidth}" Text="{Binding $parent[Window].Message}" TextWrapping="WrapWithOverflow"/>
 				<StackPanel Name="secondaryMessagePanel" IsVisible="{Binding $parent[Window].SecondaryMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">

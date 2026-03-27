@@ -469,7 +469,7 @@
 										<StackPanel>
 											<TextBlock appControls:DialogElement.TextRole="Label" Text="Title"/>
 											<Grid ColumnDefinitions="Auto,*">
-												<Image Classes="Dialog_Icon_Description" Source="{StaticResource Image/Icon.Information.Outline}"/>
+												<Image appControls:DialogElement.IconType="DescriptionBelowLabel" Source="{StaticResource Image/Icon.Information.Outline}"/>
 												<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Grid.Column="1" Text="Description Description Description Description Description Description"/>
 											</Grid>
 										</StackPanel>
@@ -490,7 +490,7 @@
 										<StackPanel>
 											<TextBlock appControls:DialogElement.TextRole="Label" Text="項目標題"/>
 											<Grid ColumnDefinitions="Auto,*">
-												<Image Classes="Dialog_Icon_Description" Source="{StaticResource Image/Icon.Information.Outline}"/>
+												<Image appControls:DialogElement.IconType="DescriptionBelowLabel" Source="{StaticResource Image/Icon.Information.Outline}"/>
 												<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Grid.Column="1" Text="描述文字 Description 描述文字 Description 描述文字 Description 描述文字 Description 描述文字"/>
 											</Grid>
 										</StackPanel>

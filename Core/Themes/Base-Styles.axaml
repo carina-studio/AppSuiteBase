@@ -629,6 +629,55 @@
 	<Style Selector="Grid.Dialog_IconText_Container">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.IconText.Margin}"/>
 	</Style>
+	<Style Selector=":is(Image)[(controls|DialogElement.IconType)=Default]">
+		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Icon.Margin}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Icon.Size}"/>
+	</Style>
+	<Style Selector=":is(Image)[(controls|DialogElement.IconType)=Default]:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<Style Selector=":is(Image)[(controls|DialogElement.IconType)=DescriptionBelowLabel]">
+		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Icon.Size.Description}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Icon.Margin.Description}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Icon.Size.Description}"/>
+	</Style>
+	<Style Selector=":is(Image)[(controls|DialogElement.IconType)=DescriptionBelowLabel]:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<Style Selector=":is(Image)[(controls|DialogElement.IconType)=IconControlButton]">
+		<Setter Property="Height" Value="{DynamicResource Double/Dialog.IconControlButton.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.IconControlButton.Icon.Size}"/>
+	</Style>
+	<Style Selector=":is(Image)[(controls|DialogElement.IconType)=Large]">
+		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Icon.Size.Large}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Icon.Margin.Large}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Icon.Size.Large}"/>
+	</Style>
+	<Style Selector=":is(Image)[(controls|DialogElement.IconType)=Large]:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(Image).Dialog_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -639,9 +688,11 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Icon.Size}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(Image).Dialog_Icon:disabled">
 		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(Image).Dialog_Icon_Description">
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Icon.Size.Description}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -652,9 +703,11 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Icon.Size.Description}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(Image).Dialog_Icon_Description:disabled">
 		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(Image).Dialog_Icon_Large">
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Icon.Size.Large}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -665,9 +718,11 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Icon.Size.Large}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(Image).Dialog_Icon_Large:disabled">
 		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(Image).Dialog_IconControlButton_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.IconControlButton.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -677,6 +732,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.IconControlButton.Icon.Size}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Line.Dialog_Item_Separator">
 		<Setter Property="EndPoint" Value="6,0"/>
 		<Setter Property="Height" Value="1"/>

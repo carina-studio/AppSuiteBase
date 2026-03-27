@@ -24,7 +24,7 @@
 		<Border Classes="Dialog_ControlButtonsPanel">
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
 				<Button Classes="Dialog_IconControlButton" Command="{Binding $parent[Window].Test}">
-					<Image Classes="Dialog_IconControlButton_Icon" Source="{StaticResource Image/Icon.Question}"/>
+					<Image appControls:DialogElement.IconType="IconControlButton" Source="{StaticResource Image/Icon.Question}"/>
 				</Button>
 				<Separator Classes="Dialog_ControlButton_Separator"/>
 				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].GenerateResultCommand}" Content="{DynamicResource String/Common.OK}"/>
@@ -222,7 +222,7 @@
 						<StackPanel Orientation="Horizontal">
 							<Border BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1" VerticalAlignment="Top">
 								<Grid ColumnDefinitions="Auto,*">
-									<Image Classes="Dialog_Icon_Description">
+									<Image appControls:DialogElement.IconType="DescriptionBelowLabel">
 										<DrawingImage>
 											<GeometryDrawing Brush="{DynamicResource Brush/Icon.Dialog.Description}" Geometry="{StaticResource Geometry/Icon.Information.Outline}"/>
 										</DrawingImage>
@@ -237,7 +237,7 @@
 						<StackPanel Orientation="Horizontal">
 							<Border BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1" VerticalAlignment="Top">
 								<Grid ColumnDefinitions="Auto,*">
-									<Image Classes="Dialog_Icon_Description" Source="{StaticResource Image/Icon.Warning.Outline.Colored.Gradient}"/>
+									<Image appControls:DialogElement.IconType="DescriptionBelowLabel" Source="{StaticResource Image/Icon.Warning.Outline.Colored.Gradient}"/>
 									<TextBlock appControls:DialogElement.TextRole="WarningDescriptionBelowLabel" Grid.Column="1" Text="Description (Warning)"/>
 								</Grid>
 							</Border>
@@ -248,7 +248,7 @@
 						<StackPanel Orientation="Horizontal">
 							<Border BorderBrush="{DynamicResource TextControlForeground}" BorderThickness="1" VerticalAlignment="Top">
 								<Grid ColumnDefinitions="Auto,*">
-									<Image Classes="Dialog_Icon_Description" Source="{StaticResource Image/Icon.Error.Outline.Colored}"/>
+									<Image appControls:DialogElement.IconType="DescriptionBelowLabel" Source="{StaticResource Image/Icon.Error.Outline.Colored}"/>
 									<TextBlock appControls:DialogElement.TextRole="ErrorDescriptionBelowLabel" Grid.Column="1" Text="Description (Error)"/>
 								</Grid>
 							</Border>
@@ -352,17 +352,17 @@
 				<Separator appControls:DialogElement.SeparatorType="Default"/>
 
 				<StackPanel Orientation="Horizontal">
-					<Image Classes="Dialog_Icon" Source="{DynamicResource Image/Icon.Information}"/>
+					<Image appControls:DialogElement.IconType="Default" Source="{DynamicResource Image/Icon.Information}"/>
 					<abControls:LinkTextBlock appControls:DialogElement.TextRole="LabelNextToIcon" Text="Icon" Uri="https://github.com/carina-studio" VerticalAlignment="Center"/>
 				</StackPanel>
 				<Separator appControls:DialogElement.SeparatorType="Small"/>
 				<StackPanel IsEnabled="False" Orientation="Horizontal">
-					<Image Classes="Dialog_Icon" Source="{StaticResource Image/Icon.Add}"/>
+					<Image appControls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Add}"/>
 					<abControls:LinkTextBlock appControls:DialogElement.TextRole="LabelNextToIcon" Text="Icon" Uri="https://github.com/carina-studio" VerticalAlignment="Center"/>
 				</StackPanel>
 				<Separator appControls:DialogElement.SeparatorType="Default"/>
 				<StackPanel Orientation="Horizontal">
-					<Image Classes="Dialog_Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
+					<Image appControls:DialogElement.IconType="Default" Source="{DynamicResource Image/Icon.OpenFile}"/>
 					<TextBlock appControls:DialogElement.TextRole="LabelNextToIcon" Text="Icon"/>
 				</StackPanel>
 				<Separator appControls:DialogElement.SeparatorType="Default"/>
@@ -393,7 +393,7 @@
 				<Separator appControls:DialogElement.SeparatorType="Large"/>
 
 				<Grid ColumnDefinitions="Auto,*">
-					<Image Classes="Dialog_Icon_Large" Source="{StaticResource Image/Icon.Information.Colored}" VerticalAlignment="Top"/>
+					<Image appControls:DialogElement.IconType="Large" Source="{StaticResource Image/Icon.Information.Colored}" VerticalAlignment="Top"/>
 					<StackPanel Grid.Column="1">
 						<TextBlock appControls:DialogElement.TextRole="Default" Text="Line1"/>
 						<TextBlock appControls:DialogElement.TextRole="Default" Text="Line2"/>

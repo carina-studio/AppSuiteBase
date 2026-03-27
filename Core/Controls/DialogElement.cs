@@ -9,6 +9,10 @@ namespace CarinaStudio.AppSuite.Controls;
 public static class DialogElement
 {
     /// <summary>
+    /// Define property for type of icon in dialog.
+    /// </summary>
+    public static readonly AttachedProperty<DialogIconType> IconTypeProperty = AvaloniaProperty.RegisterAttached<Avalonia.Controls.Image, DialogIconType>("IconType", typeof(DialogElement), DialogIconType.None);
+    /// <summary>
     /// Define property for type of separator in dialog.
     /// </summary>
     public static readonly AttachedProperty<DialogSeparatorType> SeparatorTypeProperty = AvaloniaProperty.RegisterAttached<Separator, DialogSeparatorType>("SeparatorType", typeof(DialogElement), DialogSeparatorType.None);
@@ -16,6 +20,15 @@ public static class DialogElement
     /// Define property for role of text in dialog.
     /// </summary>
     public static readonly AttachedProperty<DialogTextRole> TextRoleProperty = AvaloniaProperty.RegisterAttached<TextBlock, DialogTextRole>("TextRole", typeof(DialogElement), DialogTextRole.None);
+    
+    
+    /// <summary>
+    /// Get the type of the icon in dialog.
+    /// </summary>
+    /// <param name="image"><see cref="Avalonia.Controls.Image"/> which show the icon.</param>
+    /// <returns>The type of the icon.</returns>
+    public static DialogIconType GetIconType(Avalonia.Controls.Image image) => 
+        image.GetValue(IconTypeProperty);
     
     
     /// <summary>
@@ -37,6 +50,15 @@ public static class DialogElement
     
     
     /// <summary>
+    /// Set the type of the icon in dialog.
+    /// </summary>
+    /// <param name="image"><see cref="Avalonia.Controls.Image"/> which show the icon.</param>
+    /// <param name="type">The type of the icon.</param>
+    public static void SetIconType(Avalonia.Controls.Image image, DialogIconType type) => 
+        image.SetValue(IconTypeProperty, type);
+    
+    
+    /// <summary>
     /// Set the type of the separator in dialog.
     /// </summary>
     /// <param name="separator">The <see cref="Separator"/>.</param>
@@ -52,6 +74,34 @@ public static class DialogElement
     /// <param name="role">The role of the text.</param>
     public static void SetTextRole(TextBlock textBlock, DialogTextRole role) => 
         textBlock.SetValue(TextRoleProperty, role);
+}
+
+
+/// <summary>
+/// Type of icon in dialog.
+/// </summary>
+public enum DialogIconType
+{
+    /// <summary>
+    /// None.
+    /// </summary>
+    None,
+    /// <summary>
+    /// Icon with default size.
+    /// </summary>
+    Default,
+    /// <summary>
+    /// Icon with large size.
+    /// </summary>
+    Large,
+    /// <summary>
+    /// Icon for description below a label.
+    /// </summary>
+    DescriptionBelowLabel,
+    /// <summary>
+    /// Icon in the icon button.
+    /// </summary>
+    IconControlButton,
 }
 
 
