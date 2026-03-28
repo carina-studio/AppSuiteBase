@@ -2899,12 +2899,42 @@
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
 		<Setter Property="VerticalAlignment" Value="Bottom"/>
 	</Style>
+	<Style Selector="Border[(controls|StatusBarElement.Role)=DropDownIcon]">
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.DropDownIcon.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.StatusBar_DropDownIcon">
 		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.DropDownIcon.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
 	</Style>
+	<Style Selector="Button[(controls|StatusBarElement.Role)=Button]">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
+		<Setter Property="CornerRadius" Value="0"/>
+		<Setter Property="Margin" Value="0"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/StatusBar.Button.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="Button[(controls|StatusBarElement.Role)=Button]:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground.Disabled}"/>
+	</Style>
+	<Style Selector="Button[(controls|StatusBarElement.Role)=Button]:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.PointerOver}"/>
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
+	</Style>
+	<Style Selector="Button[(controls|StatusBarElement.Role)=Button]:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.StatusBar_Button">
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
@@ -2915,18 +2945,35 @@
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.StatusBar_Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground.Disabled}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.StatusBar_Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.PointerOver}"/>
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.StatusBar_Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
 	</Style>
+	<Style Selector=":is(Image)[(controls|StatusBarElement.Role)=DropDownIcon]">
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.DropDownIcon.Margin}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
+	</Style>
+	<Style Selector=":is(Image)[(controls|StatusBarElement.Role)=DropDownIcon]:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(Image).StatusBar_DropDownIcon">
 		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -2937,9 +2984,24 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(Image).StatusBar_DropDownIcon:disabled">
 		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
+	<Style Selector=":is(Image)[(controls|StatusBarElement.Role)=Icon]">
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+	</Style>
+	<Style Selector=":is(Image)[(controls|StatusBarElement.Role)=Icon]:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(Image).StatusBar_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -2950,9 +3012,24 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(Image).StatusBar_Icon:disabled">
 		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
+	<Style Selector=":is(Image)[(controls|StatusBarElement.Role)=IconWithLabel]">
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin.WithText}"/>
+		<Setter Property="Stretch" Value="Uniform"/>
+		<Setter Property="StretchDirection" Value="Both"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+	</Style>
+	<Style Selector=":is(Image)[(controls|StatusBarElement.Role)=IconWithLabel]:disabled">
+		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(Image).StatusBar_IconWithText">
 		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Center"/>
@@ -2963,27 +3040,59 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(Image).StatusBar_IconWithText:disabled">
 		<Setter Property="Opacity" Value="{DynamicResource Double/Icon.Opacity.Disabled}"/>
 	</Style>
+	<Style Selector="Panel[(controls|StatusBarElement.Role)=DropDownIcon]">
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.DropDownIcon.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Panel.StatusBar_DropDownIcon">
 		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.DropDownIcon.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.DropDownIcon.Size}"/>
 	</Style>
+	<Style Selector="Panel[(controls|StatusBarElement.Role)=Icon]">
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Panel.StatusBar_Icon">
 		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 	</Style>
+	<Style Selector="Panel[(controls|StatusBarElement.Role)=IconWithLabel]">
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin.WithText}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Panel.StatusBar_IconWithText">
 		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin.WithText}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 	</Style>
+	<Style Selector="abControls|ProgressRing[(controls|StatusBarElement.Role)=Icon]">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin}"/>
+		<Setter Property="RingThickness" Value="{DynamicResource Double/StatusBar.ProgressRing.RingThickness}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="abControls|ProgressRing.StatusBar_ProgressRing">
 		<Setter Property="Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
@@ -2993,6 +3102,16 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 	</Style>
+	<Style Selector="abControls|ProgressRing[(controls|StatusBarElement.Role)=IconWithLabel]">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+		<Setter Property="HorizontalAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Icon.Margin.WithText}"/>
+		<Setter Property="RingThickness" Value="{DynamicResource Double/StatusBar.ProgressRing.RingThickness}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="abControls|ProgressRing.StatusBar_ProgressRingWithText">
 		<Setter Property="Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
@@ -3002,6 +3121,29 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/StatusBar.Icon.Size}"/>
 	</Style>
+	<Style Selector="RepeatButton[(controls|StatusBarElement.Role)=Button]">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
+		<Setter Property="CornerRadius" Value="0"/>
+		<Setter Property="Margin" Value="0"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/StatusBar.Button.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="RepeatButton[(controls|StatusBarElement.Role)=Button]:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground.Disabled}"/>
+	</Style>
+	<Style Selector="RepeatButton[(controls|StatusBarElement.Role)=Button]:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.PointerOver}"/>
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
+	</Style>
+	<Style Selector="RepeatButton[(controls|StatusBarElement.Role)=Button]:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="RepeatButton.StatusBar_RepeatButton">
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
@@ -3012,26 +3154,68 @@
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="RepeatButton.StatusBar_RepeatButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground.Disabled}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="RepeatButton.StatusBar_RepeatButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.PointerOver}"/>
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="RepeatButton.StatusBar_RepeatButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
 	</Style>
+	<Style Selector="Separator[(controls|StatusBarElement.Role)=Separator]">
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="Width" Value="20"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Separator.StatusBar_Separator">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="Width" Value="20"/>
 	</Style>
+	<Style Selector="TextBlock[(controls|StatusBarElement.Role)=Label]">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Item.Margin}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="TextBlock.StatusBar_TextBlock">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/StatusBar.Item.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="ToggleButton[(controls|StatusBarElement.Role)=Button]">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
+		<Setter Property="CornerRadius" Value="0"/>
+		<Setter Property="Margin" Value="0"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/StatusBar.Button.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="ToggleButton[(controls|StatusBarElement.Role)=Button]:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground.Disabled}"/>
+	</Style>
+	<Style Selector="ToggleButton[(controls|StatusBarElement.Role)=Button]:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.PointerOver}"/>
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
+	</Style>
+	<Style Selector="ToggleButton[(controls|StatusBarElement.Role)=Button]:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
+	</Style>
+	<Style Selector="ToggleButton[(controls|StatusBarElement.Role)=Button]:checked /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.ToggleButton.Background.Checked}"/>
+	</Style>
+	<Style Selector="ToggleButton[(controls|StatusBarElement.Role)=Button]:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="ToggleButton.StatusBar_ToggleButton">
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
@@ -3042,21 +3226,26 @@
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="ToggleButton.StatusBar_ToggleButton:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground.Disabled}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="ToggleButton.StatusBar_ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.PointerOver}"/>
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="ToggleButton.StatusBar_ToggleButton:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource Brush/StatusBar.Foreground}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="ToggleButton.StatusBar_ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.ToggleButton.Background.Checked}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="ToggleButton.StatusBar_ToggleButton:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource Brush/StatusBar.Button.Background.Pressed}"/>
 	</Style>

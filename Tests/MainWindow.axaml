@@ -81,49 +81,49 @@
 		<Panel DockPanel.Dock="Bottom">
 			<Border Classes="StatusBar">
 				<StackPanel Orientation="Horizontal">
-					<TextBlock Classes="StatusBar_TextBlock" Text="{DynamicResource String/Common.OK}"/>
-					<Separator Classes="StatusBar_Separator"/>
-					<TextBlock Classes="StatusBar_TextBlock" Text="{DynamicResource String/Common.Cancel}"/>
+					<TextBlock appControls:StatusBarElement.Role="Label" Text="{DynamicResource String/Common.OK}"/>
+					<Separator appControls:StatusBarElement.Role="Separator"/>
+					<TextBlock appControls:StatusBarElement.Role="Label" Text="{DynamicResource String/Common.Cancel}"/>
 
-					<Separator Classes="StatusBar_Separator"/>
-					<Image Classes="StatusBar_Icon">
+					<Separator appControls:StatusBarElement.Role="Separator"/>
+					<Image appControls:StatusBarElement.Role="Icon">
 						<DrawingImage>
 							<GeometryDrawing Brush="{StaticResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.File.Text.Outline}"/>
 						</DrawingImage>
 					</Image>
 
-					<Separator Classes="StatusBar_Separator"/>
-					<Image Classes="StatusBar_IconWithText">
+					<Separator appControls:StatusBarElement.Role="Separator"/>
+					<Image appControls:StatusBarElement.Role="IconWithLabel">
 						<DrawingImage>
 							<GeometryDrawing Brush="{StaticResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.Folder.Outline}"/>
 						</DrawingImage>
 					</Image>
-					<TextBlock Classes="StatusBar_TextBlock" Text="Text of icon"/>
+					<TextBlock appControls:StatusBarElement.Role="Label" Text="Text of icon"/>
 					
-					<Separator Classes="StatusBar_Separator"/>
-					<abControls:ProgressRing Classes="StatusBar_ProgressRingWithText" IsIndeterminate="True"/>
-					<TextBlock Classes="StatusBar_TextBlock" Text="Text of progress"/>
+					<Separator appControls:StatusBarElement.Role="Separator"/>
+					<abControls:ProgressRing appControls:StatusBarElement.Role="IconWithLabel" IsIndeterminate="True"/>
+					<TextBlock appControls:StatusBarElement.Role="Label" Text="Text of progress"/>
 
-					<Separator Classes="StatusBar_Separator"/>
-					<TextBlock Classes="StatusBar_TextBlock" Text="Text with arrow"/>
-					<Image Classes="StatusBar_DropDownIcon">
+					<Separator appControls:StatusBarElement.Role="Separator"/>
+					<TextBlock appControls:StatusBarElement.Role="Label" Text="Text with arrow"/>
+					<Image appControls:StatusBarElement.Role="DropDownIcon">
 						<DrawingImage>
 							<GeometryDrawing Brush="{StaticResource Brush/StatusBar.Foreground}" Geometry="{DynamicResource Geometry/Icon.DropDown.Up}"/>
 						</DrawingImage>
 					</Image>
 
-					<Separator Classes="StatusBar_Separator"/>
-					<Button Classes="StatusBar_Button">Button</Button>
-					<Button Classes="StatusBar_Button" IsEnabled="False">Button</Button>
+					<Separator appControls:StatusBarElement.Role="Separator"/>
+					<Button appControls:StatusBarElement.Role="Button">Button</Button>
+					<Button appControls:StatusBarElement.Role="Button" IsEnabled="False">Button</Button>
 
-					<Separator Classes="StatusBar_Separator"/>
-					<ToggleButton Classes="StatusBar_ToggleButton">ToggleButton</ToggleButton>
-					<ToggleButton Classes="StatusBar_ToggleButton" IsEnabled="False">ToggleButton</ToggleButton>
-					<ToggleButton Classes="StatusBar_ToggleButton" IsChecked="True" IsEnabled="False">ToggleButton</ToggleButton>
+					<Separator appControls:StatusBarElement.Role="Separator"/>
+					<ToggleButton appControls:StatusBarElement.Role="Button">ToggleButton</ToggleButton>
+					<ToggleButton appControls:StatusBarElement.Role="Button" IsEnabled="False">ToggleButton</ToggleButton>
+					<ToggleButton appControls:StatusBarElement.Role="Button" IsChecked="True" IsEnabled="False">ToggleButton</ToggleButton>
 
-					<Separator Classes="StatusBar_Separator"/>
-					<RepeatButton Classes="StatusBar_RepeatButton">RepeatButton</RepeatButton>
-					<RepeatButton Classes="StatusBar_RepeatButton" IsEnabled="False">RepeatButton</RepeatButton>
+					<Separator appControls:StatusBarElement.Role="Separator"/>
+					<RepeatButton appControls:StatusBarElement.Role="Button">RepeatButton</RepeatButton>
+					<RepeatButton appControls:StatusBarElement.Role="Button" IsEnabled="False">RepeatButton</RepeatButton>
 				</StackPanel>
 			</Border>
 			<Line Classes="Shadow" Stroke="{DynamicResource Brush/StatusBar.Border}" VerticalAlignment="Top"/>
