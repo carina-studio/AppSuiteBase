@@ -42,7 +42,7 @@
 			            Grid.Row="1"
 			            IsVisible="{Binding #dialog.IsCancellable}">
 				<Separator controls:DialogElement.SeparatorType="Large"/>
-				<Button Classes="Dialog_ControlButton" 
+				<Button controls:DialogElement.ButtonRole="Control"
 				        Command="{Binding #dialog.Cancel}"
 				        Content="{Binding #dialog.CancelButtonText}"
 				        HorizontalAlignment="Center"

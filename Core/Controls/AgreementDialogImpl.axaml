@@ -19,16 +19,16 @@
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Agree}" Content="{Binding #dialog.OKButtonText}" IsVisible="{Binding $parent[Window].IsAgreedBefore}"/>
-				<Button Name="agreeButton" Classes="Dialog_AccentControlButton" Command="{Binding $parent[Window].Agree}" Content="{DynamicResource String/Common.Agree}" IsVisible="{Binding !#dialog.IsAgreedBefore}"/>
-				<Button Classes="Dialog_AccentControlButton" Command="{Binding $parent[Window].Decline}" Content="{DynamicResource String/Common.Decline}" IsVisible="{Binding !#dialog.IsAgreedBefore}"/>
+				<Button controls:DialogElement.ButtonRole="Control" Command="{Binding $parent[Window].Agree}" Content="{Binding #dialog.OKButtonText}" IsVisible="{Binding $parent[Window].IsAgreedBefore}"/>
+				<Button Name="agreeButton" controls:DialogElement.ButtonRole="ControlWithAccentColor" Command="{Binding $parent[Window].Agree}" Content="{DynamicResource String/Common.Agree}" IsVisible="{Binding !#dialog.IsAgreedBefore}"/>
+				<Button controls:DialogElement.ButtonRole="ControlWithAccentColor" Command="{Binding $parent[Window].Decline}" Content="{DynamicResource String/Common.Decline}" IsVisible="{Binding !#dialog.IsAgreedBefore}"/>
 			</StackPanel>
 		</Border>
 
 		<!-- Content -->
 		<DockPanel>
 
-			<!-- Tool bar -->
+			<!-- Toolbar -->
 			<Border Classes="ToolBar" DockPanel.Dock="Top">
 				<Grid>
 					<Grid.ColumnDefinitions>

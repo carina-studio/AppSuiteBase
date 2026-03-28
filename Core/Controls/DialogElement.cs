@@ -9,6 +9,10 @@ namespace CarinaStudio.AppSuite.Controls;
 public static class DialogElement
 {
     /// <summary>
+    /// Define property for role of button in dialog.
+    /// </summary>
+    public static readonly AttachedProperty<DialogButtonRole> ButtonRoleProperty = AvaloniaProperty.RegisterAttached<Button, DialogButtonRole>("ButtonRole", typeof(DialogElement), DialogButtonRole.None);
+    /// <summary>
     /// Define property for type of icon in dialog.
     /// </summary>
     public static readonly AttachedProperty<DialogIconType> IconTypeProperty = AvaloniaProperty.RegisterAttached<Avalonia.Controls.Image, DialogIconType>("IconType", typeof(DialogElement), DialogIconType.None);
@@ -24,6 +28,15 @@ public static class DialogElement
     /// Define property for role of text in dialog.
     /// </summary>
     public static readonly AttachedProperty<DialogTextRole> TextRoleProperty = AvaloniaProperty.RegisterAttached<TextBlock, DialogTextRole>("TextRole", typeof(DialogElement), DialogTextRole.None);
+    
+    
+    /// <summary>
+    /// Get the role of the button in dialog.
+    /// </summary>
+    /// <param name="button">The button.</param>
+    /// <returns>The role of the button</returns>
+    public static DialogButtonRole GetButtonRole(Button button) => 
+        button.GetValue(ButtonRoleProperty);
     
     
     /// <summary>
@@ -60,6 +73,15 @@ public static class DialogElement
     /// <returns>The role of the text.</returns>
     public static DialogTextRole GetTextRole(TextBlock textBlock) => 
         textBlock.GetValue(TextRoleProperty);
+    
+    
+    /// <summary>
+    /// Set the role of the button in dialog.
+    /// </summary>
+    /// <param name="button">The button.</param>
+    /// <param name="role">The role of the button.</param>
+    public static void SetButtonRole(Button button, DialogButtonRole role) => 
+        button.SetValue(ButtonRoleProperty, role);
     
     
     /// <summary>
@@ -100,6 +122,38 @@ public static class DialogElement
 
 
 /// <summary>
+/// Role of button in dialog.
+/// </summary>
+public enum DialogButtonRole
+{
+    /// <summary>
+    /// None.
+    /// </summary>
+    None,
+    /// <summary>
+    /// Control button.
+    /// </summary>
+    Control,
+    /// <summary>
+    /// Control button with icon.
+    /// </summary>
+    IconControl,
+    /// <summary>
+    /// Control button with accent color.
+    /// </summary>
+    ControlWithAccentColor,
+    /// <summary>
+    /// Input of a dialog item.
+    /// </summary>
+    ItemInput,
+    /// <summary>
+    /// To show more information.
+    /// </summary>
+    ShowInformation,
+}
+
+
+/// <summary>
 /// Type of icon in dialog.
 /// </summary>
 public enum DialogIconType
@@ -136,6 +190,10 @@ public enum DialogSeparatorType
     /// None.
     /// </summary>
     None,
+    /// <summary>
+    /// Separator between control buttons.
+    /// </summary>
+    ControlButton,
     /// <summary>
     /// Separator between items.
     /// </summary>

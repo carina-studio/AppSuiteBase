@@ -18,12 +18,25 @@
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
-				<Button Classes="Dialog_ControlButton" Command="{Binding CheckForUpdateCommand}" Content="{asXaml:StringResource ApplicationUpdateDialog.CheckForUpdate}" IsEnabled="{Binding !IsPreparingForUpdate}"/>
+				<Button controls:DialogElement.ButtonRole="Control" 
+				        Command="{Binding CheckForUpdateCommand}" 
+				        Content="{asXaml:StringResource ApplicationUpdateDialog.CheckForUpdate}" 
+				        IsEnabled="{Binding !IsPreparingForUpdate}"/>
 				<Panel IsVisible="{Binding !IsLatestVersion}">
-					<Button Name="downloadUpdatePackageButton" Classes="Dialog_AccentControlButton" Command="{Binding #dialog.DownloadUpdatePackage}" Content="{asXaml:StringResource ApplicationUpdateDialog.DownloadUpdatePackage}" IsVisible="{Binding !IsAutoUpdateSupported}"/>
-					<Button Name="startUpdatingButton" Classes="Dialog_AccentControlButton" Command="{Binding StartUpdatingCommand}" Content="{asXaml:StringResource ApplicationUpdateDialog.StartUpdating}" IsVisible="{Binding IsAutoUpdateSupported}"/>
+					<Button Name="downloadUpdatePackageButton" 
+					        controls:DialogElement.ButtonRole="ControlWithAccentColor"
+					        Command="{Binding #dialog.DownloadUpdatePackage}" 
+					        Content="{asXaml:StringResource ApplicationUpdateDialog.DownloadUpdatePackage}" 
+					        IsVisible="{Binding !IsAutoUpdateSupported}"/>
+					<Button Name="startUpdatingButton" 
+					        controls:DialogElement.ButtonRole="ControlWithAccentColor"
+					        Command="{Binding StartUpdatingCommand}" 
+					        Content="{asXaml:StringResource ApplicationUpdateDialog.StartUpdating}" 
+					        IsVisible="{Binding IsAutoUpdateSupported}"/>
 				</Panel>
-				<Button Classes="Dialog_ControlButton" Command="{Binding #dialog.Close}" Content="{Binding #dialog.CancelButtonText}"/>
+				<Button controls:DialogElement.ButtonRole="Control" 
+				        Command="{Binding #dialog.Close}" 
+				        Content="{Binding #dialog.CancelButtonText}"/>
 			</StackPanel>
 		</Border>
 

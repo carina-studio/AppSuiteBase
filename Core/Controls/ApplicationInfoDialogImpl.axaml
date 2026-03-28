@@ -41,11 +41,11 @@
 		<Border x:CompileBindings="False" Classes="Dialog_ControlButtonsPanel">
 			<Grid Classes="Dialog_ControlButtonsPanel" ColumnDefinitions="Auto,*">
 				<StackPanel Classes="Dialog_ControlButtonsPanel">
-					<Button Classes="Dialog_ControlButton" Command="{Binding #window.ShowAppUpdateDialog}" Content="{xaml:StringResource ApplicationInfoDialog.ShowAppUpdateDialog}"/>
+					<Button controls:DialogElement.ButtonRole="Control" Command="{Binding #window.ShowAppUpdateDialog}" Content="{xaml:StringResource ApplicationInfoDialog.ShowAppUpdateDialog}"/>
 					<Separator controls:DialogElement.SeparatorType="Small"/>
 				</StackPanel>
 				<Panel Classes="Dialog_ControlButtonsPanel" Grid.Column="1">
-					<Button Classes="Dialog_ControlButton" Command="{Binding #window.Close}" Content="{Binding #window.OKButtonText}"/>
+					<Button controls:DialogElement.ButtonRole="Control" Command="{Binding #window.Close}" Content="{Binding #window.OKButtonText}"/>
 				</Panel>
 			</Grid>
 		</Border>

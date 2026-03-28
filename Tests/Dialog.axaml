@@ -23,12 +23,12 @@
 
 		<Border Classes="Dialog_ControlButtonsPanel">
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
-				<Button Classes="Dialog_IconControlButton" Command="{Binding $parent[Window].Test}">
+				<Button appControls:DialogElement.ButtonRole="IconControl" Command="{Binding $parent[Window].Test}">
 					<Image appControls:DialogElement.IconType="IconControlButton" Source="{StaticResource Image/Icon.Question}"/>
 				</Button>
-				<Separator Classes="Dialog_ControlButton_Separator"/>
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].GenerateResultCommand}" Content="{DynamicResource String/Common.OK}"/>
-				<Button Classes="Dialog_ControlButton" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.Cancel}"/>
+				<Separator appControls:DialogElement.SeparatorType="ControlButton"/>
+				<Button appControls:DialogElement.ButtonRole="Control" Command="{Binding $parent[Window].GenerateResultCommand}" Content="{DynamicResource String/Common.OK}"/>
+				<Button appControls:DialogElement.ButtonRole="Control" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.Cancel}"/>
 			</StackPanel>
 		</Border>
 
@@ -57,7 +57,7 @@
 							<StackPanel>
 								<StackPanel Orientation="Horizontal">
 									<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
-									<Button Classes="Dialog_Info_Button">
+									<Button appControls:DialogElement.ButtonRole="ShowInformation">
 										<Image Classes="Icon" Source="{DynamicResource Image/Icon.Information.Outline}"/>
 									</Button>
 								</StackPanel>
@@ -83,7 +83,7 @@
 							<StackPanel>
 								<WrapPanel Background="Gray">
 									<TextBlock appControls:DialogElement.TextRole="Label" Text="Label with looooooooooooooooooooooog text"/>
-									<Button Classes="Dialog_Info_Button">
+									<Button appControls:DialogElement.ButtonRole="ShowInformation">
 										<Image Classes="Icon" Source="{DynamicResource Image/Icon.Question.Outline}"/>
 									</Button>
 								</WrapPanel>

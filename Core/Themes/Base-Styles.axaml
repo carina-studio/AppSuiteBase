@@ -506,6 +506,34 @@
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="Button[(controls|DialogElement.ButtonRole)=ControlWithAccentColor]">
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ControlButton.Margin}"/>
+		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.ControlButton.MinWidth}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ControlButton.Padding}"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<Style Selector="Button[(controls|DialogElement.ButtonRole)=ControlWithAccentColor]:focus /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource AccentButtonBackground}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource AccentButtonBorderBrush}" />
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource AccentButtonForeground}" />
+	</Style>
+	<Style Selector="Button[(controls|DialogElement.ButtonRole)=ControlWithAccentColor]:focus:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource AccentButtonBackgroundDisabled}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource AccentButtonBorderBrush}" />
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource AccentButtonForeground}" />
+	</Style>
+	<Style Selector="Button[(controls|DialogElement.ButtonRole)=ControlWithAccentColor]:focus:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource AccentButtonBackgroundPointerOver}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource AccentButtonBorderBrushPointerOver}" />
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource AccentButtonForegroundPointerOver}" />
+	</Style>
+	<Style Selector="Button[(controls|DialogElement.ButtonRole)=ControlWithAccentColor]:focus:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundPressed}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushPressed}" />
+		<Setter Property="TextBlock.Foreground" Value="{DynamicResource ButtonForegroundPressed}" />
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.Dialog_AccentControlButton">
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ControlButton.Margin}"/>
@@ -513,26 +541,39 @@
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ControlButton.Padding}"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.Dialog_AccentControlButton:focus /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource AccentButtonBackground}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource AccentButtonBorderBrush}" />
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource AccentButtonForeground}" />
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.Dialog_AccentControlButton:focus:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource AccentButtonBackgroundDisabled}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource AccentButtonBorderBrush}" />
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource AccentButtonForeground}" />
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.Dialog_AccentControlButton:focus:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource AccentButtonBackgroundPointerOver}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource AccentButtonBorderBrushPointerOver}" />
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource AccentButtonForegroundPointerOver}" />
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.Dialog_AccentControlButton:focus:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource ButtonBackgroundPressed}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushPressed}" />
 		<Setter Property="TextBlock.Foreground" Value="{DynamicResource ButtonForegroundPressed}" />
 	</Style>
+	<Style Selector="Button[(controls|DialogElement.ButtonRole)=Control]">
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ControlButton.Margin}"/>
+		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.ControlButton.MinWidth}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ControlButton.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.Dialog_ControlButton">
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ControlButton.Margin}"/>
@@ -541,6 +582,14 @@
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="Button[(controls|DialogElement.ButtonRole)=IconControl]">
+		<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ControlButton.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.IconControlButton.Padding}"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="VerticalContentAlignment" Value="Center"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.Dialog_IconControlButton">
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ControlButton.Margin}"/>
@@ -548,6 +597,27 @@
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="Button[(controls|DialogElement.ButtonRole)=ShowInformation]">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="Cursor" Value="Hand"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Label}"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.InfoButton.Margin}"/>
+		<Setter Property="Padding" Value="0"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Label}"/>
+	</Style>
+	<Style Selector="Button[(controls|DialogElement.ButtonRole)=ShowInformation]:disabled /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+	</Style>
+	<Style Selector="Button[(controls|DialogElement.ButtonRole)=ShowInformation]:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+	</Style>
+	<Style Selector="Button[(controls|DialogElement.ButtonRole)=ShowInformation]:pressed /template/ ContentPresenter#PART_ContentPresenter">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.Dialog_Info_Button">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
@@ -559,12 +629,15 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Label}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.Dialog_Info_Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.Dialog_Info_Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.Dialog_Info_Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
@@ -855,6 +928,10 @@
 		<Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 	</Style>
+	<Style Selector="Separator[(controls|DialogElement.SeparatorType)=ControlButton]">
+		<Setter Property="Background" Value="{x:Null}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.ControlButton.Separator.Width}"/>
+	</Style>
 	<Style Selector="Separator[(controls|DialogElement.SeparatorType)=Default]">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height}"/>
@@ -899,6 +976,7 @@
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height.Small}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width.Small}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Separator.Dialog_ControlButton_Separator">
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.ControlButton.Separator.Width}"/>

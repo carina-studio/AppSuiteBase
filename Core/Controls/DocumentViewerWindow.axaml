@@ -19,7 +19,7 @@
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
-				<Button Classes="Dialog_ControlButton" Command="{Binding #window.Close}" Content="{Binding #window.OKButtonText}"/>
+				<Button controls:DialogElement.ButtonRole="Control" Command="{Binding #window.Close}" Content="{Binding #window.OKButtonText}"/>
 			</StackPanel>
 		</Border>
 
