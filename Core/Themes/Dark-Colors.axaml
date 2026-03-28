@@ -100,7 +100,14 @@
 	<!-- ThemeModeTest -->
 	<Color x:Key="Color/ThemeModeTest.Color">#7faabbcc</Color>
 
-	<!-- ToolBar -->
+	<!-- Toolbar -->
+	<Color x:Key="Color/Toolbar.Background">#303030</Color>
+	<Color x:Key="Color/Toolbar.Button.Background.PointerOver">#404040</Color>
+	<Color x:Key="Color/Toolbar.Button.Background.Pressed">#171717</Color>
+	<Color x:Key="Color/Toolbar.Button.Background.Transparent">#00404040</Color>
+	<Color x:Key="Color/Toolbar.Border">#404040</Color>
+	<Color x:Key="Color/Toolbar.TextBox.Background">#292929</Color>
+	<!-- Deprecated -->
 	<Color x:Key="Color/ToolBar.Background">#303030</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#404040</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#171717</Color>

@@ -951,7 +951,7 @@
 				<GeometryDrawing.Pen>
 					<Pen Brush="{DynamicResource Brush/Icon.WithOpacity.0.5}"/>
 				</GeometryDrawing.Pen>
-				<EllipseGeometry RadiusX="{DynamicResource Double/ToolBar.NotificationIndicator.Size}" RadiusY="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
+				<EllipseGeometry RadiusX="{DynamicResource Double/Toolbar.NotificationIndicator.Size}" RadiusY="{DynamicResource Double/Toolbar.NotificationIndicator.Size}"/>
 			</GeometryDrawing>
 		</DrawingGroup>
 	</DrawingImage>
@@ -961,7 +961,7 @@
 				<GeometryDrawing.Pen>
 					<Pen Brush="{DynamicResource Brush/Icon.WithOpacity.0.5}"/>
 				</GeometryDrawing.Pen>
-				<EllipseGeometry RadiusX="{DynamicResource Double/ToolBar.NotificationIndicator.Size}" RadiusY="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
+				<EllipseGeometry RadiusX="{DynamicResource Double/Toolbar.NotificationIndicator.Size}" RadiusY="{DynamicResource Double/Toolbar.NotificationIndicator.Size}"/>
 			</GeometryDrawing>
 		</DrawingGroup>
 	</DrawingImage>
@@ -971,7 +971,7 @@
 				<GeometryDrawing.Pen>
 					<Pen Brush="{DynamicResource Brush/Icon.WithOpacity.0.5}"/>
 				</GeometryDrawing.Pen>
-				<EllipseGeometry RadiusX="{DynamicResource Double/ToolBar.NotificationIndicator.Size}" RadiusY="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
+				<EllipseGeometry RadiusX="{DynamicResource Double/Toolbar.NotificationIndicator.Size}" RadiusY="{DynamicResource Double/Toolbar.NotificationIndicator.Size}"/>
 			</GeometryDrawing>
 		</DrawingGroup>
 	</DrawingImage>
@@ -981,7 +981,7 @@
 				<GeometryDrawing.Pen>
 					<Pen Brush="{DynamicResource Brush/Icon.WithOpacity.0.5}"/>
 				</GeometryDrawing.Pen>
-				<EllipseGeometry RadiusX="{DynamicResource Double/ToolBar.NotificationIndicator.Size}" RadiusY="{DynamicResource Double/ToolBar.NotificationIndicator.Size}"/>
+				<EllipseGeometry RadiusX="{DynamicResource Double/Toolbar.NotificationIndicator.Size}" RadiusY="{DynamicResource Double/Toolbar.NotificationIndicator.Size}"/>
 			</GeometryDrawing>
 		</DrawingGroup>
 	</DrawingImage>

@@ -437,7 +437,35 @@
 	<GridLength x:Key="ToggleSwitchPreContentMargin">1</GridLength>
 	<Thickness x:Key="ToggleSwitchTopHeaderMargin">0</Thickness>
 
-	<!-- ToolBar -->
+	<!-- Toolbar -->
+	<sys:Double x:Key="Double/Toolbar.DropDownButton.Icon.Size">8</sys:Double>
+	<sys:Double x:Key="Double/Toolbar.Button.Size">32</sys:Double>
+	<sys:Double x:Key="Double/Toolbar.Button.Size.Small">24</sys:Double>
+	<sys:Double x:Key="Double/Toolbar.Button.Size.WithDropDownIcon">47</sys:Double> <!-- Toolbar.Button.Size + Toolbar.Button.DropDownIcon.Margin + Toolbar.DropDownButton.Icon.Size -->
+	<sys:Double x:Key="Double/Toolbar.MinSize">39</sys:Double> <!-- Button size + Padding + Border -->
+	<sys:Double x:Key="Double/Toolbar.MinSize.Small">31</sys:Double> <!-- Button size + Padding + Border -->
+	<sys:Double x:Key="Double/Toolbar.NotificationIndicator.Size">8</sys:Double>
+	<sys:Double x:Key="Double/Toolbar.NotificationIndicator.Offset">3</sys:Double>
+	<sys:Double x:Key="Double/Toolbar.ProgressRing.RingThickness">3</sys:Double>
+	<sys:Double x:Key="Double/Toolbar.SplitButton.SecondaryButton.MinWidth">16</sys:Double> <!-- Toolbar.DropDownButton.Icon.Size + Toolbar.DropDownButton.Padding * 2 -->
+	<GridLength x:Key="GridLength/Toolbar.Button.DropDownIcon.Margin">7</GridLength>
+	<Thickness x:Key="Thickness/Toolbar.Button.Margin">2</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.Button.Margin.Small">1</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.Button.Margin.WithDropDownButton">2,2,0,2</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.Button.Padding">8</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.Button.Padding.Small">5</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.DropDownButton.Margin">0,2,2,2</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.DropDownButton.Padding">4</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.Item.Margin">2</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.Padding">3</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.Padding.Small">3</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.Separator.Margin.Horizontal">6,3,6,3</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.Separator.Margin.Horizontal.Small">4,2,4,2</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.Separator.Margin.Vertical">3,6,3,6</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.Separator.Margin.Vertical.Small">2,4,2,4</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.TextBlock.Margin">2</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.TextBlock.Margin.Small">1</Thickness>
+	<!-- Deprecated -->
 	<sys:Double x:Key="Double/ToolBar.DropDownButton.Icon.Size">8</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.Button.Size">32</sys:Double>
 	<sys:Double x:Key="Double/ToolBar.Button.Size.Small">24</sys:Double>

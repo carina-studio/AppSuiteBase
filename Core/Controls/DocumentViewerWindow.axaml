@@ -27,7 +27,7 @@
 		<DockPanel>
 
 			<!-- Toolbar -->
-			<Border Classes="ToolBar" DockPanel.Dock="Top" IsVisible="{Binding #window.Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+			<Border Classes="Toolbar" DockPanel.Dock="Top" IsVisible="{Binding #window.Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
 				<Grid>
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="{StaticResource GridLength/DocumentViewerWindow.ToolBar.LeftPadding}"/>
@@ -36,7 +36,7 @@
 					</Grid.ColumnDefinitions>
 
 					<!-- Message -->
-					<TextBlock Classes="ToolBar_TextBlock" Text="{Binding #window.Message}" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center"/>
+					<TextBlock controls:ToolbarElement.Role="Label" Text="{Binding #window.Message}" Grid.Column="1" TextWrapping="Wrap" VerticalAlignment="Center"/>
 				
 				</Grid>
 			</Border>

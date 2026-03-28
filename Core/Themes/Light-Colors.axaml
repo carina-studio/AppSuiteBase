@@ -122,7 +122,14 @@
 	<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedDisabled" Color="{DynamicResource SystemAccentColorDark1}" Opacity="0.5"/>
 	<SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{DynamicResource SystemAccentColorDark2}"/>
 
-	<!-- ToolBar -->
+	<!-- Toolbar -->
+	<Color x:Key="Color/Toolbar.Background">#f7f7f7</Color>
+	<Color x:Key="Color/Toolbar.Button.Background.PointerOver">#e0e0e0</Color>
+	<Color x:Key="Color/Toolbar.Button.Background.Pressed">#d7d7d7</Color>
+	<Color x:Key="Color/Toolbar.Button.Background.Transparent">#00d7d7d7</Color>
+	<Color x:Key="Color/Toolbar.Border">#e0e0e0</Color>
+	<Color x:Key="Color/Toolbar.TextBox.Background">#fbfbfb</Color>
+	<!-- Deprecated -->
 	<Color x:Key="Color/ToolBar.Background">#f7f7f7</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#e0e0e0</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#d7d7d7</Color>
