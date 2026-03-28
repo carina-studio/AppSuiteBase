@@ -42,13 +42,13 @@
 
 						<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 						<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description 1"/>
-						<TextBox Classes="Dialog_Item_TextBox"/>
+						<TextBox appControls:DialogElement.IsDialogItemInput="True"/>
 						<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description 2"/>
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 
 						<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 						<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Selectable description 1"/>
-						<ToggleSwitch Classes="Dialog_Item_ToggleSwitch"/>
+						<ToggleSwitch appControls:DialogElement.IsDialogItemInput="True"/>
 						<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Selectable description 2"/>
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 
@@ -63,7 +63,7 @@
 								</StackPanel>
 								<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
-							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch"/>
+							<ToggleSwitch appControls:DialogElement.IsDialogItemInput="True"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
@@ -71,12 +71,12 @@
 								<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 								<abControls:LinkTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" IsVisible="{Binding #toggleSwitch1.IsChecked}" Text="Google" Uri="http://www.google.com/"/>
 							</StackPanel>
-							<ToggleSwitch Name="toggleSwitch1" Classes="Dialog_Item_ToggleSwitch" IsChecked="True"/>
+							<ToggleSwitch Name="toggleSwitch1" appControls:DialogElement.IsDialogItemInput="True" IsChecked="True"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
 							<TextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
-							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch" IsEnabled="False"/>
+							<ToggleSwitch appControls:DialogElement.IsDialogItemInput="True" IsEnabled="False"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
@@ -89,7 +89,7 @@
 								</WrapPanel>
 								<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description with looooooooooooooooooooooog text"/>
 							</StackPanel>
-							<ToggleSwitch Classes="Dialog_Item_ToggleSwitch"/>
+							<ToggleSwitch appControls:DialogElement.IsDialogItemInput="True"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 
@@ -99,7 +99,7 @@
 								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
-							<ComboBox Classes="Dialog_Item_ComboBox" SelectedIndex="1">
+							<ComboBox appControls:DialogElement.IsDialogItemInput="True" SelectedIndex="1">
 								<ComboBoxItem>Item 1</ComboBoxItem>
 								<ComboBoxItem>Item 2</ComboBoxItem>
 								<ComboBoxItem>Item 3___</ComboBoxItem>
@@ -112,7 +112,7 @@
 								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
-							<ComboBox Classes="Dialog_Item_ComboBox" IsEnabled="False" SelectedIndex="1">
+							<ComboBox appControls:DialogElement.IsDialogItemInput="True" IsEnabled="False" SelectedIndex="1">
 								<ComboBoxItem>Item 1</ComboBoxItem>
 								<ComboBoxItem>Item 2</ComboBoxItem>
 								<ComboBoxItem>Item 3___</ComboBoxItem>
@@ -127,7 +127,7 @@
 								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
-							<TextBox Classes="Dialog_Item_TextBox"/>
+							<TextBox appControls:DialogElement.IsDialogItemInput="True"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
@@ -135,7 +135,7 @@
 								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
-							<TextBox Classes="Dialog_Item_TextBox"/>
+							<TextBox appControls:DialogElement.IsDialogItemInput="True"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
@@ -147,7 +147,7 @@
 								<ToggleButton Name="isEnabledButton" Content="IsEnabled" Grid.Column="1" IsChecked="{Binding #itemTextBox1.IsEnabled, Mode=TwoWay}"/>
 								<Separator appControls:DialogElement.SeparatorType="Small" Grid.Column="2"/>
 							</Grid>
-							<TextBox Name="itemTextBox1" Classes="Dialog_Item_TextBox" IsEnabled="False" Text="Text"/>
+							<TextBox Name="itemTextBox1" appControls:DialogElement.IsDialogItemInput="True" IsEnabled="False" Text="Text"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
@@ -155,24 +155,24 @@
 								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
-							<TextBox Classes="Dialog_Item_TextBox" Watermark="Watermark"/>
+							<TextBox appControls:DialogElement.IsDialogItemInput="True" Watermark="Watermark"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="InnerItem"/>
-						<TextBox Classes="Dialog_Item_TextBox" Height="100" TextAlignment="Left"/>
+						<TextBox appControls:DialogElement.IsDialogItemInput="True" Height="100" TextAlignment="Left"/>
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem ItemSize="Small">
 							<TextBlock appControls:DialogElement.TextRole="Label" Text="IP address"/>
-							<abControls:IPAddressTextBox Classes="Dialog_Item_TextBox"/>
+							<abControls:IPAddressTextBox appControls:DialogElement.IsDialogItemInput="True"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="InnerItem"/>
 						<appControls:DialogItem Name="regexItem" ItemSize="Small">
 							<TextBlock appControls:DialogElement.TextRole="Label" Text="Regex"/>
-							<appControls:RegexTextBox Name="regexTextBox" Classes="Dialog_Item_TextBox"/>
+							<appControls:RegexTextBox Name="regexTextBox" appControls:DialogElement.IsDialogItemInput="True"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="InnerItem"/>
 						<appControls:DialogItem ItemSize="Small">
 							<TextBlock appControls:DialogElement.TextRole="Label" Text="Date and time format"/>
-							<appControls:DateTimeFormatTextBox Classes="Dialog_Item_TextBox"/>
+							<appControls:DateTimeFormatTextBox appControls:DialogElement.IsDialogItemInput="True"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="InnerItem"/>
 						<appControls:DialogItem ItemSize="Small">
@@ -184,7 +184,7 @@
 						<!-- Item with NumericUpDown -->
 						<appControls:DialogItem>
 							<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
-							<NumericUpDown Classes="Dialog_Item_NumericUpDown" Maximum="100" Minimum="0" Value="50"/>
+							<NumericUpDown appControls:DialogElement.IsDialogItemInput="True" Maximum="100" Minimum="0" Value="50"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
@@ -192,7 +192,7 @@
 								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
-							<NumericUpDown Classes="Dialog_Item_NumericUpDown" IsEnabled="False" Maximum="100" Minimum="0" Value="50"/>
+							<NumericUpDown appControls:DialogElement.IsDialogItemInput="True" IsEnabled="False" Maximum="100" Minimum="0" Value="50"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 
@@ -202,7 +202,7 @@
 								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
-							<Slider Classes="Dialog_Item_Slider" TickFrequency="10"/>
+							<Slider appControls:DialogElement.IsDialogItemInput="True" TickFrequency="10"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
@@ -210,7 +210,7 @@
 								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
-							<Slider Classes="Dialog_Item_Slider" TickPlacement="None"/>
+							<Slider appControls:DialogElement.IsDialogItemInput="True" TickPlacement="None"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 
@@ -302,7 +302,7 @@
 				
 				<TextBlock appControls:DialogElement.TextRole="LabelAboveInputControl" Text="ListBox"/>
 				<StackPanel Classes="Dialog_FullWidthControl_Container">
-					<ListBox Classes="Dialog_Item_ListBox">
+					<ListBox appControls:DialogElement.IsDialogItemInput="True">
 						<ListBoxItem>Item 1</ListBoxItem>
 						<ListBoxItem>Item 2</ListBoxItem>
 						<ListBoxItem>Item 3</ListBoxItem>

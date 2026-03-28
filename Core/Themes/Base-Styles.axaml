@@ -502,6 +502,10 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TextBlock.Margin.Header2}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Header2}"/>
 	</Style>
+	<Style Selector="Button[(controls|DialogElement.IsDialogItemInput)=True]">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
 	<Style Selector="Button.Dialog_AccentControlButton">
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ControlButton.Margin}"/>
@@ -564,6 +568,7 @@
 	<Style Selector="Button.Dialog_Info_Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Button.Dialog_Item_Button">
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
@@ -576,6 +581,11 @@
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.ListActionButton.Padding}"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="ComboBox[(controls|DialogElement.IsDialogItemInput)=True]">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
 	<Style Selector="CheckBox.Dialog_CheckBox">
 		<Setter Property="HorizontalAlignment" Value="Left"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
@@ -586,6 +596,7 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="ComboBox.Dialog_Item_ComboBox">
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
@@ -779,6 +790,15 @@
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 	</Style>
+	<Style Selector="ListBox[(controls|DialogElement.IsDialogItemInput)=True]">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="CornerRadius" Value="0"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ListBox.Margin}"/>
+		<Setter Property="Padding" Value="0"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="ListBox.Dialog_Item_ListBox">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>
@@ -796,6 +816,12 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="NumericUpDown[(controls|DialogElement.IsDialogItemInput)=True]">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="NumericUpDown.Dialog_Item_NumericUpDown">
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
@@ -910,6 +936,13 @@
 		<Setter Property="Height" Value="{DynamicResource Double/Dialog.Separator.Height.Small}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Separator.Width.Small}"/>
 	</Style>
+	<Style Selector="Slider[(controls|DialogElement.IsDialogItemInput)=True]">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="TickPlacement" Value="Outside"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Slider.Dialog_Item_Slider">
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="TickPlacement" Value="Outside"/>
@@ -1185,6 +1218,49 @@
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<Style Selector=":is(TextBox)[(controls|DialogElement.IsDialogItemInput)=True]">
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="MinWidth" Value="{DynamicResource Double/Dialog.Control.MinWidth}"/>
+		<Setter Property="Padding" Value="0"/>
+		<Setter Property="TextAlignment" Value="Right"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector=":is(TextBox)[(controls|DialogElement.IsDialogItemInput)=True] /template/ Border#PART_BorderElement">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
+	</Style>
+	<Style Selector=":is(TextBox)[(controls|DialogElement.IsDialogItemInput)=True]:disabled /template/ Border#PART_BorderElement">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
+	</Style>
+	<Style Selector=":is(TextBox)[(controls|DialogElement.IsDialogItemInput)=True]:focus /template/ Border#PART_BorderElement">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
+	</Style>
+	<Style Selector=":is(TextBox)[(controls|DialogElement.IsDialogItemInput)=True]:dateTimeTextBox:invalidValueTextBoxText">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+	</Style>
+	<Style Selector=":is(TextBox)[(controls|DialogElement.IsDialogItemInput)=True]:integerTextBox:invalidValueTextBoxText">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+	</Style>
+	<Style Selector=":is(TextBox)[(controls|DialogElement.IsDialogItemInput)=True]:ipAddressTextBox:invalidObjectTextBoxText">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+	</Style>
+	<Style Selector=":is(TextBox)[(controls|DialogElement.IsDialogItemInput)=True]:realNumberTextBox:invalidValueTextBoxText">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+	</Style>
+	<Style Selector=":is(TextBox)[(controls|DialogElement.IsDialogItemInput)=True]:timeSpanTextBox:invalidValueTextBoxText">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+	</Style>
+	<Style Selector=":is(TextBox)[(controls|DialogElement.IsDialogItemInput)=True]:uriTextBox:invalidObjectTextBoxText">
+		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
+	</Style>
+	<Style Selector=":is(TextBox)[(controls|DialogElement.IsDialogItemInput)=True]:pointerover /template/ Border#PART_BorderElement">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBox).Dialog_Item_TextBox">
 		<Setter Property="BorderThickness" Value="0"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -1193,36 +1269,46 @@
 		<Setter Property="TextAlignment" Value="Right"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBox).Dialog_Item_TextBox /template/ Border#PART_BorderElement">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBox).Dialog_Item_TextBox:disabled /template/ Border#PART_BorderElement">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBox).Dialog_Item_TextBox:focus /template/ Border#PART_BorderElement">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBox).Dialog_Item_TextBox:dateTimeTextBox:invalidValueTextBoxText">
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBox).Dialog_Item_TextBox:integerTextBox:invalidValueTextBoxText">
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBox).Dialog_Item_TextBox:ipAddressTextBox:invalidObjectTextBoxText">
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBox).Dialog_Item_TextBox:realNumberTextBox:invalidValueTextBoxText">
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBox).Dialog_Item_TextBox:timeSpanTextBox:invalidValueTextBoxText">
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBox).Dialog_Item_TextBox:uriTextBox:invalidObjectTextBoxText">
 		<Setter Property="Foreground" Value="{DynamicResource Brush/Dialog.TextBlock.Foreground.Error}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector=":is(TextBox).Dialog_Item_TextBox:pointerover /template/ Border#PART_BorderElement">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderBrush" Value="{x:Static Brushes.Transparent}"/>
@@ -1252,14 +1338,29 @@
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="SplitButton[(controls|DialogElement.IsDialogItemInput)=True]">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="SplitButton.Dialog_Item_SplitButton">
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="ToggleButton[(controls|DialogElement.IsDialogItemInput)=True]">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="ToggleButton.Dialog_Item_ToggleButton">
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="ToggleSwitch[(controls|DialogElement.IsDialogItemInput)=True]">
+		<Setter Property="HorizontalAlignment" Value="Right"/>
+		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="ToggleSwitch.Dialog_Item_ToggleSwitch">
 		<Setter Property="HorizontalAlignment" Value="Right"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
@@ -1268,6 +1369,15 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.Control.Margin}"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<Style Selector="TreeView[(controls|DialogElement.IsDialogItemInput)=True]">
+		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
+		<Setter Property="BorderThickness" Value="0"/>
+		<Setter Property="CornerRadius" Value="0"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TreeView.Margin}"/>
+		<Setter Property="Padding" Value="0"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="TreeView.Dialog_Item_TreeView">
 		<Setter Property="Background" Value="{x:Static Brushes.Transparent}"/>
 		<Setter Property="BorderThickness" Value="0"/>

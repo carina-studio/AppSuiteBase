@@ -13,6 +13,10 @@ public static class DialogElement
     /// </summary>
     public static readonly AttachedProperty<DialogIconType> IconTypeProperty = AvaloniaProperty.RegisterAttached<Avalonia.Controls.Image, DialogIconType>("IconType", typeof(DialogElement), DialogIconType.None);
     /// <summary>
+    /// Define property to indicate whether the control is an input for dialog item or not.
+    /// </summary>
+    public static readonly AttachedProperty<bool> IsDialogItemInputProperty = AvaloniaProperty.RegisterAttached<Control, bool>("IsDialogItemInput", typeof(DialogElement), false);
+    /// <summary>
     /// Define property for type of separator in dialog.
     /// </summary>
     public static readonly AttachedProperty<DialogSeparatorType> SeparatorTypeProperty = AvaloniaProperty.RegisterAttached<Separator, DialogSeparatorType>("SeparatorType", typeof(DialogElement), DialogSeparatorType.None);
@@ -29,6 +33,15 @@ public static class DialogElement
     /// <returns>The type of the icon.</returns>
     public static DialogIconType GetIconType(Avalonia.Controls.Image image) => 
         image.GetValue(IconTypeProperty);
+    
+    
+    /// <summary>
+    /// Check whether the control is an input of a dialog item or not.
+    /// </summary>
+    /// <param name="control">The control.</param>
+    /// <returns>True if the control is an input of a dialog item.</returns>
+    public static bool GetIsDialogItemInput(Control control) =>
+        control.GetValue(IsDialogItemInputProperty);
     
     
     /// <summary>
@@ -56,6 +69,15 @@ public static class DialogElement
     /// <param name="type">The type of the icon.</param>
     public static void SetIconType(Avalonia.Controls.Image image, DialogIconType type) => 
         image.SetValue(IconTypeProperty, type);
+    
+    
+    /// <summary>
+    /// Set the control as an input of a dialog item.
+    /// </summary>
+    /// <param name="control">The control.</param>
+    /// <param name="isInput">True to set as input.</param>
+    public static void SetIsDialogItemInput(Control control, bool isInput) =>
+        control.SetValue(IsDialogItemInputProperty, isInput);
     
     
     /// <summary>

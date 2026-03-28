@@ -53,10 +53,10 @@
 
 								<!-- Download -->
 								<Button Name="downloadButton" 
-									Classes="Dialog_Item_Button" 
 									Content="{DynamicResource String/ExternalDependenciesDialog.ExternalDependency.Install}" 
 									Command="{Binding #dialog.Download}" 
 									CommandParameter="{Binding}"
+									controls:DialogElement.IsDialogItemInput="True"
 									IsVisible="{Binding State, Converter={x:Static abConverters:ObjectConverters.IsEquivalentTo}, ConverterParameter={x:Static as:ExternalDependencyState.Unavailable}}" 
 									VerticalAlignment="Center"/>
 								<Separator controls:DialogElement.SeparatorType="Small">
@@ -70,10 +70,10 @@
 
 								<!-- Details -->
 								<Button Name="detailsButton" 
-									Classes="Dialog_Item_Button"
 									Content="{DynamicResource String/Common.Details}" 
 									Command="{Binding #dialog.ShowDetails}" 
 									CommandParameter="{Binding}"
+									controls:DialogElement.IsDialogItemInput="True"
 									IsVisible="{Binding DetailsUri, Converter={x:Static ObjectConverters.IsNotNull}}"
 									VerticalAlignment="Center"/>
 
