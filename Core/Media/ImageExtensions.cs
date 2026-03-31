@@ -25,6 +25,30 @@ public static class ImageExtensions
     {
         var iconSize = new PixelSize(NativeMenuItemIconSize, NativeMenuItemIconSize);
         var iconDpi = new Vector(NativeMenuItemIconDpi, NativeMenuItemIconDpi);
+        if (IAppSuiteApplication.CurrentOrNull is { } app
+            && app.EffectiveThemeMode != app.SystemThemeMode
+            && image is DrawingImage drawingImage
+            && drawingImage.Drawing is { } drawing
+            && drawing.TryClone(out var clonedDrawing))
+        {
+            var iconBrush = app.SystemThemeMode switch
+            {
+                ThemeMode.Dark => app.FindResourceOrDefault<IBrush?>("Brush/Icon.Light"),
+                _ => app.FindResourceOrDefault<IBrush?>("Brush/Icon.Dark")
+            };
+            void ApplyIconBrush(Drawing? drawing)
+            {
+                if (drawing is GeometryDrawing geometryDrawing)
+                    geometryDrawing.Brush = iconBrush;
+                else if (drawing is DrawingGroup drawingGroup)
+                {
+                    foreach (var child in drawingGroup.Children)
+                        ApplyIconBrush(child);
+                }
+            }
+            ApplyIconBrush(clonedDrawing);
+            image = new DrawingImage(clonedDrawing);
+        }
         return new RenderTargetBitmap(iconSize, iconDpi).Also(bitmap =>
         {
             using var dc = bitmap.CreateDrawingContext();

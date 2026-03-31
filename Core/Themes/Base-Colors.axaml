@@ -155,7 +155,7 @@
 	<Color x:Key="Color/Icon.CPlusPlus.Middle">#00599c</Color>
 	<Color x:Key="Color/Icon.CSharp.Dark">#512bd4</Color>
 	<Color x:Key="Color/Icon.CSharp.Light">#927be5</Color>
-	<Color x:Key="Color/Icon.Dark">#000000</Color>
+	<Color x:Key="Color/Icon.Dark">#333333</Color>
 	<SolidColorBrush x:Key="Brush/Icon.Dialog.Description" Color="{DynamicResource Color/Dialog.TextBlock.Foreground.Description}"/>
 	<StaticResourceExtension x:Key="Color/Icon.Error" ResourceKey="Color/Icon.Alert"/>
 	<StaticResourceExtension x:Key="Color/Icon.Error.Dark" ResourceKey="Color/Icon.Alert.Dark"/>

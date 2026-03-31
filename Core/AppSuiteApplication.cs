@@ -5229,6 +5229,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
 
     /// <inheritdoc/>
+    public ThemeMode SystemThemeMode => this.systemThemeMode;
+
+
+    /// <inheritdoc/>
     public bool TakeMemorySnapshot(string outputFileName)
     {
         // check state
@@ -5833,6 +5837,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
         // update state
         this.systemThemeMode = themeMode;
+        this.OnPropertyChanged(nameof(SystemThemeMode));
         if (checkRestartingMainWindows)
             this.CheckRestartingRootWindowsNeeded();
         

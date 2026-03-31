@@ -169,6 +169,14 @@ namespace CarinaStudio.AppSuite.Tests
         });
 
 
+        protected override void OnPropertyChanged(string propertyName)
+        {
+            base.OnPropertyChanged(propertyName);
+            if (propertyName == nameof(SystemThemeMode))
+                this.UpdateNativeMenuItemIcons();
+        }
+
+
         protected override async Task OnPrepareStartingAsync()
         {
             LogToConsole("Prepare starting (App)");
@@ -196,14 +204,7 @@ namespace CarinaStudio.AppSuite.Tests
                     await this.ShowMainWindowAsync();
             }
             
-            NativeMenu.GetMenu(this)?.Items.Let(items =>
-            {
-                foreach (var item in items)
-                {
-                    if (item is NativeMenuItem menuItem && menuItem.Header == "Exit")
-                        menuItem.Icon = this.FindResourceOrDefault<IImage?>("Image/Icon.Exit")?.ToNativeMenuItemIcon();
-                }
-            });
+            this.UpdateNativeMenuItemIcons();
         }
 
 
@@ -246,6 +247,19 @@ namespace CarinaStudio.AppSuite.Tests
 
         public override Task ShowApplicationOptionsDialogAsync(Avalonia.Controls.Window? owner, string? section = null) =>
             Task.CompletedTask;
+
+
+        void UpdateNativeMenuItemIcons()
+        {
+            NativeMenu.GetMenu(this)?.Items.Let(items =>
+            {
+                foreach (var item in items)
+                {
+                    if (item is NativeMenuItem menuItem && menuItem.Header == "Exit")
+                        menuItem.Icon = this.FindResourceOrDefault<IImage?>("Image/Icon.Exit")?.ToNativeMenuItemIcon();
+                }
+            });
+        }
 
 
         public override DocumentSource? UserAgreement => new AgreementDocumentSource(this);

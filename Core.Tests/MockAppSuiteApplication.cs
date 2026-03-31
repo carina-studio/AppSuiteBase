@@ -486,6 +486,10 @@ public class MockAppSuiteApplication : IAppSuiteApplication
     
     
     /// <inheritdoc/>
+    public virtual ThemeMode SystemThemeMode => ThemeMode.Dark;
+    
+    
+    /// <inheritdoc/>
     public virtual bool TakeMemorySnapshot(string outputFileName) =>
         false;
 

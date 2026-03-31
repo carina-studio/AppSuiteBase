@@ -548,6 +548,12 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     
     
     /// <summary>
+    /// Get the theme mode which is currently applied by system.
+    /// </summary>
+    ThemeMode SystemThemeMode { get; }
+    
+    
+    /// <summary>
     /// Take single memory snapshot.
     /// </summary>
     /// <param name="outputFileName">Name of output snapshot file.</param>
