@@ -95,8 +95,10 @@
 	<sys:Double x:Key="Double/Dialog.Icon.Size.Large">40</sys:Double>
 	<sys:Double x:Key="Double/Dialog.IconControlButton.Icon.Size">14</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Item.MinHeight">40</sys:Double>
-	<sys:Double x:Key="Double/Dialog.Item.MinHeight.Small">20</sys:Double>
+	<sys:Double x:Key="Double/Dialog.Item.MinHeight.Small">24</sys:Double>
+	<sys:Double x:Key="Double/Dialog.ItemSeparator.Opacity.Inner">0.8</sys:Double>
 	<sys:Double x:Key="Double/Dialog.ItemSeparator.Stroke">1</sys:Double>
+	<sys:Double x:Key="Double/Dialog.ItemSeparator.Stroke.Inner">2</sys:Double>
 	<sys:Double x:Key="Double/Dialog.ListActionButton.MinWidth">80</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Height">14</sys:Double>
 	<sys:Double x:Key="Double/Dialog.Separator.Height.Large">28</sys:Double>
@@ -433,9 +435,14 @@
 	<sys:Double x:Key="Double/TextInputDialog.Width">450</sys:Double>
 
 	<!-- ToggleSwitch -->
+	<CornerRadius x:Key="ToggleSwitchCornerRadius">10</CornerRadius>
+	<sys:Double x:Key="ToggleSwitchHeight">20</sys:Double>
+	<sys:Double x:Key="ToggleSwitchKnobHeight">14</sys:Double>
+	<sys:Double x:Key="ToggleSwitchKnobWidth">14</sys:Double>
 	<GridLength x:Key="ToggleSwitchPostContentMargin">1</GridLength>
 	<GridLength x:Key="ToggleSwitchPreContentMargin">1</GridLength>
 	<Thickness x:Key="ToggleSwitchTopHeaderMargin">0</Thickness>
+	<sys:Double x:Key="ToggleSwitchWidth">40</sys:Double>
 
 	<!-- Toolbar -->
 	<sys:Double x:Key="Double/Toolbar.DropDownButton.Icon.Size">8</sys:Double>

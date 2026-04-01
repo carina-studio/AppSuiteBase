@@ -8,31 +8,39 @@
 	<SolidColorBrush x:Key="Brush/ApplicationInfoDialog.Header.Layer2.Border" Color="{DynamicResource SystemAccentColorLight1}" Opacity="0.3"/>
 
 	<!-- Button -->
-	<Color x:Key="Color/Button.Background">#2d2d2d</Color>
-	<Color x:Key="Color/Button.Background.Disabled">#303030</Color>
-	<Color x:Key="Color/Button.Background.PointerOver">#3d3d3d</Color>
-	<Color x:Key="Color/Button.Background.Pressed">#202020</Color>
-	<Color x:Key="Color/Button.Background.Transparent">#002d2d2d</Color>
+	<Color x:Key="Color/Button.Background">#404040</Color>
+	<Color x:Key="Color/Button.Background.Disabled">#505050</Color>
+	<Color x:Key="Color/Button.Background.PointerOver">#474747</Color>
+	<Color x:Key="Color/Button.Background.Pressed">#303030</Color>
+	<Color x:Key="Color/Button.Background.Transparent">#00404040</Color>
+	<Color x:Key="Color/Button.Border">#474747</Color>
+	<Color x:Key="Color/Button.Border.Transparent">#00474747</Color>
 	<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{DynamicResource Color/Control.Border.Light}"/>
 	
 	<!-- ComboBox -->
+	<SolidColorBrush x:Key="ComboBoxBackground" Color="#1e1e1e"/>
+	<SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="{DynamicResource Color/Button.Background.PointerOver}"/>
+	<SolidColorBrush x:Key="ComboBoxBackgroundPressed" Color="{DynamicResource Color/Button.Background.Pressed}"/>
+	<SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="{DynamicResource Color/Control.Border.Light}"/>
+	<SolidColorBrush x:Key="ComboBoxBorderBrushPressed" Color="{DynamicResource Color/Control.Border.Dark}"/>
 	<SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#272727"/>
 	<SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="{DynamicResource Color/ToolTip.Border}"/>
 
 	<!-- Control -->
-	<Color x:Key="Color/Control.Border">#404040</Color>
-	<Color x:Key="Color/Control.Border.Dark">#2d2d2d</Color>
-	<Color x:Key="Color/Control.Border.Dark.Transparent">#002d2d2d</Color>
-	<Color x:Key="Color/Control.Border.Light">#4a4a4a</Color>
-	<Color x:Key="Color/Control.Border.Light.Transparent">#004a4a4a</Color>
+	<Color x:Key="Color/Control.Border">#474747</Color>
+	<Color x:Key="Color/Control.Border.Dark">#373737</Color>
+	<Color x:Key="Color/Control.Border.Dark.Transparent">#00373737</Color>
+	<Color x:Key="Color/Control.Border.Light">#505050</Color>
+	<Color x:Key="Color/Control.Border.Light.Transparent">#00505050</Color>
 	<Color x:Key="Color/Control.Border.Transparent">#00404040</Color>
 
 	<!-- Dialog -->
-	<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#222222</Color>
+	<Color x:Key="Color/Dialog.Background">#343434</Color>
+	<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#2c2c2c</Color>
 	<Color x:Key="Color/Dialog.ControlButtonsPanel.Border">#404040</Color>
 	<Color x:Key="Color/Dialog.ItemSeparator">#17ffffff</Color>
-	<Color x:Key="Color/Dialog.ItemsGroup.Background">#3f000000</Color>
-	<Color x:Key="Color/Dialog.ItemsGroup.Border">#1effffff</Color>
+	<Color x:Key="Color/Dialog.ItemsGroup.Background">#272727</Color>
+	<Color x:Key="Color/Dialog.ItemsGroup.Border">#17ffffff</Color>
 	<Color x:Key="Color/Dialog.TextBlock.Foreground.Description">#7fffffff</Color>
 
 	<!-- Expander -->
@@ -46,7 +54,7 @@
 	<Color x:Key="Color/Icon.CPlusPlus.Middle">#007bd9</Color>
 	<Color x:Key="Color/Icon.Gradient.Dark">#a7a7a7</Color>
 	<Color x:Key="Color/Icon.Gradient.Light">#ffffff</Color>
-	<Color x:Key="Color/Icon.Inverse">#000000</Color>
+	<Color x:Key="Color/Icon.Inverse">#333333</Color>
 	
 	<!-- MarkdownViewer -->
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading1.Foreground">#ffffff</Color>
@@ -58,7 +66,7 @@
 	<Color x:Key="Color/MarkdownViewer.Markdown.InlineCode.Background">#444444</Color>
 
 	<!-- Menu -->
-	<Color x:Key="Color/Menu.Background">#303030</Color>
+	<Color x:Key="Color/Menu.Background">#282828</Color>
 	
 	<!-- MenuFlyout -->
 	<SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#272727"/>
@@ -75,25 +83,25 @@
 	<StaticResourceExtension x:Key="Color/StatusBar.Border" ResourceKey="Color/Shadow.Lighten"/>
 
 	<!-- TabControl -->
-	<Color x:Key="Color/TabControl.TabStrip.Border">#555555</Color>
+	<Color x:Key="Color/TabControl.TabStrip.Border">#424242</Color>
 	<LinearGradientBrush x:Key="OpacityMask/TabControl.TabStrip.Background" EndPoint="100%,100%" StartPoint="0%,0%">
-		<GradientStop Color="#17000000" Offset="0"/>
-		<GradientStop Color="#2f000000" Offset="0.5"/>
+		<GradientStop Color="#14000000" Offset="0"/>
+		<GradientStop Color="#27000000" Offset="0.5"/>
 		<GradientStop Color="#04000000" Offset="1"/>
 	</LinearGradientBrush>
 
 	<!-- TabItem -->
-	<Color x:Key="Color/TabItem.Header.Background">#00303030</Color>
-	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#af303030</Color>
-	<Color x:Key="Color/TabItem.Header.Background.Selected">#303030</Color>
-	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#444444</Color>
-	<Color x:Key="Color/TabItem.Header.Border.Selected">#555555</Color>
+	<Color x:Key="Color/TabItem.Header.Background">#00282828</Color>
+	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#af282828</Color>
+	<Color x:Key="Color/TabItem.Header.Background.Selected">#282828</Color>
+	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#373737</Color>
+	<Color x:Key="Color/TabItem.Header.Border.Selected">#424242</Color>
 	<Color x:Key="Color/TabItem.Header.Separator">#17ffffff</Color>
 
 	<!-- TextBox -->
-	<SolidColorBrush x:Key="TextControlBackground" Color="#222222"/>
-	<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#1a1a1a"/>
-	<SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#303030"/>
+	<SolidColorBrush x:Key="TextControlBackground" Color="#1e1e1e"/>
+	<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#171717"/>
+	<SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#272727"/>
 	<SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{StaticResource Color/Control.Border.Light}"/>
 	<SolidColorBrush x:Key="TextControlSelectionHighlightColor" Color="{DynamicResource Color/Accent}" Opacity="0.75"/>
 
@@ -101,19 +109,19 @@
 	<Color x:Key="Color/ThemeModeTest.Color">#7faabbcc</Color>
 
 	<!-- Toolbar -->
-	<Color x:Key="Color/Toolbar.Background">#303030</Color>
+	<Color x:Key="Color/Toolbar.Background">#282828</Color>
 	<Color x:Key="Color/Toolbar.Button.Background.PointerOver">#404040</Color>
 	<Color x:Key="Color/Toolbar.Button.Background.Pressed">#171717</Color>
 	<Color x:Key="Color/Toolbar.Button.Background.Transparent">#00404040</Color>
-	<Color x:Key="Color/Toolbar.Border">#404040</Color>
-	<Color x:Key="Color/Toolbar.TextBox.Background">#292929</Color>
+	<Color x:Key="Color/Toolbar.Border">#424242</Color>
+	<Color x:Key="Color/Toolbar.TextBox.Background">#1e1e1e</Color>
 	<!-- Deprecated -->
-	<Color x:Key="Color/ToolBar.Background">#303030</Color>
+	<Color x:Key="Color/ToolBar.Background">#282828</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.PointerOver">#404040</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Pressed">#171717</Color>
 	<Color x:Key="Color/ToolBar.Button.Background.Transparent">#00404040</Color>
-	<Color x:Key="Color/ToolBar.Border">#404040</Color>
-	<Color x:Key="Color/ToolBar.TextBox.Background">#292929</Color>
+	<Color x:Key="Color/ToolBar.Border">#424242</Color>
+	<Color x:Key="Color/ToolBar.TextBox.Background">#1e1e1e</Color>
 
 	<!-- ToolTip -->
 	<Color x:Key="Color/ToolTip.Background">#272727</Color>
@@ -130,9 +138,9 @@
 			</ImageDrawing>
 		</DrawingBrush.Drawing>
 	</DrawingBrush>
-	<Color x:Key="Color/Window.Background">#272727</Color>
-	<Color x:Key="Color/Window.Background.Dark">#202020</Color>
-	<Color x:Key="Color/Window.Background.Light">#2f2f2f</Color>
+	<Color x:Key="Color/Window.Background">#373737</Color>
+	<Color x:Key="Color/Window.Background.Dark">#303030</Color>
+	<Color x:Key="Color/Window.Background.Light">#3f3f3f</Color>
 	<Color x:Key="Color/Window.Background.Tabbed">#404040</Color>
 	<Color x:Key="Color/Window.Background.Tabbed.Dark">#373737</Color>
 	<Color x:Key="Color/Window.Background.Tabbed.Light">#474747</Color>
@@ -161,7 +169,7 @@
 	<Color x:Key="Color/WorkingArea.Background">#272727</Color>
 	<Color x:Key="Color/WorkingArea.Background.Dark">#1f1f1f</Color>
 	<Color x:Key="Color/WorkingArea.Background.Light">#2f2f2f</Color>
-	<Color x:Key="Color/WorkingArea.Panel.Background">#2f2f2f</Color>
-	<Color x:Key="Color/WorkingArea.Panel.Border">#404040</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Background">#373737</Color>
+	<Color x:Key="Color/WorkingArea.Panel.Border">#444444</Color>
 	
 </ResourceDictionary>

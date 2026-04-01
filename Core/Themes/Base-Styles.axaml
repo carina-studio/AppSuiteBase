@@ -943,13 +943,14 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.ItemSeparator.Margin}"/>
 		<Setter Property="Template">
 			<ControlTemplate>
-				<Line EndPoint="6,0" 
+				<Line EndPoint="3,0" 
+				      Opacity="{DynamicResource Double/Dialog.ItemSeparator.Opacity.Inner}"
 				      StartPoint="0,0"
 				      Stretch="Fill"
 				      Stroke="{DynamicResource Brush/Dialog.ItemSeparator}"
-				      StrokeDashArray="4,2"
+				      StrokeDashArray="2,1"
 				      StrokeDashOffset="0"
-				      StrokeThickness="{DynamicResource Double/Dialog.ItemSeparator.Stroke}"/>
+				      StrokeThickness="{DynamicResource Double/Dialog.ItemSeparator.Stroke.Inner}"/>
 			</ControlTemplate>
 		</Setter>
 	</Style>
@@ -1469,6 +1470,7 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/Dialog.TreeView.Margin}"/>
 	</Style>
 	<Style Selector="Window.Dialog">
+		<Setter Property="Background" Value="{DynamicResource Brush/Dialog.Background}"/>
 		<Setter Property="CanResize" Value="False"/>
 		<Setter Property="ShowInTaskbar" Value="False"/>
 		<Setter Property="SizeToContent" Value="Height"/>
@@ -2877,6 +2879,9 @@
 	<Style Selector="SplitButton:checked /template/ PathIcon">
 		<Setter Property="Foreground" Value="{DynamicResource SplitButtonForegroundChecked}"/>
 	</Style>
+	<Style Selector="SplitButton:checked /template/ Border#SeparatorBorder">
+		<Setter Property="Background" Value="{DynamicResource SplitButtonBorderBrushChecked}"/>
+	</Style>
 	<Style Selector="SplitButton:checked:flyout-open /template/ Border#SeparatorBorder">
 		<Setter Property="Background" Value="{DynamicResource SplitButtonBorderBrushCheckedPressed}"/>
 	</Style>
@@ -3785,7 +3790,106 @@
 	<Style Selector="ToggleSwitch">
 		<Setter Property="OffContent" Value="{x:Null}"/>
 		<Setter Property="OnContent" Value="{x:Null}"/>
-		<Setter Property="Width" Value="40"/>
+		<Setter Property="Template">
+			<ControlTemplate TargetType="{x:Type ToggleSwitch}">
+				<Grid Background="{TemplateBinding Background}" RowDefinitions="Auto,*">
+
+					<ContentPresenter
+						x:Name="PART_ContentPresenter"
+						Grid.Row="0"
+						VerticalAlignment="Top"
+						Content="{TemplateBinding Content}"
+						ContentTemplate="{TemplateBinding ContentTemplate}"
+						Margin="{DynamicResource ToggleSwitchTopHeaderMargin}" />
+
+					<Grid
+						Grid.Row="1"
+						MinWidth="{DynamicResource ToggleSwitchThemeMinWidth}"
+						HorizontalAlignment="Left"
+						VerticalAlignment="Top">
+
+						<Grid.RowDefinitions>
+							<RowDefinition Height="{DynamicResource ToggleSwitchPreContentMargin}" />
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="{DynamicResource ToggleSwitchPostContentMargin}" />
+						</Grid.RowDefinitions>
+
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="12" MaxWidth="12" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+
+						<Grid
+							x:Name="SwitchAreaGrid"
+							Grid.RowSpan="3"
+							Grid.ColumnSpan="3"
+							Background="{DynamicResource ToggleSwitchContainerBackground}"
+							Margin="0,5"
+							TemplatedControl.IsTemplateFocusTarget="True" />
+
+						<ContentPresenter
+							x:Name="PART_OffContentPresenter"
+							Grid.RowSpan="3"
+							Grid.Column="2"
+							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+							Content="{TemplateBinding OffContent}"
+							ContentTemplate="{TemplateBinding OffContentTemplate}" />
+
+						<ContentPresenter
+							x:Name="PART_OnContentPresenter"
+							Grid.RowSpan="3"
+							Grid.Column="2"
+							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+							Content="{TemplateBinding OnContent}"
+							ContentTemplate="{TemplateBinding OnContentTemplate}" />
+
+						<Border
+							x:Name="OuterBorder"
+							Grid.Row="1"
+							Width="{DynamicResource ToggleSwitchWidth}"
+							Height="{DynamicResource ToggleSwitchHeight}"
+							Background="{DynamicResource ToggleSwitchFillOff}"
+							BorderBrush="{DynamicResource ToggleSwitchStrokeOff}"
+							BorderThickness="{DynamicResource ToggleSwitchOuterBorderStrokeThickness}"
+							CornerRadius="{DynamicResource ToggleSwitchCornerRadius}" />
+
+						<Border
+							x:Name="SwitchKnobBounds"
+							Grid.Row="1"
+							Width="{DynamicResource ToggleSwitchWidth}"
+							Height="{DynamicResource ToggleSwitchHeight}"
+							Background="{DynamicResource ToggleSwitchFillOn}"
+							BorderBrush="{DynamicResource ToggleSwitchStrokeOn}"
+							BorderThickness="{DynamicResource ToggleSwitchOnStrokeThickness}"
+							CornerRadius="{DynamicResource ToggleSwitchCornerRadius}" />
+
+						<Canvas
+							x:Name="PART_SwitchKnob"
+							Grid.Row="1"
+							Width="{DynamicResource ToggleSwitchHeight}"
+							Height="{DynamicResource ToggleSwitchHeight}"
+							HorizontalAlignment="Left">
+
+							<Grid x:Name="PART_MovingKnobs" Width="{DynamicResource ToggleSwitchHeight}" Height="{DynamicResource ToggleSwitchHeight}">
+								<Ellipse
+									x:Name="SwitchKnobOn"
+									Fill="{DynamicResource ToggleSwitchKnobFillOn}"
+									Width="{DynamicResource ToggleSwitchKnobWidth}"
+									Height="{DynamicResource ToggleSwitchKnobHeight}" />
+								<Ellipse
+									x:Name="SwitchKnobOff"
+									Fill="{DynamicResource ToggleSwitchKnobFillOff}"
+									Width="{DynamicResource ToggleSwitchKnobWidth}"
+									Height="{DynamicResource ToggleSwitchKnobHeight}" />
+							</Grid>
+						</Canvas>
+					</Grid>
+				</Grid>
+			</ControlTemplate>
+		</Setter>
 	</Style>
 	<Style Selector="ToggleSwitch:disabled">
 		<Setter Property="Opacity" Value="0.5"/>

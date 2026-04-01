@@ -31,11 +31,7 @@ public static class ImageExtensions
             && drawingImage.Drawing is { } drawing
             && drawing.TryClone(out var clonedDrawing))
         {
-            var iconBrush = app.SystemThemeMode switch
-            {
-                ThemeMode.Dark => app.FindResourceOrDefault<IBrush?>("Brush/Icon.Light"),
-                _ => app.FindResourceOrDefault<IBrush?>("Brush/Icon.Dark")
-            };
+            var iconBrush = app.FindResourceOrDefault<IBrush?>("Brush/Icon.Inverse");
             void ApplyIconBrush(Drawing? drawing)
             {
                 if (drawing is GeometryDrawing geometryDrawing)
