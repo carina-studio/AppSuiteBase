@@ -26,6 +26,7 @@ using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.Scripting;
+using CarinaStudio.AppSuite.UsageData;
 using CarinaStudio.AutoUpdate;
 using CarinaStudio.AutoUpdate.Resolvers;
 using CarinaStudio.Collections;
@@ -466,6 +467,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     readonly Dictionary<TopLevel, IDisposable> topLevelFontSizeBindingTokens = new();
     volatile TracingSession? tracingSession;
     readonly Lock tracingSyncLock = new();
+    IUsageManager? usageManager;
     readonly Dictionary<Avalonia.Controls.Window, List<IDisposable>> windowObserverTokens = new();
     readonly ObservableList<Avalonia.Controls.Window> windows = new();
 
@@ -3581,6 +3583,31 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.productManager = new MockProductManager(this);
         }
 
+        // initialize usage manager
+        var umType = this.UsageManagerImplType;
+        if (umType is not null)
+        {
+            try
+            {
+                // initialize
+                await (Task)umType.GetMethod("InitializeAsync", BindingFlags.Public | BindingFlags.Static, [ typeof(IAppSuiteApplication) ])!.Invoke(null, [ this ])!;
+
+                // get instance
+                this.usageManager = (IUsageManager)umType.GetProperty("Default", BindingFlags.Public | BindingFlags.Static)!.GetGetMethod()!.Invoke(null, [])!;
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Failed to create implementation of usage manager");
+            }
+        }
+        else
+            this.Logger.LogWarning("No implementation of usage manager");
+        if (this.usageManager is null)
+        {
+            this.Logger.LogDebug("Use mock usage manager");
+            this.usageManager = new MockUsageManager(this);
+        }
+
         // complete checking external dependencies
         await Task.WhenAll(checkExtDepTasks);
         
@@ -5951,6 +5978,19 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 resources.Remove(resourceKey);
         }
     }
+
+
+    /// <inheritdoc/>
+    public IUsageManager UsageManager => this.usageManager ?? throw new InvalidOperationException("Application is not initialized yet.");
+    
+    
+    /// <summary>
+    /// Get type of the implementation of <see cref="IUsageManager"/>.
+    /// </summary>
+    [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.PublicProperties)]
+    // ReSharper disable UnassignedGetOnlyAutoProperty
+    protected virtual Type? UsageManagerImplType { get; }
+    // ReSharper restore UnassignedGetOnlyAutoProperty
 
 
     /// <summary>

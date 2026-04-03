@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+
+namespace CarinaStudio.AppSuite.UsageData;
+
+/// <summary>
+/// No-op implementation of <see cref="IUsageManager"/>.
+/// </summary>
+internal class MockUsageManager(IAppSuiteApplication app) : BaseApplicationObject<IAppSuiteApplication>(app), IUsageManager
+{
+    /// <inheritdoc/>
+    public bool IsEnabled => false;
+
+
+    /// <inheritdoc/>
+    public void TrackEvent(string eventName, IDictionary<string, string>? properties = null, IDictionary<string, double>? metrics = null)
+    { }
+
+
+    /// <inheritdoc/>
+    public void TrackException(Exception exception, UsageSeverityLevel severityLevel = UsageSeverityLevel.Error, IDictionary<string, string>? properties = null)
+    { }
+
+
+    /// <inheritdoc/>
+    public void TrackMetric(string metricName, double value, IDictionary<string, string>? properties = null)
+    { }
+
+
+    /// <inheritdoc/>
+    public void TrackScreenView(string screenName, TimeSpan? duration = null, IDictionary<string, string>? properties = null)
+    { }
+}

@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Styling;
+using CarinaStudio.AppSuite.UsageData;
 using CarinaStudio.IO;
 using CarinaStudio.Threading;
 using System;
@@ -572,6 +573,12 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// Get latest checked application update information.
     /// </summary>
     ApplicationUpdateInfo? UpdateInfo { get; }
+    
+    
+    /// <summary>
+    /// Get the component to collect the application usage data.
+    /// </summary>
+    IUsageManager UsageManager { get; }
 
 
     /// <summary>

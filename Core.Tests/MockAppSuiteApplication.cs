@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Styling;
 using CarinaStudio.AppSuite.Controls;
+using CarinaStudio.AppSuite.UsageData;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
@@ -47,6 +48,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
         this.ProcessInfo = new ProcessInfo(this);
         this.ProductManager = new Product.MockProductManager(this);
         this.RootPrivateDirectoryPath = Path.Combine(Path.GetTempPath(), $"AppSuiteTest-{DateTime.Now.ToBinary()}");
+        this.UsageManager = new MockUsageManager(this);
         Directory.CreateDirectory(this.RootPrivateDirectoryPath);
     }
 
@@ -508,6 +510,10 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
     /// <inheritdoc/>
     public virtual ApplicationUpdateInfo? UpdateInfo => null;
+
+
+    /// <inheritdoc/>
+    public IUsageManager UsageManager { get; }
 
 
     /// <inheritdoc/>
