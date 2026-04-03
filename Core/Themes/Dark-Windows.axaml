@@ -4,4 +4,74 @@
 	<!-- Base styles -->
 	<StyleInclude Source="/Themes/Base-Windows.axaml"/>
 	
+	<!-- Resources -->
+	<Styles.Resources>
+		
+		<!-- Button -->
+		<Color x:Key="Color/Button.Background">#2d2d2d</Color>
+		<Color x:Key="Color/Button.Background.PointerOver">#3d3d3d</Color>
+		<Color x:Key="Color/Button.Background.Pressed">#4a4a4a</Color>
+		<Color x:Key="Color/Button.Background.Transparent">#002d2d2d</Color>
+		<Color x:Key="Color/Button.Border">#4a4a4a</Color>
+		<Color x:Key="Color/Button.Border.Transparent">#004a4a4a</Color>
+		
+		<!-- ComboBox -->
+		<SolidColorBrush x:Key="ComboBoxBackground" Color="#131313"/>
+		
+		<!-- Control -->
+		<Color x:Key="Color/Control.Border">#5a5a5a</Color>
+		<Color x:Key="Color/Control.Border.Dark">#404040</Color>
+		<Color x:Key="Color/Control.Border.Dark.Transparent">#00404040</Color>
+		<Color x:Key="Color/Control.Border.Light">#646464</Color>
+		<Color x:Key="Color/Control.Border.Light.Transparent">#00646464</Color>
+		<Color x:Key="Color/Control.Border.Transparent">#005a5a5a</Color>
+		
+		<!-- Dialog -->
+		<Color x:Key="Color/Dialog.Background">#202020</Color>
+		<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#2b2b2b</Color>
+		<Color x:Key="Color/Dialog.ItemsGroup.Background">#2f2f2f</Color>
+		
+		<!-- Menu -->
+		<Color x:Key="Color/Menu.Background">#2c2c2c</Color>
+		
+		<!-- TabControl -->
+		<Color x:Key="Color/TabControl.TabStrip.Border">#3d3d3d</Color>
+		
+		<!-- TabItem -->
+		<Color x:Key="Color/TabItem.Header.Background">#002c2c2c</Color>
+		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#af2c2c2c</Color>
+		<Color x:Key="Color/TabItem.Header.Background.Selected">#2c2c2c</Color>
+		<Color x:Key="Color/TabItem.Header.Border.PointerOver">#303030</Color>
+		<Color x:Key="Color/TabItem.Header.Border.Selected">#3d3d3d</Color>
+		
+		<!-- TextBox -->
+		<SolidColorBrush x:Key="TextControlBackground" Color="#131313"/>
+		<SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#131313"/>
+		<SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#232323"/>
+		
+		<!-- Toolbar -->
+		<Color x:Key="Color/Toolbar.Background">#2c2c2c</Color>
+		<Color x:Key="Color/Toolbar.Border">#3d3d3d</Color>
+		<Color x:Key="Color/Toolbar.TextBox.Background">#131313</Color>
+		
+		<!-- Window -->
+		<Color x:Key="Color/Window.Background">#202020</Color>
+		<Color x:Key="Color/Window.Background.Dark">#171717</Color>
+		<Color x:Key="Color/Window.Background.Light">#272727</Color>
+		<Color x:Key="Color/Window.Background.Tabbed">#272727</Color>
+		<Color x:Key="Color/Window.Background.Tabbed.Dark">#202020</Color>
+		<Color x:Key="Color/Window.Background.Tabbed.Light">#303030</Color>
+		<Color x:Key="Color/Window.Background.Tabbed.Transparent">#b7272727</Color>
+		<Color x:Key="Color/Window.Background.Transparent">#b7202020</Color>
+		<Color x:Key="Color/Window.TitleBar">#272727</Color>
+		
+		<!-- WorkingArea -->
+		<Color x:Key="Color/WorkingArea.Background">#1c1c1c</Color>
+		<Color x:Key="Color/WorkingArea.Background.Dark">#141414</Color>
+		<Color x:Key="Color/WorkingArea.Background.Light">#272727</Color>
+		<Color x:Key="Color/WorkingArea.Panel.Background">#303030</Color>
+		<Color x:Key="Color/WorkingArea.Panel.Border">#404040</Color>
+		
+	</Styles.Resources>
+	
 </Styles>

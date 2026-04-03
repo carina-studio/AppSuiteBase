@@ -4,4 +4,60 @@
 	<!-- Base styles -->
 	<StyleInclude Source="/Themes/Base-Windows.axaml"/>
 	
+	<!-- Resources -->
+	<Styles.Resources>
+		
+		<!-- Button -->
+		<Color x:Key="Color/Button.Background">#ffffff</Color>
+		<Color x:Key="Color/Button.Border">#cccccc</Color>
+		<Color x:Key="Color/Button.Border.Transparent">#00cccccc</Color>
+		
+		<!-- Control -->
+		<Color x:Key="Color/Control.Border">#cccccc</Color>
+		<Color x:Key="Color/Control.Border.Dark">#aaaaaa</Color>
+		<Color x:Key="Color/Control.Border.Dark.Transparent">#00aaaaaa</Color>
+		<Color x:Key="Color/Control.Border.Light">#dddddd</Color>
+		<Color x:Key="Color/Control.Border.Light.Transparent">#00dddddd</Color>
+		<Color x:Key="Color/Control.Border.Transparent">#00cccccc</Color>
+		
+		<!-- Dialog -->
+		<Color x:Key="Color/Dialog.Background">#ffffff</Color>
+		<Color x:Key="Color/Dialog.ControlButtonsPanel.Background">#f4f4f4</Color>
+		<Color x:Key="Color/Dialog.ControlButtonsPanel.Border">#e4e4e4</Color>
+		<Color x:Key="Color/Dialog.ItemsGroup.Background">#fafafa</Color>
+		<Color x:Key="Color/Dialog.ItemsGroup.Border">#e7e7e7</Color>
+		
+		<!-- Menu -->
+		<Color x:Key="Color/Menu.Background">#f3f3f3</Color>
+		
+		<!-- TabControl -->
+		<Color x:Key="Color/TabControl.TabStrip.Border">#dddddd</Color>
+
+		<!-- TabItem -->
+		<Color x:Key="Color/TabItem.Header.Background">#00f3f3f3</Color>
+		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#8ff3f3f3</Color>
+		<Color x:Key="Color/TabItem.Header.Background.Selected">#f3f3f3</Color>
+		<Color x:Key="Color/TabItem.Header.Border.PointerOver">#d0d0d0</Color>
+		<Color x:Key="Color/TabItem.Header.Border.Selected">#dddddd</Color>
+		
+		<!-- Toolbar -->
+		<Color x:Key="Color/Toolbar.Background">#f3f3f3</Color>
+		<Color x:Key="Color/Toolbar.Border">#e5e5e5</Color>
+		
+		<!-- Window -->
+		<Color x:Key="Color/Window.Background">#ffffff</Color>
+		<Color x:Key="Color/Window.Background.Tabbed">#ffffff</Color>
+		<Color x:Key="Color/Window.Background.Tabbed.Transparent">#00ffffff</Color>
+		<Color x:Key="Color/Window.Background.Transparent">#00ffffff</Color>
+		<Color x:Key="Color/Window.TitleBar">#f3f3f3</Color>
+		
+		<!-- WorkingArea -->
+		<Color x:Key="Color/WorkingArea.Background">#f3f3f3</Color>
+		<Color x:Key="Color/WorkingArea.Background.Dark">#ececec</Color>
+		<Color x:Key="Color/WorkingArea.Background.Light">#ffffff</Color>
+		<Color x:Key="Color/WorkingArea.Panel.Background">#ebebeb</Color>
+		<Color x:Key="Color/WorkingArea.Panel.Border">#e0e0e0</Color>
+		
+	</Styles.Resources>
+	
 </Styles>

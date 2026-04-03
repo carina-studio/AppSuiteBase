@@ -439,6 +439,7 @@
 	<sys:Double x:Key="ToggleSwitchHeight">20</sys:Double>
 	<sys:Double x:Key="ToggleSwitchKnobHeight">14</sys:Double>
 	<sys:Double x:Key="ToggleSwitchKnobWidth">14</sys:Double>
+	<sys:Double x:Key="ToggleSwitchThemeMinWidth">40</sys:Double>
 	<GridLength x:Key="ToggleSwitchPostContentMargin">1</GridLength>
 	<GridLength x:Key="ToggleSwitchPreContentMargin">1</GridLength>
 	<Thickness x:Key="ToggleSwitchTopHeaderMargin">0</Thickness>

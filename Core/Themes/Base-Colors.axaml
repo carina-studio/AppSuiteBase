@@ -506,12 +506,12 @@
 	<StaticResourceExtension x:Key="ToggleSwitchStrokeOnPressed" ResourceKey="ButtonBorderBrushPressed"/>
 
 	<!-- Toolbar -->
-	<SolidColorBrush x:Key="Brush/Toolbar.Background" Color="{DynamicResource Color/ToolBar.Background}"/>
-	<SolidColorBrush x:Key="Brush/Toolbar.Button.Background.PointerOver" Color="{DynamicResource Color/ToolBar.Button.Background.PointerOver}"/>
-	<SolidColorBrush x:Key="Brush/Toolbar.Button.Background.Pressed" Color="{DynamicResource Color/ToolBar.Button.Background.Pressed}"/>
-	<SolidColorBrush x:Key="Brush/Toolbar.Button.Background.Transparent" Color="{DynamicResource Color/ToolBar.Button.Background.Transparent}"/>
-	<SolidColorBrush x:Key="Brush/Toolbar.Border" Color="{DynamicResource Color/ToolBar.Border}"/>
-	<SolidColorBrush x:Key="Brush/Toolbar.TextBox.Background" Color="{DynamicResource Color/ToolBar.TextBox.Background}"/>
+	<SolidColorBrush x:Key="Brush/Toolbar.Background" Color="{DynamicResource Color/Toolbar.Background}"/>
+	<SolidColorBrush x:Key="Brush/Toolbar.Button.Background.PointerOver" Color="{DynamicResource Color/Toolbar.Button.Background.PointerOver}"/>
+	<SolidColorBrush x:Key="Brush/Toolbar.Button.Background.Pressed" Color="{DynamicResource Color/Toolbar.Button.Background.Pressed}"/>
+	<SolidColorBrush x:Key="Brush/Toolbar.Button.Background.Transparent" Color="{DynamicResource Color/Toolbar.Button.Background.Transparent}"/>
+	<SolidColorBrush x:Key="Brush/Toolbar.Border" Color="{DynamicResource Color/Toolbar.Border}"/>
+	<SolidColorBrush x:Key="Brush/Toolbar.TextBox.Background" Color="{DynamicResource Color/Toolbar.TextBox.Background}"/>
 	<Color x:Key="Color/Toolbar.Background">#ffffff</Color>
 	<Color x:Key="Color/Toolbar.Button.Background.PointerOver">#ffffff</Color>
 	<Color x:Key="Color/Toolbar.Button.Background.Pressed">#ffffff</Color>

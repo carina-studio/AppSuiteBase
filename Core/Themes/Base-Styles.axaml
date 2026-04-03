@@ -3794,19 +3794,17 @@
 			<ControlTemplate TargetType="{x:Type ToggleSwitch}">
 				<Grid Background="{TemplateBinding Background}" RowDefinitions="Auto,*">
 
-					<ContentPresenter
-						x:Name="PART_ContentPresenter"
-						Grid.Row="0"
-						VerticalAlignment="Top"
-						Content="{TemplateBinding Content}"
-						ContentTemplate="{TemplateBinding ContentTemplate}"
-						Margin="{DynamicResource ToggleSwitchTopHeaderMargin}" />
+					<ContentPresenter x:Name="PART_ContentPresenter"
+					                  Grid.Row="0"
+					                  VerticalAlignment="Top"
+					                  Content="{TemplateBinding Content}"
+					                  ContentTemplate="{TemplateBinding ContentTemplate}"
+					                  Margin="{DynamicResource ToggleSwitchTopHeaderMargin}" />
 
-					<Grid
-						Grid.Row="1"
-						MinWidth="{DynamicResource ToggleSwitchThemeMinWidth}"
-						HorizontalAlignment="Left"
-						VerticalAlignment="Top">
+					<Grid Grid.Row="1"
+					      MinWidth="{DynamicResource ToggleSwitchThemeMinWidth}"
+					      HorizontalAlignment="Left"
+					      VerticalAlignment="Top">
 
 						<Grid.RowDefinitions>
 							<RowDefinition Height="{DynamicResource ToggleSwitchPreContentMargin}" />
@@ -3816,74 +3814,66 @@
 
 						<Grid.ColumnDefinitions>
 							<ColumnDefinition Width="Auto" />
-							<ColumnDefinition Width="12" MaxWidth="12" />
+							<ColumnDefinition Width="*" MaxWidth="12" />
 							<ColumnDefinition Width="Auto" />
 						</Grid.ColumnDefinitions>
 
-						<Grid
-							x:Name="SwitchAreaGrid"
-							Grid.RowSpan="3"
-							Grid.ColumnSpan="3"
-							Background="{DynamicResource ToggleSwitchContainerBackground}"
-							Margin="0,5"
-							TemplatedControl.IsTemplateFocusTarget="True" />
+						<Grid x:Name="SwitchAreaGrid"
+						      Grid.RowSpan="3"
+						      Grid.ColumnSpan="3"
+						      Background="{DynamicResource ToggleSwitchContainerBackground}"
+						      Margin="0,5"
+						      TemplatedControl.IsTemplateFocusTarget="True" />
 
-						<ContentPresenter
-							x:Name="PART_OffContentPresenter"
-							Grid.RowSpan="3"
-							Grid.Column="2"
-							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-							Content="{TemplateBinding OffContent}"
-							ContentTemplate="{TemplateBinding OffContentTemplate}" />
+						<ContentPresenter x:Name="PART_OffContentPresenter"
+						                  Grid.RowSpan="3"
+						                  Grid.Column="2"
+						                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+						                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+						                  Content="{TemplateBinding OffContent}"
+						                  ContentTemplate="{TemplateBinding OffContentTemplate}" />
 
-						<ContentPresenter
-							x:Name="PART_OnContentPresenter"
-							Grid.RowSpan="3"
-							Grid.Column="2"
-							HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-							VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-							Content="{TemplateBinding OnContent}"
-							ContentTemplate="{TemplateBinding OnContentTemplate}" />
+						<ContentPresenter x:Name="PART_OnContentPresenter"
+						                  Grid.RowSpan="3"
+						                  Grid.Column="2"
+						                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+						                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+						                  Content="{TemplateBinding OnContent}"
+						                  ContentTemplate="{TemplateBinding OnContentTemplate}" />
 
-						<Border
-							x:Name="OuterBorder"
-							Grid.Row="1"
-							Width="{DynamicResource ToggleSwitchWidth}"
-							Height="{DynamicResource ToggleSwitchHeight}"
-							Background="{DynamicResource ToggleSwitchFillOff}"
-							BorderBrush="{DynamicResource ToggleSwitchStrokeOff}"
-							BorderThickness="{DynamicResource ToggleSwitchOuterBorderStrokeThickness}"
-							CornerRadius="{DynamicResource ToggleSwitchCornerRadius}" />
+						<Border x:Name="OuterBorder"
+						        Grid.Row="1"
+						        Width="{DynamicResource ToggleSwitchWidth}"
+						        Height="{DynamicResource ToggleSwitchHeight}"
+						        Background="{DynamicResource ToggleSwitchFillOff}"
+						        BorderBrush="{DynamicResource ToggleSwitchStrokeOff}"
+						        BorderThickness="{DynamicResource ToggleSwitchOuterBorderStrokeThickness}"
+						        CornerRadius="{DynamicResource ToggleSwitchCornerRadius}" />
 
-						<Border
-							x:Name="SwitchKnobBounds"
-							Grid.Row="1"
-							Width="{DynamicResource ToggleSwitchWidth}"
-							Height="{DynamicResource ToggleSwitchHeight}"
-							Background="{DynamicResource ToggleSwitchFillOn}"
-							BorderBrush="{DynamicResource ToggleSwitchStrokeOn}"
-							BorderThickness="{DynamicResource ToggleSwitchOnStrokeThickness}"
-							CornerRadius="{DynamicResource ToggleSwitchCornerRadius}" />
+						<Border x:Name="SwitchKnobBounds"
+						        Grid.Row="1"
+						        Width="{DynamicResource ToggleSwitchWidth}"
+						        Height="{DynamicResource ToggleSwitchHeight}"
+						        Background="{DynamicResource ToggleSwitchFillOn}"
+						        BorderBrush="{DynamicResource ToggleSwitchStrokeOn}"
+						        BorderThickness="{DynamicResource ToggleSwitchOnStrokeThickness}"
+						        CornerRadius="{DynamicResource ToggleSwitchCornerRadius}" />
 
-						<Canvas
-							x:Name="PART_SwitchKnob"
-							Grid.Row="1"
-							Width="{DynamicResource ToggleSwitchHeight}"
-							Height="{DynamicResource ToggleSwitchHeight}"
-							HorizontalAlignment="Left">
+						<Canvas x:Name="PART_SwitchKnob"
+						        Grid.Row="1"
+						        Width="{DynamicResource ToggleSwitchHeight}"
+						        Height="{DynamicResource ToggleSwitchHeight}"
+						        HorizontalAlignment="Left">
 
 							<Grid x:Name="PART_MovingKnobs" Width="{DynamicResource ToggleSwitchHeight}" Height="{DynamicResource ToggleSwitchHeight}">
-								<Ellipse
-									x:Name="SwitchKnobOn"
-									Fill="{DynamicResource ToggleSwitchKnobFillOn}"
-									Width="{DynamicResource ToggleSwitchKnobWidth}"
-									Height="{DynamicResource ToggleSwitchKnobHeight}" />
-								<Ellipse
-									x:Name="SwitchKnobOff"
-									Fill="{DynamicResource ToggleSwitchKnobFillOff}"
-									Width="{DynamicResource ToggleSwitchKnobWidth}"
-									Height="{DynamicResource ToggleSwitchKnobHeight}" />
+								<Ellipse x:Name="SwitchKnobOn"
+								         Fill="{DynamicResource ToggleSwitchKnobFillOn}"
+								         Width="{DynamicResource ToggleSwitchKnobWidth}"
+								         Height="{DynamicResource ToggleSwitchKnobHeight}" />
+								<Ellipse x:Name="SwitchKnobOff"
+								         Fill="{DynamicResource ToggleSwitchKnobFillOff}"
+								         Width="{DynamicResource ToggleSwitchKnobWidth}"
+								         Height="{DynamicResource ToggleSwitchKnobHeight}" />
 							</Grid>
 						</Canvas>
 					</Grid>
