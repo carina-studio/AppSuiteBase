@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.UsageData;
 
@@ -8,6 +10,10 @@ namespace CarinaStudio.AppSuite.UsageData;
 /// </summary>
 internal class MockUsageManager(IAppSuiteApplication app) : BaseApplicationObject<IAppSuiteApplication>(app), IUsageManager
 {
+    /// <inheritdoc/>
+    public Task FlushAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+
+
     /// <inheritdoc/>
     public bool IsEnabled => false;
 

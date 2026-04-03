@@ -3350,6 +3350,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         // save settings
         if (isCritical)
             await this.SaveSettingsAsync(true);
+
+        // flush usage data
+        if (this.usageManager is not null)
+            await this.usageManager.FlushAsync();
     }
 
 

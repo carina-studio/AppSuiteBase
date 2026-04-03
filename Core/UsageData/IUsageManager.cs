@@ -1,6 +1,8 @@
 using CarinaStudio.Threading;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.UsageData;
 
@@ -13,6 +15,14 @@ namespace CarinaStudio.AppSuite.UsageData;
 [ThreadSafe]
 public interface IUsageManager : IApplicationObject<IAppSuiteApplication>
 {
+    /// <summary>
+    /// Flush all data and complete related transmissions asynchronously.
+    /// </summary>
+    /// <param name="cancellationToken"><see cref="CancellationToken"/> to cancel the operation.</param>
+    /// <returns>Task of flushing and transmissions.</returns>
+    Task FlushAsync(CancellationToken cancellationToken = default);
+    
+    
     /// <summary>
     /// Whether usage data collection is enabled.
     /// Reflects the user's privacy preference; all Track* calls are
