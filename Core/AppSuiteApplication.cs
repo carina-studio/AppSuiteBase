@@ -2072,7 +2072,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// <summary>
     /// Check whether splash window is needed when launching application or not.
     /// </summary>
-    protected virtual bool IsSplashWindowNeeded => Platform.IsNotMacOS;
+    protected virtual bool IsSplashWindowNeeded => Platform.IsNotMacOS || this.Configuration.GetValueOrDefault(ConfigurationKeys.ForceUsingWindowsStyles);
 
 
     /// <summary>
@@ -5672,7 +5672,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 Source = new Uri($"avares://CarinaStudio.AppSuite.Core/Themes/{themeMode}.axaml"),
             };
 #pragma warning restore IL2026
-            if (Platform.IsMacOS)
+            if (Platform.IsMacOS || this.Configuration.GetValueOrDefault(ConfigurationKeys.ForceUsingMacOSStyles))
             {
                 this.styles = new Styles().Also(styles =>
                 {
@@ -5685,7 +5685,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 #pragma warning restore IL2026
                 });
             }
-            else if (Platform.IsWindows)
+            else if (Platform.IsWindows || this.Configuration.GetValueOrDefault(ConfigurationKeys.ForceUsingWindowsStyles))
             {
                 this.styles = new Styles().Also(styles =>
                 {

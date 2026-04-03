@@ -44,6 +44,14 @@ public abstract class ConfigurationKeys
     /// </summary>
     public static readonly SettingKey<int> DialogNavigationBarUpdateDelay = new(nameof(DialogNavigationBarUpdateDelay), 100);
     /// <summary>
+    /// Whether to force using macOS styles or not.
+    /// </summary>
+    public static readonly SettingKey<bool> ForceUsingMacOSStyles = new(nameof(ForceUsingMacOSStyles), false);
+    /// <summary>
+    /// Whether to force using Windows styles or not.
+    /// </summary>
+    public static readonly SettingKey<bool> ForceUsingWindowsStyles = new(nameof(ForceUsingWindowsStyles), false);
+    /// <summary>
     /// Whether content of window should be blurred when one or more dialogs are showing or not.
     /// </summary>
     public static readonly SettingKey<bool> MakeContentBlurredWhenShowingDialog = new(nameof(MakeContentBlurredWhenShowingDialog), false);
