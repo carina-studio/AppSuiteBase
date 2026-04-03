@@ -1,3 +1,4 @@
+using CarinaStudio.Threading;
 using System;
 using System.Collections.Generic;
 
@@ -9,6 +10,7 @@ namespace CarinaStudio.AppSuite.UsageData;
 /// by monitoring the application state.
 /// Implementations are expected to be thread-safe.
 /// </summary>
+[ThreadSafe]
 public interface IUsageManager : IApplicationObject<IAppSuiteApplication>
 {
     /// <summary>
@@ -26,20 +28,17 @@ public interface IUsageManager : IApplicationObject<IAppSuiteApplication>
     /// <param name="properties">Optional key/value pairs describing the event context.</param>
     /// <param name="metrics">Optional numeric measurements, e.g. <c>{ "FileSize", 1024 }</c>.</param>
     void TrackEvent(string eventName, IDictionary<string, string>? properties = null, IDictionary<string, double>? metrics = null);
-
-
+    
+    
     /// <summary>
-    /// Track that the user navigated to a named screen or opened a dialog.
+    /// Track a handled or unhandled exception.
     /// </summary>
-    /// <param name="screenName">Logical name, e.g. <c>"MainWindow"</c>, <c>"SettingsDialog"</c>.</param>
-    /// <param name="duration">Optional time the user spent on the screen.</param>
+    /// <param name="exception">Exception to track.</param>
+    /// <param name="severityLevel">Severity classification.</param>
     /// <param name="properties">Optional additional properties.</param>
-    void TrackScreenView(
-        string screenName,
-        TimeSpan? duration = null,
-        IDictionary<string, string>? properties = null);
-
-
+    void TrackException(Exception exception, UsageSeverityLevel severityLevel = UsageSeverityLevel.Error, IDictionary<string, string>? properties = null);
+    
+    
     /// <summary>
     /// Track a single numeric measurement, e.g. startup time or memory usage.
     /// </summary>
@@ -50,12 +49,12 @@ public interface IUsageManager : IApplicationObject<IAppSuiteApplication>
 
 
     /// <summary>
-    /// Track a handled or unhandled exception.
+    /// Track that the user navigated to a named screen or opened a dialog.
     /// </summary>
-    /// <param name="exception">Exception to track.</param>
-    /// <param name="severityLevel">Severity classification.</param>
+    /// <param name="screenName">Logical name, e.g. <c>"MainWindow"</c>, <c>"SettingsDialog"</c>.</param>
+    /// <param name="duration">Optional time the user spent on the screen.</param>
     /// <param name="properties">Optional additional properties.</param>
-    void TrackException(Exception exception, UsageSeverityLevel severityLevel = UsageSeverityLevel.Error, IDictionary<string, string>? properties = null);
+    void TrackScreenView(string screenName, TimeSpan? duration = null, IDictionary<string, string>? properties = null);
 }
 
 
@@ -71,6 +70,7 @@ public static class UsageManagerExtensions
     /// <param name="eventName">Short, dot-separated name, e.g. <c>"Editor.OpenFile"</c>.</param>
     /// <param name="propertyKey">Property key.</param>
     /// <param name="propertyValue">Property value.</param>
+    [ThreadSafe]
     public static void TrackEvent(this IUsageManager manager, string eventName, string propertyKey, string propertyValue) =>
         manager.TrackEvent(eventName, new Dictionary<string, string> { [propertyKey] = propertyValue });
 
@@ -80,6 +80,7 @@ public static class UsageManagerExtensions
     /// </summary>
     /// <param name="manager"><see cref="IUsageManager"/>.</param>
     /// <param name="screenName">Logical name, e.g. <c>"MainWindow"</c>, <c>"SettingsDialog"</c>.</param>
+    [ThreadSafe]
     public static void TrackScreenView(this IUsageManager manager, string screenName) =>
         manager.TrackScreenView(screenName, null, null);
 }
