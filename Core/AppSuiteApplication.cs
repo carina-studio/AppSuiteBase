@@ -47,6 +47,7 @@ using RangeSlider.Avalonia.Themes.Fluent;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -284,6 +285,38 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         public void Dispose() =>
             app.StopTracing(this);
     }
+    
+    
+    // Constants for usage events tracking.
+    static class UsageEvents
+    {
+        public const string CultureChanged = "App.CultureChanged";
+        public const string Launched = "App.Launched";
+        public const string ProVersionActivated = "App.ProVersionActivated";
+        public const string ProVersionDeactivated = "App.ProVersionDeactivated";
+        public const string ThemeModeChanged = "App.ThemeModeChanged";
+    }
+    
+    
+    // Constants for usage metrics tracking.
+    static class UsageMetrics
+    {
+        public const string MainWindowCount = "App.MainWindowCount";
+    }
+    
+    
+    // Constants for usage collection properties.
+    static class UsageProperties
+    {
+        public const string Culture = "Culture";
+        public const string IsDebugMode = "IsDebugMode";
+        public const string IsProVersionActivated = "IsProVersion";
+        public const string IsRunningAsAdministrator = "IsRunningAsAdmin";
+        public const string LaunchTime = "LaunchTime";
+        public const string SystemCulture = "SystemCulture";
+        public const string SystemThemeMode = "SystemThemeMode";
+        public const string ThemeMode = "ThemeMode";
+    }
 
 
     /// <summary>
@@ -423,16 +456,19 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     long frameworkInitializedTime;
     volatile HardwareInfo? hardwareInfo;
     bool isCriticalShutdownStarted;
+    bool isLaunchedEventTracked;
     bool isRestartAsAdminRequested;
     bool isRestartingRootWindowsRequested;
     bool isRestartRequested;
     bool isShutdownStarted;
+    readonly Stopwatch launchTopWatch = new Stopwatch().Also(it => it.Start());
     IDisposable? launchTracingToken;
     Task? loadingInitPersistentStateTask;
     Task? loadingInitSettingsTask;
     int logOutputTargetPort;
     EventHandler? mainWindowClosedHandler;
     readonly Dictionary<MainWindow, MainWindowHolder> mainWindowHolders = new();
+    EventHandler? mainWindowOpenedHandler;
     readonly ObservableList<MainWindow> mainWindows = new();
     readonly CancellationTokenSource multiInstancesServerCancellationTokenSource = new();
     NamedPipeServerStream? multiInstancesServerStream;
@@ -1944,7 +1980,20 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         var handled = this.OnExceptionOccurredInApplicationLifetime(ex);
         var e = new IAppSuiteApplication.ExceptionEventArgs(ex) { Handled = handled };
         this.ExceptionOccurredInApplicationLifetime?.Invoke(this, e);
-        return handled || e.Handled;
+        handled |= e.Handled;
+        try
+        {
+            var properties = new Dictionary<string, string>
+            {
+                ["Handled"] = handled.ToString()
+            };
+            this.usageManager?.TrackException(ex, UsageSeverityLevel.Critical, properties);
+        }
+        catch
+        {
+            // ignored
+        }
+        return handled;
     }
 
 
@@ -3196,6 +3245,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         this.windows.Remove(mainWindow);
         if (this.mainWindowClosedHandler is not null)
             mainWindow.Closed -= this.mainWindowClosedHandler;
+        if (this.mainWindowOpenedHandler is not null)
+            mainWindow.Opened -= this.mainWindowOpenedHandler;
 
         this.Logger.LogDebug("Main window {id:x8} closed, {count} remains", mainWindow.GetHashCode(), this.mainWindows.Count);
 
@@ -3273,6 +3324,22 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.Logger.LogWarning("Skip saving settings because of shutting down for critical reason");
         else
             await this.SaveSettingsAsync();
+        
+        // track usage
+        this.usageManager?.TrackMetric(UsageMetrics.MainWindowCount, this.mainWindows.Count);
+    }
+
+
+    /// <summary>
+    /// Called when a main window has been opened.
+    /// </summary>
+    /// <param name="mainWindow">The main window.</param>
+    /// <param name="viewModel">The view-model of the main window.</param>
+    protected virtual void OnMainWindowOpened(MainWindow mainWindow, ViewModel viewModel)
+    {
+        this.launchTopWatch.Stop();
+        this.TrackLaunchedEvent();
+        this.usageManager?.TrackMetric(UsageMetrics.MainWindowCount, this.mainWindows.Count);
     }
 
 
@@ -3570,6 +3637,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
                     // get instance
                     this.productManager = (IProductManager)pmType.GetProperty("Default", BindingFlags.Public | BindingFlags.Static)!.GetGetMethod()!.Invoke(null, [])!;
+                    this.productManager.ProductActivationChanged += (_, productId, isActivated) => this.OnProductActivationStateChanged(productId, isActivated);
                 }
                 else
                     this.Logger.LogError("Unexpected type of implementation of product manager");
@@ -3598,6 +3666,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
                 // get instance
                 this.usageManager = (IUsageManager)umType.GetProperty("Default", BindingFlags.Public | BindingFlags.Static)!.GetGetMethod()!.Invoke(null, [])!;
+                this.usageManager.PropertyChanged += (_, e) => this.OnUsageManagerPropertyChanged(e);
             }
             catch (Exception ex)
             {
@@ -3647,6 +3716,19 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.avaloniaLogger.Log(level, "[{__area__}][{__source__}] " + messageTemplate, expandedProperties);
             // ReSharper restore TemplateIsNotCompileTimeConstantProblem
 #pragma warning restore CA2254
+        }
+    }
+
+
+    // Called when product activation state changed.
+    void OnProductActivationStateChanged(string productId, bool isActivated)
+    {
+        if (productId == this.ProVersionProductId)
+        {
+            if (isActivated)
+                this.usageManager?.TrackEvent(UsageEvents.ProVersionActivated);
+            else
+                this.usageManager?.TrackEvent(UsageEvents.ProVersionDeactivated);
         }
     }
 
@@ -3785,7 +3867,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         else if (e.Key == SettingKeys.ApplySystemTextScaleFactor)
             _ = this.UpdateTextScaleFactorAsync(CancellationToken.None);
         else if (e.Key == SettingKeys.Culture)
+        {
+            this.usageManager?.TrackEvent(UsageEvents.CultureChanged, UsageProperties.Culture, e.Value.ToString()!);
             _ = this.UpdateCultureInfoAsync(true);
+        }
         else if (e.Key == SettingKeys.ShowProcessInfo)
         {
             if (!(bool)e.Value)
@@ -3795,6 +3880,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         }
         else if (e.Key == SettingKeys.ThemeMode)
         {
+            this.usageManager?.TrackEvent(UsageEvents.ThemeModeChanged, UsageProperties.ThemeMode, e.Value.ToString()!);
             if ((ThemeMode)e.Value == ThemeMode.System)
             {
                 // ReSharper disable once AsyncVoidLambda
@@ -3881,6 +3967,17 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// <param name="newVersion">New version.</param>
     protected virtual void OnUpgradeSettings(ISettings settings, int oldVersion, int newVersion)
     { }
+    
+    
+    // Called when property of the usage manager changed.
+    void OnUsageManagerPropertyChanged(PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(IUsageManager.IsEnabled) && this.usageManager?.IsEnabled == true)
+        {
+            this.TrackLaunchedEvent();
+            this.usageManager.TrackMetric(UsageMetrics.MainWindowCount, this.mainWindows.Count);
+        }
+    }
 
 
     /// <summary>
@@ -4892,6 +4989,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (sender is MainWindow mainWindow)
                 _ = this.OnMainWindowClosedAsync(mainWindow);
         }).Also(it => this.mainWindowClosedHandler = it);
+        mainWindow.Opened += this.mainWindowOpenedHandler ?? new EventHandler((sender, e) =>
+        {
+            if (sender is MainWindow mainWindow)
+                this.OnMainWindowOpened(mainWindow, viewModel);
+        }).Also(it => this.mainWindowOpenedHandler = it);
         mainWindow.GetObservable(WindowBase.IsActiveProperty).Subscribe(new Observer<bool>(value =>
         {
             this.OnMainWindowActivationChanged(mainWindow, value);
@@ -5436,6 +5538,34 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// <inheritdoc/>
     [ThreadSafe]
     public double TextScaleFactor { get; private set; } = 1.0;
+    
+    
+    // Track launched usage event.
+    void TrackLaunchedEvent()
+    {
+        if (this.isLaunchedEventTracked
+            || this.launchTopWatch.IsRunning
+            || this.settings is null
+            || this.usageManager?.IsEnabled != true)
+        {
+            return;
+        }
+        this.isLaunchedEventTracked = true;
+        var properties = new Dictionary<string, string>
+        {
+            [UsageProperties.Culture] = this.settings.GetValueOrDefault(SettingKeys.Culture).ToString(),
+            [UsageProperties.IsDebugMode] = this.IsDebugMode.ToString(CultureInfo.InvariantCulture),
+            [UsageProperties.IsProVersionActivated] = this.productManager is null || string.IsNullOrEmpty(this.ProVersionProductId) 
+                ? false.ToString(CultureInfo.InvariantCulture) 
+                : this.productManager.IsProductActivated(this.ProVersionProductId).ToString(CultureInfo.InvariantCulture),
+            [UsageProperties.IsRunningAsAdministrator] = this.IsRunningAsAdministrator.ToString(CultureInfo.InvariantCulture),
+            [UsageProperties.LaunchTime] = this.launchTopWatch.ElapsedMilliseconds.ToString(CultureInfo.InvariantCulture),
+            [UsageProperties.SystemCulture] = CultureInfo.CurrentUICulture.Name,
+            [UsageProperties.SystemThemeMode] = this.systemThemeMode.ToString(),
+            [UsageProperties.ThemeMode] = this.settings.GetValueOrDefault(SettingKeys.ThemeMode).ToString(),
+        };
+        this.usageManager.TrackEvent(UsageEvents.Launched, properties);
+    }
 
 
     // Update culture info according to settings.

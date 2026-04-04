@@ -1,6 +1,7 @@
 using CarinaStudio.Threading;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace CarinaStudio.AppSuite.UsageData;
 /// Implementations are expected to be thread-safe.
 /// </summary>
 [ThreadSafe]
-public interface IUsageManager : IApplicationObject<IAppSuiteApplication>
+public interface IUsageManager : IApplicationObject<IAppSuiteApplication>, INotifyPropertyChanged
 {
     /// <summary>
     /// Flush all data and complete related transmissions asynchronously.
