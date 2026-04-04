@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,6 +17,10 @@ internal class MockUsageManager(IAppSuiteApplication app) : BaseApplicationObjec
 
     /// <inheritdoc/>
     public bool IsEnabled => false;
+
+
+    /// <inheritdoc/>
+    public event PropertyChangedEventHandler? PropertyChanged;
 
 
     /// <inheritdoc/>
