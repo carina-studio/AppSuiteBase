@@ -239,11 +239,13 @@
 	<sys:String x:Key="String/Common.ShowLess">顯示較少</sys:String>
 	<sys:String x:Key="String/Common.ShowMore">顯示更多</sys:String>
 	<sys:String x:Key="String/Common.ShowMore.WithDialog">顯示更多…</sys:String>
+	<sys:String x:Key="String/Common.Tab">分頁</sys:String>
 	<sys:String x:Key="String/Common.TakeMemorySnapshot">擷取記憶體快照</sys:String>
 	<sys:String x:Key="String/Common.TakeMemorySnapshot.WithDialog">擷取記憶體快照…</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement">使用者協議</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement.WithDialog">使用者協議…</sys:String>
 	<sys:String x:Key="String/Common.Validating">驗證中…</sys:String>
+	<sys:String x:Key="String/Common.Window">視窗</sys:String>
 	<sys:String x:Key="String/Common.Yes">是</sys:String>
 
 	<!-- DatePicker -->

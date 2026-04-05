@@ -155,8 +155,8 @@
 	<sys:String x:Key="String/Common.Cancel">取消</sys:String>
 	<sys:String x:Key="String/Common.Clear">清除</sys:String>
 	<sys:String x:Key="String/Common.Close">关闭</sys:String>
-	<sys:String x:Key="String/Common.CloseTab">关闭页面</sys:String>
-	<sys:String x:Key="String/Common.CloseTab.WithGesture">关闭页面 (Ctrl+W)</sys:String>
+	<sys:String x:Key="String/Common.CloseTab">关闭标签页</sys:String>
+	<sys:String x:Key="String/Common.CloseTab.WithGesture">关闭标签页 (Ctrl+W)</sys:String>
 	<sys:String x:Key="String/Common.CloseWindow">关闭窗口</sys:String>
 	<sys:String x:Key="String/Common.Complete">完成</sys:String>
 	<sys:String x:Key="String/Common.Complete.WithDialog">完成…</sys:String>
@@ -167,8 +167,8 @@
 	<sys:String x:Key="String/Common.Copy.WithGesture">复制 (Ctrl+C)</sys:String>
 	<sys:String x:Key="String/Common.Create">建立</sys:String>
 	<sys:String x:Key="String/Common.Create.WithDialog">建立…</sys:String>
-	<sys:String x:Key="String/Common.CreateTab">建立新的页面</sys:String>
-	<sys:String x:Key="String/Common.CreateTab.WithGesture">建立新的页面 (Ctrl+T)</sys:String>
+	<sys:String x:Key="String/Common.CreateTab">建立新的标签页</sys:String>
+	<sys:String x:Key="String/Common.CreateTab.WithGesture">建立新的标签页 (Ctrl+T)</sys:String>
 	<sys:String x:Key="String/Common.CreateWindow">建立新的窗口</sys:String>
 	<sys:String x:Key="String/Common.Custom">自定义</sys:String>
 	<sys:String x:Key="String/Common.Cut">剪切</sys:String>
@@ -207,7 +207,7 @@
 	<sys:String x:Key="String/Common.OK">确定</sys:String>
 	<sys:String x:Key="String/Common.Open">打开</sys:String>
 	<sys:String x:Key="String/Common.Open.WithDialog">打开…</sys:String>
-	<sys:String x:Key="String/Common.OpenInNewTab">在新页面中开启</sys:String>
+	<sys:String x:Key="String/Common.OpenInNewTab">在新标签页中开启</sys:String>
 	<sys:String x:Key="String/Common.OpenInNewWindow">在新窗口中开启</sys:String>
 	<sys:String x:Key="String/Common.OpenScriptLogWindow">脚本日志窗口</sys:String>
 	<sys:String x:Key="String/Common.OpenScriptLogWindow.WithDialog">脚本日志窗口…</sys:String>
@@ -239,11 +239,13 @@
 	<sys:String x:Key="String/Common.ShowLess">显示较少</sys:String>
 	<sys:String x:Key="String/Common.ShowMore">显示更多</sys:String>
 	<sys:String x:Key="String/Common.ShowMore.WithDialog">显示更多…</sys:String>
+	<sys:String x:Key="String/Common.Tab">标签页</sys:String>
 	<sys:String x:Key="String/Common.TakeMemorySnapshot">撷取内存快照</sys:String>
 	<sys:String x:Key="String/Common.TakeMemorySnapshot.WithDialog">撷取内存快照…</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement">使用者协议</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement.WithDialog">使用者协议…</sys:String>
 	<sys:String x:Key="String/Common.Validating">验证中…</sys:String>
+	<sys:String x:Key="String/Common.Window">窗口</sys:String>
 	<sys:String x:Key="String/Common.Yes">是</sys:String>
 
 	<!-- DatePicker -->

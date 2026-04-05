@@ -245,11 +245,13 @@
 	<sys:String x:Key="String/Common.ShowLess">Show Less</sys:String>
 	<sys:String x:Key="String/Common.ShowMore">Show More</sys:String>
 	<sys:String x:Key="String/Common.ShowMore.WithDialog">Show More…</sys:String>
+	<sys:String x:Key="String/Common.Tab">Tab</sys:String>
 	<sys:String x:Key="String/Common.TakeMemorySnapshot">Take Memory Snapshot</sys:String>
 	<sys:String x:Key="String/Common.TakeMemorySnapshot.WithDialog">Take Memory Snapshot…</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement">User Agreement</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement.WithDialog">User Agreement…</sys:String>
 	<sys:String x:Key="String/Common.Validating">Validating…</sys:String>
+	<sys:String x:Key="String/Common.Window">Window</sys:String>
 	<sys:String x:Key="String/Common.Yes">Yes</sys:String>
 	
 	<!-- DatePicker -->
