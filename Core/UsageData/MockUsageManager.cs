@@ -12,7 +12,7 @@ namespace CarinaStudio.AppSuite.UsageData;
 internal class MockUsageManager(IAppSuiteApplication app) : BaseApplicationObject<IAppSuiteApplication>(app), IUsageManager
 {
     /// <inheritdoc/>
-    public Task FlushAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+    public Task FlushAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
 
 
     /// <inheritdoc/>

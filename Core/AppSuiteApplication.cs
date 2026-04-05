@@ -24,6 +24,7 @@ using Avalonia.Themes.Fluent;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Controls;
+using CarinaStudio.AppSuite.Net;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.Scripting;
 using CarinaStudio.AppSuite.UsageData;
@@ -352,6 +353,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     // Constants.
     const int AutoSaveSettingsDelay = 1000;
     const int DeactivationDelay = 300;
+    const int FlushingUsageDataInterval = 60 * 60000; // 1 hr
+    const int FlushingUsageDataWhenShuttingDownTimeout = 10000;
     const int MinSplashWindowDuration = 2000;
     const string InitSettingsFileName = "InitSettings.json";
     const string PersistentStateFileName = "PersistentState.json";
@@ -453,6 +456,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     ScheduledAction? deactivateAction;
     CancellationTokenSource? deactivationActionCancellationTokenSource;
     readonly Styles extraStyles = new();
+    ScheduledAction? flushUsageDataAction;
     long frameworkInitializedTime;
     volatile HardwareInfo? hardwareInfo;
     bool isCriticalShutdownStarted;
@@ -1928,6 +1932,35 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// Get fall-back theme mode if <see cref="IsSystemThemeModeSupported"/> is false.
     /// </summary>
     protected virtual ThemeMode FallbackThemeMode { get; } = Platform.IsMacOS ? ThemeMode.Light : ThemeMode.Dark;
+    
+    
+    // Flush collected usage data.
+    async Task FlushUsageDataAsync()
+    {
+        if (this.usageManager is null || !this.usageManager.IsEnabled)
+            return;
+        this.flushUsageDataAction?.Cancel();
+        if (this.isShutdownStarted)
+        {
+            using var cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource.CancelAfter(FlushingUsageDataWhenShuttingDownTimeout);
+            cancellationTokenSource.Token.Register(_ => this.Logger.LogError("Timeout waiting for flushing collected usage data"), null);
+            try
+            {
+                await this.usageManager.FlushAsync(cancellationTokenSource.Token);
+            }
+            catch
+            {
+                // ignored
+            }
+        }
+        else
+        {
+            await this.usageManager.FlushAsync();
+            if (!this.isShutdownStarted)
+                this.flushUsageDataAction?.Schedule(FlushingUsageDataInterval);
+        }
+    }
 
 
     // Transform RGB color values.
@@ -3419,8 +3452,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             await this.SaveSettingsAsync(true);
 
         // flush usage data
-        if (this.usageManager is not null)
-            await this.usageManager.FlushAsync();
+        await this.FlushUsageDataAsync();
     }
 
 
@@ -3491,6 +3523,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         // setup scheduled actions
         this.checkUpdateInfoAction = new(this.CheckForApplicationUpdateAsync);
         this.deactivateAction = new(this.Deactivate);
+        this.flushUsageDataAction = new(this.FlushUsageDataAsync);
         this.performFullGCAction = new(() => this.PerformGC(GCCollectionMode.Forced));
         this.stopUserInteractionAction = new(() =>
         {
@@ -3601,7 +3634,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.UpdateSplashWindowMessage(this.GetStringNonNull("AppSuiteApplication.InitializingComponents"));
             await this.splashWindow!.WaitForRenderingAsync();
         }
-        var initNetworkManagerTask = Net.NetworkManager.InitializeAsync(this);
+        var initNetworkManagerTask = NetworkManager.InitializeAsync(this);
 
         // setup styles
         this.UpdateStyles();
@@ -3994,6 +4027,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// </summary>
     protected virtual void OnUserInteractionStopped()
     { 
+        this.flushUsageDataAction?.Execute();
         this.PerformGC(GCCollectionMode.Optimized);
         var delay = this.Configuration.GetValueOrDefault(ConfigurationKeys.DelayToPerformFullGCWhenUserInteractionStopped);
         if (delay >= 0)
@@ -4989,7 +5023,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (sender is MainWindow mainWindow)
                 _ = this.OnMainWindowClosedAsync(mainWindow);
         }).Also(it => this.mainWindowClosedHandler = it);
-        mainWindow.Opened += this.mainWindowOpenedHandler ?? new EventHandler((sender, e) =>
+        mainWindow.Opened += this.mainWindowOpenedHandler ?? new EventHandler((sender, _) =>
         {
             if (sender is MainWindow mainWindow)
                 this.OnMainWindowOpened(mainWindow, viewModel);
@@ -5565,6 +5599,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             [UsageProperties.ThemeMode] = this.settings.GetValueOrDefault(SettingKeys.ThemeMode).ToString(),
         };
         this.usageManager.TrackEvent(UsageEvents.Launched, properties);
+        this.flushUsageDataAction?.Schedule(FlushingUsageDataInterval);
     }
 
 
