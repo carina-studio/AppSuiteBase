@@ -240,12 +240,17 @@
 	<sys:String x:Key="String/Common.ShowMore">显示更多</sys:String>
 	<sys:String x:Key="String/Common.ShowMore.WithDialog">显示更多…</sys:String>
 	<sys:String x:Key="String/Common.Tab">标签页</sys:String>
+	<StaticResourceExtension x:Key="String/Common.Tabs" ResourceKey="String/Common.Tab"/>
 	<sys:String x:Key="String/Common.TakeMemorySnapshot">撷取内存快照</sys:String>
 	<sys:String x:Key="String/Common.TakeMemorySnapshot.WithDialog">撷取内存快照…</sys:String>
+	<sys:String x:Key="String/Common.Tool">工具</sys:String>
+	<StaticResourceExtension x:Key="String/Common.Tools" ResourceKey="String/Common.Tool"/>
+	<sys:String x:Key="String/Common.Tools.WithDialog">工具…</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement">使用者协议</sys:String>
 	<sys:String x:Key="String/Common.UserAgreement.WithDialog">使用者协议…</sys:String>
 	<sys:String x:Key="String/Common.Validating">验证中…</sys:String>
 	<sys:String x:Key="String/Common.Window">窗口</sys:String>
+	<StaticResourceExtension x:Key="String/Common.Windows" ResourceKey="String/Common.Window"/>
 	<sys:String x:Key="String/Common.Yes">是</sys:String>
 
 	<!-- DatePicker -->
