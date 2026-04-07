@@ -17,6 +17,7 @@ using CarinaStudio.Windows.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -404,7 +405,16 @@ public class StringInterpolationFormatTextBox : SyntaxHighlightingObjectTextBox<
 				(this.predefinedVarsPopup.ItemListBox.SelectedItem as ListBoxItem)?.Let(item =>
 				{
 					if (item.DataContext is StringInterpolationVariable variable)
+					{
+						if (this.PredefinedVariableSelected is { } @event)
+						{
+							var sivse = new StringInterpolationVariableSelectedEventArgs(variable);
+							@event(this, sivse);
+							if (sivse.Cancel)
+								return;
+						}
 						this.InputVariableName(variable.Name);
+					}
 				});
 				this.CloseAssistanceMenus();
 			}
@@ -487,6 +497,12 @@ public class StringInterpolationFormatTextBox : SyntaxHighlightingObjectTextBox<
 	public IList<StringInterpolationVariable> PredefinedVariables => this.predefinedVars;
 
 
+    /// <summary>
+    /// Raised when a <see cref="StringInterpolationVariable"/> has been selected by user.
+    /// </summary>
+	public event EventHandler<StringInterpolationVariableSelectedEventArgs>? PredefinedVariableSelected; 
+
+
 	/// <inheritdoc/>
 	protected override void RaiseObjectChanged(string? oldValue, string? newValue) =>
 		this.RaisePropertyChanged(ObjectProperty, oldValue, newValue);
@@ -508,7 +524,16 @@ public class StringInterpolationFormatTextBox : SyntaxHighlightingObjectTextBox<
 				{
 					menu.Close();
 					if (e.Item is ListBoxItem item && item.DataContext is StringInterpolationVariable variable)
+					{
+						if (this.PredefinedVariableSelected is { } @event)
+						{
+							var sivse = new StringInterpolationVariableSelectedEventArgs(variable);
+							@event(this, sivse);
+							if (sivse.Cancel)
+								return;
+						}
 						this.InputVariableName(variable.Name);
+					}
 				};
 				it.ItemsPanel = this.FindResourceOrDefault<ItemsPanelTemplate>("ItemsPanelTemplate/StackPanel"); // [Workaround] Prevent crashing caused by VirtualizationStackPanel
 				it.ItemsSource = this.filteredPredefinedVarListBoxItems;
@@ -630,4 +655,17 @@ public class StringInterpolationVariable : AvaloniaObject
 		get => this.GetValue(NameProperty);
 		set => this.SetValue(NameProperty, value);
 	}
+}
+
+
+/// <summary>
+/// Event data for user selected a variable.
+/// </summary>
+/// <param name="variable">The selected variable.</param>
+public class StringInterpolationVariableSelectedEventArgs(StringInterpolationVariable variable) : CancelEventArgs
+{
+	/// <summary>
+	/// Get the selected variable.
+	/// </summary>
+	public StringInterpolationVariable Variable { get; } = variable;
 }

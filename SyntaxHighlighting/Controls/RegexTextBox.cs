@@ -18,6 +18,7 @@ using CarinaStudio.Windows.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -136,6 +137,12 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 			this.candidatePhrasesSelectionCTS = null;
 		}
 	}
+
+
+	/// <summary>
+	/// Raise when a candidate input phrase has been selected by user.
+	/// </summary>
+	public event EventHandler<CandidateInputPhraseSelectedEventArgs>? CandidatePhraseSelected;
 
 
 	/// <inheritdoc/>
@@ -376,6 +383,15 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 		var text = this.Text;
 		if (string.IsNullOrEmpty(text) || string.IsNullOrEmpty(phrase))
 			return;
+		
+		// raise event
+		if (this.CandidatePhraseSelected is { } @event)
+		{
+			var e = new CandidateInputPhraseSelectedEventArgs(phrase);
+			@event(this, e);
+			if (e.Cancel)
+				return;
+		}
 
 		// find proper selection
 		Func<char, char, bool> checkCharEquality = this.IgnoreCase
@@ -753,7 +769,16 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 				(this.predefinedGroupsPopup.ItemListBox.SelectedItem as ListBoxItem)?.Let(item =>
 				{
 					if (item.DataContext is RegexGroup group)
+					{
+						if (this.PredefinedGroupSelected is { } @event)
+						{
+							var e = new RegexGroupSelectedEventArgs(group);
+							@event(this, e);
+							if (e.Cancel)
+								return;
+						}
 						this.InputGroupName(group.Name);
+					}
 				});
 				this.CloseAssistanceMenus();
 			}
@@ -991,6 +1016,12 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 	/// Predefined list of <see cref="RegexGroup"/> for input assistance.
 	/// </summary>
 	public IList<RegexGroup> PredefinedGroups => this.predefinedGroups;
+
+
+	/// <summary>
+	/// Raise when a predefined <see cref="RegexGroup"/> has been selected by user.
+	/// </summary>
+	public event EventHandler<RegexGroupSelectedEventArgs>? PredefinedGroupSelected;
 	
 	
 	/// <inheritdoc/>
@@ -1141,7 +1172,16 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 				{
 					menu.Close();
 					if (e.Item is ListBoxItem item && item.DataContext is RegexGroup group)
+					{
+						if (this.PredefinedGroupSelected is { } @event)
+						{
+							var rgse = new RegexGroupSelectedEventArgs(group);
+							@event(this, rgse);
+							if (rgse.Cancel)
+								return;
+						}
 						this.InputGroupName(group.Name);
+					}
 				};
 				it.ItemsPanel = this.FindResourceOrDefault<ItemsPanelTemplate>("ItemsPanelTemplate/StackPanel"); // [Workaround] Prevent crashing caused by VirtualizationStackPanel
 				it.ItemsSource = this.filteredPredefinedGroupListBoxItems;
@@ -1371,4 +1411,17 @@ public class RegexGroup : AvaloniaObject
 		get => this.GetValue(NameProperty);
 		set => this.SetValue(NameProperty, value);
 	}
+}
+
+
+/// <summary>
+/// Event data for user selected a group of regular expression.
+/// </summary>
+/// <param name="group">The selected group.</param>
+public class RegexGroupSelectedEventArgs(RegexGroup group) : CancelEventArgs
+{
+	/// <summary>
+	/// Get the selected group of regular expression.
+	/// </summary>
+	public RegexGroup Group { get; } = group;
 }

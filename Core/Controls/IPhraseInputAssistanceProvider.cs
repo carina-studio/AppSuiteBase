@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,4 +19,17 @@ public interface IPhraseInputAssistanceProvider
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>Task of selecting candidate phrases.</returns>
     Task<IList<string>> SelectCandidatePhrasesAsync(string prefix, string? postfix, CancellationToken cancellationToken);
+}
+
+
+/// <summary>
+/// Event data for candidate input phrase selected by user.
+/// </summary>
+/// <param name="phrase">The selected phrase.</param>
+public class CandidateInputPhraseSelectedEventArgs(string phrase) : CancelEventArgs
+{
+    /// <summary>
+    /// Get the selected phrase.
+    /// </summary>
+    public string Phrase { get; } = phrase;
 }
