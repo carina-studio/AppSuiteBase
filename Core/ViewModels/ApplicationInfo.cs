@@ -29,6 +29,10 @@ public class ApplicationInfo : ViewModel<IAppSuiteApplication>
     public enum ApplicationIconCreator
     {
         /// <summary>
+        /// None.
+        /// </summary>
+        None,
+        /// <summary>
         /// Freepik.
         /// </summary>
         Freepik,
@@ -40,6 +44,10 @@ public class ApplicationInfo : ViewModel<IAppSuiteApplication>
     /// </summary>
     public enum ApplicationIconWebSite
     {
+        /// <summary>
+        /// None.
+        /// </summary>
+        None,
         /// <summary>
         /// Flaticon.
         /// </summary>
@@ -218,13 +226,13 @@ public class ApplicationInfo : ViewModel<IAppSuiteApplication>
     /// <summary>
     /// Get creator of application icon.
     /// </summary>
-    public virtual ApplicationIconCreator IconCreator => ApplicationIconCreator.Freepik;
+    public virtual ApplicationIconCreator IconCreator => ApplicationIconCreator.None;
 
 
     /// <summary>
     /// Get website of application icon.
     /// </summary>
-    public virtual ApplicationIconWebSite IconWebSite => ApplicationIconWebSite.Flaticon;
+    public virtual ApplicationIconWebSite IconWebSite => ApplicationIconWebSite.None;
     
     
     /// <summary>
