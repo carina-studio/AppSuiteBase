@@ -94,6 +94,8 @@
 	<sys:String x:Key="String/ApplicationOptions.EnableLigatureInScript">Ligatures and Contextual Alternatives</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">Enable Script Execution</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">Indent Size</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.IsUsageDataCollectionAllowed">Allow Collecting Anonymous Usage Data</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.IsUsageDataCollectionAllowed.Description">To help us understand how the application is used and improve it.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">Show Splash Screen when Launching</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">Log Output Port</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">Restart the application for the change to take effect.</sys:String>
@@ -147,6 +149,7 @@
 	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">Update Paths Defined by System</sys:String>
 
 	<!-- Common -->
+	<sys:String x:Key="String/Common.Accept">Accept</sys:String>
 	<sys:String x:Key="String/Common.Activate">Activate</sys:String>
 	<sys:String x:Key="String/Common.Activate.WithDialog">Activate…</sys:String>
 	<sys:String x:Key="String/Common.Add">Add</sys:String>
@@ -182,6 +185,7 @@
 	<sys:String x:Key="String/Common.DebugMode">Debug Mode</sys:String>
 	<sys:String x:Key="String/Common.Decline">Decline</sys:String>
 	<sys:String x:Key="String/Common.Delete">Delete</sys:String>
+	<sys:String x:Key="String/Common.Deny">Deny</sys:String>
 	<sys:String x:Key="String/Common.Details">Details</sys:String>
 	<sys:String x:Key="String/Common.Details.WithDialog">Details…</sys:String>
 	<sys:String x:Key="String/Common.Disable">Disable</sys:String>
@@ -336,6 +340,19 @@
 	<sys:String x:Key="String/MainWindow.ReactivateProductNeeded">Unable to activate '{0}', please try activating it again.</sys:String>
 	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS">You are running {0} outside the 'Applications' folder. We recommend moving it into the ‘Applications’ folder to ensure it runs properly and avoids system permission issues.</sys:String>
 	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication">Close Application</sys:String>
+	<sys:String x:Key="String/MainWindow.UsageDataCollection.Message">Help Us Improve the Application!</sys:String>
+	<sys:String x:Key="String/MainWindow.UsageDataCollection.SecondaryMessage">We'd like to collect anonymous usage data to help us understand how the application is used and improve it.
+
+What will be collected:
+  - Anonymous session identifiers
+  - Feature interaction events
+  - Configuration metrics
+
+What will NOT be collected:
+  - Any personally identifiable information
+
+You can change this setting at any time in Options.</sys:String>
+	<sys:String x:Key="String/MainWindow.UsageDataCollection.Title">Usage Data Collection</sys:String>
 	<sys:String x:Key="String/MainWindow.UserAgreement.Message">You must read and agree to the《User Agreement》before you start using {0}.</sys:String>
 	<sys:String x:Key="String/MainWindow.UserAgreement.Message.Updated">You must read and agree to the updated《User Agreement》before you start using {0}.</sys:String>
 

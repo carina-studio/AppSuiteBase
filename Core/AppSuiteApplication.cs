@@ -5652,6 +5652,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     public ApplicationUpdateInfo? UpdateInfo { get; private set; }
 
 
+    /// <summary>
+    /// Get version of usage data to be collected.
+    /// </summary>
+    internal protected virtual int UsageDataCollectionVersion => 1;
+
+
     /// <inheritdoc/>
     public abstract DocumentSource? UserAgreement { get; }
 

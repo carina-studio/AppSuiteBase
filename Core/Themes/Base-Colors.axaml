@@ -182,6 +182,9 @@
 	<Color x:Key="Color/Icon.Information">#288acc</Color>
 	<Color x:Key="Color/Icon.Information.Dark">#2070a6</Color>
 	<Color x:Key="Color/Icon.Information.Light">#2fa3f2</Color>
+	<Color x:Key="Color/Icon.Insights">#0078d4</Color>
+	<Color x:Key="Color/Icon.Insights.Dark">#006cbf</Color>
+	<Color x:Key="Color/Icon.Insights.Light">#0090ff</Color>
 	<Color x:Key="Color/Icon.Inverse">#ffffff</Color>
 	<Color x:Key="Color/Icon.JavaScript">#e6bb00</Color>
 	<Color x:Key="Color/Icon.Key">#ccaa00</Color>
@@ -247,6 +250,7 @@
 	</LinearGradientBrush>
 	<SolidColorBrush x:Key="Brush/Icon.Heart" Color="{DynamicResource Color/Icon.Heart}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Information" Color="{DynamicResource Color/Icon.Information}"/>
+	<SolidColorBrush x:Key="Brush/Icon.Insights" Color="{DynamicResource Color/Icon.Insights}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Inverse" Color="{DynamicResource Color/Icon.Inverse}"/>
 	<SolidColorBrush x:Key="Brush/Icon.JavaScript" Color="{DynamicResource Color/Icon.JavaScript}"/>
 	<SolidColorBrush x:Key="Brush/Icon.Key" Color="{DynamicResource Color/Icon.Key}"/>

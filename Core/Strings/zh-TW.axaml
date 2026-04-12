@@ -88,6 +88,8 @@
 	<sys:String x:Key="String/ApplicationOptions.EnableLigatureInScript">連字及情境替代字形</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">啟用腳本執行</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">縮排空白字元數</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.IsUsageDataCollectionAllowed">允許蒐集匿名使用資料</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.IsUsageDataCollectionAllowed.Description">幫助我們了解應用程式如何被使用並改善。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">啟動應用程式時顯示啟動畫面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">日誌輸出連接埠</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">重新啟動應用程式以套用變更。</sys:String>
@@ -141,6 +143,7 @@
 	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">更新系統定義路徑</sys:String>
 	
 	<!-- Common -->
+	<sys:String x:Key="String/Common.Accept">接受</sys:String>
 	<sys:String x:Key="String/Common.Activate">啟用</sys:String>
 	<sys:String x:Key="String/Common.Activate.WithDialog">啟用…</sys:String>
 	<sys:String x:Key="String/Common.Add">加入</sys:String>
@@ -176,6 +179,7 @@
 	<sys:String x:Key="String/Common.DebugMode">偵錯模式</sys:String>
 	<sys:String x:Key="String/Common.Decline">不同意</sys:String>
 	<sys:String x:Key="String/Common.Delete">刪除</sys:String>
+	<sys:String x:Key="String/Common.Deny">拒絕</sys:String>
 	<sys:String x:Key="String/Common.Details">詳細資訊</sys:String>
 	<sys:String x:Key="String/Common.Details.WithDialog">詳細資訊…</sys:String>
 	<sys:String x:Key="String/Common.Disable">停用</sys:String>
@@ -330,6 +334,19 @@
 	<sys:String x:Key="String/MainWindow.ReactivateProductNeeded">無法啟用「{0}」，請嘗試再次啟用。</sys:String>
 	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS">您正在「應用程式」資料夾外執行 {0}。建議您將其移動至「應用程式」資料夾內執行以確保功能不受到系統權限問題之影響。</sys:String>
 	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication">關閉應用程式</sys:String>
+	<sys:String x:Key="String/MainWindow.UsageDataCollection.Message">幫助我們改善應用程式！</sys:String>
+	<sys:String x:Key="String/MainWindow.UsageDataCollection.SecondaryMessage">我們想要蒐集匿名的使用資料，以幫助我們了解應用程式的使用並改善。
+
+哪些將會被蒐集：
+  - 匿名的工作階段識別碼
+  - 功能使用事件
+  - 配置指標
+
+哪些將不會被蒐集：
+  - 任何可以識別個人的資訊
+
+您隨時可以在選項中變更這個設定。</sys:String>
+	<sys:String x:Key="String/MainWindow.UsageDataCollection.Title">使用資料蒐集</sys:String>
 	<sys:String x:Key="String/MainWindow.UserAgreement.Message">在您使用 {0} 之前，您必須閱讀且同意《使用者協議》。</sys:String>
 	<sys:String x:Key="String/MainWindow.UserAgreement.Message.Updated">在您使用 {0} 之前，您必須閱讀且同意新的《使用者協議》。</sys:String>
 

@@ -3,12 +3,14 @@ using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.Platform;
 using Avalonia.Rendering;
 using Avalonia.Threading;
 using CarinaStudio.Animation;
 using CarinaStudio.AppSuite.Net;
 using CarinaStudio.AppSuite.Product;
+using CarinaStudio.AppSuite.UsageData;
 using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
@@ -53,6 +55,7 @@ public abstract class MainWindow : Window
     
     
     // Static fields.
+    static readonly SettingKey<int> ConfirmedUsageDataCollectionVersionKey = new("MainWindow.ConfirmedUsageDataCollectionVersion", -1);
     static readonly SettingKey<bool> DoNotCheckAppRunningLocationOnMacOSKey = new("MainWindow.DoNotCheckAppRunningLocationOnMacOS");
     static readonly SettingKey<int> ExtDepDialogShownVersionKey = new("MainWindow.ExternalDependenciesDialogShownVersion", -1);
     static bool IsAppDataImportResultDialogShown;
@@ -1140,6 +1143,36 @@ public abstract class MainWindow : Window
                 this.Logger.LogDebug("No application change list to show");
                 this.isShowingInitialDialogs = false;
             }
+        }
+        
+        // confirm usage data collection
+        if (asApp is not null && asApp.UsageManager is not MockUsageManager)
+        {
+            var udcVersion = asApp.UsageDataCollectionVersion;
+            var confirmedUdcVersion = this.PersistentState.GetValueOrDefault(ConfirmedUsageDataCollectionVersionKey);
+            if (confirmedUdcVersion < udcVersion)
+            {
+                this.Logger.LogDebug("Confirm usage data collection");
+                
+                this.isShowingInitialDialogs = true;
+                var confirmationResult = await new MessageDialog
+                {
+                    Buttons = MessageDialogButtons.YesNo,
+                    CustomIcon = app.FindResourceOrDefault<IImage?>("Image/Icon.Insights.Colored.Gradient"),
+                    CustomNoText = app.GetObservableString("Common.Deny"),
+                    CustomYesText = app.GetObservableString("Common.Allow"),
+                    DefaultResult = MessageDialogResult.Yes,
+                    Icon = MessageDialogIcon.Custom,
+                    Message = app.GetObservableString("MainWindow.UsageDataCollection.Message"),
+                    SecondaryMessage = app.GetObservableString("MainWindow.UsageDataCollection.SecondaryMessage"),
+                    Title = app.GetObservableString("MainWindow.UsageDataCollection.Title")
+                }.ShowDialog(this);
+                this.PersistentState.SetValue(ConfirmedUsageDataCollectionVersionKey, udcVersion);
+                this.Settings.SetValue(SettingKeys.IsUsageDataCollectionAllowed, confirmationResult == MessageDialogResult.Yes);
+                this.isShowingInitialDialogs = false;
+            }
+            else if (confirmedUdcVersion > udcVersion)
+                this.PersistentState.SetValue(ConfirmedUsageDataCollectionVersionKey, udcVersion);
         }
 
         // notify application update found

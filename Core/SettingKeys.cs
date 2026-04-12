@@ -50,6 +50,12 @@ public sealed class SettingKeys
     /// Indentation size of script.
     /// </summary>
     public static readonly SettingKey<int> IndentationSizeInScript = new(nameof(IndentationSizeInScript), 4);
+    
+    
+    /// <summary>
+    /// Whether the usage data collection is allowed or not.
+    /// </summary>
+    public static readonly SettingKey<bool> IsUsageDataCollectionAllowed = new(nameof(IsUsageDataCollectionAllowed), false);
 
 
     /// <summary>
