@@ -2,9 +2,9 @@
     <PropertyGroup>
 
         <!-- Version -->
-        <AssemblyVersion>3.0.4.411</AssemblyVersion>
-        <Version>3.0.4.411</Version>
-        <PackageVersion>3.0.4.411-preview</PackageVersion>
+        <AssemblyVersion>3.0.5.413</AssemblyVersion>
+        <Version>3.0.5.413</Version>
+        <PackageVersion>3.0.5.413-preview</PackageVersion>
 
         <!-- Other information -->
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -15,7 +15,7 @@
 		<Company>Carina Studio</Company>
         <Copyright>©2021-$([System.DateTime]::Now.Year) Carina Studio</Copyright>
         <Description>Base libraries for Carina Studio Application Suite.</Description>
-        <DotNetLibraryVersion>10.0.3</DotNetLibraryVersion>
+        <DotNetLibraryVersion>10.0.4</DotNetLibraryVersion>
 		<Nullable>enable</Nullable>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/carina-studio/AppSuiteBase/</PackageProjectUrl>
