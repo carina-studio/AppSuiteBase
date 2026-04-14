@@ -334,7 +334,7 @@
 	<sys:String x:Key="String/MainWindow.ReactivateProductNeeded">无法启用「{0}」，请尝试再次启用。</sys:String>
 	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS">您正在「应用程序」资料夹外运行 {0}。建议您将其移动至「应用程序」资料夹内运行以确保功能不受到系统权限问题之影响。</sys:String>
 	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication">关闭应用程序</sys:String>
-	<sys:String x:Key="String/MainWindow.UsageDataCollection.Message">帮助我们优化应用程序！</sys:String>
+	<sys:String x:Key="String/MainWindow.UsageDataCollection.Message">帮助我们改善应用程序！</sys:String>
 	<sys:String x:Key="String/MainWindow.UsageDataCollection.SecondaryMessage">我们想要收集匿名的使用数据，以帮助我们了解应用程序的使用并优化。
 
 哪些将会被收集：

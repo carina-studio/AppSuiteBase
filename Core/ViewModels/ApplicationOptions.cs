@@ -346,7 +346,17 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// <summary>
     /// Check whether <see cref="ThemeMode"/> has been changed before restarting main windows or not.
     /// </summary>
-    public bool IsThemeModeChanged { get; private set;}
+    public bool IsThemeModeChanged { get; private set; }
+    
+    
+    /// <summary>
+    /// Get or set whether the usage data collection is allowed or not.
+    /// </summary>
+    public bool IsUsageDataCollectionAllowed
+    {
+        get => this.Settings.GetValueOrDefault(SettingKeys.IsUsageDataCollectionAllowed);
+        set => this.Settings.SetValue(SettingKeys.IsUsageDataCollectionAllowed, value);
+    }
 
 
     /// <summary>
@@ -499,6 +509,8 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
             this.OnPropertyChanged(nameof(EnableRunningScript));
         else if (key == SettingKeys.IndentationSizeInScript)
             this.OnPropertyChanged(nameof(IndentationSizeInScript));
+        else if (key == SettingKeys.IsUsageDataCollectionAllowed)
+            this.OnPropertyChanged(nameof(IsUsageDataCollectionAllowed));
         else if (key == SettingKeys.LaunchWithSplashWindow)
             this.OnPropertyChanged(nameof(LaunchWithSplashWindow));
         else if (key == SettingKeys.NotifyApplicationUpdate)
