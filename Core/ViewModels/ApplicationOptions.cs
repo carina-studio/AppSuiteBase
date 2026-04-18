@@ -1,5 +1,6 @@
 ﻿using Avalonia.Data.Converters;
 using CarinaStudio.AppSuite.Scripting;
+using CarinaStudio.AppSuite.UsageData;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
 using CarinaStudio.ViewModels;
@@ -46,6 +47,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
         this.IsCustomScreenScaleFactorSupported = double.IsFinite(this.Application.CustomScreenScaleFactor);
         this.IsCustomScreenScaleFactorAdjusted = this.IsCustomScreenScaleFactorSupported
             && Math.Abs(this.Application.CustomScreenScaleFactor - this.Application.EffectiveCustomScreenScaleFactor) >= 0.01;
+        this.IsUsageDataCollectionAvailable = this.Application.UsageManager is not MockUsageManager;
         this.ThemeModes = new List<ThemeMode>(Enum.GetValues<ThemeMode>()).Also(it =>
         {
             if (!this.Application.IsSystemThemeModeSupported)
@@ -357,6 +359,12 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
         get => this.Settings.GetValueOrDefault(SettingKeys.IsUsageDataCollectionAllowed);
         set => this.Settings.SetValue(SettingKeys.IsUsageDataCollectionAllowed, value);
     }
+    
+    
+    /// <summary>
+    /// Check whether the usage data collection is available or not.
+    /// </summary>
+    public bool IsUsageDataCollectionAvailable { get; }
 
 
     /// <summary>
