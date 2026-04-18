@@ -3644,6 +3644,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         if (Platform.IsWindows)
             SystemEvents.UserPreferenceChanged += this.OnWindowsUserPreferenceChanged;
 #pragma warning restore CA1416
+
+        // register for restart after system reboot
+        if (Platform.IsWindows)
+            this.RegisterApplicationRestartOnWindows();
         
         // setup text scale factor
         if (Platform.IsMacOS)
@@ -4565,6 +4569,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     }
     
     
+    /// <summary>
+    /// Check whether main windows should be restored after system reboot.
+    /// </summary>
+    protected virtual bool RestoreMainWindowsAfterSystemReboot => false;
+
+
     // Restore specific settings file from its backup.
     static bool RestoreSettingsFileFromBackup(string filePath)
     {

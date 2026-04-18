@@ -299,8 +299,20 @@ unsafe partial class AppSuiteApplication
         }
     }
 #pragma warning restore CA1416
-    
-    
+
+
+    // Register application for restart after system reboot on Windows.
+    void RegisterApplicationRestartOnWindows()
+    {
+        if (Platform.IsNotWindows)
+            return;
+        var commandLine = this.RestoreMainWindowsAfterSystemReboot ? RestoreMainWindowsArgument : null;
+        var result = Win32.RegisterApplicationRestart(commandLine, Win32.RESTART.NO_CRASH | Win32.RESTART.NO_HANG);
+        if (result != 0)
+            this.Logger.LogWarning("Failed to register application restart, result: {result}", result);
+    }
+
+
     // Setup AppBuilder for Windows.
     static void SetupWindowsAppBuilder(AppBuilder builder, ISettings initSettings)
     {
