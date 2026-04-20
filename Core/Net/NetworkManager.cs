@@ -11,8 +11,8 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
-using CarinaStudio.Configuration;
 
 namespace CarinaStudio.AppSuite.Net;
 
@@ -29,6 +29,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
     // Static fields.
     static NetworkManager? DefaultInstance;
     static readonly Regex IPv4Regex = new("(?<Address>\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})");
+    static readonly TimeSpan NetworkConnectionCheckingTimeout = TimeSpan.FromSeconds(30);
     static readonly string[] PingTargetAddresses = 
     [
         "208.67.222.222", // OpenDNS
@@ -43,6 +44,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         "https://ipv4.icanhazip.com/",
         "http://checkip.dyndns.org/",
     ];
+    static HttpClient? SharedNetworkConnectionCheckHttpClient;
 
 
     // Fields.
@@ -128,29 +130,39 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
                 this.Logger.LogError("Unable to get active IPv4 address");
                 ipAddress = this.IPAddress;
             }
-            using var httpClient = new HttpClient();
-            foreach (var server in PublicIPCheckingServers)
+            var httpClient = Interlocked.Exchange(ref SharedNetworkConnectionCheckHttpClient, null) ?? new HttpClient
             {
-                try
+                Timeout = NetworkConnectionCheckingTimeout
+            };
+            try
+            {
+                foreach (var server in PublicIPCheckingServers)
                 {
-                    await using var stream = await Task.Run(async () => 
-                        await httpClient.GetStreamAsync(server));
-                    using var reader = new StreamReader(stream, Encoding.UTF8);
-                    var match = IPv4Regex.Match(await reader.ReadToEndAsync());
-                    if (match.Success)
+                    try
                     {
-                        publicIPAddress = IPAddress.Parse(match.Groups["Address"].Value);
-                        break;
+                        await using var stream = await httpClient.GetStreamAsync(server);
+                        using var reader = new StreamReader(stream, Encoding.UTF8);
+                        var match = IPv4Regex.Match(await reader.ReadToEndAsync());
+                        if (match.Success)
+                        {
+                            publicIPAddress = IPAddress.Parse(match.Groups["Address"].Value);
+                            break;
+                        }
                     }
+                    // ReSharper disable once EmptyGeneralCatchClause
+                    catch
+                    { }
                 }
-                // ReSharper disable once EmptyGeneralCatchClause
-                catch
-                { }
+                if (publicIPAddress == null)
+                {
+                    this.Logger.LogError("Unable to get active IPv4 address for connection to internet");
+                    publicIPAddress = this.PublicIPAddress;
+                }
             }
-            if (publicIPAddress == null)
+            finally
             {
-                this.Logger.LogError("Unable to get active IPv4 address for connection to internet");
-                publicIPAddress = this.PublicIPAddress;
+                if (Interlocked.CompareExchange(ref SharedNetworkConnectionCheckHttpClient, httpClient, null) != null)
+                    httpClient.Dispose();
             }
         }
         else
@@ -331,6 +343,21 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
                     }
                     else
                     {
+                        var currentPhysicalAddress = networkInterface.GetPhysicalAddress();
+                        var currentAddressBytes = currentPhysicalAddress.GetAddressBytes();
+                        var hasValidCurrentAddress = currentAddressBytes.Length > 0 && Array.Exists(currentAddressBytes, b => b != 0);
+                        var primaryAddressBytes = primaryPhysicalAddress.GetAddressBytes();
+                        var primaryHasValidAddress = primaryAddressBytes.Length > 0 && Array.Exists(primaryAddressBytes, b => b != 0);
+                        if (hasValidCurrentAddress && !primaryHasValidAddress)
+                        {
+                            // upgrade from invalid-MAC primary to any interface with a valid MAC,
+                            // regardless of NetworkInterfaceType — handles Windows adapters that
+                            // report non-standard types yet have a real physical address
+                            primaryInterfaceName = networkInterface.Name;
+                            primaryInterfaceType = networkInterface.NetworkInterfaceType;
+                            primaryPhysicalAddress = currentPhysicalAddress;
+                            continue;
+                        }
                         switch (networkInterface.NetworkInterfaceType)
                         {
                             case NetworkInterfaceType.Ethernet:
@@ -354,7 +381,7 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
                         }
                         primaryInterfaceName = networkInterface.Name;
                         primaryInterfaceType = networkInterface.NetworkInterfaceType;
-                        primaryPhysicalAddress = networkInterface.GetPhysicalAddress();
+                        primaryPhysicalAddress = currentPhysicalAddress;
                     }
                 }
                 isNetworkAvailable = NetworkInterface.GetIsNetworkAvailable();
