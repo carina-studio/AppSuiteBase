@@ -155,6 +155,23 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 	public event EventHandler<MessageEventArgs>? ErrorMessageGenerated;
 
 
+	// Get the effective URI of auto-updater package manifest, applying the debug-mode override when available.
+	Uri GetEffectiveAutoUpdaterPackageManifestUri()
+	{
+		if (this.Application.IsDebugMode)
+		{
+			var overrideString = this.Application.Configuration.GetValueOrDefault(ConfigurationKeys.AutoUpdaterPackageManifestUriOverride);
+			if (!string.IsNullOrWhiteSpace(overrideString)
+				&& Uri.TryCreate(overrideString, UriKind.Absolute, out var overrideUri))
+			{
+				this.Logger.LogWarning("Use overridden auto updater package manifest URI '{uri}'", overrideUri);
+				return overrideUri;
+			}
+		}
+		return AutoUpdaterPackageManifestUri;
+	}
+
+
 	/// <summary>
 	/// Check whether <see cref="ReleasePageUri"/> is valid or not.
 	/// </summary>
@@ -462,6 +479,8 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 					argsBuilder.AppendFormat(" -screen-scale-factor {0:F2}", screenScaleFactor);
 				if (this.Application.IsDebugMode)
 					argsBuilder.Append(" -debug-mode");
+				if (Platform.IsMacOS)
+					argsBuilder.Append(" -discard-unrelated-files");
 				if (autoUpdaterVersion >= AutoUpdaterVersionSupportsAppSuiteVersion
 				    && this.GetType().Assembly.GetName().Version is { } asVersion)
 				{
@@ -600,7 +619,8 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 
 		// resolve info of auto updater
 		this.updatePreparationCancellationTokenSource = new CancellationTokenSource();
-		var auPackageResolver = new JsonPackageResolver(this.Application, localAuVersion) { Source = new WebRequestStreamProvider(AutoUpdaterPackageManifestUri) };
+		var auPackageManifestUri = this.GetEffectiveAutoUpdaterPackageManifestUri();
+		var auPackageResolver = new JsonPackageResolver(this.Application, localAuVersion) { Source = new WebRequestStreamProvider(auPackageManifestUri) };
 		try
 		{
 			await auPackageResolver.StartAndWaitAsync(this.updatePreparationCancellationTokenSource.Token);
@@ -695,7 +715,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 		{
 			ApplicationDirectoryPath = tempAutoUpdaterDirectory,
 			PackageInstaller = new ZipPackageInstaller(this.Application),
-			PackageResolver = new JsonPackageResolver(this.Application, localAuVersion) { Source = new WebRequestStreamProvider(AutoUpdaterPackageManifestUri) },
+			PackageResolver = new JsonPackageResolver(this.Application, localAuVersion) { Source = new WebRequestStreamProvider(auPackageManifestUri) },
 		};
 		this.Logger.LogWarning("Start downloading auto updater to '{tempAutoUpdaterDirectory}'", tempAutoUpdaterDirectory);
 		this.auUpdater.PropertyChanged += this.OnAuUpdaterPropertyChanged;

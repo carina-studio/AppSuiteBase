@@ -12,6 +12,10 @@ public abstract class ConfigurationKeys
     /// </summary>
     public static readonly SettingKey<int> AppUpdateInfoCheckingInterval = new(nameof(AppUpdateInfoCheckingInterval), 3600000 /* 1 hr */);
     /// <summary>
+    /// URI to override the default auto-updater package manifest URI. Only effective in debug mode when the value is a valid absolute URI.
+    /// </summary>
+    public static readonly SettingKey<string> AutoUpdaterPackageManifestUriOverride = new(nameof(AutoUpdaterPackageManifestUriOverride), "");
+    /// <summary>
     /// Name of default font family for showing agreement.
     /// </summary>
     public static readonly SettingKey<string> DefaultFontFamilyOfAgreement = new(nameof(DefaultFontFamilyOfAgreement), "Roboto");
