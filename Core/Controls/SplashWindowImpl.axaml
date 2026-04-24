@@ -33,6 +33,7 @@
 					<GradientStop Offset="0.5" Color="#9f111111"/>
 					<GradientStop Offset="1" Color="#00111111"/>
 				</LinearGradientBrush>
+				<Color x:Key="Color/SplashWindow.Message.Shadow">#4f000000</Color>
 				<Color x:Key="Color/SplashWindow.Shadow">#000000</Color>
 				<sys:Double x:Key="Double/SplashWindow.TopBar.Opacity">0.75</sys:Double>
 			</Styles.Resources>
@@ -52,6 +53,7 @@
 					<GradientStop Offset="0.5" Color="#7feeeeee"/>
 					<GradientStop Offset="1" Color="#00eeeeee"/>
 				</LinearGradientBrush>
+				<Color x:Key="Color/SplashWindow.Message.Shadow">#3f000000</Color>
 				<Color x:Key="Color/SplashWindow.Shadow">#ffffff</Color>
 				<sys:Double x:Key="Double/SplashWindow.TopBar.Opacity">0.85</sys:Double>
 			</Styles.Resources>
@@ -276,7 +278,7 @@
 							                  Easing="ExponentialEaseOut"/>
 						</Transitions>
 					</Panel.Transitions>
-					<Border Background="#7f000000" CornerRadius="5">
+					<Border Background="{DynamicResource Color/SplashWindow.Message.Shadow}" CornerRadius="5" Margin="0,2,0,2">
 						<Border.Effect>
 							<BlurEffect Radius="10"/>
 						</Border.Effect>
