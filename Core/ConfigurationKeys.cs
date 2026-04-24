@@ -56,6 +56,10 @@ public abstract class ConfigurationKeys
     /// </summary>
     public static readonly SettingKey<bool> MakeContentBlurredWhenShowingDialog = new(nameof(MakeContentBlurredWhenShowingDialog), false);
     /// <summary>
+    /// Minimum duration that the splash window should be shown in milliseconds.
+    /// </summary>
+    public static readonly SettingKey<int> MinSplashWindowDuration = new(nameof(MinSplashWindowDuration), 2000);
+    /// <summary>
     /// Interval of checking whether script running is completed or not.
     /// </summary>
     public static readonly SettingKey<int> ScriptCompletionCheckingInterval = new(nameof(ScriptCompletionCheckingInterval), 3000);

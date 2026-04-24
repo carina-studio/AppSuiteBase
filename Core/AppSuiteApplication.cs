@@ -355,7 +355,6 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     const int DeactivationDelay = 300;
     const int FlushingUsageDataInterval = 60 * 60000; // 1 hr
     const int FlushingUsageDataWhenShuttingDownTimeout = 10000;
-    const int MinSplashWindowDuration = 2000;
     const string InitSettingsFileName = "InitSettings.json";
     const string PersistentStateFileName = "PersistentState.json";
     const string SettingsFileName = "Settings.json";
@@ -5061,9 +5060,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         }
         if (this.splashWindow is not null)
         {
-            var duration = (this.stopWatch.ElapsedMilliseconds - this.splashWindowShownTime);
+            var duration = this.stopWatch.ElapsedMilliseconds - this.splashWindowShownTime;
+            var minDuration = Math.Max(0, this.Configuration.GetValueOrDefault(ConfigurationKeys.MinSplashWindowDuration));
             this.Logger.LogTrace("[Performance] Took {duration} ms between showing splash window and main window", duration);
-            var delay = MinSplashWindowDuration - duration;
+            var delay = minDuration - duration;
             if (delay > 0)
             {
                 this.Logger.LogDebug("Delay for showing splash window");
