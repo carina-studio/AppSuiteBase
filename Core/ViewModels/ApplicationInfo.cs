@@ -129,6 +129,12 @@ public class ApplicationInfo : ViewModel<IAppSuiteApplication>
 
 
     /// <summary>
+    /// Get image for the banner.
+    /// </summary>
+    public virtual IImage? BannerImage => null;
+
+
+    /// <summary>
     /// Export application logs to given file.
     /// </summary>
     /// <param name="outputFileName">Name of file to output logs to.</param>

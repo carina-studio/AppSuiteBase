@@ -14,6 +14,7 @@
 	
 	<ItemGroup>
 		<AvaloniaResource Include="AppIcon.ico" />
+		<AvaloniaResource Include="ApplicationInfoBanner.jpg" />
 		<AvaloniaResource Include="ChangeList.md" />
 		<AvaloniaResource Include="ChangeList-zh-CN.md" />
 		<AvaloniaResource Include="ChangeList-zh-TW.md" />
