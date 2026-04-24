@@ -73,42 +73,44 @@ public class PackagingTool
             }
 
             // find all packages of current version
-            var packageFileNameRegex = new Regex("^(?<AppName>[\\w\\d\\.]+)\\-(?<Version>[\\d\\.]+)\\-(?<PlatformId>[\\w]+\\-[\\w\\d]+)(?<FxDependent>\\-fx\\-dependent)?\\.zip$", RegexOptions.IgnoreCase);
-            var currentVersionPackageNames = new HashSet<string>(IO.PathEqualityComparer.Default).Also(it =>
+            var packageFileNameRegex = new Regex("^(?<AppName>[\\w\\d\\.]+)\\-(?<Version>[^-]+)\\-(?<PlatformId>(?:win|osx|linux)\\-(?:x86|x64|arm64))(?<FxDependent>\\-fx\\-dependent)?\\.zip$", RegexOptions.IgnoreCase);
+            var currentVersionPackages = new Dictionary<string, (string Name, string Version)>().Also(it =>
             {
                 foreach (var path in Directory.EnumerateFiles(currentVersionDir, "*.zip"))
                 {
                     var name = Path.GetFileName(path);
                     var match = packageFileNameRegex.Match(name);
-                    if (match.Success && Version.Parse(match.Groups["Version"].Value) == currentVersion)
-                    {
-                        if (platform == null || match.Groups["PlatformId"].Value.StartsWith(platform))
-                            it.Add(name);
-                    }
+                    if (!match.Success)
+                        continue;
+                    if (platform != null && !match.Groups["PlatformId"].Value.StartsWith(platform))
+                        continue;
+                    var key = $"{match.Groups["AppName"].Value}|{match.Groups["PlatformId"].Value}|{(match.Groups["FxDependent"].Success ? "fx" : "")}";
+                    it[key] = (name, match.Groups["Version"].Value);
                 }
             });
-            if (currentVersionPackageNames.IsEmpty())
+            if (currentVersionPackages.Count == 0)
                 return PackagingResult.Success;
-            
+
             // create packages
             var buffer1 = new byte[4096];
             var buffer2 = new byte[4096];
             foreach (var path in Directory.EnumerateFiles(prevVersionDir, "*.zip"))
             {
-                // check file name and version
+                // check file name
                 var match = packageFileNameRegex.Match(Path.GetFileName(path));
-                if (!match.Success || Version.Parse(match.Groups["Version"].Value) != prevVersion)
+                if (!match.Success)
                     continue;
                 if (platform != null && !match.Groups["PlatformId"].Value.StartsWith(platform))
                     continue;
-                
+
                 // find current version of package
                 var isFxDependent = match.Groups["FxDependent"].Success;
-                var currentVersionPackageName = isFxDependent 
-                    ? $"{match.Groups["AppName"].Value}-{currentVersion}-{match.Groups["PlatformId"].Value}-fx-dependent.zip"
-                    : $"{match.Groups["AppName"].Value}-{currentVersion}-{match.Groups["PlatformId"].Value}.zip";
-                if (!currentVersionPackageNames.Contains(currentVersionPackageName))
+                var key = $"{match.Groups["AppName"].Value}|{match.Groups["PlatformId"].Value}|{(isFxDependent ? "fx" : "")}";
+                if (!currentVersionPackages.TryGetValue(key, out var currentVersionPackage))
                     continue;
+                var currentVersionPackageName = currentVersionPackage.Name;
+                var prevVersionLabel = match.Groups["Version"].Value;
+                var currentVersionLabel = currentVersionPackage.Version;
                 
                 // output information
                 if (isFxDependent)
@@ -168,8 +170,8 @@ public class PackagingTool
 
                 // compress
                 var diffPackageName = isFxDependent
-                    ? $"{match.Groups["AppName"].Value}-{prevVersion}-{currentVersion}-{match.Groups["PlatformId"].Value}-fx-dependent.zip"
-                    : $"{match.Groups["AppName"].Value}-{prevVersion}-{currentVersion}-{match.Groups["PlatformId"].Value}.zip";
+                    ? $"{match.Groups["AppName"].Value}-{prevVersionLabel}-{currentVersionLabel}-{match.Groups["PlatformId"].Value}-fx-dependent.zip"
+                    : $"{match.Groups["AppName"].Value}-{prevVersionLabel}-{currentVersionLabel}-{match.Groups["PlatformId"].Value}.zip";
                 var diffPackagePath = Path.Combine(currentVersionDir, diffPackageName);
                 Console.WriteLine($"Generating diff package '{diffPackageName}'");
                 File.Delete(diffPackagePath);
@@ -226,7 +228,7 @@ public class PackagingTool
         try
         {
             // check directory
-            var packageFileNameRegex = new Regex("^(?<AppName>[\\w\\d\\.]+)(\\-(?<PrevVersion>[\\d\\.]+))?-(?<Version>[\\d\\.]+)\\-(?<PlatformId>[\\w]+\\-[\\w\\d]+)(?<FxDependent>\\-fx\\-dependent)?\\.zip$", RegexOptions.IgnoreCase);
+            var packageFileNameRegex = new Regex("^(?<AppName>[\\w\\d\\.]+)(\\-(?<PrevVersion>[^-]+))?\\-(?<Version>[^-]+)\\-(?<PlatformId>(?:win|osx|linux)\\-(?:x86|x64|arm64))(?<FxDependent>\\-fx\\-dependent)?\\.zip$", RegexOptions.IgnoreCase);
             var packagesDir = Path.Combine(PackagesFolderName, version.ToString());
             if (!Directory.Exists(packagesDir))
             {
@@ -242,7 +244,7 @@ public class PackagingTool
                 {
                     var name = Path.GetFileName(path);
                     var match = packageFileNameRegex.Match(name);
-                    if (!match.Success || Version.Parse(match.Groups["Version"].Value) != version)
+                    if (!match.Success)
                         continue;
                     if (platform != null && !match.Groups["PlatformId"].Value.StartsWith(platform))
                         continue;
@@ -415,6 +417,23 @@ public class PackagingTool
             return PackagingResult.UnclassifiedError;
         }
     }
+    
+    
+    // Get previous informational version of given project.
+    PackagingResult GetPreviousInformationalVersion(IList<string> args)
+    {
+        if (args.IsEmpty())
+        {
+            Console.Error.WriteLine("No project specified.");
+            return PackagingResult.InvalidArgument;
+        }
+        var result = this.GetPreviousVersion(args[0], out _, out var informationalVersion);
+        if (result == PackagingResult.Success)
+            Console.Write(informationalVersion);
+        else
+            Console.Error.Write($"Unable to get previous informational version of '{args[0]}'");
+        return result;
+    }
 
 
     // Get previous version of given project.
@@ -425,15 +444,16 @@ public class PackagingTool
             Console.Error.WriteLine("No project specified.");
             return PackagingResult.InvalidArgument;
         }
-        var result = this.GetPreviousVersion(args[0], out var version);
+        var result = this.GetPreviousVersion(args[0], out var version, out _);
         if (result == PackagingResult.Success && version != null)
             Console.Write(version);
         return result;
     }
-    PackagingResult GetPreviousVersion(string projectFile, out Version? version)
+    PackagingResult GetPreviousVersion(string projectFile, out Version? version, out string? informationalVersion)
     {
         // get current version
         version = null;
+        informationalVersion = null;
         var result = this.GetCurrentVersion(projectFile, out var currentVersion, out _);
         if (result != PackagingResult.Success)
         {
@@ -446,19 +466,37 @@ public class PackagingTool
         {
             if (!Directory.Exists(PackagesFolderName))
                 return PackagingResult.Success;
+            var packageNameRegex = new Regex(@"^([^-]+)-(?<VersionName>[^-]+)-([a-z]+)-([a-z0-9]+)\.zip$", RegexOptions.IgnoreCase);
             foreach (var path in Directory.EnumerateDirectories(PackagesFolderName))
             {
-                if (Version.TryParse(Path.GetFileName(path), out var candVersion)
-                    && candVersion < currentVersion)
+                if (Version.TryParse(Path.GetFileName(path), out var candVersion) && candVersion < currentVersion)
                 {
                     if (version == null || candVersion > version)
+                    {
                         version = candVersion;
+                        informationalVersion = null;
+                        try
+                        {
+                            foreach (var packagePath in Directory.EnumerateFiles(path))
+                            {
+                                var match = packageNameRegex.Match(Path.GetFileName(packagePath));
+                                if (match.Success)
+                                {
+                                    var versionName = match.Groups["VersionName"].Value;
+                                    if (!Version.TryParse(versionName, out var packageVersion) || packageVersion != candVersion)
+                                        informationalVersion = versionName;
+                                    break;
+                                }
+                            }
+                        }
+                        catch
+                        { /* best effort */ }
+                    }
                 }
             }
         }
-        // ReSharper disable once EmptyGeneralCatchClause
         catch
-        { }
+        { /* best effort */ }
         return PackagingResult.Success;
     }
 
@@ -488,6 +526,8 @@ public class PackagingTool
                 return this.GetCurrentInformationalVersion(args.GetRangeView(1, args.Count - 1));
             case "get-current-version":
                 return this.GetCurrentVersion(args.GetRangeView(1, args.Count - 1));
+            case "get-previous-informational-version":
+                return this.GetPreviousInformationalVersion(args.GetRangeView(1, args.Count - 1));
             case "get-previous-version":
                 return this.GetPreviousVersion(args.GetRangeView(1, args.Count - 1));
         }
