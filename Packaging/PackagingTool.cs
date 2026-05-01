@@ -20,6 +20,31 @@ public class PackagingTool
     const string PackagesFolderName = "Packages";
 
 
+    // Build map from informational version label (as embedded in package filenames) to the numeric version
+    // recorded as the release folder name. Used to resolve a diff package's PrevVersion segment — which may be
+    // an arbitrary informational label — into the numeric BaseVersion that the auto-updater compares against
+    // the running assembly version.
+    Dictionary<string, Version> BuildVersionLabelMap(Regex packageFileNameRegex)
+    {
+        var map = new Dictionary<string, Version>(StringComparer.OrdinalIgnoreCase);
+        if (!Directory.Exists(PackagesFolderName))
+            return map;
+        foreach (var dir in Directory.EnumerateDirectories(PackagesFolderName))
+        {
+            if (!Version.TryParse(Path.GetFileName(dir), out var numericVersion))
+                continue;
+            foreach (var path in Directory.EnumerateFiles(dir, "*.zip"))
+            {
+                var match = packageFileNameRegex.Match(Path.GetFileName(path));
+                if (!match.Success || match.Groups["PrevVersion"].Success)
+                    continue;
+                map[match.Groups["Version"].Value] = numericVersion;
+            }
+        }
+        return map;
+    }
+
+
     // Create diff packages.
     PackagingResult CreateDiffPackages(IList<string> args)
     {
@@ -268,6 +293,9 @@ public class PackagingTool
                 return PackagingResult.Success;
             }
 
+            // resolve informational PrevVersion labels to numeric versions on demand
+            Dictionary<string, Version>? labelToVersionMap = null;
+
             // generate manifest
             var manifestName = platform != null ? $"PackageManifest-{platform}.json" : "PackageManifest.json";
             Console.WriteLine($"Creating package manifest '{manifestName}'");
@@ -326,7 +354,19 @@ public class PackagingTool
                 jsonWriter.WriteStartObject();
                 architecture?.Let(it => jsonWriter.WriteString("Architecture", it));
                 if (match.Groups["PrevVersion"].Success)
-                    jsonWriter.WriteString("BaseVersion", match.Groups["PrevVersion"].Value);
+                {
+                    // PrevVersion may be either the prior release's numeric version or its informational
+                    // version (which can itself be a parseable Version, e.g. "2026.0" for release 5.0.1).
+                    // Treat the label as opaque and resolve it against the scan of Packages/.
+                    var prevLabel = match.Groups["PrevVersion"].Value;
+                    labelToVersionMap ??= this.BuildVersionLabelMap(packageFileNameRegex);
+                    if (!labelToVersionMap.TryGetValue(prevLabel, out var baseVersion))
+                    {
+                        Console.Error.Write($"Cannot resolve base version from label '{prevLabel}' for package '{name}'");
+                        return PackagingResult.UnclassifiedError;
+                    }
+                    jsonWriter.WriteString("BaseVersion", baseVersion.ToString());
+                }
                 os?.Let(it => jsonWriter.WriteString("OperatingSystem", it));
                 if (match.Groups["FxDependent"].Success)
                 {
