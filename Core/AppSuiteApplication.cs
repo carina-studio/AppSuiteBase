@@ -1177,6 +1177,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (updateInfo == null || updateInfo.Version <= ApplicationUpdateDialog.LatestShownVersion)
                 return Task.FromResult(false);
         }
+        // ReSharper disable once GenericEnumeratorNotDisposed
+        if (!this.PackageManifestUris.GetEnumerator().Use(it => it.MoveNext()))
+        {
+            this.Logger.LogWarning("No package manifest URI specified to check update");
+            return Task.FromResult(false);
+        }
         this.Logger.LogDebug("Show application update dialog");
         return this.ShowAppUpdateDialogAsync(owner, forceShowingDialog);
     }

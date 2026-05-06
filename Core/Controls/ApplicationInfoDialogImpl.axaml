@@ -40,7 +40,7 @@
 		<!-- Control buttons -->
 		<Border x:CompileBindings="False" Classes="Dialog_ControlButtonsPanel">
 			<Grid Classes="Dialog_ControlButtonsPanel" ColumnDefinitions="Auto,*">
-				<StackPanel Classes="Dialog_ControlButtonsPanel">
+				<StackPanel Classes="Dialog_ControlButtonsPanel" IsVisible="{Binding #window.IsApplicationUpdateCheckAvailable}">
 					<Button controls:DialogElement.ButtonRole="Control" Command="{Binding #window.ShowAppUpdateDialog}" Content="{xaml:StringResource ApplicationInfoDialog.ShowAppUpdateDialog}"/>
 					<Separator controls:DialogElement.SeparatorType="Small"/>
 				</StackPanel>

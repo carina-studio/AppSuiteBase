@@ -2,7 +2,6 @@
 
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
 using Avalonia.Data.Converters;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
@@ -136,6 +135,10 @@ class ApplicationInfoDialogImpl : Dialog
 			}
 			this.SetValue(PrimaryNetworkInterfacePhysicalAddressProperty, buffer.ToString());
 		});
+		
+		// check application update
+		// ReSharper disable once GenericEnumeratorNotDisposed
+		this.IsApplicationUpdateCheckAvailable = this.Application.PackageManifestUris.GetEnumerator().Use(it => it.MoveNext());
 		
 		// setup controls
 		AvaloniaXamlLoader.Load(this);
@@ -337,6 +340,12 @@ class ApplicationInfoDialogImpl : Dialog
 	
 	// Informational version name.
 	string? InformationalVersion => this.GetValue(InformationalVersionProperty);
+	
+	
+	/// <summary>
+	/// Check whether the application update check is available or not.
+	/// </summary>
+	public bool IsApplicationUpdateCheckAvailable { get; }
 
 
 	/// <summary>

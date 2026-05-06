@@ -67,7 +67,7 @@
 						<StackPanel IsVisible="{Binding !IsLatestVersion}" Orientation="Vertical">
 							<abControls:FormattedTextBlock Arg1="{Binding #dialog.Application.Name}" 
 							                               Arg2="{Binding UpdateVersionString}" 
-							                               controls:DialogElement.TextRole="DescriptionBelowLabel" 
+							                               controls:DialogElement.TextRole="Default" 
 							                               FontWeight="Bold" Format="{asXaml:StringResource ApplicationUpdateDialog.NewVersionFound}" 
 							                               TextTrimming="CharacterEllipsis" 
 							                               TextWrapping="NoWrap"/>
