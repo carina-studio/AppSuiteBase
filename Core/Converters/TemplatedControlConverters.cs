@@ -24,9 +24,14 @@ public static class TemplatedControlConverters
             "Error" => app.TryFindResource("Color/TextBox.BoxShadow.Error", out Color? colorResource)
                 ? colorResource.Value
                 : default,
-            _ => app.TryFindResource("Color/TextBox.BoxShadow.Focused", out Color? colorResource)
-                ? colorResource.Value
-                : default,
+            _ => Global.Run(() =>
+            {
+                if (app.TryFindResource("TextControlBorderBrushFocused", out IBrush? brush) && brush is ISolidColorBrush solidColorBrush)
+                    return solidColorBrush.Color;
+                return app.TryFindResource("Color/Accent", out Color? colorResource)
+                    ? colorResource.Value
+                    : default;
+            }),
         };
         var boxShadow = new BoxShadow
         {

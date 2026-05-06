@@ -1,12 +1,10 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Media;
+using Avalonia.Styling;
 using CarinaStudio.AppSuite.Media;
 using CarinaStudio.AppSuite.ViewModels;
-using CarinaStudio.Collections;
-using CarinaStudio.Controls;
-using CarinaStudio.Threading;
 using CarinaStudio.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -151,6 +149,15 @@ namespace CarinaStudio.AppSuite.Tests
             if (ex.Message == "test")
                 return true;
             return false;
+        }
+
+
+        protected override IStyle OnLoadTheme(ThemeMode themeMode)
+        {
+            return new StyleInclude(new Uri($"avares://{this.Assembly.GetName().Name}"))
+            {
+                Source = new Uri($"avares://{this.Assembly.GetName().Name}/Theme.axaml")
+            };
         }
 
 
