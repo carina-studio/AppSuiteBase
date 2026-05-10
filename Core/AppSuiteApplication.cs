@@ -56,6 +56,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -2959,6 +2960,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         var desktopLifetime = (this.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime);
         if (!this.IsMultipleProcessesSupported && desktopLifetime is not null && Platform.IsNotMacOS)
         {
+            // build pipe name from sanitized application name and a deterministic hash of root private directory path
             this.multiInstancesServerStreamName = this.Name.Let(it =>
             {
                 var nameBuilder = new StringBuilder(it);
@@ -2968,22 +2970,23 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                         nameBuilder[i] = '_';
                 }
                 nameBuilder.Append('-');
-                nameBuilder.Append(Math.Abs(this.RootPrivateDirectoryPath.GetHashCode()));
+                nameBuilder.Append(Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(this.RootPrivateDirectoryPath)).AsSpan(0, 16)));
                 return nameBuilder.ToString();
             });
-            if (Platform.IsNotWindows)
+
+            // try forwarding arguments to an existing instance first
+            if (this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args ?? []))
             {
-                // [workaround] treat process as client first because limitation of max server instance seems not working on Linux
-                if (this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args ?? []))
-                {
-                    this.SynchronizationContext.Post(() => desktopLifetime.Shutdown());
-                    return;
-                }
+                this.SynchronizationContext.Post(() => desktopLifetime.Shutdown());
+                return;
             }
+
+            // no existing server reachable, become the server
             if (this.CreateMultiInstancesServerStream(true, false))
                 _ = this.WaitForMultiInstancesClient();
             else
             {
+                // race: another process became server in the meantime
                 this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args ?? []);
                 this.SynchronizationContext.Post(() => desktopLifetime.Shutdown());
                 return;

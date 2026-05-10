@@ -62,6 +62,11 @@ Shared build configuration lives in `Directory.Build.props`: assembly version, n
 - `[ThreadSafe]` attributes mark thread-safe members explicitly.
 - Internal APIs are shared between trusted assemblies via `InternalsVisibleTo` in `Directory.Build.props`.
 
+### Method Body Layout
+- Inside a method body, group related statements into **blocks** separated by a single blank line.
+- Each block is preceded by a single-line `//` comment describing what the block does.
+- Exception: when a method body contains only one block, the leading comment is optional.
+
 ### File and Type Organization
 - One type per file; file name matches the type name exactly.
 - Each subsystem gets its own subfolder under `Core/` (e.g. `Scripting/`, `Data/`, `UsageData/`).
