@@ -82,16 +82,6 @@ static unsafe class Win32
 
 
     [Flags]
-    public enum RESTART : uint
-    {
-        NO_CRASH = 1,
-        NO_HANG = 2,
-        NO_PATCH = 4,
-        NO_REBOOT = 8,
-    }
-
-
-    [Flags]
     public enum TBPF : uint
     {
         ERROR = 0x4,
@@ -149,10 +139,6 @@ static unsafe class Win32
 
     [DllImport("User32", SetLastError = true)]
     public static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-
-    [DllImport("Kernel32", SetLastError = true)]
-    public static extern int RegisterApplicationRestart([MarshalAs(UnmanagedType.LPWStr)] string? pwzCommandline, RESTART dwFlags);
 
 
     [DllImport("User32", SetLastError = true)]

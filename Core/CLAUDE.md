@@ -17,6 +17,24 @@ Platform-specific logic is split into partial classes:
 
 The interface `IAppSuiteApplication` provides the abstraction; `IAppSuiteApplication.Current` is the static singleton accessor.
 
+### Restart After System Reboot (Windows)
+
+The framework relaunches the app after a Windows system reboot using a `RunOnce` registry entry. `RunOnce` is used in place of `RegisterApplicationRestart` because the OS-level "Restart apps" sign-in setting is off by default on most installs, which makes `RegisterApplicationRestart` unreliable in practice.
+
+The relaunch is always-on for AppSuite-based applications on Windows. The `RestoreMainWindowsAfterSystemReboot` property is a separate, orthogonal concern: when `true`, the relaunch command line includes the `-restore-main-windows` argument so that main windows are restored on the next run; when `false`, the app is still relaunched but without window restoration.
+
+Lifecycle:
+1. **On launch** (during `OnPrepareStartingAsync`): any stale entry left from a previous shutdown is removed via `RemoveRunOnceEntryForRestartOnWindows()`. Defensive cleanup — under normal flow `RunOnce` self-deletes when it fires, so this is usually a no-op.
+2. **On OS-initiated shutdown** (Avalonia's `ShutdownRequested` event fires — i.e. `WM_QUERYENDSESSION`): the handler sets `shutdownSource = System` (matching the macOS behavior) and calls `WriteRunOnceEntryForRestartOnWindows()`, which writes an entry to `HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce` pointing at the current exe (with the `-restore-main-windows` argument appended when `RestoreMainWindowsAfterSystemReboot == true`). The entry name is `CarinaStudio.<AssemblyName>.RestoreAfterReboot`, namespaced by assembly name so multiple AppSuite-based apps do not collide.
+3. **On graceful, app-initiated shutdown** (`ShutdownAsync` called with `isCritical == false` *and* `shutdownSource == ShutdownSource.Application` — e.g. File → Exit, in-app `Restart()`): the entry is removed via `RemoveRunOnceEntryForRestartOnWindows()`. Critical shutdowns skip cleanup. **Importantly**, OS-initiated shutdowns also reach `ShutdownAsync` (Avalonia drives it after `ShutdownRequested`) but their `shutdownSource == ShutdownSource.System` — the cleanup must be skipped there, otherwise the entry just written in step 2 would be wiped before reboot.
+4. **On next login** (when an OS shutdown actually proceeded): Windows fires `RunOnce` once and auto-deletes the entry. The app launches; if the command line included `-restore-main-windows`, it flows through the existing parsing path and `IsRestoringMainWindowsRequested` drives main-window restoration.
+
+Force-kill paths (Task Manager → End Process, `taskkill /F`, antivirus, crash) bypass both hooks: nothing is written if no shutdown was in progress, and if a force-kill occurs *during* an OS shutdown the entry survives, which is correct because the user did request the reboot.
+
+**Known limitation — cancelled system shutdown.** If `WM_QUERYENDSESSION` fires (entry written, `shutdownSource` becomes `System`) and the shutdown is then cancelled by another app, `shutdownSource` is sticky and subsequent app-initiated graceful exits will *also* see it as `System` — so the cleanup branch in step 3 is skipped and the stale entry survives until either (a) the next system reboot consumes it, or (b) the launch-time cleanup in step 1 removes it on a manual relaunch. In the meantime, a spurious relaunch may occur on the next login. This trade-off is accepted: gating cleanup on `shutdownSource` is what makes the primary case (system reboot relaunches the app) work correctly.
+
+All registry operations are best-effort and exception-safe; failures never propagate.
+
 ## Key Namespaces
 
 - **`Controls/`** — 90+ custom Avalonia controls: dialogs (agreement, file selection, app update), `MainWindow` base classes, `TutorialPresenter`, `NotificationPresenter`, specialized input controls.

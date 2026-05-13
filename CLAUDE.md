@@ -63,9 +63,10 @@ Shared build configuration lives in `Directory.Build.props`: assembly version, n
 - Internal APIs are shared between trusted assemblies via `InternalsVisibleTo` in `Directory.Build.props`.
 
 ### Method Body Layout
-- Inside a method body, group related statements into **blocks** separated by a single blank line.
-- Each block is preceded by a single-line `//` comment describing what the block does.
-- Exception: when a method body contains only one block, the leading comment is optional.
+- Inside any code block (method body, `if`/`else`, `for`/`while`/`foreach`, `try`/`catch`/`finally`, lambda body, etc.), group related statements into **logical blocks** separated by a single blank line.
+- **Every** logical block is preceded by a single-line `//` comment describing what the block does — including the leading (first) block.
+- Exception: when an enclosing block contains only one logical block, the leading comment is optional.
+- When you split a logical block into 2 or more sub-blocks (e.g. for readability), each resulting sub-block must have its own leading comment — adding sub-blocks without comments is not allowed.
 
 ### File and Type Organization
 - One type per file; file name matches the type name exactly.
@@ -74,7 +75,9 @@ Shared build configuration lives in `Directory.Build.props`: assembly version, n
 - Subfolder/namespace names use **noun-first** ordering (e.g. `UsageData`, not `DataUsage`).
 - Companion types for an interface (`Extensions`, enums) go in separate files in the same folder.
 - Inner types within a class/file are ordered **alphabetically** by name.
-- Members within a type (enum values, properties, methods) are also ordered **alphabetically**. Exception: struct fields with `[StructLayout(LayoutKind.Sequential)]` must preserve their memory-layout order and cannot be reordered.
+- Data members are grouped near the top of the type in this order: (1) constants under a `// Constants.` header, (2) static fields under a `// Static Fields.` header, (3) instance/private fields under a `// Fields.` header. Each group is ordered **alphabetically** by name (case-insensitive). Headers for empty groups are omitted.
+- Properties and methods follow the data members, ordered **alphabetically** by name and interleaved together (not grouped by kind).
+- Enum values are ordered **alphabetically**. Exception: struct fields with `[StructLayout(LayoutKind.Sequential)]` must preserve their memory-layout order and cannot be reordered.
 
 ### Interfaces and Managers
 - Subsystem interfaces are named `IXxxManager` and extend `IApplicationObject<IAppSuiteApplication>`.

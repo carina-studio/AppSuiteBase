@@ -3119,9 +3119,16 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             {
                 if (!this.isShutdownStarted && Platform.IsNotMacOS)
                 {
+                    // mark application as shutting down due to system request
                     this.Logger.LogWarning("Application has been shut down unexpectedly");
                     this.isShutdownStarted = true;
+                    if (this.shutdownSource == ShutdownSource.None)
+                        this.shutdownSource = ShutdownSource.System;
                     this.OnPropertyChanged(nameof(IsShutdownStarted));
+
+                    // request relaunch after system reboot
+                    if (Platform.IsWindows)
+                        this.WriteRunOnceEntryForRestartOnWindows();
                 }
             };
         }
@@ -3653,10 +3660,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             SystemEvents.UserPreferenceChanged += this.OnWindowsUserPreferenceChanged;
 #pragma warning restore CA1416
 
-        // register for restart after system reboot
+        // clean any stale RunOnce entry left from a previous shutdown
         if (Platform.IsWindows)
-            this.RegisterApplicationRestartOnWindows();
-        
+            this.RemoveRunOnceEntryForRestartOnWindows();
+
         // setup text scale factor
         if (Platform.IsMacOS)
             await this.UpdateTextScaleFactorAsync(CancellationToken.None);
@@ -5205,6 +5212,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.isCriticalShutdownStarted = true;
             this.OnPropertyChanged(nameof(IsCriticalShutdownStarted));
         }
+
+        // clean RunOnce restart entry on non-critical shutdown — a cancelled system shutdown that
+        // previously wrote one is now confirmed obsolete; for normal user-initiated exits this is
+        // a no-op
+        if (!isCritical && Platform.IsWindows && this.shutdownSource == ShutdownSource.Application)
+            this.RemoveRunOnceEntryForRestartOnWindows();
 
         // delay
         if (!isCritical && isFirstCall && delay > 0)

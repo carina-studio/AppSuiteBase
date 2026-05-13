@@ -20,6 +20,10 @@ namespace CarinaStudio.AppSuite;
 
 unsafe partial class AppSuiteApplication
 {
+    // Constants.
+    const string WindowsRunOnceKeyPath = @"Software\Microsoft\Windows\CurrentVersion\RunOnce";
+
+
     // Fields.
     readonly Dictionary<object, nint> baseWndProcPointers = new();
     bool isMessageWindowWndProcAttached;
@@ -301,16 +305,29 @@ unsafe partial class AppSuiteApplication
 #pragma warning restore CA1416
 
 
-    // Register application for restart after system reboot on Windows.
-    void RegisterApplicationRestartOnWindows()
+    // Remove the RunOnce registry entry used to relaunch the application after a system reboot.
+    // Best-effort cleanup: this method must not throw — it may be called during startup, shutdown,
+    // or other paths where surfacing an exception would mask a more important error.
+#pragma warning disable CA1416
+    void RemoveRunOnceEntryForRestartOnWindows()
     {
         if (Platform.IsNotWindows)
             return;
-        var commandLine = this.RestoreMainWindowsAfterSystemReboot ? RestoreMainWindowsArgument : null;
-        var result = Win32.RegisterApplicationRestart(commandLine, Win32.RESTART.NO_CRASH | Win32.RESTART.NO_HANG);
-        if (result != 0)
-            this.Logger.LogWarning("Failed to register application restart, result: {result}", result);
+        try
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(WindowsRunOnceKeyPath, writable: true);
+            if (key?.GetValue(this.WindowsRunOnceEntryName) is not null)
+            {
+                key.DeleteValue(this.WindowsRunOnceEntryName, throwOnMissingValue: false);
+                this.Logger.LogDebug("RunOnce entry deleted");
+            }
+        }
+        catch
+        {
+            // Swallow all — registry I/O failure must never propagate from this method.
+        }
     }
+#pragma warning restore CA1416
 
 
     // Setup AppBuilder for Windows.
@@ -382,4 +399,41 @@ unsafe partial class AppSuiteApplication
             _ => Win32.TBPF.NOPROGRESS,
         });
     }
+    
+    
+    // Value name of the RunOnce entry used by this application instance. Namespaced by application
+    // name so multiple AppSuite-based applications do not collide on the same key.
+    string WindowsRunOnceEntryName => $"CarinaStudio.{this.Assembly.GetName().Name ?? this.Name}.RestoreAfterReboot";
+
+
+    // Write a RunOnce registry entry so Windows relaunches the application with the
+    // -restore-main-windows argument on next login. Called only from the ShutdownRequested
+    // handler — i.e. when the OS is shutting the system down — so that user-initiated
+    // graceful exits never create the entry.
+#pragma warning disable CA1416
+    void WriteRunOnceEntryForRestartOnWindows()
+    {
+        if (Platform.IsNotWindows)
+            return;
+        var exePath = Environment.ProcessPath;
+        if (string.IsNullOrEmpty(exePath))
+        {
+            this.Logger.LogWarning("Cannot determine exe path for RunOnce restart-after-reboot entry");
+            return;
+        }
+        try
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(WindowsRunOnceKeyPath);
+            if (this.RestoreMainWindowsAfterSystemReboot)
+                key.SetValue(this.WindowsRunOnceEntryName, $"\"{exePath}\" {RestoreMainWindowsArgument}");
+            else
+                key.SetValue(this.WindowsRunOnceEntryName, $"\"{exePath}\"");
+            this.Logger.LogDebug("RunOnce entry written for restart-after-reboot");
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogWarning(ex, "Failed to write RunOnce entry for restart-after-reboot");
+        }
+    }
+#pragma warning restore CA1416
 }
