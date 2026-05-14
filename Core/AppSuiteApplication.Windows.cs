@@ -425,9 +425,9 @@ unsafe partial class AppSuiteApplication
         {
             using var key = Registry.CurrentUser.CreateSubKey(WindowsRunOnceKeyPath);
             if (this.RestoreMainWindowsAfterSystemReboot)
-                key.SetValue(this.WindowsRunOnceEntryName, $"\"{exePath}\" {RestoreMainWindowsArgument}");
+                key.SetValue(this.WindowsRunOnceEntryName, $"\"{exePath}\" {RestartedBySystemArgument} {RestoreMainWindowsArgument}");
             else
-                key.SetValue(this.WindowsRunOnceEntryName, $"\"{exePath}\"");
+                key.SetValue(this.WindowsRunOnceEntryName, $"\"{exePath}\" {RestartedBySystemArgument}");
             this.Logger.LogDebug("RunOnce entry written for restart-after-reboot");
         }
         catch (Exception ex)

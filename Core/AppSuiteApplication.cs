@@ -208,6 +208,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         /// </summary>
         public const string IsDebugModeRequested = "IsDebugModeRequested";
         /// <summary>
+        /// Whether the application is restarted by system or not.
+        /// </summary>
+        public const string IsRestartedBySystem = "IsRestartedBySystem";
+        /// <summary>
         /// Whether restoring main window is requested or not.
         /// </summary>
         public const string IsRestoringMainWindowsRequested = "IsRestoringMainWindowsRequested";
@@ -358,6 +362,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     const int FlushingUsageDataWhenShuttingDownTimeout = 10000;
     const string InitSettingsFileName = "InitSettings.json";
     const string PersistentStateFileName = "PersistentState.json";
+    const string RestartedBySystemArgument = "-restarted-by-system";
     const string SettingsFileName = "Settings.json";
     const bool SimulateFirstLaunch = false;
     const bool SimulateImportInitSettingsFailure = false;
@@ -2977,6 +2982,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             // try forwarding arguments to an existing instance first
             if (this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args ?? []))
             {
+                this.Logger.LogWarning("Existing instance detected, shutting down");
                 this.SynchronizationContext.Post(() => desktopLifetime.Shutdown());
                 return;
             }
@@ -2987,6 +2993,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             else
             {
                 // race: another process became server in the meantime
+                this.Logger.LogWarning("Unable to create multi-instance server, try forwarding arguments to the existing instance and shut down");
                 this.SendArgumentsToMultiInstancesServer(desktopLifetime.Args ?? []);
                 this.SynchronizationContext.Post(() => desktopLifetime.Shutdown());
                 return;
@@ -4273,6 +4280,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                                 LogToConsole($"Invalid directory to import app data: {directory}");
                         }
                         break;
+                    case RestartedBySystemArgument:
+                        launchOptions[LaunchOptionKeys.IsRestartedBySystem] = true;
+                        ++index;
+                        break;
                     case RestoreMainWindowsArgument:
                         launchOptions[LaunchOptionKeys.IsRestoringMainWindowsRequested] = true;
                         ++index;
@@ -4783,6 +4794,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.Logger.LogWarning("Try connect to multi-instances server");
             using var clientStream = new NamedPipeClientStream(".", this.multiInstancesServerStreamName, PipeDirection.Out);
             clientStream.Connect(500);
+            
+            // skip if the application is restarted by system
+            if (this.LaunchOptions.TryGetValue(LaunchOptionKeys.IsRestartedBySystem, out bool isRestartedBySystem) && isRestartedBySystem)
+            {
+                this.Logger.LogWarning("Connected to multi-instances server, skip because the application is restarted by system");
+                return true;
+            }
 
             // send arguments
             this.Logger.LogWarning("Send application arguments to multi-instances server");
