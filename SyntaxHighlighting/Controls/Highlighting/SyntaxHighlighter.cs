@@ -152,6 +152,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     FontWeight fontWeight = FontWeight.Normal;
     IBrush? foreground;
     IDisposable foregroundPropertyChangedHandlerToken = EmptyDisposable.Default;
+    bool hasHighlightingRuns;
     readonly bool isDebugMode = IAppSuiteApplication.CurrentOrNull?.IsDebugMode == true;
     bool isMaxTokenCountReached;
     double letterSpacing;
@@ -177,7 +178,6 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     string? text;
     TextAlignment textAlignment = TextAlignment.Left;
     TextDecorationCollection? textDecorations;
-    TextLayout? textLayout;
     IReadOnlyList<ValueSpan<TextRunProperties>>? textProperties;
     TextTrimming textTrimming = TextTrimming.CharacterEllipsis;
     TextWrapping textWrapping = TextWrapping.NoWrap;
@@ -702,13 +702,9 @@ public sealed class SyntaxHighlighter : AvaloniaObject
     /// <returns>Text layout.</returns>
     public TextLayout CreateTextLayout()
     {
-        // use created text layout
-        if (this.textLayout != null)
-            return this.textLayout;
-        
         // get text
         var text = this.TextWithPreeditText;
-        
+
         // create type face
         var typeface = new Typeface(this.fontFamily, this.fontStyle, this.fontWeight, this.fontStretch);
 
@@ -720,35 +716,51 @@ public sealed class SyntaxHighlighter : AvaloniaObject
             this.foreground,
             this.background
         );
-        
+
         // create text runs and source
         if (this.textProperties is null)
         {
+            // create
             var tokenCount = 0;
             this.textProperties = this.CreateTextProperties(ref tokenCount, defaultRunProperties);
             this.SetAndRaise(IsMaxTokenCountReachedProperty, ref this.isMaxTokenCountReached, maxTokenCount >= 0 && tokenCount >= maxTokenCount);
+
+            // detect whether any non-default highlighting run was produced
+            this.hasHighlightingRuns = false;
+            foreach (var prop in this.textProperties)
+            {
+                if (!ReferenceEquals(prop.Value, defaultRunProperties))
+                {
+                    this.hasHighlightingRuns = true;
+                    break;
+                }
+            }
         }
 
         // create text layout
-        this.textLayout = new TextLayout(
-            text, 
-            typeface, 
-            this.fontSize, 
-            this.foreground, 
+        // do not cache the instance because the caller (Avalonia TextBlock) takes ownership and disposes it on the next measure;
+        // returning a previously-handed-out instance from a cache would be a use-after-dispose
+        // also pass null as textStyleOverrides when nothing was actually highlighted, to avoid an Avalonia trimming edge case
+        // where TextLayout with a single default-style override and maxWidth equal to the natural width renders nothing
+        var textLayout = new TextLayout(
+            text,
+            typeface,
+            this.fontSize,
+            this.foreground,
             this.textAlignment,
-            this.textWrapping, 
+            this.textWrapping,
             this.textTrimming,
             maxLines: this.maxLines,
-            maxWidth: this.maxWidth, 
-            maxHeight: this.maxHeight, 
-            textStyleOverrides: this.textProperties,
-            flowDirection: this.flowDirection, 
-            lineHeight: this.lineHeight, 
+            maxWidth: this.maxWidth,
+            maxHeight: this.maxHeight,
+            textStyleOverrides: this.hasHighlightingRuns ? this.textProperties : null,
+            flowDirection: this.flowDirection,
+            lineHeight: this.lineHeight,
             letterSpacing: this.letterSpacing
         );
         if (this.isDebugMode)
         {
-            var textLines = this.textLayout.TextLines;
+            var textLines = textLayout.TextLines;
             for (var lineIndex = textLines.Count - 1; lineIndex >= 0; --lineIndex)
             {
                 var textRuns = textLines[lineIndex].TextRuns;
@@ -760,7 +772,7 @@ public sealed class SyntaxHighlighter : AvaloniaObject
                 }
             }
         }
-        return this.textLayout;
+        return textLayout;
     }
 
 
@@ -1148,11 +1160,8 @@ public sealed class SyntaxHighlighter : AvaloniaObject
 
 
     // Invalidate text layout.
-    void InvalidateTextLayout()
-    {
-        this.textLayout = null;
+    void InvalidateTextLayout() =>
         this.TextLayoutInvalidated?.Invoke(this, EventArgs.Empty);
-    }
     
 
     // Invalidate text properties.
