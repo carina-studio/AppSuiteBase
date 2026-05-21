@@ -17,6 +17,9 @@
 	<Color x:Key="Color/Button.Border.Transparent">#00474747</Color>
 	<SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="{DynamicResource Color/Control.Border.Light}"/>
 	
+	<!-- CheckBox -->
+	<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUnchecked" Color="#00000000"/>
+	
 	<!-- ComboBox -->
 	<SolidColorBrush x:Key="ComboBoxBackground" Color="#1e1e1e"/>
 	<SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="{DynamicResource Color/Button.Background.PointerOver}"/>
@@ -107,6 +110,9 @@
 
 	<!-- ThemeModeTest -->
 	<Color x:Key="Color/ThemeModeTest.Color">#7faabbcc</Color>
+	
+	<!-- ToggleSwitch -->
+	<SolidColorBrush x:Key="ToggleSwitchFillOff" Color="#00000000"/>
 
 	<!-- Toolbar -->
 	<Color x:Key="Color/Toolbar.Background">#282828</Color>

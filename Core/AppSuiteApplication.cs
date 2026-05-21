@@ -1481,6 +1481,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             .Template().Name("PART_IncreaseButton"), duration));
         this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ButtonSpinner))
             .Template().Name("PART_DecreaseButton"), duration));
+        this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(CheckBox))
+            .Template().Name("NormalRectangle"), duration));
         this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(ComboBox))
             .Template().Name("Background"), duration));
         this.extraStyles.Add(this.DefineBrushTransitionsStyle(s => s.OfType(typeof(Avalonia.Controls.DatePicker))

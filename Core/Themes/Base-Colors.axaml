@@ -66,6 +66,7 @@
 	<StaticResourceExtension x:Key="CheckBoxCheckBackgroundFillIndeterminateDisabled" ResourceKey="ButtonBackgroundDisabled"/>
 	<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillIndeterminatePointerOver" Color="{DynamicResource SystemAccentColorLight1}"/>
 	<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillIndeterminatePressed" Color="{DynamicResource SystemAccentColorDark1}"/>
+	<SolidColorBrush x:Key="CheckBoxCheckBackgroundFillUnchecked" Color="#00ffffff"/>
 	<StaticResourceExtension x:Key="CheckBoxCheckBackgroundFillUncheckedDisabled" ResourceKey="ButtonBackgroundDisabled"/>
 	<StaticResourceExtension x:Key="CheckBoxCheckBackgroundFillUncheckedPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
 	<StaticResourceExtension x:Key="CheckBoxCheckBackgroundFillUncheckedPressed" ResourceKey="ButtonBackgroundPressed"/>
@@ -497,6 +498,7 @@
 	<SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{DynamicResource SystemAccentColorDark2}"/>
 	
 	<!-- ToggleSwitch -->
+	<SolidColorBrush x:Key="ToggleSwitchFillOff" Color="#00ffffff"/>
 	<StaticResourceExtension x:Key="ToggleSwitchFillOffPointerOver" ResourceKey="ButtonBackgroundPointerOver"/>
 	<StaticResourceExtension x:Key="ToggleSwitchFillOffPressed" ResourceKey="ButtonBackgroundPressed"/>
 	<StaticResourceExtension x:Key="ToggleSwitchStrokeOff" ResourceKey="ButtonBorderBrush"/>
