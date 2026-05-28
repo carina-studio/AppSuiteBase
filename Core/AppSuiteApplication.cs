@@ -975,49 +975,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 fontManager.AddFontCollection(new EmbeddedFontCollection(new("fonts:Noto", UriKind.Absolute), new($"{fontBaseUri}/Noto", UriKind.Absolute)));
             });
             
-            // setup font manager
-            var cjkUnicodeRanges = new UnicodeRange(
-            [
-                // ReSharper disable CommentTypo
-                new(0x2e80, 0x2eff), // CJKRadicalsSupplement
-                new(0x3000, 0x303f), // CJKSymbolsandPunctuation
-                new(0x3200, 0x4dbf), // EnclosedCJKLettersandMonths, CJKCompatibility, CJKUnifiedIdeographsExtensionA
-                new(0x4e00, 0x9fff), // CJKUnifiedIdeographs
-                new(0xf900, 0xfaff), // CJKCompatibilityIdeographs
-                new(0xfe30, 0xfe4f) // CJKCompatibilityForms
-                // ReSharper restore CommentTypo
-            ]);
+            // setup font manager with a Noto Sans Latin-primary composite default; CJK runs fall through to the variant-preferred Noto Sans SC/TC face. Line height across scripts is normalized at the TextBlock level (see TextBlock LineHeight style) since Noto Sans Latin and CJK faces don't share intrinsic line metrics.
             it.With(new FontManagerOptions
             {
-                DefaultFamilyName = "fonts:Inter#Inter",
-                FontFallbacks = _LaunchChineseVariant switch
+                DefaultFamilyName = _LaunchChineseVariant switch
                 {
-                    ChineseVariant.Default =>
-                    [
-                        new FontFallback
-                        {
-                            FontFamily = new("fonts:Noto#Noto Sans SC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        },
-                        new FontFallback
-                        {
-                            FontFamily = new("fonts:Noto#Noto Sans TC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        },
-                    ],
-                    ChineseVariant.Taiwan =>
-                    [
-                        new FontFallback
-                        {
-                            FontFamily = new("fonts:Noto#Noto Sans TC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        },
-                        new FontFallback
-                        {
-                            FontFamily = new("fonts:Noto#Noto Sans SC"),
-                            UnicodeRange = cjkUnicodeRanges,
-                        },
-                    ],
+                    ChineseVariant.Default => "fonts:Noto#Noto Sans, fonts:Noto#Noto Sans SC, fonts:Noto#Noto Sans TC",
+                    ChineseVariant.Taiwan => "fonts:Noto#Noto Sans, fonts:Noto#Noto Sans TC, fonts:Noto#Noto Sans SC",
                     _ => throw new NotImplementedException(),
                 },
             });

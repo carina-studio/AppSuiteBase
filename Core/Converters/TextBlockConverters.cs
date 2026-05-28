@@ -1,5 +1,4 @@
 ﻿using Avalonia.Data.Converters;
-using System;
 
 namespace CarinaStudio.AppSuite.Converters;
 
@@ -12,10 +11,10 @@ public static class TextBlockConverters
     /// <summary>
     /// Converter to convert from font size to line height.
     /// </summary>
-    public static readonly IValueConverter FontSizeToLineHeight = new FuncValueConverter<double, double>(fontSize => Math.Ceiling(fontSize * 1.4));
+    public static readonly IValueConverter FontSizeToLineHeight = new FuncValueConverter<double, double>(fontSize => fontSize * 1.3);
     // [Workaround] To keep line height same across platforms.
     /// <summary>
     /// Converter to convert from font size to compact line height.
     /// </summary>
-    public static readonly IValueConverter FontSizeToLineHeightCompact = new FuncValueConverter<double, double>(fontSize => Math.Ceiling(fontSize * 1.2));
+    public static readonly IValueConverter FontSizeToLineHeightCompact = new FuncValueConverter<double, double>(fontSize => fontSize * 1.2);
 }

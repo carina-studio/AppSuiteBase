@@ -437,14 +437,23 @@
 							
 							<!-- Line height -->
 							<StackPanel Orientation="Horizontal" Margin="5">
-								<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Top">
+								<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Bottom">
 									<TextBlock Text="English"/>
 								</Border>
-								<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Top">
+								<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Bottom">
 									<TextBlock Text="繁體中文"/>
 								</Border>
-								<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Top">
+								<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Bottom">
 									<TextBlock Text="カタカナ"/>
+								</Border>
+								<Border BorderBrush="Green" BorderThickness="1" Margin="5,0,0,0" VerticalAlignment="Bottom">
+									<TextBlock FontSize="11" Text="English"/>
+								</Border>
+								<Border BorderBrush="Green" BorderThickness="1" VerticalAlignment="Bottom">
+									<TextBlock FontSize="11" Text="繁體中文"/>
+								</Border>
+								<Border BorderBrush="Green" BorderThickness="1" VerticalAlignment="Bottom">
+									<TextBlock FontSize="11" Text="カタカナ"/>
 								</Border>
 							</StackPanel>
 							<StackPanel Orientation="Horizontal" Margin="5">
