@@ -242,6 +242,7 @@
 
 	<!-- MarkdownViewer -->
 	<CornerRadius x:Key="CornerRadius/MarkdownViewer.Markdown.InlineCode">4</CornerRadius>
+	<CornerRadius x:Key="CornerRadius/MarkdownViewer.Markdown.Table">8</CornerRadius>
 	<sys:Double x:Key="Double/MarkdownViewer.Markdown.Heading1">24</sys:Double>
 	<sys:Double x:Key="Double/MarkdownViewer.Markdown.Heading2">20</sys:Double>
 	<sys:Double x:Key="Double/MarkdownViewer.Markdown.Heading3">18</sys:Double>
@@ -250,8 +251,8 @@
 	<sys:Double x:Key="Double/MarkdownViewer.Markdown.Heading6">14</sys:Double>
 	<sys:Double x:Key="Double/MarkdownViewer.Markdown.Text">14</sys:Double>
 	<sys:Double x:Key="Double/MarkdownViewer.Markdown.Text.LineSpacing">3</sys:Double>
-	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Blockquote.Margin">0,3,0,13</Thickness>
-	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Blockquote.Padding">16,13,16,3</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Blockquote.Margin">0,8,0,8</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Blockquote.Padding">16,8,16,8</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.InlineCode.Margin">1,0,1,0</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.InlineCode.Padding">5,0,5,0</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.List.Margin">28,3,0,13</Thickness>
@@ -263,9 +264,15 @@
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading4">0,12,0,4</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading5">0,10,0,3</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Heading6">0,8,0,2</Thickness>
-	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Text.Margin">0,3,0,13</Thickness>
-	<Thickness x:Key="Thickness/MarkdownViewer.Padding">15,12,15,12</Thickness>
-	<Thickness x:Key="Thickness/MarkdownViewer.Padding.StartsWithHeading">15,-3,15,12</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Table.Cell.Margin">0.5</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Table.Cell.Padding">10,-3,10,-3</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Table.Header.Margin">0.5</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Table.Header.Padding">10,0,10,0</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Table.Margin">0,8,0,8</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Table.Text.Margin">0,8,0,8</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Markdown.Text.Margin">0,8,0,8</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Padding">15,7,15,7</Thickness>
+	<Thickness x:Key="Thickness/MarkdownViewer.Padding.StartsWithHeading">15,-3,15,7</Thickness>
 	<Thickness x:Key="Thickness/MarkdownViewer.Rule.Margin">0,3,0,13</Thickness>
 
 	<!-- Menu -->

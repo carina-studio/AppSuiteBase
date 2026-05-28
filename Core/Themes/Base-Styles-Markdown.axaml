@@ -11,6 +11,32 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Blockquote.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Blockquote.Padding}"/>
 	</Style>
+	<Style Selector="Border.EvenTableRow">
+		<Setter Property="Background" Value="{DynamicResource Brush/MarkdownViewer.Markdown.Table.EvenRow.Background}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Table.Cell.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Table.Cell.Padding}"/>
+	</Style>
+	<Style Selector="Border.Table">
+		<Setter Property="ClipToBounds" Value="True"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/MarkdownViewer.Markdown.Table}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Table.Margin}"/>
+	</Style>
+	<Style Selector="Border.Table ca|CTextBlock">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Table.Text.Margin}"/>
+	</Style>
+	<Style Selector="Border.TableHeader">
+		<Setter Property="Background" Value="{DynamicResource Brush/MarkdownViewer.Markdown.Table.Header.Background}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Table.Header.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Table.Header.Padding}"/>
+	</Style>
+	<Style Selector="Border.TableHeader ca|CTextBlock">
+		<Setter Property="FontWeight" Value="Bold"/>
+	</Style>
+	<Style Selector="Border.OddTableRow">
+		<Setter Property="Background" Value="{DynamicResource Brush/MarkdownViewer.Markdown.Table.OddRow.Background}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Table.Cell.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Table.Cell.Padding}"/>
+	</Style>
 	<Style Selector="ca|CCode">
 		<Setter Property="Background" Value="{DynamicResource Brush/MarkdownViewer.Markdown.InlineCode.Background}"/>
 		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/MarkdownViewer.Markdown.InlineCode}"/>
