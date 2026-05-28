@@ -251,6 +251,10 @@ public enum DialogTextRole
     /// </summary>
     LabelNextToIcon,
     /// <summary>
+    /// Standalone description.
+    /// </summary>
+    Description,
+    /// <summary>
     /// Description below a checkbox.
     /// </summary>
     DescriptionBelowCheckBox,
