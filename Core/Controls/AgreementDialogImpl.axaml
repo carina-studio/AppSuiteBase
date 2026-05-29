@@ -29,7 +29,7 @@
 		<DockPanel>
 
 			<!-- Toolbar -->
-			<Border Classes="Toolbar" DockPanel.Dock="Top">
+			<Border Classes="Toolbar" BorderBrush="{DynamicResource Brush/Toolbar.Border}" BorderThickness="0,0,0,1" DockPanel.Dock="Top">
 				<Grid>
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="{StaticResource GridLength/DocumentViewerWindow.ToolBar.LeftPadding}"/>
@@ -54,8 +54,12 @@
 			</Border>
 
 			<!-- Document -->
-			<controls:MarkdownViewer BorderThickness="0" HorizontalScrollBarVisibility="Disabled" TextElement.FontFamily="{Binding #dialog.DocumentFontFamily}" Source="{Binding #dialog.DocumentUri}"/>
-
+			<Panel>
+				<controls:MarkdownViewer BorderThickness="0" CornerRadius="0" HorizontalScrollBarVisibility="Disabled" TextElement.FontFamily="{Binding #dialog.DocumentFontFamily}" Source="{Binding #dialog.DocumentUri}"/>
+				<Border Classes="Shadow_Bottom_Light" VerticalAlignment="Top"/>
+				<Border Classes="Shadow_Top_Light" VerticalAlignment="Bottom"/>
+			</Panel>
+			
 		</DockPanel>
 		
 	</DockPanel>

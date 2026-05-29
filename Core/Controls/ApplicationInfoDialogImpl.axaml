@@ -51,537 +51,540 @@
 		</Border>
 
 		<!-- Content -->
-		<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="{DynamicResource Double/ApplicationInfoDialog.Content.MaxHeight}">
-			<Panel>
+		<Panel>
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled" MaxHeight="{DynamicResource Double/ApplicationInfoDialog.Content.MaxHeight}">
+				<Panel>
 
-				<!-- Background -->
-				<Panel Name="bannerImagePanel" IsVisible="{Binding #bannerImage.IsVisible}">
-					<Panel Height="{StaticResource Double/ApplicationInfoDialog.Header.Background.Height}" VerticalAlignment="Top">
-						<Panel.OpacityMask>
-							<LinearGradientBrush EndPoint="0%,100%" StartPoint="0%,0%">
-								<GradientStop Color="#ff000000" Offset="0"/>
-								<GradientStop Color="#00000000" Offset="0.75"/>
-							</LinearGradientBrush>
-						</Panel.OpacityMask>
-						<Image Name="bannerImage" 
-						       IsVisible="{Binding $self.Source, Converter={x:Static ObjectConverters.IsNotNull}}" 
-						       Margin="0,0,0,-9999"
-						       Source="{Binding BannerImage}" 
-						       Stretch="Uniform"
-						       VerticalAlignment="Top"/>
+					<!-- Background -->
+					<Panel Name="bannerImagePanel" IsVisible="{Binding #bannerImage.IsVisible}">
+						<Panel Height="{StaticResource Double/ApplicationInfoDialog.Header.Background.Height}" VerticalAlignment="Top">
+							<Panel.OpacityMask>
+								<LinearGradientBrush EndPoint="0%,100%" StartPoint="0%,0%">
+									<GradientStop Color="#ff000000" Offset="0"/>
+									<GradientStop Color="#00000000" Offset="0.75"/>
+								</LinearGradientBrush>
+							</Panel.OpacityMask>
+							<Image Name="bannerImage" 
+							       IsVisible="{Binding $self.Source, Converter={x:Static ObjectConverters.IsNotNull}}" 
+							       Margin="0,0,0,-9999"
+							       Source="{Binding BannerImage}" 
+							       Stretch="Uniform"
+							       VerticalAlignment="Top"/>
+						</Panel>
 					</Panel>
-				</Panel>
-				<Panel IsVisible="{Binding !#bannerImagePanel.IsVisible}">
-					<Panel Height="{StaticResource Double/ApplicationInfoDialog.Header.Background.Height}" VerticalAlignment="Top">
-						<Ellipse 
-							Fill="{DynamicResource Brush/ApplicationInfoDialog.Header.Layer1.Background}" 
-							Stroke="{DynamicResource Brush/ApplicationInfoDialog.Header.Layer1.Border}" 
-							StrokeThickness="{StaticResource Double/ApplicationInfoDialog.Header.Layer1.BorderThickness}">
-							<Ellipse.RenderTransform>
-								<TransformGroup>
-									<ScaleTransform ScaleX="3" ScaleY="2.0"/>
-									<TranslateTransform X="{StaticResource Double/ApplicationInfoDialog.Header.Layer1.Background.OffsetX}" Y="{StaticResource Double/ApplicationInfoDialog.Header.Layer1.Background.OffsetY}"/>
-								</TransformGroup>
-							</Ellipse.RenderTransform>
-						</Ellipse>
-						<Ellipse 
-							Fill="{DynamicResource Brush/ApplicationInfoDialog.Header.Layer2.Background}" 
-							Stroke="{DynamicResource Brush/ApplicationInfoDialog.Header.Layer2.Border}" 
-							StrokeThickness="{StaticResource Double/ApplicationInfoDialog.Header.Layer2.BorderThickness}">
-							<Ellipse.RenderTransform>
-								<TransformGroup>
-									<ScaleTransform ScaleX="2.0" ScaleY="2.0"/>
-									<TranslateTransform X="{StaticResource Double/ApplicationInfoDialog.Header.Layer2.Background.OffsetX}" Y="{StaticResource Double/ApplicationInfoDialog.Header.Layer2.Background.OffsetY}"/>
-								</TransformGroup>
-							</Ellipse.RenderTransform>
-						</Ellipse>
-					</Panel>
-					<Border Height="{Binding #window.Width}" VerticalAlignment="Top">
-						<Border.Background>
-							<RadialGradientBrush Center="70%,0%" GradientOrigin="70%,0%" RadiusX="70%" RadiusY="20%">
-								<GradientStop Color="#37ffffff" Offset="0"/>
-								<GradientStop Color="#00ffffff" Offset="1"/>
-							</RadialGradientBrush>
-						</Border.Background>
-					</Border>
-				</Panel>
-
-				<!-- Content -->
-				<StackPanel Name="itemsPanel" Background="{x:Static Brushes.Transparent}" Classes="Dialog_ContentPanel_WithItemsGroups">
-
-					<!-- Icon and title -->
-					<DockPanel HorizontalAlignment="Stretch">
-
-						<!-- Icon -->
-						<Border DockPanel.Dock="Left" IsVisible="{Binding !#bannerImagePanel.IsVisible}">
-							<Image Height="{DynamicResource Double/ApplicationInfoDialog.AppIcon.Size}" Margin="{DynamicResource Thickness/ApplicationInfoDialog.AppIcon.Margin}" Source="{Binding Icon}" VerticalAlignment="Center" Width="{DynamicResource Double/ApplicationInfoDialog.AppIcon.Size}"/>
+					<Panel IsVisible="{Binding !#bannerImagePanel.IsVisible}">
+						<Panel Height="{StaticResource Double/ApplicationInfoDialog.Header.Background.Height}" VerticalAlignment="Top">
+							<Ellipse 
+								Fill="{DynamicResource Brush/ApplicationInfoDialog.Header.Layer1.Background}" 
+								Stroke="{DynamicResource Brush/ApplicationInfoDialog.Header.Layer1.Border}" 
+								StrokeThickness="{StaticResource Double/ApplicationInfoDialog.Header.Layer1.BorderThickness}">
+								<Ellipse.RenderTransform>
+									<TransformGroup>
+										<ScaleTransform ScaleX="3" ScaleY="2.0"/>
+										<TranslateTransform X="{StaticResource Double/ApplicationInfoDialog.Header.Layer1.Background.OffsetX}" Y="{StaticResource Double/ApplicationInfoDialog.Header.Layer1.Background.OffsetY}"/>
+									</TransformGroup>
+								</Ellipse.RenderTransform>
+							</Ellipse>
+							<Ellipse 
+								Fill="{DynamicResource Brush/ApplicationInfoDialog.Header.Layer2.Background}" 
+								Stroke="{DynamicResource Brush/ApplicationInfoDialog.Header.Layer2.Border}" 
+								StrokeThickness="{StaticResource Double/ApplicationInfoDialog.Header.Layer2.BorderThickness}">
+								<Ellipse.RenderTransform>
+									<TransformGroup>
+										<ScaleTransform ScaleX="2.0" ScaleY="2.0"/>
+										<TranslateTransform X="{StaticResource Double/ApplicationInfoDialog.Header.Layer2.Background.OffsetX}" Y="{StaticResource Double/ApplicationInfoDialog.Header.Layer2.Background.OffsetY}"/>
+									</TransformGroup>
+								</Ellipse.RenderTransform>
+							</Ellipse>
+						</Panel>
+						<Border Height="{Binding #window.Width}" VerticalAlignment="Top">
+							<Border.Background>
+								<RadialGradientBrush Center="70%,0%" GradientOrigin="70%,0%" RadiusX="70%" RadiusY="20%">
+									<GradientStop Color="#37ffffff" Offset="0"/>
+									<GradientStop Color="#00ffffff" Offset="1"/>
+								</RadialGradientBrush>
+							</Border.Background>
 						</Border>
+					</Panel>
 
-						<!-- Title and version -->
-						<Border x:CompileBindings="False">
-							<StackPanel Orientation="Vertical" VerticalAlignment="Center">
-								<StackPanel Margin="{StaticResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Orientation="Horizontal">
-									<SelectableTextBlock Classes="Shadowed" FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Text="{Binding Name}" VerticalAlignment="Center"/>
-									<StackPanel Name="badgesPanel" Classes="Shadowed" Height="{StaticResource Double/ApplicationInfoDialog.AppBadge.Size}" Orientation="Horizontal" VerticalAlignment="Center"/>
+					<!-- Content -->
+					<StackPanel Name="itemsPanel" Background="{x:Static Brushes.Transparent}" Classes="Dialog_ContentPanel_WithItemsGroups">
+
+						<!-- Icon and title -->
+						<DockPanel HorizontalAlignment="Stretch">
+
+							<!-- Icon -->
+							<Border DockPanel.Dock="Left" IsVisible="{Binding !#bannerImagePanel.IsVisible}">
+								<Image Height="{DynamicResource Double/ApplicationInfoDialog.AppIcon.Size}" Margin="{DynamicResource Thickness/ApplicationInfoDialog.AppIcon.Margin}" Source="{Binding Icon}" VerticalAlignment="Center" Width="{DynamicResource Double/ApplicationInfoDialog.AppIcon.Size}"/>
+							</Border>
+
+							<!-- Title and version -->
+							<Border x:CompileBindings="False">
+								<StackPanel Orientation="Vertical" VerticalAlignment="Center">
+									<StackPanel Margin="{StaticResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Orientation="Horizontal">
+										<SelectableTextBlock Classes="Shadowed" FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Text="{Binding Name}" VerticalAlignment="Center"/>
+										<StackPanel Name="badgesPanel" Classes="Shadowed" Height="{StaticResource Double/ApplicationInfoDialog.AppBadge.Size}" Orientation="Horizontal" VerticalAlignment="Center"/>
+									</StackPanel>
+									<WrapPanel Orientation="Horizontal">
+										<SelectableTextBlock Classes="Shadowed" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" Opacity="{StaticResource Double/ApplicationInfoDialog.AppVersion.Opacity}" Text="{Binding #window.InformationalVersion}" VerticalAlignment="Center"/>
+										<TextBlock Classes="Shadowed" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding #window.HasApplicationChangeList}" Margin="5,0,5,0" Text="|" VerticalAlignment="Center"/>
+										<abControls:LinkTextBlock Classes="Shadowed" Command="{Binding #window.ShowApplicationChangeList}" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding #window.HasApplicationChangeList}" Text="{xaml:StringResource ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
+									</WrapPanel>
 								</StackPanel>
-								<WrapPanel Orientation="Horizontal">
-									<SelectableTextBlock Classes="Shadowed" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" Opacity="{StaticResource Double/ApplicationInfoDialog.AppVersion.Opacity}" Text="{Binding #window.InformationalVersion}" VerticalAlignment="Center"/>
-									<TextBlock Classes="Shadowed" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding #window.HasApplicationChangeList}" Margin="5,0,5,0" Text="|" VerticalAlignment="Center"/>
-									<abControls:LinkTextBlock Classes="Shadowed" Command="{Binding #window.ShowApplicationChangeList}" FontSize="{StaticResource Double/ApplicationInfoDialog.AppVersion.FontSize}" IsVisible="{Binding #window.HasApplicationChangeList}" Text="{xaml:StringResource ApplicationInfoDialog.ApplicationChangeList}" VerticalAlignment="Center"/>
-								</WrapPanel>
-							</StackPanel>
-						</Border>
+							</Border>
 
-					</DockPanel>
-					<Separator controls:DialogElement.SeparatorType="Large"/>
-					<Separator controls:DialogElement.SeparatorType="Default"/>
+						</DockPanel>
+						<Separator controls:DialogElement.SeparatorType="Large"/>
+						<Separator controls:DialogElement.SeparatorType="Default"/>
 
-					<!-- Open source attribution -->
-					<WrapPanel Name="openSourceAttrPanel"
-					           IsVisible="{xaml:AndBindings 
-					               {Binding IsOpenSourceBased},
-					               {Binding GitHubProjectUri, Converter={x:Static ObjectConverters.IsNotNull}}
-					           }"
-					           Orientation="Horizontal">
-						<TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
-						<Separator Classes="TextSeparator"/>
-						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.OpenSourceBased.Section1}" VerticalAlignment="Center"/>
-						<Separator Classes="TextSeparator"/>
-						<abControls:LinkTextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.OpenSourceBased.Section2}" Uri="{Binding GitHubProjectUri}" VerticalAlignment="Center"/>
-						<Separator Classes="TextSeparator"/>
-						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.OpenSourceBased.Section3}" VerticalAlignment="Center"/>
-					</WrapPanel>
+						<!-- Open source attribution -->
+						<WrapPanel Name="openSourceAttrPanel"
+						           IsVisible="{xaml:AndBindings 
+						               {Binding IsOpenSourceBased},
+						               {Binding GitHubProjectUri, Converter={x:Static ObjectConverters.IsNotNull}}
+						           }"
+						           Orientation="Horizontal">
+							<TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+							<Separator Classes="TextSeparator"/>
+							<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.OpenSourceBased.Section1}" VerticalAlignment="Center"/>
+							<Separator Classes="TextSeparator"/>
+							<abControls:LinkTextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.OpenSourceBased.Section2}" Uri="{Binding GitHubProjectUri}" VerticalAlignment="Center"/>
+							<Separator Classes="TextSeparator"/>
+							<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.OpenSourceBased.Section3}" VerticalAlignment="Center"/>
+						</WrapPanel>
 
-					<!-- App icon attribution (Flaticon) -->
-					<WrapPanel Orientation="Horizontal" IsVisible="{Binding IconWebSite, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:ApplicationInfo+ApplicationIconWebSite.Flaticon}}">
-						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon}" VerticalAlignment="Center"/>
-						<Separator Classes="TextSeparator"/>
-						<abControls:LinkTextBlock IsVisible="{Binding IconCreator, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:ApplicationInfo+ApplicationIconCreator.Freepik}}" Text="Freepik" Uri="https://www.freepik.com/" VerticalAlignment="Center"/>
-						<Separator Classes="TextSeparator"/>
-						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon}" VerticalAlignment="Center"/>
-						<Separator Classes="TextSeparator"/>
-						<abControls:LinkTextBlock Text="Flaticon" Uri="https://www.flaticon.com/" VerticalAlignment="Center"/>
-						<Separator Classes="TextSeparator"/>
-						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon}" VerticalAlignment="Center"/>
-					</WrapPanel>
-					<Separator controls:DialogElement.SeparatorType="Default"/>
+						<!-- App icon attribution (Flaticon) -->
+						<WrapPanel Orientation="Horizontal" IsVisible="{Binding IconWebSite, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:ApplicationInfo+ApplicationIconWebSite.Flaticon}}">
+							<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon}" VerticalAlignment="Center"/>
+							<Separator Classes="TextSeparator"/>
+							<abControls:LinkTextBlock IsVisible="{Binding IconCreator, Converter={x:Static ObjectConverters.Equal}, ConverterParameter={x:Static vm:ApplicationInfo+ApplicationIconCreator.Freepik}}" Text="Freepik" Uri="https://www.freepik.com/" VerticalAlignment="Center"/>
+							<Separator Classes="TextSeparator"/>
+							<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon}" VerticalAlignment="Center"/>
+							<Separator Classes="TextSeparator"/>
+							<abControls:LinkTextBlock Text="Flaticon" Uri="https://www.flaticon.com/" VerticalAlignment="Center"/>
+							<Separator Classes="TextSeparator"/>
+							<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon}" VerticalAlignment="Center"/>
+						</WrapPanel>
+						<Separator controls:DialogElement.SeparatorType="Default"/>
 
-					<!-- Copyright -->
-					<WrapPanel>
-						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.PoweredBy.Section1}" VerticalAlignment="Center"/>
-						<Separator Classes="TextSeparator"/>
-						<abControls:LinkTextBlock Text=".NET" Uri="https://dotnet.microsoft.com/" VerticalAlignment="Center"/>
-						<Separator Classes="TextSeparator"/>
-						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.PoweredBy.Section2}" VerticalAlignment="Center"/>
-						<Separator Classes="TextSeparator"/>
-						<abControls:LinkTextBlock Text="Avalonia" Uri="https://avaloniaui.net/" VerticalAlignment="Center"/>
-						<Separator Classes="TextSeparator"/>
-						<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.PoweredBy.Section3}" VerticalAlignment="Center"/>
-					</WrapPanel>
-					<Separator controls:DialogElement.SeparatorType="Default"/>
-					<TextBlock x:CompileBindings="False" Text="{Binding #window.Copyright, Mode=OneTime}"/>
-					<Separator controls:DialogElement.SeparatorType="Large"/>
+						<!-- Copyright -->
+						<WrapPanel>
+							<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.PoweredBy.Section1}" VerticalAlignment="Center"/>
+							<Separator Classes="TextSeparator"/>
+							<abControls:LinkTextBlock Text=".NET" Uri="https://dotnet.microsoft.com/" VerticalAlignment="Center"/>
+							<Separator Classes="TextSeparator"/>
+							<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.PoweredBy.Section2}" VerticalAlignment="Center"/>
+							<Separator Classes="TextSeparator"/>
+							<abControls:LinkTextBlock Text="Avalonia" Uri="https://avaloniaui.net/" VerticalAlignment="Center"/>
+							<Separator Classes="TextSeparator"/>
+							<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.PoweredBy.Section3}" VerticalAlignment="Center"/>
+						</WrapPanel>
+						<Separator controls:DialogElement.SeparatorType="Default"/>
+						<TextBlock x:CompileBindings="False" Text="{Binding #window.Copyright, Mode=OneTime}"/>
+						<Separator controls:DialogElement.SeparatorType="Large"/>
 
-					<!-- System info -->
-					<TextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{xaml:StringResource ApplicationInfoDialog.SystemInformation}"/>
-					<Border Classes="Dialog_ItemsGroup_Container">
-						<StackPanel>
-
-							<!-- Device name -->
-							<controls:DialogItem ItemSize="Small">
-								<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.DeviceName}"/>
-								<SelectableTextBlock controls:DialogElement.TextRole="Default" 
-								                     HorizontalAlignment="Right" 
-								                     Text="{x:Static sys:Environment.MachineName}" 
-								                     TextTrimming="CharacterEllipsis"/>
-							</controls:DialogItem>
-							<Separator controls:DialogElement.SeparatorType="Item"/>
-
-							<!-- Operating system -->
-							<controls:DialogItem ItemSize="Small">
-								<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.OperatingSystem}"/>
-								<SelectableTextBlock controls:DialogElement.TextRole="Default" 
-								                     HorizontalAlignment="Right" 
-								                     Text="{Binding OperatingSystemDescription}" 
-								                     TextTrimming="CharacterEllipsis"/>
-							</controls:DialogItem>
-							<Separator controls:DialogElement.SeparatorType="Item"/>
-
-							<!-- Framework version -->
-							<controls:DialogItem ItemSize="Small">
-								<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.FrameworkVersion}"/>
-								<SelectableTextBlock controls:DialogElement.TextRole="Default" 
-								                     HorizontalAlignment="Right" 
-								                     Text="{Binding FrameworkVersion}" 
-								                     TextTrimming="CharacterEllipsis"/>
-							</controls:DialogItem>
-							<Separator controls:DialogElement.SeparatorType="Item"/>
-
-							<!-- Processor count -->
-							<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.Application.IsDebugMode}">
-								<controls:DialogItem ItemSize="Small">
-									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ProcessorCount}"/>
-									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
-									                     HorizontalAlignment="Right" 
-									                     Text="{Binding Source={x:Static sys:Environment.ProcessorCount}}" 
-									                     TextTrimming="CharacterEllipsis"/>
-								</controls:DialogItem>
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-							</StackPanel>
-
-							<!-- Total physical memory -->
-							<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasTotalPhysicalMemory}">
-								<controls:DialogItem ItemSize="Small">
-									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.TotalPhysicalMemory}"/>
-									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
-									                     HorizontalAlignment="Right" 
-									                     Text="{Binding #window.Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" 
-									                     TextTrimming="CharacterEllipsis"/>
-								</controls:DialogItem>
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-							</StackPanel>
-
-							<!-- Network connection -->
-							<controls:DialogItem ItemSize="Small">
-								<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.NetworkConnection}"/>
-								<Panel>
-									<SelectableTextBlock IsVisible="{Binding !IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" Text="{xaml:StringResource ApplicationInfoDialog.NetworkConnection.Disconnected}" TextTrimming="CharacterEllipsis"/>
-									<abControls:FormattedSelectableTextBlock Arg1="{Binding PublicIPAddress, Source={x:Static net:NetworkManager.Default}}" 
-									                                         controls:DialogElement.TextRole="Default" 
-									                                         Format="{xaml:StringResource ApplicationInfoDialog.NetworkConnection.Format}" 
-									                                         HorizontalAlignment="Right" 
-									                                         IsVisible="{Binding IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" 
-									                                         TextTrimming="CharacterEllipsis"/>
-								</Panel>
-							</controls:DialogItem>
-
-							<!-- Primary network interface -->
-							<StackPanel x:CompileBindings="False" 
-							            IsVisible="{xaml:AndBindings 
-											{Binding #window.PrimaryNetworkInterfacePhysicalAddress, Converter={x:Static StringConverters.IsNotNullOrEmpty}},
-											{Binding #window.Application.IsDebugMode}
-										}">
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-								<controls:DialogItem ItemSize="Small">
-									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.PrimaryNetworkInterface}"/>
-									<abControls:FormattedSelectableTextBlock Arg1="{Binding PrimaryInterfaceName, Source={x:Static net:NetworkManager.Default}}" 
-									                                         Arg2="{Binding PrimaryInterfaceType, Converter={x:Static controls:ApplicationInfoDialogImpl.NetworkInterfaceTypeConverter}, Source={x:Static net:NetworkManager.Default}}" 
-									                                         Arg3="{Binding #window.PrimaryNetworkInterfacePhysicalAddress}" 
-									                                         controls:DialogElement.TextRole="Default" 
-									                                         Format="{xaml:StringResource ApplicationInfoDialog.PrimaryNetworkInterface.Format}" 
-									                                         HorizontalAlignment="Right" 
-									                                         TextTrimming="CharacterEllipsis"/>
-								</controls:DialogItem>
-							</StackPanel>
-
-							<!-- Screen info -->
-							<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.Application.IsDebugMode}">
-
-								<!-- Screen pixel density -->
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-								<controls:DialogItem ItemSize="Small">
-									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.Screen.PixelDensity}"/>
-									<abControls:FormattedSelectableTextBlock Arg1="{Binding #window.ScreenPixelDensity}" 
-									                                         controls:DialogElement.TextRole="Default" 
-									                                         Format="{xaml:StringResource ApplicationInfoDialog.Screen.PixelDensity.Format}" 
-									                                         HorizontalAlignment="Right"
-									                                         TextTrimming="CharacterEllipsis"/>
-								</controls:DialogItem>
-
-								<!-- Screen size -->
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-								<controls:DialogItem ItemSize="Small">
-									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.Screen.Size}"/>
-									<abControls:FormattedSelectableTextBlock Arg1="{Binding #window.PhysicalScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" 
-									                                         Arg2="{Binding #window.ScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" 
-									                                         controls:DialogElement.TextRole="Default" 
-									                                         Format="{xaml:StringResource ApplicationInfoDialog.Screen.Size.Format}"
-									                                         HorizontalAlignment="Right"
-									                                         TextTrimming="CharacterEllipsis"/>
-								</controls:DialogItem>
-								
-								<!-- Working area -->
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-								<controls:DialogItem ItemSize="Small">
-									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.Screen.WorkingArea}"/>
-									<abControls:FormattedSelectableTextBlock Arg1="{Binding #window.PhysicalScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" 
-									                                         Arg2="{Binding #window.ScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" 
-									                                         controls:DialogElement.TextRole="Default" 
-									                                         Format="{xaml:StringResource ApplicationInfoDialog.Screen.WorkingArea.Format}" 
-									                                         HorizontalAlignment="Right"
-									                                         TextTrimming="CharacterEllipsis"/>
-								</controls:DialogItem>
-
-							</StackPanel>
-						</StackPanel>
-					</Border>
-					<Separator controls:DialogElement.SeparatorType="Large"/>
-
-					<!-- Process info -->
-					<TextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{xaml:StringResource ApplicationInfoDialog.ProcessInformation}"/>
-					<Border x:CompileBindings="False" Classes="Dialog_ItemsGroup_Container">
-						<StackPanel>
-
-							<!-- Process ID -->
-							<controls:DialogItem ItemSize="Small">
-								<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ProcessId}"/>
-								<SelectableTextBlock controls:DialogElement.TextRole="Default" 
-								                     HorizontalAlignment="Right"
-								                     Text="{Binding #window.Application.ProcessInfo.ProcessId, Mode=OneTime}" 
-								                     TextTrimming="CharacterEllipsis"/>
-							</controls:DialogItem>
-							<Separator controls:DialogElement.SeparatorType="Item"/>
-
-							<!-- Thread count -->
-							<controls:DialogItem ItemSize="Small">
-								<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ThreadCount}"/>
-								<SelectableTextBlock controls:DialogElement.TextRole="Default" 
-								                     HorizontalAlignment="Right"
-								                     Text="{Binding #window.Application.ProcessInfo.ThreadCount}" 
-								                     TextTrimming="CharacterEllipsis"/>
-							</controls:DialogItem>
-							<Separator controls:DialogElement.SeparatorType="Item"/>
-
-							<!-- CPU usage -->
-							<controls:DialogItem ItemSize="Small">
-								<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.CpuUsage}"/>
-								<abControls:FormattedSelectableTextBlock Arg1="{Binding #window.Application.ProcessInfo.CpuUsagePercentage}" 
-								                                         controls:DialogElement.TextRole="Default" 
-								                                         Format="{xaml:StringResource ApplicationInfoDialog.CpuUsage.Format}" 
-								                                         HorizontalAlignment="Right"
-								                                         TextTrimming="CharacterEllipsis"/>
-							</controls:DialogItem>
-							<Separator controls:DialogElement.SeparatorType="Item"/>
-
-							<!-- Private memory usage -->
-							<controls:DialogItem ItemSize="Small">
-								<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.PrivateMemoryUsage}"/>
-								<SelectableTextBlock controls:DialogElement.TextRole="Default" 
-								                     HorizontalAlignment="Right"
-								                     Text="{Binding #window.Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static converters:FileSizeConverter.Default}}" 
-								                     TextTrimming="CharacterEllipsis"/>
-							</controls:DialogItem>
-							
-							<!-- Managed environment information -->
-							<StackPanel IsVisible="{Binding #window.Application.IsDebugMode}">
-
-								<!-- Managed heap size -->
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-								<controls:DialogItem ItemSize="Small">
-									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ManagedHeapSize}"/>
-									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
-									                     HorizontalAlignment="Right"
-									                     Text="{Binding #window.Application.ProcessInfo.ManagedHeapSize, Converter={x:Static converters:FileSizeConverter.Default}}" 
-									                     TextTrimming="CharacterEllipsis"/>
-								</controls:DialogItem>
-								
-								<!-- Managed heap usage -->
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-								<controls:DialogItem ItemSize="Small">
-									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ManagedHeapUsage}"/>
-									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
-									                     HorizontalAlignment="Right"
-									                     Text="{Binding #window.Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static converters:FileSizeConverter.Default}}" 
-									                     TextTrimming="CharacterEllipsis"/>
-								</controls:DialogItem>
-								
-								<!-- GC frequency -->
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-								<controls:DialogItem ItemSize="Small">
-									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.GCFrequency}"/>
-									<abControls:FormattedSelectableTextBlock Arg1="{Binding #window.Application.ProcessInfo.GCFrequency}" 
-									                                         controls:DialogElement.TextRole="Default" 
-									                                         Format="{xaml:StringResource ApplicationInfoDialog.GCFrequency.Format}" 
-									                                         HorizontalAlignment="Right"
-									                                         TextTrimming="CharacterEllipsis"/>
-								</controls:DialogItem>
-
-								<!-- Finalization pending count -->
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-								<controls:DialogItem ItemSize="Small">
-									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.FinalizationPendingCount}"/>
-									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
-									                     HorizontalAlignment="Right"
-									                     Text="{Binding #window.Application.ProcessInfo.FinalizationPendingCount}" 
-									                     TextTrimming="CharacterEllipsis"/>
-								</controls:DialogItem>
-								
-							</StackPanel>
-							
-							<!-- Script info -->
-							<StackPanel Name="scriptInfoPanel" IsVisible="False">
-
-								<!-- Running script count -->
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-								<controls:DialogItem ItemSize="Small">
-									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.RunningScriptCount}"/>
-									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
-									                     HorizontalAlignment="Right"
-									                     Text="{Binding RunningScriptCount, Source={x:Static scripting:ScriptManager.Default}}" 
-									                     TextTrimming="CharacterEllipsis"/>
-								</controls:DialogItem>
-								
-								<!-- Script running loading -->
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-								<controls:DialogItem ItemSize="Small">
-									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ScriptRunningLoading}"/>
-									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
-									                     HorizontalAlignment="Right"
-									                     Text="{Binding ScriptRunningLoading, Source={x:Static scripting:ScriptManager.Default}, Converter={x:Static converters:RatioToPercentageConverter.Default}}" 
-									                     TextTrimming="CharacterEllipsis"/>
-								</controls:DialogItem>
-
-							</StackPanel>
-
-						</StackPanel>
-					</Border>
-					<Separator controls:DialogElement.SeparatorType="Large"/>
-
-					<!-- Activated products -->
-					<StackPanel Name="productListSectionPanel">
-						<TextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{xaml:StringResource ApplicationInfoDialog.Products}"/>
+						<!-- System info -->
+						<TextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{xaml:StringResource ApplicationInfoDialog.SystemInformation}"/>
 						<Border Classes="Dialog_ItemsGroup_Container">
-							<StackPanel Name="productListPanel"/>
+							<StackPanel>
+
+								<!-- Device name -->
+								<controls:DialogItem ItemSize="Small">
+									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.DeviceName}"/>
+									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
+									                     HorizontalAlignment="Right" 
+									                     Text="{x:Static sys:Environment.MachineName}" 
+									                     TextTrimming="CharacterEllipsis"/>
+								</controls:DialogItem>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
+
+								<!-- Operating system -->
+								<controls:DialogItem ItemSize="Small">
+									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.OperatingSystem}"/>
+									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
+									                     HorizontalAlignment="Right" 
+									                     Text="{Binding OperatingSystemDescription}" 
+									                     TextTrimming="CharacterEllipsis"/>
+								</controls:DialogItem>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
+
+								<!-- Framework version -->
+								<controls:DialogItem ItemSize="Small">
+									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.FrameworkVersion}"/>
+									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
+									                     HorizontalAlignment="Right" 
+									                     Text="{Binding FrameworkVersion}" 
+									                     TextTrimming="CharacterEllipsis"/>
+								</controls:DialogItem>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
+
+								<!-- Processor count -->
+								<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.Application.IsDebugMode}">
+									<controls:DialogItem ItemSize="Small">
+										<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ProcessorCount}"/>
+										<SelectableTextBlock controls:DialogElement.TextRole="Default" 
+										                     HorizontalAlignment="Right" 
+										                     Text="{Binding Source={x:Static sys:Environment.ProcessorCount}}" 
+										                     TextTrimming="CharacterEllipsis"/>
+									</controls:DialogItem>
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+								</StackPanel>
+
+								<!-- Total physical memory -->
+								<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasTotalPhysicalMemory}">
+									<controls:DialogItem ItemSize="Small">
+										<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.TotalPhysicalMemory}"/>
+										<SelectableTextBlock controls:DialogElement.TextRole="Default" 
+										                     HorizontalAlignment="Right" 
+										                     Text="{Binding #window.Application.HardwareInfo.TotalPhysicalMemory, Converter={x:Static converters:FileSizeConverter.Default}}" 
+										                     TextTrimming="CharacterEllipsis"/>
+									</controls:DialogItem>
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+								</StackPanel>
+
+								<!-- Network connection -->
+								<controls:DialogItem ItemSize="Small">
+									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.NetworkConnection}"/>
+									<Panel>
+										<SelectableTextBlock IsVisible="{Binding !IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" Text="{xaml:StringResource ApplicationInfoDialog.NetworkConnection.Disconnected}" TextTrimming="CharacterEllipsis"/>
+										<abControls:FormattedSelectableTextBlock Arg1="{Binding PublicIPAddress, Source={x:Static net:NetworkManager.Default}}" 
+										                                         controls:DialogElement.TextRole="Default" 
+										                                         Format="{xaml:StringResource ApplicationInfoDialog.NetworkConnection.Format}" 
+										                                         HorizontalAlignment="Right" 
+										                                         IsVisible="{Binding IsNetworkConnected, Source={x:Static net:NetworkManager.Default}}" 
+										                                         TextTrimming="CharacterEllipsis"/>
+									</Panel>
+								</controls:DialogItem>
+
+								<!-- Primary network interface -->
+								<StackPanel x:CompileBindings="False" 
+								            IsVisible="{xaml:AndBindings 
+												{Binding #window.PrimaryNetworkInterfacePhysicalAddress, Converter={x:Static StringConverters.IsNotNullOrEmpty}},
+												{Binding #window.Application.IsDebugMode}
+											}">
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+									<controls:DialogItem ItemSize="Small">
+										<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.PrimaryNetworkInterface}"/>
+										<abControls:FormattedSelectableTextBlock Arg1="{Binding PrimaryInterfaceName, Source={x:Static net:NetworkManager.Default}}" 
+										                                         Arg2="{Binding PrimaryInterfaceType, Converter={x:Static controls:ApplicationInfoDialogImpl.NetworkInterfaceTypeConverter}, Source={x:Static net:NetworkManager.Default}}" 
+										                                         Arg3="{Binding #window.PrimaryNetworkInterfacePhysicalAddress}" 
+										                                         controls:DialogElement.TextRole="Default" 
+										                                         Format="{xaml:StringResource ApplicationInfoDialog.PrimaryNetworkInterface.Format}" 
+										                                         HorizontalAlignment="Right" 
+										                                         TextTrimming="CharacterEllipsis"/>
+									</controls:DialogItem>
+								</StackPanel>
+
+								<!-- Screen info -->
+								<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.Application.IsDebugMode}">
+
+									<!-- Screen pixel density -->
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+									<controls:DialogItem ItemSize="Small">
+										<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.Screen.PixelDensity}"/>
+										<abControls:FormattedSelectableTextBlock Arg1="{Binding #window.ScreenPixelDensity}" 
+										                                         controls:DialogElement.TextRole="Default" 
+										                                         Format="{xaml:StringResource ApplicationInfoDialog.Screen.PixelDensity.Format}" 
+										                                         HorizontalAlignment="Right"
+										                                         TextTrimming="CharacterEllipsis"/>
+									</controls:DialogItem>
+
+									<!-- Screen size -->
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+									<controls:DialogItem ItemSize="Small">
+										<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.Screen.Size}"/>
+										<abControls:FormattedSelectableTextBlock Arg1="{Binding #window.PhysicalScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" 
+										                                         Arg2="{Binding #window.ScreenSize, Converter={x:Static controls:ApplicationInfoDialogImpl.SizeToStringConverter}}" 
+										                                         controls:DialogElement.TextRole="Default" 
+										                                         Format="{xaml:StringResource ApplicationInfoDialog.Screen.Size.Format}"
+										                                         HorizontalAlignment="Right"
+										                                         TextTrimming="CharacterEllipsis"/>
+									</controls:DialogItem>
+									
+									<!-- Working area -->
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+									<controls:DialogItem ItemSize="Small">
+										<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.Screen.WorkingArea}"/>
+										<abControls:FormattedSelectableTextBlock Arg1="{Binding #window.PhysicalScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" 
+										                                         Arg2="{Binding #window.ScreenWorkingArea, Converter={x:Static controls:ApplicationInfoDialogImpl.RectToStringConverter}}" 
+										                                         controls:DialogElement.TextRole="Default" 
+										                                         Format="{xaml:StringResource ApplicationInfoDialog.Screen.WorkingArea.Format}" 
+										                                         HorizontalAlignment="Right"
+										                                         TextTrimming="CharacterEllipsis"/>
+									</controls:DialogItem>
+
+								</StackPanel>
+							</StackPanel>
 						</Border>
 						<Separator controls:DialogElement.SeparatorType="Large"/>
+
+						<!-- Process info -->
+						<TextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{xaml:StringResource ApplicationInfoDialog.ProcessInformation}"/>
+						<Border x:CompileBindings="False" Classes="Dialog_ItemsGroup_Container">
+							<StackPanel>
+
+								<!-- Process ID -->
+								<controls:DialogItem ItemSize="Small">
+									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ProcessId}"/>
+									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
+									                     HorizontalAlignment="Right"
+									                     Text="{Binding #window.Application.ProcessInfo.ProcessId, Mode=OneTime}" 
+									                     TextTrimming="CharacterEllipsis"/>
+								</controls:DialogItem>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
+
+								<!-- Thread count -->
+								<controls:DialogItem ItemSize="Small">
+									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ThreadCount}"/>
+									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
+									                     HorizontalAlignment="Right"
+									                     Text="{Binding #window.Application.ProcessInfo.ThreadCount}" 
+									                     TextTrimming="CharacterEllipsis"/>
+								</controls:DialogItem>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
+
+								<!-- CPU usage -->
+								<controls:DialogItem ItemSize="Small">
+									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.CpuUsage}"/>
+									<abControls:FormattedSelectableTextBlock Arg1="{Binding #window.Application.ProcessInfo.CpuUsagePercentage}" 
+									                                         controls:DialogElement.TextRole="Default" 
+									                                         Format="{xaml:StringResource ApplicationInfoDialog.CpuUsage.Format}" 
+									                                         HorizontalAlignment="Right"
+									                                         TextTrimming="CharacterEllipsis"/>
+								</controls:DialogItem>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
+
+								<!-- Private memory usage -->
+								<controls:DialogItem ItemSize="Small">
+									<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.PrivateMemoryUsage}"/>
+									<SelectableTextBlock controls:DialogElement.TextRole="Default" 
+									                     HorizontalAlignment="Right"
+									                     Text="{Binding #window.Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static converters:FileSizeConverter.Default}}" 
+									                     TextTrimming="CharacterEllipsis"/>
+								</controls:DialogItem>
+								
+								<!-- Managed environment information -->
+								<StackPanel IsVisible="{Binding #window.Application.IsDebugMode}">
+
+									<!-- Managed heap size -->
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+									<controls:DialogItem ItemSize="Small">
+										<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ManagedHeapSize}"/>
+										<SelectableTextBlock controls:DialogElement.TextRole="Default" 
+										                     HorizontalAlignment="Right"
+										                     Text="{Binding #window.Application.ProcessInfo.ManagedHeapSize, Converter={x:Static converters:FileSizeConverter.Default}}" 
+										                     TextTrimming="CharacterEllipsis"/>
+									</controls:DialogItem>
+									
+									<!-- Managed heap usage -->
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+									<controls:DialogItem ItemSize="Small">
+										<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ManagedHeapUsage}"/>
+										<SelectableTextBlock controls:DialogElement.TextRole="Default" 
+										                     HorizontalAlignment="Right"
+										                     Text="{Binding #window.Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static converters:FileSizeConverter.Default}}" 
+										                     TextTrimming="CharacterEllipsis"/>
+									</controls:DialogItem>
+									
+									<!-- GC frequency -->
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+									<controls:DialogItem ItemSize="Small">
+										<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.GCFrequency}"/>
+										<abControls:FormattedSelectableTextBlock Arg1="{Binding #window.Application.ProcessInfo.GCFrequency}" 
+										                                         controls:DialogElement.TextRole="Default" 
+										                                         Format="{xaml:StringResource ApplicationInfoDialog.GCFrequency.Format}" 
+										                                         HorizontalAlignment="Right"
+										                                         TextTrimming="CharacterEllipsis"/>
+									</controls:DialogItem>
+
+									<!-- Finalization pending count -->
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+									<controls:DialogItem ItemSize="Small">
+										<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.FinalizationPendingCount}"/>
+										<SelectableTextBlock controls:DialogElement.TextRole="Default" 
+										                     HorizontalAlignment="Right"
+										                     Text="{Binding #window.Application.ProcessInfo.FinalizationPendingCount}" 
+										                     TextTrimming="CharacterEllipsis"/>
+									</controls:DialogItem>
+									
+								</StackPanel>
+								
+								<!-- Script info -->
+								<StackPanel Name="scriptInfoPanel" IsVisible="False">
+
+									<!-- Running script count -->
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+									<controls:DialogItem ItemSize="Small">
+										<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.RunningScriptCount}"/>
+										<SelectableTextBlock controls:DialogElement.TextRole="Default" 
+										                     HorizontalAlignment="Right"
+										                     Text="{Binding RunningScriptCount, Source={x:Static scripting:ScriptManager.Default}}" 
+										                     TextTrimming="CharacterEllipsis"/>
+									</controls:DialogItem>
+									
+									<!-- Script running loading -->
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+									<controls:DialogItem ItemSize="Small">
+										<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ScriptRunningLoading}"/>
+										<SelectableTextBlock controls:DialogElement.TextRole="Default" 
+										                     HorizontalAlignment="Right"
+										                     Text="{Binding ScriptRunningLoading, Source={x:Static scripting:ScriptManager.Default}, Converter={x:Static converters:RatioToPercentageConverter.Default}}" 
+										                     TextTrimming="CharacterEllipsis"/>
+									</controls:DialogItem>
+
+								</StackPanel>
+
+							</StackPanel>
+						</Border>
+						<Separator controls:DialogElement.SeparatorType="Large"/>
+
+						<!-- Activated products -->
+						<StackPanel Name="productListSectionPanel">
+							<TextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{xaml:StringResource ApplicationInfoDialog.Products}"/>
+							<Border Classes="Dialog_ItemsGroup_Container">
+								<StackPanel Name="productListPanel"/>
+							</Border>
+							<Separator controls:DialogElement.SeparatorType="Large"/>
+						</StackPanel>
+
+						<!-- Assemblies (Header) -->
+						<TextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{xaml:StringResource ApplicationInfoDialog.Assemblies}"/>
+						<Border Classes="Dialog_ItemsGroup_Container">
+							<StackPanel>
+
+								<!-- Assemblies -->
+								<StackPanel Name="assembliesPanel" IsVisible="{Binding #window.IsAssembliesPanelExpanded}"/>
+								
+								<!-- Expand/Collapse -->
+								<Separator controls:DialogElement.SeparatorType="Item" IsVisible="{Binding #window.IsAssembliesPanelExpanded}"/>
+								<controls:DialogItem ItemSize="Small">
+									<abControls:FormattedTextBlock controls:DialogElement.TextRole="Label" 
+									                               Arg1="{Binding Assemblies.Count}" 
+									                               Format="{xaml:StringResource ApplicationInfoDialog.Assemblies.Description}"
+									                               Opacity="{Binding #window.IsAssembliesPanelExpanded, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacityInverted}}"/>
+									<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+										<abControls:LinkTextBlock Command="{Binding #window.ExpandAssembliesPanel}" 
+										                          controls:DialogElement.TextRole="Default" 
+										                          HorizontalAlignment="Right" IsVisible="{Binding !#window.IsAssembliesPanelExpanded}" 
+										                          Text="{xaml:StringResource Common.ShowMore}"/>
+										<abControls:LinkTextBlock Command="{Binding #window.CollapseAssembliesPanel}" 
+										                          controls:DialogElement.TextRole="Default" 
+										                          HorizontalAlignment="Right" IsVisible="{Binding #window.IsAssembliesPanelExpanded}" 
+										                          Text="{xaml:StringResource Common.ShowLess}"/>
+									</StackPanel>
+								</controls:DialogItem>
+
+							</StackPanel>
+						</Border>
+						<Separator controls:DialogElement.SeparatorType="Large"/>
+						
+						<!-- Other information -->
+						<TextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{xaml:StringResource ApplicationInfoDialog.Other}"/>
+						<Border Classes="Dialog_ItemsGroup_Container">
+							<StackPanel>
+
+								<!-- Donate -->
+								<StackPanel IsVisible="{Binding PayPalUri, Converter={x:Static ObjectConverters.IsNotNull}}">
+									<controls:DialogItem ItemSize="Small">
+										<StackPanel Orientation="Horizontal">
+											<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.PayPal.Outline.Colored}"/>
+											<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Text="{xaml:StringResource ApplicationInfoDialog.DonateWithPayPal}" Uri="{Binding PayPalUri}"/>
+										</StackPanel>
+									</controls:DialogItem>
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+								</StackPanel>
+
+								<!-- Website -->
+								<StackPanel IsVisible="{Binding WebsiteUri, Converter={x:Static ObjectConverters.IsNotNull}}">
+									<controls:DialogItem ItemSize="Small">
+										<StackPanel Orientation="Horizontal">
+											<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Website}"/>
+											<abControls:FormattedLinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Arg1="{Binding Application.Name}" Format="{xaml:StringResource ApplicationInfoDialog.Website}" Uri="{Binding WebsiteUri}"/>
+										</StackPanel>
+									</controls:DialogItem>
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+								</StackPanel>
+
+								<!-- User agreement -->
+								<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasUserAgreement}">
+									<controls:DialogItem ItemSize="Small">
+										<StackPanel Orientation="Horizontal">
+											<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.UserAgreement.Outline}"/>
+											<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ShowUserAgreement}" Text="{xaml:StringResource Common.UserAgreement.WithDialog}"/>
+										</StackPanel>
+									</controls:DialogItem>
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+								</StackPanel>
+
+								<!-- Privacy policy -->
+								<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasPrivacyPolicy}">
+									<controls:DialogItem ItemSize="Small">
+										<StackPanel Orientation="Horizontal">
+											<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.PrivacyPolicy.Outline}"/>
+											<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ShowPrivacyPolicy}" Text="{xaml:StringResource Common.PrivacyPolicy.WithDialog}"/>
+										</StackPanel>
+									</controls:DialogItem>
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+								</StackPanel>
+
+								<!-- External dependencies -->
+								<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasExternalDependencies}">
+									<controls:DialogItem ItemSize="Small">
+										<StackPanel Orientation="Horizontal">
+											<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Dependencies}"/>
+											<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ShowExternalDependencies}" Text="{xaml:StringResource ApplicationInfoDialog.ExternalDependencies}"/>
+										</StackPanel>
+									</controls:DialogItem>
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+								</StackPanel>
+
+								<!-- Restart in debug mode -->
+								<StackPanel x:CompileBindings="False" IsVisible="{Binding !#window.Application.IsDebugMode}">
+									<controls:DialogItem ItemSize="Small">
+										<StackPanel Orientation="Horizontal">
+											<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Debug.Outline}"/>
+											<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.RestartInDebugMode}" Text="{xaml:StringResource ApplicationInfoDialog.RestartInDebugMode}"/>
+										</StackPanel>
+									</controls:DialogItem>
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+								</StackPanel>
+								
+								<!-- Import application data -->
+								<controls:DialogItem ItemSize="Small">
+									<StackPanel Orientation="Horizontal">
+										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Import}"/>
+										<abControls:LinkTextBlock x:CompileBindings="False" controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ImportApplicationData}" Text="{xaml:StringResource ApplicationInfoDialog.ImportApplicationData}"/>
+									</StackPanel>
+								</controls:DialogItem>
+								<Separator controls:DialogElement.SeparatorType="Item"/>
+
+								<!-- Export logs -->
+								<controls:DialogItem ItemSize="Small">
+									<StackPanel Orientation="Horizontal">
+										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Export}"/>
+										<abControls:LinkTextBlock x:CompileBindings="False" controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ExportLogs}" Text="{xaml:StringResource ApplicationInfoDialog.ExportAppLogs}"/>
+									</StackPanel>
+								</controls:DialogItem>
+								
+								<!-- Take memory snapshot -->
+								<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.Application.IsDebugMode}">
+									<Separator controls:DialogElement.SeparatorType="Item"/>
+									<controls:DialogItem ItemSize="Small">
+										<StackPanel Orientation="Horizontal">
+											<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Memory.Outline}"/>
+											<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.TakeMemorySnapshot}" Text="{xaml:StringResource Common.TakeMemorySnapshot.WithDialog}"/>
+										</StackPanel>
+									</controls:DialogItem>
+								</StackPanel>
+
+							</StackPanel>
+						</Border>
+
 					</StackPanel>
-
-					<!-- Assemblies (Header) -->
-					<TextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{xaml:StringResource ApplicationInfoDialog.Assemblies}"/>
-					<Border Classes="Dialog_ItemsGroup_Container">
-						<StackPanel>
-
-							<!-- Assemblies -->
-							<StackPanel Name="assembliesPanel" IsVisible="{Binding #window.IsAssembliesPanelExpanded}"/>
-							
-							<!-- Expand/Collapse -->
-							<Separator controls:DialogElement.SeparatorType="Item" IsVisible="{Binding #window.IsAssembliesPanelExpanded}"/>
-							<controls:DialogItem ItemSize="Small">
-								<abControls:FormattedTextBlock controls:DialogElement.TextRole="Label" 
-								                               Arg1="{Binding Assemblies.Count}" 
-								                               Format="{xaml:StringResource ApplicationInfoDialog.Assemblies.Description}"
-								                               Opacity="{Binding #window.IsAssembliesPanelExpanded, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacityInverted}}"/>
-								<StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-									<abControls:LinkTextBlock Command="{Binding #window.ExpandAssembliesPanel}" 
-									                          controls:DialogElement.TextRole="Default" 
-									                          HorizontalAlignment="Right" IsVisible="{Binding !#window.IsAssembliesPanelExpanded}" 
-									                          Text="{xaml:StringResource Common.ShowMore}"/>
-									<abControls:LinkTextBlock Command="{Binding #window.CollapseAssembliesPanel}" 
-									                          controls:DialogElement.TextRole="Default" 
-									                          HorizontalAlignment="Right" IsVisible="{Binding #window.IsAssembliesPanelExpanded}" 
-									                          Text="{xaml:StringResource Common.ShowLess}"/>
-								</StackPanel>
-							</controls:DialogItem>
-
-						</StackPanel>
-					</Border>
-					<Separator controls:DialogElement.SeparatorType="Large"/>
-					
-					<!-- Other information -->
-					<TextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{xaml:StringResource ApplicationInfoDialog.Other}"/>
-					<Border Classes="Dialog_ItemsGroup_Container">
-						<StackPanel>
-
-							<!-- Donate -->
-							<StackPanel IsVisible="{Binding PayPalUri, Converter={x:Static ObjectConverters.IsNotNull}}">
-								<controls:DialogItem ItemSize="Small">
-									<StackPanel Orientation="Horizontal">
-										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.PayPal.Outline.Colored}"/>
-										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Text="{xaml:StringResource ApplicationInfoDialog.DonateWithPayPal}" Uri="{Binding PayPalUri}"/>
-									</StackPanel>
-								</controls:DialogItem>
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-							</StackPanel>
-
-							<!-- Website -->
-							<StackPanel IsVisible="{Binding WebsiteUri, Converter={x:Static ObjectConverters.IsNotNull}}">
-								<controls:DialogItem ItemSize="Small">
-									<StackPanel Orientation="Horizontal">
-										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Website}"/>
-										<abControls:FormattedLinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Arg1="{Binding Application.Name}" Format="{xaml:StringResource ApplicationInfoDialog.Website}" Uri="{Binding WebsiteUri}"/>
-									</StackPanel>
-								</controls:DialogItem>
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-							</StackPanel>
-
-							<!-- User agreement -->
-							<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasUserAgreement}">
-								<controls:DialogItem ItemSize="Small">
-									<StackPanel Orientation="Horizontal">
-										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.UserAgreement.Outline}"/>
-										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ShowUserAgreement}" Text="{xaml:StringResource Common.UserAgreement.WithDialog}"/>
-									</StackPanel>
-								</controls:DialogItem>
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-							</StackPanel>
-
-							<!-- Privacy policy -->
-							<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasPrivacyPolicy}">
-								<controls:DialogItem ItemSize="Small">
-									<StackPanel Orientation="Horizontal">
-										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.PrivacyPolicy.Outline}"/>
-										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ShowPrivacyPolicy}" Text="{xaml:StringResource Common.PrivacyPolicy.WithDialog}"/>
-									</StackPanel>
-								</controls:DialogItem>
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-							</StackPanel>
-
-							<!-- External dependencies -->
-							<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasExternalDependencies}">
-								<controls:DialogItem ItemSize="Small">
-									<StackPanel Orientation="Horizontal">
-										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Dependencies}"/>
-										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ShowExternalDependencies}" Text="{xaml:StringResource ApplicationInfoDialog.ExternalDependencies}"/>
-									</StackPanel>
-								</controls:DialogItem>
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-							</StackPanel>
-
-							<!-- Restart in debug mode -->
-							<StackPanel x:CompileBindings="False" IsVisible="{Binding !#window.Application.IsDebugMode}">
-								<controls:DialogItem ItemSize="Small">
-									<StackPanel Orientation="Horizontal">
-										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Debug.Outline}"/>
-										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.RestartInDebugMode}" Text="{xaml:StringResource ApplicationInfoDialog.RestartInDebugMode}"/>
-									</StackPanel>
-								</controls:DialogItem>
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-							</StackPanel>
-							
-							<!-- Import application data -->
-							<controls:DialogItem ItemSize="Small">
-								<StackPanel Orientation="Horizontal">
-									<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Import}"/>
-									<abControls:LinkTextBlock x:CompileBindings="False" controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ImportApplicationData}" Text="{xaml:StringResource ApplicationInfoDialog.ImportApplicationData}"/>
-								</StackPanel>
-							</controls:DialogItem>
-							<Separator controls:DialogElement.SeparatorType="Item"/>
-
-							<!-- Export logs -->
-							<controls:DialogItem ItemSize="Small">
-								<StackPanel Orientation="Horizontal">
-									<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Export}"/>
-									<abControls:LinkTextBlock x:CompileBindings="False" controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ExportLogs}" Text="{xaml:StringResource ApplicationInfoDialog.ExportAppLogs}"/>
-								</StackPanel>
-							</controls:DialogItem>
-							
-							<!-- Take memory snapshot -->
-							<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.Application.IsDebugMode}">
-								<Separator controls:DialogElement.SeparatorType="Item"/>
-								<controls:DialogItem ItemSize="Small">
-									<StackPanel Orientation="Horizontal">
-										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Memory.Outline}"/>
-										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.TakeMemorySnapshot}" Text="{xaml:StringResource Common.TakeMemorySnapshot.WithDialog}"/>
-									</StackPanel>
-								</controls:DialogItem>
-							</StackPanel>
-
-						</StackPanel>
-					</Border>
-
-				</StackPanel>
-			</Panel>
-		</ScrollViewer>
+				</Panel>
+			</ScrollViewer>
+			<Border Classes="Shadow_Top_Light" VerticalAlignment="Bottom"/>
+		</Panel>
 
 	</DockPanel>
 
