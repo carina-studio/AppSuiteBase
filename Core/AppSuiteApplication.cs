@@ -975,15 +975,15 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 fontManager.AddFontCollection(new EmbeddedFontCollection(new("fonts:Noto", UriKind.Absolute), new($"{fontBaseUri}/Noto", UriKind.Absolute)));
             });
             
-            // setup font manager with a Noto Sans Latin-primary composite default; CJK runs fall through to the variant-preferred Noto Sans SC/TC face. Line height across scripts is normalized at the TextBlock level (see TextBlock LineHeight style) since Noto Sans Latin and CJK faces don't share intrinsic line metrics.
+            // setup font manager with an Inter Latin-primary composite default; CJK runs fall through to the variant-preferred Noto Sans SC/TC face. Line height across scripts is normalized at the TextBlock level (see TextBlock LineHeight style) since Inter and Noto Sans CJK faces don't share intrinsic line metrics.
             it.With(new FontManagerOptions
             {
                 DefaultFamilyName = _LaunchChineseVariant switch
                 {
-                    ChineseVariant.Default => "fonts:Noto#Noto Sans, fonts:Noto#Noto Sans SC, fonts:Noto#Noto Sans TC",
-                    ChineseVariant.Taiwan => "fonts:Noto#Noto Sans, fonts:Noto#Noto Sans TC, fonts:Noto#Noto Sans SC",
+                    ChineseVariant.Default => "fonts:Inter#Inter, fonts:Noto#Noto Sans SC, fonts:Noto#Noto Sans TC",
+                    ChineseVariant.Taiwan => "fonts:Inter#Inter, fonts:Noto#Noto Sans TC, fonts:Noto#Noto Sans SC",
                     _ => throw new NotImplementedException(),
-                },
+                }
             });
             
             // setup platform specific settings

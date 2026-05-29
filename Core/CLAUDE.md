@@ -36,6 +36,14 @@ Force-kill paths (Task Manager → End Process, `taskkill /F`, antivirus, crash)
 
 All registry operations are best-effort and exception-safe; failures never propagate.
 
+### Default Font Configuration
+
+Wired in `BuildApplication` via `FontManagerOptions.DefaultFamilyName`. The value is a **composite font family name** (comma-separated, parsed by Avalonia as primary + fallback chain): `Inter` as the Latin face, followed by `Noto Sans SC` / `Noto Sans TC` for CJK glyph coverage. The order of the two CJK faces is variant-aware — Simplified-first for `ChineseVariant.Default`, Traditional-first for `ChineseVariant.Taiwan` — driven by `_LaunchChineseVariant` (resolved from `SettingKeys.Culture` earlier in the same builder).
+
+The composite-name approach replaces an earlier `FontFallbacks` block keyed by CJK `UnicodeRange`s. Both approaches solved glyph routing, but the composite-name form makes the variant ordering live next to the primary family and removes the duplicate Unicode-range bookkeeping. Embedded font collections (`fonts:Inter`, `fonts:Noto`) are registered via `ConfigureFonts` immediately above and must stay in sync with the family names referenced here.
+
+**Line height is *not* normalized here.** Inter and the Noto Sans CJK faces have different intrinsic ascent/descent, so per-run line height still diverges across scripts even with the composite default. Uniform line height across mixed-script text is the responsibility of the `TextBlock` layer (explicit `LineHeight`). Do not try to "fix" the per-script height divergence inside `FontManagerOptions` — Avalonia's `TextLayout` computes line height from each run's resolved typeface, so the only levers that work at this layer are (a) matched-metric fonts, and (b) per-control `LineHeight`.
+
 ## Key Namespaces
 
 - **`Controls/`** — 90+ custom Avalonia controls: dialogs (agreement, file selection, app update), `MainWindow` base classes, `TutorialPresenter`, `NotificationPresenter`, specialized input controls.

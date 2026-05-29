@@ -171,6 +171,10 @@ public enum DialogIconType
     /// </summary>
     Large,
     /// <summary>
+    /// Icon for standalone description.
+    /// </summary>
+    Description,
+    /// <summary>
     /// Icon for description below a label.
     /// </summary>
     DescriptionBelowLabel,
