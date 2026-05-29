@@ -42,10 +42,8 @@
 		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/MarkdownViewer.Markdown.InlineCode}"/>
 		<Setter Property="MonospaceFontFamily" Value="fonts:Noto#Noto Sans Mono"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Text}"/>
-		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeight}}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.InlineCode.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.InlineCode.Padding}"/>
-		<Setter Property="TextVerticalAlignment" Value="Top"/>
 	</Style>
 	<Style Selector="ca|CHyperlink">
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Text}"/>

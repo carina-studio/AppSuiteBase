@@ -140,7 +140,7 @@
 						<Separator appControls:DialogElement.SeparatorType="Item"/>
 						<appControls:DialogItem>
 							<Grid ColumnDefinitions="*,Auto,Auto">
-								<StackPanel>
+								<StackPanel VerticalAlignment="Center">
 									<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 									<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" IsVisible="{Binding #isEnabledButton.IsChecked}" Text="Description"/>
 								</StackPanel>

@@ -2078,6 +2078,7 @@
 		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Control.Border}"/>
 		<Setter Property="BorderThickness" Value="{DynamicResource Thickness/Control.Border}"/>
 		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
+		<Setter Property="IsSelectionEnabled" Value="True"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Padding}"/>
 		<Setter Property="Template">
 			<ControlTemplate>
