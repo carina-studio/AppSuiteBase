@@ -108,7 +108,7 @@
 			<ScrollViewer Name="scrollViewer" HorizontalScrollBarVisibility="Disabled" MaxHeight="{StaticResource Double/ExternalDependenciesDialog.Content.MaxHeight}">
 				<StackPanel Name="externalDependenciesPanel" Background="{x:Static Brushes.Transparent}" Classes="Dialog_ContentPanel_WithItemsGroups"/>
 			</ScrollViewer>
-			<Border Classes="Shadow_Top_Light" VerticalAlignment="Bottom"/>
+			<Border controls:ControlShadow.Position="Top" controls:ControlShadow.Source="ControlButtonsPanel" VerticalAlignment="Bottom"/>
 		</Panel>
 
 	</DockPanel>

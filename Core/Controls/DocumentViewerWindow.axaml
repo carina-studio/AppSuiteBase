@@ -44,8 +44,8 @@
 			<!-- Document -->
 			<Panel>
 				<controls:MarkdownViewer BorderThickness="0" CornerRadius="0" HorizontalScrollBarVisibility="Disabled" TextElement.FontFamily="{Binding #window.DocumentFontFamily}" Source="{Binding #window.DocumentUri}"/>
-				<Border Classes="Shadow_Bottom_Light" VerticalAlignment="Top"/>
-				<Border Classes="Shadow_Top_Light" VerticalAlignment="Bottom"/>
+				<Border controls:ControlShadow.Position="Bottom" controls:ControlShadow.Source="Toolbar" VerticalAlignment="Top"/>
+				<Border controls:ControlShadow.Position="Top" controls:ControlShadow.Source="ControlButtonsPanel" VerticalAlignment="Bottom"/>
 			</Panel>
 
 		</DockPanel>

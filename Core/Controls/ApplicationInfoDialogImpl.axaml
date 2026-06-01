@@ -583,7 +583,7 @@
 					</StackPanel>
 				</Panel>
 			</ScrollViewer>
-			<Border Classes="Shadow_Top_Light" VerticalAlignment="Bottom"/>
+			<Border controls:ControlShadow.Position="Top" controls:ControlShadow.Source="ControlButtonsPanel" VerticalAlignment="Bottom"/>
 		</Panel>
 
 	</DockPanel>

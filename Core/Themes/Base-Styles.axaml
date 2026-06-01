@@ -2635,18 +2635,45 @@
 	</Style>
 	
 	<!-- Shadow -->
+	<Style Selector="Border[(controls|ControlShadow.Position)=Bottom]">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Bottom.Light}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+	</Style>
+	<Style Selector="Border[(controls|ControlShadow.Position)=Left]">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Left.Light}"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+	</Style>
+	<Style Selector="Border[(controls|ControlShadow.Position)=Right]">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Right.Light}"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+	</Style>
+	<Style Selector="Border[(controls|ControlShadow.Position)=Top]">
+		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Top.Light}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="IsHitTestVisible" Value="False"/>
+	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Shadow_Bottom">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Bottom}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Shadow_Bottom_Heavy">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Bottom.Heavy}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Shadow_Bottom_Light">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Bottom.Light}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
@@ -2701,54 +2728,63 @@
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 		<Setter Property="VerticalAlignment" Value="Top"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Shadow_Left">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Left}"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Shadow_Left_Heavy">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Left.Heavy}"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Shadow_Left_Light">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Left.Light}"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Shadow_Right">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Right}"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Shadow_Right_Heavy">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Right.Heavy}"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Shadow_Right_Light">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Right.Light}"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="VerticalAlignment" Value="Stretch"/>
 		<Setter Property="Width" Value="{DynamicResource Double/Shadow.Size.Light}"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Shadow_Top">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Top}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size}"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Shadow_Top_Heavy">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Top.Heavy}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Heavy}"/>
 		<Setter Property="IsHitTestVisible" Value="False"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 	</Style>
+	<!-- Deprecated -->
 	<Style Selector="Border.Shadow_Top_Light">
 		<Setter Property="Background" Value="{DynamicResource Brush/Shadow.Top.Light}"/>
 		<Setter Property="Height" Value="{DynamicResource Double/Shadow.Size.Light}"/>
