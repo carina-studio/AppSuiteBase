@@ -60,6 +60,7 @@
 	<Color x:Key="Color/Icon.Inverse">#333333</Color>
 	
 	<!-- MarkdownViewer -->
+	<Color x:Key="Color/MarkdownViewer.Markdown.CodeBlock.Background">#373737</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading1.Foreground">#ffffff</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading2.Foreground">#73e699</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading3.Foreground">#1ccca0</Color>
@@ -67,9 +68,9 @@
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading5.Foreground">#236cff</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading6.Foreground">#a77fff</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.InlineCode.Background">#444444</Color>
-	<Color x:Key="Color/MarkdownViewer.Markdown.Table.EvenRow.Background">#222222</Color>
+	<Color x:Key="Color/MarkdownViewer.Markdown.Table.EvenRow.Background">#272727</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.Table.Header.Background">#373737</Color>
-	<Color x:Key="Color/MarkdownViewer.Markdown.Table.OddRow.Background">#222222</Color>
+	<Color x:Key="Color/MarkdownViewer.Markdown.Table.OddRow.Background">#272727</Color>
 
 	<!-- Menu -->
 	<Color x:Key="Color/Menu.Background">#282828</Color>

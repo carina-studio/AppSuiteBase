@@ -278,6 +278,7 @@
 	<Color x:Key="Color/InPlaceAction.Background.Transparent">#00ffffff</Color>
 	
 	<!-- MarkdownViewer -->
+	<Color x:Key="Color/MarkdownViewer.Markdown.CodeBlock.Background">#e0e0e0</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading1.Foreground">#ffffff</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading2.Foreground">#ffffff</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.Heading3.Foreground">#ffffff</Color>
@@ -288,6 +289,7 @@
 	<Color x:Key="Color/MarkdownViewer.Markdown.Table.EvenRow.Background">#eeeeee</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.Table.Header.Background">#dddddd</Color>
 	<Color x:Key="Color/MarkdownViewer.Markdown.Table.OddRow.Background">#eeeeee</Color>
+	<SolidColorBrush x:Key="Brush/MarkdownViewer.Markdown.CodeBlock.Background" Color="{DynamicResource Color/MarkdownViewer.Markdown.CodeBlock.Background}"/>
 	<SolidColorBrush x:Key="Brush/MarkdownViewer.Markdown.Heading1.Foreground" Color="{DynamicResource Color/MarkdownViewer.Markdown.Heading1.Foreground}"/>
 	<SolidColorBrush x:Key="Brush/MarkdownViewer.Markdown.Heading2.Foreground" Color="{DynamicResource Color/MarkdownViewer.Markdown.Heading2.Foreground}"/>
 	<SolidColorBrush x:Key="Brush/MarkdownViewer.Markdown.Heading3.Foreground" Color="{DynamicResource Color/MarkdownViewer.Markdown.Heading3.Foreground}"/>

@@ -11,6 +11,12 @@
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Blockquote.Margin}"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Blockquote.Padding}"/>
 	</Style>
+	<Style Selector="Border.CodeBlock">
+		<Setter Property="Background" Value="{DynamicResource Brush/MarkdownViewer.Markdown.CodeBlock.Background}" />
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.CodeBlock.Margin}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.CodeBlock.Padding}"/>
+	</Style>
 	<Style Selector="Border.EvenTableRow">
 		<Setter Property="Background" Value="{DynamicResource Brush/MarkdownViewer.Markdown.Table.EvenRow.Background}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Table.Cell.Margin}"/>
@@ -18,7 +24,7 @@
 	</Style>
 	<Style Selector="Border.Table">
 		<Setter Property="ClipToBounds" Value="True"/>
-		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/MarkdownViewer.Markdown.Table}"/>
+		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Table.Margin}"/>
 	</Style>
 	<Style Selector="Border.Table ca|CTextBlock">
@@ -130,6 +136,9 @@
 		<Setter Property="FontWeight" Value="Bold"/>
 		<Setter Property="Foreground" Value="{DynamicResource Brush/MarkdownViewer.Markdown.Heading6.Foreground}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading6}"/>
+	</Style>
+	<Style Selector="TextBlock.CodeBlock">
+		<Setter Property="FontFamily" Value="fonts:Noto#Noto Sans Mono"/>
 	</Style>
 	
 </Styles>
