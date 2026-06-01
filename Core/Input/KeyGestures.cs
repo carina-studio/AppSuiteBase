@@ -32,6 +32,10 @@ public static class KeyGestures
     /// </summary>
     public static readonly KeyGesture Paste = new(Key.V, PrimaryKeyModifiers);
     /// <summary>
+    /// Quit the application.
+    /// </summary>
+    public static readonly KeyGesture QuitApplication = new(Key.Q, PrimaryKeyModifiers);
+    /// <summary>
     /// Save file.
     /// </summary>
     public static readonly KeyGesture SaveFile = new(Key.S, PrimaryKeyModifiers);

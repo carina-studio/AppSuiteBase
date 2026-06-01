@@ -1,5 +1,6 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:input="using:CarinaStudio.AppSuite.Input"
              xmlns:sys="using:System"
              x:Class="CarinaStudio.AppSuite.Tests.App">
     
@@ -13,7 +14,7 @@
         <NativeMenu>
             <NativeMenuItem Header="Item 1" Icon="{DynamicResource Bitmap/Empty}"/>
             <NativeMenuItemSeparator/>
-            <NativeMenuItem Header="Exit"/>
+            <NativeMenuItem Header="Exit" Gesture="{x:Static input:KeyGestures.QuitApplication}"/>
         </NativeMenu>
     </NativeMenu.Menu>
 

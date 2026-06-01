@@ -8,6 +8,7 @@ using Avalonia.Platform;
 using Avalonia.Rendering;
 using Avalonia.Threading;
 using CarinaStudio.Animation;
+using CarinaStudio.AppSuite.Input;
 using CarinaStudio.AppSuite.Net;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.UsageData;
@@ -140,9 +141,16 @@ public abstract class MainWindow : Window
         // extend client area if needed
         this.UpdateExtendingClientArea();
         this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome; // show system chrome when opened
-        
+
         // setup debug overlays
         this.UpdateDebugOverlays();
+
+        // bind platform-appropriate quit-application shortcut (Cmd+Q on macOS, Ctrl+Q elsewhere)
+        this.KeyBindings.Add(new KeyBinding
+        {
+            Gesture = KeyGestures.QuitApplication,
+            Command = new Command(() => this.Application.Shutdown()),
+        });
     }
     
     
