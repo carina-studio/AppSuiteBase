@@ -90,7 +90,6 @@
 		<Setter Property="LineHeight" Value="{Binding $self.FontSize, Converter={x:Static converters:TextBlockConverters.FontSizeToLineHeight}}"/>
 		<Setter Property="LineSpacing" Value="{DynamicResource Double/MarkdownViewer.Markdown.Text.LineSpacing}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Text.Margin}"/>
-		<Setter Property="SelectionBrush" Value="{DynamicResource Brush/SelectableTextBlock.Selection.Background}"/>
 	</Style>
 	<Style Selector=".List ca|CTextBlock">
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.List.Text.Margin}"/>

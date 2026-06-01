@@ -5,6 +5,7 @@ using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml.Styling;
+using Avalonia.Media;
 using CarinaStudio.AppSuite.Input;
 using CarinaStudio.Windows.Input;
 using ColorTextBlock.Avalonia;
@@ -34,6 +35,10 @@ public unsafe class MarkdownViewer : TemplatedControl
     /// </summary>
     public static readonly DirectProperty<MarkdownViewer, string?> SelectedTextProperty = AvaloniaProperty.RegisterDirect<MarkdownViewer, string?>(nameof(SelectedText), v => v.selectedText);
     /// <summary>
+    /// Define <see cref="SelectionBrush"/> property.
+    /// </summary>
+    public static readonly DirectProperty<MarkdownViewer, IBrush?> SelectionBrushProperty = AvaloniaProperty.RegisterDirect<MarkdownViewer, IBrush?>(nameof(SelectionBrush), v => v.selectionBrush, (v, brush) => v.SelectionBrush = brush);
+    /// <summary>
     /// Define <see cref="Source"/> property.
     /// </summary>
     public static readonly StyledProperty<Uri?> SourceProperty = AvaloniaProperty.Register<MarkdownViewer, Uri?>(nameof(Source));
@@ -51,6 +56,7 @@ public unsafe class MarkdownViewer : TemplatedControl
     MarkdownScrollViewer? presenter;
     ScrollViewer? scrollViewer;
     string? selectedText;
+    IBrush? selectionBrush;
 
 
     // Static initializer.
@@ -144,7 +150,8 @@ public unsafe class MarkdownViewer : TemplatedControl
                 SetAndRaise(SelectedTextProperty, ref this.selectedText, text);
                 this.canCopySelectedText.Update(!string.IsNullOrEmpty(text));
             });
-        var fieldInfo = typeof(MarkdownScrollViewer).GetField("_viewer", BindingFlags.Instance | BindingFlags.NonPublic);
+            this.presenter.SelectionBrush = this.selectionBrush;
+            var fieldInfo = typeof(MarkdownScrollViewer).GetField("_viewer", BindingFlags.Instance | BindingFlags.NonPublic);
             this.scrollViewer = fieldInfo?.GetValue(this.presenter) as ScrollViewer;
         }
         if (this.scrollViewer is not null)
@@ -245,6 +252,24 @@ public unsafe class MarkdownViewer : TemplatedControl
     /// Get selected text.
     /// </summary>
     public string? SelectedText => this.selectedText;
+
+
+    /// <summary>
+    /// Get or set <see cref="IBrush"/> for selection background.
+    /// </summary>
+    public IBrush? SelectionBrush
+    {
+        get => this.selectionBrush;
+        set
+        {
+            this.VerifyAccess();
+            if (ReferenceEquals(this.selectionBrush, value))
+                return;
+            if (this.presenter is not null)
+                this.presenter.SelectionBrush = value;
+            this.SetAndRaise(SelectionBrushProperty, ref this.selectionBrush, value);
+        }
+    }
 
 
     /// <summary>

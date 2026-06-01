@@ -2080,6 +2080,7 @@
 		<Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
 		<Setter Property="IsSelectionEnabled" Value="True"/>
 		<Setter Property="Padding" Value="{DynamicResource Thickness/MarkdownViewer.Padding}"/>
+		<Setter Property="SelectionBrush" Value="{DynamicResource Brush/SelectableTextBlock.Selection.Background}"/>
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Border 
