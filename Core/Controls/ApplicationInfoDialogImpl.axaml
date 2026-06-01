@@ -122,7 +122,7 @@
 							<Border x:CompileBindings="False">
 								<StackPanel Orientation="Vertical" VerticalAlignment="Center">
 									<StackPanel Margin="{StaticResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Orientation="Horizontal">
-										<SelectableTextBlock Classes="Shadowed" FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Text="{Binding Name}" VerticalAlignment="Center"/>
+										<SelectableTextBlock Classes="Shadowed" FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Text="{Binding #window.ApplicationName}" VerticalAlignment="Center"/>
 										<StackPanel Name="badgesPanel" Classes="Shadowed" Height="{StaticResource Double/ApplicationInfoDialog.AppBadge.Size}" Orientation="Horizontal" VerticalAlignment="Center"/>
 									</StackPanel>
 									<WrapPanel Orientation="Horizontal">

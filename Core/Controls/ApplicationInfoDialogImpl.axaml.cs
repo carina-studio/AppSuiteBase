@@ -38,6 +38,7 @@ class ApplicationInfoDialogImpl : Dialog
 
 
 	// Static fields.
+	static readonly DirectProperty<ApplicationInfoDialogImpl, string?> ApplicationNameProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, string?>(nameof(ApplicationName), w => w.appName);
 	static readonly StyledProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
 	static readonly StyledProperty<bool> HasExternalDependenciesProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasExternalDependencies");
 	static readonly StyledProperty<bool> HasPrivacyPolicyProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasPrivacyPolicy");
@@ -71,6 +72,7 @@ class ApplicationInfoDialogImpl : Dialog
 
 
 	// Fields.
+	string? appName;
 	readonly Panel badgesPanel;
 	readonly TaskCompletionSource closingTaskSource = new();
 	readonly bool isProprietaryApp;
@@ -218,6 +220,12 @@ class ApplicationInfoDialogImpl : Dialog
 		// observe properties
 		this.GetObservable(BoundsProperty).Subscribe(_ => this.updateScreenInfoAction.Schedule(500));
 	}
+
+
+	/// <summary>
+	/// Get name of application.
+	/// </summary>
+	public string? ApplicationName => this.appName;
 
 
 	/**
@@ -387,6 +395,12 @@ class ApplicationInfoDialogImpl : Dialog
 			// sync state
 			this.UpdateTitle();
 			this.UpdateVersionString();
+			
+			// update application name
+			var appName = appInfo.IsOpenSourceBased && !this.isProprietaryApp
+				? $"{appInfo.Name} (OSS)"
+				: appInfo.Name;
+			this.SetAndRaise(ApplicationNameProperty, ref this.appName, appName);
 
 			// show badges
 			this.badgesPanel.Children.Clear();
