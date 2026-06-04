@@ -1098,6 +1098,15 @@
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
 	</Style>
+	<Style Selector=":is(abControls|LinkTextBlock)[(controls|DialogElement.TextRole)=Description]">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForeground}"/>
+	</Style>
+	<Style Selector=":is(abControls|LinkTextBlock)[(controls|DialogElement.TextRole)=Description]:pointerover">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForegroundPointerOver}"/>
+	</Style>
+	<Style Selector=":is(abControls|LinkTextBlock)[(controls|DialogElement.TextRole)=Description]:pressed">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForegroundPressed}"/>
+	</Style>
 	<Style Selector=":is(TextBlock)[(controls|DialogElement.TextRole)=DescriptionBelowCheckBox]">
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/Dialog.TextBlock.FontSize.Description}"/>
@@ -1107,6 +1116,15 @@
 		<Setter Property="Padding" Value="{DynamicResource Thickness/Dialog.TextBlock.Padding.Description}"/>
 		<Setter Property="TextWrapping" Value="Wrap"/>
 		<Setter Property="VerticalAlignment" Value="Center"/>
+	</Style>
+	<Style Selector=":is(abControls|LinkTextBlock)[(controls|DialogElement.TextRole)=DescriptionBelowCheckBox]">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForeground}"/>
+	</Style>
+	<Style Selector=":is(abControls|LinkTextBlock)[(controls|DialogElement.TextRole)=DescriptionBelowCheckBox]:pointerover">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForegroundPointerOver}"/>
+	</Style>
+	<Style Selector=":is(abControls|LinkTextBlock)[(controls|DialogElement.TextRole)=DescriptionBelowCheckBox]:pressed">
+		<Setter Property="Foreground" Value="{DynamicResource LinkTextBlockForegroundPressed}"/>
 	</Style>
 	<Style Selector=":is(TextBlock)[(controls|DialogElement.TextRole)=DescriptionBelowLabel]">
 		<Setter Property="ClipToBounds" Value="False"/>
