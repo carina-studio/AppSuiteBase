@@ -91,6 +91,10 @@ public enum ToolbarElementRole
     /// </summary>
     SmallHorizontalSeparator,
     /// <summary>
+    /// Icon with smaller size.
+    /// </summary>
+    SmallIcon,
+    /// <summary>
     /// Label with smaller size.
     /// </summary>
     SmallLabel,
@@ -98,4 +102,8 @@ public enum ToolbarElementRole
     /// Vertical separator with smaller size.
     /// </summary>
     SmallSeparator,
+    /// <summary>
+    /// Text placed after an icon inside a button.
+    /// </summary>
+    TextAfterIcon,
 }

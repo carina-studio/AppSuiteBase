@@ -455,8 +455,10 @@
 
 	<!-- Toolbar -->
 	<sys:Double x:Key="Double/Toolbar.DropDownButton.Icon.Size">8</sys:Double>
-	<sys:Double x:Key="Double/Toolbar.Button.Size">32</sys:Double>
-	<sys:Double x:Key="Double/Toolbar.Button.Size.Small">24</sys:Double>
+	<sys:Double x:Key="Double/Toolbar.Button.Icon.Size">16</sys:Double> <!-- Should be: Button.Size - (Button.Padding * 2) -->
+	<sys:Double x:Key="Double/Toolbar.Button.Icon.Size.Small">14</sys:Double> <!-- Should be: Button.Size.Small - (Button.Padding.Small * 2) -->
+	<sys:Double x:Key="Double/Toolbar.Button.Size">32</sys:Double> <!-- Should be: Button.Icon.Size + (Button.Padding * 2) -->
+	<sys:Double x:Key="Double/Toolbar.Button.Size.Small">24</sys:Double> <!-- Should be: Button.Size.Small + (Button.Padding.Small * 2) -->
 	<sys:Double x:Key="Double/Toolbar.Button.Size.WithDropDownIcon">47</sys:Double> <!-- Toolbar.Button.Size + Toolbar.Button.DropDownIcon.Margin + Toolbar.DropDownButton.Icon.Size -->
 	<sys:Double x:Key="Double/Toolbar.MinSize">39</sys:Double> <!-- Button size + Padding + Border -->
 	<sys:Double x:Key="Double/Toolbar.MinSize.Small">31</sys:Double> <!-- Button size + Padding + Border -->
@@ -480,6 +482,7 @@
 	<Thickness x:Key="Thickness/Toolbar.Separator.Margin.Vertical">3,6,3,6</Thickness>
 	<Thickness x:Key="Thickness/Toolbar.Separator.Margin.Vertical.Small">2,4,2,4</Thickness>
 	<Thickness x:Key="Thickness/Toolbar.TextBlock.Margin">2</Thickness>
+	<Thickness x:Key="Thickness/Toolbar.TextBlock.Margin.AfterIcon">5,0,0,0</Thickness>
 	<Thickness x:Key="Thickness/Toolbar.TextBlock.Margin.Small">1</Thickness>
 	<!-- Deprecated -->
 	<sys:Double x:Key="Double/ToolBar.DropDownButton.Icon.Size">8</sys:Double>
