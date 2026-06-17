@@ -45,6 +45,10 @@ public abstract class MainWindow : Window
     /// Property of <see cref="HasMultipleMainWindows"/>.
     /// </summary>
     public static readonly DirectProperty<MainWindow, bool> HasMultipleMainWindowsProperty = AvaloniaProperty.RegisterDirect<MainWindow, bool>(nameof(HasMultipleMainWindows), w => w.hasMultipleMainWindows);
+    /// <summary>
+    /// Property of <see cref="IsApplicationUpdateFoundNotificationShown"/>.
+    /// </summary>
+    public static readonly DirectProperty<MainWindow, bool> IsApplicationUpdateFoundNotificationShownProperty = AvaloniaProperty.RegisterDirect<MainWindow, bool>(nameof(IsApplicationUpdateFoundNotificationShown), w => w.isAppUpdateFoundNotificationShown);
     
     
     // Constants.
@@ -79,6 +83,7 @@ public abstract class MainWindow : Window
     ThicknessRenderingAnimator? contentPaddingAnimator;
     ContentPresenter? contentPresenter;
     bool hasMultipleMainWindows;
+    bool isAppUpdateFoundNotificationShown;
     bool isClosingScheduled;
     bool isFirstContentPaddingUpdate = true;
     bool isShowingInitialDialogs;
@@ -264,6 +269,12 @@ public abstract class MainWindow : Window
 
 
     /// <summary>
+    /// Check whether notification or dialog for application update found has been shown or not.
+    /// </summary>
+    public bool IsApplicationUpdateFoundNotificationShown => this.isAppUpdateFoundNotificationShown;
+
+
+    /// <summary>
     /// Check whether extending client area to title bar is allowed or not.
     /// </summary>
     public virtual bool IsExtendingClientAreaAllowed => true;
@@ -311,8 +322,17 @@ public abstract class MainWindow : Window
         // check state
         if (!this.Settings.GetValueOrDefault(SettingKeys.NotifyApplicationUpdate))
             return;
-        if (IsNotifyingAppUpdateFound || !this.IsOpened)
+        if (!this.IsOpened)
             return;
+        
+        // report as shown if another window is already notifying
+        if (IsNotifyingAppUpdateFound)
+        {
+            this.SetAndRaise(IsApplicationUpdateFoundNotificationShownProperty, ref this.isAppUpdateFoundNotificationShown, true);
+            return;
+        }
+        
+        // check state
         var updateInfo = this.Application.UpdateInfo;
         if (updateInfo is null || updateInfo.Version <= ApplicationUpdateDialog.LatestShownVersion)
             return;
@@ -352,6 +372,7 @@ public abstract class MainWindow : Window
             });
             notificationPresenter.AddNotification(this.appUpdateNotification);
             ApplicationUpdateDialog.IgnoreCurrentUpdateInfo();
+            this.SetAndRaise(IsApplicationUpdateFoundNotificationShownProperty, ref this.isAppUpdateFoundNotificationShown, true);
             return;
         }
         
@@ -359,7 +380,9 @@ public abstract class MainWindow : Window
         if (isInitialCheck || this.areInitialDialogsClosed)
         {
             IsNotifyingAppUpdateFound = true;
-            await this.Application.CheckForApplicationUpdateAsync(this, false);
+            var task = this.Application.CheckForApplicationUpdateAsync(this, false);
+            this.SetAndRaise(IsApplicationUpdateFoundNotificationShownProperty, ref this.isAppUpdateFoundNotificationShown, true);
+            await task;
             IsNotifyingAppUpdateFound = false;
         }
     }
