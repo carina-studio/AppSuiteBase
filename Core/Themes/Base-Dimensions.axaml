@@ -522,6 +522,7 @@
 	<!-- ToolTip -->
 	<CornerRadius x:Key="CornerRadius/ToolTip">10</CornerRadius>
 	<Thickness x:Key="Thickness/ToolTip.Margin">6</Thickness>
+	<Thickness x:Key="Thickness/ToolTip.Padding">6</Thickness>
 
 	<!-- TreeView -->
 	<Thickness x:Key="Thickness/TreeView.Padding">3</Thickness>

@@ -4952,6 +4952,7 @@
 	<!-- ToolTip -->
 	<Style Selector="ToolTip">
 		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/ToolTip}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/ToolTip.Padding}"/>
 		<Setter Property="Template">
 			<ControlTemplate>
 				<Border Name="PART_LayoutRoot"
