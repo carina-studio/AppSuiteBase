@@ -4625,12 +4625,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (isCritical)
             {
                 this.Logger.LogWarning("Start saving configuration for critical reason");
-                config.Save(this.configurationFilePath);
+                config.Save(this.configurationFilePath, keepUnknownKeys: true);
             }
             else
             {
                 this.Logger.LogDebug("Start saving configuration");
-                await config.SaveAsync(this.configurationFilePath);
+                await config.SaveAsync(this.configurationFilePath, keepUnknownKeys: true);
             }
             this.Logger.LogDebug("Complete saving configuration");
         }
@@ -4663,12 +4663,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (isCritical)
             {
                 this.Logger.LogWarning("Start saving initial settings for critical reason");
-                InitSettingsInstance!.Save(InitSettingsFilePath);
+                InitSettingsInstance!.Save(InitSettingsFilePath, keepUnknownKeys: true);
             }
             else
             {
                 this.Logger.LogDebug("Start saving initial settings");
-                await InitSettingsInstance!.SaveAsync(InitSettingsFilePath);
+                await InitSettingsInstance!.SaveAsync(InitSettingsFilePath, keepUnknownKeys: true);
             }
             this.Logger.LogDebug("Complete saving initial settings");
         }
@@ -4701,12 +4701,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (isCritical)
             {
                 this.Logger.LogWarning("Start saving persistent state for critical reason");
-                this.persistentState.Save(this.persistentStateFilePath);
+                this.persistentState.Save(this.persistentStateFilePath, keepUnknownKeys: true);
             }
             else
             {
                 this.Logger.LogDebug("Start saving persistent state");
-                await this.persistentState.SaveAsync(this.persistentStateFilePath);
+                await this.persistentState.SaveAsync(this.persistentStateFilePath, keepUnknownKeys: true);
             }
             this.Logger.LogDebug("Complete saving persistent state");
         }
@@ -4739,12 +4739,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (isCritical)
             {
                 this.Logger.LogWarning("Start saving settings for critical reason");
-                this.settings.Save(SettingsFilePath);
+                this.settings.Save(SettingsFilePath, keepUnknownKeys: true);
             }
             else
             {
                 this.Logger.LogDebug("Start saving settings");
-                await this.settings.SaveAsync(SettingsFilePath);
+                await this.settings.SaveAsync(SettingsFilePath, keepUnknownKeys: true);
             }
             this.Logger.LogDebug("Complete saving settings");
         }
