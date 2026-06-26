@@ -471,9 +471,9 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// </summary>
     /// <param name="argsBuilder">Builder to build arguments to restart.</param>
     /// <param name="asAdministrator">True to restart application as Administrator/Superuser.</param>
-    /// <param name="isCritical">True if restarting for critical reason.</param>
+    /// <param name="reason">Reason of shutting down to restart.</param>
     /// <returns>True if restarting has been accepted.</returns>
-    bool Restart(ApplicationArgsBuilder argsBuilder, bool asAdministrator = false, bool isCritical = false);
+    bool Restart(ApplicationArgsBuilder argsBuilder, bool asAdministrator = false, ApplicationShutdownReason reason = ApplicationShutdownReason.None);
 
 
     /// <summary>
@@ -536,8 +536,8 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// Close all main windows and shut down application.
     /// </summary>
     /// <param name="delay">Delay before start process of shutting down in milliseconds.</param>
-    /// <param name="isCritical">True if shutting down is caused by critical reason.</param>
-    void Shutdown(int delay = 0, bool isCritical = false);
+    /// <param name="reason">Reason of shutting down.</param>
+    void Shutdown(int delay = 0, ApplicationShutdownReason reason = ApplicationShutdownReason.None);
 
 
     /// <summary>

@@ -3412,10 +3412,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// <summary>
     /// Called to perform asynchronous operations before shutting down.
     /// </summary>
-    /// <param name="isCritical">True if shutting down for critical reason.</param>
+    /// <param name="reason">Reason of shutting down.</param>
     /// <returns>Task of performing operations.</returns>
-    protected virtual async Task OnPrepareShuttingDownAsync(bool isCritical)
+    protected virtual async Task OnPrepareShuttingDownAsync(ApplicationShutdownReason reason)
     {
+        // check whether shutting down for critical reason
+        var isCritical = reason == ApplicationShutdownReason.Critical;
+
         // dispose pending view-model of main windows
         if (this.pendingMainWindowHolders.IsNotEmpty())
         {
@@ -4473,7 +4476,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
 
     /// <inheritdoc/>
-    public bool Restart(ApplicationArgsBuilder argsBuilder, bool asAdministrator, bool isCritical = false)
+    public bool Restart(ApplicationArgsBuilder argsBuilder, bool asAdministrator, ApplicationShutdownReason reason = ApplicationShutdownReason.None)
     {
         // check state
         this.VerifyAccess();
@@ -4495,7 +4498,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         this.restartArgs = argsBuilder.Clone();
 
         // shutdown to restart
-        this.Shutdown(0, isCritical);
+        this.Shutdown(0, reason);
         return true;
     }
 
@@ -4956,7 +4959,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 		if (result == ApplicationUpdateDialogResult.ShutdownNeeded)
 		{
             this.Logger.LogWarning("Shut down to update application");
-            this.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
+            this.Shutdown(300, ApplicationShutdownReason.UpdatingApplication); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
             return true;
 		}
         return false;
@@ -5174,15 +5177,18 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
 
     /// <inheritdoc/>
-    public void Shutdown(int delay = 0, bool isCritical = false) =>
-        _ = this.ShutdownAsync(delay, isCritical);
+    public void Shutdown(int delay = 0, ApplicationShutdownReason reason = ApplicationShutdownReason.None) =>
+        _ = this.ShutdownAsync(delay, reason);
 
 
     // Start shutting down the application.
-    async Task ShutdownAsync(int delay, bool isCritical)
+    async Task ShutdownAsync(int delay, ApplicationShutdownReason reason)
     {
         // check state
         this.VerifyAccess();
+
+        // check whether shutting down for critical reason
+        var isCritical = reason == ApplicationShutdownReason.Critical;
 
         // update state
         if (isCritical)
@@ -5263,14 +5269,14 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         if (isCritical)
         {
             this.Logger.LogWarning("Prepare shutting down for critical reason");
-            var task = this.OnPrepareShuttingDownAsync(true);
+            var task = this.OnPrepareShuttingDownAsync(reason);
             if (!task.IsCompleted)
                 throw new InvalidOperationException("Cannot perform asynchronous OnPrepareShuttingDownAsync() when shutting down for critical reason");
         }
         else
         {
             this.Logger.LogWarning("Prepare shutting down");
-            await this.OnPrepareShuttingDownAsync(false);
+            await this.OnPrepareShuttingDownAsync(reason);
         }
 
         // shut down Avalonia
