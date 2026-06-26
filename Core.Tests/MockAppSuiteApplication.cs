@@ -421,7 +421,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
-    public bool Restart(ApplicationArgsBuilder argsBuilder, bool asAdministrator, bool isCritical = false) => false;
+    public bool Restart(ApplicationArgsBuilder argsBuilder, bool asAdministrator, ApplicationShutdownReason reason) => false;
 
 
     /// <inheritdoc/>
@@ -466,7 +466,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
-    public void Shutdown(int delay, bool isCritical = false)
+    public void Shutdown(int delay, ApplicationShutdownReason reason)
     { }
 
 
