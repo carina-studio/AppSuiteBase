@@ -5207,6 +5207,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         bool isFirstCall = !this.isShutdownStarted;
         if (!this.isShutdownStarted)
         {
+            if (reason != ApplicationShutdownReason.None)
+            {
+                this.ShutdownReason = reason;
+                this.OnPropertyChanged(nameof(ShutdownReason));
+            }
             if (isCritical)
                 this.isCriticalShutdownStarted = true;
             this.isShutdownStarted = true;
@@ -5216,6 +5221,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         }
         else if (isCritical && !this.isCriticalShutdownStarted)
         {
+            if (this.ShutdownReason != reason)
+            {
+                this.ShutdownReason = reason;
+                this.OnPropertyChanged(nameof(ShutdownReason));
+            }
             this.isCriticalShutdownStarted = true;
             this.OnPropertyChanged(nameof(IsCriticalShutdownStarted));
         }
@@ -5269,14 +5279,38 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         if (isCritical)
         {
             this.Logger.LogWarning("Prepare shutting down for critical reason");
-            var task = this.OnPrepareShuttingDownAsync(reason);
-            if (!task.IsCompleted)
-                throw new InvalidOperationException("Cannot perform asynchronous OnPrepareShuttingDownAsync() when shutting down for critical reason");
+            Task? task;
+            try
+            {
+                task = this.OnPrepareShuttingDownAsync(reason);
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Error occurred while preparing shutting down for critical reason");
+                task = null;
+            }
+            if (task is not null)
+            {
+                if (task.IsFaulted)
+                {
+                    var ex = task.Exception;
+                    this.Logger.LogError(ex?.InnerException ?? ex, "Error occurred while preparing shutting down for critical reason");
+                }
+                else if (!task.IsCompleted)
+                    throw new InvalidOperationException("Cannot perform asynchronous OnPrepareShuttingDownAsync() when shutting down for critical reason");
+            }
         }
         else
         {
             this.Logger.LogWarning("Prepare shutting down");
-            await this.OnPrepareShuttingDownAsync(reason);
+            try
+            {
+                await this.OnPrepareShuttingDownAsync(reason);
+            }
+            catch (Exception ex)
+            {
+                this.Logger.LogError(ex, "Error occurred while preparing shutting down");
+            }
         }
 
         // shut down Avalonia
@@ -5333,6 +5367,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         if (Platform.IsMacOS)
             this.ShutdownMacOSApp();
     }
+
+
+    /// <inheritdoc/>
+    [ThreadSafe]
+    public ApplicationShutdownReason ShutdownReason { get; private set; } = ApplicationShutdownReason.None;
 
 
     /// <inheritdoc/>

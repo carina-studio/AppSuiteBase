@@ -471,6 +471,10 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
+    public ApplicationShutdownReason ShutdownReason => ApplicationShutdownReason.None;
+
+
+    /// <inheritdoc/>
     public virtual IDisposable StartTracing(string outputFileName) =>
         new EmptyDisposable();
 

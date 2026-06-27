@@ -541,6 +541,13 @@ public interface IAppSuiteApplication : IAvaloniaApplication
 
 
     /// <summary>
+    /// Get reason of shutting down the application.
+    /// </summary>
+    [ThreadSafe]
+    ApplicationShutdownReason ShutdownReason { get; }
+
+
+    /// <summary>
     /// Start tracing for performance profiling.
     /// </summary>
     /// <param name="outputFileName">Name of output file.</param>
