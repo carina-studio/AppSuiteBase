@@ -82,6 +82,7 @@
 	<sys:String x:Key="String/ApplicationOptions.Culture">語言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">使用者介面縮放比例</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR 工具尚未安裝。</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DefaultBackdropStrength">背景效果</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">預設腳本語言</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle">停止使用 ANGLE 繪製</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle.Description">避免在部分顯示卡上的繪製問題，但會影響部分視覺效果。</sys:String>

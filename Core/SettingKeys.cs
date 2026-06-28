@@ -29,6 +29,12 @@ public sealed class SettingKeys
 
 
     /// <summary>
+    /// Default strength (0.0~1.0) of backdrop.
+    /// </summary>
+    public static readonly SettingKey<double> DefaultBackdropStrength = new(nameof(DefaultBackdropStrength), 0.5);
+
+
+    /// <summary>
     /// Default language of script.
     /// </summary>
     public static readonly SettingKey<ScriptLanguage> DefaultScriptLanguage = new(nameof(DefaultScriptLanguage), ScriptLanguage.CSharp_14);

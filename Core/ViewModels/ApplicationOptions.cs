@@ -1,4 +1,5 @@
 ﻿using Avalonia.Data.Converters;
+using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.AppSuite.Scripting;
 using CarinaStudio.AppSuite.UsageData;
 using CarinaStudio.Collections;
@@ -24,6 +25,14 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// <see cref="IValueConverter"/> to convert from <see cref="ApplicationCulture"/> to <see cref="string"/>.
     /// </summary>
     public static readonly IValueConverter ApplicationCultureConverter = new Converters.EnumConverter(IAppSuiteApplication.CurrentOrNull, typeof(ApplicationCulture));
+    /// <summary>
+    /// Maximum value allowed for <see cref="DefaultBackdropStrength"/>.
+    /// </summary>
+    public const double MaxDefaultBackdropStrength = 0.75;
+    /// <summary>
+    /// Minimum value allowed for <see cref="DefaultBackdropStrength"/>.
+    /// </summary>
+    public const double MinDefaultBackdropStrength = 0.25;
     /// <summary>
     /// <see cref="IValueConverter"/> to convert from <see cref="ThemeMode"/> to <see cref="string"/>.
     /// </summary>
@@ -210,6 +219,24 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
 
 
     /// <summary>
+    /// Get or set default strength of backdrop.
+    /// </summary>
+    public double DefaultBackdropStrength
+    {
+        get
+        {
+            var value = this.Settings.GetValueOrDefault(SettingKeys.DefaultBackdropStrength);
+            return double.IsFinite(value)
+                ? Math.Clamp(value, MinDefaultBackdropStrength, MaxDefaultBackdropStrength)
+                : SettingKeys.DefaultBackdropStrength.DefaultValue;
+        }
+        set => this.Settings.SetValue(SettingKeys.DefaultBackdropStrength, double.IsFinite(value)
+            ? Math.Clamp(value, MinDefaultBackdropStrength, MaxDefaultBackdropStrength)
+            : SettingKeys.DefaultBackdropStrength.DefaultValue);
+    }
+
+
+    /// <summary>
     /// Get or set default language of script.
     /// </summary>
     public ScriptLanguage DefaultScriptLanguage
@@ -289,6 +316,12 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// Check whether <see cref="ApplySystemTextScaleFactor"/> is supported or not.
     /// </summary>
     public bool IsApplyingSystemTextScaleFactorSupported => this.Application.IsApplyingSystemTextScaleFactorSupported;
+
+
+    /// <summary>
+    /// Check whether the backdrop is supported by the current rendering pipeline or not.
+    /// </summary>
+    public bool IsBackdropSupported => Backdrop.IsSupported;
 
 
     /// <summary>
@@ -509,6 +542,8 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
             this.OnPropertyChanged(nameof(ApplySystemTextScaleFactor));
         else if (key == SettingKeys.Culture)
             this.OnPropertyChanged(nameof(Culture));
+        else if (key == SettingKeys.DefaultBackdropStrength)
+            this.OnPropertyChanged(nameof(DefaultBackdropStrength));
         else if (key == SettingKeys.DefaultScriptLanguage)
             this.OnPropertyChanged(nameof(DefaultScriptLanguage));
         else if (key == SettingKeys.EnableLigatureInScript)

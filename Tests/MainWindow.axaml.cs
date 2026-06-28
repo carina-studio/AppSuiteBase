@@ -75,6 +75,7 @@ namespace CarinaStudio.AppSuite.Tests
         readonly DataFormat<byte[]> TabItemDataFormat = DataFormat.CreateBytesApplicationFormat("TabItem");
 
 
+        static readonly DirectProperty<MainWindow, double> DefaultBackdropStrengthProperty = AvaloniaProperty.RegisterDirect<MainWindow, double>(nameof(DefaultBackdropStrength), window => window.defaultBackdropStrength, (window, value) => window.DefaultBackdropStrength = value);
         static readonly StyledProperty<int> Int32Property = AvaloniaProperty.Register<MainWindow, int>("Int32", 1);
         static readonly DirectProperty<MainWindow, IImage?> SelectedGradientImageProperty = AvaloniaProperty.RegisterDirect<MainWindow, IImage?>(nameof(SelectedGradientImage), window => window.selectedGradientImage);
         static readonly DirectProperty<MainWindow, IImage?> SelectedImageProperty = AvaloniaProperty.RegisterDirect<MainWindow, IImage?>(nameof(SelectedImage), window => window.selectedImage);
@@ -82,6 +83,7 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         readonly MutableObservableBoolean canShowAppInfo = new(true);
+        double defaultBackdropStrength = SettingKeys.DefaultBackdropStrength.DefaultValue;
         readonly IDisposable hfProcessInfoUpdateToken;
         readonly IntegerTextBox integerTextBox;
         readonly IntegerTextBox integerTextBox2;
@@ -129,6 +131,7 @@ namespace CarinaStudio.AppSuite.Tests
             this.ShowAppInfoDialogCommand = new Command(() => this.ShowAppInfoDialog(), this.canShowAppInfo);
             this.ShowTutorialCommand = new Command<Visual>(this.ShowTutorial);
 
+            this.defaultBackdropStrength = this.Settings.GetValueOrDefault(SettingKeys.DefaultBackdropStrength);
             this.hfProcessInfoUpdateToken = this.Application.ProcessInfo.RequestHighFrequencyUpdate();
 
             var iconResources = new ResourceInclude(new Uri("avares://CarinaStudio.AppSuite.Core")).Let(it =>
@@ -320,6 +323,13 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         public ViewModels.ApplicationOptions ApplicationOptions { get; } = new ViewModels.ApplicationOptions();
+
+
+        public double DefaultBackdropStrength
+        {
+            get => this.defaultBackdropStrength;
+            set => this.Settings.SetValue(SettingKeys.DefaultBackdropStrength, value);
+        }
 
 
         public void EditConfiguration()
@@ -568,6 +578,14 @@ namespace CarinaStudio.AppSuite.Tests
             {
                 Message = $"Double-clicked on {e.Item} at position {e.ItemIndex}",
             }.ShowDialog(this);
+        }
+
+
+        protected override void OnSettingChanged(SettingChangedEventArgs e)
+        {
+            base.OnSettingChanged(e);
+            if (e.Key == SettingKeys.DefaultBackdropStrength)
+                this.SetAndRaise(DefaultBackdropStrengthProperty, ref this.defaultBackdropStrength, (double)e.Value);
         }
 
 

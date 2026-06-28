@@ -14,6 +14,7 @@
 		xmlns:sys="using:System"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Tests.MainWindow"
+        Name="window"
 		Classes="Tabbed"
 		ClipToBounds="False"
 		Icon="/AppIcon.ico"
@@ -144,827 +145,843 @@
 						</Grid>
 					</TabItem.Header>
 
-					<ScrollViewer Name="scrollViewer" Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Disabled">
-						<StackPanel Background="{x:Static Brushes.Transparent}" HorizontalAlignment="Stretch" Orientation="Vertical">
+					<Panel>
+						<appControls:BackdropTarget Name="backdropTarget" BackgroundColor="{DynamicResource Color/WorkingArea.Background}">
+							<ScrollViewer Name="scrollViewer" Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalAlignment="Stretch" HorizontalScrollBarVisibility="Disabled">
+								<StackPanel Background="{x:Static Brushes.Transparent}" HorizontalAlignment="Stretch" Orientation="Vertical">
 
-							<StackPanel.ContextMenu>
-								<ContextMenu>
-									<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Horizontal}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Horizontal}">
-										<MenuItem.Icon>
-											<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Horizontal}"/>
-										</MenuItem.Icon>
-									</MenuItem>
-									<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Vertical}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Vertical}">
-										<MenuItem.Icon>
-											<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Vertical}"/>
-										</MenuItem.Icon>
-									</MenuItem>
-									<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Tile}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Tile}">
-										<MenuItem.Icon>
-											<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Tile}"/>
-										</MenuItem.Icon>
-									</MenuItem>
-									<Separator/>
-									<MenuItem Header="Item" InputGesture="Ctrl+Z">
-										<MenuItem.Icon>
-											<Image Classes="MenuItem_Icon" Source="{DynamicResource Image/Icon.OK}"/>
-										</MenuItem.Icon>
-									</MenuItem>
-									<Separator/>
-									<MenuItem Header="Item">
-										<MenuItem.Icon>
-											<Border Background="Red" Height="30" Width="20"/>
-										</MenuItem.Icon>
-									</MenuItem>
-									<MenuItem Header="Item" IsEnabled="False">
-										<MenuItem.Icon>
-											<Image Classes="MenuItem_Icon" Source="{DynamicResource Image/Icon.Update}"/>
-										</MenuItem.Icon>
-									</MenuItem>
-									<MenuItem Header="Item">
-										<MenuItem Header="Sub Item"/>
-										<MenuItem Header="Sub Item"/>
-										<Separator/>
-										<MenuItem Header="Sub Item"/>
-										<MenuItem Header="Sub Item"/>
-									</MenuItem>
-									<MenuItem Header="Item"/>
-								</ContextMenu>
-							</StackPanel.ContextMenu>
-
-							<!-- Menu and ToolBar -->
-							<Panel>
-								<StackPanel ClipToBounds="False">
-									
-									<Menu>
-
-										<MenuItem Header="File">
-											<MenuItem Header="Sub Item"/>
-											<MenuItem Header="Sub Item"/>
+									<StackPanel.ContextMenu>
+										<ContextMenu>
+											<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Horizontal}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Horizontal}">
+												<MenuItem.Icon>
+													<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Horizontal}"/>
+												</MenuItem.Icon>
+											</MenuItem>
+											<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Vertical}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Vertical}">
+												<MenuItem.Icon>
+													<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Vertical}"/>
+												</MenuItem.Icon>
+											</MenuItem>
+											<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Tile}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Tile}">
+												<MenuItem.Icon>
+													<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Tile}"/>
+												</MenuItem.Icon>
+											</MenuItem>
 											<Separator/>
-											<MenuItem Header="Sub Item"/>
-											<MenuItem Header="Sub Item"/>
-										</MenuItem>
+											<MenuItem Header="Item" InputGesture="Ctrl+Z">
+												<MenuItem.Icon>
+													<Image Classes="MenuItem_Icon" Source="{DynamicResource Image/Icon.OK}"/>
+												</MenuItem.Icon>
+											</MenuItem>
+											<Separator/>
+											<MenuItem Header="Item">
+												<MenuItem.Icon>
+													<Border Background="Red" Height="30" Width="20"/>
+												</MenuItem.Icon>
+											</MenuItem>
+											<MenuItem Header="Item" IsEnabled="False">
+												<MenuItem.Icon>
+													<Image Classes="MenuItem_Icon" Source="{DynamicResource Image/Icon.Update}"/>
+												</MenuItem.Icon>
+											</MenuItem>
+											<MenuItem Header="Item">
+												<MenuItem Header="Sub Item"/>
+												<MenuItem Header="Sub Item"/>
+												<Separator/>
+												<MenuItem Header="Sub Item"/>
+												<MenuItem Header="Sub Item"/>
+											</MenuItem>
+											<MenuItem Header="Item"/>
+										</ContextMenu>
+									</StackPanel.ContextMenu>
 
-										<MenuItem Header="Edit">
-											<MenuItem.Icon>
-												<Image Classes="MenuItem_Icon" Source="{DynamicResource Image/Icon.Edit}"/>
-											</MenuItem.Icon>
-										</MenuItem>
+									<!-- Menu and ToolBar -->
+									<Panel>
+										<StackPanel ClipToBounds="False">
+											
+											<Menu>
 
-									</Menu>
+												<MenuItem Header="File">
+													<MenuItem Header="Sub Item"/>
+													<MenuItem Header="Sub Item"/>
+													<Separator/>
+													<MenuItem Header="Sub Item"/>
+													<MenuItem Header="Sub Item"/>
+												</MenuItem>
 
-									<!-- Toolbar -->
-									<Border Name="toolBar" BorderBrush="{DynamicResource Brush/Toolbar.Border}" BorderThickness="0,0,0,1" Classes="Toolbar">
-										<appControls:ToolBarScrollViewer Name="toolBarScrollViewer">
-											<Grid Background="{x:Static Brushes.Transparent}" ClipToBounds="False" ColumnDefinitions="Auto,*,Auto">
-												<StackPanel ClipToBounds="False" HorizontalAlignment="Stretch" Orientation="Horizontal">
-													
-													<Button appControls:ToolbarElement.Role="Button" Command="{Binding $parent[Window].ShowAppInfoDialogCommand}" ToolTip.Tip="Tool tip">
-														<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Panel.Right}"/>
-													</Button>
-													<Button appControls:ToolbarElement.Role="Button" ToolTip.Tip="Tool tip">
-														<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Sliders}"/>
-													</Button>
-													<Button appControls:ToolbarElement.Role="Button">
-														<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.AddFile.Outline}"/>
-													</Button>
-													<Button appControls:ToolbarElement.Role="Button">
-														<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.AddFolder.Outline}"/>
-													</Button>
-													<Button appControls:ToolbarElement.Role="Button" Width="NaN">
-														<StackPanel Orientation="Horizontal">
-															<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.AddFolder.Outline}"/>
-															<TextBlock appControls:ToolbarElement.Role="TextAfterIcon" Text="Text"/>
+												<MenuItem Header="Edit">
+													<MenuItem.Icon>
+														<Image Classes="MenuItem_Icon" Source="{DynamicResource Image/Icon.Edit}"/>
+													</MenuItem.Icon>
+												</MenuItem>
+
+											</Menu>
+
+											<!-- Toolbar -->
+											<Border Name="toolBar" BorderBrush="{DynamicResource Brush/Toolbar.Border}" BorderThickness="0,0,0,1" Classes="Toolbar">
+												<appControls:ToolBarScrollViewer Name="toolBarScrollViewer">
+													<Grid Background="{x:Static Brushes.Transparent}" ClipToBounds="False" ColumnDefinitions="Auto,*,Auto">
+														<StackPanel ClipToBounds="False" HorizontalAlignment="Stretch" Orientation="Horizontal">
+															
+															<Button appControls:ToolbarElement.Role="Button" Command="{Binding $parent[Window].ShowAppInfoDialogCommand}" ToolTip.Tip="Tool tip">
+																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Panel.Right}"/>
+															</Button>
+															<Button appControls:ToolbarElement.Role="Button" ToolTip.Tip="Tool tip">
+																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Sliders}"/>
+															</Button>
+															<Button appControls:ToolbarElement.Role="Button">
+																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.AddFile.Outline}"/>
+															</Button>
+															<Button appControls:ToolbarElement.Role="Button">
+																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.AddFolder.Outline}"/>
+															</Button>
+															<Button appControls:ToolbarElement.Role="Button" Width="NaN">
+																<StackPanel Orientation="Horizontal">
+																	<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.AddFolder.Outline}"/>
+																	<TextBlock appControls:ToolbarElement.Role="TextAfterIcon" Text="Text"/>
+																</StackPanel>
+															</Button>
+															<Button appControls:ToolbarElement.Role="Button" IsEnabled="{Binding #toolBarToggleButton.IsChecked}">
+																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
+															</Button>
+															
+															<Border appControls:ToolbarElement.Role="Icon">
+																<abControls:ProgressRing appControls:ToolbarElement.Role="ProgressRing" IsIndeterminate="True"/>
+															</Border>
+
+															<Button Classes="ToolBar_Button_WithDropDownButton">
+																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Star}"/>
+															</Button>
+															<ToggleButton Classes="ToolBar_DropDownButton">
+																<Panel>
+																	<Image appControls:ToolbarElement.Role="DropDownIcon" IsVisible="{Binding !$parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.DropDown.Down}"/>
+																	<Image appControls:ToolbarElement.Role="DropDownIcon" IsVisible="{Binding $parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.DropDown.Down.Light}"/>
+																</Panel>
+															</ToggleButton>
+															
+															<ToggleButton appControls:ToolbarElement.Role="ButtonWithDropDownIcon">
+																<Panel>
+																	<Grid>
+																		<Grid.ColumnDefinitions>
+																			<ColumnDefinition Width="*"/>
+																			<ColumnDefinition Width="{StaticResource GridLength/Toolbar.Button.DropDownIcon.Margin}"/>
+																			<ColumnDefinition Width="Auto"/>
+																		</Grid.ColumnDefinitions>
+																		<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Error}"/>
+																		<Image appControls:ToolbarElement.Role="DropDownIcon" Grid.Column="2" Source="{StaticResource Image/Icon.DropDown.Down}"/>
+																	</Grid>
+																</Panel>
+															</ToggleButton>
+
+															<Panel ClipToBounds="False">
+																<TextBox appControls:ToolbarElement.Role="Input" Width="100">
+																	<TextBox.InnerRightContent>
+																		<StackPanel Classes="TextBox_InPlaceActions">
+																			<ToggleButton Classes="TextBox_InPlaceAction">
+																				<Image appControls:ToolbarElement.Role="Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
+																			</ToggleButton>
+																		</StackPanel>
+																	</TextBox.InnerRightContent>
+																</TextBox>
+															</Panel>
+															<TextBox appControls:ToolbarElement.Role="Input" Width="50" IsEnabled="False"/>
+
+															<ToggleButton Name="toolBarToggleButton" appControls:ToolbarElement.Role="Button" ToolTip.Tip="This is tooltip">
+																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
+															</ToggleButton>
+
+															<RepeatButton appControls:ToolbarElement.Role="Button" ToolTip.Tip="This is tooltip">
+																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Add}"/>
+															</RepeatButton>
+															
+															<appControls:ToggleSplitButton appControls:ToolbarElement.Role="Button">
+																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Information}"/>
+																<appControls:ToggleSplitButton.DropDownMenu>
+																	<ContextMenu>
+																		<MenuItem Header="Item 1"/>
+																		<MenuItem Header="Item 2"/>
+																	</ContextMenu>
+																</appControls:ToggleSplitButton.DropDownMenu>
+															</appControls:ToggleSplitButton>
+
+															<Separator appControls:ToolbarElement.Role="Separator"/>
+
+															<ToggleButton appControls:ToolbarElement.Role="Button" IsEnabled="False">
+																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
+															</ToggleButton>
+
+															<ComboBox appControls:ToolbarElement.Role="Input" Width="100">
+																12345
+															</ComboBox>
+															<ComboBox appControls:ToolbarElement.Role="Input"  Width="100" IsEnabled="False">
+																6789
+															</ComboBox>
+															<TextBox appControls:ToolbarElement.Role="Input"  Width="100"/>
+
+															<Button appControls:ToolbarElement.Role="Button" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}">
+																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Lightbulb}"/>
+															</Button>
+
+															<RepeatButton appControls:ToolbarElement.Role="Button" IsEnabled="False">
+																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Folder}"/>
+															</RepeatButton>
+
+															<TextBlock appControls:ToolbarElement.Role="Label"  IsEnabled="False" Text="test:"/>
+															
+															<TextBox appControls:ToolbarElement.Role="Input"  IsEnabled="False" Text="Hello"/>
+
 														</StackPanel>
-													</Button>
-													<Button appControls:ToolbarElement.Role="Button" IsEnabled="{Binding #toolBarToggleButton.IsChecked}">
-														<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Error.Colored}"/>
-													</Button>
-													
-													<Border appControls:ToolbarElement.Role="Icon">
-														<abControls:ProgressRing appControls:ToolbarElement.Role="ProgressRing" IsIndeterminate="True"/>
-													</Border>
 
-													<Button Classes="ToolBar_Button_WithDropDownButton">
-														<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Star}"/>
-													</Button>
-													<ToggleButton Classes="ToolBar_DropDownButton">
-														<Panel>
-															<Image appControls:ToolbarElement.Role="DropDownIcon" IsVisible="{Binding !$parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.DropDown.Down}"/>
-															<Image appControls:ToolbarElement.Role="DropDownIcon" IsVisible="{Binding $parent[ToggleButton].IsChecked}" Source="{StaticResource Image/Icon.DropDown.Down.Light}"/>
-														</Panel>
-													</ToggleButton>
-													
-													<ToggleButton appControls:ToolbarElement.Role="ButtonWithDropDownIcon">
-														<Panel>
-															<Grid>
-																<Grid.ColumnDefinitions>
-																	<ColumnDefinition Width="*"/>
-																	<ColumnDefinition Width="{StaticResource GridLength/Toolbar.Button.DropDownIcon.Margin}"/>
-																	<ColumnDefinition Width="Auto"/>
-																</Grid.ColumnDefinitions>
-																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Error}"/>
-																<Image appControls:ToolbarElement.Role="DropDownIcon" Grid.Column="2" Source="{StaticResource Image/Icon.DropDown.Down}"/>
-															</Grid>
-														</Panel>
-													</ToggleButton>
-
-													<Panel ClipToBounds="False">
-														<TextBox appControls:ToolbarElement.Role="Input" Width="100">
+														<TextBox Name="toolBarTextBox" appControls:ToolbarElement.Role="Input" Grid.Column="1" Watermark="TextBox with in-place actions">
 															<TextBox.InnerRightContent>
 																<StackPanel Classes="TextBox_InPlaceActions">
-																	<ToggleButton Classes="TextBox_InPlaceAction">
-																		<Image appControls:ToolbarElement.Role="Icon" Source="{DynamicResource Image/Icon.OpenFile}"/>
-																	</ToggleButton>
+																	<Button Classes="TextBox_InPlaceAction">
+																		<Image Classes="Icon" Source="{DynamicResource Image/Icon.Save}"/>
+																	</Button>
+																	<Button Classes="TextBox_InPlaceAction">
+																		<Image Classes="Icon" Source="{DynamicResource Image/Icon.Close}"/>
+																	</Button>
 																</StackPanel>
 															</TextBox.InnerRightContent>
 														</TextBox>
-													</Panel>
-													<TextBox appControls:ToolbarElement.Role="Input" Width="50" IsEnabled="False"/>
 
-													<ToggleButton Name="toolBarToggleButton" appControls:ToolbarElement.Role="Button" ToolTip.Tip="This is tooltip">
-														<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.OK.Colored}"/>
-													</ToggleButton>
-
-													<RepeatButton appControls:ToolbarElement.Role="Button" ToolTip.Tip="This is tooltip">
-														<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Add}"/>
-													</RepeatButton>
-													
-													<appControls:ToggleSplitButton appControls:ToolbarElement.Role="Button">
-														<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Information}"/>
-														<appControls:ToggleSplitButton.DropDownMenu>
-															<ContextMenu>
-																<MenuItem Header="Item 1"/>
-																<MenuItem Header="Item 2"/>
-															</ContextMenu>
-														</appControls:ToggleSplitButton.DropDownMenu>
-													</appControls:ToggleSplitButton>
-
-													<Separator appControls:ToolbarElement.Role="Separator"/>
-
-													<ToggleButton appControls:ToolbarElement.Role="Button" IsEnabled="False">
-														<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.SaveAll}"/>
-													</ToggleButton>
-
-													<ComboBox appControls:ToolbarElement.Role="Input" Width="100">
-														12345
-													</ComboBox>
-													<ComboBox appControls:ToolbarElement.Role="Input"  Width="100" IsEnabled="False">
-														6789
-													</ComboBox>
-													<TextBox appControls:ToolbarElement.Role="Input"  Width="100"/>
-
-													<Button appControls:ToolbarElement.Role="Button" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}">
-														<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Lightbulb}"/>
-													</Button>
-
-													<RepeatButton appControls:ToolbarElement.Role="Button" IsEnabled="False">
-														<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Folder}"/>
-													</RepeatButton>
-
-													<TextBlock appControls:ToolbarElement.Role="Label"  IsEnabled="False" Text="test:"/>
-													
-													<TextBox appControls:ToolbarElement.Role="Input"  IsEnabled="False" Text="Hello"/>
-
-												</StackPanel>
-
-												<TextBox Name="toolBarTextBox" appControls:ToolbarElement.Role="Input" Grid.Column="1" Watermark="TextBox with in-place actions">
-													<TextBox.InnerRightContent>
-														<StackPanel Classes="TextBox_InPlaceActions">
-															<Button Classes="TextBox_InPlaceAction">
-																<Image Classes="Icon" Source="{DynamicResource Image/Icon.Save}"/>
-															</Button>
-															<Button Classes="TextBox_InPlaceAction">
-																<Image Classes="Icon" Source="{DynamicResource Image/Icon.Close}"/>
+														<StackPanel Grid.Column="2" HorizontalAlignment="Stretch" Orientation="Horizontal">
+															<Button appControls:ToolbarElement.Role="Button">
+																<Panel>
+																	<Image appControls:ToolbarElement.Role="Icon" Source="{DynamicResource Image/Icon.More}"/>
+																	<Border appControls:ToolbarElement.Role="Badge" IsVisible="{Binding $parent[Window].Application.UpdateInfo, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}">
+																		<Image appControls:ToolbarElement.Role="Badge" Source="{StaticResource Image/Icon.Update.Colored}"/>
+																	</Border>
+																	<Border appControls:ToolbarElement.Role="Badge" IsVisible="{Binding !$parent[Window].Application.UpdateInfo, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}">
+																		<Image appControls:ToolbarElement.Role="Badge" Source="{StaticResource Image/Icon.NotificationIndicator.Success}"/>
+																	</Border>
+																</Panel>
 															</Button>
 														</StackPanel>
-													</TextBox.InnerRightContent>
-												</TextBox>
-
-												<StackPanel Grid.Column="2" HorizontalAlignment="Stretch" Orientation="Horizontal">
-													<Button appControls:ToolbarElement.Role="Button">
-														<Panel>
-															<Image appControls:ToolbarElement.Role="Icon" Source="{DynamicResource Image/Icon.More}"/>
-															<Border appControls:ToolbarElement.Role="Badge" IsVisible="{Binding $parent[Window].Application.UpdateInfo, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}">
-																<Image appControls:ToolbarElement.Role="Badge" Source="{StaticResource Image/Icon.Update.Colored}"/>
-															</Border>
-															<Border appControls:ToolbarElement.Role="Badge" IsVisible="{Binding !$parent[Window].Application.UpdateInfo, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}">
-																<Image appControls:ToolbarElement.Role="Badge" Source="{StaticResource Image/Icon.NotificationIndicator.Success}"/>
-															</Border>
-														</Panel>
+													</Grid>
+												</appControls:ToolBarScrollViewer>
+											</Border>
+											
+											<!-- Toolbar (Small) -->
+											<Border Classes="Toolbar_Small" BorderBrush="{DynamicResource Brush/Toolbar.Border}" BorderThickness="0,0,0,1">
+												<StackPanel Orientation="Horizontal">
+													
+													<Button appControls:ToolbarElement.Role="SmallButton" Command="{Binding $parent[Window].ShowAppInfoDialogCommand}" ToolTip.Tip="Tool tip">
+														<Image appControls:ToolbarElement.Role="SmallIcon" Source="{StaticResource Image/Icon.Panel.Right}"/>
 													</Button>
+													<Button appControls:ToolbarElement.Role="SmallButton" ToolTip.Tip="Tool tip">
+														<Image appControls:ToolbarElement.Role="SmallIcon" Source="{StaticResource Image/Icon.Sliders}"/>
+													</Button>
+													<Button appControls:ToolbarElement.Role="SmallButton">
+														<Image appControls:ToolbarElement.Role="SmallIcon" Source="{StaticResource Image/Icon.AddFile}"/>
+													</Button>
+													
+													<Separator appControls:ToolbarElement.Role="SmallSeparator"/>
+													
+													<ToggleButton appControls:ToolbarElement.Role="SmallButton" ToolTip.Tip="This is tooltip">
+														<Image appControls:ToolbarElement.Role="SmallIcon" Source="{StaticResource Image/Icon.OK.Colored}"/>
+													</ToggleButton>
+
+													<RepeatButton appControls:ToolbarElement.Role="SmallButton" ToolTip.Tip="This is tooltip">
+														<Image appControls:ToolbarElement.Role="SmallIcon" Source="{StaticResource Image/Icon.Add}"/>
+													</RepeatButton>
+													
+													<TextBlock appControls:ToolbarElement.Role="SmallLabel" Text="Text"/>
+													
+													<RepeatButton appControls:ToolbarElement.Role="SmallButton" ToolTip.Tip="This is tooltip">
+														<Image appControls:ToolbarElement.Role="SmallIcon" Source="{StaticResource Image/Icon.File.Outline}"/>
+													</RepeatButton>
+													
 												</StackPanel>
-											</Grid>
-										</appControls:ToolBarScrollViewer>
-									</Border>
-									
-									<!-- Toolbar (Small) -->
-									<Border Classes="Toolbar_Small" BorderBrush="{DynamicResource Brush/Toolbar.Border}" BorderThickness="0,0,0,1">
-										<StackPanel Orientation="Horizontal">
-											
-											<Button appControls:ToolbarElement.Role="SmallButton" Command="{Binding $parent[Window].ShowAppInfoDialogCommand}" ToolTip.Tip="Tool tip">
-												<Image appControls:ToolbarElement.Role="SmallIcon" Source="{StaticResource Image/Icon.Panel.Right}"/>
-											</Button>
-											<Button appControls:ToolbarElement.Role="SmallButton" ToolTip.Tip="Tool tip">
-												<Image appControls:ToolbarElement.Role="SmallIcon" Source="{StaticResource Image/Icon.Sliders}"/>
-											</Button>
-											<Button appControls:ToolbarElement.Role="SmallButton">
-												<Image appControls:ToolbarElement.Role="SmallIcon" Source="{StaticResource Image/Icon.AddFile}"/>
-											</Button>
-											
-											<Separator appControls:ToolbarElement.Role="SmallSeparator"/>
-											
-											<ToggleButton appControls:ToolbarElement.Role="SmallButton" ToolTip.Tip="This is tooltip">
-												<Image appControls:ToolbarElement.Role="SmallIcon" Source="{StaticResource Image/Icon.OK.Colored}"/>
-											</ToggleButton>
-
-											<RepeatButton appControls:ToolbarElement.Role="SmallButton" ToolTip.Tip="This is tooltip">
-												<Image appControls:ToolbarElement.Role="SmallIcon" Source="{StaticResource Image/Icon.Add}"/>
-											</RepeatButton>
-											
-											<TextBlock appControls:ToolbarElement.Role="SmallLabel" Text="Text"/>
-											
-											<RepeatButton appControls:ToolbarElement.Role="SmallButton" ToolTip.Tip="This is tooltip">
-												<Image appControls:ToolbarElement.Role="SmallIcon" Source="{StaticResource Image/Icon.File.Outline}"/>
-											</RepeatButton>
+											</Border>
 											
 										</StackPanel>
-									</Border>
-									
-								</StackPanel>
-								<Line Classes="Shadow" Stroke="{DynamicResource Brush/Toolbar.Border}" VerticalAlignment="Bottom"/>
-							</Panel>
-							<Border Classes="Shadow_Bottom_Light"/>
+										<Line Classes="Shadow" Stroke="{DynamicResource Brush/Toolbar.Border}" VerticalAlignment="Bottom"/>
+									</Panel>
+									<Border Classes="Shadow_Bottom_Light"/>
 
-							<!-- Accent colors -->
-							<StackPanel Height="30" Margin="5" Orientation="Horizontal">
-								<Border Width="30">
-									<Border.Background>
-										<SolidColorBrush Color="{DynamicResource SystemAccentColorLight3}"/>
-									</Border.Background>
-								</Border>
-								<Border Width="30">
-									<Border.Background>
-										<SolidColorBrush Color="{DynamicResource SystemAccentColorLight2}"/>
-									</Border.Background>
-								</Border>
-								<Border Width="30">
-									<Border.Background>
-										<SolidColorBrush Color="{DynamicResource SystemAccentColorLight1}"/>
-									</Border.Background>
-								</Border>
-								<Border Width="30">
-									<Border.Background>
-										<SolidColorBrush Color="{DynamicResource SystemAccentColor}"/>
-									</Border.Background>
-								</Border>
-								<Border Width="30">
-									<Border.Background>
-										<SolidColorBrush Color="{DynamicResource SystemAccentColorDark1}"/>
-									</Border.Background>
-								</Border>
-								<Border Width="30">
-									<Border.Background>
-										<SolidColorBrush Color="{DynamicResource SystemAccentColorDark2}"/>
-									</Border.Background>
-								</Border>
-								<Border Width="30">
-									<Border.Background>
-										<SolidColorBrush Color="{DynamicResource SystemAccentColorDark3}"/>
-									</Border.Background>
-								</Border>
-							</StackPanel>
-
-							<Button Name="testButton1" Command="{Binding $parent[Window].Test}" Margin="5" ToolTip.Tip="{DynamicResource String/Common.Copy.WithGesture}">
-								<TextBlock Background="Red" BaselineOffset="5" Text="ABC abjg 中文 過骨"/>
-							</Button>
-							<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
-							
-							<!-- Line height -->
-							<StackPanel Orientation="Horizontal" Margin="5">
-								<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Bottom">
-									<TextBlock Text="English"/>
-								</Border>
-								<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Bottom">
-									<TextBlock Text="繁體中文"/>
-								</Border>
-								<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Bottom">
-									<TextBlock Text="カタカナ"/>
-								</Border>
-								<Border BorderBrush="Green" BorderThickness="1" Margin="5,0,0,0" VerticalAlignment="Bottom">
-									<TextBlock FontSize="11" Text="English"/>
-								</Border>
-								<Border BorderBrush="Green" BorderThickness="1" VerticalAlignment="Bottom">
-									<TextBlock FontSize="11" Text="繁體中文"/>
-								</Border>
-								<Border BorderBrush="Green" BorderThickness="1" VerticalAlignment="Bottom">
-									<TextBlock FontSize="11" Text="カタカナ"/>
-								</Border>
-							</StackPanel>
-							<StackPanel Orientation="Horizontal" Margin="5">
-								<TextBox Text="English" VerticalAlignment="Top"/>
-								<TextBox Text="繁體中文" VerticalAlignment="Top"/>
-								<TextBox Text="カタカナ" VerticalAlignment="Top"/>
-								<TextBox AcceptsReturn="True" Height="100" Margin="5,0,0,0" VerticalAlignment="Top" Width="300"/>
-							</StackPanel>
-							
-							<!-- Dialog Item -->
-							<StackPanel HorizontalAlignment="Left" Margin="5,5,0,0" Orientation="Horizontal">
-								<Border BorderBrush="#777777" BorderThickness="1" VerticalAlignment="Top" Width="250">
-									<appControls:DialogItem>
-										<StackPanel>
-											<TextBlock appControls:DialogElement.TextRole="Label" Text="Title"/>
-											<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description Description Description Description Description Description"/>
-										</StackPanel>
-									</appControls:DialogItem>
-								</Border>
-								<Border BorderBrush="#777777" BorderThickness="1" Margin="5,0,0,0" VerticalAlignment="Top" Width="250">
-									<appControls:DialogItem>
-										<StackPanel>
-											<TextBlock appControls:DialogElement.TextRole="Label" Text="Title"/>
-											<Grid ColumnDefinitions="Auto,*">
-												<Image appControls:DialogElement.IconType="DescriptionBelowLabel" Source="{StaticResource Image/Icon.Information.Outline}"/>
-												<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Grid.Column="1" Text="Description Description Description Description Description Description"/>
-											</Grid>
-										</StackPanel>
-									</appControls:DialogItem>
-								</Border>
-							</StackPanel>
-							<StackPanel HorizontalAlignment="Left" Margin="5,5,0,5" Orientation="Horizontal">
-								<Border BorderBrush="#777777" BorderThickness="1" VerticalAlignment="Top" Width="250">
-									<appControls:DialogItem>
-										<StackPanel>
-											<TextBlock appControls:DialogElement.TextRole="Label" Text="項目標題"/>
-											<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="描述文字 Description 描述文字 Description 描述文字 Description 描述文字 Description 描述文字"/>
-										</StackPanel>
-									</appControls:DialogItem>
-								</Border>
-								<Border BorderBrush="#777777" BorderThickness="1" Margin="5,0,0,0" VerticalAlignment="Top" Width="250">
-									<appControls:DialogItem>
-										<StackPanel>
-											<TextBlock appControls:DialogElement.TextRole="Label" Text="項目標題"/>
-											<Grid ColumnDefinitions="Auto,*">
-												<Image appControls:DialogElement.IconType="DescriptionBelowLabel" Source="{StaticResource Image/Icon.Information.Outline}"/>
-												<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Grid.Column="1" Text="描述文字 Description 描述文字 Description 描述文字 Description 描述文字 Description 描述文字"/>
-											</Grid>
-										</StackPanel>
-									</appControls:DialogItem>
-								</Border>
-							</StackPanel>
-							
-							<!-- Auto-Sized SyntaxHighlightingTextBlock -->
-							<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
-								<appControls:SyntaxHighlightingTextBlock Name="syntaxHighlightingTextBlock1" DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="AppSuite.+(pattern1|pattern2|pattern3)"/>
-							</Border>
-							
-							<!-- Slider -->
-							<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
-								<Slider Maximum="100" Minimum="0" TickFrequency="10" TickPlacement="Outside" Width="200"/>
-							</Border>
-							<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
-								<Slider Maximum="100" Minimum="0" TickFrequency="10" TickPlacement="TopLeft" Width="200"/>
-							</Border>
-							<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
-								<Slider Maximum="100" Minimum="0" TickFrequency="10" TickPlacement="None" Width="200">
-									<Slider.Resources>
-										<GridLength x:Key="SliderPostContentMargin">0</GridLength>
-										<GridLength x:Key="SliderPreContentMargin">0</GridLength>
-									</Slider.Resources>
-								</Slider>
-							</Border>
-							<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
-								<rs:RangeSlider Maximum="100" Minimum="0" MoveWholeRange="True" TickFrequency="10" TickPlacement="Outside" Width="200"/>
-							</Border>
-							<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
-								<rs:RangeSlider IsThumbOverlap="True" Maximum="100" Minimum="0" TickPlacement="None" Width="200">
-									<rs:RangeSlider.Resources>
-										<GridLength x:Key="SliderPostContentMargin">0</GridLength>
-										<GridLength x:Key="SliderPreContentMargin">0</GridLength>
-									</rs:RangeSlider.Resources>
-								</rs:RangeSlider>
-							</Border>
-						
-							<!-- Shadows -->
-							<WrapPanel>
-								<Panel Height="100" HorizontalAlignment="Left" Margin="5" Width="100">
-									<Line Classes="Shadow" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
-									<Line Classes="Shadow" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
-									<Line Classes="Shadow" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
-									<Line Classes="Shadow" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
-								</Panel>
-								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Light}" CornerRadius="5" Height="100" Margin="5,5,0,5" Width="100"/>
-								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow}" CornerRadius="5" Height="100" Margin="20,5,0,5" Width="100"/>
-								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Heavy}" CornerRadius="5" Height="100" Margin="30,5,0,5" Width="100"/>
-								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Inner.Light}" CornerRadius="5" Height="100" Margin="25,5,5,5" Width="100"/>
-								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Inner}" CornerRadius="5" Height="100" Margin="5" Width="100"/>
-								<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Inner.Heavy}" CornerRadius="5" Height="100" Margin="5" Width="100"/>
-								<Grid Margin="30,0,0,0" ColumnDefinitions="Auto,100,Auto" RowDefinitions="Auto,100,Auto">
-									<Border Background="{x:Static Brushes.White}" Grid.Column="1" Grid.Row="1"/>
-									<Border Classes="Shadow_TopLeft_Outer_Light" Grid.Column="0" Grid.Row="0"/>
-									<Border Classes="Shadow_TopRight_Outer_Light" Grid.Column="2" Grid.Row="0"/>
-									<Border Classes="Shadow_BottomLeft_Outer_Light" Grid.Column="0" Grid.Row="2"/>
-									<Border Classes="Shadow_BottomRight_Outer_Light" Grid.Column="2" Grid.Row="2"/>
-									<Border Classes="Shadow_Left_Light" Grid.Column="0" Grid.Row="1"/>
-									<Border Classes="Shadow_Top_Light" Grid.Column="1" Grid.Row="0"/>
-									<Border Classes="Shadow_Right_Light" Grid.Column="2" Grid.Row="1"/>
-									<Border Classes="Shadow_Bottom_Light" Grid.Column="1" Grid.Row="2"/>
-								</Grid>
-								<Grid Margin="20,0,0,0" ColumnDefinitions="Auto,100,Auto" RowDefinitions="Auto,100,Auto">
-									<Border Background="{x:Static Brushes.White}" Grid.Column="1" Grid.Row="1"/>
-									<Border Classes="Shadow_TopLeft_Outer" Grid.Column="0" Grid.Row="0"/>
-									<Border Classes="Shadow_TopRight_Outer" Grid.Column="2" Grid.Row="0"/>
-									<Border Classes="Shadow_BottomLeft_Outer" Grid.Column="0" Grid.Row="2"/>
-									<Border Classes="Shadow_BottomRight_Outer" Grid.Column="2" Grid.Row="2"/>
-									<Border Classes="Shadow_Left" Grid.Column="0" Grid.Row="1"/>
-									<Border Classes="Shadow_Top" Grid.Column="1" Grid.Row="0"/>
-									<Border Classes="Shadow_Right" Grid.Column="2" Grid.Row="1"/>
-									<Border Classes="Shadow_Bottom" Grid.Column="1" Grid.Row="2"/>
-								</Grid>
-								<Grid Margin="30,0,0,0" ColumnDefinitions="Auto,100,Auto" RowDefinitions="Auto,100,Auto">
-									<Border Background="{x:Static Brushes.White}" Grid.Column="1" Grid.Row="1"/>
-									<Border Classes="Shadow_TopLeft_Outer_Heavy" Grid.Column="0" Grid.Row="0"/>
-									<Border Classes="Shadow_TopRight_Outer_Heavy" Grid.Column="2" Grid.Row="0"/>
-									<Border Classes="Shadow_BottomLeft_Outer_Heavy" Grid.Column="0" Grid.Row="2"/>
-									<Border Classes="Shadow_BottomRight_Outer_Heavy" Grid.Column="2" Grid.Row="2"/>
-									<Border Classes="Shadow_Left_Heavy" Grid.Column="0" Grid.Row="1"/>
-									<Border Classes="Shadow_Top_Heavy" Grid.Column="1" Grid.Row="0"/>
-									<Border Classes="Shadow_Right_Heavy" Grid.Column="2" Grid.Row="1"/>
-									<Border Classes="Shadow_Bottom_Heavy" Grid.Column="1" Grid.Row="2"/>
-								</Grid>
-							</WrapPanel>
-
-							<ScrollBar AllowAutoHide="False" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" ViewportSize="10" Width="300"/>
-
-							<TextBlock Text="{DynamicResource String/ApplicationOptions.LogOutputTargetPort}" Margin="5,5,5,0"/>
-							<NumericUpDown HorizontalAlignment="Left" Margin="5,0,0,0" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
-
-							<Panel HorizontalAlignment="Left" Margin="5">
-								<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" BorderBrush="{DynamicResource Brush/WorkingArea.Panel.Border}" BorderThickness="1" BoxShadow="{DynamicResource BoxShadows/Shadow.Light}" HorizontalAlignment="Left" Padding="5">
-									<StackPanel>
-										<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5,0,0,0"/>
-										<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ProcessId, StringFormat={}PID: {0}}" Margin="5,5,0,0"/>
-										<SelectableTextBlock Focusable="True" Text="" Margin="5,5,0,0">
-											<Run Text="CPU: "/>
-											<Run FontWeight="Bold" Foreground="Green" Text="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage, StringFormat={}{0:F2}%}"/>
-										</SelectableTextBlock>
-										<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Memory Usage: {0}}" Margin="5,5,0,0"/>
-										<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapSize, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Size: {0}}" Margin="5,5,0,0"/>
-										<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Usage: {0}}" Margin="5,5,0,0"/>
-										<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.FinalizationPendingCount, StringFormat={}Finalization Pending Count: {0}}" Margin="5,5,0,0"/>
-										<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.GCFrequency, StringFormat={}GC Frequency: {0:F2}}" Margin="5,5,0,0"/>
-										<TextBlock Text="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5,5,0,0"/>
-										<Slider IsEnabled="{Binding $parent[Window].ApplicationOptions.IsCustomScreenScaleFactorSupported, Mode=OneTime}" Margin="5,5,0,0" Maximum="{Binding $parent[Window].ApplicationOptions.MaxCustomScreenScaleFactor, Mode=OneTime}" Minimum="1" TickFrequency="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactorGranularity, Mode=OneTime}" TickPlacement="Outside" Value="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactor, Mode=TwoWay}" Width="200"/>
-										<TextBlock Text="{Binding $parent[Window].ActualTransparencyLevel}" Margin="5,5,0,0"/>
-										<TextBlock Text="{Binding $parent[Window].Application.IsDebugMode, StringFormat={}IsDebugMode: {0}}" Margin="5,5,0,0"/>
+									<!-- Accent colors -->
+									<StackPanel Height="30" Margin="5" Orientation="Horizontal">
+										<Border Width="30">
+											<Border.Background>
+												<SolidColorBrush Color="{DynamicResource SystemAccentColorLight3}"/>
+											</Border.Background>
+										</Border>
+										<Border Width="30">
+											<Border.Background>
+												<SolidColorBrush Color="{DynamicResource SystemAccentColorLight2}"/>
+											</Border.Background>
+										</Border>
+										<Border Width="30">
+											<Border.Background>
+												<SolidColorBrush Color="{DynamicResource SystemAccentColorLight1}"/>
+											</Border.Background>
+										</Border>
+										<Border Width="30">
+											<Border.Background>
+												<SolidColorBrush Color="{DynamicResource SystemAccentColor}"/>
+											</Border.Background>
+										</Border>
+										<Border Width="30">
+											<Border.Background>
+												<SolidColorBrush Color="{DynamicResource SystemAccentColorDark1}"/>
+											</Border.Background>
+										</Border>
+										<Border Width="30">
+											<Border.Background>
+												<SolidColorBrush Color="{DynamicResource SystemAccentColorDark2}"/>
+											</Border.Background>
+										</Border>
+										<Border Width="30">
+											<Border.Background>
+												<SolidColorBrush Color="{DynamicResource SystemAccentColorDark3}"/>
+											</Border.Background>
+										</Border>
 									</StackPanel>
-								</Border>
-							</Panel>
 
-							<abControls:IntegerTextBox Name="integerTextBox" HorizontalAlignment="Left" IsNullValueAllowed="False" Margin="5,5,0,0" Minimum="1" Width="200" Watermark="Integer"/>
-							<TextBlock Text="{Binding #integerTextBox.Value, StringFormat={}Value: {0}}" HorizontalAlignment="Left" Margin="5,0,0,5"/>
-
-							<abControls:FormattedTextBlock Arg1="{Binding #regexTextBox.HasOpenedAssistanceMenus}" Format="{}HasOpenedAssistanceMenus: {0}" Margin="5,5,5,2"/>
-							<abControls:FormattedTextBlock Arg1="{Binding #regexTextBox.IsMaxTokenCountReached}" Format="{}IsMaxTokenCountReached: {0}" Margin="5,0,0,2"/>
-							<appControls:RegexTextBox Name="regexTextBox" Height="300" HorizontalAlignment="Left" Margin="5" MaxTokenCount="5" TextWrapping="Wrap" Width="300">
-								<appControls:RegexTextBox.PredefinedGroups>
-									<appControls:RegexGroup Name="Group1"/>
-									<appControls:RegexGroup Name="Group2"/>
-									<appControls:RegexGroup Name="Hello" DisplayName="{DynamicResource String/Common.OK}"/>
-									<appControls:RegexGroup Name="World" DisplayName="{DynamicResource String/Common.Cancel}"/>
-									<appControls:RegexGroup Name="Group3"/>
-									<appControls:RegexGroup Name="Group4"/>
-									<appControls:RegexGroup Name="Group5"/>
-									<appControls:RegexGroup Name="Group6"/>
-									<appControls:RegexGroup Name="Group7"/>
-									<appControls:RegexGroup Name="Group8"/>
-									<appControls:RegexGroup Name="Group9"/>
-									<appControls:RegexGroup Name="Group10"/>
-									<appControls:RegexGroup Name="Group11"/>
-									<appControls:RegexGroup Name="Group12"/>
-									<appControls:RegexGroup Name="Group13"/>
-									<appControls:RegexGroup Name="Group14"/>
-									<appControls:RegexGroup Name="Group15"/>
-									<appControls:RegexGroup Name="Group16"/>
-									<appControls:RegexGroup Name="Group17"/>
-									<appControls:RegexGroup Name="Group18"/>
-									<appControls:RegexGroup Name="Group19"/>
-									<appControls:RegexGroup Name="Group20"/>
-									<appControls:RegexGroup Name="Group21"/>
-									<appControls:RegexGroup Name="Group22"/>
-									<appControls:RegexGroup Name="Group23"/>
-									<appControls:RegexGroup Name="Group24"/>
-									<appControls:RegexGroup Name="Group25"/>
-									<appControls:RegexGroup Name="Group26"/>
-									<appControls:RegexGroup Name="Group27"/>
-									<appControls:RegexGroup Name="Group28"/>
-									<appControls:RegexGroup Name="Group29"/>
-									<appControls:RegexGroup Name="Group30"/>
-								</appControls:RegexTextBox.PredefinedGroups>
-							</appControls:RegexTextBox>
-							<appControls:RegexTextBox HorizontalAlignment="Left" Margin="5" Width="400"/>
-							<appControls:RegexTextBox HorizontalAlignment="Left" IsReadOnly="True" Margin="5" Text="Read-Only RegexTextBox" Width="400"/>
-
-							<abControls:FormattedTextBlock Arg1="{Binding #stringInterpolationFormatTextBox.HasOpenedAssistanceMenus}" Format="{}HasOpenedAssistanceMenus: {0}" Margin="5,5,5,2"/>
-							<abControls:FormattedTextBlock Arg1="{Binding #stringInterpolationFormatTextBox.IsMaxTokenCountReached}" Format="{}IsMaxTokenCountReached: {0}" Margin="5,0,0,2"/>
-							<appControls:StringInterpolationFormatTextBox Name="stringInterpolationFormatTextBox" Height="60" HorizontalAlignment="Left" Margin="5" MaxTokenCount="5" TextWrapping="Wrap" Watermark="String interpolation" Width="200">
-								<appControls:StringInterpolationFormatTextBox.PredefinedVariables>
-									<appControls:StringInterpolationVariable Name="Var1"/>
-									<appControls:StringInterpolationVariable Name="Var2"/>
-									<appControls:StringInterpolationVariable Name="Hello" DisplayName="{DynamicResource String/Common.OK}"/>
-									<appControls:StringInterpolationVariable Name="World" DisplayName="{DynamicResource String/Common.Cancel}"/>
-								</appControls:StringInterpolationFormatTextBox.PredefinedVariables>
-							</appControls:StringInterpolationFormatTextBox>
-							<appControls:StringInterpolationFormatTextBox HorizontalAlignment="Left" Margin="5" Watermark="String interpolation" Width="200"/>
-
-							<appControls:DateTimeFormatTextBox HorizontalAlignment="Left" Margin="5" Width="250"/>
-
-							<appControls:TimeSpanFormatTextBox HorizontalAlignment="Left" Margin="5" Width="250"/>
-
-							<!-- In-place actions -->
-							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
-								<StackPanel Orientation="Horizontal">
-									<Button Classes="InPlaceAction_Button">
-										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.File.Outline}"/>
+									<Button Name="testButton1" Command="{Binding $parent[Window].Test}" Margin="5" ToolTip.Tip="{DynamicResource String/Common.Copy.WithGesture}">
+										<TextBlock Background="Red" BaselineOffset="5" Text="ABC abjg 中文 過骨"/>
 									</Button>
-									<Button Classes="InPlaceAction_Button">
-										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.OpenFile.Outline}"/>
-									</Button>
-									<Button Classes="InPlaceAction_Button">
-										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.Save.Outline}"/>
-									</Button>
-									<Button Classes="InPlaceAction_Button" IsEnabled="False">
-										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.SaveAll.Outline}"/>
-									</Button>
-									<ToggleButton Classes="InPlaceAction_ToggleButton" IsEnabled="False">
-										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.More}"/>
-									</ToggleButton>
-									<ToggleButton Classes="InPlaceAction_ToggleButton" IsChecked="True" IsEnabled="False">
-										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.More}"/>
-									</ToggleButton>
-									<ToggleButton Classes="InPlaceAction_ToggleButton">
-										<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.More}"/>
-									</ToggleButton>
-								</StackPanel>
-							</Border>
-							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
-								<StackPanel Orientation="Horizontal">
-									<Button Classes="InPlaceAction_Button_Medium">
-										<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.File}"/>
-									</Button>
-									<Button Classes="InPlaceAction_Button_Medium">
-										<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.OpenFile}"/>
-									</Button>
-									<Button Classes="InPlaceAction_Button_Medium">
-										<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.Save}"/>
-									</Button>
-									<Button Classes="InPlaceAction_Button_Medium" IsEnabled="False">
-										<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.SaveAll}"/>
-									</Button>
-									<ToggleButton Classes="InPlaceAction_ToggleButton_Medium" IsEnabled="False">
-										<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.More}"/>
-									</ToggleButton>
-									<ToggleButton Classes="InPlaceAction_ToggleButton_Medium" IsChecked="True" IsEnabled="False">
-										<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.More}"/>
-									</ToggleButton>
-									<ToggleButton Classes="InPlaceAction_ToggleButton_Medium">
-										<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.More}"/>
-									</ToggleButton>
-								</StackPanel>
-							</Border>
-							<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
-								<StackPanel Orientation="Horizontal">
-									<Button Classes="InPlaceAction_Button_Large">
-										<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.File}"/>
-									</Button>
-									<Button Classes="InPlaceAction_Button_Large">
-										<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.OpenFile}"/>
-									</Button>
-									<Button Classes="InPlaceAction_Button_Large">
-										<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.Save}"/>
-									</Button>
-									<Button Classes="InPlaceAction_Button_Large" IsEnabled="False">
-										<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.SaveAll}"/>
-									</Button>
-									<ToggleButton Classes="InPlaceAction_ToggleButton_Large" IsEnabled="False">
-										<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
-									</ToggleButton>
-									<ToggleButton Classes="InPlaceAction_ToggleButton_Large" IsChecked="True" IsEnabled="False">
-										<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
-									</ToggleButton>
-									<ToggleButton Classes="InPlaceAction_ToggleButton_Large">
-										<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
-									</ToggleButton>
-								</StackPanel>
-							</Border>
-							
-							<!-- Buttons -->
-							<WrapPanel Name="buttonsPanel" Background="{DynamicResource MenuFlyoutPresenterBackground}" Orientation="Horizontal" >
-								<Button Content="Button" Margin="5"/>
-								<Button Content="Button" IsEnabled="False" Margin="5"/>
-								<Button Classes="accent" Content="Button" Margin="5"/>
-								<Button Classes="accent" Content="Button" IsEnabled="False" Margin="5"/>
-								<Button Margin="5">
-									<Grid ColumnDefinitions="Auto,*">
-										<Image Classes="Button_Icon" Source="{DynamicResource Image/Icon.Folder.Outline}"/>
-										<TextBlock Classes="Button_Text" Grid.Column="1" Text="Button"/>
-									</Grid>
-								</Button>
-								<Button IsEnabled="False" Margin="5">
-									<Grid ColumnDefinitions="Auto,*">
-										<Image Classes="Button_Icon" Source="{DynamicResource Image/Icon.File.Outline}"/>
-										<TextBlock Classes="Button_Text" Grid.Column="1" Text="Button"/>
-									</Grid>
-								</Button>
-								<Button Margin="5">
-									<Grid ColumnDefinitions="*,Auto">
-										<TextBlock Classes="Button_Text" Text="Button"/>
-										<Image Classes="Button_DropDownIcon" Grid.Column="1" Source="{DynamicResource Image/Icon.DropDown.Down}"/>
-									</Grid>
-								</Button>
-								<Button IsEnabled="False" Margin="5">
-									<Grid ColumnDefinitions="*,Auto">
-										<TextBlock Classes="Button_Text" Text="Button"/>
-										<Image Classes="Button_DropDownIcon" Grid.Column="1" Source="{DynamicResource Image/Icon.DropDown.Down}"/>
-									</Grid>
-								</Button>
-								<ToggleButton Content="ToggleButton" Margin="5"/>
-								<ToggleButton Content="ToggleButton" IsEnabled="False" Margin="5"/>
-								<ToggleButton Content="ToggleButton" IsChecked="True" IsEnabled="False" Margin="5"/>
-								<RepeatButton Content="RepeatButton" Margin="5"/>
-								<RepeatButton Content="RepeatButton" IsEnabled="False" Margin="5"/>
-								<appControls:SplitButton Content="SplitButton" Margin="5">
-									<appControls:SplitButton.DropDownMenu>
-										<ContextMenu>
-											<MenuItem Header="Item 1"/>
-											<MenuItem Header="Item 2"/>
-											<Separator/>
-											<MenuItem Header="Item 3"/>
-										</ContextMenu>
-									</appControls:SplitButton.DropDownMenu>
-								</appControls:SplitButton>
-								<appControls:SplitButton Content="SplitButton" IsEnabled="False" Margin="5"/>
-								<appControls:ToggleSplitButton Content="ToggleSplitButton" Margin="5">
-									<appControls:ToggleSplitButton.DropDownMenu>
-										<ContextMenu>
-											<MenuItem Header="Item 1"/>
-											<MenuItem Header="Item 2"/>
-											<Separator/>
-											<MenuItem Header="Item 3"/>
-										</ContextMenu>
-									</appControls:ToggleSplitButton.DropDownMenu>
-								</appControls:ToggleSplitButton>
-								<appControls:ToggleSplitButton Content="ToggleSplitButton" IsEnabled="False" Margin="5"/>
-								<appControls:ToggleSplitButton Content="ToggleSplitButton" IsChecked="True" IsEnabled="False" Margin="5"/>
-								<appControls:ToggleSplitButton Content="ToggleSplitButton" IsChecked="True" Margin="5"/>
-							</WrapPanel>
-
-							<WrapPanel Orientation="Horizontal">
-								<ToggleSwitch Margin="5"/>
-								<ToggleSwitch IsEnabled="False" Margin="5"/>
-								<ToggleSwitch IsChecked="True" IsEnabled="False" Margin="5"/>
-							</WrapPanel>
-
-							<WrapPanel Orientation="Horizontal">
-								<CheckBox Content="CheckBox" Margin="5"/>
-								<CheckBox Content="Disabled" IsEnabled="False" Margin="5"/>
-								<CheckBox Content="Disabled" IsChecked="True" IsEnabled="False" Margin="5"/>
-								<CheckBox Content="Indeternimate" IsChecked="{x:Null}" Margin="5"/>
-							</WrapPanel>
-
-							<WrapPanel Orientation="Horizontal">
-								<RadioButton Content="RadioButton" Margin="5"/>
-								<RadioButton Content="Disabled" IsEnabled="False" Margin="5"/>
-								<RadioButton Content="Disabled" IsChecked="True" IsEnabled="False" Margin="5"/>
-								<RadioButton Content="Indeterminate" IsChecked="{x:Null}" Margin="5"/>
-							</WrapPanel>
-
-							<NumericUpDown HorizontalAlignment="Left" Maximum="100" Minimum="0" Margin="5" Value="50" Width="150"/>
-
-							<!-- Test actions -->
-							<WrapPanel Orientation="Horizontal">
-								<Button Command="{Binding $parent[Window].ShowAppInfoDialog}" Content="App Info" Margin="5"/>
-								<Button Command="{Binding $parent[Window].ShowAppUpdateDialog}" Content="App Update" Margin="5"/>
-								<Button Command="{Binding $parent[Window].ShowMessageDialog}" Content="MessageDialog" Margin="5"/>
-								<Button Command="{Binding $parent[Window].ShowTextInputDialog}" Content="TextInputDialog" Margin="5"/>
-								<Button Command="{Binding $parent[Window].ShowAppDataImportDirSelectionDialog}" Content="Select dir to import app data" Margin="5"/>
-								<Button Command="{Binding $parent[Window].ShowNotification}" Content="Show Notification" Margin="5"/>
-								<Button Command="{Binding $parent[Window].ShowExternalDependenciesDialog}" Content="External Dependencies" Margin="5"/>
-								<Button Command="{Binding $parent[Window].ShowTestDialog}" Content="Test Dialog" Margin="5"/>
-								<Button Command="{Binding $parent[Window].ShowTestWizardDialog}" Content="Test Wizard Dialog" Margin="5"/>
-								<Button Command="{Binding $parent[Window].FindCommandPath}" Content="Find command path" Margin="5"/>
-								<Button Command="{Binding $parent[Window].UpdateTaskbarIconProgressState}" Content="Update Taskbar icon progress" Margin="5"/>
-								<Button Command="{Binding $parent[Window].Application.ShowMainWindowAsync}" Content="Open New Window" Margin="5"/>
-								<Button Command="{Binding $parent[Window].RestartApp}" Content="Restart App" Margin="5"/>
-								<Button Command="{Binding $parent[Window].EditConfiguration}" Content="Edit Configuration" Margin="5"/>
-								<Button Command="{Binding $parent[Window].Application.ShowSelfTestingWindow}" Content="Self Testing" Margin="5"/>
-								<Button Command="{Binding $parent[Window].Shutdown}" Content="Shutdown" Margin="5"/>
-							</WrapPanel>
-
-							<abControls:LinkTextBlock HorizontalAlignment="Left" IsEnabled="False" Margin="5" Text="Google" Uri="http://www.google.com/"/>
-							<abControls:LinkTextBlock Command="{Binding $parent[Window].SwitchTheme}" HorizontalAlignment="Left" Margin="5" Text="Switch theme"/>
-							<abControls:LinkTextBlock Command="{Binding $parent[Window].SwitchAppCulture}" HorizontalAlignment="Left" Margin="5" Text="Switch application culture"/>
-
-							<abControls:DateTimeTextBox Name="dateTimeTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
-							<TextBlock Margin="5,0,0,5" Text="{Binding #dateTimeTextBox.Value, StringFormat={}Value: {0}}"/>
-
-							<abControls:IntegerTextBox Name="integerTextBox2" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200" Watermark="Integer"/>
-							<TextBlock Text="{Binding #integerTextBox2.Value, StringFormat={}Value: {0}}" HorizontalAlignment="Left" Margin="5,0,0,5"/>
-
-							<appControls:EnumComboBox EnumType="{x:Type app:ThemeMode}" HorizontalAlignment="Left" Margin="5" Width="200"/>
-
-							<TextBox Width="200" Margin="5" HorizontalAlignment="Left"/>
-							<TextBox IsReadOnly="True" Text="Read-Only" Width="200" Margin="5" HorizontalAlignment="Left"/>
-							<TextBox IsEnabled="False" Text="Disabled" Width="200" Margin="5" HorizontalAlignment="Left"/>
-
-							<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left">
-								<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
-							</Border>
-
-							<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left" IsEnabled="False">
-								<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
-							</Border>
-
-							<appControls:ListBox Name="listBox1" DoubleClickOnItem="OnListBoxDoubleClickOnItem" HorizontalAlignment="Left" Width="150" Margin="5" SelectionMode="Multiple">
-								<appControls:ListBox.ItemsSource>
-									<avCollections:AvaloniaList x:TypeArguments="sys:Object">
-										<appControls:SyntaxHighlightingTextBlock DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="[0-9]abc(123)"/>
-										<Grid ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch">
-											<TextBlock Text="Item 1" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
-											<appControls:Image Classes="Icon" Grid.Column="1" Height="14" VerticalAlignment="Center" Width="14">
-												<DrawingImage>
-													<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Star}"/>
-												</DrawingImage>
-											</appControls:Image>
+									<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
+									
+									<!-- Line height -->
+									<StackPanel Orientation="Horizontal" Margin="5">
+										<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Bottom">
+											<TextBlock Text="English"/>
+										</Border>
+										<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Bottom">
+											<TextBlock Text="繁體中文"/>
+										</Border>
+										<Border BorderBrush="Red" BorderThickness="1" VerticalAlignment="Bottom">
+											<TextBlock Text="カタカナ"/>
+										</Border>
+										<Border BorderBrush="Green" BorderThickness="1" Margin="5,0,0,0" VerticalAlignment="Bottom">
+											<TextBlock FontSize="11" Text="English"/>
+										</Border>
+										<Border BorderBrush="Green" BorderThickness="1" VerticalAlignment="Bottom">
+											<TextBlock FontSize="11" Text="繁體中文"/>
+										</Border>
+										<Border BorderBrush="Green" BorderThickness="1" VerticalAlignment="Bottom">
+											<TextBlock FontSize="11" Text="カタカナ"/>
+										</Border>
+									</StackPanel>
+									<StackPanel Orientation="Horizontal" Margin="5">
+										<TextBox Text="English" VerticalAlignment="Top"/>
+										<TextBox Text="繁體中文" VerticalAlignment="Top"/>
+										<TextBox Text="カタカナ" VerticalAlignment="Top"/>
+										<TextBox AcceptsReturn="True" Height="100" Margin="5,0,0,0" VerticalAlignment="Top" Width="300"/>
+									</StackPanel>
+									
+									<!-- Dialog Item -->
+									<StackPanel HorizontalAlignment="Left" Margin="5,5,0,0" Orientation="Horizontal">
+										<Border BorderBrush="#777777" BorderThickness="1" VerticalAlignment="Top" Width="250">
+											<appControls:DialogItem>
+												<StackPanel>
+													<TextBlock appControls:DialogElement.TextRole="Label" Text="Title"/>
+													<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description Description Description Description Description Description"/>
+												</StackPanel>
+											</appControls:DialogItem>
+										</Border>
+										<Border BorderBrush="#777777" BorderThickness="1" Margin="5,0,0,0" VerticalAlignment="Top" Width="250">
+											<appControls:DialogItem>
+												<StackPanel>
+													<TextBlock appControls:DialogElement.TextRole="Label" Text="Title"/>
+													<Grid ColumnDefinitions="Auto,*">
+														<Image appControls:DialogElement.IconType="DescriptionBelowLabel" Source="{StaticResource Image/Icon.Information.Outline}"/>
+														<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Grid.Column="1" Text="Description Description Description Description Description Description"/>
+													</Grid>
+												</StackPanel>
+											</appControls:DialogItem>
+										</Border>
+									</StackPanel>
+									<StackPanel HorizontalAlignment="Left" Margin="5,5,0,5" Orientation="Horizontal">
+										<Border BorderBrush="#777777" BorderThickness="1" VerticalAlignment="Top" Width="250">
+											<appControls:DialogItem>
+												<StackPanel>
+													<TextBlock appControls:DialogElement.TextRole="Label" Text="項目標題"/>
+													<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="描述文字 Description 描述文字 Description 描述文字 Description 描述文字 Description 描述文字"/>
+												</StackPanel>
+											</appControls:DialogItem>
+										</Border>
+										<Border BorderBrush="#777777" BorderThickness="1" Margin="5,0,0,0" VerticalAlignment="Top" Width="250">
+											<appControls:DialogItem>
+												<StackPanel>
+													<TextBlock appControls:DialogElement.TextRole="Label" Text="項目標題"/>
+													<Grid ColumnDefinitions="Auto,*">
+														<Image appControls:DialogElement.IconType="DescriptionBelowLabel" Source="{StaticResource Image/Icon.Information.Outline}"/>
+														<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Grid.Column="1" Text="描述文字 Description 描述文字 Description 描述文字 Description 描述文字 Description 描述文字"/>
+													</Grid>
+												</StackPanel>
+											</appControls:DialogItem>
+										</Border>
+									</StackPanel>
+									
+									<!-- Auto-Sized SyntaxHighlightingTextBlock -->
+									<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
+										<appControls:SyntaxHighlightingTextBlock Name="syntaxHighlightingTextBlock1" DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="AppSuite.+(pattern1|pattern2|pattern3)"/>
+									</Border>
+									
+									<!-- Slider -->
+									<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
+										<Slider Maximum="100" Minimum="0" TickFrequency="10" TickPlacement="Outside" Width="200"/>
+									</Border>
+									<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
+										<Slider Maximum="100" Minimum="0" TickFrequency="10" TickPlacement="TopLeft" Width="200"/>
+									</Border>
+									<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
+										<Slider Maximum="100" Minimum="0" TickFrequency="10" TickPlacement="None" Width="200">
+											<Slider.Resources>
+												<GridLength x:Key="SliderPostContentMargin">0</GridLength>
+												<GridLength x:Key="SliderPreContentMargin">0</GridLength>
+											</Slider.Resources>
+										</Slider>
+									</Border>
+									<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
+										<rs:RangeSlider Maximum="100" Minimum="0" MoveWholeRange="True" TickFrequency="10" TickPlacement="Outside" Width="200"/>
+									</Border>
+									<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
+										<rs:RangeSlider IsThumbOverlap="True" Maximum="100" Minimum="0" TickPlacement="None" Width="200">
+											<rs:RangeSlider.Resources>
+												<GridLength x:Key="SliderPostContentMargin">0</GridLength>
+												<GridLength x:Key="SliderPreContentMargin">0</GridLength>
+											</rs:RangeSlider.Resources>
+										</rs:RangeSlider>
+									</Border>
+								
+									<!-- Shadows -->
+									<WrapPanel>
+										<Panel Height="100" HorizontalAlignment="Left" Margin="5" Width="100">
+											<Line Classes="Shadow" HorizontalAlignment="Stretch" VerticalAlignment="Top"/>
+											<Line Classes="Shadow" HorizontalAlignment="Stretch" VerticalAlignment="Bottom"/>
+											<Line Classes="Shadow" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+											<Line Classes="Shadow" HorizontalAlignment="Right" VerticalAlignment="Stretch"/>
+										</Panel>
+										<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Light}" CornerRadius="5" Height="100" Margin="5,5,0,5" Width="100"/>
+										<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow}" CornerRadius="5" Height="100" Margin="20,5,0,5" Width="100"/>
+										<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Heavy}" CornerRadius="5" Height="100" Margin="30,5,0,5" Width="100"/>
+										<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Inner.Light}" CornerRadius="5" Height="100" Margin="25,5,5,5" Width="100"/>
+										<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Inner}" CornerRadius="5" Height="100" Margin="5" Width="100"/>
+										<Border Background="{x:Static Brushes.White}" BoxShadow="{DynamicResource BoxShadows/Shadow.Inner.Heavy}" CornerRadius="5" Height="100" Margin="5" Width="100"/>
+										<Grid Margin="30,0,0,0" ColumnDefinitions="Auto,100,Auto" RowDefinitions="Auto,100,Auto">
+											<Border Background="{x:Static Brushes.White}" Grid.Column="1" Grid.Row="1"/>
+											<Border Classes="Shadow_TopLeft_Outer_Light" Grid.Column="0" Grid.Row="0"/>
+											<Border Classes="Shadow_TopRight_Outer_Light" Grid.Column="2" Grid.Row="0"/>
+											<Border Classes="Shadow_BottomLeft_Outer_Light" Grid.Column="0" Grid.Row="2"/>
+											<Border Classes="Shadow_BottomRight_Outer_Light" Grid.Column="2" Grid.Row="2"/>
+											<Border Classes="Shadow_Left_Light" Grid.Column="0" Grid.Row="1"/>
+											<Border Classes="Shadow_Top_Light" Grid.Column="1" Grid.Row="0"/>
+											<Border Classes="Shadow_Right_Light" Grid.Column="2" Grid.Row="1"/>
+											<Border Classes="Shadow_Bottom_Light" Grid.Column="1" Grid.Row="2"/>
 										</Grid>
-										<sys:String>Item 2 Item 2 Item 2 Item 2 Item 2</sys:String>
-										<TextBlock IsEnabled="False">Item 3</TextBlock>
-										<sys:String>Item 4 Item 4 Item 4 Item 4 Item 4</sys:String>
-									</avCollections:AvaloniaList>
-								</appControls:ListBox.ItemsSource>
-							</appControls:ListBox>
+										<Grid Margin="20,0,0,0" ColumnDefinitions="Auto,100,Auto" RowDefinitions="Auto,100,Auto">
+											<Border Background="{x:Static Brushes.White}" Grid.Column="1" Grid.Row="1"/>
+											<Border Classes="Shadow_TopLeft_Outer" Grid.Column="0" Grid.Row="0"/>
+											<Border Classes="Shadow_TopRight_Outer" Grid.Column="2" Grid.Row="0"/>
+											<Border Classes="Shadow_BottomLeft_Outer" Grid.Column="0" Grid.Row="2"/>
+											<Border Classes="Shadow_BottomRight_Outer" Grid.Column="2" Grid.Row="2"/>
+											<Border Classes="Shadow_Left" Grid.Column="0" Grid.Row="1"/>
+											<Border Classes="Shadow_Top" Grid.Column="1" Grid.Row="0"/>
+											<Border Classes="Shadow_Right" Grid.Column="2" Grid.Row="1"/>
+											<Border Classes="Shadow_Bottom" Grid.Column="1" Grid.Row="2"/>
+										</Grid>
+										<Grid Margin="30,0,0,0" ColumnDefinitions="Auto,100,Auto" RowDefinitions="Auto,100,Auto">
+											<Border Background="{x:Static Brushes.White}" Grid.Column="1" Grid.Row="1"/>
+											<Border Classes="Shadow_TopLeft_Outer_Heavy" Grid.Column="0" Grid.Row="0"/>
+											<Border Classes="Shadow_TopRight_Outer_Heavy" Grid.Column="2" Grid.Row="0"/>
+											<Border Classes="Shadow_BottomLeft_Outer_Heavy" Grid.Column="0" Grid.Row="2"/>
+											<Border Classes="Shadow_BottomRight_Outer_Heavy" Grid.Column="2" Grid.Row="2"/>
+											<Border Classes="Shadow_Left_Heavy" Grid.Column="0" Grid.Row="1"/>
+											<Border Classes="Shadow_Top_Heavy" Grid.Column="1" Grid.Row="0"/>
+											<Border Classes="Shadow_Right_Heavy" Grid.Column="2" Grid.Row="1"/>
+											<Border Classes="Shadow_Bottom_Heavy" Grid.Column="1" Grid.Row="2"/>
+										</Grid>
+									</WrapPanel>
 
-							<appControls:ListBox HorizontalAlignment="Left" ItemsSource="{Binding $parent[Window].StringItems}" Width="150" Margin="5" SelectionMode="Multiple">
-								<ListBox.ItemTemplate>
-									<DataTemplate>
-										<appControls:SyntaxHighlightingTextBlock DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="{Binding}"/>
-									</DataTemplate>
-								</ListBox.ItemTemplate>
-							</appControls:ListBox>
+									<ScrollBar AllowAutoHide="False" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" ViewportSize="10" Width="300"/>
 
-							<ComboBox HorizontalAlignment="Left" Width="200" Margin="5">
-								<ComboBoxItem HorizontalAlignment="Stretch">
-									<Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Left" VerticalAlignment="Center">
-										<appControls:Image Classes="ComboBoxItem_Icon">
-											<DrawingImage>
-												<GeometryDrawing Brush="{Binding $parent[ComboBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.OK}"/>
-											</DrawingImage>
-										</appControls:Image>
-										<TextBlock Classes="ComboBoxItem_TextBlock" Grid.Column="1" Text="Item"/>
-									</Grid>
-								</ComboBoxItem>
-								<ComboBoxItem>2</ComboBoxItem>
-								<ComboBoxItem>3</ComboBoxItem>
-								<ComboBoxItem>4</ComboBoxItem>
-								<ComboBoxItem>5</ComboBoxItem>
-								<ComboBoxItem>6</ComboBoxItem>
-								<ComboBoxItem>7</ComboBoxItem>
-								<ComboBoxItem>8</ComboBoxItem>
-								<ComboBoxItem>9</ComboBoxItem>
-								<ComboBoxItem HorizontalAlignment="Stretch">
-									<Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Left" VerticalAlignment="Center">
-										<appControls:Image Classes="ComboBoxItem_Icon">
-											<DrawingImage>
-												<GeometryDrawing Brush="{Binding $parent[ComboBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.OK}"/>
-											</DrawingImage>
-										</appControls:Image>
-										<TextBlock Classes="ComboBoxItem_TextBlock" Grid.Column="1" Text="10 looooooooooooooooooooog content"/>
-									</Grid>
-								</ComboBoxItem>
-								<ComboBoxItem>11</ComboBoxItem>
-								<ComboBoxItem>12</ComboBoxItem>
-								<ComboBoxItem>13</ComboBoxItem>
-								<ComboBoxItem>14</ComboBoxItem>
-								<ComboBoxItem>15</ComboBoxItem>
-								<ComboBoxItem>16</ComboBoxItem>
-								<ComboBoxItem>17</ComboBoxItem>
-								<ComboBoxItem>18</ComboBoxItem>
-								<ComboBoxItem>19</ComboBoxItem>
-								<ComboBoxItem>20</ComboBoxItem>
-							</ComboBox>
+									<TextBlock Text="{DynamicResource String/ApplicationOptions.LogOutputTargetPort}" Margin="5,5,5,0"/>
+									<NumericUpDown HorizontalAlignment="Left" Margin="5,0,0,0" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
 
-							<abControls:TimeSpanTextBox Name="timeSpanTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
-							<TextBlock Margin="5,0,0,5" Text="{Binding #timeSpanTextBox.Value, StringFormat={}Time span: {0}}"/>
+									<Panel HorizontalAlignment="Left" Margin="5">
+										<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" BorderBrush="{DynamicResource Brush/WorkingArea.Panel.Border}" BorderThickness="1" BoxShadow="{DynamicResource BoxShadows/Shadow.Light}" HorizontalAlignment="Left" Padding="5">
+											<StackPanel>
+												<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5,0,0,0"/>
+												<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ProcessId, StringFormat={}PID: {0}}" Margin="5,5,0,0"/>
+												<SelectableTextBlock Focusable="True" Text="" Margin="5,5,0,0">
+													<Run Text="CPU: "/>
+													<Run FontWeight="Bold" Foreground="Green" Text="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage, StringFormat={}{0:F2}%}"/>
+												</SelectableTextBlock>
+												<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Memory Usage: {0}}" Margin="5,5,0,0"/>
+												<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapSize, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Size: {0}}" Margin="5,5,0,0"/>
+												<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Usage: {0}}" Margin="5,5,0,0"/>
+												<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.FinalizationPendingCount, StringFormat={}Finalization Pending Count: {0}}" Margin="5,5,0,0"/>
+												<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.GCFrequency, StringFormat={}GC Frequency: {0:F2}}" Margin="5,5,0,0"/>
+												<TextBlock Text="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5,5,0,0"/>
+												<Slider IsEnabled="{Binding $parent[Window].ApplicationOptions.IsCustomScreenScaleFactorSupported, Mode=OneTime}" Margin="5,5,0,0" Maximum="{Binding $parent[Window].ApplicationOptions.MaxCustomScreenScaleFactor, Mode=OneTime}" Minimum="1" TickFrequency="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactorGranularity, Mode=OneTime}" TickPlacement="Outside" Value="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactor, Mode=TwoWay}" Width="200"/>
+												<TextBlock Text="{Binding $parent[Window].ActualTransparencyLevel}" Margin="5,5,0,0"/>
+												<TextBlock Text="{Binding $parent[Window].Application.IsDebugMode, StringFormat={}IsDebugMode: {0}}" Margin="5,5,0,0"/>
+											</StackPanel>
+										</Border>
+									</Panel>
 
-							<abControls:IPAddressTextBox Name="ipAddressTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
-							<TextBlock Margin="5,0,0,5" Text="{Binding #ipAddressTextBox.Object, StringFormat={}IPAddress: {0}}"/>
+									<abControls:IntegerTextBox Name="integerTextBox" HorizontalAlignment="Left" IsNullValueAllowed="False" Margin="5,5,0,0" Minimum="1" Width="200" Watermark="Integer"/>
+									<TextBlock Text="{Binding #integerTextBox.Value, StringFormat={}Value: {0}}" HorizontalAlignment="Left" Margin="5,0,0,5"/>
 
-							<abControls:UriTextBox Name="uriTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
+									<abControls:FormattedTextBlock Arg1="{Binding #regexTextBox.HasOpenedAssistanceMenus}" Format="{}HasOpenedAssistanceMenus: {0}" Margin="5,5,5,2"/>
+									<abControls:FormattedTextBlock Arg1="{Binding #regexTextBox.IsMaxTokenCountReached}" Format="{}IsMaxTokenCountReached: {0}" Margin="5,0,0,2"/>
+									<appControls:RegexTextBox Name="regexTextBox" Height="300" HorizontalAlignment="Left" Margin="5" MaxTokenCount="5" TextWrapping="Wrap" Width="300">
+										<appControls:RegexTextBox.PredefinedGroups>
+											<appControls:RegexGroup Name="Group1"/>
+											<appControls:RegexGroup Name="Group2"/>
+											<appControls:RegexGroup Name="Hello" DisplayName="{DynamicResource String/Common.OK}"/>
+											<appControls:RegexGroup Name="World" DisplayName="{DynamicResource String/Common.Cancel}"/>
+											<appControls:RegexGroup Name="Group3"/>
+											<appControls:RegexGroup Name="Group4"/>
+											<appControls:RegexGroup Name="Group5"/>
+											<appControls:RegexGroup Name="Group6"/>
+											<appControls:RegexGroup Name="Group7"/>
+											<appControls:RegexGroup Name="Group8"/>
+											<appControls:RegexGroup Name="Group9"/>
+											<appControls:RegexGroup Name="Group10"/>
+											<appControls:RegexGroup Name="Group11"/>
+											<appControls:RegexGroup Name="Group12"/>
+											<appControls:RegexGroup Name="Group13"/>
+											<appControls:RegexGroup Name="Group14"/>
+											<appControls:RegexGroup Name="Group15"/>
+											<appControls:RegexGroup Name="Group16"/>
+											<appControls:RegexGroup Name="Group17"/>
+											<appControls:RegexGroup Name="Group18"/>
+											<appControls:RegexGroup Name="Group19"/>
+											<appControls:RegexGroup Name="Group20"/>
+											<appControls:RegexGroup Name="Group21"/>
+											<appControls:RegexGroup Name="Group22"/>
+											<appControls:RegexGroup Name="Group23"/>
+											<appControls:RegexGroup Name="Group24"/>
+											<appControls:RegexGroup Name="Group25"/>
+											<appControls:RegexGroup Name="Group26"/>
+											<appControls:RegexGroup Name="Group27"/>
+											<appControls:RegexGroup Name="Group28"/>
+											<appControls:RegexGroup Name="Group29"/>
+											<appControls:RegexGroup Name="Group30"/>
+										</appControls:RegexTextBox.PredefinedGroups>
+									</appControls:RegexTextBox>
+									<appControls:RegexTextBox HorizontalAlignment="Left" Margin="5" Width="400"/>
+									<appControls:RegexTextBox HorizontalAlignment="Left" IsReadOnly="True" Margin="5" Text="Read-Only RegexTextBox" Width="400"/>
 
-							<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" Height="50"/>
+									<abControls:FormattedTextBlock Arg1="{Binding #stringInterpolationFormatTextBox.HasOpenedAssistanceMenus}" Format="{}HasOpenedAssistanceMenus: {0}" Margin="5,5,5,2"/>
+									<abControls:FormattedTextBlock Arg1="{Binding #stringInterpolationFormatTextBox.IsMaxTokenCountReached}" Format="{}IsMaxTokenCountReached: {0}" Margin="5,0,0,2"/>
+									<appControls:StringInterpolationFormatTextBox Name="stringInterpolationFormatTextBox" Height="60" HorizontalAlignment="Left" Margin="5" MaxTokenCount="5" TextWrapping="Wrap" Watermark="String interpolation" Width="200">
+										<appControls:StringInterpolationFormatTextBox.PredefinedVariables>
+											<appControls:StringInterpolationVariable Name="Var1"/>
+											<appControls:StringInterpolationVariable Name="Var2"/>
+											<appControls:StringInterpolationVariable Name="Hello" DisplayName="{DynamicResource String/Common.OK}"/>
+											<appControls:StringInterpolationVariable Name="World" DisplayName="{DynamicResource String/Common.Cancel}"/>
+										</appControls:StringInterpolationFormatTextBox.PredefinedVariables>
+									</appControls:StringInterpolationFormatTextBox>
+									<appControls:StringInterpolationFormatTextBox HorizontalAlignment="Left" Margin="5" Watermark="String interpolation" Width="200"/>
 
-						</StackPanel>
-					</ScrollViewer>
+									<appControls:DateTimeFormatTextBox HorizontalAlignment="Left" Margin="5" Width="250"/>
+
+									<appControls:TimeSpanFormatTextBox HorizontalAlignment="Left" Margin="5" Width="250"/>
+
+									<!-- In-place actions -->
+									<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
+										<StackPanel Orientation="Horizontal">
+											<Button Classes="InPlaceAction_Button">
+												<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.File.Outline}"/>
+											</Button>
+											<Button Classes="InPlaceAction_Button">
+												<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.OpenFile.Outline}"/>
+											</Button>
+											<Button Classes="InPlaceAction_Button">
+												<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.Save.Outline}"/>
+											</Button>
+											<Button Classes="InPlaceAction_Button" IsEnabled="False">
+												<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.SaveAll.Outline}"/>
+											</Button>
+											<ToggleButton Classes="InPlaceAction_ToggleButton" IsEnabled="False">
+												<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.More}"/>
+											</ToggleButton>
+											<ToggleButton Classes="InPlaceAction_ToggleButton" IsChecked="True" IsEnabled="False">
+												<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.More}"/>
+											</ToggleButton>
+											<ToggleButton Classes="InPlaceAction_ToggleButton">
+												<Image Classes="InPlaceAction_Icon" Source="{DynamicResource Image/Icon.More}"/>
+											</ToggleButton>
+										</StackPanel>
+									</Border>
+									<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
+										<StackPanel Orientation="Horizontal">
+											<Button Classes="InPlaceAction_Button_Medium">
+												<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.File}"/>
+											</Button>
+											<Button Classes="InPlaceAction_Button_Medium">
+												<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.OpenFile}"/>
+											</Button>
+											<Button Classes="InPlaceAction_Button_Medium">
+												<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.Save}"/>
+											</Button>
+											<Button Classes="InPlaceAction_Button_Medium" IsEnabled="False">
+												<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.SaveAll}"/>
+											</Button>
+											<ToggleButton Classes="InPlaceAction_ToggleButton_Medium" IsEnabled="False">
+												<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.More}"/>
+											</ToggleButton>
+											<ToggleButton Classes="InPlaceAction_ToggleButton_Medium" IsChecked="True" IsEnabled="False">
+												<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.More}"/>
+											</ToggleButton>
+											<ToggleButton Classes="InPlaceAction_ToggleButton_Medium">
+												<Image Classes="InPlaceAction_Icon_Medium" Source="{DynamicResource Image/Icon.More}"/>
+											</ToggleButton>
+										</StackPanel>
+									</Border>
+									<Border Background="{DynamicResource Brush/Accent}" CornerRadius="{DynamicResource ControlCornerRadius}" HorizontalAlignment="Left" Margin="5" Padding="10">
+										<StackPanel Orientation="Horizontal">
+											<Button Classes="InPlaceAction_Button_Large">
+												<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.File}"/>
+											</Button>
+											<Button Classes="InPlaceAction_Button_Large">
+												<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.OpenFile}"/>
+											</Button>
+											<Button Classes="InPlaceAction_Button_Large">
+												<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.Save}"/>
+											</Button>
+											<Button Classes="InPlaceAction_Button_Large" IsEnabled="False">
+												<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.SaveAll}"/>
+											</Button>
+											<ToggleButton Classes="InPlaceAction_ToggleButton_Large" IsEnabled="False">
+												<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
+											</ToggleButton>
+											<ToggleButton Classes="InPlaceAction_ToggleButton_Large" IsChecked="True" IsEnabled="False">
+												<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
+											</ToggleButton>
+											<ToggleButton Classes="InPlaceAction_ToggleButton_Large">
+												<appControls:Image Classes="InPlaceAction_Icon_Large" Source="{DynamicResource Image/Icon.More}"/>
+											</ToggleButton>
+										</StackPanel>
+									</Border>
+									
+									<!-- Buttons -->
+									<WrapPanel Name="buttonsPanel" Background="{DynamicResource MenuFlyoutPresenterBackground}" Orientation="Horizontal" >
+										<Button Content="Button" Margin="5"/>
+										<Button Content="Button" IsEnabled="False" Margin="5"/>
+										<Button Classes="accent" Content="Button" Margin="5"/>
+										<Button Classes="accent" Content="Button" IsEnabled="False" Margin="5"/>
+										<Button Margin="5">
+											<Grid ColumnDefinitions="Auto,*">
+												<Image Classes="Button_Icon" Source="{DynamicResource Image/Icon.Folder.Outline}"/>
+												<TextBlock Classes="Button_Text" Grid.Column="1" Text="Button"/>
+											</Grid>
+										</Button>
+										<Button IsEnabled="False" Margin="5">
+											<Grid ColumnDefinitions="Auto,*">
+												<Image Classes="Button_Icon" Source="{DynamicResource Image/Icon.File.Outline}"/>
+												<TextBlock Classes="Button_Text" Grid.Column="1" Text="Button"/>
+											</Grid>
+										</Button>
+										<Button Margin="5">
+											<Grid ColumnDefinitions="*,Auto">
+												<TextBlock Classes="Button_Text" Text="Button"/>
+												<Image Classes="Button_DropDownIcon" Grid.Column="1" Source="{DynamicResource Image/Icon.DropDown.Down}"/>
+											</Grid>
+										</Button>
+										<Button IsEnabled="False" Margin="5">
+											<Grid ColumnDefinitions="*,Auto">
+												<TextBlock Classes="Button_Text" Text="Button"/>
+												<Image Classes="Button_DropDownIcon" Grid.Column="1" Source="{DynamicResource Image/Icon.DropDown.Down}"/>
+											</Grid>
+										</Button>
+										<ToggleButton Content="ToggleButton" Margin="5"/>
+										<ToggleButton Content="ToggleButton" IsEnabled="False" Margin="5"/>
+										<ToggleButton Content="ToggleButton" IsChecked="True" IsEnabled="False" Margin="5"/>
+										<RepeatButton Content="RepeatButton" Margin="5"/>
+										<RepeatButton Content="RepeatButton" IsEnabled="False" Margin="5"/>
+										<appControls:SplitButton Content="SplitButton" Margin="5">
+											<appControls:SplitButton.DropDownMenu>
+												<ContextMenu>
+													<MenuItem Header="Item 1"/>
+													<MenuItem Header="Item 2"/>
+													<Separator/>
+													<MenuItem Header="Item 3"/>
+												</ContextMenu>
+											</appControls:SplitButton.DropDownMenu>
+										</appControls:SplitButton>
+										<appControls:SplitButton Content="SplitButton" IsEnabled="False" Margin="5"/>
+										<appControls:ToggleSplitButton Content="ToggleSplitButton" Margin="5">
+											<appControls:ToggleSplitButton.DropDownMenu>
+												<ContextMenu>
+													<MenuItem Header="Item 1"/>
+													<MenuItem Header="Item 2"/>
+													<Separator/>
+													<MenuItem Header="Item 3"/>
+												</ContextMenu>
+											</appControls:ToggleSplitButton.DropDownMenu>
+										</appControls:ToggleSplitButton>
+										<appControls:ToggleSplitButton Content="ToggleSplitButton" IsEnabled="False" Margin="5"/>
+										<appControls:ToggleSplitButton Content="ToggleSplitButton" IsChecked="True" IsEnabled="False" Margin="5"/>
+										<appControls:ToggleSplitButton Content="ToggleSplitButton" IsChecked="True" Margin="5"/>
+									</WrapPanel>
+
+									<WrapPanel Orientation="Horizontal">
+										<ToggleSwitch Margin="5"/>
+										<ToggleSwitch IsEnabled="False" Margin="5"/>
+										<ToggleSwitch IsChecked="True" IsEnabled="False" Margin="5"/>
+									</WrapPanel>
+
+									<WrapPanel Orientation="Horizontal">
+										<CheckBox Content="CheckBox" Margin="5"/>
+										<CheckBox Content="Disabled" IsEnabled="False" Margin="5"/>
+										<CheckBox Content="Disabled" IsChecked="True" IsEnabled="False" Margin="5"/>
+										<CheckBox Content="Indeternimate" IsChecked="{x:Null}" Margin="5"/>
+									</WrapPanel>
+
+									<WrapPanel Orientation="Horizontal">
+										<RadioButton Content="RadioButton" Margin="5"/>
+										<RadioButton Content="Disabled" IsEnabled="False" Margin="5"/>
+										<RadioButton Content="Disabled" IsChecked="True" IsEnabled="False" Margin="5"/>
+										<RadioButton Content="Indeterminate" IsChecked="{x:Null}" Margin="5"/>
+									</WrapPanel>
+
+									<NumericUpDown HorizontalAlignment="Left" Maximum="100" Minimum="0" Margin="5" Value="50" Width="150"/>
+
+									<!-- Test actions -->
+									<WrapPanel Orientation="Horizontal">
+										<Button Command="{Binding $parent[Window].ShowAppInfoDialog}" Content="App Info" Margin="5"/>
+										<Button Command="{Binding $parent[Window].ShowAppUpdateDialog}" Content="App Update" Margin="5"/>
+										<Button Command="{Binding $parent[Window].ShowMessageDialog}" Content="MessageDialog" Margin="5"/>
+										<Button Command="{Binding $parent[Window].ShowTextInputDialog}" Content="TextInputDialog" Margin="5"/>
+										<Button Command="{Binding $parent[Window].ShowAppDataImportDirSelectionDialog}" Content="Select dir to import app data" Margin="5"/>
+										<Button Command="{Binding $parent[Window].ShowNotification}" Content="Show Notification" Margin="5"/>
+										<Button Command="{Binding $parent[Window].ShowExternalDependenciesDialog}" Content="External Dependencies" Margin="5"/>
+										<Button Command="{Binding $parent[Window].ShowTestDialog}" Content="Test Dialog" Margin="5"/>
+										<Button Command="{Binding $parent[Window].ShowTestWizardDialog}" Content="Test Wizard Dialog" Margin="5"/>
+										<Button Command="{Binding $parent[Window].FindCommandPath}" Content="Find command path" Margin="5"/>
+										<Button Command="{Binding $parent[Window].UpdateTaskbarIconProgressState}" Content="Update Taskbar icon progress" Margin="5"/>
+										<Button Command="{Binding $parent[Window].Application.ShowMainWindowAsync}" Content="Open New Window" Margin="5"/>
+										<Button Command="{Binding $parent[Window].RestartApp}" Content="Restart App" Margin="5"/>
+										<Button Command="{Binding $parent[Window].EditConfiguration}" Content="Edit Configuration" Margin="5"/>
+										<Button Command="{Binding $parent[Window].Application.ShowSelfTestingWindow}" Content="Self Testing" Margin="5"/>
+										<Button Command="{Binding $parent[Window].Shutdown}" Content="Shutdown" Margin="5"/>
+									</WrapPanel>
+
+									<abControls:LinkTextBlock HorizontalAlignment="Left" IsEnabled="False" Margin="5" Text="Google" Uri="http://www.google.com/"/>
+									<abControls:LinkTextBlock Command="{Binding $parent[Window].SwitchTheme}" HorizontalAlignment="Left" Margin="5" Text="Switch theme"/>
+									<abControls:LinkTextBlock Command="{Binding $parent[Window].SwitchAppCulture}" HorizontalAlignment="Left" Margin="5" Text="Switch application culture"/>
+
+									<abControls:DateTimeTextBox Name="dateTimeTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
+									<TextBlock Margin="5,0,0,5" Text="{Binding #dateTimeTextBox.Value, StringFormat={}Value: {0}}"/>
+
+									<abControls:IntegerTextBox Name="integerTextBox2" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200" Watermark="Integer"/>
+									<TextBlock Text="{Binding #integerTextBox2.Value, StringFormat={}Value: {0}}" HorizontalAlignment="Left" Margin="5,0,0,5"/>
+
+									<appControls:EnumComboBox EnumType="{x:Type app:ThemeMode}" HorizontalAlignment="Left" Margin="5" Width="200"/>
+
+									<TextBox Width="200" Margin="5" HorizontalAlignment="Left"/>
+									<TextBox IsReadOnly="True" Text="Read-Only" Width="200" Margin="5" HorizontalAlignment="Left"/>
+									<TextBox IsEnabled="False" Text="Disabled" Width="200" Margin="5" HorizontalAlignment="Left"/>
+
+									<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left">
+										<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
+									</Border>
+
+									<Border Width="30" Height="30" Margin="10" HorizontalAlignment="Left" IsEnabled="False">
+										<Image Classes="Icon" Source="{StaticResource Image/Icon.Folder}"/>
+									</Border>
+
+									<appControls:ListBox Name="listBox1" DoubleClickOnItem="OnListBoxDoubleClickOnItem" HorizontalAlignment="Left" Width="150" Margin="5" SelectionMode="Multiple">
+										<appControls:ListBox.ItemsSource>
+											<avCollections:AvaloniaList x:TypeArguments="sys:Object">
+												<appControls:SyntaxHighlightingTextBlock DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="[0-9]abc(123)"/>
+												<Grid ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch">
+													<TextBlock Text="Item 1" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+													<appControls:Image Classes="Icon" Grid.Column="1" Height="14" VerticalAlignment="Center" Width="14">
+														<DrawingImage>
+															<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Star}"/>
+														</DrawingImage>
+													</appControls:Image>
+												</Grid>
+												<sys:String>Item 2 Item 2 Item 2 Item 2 Item 2</sys:String>
+												<TextBlock IsEnabled="False">Item 3</TextBlock>
+												<sys:String>Item 4 Item 4 Item 4 Item 4 Item 4</sys:String>
+											</avCollections:AvaloniaList>
+										</appControls:ListBox.ItemsSource>
+									</appControls:ListBox>
+
+									<appControls:ListBox HorizontalAlignment="Left" ItemsSource="{Binding $parent[Window].StringItems}" Width="150" Margin="5" SelectionMode="Multiple">
+										<ListBox.ItemTemplate>
+											<DataTemplate>
+												<appControls:SyntaxHighlightingTextBlock DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="{Binding}"/>
+											</DataTemplate>
+										</ListBox.ItemTemplate>
+									</appControls:ListBox>
+
+									<ComboBox HorizontalAlignment="Left" Width="200" Margin="5">
+										<ComboBoxItem HorizontalAlignment="Stretch">
+											<Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Left" VerticalAlignment="Center">
+												<appControls:Image Classes="ComboBoxItem_Icon">
+													<DrawingImage>
+														<GeometryDrawing Brush="{Binding $parent[ComboBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.OK}"/>
+													</DrawingImage>
+												</appControls:Image>
+												<TextBlock Classes="ComboBoxItem_TextBlock" Grid.Column="1" Text="Item"/>
+											</Grid>
+										</ComboBoxItem>
+										<ComboBoxItem>2</ComboBoxItem>
+										<ComboBoxItem>3</ComboBoxItem>
+										<ComboBoxItem>4</ComboBoxItem>
+										<ComboBoxItem>5</ComboBoxItem>
+										<ComboBoxItem>6</ComboBoxItem>
+										<ComboBoxItem>7</ComboBoxItem>
+										<ComboBoxItem>8</ComboBoxItem>
+										<ComboBoxItem>9</ComboBoxItem>
+										<ComboBoxItem HorizontalAlignment="Stretch">
+											<Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Left" VerticalAlignment="Center">
+												<appControls:Image Classes="ComboBoxItem_Icon">
+													<DrawingImage>
+														<GeometryDrawing Brush="{Binding $parent[ComboBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.OK}"/>
+													</DrawingImage>
+												</appControls:Image>
+												<TextBlock Classes="ComboBoxItem_TextBlock" Grid.Column="1" Text="10 looooooooooooooooooooog content"/>
+											</Grid>
+										</ComboBoxItem>
+										<ComboBoxItem>11</ComboBoxItem>
+										<ComboBoxItem>12</ComboBoxItem>
+										<ComboBoxItem>13</ComboBoxItem>
+										<ComboBoxItem>14</ComboBoxItem>
+										<ComboBoxItem>15</ComboBoxItem>
+										<ComboBoxItem>16</ComboBoxItem>
+										<ComboBoxItem>17</ComboBoxItem>
+										<ComboBoxItem>18</ComboBoxItem>
+										<ComboBoxItem>19</ComboBoxItem>
+										<ComboBoxItem>20</ComboBoxItem>
+									</ComboBox>
+
+									<abControls:TimeSpanTextBox Name="timeSpanTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
+									<TextBlock Margin="5,0,0,5" Text="{Binding #timeSpanTextBox.Value, StringFormat={}Time span: {0}}"/>
+
+									<abControls:IPAddressTextBox Name="ipAddressTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
+									<TextBlock Margin="5,0,0,5" Text="{Binding #ipAddressTextBox.Object, StringFormat={}IPAddress: {0}}"/>
+
+									<abControls:UriTextBox Name="uriTextBox" HorizontalAlignment="Left" Margin="5" Width="200"/>
+
+									<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" Height="50"/>
+
+								</StackPanel>
+							</ScrollViewer>
+						</appControls:BackdropTarget>
+						<Border ClipToBounds="True" CornerRadius="10" HorizontalAlignment="Stretch" Margin="10" VerticalAlignment="Bottom">
+							<Panel>
+								<Border Background="{DynamicResource Brush/Toolbar.Background}" BorderBrush="{DynamicResource Brush/Toolbar.Border}" BorderThickness="1" CornerRadius="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+								<Border ClipToBounds="True" CornerRadius="9" Margin="1">
+									<appControls:Backdrop Opacity="{Binding #window.DefaultBackdropStrength}" Target="{Binding ElementName=backdropTarget}" Type="LensBlur"/>
+								</Border>
+								<StackPanel Orientation="Horizontal">
+									<Button Content="Button" Margin="10" VerticalAlignment="Center"/>
+									<Slider SmallChange="0.1" Minimum="0" Maximum="1" Value="{Binding #window.DefaultBackdropStrength, Mode=TwoWay}" Width="100"/>
+								</StackPanel>
+							</Panel>
+						</Border>
+					</Panel>
 
 				</appControls:TabItem>
 
