@@ -45,10 +45,12 @@ public class Backdrop : Decorator
 
     // Fields.
     readonly BackdropLayer backdropLayer;
-    double defaultOpacity = SettingKeys.DefaultBackdropStrength.DefaultValue;
+    ISettings? configuration;
+    double defaultOpacity = SettingKeys.DefaultBackdropEffectStrength.DefaultValue;
     IDisposable? defaultStrengthToken;
     bool isAttachedToVisualTree;
     bool isBackdropActive;
+    bool isBackdropEffectEnabled = ConfigurationKeys.EnableBackdropEffect.DefaultValue;
     BackdropTarget? registeredTarget;
     ISettings? settings;
 
@@ -144,14 +146,22 @@ public class Backdrop : Decorator
         // start applying the default backdrop strength from the application setting
         if (IAppSuiteApplication.CurrentOrNull is { } app)
         {
+            this.configuration = app.Configuration;
+            this.configuration.SettingChanged += this.OnConfigChanged;
             this.settings = app.Settings;
             this.settings.SettingChanged += this.OnSettingChanged;
-            var defaultOpacity = this.settings.GetValueOrDefault(SettingKeys.DefaultBackdropStrength);
+            this.isBackdropEffectEnabled = this.configuration.GetValueOrDefault(ConfigurationKeys.EnableBackdropEffect);
+            var defaultOpacity = this.settings.GetValueOrDefault(SettingKeys.DefaultBackdropEffectStrength);
             this.SetAndRaise(DefaultOpacityProperty, ref this.defaultOpacity, double.IsFinite(defaultOpacity) 
                 ? Math.Clamp(defaultOpacity, 0, 1) 
-                : SettingKeys.DefaultBackdropStrength.DefaultValue);
+                : SettingKeys.DefaultBackdropEffectStrength.DefaultValue);
             this.ApplyDefaultOpacity();
         }
+        else
+            this.isBackdropEffectEnabled = ConfigurationKeys.EnableBackdropEffect.DefaultValue;
+        
+        // update state
+        this.UpdateIsBackdropActive();
     }
 
 
@@ -159,6 +169,11 @@ public class Backdrop : Decorator
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         // stop applying the default backdrop strength
+        if (this.configuration is not null)
+        {
+            this.configuration.SettingChanged -= this.OnConfigChanged;
+            this.configuration = null;
+        }
         if (this.settings is not null)
         {
             this.settings.SettingChanged -= this.OnSettingChanged;
@@ -191,6 +206,28 @@ public class Backdrop : Decorator
             this.UpdateIsBackdropActive();
         }
     }
+    
+    
+    // Called when an application config is changed.
+    void OnConfigChanged(object? sender, SettingChangedEventArgs e)
+    {
+        if (this.CheckAccess())
+            this.OnConfigChanged(e);
+        else
+            Dispatcher.UIThread.Post(() => this.OnConfigChanged(e));
+    }
+    
+    
+    // Called when an application config is changed.
+    void OnConfigChanged(SettingChangedEventArgs e)
+    {
+        if (e.Key == ConfigurationKeys.EnableBackdropEffect)
+        {
+            this.isBackdropEffectEnabled = (bool)e.Value;
+            this.UpdateIsBackdropActive();
+            this.backdropLayer.InvalidateVisual();
+        }
+    }
 
 
     // Called when an application setting is changed.
@@ -206,12 +243,12 @@ public class Backdrop : Decorator
     // Called when an application setting is changed.
     void OnSettingChanged(SettingChangedEventArgs e)
     {
-        if (e.Key == SettingKeys.DefaultBackdropStrength && this.settings is not null)
+        if (e.Key == SettingKeys.DefaultBackdropEffectStrength && this.settings is not null)
         {
             var defaultOpacity = (double)e.Value;
             this.SetAndRaise(DefaultOpacityProperty, ref this.defaultOpacity, double.IsFinite(defaultOpacity) 
                 ? Math.Clamp(defaultOpacity, 0, 1) 
-                : SettingKeys.DefaultBackdropStrength.DefaultValue);
+                : SettingKeys.DefaultBackdropEffectStrength.DefaultValue);
         }
     }
 
@@ -221,7 +258,7 @@ public class Backdrop : Decorator
     {
         // skip if there is nothing to draw, or the GPU pipeline is not used (snapshot + blur is only worthwhile on the GPU)
         var target = this.registeredTarget;
-        if (target is null || this.Type == BackdropType.None || !IsSupported)
+        if (target is null || this.Type == BackdropType.None || !IsSupported || !this.isBackdropEffectEnabled)
             return;
 
         // extend the region on all sides so the blur effect has real content to sample at the edges, otherwise the blur weakens towards the edges (the layer does not clip to bounds, so the extra drawing is included in the effect)
@@ -269,7 +306,7 @@ public class Backdrop : Decorator
 
     // Update IsBackdropActive according to the current target, type and rendering pipeline.
     void UpdateIsBackdropActive() =>
-        this.IsBackdropActive = this.Target is not null && this.Type != BackdropType.None && IsSupported;
+        this.IsBackdropActive = this.Target is not null && this.Type != BackdropType.None && IsSupported && this.isBackdropEffectEnabled;
 
 
     // Register the backdrop layer to or unregister it from the target according to the current attachment state and Target property.

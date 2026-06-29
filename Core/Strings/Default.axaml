@@ -88,7 +88,7 @@
 	<sys:String x:Key="String/ApplicationOptions.Culture">Language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">User Interface Scale Factor</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR tool is not installed yet.</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.DefaultBackdropStrength">Backdrop Effect</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DefaultBackdropEffectStrength">Backdrop Effect</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">Default Language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle">Disable ANGLE Rendering</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle.Description">Prevent rendering issues with certain graphics cards, but may affect some visual effects.</sys:String>

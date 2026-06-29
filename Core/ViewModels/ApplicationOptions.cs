@@ -26,13 +26,13 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// </summary>
     public static readonly IValueConverter ApplicationCultureConverter = new Converters.EnumConverter(IAppSuiteApplication.CurrentOrNull, typeof(ApplicationCulture));
     /// <summary>
-    /// Maximum value allowed for <see cref="DefaultBackdropStrength"/>.
+    /// Maximum value allowed for <see cref="DefaultBackdropEffectStrength"/>.
     /// </summary>
-    public const double MaxDefaultBackdropStrength = 0.75;
+    public const double MaxDefaultBackdropEffectStrength = 0.75;
     /// <summary>
-    /// Minimum value allowed for <see cref="DefaultBackdropStrength"/>.
+    /// Minimum value allowed for <see cref="DefaultBackdropEffectStrength"/>.
     /// </summary>
-    public const double MinDefaultBackdropStrength = 0.25;
+    public const double MinDefaultBackdropEffectStrength = 0.25;
     /// <summary>
     /// <see cref="IValueConverter"/> to convert from <see cref="ThemeMode"/> to <see cref="string"/>.
     /// </summary>
@@ -52,6 +52,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// </summary>
     public ApplicationOptions() : base(IAppSuiteApplication.Current)
     {
+        this.Configuration = this.Application.Configuration;
         this.HasMainWindows = this.Application.MainWindows.IsNotEmpty();
         this.IsCustomScreenScaleFactorSupported = double.IsFinite(this.Application.CustomScreenScaleFactor);
         this.IsCustomScreenScaleFactorAdjusted = this.IsCustomScreenScaleFactorSupported
@@ -71,6 +72,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
             this.IsDisableAngleChanged = InitDisableAngle != initSettings.GetValueOrDefault(InitSettingKeys.DisableAngle);
         });
         this.IsChineseVariantChanged = this.Application.ChineseVariant != this.Application.LaunchChineseVariant;
+        this.Configuration.SettingChanged += this.OnConfigurationChanged;
         ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged += this.OnMainWindowsChanged;
         this.Application.ProductManager.Let(it =>
         {
@@ -167,6 +169,12 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
         this.IsCheckingXRandR = false;
         this.OnPropertyChanged(nameof(IsCheckingXRandR));
     }
+    
+    
+    /// <summary>
+    /// Get application configuration.
+    /// </summary>
+    protected ISettings Configuration { get; }
 
 
     /// <summary>
@@ -219,20 +227,20 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
 
 
     /// <summary>
-    /// Get or set default strength of backdrop.
+    /// Get or set default strength of backdrop effect.
     /// </summary>
-    public double DefaultBackdropStrength
+    public double DefaultBackdropEffectStrength
     {
         get
         {
-            var value = this.Settings.GetValueOrDefault(SettingKeys.DefaultBackdropStrength);
+            var value = this.Settings.GetValueOrDefault(SettingKeys.DefaultBackdropEffectStrength);
             return double.IsFinite(value)
-                ? Math.Clamp(value, MinDefaultBackdropStrength, MaxDefaultBackdropStrength)
-                : SettingKeys.DefaultBackdropStrength.DefaultValue;
+                ? Math.Clamp(value, MinDefaultBackdropEffectStrength, MaxDefaultBackdropEffectStrength)
+                : SettingKeys.DefaultBackdropEffectStrength.DefaultValue;
         }
-        set => this.Settings.SetValue(SettingKeys.DefaultBackdropStrength, double.IsFinite(value)
-            ? Math.Clamp(value, MinDefaultBackdropStrength, MaxDefaultBackdropStrength)
-            : SettingKeys.DefaultBackdropStrength.DefaultValue);
+        set => this.Settings.SetValue(SettingKeys.DefaultBackdropEffectStrength, double.IsFinite(value)
+            ? Math.Clamp(value, MinDefaultBackdropEffectStrength, MaxDefaultBackdropEffectStrength)
+            : SettingKeys.DefaultBackdropEffectStrength.DefaultValue);
     }
 
 
@@ -259,6 +267,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// <inheritdoc/>
     protected override void Dispose(bool disposing)
     {
+        this.Configuration.SettingChanged -= this.OnConfigurationChanged;
         (this.Application as AppSuiteApplication)?.InitSettings.Let(it => it.SettingChanged -= this.OnInitSettingsChanged);
         ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged -= this.OnMainWindowsChanged;
         this.Application.ProductManager.Let(it =>
@@ -319,9 +328,9 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
 
 
     /// <summary>
-    /// Check whether the backdrop is supported by the current rendering pipeline or not.
+    /// Check whether the backdrop effect is supported by the current rendering pipeline and configuration or not.
     /// </summary>
-    public bool IsBackdropSupported => Backdrop.IsSupported;
+    public bool IsBackdropEffectSupported => Backdrop.IsSupported && this.Configuration.GetValueOrDefault(ConfigurationKeys.EnableBackdropEffect);
 
 
     /// <summary>
@@ -475,6 +484,27 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     }
     
     
+    // Called when a configuration has been changed.
+    void OnConfigurationChanged(object? sender, SettingChangedEventArgs e)
+    {
+        if (this.CheckAccess())
+            this.OnConfigurationChanged(e);
+        else
+            this.SynchronizationContext.Post(_ => this.OnConfigurationChanged(e), null);
+    }
+
+
+    /// <summary>
+    /// Called when a configuration has been changed.
+    /// </summary>
+    /// <param name="e">Event data.</param>
+    protected virtual void OnConfigurationChanged(SettingChangedEventArgs e)
+    {
+        if (e.Key == ConfigurationKeys.EnableBackdropEffect)
+            this.OnPropertyChanged(nameof(IsBackdropEffectSupported));
+    }
+    
+    
     // Called when initial settings changed.
     void OnInitSettingsChanged(object? sender, SettingChangedEventArgs e)
     {
@@ -542,8 +572,8 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
             this.OnPropertyChanged(nameof(ApplySystemTextScaleFactor));
         else if (key == SettingKeys.Culture)
             this.OnPropertyChanged(nameof(Culture));
-        else if (key == SettingKeys.DefaultBackdropStrength)
-            this.OnPropertyChanged(nameof(DefaultBackdropStrength));
+        else if (key == SettingKeys.DefaultBackdropEffectStrength)
+            this.OnPropertyChanged(nameof(DefaultBackdropEffectStrength));
         else if (key == SettingKeys.DefaultScriptLanguage)
             this.OnPropertyChanged(nameof(DefaultScriptLanguage));
         else if (key == SettingKeys.EnableLigatureInScript)

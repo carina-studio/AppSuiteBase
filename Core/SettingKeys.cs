@@ -29,9 +29,9 @@ public sealed class SettingKeys
 
 
     /// <summary>
-    /// Default strength (0.0~1.0) of backdrop.
+    /// Default strength (0.0~1.0) of backdrop effect.
     /// </summary>
-    public static readonly SettingKey<double> DefaultBackdropStrength = new(nameof(DefaultBackdropStrength), 0.5);
+    public static readonly SettingKey<double> DefaultBackdropEffectStrength = new(nameof(DefaultBackdropEffectStrength), 0.5);
 
 
     /// <summary>

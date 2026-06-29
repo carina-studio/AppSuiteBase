@@ -83,7 +83,7 @@ namespace CarinaStudio.AppSuite.Tests
 
 
         readonly MutableObservableBoolean canShowAppInfo = new(true);
-        double defaultBackdropStrength = SettingKeys.DefaultBackdropStrength.DefaultValue;
+        double defaultBackdropStrength = SettingKeys.DefaultBackdropEffectStrength.DefaultValue;
         readonly IDisposable hfProcessInfoUpdateToken;
         readonly IntegerTextBox integerTextBox;
         readonly IntegerTextBox integerTextBox2;
@@ -131,7 +131,7 @@ namespace CarinaStudio.AppSuite.Tests
             this.ShowAppInfoDialogCommand = new Command(() => this.ShowAppInfoDialog(), this.canShowAppInfo);
             this.ShowTutorialCommand = new Command<Visual>(this.ShowTutorial);
 
-            this.defaultBackdropStrength = this.Settings.GetValueOrDefault(SettingKeys.DefaultBackdropStrength);
+            this.defaultBackdropStrength = this.Settings.GetValueOrDefault(SettingKeys.DefaultBackdropEffectStrength);
             this.hfProcessInfoUpdateToken = this.Application.ProcessInfo.RequestHighFrequencyUpdate();
 
             var iconResources = new ResourceInclude(new Uri("avares://CarinaStudio.AppSuite.Core")).Let(it =>
@@ -328,7 +328,7 @@ namespace CarinaStudio.AppSuite.Tests
         public double DefaultBackdropStrength
         {
             get => this.defaultBackdropStrength;
-            set => this.Settings.SetValue(SettingKeys.DefaultBackdropStrength, value);
+            set => this.Settings.SetValue(SettingKeys.DefaultBackdropEffectStrength, value);
         }
 
 
@@ -584,7 +584,7 @@ namespace CarinaStudio.AppSuite.Tests
         protected override void OnSettingChanged(SettingChangedEventArgs e)
         {
             base.OnSettingChanged(e);
-            if (e.Key == SettingKeys.DefaultBackdropStrength)
+            if (e.Key == SettingKeys.DefaultBackdropEffectStrength)
                 this.SetAndRaise(DefaultBackdropStrengthProperty, ref this.defaultBackdropStrength, (double)e.Value);
         }
 

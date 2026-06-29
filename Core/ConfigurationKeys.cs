@@ -28,6 +28,10 @@ public abstract class ConfigurationKeys
     /// </summary>
     public static readonly SettingKey<bool> EnableAvaloniaVerboseLogging = new(nameof(EnableAvaloniaVerboseLogging), false);
     /// <summary>
+    /// Whether backdrop related effect is enabled or not.
+    /// </summary>
+    public static readonly SettingKey<bool> EnableBackdropEffect = new(nameof(EnableBackdropEffect), true);
+    /// <summary>
     /// Whether retrieved application update info should be always accepted or not.
     /// </summary>
     public static readonly SettingKey<bool> ForceAcceptingAppUpdateInfo = new(nameof(ForceAcceptingAppUpdateInfo), false);
