@@ -973,7 +973,7 @@
 							<Panel>
 								<Border Background="{DynamicResource Brush/Toolbar.Background}" BorderBrush="{DynamicResource Brush/Toolbar.Border}" BorderThickness="1" CornerRadius="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 								<Border ClipToBounds="True" CornerRadius="9" Margin="1">
-									<appControls:Backdrop Opacity="{Binding #window.DefaultBackdropStrength}" Target="{Binding ElementName=backdropTarget}" Type="LensBlur"/>
+									<appControls:Backdrop BackdropEffect="LensBlur" Target="{Binding ElementName=backdropTarget}"/>
 								</Border>
 								<StackPanel Orientation="Horizontal">
 									<Button Content="Button" Margin="10" VerticalAlignment="Center"/>

@@ -74,7 +74,7 @@ Shared build configuration lives in `Directory.Build.props`: assembly version, n
 - Namespace matches the folder path: `CarinaStudio.AppSuite.<Subfolder>`.
 - Subfolder/namespace names use **noun-first** ordering (e.g. `UsageData`, not `DataUsage`).
 - Companion types for an interface (`Extensions`, enums) go in separate files in the same folder.
-- Inner types within a class/file are ordered **alphabetically** by name.
+- Inner types are placed **near the top** of the containing type — after the public Avalonia property/event/converter registration fields (if any) and **before** the `// Constants.` data-member group — and ordered **alphabetically** by name among themselves.
 - Data members are grouped near the top of the type in this order: (1) constants under a `// Constants.` header, (2) static fields under a `// Static Fields.` header, (3) instance/private fields under a `// Fields.` header. Each group is ordered **alphabetically** by name (case-insensitive). Headers for empty groups are omitted.
 - Properties and methods follow the data members, ordered **alphabetically** by name and interleaved together (not grouped by kind).
 - Enum values are ordered **alphabetically**. Exception: struct fields with `[StructLayout(LayoutKind.Sequential)]` must preserve their memory-layout order and cannot be reordered.

@@ -26,14 +26,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// </summary>
     public static readonly IValueConverter ApplicationCultureConverter = new Converters.EnumConverter(IAppSuiteApplication.CurrentOrNull, typeof(ApplicationCulture));
     /// <summary>
-    /// Maximum value allowed for <see cref="DefaultBackdropEffectStrength"/>.
-    /// </summary>
-    public const double MaxDefaultBackdropEffectStrength = 0.75;
-    /// <summary>
-    /// Minimum value allowed for <see cref="DefaultBackdropEffectStrength"/>.
-    /// </summary>
-    public const double MinDefaultBackdropEffectStrength = 0.25;
-    /// <summary>
     /// <see cref="IValueConverter"/> to convert from <see cref="ThemeMode"/> to <see cref="string"/>.
     /// </summary>
     public static readonly IValueConverter ThemeModeConverter = new Converters.EnumConverter(IAppSuiteApplication.CurrentOrNull, typeof(ThemeMode));
@@ -235,11 +227,11 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
         {
             var value = this.Settings.GetValueOrDefault(SettingKeys.DefaultBackdropEffectStrength);
             return double.IsFinite(value)
-                ? Math.Clamp(value, MinDefaultBackdropEffectStrength, MaxDefaultBackdropEffectStrength)
+                ? Math.Clamp(value, 0, 1)
                 : SettingKeys.DefaultBackdropEffectStrength.DefaultValue;
         }
         set => this.Settings.SetValue(SettingKeys.DefaultBackdropEffectStrength, double.IsFinite(value)
-            ? Math.Clamp(value, MinDefaultBackdropEffectStrength, MaxDefaultBackdropEffectStrength)
+            ? Math.Clamp(value, 0, 1)
             : SettingKeys.DefaultBackdropEffectStrength.DefaultValue);
     }
 
