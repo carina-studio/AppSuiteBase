@@ -155,12 +155,6 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
     /// <inheritdoc/>
     public virtual CultureInfo CultureInfo { get; } = CultureInfo.CurrentCulture;
-    
-
-    /// <summary>
-    /// Get instance for current process.
-    /// </summary>
-    public static MockAppSuiteApplication Current => current ?? throw new InvalidOperationException("Application instance is not ready.");
 
 
     /// <inheritdoc/>
@@ -211,7 +205,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
     /// Initialize default <see cref="MockAppSuiteApplication"/> instance for current process.
     /// </summary>
     /// <returns><see cref="MockAppSuiteApplication"/> instance.</returns>
-    public static MockAppSuiteApplication Initialize() => Initialize(() => new MockAppSuiteApplication());
+    internal static MockAppSuiteApplication Initialize() => Initialize(() => new MockAppSuiteApplication());
 
 
     /// <summary>
@@ -221,17 +215,28 @@ public class MockAppSuiteApplication : IAppSuiteApplication
     /// <returns><see cref="MockAppSuiteApplication"/> instance.</returns>
     public static MockAppSuiteApplication Initialize(Func<MockAppSuiteApplication> creator)
     {
-        if (current != null)
+        if (current is not null)
+        {
+            if (IAppSuiteApplication.MockInstance is not null && !ReferenceEquals(IAppSuiteApplication.MockInstance, current))
+                throw new InvalidOperationException("There is already a mock instance registered into IAppSuiteApplication.");
             return current;
+        }
         using (var _ = initSyncLock.EnterScope())
         {
-            if (current != null)
+            if (current is not null)
+            {
+                if (IAppSuiteApplication.MockInstance is not null && !ReferenceEquals(IAppSuiteApplication.MockInstance, current))
+                    throw new InvalidOperationException("There is already a mock instance registered into IAppSuiteApplication.");
                 return current;
+            }
+            if (IAppSuiteApplication.MockInstance is not null)
+                throw new InvalidOperationException("There is already a mock instance registered into IAppSuiteApplication.");
             synchronizationContext = new SingleThreadSynchronizationContext();
             synchronizationContext.Send(() =>
             {
                 current = creator();
             });
+            IAppSuiteApplication.MockInstance = current;
         }
         return current.AsNonNull();
     }
@@ -396,7 +401,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
-    public virtual Version? PrivacyPolicyVersion { get; } = null;
+    public virtual Version? PrivacyPolicyVersion => null;
 
 
     /// <inheritdoc/>

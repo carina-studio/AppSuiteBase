@@ -168,13 +168,29 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// <summary>
     /// Get instance of <see cref="IAppSuiteApplication"/> of current process.
     /// </summary>
-    public static new IAppSuiteApplication Current => (IAppSuiteApplication)Avalonia.Application.Current.AsNonNull();
+    public static new IAppSuiteApplication Current
+    {
+        get
+        {
+            if (Avalonia.Application.Current is { } avaloniaApp)
+                return (IAppSuiteApplication)avaloniaApp;
+            return MockInstance ?? throw new InvalidOperationException("Application instance is not ready.");
+        }
+    }
 
 
     /// <summary>
     /// Get instance of <see cref="IAppSuiteApplication"/> of current process, or Null if instance doesn't exist.
     /// </summary>
-    public static new IAppSuiteApplication? CurrentOrNull => Avalonia.Application.Current as IAppSuiteApplication;
+    public static new IAppSuiteApplication? CurrentOrNull
+    {
+        get
+        {
+            if (Avalonia.Application.Current is { } avaloniaApp)
+                return avaloniaApp as IAppSuiteApplication;
+            return MockInstance;
+        }
+    }
 
 
     /// <summary>
@@ -399,6 +415,12 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     /// Get list of main windows.
     /// </summary>
     IList<Controls.MainWindow> MainWindows { get; }
+    
+    
+    /// <summary>
+    /// Get or set mock instance of <see cref="IAppSuiteApplication"/>.
+    /// </summary>
+    internal static IAppSuiteApplication? MockInstance { get; set; }
 
 
     /// <summary>
