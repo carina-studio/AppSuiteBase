@@ -1503,6 +1503,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         // reset pointer over state of window when showing modal dialog
         // AsNonNull() is intentional: a NRE here on Avalonia upgrade is the signal that
         // _pointerOverPreProcessor / ClearPointerOver moved and the workaround needs revisiting.
+        // TODO
+        /*
         var pointerOverPreProcessorField = typeof(TopLevel).GetField("_pointerOverPreProcessor", BindingFlags.Instance | BindingFlags.NonPublic).AsNonNull();
         MethodInfo? clearPointerOverMethod = null;
         CarinaStudio.Controls.Window.HasDialogsProperty.Changed.Subscribe(e =>
@@ -1514,6 +1516,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 clearPointerOverMethod.Invoke(pointerOverPreProcessor, [ ]);
             }
         }, skipOnNextDuringSubscription: true);
+        */
 
         // disable pointer wheel on ComboBox/NumericUpDown
         InputElement.PointerWheelChangedEvent.AddClassHandler(typeof(ComboBox), (s, e) =>
