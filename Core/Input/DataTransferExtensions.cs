@@ -1,6 +1,4 @@
 ﻿using Avalonia.Input;
-using Avalonia.Platform.Storage;
-using CarinaStudio.Collections;
 using System;
 using System.Runtime.InteropServices;
 
@@ -24,17 +22,6 @@ public static class DataTransferExtensions
         public int Key;
         public IntPtr Handle;
     }
-    
-    
-    /// <summary>
-    /// Add value to the <see cref="DataTransfer"/>.
-    /// </summary>
-    /// <param name="dataTransfer"><see cref="DataTransfer"/>.</param>
-    /// <param name="format">Format.</param>
-    /// <param name="value">Value.</param>
-    /// <typeparam name="T">Type of value.</typeparam>
-    public static void Add<T>(this DataTransfer dataTransfer, DataFormat<T> format, T? value) where T : class =>
-        dataTransfer.Add(DataTransferItem.Create(format, value));
 
 
     /// <summary>
@@ -59,42 +46,6 @@ public static class DataTransferExtensions
         }
         else
             dataTransfer.Add(DataTransferItem.Create(format, (byte[]?)null));
-    }
-
-
-    /// <summary>
-    /// Check whether the <see cref="IDataTransfer"/> contains one or more file items or not.
-    /// </summary>
-    /// <param name="dataTransfer"><see cref="IDataTransfer"/>.</param>
-    /// <returns>True if the <see cref="IDataTransfer"/> contains one or more file items.</returns>
-    public static bool HasFiles(this IDataTransfer dataTransfer) => dataTransfer.Contains(DataFormat.File);
-
-
-    /// <summary>
-    /// Try getting local path of files from <see cref="IDataTransfer"/>.
-    /// </summary>
-    /// <param name="dataTransfer"><see cref="IDataTransfer"/>.</param>
-    /// <returns>Array of local path of files.</returns>
-    public static string[]? TryGetLocalFilePaths(this IDataTransfer dataTransfer)
-    {
-        var files = dataTransfer.TryGetFiles();
-        if (files.IsNullOrEmpty())
-            return null;
-        var fileCount = files.Length;
-        var filePaths = GC.AllocateUninitializedArray<string>(files.Length);
-        var filePathCount = 0;
-        for (var i = 0; i < fileCount; ++i)
-        {
-            if (files[i].TryGetLocalPath() is { } filePath && filePath.Length > 0)
-                filePaths[filePathCount++] = filePath;
-        }
-        if (filePathCount == fileCount)
-            return filePaths;
-        if (filePathCount == 0)
-            return null;
-        var subFilePaths = GC.AllocateUninitializedArray<string>(filePathCount);
-        Array.Copy(filePaths, 0, subFilePaths, 0, filePathCount);
-        return subFilePaths;
     }
 
 

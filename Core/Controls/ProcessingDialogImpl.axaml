@@ -12,8 +12,8 @@
 		MinWidth="{StaticResource Double/ProcessingDialog.MinWidth}"
         ShowInTaskbar="False"
 		SizeToContent="WidthAndHeight"
-        SystemDecorations="None"
         TransparencyLevelHint="Transparent"
+        WindowDecorations="None"
         WindowStartupLocation="CenterOwner">
 
 	<Border Background="{DynamicResource Brush/Window.Background}"

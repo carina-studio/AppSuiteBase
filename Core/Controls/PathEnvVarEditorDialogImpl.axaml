@@ -14,7 +14,7 @@
 		MinHeight="{DynamicResource Double/PathEnvVarEditorDialog.MinHeight}"
 		MinWidth="{DynamicResource Double/PathEnvVarEditorDialog.MinWidth}"
 		SizeToContent="Manual"
-        Title="{DynamicResource String/PathEnvVarEditorDialog.Title}"
+        Title="{xaml:StringResource PathEnvVarEditorDialog.Title}"
 		Width="{DynamicResource Double/PathEnvVarEditorDialog.Width}">
 	
 	<DockPanel>
@@ -25,7 +25,7 @@
 				<StackPanel Classes="Dialog_ControlButtonsPanel">
 					<Button controls:DialogElement.ButtonRole="Control"
 					        Command="{Binding #window.AddPath}" 
-					        Content="{DynamicResource String/PathEnvVarEditorDialog.AddPath.WithDialog}"
+					        Content="{xaml:StringResource PathEnvVarEditorDialog.AddPath.WithDialog}"
 					        IsEnabled="{xaml:AndBindings
 					            {Binding !#window.IsRefreshingPaths},
 					            {Binding !#window.IsSavingPaths}
@@ -52,7 +52,7 @@
 		<Grid Classes="Dialog_ContentPanel" RowDefinitions="Auto,*,Auto">
 
 			<!-- System paths -->
-			<TextBlock controls:DialogElement.TextRole="LabelAboveInputControl" Text="{DynamicResource String/PathEnvVarEditorDialog.Paths}"/>
+			<TextBlock controls:DialogElement.TextRole="LabelAboveInputControl" Text="{xaml:StringResource PathEnvVarEditorDialog.Paths}"/>
 			<controls:ListBox Name="pathListBox" Classes="Dialog_ListBox" Grid.Row="1" ItemsSource="{Binding #window.SystemPaths}">
 				<controls:ListBox.ItemsPanel>
 					<ItemsPanelTemplate>
@@ -65,14 +65,14 @@
 							<abControls:TextBlock Classes="ListBoxItem_TextBlock" Text="{Binding}"/>
 							<Border Classes="InPlaceAction_Reserved" Grid.ColumnSpan="2"/>
 							<StackPanel Grid.Column="1" IsVisible="{Binding $parent[ListBoxItem].IsPointerOver}" Orientation="Horizontal">
-								<Button Classes="InPlaceAction_Button" Command="{Binding #window.RemovePathCommand}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{DynamicResource String/Common.Delete}">
+								<Button Classes="InPlaceAction_Button" Command="{Binding #window.RemovePathCommand}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{xaml:StringResource Common.Delete}">
 									<controls:Image Classes="InPlaceAction_Icon">
 										<DrawingImage>
 											<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Delete.Outline}"/>
 										</DrawingImage>
 									</controls:Image>
 								</Button>
-								<Button Classes="InPlaceAction_Button" Command="{Binding #window.EditPathCommand}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{DynamicResource String/Common.Edit}">
+								<Button Classes="InPlaceAction_Button" Command="{Binding #window.EditPathCommand}" CommandParameter="{Binding $parent[ListBoxItem].DataContext}" ToolTip.Tip="{xaml:StringResource Common.Edit}">
 									<controls:Image Classes="InPlaceAction_Icon">
 										<DrawingImage>
 											<GeometryDrawing Brush="{Binding $parent[ListBoxItem].Foreground}" Geometry="{StaticResource Geometry/Icon.Edit.Outline}"/>
@@ -88,7 +88,7 @@
 			<!-- Custom paths -->
 			<StackPanel Grid.Row="2" IsVisible="{Binding #window.CustomPaths.Count}">
 				<Separator controls:DialogElement.SeparatorType="Default"/>
-				<TextBlock controls:DialogElement.TextRole="LabelAboveInputControl" Text="{DynamicResource String/PathEnvVarEditorDialog.CustomPaths}"/>
+				<TextBlock controls:DialogElement.TextRole="LabelAboveInputControl" Text="{xaml:StringResource PathEnvVarEditorDialog.CustomPaths}"/>
 				<ListBox Name="customPathListBox" Classes="Dialog_ListBox" Height="{StaticResource Double/PathEnvVarEditorDialog.CustomPaths.Height}" ItemsSource="{Binding #window.CustomPaths}">
 					<ListBox.ItemsPanel>
 						<ItemsPanelTemplate>

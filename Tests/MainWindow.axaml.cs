@@ -300,12 +300,12 @@ namespace CarinaStudio.AppSuite.Tests
             DragDrop.SetAllowDrop(this, true);
             this.AddHandler(DragDrop.DragEnterEvent, (_, e) =>
             {
-                if (e.DataTransfer.HasFiles())
+                if (e.DataTransfer.HasFiles)
                     e.DragEffects = DragDropEffects.Copy;
             });
             this.AddHandler(DragDrop.DragOverEvent, (_, e) =>
             {
-                if (e.DataTransfer.HasFiles())
+                if (e.DataTransfer.HasFiles)
                     e.DragEffects = DragDropEffects.Copy;
             });
             this.AddHandler(DragDrop.DropEvent, (_, e) =>
@@ -594,7 +594,7 @@ namespace CarinaStudio.AppSuite.Tests
             var dataTransfer = new DataTransfer();
             var itemHandle = GCHandle.Alloc(e.Item, GCHandleType.Weak);
             dataTransfer.Add(TabItemDataFormat, itemHandle);
-            DragDrop.DoDragDropAsync(e.PointerEventArgs, dataTransfer, DragDropEffects.Move)
+            DragDrop.DoDragDropAsync(e.PointerPressedEventArgs, dataTransfer, DragDropEffects.Move)
                 .GetAwaiter().OnCompleted(() =>
                 {
                     itemHandle.Free();

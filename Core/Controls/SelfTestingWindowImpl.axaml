@@ -8,6 +8,7 @@
 		xmlns:testing="using:CarinaStudio.AppSuite.Testing"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.SelfTestingWindowImpl"
+        Name="window"
 		CanResize="True"
 		Classes="Dialog"
 		Height="{StaticResource Double/SelfTestingWindow.Height}"
@@ -23,8 +24,8 @@
 		<!-- Control buttons -->
 		<Border Classes="Dialog_ControlButtonsPanel" DockPanel.Dock="Bottom">
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
-				<Button controls:DialogElement.ButtonRole="Control" Command="{Binding $parent[Window].RunAllTestCases}" Content="{DynamicResource String/SelfTestingWindow.RunAllTestCases}"/>
-				<Button controls:DialogElement.ButtonRole="Control" Command="{Binding $parent[Window].CancelAllTestCases}" Content="{DynamicResource String/SelfTestingWindow.CancelAllTestCases}"/>
+				<Button controls:DialogElement.ButtonRole="Control" Command="{Binding #window.RunAllTestCases}" Content="{DynamicResource String/SelfTestingWindow.RunAllTestCases}"/>
+				<Button controls:DialogElement.ButtonRole="Control" Command="{Binding #window.CancelAllTestCases}" Content="{DynamicResource String/SelfTestingWindow.CancelAllTestCases}"/>
 			</StackPanel>
 		</Border>
 
@@ -41,7 +42,7 @@
 							<Border Classes="InPlaceAction_Reserved"/>
 							<abControls:FormattedTextBlock Arg1="{Binding Name}" Arg2="{Binding SucceededTestCaseCount}" Arg3="{Binding FailedTestCaseCount}" Arg4="{Binding TestCases.Count}" Format="{DynamicResource String/SelfTestingWindow.TestCaseCategoryInfo}"/>
 							<StackPanel Grid.Column="1" IsVisible="{Binding #rootPanel.IsPointerOver}" Orientation="Horizontal">
-								<Button Classes="InPlaceAction_Button" Command="{Binding $parent[Window].RunTestCasesInCategoryCommand}" CommandParameter="{Binding $parent[TreeViewItem]}" ToolTip.Tip="{DynamicResource String/SelfTestingWindow.RunTestCasesInCategory}">
+								<Button Classes="InPlaceAction_Button" Command="{Binding #window.RunTestCasesInCategoryCommand}" CommandParameter="{Binding $parent[TreeViewItem]}" ToolTip.Tip="{DynamicResource String/SelfTestingWindow.RunTestCasesInCategory}">
 									<controls:Image Classes="InPlaceAction_Icon">
 										<DrawingImage>
 											<GeometryDrawing Brush="{Binding $parent[TreeViewItem].Foreground}" Geometry="{StaticResource Geometry/Icon.PlayMedia}"/>
@@ -59,14 +60,14 @@
 							<Border Classes="InPlaceAction_Reserved" Grid.Column="1"/>
 							<TextBlock Classes="TreeViewItem_TextBlock" Grid.Column="1" Text="{Binding Name}"/>
 							<StackPanel Grid.Column="2" IsVisible="{Binding $parent[TreeViewItem].IsPointerOver}" Orientation="Horizontal">
-								<Button Classes="InPlaceAction_Button" Command="{Binding $parent[Window].RunTestCaseCommand}" CommandParameter="{Binding $parent[TreeViewItem]}" IsVisible="{Binding IsRunnable}" ToolTip.Tip="{DynamicResource String/SelfTestingWindow.RunTestCase}">
+								<Button Classes="InPlaceAction_Button" Command="{Binding #window.RunTestCaseCommand}" CommandParameter="{Binding $parent[TreeViewItem]}" IsVisible="{Binding IsRunnable}" ToolTip.Tip="{DynamicResource String/SelfTestingWindow.RunTestCase}">
 									<controls:Image Classes="InPlaceAction_Icon">
 										<DrawingImage>
 											<GeometryDrawing Brush="{Binding $parent[TreeViewItem].Foreground}" Geometry="{StaticResource Geometry/Icon.PlayMedia}"/>
 										</DrawingImage>
 									</controls:Image>
 								</Button>
-								<Button Classes="InPlaceAction_Button" Command="{Binding $parent[Window].CancelTestCaseCommand}" CommandParameter="{Binding $parent[TreeViewItem]}" IsVisible="{Binding IsCancellable}" ToolTip.Tip="{DynamicResource String/SelfTestingWindow.CancelTestCase}">
+								<Button Classes="InPlaceAction_Button" Command="{Binding #window.CancelTestCaseCommand}" CommandParameter="{Binding $parent[TreeViewItem]}" IsVisible="{Binding IsCancellable}" ToolTip.Tip="{DynamicResource String/SelfTestingWindow.CancelTestCase}">
 									<controls:Image Classes="InPlaceAction_Icon">
 										<DrawingImage>
 											<GeometryDrawing Brush="{Binding $parent[TreeViewItem].Foreground}" Geometry="{StaticResource Geometry/Icon.StopMedia}"/>

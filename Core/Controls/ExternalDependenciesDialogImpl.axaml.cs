@@ -157,6 +157,10 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 			}, RoutingStrategies.Tunnel);
 		});
 	}
+	
+	
+	// Whether the dialog can be closed or not.
+	bool CanClose => this.GetValue(CanCloseProperty);
 
 
 #pragma warning disable CA1822

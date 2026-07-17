@@ -24,7 +24,7 @@ public class TimeSpanFormatTextBox : SyntaxHighlightingObjectTextBox<string>
     {
         SyntaxHighlighting.VerifyInitialization();
         this.PseudoClasses.Add(":timeSpanFormatTextBox");
-        this.Bind(WatermarkProperty, this.GetResourceObservable("String/TimeSpanFormatTextBox.Watermark"));
+        this.Bind(PlaceholderTextProperty, this.GetResourceObservable("String/TimeSpanFormatTextBox.Watermark"));
     }
     
     

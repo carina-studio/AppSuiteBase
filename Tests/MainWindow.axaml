@@ -25,17 +25,17 @@
 		<sys:String x:Key="String/MessageDialog.Result">The result is {0}</sys:String>
 		
 		<ContextMenu x:Key="contextMenu" Placement="Bottom">
-			<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Horizontal}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Horizontal}">
+			<MenuItem Command="{Binding #window.LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Horizontal}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Horizontal}">
 				<MenuItem.Icon>
 					<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Horizontal}"/>
 				</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Vertical}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Vertical}">
+			<MenuItem Command="{Binding #window.LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Vertical}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Vertical}">
 				<MenuItem.Icon>
 					<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Vertical}"/>
 				</MenuItem.Icon>
 			</MenuItem>
-			<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Tile}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Tile}">
+			<MenuItem Command="{Binding #window.LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Tile}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Tile}">
 				<MenuItem.Icon>
 					<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Tile}"/>
 				</MenuItem.Icon>
@@ -64,9 +64,10 @@
 	</Window.Resources>
 	
 	<Window.Styles>
-		<Style Selector="CaptionButtons">
-			<Setter Property="MaxHeight" Value="{Binding $parent[Window].ExtendClientAreaTitleBarHeightHint}"/>
-		</Style>
+		<!-- TODO -->
+		<!--Style Selector="CaptionButtons">
+			<Setter Property="MaxHeight" Value="{Binding #window.ExtendClientAreaTitleBarHeightHint}"/>
+		</Style-->
 	</Window.Styles>
 
 	<Window.ExtendClientAreaTitleBarHeightHint>
@@ -139,7 +140,7 @@
 						<Grid ColumnDefinitions="Auto,*,Auto" ToolTip.Tip="This is tooltip">
 							<Image Classes="TabItem_Icon" IsEnabled="{Binding $parent[TabItem].IsSelected}" Source="{DynamicResource Image/Icon.File}"/>
 							<TextBlock Classes="TabItem_TextBlock" Grid.Column="1" Text="Item 1 Item 1 Item 1 Item 1 kkkkkkkkkkkkkkkkk"/>
-							<Button Classes="TabItem_Button" Command="{Binding $parent[Window].Test}" Grid.Column="2">
+							<Button Classes="TabItem_Button" Command="{Binding #window.Test}" Grid.Column="2">
 								<Image Classes="Icon" Source="{StaticResource Image/Icon.Close}"/>
 							</Button>
 						</Grid>
@@ -152,17 +153,17 @@
 
 									<StackPanel.ContextMenu>
 										<ContextMenu>
-											<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Horizontal}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Horizontal}">
+											<MenuItem Command="{Binding #window.LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Horizontal}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Horizontal}">
 												<MenuItem.Icon>
 													<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Horizontal}"/>
 												</MenuItem.Icon>
 											</MenuItem>
-											<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Vertical}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Vertical}">
+											<MenuItem Command="{Binding #window.LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Vertical}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Vertical}">
 												<MenuItem.Icon>
 													<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Vertical}"/>
 												</MenuItem.Icon>
 											</MenuItem>
-											<MenuItem Command="{Binding $parent[Window].LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Tile}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Tile}">
+											<MenuItem Command="{Binding #window.LayoutMainWindowsCommand}" CommandParameter="{x:Static appControls:MultiWindowLayout.Tile}" Header="{DynamicResource String/MainWindow.LayoutMainWindows.Tile}">
 												<MenuItem.Icon>
 													<Image Classes="Icon" Source="{DynamicResource Image/Icon.Layout.Tile}"/>
 												</MenuItem.Icon>
@@ -223,7 +224,7 @@
 													<Grid Background="{x:Static Brushes.Transparent}" ClipToBounds="False" ColumnDefinitions="Auto,*,Auto">
 														<StackPanel ClipToBounds="False" HorizontalAlignment="Stretch" Orientation="Horizontal">
 															
-															<Button appControls:ToolbarElement.Role="Button" Command="{Binding $parent[Window].ShowAppInfoDialogCommand}" ToolTip.Tip="Tool tip">
+															<Button appControls:ToolbarElement.Role="Button" Command="{Binding #window.ShowAppInfoDialogCommand}" ToolTip.Tip="Tool tip">
 																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Panel.Right}"/>
 															</Button>
 															<Button appControls:ToolbarElement.Role="Button" ToolTip.Tip="Tool tip">
@@ -318,7 +319,7 @@
 															</ComboBox>
 															<TextBox appControls:ToolbarElement.Role="Input"  Width="100"/>
 
-															<Button appControls:ToolbarElement.Role="Button" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}">
+															<Button appControls:ToolbarElement.Role="Button" Command="{Binding #window.ShowTutorialCommand}" CommandParameter="{Binding $self}">
 																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Lightbulb}"/>
 															</Button>
 
@@ -332,7 +333,7 @@
 
 														</StackPanel>
 
-														<TextBox Name="toolBarTextBox" appControls:ToolbarElement.Role="Input" Grid.Column="1" Watermark="TextBox with in-place actions">
+														<TextBox Name="toolBarTextBox" appControls:ToolbarElement.Role="Input" Grid.Column="1" PlaceholderText="TextBox with in-place actions">
 															<TextBox.InnerRightContent>
 																<StackPanel Classes="TextBox_InPlaceActions">
 																	<Button Classes="TextBox_InPlaceAction">
@@ -349,10 +350,10 @@
 															<Button appControls:ToolbarElement.Role="Button">
 																<Panel>
 																	<Image appControls:ToolbarElement.Role="Icon" Source="{DynamicResource Image/Icon.More}"/>
-																	<Border appControls:ToolbarElement.Role="Badge" IsVisible="{Binding $parent[Window].Application.UpdateInfo, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}">
+																	<Border appControls:ToolbarElement.Role="Badge" IsVisible="{Binding #window.Application.UpdateInfo, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}">
 																		<Image appControls:ToolbarElement.Role="Badge" Source="{StaticResource Image/Icon.Update.Colored}"/>
 																	</Border>
-																	<Border appControls:ToolbarElement.Role="Badge" IsVisible="{Binding !$parent[Window].Application.UpdateInfo, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}">
+																	<Border appControls:ToolbarElement.Role="Badge" IsVisible="{Binding !#window.Application.UpdateInfo, Converter={x:Static aConverters:StringConverters.IsNotNullOrEmpty}}">
 																		<Image appControls:ToolbarElement.Role="Badge" Source="{StaticResource Image/Icon.NotificationIndicator.Success}"/>
 																	</Border>
 																</Panel>
@@ -366,7 +367,7 @@
 											<Border Classes="Toolbar_Small" BorderBrush="{DynamicResource Brush/Toolbar.Border}" BorderThickness="0,0,0,1">
 												<StackPanel Orientation="Horizontal">
 													
-													<Button appControls:ToolbarElement.Role="SmallButton" Command="{Binding $parent[Window].ShowAppInfoDialogCommand}" ToolTip.Tip="Tool tip">
+													<Button appControls:ToolbarElement.Role="SmallButton" Command="{Binding #window.ShowAppInfoDialogCommand}" ToolTip.Tip="Tool tip">
 														<Image appControls:ToolbarElement.Role="SmallIcon" Source="{StaticResource Image/Icon.Panel.Right}"/>
 													</Button>
 													<Button appControls:ToolbarElement.Role="SmallButton" ToolTip.Tip="Tool tip">
@@ -439,10 +440,10 @@
 										</Border>
 									</StackPanel>
 
-									<Button Name="testButton1" Command="{Binding $parent[Window].Test}" Margin="5" ToolTip.Tip="{DynamicResource String/Common.Copy.WithGesture}">
+									<Button Name="testButton1" Command="{Binding #window.Test}" Margin="5" ToolTip.Tip="{DynamicResource String/Common.Copy.WithGesture}">
 										<TextBlock Background="Red" BaselineOffset="5" Text="ABC abjg 中文 過骨"/>
 									</Button>
-									<Button Command="{Binding $parent[Window].Test2}" Content="Test2" Margin="5"/>
+									<Button Command="{Binding #window.Test2}" Content="Test2" Margin="5"/>
 									
 									<!-- Line height -->
 									<StackPanel Orientation="Horizontal" Margin="5">
@@ -518,7 +519,7 @@
 									
 									<!-- Auto-Sized SyntaxHighlightingTextBlock -->
 									<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
-										<appControls:SyntaxHighlightingTextBlock Name="syntaxHighlightingTextBlock1" DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="AppSuite.+(pattern1|pattern2|pattern3)"/>
+										<appControls:SyntaxHighlightingTextBlock Name="syntaxHighlightingTextBlock1" DefinitionSet="{Binding #window.RegexSyntaxHighlightingDefinitionSet}" Text="AppSuite.+(pattern1|pattern2|pattern3)"/>
 									</Border>
 									
 									<!-- Slider -->
@@ -600,31 +601,30 @@
 									<ScrollBar AllowAutoHide="False" HorizontalAlignment="Left" Margin="5" Orientation="Horizontal" ViewportSize="10" Width="300"/>
 
 									<TextBlock Text="{DynamicResource String/ApplicationOptions.LogOutputTargetPort}" Margin="5,5,5,0"/>
-									<NumericUpDown HorizontalAlignment="Left" Margin="5,0,0,0" Maximum="65535" Minimum="1" Value="{Binding $parent[Window].ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
+									<NumericUpDown HorizontalAlignment="Left" Margin="5,0,0,0" Maximum="65535" Minimum="1" Value="{Binding #window.ApplicationOptions.LogOutputTargetPort, Mode=TwoWay}" Width="150"/>
 
 									<Panel HorizontalAlignment="Left" Margin="5">
 										<Border Background="{DynamicResource Brush/WorkingArea.Panel.Background}" BorderBrush="{DynamicResource Brush/WorkingArea.Panel.Border}" BorderThickness="1" BoxShadow="{DynamicResource BoxShadows/Shadow.Light}" HorizontalAlignment="Left" Padding="5">
 											<StackPanel>
-												<TextBlock Text="{Binding ID, StringFormat={}ID:{0}}" Margin="5,0,0,0"/>
-												<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ProcessId, StringFormat={}PID: {0}}" Margin="5,5,0,0"/>
+												<TextBlock Text="{Binding #window.Application.ProcessInfo.ProcessId, StringFormat={}PID: {0}}" Margin="5,5,0,0"/>
 												<SelectableTextBlock Focusable="True" Text="" Margin="5,5,0,0">
 													<Run Text="CPU: "/>
-													<Run FontWeight="Bold" Foreground="Green" Text="{Binding $parent[Window].Application.ProcessInfo.CpuUsagePercentage, StringFormat={}{0:F2}%}"/>
+													<Run FontWeight="Bold" Foreground="Green" Text="{Binding #window.Application.ProcessInfo.CpuUsagePercentage, StringFormat={}{0:F2}%}"/>
 												</SelectableTextBlock>
-												<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Memory Usage: {0}}" Margin="5,5,0,0"/>
-												<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapSize, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Size: {0}}" Margin="5,5,0,0"/>
-												<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Usage: {0}}" Margin="5,5,0,0"/>
-												<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.FinalizationPendingCount, StringFormat={}Finalization Pending Count: {0}}" Margin="5,5,0,0"/>
-												<TextBlock Text="{Binding $parent[Window].Application.ProcessInfo.GCFrequency, StringFormat={}GC Frequency: {0:F2}}" Margin="5,5,0,0"/>
-												<TextBlock Text="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5,5,0,0"/>
-												<Slider IsEnabled="{Binding $parent[Window].ApplicationOptions.IsCustomScreenScaleFactorSupported, Mode=OneTime}" Margin="5,5,0,0" Maximum="{Binding $parent[Window].ApplicationOptions.MaxCustomScreenScaleFactor, Mode=OneTime}" Minimum="1" TickFrequency="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactorGranularity, Mode=OneTime}" TickPlacement="Outside" Value="{Binding $parent[Window].ApplicationOptions.CustomScreenScaleFactor, Mode=TwoWay}" Width="200"/>
-												<TextBlock Text="{Binding $parent[Window].ActualTransparencyLevel}" Margin="5,5,0,0"/>
-												<TextBlock Text="{Binding $parent[Window].Application.IsDebugMode, StringFormat={}IsDebugMode: {0}}" Margin="5,5,0,0"/>
+												<TextBlock Text="{Binding #window.Application.ProcessInfo.PrivateMemoryUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Memory Usage: {0}}" Margin="5,5,0,0"/>
+												<TextBlock Text="{Binding #window.Application.ProcessInfo.ManagedHeapSize, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Size: {0}}" Margin="5,5,0,0"/>
+												<TextBlock Text="{Binding #window.Application.ProcessInfo.ManagedHeapUsage, Converter={x:Static appConverters:FileSizeConverter.Default}, StringFormat={}Managed Heap Usage: {0}}" Margin="5,5,0,0"/>
+												<TextBlock Text="{Binding #window.Application.ProcessInfo.FinalizationPendingCount, StringFormat={}Finalization Pending Count: {0}}" Margin="5,5,0,0"/>
+												<TextBlock Text="{Binding #window.Application.ProcessInfo.GCFrequency, StringFormat={}GC Frequency: {0:F2}}" Margin="5,5,0,0"/>
+												<TextBlock Text="{Binding #window.ApplicationOptions.CustomScreenScaleFactor, StringFormat={}{0:F2}}" Margin="5,5,0,0"/>
+												<Slider IsEnabled="{Binding #window.ApplicationOptions.IsCustomScreenScaleFactorSupported, Mode=OneTime}" Margin="5,5,0,0" Maximum="{Binding #window.ApplicationOptions.MaxCustomScreenScaleFactor, Mode=OneTime}" Minimum="1" TickFrequency="{Binding #window.ApplicationOptions.CustomScreenScaleFactorGranularity, Mode=OneTime}" TickPlacement="Outside" Value="{Binding #window.ApplicationOptions.CustomScreenScaleFactor, Mode=TwoWay}" Width="200"/>
+												<TextBlock Text="{Binding #window.ActualTransparencyLevel}" Margin="5,5,0,0"/>
+												<TextBlock Text="{Binding #window.Application.IsDebugMode, StringFormat={}IsDebugMode: {0}}" Margin="5,5,0,0"/>
 											</StackPanel>
 										</Border>
 									</Panel>
 
-									<abControls:IntegerTextBox Name="integerTextBox" HorizontalAlignment="Left" IsNullValueAllowed="False" Margin="5,5,0,0" Minimum="1" Width="200" Watermark="Integer"/>
+									<abControls:IntegerTextBox Name="integerTextBox" HorizontalAlignment="Left" IsNullValueAllowed="False" Margin="5,5,0,0" Minimum="1" Width="200" PlaceholderText="Integer"/>
 									<TextBlock Text="{Binding #integerTextBox.Value, StringFormat={}Value: {0}}" HorizontalAlignment="Left" Margin="5,0,0,5"/>
 
 									<abControls:FormattedTextBlock Arg1="{Binding #regexTextBox.HasOpenedAssistanceMenus}" Format="{}HasOpenedAssistanceMenus: {0}" Margin="5,5,5,2"/>
@@ -670,7 +670,7 @@
 
 									<abControls:FormattedTextBlock Arg1="{Binding #stringInterpolationFormatTextBox.HasOpenedAssistanceMenus}" Format="{}HasOpenedAssistanceMenus: {0}" Margin="5,5,5,2"/>
 									<abControls:FormattedTextBlock Arg1="{Binding #stringInterpolationFormatTextBox.IsMaxTokenCountReached}" Format="{}IsMaxTokenCountReached: {0}" Margin="5,0,0,2"/>
-									<appControls:StringInterpolationFormatTextBox Name="stringInterpolationFormatTextBox" Height="60" HorizontalAlignment="Left" Margin="5" MaxTokenCount="5" TextWrapping="Wrap" Watermark="String interpolation" Width="200">
+									<appControls:StringInterpolationFormatTextBox Name="stringInterpolationFormatTextBox" Height="60" HorizontalAlignment="Left" Margin="5" MaxTokenCount="5" TextWrapping="Wrap" PlaceholderText="String interpolation" Width="200">
 										<appControls:StringInterpolationFormatTextBox.PredefinedVariables>
 											<appControls:StringInterpolationVariable Name="Var1"/>
 											<appControls:StringInterpolationVariable Name="Var2"/>
@@ -678,7 +678,7 @@
 											<appControls:StringInterpolationVariable Name="World" DisplayName="{DynamicResource String/Common.Cancel}"/>
 										</appControls:StringInterpolationFormatTextBox.PredefinedVariables>
 									</appControls:StringInterpolationFormatTextBox>
-									<appControls:StringInterpolationFormatTextBox HorizontalAlignment="Left" Margin="5" Watermark="String interpolation" Width="200"/>
+									<appControls:StringInterpolationFormatTextBox HorizontalAlignment="Left" Margin="5" PlaceholderText="String interpolation" Width="200"/>
 
 									<appControls:DateTimeFormatTextBox HorizontalAlignment="Left" Margin="5" Width="250"/>
 
@@ -846,32 +846,32 @@
 
 									<!-- Test actions -->
 									<WrapPanel Orientation="Horizontal">
-										<Button Command="{Binding $parent[Window].ShowAppInfoDialog}" Content="App Info" Margin="5"/>
-										<Button Command="{Binding $parent[Window].ShowAppUpdateDialog}" Content="App Update" Margin="5"/>
-										<Button Command="{Binding $parent[Window].ShowMessageDialog}" Content="MessageDialog" Margin="5"/>
-										<Button Command="{Binding $parent[Window].ShowTextInputDialog}" Content="TextInputDialog" Margin="5"/>
-										<Button Command="{Binding $parent[Window].ShowAppDataImportDirSelectionDialog}" Content="Select dir to import app data" Margin="5"/>
-										<Button Command="{Binding $parent[Window].ShowNotification}" Content="Show Notification" Margin="5"/>
-										<Button Command="{Binding $parent[Window].ShowExternalDependenciesDialog}" Content="External Dependencies" Margin="5"/>
-										<Button Command="{Binding $parent[Window].ShowTestDialog}" Content="Test Dialog" Margin="5"/>
-										<Button Command="{Binding $parent[Window].ShowTestWizardDialog}" Content="Test Wizard Dialog" Margin="5"/>
-										<Button Command="{Binding $parent[Window].FindCommandPath}" Content="Find command path" Margin="5"/>
-										<Button Command="{Binding $parent[Window].UpdateTaskbarIconProgressState}" Content="Update Taskbar icon progress" Margin="5"/>
-										<Button Command="{Binding $parent[Window].Application.ShowMainWindowAsync}" Content="Open New Window" Margin="5"/>
-										<Button Command="{Binding $parent[Window].RestartApp}" Content="Restart App" Margin="5"/>
-										<Button Command="{Binding $parent[Window].EditConfiguration}" Content="Edit Configuration" Margin="5"/>
-										<Button Command="{Binding $parent[Window].Application.ShowSelfTestingWindow}" Content="Self Testing" Margin="5"/>
-										<Button Command="{Binding $parent[Window].Shutdown}" Content="Shutdown" Margin="5"/>
+										<Button Command="{Binding #window.ShowAppInfoDialog}" Content="App Info" Margin="5"/>
+										<Button Command="{Binding #window.ShowAppUpdateDialog}" Content="App Update" Margin="5"/>
+										<Button Command="{Binding #window.ShowMessageDialog}" Content="MessageDialog" Margin="5"/>
+										<Button Command="{Binding #window.ShowTextInputDialog}" Content="TextInputDialog" Margin="5"/>
+										<Button Command="{Binding #window.ShowAppDataImportDirSelectionDialog}" Content="Select dir to import app data" Margin="5"/>
+										<Button Command="{Binding #window.ShowNotification}" Content="Show Notification" Margin="5"/>
+										<Button Command="{Binding #window.ShowExternalDependenciesDialog}" Content="External Dependencies" Margin="5"/>
+										<Button Command="{Binding #window.ShowTestDialog}" Content="Test Dialog" Margin="5"/>
+										<Button Command="{Binding #window.ShowTestWizardDialog}" Content="Test Wizard Dialog" Margin="5"/>
+										<Button Command="{Binding #window.FindCommandPath}" Content="Find command path" Margin="5"/>
+										<Button Command="{Binding #window.UpdateTaskbarIconProgressState}" Content="Update Taskbar icon progress" Margin="5"/>
+										<Button Command="{Binding #window.Application.ShowMainWindowAsync}" Content="Open New Window" Margin="5"/>
+										<Button Command="{Binding #window.RestartApp}" Content="Restart App" Margin="5"/>
+										<Button Command="{Binding #window.EditConfiguration}" Content="Edit Configuration" Margin="5"/>
+										<Button Command="{Binding #window.Application.ShowSelfTestingWindow}" Content="Self Testing" Margin="5"/>
+										<Button Command="{Binding #window.Shutdown}" Content="Shutdown" Margin="5"/>
 									</WrapPanel>
 
 									<abControls:LinkTextBlock HorizontalAlignment="Left" IsEnabled="False" Margin="5" Text="Google" Uri="http://www.google.com/"/>
-									<abControls:LinkTextBlock Command="{Binding $parent[Window].SwitchTheme}" HorizontalAlignment="Left" Margin="5" Text="Switch theme"/>
-									<abControls:LinkTextBlock Command="{Binding $parent[Window].SwitchAppCulture}" HorizontalAlignment="Left" Margin="5" Text="Switch application culture"/>
+									<abControls:LinkTextBlock Command="{Binding #window.SwitchTheme}" HorizontalAlignment="Left" Margin="5" Text="Switch theme"/>
+									<abControls:LinkTextBlock Command="{Binding #window.SwitchAppCulture}" HorizontalAlignment="Left" Margin="5" Text="Switch application culture"/>
 
 									<abControls:DateTimeTextBox Name="dateTimeTextBox" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200"/>
 									<TextBlock Margin="5,0,0,5" Text="{Binding #dateTimeTextBox.Value, StringFormat={}Value: {0}}"/>
 
-									<abControls:IntegerTextBox Name="integerTextBox2" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200" Watermark="Integer"/>
+									<abControls:IntegerTextBox Name="integerTextBox2" HorizontalAlignment="Left" Margin="5,5,0,0" Width="200" PlaceholderText="Integer"/>
 									<TextBlock Text="{Binding #integerTextBox2.Value, StringFormat={}Value: {0}}" HorizontalAlignment="Left" Margin="5,0,0,5"/>
 
 									<appControls:EnumComboBox EnumType="{x:Type app:ThemeMode}" HorizontalAlignment="Left" Margin="5" Width="200"/>
@@ -891,7 +891,7 @@
 									<appControls:ListBox Name="listBox1" DoubleClickOnItem="OnListBoxDoubleClickOnItem" HorizontalAlignment="Left" Width="150" Margin="5" SelectionMode="Multiple">
 										<appControls:ListBox.ItemsSource>
 											<avCollections:AvaloniaList x:TypeArguments="sys:Object">
-												<appControls:SyntaxHighlightingTextBlock DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="[0-9]abc(123)"/>
+												<appControls:SyntaxHighlightingTextBlock DefinitionSet="{Binding #window.RegexSyntaxHighlightingDefinitionSet}" Text="[0-9]abc(123)"/>
 												<Grid ColumnDefinitions="*,Auto" HorizontalAlignment="Stretch">
 													<TextBlock Text="Item 1" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
 													<appControls:Image Classes="Icon" Grid.Column="1" Height="14" VerticalAlignment="Center" Width="14">
@@ -907,10 +907,10 @@
 										</appControls:ListBox.ItemsSource>
 									</appControls:ListBox>
 
-									<appControls:ListBox HorizontalAlignment="Left" ItemsSource="{Binding $parent[Window].StringItems}" Width="150" Margin="5" SelectionMode="Multiple">
+									<appControls:ListBox HorizontalAlignment="Left" ItemsSource="{Binding #window.StringItems}" Width="150" Margin="5" SelectionMode="Multiple">
 										<ListBox.ItemTemplate>
 											<DataTemplate>
-												<appControls:SyntaxHighlightingTextBlock DefinitionSet="{Binding $parent[Window].RegexSyntaxHighlightingDefinitionSet}" Text="{Binding}"/>
+												<appControls:SyntaxHighlightingTextBlock DefinitionSet="{Binding #window.RegexSyntaxHighlightingDefinitionSet}" Text="{Binding}"/>
 											</DataTemplate>
 										</ListBox.ItemTemplate>
 									</appControls:ListBox>
@@ -1134,17 +1134,17 @@
 					</TabItem.Header>
 					<Panel>
 						<StackPanel HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Top">
-							<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" Margin="10" VerticalAlignment="Center"/>
+							<Button Content="Show Tutorial" Command="{Binding #window.ShowTutorialCommand}" CommandParameter="{Binding $self}" Margin="10" VerticalAlignment="Center"/>
 							<TextBlock Name="tutorialAnchorTextBlock" Margin="20,10,10,10" Text="Anchor" VerticalAlignment="Center"/>
 						</StackPanel>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Left" Margin="10,10,10,80" VerticalAlignment="Center"/>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Bottom"/>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="10,10,20,10" VerticalAlignment="Top"/>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center"/>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="20,10,10,10" VerticalAlignment="Bottom"/>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Top"/>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10,80,10,10" VerticalAlignment="Center"/>
-						<Button Content="Show Tutorial" Command="{Binding $parent[Window].ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom"/>
+						<Button Content="Show Tutorial" Command="{Binding #window.ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Left" Margin="10,10,10,80" VerticalAlignment="Center"/>
+						<Button Content="Show Tutorial" Command="{Binding #window.ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Bottom"/>
+						<Button Content="Show Tutorial" Command="{Binding #window.ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="10,10,20,10" VerticalAlignment="Top"/>
+						<Button Content="Show Tutorial" Command="{Binding #window.ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center"/>
+						<Button Content="Show Tutorial" Command="{Binding #window.ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Center" Margin="20,10,10,10" VerticalAlignment="Bottom"/>
+						<Button Content="Show Tutorial" Command="{Binding #window.ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Top"/>
+						<Button Content="Show Tutorial" Command="{Binding #window.ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10,80,10,10" VerticalAlignment="Center"/>
+						<Button Content="Show Tutorial" Command="{Binding #window.ShowTutorialCommand}" CommandParameter="{Binding $self}" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Bottom"/>
 					</Panel>
 				</appControls:TabItem>
 
@@ -1153,28 +1153,28 @@
 						<TextBlock Text="Images"/>
 					</TabItem.Header>
 					<Grid ColumnDefinitions="200,Auto,*" Margin="5" RowDefinitions="Auto,5,*">
-						<ListBox Grid.RowSpan="3" HorizontalAlignment="Stretch" ItemsSource="{Binding $parent[Window].ImageIdList}" SelectionChanged="OnImageIdListBoxSelectionChanged"/>
+						<ListBox Grid.RowSpan="3" HorizontalAlignment="Stretch" ItemsSource="{Binding #window.ImageIdList}" SelectionChanged="OnImageIdListBoxSelectionChanged"/>
 						<GridSplitter Classes="Splitter_Horizontal" Background="{DynamicResource Color/Accent.Transparent}" Grid.Column="1" Grid.RowSpan="3"/>
-						<TextBox Grid.Column="2" IsReadOnly="True" Text="{Binding $parent[Window].SelectedImageId}"/>
+						<TextBox Grid.Column="2" IsReadOnly="True" Text="{Binding #window.SelectedImageId}"/>
 						<StackPanel Grid.Column="2" Grid.Row="2">
 							<WrapPanel>
 								<Border BorderBrush="Gray" BorderThickness="1" Height="100" Margin="10" Width="100">
-									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedImage}"/>
+									<Image Classes="Icon" Source="{Binding #window.SelectedImage}"/>
 								</Border>
 								<Border BorderBrush="Gray" BorderThickness="1" Height="100" Margin="10" Width="100">
-									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedGradientImage}"/>
+									<Image Classes="Icon" Source="{Binding #window.SelectedGradientImage}"/>
 								</Border>
 								<Border BorderBrush="Gray" BorderThickness="1" Height="{DynamicResource Double/Toolbar.Button.Size}" Margin="10" Padding="{DynamicResource Thickness/Toolbar.Button.Padding}" Width="{DynamicResource Double/Toolbar.Button.Size}">
-									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedImage}"/>
+									<Image Classes="Icon" Source="{Binding #window.SelectedImage}"/>
 								</Border>
 								<Border BorderBrush="Gray" BorderThickness="1" Height="{DynamicResource Double/MenuItem.Icon.Size}" Margin="10" Width="{DynamicResource Double/MenuItem.Icon.Size}">
-									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedImage}"/>
+									<Image Classes="Icon" Source="{Binding #window.SelectedImage}"/>
 								</Border>
 								<Border BorderBrush="Gray" BorderThickness="1" Height="{DynamicResource Double/InPlaceAction.IconSize}" Margin="10" Width="{DynamicResource Double/InPlaceAction.IconSize}">
-									<Image Classes="Icon" Source="{Binding $parent[Window].SelectedImage}"/>
+									<Image Classes="Icon" Source="{Binding #window.SelectedImage}"/>
 								</Border>
 							</WrapPanel>
-							<abControls:FormattedTextBlock Arg1="{Binding $parent[Window].SelectedImage.Size.Width, FallbackValue=0}" Arg2="{Binding $parent[Window].SelectedImage.Size.Height, FallbackValue=0}" Format="{}{0:F2}x{1:F2}" Margin="10"/>
+							<abControls:FormattedTextBlock Arg1="{Binding #window.SelectedImage.Size.Width, FallbackValue=0}" Arg2="{Binding #window.SelectedImage.Size.Height, FallbackValue=0}" Format="{}{0:F2}x{1:F2}" Margin="10"/>
 						</StackPanel>
 					</Grid>
 				</appControls:TabItem>
@@ -1217,7 +1217,7 @@
 						<appControls:SyntaxHighlightingTextBlock Name="multiLineSyntaxHighlightingTextBlock" MaxLines="2"/>
 						<ScrollViewer Background="{DynamicResource Brush/WorkingArea.Background}" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
 							<StackPanel Margin="5">
-								<Button Command="{Binding $parent[Window].OpenFileForSyntaxHighlightingTextBlocks}" Content="Open file"/>
+								<Button Command="{Binding #window.OpenFileForSyntaxHighlightingTextBlocks}" Content="Open file"/>
 								<appControls:SyntaxHighlightingTextBox Name="syntaxHighlightingTextBox" HorizontalAlignment="Stretch"/>
 								<Separator Background="{x:Null}" Height="5"/>
 								<Border BorderBrush="Blue" BorderThickness="1" HorizontalAlignment="Stretch">

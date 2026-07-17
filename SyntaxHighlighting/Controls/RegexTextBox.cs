@@ -111,7 +111,7 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 		this.InputGroupNameCommand = new Command<string>(this.InputGroupName);
 		this.InputStringCommand = new Command<string>(this.InputString);
 		this.MaxLength = 1024;
-		this.Bind(WatermarkProperty, this.GetResourceObservable("String/RegexTextBox.Watermark"));
+		this.Bind(PlaceholderTextProperty, this.GetResourceObservable("String/RegexTextBox.Watermark"));
 		this.showAssistanceMenuAction = new(this.ShowAssistanceMenu);
 		this.updateSelectedTokensAction = new(this.UpdateSelectedTokens);
 
@@ -526,7 +526,7 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 
 
 	/// <inheritdoc/>
-	protected override void OnLostFocus(RoutedEventArgs e)
+	protected override void OnLostFocus(FocusChangedEventArgs e)
 	{
 		SynchronizationContext.Current?.PostDelayed(() =>
 		{

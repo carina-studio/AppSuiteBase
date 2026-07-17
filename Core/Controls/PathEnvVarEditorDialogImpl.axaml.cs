@@ -124,6 +124,14 @@ class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	/// Command to edit specific path.
 	/// </summary>
 	public ICommand EditPathCommand { get; }
+	
+	
+	// Whether the paths are being refreshed or not.
+	bool IsRefreshingPaths => this.GetValue(IsRefreshingPathsProperty);
+
+
+	// Whether the paths are being saved or not.
+	bool IsSavingPaths => this.GetValue(IsSavingPathsProperty);
 
 
 	/// <inheritdoc/>

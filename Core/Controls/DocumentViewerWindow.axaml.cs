@@ -47,6 +47,10 @@ public class DocumentViewerWindow : Dialog
     /// </summary>
     // ReSharper disable once PropertyCanBeMadeInitOnly.Global
     public DocumentSource? DocumentSource { get; set; }
+    
+    
+    // URI of document.
+    Uri? DocumentUri => this.GetValue(DocumentUriProperty);
 
 
     /// <summary>

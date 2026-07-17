@@ -23,7 +23,7 @@ public class TabItem : Avalonia.Controls.TabItem
     /// <summary>
     /// Define <see cref="IsNextItemSelected"/> property.
     /// </summary>
-    public static readonly DirectProperty<TabItem, bool> IsNextItemSelectedProperty = AvaloniaProperty.RegisterDirect<TabItem, bool>(nameof(IsNextItemSelected), i => i.isNextItemSeleted);
+    public static readonly DirectProperty<TabItem, bool> IsNextItemSelectedProperty = AvaloniaProperty.RegisterDirect<TabItem, bool>(nameof(IsNextItemSelected), i => i.isNextItemSelected);
     /// <summary>
     /// Define <see cref="IsPreviousItemPointerOver"/> property.
     /// </summary>
@@ -38,7 +38,7 @@ public class TabItem : Avalonia.Controls.TabItem
     bool isFirstItem;
     bool isLastItem;
     bool isNextItemPointerOver;
-    bool isNextItemSeleted;
+    bool isNextItemSelected;
     bool isPreviousItemPointerOverPrevItem;
     bool isPreviousItemSelected;
     
@@ -78,8 +78,8 @@ public class TabItem : Avalonia.Controls.TabItem
     /// </summary>
     public bool IsNextItemSelected
     {
-        get => this.isNextItemSeleted;
-        internal set => this.SetAndRaise(IsNextItemSelectedProperty, ref this.isNextItemSeleted, value);
+        get => this.isNextItemSelected;
+        internal set => this.SetAndRaise(IsNextItemSelectedProperty, ref this.isNextItemSelected, value);
     }
     
     

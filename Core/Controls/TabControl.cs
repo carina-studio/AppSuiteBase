@@ -45,6 +45,7 @@ public class TabControl : Avalonia.Controls.TabControl
     TopLevel? attachedTopLevel;
     object? draggingOverItem;
     int draggingOverItemIndex = -1;
+    PointerPressedEventArgs? pointerPressedEventArgs;
     object? pointerPressedItem;
     int pointerPressedItemIndex = -1;
     Point? pointerPressedPosition;
@@ -546,7 +547,7 @@ public class TabControl : Avalonia.Controls.TabControl
     void OnPreviewPointerMove(object? sender, PointerEventArgs e)
     {
         // check state
-        if (!this.pointerPressedPosition.HasValue || this.pointerPressedItem is null)
+        if (this.pointerPressedEventArgs is null || !this.pointerPressedPosition.HasValue || this.pointerPressedItem is null)
             return;
 
         // check moving distance
@@ -570,7 +571,7 @@ public class TabControl : Avalonia.Controls.TabControl
         }
 
         // start dragging item
-        var itemEventArgs = new TabItemDraggedEventArgs(e, this.pointerPressedItemIndex, this.pointerPressedItem);
+        var itemEventArgs = new TabItemDraggedEventArgs(this.pointerPressedEventArgs, this.pointerPressedItemIndex, this.pointerPressedItem);
         this.ItemDragged?.Invoke(this, itemEventArgs);
         if (itemEventArgs.Handled)
             e.Handled = true;
@@ -593,6 +594,7 @@ public class TabControl : Avalonia.Controls.TabControl
             return;
 
         // keep pressed position
+        this.pointerPressedEventArgs = e;
         this.pointerPressedPosition = pointer.Position;
     }
 
@@ -600,6 +602,7 @@ public class TabControl : Avalonia.Controls.TabControl
     // Called before handling pointer-released event by its child.
     void OnPreviewPointerReleased(object? sender, PointerEventArgs e)
     {
+        this.pointerPressedEventArgs = null;
         this.pointerPressedItem = null;
         this.pointerPressedItemIndex = -1;
         this.pointerPressedPosition = null;
@@ -868,15 +871,15 @@ public class DragOnTabItemEventArgs : TabItemEventArgs
 public class TabItemDraggedEventArgs : TabItemEventArgs
 {
     // Constructor.
-    internal TabItemDraggedEventArgs(PointerEventArgs e, int itemIndex, object item) : base(itemIndex, item)
+    internal TabItemDraggedEventArgs(PointerPressedEventArgs e, int itemIndex, object item) : base(itemIndex, item)
     {
-        this.PointerEventArgs = e;
+        this.PointerPressedEventArgs = e;
     }
     
     /// <summary>
-    /// Get <see cref="PointerEventArgs"/> which triggered the dragging event.
+    /// Get <see cref="PointerPressedEventArgs"/> which triggered the dragging event.
     /// </summary>
-    public PointerEventArgs PointerEventArgs { get; }
+    public PointerPressedEventArgs PointerPressedEventArgs { get; }
 }
 
 

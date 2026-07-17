@@ -9,8 +9,8 @@
         <!-- Other information -->
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Authors>Carina Studio</Authors>
-        <AppBaseVersion>2.3.2.621</AppBaseVersion>
-        <AvaloniaVersion>11.3.10</AvaloniaVersion>
+        <AppBaseVersion>2.4.1.621-preview</AppBaseVersion>
+        <AvaloniaVersion>12.0.0</AvaloniaVersion>
         <AvaloniaNameGeneratorFilterByNamespace>Dummy</AvaloniaNameGeneratorFilterByNamespace> <!-- Prevent generating InitializeComponents() and fields -->
 		<Company>Carina Studio</Company>
         <Copyright>©2021-$([System.DateTime]::Now.Year) Carina Studio</Copyright>

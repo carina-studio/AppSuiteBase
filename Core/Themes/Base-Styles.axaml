@@ -211,7 +211,8 @@
 		<Setter Property="Background" Value="#ffe81123" />
 		<Setter Property="BorderBrush" Value="#fff1707a" />
 	</Style>
-	<Style Selector="CaptionButtons">
+	<!-- TODO -->
+	<!--Style Selector="CaptionButtons">
 		<Setter Property="Template">
 			<ControlTemplate>
 				<StackPanel Spacing="2" VerticalAlignment="Stretch" TextElement.FontSize="10" Orientation="Horizontal">
@@ -256,7 +257,7 @@
 				</StackPanel>
 			</ControlTemplate>
 		</Setter>
-	</Style>
+	</Style-->
 
 	<!-- ComboBox -->
 	<Style Selector="ComboBox">
@@ -1635,7 +1636,7 @@
 								</ScaleTransform.Transitions>
 							</ScaleTransform>
 						</Border.RenderTransform>
-						<Grid ClipToBounds="True" ColumnDefinitions="Auto,*,Auto" RowDefinitions="*,Auto">
+						<Grid ClipToBounds="True" ColumnDefinitions="Auto,*,Auto" RowDefinitions="*,Auto" x:DataType="{x:Type controls:Tutorial}">
 							
 							<!-- Icon -->
 							<Border VerticalAlignment="Top">
@@ -1665,7 +1666,7 @@
 							
 							<!-- Skip all tutorials -->
 							<abControls:LinkTextBlock Name="PART_SkipAllTutorials" 
-							                          Command="{Binding Presenter.RequestSkippingAllTutorials}" 
+							                          Command="{Binding Presenter.RequestSkippingAllTutorials, FallbackValue={x:Null}}" 
 							                          FontSize="{DynamicResource Double/FullWindowTutorialPresenter.Tutorial.SkipAllTutorials.FontSize}" 
 							                          Grid.Column="1" 
 							                          Grid.Row="1" 
@@ -1677,7 +1678,7 @@
 							<!-- Dismiss -->
 							<Button Name="PART_Dismiss" 
 							        Background="{DynamicResource ButtonBackgroundTransparent}" 
-							        BorderThickness="0" Command="{Binding Presenter.DismissTutorial}" 
+							        BorderThickness="0" Command="{Binding Presenter.DismissTutorial, FallbackValue={x:Null}}" 
 							        CornerRadius="{DynamicResource CornerRadius/FullWindowTutorialPresenter.Tutorial.Dismiss}"
 							        Grid.Column="2" 
 							        Grid.RowSpan="2"
@@ -2312,7 +2313,7 @@
 					         MinWidth="0"
 					         Foreground="{TemplateBinding Foreground}"
 					         FontSize="{TemplateBinding FontSize}"
-					         Watermark="{TemplateBinding Watermark}"
+					         PlaceholderText="{TemplateBinding Watermark}"
 					         IsReadOnly="{TemplateBinding IsReadOnly}"
 					         VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
 					         HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -3486,7 +3487,7 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
 	</Style>
-	<Style Selector="TabItem">
+	<Style Selector="controls|TabItem">
 		<Setter Property="ClipToBounds" Value="False"/>
 		<Setter Property="MaxHeight" Value="{DynamicResource Double/TabItem.Header.Height}"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/TabItem.Header.Height}"/>
@@ -3506,11 +3507,11 @@
 								        Margin="{DynamicResource Thickness/TabItem.Header.Separator.Margin}">
 									<Border.IsVisible>
 										<MultiBinding Converter="{x:Static BoolConverters.And}">
-											<Binding Path="!IsPointerOver" RelativeSource="{RelativeSource TemplatedParent}"/>
-											<Binding Path="!IsSelected" RelativeSource="{RelativeSource TemplatedParent}"/>
-											<Binding Path="!IsFirstItem" RelativeSource="{RelativeSource TemplatedParent}" FallbackValue="False"/>
-											<Binding Path="!IsPreviousItemPointerOver" RelativeSource="{RelativeSource TemplatedParent}" FallbackValue="False"/>
-											<Binding Path="!IsPreviousItemSelected" RelativeSource="{RelativeSource TemplatedParent}" FallbackValue="False"/>
+											<TemplateBinding Property="IsPointerOver" Converter="{x:Static BoolConverters.Not}"/>
+											<TemplateBinding Property="IsSelected" Converter="{x:Static BoolConverters.Not}"/>
+											<TemplateBinding Property="IsFirstItem" Converter="{x:Static BoolConverters.Not}"/>
+											<TemplateBinding Property="IsPreviousItemPointerOver" Converter="{x:Static BoolConverters.Not}"/>
+											<TemplateBinding Property="IsPreviousItemSelected" Converter="{x:Static BoolConverters.Not}"/>
 										</MultiBinding>
 									</Border.IsVisible>
 								</Border>
@@ -3639,7 +3640,7 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-	<Style Selector="TabItem.EmptyWithSeparator">
+	<Style Selector="controls|TabItem.EmptyWithSeparator">
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate>
@@ -3653,9 +3654,9 @@
 							        Margin="{DynamicResource Thickness/TabItem.Header.Separator.Margin}">
 								<Border.IsVisible>
 									<MultiBinding Converter="{x:Static BoolConverters.And}">
-										<Binding Path="!IsFirstItem" RelativeSource="{RelativeSource TemplatedParent}" FallbackValue="False"/>
-										<Binding Path="!IsPreviousItemPointerOver" RelativeSource="{RelativeSource TemplatedParent}" FallbackValue="False"/>
-										<Binding Path="!IsPreviousItemSelected" RelativeSource="{RelativeSource TemplatedParent}" FallbackValue="False"/>
+										<TemplateBinding Property="IsFirstItem" Converter="{x:Static BoolConverters.Not}"/>
+										<TemplateBinding Property="IsPreviousItemPointerOver" Converter="{x:Static BoolConverters.Not}"/>
+										<TemplateBinding Property="IsPreviousItemSelected" Converter="{x:Static BoolConverters.Not}"/>
 									</MultiBinding>
 								</Border.IsVisible>
 							</Border>
@@ -5072,9 +5073,10 @@
 					<Panel Background="Transparent" Margin="{TemplateBinding WindowDecorationMargin}" />
 					<Panel>
 						<VisualLayerManager>
-							<VisualLayerManager.ChromeOverlayLayer>
+							<!-- TODO -->
+							<!--VisualLayerManager.ChromeOverlayLayer>
 								<TitleBar />
-							</VisualLayerManager.ChromeOverlayLayer>
+							</VisualLayerManager.ChromeOverlayLayer-->
 							<ContentPresenter Name="PART_ContentPresenter"
 											  ContentTemplate="{TemplateBinding ContentTemplate}"
 											  Content="{TemplateBinding Content}"

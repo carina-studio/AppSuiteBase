@@ -66,7 +66,7 @@ public abstract class Window : CarinaStudio.Controls.ApplicationWindow<IAppSuite
                 ref this.isSystemChromeVisibleInClientArea, 
                 Global.Run(() =>
                 {
-                    if (this.SystemDecorations != SystemDecorations.Full)
+                    if (this.WindowDecorations != WindowDecorations.Full)
                         return false;
                     if (!this.ExtendClientAreaToDecorationsHint)
                         return false;
@@ -179,7 +179,7 @@ public abstract class Window : CarinaStudio.Controls.ApplicationWindow<IAppSuite
         var property = change.Property;
         if (property == CurrentTutorialProperty)
             this.updateTransparencyLevelAction.Schedule();
-        else if (property == ExtendClientAreaToDecorationsHintProperty || property == SystemDecorationsProperty || property == WindowStateProperty)
+        else if (property == ExtendClientAreaToDecorationsHintProperty || property == WindowDecorationsProperty || property == WindowStateProperty)
             this.checkSystemChromeVisibilityAction.Schedule();
         else if (property == IsActiveProperty)
             this.updateTransparencyLevelAction.Schedule();

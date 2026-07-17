@@ -145,7 +145,7 @@ public abstract class MainWindow : Window
 
         // extend client area if needed
         this.UpdateExtendingClientArea();
-        this.ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome; // show system chrome when opened
+        this.ExtendClientAreaToDecorationsHint = true; // show system chrome when opened
 
         // setup debug overlays
         this.UpdateDebugOverlays();
@@ -1317,6 +1317,7 @@ public abstract class MainWindow : Window
             return;
         if (this.ExtendClientAreaToDecorationsHint)
         {
+            /*
             var hints = ExtendClientAreaChromeHints.PreferSystemChrome;
             if (Platform.IsMacOS 
                 && !willBeFullScreen 
@@ -1325,6 +1326,7 @@ public abstract class MainWindow : Window
                 hints |= ExtendClientAreaChromeHints.OSXThickTitleBar;
             }
             this.ExtendClientAreaChromeHints = hints;
+            */
         }
     }
 

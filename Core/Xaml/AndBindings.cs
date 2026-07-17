@@ -10,14 +10,14 @@ namespace CarinaStudio.AppSuite.Xaml;
 /// Markup extension to generate binding which use <see cref="Avalonia.Data.Converters.BoolConverters.And"/> to combine multiple bindings.
 /// </summary>
 /// <param name="bindings">Bindings to be combined.</param>
-public class AndBindings(IList<IBinding> bindings) : MarkupExtension
+public class AndBindings(IList<BindingBase> bindings) : MarkupExtension
 {
     /// <summary>
     /// Initialize new <see cref="AndBindings"/> instance.
     /// </summary>
     /// <param name="binding1">1st binding.</param>
     /// <param name="binding2">2nd binding.</param>
-    public AndBindings(IBinding binding1, IBinding binding2): this([ binding1, binding2 ])
+    public AndBindings(BindingBase binding1, BindingBase binding2): this([ binding1, binding2 ])
     { }
     
     
@@ -27,7 +27,7 @@ public class AndBindings(IList<IBinding> bindings) : MarkupExtension
     /// <param name="binding1">1st binding.</param>
     /// <param name="binding2">2nd binding.</param>
     /// <param name="binding3">3rd binding.</param>
-    public AndBindings(IBinding binding1, IBinding binding2, IBinding binding3): this([ binding1, binding2, binding3 ])
+    public AndBindings(BindingBase binding1, BindingBase binding2, BindingBase binding3): this([ binding1, binding2, binding3 ])
     { }
     
     
@@ -38,7 +38,7 @@ public class AndBindings(IList<IBinding> bindings) : MarkupExtension
     /// <param name="binding2">2nd binding.</param>
     /// <param name="binding3">3rd binding.</param>
     /// <param name="binding4">4th binding.</param>
-    public AndBindings(IBinding binding1, IBinding binding2, IBinding binding3, IBinding binding4): this([ binding1, binding2, binding3, binding4 ])
+    public AndBindings(BindingBase binding1, BindingBase binding2, BindingBase binding3, BindingBase binding4): this([ binding1, binding2, binding3, binding4 ])
     { }
     
     
@@ -50,7 +50,7 @@ public class AndBindings(IList<IBinding> bindings) : MarkupExtension
     /// <param name="binding3">3rd binding.</param>
     /// <param name="binding4">4th binding.</param>
     /// <param name="binding5">5th binding.</param>
-    public AndBindings(IBinding binding1, IBinding binding2, IBinding binding3, IBinding binding4, IBinding binding5): this([ binding1, binding2, binding3, binding4, binding5 ])
+    public AndBindings(BindingBase binding1, BindingBase binding2, BindingBase binding3, BindingBase binding4, BindingBase binding5): this([ binding1, binding2, binding3, binding4, binding5 ])
     { }
 
 

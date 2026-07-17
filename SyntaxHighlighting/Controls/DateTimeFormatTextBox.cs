@@ -26,7 +26,7 @@ public class DateTimeFormatTextBox : SyntaxHighlightingObjectTextBox<string>
         SyntaxHighlighting.VerifyInitialization();
         this.AcceptsWhiteSpaces = true;
         this.PseudoClasses.Add(":dateTimeFormatTextBox");
-        this.Bind(WatermarkProperty, this.GetResourceObservable("String/DateTimeFormatTextBox.Watermark"));
+        this.Bind(PlaceholderTextProperty, this.GetResourceObservable("String/DateTimeFormatTextBox.Watermark"));
     }
     
     

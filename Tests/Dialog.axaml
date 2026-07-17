@@ -4,8 +4,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:abControls="using:CarinaStudio.Controls"
 		xmlns:appControls="using:CarinaStudio.AppSuite.Controls"
+        xmlns:appViewModels="using:CarinaStudio.AppSuite.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Tests.Dialog"
+        x:DataType="{x:Type appViewModels:ApplicationOptions}"
+        Name="dialog"
 		CanResize="True"
 		Classes="Dialog"
 		Width="400">
@@ -23,12 +26,12 @@
 
 		<Border Classes="Dialog_ControlButtonsPanel">
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
-				<Button appControls:DialogElement.ButtonRole="IconControl" Command="{Binding $parent[Window].Test}">
+				<Button appControls:DialogElement.ButtonRole="IconControl" Command="{Binding #dialog.Test}">
 					<Image appControls:DialogElement.IconType="IconControlButton" Source="{StaticResource Image/Icon.Question}"/>
 				</Button>
 				<Separator appControls:DialogElement.SeparatorType="ControlButton"/>
-				<Button appControls:DialogElement.ButtonRole="Control" Command="{Binding $parent[Window].GenerateResultCommand}" Content="{DynamicResource String/Common.OK}"/>
-				<Button appControls:DialogElement.ButtonRole="Control" Command="{Binding $parent[Window].Close}" Content="{DynamicResource String/Common.Cancel}"/>
+				<Button appControls:DialogElement.ButtonRole="Control" Command="{Binding #dialog.GenerateResultCommand}" Content="{DynamicResource String/Common.OK}"/>
+				<Button appControls:DialogElement.ButtonRole="Control" Command="{Binding #dialog.Close}" Content="{DynamicResource String/Common.Cancel}"/>
 			</StackPanel>
 		</Border>
 
@@ -155,7 +158,7 @@
 								<SelectableTextBlock appControls:DialogElement.TextRole="Label" Text="Label"/>
 								<SelectableTextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
 							</StackPanel>
-							<TextBox appControls:DialogElement.IsDialogItemInput="True" Watermark="Watermark"/>
+							<TextBox appControls:DialogElement.IsDialogItemInput="True" PlaceholderText="Watermark"/>
 						</appControls:DialogItem>
 						<Separator appControls:DialogElement.SeparatorType="InnerItem"/>
 						<TextBox appControls:DialogElement.IsDialogItemInput="True" Height="100" TextAlignment="Left"/>

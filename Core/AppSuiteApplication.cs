@@ -1632,6 +1632,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
         // 1. Animate popup and move it to correct position according to its shadows.
         // 2. Attach WndProc to host window of Popup.
+        var popupHostProperty = typeof(Popup).GetProperty("Host", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public) ?? throw new NotSupportedException();
         var popupPositionRequestType = typeof(Avalonia.Application).Assembly.GetType("Avalonia.Controls.Primitives.PopupPositioning.PopupPositionRequest") ?? throw new NotSupportedException();
         var popupPositionRequestField = typeof(PopupRoot).GetField("_popupPositionRequest", BindingFlags.Instance | BindingFlags.NonPublic)?.Also(it =>
         {
@@ -1668,7 +1669,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 return;
 
             // attach WndProc
-            if (Platform.IsWindows && popup.Host is TopLevel popupTopLevel && e.NewValue.Value)
+            if (Platform.IsWindows && popupHostProperty.GetValue(popup) is TopLevel popupTopLevel && e.NewValue.Value)
                 this.AttachWndProc(popupTopLevel);
 
             // find root border
@@ -1711,7 +1712,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             }
 
             // handle opening popup
-            if (popup.Host is PopupRoot hostWindow)
+            if (popupHostProperty.GetValue(popup) is PopupRoot hostWindow)
             {
                 // setup background if transparent windows are not allowed
                 if (!this.AllowTransparentWindows)
@@ -3499,7 +3500,6 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// Called to prepare application after Avalonia framework initialized.
     /// </summary>
     /// <returns>Task of preparation.</returns>
-    [DynamicDependency(DynamicallyAccessedMemberTypes.PublicConstructors, typeof(ColorPicker))]
     [RequiresUnreferencedCode("Create internal components.")]
     protected virtual async Task OnPrepareStartingAsync()
     {

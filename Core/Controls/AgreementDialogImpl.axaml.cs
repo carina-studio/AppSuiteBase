@@ -62,6 +62,18 @@ class AgreementDialogImpl : Dialog
     }
 
 
+    // Current culture.
+    ApplicationCulture Culture
+    {
+        get => this.GetValue(CultureProperty);
+        set => this.SetValue(CultureProperty, value);
+    }
+
+
+    // Available cultures.
+    IList<ApplicationCulture> Cultures => this.GetValue(CulturesProperty);
+
+
     /// <summary>
     /// Decline the user agreement.
     /// </summary>
@@ -86,6 +98,10 @@ class AgreementDialogImpl : Dialog
     /// Get or set source of document to be shown.
     /// </summary>
     public DocumentSource? DocumentSource { get; init; }
+    
+    
+    // URI of document.
+    Uri? DocumentUri => this.GetValue(DocumentUriProperty);
 
 
     /// <summary>

@@ -37,7 +37,7 @@ unsafe partial class AppSuiteApplication
     {
         if (!Platform.IsWindows11OrAbove)
             return;
-        if (window.IsExtendedIntoWindowDecorations || window.SystemDecorations == SystemDecorations.None)
+        if (window.IsExtendedIntoWindowDecorations || window.WindowDecorations == WindowDecorations.None)
             return;
         var hWnd = (window.TryGetPlatformHandle()?.Handle).GetValueOrDefault();
         if (hWnd != IntPtr.Zero)

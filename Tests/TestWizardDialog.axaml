@@ -14,10 +14,10 @@
 
 		<Border Classes="Dialog_ControlButtonsPanel">
 			<StackPanel Classes="Dialog_ControlButtonsPanel">
-				<Button appControls:DialogElement.ButtonRole="Control" Command="{Binding $parent[Window].GoToPreviousPageCommand}" Content="{Binding #dialog.GoToPreviousPageButtonText}"/>
-				<Button appControls:DialogElement.ButtonRole="Control" Command="{Binding $parent[Window].GoToNextPageCommand}" Content="{Binding #dialog.GoToNextPageButtonText}"/>
+				<Button appControls:DialogElement.ButtonRole="Control" Command="{Binding #dialog.GoToPreviousPageCommand}" Content="{Binding #dialog.GoToPreviousPageButtonText}"/>
+				<Button appControls:DialogElement.ButtonRole="Control" Command="{Binding #dialog.GoToNextPageCommand}" Content="{Binding #dialog.GoToNextPageButtonText}"/>
 				<Separator appControls:DialogElement.SeparatorType="ControlButton"/>
-				<Button appControls:DialogElement.ButtonRole="Control" Command="{Binding $parent[Window].Close}" Content="{Binding #dialog.CancelButtonText}"/>
+				<Button appControls:DialogElement.ButtonRole="Control" Command="{Binding #dialog.Close}" Content="{Binding #dialog.CancelButtonText}"/>
 			</StackPanel>
 		</Border>
 

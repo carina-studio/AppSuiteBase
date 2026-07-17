@@ -9,11 +9,11 @@
         Background="{x:Null}"
         CanResize="False"
         Height="350"
-		SystemDecorations="None"
         Title="{Binding #window.ApplicationName}"
         TransparencyLevelHint="Transparent"
         UseLayoutRounding="True"
         Width="500"
+        WindowDecorations="None"
         WindowStartupLocation="CenterScreen">
 	
 	<!-- Resources -->
