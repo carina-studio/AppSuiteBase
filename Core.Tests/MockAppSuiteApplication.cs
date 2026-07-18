@@ -1,5 +1,8 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Headless;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using CarinaStudio.AppSuite.Controls;
 using CarinaStudio.AppSuite.UsageData;
 using CarinaStudio.Collections;
@@ -8,11 +11,9 @@ using CarinaStudio.Threading;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Globalization;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Window = Avalonia.Controls.Window;
@@ -23,20 +24,12 @@ namespace CarinaStudio.AppSuite;
 /// <summary>
 /// Mock implementation of <see cref="IAppSuiteApplication"/> for testing purpose.
 /// </summary>
-public class MockAppSuiteApplication : IAppSuiteApplication
+// ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
+public class MockAppSuiteApplication : Application, IAppSuiteApplication
 {
-    // Empty implementation of IDisposable.
-    class EmptyDisposable : IDisposable
-    {
-        public void Dispose()
-        { }
-    }
-
-
     // Static fields.
     static volatile MockAppSuiteApplication? current;
     static readonly Lock initSyncLock = new();
-    static volatile SingleThreadSynchronizationContext? synchronizationContext;
 
 
     /// <summary>
@@ -44,8 +37,6 @@ public class MockAppSuiteApplication : IAppSuiteApplication
     /// </summary>
     internal protected MockAppSuiteApplication()
     {
-        this.HardwareInfo = new HardwareInfo(this);
-        this.ProcessInfo = new ProcessInfo(this);
         this.ProductManager = new Product.MockProductManager(this);
         this.RootPrivateDirectoryPath = Path.Combine(Path.GetTempPath(), $"AppSuiteTest-{DateTime.Now.ToBinary()}");
         this.UsageManager = new MockUsageManager(this);
@@ -93,14 +84,6 @@ public class MockAppSuiteApplication : IAppSuiteApplication
     
     /// <inheritdoc/>
     public Version AvaloniaVersion { get; } = typeof(Avalonia.Application).Assembly.GetName().Version ?? throw new NotSupportedException("Unable to get version of Avalonia.");
-
-
-    /// <inheritdoc/>
-    public Assembly Assembly { get; } = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
-
-
-    /// <inheritdoc/>
-    public bool CheckAccess() => Thread.CurrentThread == synchronizationContext?.ExecutionThread;
 
 
     /// <inheritdoc/>
@@ -154,7 +137,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
-    public virtual CultureInfo CultureInfo { get; } = CultureInfo.CurrentCulture;
+    public override CultureInfo CultureInfo { get; } = CultureInfo.CurrentCulture;
 
 
     /// <inheritdoc/>
@@ -184,28 +167,28 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
-    public virtual IObservable<object?> GetResourceObservable(object key, Func<object?, object?>? converter = null) =>
+    public new virtual IObservable<object?> GetResourceObservable(object key, Func<object?, object?>? converter = null) =>
         new FixedObservableValue<object?>(null);
 
 
     /// <inheritdoc/>
-    public virtual IObservable<string?> GetObservableString(string key) =>
+    public override IObservable<string?> GetObservableString(string key) =>
         new FixedObservableValue<string?>(null);
 
 
     /// <inheritdoc/>
-    public virtual string? GetString(string key, string? defaultValue = null) => defaultValue;
+    public override string? GetString(string key, string? defaultValue = null) => defaultValue;
 
 
     /// <inheritdoc/>
-    public HardwareInfo HardwareInfo { get; }
+    public HardwareInfo HardwareInfo { get; private set; } = null!;
 
 
     /// <summary>
     /// Initialize default <see cref="MockAppSuiteApplication"/> instance for current process.
     /// </summary>
     /// <returns><see cref="MockAppSuiteApplication"/> instance.</returns>
-    internal static MockAppSuiteApplication Initialize() => Initialize(() => new MockAppSuiteApplication());
+    internal static new MockAppSuiteApplication Initialize() => Initialize(() => new MockAppSuiteApplication());
 
 
     /// <summary>
@@ -231,11 +214,26 @@ public class MockAppSuiteApplication : IAppSuiteApplication
             }
             if (IAppSuiteApplication.MockInstance is not null)
                 throw new InvalidOperationException("There is already a mock instance registered into IAppSuiteApplication.");
-            synchronizationContext = new SingleThreadSynchronizationContext();
-            synchronizationContext.Send(() =>
+
+            // set up the headless application on a dedicated dispatcher thread with a real (Skia) render backend
+            var appReadyEvent = new ManualResetEventSlim();
+            var appLoopCts = new CancellationTokenSource();
+            var appThread = new Thread(() =>
             {
-                current = creator();
-            });
+                AppBuilder.Configure(creator)
+                    .UseHeadless(new AvaloniaHeadlessPlatformOptions { UseHeadlessDrawing = false })
+                    .UseSkia()
+                    .SetupWithoutStarting();
+                current = (MockAppSuiteApplication)Avalonia.Application.Current.AsNonNull();
+                appReadyEvent.Set();
+                Dispatcher.UIThread.MainLoop(appLoopCts.Token);
+            })
+            {
+                IsBackground = true,
+                Name = "Mock application thread",
+            };
+            appThread.Start();
+            appReadyEvent.Wait(CancellationToken.None);
             IAppSuiteApplication.MockInstance = current;
         }
         return current.AsNonNull();
@@ -289,7 +287,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
-    public virtual bool IsShutdownStarted => false;
+    public override bool IsShutdownStarted => false;
     
     
     /// <inheritdoc/>
@@ -360,7 +358,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
-    public virtual ILoggerFactory LoggerFactory { get; } = new LoggerFactory();
+    public override ILoggerFactory LoggerFactory { get; } = new LoggerFactory();
 
 
     /// <inheritdoc/>
@@ -368,15 +366,19 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
-    public virtual string Name => "Mock AppSuite";
+    public new virtual string Name => "Mock AppSuite";
 
 
-    /// <summary>
-    /// Raise <see cref="PropertyChanged"/> event.
-    /// </summary>
-    /// <param name="propertyName">Name of changed property.</param>
-    protected virtual void OnPropertyChanged(string propertyName) =>
-        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    /// <inheritdoc/>
+    public override void OnFrameworkInitializationCompleted()
+    {
+        // base implementation sets up the synchronization context of the application thread
+        base.OnFrameworkInitializationCompleted();
+
+        // create infrastructure which depends on the application thread being ready
+        this.HardwareInfo = new HardwareInfo(this);
+        this.ProcessInfo = new ProcessInfo(this);
+    }
 
 
     /// <inheritdoc/>
@@ -389,7 +391,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
-    public ISettings PersistentState { get; } = new MemorySettings();
+    public override ISettings PersistentState { get; } = new MemorySettings();
 
 
     /// <inheritdoc/>
@@ -405,15 +407,11 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
-    public ProcessInfo ProcessInfo { get; }
+    public ProcessInfo ProcessInfo { get; private set; } = null!;
 
 
     /// <inheritdoc/>
     public virtual Product.IProductManager ProductManager { get; }
-
-
-    /// <inheritdoc/>
-    public event PropertyChangedEventHandler? PropertyChanged;
 
 
     /// <inheritdoc/>
@@ -440,7 +438,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
-    public string RootPrivateDirectoryPath { get; }
+    public sealed override string RootPrivateDirectoryPath { get; }
 
 
     /// <inheritdoc/>
@@ -452,7 +450,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
 
 
     /// <inheritdoc/>
-    public ISettings Settings { get; } = new MemorySettings();
+    public override ISettings Settings { get; } = new MemorySettings();
 
 
     /// <inheritdoc/>
@@ -484,18 +482,6 @@ public class MockAppSuiteApplication : IAppSuiteApplication
         new EmptyDisposable();
 
 
-    /// <summary>
-    /// Raised when string resources updated.
-    /// </summary>
-#pragma warning disable CS0067
-    public event EventHandler? StringsUpdated;
-#pragma warning restore CS0067
-
-
-    /// <inheritdoc/>
-    public virtual SynchronizationContext SynchronizationContext => synchronizationContext ?? throw new InvalidOperationException("Application instance is not ready.");
-    
-    
     /// <inheritdoc/>
     public virtual ThemeMode SystemThemeMode => ThemeMode.Dark;
     
@@ -510,7 +496,7 @@ public class MockAppSuiteApplication : IAppSuiteApplication
     
 
     /// <inheritdoc/>
-    public virtual bool TryFindResource(object key, ThemeVariant? theme, [NotNullWhen(true)] out object? value)
+    public new virtual bool TryFindResource(object key, ThemeVariant? theme, [NotNullWhen(true)] out object? value)
     {
         value = null;
         return false;
