@@ -159,8 +159,10 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	}
 	
 	
-	// Whether the dialog can be closed or not.
-	bool CanClose => this.GetValue(CanCloseProperty);
+	/// <summary>
+	/// Get whether the dialog can be closed or not.
+	/// </summary>
+	public bool CanClose => this.GetValue(CanCloseProperty);
 
 
 #pragma warning disable CA1822

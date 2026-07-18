@@ -3487,14 +3487,15 @@
 		<Setter Property="VerticalAlignment" Value="Center"/>
 		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Icon.Size}"/>
 	</Style>
-	<Style Selector="controls|TabItem">
+	<Style Selector="TabItem">
 		<Setter Property="ClipToBounds" Value="False"/>
+		<Setter Property="FontSize" Value="{DynamicResource Double/TabItem.Header.FontSize}"/>
 		<Setter Property="MaxHeight" Value="{DynamicResource Double/TabItem.Header.Height}"/>
 		<Setter Property="MinHeight" Value="{DynamicResource Double/TabItem.Header.Height}"/>
 		<Setter Property="Padding" Value="0"/>
 		<Setter Property="Template">
 			<Setter.Value>
-				<ControlTemplate>
+				<ControlTemplate TargetType="controls:TabItem">
 					<Border Background="{x:Static Brushes.Transparent}" ClipToBounds="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 						<DockPanel ClipToBounds="False" VerticalAlignment="Stretch">
 							
@@ -3589,6 +3590,7 @@
 									</Border>
 									<ContentPresenter Content="{TemplateBinding Header}" 
 									                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+									                  FontSize="{TemplateBinding FontSize}"
 									                  Height="{DynamicResource Double/TabItem.Header.Content.Height}" 
 									                  HorizontalAlignment="Stretch" 
 									                  Margin="{DynamicResource Thickness/TabItem.Header.Padding}" 
@@ -3623,7 +3625,6 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
-		<Setter Property="TextBlock.FontSize" Value="{DynamicResource Double/TabItem.Header.FontSize}"/>
 	</Style>
 	<Style Selector="TabItem.Empty">
 		<Setter Property="Template">
@@ -3640,10 +3641,11 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-	<Style Selector="controls|TabItem.EmptyWithSeparator">
+	<!-- Selector targets Avalonia.Controls.TabItem for the same style key reason as the TabItem style above. -->
+	<Style Selector="TabItem.EmptyWithSeparator">
 		<Setter Property="Template">
 			<Setter.Value>
-				<ControlTemplate>
+				<ControlTemplate TargetType="controls:TabItem">
 					<DockPanel VerticalAlignment="Stretch" Margin="{DynamicResource Thickness/AddTabItemButton.Margin}">
 						<Panel DockPanel.Dock="Left">
 							<Border BorderThickness="1,0,0,0"
@@ -5072,11 +5074,7 @@
 					<Border Name="PART_Background" Background="{TemplateBinding Background}" IsHitTestVisible="False" />
 					<Panel Background="Transparent" Margin="{TemplateBinding WindowDecorationMargin}" />
 					<Panel>
-						<VisualLayerManager>
-							<!-- TODO -->
-							<!--VisualLayerManager.ChromeOverlayLayer>
-								<TitleBar />
-							</VisualLayerManager.ChromeOverlayLayer-->
+						<VisualLayerManager Name="PART_VisualLayerManager">
 							<ContentPresenter Name="PART_ContentPresenter"
 											  ContentTemplate="{TemplateBinding ContentTemplate}"
 											  Content="{TemplateBinding Content}"

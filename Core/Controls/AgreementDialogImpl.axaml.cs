@@ -61,17 +61,21 @@ class AgreementDialogImpl : Dialog
         this.Close(AgreementDialogResult.Agreed);
     }
 
-
-    // Current culture.
-    ApplicationCulture Culture
+    
+    /// <summary>
+    /// Get or set culture for the agreement.
+    /// </summary>
+    public ApplicationCulture Culture
     {
         get => this.GetValue(CultureProperty);
         set => this.SetValue(CultureProperty, value);
     }
 
 
-    // Available cultures.
-    IList<ApplicationCulture> Cultures => this.GetValue(CulturesProperty);
+    /// <summary>
+    /// Get list of available cultures for the agreement.
+    /// </summary>
+    public IList<ApplicationCulture> Cultures => this.GetValue(CulturesProperty);
 
 
     /// <summary>
@@ -100,8 +104,10 @@ class AgreementDialogImpl : Dialog
     public DocumentSource? DocumentSource { get; init; }
     
     
-    // URI of document.
-    Uri? DocumentUri => this.GetValue(DocumentUriProperty);
+    /// <summary>
+    /// Get URI of document for the agreement.
+    /// </summary>
+    public Uri? DocumentUri => this.GetValue(DocumentUriProperty);
 
 
     /// <summary>

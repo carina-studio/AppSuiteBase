@@ -57,20 +57,18 @@
 
 					<!-- Background -->
 					<Panel Name="bannerImagePanel" IsVisible="{Binding #bannerImage.IsVisible}">
-						<Panel Height="{StaticResource Double/ApplicationInfoDialog.Header.Background.Height}" VerticalAlignment="Top">
-							<Panel.OpacityMask>
-								<LinearGradientBrush EndPoint="0%,100%" StartPoint="0%,0%">
+						<Image Name="bannerImage" 
+						       IsVisible="{Binding $self.Source, Converter={x:Static ObjectConverters.IsNotNull}}" 
+						       Source="{Binding BannerImage}" 
+						       Stretch="Uniform"
+						       VerticalAlignment="Top">
+							<Image.OpacityMask>
+								<LinearGradientBrush EndPoint="{Binding #window.BannerImageOpacityMaskEndPoint}" StartPoint="0,0">
 									<GradientStop Color="#ff000000" Offset="0"/>
 									<GradientStop Color="#00000000" Offset="0.75"/>
 								</LinearGradientBrush>
-							</Panel.OpacityMask>
-							<Image Name="bannerImage" 
-							       IsVisible="{Binding $self.Source, Converter={x:Static ObjectConverters.IsNotNull}}" 
-							       Margin="0,0,0,-9999"
-							       Source="{Binding BannerImage}" 
-							       Stretch="Uniform"
-							       VerticalAlignment="Top"/>
-						</Panel>
+							</Image.OpacityMask>
+						</Image>
 					</Panel>
 					<Panel IsVisible="{Binding !#bannerImagePanel.IsVisible}">
 						<Panel Height="{StaticResource Double/ApplicationInfoDialog.Header.Background.Height}" VerticalAlignment="Top">

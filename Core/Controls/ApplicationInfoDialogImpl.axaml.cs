@@ -143,6 +143,8 @@ class ApplicationInfoDialogImpl : Dialog
 		this.IsApplicationUpdateCheckAvailable = this.Application.PackageManifestUris.GetEnumerator().Use(it => it.MoveNext());
 		
 		// setup controls
+		var bannerImageHeight = this.Application.FindResourceOrDefault("Double/ApplicationInfoDialog.Header.Background.Height", 0.0);
+		this.BannerImageOpacityMaskEndPoint = new(new(0, bannerImageHeight), RelativeUnit.Absolute);
 		AvaloniaXamlLoader.Load(this);
 		this.badgesPanel = this.Get<Panel>(nameof(badgesPanel)).AsNonNull();
 		this.Get<Panel>("itemsPanel").Also(it =>
@@ -226,6 +228,12 @@ class ApplicationInfoDialogImpl : Dialog
 	/// Get name of application.
 	/// </summary>
 	public string? ApplicationName => this.appName;
+	
+	
+	/// <summary>
+	/// Get end point of opacity mask for banner image.
+	/// </summary>
+	public RelativePoint BannerImageOpacityMaskEndPoint { get; }
 
 
 	/**
@@ -315,8 +323,26 @@ class ApplicationInfoDialogImpl : Dialog
 	public bool HasApplicationChangeList => this.GetValue(HasApplicationChangeListProperty);
 
 
+	/// <summary>
+	/// Check whether there is any external dependency or not.
+	/// </summary>
+	public bool HasExternalDependencies => this.GetValue(HasExternalDependenciesProperty);
+
+
+	/// <summary>
+	/// Check whether privacy policy is available or not.
+	/// </summary>
+	public bool HasPrivacyPolicy => this.GetValue(HasPrivacyPolicyProperty);
+
+
 	// Check whether total physical memory info is valid or not.
 	public bool HasTotalPhysicalMemory => this.GetValue(HasTotalPhysicalMemoryProperty);
+
+
+	/// <summary>
+	/// Check whether user agreement is available or not.
+	/// </summary>
+	public bool HasUserAgreement => this.GetValue(HasUserAgreementProperty);
 
 
 	// Import application data from specific directory.
@@ -346,8 +372,10 @@ class ApplicationInfoDialogImpl : Dialog
 	}
 	
 	
-	// Informational version name.
-	string? InformationalVersion => this.GetValue(InformationalVersionProperty);
+	/// <summary>
+	/// Get informational version name.
+	/// </summary>
+	public string? InformationalVersion => this.GetValue(InformationalVersionProperty);
 	
 	
 	/// <summary>
@@ -555,6 +583,12 @@ class ApplicationInfoDialogImpl : Dialog
 
 	// Screen working area in pixels.
 	public PixelRect PhysicalScreenWorkingArea => this.physicalScreenWorkingArea;
+
+
+	/// <summary>
+	/// Get physical address of primary network interface.
+	/// </summary>
+	public string? PrimaryNetworkInterfacePhysicalAddress => this.GetValue(PrimaryNetworkInterfacePhysicalAddressProperty);
 
 
 	/// <summary>

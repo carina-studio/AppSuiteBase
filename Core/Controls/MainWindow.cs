@@ -16,6 +16,8 @@ using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
 using CarinaStudio.Logging;
+using CarinaStudio.MacOS.AppKit;
+using CarinaStudio.MacOS.ObjectiveC;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
@@ -71,6 +73,7 @@ public abstract class MainWindow : Window
     static bool IsReactivatingProVersion;
     static bool IsReactivatingProVersionNeeded;
     static readonly SettingKey<string> LatestAppChangeListShownVersionKey = new("ApplicationChangeListDialog.LatestShownVersion", "");
+    static Property? NSWindowTitleVisibilityProperty;
     static readonly SettingKey<int> WindowHeightSettingKey = new("MainWindow.Height", 600);
     static readonly SettingKey<WindowState> WindowStateSettingKey = new("MainWindow.State", WindowState.Maximized);
     static readonly SettingKey<int> WindowWidthSettingKey = new("MainWindow.Width", 800);
@@ -1313,20 +1316,25 @@ public abstract class MainWindow : Window
     // Update chrome hints for extending client area.
     void UpdateExtendClientAreaChromeHints(bool willBeFullScreen)
     {
-        if (this.IsClosed)
+        // check state
+        if (this.IsClosed || !this.ExtendClientAreaToDecorationsHint || Platform.IsNotMacOS)
             return;
-        if (this.ExtendClientAreaToDecorationsHint)
+
+        // [Workaround] Use thick title bar to show large caption buttons, but restore to normal title bar
+        // before entering full-screen mode to prevent showing empty toolbar with menu bar.
+        // The same effect which was done by Avalonia 11 with ExtendClientAreaChromeHints.OSXThickTitleBar.
+        var isFullScreen = willBeFullScreen || this.WindowState == WindowState.FullScreen;
+        this.IsMacOSThickTitleBarEnabled = !isFullScreen;
+
+        // show title in system title bar in full-screen mode because the title is hidden by Avalonia when client area is extended
+        var handle = (this.TryGetPlatformHandle()?.Handle).GetValueOrDefault();
+        if (handle != IntPtr.Zero)
         {
-            /*
-            var hints = ExtendClientAreaChromeHints.PreferSystemChrome;
-            if (Platform.IsMacOS 
-                && !willBeFullScreen 
-                && this.WindowState != WindowState.FullScreen)
+            NSObject.FromHandle<NSWindow>(handle)?.Use(nsWindow =>
             {
-                hints |= ExtendClientAreaChromeHints.OSXThickTitleBar;
-            }
-            this.ExtendClientAreaChromeHints = hints;
-            */
+                NSWindowTitleVisibilityProperty ??= Class.GetClass("NSWindow").AsNonNull().GetProperty("titleVisibility").AsNonNull();
+                nsWindow.SetProperty(NSWindowTitleVisibilityProperty, isFullScreen ? 0 : 1); // NSWindowTitleVisible : NSWindowTitleHidden
+            });
         }
     }
 

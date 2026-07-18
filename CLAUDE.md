@@ -57,6 +57,7 @@ Shared build configuration lives in `Directory.Build.props`: assembly version, n
 
 ### General
 - Nullable reference types are enabled (`#nullable enable`) everywhere.
+- Compare native handles against `IntPtr.Zero` explicitly (`handle == IntPtr.Zero`), not `default`.
 - Unsafe blocks are allowed globally (set in `Directory.Build.props`).
 - All public async methods return `Task`/`ValueTask`; UI-thread operations use `Dispatcher.UIThread`.
 - `[ThreadSafe]` attributes mark thread-safe members explicitly.
@@ -74,6 +75,7 @@ Shared build configuration lives in `Directory.Build.props`: assembly version, n
 - Namespace matches the folder path: `CarinaStudio.AppSuite.<Subfolder>`.
 - Subfolder/namespace names use **noun-first** ordering (e.g. `UsageData`, not `DataUsage`).
 - Companion types for an interface (`Extensions`, enums) go in separate files in the same folder.
+- `extension` blocks (C# 14 extension members) are placed **first** in the containing class, before all other members; they are not sorted with other members. Members inside an `extension` block are ordered alphabetically.
 - Inner types are placed **near the top** of the containing type — after the public Avalonia property/event/converter registration fields (if any) and **before** the `// Constants.` data-member group — and ordered **alphabetically** by name among themselves.
 - Data members are grouped near the top of the type in this order: (1) constants under a `// Constants.` header, (2) static fields under a `// Static Fields.` header, (3) instance/private fields under a `// Fields.` header. Each group is ordered **alphabetically** by name (case-insensitive). Headers for empty groups are omitted.
 - Properties and methods follow the data members, ordered **alphabetically** by name and interleaved together (not grouped by kind).

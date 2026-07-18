@@ -49,8 +49,10 @@ public class DocumentViewerWindow : Dialog
     public DocumentSource? DocumentSource { get; set; }
     
     
-    // URI of document.
-    Uri? DocumentUri => this.GetValue(DocumentUriProperty);
+    /// <summary>
+    /// Get URI of document to be shown.
+    /// </summary>
+    public Uri? DocumentUri => this.GetValue(DocumentUriProperty);
 
 
     /// <summary>

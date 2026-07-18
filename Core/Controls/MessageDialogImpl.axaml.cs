@@ -86,28 +86,40 @@ class MessageDialogImpl : Dialog
 	}
 
 
-	// Get result of button 1.
-	MessageDialogResult? Button1Result => this.GetValue(Button1ResultProperty);
+	/// <summary>
+	/// Get result of button 1.
+	/// </summary>
+	public MessageDialogResult? Button1Result => this.GetValue(Button1ResultProperty);
 
 
-	// Get text of button 1.
-	string? Button1Text => this.GetValue(Button1TextProperty);
+	/// <summary>
+	/// Get text of button 1.
+	/// </summary>
+	public string? Button1Text => this.GetValue(Button1TextProperty);
 
 
-	// Get result of button 2.
-	MessageDialogResult? Button2Result => this.GetValue(Button2ResultProperty);
+	/// <summary>
+	/// Get result of button 2.
+	/// </summary>
+	public MessageDialogResult? Button2Result => this.GetValue(Button2ResultProperty);
 
 
-	// Get text of button 2.
-	string? Button2Text => this.GetValue(Button2TextProperty);
+	/// <summary>
+	/// Get text of button 2.
+	/// </summary>
+	public string? Button2Text => this.GetValue(Button2TextProperty);
 
 
-	// Get result of button 3.
-	MessageDialogResult? Button3Result => this.GetValue(Button3ResultProperty);
+	/// <summary>
+	/// Get result of button 3.
+	/// </summary>
+	public MessageDialogResult? Button3Result => this.GetValue(Button3ResultProperty);
 
 
-	// Get text of button 3.
-	string? Button3Text => this.GetValue(Button3TextProperty);
+	/// <summary>
+	/// Get text of button 3.
+	/// </summary>
+	public string? Button3Text => this.GetValue(Button3TextProperty);
 
 
 	/// <summary>
@@ -224,20 +236,28 @@ class MessageDialogImpl : Dialog
 	public new MessageDialogIcon Icon { get; init; } = MessageDialogIcon.Information;
 
 
-	// Get IImage according to Icon.
-	IImage? IconImage => this.GetValue(IconImageProperty);
+	/// <summary>
+	/// Get image according to icon.
+	/// </summary>
+	public IImage? IconImage => this.GetValue(IconImageProperty);
 
 
-	// Check whether button 1 is visible or not.
-	bool IsButton1Visible => this.GetValue(IsButton1VisibleProperty);
+	/// <summary>
+	/// Check whether button 1 is visible or not.
+	/// </summary>
+	public bool IsButton1Visible => this.GetValue(IsButton1VisibleProperty);
 
 
-	// Check whether button 2 is visible or not.
-	bool IsButton2Visible => this.GetValue(IsButton2VisibleProperty);
+	/// <summary>
+	/// Check whether button 2 is visible or not.
+	/// </summary>
+	public bool IsButton2Visible => this.GetValue(IsButton2VisibleProperty);
 
 
-	// Check whether button 3 is visible or not.
-	bool IsButton3Visible => this.GetValue(IsButton3VisibleProperty);
+	/// <summary>
+	/// Check whether button 3 is visible or not.
+	/// </summary>
+	public bool IsButton3Visible => this.GetValue(IsButton3VisibleProperty);
 
 
 	/// <summary>

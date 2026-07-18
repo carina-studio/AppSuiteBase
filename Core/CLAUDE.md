@@ -67,6 +67,14 @@ The composite-name approach replaces an earlier `FontFallbacks` block keyed by C
 
 **Effect z-order caveat.** A visual carrying a live `Effect` does **not** reliably respect child z-order in the 11.3 compositor — the blur layer composites *over* an immediately-following sibling (effects are queued as deferred commands, not applied in simple child order). So an overlay meant to sit *on top* of the blur (tint/frame) must be placed **behind** the `Backdrop` and shown through its transparency (the `Strength`-driven layer opacity — lower `Strength` lets more of the tint show through), not stacked in front of it.
 
+## Theming: Selectors for StyleKey-Overriding Controls
+
+Several custom controls override `StyleKeyOverride` to a base Avalonia type (e.g. `TabItem`, `TabControl`, `ListBox`) so they receive the Fluent `ControlTheme` — Avalonia (verified on 12.0.4) resolves control themes by exact style key with **no base-type fallback**, so removing such an override strips the Fluent theme (foreground pseudo-classes, padding baselines) entirely.
+
+Style selectors match a control's **StyleKey**, not its CLR type. The Avalonia 11 XAML compiler masked this by substituting a selector's target type with its compile-time `StyleKeyOverride`; the Avalonia 12 compiler does not, so a derived-type selector like `controls|TabItem` compiles to the derived type and **silently never matches** — the control just falls back to the Fluent template (this is how the TabItem header font size regressed during the Avalonia 12 upgrade).
+
+Convention (see the `TabItem` styles in `Themes/Base-Styles.axaml`): write the selector against the **style key type** (`Selector="TabItem"`), and put `TargetType="controls:TabItem"` on the inner `ControlTemplate` so `TemplateBinding`s to the derived control's properties still compile. A narrower template `TargetType` than the selector type is accepted by the compiler and is safe as long as only the derived control is used with that style in practice.
+
 ## Key Namespaces
 
 - **`Controls/`** — 90+ custom Avalonia controls: dialogs (agreement, file selection, app update), `MainWindow` base classes, `TutorialPresenter`, `NotificationPresenter`, specialized input controls.

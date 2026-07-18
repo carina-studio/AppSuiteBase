@@ -126,12 +126,16 @@ class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 	public ICommand EditPathCommand { get; }
 	
 	
-	// Whether the paths are being refreshed or not.
-	bool IsRefreshingPaths => this.GetValue(IsRefreshingPathsProperty);
+	/// <summary>
+	/// Get whether the paths are being refreshed or not.
+	/// </summary>
+	public bool IsRefreshingPaths => this.GetValue(IsRefreshingPathsProperty);
 
 
-	// Whether the paths are being saved or not.
-	bool IsSavingPaths => this.GetValue(IsSavingPathsProperty);
+	/// <summary>
+	/// Get whether the paths are being saved or not.
+	/// </summary>
+	public bool IsSavingPaths => this.GetValue(IsSavingPathsProperty);
 
 
 	/// <inheritdoc/>
