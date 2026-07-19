@@ -4,7 +4,6 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Media;
-using Avalonia.Platform;
 using Avalonia.Rendering;
 using Avalonia.Threading;
 using CarinaStudio.Animation;
@@ -73,7 +72,6 @@ public abstract class MainWindow : Window
     static bool IsReactivatingProVersion;
     static bool IsReactivatingProVersionNeeded;
     static readonly SettingKey<string> LatestAppChangeListShownVersionKey = new("ApplicationChangeListDialog.LatestShownVersion", "");
-    static Property? NSWindowTitleVisibilityProperty;
     static readonly SettingKey<int> WindowHeightSettingKey = new("MainWindow.Height", 600);
     static readonly SettingKey<WindowState> WindowStateSettingKey = new("MainWindow.State", WindowState.Maximized);
     static readonly SettingKey<int> WindowWidthSettingKey = new("MainWindow.Width", 800);
@@ -92,6 +90,7 @@ public abstract class MainWindow : Window
     bool isShowingInitialDialogs;
     readonly ScheduledAction notifyChineseVariantChangedAction;
     readonly ScheduledAction notifyNetworkConnForActivatingProVersionAction;
+    NSWindow? nsWindow;
     long openedTime;
     readonly ScheduledAction reactivateProVersionAction;
     readonly ScheduledAction restartingRootWindowsAction;
@@ -538,6 +537,7 @@ public abstract class MainWindow : Window
         this.restartingRootWindowsAction.Cancel();
         this.reactivateProVersionAction.Cancel();
         this.showInitDialogsAction.Cancel();
+        this.nsWindow = this.nsWindow.DisposeAndReturnNull();
         base.OnClosed(e);
     }
 
@@ -1327,15 +1327,15 @@ public abstract class MainWindow : Window
         this.IsMacOSThickTitleBarEnabled = !isFullScreen;
 
         // show title in system title bar in full-screen mode because the title is hidden by Avalonia when client area is extended
-        var handle = (this.TryGetPlatformHandle()?.Handle).GetValueOrDefault();
-        if (handle != IntPtr.Zero)
+        if (this.nsWindow is null)
         {
-            NSObject.FromHandle<NSWindow>(handle)?.Use(nsWindow =>
-            {
-                NSWindowTitleVisibilityProperty ??= Class.GetClass("NSWindow").AsNonNull().GetProperty("titleVisibility").AsNonNull();
-                nsWindow.SetProperty(NSWindowTitleVisibilityProperty, isFullScreen ? 0 : 1); // NSWindowTitleVisible : NSWindowTitleHidden
-            });
+            var handle = (this.TryGetPlatformHandle()?.Handle).GetValueOrDefault();
+            if (handle != IntPtr.Zero)
+                this.nsWindow = NSObject.FromHandle<NSWindow>(handle);
         }
+        this.nsWindow?.TitleVisibility = isFullScreen 
+            ? NSWindow.TitleAppearance.Visible 
+            : NSWindow.TitleAppearance.Hidden;
     }
 
 
