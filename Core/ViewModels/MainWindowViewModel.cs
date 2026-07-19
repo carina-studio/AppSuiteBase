@@ -13,7 +13,7 @@ public abstract class MainWindowViewModel : ViewModel<IAppSuiteApplication>, ISt
     /// <summary>
     /// Property of <see cref="Title"/>.
     /// </summary>
-    public static readonly ObservableProperty<string?> TitleProperty = ObservableProperty.Register<MainWindowViewModel, string?>(nameof(Title));
+    public static readonly ObservableProperty<string?> TitleProp = ObservableProperty.Register<MainWindowViewModel, string?>(nameof(Title));
 
 
     // Fields.
@@ -41,7 +41,7 @@ public abstract class MainWindowViewModel : ViewModel<IAppSuiteApplication>, ISt
         {
             if (this.IsDisposed)
                 return;
-            this.SetValue(TitleProperty, this.OnUpdateTitle());
+            this.SetValue(TitleProp, this.OnUpdateTitle());
         });
         this.updateTitleAction.Schedule();
     }
@@ -92,7 +92,7 @@ public abstract class MainWindowViewModel : ViewModel<IAppSuiteApplication>, ISt
     /// <summary>
     /// Get title of main window.
     /// </summary>
-    public string? Title => this.GetValue(TitleProperty);
+    public string? Title => this.GetValue(TitleProp);
 }
 
 

@@ -63,6 +63,11 @@ Shared build configuration lives in `Directory.Build.props`: assembly version, n
 - `[ThreadSafe]` attributes mark thread-safe members explicitly.
 - Internal APIs are shared between trusted assemblies via `InternalsVisibleTo` in `Directory.Build.props`.
 
+### View-Model Properties and XAML Bindings
+- `ObservableProperty<T>` fields in view-models are named `XxxProp` (e.g. `TitleProp`), **never** `XxxProperty`, regardless of visibility. Reason: Avalonia 12 compiled bindings resolve any public static field named `<Member>Property` on the bound type as an `AvaloniaProperty` and fail compilation when it is not one; the `Prop` suffix is applied to all visibilities for consistency.
+- `AvaloniaProperty` fields on controls keep the standard `XxxProperty` suffix — that convention is required by Avalonia and does not conflict.
+- XAML bindings are always compiled: `{ReflectionBinding}` and `x:CompileBindings="False"` are not allowed. `x:CompileBindings="True"` is redundant (compiled is the Avalonia 12 default) and is omitted.
+
 ### Method Body Layout
 - Inside any code block (method body, `if`/`else`, `for`/`while`/`foreach`, `try`/`catch`/`finally`, lambda body, etc.), group related statements into **logical blocks** separated by a single blank line.
 - **Every** logical block is preceded by a single-line `//` comment describing what the block does — including the leading (first) block.

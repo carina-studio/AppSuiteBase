@@ -13,7 +13,6 @@
         xmlns:vm="using:CarinaStudio.AppSuite.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="CarinaStudio.AppSuite.Controls.ApplicationInfoDialogImpl"
-        x:CompileBindings="True"
         x:DataType="vm:ApplicationInfo"
 		Name="window"
         Classes="Dialog"
@@ -38,7 +37,7 @@
 	<DockPanel>
 
 		<!-- Control buttons -->
-		<Border x:CompileBindings="False" Classes="Dialog_ControlButtonsPanel">
+		<Border Classes="Dialog_ControlButtonsPanel">
 			<Grid Classes="Dialog_ControlButtonsPanel" ColumnDefinitions="Auto,*">
 				<StackPanel Classes="Dialog_ControlButtonsPanel" IsVisible="{Binding #window.IsApplicationUpdateCheckAvailable}">
 					<Button controls:DialogElement.ButtonRole="Control" Command="{Binding #window.ShowAppUpdateDialog}" Content="{xaml:StringResource ApplicationInfoDialog.ShowAppUpdateDialog}"/>
@@ -117,7 +116,7 @@
 							</Border>
 
 							<!-- Title and version -->
-							<Border x:CompileBindings="False">
+							<Border>
 								<StackPanel Orientation="Vertical" VerticalAlignment="Center">
 									<StackPanel Margin="{StaticResource Thickness/ApplicationInfoDialog.AppTitle.Margin}" Orientation="Horizontal">
 										<SelectableTextBlock Classes="Shadowed" FontSize="{DynamicResource Double/ApplicationInfoDialog.AppTitle.FontSize}" FontWeight="Bold" Text="{Binding #window.ApplicationName}" VerticalAlignment="Center"/>
@@ -178,7 +177,7 @@
 							<TextBlock Text="{xaml:StringResource ApplicationInfoDialog.Attribution.PoweredBy.Section3}" VerticalAlignment="Center"/>
 						</WrapPanel>
 						<Separator controls:DialogElement.SeparatorType="Default"/>
-						<TextBlock x:CompileBindings="False" Text="{Binding #window.Copyright, Mode=OneTime}"/>
+						<TextBlock Text="{Binding #window.Copyright, Mode=OneTime}"/>
 						<Separator controls:DialogElement.SeparatorType="Large"/>
 
 						<!-- System info -->
@@ -217,7 +216,7 @@
 								<Separator controls:DialogElement.SeparatorType="Item"/>
 
 								<!-- Processor count -->
-								<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.Application.IsDebugMode}">
+								<StackPanel IsVisible="{Binding #window.Application.IsDebugMode}">
 									<controls:DialogItem ItemSize="Small">
 										<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.ProcessorCount}"/>
 										<SelectableTextBlock controls:DialogElement.TextRole="Default" 
@@ -229,7 +228,7 @@
 								</StackPanel>
 
 								<!-- Total physical memory -->
-								<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasTotalPhysicalMemory}">
+								<StackPanel IsVisible="{Binding #window.HasTotalPhysicalMemory}">
 									<controls:DialogItem ItemSize="Small">
 										<TextBlock controls:DialogElement.TextRole="Label" Text="{xaml:StringResource ApplicationInfoDialog.TotalPhysicalMemory}"/>
 										<SelectableTextBlock controls:DialogElement.TextRole="Default" 
@@ -255,7 +254,7 @@
 								</controls:DialogItem>
 
 								<!-- Primary network interface -->
-								<StackPanel x:CompileBindings="False" 
+								<StackPanel 
 								            IsVisible="{xaml:AndBindings 
 												{Binding #window.PrimaryNetworkInterfacePhysicalAddress, Converter={x:Static StringConverters.IsNotNullOrEmpty}},
 												{Binding #window.Application.IsDebugMode}
@@ -274,7 +273,7 @@
 								</StackPanel>
 
 								<!-- Screen info -->
-								<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.Application.IsDebugMode}">
+								<StackPanel IsVisible="{Binding #window.Application.IsDebugMode}">
 
 									<!-- Screen pixel density -->
 									<Separator controls:DialogElement.SeparatorType="Item"/>
@@ -318,7 +317,7 @@
 
 						<!-- Process info -->
 						<TextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{xaml:StringResource ApplicationInfoDialog.ProcessInformation}"/>
-						<Border x:CompileBindings="False" Classes="Dialog_ItemsGroup_Container">
+						<Border Classes="Dialog_ItemsGroup_Container">
 							<StackPanel>
 
 								<!-- Process ID -->
@@ -504,7 +503,7 @@
 								</StackPanel>
 
 								<!-- User agreement -->
-								<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasUserAgreement}">
+								<StackPanel IsVisible="{Binding #window.HasUserAgreement}">
 									<controls:DialogItem ItemSize="Small">
 										<StackPanel Orientation="Horizontal">
 											<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.UserAgreement.Outline}"/>
@@ -515,7 +514,7 @@
 								</StackPanel>
 
 								<!-- Privacy policy -->
-								<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasPrivacyPolicy}">
+								<StackPanel IsVisible="{Binding #window.HasPrivacyPolicy}">
 									<controls:DialogItem ItemSize="Small">
 										<StackPanel Orientation="Horizontal">
 											<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.PrivacyPolicy.Outline}"/>
@@ -526,7 +525,7 @@
 								</StackPanel>
 
 								<!-- External dependencies -->
-								<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.HasExternalDependencies}">
+								<StackPanel IsVisible="{Binding #window.HasExternalDependencies}">
 									<controls:DialogItem ItemSize="Small">
 										<StackPanel Orientation="Horizontal">
 											<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Dependencies}"/>
@@ -537,7 +536,7 @@
 								</StackPanel>
 
 								<!-- Restart in debug mode -->
-								<StackPanel x:CompileBindings="False" IsVisible="{Binding !#window.Application.IsDebugMode}">
+								<StackPanel IsVisible="{Binding !#window.Application.IsDebugMode}">
 									<controls:DialogItem ItemSize="Small">
 										<StackPanel Orientation="Horizontal">
 											<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Debug.Outline}"/>
@@ -551,7 +550,7 @@
 								<controls:DialogItem ItemSize="Small">
 									<StackPanel Orientation="Horizontal">
 										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Import}"/>
-										<abControls:LinkTextBlock x:CompileBindings="False" controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ImportApplicationData}" Text="{xaml:StringResource ApplicationInfoDialog.ImportApplicationData}"/>
+										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ImportApplicationData}" Text="{xaml:StringResource ApplicationInfoDialog.ImportApplicationData}"/>
 									</StackPanel>
 								</controls:DialogItem>
 								<Separator controls:DialogElement.SeparatorType="Item"/>
@@ -560,12 +559,12 @@
 								<controls:DialogItem ItemSize="Small">
 									<StackPanel Orientation="Horizontal">
 										<Image controls:DialogElement.IconType="Default" Source="{StaticResource Image/Icon.Export}"/>
-										<abControls:LinkTextBlock x:CompileBindings="False" controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ExportLogs}" Text="{xaml:StringResource ApplicationInfoDialog.ExportAppLogs}"/>
+										<abControls:LinkTextBlock controls:DialogElement.TextRole="LabelNextToIcon" Command="{Binding #window.ExportLogs}" Text="{xaml:StringResource ApplicationInfoDialog.ExportAppLogs}"/>
 									</StackPanel>
 								</controls:DialogItem>
 								
 								<!-- Take memory snapshot -->
-								<StackPanel x:CompileBindings="False" IsVisible="{Binding #window.Application.IsDebugMode}">
+								<StackPanel IsVisible="{Binding #window.Application.IsDebugMode}">
 									<Separator controls:DialogElement.SeparatorType="Item"/>
 									<controls:DialogItem ItemSize="Small">
 										<StackPanel Orientation="Horizontal">

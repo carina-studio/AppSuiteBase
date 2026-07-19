@@ -36,20 +36,20 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 	static readonly Uri AutoUpdaterPackageManifestUri = new("https://raw.githubusercontent.com/carina-studio/AutoUpdater/master/PackageManifest-Avalonia.json");
 	static readonly Version AutoUpdaterVersionSupportsAppSuiteVersion = new(2, 2, 0, 1225);
 	static readonly Version AutoUpdaterVersionSupportsBaseVersion = new(1, 1, 0, 713);
-	static readonly ObservableProperty<bool> HasReleasePageUriProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(HasReleasePageUri));
-	static readonly ObservableProperty<bool> IsAutoUpdateSupportedProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsAutoUpdateSupported));
-	static readonly ObservableProperty<bool> IsCheckingForUpdateProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsCheckingForUpdate));
-	static readonly ObservableProperty<bool> IsLatestVersionProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsLatestVersion));
-	static readonly ObservableProperty<bool> IsPreparingForUpdateProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsPreparingForUpdate));
-	static readonly ObservableProperty<bool> IsShutdownNeededToContinueUpdateProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsShutdownNeededToContinueUpdate));
-	static readonly ObservableProperty<bool> IsUpdatePreparationProgressAvailableProperty = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsUpdatePreparationProgressAvailable));
-	static readonly ObservableProperty<Uri?> ReleasePageUriProperty = ObservableProperty.Register<ApplicationUpdater, Uri?>(nameof(ReleasePageUri));
-	static readonly ObservableProperty<string?> UpdateInformationalVersionProperty = ObservableProperty.Register<ApplicationUpdater, string?>(nameof(UpdateInformationalVersion));
-	static readonly ObservableProperty<Uri?> UpdatePackageUriProperty = ObservableProperty.Register<ApplicationUpdater, Uri?>(nameof(UpdatePackageUri));
-	static readonly ObservableProperty<string?> UpdatePreparationMessageProperty = ObservableProperty.Register<ApplicationUpdater, string?>(nameof(UpdatePreparationMessage));
-	static readonly ObservableProperty<double> UpdatePreparationProgressPercentageProperty = ObservableProperty.Register<ApplicationUpdater, double>(nameof(UpdatePreparationProgressPercentage));
-	static readonly ObservableProperty<Version?> UpdateVersionProperty = ObservableProperty.Register<ApplicationUpdater, Version?>(nameof(UpdateVersion));
-	static readonly ObservableProperty<string?> UpdateVersionStringProperty = ObservableProperty.Register<ApplicationUpdater, string?>(nameof(UpdateVersionString));
+	static readonly ObservableProperty<bool> HasReleasePageUriProp = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(HasReleasePageUri));
+	static readonly ObservableProperty<bool> IsAutoUpdateSupportedProp = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsAutoUpdateSupported));
+	static readonly ObservableProperty<bool> IsCheckingForUpdateProp = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsCheckingForUpdate));
+	static readonly ObservableProperty<bool> IsLatestVersionProp = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsLatestVersion));
+	static readonly ObservableProperty<bool> IsPreparingForUpdateProp = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsPreparingForUpdate));
+	static readonly ObservableProperty<bool> IsShutdownNeededToContinueUpdateProp = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsShutdownNeededToContinueUpdate));
+	static readonly ObservableProperty<bool> IsUpdatePreparationProgressAvailableProp = ObservableProperty.Register<ApplicationUpdater, bool>(nameof(IsUpdatePreparationProgressAvailable));
+	static readonly ObservableProperty<Uri?> ReleasePageUriProp = ObservableProperty.Register<ApplicationUpdater, Uri?>(nameof(ReleasePageUri));
+	static readonly ObservableProperty<string?> UpdateInformationalVersionProp = ObservableProperty.Register<ApplicationUpdater, string?>(nameof(UpdateInformationalVersion));
+	static readonly ObservableProperty<Uri?> UpdatePackageUriProp = ObservableProperty.Register<ApplicationUpdater, Uri?>(nameof(UpdatePackageUri));
+	static readonly ObservableProperty<string?> UpdatePreparationMessageProp = ObservableProperty.Register<ApplicationUpdater, string?>(nameof(UpdatePreparationMessage));
+	static readonly ObservableProperty<double> UpdatePreparationProgressPercentageProp = ObservableProperty.Register<ApplicationUpdater, double>(nameof(UpdatePreparationProgressPercentage));
+	static readonly ObservableProperty<Version?> UpdateVersionProp = ObservableProperty.Register<ApplicationUpdater, Version?>(nameof(UpdateVersion));
+	static readonly ObservableProperty<string?> UpdateVersionStringProp = ObservableProperty.Register<ApplicationUpdater, string?>(nameof(UpdateVersionString));
 
 
 	// Fields.
@@ -66,7 +66,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 	/// </summary>
 	public ApplicationUpdater() : base(IAppSuiteApplication.Current)
 	{
-		this.CancelUpdatingCommand = new Command(this.CancelUpdating, this.GetValueAsObservable(IsPreparingForUpdateProperty));
+		this.CancelUpdatingCommand = new Command(this.CancelUpdating, this.GetValueAsObservable(IsPreparingForUpdateProp));
 		this.CheckForUpdateCommand = new Command(this.CheckForUpdateAsync, this.canCheckForUpdate);
 		this.StartUpdatingCommand = new Command(this.StartUpdatingAsync, this.canStartUpdating);
 		this.ReportUpdateInfo();
@@ -118,11 +118,11 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 		// check for update
 		this.canCheckForUpdate.Update(false);
 		this.canStartUpdating.Update(false);
-		this.SetValue(IsCheckingForUpdateProperty, true);
+		this.SetValue(IsCheckingForUpdateProp, true);
 		await this.Application.CheckForApplicationUpdateAsync();
 		if (!this.IsDisposed)
 		{
-			this.SetValue(IsCheckingForUpdateProperty, false);
+			this.SetValue(IsCheckingForUpdateProp, false);
 			this.canCheckForUpdate.Update(true);
 			this.canStartUpdating.Update(this.IsAutoUpdateSupported && !this.IsPreparingForUpdate);
 		}
@@ -175,43 +175,43 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 	/// <summary>
 	/// Check whether <see cref="ReleasePageUri"/> is valid or not.
 	/// </summary>
-	public bool HasReleasePageUri => this.GetValue(HasReleasePageUriProperty);
+	public bool HasReleasePageUri => this.GetValue(HasReleasePageUriProp);
 
 
 	/// <summary>
 	/// Check whether auto update is supported or not.
 	/// </summary>
-	public bool IsAutoUpdateSupported => this.GetValue(IsAutoUpdateSupportedProperty);
+	public bool IsAutoUpdateSupported => this.GetValue(IsAutoUpdateSupportedProp);
 
 
 	/// <summary>
 	/// Check whether application update checking is on-going or not.
 	/// </summary>
-	public bool IsCheckingForUpdate => this.GetValue(IsCheckingForUpdateProperty);
+	public bool IsCheckingForUpdate => this.GetValue(IsCheckingForUpdateProp);
 
 
 	/// <summary>
 	/// Check whether application version is the latest or not.
 	/// </summary>
-	public bool IsLatestVersion => this.GetValue(IsLatestVersionProperty);
+	public bool IsLatestVersion => this.GetValue(IsLatestVersionProp);
 
 
 	/// <summary>
 	/// Check whether update preparation is on-going or not.
 	/// </summary>
-	public bool IsPreparingForUpdate => this.GetValue(IsPreparingForUpdateProperty);
+	public bool IsPreparingForUpdate => this.GetValue(IsPreparingForUpdateProp);
 
 
 	/// <summary>
 	/// Check whether shutting down is needed to continue update or not.
 	/// </summary>
-	public bool IsShutdownNeededToContinueUpdate => this.GetValue(IsShutdownNeededToContinueUpdateProperty);
+	public bool IsShutdownNeededToContinueUpdate => this.GetValue(IsShutdownNeededToContinueUpdateProp);
 
 
 	/// <summary>
 	/// Check whether value of <see cref="UpdatePreparationProgressPercentage"/> is available or not.
 	/// </summary>
-	public bool IsUpdatePreparationProgressAvailable => this.GetValue(IsUpdatePreparationProgressAvailableProperty);
+	public bool IsUpdatePreparationProgressAvailable => this.GetValue(IsUpdatePreparationProgressAvailableProp);
 
 
 	/// <summary>
@@ -255,7 +255,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 				break;
 			case nameof(Updater.Progress):
 				if (this.IsPreparingForUpdate)
-					this.SetValue(UpdatePreparationProgressPercentageProperty, updater.Progress * 100);
+					this.SetValue(UpdatePreparationProgressPercentageProp, updater.Progress * 100);
 				break;
 			case nameof(Updater.State):
 				this.RefreshMessages();
@@ -343,10 +343,10 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 	protected override void OnPropertyChanged(ObservableProperty property, object? oldValue, object? newValue)
 	{
 		base.OnPropertyChanged(property, oldValue, newValue);
-		if (property == ReleasePageUriProperty)
-			this.SetValue(HasReleasePageUriProperty, newValue is not null);
-		else if (property == UpdatePreparationProgressPercentageProperty)
-			this.SetValue(IsUpdatePreparationProgressAvailableProperty, double.IsFinite(this.UpdatePreparationProgressPercentage));
+		if (property == ReleasePageUriProp)
+			this.SetValue(HasReleasePageUriProp, newValue is not null);
+		else if (property == UpdatePreparationProgressPercentageProp)
+			this.SetValue(IsUpdatePreparationProgressAvailableProp, double.IsFinite(this.UpdatePreparationProgressPercentage));
 	}
 
 
@@ -373,7 +373,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 		});
 
 		// update state
-		this.SetValue(IsPreparingForUpdateProperty, false);
+		this.SetValue(IsPreparingForUpdateProp, false);
 		this.canStartUpdating.Update(!this.IsCheckingForUpdate);
 		this.RefreshMessages();
 
@@ -499,7 +499,7 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 
 		// shutdown
 		this.Logger.LogWarning("Need to shutdown to continue updating");
-		this.SetValue(IsShutdownNeededToContinueUpdateProperty, true);
+		this.SetValue(IsShutdownNeededToContinueUpdateProp, true);
 	}
 
 
@@ -514,22 +514,22 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 			{
 				var downloadedSizeString = this.auUpdater.DownloadedPackageSize.ToFileSizeString();
 				var packageSize = this.auUpdater.PackageSize.GetValueOrDefault();
-				this.SetValue(UpdatePreparationMessageProperty, packageSize > 0 
+				this.SetValue(UpdatePreparationMessageProp, packageSize > 0 
 					? this.Application.GetFormattedString("ApplicationUpdater.DownloadingAutoUpdater", $"{downloadedSizeString} / {packageSize.ToFileSizeString()}") 
 					: this.Application.GetFormattedString("ApplicationUpdater.DownloadingAutoUpdater", downloadedSizeString));
 			}
 			else
-				this.SetValue(UpdatePreparationMessageProperty, this.Application.GetString("ApplicationUpdater.PreparingForUpdate"));
+				this.SetValue(UpdatePreparationMessageProp, this.Application.GetString("ApplicationUpdater.PreparingForUpdate"));
 		}
 		else
-			this.SetValue(UpdatePreparationMessageProperty, null);
+			this.SetValue(UpdatePreparationMessageProp, null);
 	}
 
 
 	/// <summary>
 	/// Get URI of update releasing page.
 	/// </summary>
-	public Uri? ReleasePageUri => this.GetValue(ReleasePageUriProperty);
+	public Uri? ReleasePageUri => this.GetValue(ReleasePageUriProp);
 
 
 	// Report current application update info.
@@ -540,23 +540,23 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 		{
 			this.canStartUpdating.Update(false);
 			this.packageManifestUri = null;
-			this.ResetValue(IsAutoUpdateSupportedProperty);
-			this.SetValue(IsLatestVersionProperty, true);
-			this.ResetValue(ReleasePageUriProperty);
-			this.ResetValue(UpdateInformationalVersionProperty);
-			this.ResetValue(UpdatePackageUriProperty);
-			this.ResetValue(UpdateVersionProperty);
-			this.ResetValue(UpdateVersionStringProperty);
+			this.ResetValue(IsAutoUpdateSupportedProp);
+			this.SetValue(IsLatestVersionProp, true);
+			this.ResetValue(ReleasePageUriProp);
+			this.ResetValue(UpdateInformationalVersionProp);
+			this.ResetValue(UpdatePackageUriProp);
+			this.ResetValue(UpdateVersionProp);
+			this.ResetValue(UpdateVersionStringProp);
 		}
 		else
 		{
-			this.SetValue(IsAutoUpdateSupportedProperty, this.OnCheckAutoUpdateSupport(updateInfo.Version));
-			this.SetValue(IsLatestVersionProperty, false);
-			this.SetValue(ReleasePageUriProperty, updateInfo.ReleasePageUri);
-			this.SetValue(UpdateInformationalVersionProperty, updateInfo.InformationalVersion);
-			this.SetValue(UpdatePackageUriProperty, updateInfo.PackageUri);
-			this.SetValue(UpdateVersionProperty, updateInfo.Version);
-			this.SetValue(UpdateVersionStringProperty, updateInfo.InformationalVersion.Let(it =>
+			this.SetValue(IsAutoUpdateSupportedProp, this.OnCheckAutoUpdateSupport(updateInfo.Version));
+			this.SetValue(IsLatestVersionProp, false);
+			this.SetValue(ReleasePageUriProp, updateInfo.ReleasePageUri);
+			this.SetValue(UpdateInformationalVersionProp, updateInfo.InformationalVersion);
+			this.SetValue(UpdatePackageUriProp, updateInfo.PackageUri);
+			this.SetValue(UpdateVersionProp, updateInfo.Version);
+			this.SetValue(UpdateVersionStringProp, updateInfo.InformationalVersion.Let(it =>
 			{
 				if (string.IsNullOrWhiteSpace(it))
 					return updateInfo.Version.ToString();
@@ -584,8 +584,8 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 
 		// update state
 		this.canStartUpdating.Update(false);
-		this.SetValue(UpdatePreparationProgressPercentageProperty, double.NaN);
-		this.SetValue(IsPreparingForUpdateProperty, true);
+		this.SetValue(UpdatePreparationProgressPercentageProp, double.NaN);
+		this.SetValue(IsPreparingForUpdateProp, true);
 
 		// update message
 		this.RefreshMessages();
@@ -736,35 +736,35 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 	/// <summary>
 	/// Get information version which application can be updated to.
 	/// </summary>
-	public string? UpdateInformationalVersion => this.GetValue(UpdateInformationalVersionProperty);
+	public string? UpdateInformationalVersion => this.GetValue(UpdateInformationalVersionProp);
 
 
 	/// <summary>
 	/// Get URI of update package.
 	/// </summary>
-	public Uri? UpdatePackageUri => this.GetValue(UpdatePackageUriProperty);
+	public Uri? UpdatePackageUri => this.GetValue(UpdatePackageUriProp);
 
 
 	/// <summary>
 	/// Get message to describe the status of update preparation.
 	/// </summary>
-	public string? UpdatePreparationMessage => this.GetValue(UpdatePreparationMessageProperty);
+	public string? UpdatePreparationMessage => this.GetValue(UpdatePreparationMessageProp);
 
 
 	/// <summary>
 	/// Get current progress percentage of update preparation.
 	/// </summary>
-	public double UpdatePreparationProgressPercentage => this.GetValue(UpdatePreparationProgressPercentageProperty);
+	public double UpdatePreparationProgressPercentage => this.GetValue(UpdatePreparationProgressPercentageProp);
 
 
 	/// <summary>
 	/// Get version which application can be updated to.
 	/// </summary>
-	public Version? UpdateVersion => this.GetValue(UpdateVersionProperty);
+	public Version? UpdateVersion => this.GetValue(UpdateVersionProp);
 
 
 	/// <summary>
 	/// Get proper string to describe version which application can be updated to.
 	/// </summary>
-	public string? UpdateVersionString => this.GetValue(UpdateVersionStringProperty);
+	public string? UpdateVersionString => this.GetValue(UpdateVersionStringProp);
 }

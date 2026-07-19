@@ -14,7 +14,7 @@
 	
 	<!-- DataTemplate -->
 	<Window.DataTemplates>
-		<DataTemplate x:CompileBindings="True" x:DataType="as:ExternalDependency" DataType="{x:Type as:ExternalDependency}">
+		<DataTemplate DataType="{x:Type as:ExternalDependency}">
 			<StackPanel>
 				<SelectableTextBlock controls:DialogElement.TextRole="ItemsGroupHeader" Text="{Binding Name}"/>
 				<Border Classes="Dialog_ItemsGroup_Container">
@@ -31,7 +31,7 @@
 							                     TextWrapping="Wrap"/>
 
 						</controls:DialogItem>
-						<Separator controls:DialogElement.SeparatorType="InnerItem" IsVisible="{ReflectionBinding #descriptionItem.IsVisible}"/>
+						<Separator controls:DialogElement.SeparatorType="InnerItem" IsVisible="{Binding #descriptionItem.IsVisible}"/>
 
 						<!-- Priority -->
 						<controls:DialogItem ItemSize="Small">
@@ -49,7 +49,7 @@
 									</MultiBinding>
 								</TextBlock.Text>
 							</TextBlock>
-							<StackPanel x:CompileBindings="False" HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
+							<StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Center">
 
 								<!-- Download -->
 								<Button Name="downloadButton" 
