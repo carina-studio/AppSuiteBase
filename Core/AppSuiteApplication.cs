@@ -3348,7 +3348,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         if (!this.EnterBackgroundMode() && this.mainWindowHolders.IsEmpty() && this.windows.IsEmpty() && !this.isCriticalShutdownStarted)
         {
             this.Logger.LogWarning("All main windows were closed, start shutting down");
-            this.Shutdown();
+            if (this.IsShutdownStarted)
+                this.Shutdown(0, this.ShutdownReason); // 2nd trigger: resume the deferred shutdown with its captured reason
+            else
+                this.Shutdown();
         }
     }
 
@@ -4127,7 +4130,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         if (this.windows.IsEmpty())
         {
             this.deactivateAction?.Execute();
-            if (!this.EnterBackgroundMode() && this.mainWindowHolders.IsEmpty())
+            if (!this.EnterBackgroundMode() && this.mainWindowHolders.IsEmpty() && !this.IsShutdownStarted)
             {
                 this.Logger.LogWarning("All windows were closed, start shutting down");
                 this.Shutdown();
