@@ -26,12 +26,6 @@ public static class ExtendedClientAreaWindowConfiguration
     {
         if (Platform.IsMacOS)
             return new Thickness(0, 1, 0, 0);
-        if (Platform.IsNotWindows)
-            return new Thickness();
-        if (Platform.IsWindows10OrAbove)
-            return new Thickness(6); // Windows 10
-        if (Platform.IsWindows8OrAbove)
-            return new Thickness(7); // Windows 8
         return new Thickness();
     });
 

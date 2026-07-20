@@ -63,13 +63,6 @@
 		</ContextMenu>
 	</Window.Resources>
 	
-	<Window.Styles>
-		<!-- TODO -->
-		<!--Style Selector="CaptionButtons">
-			<Setter Property="MaxHeight" Value="{Binding #window.ExtendClientAreaTitleBarHeightHint}"/>
-		</Style-->
-	</Window.Styles>
-
 	<Window.ExtendClientAreaTitleBarHeightHint>
 		<MultiBinding Converter="{x:Static abConverters:DoubleConverters.Addition}">
 			<Binding ElementName="tabControl" Path="TabStripSize"/>

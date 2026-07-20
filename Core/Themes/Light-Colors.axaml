@@ -17,6 +17,7 @@
 	<!-- CaptionButtons -->
 	<SolidColorBrush x:Key="Brush/CaptionButtons.Button.Background.PointerOver" Color="#1f000000"/>
 	<SolidColorBrush x:Key="Brush/CaptionButtons.Button.Background.Pressed" Color="#2f000000"/>
+	<SolidColorBrush x:Key="Brush/CaptionButtons.Button.Foreground" Color="#1a1a1a"/>
 	
 	<!-- ComboBox -->
 	<SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#ffffff"/>
