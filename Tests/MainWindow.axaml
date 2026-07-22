@@ -1232,6 +1232,25 @@
 						</ScrollViewer>
 					</StackPanel>
 				</appControls:TabItem>
+				
+				<appControls:TabItem Header="Font">
+					<Panel>
+						<appControls:BackdropTarget Name="fontBackdropTarget">
+							<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+								<SelectableTextBlock FontSize="{Binding #fontSizeSlider.Value}" Margin="10,10,10,50" Text="{Binding #window.FontTestText}" TextWrapping="Wrap"/>
+							</ScrollViewer>
+						</appControls:BackdropTarget>
+						<Border ClipToBounds="True" CornerRadius="10" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Bottom">
+							<Panel>
+								<Border Background="{DynamicResource Brush/Toolbar.Background}" BorderBrush="{DynamicResource Brush/Toolbar.Border}" BorderThickness="1" CornerRadius="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+								<Border ClipToBounds="True" CornerRadius="9" Margin="1">
+									<appControls:Backdrop BackdropEffect="LensBlur" Target="{Binding ElementName=fontBackdropTarget}"/>
+								</Border>
+								<Slider Name="fontSizeSlider" SmallChange="0.5" Margin="10,0,10,0" Minimum="10" Maximum="30" Value="14" Width="200"/>
+							</Panel>
+						</Border>
+					</Panel>
+				</appControls:TabItem>
 
 				<appControls:TabItem Header="Markdown">
 					<appControls:MarkdownViewer HorizontalScrollBarVisibility="Disabled" Margin="10" Source="avares://CarinaStudio.AppSuite.Tests/Document.md"/>

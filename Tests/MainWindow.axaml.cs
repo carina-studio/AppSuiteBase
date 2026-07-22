@@ -29,6 +29,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Markup.Xaml.Styling;
+using Avalonia.Platform;
 using Avalonia.Threading;
 using CarinaStudio.AppSuite.Input;
 using CarinaStudio.AppSuite.IO;
@@ -36,6 +37,9 @@ using CarinaStudio.AppSuite.Media;
 using System.Collections;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Reflection;
+using System.Text;
 using System.Threading;
 using ListBox = CarinaStudio.AppSuite.Controls.ListBox;
 using TabControl = Avalonia.Controls.TabControl;
@@ -153,6 +157,12 @@ namespace CarinaStudio.AppSuite.Tests
             this.SetupCustomResource(this.Application.CultureInfo);
 
             this.RegexSyntaxHighlightingDefinitionSet = RegexSyntaxHighlighting.CreateDefinitionSet(this.Application);
+
+            this.FontTestText = AssetLoader.Open(new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}/FontTest.txt")).Use(stream =>
+            {
+                using var reader = new StreamReader(stream, Encoding.UTF8);
+                return reader.ReadToEnd();
+            });
 
             InitializeComponent();
 
@@ -383,6 +393,9 @@ namespace CarinaStudio.AppSuite.Tests
                 }.ShowDialog(this);
             }
         }
+        
+        
+        public string FontTestText { get; }
 
 
         public IList<string> ImageIdList { get; }

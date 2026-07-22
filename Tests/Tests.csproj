@@ -20,6 +20,7 @@
 		<AvaloniaResource Include="ChangeList-zh-TW.md" />
 		<AvaloniaResource Include="Document.md" />
 		<AvaloniaResource Include="Document-zh-TW.md" />
+		<AvaloniaResource Include="FontTest.txt" />
 		<AvaloniaResource Include="SplashWindowBackground.jpg" />
 	</ItemGroup>
 	
