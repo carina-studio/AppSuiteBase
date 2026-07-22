@@ -58,7 +58,7 @@ public static class ExtendedClientAreaWindowConfiguration
     /// <summary>
     /// Check whether system chrome is visible when <see cref="Avalonia.Controls.Window.WindowState"/> is <see cref="WindowState.FullScreen"/> or not.
     /// </summary>
-    public static bool IsSystemChromeVisibleInFullScreen => false;
+    public static bool IsSystemChromeVisibleInFullScreen => Platform.IsMacOS;
 
 
     /// <summary>

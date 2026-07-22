@@ -8,6 +8,7 @@ using Avalonia.Rendering;
 using Avalonia.Threading;
 using CarinaStudio.Animation;
 using CarinaStudio.AppSuite.Input;
+using CarinaStudio.AppSuite.Native;
 using CarinaStudio.AppSuite.Net;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.UsageData;
@@ -83,6 +84,7 @@ public abstract class MainWindow : Window
     Thickness contentPadding;
     ThicknessRenderingAnimator? contentPaddingAnimator;
     ContentPresenter? contentPresenter;
+    FullScreenWindowControls? fullScreenWindowControls;
     bool hasMultipleMainWindows;
     bool isAppUpdateFoundNotificationShown;
     bool isClosingScheduled;
@@ -508,6 +510,7 @@ public abstract class MainWindow : Window
         this.restartingRootWindowsAction.Cancel();
         this.reactivateProVersionAction.Cancel();
         this.showInitDialogsAction.Cancel();
+        this.fullScreenWindowControls = this.fullScreenWindowControls.DisposeAndReturnNull();
         this.nsWindow = this.nsWindow.DisposeAndReturnNull();
         base.OnClosed(e);
     }
@@ -1289,16 +1292,19 @@ public abstract class MainWindow : Window
         var isFullScreen = willBeFullScreen || this.WindowState == WindowState.FullScreen;
         this.IsMacOSThickTitleBarEnabled = !isFullScreen;
 
-        // show title in system title bar in full-screen mode because the title is hidden by Avalonia when client area is extended
+        // setup NSWindow and controller to show window buttons in full-screen mode
         if (this.nsWindow is null)
         {
             var handle = (this.TryGetPlatformHandle()?.Handle).GetValueOrDefault();
             if (handle != IntPtr.Zero)
+            {
                 this.nsWindow = NSObject.FromHandle<NSWindow>(handle);
+                this.nsWindow?.Let(it => this.fullScreenWindowControls = new FullScreenWindowControls(it));
+            }
         }
-        this.nsWindow?.TitleVisibility = isFullScreen 
-            ? NSWindow.TitleAppearance.Visible 
-            : NSWindow.TitleAppearance.Hidden;
+
+        // keep title in system title bar hidden because the title bar area drawn by application shows window buttons and title in full-screen mode
+        this.nsWindow?.TitleVisibility = NSWindow.TitleAppearance.Hidden;
     }
 
 

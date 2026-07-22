@@ -641,6 +641,7 @@ public class TabControl : Avalonia.Controls.TabControl
     void OnWindowPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (e.Property == Avalonia.Controls.Window.ExtendClientAreaToDecorationsHintProperty
+            || e.Property == Avalonia.Controls.Window.WindowStateProperty
             || e.Property == Window.IsSystemChromeVisibleInClientAreaProperty)
         {
             this.updateTabStripScrollViewerMarginAction.Schedule();
@@ -785,7 +786,9 @@ public class TabControl : Avalonia.Controls.TabControl
                 return new Thickness();
             }
             var sysChromeSize = ExtendedClientAreaWindowConfiguration.SystemChromeWidth;
-            var reservedSize = this.FindResourceOrDefault("Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace", 0.0);
+            var reservedSize = window.WindowState == WindowState.FullScreen
+                ? 0.0 // no need to reserve space for dragging window in full-screen mode
+                : this.FindResourceOrDefault("Double/TabControl.TabStrip.ExtendedClientAreaReserveSpace", 0.0);
             if (ExtendedClientAreaWindowConfiguration.IsSystemChromePlacedAtRight)
                 return new Thickness(0, 0, sysChromeSize + reservedSize, 0);
             return new Thickness(sysChromeSize, 0, reservedSize, 0);

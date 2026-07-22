@@ -58,6 +58,7 @@ Shared build configuration lives in `Directory.Build.props`: assembly version, n
 ### General
 - Nullable reference types are enabled (`#nullable enable`) everywhere.
 - Compare native handles against `IntPtr.Zero` explicitly (`handle == IntPtr.Zero`), not `default`.
+- Do not combine assignment and evaluation into the same expression — assign in its own statement, then use the value (e.g. lazy caching is `Field ??= Create(); return Field;`, never `return Field ??= Create();` or an expression-bodied member doing both).
 - Unsafe blocks are allowed globally (set in `Directory.Build.props`).
 - All public async methods return `Task`/`ValueTask`; UI-thread operations use `Dispatcher.UIThread`.
 - `[ThreadSafe]` attributes mark thread-safe members explicitly.
