@@ -4,6 +4,8 @@
 		<AssemblyName>CarinaStudio.AppSuite.Core.Tests</AssemblyName>
 		<PackageId>CarinaStudio.AppSuite.Core.Tests</PackageId>
 		<RootNamespace>CarinaStudio.AppSuite</RootNamespace>
+		<!-- Microsoft.NET.Test.Sdk sets IsPackable to False. Force it back since this project is also released as library package which provides testing infrastructure to consumer applications. -->
+		<IsPackable>true</IsPackable>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -19,6 +21,9 @@
 	<ItemGroup>
 		<PackageReference Include="Avalonia.Headless" Version="$(AvaloniaVersion)" />
 		<PackageReference Include="Avalonia.Skia" Version="$(AvaloniaVersion)" />
+		<!-- Test runner is build-time only and must not become a dependency of the released package. -->
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" PrivateAssets="all" />
+		<PackageReference Include="NUnit3TestAdapter" Version="5.1.0" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>

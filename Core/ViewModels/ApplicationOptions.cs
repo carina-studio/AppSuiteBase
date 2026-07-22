@@ -63,7 +63,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
             this.IsDisableAngleSupported = Platform.IsWindows;
             this.IsDisableAngleChanged = InitDisableAngle != initSettings.GetValueOrDefault(InitSettingKeys.DisableAngle);
         });
-        this.IsChineseVariantChanged = this.Application.ChineseVariant != this.Application.LaunchChineseVariant;
         this.Configuration.SettingChanged += this.OnConfigurationChanged;
         ((INotifyCollectionChanged)this.Application.MainWindows).CollectionChanged += this.OnMainWindowsChanged;
         this.Application.ProductManager.Let(it =>
@@ -332,12 +331,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     
     
     /// <summary>
-    /// Check whether variant of Chinese has been changed or not.
-    /// </summary>
-    public bool IsChineseVariantChanged { get; private set; }
-
-
-    /// <summary>
     /// Check whether custom screen scale factor is different from effective scale factor or not.
     /// </summary>
     public bool IsCustomScreenScaleFactorAdjusted { get; private set; }
@@ -450,16 +443,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     protected override void OnApplicationPropertyChanged(PropertyChangedEventArgs e)
     {
         base.OnApplicationPropertyChanged(e);
-        if (e.PropertyName == nameof(IAppSuiteApplication.ChineseVariant))
-        {
-            var changed = this.Application.ChineseVariant != this.Application.LaunchChineseVariant;
-            if (this.IsChineseVariantChanged != changed)
-            {
-                this.IsChineseVariantChanged = changed;
-                this.OnPropertyChanged(nameof(IsChineseVariantChanged));
-            }
-        }
-        else if (e.PropertyName == nameof(IAppSuiteApplication.CustomScreenScaleFactor))
+        if (e.PropertyName == nameof(IAppSuiteApplication.CustomScreenScaleFactor))
         {
             this.OnPropertyChanged(nameof(CustomScreenScaleFactor));
             var adjusted = Math.Abs(this.Application.CustomScreenScaleFactor - this.Application.EffectiveCustomScreenScaleFactor) >= 0.01;
