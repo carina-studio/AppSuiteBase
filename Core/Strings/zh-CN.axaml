@@ -94,7 +94,6 @@
 	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">启动应用时显示启动画面</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">日志输出连接端口</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">重启应用程序以生效。</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect.ChineseVariantChanged">中文环境已改变，需要重新启动应用程序以生效。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.NotifyApplicationUpdate">应用程序有更新时显示通知</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Others">其他设定</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.PromptWhenScriptRuntimeErrorOccurred">运行期间发生错误时显示提示</sys:String>
@@ -104,7 +103,6 @@
 	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">使用空白字符进行缩排</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillCloseAllWindowsToTakeEffect">将关闭所有窗口以生效。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">将重启应用程序以生效。</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect.ChineseVariantChanged">中文环境已改变，将重启应用程序以生效。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.WillRestartMainWindowsToTakeEffect">将重启窗口以生效。</sys:String>
 
 	<!-- ApplicationReleasingType -->
@@ -320,7 +318,6 @@
 
 	<!-- MainWindow -->
 	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">已经有新的 {0} 版本。</sys:String>
-	<StaticResourceExtension x:Key="String/MainWindow.ChineseVariantChanged" ResourceKey="String/ApplicationOptions.WillRestartApplicationToTakeEffect.ChineseVariantChanged"/>
 	<sys:String x:Key="String/MainWindow.ConfirmLayingOutLotsOfMainWindows">排列较多数量的窗口导致不适合的排列结果，是否仍要进行排列？</sys:String>
 	<sys:String x:Key="String/MainWindow.ImportApplicationData.ConfirmationForFirstLaunch">您是否要从另一个目录将应用程序数据导入？您也可以稍后从「关于」对话窗中导入数据。</sys:String>
 	<sys:String x:Key="String/MainWindow.ImportApplicationData.Failed">无法从「{0}」将应用程序数据导入。</sys:String>

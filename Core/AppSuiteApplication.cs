@@ -24,6 +24,7 @@ using Avalonia.Themes.Fluent;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using CarinaStudio.AppSuite.Controls;
+using CarinaStudio.AppSuite.Media;
 using CarinaStudio.AppSuite.Net;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.Scripting;
@@ -439,6 +440,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     static ChineseVariant _LaunchChineseVariant;
     static readonly SettingKey<int> LogOutputTargetPortKey = new("LogOutputTargetPort");
     static readonly SettingKey<byte[]> MainWindowViewModelStatesKey = new("MainWindowViewModelStates", []);
+    static readonly string[] MetricsNormalizedFontFileNames = ["NotoSansSC-Bold.ttf", "NotoSansSC-Regular.ttf", "NotoSansTC-Bold.ttf", "NotoSansTC-Regular.ttf"];
     static readonly string SettingsFilePath = Path.Combine(AppDirectoryPath, SettingsFileName);
 
 
@@ -712,11 +714,20 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
 
     /// <inheritdoc/>
-    public IDisposable AddCustomStyle(IStyle style) 
+    public IDisposable AddCustomStyle(IStyle style)
     {
         this.VerifyAccess();
         this.Styles.Add(style);
         return new CustomStyleToken(this, style);
+    }
+
+
+    // Add embedded font collections to given font manager. Vertical metrics of CJK fonts are normalized to keep their line metrics consistent with Inter (see FontVerticalMetricsNormalizer).
+    internal static void AddEmbeddedFontCollections(FontManager fontManager)
+    {
+        var fontBaseUri = $"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts";
+        fontManager.AddFontCollection(new EmbeddedFontCollection(new("fonts:Inter", UriKind.Absolute), new($"{fontBaseUri}/Inter", UriKind.Absolute)));
+        fontManager.AddFontCollection(new MetricsNormalizedFontCollection(new("fonts:Noto", UriKind.Absolute), new($"{fontBaseUri}/Noto", UriKind.Absolute), MetricsNormalizedFontFileNames));
     }
 
 
@@ -968,22 +979,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             LogToConsole($"Chinese variant: {_LaunchChineseVariant}");
             
             // load embedded fonts
-            var fontBaseUri = $"avares://{Assembly.GetExecutingAssembly().GetName().Name}/Fonts";
-            it.ConfigureFonts(fontManager =>
-            {
-                fontManager.AddFontCollection(new EmbeddedFontCollection(new("fonts:Inter", UriKind.Absolute), new($"{fontBaseUri}/Inter", UriKind.Absolute)));
-                fontManager.AddFontCollection(new EmbeddedFontCollection(new("fonts:Noto", UriKind.Absolute), new($"{fontBaseUri}/Noto", UriKind.Absolute)));
-            });
+            it.ConfigureFonts(AddEmbeddedFontCollections);
             
-            // setup font manager with an Inter Latin-primary composite default; CJK runs fall through to the variant-preferred Noto Sans SC/TC face. Line height across scripts is normalized at the TextBlock level (see TextBlock LineHeight style) since Inter and Noto Sans CJK faces don't share intrinsic line metrics.
+            // setup font manager with an Inter Latin-primary composite default; CJK runs fall through to the variant-preferred Noto Sans SC/TC face. Line height across scripts is normalized at the TextBlock level (see TextBlock LineHeight style) since Inter and Noto Sans CJK faces don't share intrinsic line metrics. The same composite is also applied to all controls through the 'ContentControlThemeFontFamily' resource override (see OnFrameworkInitializationCompleted) because controls carrying the default font family don't route per-codepoint fallback through this composite.
             it.With(new FontManagerOptions
             {
-                DefaultFamilyName = _LaunchChineseVariant switch
-                {
-                    ChineseVariant.Default => "fonts:Inter#Inter, fonts:Noto#Noto Sans SC, fonts:Noto#Noto Sans TC",
-                    ChineseVariant.Taiwan => "fonts:Inter#Inter, fonts:Noto#Noto Sans TC, fonts:Noto#Noto Sans SC",
-                    _ => throw new NotImplementedException(),
-                }
+                DefaultFamilyName = GetDefaultFontFamilyName(_LaunchChineseVariant)
             });
             
             // setup platform specific settings
@@ -1977,6 +1978,15 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     }
 
 
+    // Get name of default font family according to variant of Chinese.
+    internal static string GetDefaultFontFamilyName(ChineseVariant chineseVariant) => chineseVariant switch
+    {
+        ChineseVariant.Default => "fonts:Inter#Inter, fonts:Noto#Noto Sans SC, fonts:Noto#Noto Sans TC",
+        ChineseVariant.Taiwan => "fonts:Inter#Inter, fonts:Noto#Noto Sans TC, fonts:Noto#Noto Sans SC",
+        _ => throw new NotImplementedException(),
+    };
+
+
     /// <inheritdoc/>
     public override IObservable<string?> GetObservableString(string key) =>
         new CachedResource<string?>(this, $"String/{key}");
@@ -2924,7 +2934,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     public override void OnFrameworkInitializationCompleted()
     {
         LogToConsole("Avalonia framework initialization completed");
-        
+
+        // override default font family of controls with the variant-aware composite. Fluent theme sets FontFamily of all TopLevels (Window/PopupRoot/OverlayPopupHost/EmbeddableControlRoot) from this resource, so every control inherits the composite and per-codepoint CJK fallback follows the Chinese variant specific ordering. Without the override, controls carry the theme default family whose fallback bypasses the composite and lets the system font (selected by OS language instead of application setting) render CJK text.
+        this.Resources["ContentControlThemeFontFamily"] = new FontFamily(GetDefaultFontFamilyName(_LaunchChineseVariant));
+
         // setup unhandled exception handler.
         Dispatcher.UIThread.UnhandledException += (_, e) =>
         {
@@ -5722,6 +5735,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         {
             this.Logger.LogDebug("Change variant of Chinese from {prevVariant} to {variant}", this.ChineseVariant, chineseVariant);
             this.ChineseVariant = chineseVariant;
+            this.Resources["ContentControlThemeFontFamily"] = new FontFamily(GetDefaultFontFamilyName(chineseVariant)); // propagates through DynamicResource to all top-levels so no restart is needed to apply the variant specific font selection
             this.OnPropertyChanged(nameof(ChineseVariant));
         }
 

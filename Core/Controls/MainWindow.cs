@@ -88,7 +88,6 @@ public abstract class MainWindow : Window
     bool isClosingScheduled;
     bool isFirstContentPaddingUpdate = true;
     bool isShowingInitialDialogs;
-    readonly ScheduledAction notifyChineseVariantChangedAction;
     readonly ScheduledAction notifyNetworkConnForActivatingProVersionAction;
     NSWindow? nsWindow;
     long openedTime;
@@ -112,7 +111,6 @@ public abstract class MainWindow : Window
         this.LayoutMainWindowsCommand = new Command<MultiWindowLayout>(this.LayoutMainWindows, this.GetObservable(HasMultipleMainWindowsProperty));
 
         // create scheduled actions
-        this.notifyChineseVariantChangedAction = new(this.NotifyChineseVariantChangedAsync);
         this.notifyNetworkConnForActivatingProVersionAction = new(this.NotifyNetworkConnectionForActivatingProVersion);
         this.reactivateProVersionAction = new(this.ReactivateProVersionAsync);
         this.restartingRootWindowsAction = new ScheduledAction(() =>
@@ -390,29 +388,6 @@ public abstract class MainWindow : Window
     }
     
     
-    // Notify user that the variant of Chinese has been changed.
-    async Task NotifyChineseVariantChangedAsync()
-    {
-        // check state
-        if (this.Application is not AppSuiteApplication asApp)
-            return;
-        if (this.Application.LaunchChineseVariant == this.Application.ChineseVariant)
-            return;
-        if (this.HasDialogs || !this.IsOpened || !this.IsActive || this.isClosingScheduled || this.Application.IsShutdownStarted)
-            return;
-        
-        // show dialog
-        _ = await new MessageDialog
-        {
-            Icon = MessageDialogIcon.Information,
-            Message = asApp.GetObservableString("MainWindow.ChineseVariantChanged"),
-        }.ShowDialog(this);
-        
-        // restart
-        asApp.Restart();
-    }
-    
-    
     // Notify user that network connection is needed for activating Pro version.
     void NotifyNetworkConnectionForActivatingProVersion()
     {
@@ -482,10 +457,6 @@ public abstract class MainWindow : Window
     {
         switch (e.PropertyName)
         {
-            case nameof(IAppSuiteApplication.ChineseVariant):
-                if (this.Application.LaunchChineseVariant != this.Application.ChineseVariant)
-                    this.notifyChineseVariantChangedAction.Schedule();
-                break;
             case nameof(IAppSuiteApplication.IsPrivacyPolicyAgreed):
             case nameof(IAppSuiteApplication.IsUserAgreementAgreed):
                 (this.Content as Control)?.Let(content => content.IsEnabled = this.Application.IsPrivacyPolicyAgreed && this.Application.IsUserAgreementAgreed);
@@ -720,10 +691,6 @@ public abstract class MainWindow : Window
 
         // check main window count
         this.SetAndRaise(HasMultipleMainWindowsProperty, ref this.hasMultipleMainWindows, this.Application.MainWindows.Count > 1);
-        
-        // notify change of chinese variant
-        if (this.Application.LaunchChineseVariant != this.Application.ChineseVariant)
-            this.notifyChineseVariantChangedAction.Schedule();
 
         // notify application update found
         if (this.Application.MainWindows.Count == 1)
@@ -784,8 +751,6 @@ public abstract class MainWindow : Window
         {
             if (!(bool)change.NewValue!)
             {
-                if (this.Application.LaunchChineseVariant != this.Application.ChineseVariant)
-                    this.notifyChineseVariantChangedAction.Schedule();
                 if (this.Application.IsRestartingRootWindowsNeeded)
                     this.restartingRootWindowsAction.Reschedule(RestartingMainWindowsDelay);
                 if (!this.AreInitialDialogsClosed)
@@ -810,8 +775,6 @@ public abstract class MainWindow : Window
         {
             if ((bool)change.NewValue!)
             {
-                if (this.Application.LaunchChineseVariant != this.Application.ChineseVariant)
-                    this.notifyChineseVariantChangedAction.Schedule();
                 if (!this.AreInitialDialogsClosed)
                     this.showInitDialogsAction.Schedule();
                 else
