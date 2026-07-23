@@ -76,6 +76,15 @@ public interface IProductManager : IApplicationObject<IAppSuiteApplication>, INo
 
 
     /// <summary>
+    /// Show corresponding dialog to let user manage devices for specific product.
+    /// </summary>
+    /// <param name="id">ID of the product.</param>
+    /// <param name="window">The window to show dialog.</param>
+    /// <returns>Task of showing dialog.</returns>
+    Task ManageDevicesAsync(string id, Window? window);
+
+
+    /// <summary>
     /// Get all ID of products which are being tracked by manager.
     /// </summary>
     IList<string> Products { get; }
@@ -228,6 +237,10 @@ class MockProductManager(IAppSuiteApplication app) : BaseApplicationObject<IAppS
 
     /// <inheritdoc/>
     public bool IsProductActivated(string id, bool onlineActivationNeeded = false) => false;
+
+
+    /// <inheritdoc/>
+    public Task ManageDevicesAsync(string id, Window? window) => Task.CompletedTask;
 
 
     /// <inheritdoc/>

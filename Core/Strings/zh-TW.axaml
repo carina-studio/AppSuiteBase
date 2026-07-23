@@ -44,6 +44,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">(已安裝：{0})</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ManagedHeapSize">受控記憶體堆積大小</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ManagedHeapUsage">受控記憶體堆積使用量</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ManageProductDevices">管理裝置…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection">網路連線狀態</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Disconnected">網路：未連線</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Format">已連線 ({0})</sys:String>

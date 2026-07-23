@@ -46,6 +46,7 @@
 	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">(Installed: {0})</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ManagedHeapSize">Managed Heap Size</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.ManagedHeapUsage">Managed Heap Usage</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ManageProductDevices">Manage Devices…</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection">Network</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Disconnected">Disconnected</sys:String>
 	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Format">Connected ({0})</sys:String>

@@ -388,6 +388,15 @@ class ApplicationInfoDialogImpl : Dialog
 	/// Check whether the panel of loaded assemblies has been expanded or not.
 	/// </summary>
 	public bool IsAssembliesPanelExpanded => this.GetValue(IsAssembliesPanelExpandedProperty);
+	
+	
+	// Manage devices for products.
+	void ManageProductDevices(string productId)
+	{
+		var productManager = this.Application.ProductManager;
+		if (!productManager.IsMock && productManager.IsProductActivated(productId))
+			_ = productManager.ManageDevicesAsync(productId, this);
+	}
 
 
 	// Called when application string resources updated.
@@ -484,18 +493,33 @@ class ApplicationInfoDialogImpl : Dialog
 									Grid.SetColumn(it, 1);
 								}));
 							}));
-							var deactivateButton = new Button().Also(it =>
+							var buttonsPanel = new StackPanel().Also(buttonsPanel =>
 							{
-								it.Classes.Add("Dialog_Item_Button");
-								it.Click += (_, _) => this.DeactivateProduct(productId);
-								it.Bind(ContentProperty, this.Application.GetObservableString("ApplicationInfoDialog.DeactivateProduct"));
+								buttonsPanel.HorizontalAlignment = HorizontalAlignment.Right;
+								buttonsPanel.Orientation = Orientation.Horizontal;
+								buttonsPanel.Children.Add(new Button().Also(it =>
+								{
+									DialogElement.SetIsDialogItemInput(it, true);
+									it.Click += (_, _) => this.ManageProductDevices(productId);
+									it.Bind(ContentProperty, this.Application.GetObservableString("ApplicationInfoDialog.ManageProductDevices"));
+								}));
+								buttonsPanel.Children.Add(new Separator().Also(it =>
+								{
+									DialogElement.SetSeparatorType(it, DialogSeparatorType.Small);
+								}));
+								buttonsPanel.Children.Add(new Button().Also(it =>
+								{
+									DialogElement.SetIsDialogItemInput(it, true);
+									it.Click += (_, _) => this.DeactivateProduct(productId);
+									it.Bind(ContentProperty, this.Application.GetObservableString("ApplicationInfoDialog.DeactivateProduct"));
+								}));
 							});
 							stackPanel.Children.Add(new Separator().Also(it =>
 							{
 								DialogElement.SetSeparatorType(it, DialogSeparatorType.InnerItem);
-								it.Bind(IsVisibleProperty, deactivateButton.GetObservable(IsVisibleProperty));
+								it.Bind(IsVisibleProperty, buttonsPanel.GetObservable(IsVisibleProperty));
 							}));
-							stackPanel.Children.Add(deactivateButton);
+							stackPanel.Children.Add(buttonsPanel);
 							this.ShowProductInfo(stackPanel);
 						}));
 					}
@@ -703,7 +727,7 @@ class ApplicationInfoDialogImpl : Dialog
 			nameTextBlock.Text = name;
 		
 		// show authorization state
-		var deactivateButton = view.Children.First(it => it is Button);
+		var buttonsPanel = view.Children.First(it => it is StackPanel { Orientation: Orientation.Horizontal });
 		if (state == ProductState.Activated 
 			&& productManager.TryGetProductEmailAddress(productId, out var emailAddress))
 		{
@@ -712,13 +736,13 @@ class ApplicationInfoDialogImpl : Dialog
 				emailAddressTextBlock.IsVisible = true;
 				emailAddressTextBlock.Text = this.Application.GetFormattedString("ApplicationInfoDialog.ProductAuthorizationInfo", emailAddress);
 			}
-			deactivateButton.IsVisible = true;
+			buttonsPanel.IsVisible = true;
 		}
 		else
 		{
 			if (dialogItem.Children[1] is Avalonia.Controls.TextBlock emailAddressTextBlock)
 				emailAddressTextBlock.IsVisible = false;
-			deactivateButton.IsVisible = false;
+			buttonsPanel.IsVisible = false;
 		}
 	}
 
