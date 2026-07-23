@@ -333,10 +333,10 @@
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">Lay Out Windows Horizontally</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">Tile Windows</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">Lay Out Windows Vertically</sys:String>
-	<sys:String x:Key="String/MainWindow.NetworkConnectionNeededForProductActivation">To activate '{0}', please connect to the internet. Otherwise, it will be temporarily deactivated after a period of time.</sys:String>
+	<sys:String x:Key="String/MainWindow.NetworkConnectionNeededForProductActivation">To activate {0}, please connect to the internet. Otherwise, it will be temporarily deactivated after a period of time.</sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message">You must read and agree to the《Privacy Policy》before you start using {0}.</sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">You must read and agree to the updated《Privacy Policy》before you start using {0}.</sys:String>
-	<sys:String x:Key="String/MainWindow.ReactivateProductNeeded">Unable to activate '{0}', please try activating it again.</sys:String>
+	<sys:String x:Key="String/MainWindow.ReactivateProductNeeded">Unable to activate {0}, please try activating it again.</sys:String>
 	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS">You are running {0} outside the 'Applications' folder. We recommend moving it into the ‘Applications’ folder to ensure it runs properly and avoids system permission issues.</sys:String>
 	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication">Close Application</sys:String>
 	<sys:String x:Key="String/MainWindow.UsageDataCollection.Message">Help Us Improve the Application!</sys:String>
