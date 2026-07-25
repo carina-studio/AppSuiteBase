@@ -467,11 +467,8 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 					$" -wait-for-process {currentProcess.Id}");
 				mainModule.FileName.Let(it =>
 				{
-					if (!it.EndsWith("/dotnet") && !it.EndsWith("\\dotnet.exe"))
-					{
-						argsBuilder.AppendFormat(" -executable \"{0}\"", it);
-						argsBuilder.AppendFormat(" -executable-args \"{0}\"", AppSuiteApplication.RestoreMainWindowsArgument);
-					}
+					argsBuilder.AppendFormat(" -executable \"{0}\"", it);
+					argsBuilder.AppendFormat(" -executable-args \"{0}\"", AppSuiteApplication.RestoreMainWindowsArgument);
 				});
 				if (accentColor.A > 0)
 					argsBuilder.AppendFormat(" -accent-color #{0:x2}{1:x2}{2:x2}{3:x2}", accentColor.A, accentColor.R, accentColor.G, accentColor.B);

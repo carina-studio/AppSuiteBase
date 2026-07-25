@@ -376,56 +376,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     static readonly SettingKey<string> AgreedUserAgreementVersionKey = new("AgreedUserAgreementVersion", "");
     static Exception? AppDataImportException;
     static bool? AppDataImportResult;
-    static readonly string AppDirectoryPath = Global.Run(() =>
-    {
-        // get path from main module
-        string? mainModulePath = null;
-        if (Platform.IsWindows)
-        {
-            var fileNameBuffer = new StringBuilder(256);
-            var size = Native.Win32.GetModuleFileName(IntPtr.Zero, fileNameBuffer, (uint)fileNameBuffer.Capacity);
-            if (size <= fileNameBuffer.Capacity)
-                mainModulePath = fileNameBuffer.ToString();
-        }
-        mainModulePath ??= Process.GetCurrentProcess().MainModule?.FileName;
-        var isRunByDotnet = mainModulePath is not null && Path.GetFileNameWithoutExtension(mainModulePath) == "dotnet";
-
-        // get path on macOS
-        if (Platform.IsMacOS)
-        {
-            var baseDirectory = Assembly.GetEntryAssembly()?.GetName().Name?.Let(it => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", "Carina Studio", it)) ?? Environment.CurrentDirectory;
-            var directory = isRunByDotnet ? $"{baseDirectory}-Debug" : baseDirectory;
-            if (!System.IO.Directory.Exists(directory))
-            {
-                try
-                {
-                    LogToConsole($"Create application data directory '{directory}'");
-                    System.IO.Directory.CreateDirectory(directory);
-                }
-                catch (Exception ex)
-                {
-                    LogToConsole($"Failed to create application data directory '{directory}'. {ex.GetType().Name}: {ex.Message}");
-                }
-            }
-            return directory;
-        }
-        
-        // use path from main module
-        if (mainModulePath is not null && !isRunByDotnet)
-            return Path.GetDirectoryName(mainModulePath)!;
-        
-        // use path from assembly
-#pragma warning disable SYSLIB0044
-        var codeBase = Assembly.GetEntryAssembly()?.GetName().CodeBase;
-#pragma warning restore SYSLIB0044
-        if (codeBase is not null && codeBase.StartsWith("file://") && codeBase.Length > 7)
-        {
-            if (Platform.IsWindows)
-                return Path.GetDirectoryName(codeBase[8..].Replace('/', '\\')) ?? Environment.CurrentDirectory;
-            return Path.GetDirectoryName(codeBase[7..]) ?? Environment.CurrentDirectory;
-        }
-        return Environment.CurrentDirectory;
-    });
+    static readonly string AppDataDirectoryPath;
     static readonly SettingKey<string> AppVersionKey = new("ApplicationVersion", "");
     static ArgumentsParser? ArgsParser;
     [ThreadStatic]
@@ -434,14 +385,15 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     static readonly SettingKey<bool> DoNotPromptBeforeTakingMemorySnapshotKey = new("DoNotPromptBeforeTakingMemorySnapshot", false);
     static bool ForceThrowingUnhandledException;
     static IDictionary<string, object>? InitLaunchOptions;
-    static readonly string InitSettingsFilePath = Path.Combine(AppDirectoryPath, InitSettingsFileName);
+    static readonly string InitSettingsFilePath;
     static InitSettingsImpl? InitSettingsInstance;
     static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new("IsAcceptNonStableApplicationUpdateInitialized", false);
+    static readonly bool IsRunningFromSourceBuild;
     static ChineseVariant _LaunchChineseVariant;
     static readonly SettingKey<int> LogOutputTargetPortKey = new("LogOutputTargetPort");
     static readonly SettingKey<byte[]> MainWindowViewModelStatesKey = new("MainWindowViewModelStates", []);
     static readonly string[] MetricsNormalizedFontFileNames = ["NotoSansSC-Bold.ttf", "NotoSansSC-Regular.ttf", "NotoSansTC-Bold.ttf", "NotoSansTC-Regular.ttf"];
-    static readonly string SettingsFilePath = Path.Combine(AppDirectoryPath, SettingsFileName);
+    static readonly string SettingsFilePath;
 
 
     // Fields.
@@ -523,6 +475,36 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     static AppSuiteApplication()
     {
         LogToConsole("Initialize AppSuiteApplication type");
+        
+        // check whether the process is running from source code build
+        var dirSeparator = Path.DirectorySeparatorChar;
+        var appContextBaseDirectory = AppContext.BaseDirectory.Let(path => path.EndsWith(dirSeparator) ? path[..^1] : path);
+        IsRunningFromSourceBuild = appContextBaseDirectory.Contains($"{dirSeparator}bin{dirSeparator}Debug{dirSeparator}") 
+                                   || appContextBaseDirectory.Contains($"{dirSeparator}bin{dirSeparator}Release{dirSeparator}");
+        
+        // select directory for application data
+        AppDataDirectoryPath = Platform.IsMacOS
+            ? Global.Run(() =>
+            {
+                var baseDirectory = Assembly.GetEntryAssembly()?.GetName().Name?.Let(it => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", "Carina Studio", it)) ?? Environment.CurrentDirectory;
+                var directory = IsRunningFromSourceBuild ? $"{baseDirectory}-Debug" : baseDirectory;
+                if (!System.IO.Directory.Exists(directory))
+                {
+                    try
+                    {
+                        LogToConsole($"Create application data directory '{directory}'");
+                        System.IO.Directory.CreateDirectory(directory);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogToConsole($"Failed to create application data directory '{directory}'. {ex.GetType().Name}: {ex.Message}");
+                    }
+                }
+                return directory;
+            })
+            : appContextBaseDirectory;
+        InitSettingsFilePath = Path.Combine(AppDataDirectoryPath, InitSettingsFileName);
+        SettingsFilePath = Path.Combine(AppDataDirectoryPath, SettingsFileName);
     }
 
 
@@ -4279,7 +4261,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                                 it.Length > 0 && it[^1] == Path.DirectorySeparatorChar
                                     ? it[..^1]
                                     : it);
-                            if (!string.IsNullOrWhiteSpace(directory) && directory.IsValidFilePath() && !PathEqualityComparer.Default.Equals(directory, AppDirectoryPath))
+                            if (!string.IsNullOrWhiteSpace(directory) && directory.IsValidFilePath() && !PathEqualityComparer.Default.Equals(directory, AppDataDirectoryPath))
                                 launchOptions[LaunchOptionKeys.DirectoryToImportAppData] = directory;
                             else
                                 LogToConsole($"Invalid directory to import app data: {directory}");
@@ -4626,7 +4608,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
     /// <inheritdoc/>
     [ThreadSafe]
-    public override string RootPrivateDirectoryPath => AppDirectoryPath;
+    public override string RootPrivateDirectoryPath => AppDataDirectoryPath;
 
 
     // Save configuration.
@@ -5353,14 +5335,41 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 {
                     process.StartInfo.Let(it =>
                     {
-                        var exeName = Process.GetCurrentProcess().MainModule?.FileName ?? "";
-                        var args = exeName.EndsWith("/dotnet") || exeName.EndsWith("\\dotnet.exe", true, null)
-                            ? $"{Environment.CommandLine} {this.restartArgs}"
+                        var useDotnetHost = IsRunningFromSourceBuild || Environment.ProcessPath.Let(it =>
+                        {
+                            if (Platform.IsWindows)
+                                return it?.EndsWith("\\dotnet.exe", StringComparison.OrdinalIgnoreCase) == true;
+                            return it?.EndsWith("/dotnet") == true;
+                        });
+                        var exeName = useDotnetHost
+                            ? Environment.CommandLine.Let(it =>
+                            {
+                                if (it.Length == 0)
+                                    return it;
+                                var c = it[0];
+                                if (c == '\'' || c == '\"')
+                                {
+                                    int end = it.IndexOf(c, 1);
+                                    return end >= 0
+                                        ? it[1..end]
+                                        : it;
+                                }
+                                else
+                                {
+                                    int end = it.IndexOf(' ', 1);
+                                    return end >= 0
+                                        ? it[..end]
+                                        : it;
+                                }
+                            })
+                            : Environment.ProcessPath ?? "";
+                        var args = useDotnetHost
+                            ? $"\"{exeName}\" {this.restartArgs}"
                             : this.restartArgs?.ToString() ?? "";
                         if (Platform.IsNotMacOS)
                         {
                             it.Arguments = args;
-                            it.FileName = exeName;
+                            it.FileName = useDotnetHost ? "dotnet" : exeName;
                             if (this.isRestartAsAdminRequested && Platform.IsWindows)
                             {
                                 it.UseShellExecute = true;
@@ -5369,7 +5378,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                         }
                         else
                         {
-                            it.Arguments = $"-c \"nohup /bin/sh -c 'while kill -0 {Environment.ProcessId} 2>/dev/null; do sleep 0.5; done; exec \"{exeName}\" {args} &'\"";
+                            var command = useDotnetHost
+                                ? $"dotnet {args}"
+                                : $"\"{exeName}\" {args}";
+                            it.Arguments = $"-c \"nohup /bin/sh -c 'while kill -0 {Environment.ProcessId} 2>/dev/null; do sleep 0.5; done; exec {command} &'\"";
                             it.FileName = "/bin/sh";
                         }
                     });
