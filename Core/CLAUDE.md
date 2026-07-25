@@ -40,6 +40,25 @@ Force-kill paths (Task Manager → End Process, `taskkill /F`, antivirus, crash)
 
 All registry operations are best-effort and exception-safe; failures never propagate.
 
+### Application Data Directory & Restart
+
+**Source-build detection.** The static field `IsRunningFromSourceBuild` (set in the static constructor) is `true` when `AppContext.BaseDirectory` contains a `bin/Debug/` or `bin/Release/` path segment — i.e. the app is running from a build-output folder (IDE run such as Rider, `dotnet run`, or a locally-built binary run in-place) rather than a shipped/installed layout. It is a **path heuristic**, not a host check: it is derived from `AppContext.BaseDirectory` (which is the assembly's directory under *both* an apphost launch and a `dotnet App.dll` launch — the old `MainModule`/`GetModuleFileName`/`CodeBase` probing and the `== "dotnet"` executable-name test were removed because a launcher-execed apphost defeats them). A shipped macOS `.app` runs from `…/Contents/MacOS/` and an installed Win/Linux app from its install dir, so neither matches; the one caveat is running a *packaged* app directly from its build-output folder before it is moved/installed.
+
+**Data directory (`AppDataDirectoryPath`).** Selected once in the static constructor and exposed as `RootPrivateDirectoryPath`:
+- **macOS** — `~/Library/Application Support/Carina Studio/<AssemblyName>`, with a `-Debug` suffix appended when `IsRunningFromSourceBuild` (so dev sessions never read/write the production data folder). The directory is created eagerly here.
+- **Windows / Linux** — `AppContext.BaseDirectory` (trailing separator trimmed; the value is compared with `PathEqualityComparer`, so it must stay separator-free), i.e. the app's own directory alongside its assemblies.
+
+`InitSettingsFilePath` and `SettingsFilePath` are combined from `AppDataDirectoryPath` in the same static constructor (they must be assigned there, after the directory is chosen, not via field initializers — static field initializers run in textual/alphabetical-declaration order, before the directory would be known).
+
+**Restart executable selection.** In the shutdown/restart path, `useDotnetHost` decides how to relaunch:
+```
+useDotnetHost = IsRunningFromSourceBuild || <Environment.ProcessPath ends with the dotnet host name>
+```
+- When **true**, the app is relaunched through the shared dotnet host: the managed assembly path is extracted from the first token of `Environment.CommandLine` (quote/space aware, so spaced paths survive) and the process is started as `dotnet "<assembly.dll>" <restartArgs>` (`FileName = "dotnet"` on Win/Linux; `exec dotnet …` inside the macOS `nohup` relauncher). This requires `dotnet` to be resolvable on the relaunch child's PATH — satisfied under Rider/terminal; it can fail for an apphost launched with a minimal PATH (e.g. a Finder double-click of the `bin/Debug` binary).
+- When **false** (the shipped case: self-contained apphost, `IsRunningFromSourceBuild` false and `ProcessPath` not the dotnet host), the app re-execs its own `Environment.ProcessPath` with `restartArgs` — no PATH dependency.
+
+The `ProcessPath`-ends-with-dotnet leg additionally covers a framework-dependent install launched via `dotnet App.dll` from a non-`bin` path, where the source-build heuristic alone would be false.
+
 ### Default Font Configuration
 
 Three cooperating pieces, all deriving the font family list from `GetDefaultFontFamilyName(ChineseVariant)`: a **composite font family name** (comma-separated primary + fallback chain) with `Inter` as the Latin face followed by `Noto Sans SC` / `Noto Sans TC` — Simplified-first for `ChineseVariant.Default`, Traditional-first for `ChineseVariant.Taiwan`.

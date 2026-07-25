@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace CarinaStudio.AppSuite.Native;
 
@@ -123,10 +122,6 @@ static unsafe class Win32
 
     [DllImport("Dwmapi", SetLastError = true)]
     public static extern int DwmSetWindowAttribute(IntPtr hwnd, DWMWA dwAttribute, void* pvAttribute, uint cbAttribute);
-
-
-    [DllImport("Kernel32", SetLastError = true)]
-    public static extern uint GetModuleFileName(IntPtr hModule, StringBuilder lpFilename, uint nSize);
 
 
     [DllImport("User32", SetLastError = true)]
