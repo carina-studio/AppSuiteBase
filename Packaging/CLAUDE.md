@@ -16,9 +16,18 @@ It is consumed by build pipelines and the `Packaging.Tests` test project. It is 
 |---|---|
 | NuGet ID | `CarinaStudio.AppSuite.Packaging` |
 | Root namespace | `CarinaStudio.AppSuite.Packaging` |
-| Target frameworks | `net8.0`, `net9.0`, `net10.0` |
+| Target frameworks | Whatever `Directory.Build.props` sets — currently `net9.0`, `net10.0` |
 | Output type | Class library |
-| Key dependency | `CarinaStudio.AppBase.Core` |
+| Key dependency | `CarinaStudio.AppBase.Core` (version pinned by `$(AppBaseVersion)`) |
+
+This project **follows the solution-wide target frameworks** — do not declare `<TargetFrameworks>`
+in `Packaging.csproj`. It targeted `net8.0` in the past; that was dropped deliberately, so do not
+add it back to widen support for older consumers.
+
+Version properties (`AssemblyVersion`, `Version`, `PackageVersion`) *are* overridden here, because
+the package is versioned independently of the rest of the solution. Everything else — target
+frameworks, authors, company, copyright, license, project URL, nullable — comes from the root
+`Directory.Build.props`.
 
 ## Structure
 

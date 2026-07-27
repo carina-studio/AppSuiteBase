@@ -296,6 +296,9 @@ public class PackagingTool
             // resolve informational PrevVersion labels to numeric versions on demand
             Dictionary<string, Version>? labelToVersionMap = null;
 
+            // resolve tag of GitHub release which packages were uploaded to
+            var releaseTag = string.IsNullOrWhiteSpace(informationalVersion) ? version.ToString() : informationalVersion;
+
             // generate manifest
             var manifestName = platform != null ? $"PackageManifest-{platform}.json" : "PackageManifest.json";
             Console.WriteLine($"Creating package manifest '{manifestName}'");
@@ -306,7 +309,7 @@ public class PackagingTool
             jsonWriter.WriteString("Version", version.ToString());
             if (!string.IsNullOrWhiteSpace(informationalVersion))
                 jsonWriter.WriteString("InformationalVersion", informationalVersion);
-            jsonWriter.WriteString("PageUri", $"https://github.com/carina-studio/{repositaryName}/releases/tag/{version}");
+            jsonWriter.WriteString("PageUri", $"https://github.com/carina-studio/{repositaryName}/releases/tag/{releaseTag}");
             jsonWriter.WritePropertyName("Packages");
             jsonWriter.WriteStartArray();
             foreach (var path in packageFilPaths)
@@ -374,7 +377,7 @@ public class PackagingTool
                     jsonWriter.WriteString("RuntimeVersion", "6.0.1");   
                 }
                 jsonWriter.WriteString("SHA256", sha256);
-                jsonWriter.WriteString("Uri", $"https://github.com/carina-studio/{repositaryName}/releases/download/{version}/{name}");
+                jsonWriter.WriteString("Uri", $"https://github.com/carina-studio/{repositaryName}/releases/download/{releaseTag}/{name}");
                 jsonWriter.WriteEndObject();
             }
             jsonWriter.WriteEndArray();
