@@ -1,25 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<AssemblyVersion>1.1.2.501</AssemblyVersion>
-		<Version>1.1.2.501</Version>
-		<PackageVersion>1.1.2.501</PackageVersion>
+		<AssemblyVersion>2.0.0.0</AssemblyVersion>
+		<Version>2.0.0.0</Version>
+		<PackageVersion>2.0.0.0</PackageVersion>
 		<RootNamespace>CarinaStudio.AppSuite.Packaging</RootNamespace>
 		<AssemblyName>CarinaStudio.AppSuite.Packaging</AssemblyName>
-		<Nullable>enable</Nullable>
 		<DocumentationFile>CarinaStudio.AppSuite.Packaging.xml</DocumentationFile>
-		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
-		<Authors>Carina Studio</Authors>
-		<Company>Carina Studio</Company>
-		<Copyright>©2022-$([System.DateTime]::Now.Year) Carina Studio</Copyright>
 		<PackageId>CarinaStudio.AppSuite.Packaging</PackageId>
 		<Description>Tool to package application of Carina Studio based-on AppSuite.</Description>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/carina-studio/AppSuiteBase/</PackageProjectUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CarinaStudio.AppBase.Core" Version="2.2.21.108" />
+		<PackageReference Include="CarinaStudio.AppBase.Core" Version="$(AppBaseVersion)" />
 	</ItemGroup>
 
 </Project>
