@@ -1,6 +1,8 @@
 .claude/launch.json
 .idea
 .vs
+AGENTS.local.md
+CLAUDE.local.md
 obj
 bin
 PublishProfiles
