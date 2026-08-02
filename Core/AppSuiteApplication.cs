@@ -5780,7 +5780,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         {
             if (it == ApplicationCulture.System || this.CheckApplicationCultureSupport(it))
                 return it;
-            this.Logger.LogWarning("Application culture {culture} is not supported, fall-back to system", it);
+            this.Logger.LogWarning("Application culture {culture} is not supported, fall-back to System", it);
             return ApplicationCulture.System;
         });
         var cultureInfo = await culture.GetCultureInfoAsync(true);
