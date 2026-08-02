@@ -1,0 +1,33 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:sys="using:System">
+
+	<!-- ApplicationDataImportDirectorySelectionDialog -->
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Confirmation">すべての設定とユーザープロファイルを含むアプリケーションデータが、選択したアプリケーション内のデータで上書きされます。上書きした後は元に戻すことはできません。</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.DirectoryValidationFailed">アプリケーション「{0}」には有効なアプリケーションデータが含まれていないようです。それでもこのアプリケーションからデータをインポートしますか？</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.LocalDirectoriesOnly">ローカルアプリケーションのみ使用できます。</sys:String>
+
+	<!-- Common -->
+	<sys:String x:Key="String/Common.Administrator">スーパーユーザー</sys:String>
+	<sys:String x:Key="String/Common.CloseTab.WithGesture">タブを閉じる (⌘W)</sys:String>
+	<sys:String x:Key="String/Common.Copy.WithGesture">コピー (⌘C)</sys:String>
+	<sys:String x:Key="String/Common.CreateTab.WithGesture">新しいタブを作成 (⌘T)</sys:String>
+	<sys:String x:Key="String/Common.Cut">カット</sys:String>
+	<sys:String x:Key="String/Common.Cut.WithGesture">カット (⌘X)</sys:String>
+	<sys:String x:Key="String/Common.Paste">ペースト</sys:String>
+	<sys:String x:Key="String/Common.Paste.WithGesture">ペースト (⌘V)</sys:String>
+	<sys:String x:Key="String/Common.Save.WithDialogAndGesture">保存… (⌘+S)</sys:String>
+	<sys:String x:Key="String/Common.Save.WithGesture">保存 (⌘S)</sys:String>
+	<sys:String x:Key="String/Common.SelectAll">すべてを選択</sys:String>
+	<sys:String x:Key="String/Common.SelectAll.WithGesture">すべてを選択 (⌘A)</sys:String>
+
+	<!-- ExternalDependenciesDialog -->
+	<sys:String x:Key="String/ExternalDependenciesDialog.EditPathEnvVar">/etc/paths を編集…</sys:String>
+
+	<!-- MainWindow -->
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.ConfirmationForFirstLaunch">別のアプリケーションからデータをインポートしますか？「バージョン情報」ダイアログから後でインポートすることもできます。</sys:String>
+
+	<!-- PathEnvVarEditorDialog -->
+	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">/etc/paths の編集</sys:String>
+
+</ResourceDictionary>

@@ -27,6 +27,8 @@
 		<AvaloniaResource Include="Fonts/Noto/NotoSerif-Bold.ttf" />
 		<AvaloniaResource Include="Fonts/Noto/NotoSerif-Italic.ttf" />
 		<AvaloniaResource Include="Fonts/Noto/NotoSerif-Regular.ttf" />
+		<AvaloniaResource Include="Fonts/Noto/NotoSansJP-Bold.ttf" />
+		<AvaloniaResource Include="Fonts/Noto/NotoSansJP-Regular.ttf" />
 		<AvaloniaResource Include="Fonts/Noto/NotoSansSC-Bold.ttf" />
 		<AvaloniaResource Include="Fonts/Noto/NotoSansSC-Regular.ttf" />
 		<AvaloniaResource Include="Fonts/Noto/NotoSansTC-Bold.ttf" />

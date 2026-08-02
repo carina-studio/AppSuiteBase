@@ -1,0 +1,435 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:sys="using:System">
+
+	<!-- ApplicationCulture -->
+	<sys:String x:Key="String/ApplicationCulture.EN_US">英語（アメリカ合衆国）</sys:String>
+	<sys:String x:Key="String/ApplicationCulture.JA_JP">日本語</sys:String>
+	<sys:String x:Key="String/ApplicationCulture.System">システム</sys:String>
+	<sys:String x:Key="String/ApplicationCulture.ZH_TW">中国語（繁体字）</sys:String>
+	<sys:String x:Key="String/ApplicationCulture.ZH_CN">中国語（簡体字）</sys:String>
+
+	<!-- ApplicationDataImportDirectorySelectionDialog -->
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Confirmation">すべての設定とユーザープロファイルを含むアプリケーションデータが、選択したディレクトリ内のデータで上書きされます。上書きした後は元に戻すことはできません。</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.DirectoryValidationFailed">ディレクトリ「{0}」には有効なアプリケーションデータが含まれていないようです。それでもこのディレクトリからデータをインポートしますか？</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.LocalDirectoriesOnly">ローカルディレクトリのみ使用できます。</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Title">アプリケーションデータのインポート</sys:String>
+
+	<!-- ApplicationInfoDialog -->
+	<sys:String x:Key="String/ApplicationInfoDialog.ApplicationChangeList">変更点</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies">読み込み済みアセンブリ</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Assemblies.Description">{0} 個のアセンブリ</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section1.Flaticon" xml:space="preserve">アプリケーションアイコンは</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section2.Flaticon" xml:space="preserve">が作成し</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.AppIcon.Section3.Flaticon" xml:space="preserve">で公開しているアイコンを改変したものです。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section1">は</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section2">オープンソースプロジェクト</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.OpenSourceBased.Section3">を基に開発されたアプリケーションです。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.PoweredBy.Section1">このソフトウェアは</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.PoweredBy.Section2">および</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Attribution.PoweredBy.Section3">を基盤としています。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ConfirmRestartingInDebugMode">デバッグモードでは、追加の実行ログが出力され、内部機能を調整するためのオプションが表示されます。次に手動で起動し直すまで、デバッグモードのままになります。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.CpuUsage">CPU 使用率</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.DeactivateProduct">無効化…</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.DeviceName">デバイス名</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.DonateWithPayPal">PayPal で寄付する</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ExportAppLogs">アプリケーションログのエクスポート…</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ExternalDependencies">外部依存関係…</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.FailedToExportAppLogs">アプリケーションログをエクスポートできませんでした。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.FinalizationPendingCount">ファイナライズ待ちオブジェクト数</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.FrameworkVersion">.NET バージョン</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.GCFrequency">1 秒あたりのガベージコレクション (GC) 回数</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.GitHubProject">GitHub のプロジェクトページ</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ImportApplicationData">アプリケーションデータのインポート…</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ImportApplicationData.Confirmation">データをインポートするためにアプリケーションを再起動します。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.InstalledFrameworkVersion">(インストール済み: {0})</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ManagedHeapSize">マネージドヒープサイズ</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ManagedHeapUsage">マネージドヒープ使用量</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection">ネットワーク</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Disconnected">未接続</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.NetworkConnection.Format">接続済み ({0})</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.OperatingSystem">オペレーティングシステム</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Other">その他の情報</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrimaryNetworkInterface">主要ネットワークインターフェイス</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrimaryNetworkInterface.Format">{0} ({1})、{2}</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrivacyPolicyWasAgreedBefore">「プライバシーポリシー」に同意済みです。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.PrivateMemoryUsage">プライベートメモリ使用量</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ProcessId">識別子 (PID)</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ProcessInformation">プロセス情報</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ProcessorCount">プロセッサ数</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ProductAuthorizationInfo">{0} に認証されています</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Products">製品</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ProprietaryVersion">(Carina Studio によるビルド)</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.RestartInDebugMode">デバッグモードで再起動</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.RunningScriptCount">実行中のスクリプト数</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Screen.PixelDensity">画面の拡大率</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Screen.Size">画面サイズ</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Screen.WorkingArea">画面の作業領域</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ScriptRunningLoading">スクリプト実行負荷</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ShowAppUpdateDialog">更新を確認…</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.SucceededToExportAppLogs">アプリケーションログをエクスポートしました。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.SystemInformation">システム情報</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.ThreadCount">スレッド数</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Title">{0} について</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.TotalPhysicalMemory">物理メモリ</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.UserAgreementWasAgreedBefore">「利用規約」に同意済みです。</sys:String>
+	<sys:String x:Key="String/ApplicationInfoDialog.Website">{0} の Web サイト</sys:String>
+
+	<!-- ApplicationOptions -->
+	<sys:String x:Key="String/ApplicationOptions">アプリケーションオプション</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.AcceptNonStableApplicationUpdate">プレリリース版の更新を受け取る</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.ApplySystemTextScaleFactor">システムの文字サイズを使用する</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.ApplySystemTextScaleFactor.Description">システムの文字サイズをユーザーインターフェイスの一部に適用します。</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.Culture">言語</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">ユーザーインターフェイスの拡大率</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR ツールがインストールされていません。</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DefaultBackdropEffectStrength">背景効果</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">既定の言語</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DisableAngle">ANGLE レンダリングを無効にする</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DisableAngle.Description">一部のグラフィックスカードで発生する表示の不具合を回避しますが、一部の視覚効果に影響する場合があります。</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableLigatureInScript">合字とコンテキスト依存の異体字</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.EnableRunningScript">スクリプトの実行を有効にする</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.IndentationSizeInScript">インデント幅</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.IsUsageDataCollectionAllowed">匿名の使用状況データの収集を許可する</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.IsUsageDataCollectionAllowed.Description">アプリケーションの使われ方を把握し、改善に役立てるために使用されます。</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.LaunchWithSplashWindow">起動時にスプラッシュ画面を表示する</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.LogOutputTargetPort">ログ出力ポート</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.NeedToRestartApplicationToTakeEffect">変更を適用するにはアプリケーションを再起動してください。</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.NotifyApplicationUpdate">更新が見つかったときに通知する</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.Others">その他の設定</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.PromptWhenScriptRuntimeErrorOccurred">実行時エラーが発生したときに通知する</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.Scripting">スクリプト</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.ThemeMode">テーマ</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.UserInterface">ユーザーインターフェイス</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.UseSpacesForIndentationInScript">インデントにスペースを使用する</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.WillCloseAllWindowsToTakeEffect">変更を適用するためにすべてのウィンドウを閉じます。</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.WillRestartApplicationToTakeEffect">変更を適用するためにアプリケーションを再起動します。</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.WillRestartMainWindowsToTakeEffect">変更を適用するためにウィンドウを再起動します。</sys:String>
+
+	<!-- ApplicationReleasingType -->
+	<sys:String x:Key="String/ApplicationReleasingType.Development">開発版</sys:String>
+	<sys:String x:Key="String/ApplicationReleasingType.Preview">プレビュー版</sys:String>
+	<sys:String x:Key="String/ApplicationReleasingType.ReleaseCandidate">RC</sys:String>
+	<sys:String x:Key="String/ApplicationReleasingType.Stable">安定版</sys:String>
+
+	<!-- ApplicationUpdateDialog -->
+	<sys:String x:Key="String/ApplicationUpdateDialog.AcceptNonStableApplicationUpdate.Description">これらの設定はアプリケーションオプションからも変更できます。</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.AutoUpdateNotSupported">互換性の問題により、{0} を自動的に更新できません。新しいバージョンを手動でダウンロードしてインストールしてください。現在のバージョンを削除する前に、設定をインポートすることができます。</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.CheckForUpdate">更新を確認</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.CheckingForUpdate">更新を確認しています…</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.DownloadUpdatePackage">ダウンロードしてインストール</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.LatestVersion">{0} は最新の状態です。</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.NewVersionFound">{0} の新しいバージョンが利用可能です: {1}</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.ReleasePage">更新の詳細</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.StartUpdating">更新</sys:String>
+	<sys:String x:Key="String/ApplicationUpdateDialog.Title">アプリケーションの更新</sys:String>
+
+	<!-- ApplicationUpdater -->
+	<sys:String x:Key="String/ApplicationUpdater.DownloadingAutoUpdater">自動更新コンポーネントをダウンロードしています ({0})…</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.FailedToPrepareForUpdate">更新の準備に失敗しました。</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.FailedToStartAutoUpdater">自動更新を開始できませんでした。</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.PreparingForUpdate">更新を準備しています…</sys:String>
+	<sys:String x:Key="String/ApplicationUpdater.ReleasePage">新しいバージョンの変更点</sys:String>
+
+	<!-- AppSuiteApplication -->
+	<sys:String x:Key="String/AppSuiteApplication.InitializingComponents">コンポーネントを初期化しています</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.LoadingTheme">テーマを読み込んでいます</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Description">メモリスナップショットの取得中は、アプリケーションが数十秒から数分間応答しなくなることがあります。</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Failed">メモリスナップショットを取得できませんでした。</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Processing">メモリスナップショットを取得しています。処理中はアプリケーションが応答しなくなります…</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Succeeded">メモリスナップショットを取得し、「{0}」に保存しました。</sys:String>
+
+	<!-- CommandSearchPaths -->
+	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">システムで定義されたパスを更新</sys:String>
+
+	<!-- Common -->
+	<sys:String x:Key="String/Common.Accept">承諾</sys:String>
+	<sys:String x:Key="String/Common.Activate">有効化</sys:String>
+	<sys:String x:Key="String/Common.Activate.WithDialog">有効化…</sys:String>
+	<sys:String x:Key="String/Common.Add">追加</sys:String>
+	<sys:String x:Key="String/Common.Add.WithDialog">追加…</sys:String>
+	<sys:String x:Key="String/Common.Administrator">管理者</sys:String>
+	<sys:String x:Key="String/Common.Agree">同意する</sys:String>
+	<sys:String x:Key="String/Common.Allow">許可</sys:String>
+	<sys:String x:Key="String/Common.Allow.WithDialog">許可…</sys:String>
+	<sys:String x:Key="String/Common.Apply">適用</sys:String>
+	<sys:String x:Key="String/Common.Apply.WithDialog">適用…</sys:String>
+	<sys:String x:Key="String/Common.BuiltIn">組み込み</sys:String>
+	<sys:String x:Key="String/Common.Cancel">キャンセル</sys:String>
+	<sys:String x:Key="String/Common.Clear">クリア</sys:String>
+	<sys:String x:Key="String/Common.Close">閉じる</sys:String>
+	<sys:String x:Key="String/Common.CloseTab">タブを閉じる</sys:String>
+	<sys:String x:Key="String/Common.CloseTab.WithGesture">タブを閉じる (Ctrl+W)</sys:String>
+	<sys:String x:Key="String/Common.CloseWindow">ウィンドウを閉じる</sys:String>
+	<sys:String x:Key="String/Common.Complete">完了</sys:String>
+	<sys:String x:Key="String/Common.Complete.WithDialog">完了…</sys:String>
+	<sys:String x:Key="String/Common.Continue">続行</sys:String>
+	<sys:String x:Key="String/Common.Continue.WithDialog">続行…</sys:String>
+	<sys:String x:Key="String/Common.ContinueToUse">使い続ける</sys:String>
+	<sys:String x:Key="String/Common.Copy">コピー</sys:String>
+	<sys:String x:Key="String/Common.Copy.WithGesture">コピー (Ctrl+C)</sys:String>
+	<sys:String x:Key="String/Common.Create">作成</sys:String>
+	<sys:String x:Key="String/Common.Create.WithDialog">作成…</sys:String>
+	<sys:String x:Key="String/Common.CreateTab">新しいタブを作成</sys:String>
+	<sys:String x:Key="String/Common.CreateTab.WithGesture">新しいタブを作成 (Ctrl+T)</sys:String>
+	<sys:String x:Key="String/Common.CreateWindow">新しいウィンドウを作成</sys:String>
+	<sys:String x:Key="String/Common.Custom">カスタム</sys:String>
+	<sys:String x:Key="String/Common.Cut">切り取り</sys:String>
+	<sys:String x:Key="String/Common.Cut.WithGesture">切り取り (Ctrl+X)</sys:String>
+	<sys:String x:Key="String/Common.DebugMode">デバッグモード</sys:String>
+	<sys:String x:Key="String/Common.Decline">同意しない</sys:String>
+	<sys:String x:Key="String/Common.Delete">削除</sys:String>
+	<sys:String x:Key="String/Common.Deny">拒否</sys:String>
+	<sys:String x:Key="String/Common.Details">詳細</sys:String>
+	<sys:String x:Key="String/Common.Details.WithDialog">詳細…</sys:String>
+	<sys:String x:Key="String/Common.Disable">無効化</sys:String>
+	<sys:String x:Key="String/Common.Disable.WithDialog">無効化…</sys:String>
+	<sys:String x:Key="String/Common.Disallow">許可しない</sys:String>
+	<sys:String x:Key="String/Common.Disallow.WithDialog">許可しない…</sys:String>
+	<sys:String x:Key="String/Common.Document">ドキュメント</sys:String>
+	<sys:String x:Key="String/Common.DoNotAskAgain">今後確認しない</sys:String>
+	<sys:String x:Key="String/Common.DoNotShowAgain">今後表示しない</sys:String>
+	<sys:String x:Key="String/Common.Edit">編集</sys:String>
+	<sys:String x:Key="String/Common.Edit.WithDialog">編集…</sys:String>
+	<sys:String x:Key="String/Common.Empty">空</sys:String>
+	<sys:String x:Key="String/Common.Enable">有効化</sys:String>
+	<sys:String x:Key="String/Common.Enable.WithDialog">有効化…</sys:String>
+	<sys:String x:Key="String/Common.Export">エクスポート</sys:String>
+	<sys:String x:Key="String/Common.Export.WithDialog">エクスポート…</sys:String>
+	<sys:String x:Key="String/Common.Feedback">フィードバック</sys:String>
+	<sys:String x:Key="String/Common.Feedback.WithDialog">フィードバック…</sys:String>
+	<sys:String x:Key="String/Common.Help">ヘルプ</sys:String>
+	<sys:String x:Key="String/Common.Ignore">無視</sys:String>
+	<sys:String x:Key="String/Common.Import">インポート</sys:String>
+	<sys:String x:Key="String/Common.Import.WithDialog">インポート…</sys:String>
+	<sys:String x:Key="String/Common.KnowMoreAbout">詳しく見る</sys:String>
+	<sys:String x:Key="String/Common.KnowMoreAbout.WithDialog">詳しく見る…</sys:String>
+	<sys:String x:Key="String/Common.Load">読み込み</sys:String>
+	<sys:String x:Key="String/Common.Load.WithDialog">読み込み…</sys:String>
+	<sys:String x:Key="String/Common.No">いいえ</sys:String>
+	<sys:String x:Key="String/Common.None">なし</sys:String>
+	<sys:String x:Key="String/Common.OK">OK</sys:String>
+	<sys:String x:Key="String/Common.Open">開く</sys:String>
+	<sys:String x:Key="String/Common.Open.WithDialog">開く…</sys:String>
+	<sys:String x:Key="String/Common.OpenInNewTab">新しいタブで開く</sys:String>
+	<sys:String x:Key="String/Common.OpenInNewWindow">新しいウィンドウで開く</sys:String>
+	<sys:String x:Key="String/Common.OpenScriptLogWindow">スクリプトログウィンドウ</sys:String>
+	<sys:String x:Key="String/Common.OpenScriptLogWindow.WithDialog">スクリプトログウィンドウ…</sys:String>
+	<sys:String x:Key="String/Common.Options">オプション</sys:String>
+	<sys:String x:Key="String/Common.Options.WithDialog">オプション…</sys:String>
+	<sys:String x:Key="String/Common.Paste">貼り付け</sys:String>
+	<sys:String x:Key="String/Common.Paste.WithGesture">貼り付け (Ctrl+V)</sys:String>
+	<sys:String x:Key="String/Common.PrivacyPolicy">プライバシーポリシー</sys:String>
+	<sys:String x:Key="String/Common.PrivacyPolicy.WithDialog">プライバシーポリシー…</sys:String>
+	<sys:String x:Key="String/Common.Processing">処理しています…</sys:String>
+	<sys:String x:Key="String/Common.Reactivate">再有効化</sys:String>
+	<sys:String x:Key="String/Common.Reactivate.WithDialog">再有効化…</sys:String>
+	<sys:String x:Key="String/Common.Refresh">最新の情報に更新</sys:String>
+	<sys:String x:Key="String/Common.Remove">削除</sys:String>
+	<sys:String x:Key="String/Common.Remove.WithDialog">削除…</sys:String>
+	<sys:String x:Key="String/Common.Rename">名前の変更</sys:String>
+	<sys:String x:Key="String/Common.Rename.WithDialog">名前の変更…</sys:String>
+	<sys:String x:Key="String/Common.Required">必須</sys:String>
+	<sys:String x:Key="String/Common.Reset">リセット</sys:String>
+	<sys:String x:Key="String/Common.Reset.WithDialog">リセット…</sys:String>
+	<sys:String x:Key="String/Common.Save">保存</sys:String>
+	<sys:String x:Key="String/Common.Save.WithDialog">保存…</sys:String>
+	<sys:String x:Key="String/Common.Save.WithDialogAndGesture">保存… (Ctrl+S)</sys:String>
+	<sys:String x:Key="String/Common.Save.WithGesture">保存 (Ctrl+S)</sys:String>
+	<sys:String x:Key="String/Common.SelectAll">すべて選択</sys:String>
+	<sys:String x:Key="String/Common.SelectAll.WithGesture">すべて選択 (Ctrl+A)</sys:String>
+	<sys:String x:Key="String/Common.SelfTesting">セルフテスト</sys:String>
+	<sys:String x:Key="String/Common.SelfTesting.WithDialog">セルフテスト…</sys:String>
+	<sys:String x:Key="String/Common.ShowLess">表示を減らす</sys:String>
+	<sys:String x:Key="String/Common.ShowMore">さらに表示</sys:String>
+	<sys:String x:Key="String/Common.ShowMore.WithDialog">さらに表示…</sys:String>
+	<sys:String x:Key="String/Common.Tab">タブ</sys:String>
+	<sys:String x:Key="String/Common.Tabs">タブ</sys:String>
+	<sys:String x:Key="String/Common.TakeMemorySnapshot">メモリスナップショットの取得</sys:String>
+	<sys:String x:Key="String/Common.TakeMemorySnapshot.WithDialog">メモリスナップショットの取得…</sys:String>
+	<sys:String x:Key="String/Common.Tool">ツール</sys:String>
+	<sys:String x:Key="String/Common.Tools">ツール</sys:String>
+	<sys:String x:Key="String/Common.Tools.WithDialog">ツール…</sys:String>
+	<sys:String x:Key="String/Common.UserAgreement">利用規約</sys:String>
+	<sys:String x:Key="String/Common.UserAgreement.WithDialog">利用規約…</sys:String>
+	<sys:String x:Key="String/Common.Validating">検証しています…</sys:String>
+	<sys:String x:Key="String/Common.Window">ウィンドウ</sys:String>
+	<sys:String x:Key="String/Common.Windows">ウィンドウ</sys:String>
+	<sys:String x:Key="String/Common.Yes">はい</sys:String>
+
+	<!-- DatePicker -->
+	<sys:String x:Key="String/DatePicker.Day">日</sys:String>
+	<sys:String x:Key="String/DatePicker.DayFormat">d日 (ddd)</sys:String>
+	<sys:String x:Key="String/DatePicker.Month">月</sys:String>
+	<sys:String x:Key="String/DatePicker.MonthFormat">M月</sys:String>
+	<sys:String x:Key="String/DatePicker.Year">年</sys:String>
+	<sys:String x:Key="String/DatePicker.YearFormat">yyyy年</sys:String>
+
+	<!-- DateTimeTextBox -->
+	<sys:String x:Key="String/DateTimeTextBox.FormatDescription">サポートされている形式:
+1.英語の一般的な日付と時刻の形式。
+2.現在の言語の一般的な日付と時刻の形式。
+3.秒/ミリ秒/マイクロ秒単位の Unix タイムスタンプ。
+4.'yyyyMMdd_HH:mm:ss.ffffff' 形式のテキスト。年、秒、秒未満の値および ':' は省略できます。</sys:String>
+	<sys:String x:Key="String/DateTimeTextBox.Watermark">日付と時刻</sys:String>
+
+	<!-- EnableRunningScriptDialog -->
+	<sys:String x:Key="String/EnableRunningScriptDialog.Message">スクリプトを実行すると、システム設定が変更されたり、コンピューターに損害が生じたりする可能性があります。作成またはインポートしたスクリプトは、実行する前に内容をよく確認してください。スクリプトを有効にしますか？</sys:String>
+
+	<!-- ExternalDependenciesDialog -->
+	<sys:String x:Key="String/ExternalDependenciesDialog.EditPathEnvVar">PATH 環境変数を編集…</sys:String>
+	<sys:String x:Key="String/ExternalDependenciesDialog.ExternalDependency.Install">ダウンロードしてインストール</sys:String>
+	<sys:String x:Key="String/ExternalDependenciesDialog.Title">外部依存関係</sys:String>
+
+	<!-- ExternalDependency-->
+	<sys:String x:Key="String/ExternalDependency.XRandR">X Window System 用のリサイズ・回転拡張機能 (XRandR)</sys:String>
+	<sys:String x:Key="String/ExternalDependency.XRandR.Description">ディスプレイ設定の検出と、ユーザーインターフェイスの拡大率の適用に使用されます。インストール後、変更を適用するにはアプリケーションを再起動する必要があります。</sys:String>
+
+	<!-- ExternalDependencyPriority -->
+	<sys:String x:Key="String/ExternalDependencyPriority.Optional">これは省略可能な依存関係です。</sys:String>
+	<sys:String x:Key="String/ExternalDependencyPriority.Required">これはアプリケーションに必要です。</sys:String>
+	<sys:String x:Key="String/ExternalDependencyPriority.RequiredByFeatures">これは一部の機能に必要です。</sys:String>
+
+	<!-- ExternalDependencyState -->
+	<sys:String x:Key="String/ExternalDependencyState.Available.Configuration">設定済み</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Available.Permission">許可済み</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Available.Software">インストール済み</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.CheckingForAvailability.Configuration">設定を確認しています…</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.CheckingForAvailability.Permission">権限を確認しています…</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.CheckingForAvailability.Software">インストール状態を確認しています…</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Unavailable.Configuration">未設定</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Unavailable.Permission">未許可</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Unavailable.Software">未インストール</sys:String>
+	<sys:String x:Key="String/ExternalDependencyState.Unknown">不明</sys:String>
+
+	<!-- FileFormat -->
+	<sys:String x:Key="String/FileFormat.All">すべての形式</sys:String>
+	<sys:String x:Key="String/FileFormat.Text">テキストファイル</sys:String>
+	<sys:String x:Key="String/FileFormat.Zip">ZIP ファイル</sys:String>
+
+	<!-- IPAddressTextBox -->
+	<sys:String x:Key="String/IPAddressTextBox.Watermark">IPv4 または IPv6</sys:String>
+
+	<!-- ItemSelectionDialog -->
+	<sys:String x:Key="String/ItemSelectionDialog.SelectOneItem">項目を 1 つ選択してください</sys:String>
+	<sys:String x:Key="String/ItemSelectionDialog.SelectOneOrMoreItems">項目を選択してください</sys:String>
+
+	<!-- LocalizationTest -->
+	<sys:String x:Key="String/LocalizationTest.String">日本語</sys:String>
+
+	<!-- MainWindow -->
+	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">{0} の新しいバージョンが利用可能です。</sys:String>
+	<sys:String x:Key="String/MainWindow.ConfirmLayingOutLotsOfMainWindows">多数のウィンドウを整列すると、正しく配置されない場合があります。ウィンドウの整列を実行しますか？</sys:String>
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.ConfirmationForFirstLaunch">別のディレクトリからアプリケーションデータをインポートしますか？「バージョン情報」ダイアログから後でインポートすることもできます。</sys:String>
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.Failed">「{0}」からアプリケーションデータをインポートできませんでした。</sys:String>
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.Succeeded">「{0}」からアプリケーションデータをインポートしました。</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows">ウィンドウを整列</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">ウィンドウを水平方向に整列</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">ウィンドウをタイル状に整列</sys:String>
+	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">ウィンドウを垂直方向に整列</sys:String>
+	<sys:String x:Key="String/MainWindow.NetworkConnectionNeededForProductActivation">「{0}」を有効化するには、インターネットに接続してください。接続しない場合、一定時間の経過後に一時的に無効化されます。</sys:String>
+	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message">{0} の使用を開始する前に、「プライバシーポリシー」をお読みいただき、同意していただく必要があります。</sys:String>
+	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">{0} の使用を開始する前に、更新された「プライバシーポリシー」をお読みいただき、同意していただく必要があります。</sys:String>
+	<sys:String x:Key="String/MainWindow.ReactivateProductNeeded">「{0}」を有効化できませんでした。もう一度有効化してください。</sys:String>
+	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS">{0} が「アプリケーション」フォルダー以外の場所で実行されています。正しく動作させ、システムの権限に関する問題を避けるため、「アプリケーション」フォルダーに移動することをおすすめします。</sys:String>
+	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication">アプリケーションを終了</sys:String>
+	<sys:String x:Key="String/MainWindow.UsageDataCollection.Message">アプリケーションの改善にご協力ください</sys:String>
+	<sys:String x:Key="String/MainWindow.UsageDataCollection.SecondaryMessage">アプリケーションの使われ方を把握し、改善に役立てるため、匿名の使用状況データを収集させていただきたいと考えています。
+
+収集する情報:
+  - 匿名のセッション識別子
+  - 機能の操作イベント
+  - 構成に関する指標
+
+収集しない情報:
+  - 個人を特定できる情報
+
+この設定はオプションからいつでも変更できます。</sys:String>
+	<sys:String x:Key="String/MainWindow.UsageDataCollection.Title">使用状況データの収集</sys:String>
+	<sys:String x:Key="String/MainWindow.UserAgreement.Message">{0} の使用を開始する前に、「利用規約」をお読みいただき、同意していただく必要があります。</sys:String>
+	<sys:String x:Key="String/MainWindow.UserAgreement.Message.Updated">{0} の使用を開始する前に、更新された「利用規約」をお読みいただき、同意していただく必要があります。</sys:String>
+
+	<!-- NetworkInterfaceType -->
+	<sys:String x:Key="String/NetworkInterfaceType.Ethernet">イーサネット</sys:String>
+	<sys:String x:Key="String/NetworkInterfaceType.Unknown">不明</sys:String>
+	<sys:String x:Key="String/NetworkInterfaceType.Wireless80211">無線</sys:String>
+
+	<!-- PathEnvVarEditorDialog -->
+	<sys:String x:Key="String/PathEnvVarEditorDialog.AddPath.WithDialog">追加…</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.CustomPaths">既定のパス</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.EditPath">ディレクトリパスの編集</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.Paths">追加したパス</sys:String>
+	<sys:String x:Key="String/PathEnvVarEditorDialog.Title">PATH 環境変数の編集</sys:String>
+
+	<!-- ProductState -->
+	<sys:String x:Key="String/ProductState.Activated">有効</sys:String>
+	<sys:String x:Key="String/ProductState.Activating">有効化しています…</sys:String>
+	<sys:String x:Key="String/ProductState.Deactivated">無効</sys:String>
+
+	<!-- ScriptLanguage -->
+	<sys:String x:Key="String/ScriptLanguage.CSharp_13">C# 13 スクリプト</sys:String>
+	<sys:String x:Key="String/ScriptLanguage.CSharp_14">C# 14 スクリプト</sys:String>
+
+	<!-- ScriptRuntimeErrorDialog -->
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.DefaultMessage">スクリプトの実行中に実行時エラーが発生しました。</sys:String>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage">{0}</sys:String>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLine">{0} [{1} 行目]</sys:String>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.ErrorMessage.WithLineColumn">{0} [{1} 行目、{2} 列目]</sys:String>
+	<StaticResourceExtension x:Key="String/ScriptRuntimeErrorDialog.PromptWhenScriptRuntimeErrorOccurred" ResourceKey="String/ApplicationOptions.PromptWhenScriptRuntimeErrorOccurred"/>
+	<sys:String x:Key="String/ScriptRuntimeErrorDialog.PromptWhenScriptRuntimeErrorOccurred.Description">この設定はアプリケーションオプションからも変更できます。</sys:String>
+
+	<!-- SelfTestingWindow -->
+	<sys:String x:Key="String/SelfTestingWindow.CancelAllTestCases">すべてのテストをキャンセル</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.CancelTestCase">テストをキャンセル</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.NeedToWaitForRunningTestCases">実行中のテストが完了するまでお待ちください。</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.RunAllTestCases">すべてのテストを実行</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.RunningTestCaseInfo">「{0}」を実行しています…</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.RunTestCase">テストを実行</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.RunTestCasesInCategory">カテゴリー内のすべてのテストを実行</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.TestCaseCategoryInfo">{0} (成功 {1} 件、失敗 {2} 件、合計 {3} 件)</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.Title">{0} のセルフテスト</sys:String>
+	<sys:String x:Key="String/SelfTestingWindow.WaitingTestCasesInfo">待機中のテスト {0} 件</sys:String>
+
+	<!-- SplashWindow -->
+	<sys:String x:Key="String/SplashWindow.Launching">起動しています</sys:String>
+	<sys:String x:Key="String/SplashWindow.ShowingMainWindow">メインウィンドウを表示しています</sys:String>
+
+	<!-- ThemeMode -->
+	<sys:String x:Key="String/ThemeMode.Dark">ダーク</sys:String>
+	<sys:String x:Key="String/ThemeMode.Light">ライト</sys:String>
+	<sys:String x:Key="String/ThemeMode.System">システム</sys:String>
+
+	<!-- TimePicker -->
+	<sys:String x:Key="String/TimePicker.Hour">時</sys:String>
+	<sys:String x:Key="String/TimePicker.HourFormat">{0:D2}時</sys:String>
+	<sys:String x:Key="String/TimePicker.Minute">分</sys:String>
+	<sys:String x:Key="String/TimePicker.MinuteFormat">{0:D2}分</sys:String>
+
+	<!-- TimeSpanConverter -->
+	<sys:String x:Key="String/TimeSpanConverter.Days">{0} 日 {1} 時間 {2} 分 {3} 秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Hours">{0} 時間 {1} 分 {2} 秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Microseconds">{0} マイクロ秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Milliseconds">{0} ミリ秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Minutes">{0} 分 {1} 秒</sys:String>
+	<sys:String x:Key="String/TimeSpanConverter.Seconds">{0} 秒</sys:String>
+
+	<!-- TimeSpanTextBox -->
+	<sys:String x:Key="String/TimeSpanTextBox.FormatDescription">サポートされている形式:
+1.HH:mm:ss。たとえば 01:12:30 は 1 時間 12 分 30 秒を表します。':' は '-' または空白に置き換えられます。
+2.d.HH:mm:ss.ffffff。たとえば 2.05:12:30.5 は 2 日 5 時間 12 分 30.5 秒を表します。':' は '-' または空白に置き換えられます。
+3.ナノ秒。たとえば 10000ns。
+4.マイクロ秒。たとえば 20000us。
+5.ミリ秒。たとえば 30000ms。</sys:String>
+	<sys:String x:Key="String/TimeSpanTextBox.Watermark">時間間隔</sys:String>
+
+	<!-- TutorialPresenter -->
+	<sys:String x:Key="String/TutorialPresenter.SkipAllTutorials">すべてのヒントをスキップ</sys:String>
+
+	<!-- UriTextBox -->
+	<sys:String x:Key="String/UriTextBox.Watermark">URI</sys:String>
+
+	<!-- WizardDialog -->
+	<sys:String x:Key="String/WizardDialog.GoToNextPage">次へ</sys:String>
+	<sys:String x:Key="String/WizardDialog.GoToPreviousPage">戻る</sys:String>
+
+</ResourceDictionary>

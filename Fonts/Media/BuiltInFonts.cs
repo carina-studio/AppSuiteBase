@@ -24,6 +24,7 @@ public static class BuiltInFonts
     static FontFamily? ibmPlexMono;
     static FontFamily? inter;
     static FontFamily? notoSans;
+    static FontFamily? notoSansJP;
     static FontFamily? notoSansMono;
     static FontFamily? notoSansSC;
     static FontFamily? notoSansTC;
@@ -43,6 +44,7 @@ public static class BuiltInFonts
             IBMPlexMono,
             Inter,
             NotoSans,
+            NotoSansJP,
             NotoSansMono,
             NotoSansSC,
             NotoSansTC,
@@ -71,6 +73,12 @@ public static class BuiltInFonts
     public static FontFamily NotoSans => notoSans ?? new FontFamily($"{baseCoreNotoResourceUri}#Noto Sans").Also(it => notoSans = it);
     
     
+    /// <summary>
+    /// Noto Sans Japanese.
+    /// </summary>
+    public static FontFamily NotoSansJP => notoSansJP ?? new FontFamily($"{baseCoreNotoResourceUri}#Noto Sans JP").Also(it => notoSansJP = it);
+
+
     /// <summary>
     /// Noto Sans Mono.
     /// </summary>
@@ -142,8 +150,9 @@ public static class BuiltInFonts
                     return new Uri($"{baseCoreInterResourceUri}{name}-Regular.ttf");
                 return new Uri($"{baseCoreInterResourceUri}{name}-{weight}.ttf");
             }),
-            nameof(NotoSans) 
-                or nameof(NotoSansMono) 
+            nameof(NotoSans)
+                or nameof(NotoSansJP)
+                or nameof(NotoSansMono)
                 or nameof(NotoSansSC) 
                 or nameof(NotoSansTC)
                 or nameof(NotoSerif) => Global.Run(() =>

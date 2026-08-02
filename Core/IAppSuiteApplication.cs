@@ -109,6 +109,14 @@ public interface IAppSuiteApplication : IAvaloniaApplication
 
 
     /// <summary>
+    /// Check whether the given application culture is supported or not.
+    /// </summary>
+    /// <param name="culture">The application culture.</param>
+    /// <returns>True if the application culture is supported.</returns>
+    bool CheckApplicationCultureSupport(ApplicationCulture culture);
+
+
+    /// <summary>
 	/// Check for application update asynchronously.
 	/// </summary>
     /// <param name="owner">Owner window.</param>

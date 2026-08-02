@@ -75,6 +75,7 @@ Shared build configuration lives in `Directory.Build.props`: assembly version, n
 
 ### File and Type Organization
 - One type per file; file name matches the type name exactly.
+- A trailing newline at end of file is **not** required — most source files end directly after the closing brace. Do not add one to an existing file, and do not report its absence as a finding.
 - Each subsystem gets its own subfolder under `Core/` (e.g. `Scripting/`, `Data/`, `UsageData/`).
 - Namespace matches the folder path: `CarinaStudio.AppSuite.<Subfolder>`.
 - Subfolder/namespace names use **noun-first** ordering (e.g. `UsageData`, not `DataUsage`).

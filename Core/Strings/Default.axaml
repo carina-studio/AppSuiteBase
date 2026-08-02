@@ -4,6 +4,7 @@
 
 	<!-- ApplicationCulture -->
 	<sys:String x:Key="String/ApplicationCulture.EN_US">English (United States)</sys:String>
+	<sys:String x:Key="String/ApplicationCulture.JA_JP">Japanese</sys:String>
 	<sys:String x:Key="String/ApplicationCulture.System">System</sys:String>
 	<sys:String x:Key="String/ApplicationCulture.ZH_TW">Chinese Traditional</sys:String>
 	<sys:String x:Key="String/ApplicationCulture.ZH_CN">Chinese Simplified</sys:String>
