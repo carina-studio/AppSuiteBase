@@ -4,6 +4,7 @@ using CarinaStudio.AppSuite.Scripting;
 using CarinaStudio.AppSuite.UsageData;
 using CarinaStudio.Collections;
 using CarinaStudio.Configuration;
+using CarinaStudio.Logging;
 using CarinaStudio.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -182,8 +183,22 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// </summary>
     public ApplicationCulture Culture
     {
-        get => this.Settings.GetValueOrDefault(SettingKeys.Culture);
-        set => this.Settings.SetValue(SettingKeys.Culture, value);
+        get
+        {
+            var culture = this.Settings.GetValueOrDefault(SettingKeys.Culture);
+            if (culture == ApplicationCulture.System || this.Application.CheckApplicationCultureSupport(culture))
+                return culture;
+            return ApplicationCulture.System;
+        }
+        set
+        {
+            if (value != ApplicationCulture.System && !this.Application.CheckApplicationCultureSupport(value))
+            {
+                this.Logger.LogWarning("Application culture {culture} is not supported, fall-back to System", value);
+                value = ApplicationCulture.System;
+            }
+            this.Settings.SetValue(SettingKeys.Culture, value);
+        }
     }
 
 
