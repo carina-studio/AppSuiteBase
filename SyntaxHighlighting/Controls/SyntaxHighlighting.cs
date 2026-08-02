@@ -105,16 +105,17 @@ public static class SyntaxHighlighting
         stringsToken = stringsToken.DisposeAndReturnNull();
         var stringResources = Global.Run(() =>
         {
-            var name = cultureInfo.Name;
             var baseUri = new Uri($"avares://{Assembly.GetExecutingAssembly().GetName().Name}");
-            if (name.StartsWith("zh-"))
-            {
 #pragma warning disable IL2026
-                if (name.EndsWith("TW"))
+            if (cultureInfo.IsJapanese)
+                return new ResourceInclude(baseUri) { Source = new("Strings/ja-JP.axaml", UriKind.Relative) };
+            if (cultureInfo.IsChinese)
+            {
+                if (cultureInfo.ChineseVariant == ChineseVariant.Taiwan)
                     return new ResourceInclude(baseUri) { Source = new("Strings/zh-TW.axaml", UriKind.Relative) };
                 return new ResourceInclude(baseUri) { Source = new("Strings/zh-CN.axaml", UriKind.Relative) };
-#pragma warning restore IL2026
             }
+#pragma warning restore IL2026
             return null;
         });
         if (stringResources != null)

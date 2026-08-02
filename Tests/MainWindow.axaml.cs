@@ -836,7 +836,8 @@ namespace CarinaStudio.AppSuite.Tests
             appOptions.Culture = appOptions.Culture switch
             {
                 ApplicationCulture.System => ApplicationCulture.EN_US,
-                ApplicationCulture.EN_US => ApplicationCulture.ZH_TW,
+                ApplicationCulture.EN_US => ApplicationCulture.JA_JP,
+                ApplicationCulture.JA_JP => ApplicationCulture.ZH_TW,
                 ApplicationCulture.ZH_TW => ApplicationCulture.ZH_CN,
                 _ => ApplicationCulture.System,
             };

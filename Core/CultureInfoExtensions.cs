@@ -7,16 +7,32 @@ namespace CarinaStudio.AppSuite;
 /// </summary>
 public static class CultureInfoExtensions
 {
-    /// <summary>
-    /// Get corresponding variant of Chinese.
-    /// </summary>
-    /// <param name="cultureInfo"><see cref="CultureInfo"/>.</param>
-    /// <returns>Variant of Chinese.</returns>
-    public static ChineseVariant GetChineseVariant(this CultureInfo cultureInfo)
+    extension(CultureInfo cultureInfo)
     {
-        var name = cultureInfo.Name;
-        return name.StartsWith("zh") && name.EndsWith("TW")
-            ? ChineseVariant.Taiwan
-            : ChineseVariant.Default;
+        /// <summary>
+        /// Get corresponding variant of Chinese.
+        /// </summary>
+        public ChineseVariant ChineseVariant
+        {
+            get
+            {
+                var name = cultureInfo.Name;
+                return name.StartsWith("zh") && name.EndsWith("TW")
+                    ? ChineseVariant.Taiwan
+                    : ChineseVariant.Default;
+            }
+        }
+
+
+        /// <summary>
+        /// Check whether the culture represents Chinese or not.
+        /// </summary>
+        public bool IsChinese => cultureInfo.Name.StartsWith("zh");
+
+
+        /// <summary>
+        /// Check whether the culture represents Japanese or not.
+        /// </summary>
+        public bool IsJapanese => cultureInfo.Name.StartsWith("ja");
     }
 }

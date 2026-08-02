@@ -93,6 +93,10 @@ public class MockAppSuiteApplication : Application, IAppSuiteApplication
 
     /// <inheritdoc/>
     public virtual DocumentSource? ChangeList => null;
+    
+    
+    /// <inheritdoc/>
+    public virtual bool CheckApplicationCultureSupport(ApplicationCulture culture) => true;
 
 
     /// <inheritdoc/>

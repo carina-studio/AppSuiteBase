@@ -7,6 +7,7 @@ using CarinaStudio.Configuration;
 using CarinaStudio.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -44,6 +45,14 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// </summary>
     public ApplicationOptions() : base(IAppSuiteApplication.Current)
     {
+        this.Cultures = ImmutableList.CreateBuilder<ApplicationCulture>().Also(builder =>
+        {
+            foreach (var culture in Enum.GetValues<ApplicationCulture>())
+            {
+                if (culture == ApplicationCulture.System || this.Application.CheckApplicationCultureSupport(culture))
+                    builder.Add(culture);
+            }
+        }).ToImmutable();
         this.Configuration = this.Application.Configuration;
         this.HasMainWindows = this.Application.MainWindows.IsNotEmpty();
         this.IsCustomScreenScaleFactorSupported = double.IsFinite(this.Application.CustomScreenScaleFactor);
@@ -181,7 +190,7 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// <summary>
     /// Get available values of <see cref="Culture"/>.
     /// </summary>
-    public IList<ApplicationCulture> Cultures { get; } = new List<ApplicationCulture>(Enum.GetValues<ApplicationCulture>()).AsReadOnly();
+    public IList<ApplicationCulture> Cultures { get; }
 
 
     /// <summary>

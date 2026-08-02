@@ -390,9 +390,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new("IsAcceptNonStableApplicationUpdateInitialized", false);
     static readonly bool IsRunningFromSourceBuild;
     static ChineseVariant _LaunchChineseVariant;
+    static CultureInfo _LaunchCultureInfo = CultureInfo.GetCultureInfo("en-US");
     static readonly SettingKey<int> LogOutputTargetPortKey = new("LogOutputTargetPort");
     static readonly SettingKey<byte[]> MainWindowViewModelStatesKey = new("MainWindowViewModelStates", []);
-    static readonly string[] MetricsNormalizedFontFileNames = ["NotoSansSC-Bold.ttf", "NotoSansSC-Regular.ttf", "NotoSansTC-Bold.ttf", "NotoSansTC-Regular.ttf"];
+    static readonly string[] MetricsNormalizedFontFileNames = ["NotoSansJP-Bold.ttf", "NotoSansJP-Regular.ttf", "NotoSansSC-Bold.ttf", "NotoSansSC-Regular.ttf", "NotoSansTC-Bold.ttf", "NotoSansTC-Regular.ttf"];
     static readonly string SettingsFilePath;
 
 
@@ -414,6 +415,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     volatile CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
     ScheduledAction? deactivateAction;
     CancellationTokenSource? deactivationActionCancellationTokenSource;
+    string defaultFontFamilyName = "";
     readonly Styles extraStyles = new();
     ScheduledAction? flushUsageDataAction;
     long frameworkInitializedTime;
@@ -956,17 +958,19 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             it.LogToTrace()
                 .UsePlatformDetect();
             
-            // check variant of Chinese
-            _LaunchChineseVariant = tempSettings.GetValueOrDefault(SettingKeys.Culture).GetChineseVariant();
-            LogToConsole($"Chinese variant: {_LaunchChineseVariant}");
-            
+            // check culture and variant of Chinese
+            var launchCulture = tempSettings.GetValueOrDefault(SettingKeys.Culture);
+            _LaunchCultureInfo = launchCulture.GetCultureInfo();
+            _LaunchChineseVariant = launchCulture.GetChineseVariant();
+            LogToConsole($"Culture: {_LaunchCultureInfo.Name}, Chinese variant: {_LaunchChineseVariant}");
+
             // load embedded fonts
             it.ConfigureFonts(AddEmbeddedFontCollections);
-            
-            // setup font manager with an Inter Latin-primary composite default; CJK runs fall through to the variant-preferred Noto Sans SC/TC face. Line height across scripts is normalized at the TextBlock level (see TextBlock LineHeight style) since Inter and Noto Sans CJK faces don't share intrinsic line metrics. The same composite is also applied to all controls through the 'ContentControlThemeFontFamily' resource override (see OnFrameworkInitializationCompleted) because controls carrying the default font family don't route per-codepoint fallback through this composite.
+
+            // setup font manager with an Inter Latin-primary composite default; CJK runs fall through to the culture-preferred Noto Sans JP/SC/TC face. Line height across scripts is normalized at the TextBlock level (see TextBlock LineHeight style) since Inter and Noto Sans CJK faces don't share intrinsic line metrics. The same composite is also applied to all controls through the 'ContentControlThemeFontFamily' resource override (see OnFrameworkInitializationCompleted) because controls carrying the default font family don't route per-codepoint fallback through this composite.
             it.With(new FontManagerOptions
             {
-                DefaultFamilyName = GetDefaultFontFamilyName(_LaunchChineseVariant)
+                DefaultFamilyName = GetDefaultFontFamilyName(_LaunchCultureInfo)
             });
             
             // setup platform specific settings
@@ -1070,6 +1074,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     // ReSharper disable UnassignedGetOnlyAutoProperty
     public virtual DocumentSource? ChangeList { get; }
     // ReSharper restore UnassignedGetOnlyAutoProperty
+
+
+    /// <inheritdoc/>
+    public virtual bool CheckApplicationCultureSupport(ApplicationCulture culture) => true;
 
 
     // Check whether restarting all root windows is needed or not.
@@ -1960,13 +1968,67 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     }
 
 
-    // Get name of default font family according to variant of Chinese.
-    internal static string GetDefaultFontFamilyName(ChineseVariant chineseVariant) => chineseVariant switch
+    // Get name of default font family according to given culture.
+    internal static string GetDefaultFontFamilyName(CultureInfo preferredCultureInfo)
     {
-        ChineseVariant.Default => "fonts:Inter#Inter, fonts:Noto#Noto Sans SC, fonts:Noto#Noto Sans TC",
-        ChineseVariant.Taiwan => "fonts:Inter#Inter, fonts:Noto#Noto Sans TC, fonts:Noto#Noto Sans SC",
-        _ => throw new NotImplementedException(),
-    };
+        // define culture names
+        const string JADefaultCultureName = "ja-JP";
+        const string ZHDefaultCultureName = "zh-CN";
+
+        // define font families
+        const string JAFontFamilyNames = "fonts:Noto#Noto Sans JP";
+        const string ZHFontFamilyNames = "fonts:Noto#Noto Sans SC, fonts:Noto#Noto Sans TC";
+        const string ZHFontFamilyNamesTC = "fonts:Noto#Noto Sans TC, fonts:Noto#Noto Sans SC";
+
+        // build list of culture infos
+        var cultureInfoList = new List<CultureInfo> { preferredCultureInfo };
+        var hasJaCultureInfo = preferredCultureInfo.IsJapanese;
+        var hasZhCultureInfo = preferredCultureInfo.IsChinese;
+        ApplicationCulture.System.GetCultureInfo().Let(sysCultureInfo =>
+        {
+            if (sysCultureInfo.IsJapanese)
+            {
+                if (!hasJaCultureInfo)
+                {
+                    hasJaCultureInfo = true;
+                    cultureInfoList.Add(sysCultureInfo);
+                }
+            }
+            else if (sysCultureInfo.IsChinese)
+            {
+                if (!hasZhCultureInfo)
+                {
+                    hasZhCultureInfo = true;
+                    cultureInfoList.Add(sysCultureInfo);
+                }
+            }
+            else if (!cultureInfoList.Contains(sysCultureInfo))
+                cultureInfoList.Add(sysCultureInfo);
+        });
+        if (!hasJaCultureInfo)
+            cultureInfoList.Add(CultureInfo.GetCultureInfo(JADefaultCultureName));
+        if (!hasZhCultureInfo)
+            cultureInfoList.Add(CultureInfo.GetCultureInfo(ZHDefaultCultureName));
+
+        // build font list
+        var fontFamilyNameBuffer = new StringBuilder("fonts:Inter#Inter");
+        foreach (var cultureInfo in cultureInfoList)
+        {
+            if (cultureInfo.IsJapanese)
+                fontFamilyNameBuffer.Append(", ").Append(JAFontFamilyNames);
+            else if (cultureInfo.IsChinese)
+            {
+                fontFamilyNameBuffer.Append(", ").Append(cultureInfo.ChineseVariant switch
+                {
+                    ChineseVariant.Taiwan => ZHFontFamilyNamesTC,
+                    _ => ZHFontFamilyNames
+                });
+            }
+        }
+
+        // complete
+        return fontFamilyNameBuffer.ToString();
+    }
 
 
     /// <inheritdoc/>
@@ -2917,8 +2979,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     {
         LogToConsole("Avalonia framework initialization completed");
 
-        // override default font family of controls with the variant-aware composite. Fluent theme sets FontFamily of all TopLevels (Window/PopupRoot/OverlayPopupHost/EmbeddableControlRoot) from this resource, so every control inherits the composite and per-codepoint CJK fallback follows the Chinese variant specific ordering. Without the override, controls carry the theme default family whose fallback bypasses the composite and lets the system font (selected by OS language instead of application setting) render CJK text.
-        this.Resources["ContentControlThemeFontFamily"] = new FontFamily(GetDefaultFontFamilyName(_LaunchChineseVariant));
+        // override default font family of controls with the culture-aware composite. Fluent theme sets FontFamily of all TopLevels (Window/PopupRoot/OverlayPopupHost/EmbeddableControlRoot) from this resource, so every control inherits the composite and per-codepoint CJK fallback follows the culture specific ordering. Without the override, controls carry the theme default family whose fallback bypasses the composite and lets the system font (selected by OS language instead of application setting) render CJK text.
+        this.defaultFontFamilyName = GetDefaultFontFamilyName(_LaunchCultureInfo);
+        this.Resources["ContentControlThemeFontFamily"] = new FontFamily(this.defaultFontFamilyName);
 
         // setup unhandled exception handler.
         Dispatcher.UIThread.UnhandledException += (_, e) =>
@@ -5716,7 +5779,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     async Task UpdateCultureInfoAsync(bool updateStringResources)
     {
         // get culture info
-        var culture = this.Settings.GetValueOrDefault(SettingKeys.Culture);
+        var culture = this.Settings.GetValueOrDefault(SettingKeys.Culture).Let(it =>
+        {
+            if (it == ApplicationCulture.System || this.CheckApplicationCultureSupport(it))
+                return it;
+            this.Logger.LogWarning("Application culture {culture} is not supported, fall-back to system", it);
+            return ApplicationCulture.System;
+        });
         var cultureInfo = await culture.GetCultureInfoAsync(true);
         cultureInfo.ClearCachedData();
         if (Equals(cultureInfo, this.cultureInfo))
@@ -5747,8 +5816,16 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         {
             this.Logger.LogDebug("Change variant of Chinese from {prevVariant} to {variant}", this.ChineseVariant, chineseVariant);
             this.ChineseVariant = chineseVariant;
-            this.Resources["ContentControlThemeFontFamily"] = new FontFamily(GetDefaultFontFamilyName(chineseVariant)); // propagates through DynamicResource to all top-levels so no restart is needed to apply the variant specific font selection
             this.OnPropertyChanged(nameof(ChineseVariant));
+        }
+
+        // update default font family
+        var defaultFontFamilyName = GetDefaultFontFamilyName(cultureInfo);
+        if (this.defaultFontFamilyName != defaultFontFamilyName)
+        {
+            this.Logger.LogDebug("Change default font family from '{prevName}' to '{name}'", this.defaultFontFamilyName, defaultFontFamilyName);
+            this.defaultFontFamilyName = defaultFontFamilyName;
+            this.Resources["ContentControlThemeFontFamily"] = new FontFamily(defaultFontFamilyName); // propagates through DynamicResource to all top-levels so no restart is needed to apply the culture specific font selection
         }
 
         // wait for completion

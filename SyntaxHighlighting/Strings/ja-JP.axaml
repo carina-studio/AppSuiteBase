@@ -1,0 +1,30 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:sys="using:System">
+
+	<!-- DateTimeFormatTextBox -->
+	<sys:String x:Key="String/DateTimeFormatTextBox.Watermark">日付と時刻の形式</sys:String>
+
+	<!-- GroupingConstruct -->
+	<sys:String x:Key="String/GroupingConstruct.NamedGroup">名前付きグループ</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.NoncapturingGroup">非キャプチャグループ</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthNegativeLookaheadAssertion">ゼロ幅の負の先読みアサーション</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthNegativeLookbehindAssertion">ゼロ幅の負の後読みアサーション</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthPositiveLookaheadAssertion">ゼロ幅の正の先読みアサーション</sys:String>
+	<sys:String x:Key="String/GroupingConstruct.ZeroWidthPositiveLookbehindAssertion">ゼロ幅の正の後読みアサーション</sys:String>
+
+	<!-- RegexTextBox -->
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.b">単語境界</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.B">非単語境界</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.d">10進数字</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.D">非10進数字</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.s">空白文字</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.S">非空白文字</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.w">単語文字</sys:String>
+	<sys:String x:Key="String/RegexTextBox.EscapedCharacter.W">非単語文字</sys:String>
+	<sys:String x:Key="String/RegexTextBox.Watermark">正規表現</sys:String>
+
+	<!-- TimeSpanFormatTextBox -->
+	<sys:String x:Key="String/TimeSpanFormatTextBox.Watermark">時間間隔の形式</sys:String>
+
+</ResourceDictionary>

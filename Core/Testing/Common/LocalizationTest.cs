@@ -1,5 +1,5 @@
 using Avalonia.Threading;
-using CarinaStudio.Configuration;
+using CarinaStudio.Collections;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -15,6 +15,7 @@ class LocalizationTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategor
     static readonly Dictionary<ApplicationCulture, string> TestStrings = new()
     {
         { ApplicationCulture.EN_US, "English" },
+        { ApplicationCulture.JA_JP, "日本語" },
         { ApplicationCulture.ZH_CN, "简体中文" },
         { ApplicationCulture.ZH_TW, "正體中文" },
     };
@@ -37,6 +38,9 @@ class LocalizationTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategor
         });
         var appCultures = new List<ApplicationCulture>(Enum.GetValues<ApplicationCulture>());
         appCultures.Remove(ApplicationCulture.System);
+        appCultures.RemoveAll(it => !this.Application.CheckApplicationCultureSupport(it)); // application may not support all cultures defined by the framework
+        if (appCultures.IsEmpty())
+            return;
         appCultures[0].Let(it =>
         {
             var sysCultureName = CultureInfo.InstalledUICulture.Name;
@@ -44,6 +48,10 @@ class LocalizationTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategor
             {
                 case ApplicationCulture.EN_US:
                     if (sysCultureName.StartsWith("en-"))
+                        appCultures.Reverse();
+                    break;
+                case ApplicationCulture.JA_JP:
+                    if (sysCultureName.StartsWith("ja-"))
                         appCultures.Reverse();
                     break;
                 case ApplicationCulture.ZH_CN:
@@ -95,7 +103,7 @@ class LocalizationTest(IAppSuiteApplication app) : TestCase(app, TestCaseCategor
                     break;
                 default:
                 {
-                    var expectedVariant = (await ApplicationCulture.System.GetCultureInfoAsync(true)).GetChineseVariant();
+                    var expectedVariant = (await ApplicationCulture.System.GetCultureInfoAsync(true)).ChineseVariant;
                     Assert.That(this.Application.ChineseVariant == expectedVariant, "Variant of Chinese is incorrect");
                     break;
                 }

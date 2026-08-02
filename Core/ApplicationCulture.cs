@@ -21,6 +21,10 @@ public enum ApplicationCulture
 	/// </summary>
 	EN_US,
 	/// <summary>
+	/// Japanese.
+	/// </summary>
+	JA_JP,
+	/// <summary>
 	/// Chinese (Taiwan).
 	/// </summary>
 	ZH_TW,
@@ -52,7 +56,7 @@ public static class ApplicationCultureExtensions
 	{
 		ApplicationCulture.ZH_CN => ChineseVariant.Default,
 		ApplicationCulture.ZH_TW => ChineseVariant.Taiwan,
-		_ => ApplicationCulture.System.GetCultureInfo(invalidateSysCultureInfo).GetChineseVariant(),
+		_ => ApplicationCulture.System.GetCultureInfo(invalidateSysCultureInfo).ChineseVariant
 	};
 
 
