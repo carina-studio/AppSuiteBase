@@ -22,7 +22,7 @@ Text
 ## Scope of User Agreement
 ULogViewer is a software based-on ```Open Source Project```/```開放原始碼專案```/```😊😊😊```/```Chinese 中文```. The ULogViewer mentioned after includes **ONLY** the executable files or zipped files which are exact same as the files provided by the following pages:
 
-+ [Website of ULogViewer](https://carinastudio.azurewebsites.net/ULogViewer/)
++ [Website of ULogViewer](https://carinastudio.net/ULogViewer/)
 + [Project and release pages of ULogViewer on GitHub](https://github.com/carina-studio/ULogViewer)
 
 This User Agreement will be applied when you use ULogViewer 2.0 and any future versions before the version specified in next version of User Agreement.

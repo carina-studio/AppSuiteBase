@@ -32,5 +32,5 @@ class AppInfo : ViewModels.ApplicationInfo
         "test2"
     ];
 
-    public override Uri WebsiteUri => new("https://carinastudio.azurewebsites.net/");
+    public override Uri WebsiteUri => new("https://carinastudio.net/");
 }

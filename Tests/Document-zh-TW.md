@@ -7,7 +7,7 @@
 
 ## 適用範圍
 ULogViewer 為基於開放原始碼專案之軟體，以下所指 ULogViewer **僅包括** 與下列頁面所提供之可執行檔或壓縮檔內容完全相同之版本：
-- [ULogViewer 網站](https://carinastudio.azurewebsites.net/ULogViewer/)
+- [ULogViewer 網站](https://carinastudio.net/ULogViewer/)
 - [GitHub 上之 ULogViewer 專案頁面及各版本釋出頁面](https://github.com/carina-studio/ULogViewer)
 
 本隱私權政策適用於您使用 ULogViewer 2.0 及下一份隱私權政策所指定之版本之間 (但不包括) 的所有版本。
