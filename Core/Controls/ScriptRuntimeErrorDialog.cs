@@ -1,4 +1,3 @@
-using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
 using System;
 using System.Threading.Tasks;
@@ -57,9 +56,9 @@ public class ScriptRuntimeErrorDialog : CommonDialog<object?>
     protected override async Task<object?> ShowDialogCore(Avalonia.Controls.Window? owner)
     {
         var app = Application.CurrentOrNull;
-        if (this.error == null || app == null)
+        if (this.error is null || app is null)
             return null;
-        var result = await new MessageDialog()
+        var dialog = new MessageDialog
         {
             Buttons = MessageDialogButtons.YesNo,
             CustomDoNotAskOrShowAgainText = app.GetObservableString("ScriptRuntimeErrorDialog.PromptWhenScriptRuntimeErrorOccurred"),
@@ -74,22 +73,24 @@ public class ScriptRuntimeErrorDialog : CommonDialog<object?>
                 return new FormattedString().Also(it =>
                 {
                     it.Arg1 = ex.Message;
-					if (ex is Scripting.ScriptException scriptException && scriptException.Line > 0)
-					{
-						it.Arg2 = scriptException.Line;
-						if (scriptException.Column >= 0)
-						{
-							it.Arg3 = scriptException.Column;
-							it.Bind(FormattedString.FormatProperty, app.GetObservableString("ScriptRuntimeErrorDialog.ErrorMessage.WithLineColumn"));
-						}
-						else
-							it.Bind(FormattedString.FormatProperty, app.GetObservableString("ScriptRuntimeErrorDialog.ErrorMessage.WithLine"));
-					}
-					else
-						it.Bind(FormattedString.FormatProperty, app.GetObservableString("ScriptRuntimeErrorDialog.ErrorMessage"));
+                    if (ex is Scripting.ScriptException scriptException && scriptException.Line > 0)
+                    {
+                        it.Arg2 = scriptException.Line;
+                        if (scriptException.Column >= 0)
+                        {
+                            it.Arg3 = scriptException.Column;
+                            it.Bind(FormattedString.FormatProperty, app.GetObservableString("ScriptRuntimeErrorDialog.ErrorMessage.WithLineColumn"));
+                        }
+                        else
+                            it.Bind(FormattedString.FormatProperty, app.GetObservableString("ScriptRuntimeErrorDialog.ErrorMessage.WithLine"));
+                    }
+                    else
+                        it.Bind(FormattedString.FormatProperty, app.GetObservableString("ScriptRuntimeErrorDialog.ErrorMessage"));
                 });
             }),
-        }.ShowDialog(owner);
+        };
+        var result = await dialog.ShowDialog(owner);
+        app.Settings.SetValue(SettingKeys.PromptWhenScriptRuntimeErrorOccurred, dialog.DoNotAskOrShowAgain.GetValueOrDefault());
         if (result == MessageDialogResult.Yes)
             Scripting.ScriptManager.Default.OpenLogWindow();
         return null;
