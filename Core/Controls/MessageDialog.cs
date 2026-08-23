@@ -227,7 +227,7 @@ public class MessageDialog : CommonDialog<MessageDialogResult>
 	/// </summary>
 	public object? SecondaryMessage
 	{
-		get => this.message;
+		get => this.secondaryMessage;
 		set
 		{
 			this.VerifyAccess();
