@@ -4,7 +4,7 @@
 
 	<!-- ApplicationDataImportDirectorySelectionDialog -->
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Confirmation">すべての設定とユーザープロファイルを含むアプリケーションデータが、選択したアプリケーション内のデータで上書きされます。上書きした後は元に戻すことはできません。</sys:String>
-	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.DirectoryValidationFailed">アプリケーション「{0}」には有効なアプリケーションデータが含まれていないようです。それでもこのアプリケーションからデータをインポートしますか？</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.DirectoryValidationFailed">アプリケーション '{0}' には有効なアプリケーションデータが含まれていないようです。それでもこのアプリケーションからデータをインポートしますか？</sys:String>
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.LocalDirectoriesOnly">ローカルアプリケーションのみ使用できます。</sys:String>
 
 	<!-- Common -->
