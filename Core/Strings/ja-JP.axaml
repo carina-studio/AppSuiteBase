@@ -11,7 +11,7 @@
 
 	<!-- ApplicationDataImportDirectorySelectionDialog -->
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Confirmation">すべての設定とユーザープロファイルを含むアプリケーションデータが、選択したディレクトリ内のデータで上書きされます。上書きした後は元に戻すことはできません。</sys:String>
-	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.DirectoryValidationFailed">ディレクトリ「{0}」には有効なアプリケーションデータが含まれていないようです。それでもこのディレクトリからデータをインポートしますか？</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.DirectoryValidationFailed">ディレクトリ '{0}' には有効なアプリケーションデータが含まれていないようです。それでもこのディレクトリからデータをインポートしますか？</sys:String>
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.LocalDirectoriesOnly">ローカルディレクトリのみ使用できます。</sys:String>
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Title">アプリケーションデータのインポート</sys:String>
 
@@ -137,7 +137,7 @@
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Description">メモリスナップショットの取得中は、アプリケーションが数十秒から数分間応答しなくなることがあります。</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Failed">メモリスナップショットを取得できませんでした。</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Processing">メモリスナップショットを取得しています。処理中はアプリケーションが応答しなくなります…</sys:String>
-	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Succeeded">メモリスナップショットを取得し、「{0}」に保存しました。</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Succeeded">メモリスナップショットを取得し、'{0}' に保存しました。</sys:String>
 
 	<!-- CommandSearchPaths -->
 	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">システムで定義されたパスを更新</sys:String>
@@ -321,16 +321,16 @@
 	<sys:String x:Key="String/MainWindow.ApplicationUpdateFound">{0} の新しいバージョンが利用可能です。</sys:String>
 	<sys:String x:Key="String/MainWindow.ConfirmLayingOutLotsOfMainWindows">多数のウィンドウを整列すると、正しく配置されない場合があります。ウィンドウの整列を実行しますか？</sys:String>
 	<sys:String x:Key="String/MainWindow.ImportApplicationData.ConfirmationForFirstLaunch">別のディレクトリからアプリケーションデータをインポートしますか？「バージョン情報」ダイアログから後でインポートすることもできます。</sys:String>
-	<sys:String x:Key="String/MainWindow.ImportApplicationData.Failed">「{0}」からアプリケーションデータをインポートできませんでした。</sys:String>
-	<sys:String x:Key="String/MainWindow.ImportApplicationData.Succeeded">「{0}」からアプリケーションデータをインポートしました。</sys:String>
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.Failed">'{0}' からアプリケーションデータをインポートできませんでした。</sys:String>
+	<sys:String x:Key="String/MainWindow.ImportApplicationData.Succeeded">'{0}' からアプリケーションデータをインポートしました。</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows">ウィンドウを整列</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Horizontal">ウィンドウを水平方向に整列</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Tile">ウィンドウをタイル状に整列</sys:String>
 	<sys:String x:Key="String/MainWindow.LayoutMainWindows.Vertical">ウィンドウを垂直方向に整列</sys:String>
-	<sys:String x:Key="String/MainWindow.NetworkConnectionNeededForProductActivation">「{0}」を有効化するには、インターネットに接続してください。接続しない場合、一定時間の経過後に一時的に無効化されます。</sys:String>
+	<sys:String x:Key="String/MainWindow.NetworkConnectionNeededForProductActivation">{0} を有効化するには、インターネットに接続してください。接続しない場合、一定時間の経過後に一時的に無効化されます。</sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message">{0} の使用を開始する前に、「プライバシーポリシー」をお読みいただき、同意していただく必要があります。</sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">{0} の使用を開始する前に、更新された「プライバシーポリシー」をお読みいただき、同意していただく必要があります。</sys:String>
-	<sys:String x:Key="String/MainWindow.ReactivateProductNeeded">「{0}」を有効化できませんでした。もう一度有効化してください。</sys:String>
+	<sys:String x:Key="String/MainWindow.ReactivateProductNeeded">{0} を有効化できませんでした。もう一度有効化してください。</sys:String>
 	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS">{0} が「アプリケーション」フォルダー以外の場所で実行されています。正しく動作させ、システムの権限に関する問題を避けるため、「アプリケーション」フォルダーに移動することをおすすめします。</sys:String>
 	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication">アプリケーションを終了</sys:String>
 	<sys:String x:Key="String/MainWindow.UsageDataCollection.Message">アプリケーションの改善にご協力ください</sys:String>

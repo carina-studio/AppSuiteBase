@@ -113,6 +113,22 @@ Shared build configuration lives in `Directory.Build.props`: assembly version, n
 - Suppress CA1416 only when calling APIs that the .NET runtime annotates with `[SupportedOSPlatform("windows")]` (e.g. `Registry`, `WindowsIdentity`).
 - Custom P/Invoke definitions in `Native.Win32` do **not** carry that annotation and do not require CA1416 suppression at their call sites.
 
+### Localized Strings
+
+String resources live in `Core/Strings/` and `SyntaxHighlighting/Strings/`, one file per culture plus optional `-Linux` / `-OSX` overrides. Quoting follows the target locale, not the source text:
+
+| Locale | Quoting a name in prose |
+|---|---|
+| `zh-TW`, `ja-JP` | `AAA「BBB」CCC` — corner brackets, no surrounding whitespace |
+| `zh-CN` | `AAA “BBB” CCC` — curly double quotes, one half-width space on each side |
+| `Default` (en) | `AAA 'BBB' CCC` |
+
+- Corner brackets (`「」`) are **wrong in `zh-CN`**, which uses `“”`.
+- Drop the surrounding space when the quote sits next to `，`, `。`, `、` or `…` — the full-width punctuation already carries it (`…并存放至 “BBB”。`, `正在执行 “{0}”…`).
+- **File names and file paths take ASCII single quotes in every locale**: `AAA 'Path' BBB`, spaced the same way. This overrides the locale quoting above, so a placeholder holding a path is never wrapped in `「」` or `“”`. An *alias* for a location — the macOS "Applications" folder, for instance — is a name, not a path, and keeps the locale quotes.
+- A product or application name substituted from a placeholder takes no quotes at all: `无法启用 {0}，请尝试再次启用。`
+- Document titles use `《…》` in `zh-CN` / `zh-TW`, `「…」` in `ja-JP`.
+
 ### Project-Specific Rules
 
 Rules that apply only within one project — everything above applies solution-wide. Each project's own `AGENTS.md` documents its architecture, not its rules.
@@ -149,6 +165,7 @@ Rules that apply only within one project — everything above applies solution-w
 - No `x:CompileBindings="False"`; any `{ReflectionBinding}` is there because a compiled binding genuinely cannot express it. `x:CompileBindings="True"` is omitted as redundant.
 - **Member ordering** is correct: `extension` blocks → inner types → constants → static fields → instance fields → properties and methods interleaved alphabetically. Verify after adding, renaming, or moving any member.
 - Every logical block inside a code block carries its own leading `//` comment, per *Method Body Layout*.
+- Localized strings use the target locale's quoting — `「」` for zh-TW/ja-JP, `“”` for zh-CN, ASCII `'…'` for file names and paths in every locale.
 
 ### Documentation
 - Check whether the change affects the architecture of a library project (`Core`, `Fonts`, `SyntaxHighlighting`). If so, the corresponding project's `AGENTS.md` should be updated to match.

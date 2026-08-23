@@ -11,7 +11,7 @@
 	
 	<!-- ApplicationDataImportDirectorySelectionDialog -->
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Confirmation">當您選定目錄後，應用程式資料（包括所有設定及使用者資料）將被目錄內的資料所覆寫，且覆寫後將無法復原。</sys:String>
-	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.DirectoryValidationFailed">目錄「{0}」中看起來沒有包含有效的應用程式資料，您是否仍要從其中匯入應用程式資料？</sys:String>
+	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.DirectoryValidationFailed">目錄 '{0}' 中看起來沒有包含有效的應用程式資料，您是否仍要從其中匯入應用程式資料？</sys:String>
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.LocalDirectoriesOnly">僅允許使用本機目錄。</sys:String>
 	<sys:String x:Key="String/ApplicationDataImportDirectorySelectionDialog.Title">匯入應用程式資料</sys:String>
 
@@ -138,7 +138,7 @@
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Description">擷取記憶體快照期間應用程式將停止回應數十秒至數分鐘。</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Failed">無法擷取記憶體快照</sys:String>
 	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Processing">正在擷取記憶體快照，過程中應用程式將停止回應…</sys:String>
-	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Succeeded">記憶體快照擷取完成並儲存至「{0}」。</sys:String>
+	<sys:String x:Key="String/AppSuiteApplication.TakeMemorySnapshot.Succeeded">記憶體快照擷取完成並儲存至 '{0}'。</sys:String>
 
 	<!-- CommandSearchPaths -->
 	<sys:String x:Key="String/CommandSearchPaths.UpdateSystemPaths">更新系統定義路徑</sys:String>
