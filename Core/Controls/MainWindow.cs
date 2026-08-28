@@ -1303,6 +1303,9 @@ public abstract class MainWindow : Window
             }
         }
 
+        // use compact toolbar style to keep system title bar thin so that window buttons align with the title bar area drawn by application
+        this.nsWindow?.Let(it => it.ToolbarStyle = NSWindowToolbarStyle.UnifiedCompact);
+
         // keep title in system title bar hidden because the title bar area drawn by application shows window buttons and title in full-screen mode
         this.nsWindow?.TitleVisibility = NSWindow.TitleAppearance.Hidden;
     }

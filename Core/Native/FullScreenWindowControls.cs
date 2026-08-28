@@ -19,7 +19,7 @@ class FullScreenWindowControls : IDisposable
     const string ButtonsViewClassName = "CarinaStudioFullScreenWindowControlsView";
     const double FallbackButtonLeftInset = 13;
     const double FallbackThickTitleBarHeight = 38;
-    const double MinThickTitleBarHeight = 30;
+    const double MinThickTitleBarHeight = 36;
     const string OverlayWindowClassName = "NSToolbarFullScreenWindow";
 
 
@@ -101,7 +101,8 @@ class FullScreenWindowControls : IDisposable
         // hide content of overlay window, this is also the tripwire if system changes the structure of full-screen title bar
         this.overlayWindow = originalTitleBarView.Window.AsNonNull().Also(it =>
         {
-            if (it.Class.Name != OverlayWindowClassName)
+            var overlayWindowClass = Class.GetClass(OverlayWindowClassName);
+            if (overlayWindowClass is null || !overlayWindowClass.IsAssignableFrom(it.Class))
                 throw new NotSupportedException($"Expect standard window buttons being relocated into {OverlayWindowClassName} but {it.Class.Name}.");
             it.ContentView.AsNonNull().IsHidden = true;
         });
