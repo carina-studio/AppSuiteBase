@@ -122,6 +122,23 @@ Every step below was exercised by the `ja-JP` addition; follow it in order. Step
 
 **Effect z-order caveat.** A visual carrying a live `Effect` does **not** reliably respect child z-order in the 11.3 compositor — the blur layer composites *over* an immediately-following sibling (effects are queued as deferred commands, not applied in simple child order). So an overlay meant to sit *on top* of the blur (tint/frame) must be placed **behind** the `Backdrop` and shown through its transparency (the `Strength`-driven layer opacity — lower `Strength` lets more of the tint show through), not stacked in front of it.
 
+## macOS Window Chrome
+
+`MainWindow.UpdateExtendClientAreaChromeHints` adds Avalonia 11's `ExtendClientAreaChromeHints.OSXThickTitleBar` while windowed (dropped before entering fullscreen, so no empty toolbar shows under the menu bar), then sets the window's toolbar style to `UnifiedCompact`. The `NSWindow` is resolved from the platform handle **once** and cached in the `nsWindow` field, disposed in `OnClosed` — do not re-resolve it per call, and do not hold it through `NSObject.Use(…)`, which disposes the wrapper on exit and leaves a null handle behind for any deferred work.
+
+The toolbar style matters only under the **macOS 26+ design**, and it is a correctness fix rather than a preference. Measured on this branch:
+
+| | legacy (linked SDK 15.5) | macOS 26+ design (linked SDK 26.0) |
+|---|---|---|
+| default (`Automatic`) | 38 pt bar, close at x=12, group right edge 66 | 66 pt bar, close at x=19, group right edge **79** |
+| `UnifiedCompact` | 38 pt — unchanged | 40 pt bar, close at x=12, group right edge 72 |
+
+`OSXThickTitleBar` already resolves to a compact 38 pt bar on the legacy design, so setting `UnifiedCompact` is a **no-op there** — it ships with no visual change for users on older macOS. Under the new design the same configuration jumps to a 66 pt bar that drops the traffic lights and pushes them to a 79 pt right edge, 1 pt inside the 80 pt `ExtendedClientAreaWindowConfiguration.SystemChromeWidth` reserve; `UnifiedCompact` restores roughly the legacy geometry.
+
+The new design is gated on the **linked SDK version of the main executable** (`LC_BUILD_VERSION`), not on the OS version, and no managed API can opt in: .NET's prebuilt apphost still reports SDK 15.5, so consumer apps have to rewrite it (`vtool -set-build-version macos 12.0 26.0`) before `codesign` in their packaging script. `UIDesignRequiresCompatibility` in `Info.plist` only opts *out* and cannot force the new design on an old-SDK binary. Apply that step only together with this toolbar-style fix — without it, patched apps get the displaced 66 pt chrome.
+
+Fullscreen is unaffected either way on this branch: `IsSystemChromeVisibleInFullScreen` is `false` and no traffic lights are drawn in fullscreen at all.
+
 ## Key Namespaces
 
 - **`Controls/`** — 90+ custom Avalonia controls: dialogs (agreement, file selection, app update), `MainWindow` base classes, `TutorialPresenter`, `NotificationPresenter`, specialized input controls.
@@ -129,7 +146,7 @@ Every step below was exercised by the `ja-JP` addition; follow it in order. Step
 - **`Data/`** — Profile system: `BaseProfile<TApp>`, `BaseProfileManager`, `IProfileManager`. Profiles are JSON-serialized; persistence uses an IO task factory for thread safety.
 - **`Scripting/`** — Script compilation and execution engine: `IScript`, `IScriptManager`, context-based execution, mock/empty implementations for testing.
 - **`Converters/`** — 16 XAML value converters (enum, file size, time span, layout/thickness helpers).
-- **`Native/`** — P/Invoke and interop: `Native.Win32` (Win32 API), `Native.MacOS` (NSOpenPanel, NSURL, osascript via dynamic lib loading).
+- **`Native/`** — P/Invoke and interop: `Native.Win32` (Win32 API), `Native.MacOS` (NSOpenPanel, NSURL, osascript via dynamic lib loading), plus `NSWindowToolbarStyle` / `NSWindowExtensions` (see *macOS Window Chrome*). General-purpose Objective-C wrappers belong in `CarinaStudio.AppBase.MacOS`; those two are a deliberate exception, backporting members that only exist from AppBase 2.4.4 onwards, and should be deleted once this branch can take that version.
 
 ## Patterns
 

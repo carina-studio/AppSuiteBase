@@ -9,6 +9,7 @@ using Avalonia.Rendering;
 using Avalonia.Threading;
 using CarinaStudio.Animation;
 using CarinaStudio.AppSuite.Input;
+using CarinaStudio.AppSuite.Native;
 using CarinaStudio.AppSuite.Net;
 using CarinaStudio.AppSuite.Product;
 using CarinaStudio.AppSuite.UsageData;
@@ -16,6 +17,8 @@ using CarinaStudio.AppSuite.ViewModels;
 using CarinaStudio.Configuration;
 using CarinaStudio.Controls;
 using CarinaStudio.Logging;
+using CarinaStudio.MacOS.AppKit;
+using CarinaStudio.MacOS.ObjectiveC;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
@@ -88,6 +91,7 @@ public abstract class MainWindow : Window
     bool isFirstContentPaddingUpdate = true;
     bool isShowingInitialDialogs;
     readonly ScheduledAction notifyNetworkConnForActivatingProVersionAction;
+    NSWindow? nsWindow;
     long openedTime;
     readonly ScheduledAction reactivateProVersionAction;
     readonly ScheduledAction restartingRootWindowsAction;
@@ -506,6 +510,7 @@ public abstract class MainWindow : Window
         this.restartingRootWindowsAction.Cancel();
         this.reactivateProVersionAction.Cancel();
         this.showInitDialogsAction.Cancel();
+        this.nsWindow = this.nsWindow.DisposeAndReturnNull();
         base.OnClosed(e);
     }
 
@@ -1288,6 +1293,17 @@ public abstract class MainWindow : Window
                 hints |= ExtendClientAreaChromeHints.OSXThickTitleBar;
             }
             this.ExtendClientAreaChromeHints = hints;
+
+            // setup NSWindow
+            if (Platform.IsMacOS && this.nsWindow is null)
+            {
+                var handle = (this.TryGetPlatformHandle()?.Handle).GetValueOrDefault();
+                if (handle != IntPtr.Zero)
+                    this.nsWindow = NSObject.FromHandle<NSWindow>(handle);
+            }
+
+            // use compact toolbar style to keep system title bar thin so that window buttons align with the title bar area drawn by application
+            this.nsWindow?.SetToolbarStyle(NSWindowToolbarStyle.UnifiedCompact);
         }
     }
 
