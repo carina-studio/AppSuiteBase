@@ -147,7 +147,6 @@ public abstract class MainWindow : Window
 
         // extend client area if needed
         this.UpdateExtendingClientArea();
-        this.ExtendClientAreaToDecorationsHint = true; // show system chrome when opened
 
         // setup debug overlays
         this.UpdateDebugOverlays();
