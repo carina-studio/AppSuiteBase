@@ -3346,8 +3346,15 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
         this.Logger.LogDebug("Main window {id:x8} closed, {count} remains", mainWindow.GetHashCode(), this.mainWindows.Count);
 
-        // perform operations
-        await this.OnMainWindowClosedAsync(mainWindow, mainWindowHolder.ViewModel);
+        // perform operations, the error is reported instead of being thrown so that the application is still able to shut down
+        try
+        {
+            await this.OnMainWindowClosedAsync(mainWindow, mainWindowHolder.ViewModel);
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, "Error occurred while performing operations after closing main window");
+        }
 
         // restart main window
         if (mainWindowHolder.IsRestartingRequested)
@@ -3392,8 +3399,15 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 this.Logger.LogError("Unable to restart main window when shutting down");
         }
 
-        // dispose view model
-        await this.OnDisposeMainWindowViewModelAsync(mainWindowHolder.ViewModel, this.isCriticalShutdownStarted);
+        // dispose view model, the error is reported instead of being thrown so that the application is still able to shut down
+        try
+        {
+            await this.OnDisposeMainWindowViewModelAsync(mainWindowHolder.ViewModel, this.isCriticalShutdownStarted);
+        }
+        catch (Exception ex)
+        {
+            this.Logger.LogError(ex, "Error occurred while disposing view-model of closed main window");
+        }
 
         // remove from window list
         this.mainWindowHolders.Remove(mainWindow);
