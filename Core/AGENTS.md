@@ -165,7 +165,7 @@ Known AppBase caveat: the `NSView.Frame` **setter** throws (`Property` metadata 
 - **`Data/`** — Profile system: `BaseProfile<TApp>`, `BaseProfileManager`, `IProfileManager`. Profiles are JSON-serialized; persistence uses an IO task factory for thread safety.
 - **`Scripting/`** — Script compilation and execution engine: `IScript`, `IScriptManager`, context-based execution, mock/empty implementations for testing.
 - **`Converters/`** — 16 XAML value converters (enum, file size, time span, layout/thickness helpers).
-- **`Native/`** — P/Invoke and interop: `Native.Win32` (Win32 API), `Native.MacOS` (NSOpenPanel, NSURL, osascript via dynamic lib loading), `FullScreenWindowControls` (inline traffic lights in macOS fullscreen — see the dedicated section above). General-purpose Objective-C wrappers belong in `CarinaStudio.AppBase.MacOS`, not here; local `NSObject` subclasses in this folder are for AppSuite-specific behavior only.
+- **`Native/`** — P/Invoke and interop: `Native.Win32` (Win32 API), `Native.MacOS` (NSOpenPanel, NSURL, osascript via dynamic lib loading), `FullScreenWindowControls` (inline traffic lights in macOS fullscreen — see the dedicated section above). General-purpose Objective-C wrappers belong in `CarinaStudio.AppBase.MacOS`, not here; local `NSObject` subclasses in this folder are for AppSuite-specific behavior only. `Win32.ITaskbarList3` is a source-generated COM interface (`[GeneratedComInterface]`) and `AppSuiteApplication.SetupWindowsTaskbarList` builds its runtime callable wrapper through `Win32.ComWrappers`, so taskbar progress keeps working in applications published with Native AOT.
 
 ## Patterns
 

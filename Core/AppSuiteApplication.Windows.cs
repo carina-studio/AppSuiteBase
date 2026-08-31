@@ -344,29 +344,50 @@ unsafe partial class AppSuiteApplication
 
 
     // Setup related objects for taskbar.
-    [DynamicDependency(DynamicallyAccessedMemberTypes.All, typeof(Win32.ITaskbarList3))]
     [MemberNotNullWhen(true, nameof(windowsTaskbarList))]
     bool SetupWindowsTaskbarList()
     {
+        // check state
         if (this.windowsTaskbarList is not null)
             return true;
-        Win32.CoInitialize();
-#pragma warning disable IL2050
-        var result = Win32.CoCreateInstance(in Win32.CLSID_TaskBarList, null, Win32.CLSCTX.INPROC_SERVER, in Win32.IID_TaskBarList3, out var obj);
-#pragma warning restore IL2050
-        if (obj is null)
+        try
         {
-            this.Logger.LogError("Unable to create ITaskBarList3 object, result: {result}", result);
+            // create COM object
+            Win32.CoInitialize();
+            var result = Win32.CoCreateInstance(in Win32.CLSID_TaskBarList, IntPtr.Zero, Win32.CLSCTX.INPROC_SERVER, in Win32.IID_TaskBarList3, out var taskbarListPtr);
+            if (taskbarListPtr == IntPtr.Zero)
+            {
+                this.Logger.LogError("Unable to create ITaskBarList3 object, result: {result}", result);
+                return false;
+            }
+
+            // create runtime callable wrapper
+            try
+            {
+                // the wrapper takes its own reference to the COM object
+                this.windowsTaskbarList = Win32.ComWrappers.GetOrCreateObjectForComInstance(taskbarListPtr, CreateObjectFlags.None) as Win32.ITaskbarList3;
+            }
+            finally
+            {
+                Marshal.Release(taskbarListPtr);
+            }
+            if (this.windowsTaskbarList is null)
+            {
+                this.Logger.LogError("Unable to get implementation of ITaskBarList3");
+                return false;
+            }
+
+            // initialize
+            this.windowsTaskbarList.HrInit();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            // failed to setup
+            this.Logger.LogError(ex, "Unable to setup ITaskBarList3");
+            this.windowsTaskbarList = null;
             return false;
         }
-        this.windowsTaskbarList = obj as Win32.ITaskbarList3;
-        if (this.windowsTaskbarList is null)
-        {
-            this.Logger.LogError("Unable to get implementation of ITaskBarList3");
-            return false;
-        }
-        this.windowsTaskbarList.HrInit();
-        return true;
     }
 
 

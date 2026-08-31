@@ -6,6 +6,21 @@ This file provides guidance to AI coding agents when working with code in this r
 
 When a change affects the architecture of a library project (`Core`, `Fonts`, `SyntaxHighlighting`), update the corresponding `AGENTS.md` in that project's folder so the documentation stays in sync with the code.
 
+### Committing
+
+1. **Wait for explicit commit confirmation** — after applying approved changes, do not run `git add`, `git commit`, `git commit --amend`, or any other commit-creating command until the user explicitly tells you to commit (e.g. "commit it", "go ahead and commit"). Approval to make an edit is not approval to commit it. Two forms of that mistake are worth naming, because both read as approval and neither is:
+    - **An instruction which approves the work is not a commit instruction.** "go", "go ahead", "go next part", and an instruction which simply names the change to make — "hide the item", "update doc", "delete the dead code" — approve the editing and nothing else.
+    - **A commit instruction never carries forward.** Work split into several parts needs its own instruction for each part, even when the part immediately before it was committed on request. The approval covered that part, not the sequence.
+
+    End a part by saying the changes are ready and what they are, then wait. The same rule applies to `git push`, branch creation, and any other shared-state action — wait for an explicit instruction.
+2. **Write the commit message in the house style** — a single line, sentence case, ending with a period, saying what the change does: `Update version to 4.0.0.828.`, `Use source-generated COM interop to make the code compatible with native AOT.` A longer single line is fine when the change needs one: `Prevent application not being able to shut down when error occurred while closing main window.` When one commit genuinely carries several independent parts, number them — **one part per line, each its own sentence ending with a period, with no blank line between them**, as `37ee7bc` and `9aed2a7` do:
+
+    [1] Upgrade to .NET libraries 10.0.11.
+    [2] Upgrade to NLog 6.2.0.
+    [3] Upgrade to NLog.Targets.Network 6.1.5.
+
+Do **not** run the parts together on one line. Beware that `git log --oneline` gives no evidence either way: git reads everything up to the first blank line as the subject, so it joins the numbered lines back into one and both spellings look identical there — check with `git log --format=%B` instead. **No body, no trailers, no emoji — and never a `Co-Authored-By` or `Claude-Session` trailer**, whatever the agent's own default guidance says. The handful of commits which carry one were written by an agent following its own default guidance; they are the inconsistency to stop, not a precedent.
+
 ## What This Is
 
 AppSuiteBase is a **cross-platform desktop application framework** built on [Avalonia UI](https://avaloniaui.net/). It is a reusable foundation library for building complex GUI applications — not an end-user application itself. Applications extend its abstract base classes and interfaces.
@@ -112,6 +127,7 @@ Shared build configuration lives in `Directory.Build.props`: assembly version, n
 ### Platform-Specific Code (`#pragma warning disable CA1416`)
 - Suppress CA1416 only when calling APIs that the .NET runtime annotates with `[SupportedOSPlatform("windows")]` (e.g. `Registry`, `WindowsIdentity`).
 - Custom P/Invoke definitions in `Native.Win32` do **not** carry that annotation and do not require CA1416 suppression at their call sites.
+- Windows COM interop must use **source-generated COM** — `[GeneratedComInterface]` interfaces (declared `partial`, inside `partial` containing types) with runtime callable wrappers built from the `StrategyBasedComWrappers` in `Native/Win32.cs`. Built-in COM interop (`[ComImport]`, `[MarshalAs(UnmanagedType.IUnknown)]`, `[MarshalAs(UnmanagedType.Interface)]`) does **not** work under Native AOT: the runtime-generated RCW/CCW machinery is absent from the image and the call throws `NotSupportedException` at runtime, which registering a `ComWrappers` instance does not fix. Declare COM entry points such as `CoCreateInstance` with `IntPtr` out-parameters, wrap the pointer with `GetOrCreateObjectForComInstance`, then `Marshal.Release` the local reference — the wrapper takes its own. Method order in a COM interface is its vtable layout, so it is exempt from the alphabetical member ordering rule.
 
 ### Localized Strings
 
