@@ -112,7 +112,22 @@ class AgreementDialogImpl : Dialog
     protected override void OnClosing(WindowClosingEventArgs e)
     {
         if (!this.hasResult && !this.IsAgreedBefore)
+        {
+            // decline the agreement and close dialog later when shutting down
+            if (this.Application.IsShutdownStarted)
+            {
+                this.SynchronizationContext.Post(() =>
+                {
+                    if (!this.hasResult)
+                        this.Decline();
+                });
+            }
+
+            // cancel closing until user made the decision
             e.Cancel = true;
+        }
+
+        // call base
         base.OnClosing(e);
     }
 

@@ -363,6 +363,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     const int FlushingUsageDataWhenShuttingDownTimeout = 10000;
     const string InitSettingsFileName = "InitSettings.json";
     const string PersistentStateFileName = "PersistentState.json";
+    const int RemainingWindowsCheckingInterval = 5000;
     const string RestartedBySystemArgument = "-restarted-by-system";
     const string SettingsFileName = "Settings.json";
     const bool SimulateFirstLaunch = false;
@@ -408,6 +409,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     ScheduledAction? autoSaveSettingsAction;
     readonly Microsoft.Extensions.Logging.ILogger avaloniaLogger;
     bool canRequestRestoringMainWindows;
+    ScheduledAction? checkRemainingWindowsAction;
     ScheduledAction? checkUpdateInfoAction;
     volatile ISettings? configuration;
     readonly string configurationFilePath;
@@ -426,6 +428,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     bool isRestartingRootWindowsRequested;
     bool isRestartRequested;
     bool isShutdownStarted;
+    bool isShuttingDownProcessStarted;
     readonly Stopwatch launchTopWatch = new Stopwatch().Also(it => it.Start());
     IDisposable? launchTracingToken;
     Task? loadingInitPersistentStateTask;
@@ -4199,10 +4202,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         if (this.windows.IsEmpty())
         {
             this.deactivateAction?.Execute();
-            if (!this.EnterBackgroundMode() && this.mainWindowHolders.IsEmpty() && !this.IsShutdownStarted)
+            if (!this.EnterBackgroundMode() && this.mainWindowHolders.IsEmpty() && !this.isCriticalShutdownStarted)
             {
                 this.Logger.LogWarning("All windows were closed, start shutting down");
-                this.Shutdown();
+                if (this.IsShutdownStarted)
+                    this.Shutdown(0, this.ShutdownReason); // 2nd trigger: resume the deferred shutdown with its captured reason
+                else
+                    this.Shutdown();
             }
         }
     }
@@ -5264,6 +5270,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
         // check whether shutting down for critical reason
         var isCritical = reason == ApplicationShutdownReason.Critical;
+        var wasCriticalShutdownStarted = this.isCriticalShutdownStarted;
 
         // update state
         if (isCritical)
@@ -5293,6 +5300,21 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (isCritical)
                 this.OnPropertyChanged(nameof(IsCriticalShutdownStarted));
             this.OnPropertyChanged(nameof(IsShutdownStarted));
+
+            // start checking windows which are not closed yet
+            this.checkRemainingWindowsAction ??= new(() =>
+            {
+                // check windows which are not closed yet
+                if (!this.isShutdownStarted || this.windows.IsEmpty())
+                    return;
+
+                // report and check again later
+                this.Logger.LogWarning("{count} window(s) are still opened after shutting down started: {windows}", 
+                    this.windows.Count, 
+                    string.Join(", ", this.windows.Select(it => it.GetType().Name)));
+                this.checkRemainingWindowsAction?.Schedule(RemainingWindowsCheckingInterval);
+            });
+            this.checkRemainingWindowsAction.Schedule(RemainingWindowsCheckingInterval);
         }
         else if (isCritical && !this.isCriticalShutdownStarted)
         {
@@ -5344,6 +5366,17 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (!isCritical)
                 return;
         }
+
+        // prevent performing the rest of shutting down process more than once, except escalating to critical shutdown
+        var wasShuttingDownProcessStarted = this.isShuttingDownProcessStarted;
+        this.isShuttingDownProcessStarted = true;
+        if (wasShuttingDownProcessStarted && (!isCritical || wasCriticalShutdownStarted))
+        {
+            this.Logger.LogWarning("Shutting down process has already been started");
+            return;
+        }
+
+        // reset main window state
         if (isFirstCall && !areMainWindowVmStateSaved)
         {
             this.Logger.LogWarning("Clear main window view-model states because of shutting down without main windows");
