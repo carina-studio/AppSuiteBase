@@ -853,6 +853,7 @@
 										<Button Command="{Binding $parent[Window].ShowAppDataImportDirSelectionDialog}" Content="Select dir to import app data" Margin="5"/>
 										<Button Command="{Binding $parent[Window].ShowNotification}" Content="Show Notification" Margin="5"/>
 										<Button Command="{Binding $parent[Window].ShowExternalDependenciesDialog}" Content="External Dependencies" Margin="5"/>
+										<Button Command="{Binding $parent[Window].ShowProcessingDialog}" Content="Processing Dialog" Margin="5"/>
 										<Button Command="{Binding $parent[Window].ShowTestDialog}" Content="Test Dialog" Margin="5"/>
 										<Button Command="{Binding $parent[Window].ShowTestWizardDialog}" Content="Test Wizard Dialog" Margin="5"/>
 										<Button Command="{Binding $parent[Window].FindCommandPath}" Content="Find command path" Margin="5"/>
