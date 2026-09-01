@@ -32,6 +32,7 @@ class ProcessingDialogImpl : Dialog
     string? actualMessage;
     readonly CachedResource<string?> defaultMessage;
     bool isCancellationRequested;
+    bool isClosing;
     bool isCompleted;
     
     
@@ -74,7 +75,8 @@ class ProcessingDialogImpl : Dialog
     public void Complete()
     {
         this.isCompleted = true;
-        this.Close();
+        if (!this.isClosing)
+            this.Close();
     }
     
     
@@ -107,9 +109,27 @@ class ProcessingDialogImpl : Dialog
     /// <inheritdoc/>.
     protected override void OnClosing(WindowClosingEventArgs e)
     {
-        if (!isCompleted)
-            e.Cancel = true;
-        base.OnClosing(e);
+        this.isClosing = true;
+        try
+        {
+            if (!isCompleted)
+            {
+                if (this.Application.IsShutdownStarted 
+                    && this.GetValue(IsCancellableProperty)
+                    && !this.GetValue(IsCancellationRequestedProperty))
+                {
+                    this.Cancel();
+                    e.Cancel = !this.isCompleted;
+                }
+                else
+                    e.Cancel = true;
+            }
+            base.OnClosing(e);
+        }
+        finally
+        {
+            this.isClosing = false;
+        }
     }
 
 

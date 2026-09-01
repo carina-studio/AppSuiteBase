@@ -753,21 +753,36 @@ public abstract class MainWindow : Window
         {
             if (!(bool)change.NewValue!)
             {
-                if (this.Application.IsRestartingRootWindowsNeeded)
-                    this.restartingRootWindowsAction.Reschedule(RestartingMainWindowsDelay);
-                if (!this.AreInitialDialogsClosed)
-                    this.showInitDialogsAction.Schedule();
-                if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId is not null)
+                if (this.Application.IsShutdownStarted)
                 {
-                    if (!this.notifyNetworkConnForActivatingProVersionAction.IsScheduled
-                        && !NetworkManager.Default.IsNetworkConnected
-                        && !IsNetworkConnForActivatingProVersionNotified)
+                    if (!this.isClosingScheduled && this.IsOpened)
                     {
-                        this.Logger.LogTrace("All dialogs were closed, notify user about network connection for activating Pro-version");
-                        this.notifyNetworkConnForActivatingProVersionAction.Schedule();
+                        this.isClosingScheduled = true;
+                        this.SynchronizationContext.PostDelayed(() =>
+                        {
+                            if (this.IsOpened)
+                                this.Close();
+                        }, 300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
                     }
-                    if (IsReactivatingProVersionNeeded)
-                        this.reactivateProVersionAction.Schedule();
+                }
+                else
+                {
+                    if (this.Application.IsRestartingRootWindowsNeeded)
+                        this.restartingRootWindowsAction.Reschedule(RestartingMainWindowsDelay);
+                    if (!this.AreInitialDialogsClosed)
+                        this.showInitDialogsAction.Schedule();
+                    if (this.Application is AppSuiteApplication asApp && asApp.ProVersionProductId is not null)
+                    {
+                        if (!this.notifyNetworkConnForActivatingProVersionAction.IsScheduled
+                            && !NetworkManager.Default.IsNetworkConnected
+                            && !IsNetworkConnForActivatingProVersionNotified)
+                        {
+                            this.Logger.LogTrace("All dialogs were closed, notify user about network connection for activating Pro-version");
+                            this.notifyNetworkConnForActivatingProVersionAction.Schedule();
+                        }
+                        if (IsReactivatingProVersionNeeded)
+                            this.reactivateProVersionAction.Schedule();
+                    }
                 }
             }
         }
@@ -1065,7 +1080,7 @@ public abstract class MainWindow : Window
                     }),
                     Title = this.GetResourceObservable("String/Common.UserAgreement"),
                 };
-                if ((await dialog.ShowDialog(this)) == AgreementDialogResult.Declined)
+                if (await dialog.ShowDialog(this) == AgreementDialogResult.Declined)
                 {
                     this.Logger.LogWarning("User decline the current User Agreement");
                     app.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
@@ -1098,7 +1113,7 @@ public abstract class MainWindow : Window
                     }),
                     Title = this.GetResourceObservable("String/Common.PrivacyPolicy"),
                 };
-                if ((await dialog.ShowDialog(this)) == AgreementDialogResult.Declined)
+                if (await dialog.ShowDialog(this) == AgreementDialogResult.Declined)
                 {
                     this.Logger.LogWarning("User decline the current Privacy Policy");
                     app.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.

@@ -203,7 +203,7 @@ class ExternalDependenciesDialogImpl : Dialog<IAppSuiteApplication>
 	/// <inheritdoc/>
 	protected override void OnClosing(WindowClosingEventArgs e)
 	{
-		if (!this.GetValue(CanCloseProperty))
+		if (!this.GetValue(CanCloseProperty) && !this.Application.IsShutdownStarted)
 			e.Cancel = true;
 		base.OnClosing(e);
 	}

@@ -105,9 +105,9 @@ class SelfTestingWindowImpl : Window<IAppSuiteApplication>
     protected override void OnClosing(WindowClosingEventArgs e)
     {
         this.testManager.CancelAllTestCases();
-        if (this.testManager.IsRunningTestCases)
+        if (this.testManager.IsRunningTestCases && !this.Application.IsShutdownStarted)
         {
-            _ = new MessageDialog()
+            _ = new MessageDialog
             {
                 Icon = MessageDialogIcon.Warning,
                 Message = this.Application.GetObservableString("SelfTestingWindow.NeedToWaitForRunningTestCases"),

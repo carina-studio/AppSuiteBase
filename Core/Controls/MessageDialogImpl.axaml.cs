@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using CarinaStudio.Windows.Input;
 using System;
@@ -287,7 +286,31 @@ class MessageDialogImpl : Dialog
 	protected override void OnClosing(WindowClosingEventArgs e)
 	{
 		if (this.result is null)
+		{
+			// select result automatically and close dialog later when shutting down
+			if (this.Application.IsShutdownStarted)
+			{
+				var result = this.DefaultResult ?? this.Buttons switch
+				{
+					MessageDialogButtons.OK => MessageDialogResult.OK,
+					MessageDialogButtons.OKCancel or MessageDialogButtons.YesNoCancel => MessageDialogResult.Cancel,
+					_ => (MessageDialogResult?)null,
+				};
+				if (result is not null)
+				{
+					this.SynchronizationContext.Post(() =>
+					{
+						if (this.result is null)
+							this.SelectResult(result);
+					});
+				}
+			}
+
+			// cancel closing until result has been selected
 			e.Cancel = true;
+		}
+
+		// call base
 		base.OnClosing(e);
 	}
 

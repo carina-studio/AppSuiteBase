@@ -197,6 +197,8 @@ class PathEnvVarEditorDialogImpl : Dialog<IAppSuiteApplication>
 		this.SetValue(IsSavingPathsProperty, false);
 		if (success)
 			this.Close(true);
+		else if (this.Application.IsShutdownStarted)
+			this.Close();
 	}
 
 
