@@ -332,6 +332,7 @@
 	<!-- ProcessingDialog -->
 	<CornerRadius x:Key="CornerRadius/ProcessingDialog">12</CornerRadius>
 	<sys:Double x:Key="Double/ProcessingDialog.MinWidth">200</sys:Double>
+	<Thickness x:Key="Thickness/ProcessingDialog.CancelButton.Margin">0,0,0,-8</Thickness>
 
 	<!-- ScrollBar -->
 	<CornerRadius x:Key="CornerRadius/ScrollBar">7</CornerRadius>

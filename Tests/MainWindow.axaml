@@ -846,6 +846,7 @@
 										<Button Command="{Binding #window.ShowAppDataImportDirSelectionDialog}" Content="Select dir to import app data" Margin="5"/>
 										<Button Command="{Binding #window.ShowNotification}" Content="Show Notification" Margin="5"/>
 										<Button Command="{Binding #window.ShowExternalDependenciesDialog}" Content="External Dependencies" Margin="5"/>
+										<Button Command="{Binding #window.ShowProcessingDialog}" Content="Processing Dialog" Margin="5"/>
 										<Button Command="{Binding #window.ShowTestDialog}" Content="Test Dialog" Margin="5"/>
 										<Button Command="{Binding #window.ShowTestWizardDialog}" Content="Test Wizard Dialog" Margin="5"/>
 										<Button Command="{Binding #window.FindCommandPath}" Content="Find command path" Margin="5"/>

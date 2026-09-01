@@ -164,9 +164,9 @@ namespace CarinaStudio.AppSuite.Tests
                 return reader.ReadToEnd();
             });
 
-            InitializeComponent();
+            AvaloniaXamlLoader.Load(this);
 
-            ((AppSuiteApplication)App.Current).EnsureClosingToolTipIfWindowIsInactive(this.Get<Control>("testButton1"));
+            ((AppSuiteApplication)CarinaStudio.Application.Current).EnsureClosingToolTipIfWindowIsInactive(this.Get<Control>("testButton1"));
 
             this.logAction = new ScheduledAction(() =>
             {
@@ -217,7 +217,7 @@ namespace CarinaStudio.AppSuite.Tests
             this.Get<RegexTextBox>("regexTextBox").Also(it =>
             {
                 // make a reference from RegexTextBox to MainWindow
-                it.GetObservable(RegexTextBox.IsTextValidProperty).Subscribe(_ =>
+                it.GetObservable(ObjectTextBox.IsTextValidProperty).Subscribe(_ =>
                 { });
                 it.PhraseInputAssistanceProvider = new PhraseInputAssistanceProvider();
             });
@@ -301,7 +301,7 @@ namespace CarinaStudio.AppSuite.Tests
             });
 
             var tabControl = this.FindControl<TabControl>("tabControl").AsNonNull();
-            this.tabItems.AddRange(tabControl.Items!.Cast<Avalonia.Controls.TabItem>());
+            this.tabItems.AddRange(tabControl.Items.Cast<TabItem>());
             tabControl.Items.Clear();
             tabControl.ItemsSource = this.tabItems;
             (this.tabItems[0].Header as Control)?.Let(it => this.Application.EnsureClosingToolTipIfWindowIsInactive(it));
@@ -332,7 +332,7 @@ namespace CarinaStudio.AppSuite.Tests
             this.notificationPresenter.AddNotification(notification);
 
 
-        public ViewModels.ApplicationOptions ApplicationOptions { get; } = new ViewModels.ApplicationOptions();
+        public ApplicationOptions ApplicationOptions { get; } = new ViewModels.ApplicationOptions();
 
 
         public double DefaultBackdropStrength
@@ -401,9 +401,6 @@ namespace CarinaStudio.AppSuite.Tests
         public IList<string> ImageIdList { get; }
 
 
-        private void InitializeComponent() => AvaloniaXamlLoader.Load(this);
-
-
         //public override bool IsExtendingClientAreaAllowed => false;
 
 
@@ -434,7 +431,7 @@ namespace CarinaStudio.AppSuite.Tests
 
         void OnDragLeaveTabItem(object? sender, TabItemEventArgs e)
         {
-            if (e.Item is not Avalonia.Controls.TabItem tabItem)
+            if (e.Item is not TabItem tabItem)
                 return;
             ItemInsertionIndicator.SetInsertingItemAfter(tabItem, false);
             ItemInsertionIndicator.SetInsertingItemBefore(tabItem, false);
@@ -616,7 +613,7 @@ namespace CarinaStudio.AppSuite.Tests
         }
 
 
-        public async void OpenFileForSyntaxHighlightingTextBlocks()
+        public async Task OpenFileForSyntaxHighlightingTextBlocks()
         {
             this.syntaxHighlightingTextBox.DefinitionSet!.TokenDefinitions[0].Let(it =>
             {
@@ -696,7 +693,7 @@ namespace CarinaStudio.AppSuite.Tests
         public void ShowExternalDependenciesDialog() =>
             _ = new ExternalDependenciesDialog().ShowDialog(this);
 
-        public async void ShowMessageDialog()
+        public async Task ShowMessageDialog()
         {
             var icon = Enum.GetValues<MessageDialogIcon>().SelectRandomElement();
             var buttons = Enum.GetValues<MessageDialogButtons>().SelectRandomElement();
@@ -763,7 +760,19 @@ namespace CarinaStudio.AppSuite.Tests
 
         public ICommand ShowAppInfoDialogCommand { get; }
 
-        public async void ShowTestDialog()
+        public async Task ShowProcessingDialog()
+        {
+            using var cancellationTokenSource = new CancellationTokenSource();
+            var dialog = new ProcessingDialog
+            {
+                IsCancellable = true,
+                Message = "Processing..."
+            };
+            dialog.CancellationRequested += (_, _) => dialog.Complete();
+            await dialog.ShowDialog(this);
+        }
+
+        public async Task ShowTestDialog()
         {
             var result = await new Dialog().ShowDialog<ApplicationOptionsDialogResult>();
             if (result == ApplicationOptionsDialogResult.RestartMainWindowsNeeded)
@@ -772,12 +781,12 @@ namespace CarinaStudio.AppSuite.Tests
                 this.Application.Restart();
         }
         
-        public async void ShowTestWizardDialog()
+        public async Task ShowTestWizardDialog()
         {
             _ = await new TestWizardDialog().ShowDialog<object?>(this);
         }
 
-        public async void ShowTextInputDialog()
+        public async Task ShowTextInputDialog()
         {
             var result = await new TextInputDialog()
             {
@@ -830,7 +839,7 @@ namespace CarinaStudio.AppSuite.Tests
         };
 
 
-        public async void SwitchAppCulture()
+        public void SwitchAppCulture()
         {
             using var appOptions = new ApplicationOptions();
             appOptions.Culture = appOptions.Culture switch

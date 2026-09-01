@@ -41,13 +41,13 @@
 			<StackPanel Grid.ColumnSpan="2"
 			            Grid.Row="1"
 			            IsVisible="{Binding #dialog.IsCancellable}">
-				<Separator controls:DialogElement.SeparatorType="Large"/>
+				<Separator controls:DialogElement.SeparatorType="Default"/>
 				<Button controls:DialogElement.ButtonRole="Control"
 				        Command="{Binding #dialog.Cancel}"
 				        Content="{Binding #dialog.CancelButtonText}"
 				        HorizontalAlignment="Center"
 				        IsEnabled="{Binding !#dialog.IsCancellationRequested}"
-				        Margin="0"/>
+				        Margin="{StaticResource Thickness/ProcessingDialog.CancelButton.Margin}"/>
 			</StackPanel>
 		
 		</Grid>
