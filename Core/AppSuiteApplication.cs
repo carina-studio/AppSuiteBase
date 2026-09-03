@@ -57,6 +57,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -2789,24 +2790,14 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// Write log to standard output.
     /// </summary>
     /// <param name="message">Message.</param>
-    protected static unsafe void LogToConsole(string? message)
+    protected static void LogToConsole(string? message)
     {
+        // check message
         if (string.IsNullOrEmpty(message))
             return;
-        var isMultiLine = false;
-        fixed (void* p = message)
-        {
-            var charPtr = (char*)p;
-            for (var i = message.Length; i > 0; --i, ++charPtr)
-            {
-                if (*charPtr == '\n')
-                {
-                    isMultiLine = true;
-                    break;
-                }
-            }
-        }
-        if (isMultiLine)
+        
+        // write message
+        if (message.Contains('\n'))
         {
             var prefix = $"[{DateTime.Now:HH:mm:ss.fff}] ";
             var lines = message.Split('\n');
@@ -3049,11 +3040,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         }
         
         // setup special resources
-        unsafe
-        {
-            var emptyRgba8888Pixel = stackalloc byte[4];
-            this.Resources["Bitmap/Empty"] = new Bitmap(PixelFormat.Rgba8888, AlphaFormat.Unpremul, (IntPtr)emptyRgba8888Pixel, new(1, 1), new(96, 96), 4);
-        }
+        // [Note] The buffer is allocated for the lifetime of the application and never freed, because the bitmap may reference it directly instead of copying it.
+        var emptyRgba8888Pixel = Marshal.AllocHGlobal(4);
+        Marshal.WriteInt32(emptyRgba8888Pixel, 0);
+        this.Resources["Bitmap/Empty"] = new Bitmap(PixelFormat.Rgba8888, AlphaFormat.Unpremul, emptyRgba8888Pixel, new(1, 1), new(96, 96), 4);
 
         // allow requesting restoring main windows
         this.canRequestRestoringMainWindows = true;

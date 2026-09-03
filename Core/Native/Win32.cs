@@ -4,7 +4,7 @@ using System.Runtime.InteropServices.Marshalling;
 
 namespace CarinaStudio.AppSuite.Native;
 
-static unsafe partial class Win32
+static partial class Win32
 {
     public static readonly Guid CLSID_TaskBarList = new("56fdf344-fd6d-11d0-958a-006097c9a090");
     public static readonly StrategyBasedComWrappers ComWrappers = new(); // Built-in COM interop is unavailable with Native AOT, RCWs must be created explicitly
@@ -68,7 +68,7 @@ static unsafe partial class Win32
         void ThumbBarSetImageList(IntPtr hwnd, IntPtr himl);
         void SetOverlayIcon(IntPtr hwnd, IntPtr hIcon, string? pszDescription);
         void SetThumbnailTooltip(IntPtr hwnd, string? pszTip);
-        void SetThumbnailClip(IntPtr hwnd, void* prcClip);
+        void SetThumbnailClip(IntPtr hwnd, IntPtr prcClip);
     }
 
 
@@ -123,7 +123,7 @@ static unsafe partial class Win32
 
 
     [DllImport("Dwmapi", SetLastError = true)]
-    public static extern int DwmSetWindowAttribute(IntPtr hwnd, DWMWA dwAttribute, void* pvAttribute, uint cbAttribute);
+    public static extern int DwmSetWindowAttribute(IntPtr hwnd, DWMWA dwAttribute, in int pvAttribute, uint cbAttribute);
 
 
     [DllImport("User32", SetLastError = true)]

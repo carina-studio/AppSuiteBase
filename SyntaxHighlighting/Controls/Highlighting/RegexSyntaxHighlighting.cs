@@ -1,4 +1,5 @@
 using Avalonia.Media;
+using System;
 using System.Text.RegularExpressions;
 
 namespace CarinaStudio.AppSuite.Controls.Highlighting;
@@ -34,30 +35,26 @@ public static class RegexSyntaxHighlighting
     /// <param name="text">The text.</param>
     /// <param name="index">Index of position in the text.</param>
     /// <returns>Number of continuous backslashes before given position.</returns>
-    public static unsafe int CountContinuousBackslashesBefore(string? text, int index)
-    {
-        if (text is null)
-            return 0;
-        fixed (char* p = text)
-        {
-            if (p is null)
-                return 0;
-            return CountContinuousBackslashesBefore(p, index);
-        }
-    }
+    public static int CountContinuousBackslashesBefore(string? text, int index) =>
+        text is not null ? CountContinuousBackslashesBefore(text.AsSpan(), index) : 0;
     
     
     /// <summary>
     /// Get number of continuous backslashes before given position.
     /// </summary>
-    /// <param name="text">Pointer to the text.</param>
+    /// <param name="text">The text.</param>
     /// <param name="index">Index of position in the text.</param>
     /// <returns>Number of continuous backslashes before given position.</returns>
-    public static unsafe int CountContinuousBackslashesBefore(char* text, int index)
+    public static int CountContinuousBackslashesBefore(ReadOnlySpan<char> text, int index)
     {
+        // check position
+        if (index > text.Length)
+            index = text.Length;
         --index;
-        if (text is null || index < 0)
+        if (index < 0)
             return 0;
+        
+        // count continuous backslashes backward
         var count = 0;
         while (index >= 0 && text[index] == '\\')
         {
@@ -202,63 +199,58 @@ public static class RegexSyntaxHighlighting
     
     
     // Find range of construct with given beginning/ending characters.
-    static unsafe Range<int> FindConstructRange(string? text, int index, char beginningChar, char endingChar)
+    static Range<int> FindConstructRange(string? text, int index, char beginningChar, char endingChar)
     {
+        // check parameters
         if (text is null)
             return default;
         var textLength = text.Length;
         if (index <= 0 || textLength <= 0 || index >= textLength)
             return default;
-        fixed (char* p = text)
+        var span = text.AsSpan();
+        
+        // find start of construct
+        var start = index - 1;
+        do
         {
-            // check pointer
-            if (p is null)
-                return default;
-            var cPtr = p;
-			
-            // find start of construct
-            var start = index - 1;
-            do
+            var c = span[start];
+            if (c == beginningChar)
             {
-                var c = cPtr[start];
-                if (c == beginningChar)
-                {
-                    if ((CountContinuousBackslashesBefore(cPtr, start) & 0x1) == 0)
-                        break;
-                }
-                else if (c == endingChar)
-                {
-                    if ((CountContinuousBackslashesBefore(cPtr, start) & 0x1) == 0)
-                        return default;
-                }
-                --start;
-            } while (start >= 0);
-            if (start < 0)
-                return default;
-			
-            // find end of construct
-            var end = index;
-            do
+                if ((CountContinuousBackslashesBefore(span, start) & 0x1) == 0)
+                    break;
+            }
+            else if (c == endingChar)
             {
-                var c = cPtr[end];
-                if (c == endingChar)
-                {
-                    if ((CountContinuousBackslashesBefore(cPtr, end) & 0x1) == 0)
-                        break;
-                }
-                else if (c == beginningChar)
-                {
-                    if ((CountContinuousBackslashesBefore(cPtr, end) & 0x1) == 0)
-                        return default;
-                }
-                ++end;
-            } while (end < textLength);
-            if (end >= textLength)
-                return default;
-			
-            // complete
-            return new(start, end + 1);
-        }
+                if ((CountContinuousBackslashesBefore(span, start) & 0x1) == 0)
+                    return default;
+            }
+            --start;
+        } while (start >= 0);
+        if (start < 0)
+            return default;
+        
+        // find end of construct
+        var end = index;
+        do
+        {
+            var c = span[end];
+            if (c == endingChar)
+            {
+                if ((CountContinuousBackslashesBefore(span, end) & 0x1) == 0)
+                    break;
+            }
+            else if (c == beginningChar)
+            {
+                if ((CountContinuousBackslashesBefore(span, end) & 0x1) == 0)
+                    return default;
+            }
+            ++end;
+        } while (end < textLength);
+        if (end >= textLength)
+            return default;
+        
+        // complete
+        return new(start, end + 1);
     }
     
     
@@ -268,34 +260,34 @@ public static class RegexSyntaxHighlighting
     /// <param name="text">The text.</param>
     /// <param name="index">Index of position in the text.</param>
     /// <returns>The range of name of group construct.</returns>
-    public static unsafe Range<int> FindGroupNameRange(string? text, int index)
+    public static Range<int> FindGroupNameRange(string? text, int index)
     {
+        // check parameters
         if (text is null)
             return default;
         var textLength = text.Length;
         var start = index - 1;
-        if (start < 0 || textLength <= 0)
+        if (start < 0 || start >= textLength)
             return default;
-        fixed (char* p = text)
+        var span = text.AsSpan();
+        
+        // find beginning of group name
+        while (start >= 0 && span[start] != '<')
         {
-            if (p is null)
+            if (span[start] == '>')
                 return default;
-            var cPtr = p;
-            while (start >= 0 && cPtr[start] != '<')
-            {
-                if (cPtr[start] == '>')
-                    return default;
-                --start;
-            }
-            if (start < 2 || cPtr[start - 1] != '?' || cPtr[start - 2] != '(')
-                return default;
-            for (var end = start + 1; end < textLength; ++end)
-            {
-                if (cPtr[end] == '>')
-                    return (start + 1, end);
-            }
-            return new(start + 1, textLength);
+            --start;
         }
+        if (start < 2 || span[start - 1] != '?' || span[start - 2] != '(')
+            return default;
+        
+        // find end of group name
+        for (var end = start + 1; end < textLength; ++end)
+        {
+            if (span[end] == '>')
+                return (start + 1, end);
+        }
+        return new(start + 1, textLength);
     }
 
 
@@ -305,61 +297,59 @@ public static class RegexSyntaxHighlighting
     /// <param name="text">The text.</param>
     /// <param name="index">Index of position in the text.</param>
     /// <returns>The range of phrase.</returns>
-    public static unsafe Range<int> FindPhraseRange(string? text, int index)
+    public static Range<int> FindPhraseRange(string? text, int index)
     {
+        // check parameters
         if (text is null)
             return default;
-        fixed (char* p = text)
-        {
-            if (p is not null)
-            {
-                // find start of phrase
-                var cPtr = p;
-                var end = index;
-                var start = end - 1;
-                while (start >= 0)
-                {
-                    var c = cPtr[start];
-                    if (char.IsLetter(c) || char.IsDigit(c) || c == '_' || c == '-')
-                        --start;
-                    else
-                    {
-                        if (c == '\\' && (CountContinuousBackslashesBefore(cPtr, start) & 0x1) == 0)
-                            ++start;
-                        break;
-                    }
-                }
-                ++start;
-
-                // find end of phrase
-                if (start <= end)
-                {
-                    var textLength = text.Length;
-                    while (end < textLength)
-                    {
-                        var c = cPtr[end];
-                        if (char.IsLetter(c) || char.IsDigit(c) || c == '_' || c == '-')
-                            ++end;
-                        else
-                            break;
-                    }
-                }
-                
-                // make sure that the phrase is started with letter
-                while (start < end)
-                {
-                    var c = cPtr[start];
-                    if (char.IsLetter(c))
-                        break;
-                    ++start;
-                }
-
-                // get range
-                if (start < end)
-                    return new(start, end);
-            }
+        var textLength = text.Length;
+        if (index < 0 || index > textLength)
             return default;
+        var span = text.AsSpan();
+        
+        // find start of phrase
+        var end = index;
+        var start = end - 1;
+        while (start >= 0)
+        {
+            var c = span[start];
+            if (char.IsLetter(c) || char.IsDigit(c) || c == '_' || c == '-')
+                --start;
+            else
+            {
+                if (c == '\\' && (CountContinuousBackslashesBefore(span, start) & 0x1) == 0)
+                    ++start;
+                break;
+            }
         }
+        ++start;
+
+        // find end of phrase
+        if (start <= end)
+        {
+            while (end < textLength)
+            {
+                var c = span[end];
+                if (char.IsLetter(c) || char.IsDigit(c) || c == '_' || c == '-')
+                    ++end;
+                else
+                    break;
+            }
+        }
+        
+        // make sure that the phrase is started with letter
+        while (start < end)
+        {
+            var c = span[start];
+            if (char.IsLetter(c))
+                break;
+            ++start;
+        }
+
+        // get range
+        if (start < end)
+            return new(start, end);
+        return default;
     }
     
     

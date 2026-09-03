@@ -3,7 +3,6 @@ using CarinaStudio.Logging;
 using System;
 using System.Diagnostics;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,20 +10,12 @@ namespace CarinaStudio.AppSuite;
 
 partial class AppSuiteApplication
 {
-    // Static fields.
-    static IntPtr gdkLibHandle;
-    static unsafe delegate*unmanaged[Cdecl]<void*> getDefaultGdkDisplay;
-    static unsafe delegate*unmanaged[Cdecl]<void*, int, void*> getGdkMonitor;
-    static unsafe delegate*unmanaged[Cdecl]<void*, int> getGdkMonitorCount;
-    static unsafe delegate*unmanaged[Cdecl]<void*, int> getGdkMonitorScaleFactor;
-
-
     // Fields.
     bool? isGSettingsAvailable;
 
 
     // Apply given screen scale factor for Linux.
-    static unsafe void ApplyScreenScaleFactorOnLinux(double scaleFactor)
+    static void ApplyScreenScaleFactorOnLinux(double scaleFactor)
     {
         // [Workaround] Ignore unsupported distributions
         if (Platform.IsNotLinux)
@@ -38,37 +29,15 @@ partial class AppSuiteApplication
         }
         
         // setup GDK
-        if (!InitializeGdk())
+        if (!Native.Gdk.Initialize())
             return;
 
-        // set environment variable
+        // get scale factor of screens
         //var valueBuilder = new StringBuilder();
-        var minScaleFactor = int.MaxValue;
-        var display = getDefaultGdkDisplay();
-        if (display is not null)
-        {
-            for (var i = getGdkMonitorCount(display) - 1; i >= 0; --i)
-            {
-                var monitor = getGdkMonitor(display, i);
-                /*
-                var monitorModelPtr = getGdkMonitorModel(monitor);
-                if (monitorModelPtr is null && i > 0)
-                    continue;
-                */
-                var monitorScaleFactor = Math.Max(1, getGdkMonitorScaleFactor(monitor));
-                /*
-                if (valueBuilder.Length > 0)
-                    valueBuilder.Append(';');
-                valueBuilder.Append(monitorModelPtr is not null ? new string(monitorModelPtr) : "default");
-                valueBuilder.Append('=');
-                valueBuilder.Append(scaleFactor);
-                */
-                if (monitorScaleFactor < minScaleFactor)
-                    minScaleFactor = monitorScaleFactor;
-            }
-        }
-        else
+        if (!Native.Gdk.TryGetMinMonitorScaleFactor(out var minScaleFactor))
             LogToConsole("Default display not found.");
+
+        // set environment variable
         if (minScaleFactor < int.MaxValue)
             LogToConsole($"Apply screen scale factor {scaleFactor}, detected screen scale factor: {minScaleFactor}");
         else
@@ -113,61 +82,6 @@ partial class AppSuiteApplication
             this.Logger.LogError(ex, "Unable to check system theme mode on Linux");
             return this.FallbackThemeMode;
         }
-    }
-
-
-    // Initialize GDK.
-    static unsafe bool InitializeGdk()
-    {
-        // check state
-        if (gdkLibHandle != IntPtr.Zero)
-            return true;
-        
-        // load library
-        if (!NativeLibrary.TryLoad("libgdk-3.so.0", out var libHandle))
-        {
-            Console.Error.WriteLine("Unable to load GDK.");
-            return false;
-        }
-        
-        // find functions
-        if (!NativeLibrary.TryGetExport(libHandle, "gdk_init", out var funcPtr))
-        {
-            Console.Error.WriteLine("Unable to find gdk_init().");
-            return false;
-        }
-        var initGdk = (delegate*unmanaged[Cdecl]<int, void*, void>)funcPtr;
-        if (!NativeLibrary.TryGetExport(libHandle, "gdk_display_get_default", out funcPtr))
-        {
-            Console.Error.WriteLine("Unable to find gdk_display_get_default().");
-            return false;
-        }
-        getDefaultGdkDisplay = (delegate*unmanaged[Cdecl]<void*>)funcPtr;
-        if (!NativeLibrary.TryGetExport(libHandle, "gdk_display_get_n_monitors", out funcPtr))
-        {
-            Console.Error.WriteLine("Unable to find gdk_display_get_n_monitors().");
-            return false;
-        }
-        getGdkMonitorCount= (delegate*unmanaged[Cdecl]<void*, int>)funcPtr;
-        if (!NativeLibrary.TryGetExport(libHandle, "gdk_display_get_monitor", out funcPtr))
-        {
-            Console.Error.WriteLine("Unable to find gdk_display_get_monitor().");
-            return false;
-        }
-        getGdkMonitor = (delegate*unmanaged[Cdecl]<void*, int, void*>)funcPtr;
-        if (!NativeLibrary.TryGetExport(libHandle, "gdk_monitor_get_scale_factor", out funcPtr))
-        {
-            Console.Error.WriteLine("Unable to find gdk_monitor_get_scale_factor().");
-            return false;
-        }
-        getGdkMonitorScaleFactor = (delegate*unmanaged[Cdecl]<void*, int>)funcPtr;
-
-        // initialize GDK
-        initGdk(0, null);
-
-        // complete
-        gdkLibHandle = libHandle;
-        return true;
     }
 
 

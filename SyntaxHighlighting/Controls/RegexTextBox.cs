@@ -373,7 +373,7 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 
 
 	// Input a phrase.
-	unsafe void InputPhrase(string phrase)
+	void InputPhrase(string phrase)
 	{
 		// check state
 		this.updateSelectedTokensAction.ExecuteIfScheduled();
@@ -397,35 +397,29 @@ public class RegexTextBox : SyntaxHighlightingObjectTextBox<Regex>
 		Func<char, char, bool> checkCharEquality = this.IgnoreCase
 			? static (x, y) => char.ToLowerInvariant(x) == char.ToLowerInvariant(y)
 			: static (x, y) => x == y;
-		var selection = (text.AsMemory(), phrase.AsMemory()).PinAs((char* textPtr, char* phrasePtr) =>
+		var textSpan = text.AsSpan();
+		var phraseSpan = phrase.AsSpan();
+		var phraseLength = phrase.Length;
+		var (selectionStart, selectionEnd) = this.GetSelection();
+		var newSelectionStart = phraseLength >= (selectionStart - selectedPhraseRange.Start!.Value)
+			? selectedPhraseRange.Start!.Value
+			: selectionStart - phraseLength;
+		while (newSelectionStart < selectionStart)
 		{
-			// get state
-			var phraseLength = phrase.Length;
-			var (selectionStart, selectionEnd) = this.GetSelection();
-			
-			// find selection start
-			var newSelectionStart = phraseLength >= (selectionStart - selectedPhraseRange.Start!.Value)
-				? selectedPhraseRange.Start!.Value
-				: selectionStart - phraseLength;
-			while (newSelectionStart < selectionStart)
+			var isPrefixMatched = true;
+			for (var i = newSelectionStart; i < selectionStart; ++i)
 			{
-				var isPrefixMatched = true;
-				for (var i = newSelectionStart; i < selectionStart; ++i)
+				if (!checkCharEquality(textSpan[i], phraseSpan[i - newSelectionStart]))
 				{
-					if (!checkCharEquality(textPtr[i], phrasePtr[i - newSelectionStart]))
-					{
-						isPrefixMatched = false;
-						break;
-					}
-				}
-				if (isPrefixMatched)
+					isPrefixMatched = false;
 					break;
-				++newSelectionStart;
+				}
 			}
-			
-			// complete
-			return new Range<int>(newSelectionStart, Math.Max(newSelectionStart, selectionEnd));
-		});
+			if (isPrefixMatched)
+				break;
+			++newSelectionStart;
+		}
+		var selection = new Range<int>(newSelectionStart, Math.Max(newSelectionStart, selectionEnd));
 		
 		// insert phrase
 		if (selection.IsClosed)

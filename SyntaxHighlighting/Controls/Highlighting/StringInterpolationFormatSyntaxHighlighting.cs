@@ -1,4 +1,5 @@
 using Avalonia.Media;
+using System;
 using System.Text.RegularExpressions;
 
 namespace CarinaStudio.AppSuite.Controls.Highlighting;
@@ -83,35 +84,35 @@ public static class StringInterpolationFormatSyntaxHighlighting
     /// <param name="text">The text.</param>
     /// <param name="index">Index of position in the text.</param>
     /// <returns>The range of variable name.</returns>
-    public static unsafe Range<int> FindVariableNameRange(string? text, int index)
+    public static Range<int> FindVariableNameRange(string? text, int index)
     {
+        // check parameters
         if (text is null)
             return default;
         var textLength = text.Length;
         var start = index - 1;
+        if (start < 0 || start >= textLength)
+            return default;
+        var span = text.AsSpan();
+        
+        // find beginning of variable name
+        while (start >= 0 && span[start] != '{')
+        {
+            var c = span[start];
+            if (c == '}' || c == ':' || c == ',')
+                return default;
+            --start;
+        }
         if (start < 0)
             return default;
-        fixed (char* p = text)
+        
+        // find end of variable name
+        for (var end = start + 1; end < textLength; ++end)
         {
-            if (p is null)
-                return default;
-            var cPtr = p;
-            while (start >= 0 && cPtr[start] != '{')
-            {
-                var c = cPtr[start];
-                if (c == '}' || c == ':' || c == ',')
-                    return default;
-                --start;
-            }
-            if (start < 0)
-                return default;
-            for (var end = start + 1; end < textLength; ++end)
-            {
-                var c = cPtr[end];
-                if (c == '}' || c == ':' || c == ',')
-                    return (start, end + 1);
-            }
-            return default;
+            var c = span[end];
+            if (c == '}' || c == ':' || c == ',')
+                return (start, end + 1);
         }
+        return default;
     }
 }

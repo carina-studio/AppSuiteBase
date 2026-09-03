@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite;
 
-unsafe partial class AppSuiteApplication
+partial class AppSuiteApplication
 {
     // Constants.
     const string WindowsRunOnceKeyPath = @"Software\Microsoft\Windows\CurrentVersion\RunOnce";
@@ -43,8 +43,8 @@ unsafe partial class AppSuiteApplication
         if (hWnd != IntPtr.Zero)
         {
             // setup window corner
-            var cornerPreference = Win32.DWMWCP.ROUND;
-            var result = Win32.DwmSetWindowAttribute(hWnd, Win32.DWMWA.WINDOW_CORNER_PREFERENCE, &cornerPreference, sizeof(int));
+            var cornerPreference = (int)Win32.DWMWCP.ROUND;
+            var result = Win32.DwmSetWindowAttribute(hWnd, Win32.DWMWA.WINDOW_CORNER_PREFERENCE, cornerPreference, sizeof(int));
             if (result != IntPtr.Zero)
             {
                 this.Logger.LogWarning("Failed to set corner preference of window '{title}', result: {result}", window.Title, result);
@@ -53,8 +53,8 @@ unsafe partial class AppSuiteApplication
             
 
             // enable/disable dark mode
-            var darkMode = this.EffectiveThemeMode == ThemeMode.Dark;
-            result = Win32.DwmSetWindowAttribute(hWnd, Win32.DWMWA.USE_IMMERSIVE_DARK_MODE, &darkMode, sizeof(int) /* size of BOOL is same as DWORD */);
+            var darkMode = this.EffectiveThemeMode == ThemeMode.Dark ? 1 : 0; // size of BOOL is same as DWORD
+            result = Win32.DwmSetWindowAttribute(hWnd, Win32.DWMWA.USE_IMMERSIVE_DARK_MODE, darkMode, sizeof(int));
             if (result != IntPtr.Zero)
             {
                 this.Logger.LogWarning("Failed to set dark mode of window '{title}', result: {result}", window.Title, result);
@@ -64,7 +64,7 @@ unsafe partial class AppSuiteApplication
             // setup title bar color
             var titleBarColor = this.FindResourceOrDefault<Color>("Color/Window.TitleBar");
             var win32Color = (titleBarColor.B << 16) | (titleBarColor.G << 8) | titleBarColor.R;
-            result = Win32.DwmSetWindowAttribute(hWnd, Win32.DWMWA.CAPTION_COLOR, &win32Color, sizeof(int));
+            result = Win32.DwmSetWindowAttribute(hWnd, Win32.DWMWA.CAPTION_COLOR, win32Color, sizeof(int));
             if (result != IntPtr.Zero)
             {
                 this.Logger.LogWarning("Failed to set caption color of window '{title}', result: {result}", window.Title, result);

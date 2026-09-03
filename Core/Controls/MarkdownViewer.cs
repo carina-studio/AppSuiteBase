@@ -20,7 +20,7 @@ namespace CarinaStudio.AppSuite.Controls;
 /// <summary>
 /// Viewer to show document in Markdown.
 /// </summary>
-public unsafe class MarkdownViewer : TemplatedControl
+public class MarkdownViewer : TemplatedControl
 {
     /// <summary>
     /// Define <see cref="HorizontalScrollBarVisibility"/> property.
@@ -125,20 +125,8 @@ public unsafe class MarkdownViewer : TemplatedControl
                 var startsWithHeading = false;
                 if (!string.IsNullOrEmpty(markdown))
                 {
-                    var length = markdown.Length;
-                    fixed (char* p = markdown)
-                    {
-                        var cPtr = p;
-                        for (var i = 0; i < length; ++i)
-                        {
-                            var c = *(cPtr++);
-                            if (char.IsWhiteSpace(c))
-                                continue;
-                            if (c == '#')
-                                startsWithHeading = true;
-                            break;
-                        }
-                    }
+                    var trimmedMarkdown = markdown.AsSpan().TrimStart();
+                    startsWithHeading = trimmedMarkdown.Length > 0 && trimmedMarkdown[0] == '#';
                 }
                 if (!startsWithHeading)
                     this.PseudoClasses.Remove(":startsWithHeading");
