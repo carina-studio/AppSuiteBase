@@ -106,7 +106,7 @@ static partial class Win32
     }
 
 
-    [DllImport("User32", SetLastError = true)]
+    [DllImport("User32", CharSet = CharSet.Unicode, SetLastError = true)]
     public static extern nint CallWindowProc(nint lpPrevWndFunc, nint hWnd, uint Msg, nint wParam, nint lParam);
 
 
@@ -115,10 +115,10 @@ static partial class Win32
 
 
     [DllImport("Ole32", SetLastError = true)]
-    public static extern int CoInitialize(IntPtr pvReserved = default);
+    public static extern int CoInitialize(IntPtr pvReserved = 0);
 
 
-    [DllImport("User32", SetLastError = true)]
+    [DllImport("User32", CharSet = CharSet.Unicode, SetLastError = true)]
     public static extern nint DefWindowProc(nint hWnd, uint Msg, nint wParam, nint lParam);
 
 
@@ -126,12 +126,18 @@ static partial class Win32
     public static extern int DwmSetWindowAttribute(IntPtr hwnd, DWMWA dwAttribute, in int pvAttribute, uint cbAttribute);
 
 
-    [DllImport("User32", SetLastError = true)]
+    [DllImport("User32", CharSet = CharSet.Unicode, SetLastError = true)]
     public static extern int GetWindowLong(IntPtr hWnd, GWL nIndex);
 
 
-    [DllImport("User32", SetLastError = true)]
-    public static extern nint GetWindowLongPtr(IntPtr hWnd, GWL nIndex);
+    // Get value from extra window memory, falls back to GetWindowLong in 32-bit process where user32 exports no *LongPtr* entry point.
+    public static nint GetWindowLongPtr(IntPtr hWnd, GWL nIndex) =>
+        Environment.Is64BitProcess ? GetWindowLongPtr64(hWnd, nIndex) : GetWindowLong(hWnd, nIndex);
+
+
+    // Must not be called in 32-bit process, the entry point is exported by 64-bit user32 only.
+    [DllImport("User32", CharSet = CharSet.Unicode, EntryPoint = "GetWindowLongPtr", SetLastError = true)]
+    static extern nint GetWindowLongPtr64(IntPtr hWnd, GWL nIndex);
 
 
     [DllImport("User32", SetLastError = true)]
@@ -142,14 +148,30 @@ static partial class Win32
     public static extern bool SetForegroundWindow(IntPtr hWnd);
 
 
-    [DllImport("User32", SetLastError = true)]
+    [DllImport("User32", CharSet = CharSet.Unicode, SetLastError = true)]
     public static extern int SetWindowLong(IntPtr hWnd, GWL nIndex, int dwNewLong);
 
 
-    [DllImport("User32", SetLastError = true)]
-    public static extern nint SetWindowLongPtr(IntPtr hWnd, GWL nIndex, nint dwNewLong);
+    [DllImport("User32", CharSet = CharSet.Unicode, SetLastError = true)]
+    public static extern int SetWindowLong(IntPtr hWnd, GWL nIndex, [MarshalAs(UnmanagedType.FunctionPtr)] WNDPROC dwNewLong);
 
 
-    [DllImport("User32", SetLastError = true)]
-    public static extern nint SetWindowLongPtr(IntPtr hWnd, GWL nIndex, [MarshalAs(UnmanagedType.FunctionPtr)] WNDPROC dwNewLong);
+    // Set value into extra window memory, falls back to SetWindowLong in 32-bit process where nint is 32-bit and user32 exports no *LongPtr* entry point.
+    public static nint SetWindowLongPtr(IntPtr hWnd, GWL nIndex, nint dwNewLong) =>
+        Environment.Is64BitProcess ? SetWindowLongPtr64(hWnd, nIndex, dwNewLong) : SetWindowLong(hWnd, nIndex, (int)dwNewLong);
+
+
+    // Set window procedure, falls back to SetWindowLong in 32-bit process where user32 exports no *LongPtr* entry point.
+    public static nint SetWindowLongPtr(IntPtr hWnd, GWL nIndex, WNDPROC dwNewLong) =>
+        Environment.Is64BitProcess ? SetWindowLongPtr64(hWnd, nIndex, dwNewLong) : SetWindowLong(hWnd, nIndex, dwNewLong);
+
+
+    // Must not be called in 32-bit process, the entry point is exported by 64-bit user32 only.
+    [DllImport("User32", CharSet = CharSet.Unicode, EntryPoint = "SetWindowLongPtr", SetLastError = true)]
+    static extern nint SetWindowLongPtr64(IntPtr hWnd, GWL nIndex, nint dwNewLong);
+
+
+    // Must not be called in 32-bit process, the entry point is exported by 64-bit user32 only.
+    [DllImport("User32", CharSet = CharSet.Unicode, EntryPoint = "SetWindowLongPtr", SetLastError = true)]
+    static extern nint SetWindowLongPtr64(IntPtr hWnd, GWL nIndex, [MarshalAs(UnmanagedType.FunctionPtr)] WNDPROC dwNewLong);
 }
