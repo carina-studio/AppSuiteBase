@@ -145,6 +145,8 @@ String resources live in `Core/Strings/` and `SyntaxHighlighting/Strings/`, one 
 - A product or application name substituted from a placeholder takes no quotes at all: `无法启用 {0}，请尝试再次启用。`
 - Document titles use `《…》` in `zh-CN` / `zh-TW`, `「…」` in `ja-JP`.
 
+Entries are grouped under `<!-- SectionName -->` comments. When removing entries leaves a section with none, **remove the section comment too** — never leave a header with nothing under it. Delete it together with one of its surrounding blank lines, so exactly one blank line separates the neighbouring sections. Do this in every locale file, since a section rarely empties in only one.
+
 ### Project-Specific Rules
 
 Rules that apply only within one project — everything above applies solution-wide. Each project's own `AGENTS.md` documents its architecture, not its rules.
@@ -182,6 +184,7 @@ Rules that apply only within one project — everything above applies solution-w
 - **Member ordering** is correct: `extension` blocks → inner types → constants → static fields → instance fields → properties and methods interleaved alphabetically. Verify after adding, renaming, or moving any member.
 - Every logical block inside a code block carries its own leading `//` comment, per *Method Body Layout*.
 - Localized strings use the target locale's quoting — `「」` for zh-TW/ja-JP, `“”` for zh-CN, ASCII `'…'` for file names and paths in every locale.
+- No `<!-- SectionName -->` comment is left behind in a string resource file after its last entry was removed, in any locale file.
 
 ### Documentation
 - Check whether the change affects the architecture of a library project (`Core`, `Fonts`, `SyntaxHighlighting`). If so, the corresponding project's `AGENTS.md` should be updated to match.

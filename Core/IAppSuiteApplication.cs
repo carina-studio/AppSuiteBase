@@ -253,10 +253,24 @@ public interface IAppSuiteApplication : IAvaloniaApplication
     
     
     /// <summary>
+    /// Check the mode of how the application should be installed on device.
+    /// </summary>
+    [ThreadSafe]
+    ApplicationInstallationMode InstallationMode { get; }
+    
+    
+    /// <summary>
     /// Check whether at least one window of application is active or not.
     /// </summary>
     [ThreadSafe]
     bool IsActive { get; }
+    
+    
+    /// <summary>
+    /// Check whether checking and applying application update is supported or not.
+    /// </summary>
+    /// <remarks>It is not supported when the application is installed and managed by package manager, or no package manifest URI is specified.</remarks>
+    bool IsApplicationUpdateSupported { get; }
     
     
     /// <summary>

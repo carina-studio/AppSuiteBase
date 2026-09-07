@@ -246,7 +246,16 @@ public class MockAppSuiteApplication : Application, IAppSuiteApplication
 
     /// <inheritdoc/>
     [ThreadSafe]
+    public virtual ApplicationInstallationMode InstallationMode => ApplicationInstallationMode.Default;
+
+
+    /// <inheritdoc/>
+    [ThreadSafe]
     public bool IsActive => false;
+
+
+    /// <inheritdoc/>
+    public virtual bool IsApplicationUpdateSupported => false;
 
 
     /// <inheritdoc/>

@@ -89,7 +89,6 @@
 	<sys:String x:Key="String/ApplicationOptions.ApplySystemTextScaleFactor.Description">Apply the system text size to selected parts of user interface.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">Language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">User Interface Scale Factor</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR tool is not installed yet.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultBackdropEffectStrength">Backdrop Effect</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">Default Language</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle">Disable ANGLE Rendering</sys:String>
@@ -288,10 +287,6 @@
 	<sys:String x:Key="String/ExternalDependenciesDialog.ExternalDependency.Install">Download and Install</sys:String>
 	<sys:String x:Key="String/ExternalDependenciesDialog.Title">External Dependencies</sys:String>
 
-	<!-- ExternalDependency-->
-	<sys:String x:Key="String/ExternalDependency.XRandR">Resize and Rotate Extension for X Window System (XRandR)</sys:String>
-	<sys:String x:Key="String/ExternalDependency.XRandR.Description">To detect display settings and apply user interface scale factor. Need to restart application to take effect after installation.</sys:String>
-
 	<!-- ExternalDependencyPriority -->
 	<sys:String x:Key="String/ExternalDependencyPriority.Optional">It is an optional dependency.</sys:String>
 	<sys:String x:Key="String/ExternalDependencyPriority.Required">It is required by application.</sys:String>
@@ -338,8 +333,6 @@
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message">You must read and agree to the《Privacy Policy》before you start using {0}.</sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">You must read and agree to the updated《Privacy Policy》before you start using {0}.</sys:String>
 	<sys:String x:Key="String/MainWindow.ReactivateProductNeeded">Unable to activate {0}, please try activating it again.</sys:String>
-	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS">You are running {0} outside the 'Applications' folder. We recommend moving it into the 'Applications' folder to ensure it runs properly and avoids system permission issues.</sys:String>
-	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication">Close Application</sys:String>
 	<sys:String x:Key="String/MainWindow.UsageDataCollection.Message">Help Us Improve the Application!</sys:String>
 	<sys:String x:Key="String/MainWindow.UsageDataCollection.SecondaryMessage">We'd like to collect anonymous usage data to help us understand how the application is used and improve it.
 

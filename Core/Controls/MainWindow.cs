@@ -24,7 +24,6 @@ using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -63,10 +62,8 @@ public abstract class MainWindow : Window
     
     // Static fields.
     static readonly SettingKey<int> ConfirmedUsageDataCollectionVersionKey = new("MainWindow.ConfirmedUsageDataCollectionVersion", -1);
-    static readonly SettingKey<bool> DoNotCheckAppRunningLocationOnMacOSKey = new("MainWindow.DoNotCheckAppRunningLocationOnMacOS");
     static readonly SettingKey<int> ExtDepDialogShownVersionKey = new("MainWindow.ExternalDependenciesDialogShownVersion", -1);
     static bool IsAppDataImportResultDialogShown;
-    static bool IsAppRunningLocationOnMacOSChecked;
     static bool IsImportAppDataDialogShown;
     static bool IsNetworkConnForActivatingProVersionNotified;
     static bool IsNotifyingAppUpdateFound;
@@ -960,45 +957,9 @@ public abstract class MainWindow : Window
             return;
         }
 
-        // check application running location on macOS
+        // import application data
         var app = this.Application;
         var asApp = app as AppSuiteApplication;
-        if (Platform.IsMacOS && !IsAppRunningLocationOnMacOSChecked && !this.PersistentState.GetValueOrDefault(DoNotCheckAppRunningLocationOnMacOSKey))
-        {
-            IsAppRunningLocationOnMacOSChecked = true;
-            var path = app.RootPrivateDirectoryPath;
-            if (Regex.IsMatch(path, @"\.app/Contents/MacOS(/.+)?")
-                && !Regex.IsMatch(path, @"^(/Applications|/Users/[^/]+/Applications)/.+"))
-            {
-                this.isShowingInitialDialogs = true;
-                var dialog = new MessageDialog
-                {
-                    Buttons = MessageDialogButtons.OKCancel,
-                    CustomCancelText = app.GetObservableString("MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication"),
-                    CustomOKText = app.GetObservableString("Common.ContinueToUse"),
-                    DefaultResult = MessageDialogResult.Cancel,
-                    DoNotAskOrShowAgain = false,
-                    Icon = MessageDialogIcon.Warning,
-                    Message = new FormattedString().Also(it =>
-                    {
-                        it.Arg1 = app.Name;
-                        it.Bind(FormattedString.FormatProperty, app.GetObservableString("MainWindow.RunningOutsideOfApplicationFolderOnMacOS"));
-                    }),
-                };
-                var result = await dialog.ShowDialog(this);
-                if (dialog.DoNotAskOrShowAgain.GetValueOrDefault())
-                    this.PersistentState.SetValue(DoNotCheckAppRunningLocationOnMacOSKey, true);
-                if (result == MessageDialogResult.Cancel)
-                {
-                    app.Shutdown(300); // [Workaround] Prevent crashing on macOS if shutting down immediately after closing dialog.
-                    this.isShowingInitialDialogs = false;
-                    return;
-                }
-                this.isShowingInitialDialogs = false;
-            }
-        }
-        
-        // import application data
         if (app.IsFirstLaunch && !IsImportAppDataDialogShown)
         {
             // prepare

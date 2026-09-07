@@ -50,11 +50,42 @@ All registry operations are best-effort and exception-safe; failures never propa
 
 **Source-build detection.** The static field `IsRunningFromSourceBuild` (set in the static constructor) is `true` when `AppContext.BaseDirectory` contains a `bin/Debug/` or `bin/Release/` path segment — i.e. the app is running from a build-output folder (IDE run such as Rider, `dotnet run`, or a locally-built binary run in-place) rather than a shipped/installed layout. It is a **path heuristic**, not a host check: it is derived from `AppContext.BaseDirectory` (which is the assembly's directory under *both* an apphost launch and a `dotnet App.dll` launch — the old `MainModule`/`GetModuleFileName`/`CodeBase` probing and the `== "dotnet"` executable-name test were removed because a launcher-execed apphost defeats them). A shipped macOS `.app` runs from `…/Contents/MacOS/` and an installed Win/Linux app from its install dir, so neither matches; the one caveat is running a *packaged* app directly from its build-output folder before it is moved/installed.
 
-**Data directory (`AppDataDirectoryPath`).** Selected once in the static constructor and exposed as `RootPrivateDirectoryPath`:
-- **macOS** — `~/Library/Application Support/Carina Studio/<AssemblyName>`, with a `-Debug` suffix appended when `IsRunningFromSourceBuild` (so dev sessions never read/write the production data folder). The directory is created eagerly here.
-- **Windows / Linux** — `AppContext.BaseDirectory` (trailing separator trimmed; the value is compared with `PathEqualityComparer`, so it must stay separator-free), i.e. the app's own directory alongside its assemblies.
+**Installation mode (`ApplicationInstallationMode`).** How the application is deployed on the device, passed by the consumer app to `BuildApplicationAndStart()` and exposed as `IAppSuiteApplication.InstallationMode`:
+- **`Default`** — the app ships as a self-contained directory it owns (portable archive, macOS `.app`, in-place install), so it may keep its data next to its own assemblies.
+- **`PackageManager`** — the app is installed and managed by a package manager (WinGet/Chocolatey/Scoop, apt/rpm/AUR, …), which owns the install directory and may make it read-only, so data must live under the current user's own directory instead, and the app must never update itself.
 
-`InitSettingsFilePath` and `SettingsFilePath` are combined from `AppDataDirectoryPath` in the same static constructor (they must be assigned there, after the directory is chosen, not via field initializers — static field initializers run in textual/alphabetical-declaration order, before the directory would be known).
+**Application update (`IsApplicationUpdateSupported`).** `InstallationMode != PackageManager && PackageManifestUris` is non-empty. Under `PackageManager` the whole update feature goes silent — updating is the package manager's job, and self-replacing the install directory would fight its package database on a directory the app usually cannot write anyway. It gates four places:
+- Both `CheckForApplicationUpdateAsync()` overloads return early. Guarding only the info overload is not enough: the `(owner, forceShowingDialog)` one skips the `UpdateInfo` check entirely when `forceShowingDialog` is `true` and goes straight to the update dialog.
+- `checkUpdateInfoAction` is never scheduled in `OnPrepareStartingAsync()`, so the periodic check never wakes the app. It must be gated there rather than only inside the method, because the method's self-reschedule sits *below* its early return.
+- `ApplicationInfoDialogImpl.IsApplicationUpdateCheckAvailable` hides the "Check for Update" button instead of leaving it dead. Consumer apps use the same property to hide their own menu entries.
+
+`ApplicationUpdater` carries its own guards on the same property, because it is a public view-model a consumer can instantiate and bind directly without ever going through the update dialog:
+- `ReportUpdateInfo()` ANDs `IsApplicationUpdateSupported` with `OnCheckAutoUpdateSupport()` rather than putting the check *inside* that virtual. The two overrides are not equivalent: `OnCheckAutoUpdateSupport(version)` is about **version compatibility**, so a consumer returning `true` there says nothing about installation mode and would defeat the guard by accident, whereas overriding `IsApplicationUpdateSupported` is a deliberate "this install may update itself" and is meant to be respected. `IsAutoUpdateSupported` then gates `canStartUpdating` and which button the dialog shows.
+- `StartUpdatingAsync()` checks it again as the last line of defence before anything is written into the installation directory.
+
+Both sites could equally check `InstallationMode` directly — the `PackageManifestUris` conjunct is already implied there (`ReportUpdateInfo()` only reaches that branch when `UpdateInfo` is non-null; `StartUpdatingAsync()` requires `packageManifestUri`). They go through the property so that "may this app update itself" has exactly one definition, and so a future condition added to it is picked up here instead of silently drifting.
+
+Its `AutoUpdater-*` / temp staging directories under `RootPrivateDirectoryPath` are created only inside `StartUpdatingAsync()`, so nothing needs cleaning up when the feature is off.
+
+**Known gap.** The `!IsAutoUpdateSupported` branch of `ApplicationUpdateDialogImpl` shows `ApplicationUpdateDialog.AutoUpdateNotSupported` ("cannot be updated automatically due to compatibility issues … download and install the new version manually") next to a package-download button. Both are wrong for `PackageManager` mode, where the answer is "update through your package manager". It is unreachable today because the dialog never opens in that mode; it needs a package-manager wording and a hidden download button if the framework ever switches to notifying about updates without offering to apply them.
+
+**Data directory (`AppDataDirectoryPath`).** Selected by `SetupWorkingDirectories()` and exposed as `RootPrivateDirectoryPath`:
+
+| Platform | `Default` | `PackageManager` |
+|---|---|---|
+| Windows | `AppContext.BaseDirectory` | `%LOCALAPPDATA%\Carina Studio\<AssemblyName>` |
+| macOS | `~/Library/Application Support/Carina Studio/<AssemblyName>` | same |
+| Linux | `AppContext.BaseDirectory` | `$XDG_DATA_HOME`-or-`~/.local/share`/`carina-studio/<assemblyname>` |
+
+- The `AppContext.BaseDirectory` cases trim the trailing separator (the value is compared with `PathEqualityComparer` when parsing `-import-app-data`, so it must stay separator-free), i.e. the app's own directory alongside its assemblies.
+- The per-user cases all go through `SetupUserApplicationDataDirectory()`, which resolves `<root>/<parents…>/<AssemblyName>`, appends a source-build suffix when `IsRunningFromSourceBuild` (so dev sessions never read/write the installed app's data folder), and creates the directory eagerly. Failures are logged, never thrown.
+- **Linux naming** follows local convention: a lower-case hyphenated vendor directory (`carina-studio`, as in `~/.config/google-chrome`), a lower-cased assembly name, and a lower-case `-debug` suffix. Windows and macOS keep `Carina Studio`, the assembly name's own casing, and `-Debug`.
+- `Environment.SpecialFolder.LocalApplicationData` serves both Windows and Linux — .NET maps it to `%LOCALAPPDATA%` and to `$XDG_DATA_HOME ?? ~/.local/share` respectively, so XDG is honored without reading the environment variable directly.
+- When the root folder path is empty (no `HOME`/`LOCALAPPDATA`) or the entry assembly has no name, the selection falls back to `AppContext.BaseDirectory`.
+
+**Side effect on single-instance scope.** `multiInstancesServerStreamName` is built from the application name plus a SHA-256 hash of `RootPrivateDirectoryPath`, so the installation mode silently decides how far "one instance" reaches. Under `Default` on Windows/Linux the hashed path is the **shared install directory**, so every user account on the machine derives the same pipe name and a second user's launch can hand its arguments to the first user's already-running instance. Under `PackageManager` (and on macOS, which has always used a per-user path) the hashed path is per-user, so each account gets its own instance. The per-user behavior is the more correct of the two; the point is that switching an existing app to `PackageManager` changes it, and that a portable and a package-managed install of the same app never see each other as the same instance.
+
+**Initialization order.** `AppDataDirectoryPath`, `InitSettingsFilePath` and `SettingsFilePath` are `static string?` fields assigned by `SetupWorkingDirectories()`, which runs as the **first** step of `BuildApplication()` — before `ParseArguments()` (which compares the `-import-app-data` directory against `AppDataDirectoryPath`) and before the `AppSuiteApplication` instance is constructed (its constructor derives `persistentStateFilePath` and the config override path from `RootPrivateDirectoryPath`). They cannot be assigned in the static constructor any more, because the installation mode is only known once the consumer app calls `BuildApplicationAndStart()`. `RootPrivateDirectoryPath` throws `InvalidOperationException` when read before that point.
 
 **Restart executable selection.** In the shutdown/restart path, `useDotnetHost` decides how to relaunch:
 ```

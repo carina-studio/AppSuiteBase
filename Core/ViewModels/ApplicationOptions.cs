@@ -11,10 +11,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 
 namespace CarinaStudio.AppSuite.ViewModels;
 
@@ -84,7 +80,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
                 it.ProductActivationChanged += this.OnProductActivationStateChanged;
             }
         });
-        _ = this.CheckXRandRAsync();
     }
 
 
@@ -108,70 +103,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     }
 
 
-    // Check installation of XRandR.
-    async Task CheckXRandRAsync()
-    {
-        // check platform
-        if (Platform.IsNotLinux)
-        {
-            this.IsXRandRInstalled = false;
-            this.OnPropertyChanged(nameof(IsXRandRInstalled));
-            return;
-        }
-
-        // update state
-        this.IsCheckingXRandR = true;
-        this.OnPropertyChanged(nameof(IsCheckingXRandR));
-
-        // check built-in XRandR
-        var xRandRPath = Path.Combine(this.Application.RootPrivateDirectoryPath, "XRandR", RuntimeInformation.ProcessArchitecture.ToString().ToLower(), "xrandr");
-        var isXRandRInstalled = await Task.Run(() =>
-            Global.RunOrDefault(() => File.Exists(xRandRPath)));
-        
-        // check XRandR installed on system
-        if (!isXRandRInstalled)
-        {
-            isXRandRInstalled = await Task.Run(() =>
-            {
-                try
-                {
-                    using var process = Process.Start(new ProcessStartInfo()
-                    {
-                        CreateNoWindow = true,
-                        FileName = "xrandr",
-                        RedirectStandardError = true,
-                        RedirectStandardInput = true,
-                        RedirectStandardOutput = true,
-                        UseShellExecute = false,
-                    });
-                    if (process is null)
-                        return false;
-                    process.WaitForExit(3000);
-                    Global.RunWithoutError(() =>
-                    {
-                        if (!process.HasExited)
-                            process.Kill();
-                    });
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            });
-        }
-
-        // complete
-        if (this.IsXRandRInstalled != isXRandRInstalled)
-        {
-            this.IsXRandRInstalled = isXRandRInstalled;
-            this.OnPropertyChanged(nameof(IsXRandRInstalled));
-        }
-        this.IsCheckingXRandR = false;
-        this.OnPropertyChanged(nameof(IsCheckingXRandR));
-    }
-    
-    
     /// <summary>
     /// Get application configuration.
     /// </summary>
@@ -349,12 +280,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
 
 
     /// <summary>
-    /// Check whether installation of XRandR is being checked or not.
-    /// </summary>
-    public bool IsCheckingXRandR { get; private set; }
-    
-    
-    /// <summary>
     /// Check whether custom screen scale factor is different from effective scale factor or not.
     /// </summary>
     public bool IsCustomScreenScaleFactorAdjusted { get; private set; }
@@ -416,12 +341,6 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// Check whether the usage data collection is available or not.
     /// </summary>
     public bool IsUsageDataCollectionAvailable { get; }
-
-
-    /// <summary>
-    /// Check whether XRandR tool is installed or not.
-    /// </summary>
-    public bool IsXRandRInstalled { get; private set; } = true;
 
 
     /// <summary>

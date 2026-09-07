@@ -378,7 +378,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     static readonly SettingKey<string> AgreedUserAgreementVersionKey = new("AgreedUserAgreementVersion", "");
     static Exception? AppDataImportException;
     static bool? AppDataImportResult;
-    static readonly string AppDataDirectoryPath;
+    static string? AppDataDirectoryPath;
+    static ApplicationInstallationMode AppInstallationMode = ApplicationInstallationMode.Default;
     static readonly SettingKey<string> AppVersionKey = new("ApplicationVersion", "");
     static ArgumentsParser? ArgsParser;
     [ThreadStatic]
@@ -387,7 +388,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     static readonly SettingKey<bool> DoNotPromptBeforeTakingMemorySnapshotKey = new("DoNotPromptBeforeTakingMemorySnapshot", false);
     static bool ForceThrowingUnhandledException;
     static IDictionary<string, object>? InitLaunchOptions;
-    static readonly string InitSettingsFilePath;
+    static string? InitSettingsFilePath;
     static InitSettingsImpl? InitSettingsInstance;
     static readonly SettingKey<bool> IsAcceptNonStableApplicationUpdateInitKey = new("IsAcceptNonStableApplicationUpdateInitialized", false);
     static readonly bool IsRunningFromSourceBuild;
@@ -396,7 +397,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     static readonly SettingKey<int> LogOutputTargetPortKey = new("LogOutputTargetPort");
     static readonly SettingKey<byte[]> MainWindowViewModelStatesKey = new("MainWindowViewModelStates", []);
     static readonly string[] MetricsNormalizedFontFileNames = ["NotoSansJP-Bold.ttf", "NotoSansJP-Regular.ttf", "NotoSansSC-Bold.ttf", "NotoSansSC-Regular.ttf", "NotoSansTC-Bold.ttf", "NotoSansTC-Regular.ttf"];
-    static readonly string SettingsFilePath;
+    static string? SettingsFilePath;
 
 
     // Fields.
@@ -484,33 +485,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         
         // check whether the process is running from source code build
         var dirSeparator = Path.DirectorySeparatorChar;
-        var appContextBaseDirectory = AppContext.BaseDirectory.Let(path => path.EndsWith(dirSeparator) ? path[..^1] : path);
+        var appContextBaseDirectory = AppContext.BaseDirectory;
         IsRunningFromSourceBuild = appContextBaseDirectory.Contains($"{dirSeparator}bin{dirSeparator}Debug{dirSeparator}") 
                                    || appContextBaseDirectory.Contains($"{dirSeparator}bin{dirSeparator}Release{dirSeparator}");
-        
-        // select directory for application data
-        AppDataDirectoryPath = Platform.IsMacOS
-            ? Global.Run(() =>
-            {
-                var baseDirectory = Assembly.GetEntryAssembly()?.GetName().Name?.Let(it => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Library", "Application Support", "Carina Studio", it)) ?? Environment.CurrentDirectory;
-                var directory = IsRunningFromSourceBuild ? $"{baseDirectory}-Debug" : baseDirectory;
-                if (!System.IO.Directory.Exists(directory))
-                {
-                    try
-                    {
-                        LogToConsole($"Create application data directory '{directory}'");
-                        System.IO.Directory.CreateDirectory(directory);
-                    }
-                    catch (Exception ex)
-                    {
-                        LogToConsole($"Failed to create application data directory '{directory}'. {ex.GetType().Name}: {ex.Message}");
-                    }
-                }
-                return directory;
-            })
-            : appContextBaseDirectory;
-        InitSettingsFilePath = Path.Combine(AppDataDirectoryPath, InitSettingsFileName);
-        SettingsFilePath = Path.Combine(AppDataDirectoryPath, SettingsFileName);
     }
 
 
@@ -841,12 +818,17 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// <param name="args">Arguments to launch application.</param>
     /// <param name="setupAction">Action to do further setup.</param>
     /// <param name="argsParser">Method to parse arguments to launch application.</param>
+    /// <param name="installationMode">Define how the application should be installed on device.</param>
     /// <typeparam name="TApp">Type of application.</typeparam>
     /// <returns><see cref="AppBuilder"/>.</returns>
     [Obsolete("Use BuildApplicationAndStart() instead.")]
-    protected static AppBuilder BuildApplication<TApp>(string[] args, Action<AppBuilder>? setupAction = null, ArgumentsParser? argsParser = null) where TApp: AppSuiteApplication, new()
+    protected static AppBuilder BuildApplication<TApp>(string[] args, Action<AppBuilder>? setupAction = null, ArgumentsParser? argsParser = null, ApplicationInstallationMode installationMode = ApplicationInstallationMode.Default) where TApp: AppSuiteApplication, new()
     {
         LogToConsole("Build application [start]");
+        
+        // setup installation mode and working directories
+        AppInstallationMode = installationMode;
+        SetupWorkingDirectories();
         
         // parse arguments
         ArgsParser = argsParser;
@@ -856,6 +838,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         if (Platform.IsLinux && InitLaunchOptions.TryGetValue(LaunchOptionKeys.ScreenScaleFactor, out double screenScaleFactor))
             ApplyScreenScaleFactorOnLinux(screenScaleFactor);
 
+        // setup initial culture info
         CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
         CultureInfo.CurrentCulture = cultureInfo;
         CultureInfo.CurrentUICulture = cultureInfo;
@@ -999,12 +982,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// <param name="args">Arguments to launch application.</param>
     /// <param name="setupAction">Action to do further setup.</param>
     /// <param name="argsParser">Method to parse arguments to launch application.</param>
+    /// <param name="installationMode">Define how the application should be installed on device.</param>
     /// <typeparam name="TApp">Type of application.</typeparam>
     /// <returns>Exit code of application.</returns>
-    protected static int BuildApplicationAndStart<TApp>(string[] args, Action<AppBuilder>? setupAction = null, ArgumentsParser? argsParser = null) where TApp : AppSuiteApplication, new()
+    protected static int BuildApplicationAndStart<TApp>(string[] args, Action<AppBuilder>? setupAction = null, ArgumentsParser? argsParser = null, ApplicationInstallationMode installationMode = ApplicationInstallationMode.Default) where TApp : AppSuiteApplication, new()
     {
 #pragma warning disable CS0618
-        var builder = BuildApplication<TApp>(args, setupAction, argsParser);
+        var builder = BuildApplication<TApp>(args, setupAction, argsParser, installationMode);
 #pragma warning restore CS0618
         var app = default(Avalonia.Application);
         var asApp = default(IAppSuiteApplication);
@@ -1142,10 +1126,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (updateInfo == null || updateInfo.Version <= ApplicationUpdateDialog.LatestShownVersion)
                 return Task.FromResult(false);
         }
-        // ReSharper disable once GenericEnumeratorNotDisposed
-        if (!this.PackageManifestUris.GetEnumerator().Use(it => it.MoveNext()))
+        if (!this.IsApplicationUpdateSupported)
         {
-            this.Logger.LogWarning("No package manifest URI specified to check update");
+            this.LogApplicationUpdateNotSupported();
             return Task.FromResult(false);
         }
         this.Logger.LogDebug("Show application update dialog");
@@ -1164,13 +1147,15 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         if (this.IsShutdownStarted)
             return null;
 
-        // check package manifest URIs
-        var manifestUris = this.PackageManifestUris.ToArray();
-        if (manifestUris.IsEmpty())
+        // check whether application update is supported or not
+        if (!this.IsApplicationUpdateSupported)
         {
-            this.Logger.LogWarning("No package manifest URI specified to check update");
+            this.LogApplicationUpdateNotSupported();
             return null;
         }
+
+        // get package manifest URIs
+        var manifestUris = this.PackageManifestUris.ToArray();
 
         // schedule next checking
         this.checkUpdateInfoAction?.Reschedule(Math.Max(10 * 60 * 1000 /* 10 mins */, this.Configuration.GetValueOrDefault(ConfigurationKeys.AppUpdateInfoCheckingInterval)));
@@ -2119,6 +2104,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     internal ISettings InitSettings => InitSettingsInstance ?? throw new InvalidOperationException();
 
 
+    /// <inheritdoc/>
+    [ThreadSafe]
+    public virtual ApplicationInstallationMode InstallationMode => AppInstallationMode;
+
+
     /// <summary>
     /// Check whether Pro-version is being activated or not.
     /// </summary>
@@ -2128,6 +2118,13 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// <inheritdoc/>
     [ThreadSafe]
     public bool IsActive { get; private set; }
+
+
+    /// <inheritdoc/>
+    public virtual bool IsApplicationUpdateSupported =>
+        this.InstallationMode != ApplicationInstallationMode.PackageManager
+        // ReSharper disable once GenericEnumeratorNotDisposed
+        && this.PackageManifestUris.GetEnumerator().Use(it => it.MoveNext());
 
 
     /// <inheritdoc/>
@@ -2686,7 +2683,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         ++this.settingsLoadingCounter;
         try
         {
-            await this.settings.LoadAsync(SettingsFilePath);
+            await this.settings.LoadAsync(SettingsFilePath!);
             this.Logger.LogDebug("Complete loading settings");
         }
         catch (Exception ex)
@@ -2757,6 +2754,16 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.Logger.LogWarning("Unable to load string resource from {uri}", uri);
             return null;
         }
+    }
+
+
+    // Write log to describe why application update is not supported.
+    void LogApplicationUpdateNotSupported()
+    {
+        if (this.InstallationMode == ApplicationInstallationMode.PackageManager)
+            this.Logger.LogInformation("Application update is managed by package manager");
+        else
+            this.Logger.LogWarning("No package manifest URI specified to check update");
     }
 
 
@@ -3801,7 +3808,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         await Task.WhenAll(checkExtDepTasks);
         
         // start checking update
-        this.checkUpdateInfoAction?.Schedule();
+        if (this.IsApplicationUpdateSupported)
+            this.checkUpdateInfoAction?.Schedule();
 
         // initialize script manager
         await ScriptManager.InitializeAsync(this, this.ScriptManagerImplType);
@@ -4681,7 +4689,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
     /// <inheritdoc/>
     [ThreadSafe]
-    public override string RootPrivateDirectoryPath => AppDataDirectoryPath;
+    public override string RootPrivateDirectoryPath => AppDataDirectoryPath ?? throw new InvalidOperationException("Application is not initialized yet.");
 
 
     // Save configuration.
@@ -4740,12 +4748,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (isCritical)
             {
                 this.Logger.LogWarning("Start saving initial settings for critical reason");
-                InitSettingsInstance!.Save(InitSettingsFilePath, keepUnknownKeys: true);
+                InitSettingsInstance!.Save(InitSettingsFilePath!, keepUnknownKeys: true);
             }
             else
             {
                 this.Logger.LogDebug("Start saving initial settings");
-                await InitSettingsInstance!.SaveAsync(InitSettingsFilePath, keepUnknownKeys: true);
+                await InitSettingsInstance!.SaveAsync(InitSettingsFilePath!, keepUnknownKeys: true);
             }
             this.Logger.LogDebug("Complete saving initial settings");
         }
@@ -4816,12 +4824,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (isCritical)
             {
                 this.Logger.LogWarning("Start saving settings for critical reason");
-                this.settings.Save(SettingsFilePath, keepUnknownKeys: true);
+                this.settings.Save(SettingsFilePath!, keepUnknownKeys: true);
             }
             else
             {
                 this.Logger.LogDebug("Start saving settings");
-                await this.settings.SaveAsync(SettingsFilePath, keepUnknownKeys: true);
+                await this.settings.SaveAsync(SettingsFilePath!, keepUnknownKeys: true);
             }
             this.Logger.LogDebug("Complete saving settings");
         }
@@ -4955,6 +4963,87 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
         // update loggers
         LogManager.ReconfigExistingLoggers();
+    }
+
+
+    // Setup the directory to store data of application inside the directory of current user, and create the directory if it doesn't exist.
+    static string SetupUserApplicationDataDirectory(string rootDirectoryPath, string[] parentDirectoryNames, string fallbackDirectoryPath)
+    {
+        // check root directory
+        if (string.IsNullOrEmpty(rootDirectoryPath))
+        {
+            LogToConsole($"Unable to get the root directory of application data directory, fall back to '{fallbackDirectoryPath}'");
+            return fallbackDirectoryPath;
+        }
+
+        // get name of application
+        var appName = Assembly.GetEntryAssembly()?.GetName().Name;
+        if (string.IsNullOrEmpty(appName))
+        {
+            LogToConsole($"Unable to get the name of entry assembly to select application data directory, fall back to '{fallbackDirectoryPath}'");
+            return fallbackDirectoryPath;
+        }
+
+        // build path of application data directory, lower-case name is used on Linux by convention
+        string[] pathComponents = [rootDirectoryPath, ..parentDirectoryNames, Platform.IsLinux ? appName.ToLowerInvariant() : appName];
+        var directory = Path.Combine(pathComponents);
+
+        // use dedicated directory for source build to keep the data of installed application untouched
+        if (IsRunningFromSourceBuild)
+            directory += Platform.IsLinux ? "-debug" : "-Debug";
+
+        // create application data directory
+        if (!System.IO.Directory.Exists(directory))
+        {
+            try
+            {
+                LogToConsole($"Create application data directory '{directory}'");
+                System.IO.Directory.CreateDirectory(directory);
+            }
+            catch (Exception ex)
+            {
+                LogToConsole($"Failed to create application data directory '{directory}'. {ex.GetType().Name}: {ex.Message}");
+            }
+        }
+        return directory;
+    }
+
+
+    // Setup all working directories needed by the application
+    [MemberNotNull(nameof(AppDataDirectoryPath), nameof(InitSettingsFilePath), nameof(SettingsFilePath))]
+    static void SetupWorkingDirectories()
+    {
+        // get directory of application
+        var appContextBaseDirectory = AppContext.BaseDirectory.Let(path => path.EndsWith(Path.DirectorySeparatorChar) ? path[..^1] : path);
+
+        // select directory for application data
+        if (Platform.IsWindows)
+        {
+            AppDataDirectoryPath = AppInstallationMode switch
+            {
+                ApplicationInstallationMode.PackageManager => SetupUserApplicationDataDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), ["Carina Studio"], appContextBaseDirectory),
+                _ => appContextBaseDirectory
+            };
+        }
+        else if (Platform.IsMacOS)
+            AppDataDirectoryPath = SetupUserApplicationDataDirectory(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ["Library", "Application Support", "Carina Studio"], appContextBaseDirectory);
+        else if (Platform.IsLinux)
+        {
+            AppDataDirectoryPath = AppInstallationMode switch
+            {
+                ApplicationInstallationMode.PackageManager => SetupUserApplicationDataDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), ["carina-studio"], appContextBaseDirectory),
+                _ => appContextBaseDirectory
+            };
+        }
+        else
+        {
+            LogToConsole("Unrecognised operation systems");
+            AppDataDirectoryPath = appContextBaseDirectory;
+        }
+
+        // select files of settings
+        InitSettingsFilePath = Path.Combine(AppDataDirectoryPath, InitSettingsFileName);
+        SettingsFilePath = Path.Combine(AppDataDirectoryPath, SettingsFileName);
     }
 
 

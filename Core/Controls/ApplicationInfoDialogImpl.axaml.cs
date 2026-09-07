@@ -139,8 +139,7 @@ class ApplicationInfoDialogImpl : Dialog
 		});
 		
 		// check application update
-		// ReSharper disable once GenericEnumeratorNotDisposed
-		this.IsApplicationUpdateCheckAvailable = this.Application.PackageManifestUris.GetEnumerator().Use(it => it.MoveNext());
+		this.IsApplicationUpdateCheckAvailable = this.Application.IsApplicationUpdateSupported;
 		
 		// setup controls
 		var bannerImageHeight = this.Application.FindResourceOrDefault("Double/ApplicationInfoDialog.Header.Background.Height", 0.0);

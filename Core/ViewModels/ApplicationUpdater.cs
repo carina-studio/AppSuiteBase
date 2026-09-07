@@ -547,7 +547,8 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 		}
 		else
 		{
-			this.SetValue(IsAutoUpdateSupportedProp, this.OnCheckAutoUpdateSupport(updateInfo.Version));
+			this.SetValue(IsAutoUpdateSupportedProp, this.Application.IsApplicationUpdateSupported
+				&& this.OnCheckAutoUpdateSupport(updateInfo.Version));
 			this.SetValue(IsLatestVersionProp, false);
 			this.SetValue(ReleasePageUriProp, updateInfo.ReleasePageUri);
 			this.SetValue(UpdateInformationalVersionProp, updateInfo.InformationalVersion);
@@ -571,6 +572,11 @@ public class ApplicationUpdater : ViewModel<IAppSuiteApplication>
 		// check state
 		this.VerifyAccess();
 		this.VerifyDisposed();
+		if (!this.Application.IsApplicationUpdateSupported)
+		{
+			this.Logger.LogWarning("Cannot update application automatically because application update is not supported");
+			return;
+		}
 		if (!this.canStartUpdating.Value
 			|| !this.IsAutoUpdateSupported
 			|| this.IsPreparingForUpdate

@@ -82,7 +82,6 @@
 	<sys:String x:Key="String/ApplicationOptions.ApplySystemTextScaleFactor.Description">システムの文字サイズをユーザーインターフェイスの一部に適用します。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.Culture">言語</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">ユーザーインターフェイスの拡大率</sys:String>
-	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor.XRandRNotFound">XRandR ツールがインストールされていません。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultBackdropEffectStrength">背景効果</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">既定の言語</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle">ANGLE レンダリングを無効にする</sys:String>
@@ -281,10 +280,6 @@
 	<sys:String x:Key="String/ExternalDependenciesDialog.ExternalDependency.Install">ダウンロードしてインストール</sys:String>
 	<sys:String x:Key="String/ExternalDependenciesDialog.Title">外部依存関係</sys:String>
 
-	<!-- ExternalDependency-->
-	<sys:String x:Key="String/ExternalDependency.XRandR">X Window System 用のリサイズ・回転拡張機能 (XRandR)</sys:String>
-	<sys:String x:Key="String/ExternalDependency.XRandR.Description">ディスプレイ設定の検出と、ユーザーインターフェイスの拡大率の適用に使用されます。インストール後、変更を適用するにはアプリケーションを再起動する必要があります。</sys:String>
-
 	<!-- ExternalDependencyPriority -->
 	<sys:String x:Key="String/ExternalDependencyPriority.Optional">これは省略可能な依存関係です。</sys:String>
 	<sys:String x:Key="String/ExternalDependencyPriority.Required">これはアプリケーションに必要です。</sys:String>
@@ -331,8 +326,6 @@
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message">{0} の使用を開始する前に、「プライバシーポリシー」をお読みいただき、同意していただく必要があります。</sys:String>
 	<sys:String x:Key="String/MainWindow.PrivacyPolicy.Message.Updated">{0} の使用を開始する前に、更新された「プライバシーポリシー」をお読みいただき、同意していただく必要があります。</sys:String>
 	<sys:String x:Key="String/MainWindow.ReactivateProductNeeded">{0} を有効化できませんでした。もう一度有効化してください。</sys:String>
-	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS">{0} が「アプリケーション」フォルダー以外の場所で実行されています。正しく動作させ、システムの権限に関する問題を避けるため、「アプリケーション」フォルダーに移動することをおすすめします。</sys:String>
-	<sys:String x:Key="String/MainWindow.RunningOutsideOfApplicationFolderOnMacOS.CloseApplication">アプリケーションを終了</sys:String>
 	<sys:String x:Key="String/MainWindow.UsageDataCollection.Message">アプリケーションの改善にご協力ください</sys:String>
 	<sys:String x:Key="String/MainWindow.UsageDataCollection.SecondaryMessage">アプリケーションの使われ方を把握し、改善に役立てるため、匿名の使用状況データを収集させていただきたいと考えています。
 
