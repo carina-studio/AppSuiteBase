@@ -126,14 +126,12 @@
 		<Setter Property="FontFamily" Value="fonts:Noto#Noto Serif"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading5}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
-		<Setter Property="Foreground" Value="{DynamicResource Brush/MarkdownViewer.Markdown.Heading5.Foreground}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading5}"/>
 	</Style>
 	<Style Selector="ca|CTextBlock.Heading6">
 		<Setter Property="FontFamily" Value="fonts:Noto#Noto Serif"/>
 		<Setter Property="FontSize" Value="{DynamicResource Double/MarkdownViewer.Markdown.Heading6}"/>
 		<Setter Property="FontWeight" Value="Bold"/>
-		<Setter Property="Foreground" Value="{DynamicResource Brush/MarkdownViewer.Markdown.Heading6.Foreground}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/MarkdownViewer.Markdown.Heading6}"/>
 	</Style>
 	<Style Selector="TextBlock.CodeBlock">

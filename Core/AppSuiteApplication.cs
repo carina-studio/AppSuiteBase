@@ -363,6 +363,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     const int FlushingUsageDataInterval = 60 * 60000; // 1 hr
     const int FlushingUsageDataWhenShuttingDownTimeout = 10000;
     const string InitSettingsFileName = "InitSettings.json";
+    const double MarkdownHeading3TextColorRatioDark = 0.4;
+    const double MarkdownHeading3TextColorRatioLight = 0.5;
+    const double MarkdownHeading4TextColorRatioDark = 0.72;
+    const double MarkdownHeading4TextColorRatioLight = 0.8;
+    const double MarkdownHeadingColorDesaturationDark = 0.3;
     const string PersistentStateFileName = "PersistentState.json";
     const int RemainingWindowsCheckingInterval = 5000;
     const string RestartedBySystemArgument = "-restarted-by-system";
@@ -396,6 +401,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     static CultureInfo _LaunchCultureInfo = CultureInfo.GetCultureInfo("en-US");
     static readonly SettingKey<int> LogOutputTargetPortKey = new("LogOutputTargetPort");
     static readonly SettingKey<byte[]> MainWindowViewModelStatesKey = new("MainWindowViewModelStates", []);
+    static readonly Color MarkdownTextColorDark = Color.FromRgb(0xff, 0xff, 0xff);
+    static readonly Color MarkdownTextColorLight = Color.FromRgb(0x1b, 0x1b, 0x1b);
     static readonly string[] MetricsNormalizedFontFileNames = ["NotoSansJP-Bold.ttf", "NotoSansJP-Regular.ttf", "NotoSansSC-Bold.ttf", "NotoSansSC-Regular.ttf", "NotoSansTC-Bold.ttf", "NotoSansTC-Regular.ttf"];
     static string? SettingsFilePath;
 
@@ -1938,22 +1945,6 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (!this.isShutdownStarted)
                 this.flushUsageDataAction?.Schedule(FlushingUsageDataInterval);
         }
-    }
-
-
-    // Transform RGB color values.
-    static Color GammaTransform(Color color, double gamma)
-    {
-        var r = (color.R / 255.0);
-        var g = (color.G / 255.0);
-        var b = (color.B / 255.0);
-        var l = (r + g + b) / 3;
-        var scale = Math.Pow(l, gamma) / l;
-        return Color.FromArgb(color.A, 
-            (byte)(Math.Min(255, r * scale * 255) + 0.5), 
-            (byte)(Math.Min(255, g * scale * 255) + 0.5), 
-            (byte)(Math.Min(255, b * scale * 255) + 0.5)
-        );
     }
 
 
@@ -6284,15 +6275,17 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             var gammaLight1 = 0.8;
             var gammaLight2 = 0.65;
             var gammaLight3 = 0.5;
-            var sysAccentColorDark1 = GammaTransform(accentColor, 1 / gammaLight1);
-            var sysAccentColorLight1 = GammaTransform(accentColor, gammaLight1);
+            var sysAccentColorDark1 = accentColor.GammaTransform(1 / gammaLight1);
+            var sysAccentColorDark2 = accentColor.GammaTransform(1 / gammaLight2);
+            var sysAccentColorLight1 = accentColor.GammaTransform(gammaLight1);
+            var sysAccentColorLight2 = accentColor.GammaTransform(gammaLight2);
             this.accentColorResources["SystemAccentColor"] = accentColor;
             this.accentColorResources["SystemAccentColorDark1"] = sysAccentColorDark1;
-            this.accentColorResources["SystemAccentColorDark2"] = GammaTransform(accentColor, 1 / gammaLight2);
-            this.accentColorResources["SystemAccentColorDark3"] = GammaTransform(accentColor, 1 / gammaLight3);
+            this.accentColorResources["SystemAccentColorDark2"] = sysAccentColorDark2;
+            this.accentColorResources["SystemAccentColorDark3"] = accentColor.GammaTransform(1 / gammaLight3);
             this.accentColorResources["SystemAccentColorLight1"] = sysAccentColorLight1;
-            this.accentColorResources["SystemAccentColorLight2"] = GammaTransform(accentColor, gammaLight2);
-            this.accentColorResources["SystemAccentColorLight3"] = GammaTransform(accentColor, gammaLight3);
+            this.accentColorResources["SystemAccentColorLight2"] = sysAccentColorLight2;
+            this.accentColorResources["SystemAccentColorLight3"] = accentColor.GammaTransform(gammaLight3);
             this.accentColorResources["Color/Accent.WithOpacity.0.75"] = Color.FromArgb((byte)(accentColor.A * 0.75 + 0.5), accentColor.R, accentColor.G, accentColor.B);
             this.accentColorResources["Color/Accent.WithOpacity.0.67"] = Color.FromArgb((byte)(accentColor.A * 0.67 + 0.5), accentColor.R, accentColor.G, accentColor.B);
             this.accentColorResources["Color/Accent.WithOpacity.0.5"] = Color.FromArgb((byte)(accentColor.A * 0.5 + 0.5), accentColor.R, accentColor.G, accentColor.B);
@@ -6302,6 +6295,32 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 
             // icon colors
             this.accentColorResources["Brush.Icon.Active"] = new SolidColorBrush(sysAccentColorLight1);
+
+            // colors of headings in Markdown document
+            var isLightThemeMode = themeMode == ThemeMode.Light;
+            var markdownTextColor = isLightThemeMode
+                ? MarkdownTextColorLight
+                : MarkdownTextColorDark;
+            var markdownHeadingColor = isLightThemeMode
+                ? sysAccentColorDark2
+                : sysAccentColorLight2.Desaturate(MarkdownHeadingColorDesaturationDark);
+            var markdownHeading3TextColorRatio = isLightThemeMode
+                ? MarkdownHeading3TextColorRatioLight
+                : MarkdownHeading3TextColorRatioDark;
+            var markdownHeading4TextColorRatio = isLightThemeMode
+                ? MarkdownHeading4TextColorRatioLight
+                : MarkdownHeading4TextColorRatioDark;
+            var markdownHeading3Color = markdownHeadingColor.Blend(markdownTextColor, markdownHeading3TextColorRatio);
+            var markdownHeading4Color = markdownHeadingColor.Blend(markdownTextColor, markdownHeading4TextColorRatio);
+            var markdownHeadingBrush = new SolidColorBrush(markdownHeadingColor);
+            this.accentColorResources["Color/MarkdownViewer.Markdown.Heading1.Foreground"] = markdownHeadingColor;
+            this.accentColorResources["Color/MarkdownViewer.Markdown.Heading2.Foreground"] = markdownHeadingColor;
+            this.accentColorResources["Color/MarkdownViewer.Markdown.Heading3.Foreground"] = markdownHeading3Color;
+            this.accentColorResources["Color/MarkdownViewer.Markdown.Heading4.Foreground"] = markdownHeading4Color;
+            this.accentColorResources["Brush/MarkdownViewer.Markdown.Heading1.Foreground"] = markdownHeadingBrush;
+            this.accentColorResources["Brush/MarkdownViewer.Markdown.Heading2.Foreground"] = markdownHeadingBrush;
+            this.accentColorResources["Brush/MarkdownViewer.Markdown.Heading3.Foreground"] = new SolidColorBrush(markdownHeading3Color);
+            this.accentColorResources["Brush/MarkdownViewer.Markdown.Heading4.Foreground"] = new SolidColorBrush(markdownHeading4Color);
 
             // [Workaround] Brushes of Slider
             this.accentColorResources["SliderThumbBackgroundPointerOver"] = new SolidColorBrush(sysAccentColorLight1);
