@@ -50,10 +50,33 @@ The sole public class. Call `Run(IList<string> args)` with a command as the firs
 | Command | Description |
 |---|---|
 | `create-diff-packages` | Compare previous and current package ZIPs; output a ZIP containing only changed/new files |
-| `create-package-manifest` | Emit a `PackageManifest.json` (or `PackageManifest-{platform}.json`) with SHA-256 checksums and GitHub download URLs |
+| `create-package-manifest` | Emit a `PackageManifest.json` (or `PackageManifest-{platform}.json`) with SHA-256 checksums and download URLs on GitHub or Cloudflare R2 |
 | `get-current-version` | Extract `<AssemblyVersion>` or `<Version>` from a `.csproj` |
 | `get-current-informational-version` | Extract informational version from a `.csproj` |
 | `get-previous-version` | Scan the `Packages/` directory to find the previous release version |
+
+### `create-package-manifest` Arguments
+
+```
+create-package-manifest [{Storage}] [{Platform}] {Repository} {Version} [{InformationalVersion}]
+```
+
+| Argument | Description |
+|---|---|
+| `Storage` | Where the packages are hosted, case-insensitive: `github` (default) or `cloudflare` |
+| `Platform` | Include only packages whose platform identifier starts with it (e.g. `win`, `osx-arm64`), and name the manifest `PackageManifest-{Platform}.json` |
+| `Repository` | Name of the GitHub repository, which is also the folder name on Cloudflare R2 |
+| `Version` | Version of the release; packages are read from `Packages/{Version}/` |
+| `InformationalVersion` | Informational version of the release; used instead of `Version` as `{Tag}` in URIs |
+
+When only one argument precedes `Repository`, it is taken as `Storage` if it names one, otherwise as `Platform`. An unknown `Storage` is rejected with `InvalidArgument` before any file is written.
+
+Package URIs by storage, where `{Tag}` is `InformationalVersion` if given, otherwise `Version`:
+
+- `github` — `https://github.com/carina-studio/{Repository}/releases/download/{Tag}/{FileName}`
+- `cloudflare` — `https://packages.carinastudio.net/{Repository}/{Tag}/{FileName}`
+
+`PageUri` always points to the GitHub release page `https://github.com/carina-studio/{Repository}/releases/tag/{Tag}`, whichever storage is used.
 
 ### `PackagingResult` (enum)
 
