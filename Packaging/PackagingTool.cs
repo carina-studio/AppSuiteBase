@@ -17,6 +17,8 @@ namespace CarinaStudio.AppSuite.Packaging;
 public class PackagingTool
 {
     // Constants.
+    const string CloudflarePackageStorage = "cloudflare";
+    const string GitHubPackageStorage = "github";
     const string PackagesFolderName = "Packages";
 
 
@@ -230,7 +232,7 @@ public class PackagingTool
         }
         var versionIndex = -1;
         Version? version = null;
-        for (var i = 1; i < Math.Min(3, args.Count); i++)
+        for (var i = 1; i < Math.Min(4, args.Count); i++)
         {
             if (Version.TryParse(args[i], out version))
             {
@@ -243,12 +245,31 @@ public class PackagingTool
             Console.Error.Write("No version specified.");
             return PackagingResult.InvalidArgument;
         }
-        var platform = versionIndex == 2 ? args[0] : null;
+        string packageStorage = GitHubPackageStorage;
+        string? platform = null;
+        if (versionIndex >= 3)
+        {
+            packageStorage = args[versionIndex - 3];
+            if (!IsValidPackageStorage(packageStorage))
+            {
+                Console.Error.Write($"Unknown package storage: {packageStorage}.");
+                return PackagingResult.InvalidArgument;
+            }
+            platform = args[versionIndex - 2];
+        }
+        else if (versionIndex >= 2)
+        {
+            var arg = args[versionIndex - 2];
+            if (IsValidPackageStorage(arg))
+                packageStorage = arg;
+            else
+                platform = arg;
+        }
         var repositaryName = args[versionIndex - 1];
         var informationalVersion = versionIndex + 1 < args.Count ? args[versionIndex + 1] : null;
-        return this.CreatePackageManifest(platform, repositaryName, version, informationalVersion);
+        return this.CreatePackageManifest(packageStorage, platform, repositaryName, version, informationalVersion);
     }
-    PackagingResult CreatePackageManifest(string? platform, string repositaryName, Version version, string? informationalVersion)
+    PackagingResult CreatePackageManifest(string packageStorage, string? platform, string repositaryName, Version version, string? informationalVersion)
     {
         try
         {
@@ -377,7 +398,17 @@ public class PackagingTool
                     jsonWriter.WriteString("RuntimeVersion", "6.0.1");   
                 }
                 jsonWriter.WriteString("SHA256", sha256);
-                jsonWriter.WriteString("Uri", $"https://github.com/carina-studio/{repositaryName}/releases/download/{releaseTag}/{name}");
+                switch (packageStorage.ToLowerInvariant())
+                {
+                    case CloudflarePackageStorage:
+                        jsonWriter.WriteString("Uri", $"https://packages.carinastudio.net/{repositaryName}/{releaseTag}/{name}");
+                        break;
+                    case GitHubPackageStorage:
+                        jsonWriter.WriteString("Uri", $"https://github.com/carina-studio/{repositaryName}/releases/download/{releaseTag}/{name}");
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
                 jsonWriter.WriteEndObject();
             }
             jsonWriter.WriteEndArray();
@@ -541,6 +572,20 @@ public class PackagingTool
         catch
         { /* best effort */ }
         return PackagingResult.Success;
+    }
+
+
+    // Check whether the given package storage is valid or not.
+    static bool IsValidPackageStorage(string packageStorage)
+    {
+        switch (packageStorage.ToLowerInvariant())
+        {
+            case CloudflarePackageStorage:
+            case GitHubPackageStorage:
+                return true;
+            default:
+                return false;
+        }
     }
 
 
