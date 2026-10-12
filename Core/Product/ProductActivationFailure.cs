@@ -6,6 +6,10 @@ namespace CarinaStudio.AppSuite.Product;
 public enum ProductActivationFailure
 {
     /// <summary>
+    /// No failure.
+    /// </summary>
+    None,
+    /// <summary>
     /// Unknown.
     /// </summary>
     Unknown,

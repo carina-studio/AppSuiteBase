@@ -91,6 +91,7 @@ public abstract class MainWindow : Window
     NSWindow? nsWindow;
     long openedTime;
     readonly ScheduledAction reactivateProVersionAction;
+    Notification? reactivateProVersionNotification;
     readonly ScheduledAction restartingRootWindowsAction;
     double restoredHeight;
     double restoredWidth;
@@ -195,9 +196,19 @@ public abstract class MainWindow : Window
                 {
                     this.Logger.LogTrace("Cancel notifying user about network connection for activating Pro-version");
                 }
+
+                // dismiss the notification which is no longer valid
+                var notification = this.reactivateProVersionNotification;
+                if (notification is not null)
+                {
+                    this.Logger.LogDebug("Pro-version has been activated, dismiss notification of reactivating Pro-version");
+                    this.reactivateProVersionNotification = null;
+                    notification.Dismiss();
+                }
                 goto default;
 			case ProductState.Deactivated:
 				if (asApp.ProductManager.TryGetProductActivationFailure(productId, out var failure)
+					&& failure != ProductActivationFailure.None
 					&& failure != ProductActivationFailure.NoNetworkConnection
 					&& !IsReactivatingProVersion)
 				{
@@ -633,7 +644,13 @@ public abstract class MainWindow : Window
                         it.Bind(NotificationAction.NameProperty, asApp.GetObservableString("ApplicationInfoDialog.DeactivateProduct"));
                     })
                 ];
-                notification.Dismissed += (_, _) => taskCompletionSource.TrySetResult();
+                notification.Dismissed += (_, _) =>
+                {
+                    if (ReferenceEquals(this.reactivateProVersionNotification, notification))
+                        this.reactivateProVersionNotification = null;
+                    taskCompletionSource.TrySetResult();
+                };
+                this.reactivateProVersionNotification = notification;
                 notification.BindToResource(Notification.IconProperty, this, "Image/Icon.Warning.Colored.Gradient");
                 notification.Bind(Notification.MessageProperty, new FormattedString().Also(it =>
                 {

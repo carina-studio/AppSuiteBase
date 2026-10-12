@@ -285,7 +285,7 @@ class MockProductManager(IAppSuiteApplication app) : BaseApplicationObject<IAppS
     /// <inheritdoc/>
     public bool TryGetProductActivationFailure(string id, out ProductActivationFailure failure)
     {
-        failure = default;
+        failure = ProductActivationFailure.None;
         return false;
     }
 
