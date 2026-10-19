@@ -60,8 +60,8 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         // monitor network change
         Task.Run(() =>
         {
+            // no subscription to NetworkAvailabilityChanged because runtime queries availability on its own thread and exception thrown there crashes the process
             NetworkChange.NetworkAddressChanged += this.OnNetworkAddressChanged;
-            NetworkChange.NetworkAvailabilityChanged += this.OnNetworkAvailabilityChanged;
         });
 
         // setup scheduled actions
@@ -267,16 +267,6 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
         this.updateNetworkAddressesAction.Schedule(NetworkAddressesUpdateDelay);
 
 
-    // Called when network availability changed.
-    void OnNetworkAvailabilityChanged(object? sender, NetworkAvailabilityEventArgs e)
-    {
-        if (e.IsAvailable)
-            this.checkNetworkConnectionAction.Schedule();
-        else
-            this.checkNetworkConnectionAction.Cancel();
-    }
-
-
     /// <summary>
     /// Get name of primary network interface.
     /// </summary>
@@ -418,6 +408,8 @@ public class NetworkManager : BaseApplicationObject<IAppSuiteApplication>, INoti
             this.isWirelessInterfaceUp = isWirelessInterfaceUp;
             if (isNetworkAvailable)
                 this.checkNetworkConnectionAction.Reschedule();
+            else
+                this.checkNetworkConnectionAction.Cancel();
         }
         catch (Exception ex)
         {
