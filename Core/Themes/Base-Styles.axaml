@@ -3646,10 +3646,11 @@
 											</Transitions>
 										</Border.Transitions>
 									</Border>
-									<Border Background="{DynamicResource Brush/TabItem.Header.Background.Selected}" 
+									<Border Name="PART_SelectedBorder"
+									        Background="{DynamicResource Brush/TabItem.Header.Background.Selected}"
 									        BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}"
 									        BorderThickness="1"
-									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
+									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"
 									        Opacity="{TemplateBinding IsSelected, Converter={x:Static converters:TabItemOpacityConverters.IsSelectedToOpacity}}">
 										<Border.Transitions>
 											<Transitions>
@@ -3674,6 +3675,10 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
+	</Style>
+	<Style Selector="TabControl:moving-selected-item TabItem /template/ Border#PART_SelectedBorder">
+		<!-- [Workaround] Prevent animating selection which is moved to first item temporarily by Avalonia while moving selected item -->
+		<Setter Property="Transitions" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="TabItem.Empty">
 		<Setter Property="Template">

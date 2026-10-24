@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
@@ -68,9 +69,9 @@ public class MultiBinding(IList<BindingBase> bindings): MarkupExtension
     
     
     /// <summary>
-    /// Get or set fallback value.
+    /// Get or set fallback value. <see cref="AvaloniaProperty.UnsetValue"/> by default.
     /// </summary>
-    public required object FallbackValue { get; set; }
+    public object FallbackValue { get; set; } = AvaloniaProperty.UnsetValue;
 
 
     /// <inheritdoc/>

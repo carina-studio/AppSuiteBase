@@ -37,6 +37,7 @@ public class TabControl : Avalonia.Controls.TabControl
 
     // Constants.
     const int DraggingThreshold = 10;
+    const string MovingSelectedItemPseudoClass = ":moving-selected-item";
     const int ScrollTabStripByButtonInterval = 300;
 
 
@@ -93,12 +94,10 @@ public class TabControl : Avalonia.Controls.TabControl
         this.updateTabStripScrollViewerMarginAction = new ScheduledAction(() => this.UpdateTabStripScrollViewerMargin(true));
 
         // observe self properties
-        var isSubscribed = false;
-        this.GetObservable(IsFullWindowModeProperty).Subscribe(_ =>
+        this.GetObservable(IsFullWindowModeProperty).Subscribe(() =>
         {
-            if (isSubscribed)
-                this.updateTabStripScrollViewerMarginAction.Schedule();
-        });
+            this.updateTabStripScrollViewerMarginAction.Schedule();
+        }, skipOnNextDuringSubscription: true);
         this.GetObservable(ItemsSourceProperty).Subscribe(items =>
         {
             if (this.attachedItemsSource is not null)
@@ -120,12 +119,10 @@ public class TabControl : Avalonia.Controls.TabControl
                 this.UpdateExtendedTabItemStates();
             }
         });
-        this.GetObservable(SelectedIndexProperty).Subscribe(_ =>
+        this.GetObservable(SelectedIndexProperty).Subscribe(() =>
         {
-            if (isSubscribed)
-                this.scrollToSelectedItemAction.Schedule();
-        });
-        isSubscribed = true;
+            this.scrollToSelectedItemAction.Schedule();
+        }, skipOnNextDuringSubscription: true);
     }
     
     
@@ -747,18 +744,35 @@ public class TabControl : Avalonia.Controls.TabControl
     /// <returns>True if the item has been moved successfully.</returns>
     public bool TryMoveItem<T>(int index, int newIndex, Func<IEnumerable, int, int, bool>? moveItemFunc = null, bool scrollIntoView = true)
     {
-        // move item
-        if (!TabControlExtensions.TryMoveItem<T>(this, index, newIndex, moveItemFunc, false))
+        // check state
+        var itemCount = this.ItemCount;
+        if (index < 0 || index >= itemCount || newIndex < 0 || newIndex >= itemCount)
             return false;
+        if (index == newIndex)
+            return true;
 
-        // scroll header of item into view
-        if (scrollIntoView)
+        // [Workaround] Disable transitions of selection while moving selected item, because selection will be moved to first item by Avalonia and restored after moving
+        var wasMovingSelectedItem = this.PseudoClasses.Contains(MovingSelectedItemPseudoClass);
+        this.PseudoClasses.Set(MovingSelectedItemPseudoClass, wasMovingSelectedItem || this.SelectedIndex == index);
+        try
         {
-            Dispatcher.UIThread.Post(() =>
+            // move item
+            if (!TabControlExtensions.TryMoveItem<T>(this, index, newIndex, moveItemFunc, false))
+                return false;
+
+            // scroll header of item into view
+            if (scrollIntoView)
             {
-                if (newIndex < this.ItemCount)
-                    this.ScrollHeaderIntoView(newIndex);
-            });
+                Dispatcher.UIThread.Post(() =>
+                {
+                    if (newIndex < this.ItemCount)
+                        this.ScrollHeaderIntoView(newIndex);
+                });
+            }
+        }
+        finally
+        {
+            this.PseudoClasses.Set(MovingSelectedItemPseudoClass, wasMovingSelectedItem);
         }
         return true;
     }
