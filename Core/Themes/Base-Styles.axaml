@@ -475,9 +475,12 @@
 	</Style>
 	
 	<!-- ContextMenu -->
+	<Style Selector="ContextMenu">
+		<Setter Property="ClipToBounds" Value="False"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/Popup.Shadow.Margin}"/>
+	</Style>
 	<Style Selector="ContextMenu /template/ Border">
 		<Setter Property="BoxShadow" Value="{DynamicResource BoxShadows/Shadow}"/>
-		<Setter Property="Margin" Value="{DynamicResource Thickness/Popup.Shadow.Margin}"/>
 		<Setter Property="Opacity" Value="{StaticResource Double/Popup.InitialOpacity}"/>
 		<Setter Property="RenderTransform">
 			<ScaleTransform ScaleX="{StaticResource Double/Popup.InitialScaling}" ScaleY="{StaticResource Double/Popup.InitialScaling}">

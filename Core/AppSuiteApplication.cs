@@ -9,7 +9,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Input.Raw;
 using Avalonia.Interactivity;
@@ -1413,7 +1412,6 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     // Define extra styles by code.
     [DynamicDependency(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields, typeof(PopupRoot))]
     [DynamicDependency(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields, typeof(TopLevel))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.PublicProperties | DynamicallyAccessedMemberTypes.NonPublicProperties, "Avalonia.Controls.Primitives.PopupPositioning.PopupPositionRequest", "Avalonia.Controls")]
     [DynamicDependency(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods, "Avalonia.Input.PointerOverPreProcessor", "Avalonia.Base")]
     [RequiresUnreferencedCode("Get internal state from Avalonia.")]
     void DefineExtraStyles()
@@ -1590,18 +1588,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 case RawPointerEventType.LeftButtonDown:
                 {
                     // get size of shadow
-                    Thickness shadowMargin;
-                    if (popup.Child is ContextMenu contextMenu)
-                    {
-                        using var childrenEnumerator = contextMenu.GetVisualChildren().GetEnumerator();
-                        if (!childrenEnumerator.MoveNext() || childrenEnumerator.Current is not Border border)
-                            return;
-                        shadowMargin = border.Margin;
-                    }
-                    else if (popup.Child is Border border)
-                        shadowMargin = border.Margin;
-                    else
+                    if (popup.Child is not { } child || child is not (ContextMenu or Border))
                         return;
+                    var shadowMargin = child.Margin;
                     if (shadowMargin == default)
                         return;
 
@@ -1620,38 +1609,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             }
         }
 
-        // 1. Animate popup and move it to correct position according to its shadows.
+        // 1. Animate popup.
         // 2. Attach WndProc to host window of Popup.
         var popupHostProperty = typeof(Popup).GetProperty("Host", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public) ?? throw new NotSupportedException();
-        var popupPositionRequestType = typeof(Avalonia.Application).Assembly.GetType("Avalonia.Controls.Primitives.PopupPositioning.PopupPositionRequest") ?? throw new NotSupportedException();
-        var popupPositionRequestField = typeof(PopupRoot).GetField("_popupPositionRequest", BindingFlags.Instance | BindingFlags.NonPublic)?.Also(it =>
-        {
-            if (it.FieldType != popupPositionRequestType)
-                throw new NotSupportedException();
-        }) ?? throw new NotSupportedException();
-        var anchorRectProperty = popupPositionRequestType.GetProperty("AnchorRect", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.Also(it =>
-        {
-            if (it.PropertyType != typeof(Rect?))
-                throw new NotSupportedException();
-        }) ?? throw new NotSupportedException();
-        var targetProperty = popupPositionRequestType.GetProperty("Target", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)?.Also(it =>
-        {
-            if (it.PropertyType != typeof(Visual))
-                throw new NotSupportedException();
-        }) ?? throw new NotSupportedException();
-        var popupHorzOffsetBindings = new Dictionary<Popup, IDisposable>();
-        var popupVertOffsetBindings = new Dictionary<Popup, IDisposable>();
         var processPopupRawInputHandlerTokens = new Dictionary<Popup, IDisposable>();
-        var latestPointerPositions = new Dictionary<TopLevel, Point>();
-        InputElement.PointerReleasedEvent.AddClassHandler<TopLevel>((topLevel, e) =>
-        {
-            if (!topLevel.IsLoaded)
-                return;
-            if (!latestPointerPositions.ContainsKey(topLevel))
-                topLevel.Unloaded += (_, _) => latestPointerPositions.Remove(topLevel);
-            var point = e.GetCurrentPoint(topLevel);
-            latestPointerPositions[topLevel] = point.Position;
-        }, RoutingStrategies.Tunnel);
         Popup.IsOpenProperty.Changed.Subscribe(e =>
         {
             // check event source
@@ -1679,10 +1640,6 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             // handle closing popup
             if (!e.NewValue.Value)
             {
-                if (popupHorzOffsetBindings.Remove(popup, out var bindingToken))
-                    bindingToken.Dispose();
-                if (popupVertOffsetBindings.Remove(popup, out bindingToken))
-                    bindingToken.Dispose();
                 if (processPopupRawInputHandlerTokens.Remove(popup, out var handlerToken))
                     handlerToken.Dispose();
                 var transitions = rootBorder.Transitions;
@@ -1715,85 +1672,6 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                     it.ScaleX = 1;
                     it.ScaleY = 1;
                 });
-
-                // check state
-                if (popup.Parent is not Control target)
-                {
-                    if (popup.PlacementTarget is not { } placementTarget)
-                        return;
-                    target = placementTarget;
-                }
-                if (target is not TopLevel topLevel)
-                {
-                    var targetTopLevel = TopLevel.GetTopLevel(target);
-                    if (targetTopLevel is null)
-                        return;
-                    topLevel = targetTopLevel;
-                }
-                var shadowMargin = rootBorder.Margin;
-                if (shadowMargin == default)
-                    return;
-
-                // calculate positions on screen
-                var positionRequest = popupPositionRequestField.GetValue(hostWindow);
-                var screenScaling = (hostWindow.Screens.ScreenFromWindow(hostWindow) ?? hostWindow.Screens.Primary)?.Scaling ?? 1.0;
-                var hostWindowRect = hostWindow.PointToScreen(default).Let(it => new Rect(new(it.X / screenScaling, it.Y / screenScaling), hostWindow.Bounds.Size));
-                var topLevelPosition = topLevel.PointToScreen(default).Let(it => new Point(it.X / screenScaling, it.Y / screenScaling));
-                var placement = popup.Placement;
-                var anchorRect = (positionRequest is not null
-                    ? anchorRectProperty.GetValue(positionRequest) as Rect?
-                    : null)?.Let(it =>
-                    placement == PlacementMode.Pointer
-                        ? Global.Run(() =>
-                        {
-                            if (latestPointerPositions.TryGetValue(topLevel, out var pointerPosition))
-                                return new Rect(topLevelPosition.X + pointerPosition.X, topLevelPosition.Y + pointerPosition.Y, 1, 1);
-                            return new Rect(topLevelPosition.X + it.X, topLevelPosition.Y + it.Y, it.Width, it.Height);
-                        })
-                        : Global.Run(() =>
-                        {
-                            var target = targetProperty.GetValue(positionRequest) as Visual;
-                            var pointOnScreen = target?.PointToScreen(default) ?? topLevel.PointToScreen(it.TopLeft);
-                            return new Rect(pointOnScreen.X / screenScaling, pointOnScreen.Y / screenScaling, it.Width, it.Height);
-                        })
-                );
-
-                // update offset
-                if (popupHorzOffsetBindings.TryGetValue(popup, out var bindingToken))
-                    bindingToken.Dispose();
-                if (popupVertOffsetBindings.TryGetValue(popup, out bindingToken))
-                    bindingToken.Dispose();
-                var shadowLength = this.FindResourceOrDefault("Double/Popup.ShadowLength", 15.0);
-                switch (placement)
-                {
-                    case PlacementMode.Bottom:
-                    case PlacementMode.Top:
-                        break;
-                    default:
-                        if (anchorRect.HasValue)
-                        {
-                            if (hostWindowRect.Center.X >= anchorRect.Value.Center.X)
-                                popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset - shadowLength), BindingPriority.Animation);
-                            else
-                                popupHorzOffsetBindings[popup] = popup.Bind(Popup.HorizontalOffsetProperty, new FixedObservableValue<object?>(popup.HorizontalOffset + shadowLength), BindingPriority.Animation);
-                        }
-                        break;
-                }
-                switch (placement)
-                {
-                    case PlacementMode.Left:
-                    case PlacementMode.Right:
-                        break;
-                    default:
-                        if (anchorRect.HasValue)
-                        {
-                            if (hostWindowRect.Center.Y >= anchorRect.Value.Center.Y)
-                                popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset - shadowLength), BindingPriority.Animation);
-                            else
-                                popupVertOffsetBindings[popup] = popup.Bind(Popup.VerticalOffsetProperty, new FixedObservableValue<object?>(popup.VerticalOffset + shadowLength), BindingPriority.Animation);
-                        }
-                        break;
-                }
 
                 // intercept pointer pressed event
                 if (topLevelInputManagerField.GetValue(hostWindow) is IInputManager inputManager

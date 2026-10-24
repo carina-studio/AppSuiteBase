@@ -162,8 +162,7 @@ public class ToggleSplitButton: Avalonia.Controls.ToggleSplitButton
         {
             if (menu.IsOpen || forceUpdate)
             {
-                var shadowMargin = IAppSuiteApplication.CurrentOrNull?.FindResourceOrDefault<Thickness>("Thickness/Popup.Shadow.Margin") ?? default;
-                return menu.SetValue(MinWidthProperty, this.Bounds.Width + shadowMargin.Left + shadowMargin.Right, BindingPriority.Template);
+                return menu.SetValue(MinWidthProperty, this.Bounds.Width, BindingPriority.Template);
             }
             return null;
         });
