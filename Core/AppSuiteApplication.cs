@@ -1412,7 +1412,6 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     // Define extra styles by code.
     [DynamicDependency(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields, typeof(PopupRoot))]
     [DynamicDependency(DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.NonPublicFields, typeof(TopLevel))]
-    [DynamicDependency(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods, "Avalonia.Input.PointerOverPreProcessor", "Avalonia.Base")]
     [RequiresUnreferencedCode("Get internal state from Avalonia.")]
     void DefineExtraStyles()
     {
@@ -1486,21 +1485,10 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         }));
         
         // reset pointer over state of window when showing modal dialog
-        // AsNonNull() is intentional: a NRE here on Avalonia upgrade is the signal that
-        // the TopLevel.PresentationSource -> _pointerOverPreProcessor -> ClearPointerOver() chain
-        // moved and the workaround needs revisiting.
-        var presentationSourceType = typeof(TopLevel).Assembly.GetType("Avalonia.Controls.PresentationSource").AsNonNull();
-        var presentationSourceProperty = typeof(TopLevel).GetProperty("PresentationSource", BindingFlags.Instance | BindingFlags.NonPublic, null, presentationSourceType, Type.EmptyTypes, null).AsNonNull();
-        var pointerOverPreProcessorField = presentationSourceType.GetField("_pointerOverPreProcessor", BindingFlags.Instance | BindingFlags.NonPublic).AsNonNull();
-        MethodInfo? clearPointerOverMethod = null;
         CarinaStudio.Controls.Window.HasDialogsProperty.Changed.Subscribe(e =>
         {
-            if (e.NewValue.Value && e.Sender is TopLevel topLevel && topLevel.IsPointerOver)
-            {
-                var pointerOverPreProcessor = pointerOverPreProcessorField.GetValue(presentationSourceProperty.GetValue(topLevel).AsNonNull()).AsNonNull();
-                clearPointerOverMethod ??= pointerOverPreProcessor.GetType().GetMethod("ClearPointerOver", BindingFlags.Instance | BindingFlags.NonPublic, [ ]).AsNonNull();
-                clearPointerOverMethod.Invoke(pointerOverPreProcessor, [ ]);
-            }
+            if (e.NewValue.Value && e.Sender is TopLevel topLevel)
+                topLevel.ClearPointerOver();
         }, skipOnNextDuringSubscription: true);
 
         // disable pointer wheel on ComboBox/NumericUpDown

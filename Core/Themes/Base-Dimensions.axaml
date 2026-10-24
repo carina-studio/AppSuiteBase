@@ -426,7 +426,7 @@
 	<Thickness x:Key="Thickness/TabItem.Header.Margin">1,0,1,2</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Padding">12,7,12,7</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Separator.Margin">0,11,0,13</Thickness>
-	<Thickness x:Key="Thickness/TabItem.InsertionIndicator.Margin">0,2,0,0</Thickness>
+	<Thickness x:Key="Thickness/TabItem.InsertionIndicator.Margin">0,2,0,2</Thickness>
 
 	<!-- TextBox -->
 	<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>

@@ -3598,6 +3598,8 @@
 								        Margin="{DynamicResource Thickness/TabItem.Header.Separator.Margin}"/>
 								<Border Margin="{DynamicResource Thickness/TabItem.InsertionIndicator.Margin}">
 									<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" 
+									        BorderBrush="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Border}" 
+									        BorderThickness="1" 
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
 									        Margin="{DynamicResource Thickness/TabItem.Header.Margin}" 
 									        Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>
@@ -3612,6 +3614,8 @@
 								        Margin="{DynamicResource Thickness/TabItem.Header.Separator.Margin}"/>
 								<Border Margin="{DynamicResource Thickness/TabItem.InsertionIndicator.Margin}">
 									<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" 
+									        BorderBrush="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Border}" 
+									        BorderThickness="1" 
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
 									        Margin="{DynamicResource Thickness/TabItem.Header.Margin}" 
 									        Width="{DynamicResource Double/TabItem.Header.InsertionIndicator.Width}"/>

@@ -486,6 +486,9 @@ public class TabControl : Avalonia.Controls.TabControl
         this.DropOnItem?.Invoke(this, dragOnItemEventArgs);
         e.DragEffects = dragOnItemEventArgs.DragEffects;
         e.Handled = dragOnItemEventArgs.Handled;
+
+        // [Workaround] Pointer events are not received during drag-and-drop, clear pointer-over state to prevent keeping it on the item at the position before dragging
+        TopLevel.GetTopLevel(this)?.ClearPointerOver();
     }
 
 
@@ -574,7 +577,11 @@ public class TabControl : Avalonia.Controls.TabControl
         var itemEventArgs = new TabItemDraggedEventArgs(this.pointerPressedEventArgs, this.pointerPressedItemIndex, this.pointerPressedItem);
         this.ItemDragged?.Invoke(this, itemEventArgs);
         if (itemEventArgs.Handled)
+        {
+            // [Workaround] Pointer events are not received during drag-and-drop, clear pointer-over state to prevent keeping it on the item at the position where dragging started
             e.Handled = true;
+            TopLevel.GetTopLevel(this)?.ClearPointerOver();
+        }
         this.pointerPressedItem = null;
         this.pointerPressedItemIndex = -1;
         this.pointerPressedPosition = null;
