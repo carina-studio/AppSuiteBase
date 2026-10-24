@@ -15,7 +15,7 @@
 		<Company>Carina Studio</Company>
         <Copyright>©2021-$([System.DateTime]::Now.Year) Carina Studio</Copyright>
         <Description>Base libraries for Carina Studio Application Suite.</Description>
-        <DotNetLibraryVersion>10.0.12</DotNetLibraryVersion>
+        <DotNetLibraryVersion>10.0.13</DotNetLibraryVersion>
         <LangVersion>preview</LangVersion>
 		<Nullable>enable</Nullable>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
