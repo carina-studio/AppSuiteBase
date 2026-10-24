@@ -1,7 +1,4 @@
-using CarinaStudio.AppSuite.Native;
-using CarinaStudio.MacOS.ObjectiveC;
 using CarinaStudio.Threading;
-using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -58,41 +55,14 @@ public class ApplicationDataImportDirectorySelectionDialog : CommonDialog<string
         string? directory;
         while (true)
         {
-            Uri directoryUri;
-            if (Platform.IsNotMacOS)
+            var dirList = await owner.StorageProvider.OpenFolderPickerAsync(new()
             {
-                var dirList = await owner.StorageProvider.OpenFolderPickerAsync(new()
-                {
-                    AllowMultiple = false,
-                    Title = app.GetString("ApplicationDataImportDirectorySelectionDialog.Title")
-                });
-                if (dirList.Count != 1)
-                    return null;
-                directoryUri = dirList[0].Path;
-            }
-            else
-            {
-                using var openPanel = NSOpenPanel.OpenPanel().Also(it =>
-                {
-                    UTType.WithIdentifier("com.apple.application-bundle")?.Use(fileType =>
-                    {
-                        using var fileTypeArray = new NSArray<UTType>(fileType);
-                        it.AllowedContentTypes = fileTypeArray;
-                    });
-                    it.AllowsMultipleSelection = false;
-                    it.CanChooseDirectories = false;
-                    it.CanChooseFiles = true;
-                    it.CanDownloadUbiquitousContents = false;
-                    it.TreatsFilePackagesAsDirectories = false;
-                });
-                var modelResponse = openPanel.RunModal();
-                if (modelResponse != 1)
-                    return null;
-                var urls = openPanel.Urls;
-                if (urls.Count != 1 || urls[0].AbsoluteString is not { } url)
-                    return null;
-                directoryUri = new Uri(url);
-            }
+                AllowMultiple = false,
+                Title = app.GetString("ApplicationDataImportDirectorySelectionDialog.Title")
+            });
+            if (dirList.Count != 1)
+                return null;
+            var directoryUri = dirList[0].Path;
             if (!owner.IsVisible)
                 return null;
             if (directoryUri.Scheme == "file")
