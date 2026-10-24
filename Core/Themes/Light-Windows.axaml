@@ -37,7 +37,7 @@
 		<Color x:Key="Color/TabItem.Header.Background">#00f3f3f3</Color>
 		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#8ff3f3f3</Color>
 		<Color x:Key="Color/TabItem.Header.Background.Selected">#f3f3f3</Color>
-		<Color x:Key="Color/TabItem.Header.Border.PointerOver">#d0d0d0</Color>
+		<Color x:Key="Color/TabItem.Header.Border.PointerOver">#e1e1e1</Color>
 		<Color x:Key="Color/TabItem.Header.Border.Selected">#dddddd</Color>
 		
 		<!-- Toolbar -->

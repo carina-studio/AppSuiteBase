@@ -3618,7 +3618,7 @@
 								</Border>
 							</DockPanel>
 							
-							<Border Name="PART_ContentContainer" ClipToBounds="False" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" VerticalAlignment="Bottom">
+							<Border Name="PART_ContentContainer" ClipToBounds="False" Margin="{DynamicResource Thickness/TabItem.Header.Margin}" VerticalAlignment="Center">
 								<Border.Width>
 									<MultiBinding Converter="{x:Static converters:TabItemWidthConverter.Default}">
 										<Binding RelativeSource="{RelativeSource AncestorType={x:Type TabControl}}"/>
@@ -3631,18 +3631,11 @@
 									<Border Background="{x:Null}" 
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
 									        IsVisible="{TemplateBinding IsSelected}"/>
-									<!--Border Background="{DynamicResource Brush/TabItem.Header.Background}" 
-									        BorderBrush="{DynamicResource Brush/TabItem.Header.Border}" 
-									        BorderThickness="1,0,1,0" 
-									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
-									        IsVisible="{TemplateBinding IsSelected}"
-									        Margin="0,0,0,1"/-->
-									<Border Background="{DynamicResource Brush/TabItem.Header.Background.PointerOver}" 
+									<Border Background="{DynamicResource Brush/TabItem.Header.Background.PointerOver}"
 									        BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}"
-									        BorderThickness="1,0,1,0" 
+									        BorderThickness="1"
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"
-									        Opacity="{TemplateBinding IsPointerOver, Converter={x:Static converters:TabItemOpacityConverters.IsPointerOverToOpacity}}" 
-									        Margin="0,1,0,1">
+									        Opacity="{TemplateBinding IsPointerOver, Converter={x:Static converters:TabItemOpacityConverters.IsPointerOverToOpacity}}">
 										<Border.Transitions>
 											<Transitions>
 												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation}" Easing="{StaticResource Easing/Animation}"/>
@@ -3650,8 +3643,8 @@
 										</Border.Transitions>
 									</Border>
 									<Border Background="{DynamicResource Brush/TabItem.Header.Background.Selected}" 
-									        BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}" 
-									        BorderThickness="1,1,1,0" 
+									        BorderBrush="{DynamicResource Brush/TabItem.Header.Border.Selected}"
+									        BorderThickness="1"
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
 									        Opacity="{TemplateBinding IsSelected, Converter={x:Static converters:TabItemOpacityConverters.IsSelectedToOpacity}}">
 										<Border.Transitions>
@@ -3660,35 +3653,15 @@
 											</Transitions>
 										</Border.Transitions>
 									</Border>
-									<ContentPresenter Content="{TemplateBinding Header}" 
-									                  ContentTemplate="{TemplateBinding HeaderTemplate}"
-									                  FontSize="{TemplateBinding FontSize}"
-									                  Height="{DynamicResource Double/TabItem.Header.Content.Height}" 
-									                  HorizontalAlignment="Stretch" 
-									                  Margin="{DynamicResource Thickness/TabItem.Header.Padding}" 
-									                  VerticalAlignment="Center"/>
-									<!--Rectangle Fill="{DynamicResource Brush/Accent}"
-									           Height="{DynamicResource Double/TabItem.Header.ColorBar.Height}"
-									           HorizontalAlignment="Stretch"
-									           IsVisible="{TemplateBinding IsSelected}"
-									           Margin="{DynamicResource Thickness/TabItem.Header.ColorBar.Margin}"
-									           Opacity="{TemplateBinding IsSelected, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacity}}"
-									           VerticalAlignment="Top">
-										<Rectangle.RenderTransform>
-											<ScaleTransform ScaleX="{Binding $parent[TabItem].IsSelected, Converter={x:Static abConverters:BooleanToValueConverters.BooleanToOpacity}}">
-												<ScaleTransform.Transitions>
-													<Transitions>
-														<DoubleTransition Property="ScaleX" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
-													</Transitions>
-												</ScaleTransform.Transitions>
-											</ScaleTransform>
-										</Rectangle.RenderTransform>
-										<Rectangle.Transitions>
-											<Transitions>
-												<DoubleTransition Property="Opacity" Duration="{StaticResource TimeSpan/Animation.Fast}" Easing="{StaticResource Easing/Animation}"/>
-											</Transitions>
-										</Rectangle.Transitions>
-									</Rectangle-->
+									<Panel Height="{DynamicResource Double/TabItem.Header.Content.Height}"
+									       Margin="{DynamicResource Thickness/TabItem.Header.Padding}"
+									       VerticalAlignment="Center">
+										<ContentPresenter Content="{TemplateBinding Header}"
+										                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+										                  FontSize="{TemplateBinding FontSize}"
+										                  HorizontalAlignment="Stretch"
+										                  VerticalAlignment="Center"/>
+									</Panel>
 								</Panel>
 							</Border>
 							
@@ -3718,7 +3691,7 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="controls:TabItem">
-					<DockPanel VerticalAlignment="Stretch" Margin="{DynamicResource Thickness/AddTabItemButton.Margin}">
+					<DockPanel VerticalAlignment="Stretch">
 						<Panel DockPanel.Dock="Left">
 							<Border BorderThickness="1,0,0,0"
 							        Opacity="0"/>
@@ -3735,13 +3708,15 @@
 								</Border.IsVisible>
 							</Border>
 						</Panel>
-						<ContentPresenter ClipToBounds="False" 
-						                  Content="{TemplateBinding Header}" 
-						                  ContentTemplate="{TemplateBinding HeaderTemplate}" 
-						                  Height="{DynamicResource Double/TabItem.Header.Content.Height}" 
-						                  HorizontalAlignment="Center" 
-						                  Margin="{DynamicResource Thickness/TabItem.Empty.Padding}" 
-						                  VerticalAlignment="Center"/>
+						<Border ClipToBounds="False" Margin="{DynamicResource Thickness/AddTabItemButton.Margin}">
+							<ContentPresenter ClipToBounds="False"
+							                  Content="{TemplateBinding Header}"
+							                  ContentTemplate="{TemplateBinding HeaderTemplate}"
+							                  Height="{DynamicResource Double/TabItem.Header.Content.Height}"
+							                  HorizontalAlignment="Center"
+							                  Margin="{DynamicResource Thickness/TabItem.Empty.Padding}"
+							                  VerticalAlignment="Center"/>
+						</Border>
 					</DockPanel>
 				</ControlTemplate>
 			</Setter.Value>

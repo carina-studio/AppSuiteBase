@@ -95,8 +95,8 @@
 	<Color x:Key="Color/TabItem.Header.Background">#00282828</Color>
 	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#af282828</Color>
 	<Color x:Key="Color/TabItem.Header.Background.Selected">#282828</Color>
-	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#373737</Color>
-	<Color x:Key="Color/TabItem.Header.Border.Selected">#424242</Color>
+	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#303030</Color>
+	<Color x:Key="Color/TabItem.Header.Border.Selected">#303030</Color>
 	<Color x:Key="Color/TabItem.Header.Separator">#17ffffff</Color>
 
 	<!-- TextBox -->

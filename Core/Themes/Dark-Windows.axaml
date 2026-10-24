@@ -41,8 +41,8 @@
 		<Color x:Key="Color/TabItem.Header.Background">#002c2c2c</Color>
 		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#af2c2c2c</Color>
 		<Color x:Key="Color/TabItem.Header.Background.Selected">#2c2c2c</Color>
-		<Color x:Key="Color/TabItem.Header.Border.PointerOver">#303030</Color>
-		<Color x:Key="Color/TabItem.Header.Border.Selected">#3d3d3d</Color>
+		<Color x:Key="Color/TabItem.Header.Border.PointerOver">#2e2e2e</Color>
+		<Color x:Key="Color/TabItem.Header.Border.Selected">#2e2e2e</Color>
 		
 		<!-- TextBox -->
 		<SolidColorBrush x:Key="TextControlBackground" Color="#131313"/>

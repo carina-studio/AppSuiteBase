@@ -41,7 +41,7 @@
 			<sys:Double x:Key="SliderVerticalThumbHeight">14</sys:Double>
 
 			<!-- TabItem -->
-			<CornerRadius x:Key="CornerRadius/TabItem.Header">7,7,0,0</CornerRadius>
+			<CornerRadius x:Key="CornerRadius/TabItem.Header">5</CornerRadius>
 
 			<!-- ToolTip -->
 			<CornerRadius x:Key="CornerRadius/ToolTip">4</CornerRadius>

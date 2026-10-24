@@ -103,7 +103,7 @@
 	<Color x:Key="Color/TabItem.Header.Background">#00f6f6f6</Color>
 	<Color x:Key="Color/TabItem.Header.Background.PointerOver">#8ff6f6f6</Color>
 	<Color x:Key="Color/TabItem.Header.Background.Selected">#f6f6f6</Color>
-	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#d0d0d0</Color>
+	<Color x:Key="Color/TabItem.Header.Border.PointerOver">#e3e3e3</Color>
 	<Color x:Key="Color/TabItem.Header.Border.Selected">#d8d8d8</Color>
 	<Color x:Key="Color/TabItem.Header.Separator">#17000000</Color>
 
