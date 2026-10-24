@@ -38,6 +38,7 @@ class FullScreenWindowControls : IDisposable
     static Selector? FillSelector;
     static Selector? FrameSelector;
     static Selector? IgnoresMouseEventsSelector;
+    static Selector? SafeAreaInsetsSelector;
     static Selector? ScreenSelector;
     static Selector? SetFillSelector;
     static Selector? SetFrameSelector;
@@ -367,7 +368,14 @@ class FullScreenWindowControls : IDisposable
         VisibleFrameSelector ??= Selector.FromName("visibleFrame");
         var frame = NSObject.SendMessage<NSRect>(screenHandle, FrameSelector);
         var visibleFrame = NSObject.SendMessage<NSRect>(screenHandle, VisibleFrameSelector);
-        return Math.Max(0, (frame.Origin.Y + frame.Size.Height) - (visibleFrame.Origin.Y + visibleFrame.Size.Height));
+        var menuBarHeight = (frame.Origin.Y + frame.Size.Height) - (visibleFrame.Origin.Y + visibleFrame.Size.Height);
+
+        // exclude unsafe area at top of screen (camera housing), window is placed below it in full-screen mode and the menu bar is shown inside it,
+        // ignore the remaining space less than 1 point because the visible frame is aligned to whole points but the safe area is not
+        SafeAreaInsetsSelector ??= Selector.FromName("safeAreaInsets");
+        var safeAreaInsets = NSObject.SendMessage<NSEdgeInsets>(screenHandle, SafeAreaInsetsSelector);
+        var persistentMenuBarHeight = menuBarHeight - safeAreaInsets.Top;
+        return persistentMenuBarHeight >= 1 ? persistentMenuBarHeight : 0;
     }
 
 
