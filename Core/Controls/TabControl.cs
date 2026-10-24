@@ -5,6 +5,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using CarinaStudio.Animation;
 using CarinaStudio.Controls;
@@ -735,6 +736,34 @@ public class TabControl : Avalonia.Controls.TabControl
     public double TabStripSize => this.tabStripSize;
     
     
+    /// <summary>
+    /// Try moving specific item, and keep the item selected if it was selected before moving.
+    /// </summary>
+    /// <param name="index">Index of item to be moved.</param>
+    /// <param name="newIndex">Index of new position of item.</param>
+    /// <param name="moveItemFunc">Function to perform moving item, or Null to use default way to move item.</param>
+    /// <param name="scrollIntoView">True to scroll header of the item into view after moving.</param>
+    /// <typeparam name="T">Type of element in the collection shown by the <see cref="TabControl"/>.</typeparam>
+    /// <returns>True if the item has been moved successfully.</returns>
+    public bool TryMoveItem<T>(int index, int newIndex, Func<IEnumerable, int, int, bool>? moveItemFunc = null, bool scrollIntoView = true)
+    {
+        // move item
+        if (!TabControlExtensions.TryMoveItem<T>(this, index, newIndex, moveItemFunc, false))
+            return false;
+
+        // scroll header of item into view
+        if (scrollIntoView)
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (newIndex < this.ItemCount)
+                    this.ScrollHeaderIntoView(newIndex);
+            });
+        }
+        return true;
+    }
+
+
     // Update states of extended TabItems.
     void UpdateExtendedTabItemStates()
     {

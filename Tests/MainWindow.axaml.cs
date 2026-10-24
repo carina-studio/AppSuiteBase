@@ -525,7 +525,7 @@ namespace CarinaStudio.AppSuite.Tests
                     ? e.ItemIndex
                     : e.ItemIndex + 1;
 
-            if (targetIndex != srcIndex && targetIndex != srcIndex + 1 && sender is TabControl tabControl)
+            if (targetIndex != srcIndex && targetIndex != srcIndex + 1 && sender is Controls.TabControl tabControl)
                 tabControl.TryMoveItem<TabItem>(srcIndex, srcIndex < targetIndex ? targetIndex - 1 : targetIndex);
             
             // [Workaround] Sometimes the content of tab item will gone after moving tab item
