@@ -4,7 +4,7 @@
 
 	<!-- AddTabItemButton -->
 	<sys:Double x:Key="Double/AddTabItemButton.Size">26</sys:Double>
-	<Thickness x:Key="Thickness/AddTabItemButton.Margin">0,0,0,2</Thickness>
+	<Thickness x:Key="Thickness/AddTabItemButton.Margin">0</Thickness>
 	<Thickness x:Key="Thickness/AddTabItemButton.Padding">5</Thickness>
 
 	<!-- AgreementDialog -->
@@ -405,7 +405,7 @@
 	<sys:Double x:Key="Double/TabControl.TabStrip.ScrollingButton.Icon.Size">10</sys:Double>
 	<Thickness x:Key="Thickness/TabControl.TabStrip.Padding">-12,0,-17,-2</Thickness> <!-- [Workaround] Reserve at least -15px at left/right for shadows -->
 	<Thickness x:Key="Thickness/TabControl.TabStrip.Panel.Margin">15,0,15,0</Thickness> <!-- [Workaround] Reserve at least 15px at left/right for shadows -->
-	<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Margin">5,1,5,3</Thickness>
+	<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Margin">5,3,5,3</Thickness>
 	<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Padding">5</Thickness>
 
 	<!-- TabItem -->
@@ -423,10 +423,10 @@
 	<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">6</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.ColorBar.Margin">1,0,1,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
-	<Thickness x:Key="Thickness/TabItem.Header.Margin">1,0,1,2</Thickness>
-	<Thickness x:Key="Thickness/TabItem.Header.Padding">12,7,12,7</Thickness>
-	<Thickness x:Key="Thickness/TabItem.Header.Separator.Margin">0,11,0,13</Thickness>
-	<Thickness x:Key="Thickness/TabItem.InsertionIndicator.Margin">0,2,0,2</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Margin">1,4,1,4</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Padding">12,6,12,6</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Separator.Margin">0,12,0,12</Thickness>
+	<Thickness x:Key="Thickness/TabItem.InsertionIndicator.Margin">0</Thickness>
 
 	<!-- TextBox -->
 	<StaticResourceExtension x:Key="TextControlBorderThemeThicknessFocused" ResourceKey="Thickness/Control.Border.Focused"/>
