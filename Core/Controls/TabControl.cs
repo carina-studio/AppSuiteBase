@@ -8,6 +8,7 @@ using Avalonia.LogicalTree;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using CarinaStudio.Animation;
+using CarinaStudio.Collections;
 using CarinaStudio.Controls;
 using CarinaStudio.Threading;
 using CarinaStudio.VisualTree;
@@ -33,6 +34,41 @@ public class TabControl : Avalonia.Controls.TabControl
     /// Property of <see cref="TabStripSize"/>.
     /// </summary>
     public static readonly DirectProperty<TabControl, double> TabStripSizeProperty = AvaloniaProperty.RegisterDirect<TabControl, double>(nameof(TabStripSize), t => t.tabStripSize);
+    
+    
+    /// <summary>
+    /// Represent the scope of moving item in <see cref="TabControl"/>.
+    /// </summary>
+    public class MovingItemScope : IDisposable
+    {
+        // Static Fields.
+        internal static readonly MovingItemScope Invalid = new();
+        
+        // Fields.
+        internal readonly int NewIndex;
+        internal readonly bool ScrollIntoView;
+        readonly TabControl? tabControl;
+        
+        // Constructor.
+        MovingItemScope()
+        { }
+        
+        // Constructor.
+        internal MovingItemScope(TabControl tabControl, int newIndex, bool scrollIntoView)
+        {
+            this.NewIndex = newIndex;
+            this.ScrollIntoView = scrollIntoView;
+            this.tabControl = tabControl;
+        }
+        
+        /// <summary>
+        /// Exit the scope without scrolling header of the item into view. Call it when moving the item failed.
+        /// </summary>
+        public void Cancel() => this.tabControl?.ExitMovingItemScope(this, false);
+        
+        /// <inheritdoc/>
+        public void Dispose() => this.tabControl?.ExitMovingItemScope(this, true);
+    }
 
 
     // Constants.
@@ -47,6 +83,7 @@ public class TabControl : Avalonia.Controls.TabControl
     TopLevel? attachedTopLevel;
     object? draggingOverItem;
     int draggingOverItemIndex = -1;
+    List<MovingItemScope>? movingItemScopes;
     PointerPressedEventArgs? pointerPressedEventArgs;
     object? pointerPressedItem;
     int pointerPressedItemIndex = -1;
@@ -165,6 +202,56 @@ public class TabControl : Avalonia.Controls.TabControl
             extendedTabItem.IsNextItemSelected = false;
             extendedTabItem.IsPreviousItemPointerOver = false;
             extendedTabItem.IsPreviousItemSelected = false;
+        }
+    }
+
+
+    /// <summary>
+    /// Enter the scope of moving the item in the <see cref="TabControl"/>.
+    /// </summary>
+    /// <remarks>
+    /// If the selected item is being moved, transitions of selection state of tab items will be disabled until all scopes are exited,
+    /// so that the temporary selection change caused by moving item won't be visible.
+    /// The caller is responsible for moving the item and restoring the selection inside the scope, and the scope must be disposed after moving,
+    /// otherwise the transitions will stay disabled. Call <see cref="MovingItemScope.Cancel"/> instead of disposing the scope if moving the item failed.
+    /// </remarks>
+    /// <param name="index">Index of the item to be moved.</param>
+    /// <param name="newIndex">Index of the new position of the item.</param>
+    /// <param name="scrollIntoView">True to scroll header of the item into view when disposing the scope.</param>
+    /// <returns><see cref="MovingItemScope"/> which represents the scope. A scope which does nothing will be returned if <paramref name="index"/> or <paramref name="newIndex"/> is invalid, or they are the same.</returns>
+    public MovingItemScope EnterMovingItemScope(int index, int newIndex, bool scrollIntoView = true)
+    {
+        // check state
+        this.VerifyAccess();
+        var itemCount = this.ItemCount;
+        if (index < 0 || index >= itemCount || newIndex < 0 || newIndex >= itemCount || index == newIndex)
+            return MovingItemScope.Invalid;
+        
+        // enter scope
+        if (this.SelectedIndex == index)
+            this.PseudoClasses.Set(MovingSelectedItemPseudoClass, true);
+        var scope = new MovingItemScope(this, newIndex, scrollIntoView);
+        this.movingItemScopes ??= new();
+        this.movingItemScopes.Add(scope);
+        return scope;
+    }
+    
+    
+    // Exit scope of moving item.
+    void ExitMovingItemScope(MovingItemScope scope, bool success)
+    {
+        this.VerifyAccess();
+        if (this.movingItemScopes.IsNullOrEmpty() || !this.movingItemScopes.Remove(scope))
+            return;
+        if (this.movingItemScopes.IsEmpty())
+            this.PseudoClasses.Set(MovingSelectedItemPseudoClass, false);
+        if (success && scope.ScrollIntoView)
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (scope.NewIndex < this.ItemCount)
+                    this.ScrollHeaderIntoView(scope.NewIndex);
+            });
         }
     }
 
@@ -744,37 +831,19 @@ public class TabControl : Avalonia.Controls.TabControl
     /// <returns>True if the item has been moved successfully.</returns>
     public bool TryMoveItem<T>(int index, int newIndex, Func<IEnumerable, int, int, bool>? moveItemFunc = null, bool scrollIntoView = true)
     {
-        // check state
-        var itemCount = this.ItemCount;
-        if (index < 0 || index >= itemCount || newIndex < 0 || newIndex >= itemCount)
-            return false;
-        if (index == newIndex)
+        // enter moving item scope
+        using var scope = this.EnterMovingItemScope(index, newIndex, scrollIntoView);
+        if (ReferenceEquals(scope, MovingItemScope.Invalid))
+        {
+            var itemCount = this.ItemCount;
+            return index >= 0 && index < itemCount && newIndex >= 0 && newIndex < itemCount && index == newIndex;
+        }
+
+        // move item
+        if (TabControlExtensions.TryMoveItem<T>(this, index, newIndex, moveItemFunc, false))
             return true;
-
-        // [Workaround] Disable transitions of selection while moving selected item, because selection will be moved to first item by Avalonia and restored after moving
-        var wasMovingSelectedItem = this.PseudoClasses.Contains(MovingSelectedItemPseudoClass);
-        this.PseudoClasses.Set(MovingSelectedItemPseudoClass, wasMovingSelectedItem || this.SelectedIndex == index);
-        try
-        {
-            // move item
-            if (!TabControlExtensions.TryMoveItem<T>(this, index, newIndex, moveItemFunc, false))
-                return false;
-
-            // scroll header of item into view
-            if (scrollIntoView)
-            {
-                Dispatcher.UIThread.Post(() =>
-                {
-                    if (newIndex < this.ItemCount)
-                        this.ScrollHeaderIntoView(newIndex);
-                });
-            }
-        }
-        finally
-        {
-            this.PseudoClasses.Set(MovingSelectedItemPseudoClass, wasMovingSelectedItem);
-        }
-        return true;
+        scope.Cancel();
+        return false;
     }
 
 
