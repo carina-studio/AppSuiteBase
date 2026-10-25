@@ -86,7 +86,26 @@ partial class AppSuiteApplication
                 {
                     ((AppSuiteApplication)Current).macOSAppDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
                 });
+                cls.DefineMethod<IntPtr>("applicationWillTerminate:", (_, cmd, notification) =>
+                {
+                    // restore base delegate so that it can release its resources before terminating
+                    var appDelegate = ((AppSuiteApplication)Current).macOSAppDelegate;
+                    appDelegate?.RestoreBaseAppDelegate();
+
+                    // forward to base delegate
+                    appDelegate?.SendMessageToBaseAppDelegate(cmd, notification);
+                });
             });
+        }
+
+        // Restore base delegate as delegate of application.
+        void RestoreBaseAppDelegate()
+        {
+            if (baseAppDelegate is null)
+                return;
+            var nsApp = NSApplication.Current;
+            if (nsApp is not null)
+                nsApp.Delegate = baseAppDelegate;
         }
 
         // Send message to base delegate.
