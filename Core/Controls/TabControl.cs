@@ -17,6 +17,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 
 namespace CarinaStudio.AppSuite.Controls;
@@ -98,6 +99,7 @@ public class TabControl : Avalonia.Controls.TabControl
     double tabStripSize = -1;
     ThicknessRenderingAnimator? tabStripScrollViewerMarginAnimator;
     readonly ScheduledAction updateTabStripScrollViewerMarginAction;
+    long windowStateChangedTimestamp;
 
 
     /// <summary>
@@ -685,6 +687,16 @@ public class TabControl : Avalonia.Controls.TabControl
         if (!this.FindItemPointerOver(e, out this.pointerPressedItemIndex, out this.pointerPressedItem))
             return;
 
+        // [Workaround] Ignore pressing on item right after changing window state by double-clicking on title bar. The window state is changed when pointer pressed and the event is delivered with the position before changing window state, which causes unexpected selection of item
+        var doubleTapTime = this.GetPlatformSettings()?.GetDoubleTapTime(e.Pointer.Type) ?? TimeSpan.FromMilliseconds(500);
+        if (Stopwatch.GetElapsedTime(this.windowStateChangedTimestamp) < doubleTapTime)
+        {
+            this.pointerPressedItem = null;
+            this.pointerPressedItemIndex = -1;
+            e.Handled = true;
+            return;
+        }
+
         // keep pressed position
         this.pointerPressedEventArgs = e;
         this.pointerPressedPosition = pointer.Position;
@@ -732,6 +744,11 @@ public class TabControl : Avalonia.Controls.TabControl
     // Called on property of window changed.
     void OnWindowPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
+        // keep time of changing window state
+        if (e.Property == Avalonia.Controls.Window.WindowStateProperty)
+            this.windowStateChangedTimestamp = Stopwatch.GetTimestamp();
+
+        // update margin of tab strip
         if (e.Property == Avalonia.Controls.Window.ExtendClientAreaToDecorationsHintProperty
             || e.Property == Avalonia.Controls.Window.WindowStateProperty
             || e.Property == Window.IsSystemChromeVisibleInClientAreaProperty)
