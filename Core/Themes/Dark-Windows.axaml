@@ -35,14 +35,14 @@
 		<Color x:Key="Color/Menu.Background">#2c2c2c</Color>
 		
 		<!-- TabControl -->
-		<Color x:Key="Color/TabControl.TabStrip.Border">#3d3d3d</Color>
+		<Color x:Key="Color/TabControl.TabStrip.Border">#555555</Color>
 		
 		<!-- TabItem -->
 		<Color x:Key="Color/TabItem.Header.Background">#002c2c2c</Color>
 		<Color x:Key="Color/TabItem.Header.Background.PointerOver">#af2c2c2c</Color>
 		<Color x:Key="Color/TabItem.Header.Background.Selected">#2c2c2c</Color>
-		<Color x:Key="Color/TabItem.Header.Border.PointerOver">#2e2e2e</Color>
-		<Color x:Key="Color/TabItem.Header.Border.Selected">#2e2e2e</Color>
+		<Color x:Key="Color/TabItem.Header.Border.PointerOver">#4a4a4a</Color>
+		<Color x:Key="Color/TabItem.Header.Border.Selected">#555555</Color>
 		
 		<!-- TextBox -->
 		<SolidColorBrush x:Key="TextControlBackground" Color="#131313"/>
