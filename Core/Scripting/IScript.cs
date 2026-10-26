@@ -122,7 +122,6 @@ public static class ScriptExtensions
     
     // Fields.
     static readonly ConcurrentStack<CancellationTokenSource> cachedCancellationTokenSources = new();
-    static Stopwatch? stopwatch;
     
     
     /// <summary>
@@ -173,14 +172,13 @@ public static class ScriptExtensions
         var runningTask = script.RunAsync<object?>(context, cancellationTokenSource.Token);
         
         // wait for completion
-        stopwatch ??= new Stopwatch().Also(it => it.Start());
-        var startTime = stopwatch.ElapsedMilliseconds;
+        var startTimestamp = Stopwatch.GetTimestamp();
         do
         {
             if (runningTask.IsCompleted)
                 break;
             Thread.Yield();
-        } while ((stopwatch.ElapsedMilliseconds - startTime) < 100);
+        } while (Stopwatch.GetElapsedTime(startTimestamp).TotalMilliseconds < 100);
         while (!runningTask.IsCompleted)
         {
             if (runningTask.Wait(checkingInternal))
@@ -239,14 +237,13 @@ public static class ScriptExtensions
         var runningTask = script.RunAsync<R>(context, cancellationTokenSource.Token);
         
         // wait for completion
-        stopwatch ??= new Stopwatch().Also(it => it.Start());
-        var startTime = stopwatch.ElapsedMilliseconds;
+        var startTimestamp = Stopwatch.GetTimestamp();
         do
         {
             if (runningTask.IsCompleted)
                 break;
             Thread.Yield();
-        } while ((stopwatch.ElapsedMilliseconds - startTime) < 100);
+        } while (Stopwatch.GetElapsedTime(startTimestamp).TotalMilliseconds < 100);
         while (!runningTask.IsCompleted)
         {
             if (cancellationCheck?.Invoke() == true)

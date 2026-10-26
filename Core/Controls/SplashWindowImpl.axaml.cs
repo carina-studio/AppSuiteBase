@@ -42,12 +42,12 @@ class SplashWindowImpl : Avalonia.Controls.Window
 	Uri? backgroundImageUri;
 	Uri? iconUri;
 	readonly TaskCompletionSource initAnimationTaskCompletionSource = new(); 
+	long openedTimestamp;
 	TaskCompletionSource? progressAnimationTaskSource;
 	DoubleRenderingAnimator? progressAnimator;
 	readonly ProgressBar progressBar;
 	TaskCompletionSource? renderingTaskSource;
 	readonly ScheduledAction showAction;
-	readonly Stopwatch stopwatch = new();
 
 
 	/// <summary>
@@ -71,7 +71,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 		{
 			// get screen info
 			var screen = this.Screens.ScreenFromWindow(this);
-			if (screen is null && this.stopwatch.ElapsedMilliseconds < MaxShowingRetryingDuration)
+			if (screen is null && Stopwatch.GetElapsedTime(this.openedTimestamp).TotalMilliseconds < MaxShowingRetryingDuration)
 			{
 				this.showAction?.Schedule(RetryShowingDelay);
 				return;
@@ -260,7 +260,6 @@ class SplashWindowImpl : Avalonia.Controls.Window
 		this.appInfo.Dispose();
 		this.progressAnimator?.Cancel();
 		this.showAction.Cancel();
-		this.stopwatch.Stop();
 		base.OnClosed(e);
 	}
 
@@ -272,7 +271,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 		base.OnOpened(e);
 
 		// show window
-		this.stopwatch.Start();
+		this.openedTimestamp = Stopwatch.GetTimestamp();
 		this.showAction.Schedule();
 		
 		// bring to front

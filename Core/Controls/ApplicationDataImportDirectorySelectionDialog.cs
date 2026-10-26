@@ -81,15 +81,14 @@ public class ApplicationDataImportDirectorySelectionDialog : CommonDialog<string
         }
         
         // validate directory
-        var stopWatch = new Stopwatch();
-        stopWatch.Start();
+        var validationStartTimestamp = Stopwatch.GetTimestamp();
         var processingDialog = new ProcessingDialog
         {
             Message = app.GetObservableString("Common.Validating")
         };
         _ = processingDialog.ShowDialog(owner);
         var isValidDirectory = await app.ValidateApplicationDataImportAsync(directory, CancellationToken.None);
-        var validationDelay = 1000 - stopWatch.ElapsedMilliseconds;
+        var validationDelay = 1000 - (long)Stopwatch.GetElapsedTime(validationStartTimestamp).TotalMilliseconds;
         if (validationDelay > 0)
             await Task.Delay((int)validationDelay);
         processingDialog.Complete();

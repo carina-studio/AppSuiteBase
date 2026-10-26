@@ -15,9 +15,8 @@ namespace CarinaStudio.AppSuite.Controls;
 public class ListBox : Avalonia.Controls.ListBox
 {
     // Fields.
-    long doubleTappedTime;
+    long doubleTappedTimestamp;
     object? pointerDownItem;
-    readonly Stopwatch stopwatch = new();
 
 
     /// <summary>
@@ -37,25 +36,9 @@ public class ListBox : Avalonia.Controls.ListBox
     public event EventHandler<ListBoxItemEventArgs>? DoubleClickOnItem;
 
 
-    /// <inheritdoc/>
-    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        base.OnAttachedToVisualTree(e);
-        this.stopwatch.Start();
-    }
-
-
-    /// <inheritdoc/>
-    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        this.stopwatch.Stop();
-        base.OnDetachedFromVisualTree(e);
-    }
-
-
     // Called when double tapped.
     void OnDoubleTapped(object? sender, RoutedEventArgs e) =>
-        this.doubleTappedTime = this.stopwatch.ElapsedMilliseconds;
+        this.doubleTappedTimestamp = Stopwatch.GetTimestamp();
 
 
     // Pointer pressed.
@@ -83,7 +66,7 @@ public class ListBox : Avalonia.Controls.ListBox
     void OnPreviewPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
         if (e.InitialPressMouseButton == MouseButton.Left 
-            && (this.stopwatch.ElapsedMilliseconds - this.doubleTappedTime) <= 500
+            && Stopwatch.GetElapsedTime(this.doubleTappedTimestamp).TotalMilliseconds <= 500
             && this.pointerDownItem is not null
             && this.SelectedItems?.Count == 1
             && this.pointerDownItem.Equals(this.SelectedItem))

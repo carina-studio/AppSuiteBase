@@ -46,11 +46,10 @@ public class ProcessInfo : INotifyPropertyChanged
 	volatile bool isFirstUpdate = true;
 	long latestGCCount;
 	readonly ILogger logger;
-	long previousProcessInfoUpdateTime;
+	long previousProcessInfoUpdateTimestamp;
 	TimeSpan previousTotalProcessorTime;
 	readonly Process process = Process.GetCurrentProcess();
     readonly SingleThreadSynchronizationContext processInfoCheckingSyncContext = new("Process information updater");
-	readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
 	readonly object uiResponseCheckingSyncLock = new();
     readonly ScheduledAction updateProcessInfoAction;
 
@@ -256,14 +255,14 @@ public class ProcessInfo : INotifyPropertyChanged
 		while (true)
 		{
 			// check response duration
-			var pingTime = stopWatch.ElapsedMilliseconds;
+			var pingTimestamp = Stopwatch.GetTimestamp();
 			var duration = 0L;
 			lock (syncLock)
 			{
 				var localCheckingId = checkingId;
 				this.app.SynchronizationContext.Post(() =>
 				{
-					duration = stopWatch.ElapsedMilliseconds - pingTime;
+					duration = (long)Stopwatch.GetElapsedTime(pingTimestamp).TotalMilliseconds;
 					lock (syncLock)
 					{
 						if (localCheckingId == checkingId)
@@ -345,7 +344,7 @@ public class ProcessInfo : INotifyPropertyChanged
 		var finalizationPendingCount = 0L;
 		var cpuUsagePercentage = double.NaN;
 		var threadCount = this.ThreadCount;
-		var updateTime = this.stopWatch.ElapsedMilliseconds;
+		var updateTimestamp = Stopwatch.GetTimestamp();
 		try
 		{
 			this.process.Refresh();
@@ -368,19 +367,19 @@ public class ProcessInfo : INotifyPropertyChanged
 					gcCount += GC.CollectionCount(i);
 				this.latestGCCount = gcCount;
 				gcCount -= latestGCCount;
-				if (this.previousProcessInfoUpdateTime > 0)
+				if (this.previousProcessInfoUpdateTimestamp != 0)
 				{
 					if (gcCount > 0)
-						gcFrequency = (gcCount * 1000.0 / (updateTime - this.previousProcessInfoUpdateTime));
+						gcFrequency = (gcCount * 1000.0 / Stopwatch.GetElapsedTime(this.previousProcessInfoUpdateTimestamp, updateTimestamp).TotalMilliseconds);
 					else
 						gcFrequency = 0;
 				}
 			}
 			finalizationPendingCount = gcMemoryInfo.FinalizationPendingCount;
-			if (this.previousProcessInfoUpdateTime > 0)
+			if (this.previousProcessInfoUpdateTimestamp != 0)
 			{
 				var processorTime = (totalProcessorTime - this.previousTotalProcessorTime);
-				var updateInterval = (updateTime - this.previousProcessInfoUpdateTime);
+				var updateInterval = Stopwatch.GetElapsedTime(this.previousProcessInfoUpdateTimestamp, updateTimestamp).TotalMilliseconds;
 				cpuUsagePercentage = (processorTime.TotalMilliseconds * 100.0 / updateInterval);
 				if (Platform.IsNotMacOS)
 					cpuUsagePercentage /= Environment.ProcessorCount;
@@ -393,7 +392,7 @@ public class ProcessInfo : INotifyPropertyChanged
 		}
 		finally
 		{
-			this.previousProcessInfoUpdateTime = updateTime;
+			this.previousProcessInfoUpdateTimestamp = updateTimestamp;
 		}
 
 		// report state

@@ -421,14 +421,14 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     ScheduledAction? checkUpdateInfoAction;
     volatile ISettings? configuration;
     readonly string configurationFilePath;
-    readonly long creationTime;
+    readonly long creationTimestamp;
     volatile CultureInfo cultureInfo = CultureInfo.GetCultureInfo("en-US");
     ScheduledAction? deactivateAction;
     CancellationTokenSource? deactivationActionCancellationTokenSource;
     string defaultFontFamilyName = "";
     readonly Styles extraStyles = new();
     ScheduledAction? flushUsageDataAction;
-    long frameworkInitializedTime;
+    long frameworkInitializedTimestamp;
     volatile HardwareInfo? hardwareInfo;
     bool isCriticalShutdownStarted;
     bool isLaunchedEventTracked;
@@ -437,7 +437,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     bool isRestartRequested;
     bool isShutdownStarted;
     bool isShuttingDownProcessStarted;
-    readonly Stopwatch launchTopWatch = new Stopwatch().Also(it => it.Start());
+    readonly long launchStartTimestamp = Stopwatch.GetTimestamp();
+    long launchTime = -1;
     IDisposable? launchTracingToken;
     Task? loadingInitPersistentStateTask;
     Task? loadingInitSettingsTask;
@@ -454,7 +455,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     volatile PersistentSettings? persistentState;
     readonly string persistentStateFilePath;
     int persistentStateLoadingCounter;
-    long prepareStartingTime;
+    long prepareStartingTimestamp;
     volatile ProcessInfo? processInfo;
     IDisposable? processInfoHfUpdateToken;
     [Obfuscation(Exclude = false)]
@@ -466,9 +467,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     int settingsLoadingCounter;
     ShutdownSource shutdownSource = ShutdownSource.None;
     SplashWindowImpl? splashWindow;
-    long splashWindowShownTime;
+    long splashWindowShownTimestamp;
     ScheduledAction? stopUserInteractionAction;
-    readonly Stopwatch stopWatch = new Stopwatch().Also(it => it.Start());
     ResourceDictionary? stringResource;
     CultureInfo? stringResourceCulture;
     IStyle? styles;
@@ -505,7 +505,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         LogToConsole("Initialize AppSuiteApplication instance [start]");
         
         // get time for performance check
-        this.creationTime = this.stopWatch.ElapsedMilliseconds;
+        this.creationTimestamp = Stopwatch.GetTimestamp();
         
         // check first launch
         // ReSharper disable VirtualMemberCallInConstructor
@@ -1167,7 +1167,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         this.checkUpdateInfoAction?.Reschedule(Math.Max(10 * 60 * 1000 /* 10 mins */, this.Configuration.GetValueOrDefault(ConfigurationKeys.AppUpdateInfoCheckingInterval)));
 
         // check update by package manifest
-        var stopWatch = new Stopwatch().Also(it => it.Start());
+        var checkingStartTimestamp = Stopwatch.GetTimestamp();
         var checkingTasks = new Task[manifestUris.Length];
         var packageResolvers = new IPackageResolver[manifestUris.Length];
         var selectedAppUpdateInfo = default(ApplicationUpdateInfo);
@@ -1211,10 +1211,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             packageResolvers[i].Dispose();
 
         // delay to make UX better
-        var delay = (1000 - stopWatch.ElapsedMilliseconds);
+        var delay = (1000 - (long)Stopwatch.GetElapsedTime(checkingStartTimestamp).TotalMilliseconds);
         if (delay > 0)
             await Task.Delay((int)delay);
-        stopWatch.Stop();
 
         // check version
         if (selectedAppUpdateInfo == null)
@@ -2355,7 +2354,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     async Task LoadPersistentStateAsync(bool isFirstLoad)
     {
         // check performance
-        var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+        var timestamp = this.IsDebugMode ? Stopwatch.GetTimestamp() : 0L;
 
         // check state
         this.VerifyAccess();
@@ -2504,10 +2503,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         });
 
         // check performance
-        if (time > 0)
+        if (timestamp != 0)
         {
-            time = this.stopWatch.ElapsedMilliseconds - time;
-            this.Logger.LogTrace("[Performance] Took {time} ms to load persistent state", time);
+            this.Logger.LogTrace("[Performance] Took {time} ms to load persistent state", (long)Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds);
         }
     }
 
@@ -2519,7 +2517,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     public async Task LoadSettingsAsync()
     {
         // check performance
-        var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+        var timestamp = this.IsDebugMode ? Stopwatch.GetTimestamp() : 0L;
 
         // check state
         this.VerifyAccess();
@@ -2573,10 +2571,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.processInfoHfUpdateToken ??= this.processInfo?.RequestHighFrequencyUpdate();
         
         // check performance
-        if (time > 0)
+        if (timestamp != 0)
         {
-            time = this.stopWatch.ElapsedMilliseconds - time;
-            this.Logger.LogTrace("[Performance] Took {time} ms to load settings", time);
+            this.Logger.LogTrace("[Performance] Took {time} ms to load settings", (long)Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds);
         }
     }
 
@@ -2858,8 +2855,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         };
         
         // check performance
-        this.frameworkInitializedTime = this.stopWatch.ElapsedMilliseconds;
-        this.Logger.LogTrace("[Performance] Took {duration} ms to initialize Avalonia framework", this.frameworkInitializedTime - this.creationTime);
+        this.frameworkInitializedTimestamp = Stopwatch.GetTimestamp();
+        this.Logger.LogTrace("[Performance] Took {duration} ms to initialize Avalonia framework", (long)Stopwatch.GetElapsedTime(this.creationTimestamp, this.frameworkInitializedTimestamp).TotalMilliseconds);
         
         // call base
         base.OnFrameworkInitializationCompleted();
@@ -3073,14 +3070,14 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 return;
             
             // check performance
-            this.prepareStartingTime = this.stopWatch.ElapsedMilliseconds;
-            this.Logger.LogTrace("[Performance] Took {duration} ms to perform actions before starting", this.prepareStartingTime - this.frameworkInitializedTime);
+            this.prepareStartingTimestamp = Stopwatch.GetTimestamp();
+            this.Logger.LogTrace("[Performance] Took {duration} ms to perform actions before starting", (long)Stopwatch.GetElapsedTime(this.frameworkInitializedTimestamp, this.prepareStartingTimestamp).TotalMilliseconds);
 
             // load configuration
-            var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+            var timestamp = this.IsDebugMode ? Stopwatch.GetTimestamp() : 0L;
             await this.LoadConfigurationAsync();
-            if (time > 0)
-                this.Logger.LogTrace("[Performance] Took {duration} ms to load configuration", this.stopWatch.ElapsedMilliseconds - time);
+            if (timestamp != 0)
+                this.Logger.LogTrace("[Performance] Took {duration} ms to load configuration", (long)Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds);
             if (this.Configuration.GetValueOrDefault(ConfigurationKeys.EnableAvaloniaVerboseLogging))
             {
                 (Avalonia.Logging.Logger.Sink as AvaloniaLogSink)?.Let(it =>
@@ -3311,7 +3308,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// <param name="viewModel">The view-model of the main window.</param>
     protected virtual void OnMainWindowOpened(MainWindow mainWindow, ViewModel viewModel)
     {
-        this.launchTopWatch.Stop();
+        if (this.launchTime < 0)
+            this.launchTime = (long)Stopwatch.GetElapsedTime(this.launchStartTimestamp).TotalMilliseconds;
         this.TrackLaunchedEvent();
         this.usageManager?.TrackMetric(UsageMetrics.MainWindowCount, this.mainWindows.Count);
     }
@@ -3515,29 +3513,29 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         });
 
         // create base themes
-        var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+        var timestamp = this.IsDebugMode ? Stopwatch.GetTimestamp() : 0L;
         this.Styles.Add(new FluentTheme());
-        if (time > 0)
+        if (timestamp != 0)
         {
-            this.Logger.LogTrace("[Performance] Took {duration} ms to create fluent theme", this.stopWatch.ElapsedMilliseconds - time);
-            time = this.stopWatch.ElapsedMilliseconds;
+            this.Logger.LogTrace("[Performance] Took {duration} ms to create fluent theme", (long)Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds);
+            timestamp = Stopwatch.GetTimestamp();
         }
         this.Styles.Add(new RangeSliderTheme());
-        if (time > 0)
-            this.Logger.LogTrace("[Performance] Took {duration} ms to create range slider theme", this.stopWatch.ElapsedMilliseconds - time);
+        if (timestamp != 0)
+            this.Logger.LogTrace("[Performance] Took {duration} ms to create range slider theme", (long)Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds);
 
         // show splash window
         var showSplashWindow = this.IsSplashWindowNeeded && this.Settings.GetValueOrDefault(SettingKeys.LaunchWithSplashWindow);
         if (showSplashWindow)
         {
             LogToConsole("Show splash window");
-            time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+            timestamp = this.IsDebugMode ? Stopwatch.GetTimestamp() : 0L;
             var splashWindowParams = this.OnPrepareSplashWindow();
-            if (time > 0)
+            if (timestamp != 0)
             {
-                var currentTime = this.stopWatch.ElapsedMilliseconds;
-                this.Logger.LogTrace("[Performance] Took {duration} ms to prepare parameters of splash window", currentTime - time);
-                time = currentTime;
+                var currentTimestamp = Stopwatch.GetTimestamp();
+                this.Logger.LogTrace("[Performance] Took {duration} ms to prepare parameters of splash window", (long)Stopwatch.GetElapsedTime(timestamp, currentTimestamp).TotalMilliseconds);
+                timestamp = currentTimestamp;
             }
             this.splashWindow = new SplashWindowImpl
             {
@@ -3547,14 +3545,14 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 IconUri = splashWindowParams.IconUri,
                 MessageColor = splashWindowParams.MessageColor,
             };
-            if (time > 0)
+            if (timestamp != 0)
             {
-                var currentTime = this.stopWatch.ElapsedMilliseconds;
-                this.Logger.LogTrace("[Performance] Took {duration} ms to create splash window", currentTime - time);
-                //time = currentTime;
+                var currentTimestamp = Stopwatch.GetTimestamp();
+                this.Logger.LogTrace("[Performance] Took {duration} ms to create splash window", (long)Stopwatch.GetElapsedTime(timestamp, currentTimestamp).TotalMilliseconds);
+                //timestamp = currentTimestamp;
             }
             this.splashWindow.Show();
-            this.splashWindowShownTime = this.stopWatch.ElapsedMilliseconds;
+            this.splashWindowShownTimestamp = Stopwatch.GetTimestamp();
             await this.splashWindow.WaitForInitialAnimationAsync();
         }
 
@@ -4247,7 +4245,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     public void PerformGC(GCCollectionMode collectionMode = GCCollectionMode.Default)
     { 
         this.Logger.LogWarning("Perform GC with mode {mode}", collectionMode);
-        var stopwatch = this.IsDebugMode ? new Stopwatch().Also(it => it.Start()) : null;
+        var startTimestamp = this.IsDebugMode ? Stopwatch.GetTimestamp() : 0L;
         switch (collectionMode)
         {
 #if NET7_0_OR_GREATER
@@ -4265,11 +4263,8 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 GC.Collect(Math.Min(1, GC.MaxGeneration), GCCollectionMode.Default, true);
                 break;
         }
-        if (stopwatch is not null)
-        {
-            this.Logger.LogTrace("[Performance] Took {time} ms to perform GC with mode {mode}", stopwatch.ElapsedMilliseconds, collectionMode);
-            stopwatch.Stop();
-        }
+        if (startTimestamp != 0)
+            this.Logger.LogTrace("[Performance] Took {time} ms to perform GC with mode {mode}", (long)Stopwatch.GetElapsedTime(startTimestamp).TotalMilliseconds, collectionMode);
     }
 
 
@@ -5035,12 +5030,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.UpdateStyles();
 
         // create view-model
-        var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+        var timestamp = this.IsDebugMode ? Stopwatch.GetTimestamp() : 0L;
         if (viewModel is null)
         {
             viewModel = this.OnCreateMainWindowViewModel(null);
-            if (time > 0)
-                this.Logger.LogTrace("[Performance] Took {time} ms to create view-model of main window", this.stopWatch.ElapsedMilliseconds - time);
+            if (timestamp != 0)
+                this.Logger.LogTrace("[Performance] Took {time} ms to create view-model of main window", (long)Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds);
         }
 
         // create and show window later if restarting main windows
@@ -5052,15 +5047,15 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         }
 
         // create main window
-        time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+        timestamp = this.IsDebugMode ? Stopwatch.GetTimestamp() : 0L;
         var mainWindow = this.OnCreateMainWindow();
         if (mainWindowCount != this.mainWindows.Count)
         {
             viewModel.Dispose();
             throw new InternalStateCorruptedException("Nested main window showing found.");
         }
-        if (time > 0)
-            this.Logger.LogTrace("[Performance] Took {time} ms to create main window", this.stopWatch.ElapsedMilliseconds - time);
+        if (timestamp != 0)
+            this.Logger.LogTrace("[Performance] Took {time} ms to create main window", (long)Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds);
 
         // attach to main window
         var mainWindowHolder = new MainWindowHolder(viewModel, mainWindow, windowCreatedAction);
@@ -5100,7 +5095,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         }
         if (this.splashWindow is not null)
         {
-            var duration = this.stopWatch.ElapsedMilliseconds - this.splashWindowShownTime;
+            var duration = (long)Stopwatch.GetElapsedTime(this.splashWindowShownTimestamp).TotalMilliseconds;
             var minDuration = Math.Max(0, this.Configuration.GetValueOrDefault(ConfigurationKeys.MinSplashWindowDuration));
             this.Logger.LogTrace("[Performance] Took {duration} ms between showing splash window and main window", duration);
             var delay = minDuration - duration;
@@ -5126,9 +5121,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             {
                 if (!mainWindowHolder.Window.IsClosed)
                 {
-                    var startTime = this.stopWatch.ElapsedMilliseconds;
+                    var startTimestamp = Stopwatch.GetTimestamp();
                     mainWindowHolder.Window.DataContext = mainWindowHolder.ViewModel;
-                    this.Logger.LogTrace("[Performance] Took {duration} ms to set view-model to main window {id:x8}", this.stopWatch.ElapsedMilliseconds - startTime, mainWindowHolder.Window.GetHashCode());
+                    this.Logger.LogTrace("[Performance] Took {duration} ms to set view-model to main window {id:x8}", (long)Stopwatch.GetElapsedTime(startTimestamp).TotalMilliseconds, mainWindowHolder.Window.GetHashCode());
                 }
             });
             
@@ -5148,9 +5143,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 if (!mainWindowHolder.Window.IsClosed)
                 {
                     this.Logger.LogTrace("Show main window {id:x8}", mainWindowHolder.Window.GetHashCode());
-                    var startTime = this.stopWatch.ElapsedMilliseconds;
+                    var startTimestamp = Stopwatch.GetTimestamp();
                     mainWindowHolder.Window.Show();
-                    this.Logger.LogTrace("[Performance] Took {duration} ms to show main window {id:x8}", this.stopWatch.ElapsedMilliseconds - startTime, mainWindowHolder.Window.GetHashCode());
+                    this.Logger.LogTrace("[Performance] Took {duration} ms to show main window {id:x8}", (long)Stopwatch.GetElapsedTime(startTimestamp).TotalMilliseconds, mainWindowHolder.Window.GetHashCode());
                 }
             });
             
@@ -5733,7 +5728,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     void TrackLaunchedEvent()
     {
         if (this.isLaunchedEventTracked
-            || this.launchTopWatch.IsRunning
+            || this.launchTime < 0
             || this.settings is null
             || this.usageManager?.IsEnabled != true)
         {
@@ -5748,7 +5743,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 ? false.ToString(CultureInfo.InvariantCulture) 
                 : this.productManager.IsProductActivated(this.ProVersionProductId).ToString(CultureInfo.InvariantCulture),
             [UsageProperties.IsRunningAsAdministrator] = this.IsRunningAsAdministrator.ToString(CultureInfo.InvariantCulture),
-            [UsageProperties.LaunchTime] = this.launchTopWatch.ElapsedMilliseconds.ToString(CultureInfo.InvariantCulture),
+            [UsageProperties.LaunchTime] = this.launchTime.ToString(CultureInfo.InvariantCulture),
             [UsageProperties.SystemCulture] = CultureInfo.CurrentUICulture.Name,
             [UsageProperties.SystemThemeMode] = this.systemThemeMode.ToString(),
             [UsageProperties.ThemeMode] = this.settings.GetValueOrDefault(SettingKeys.ThemeMode).ToString(),
@@ -5840,7 +5835,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     void UpdateLogOutputToLocalhost()
     {
         // check performance
-        var time = this.IsDebugMode && !this.IsFirstLaunch ? this.stopWatch.ElapsedMilliseconds : 0L;
+        var timestamp = this.IsDebugMode && !this.IsFirstLaunch ? Stopwatch.GetTimestamp() : 0L;
 
         // get port
         var port = this.PersistentState.GetValueOrDefault(LogOutputTargetPortKey);
@@ -5867,10 +5862,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.SetupLogNetworkTarget(config, port);
 
         // check performance
-        if (time > 0)
+        if (timestamp != 0)
         {
-            time = this.stopWatch.ElapsedMilliseconds - time;
-            this.Logger.LogTrace("[Performance] Took {time} ms to update log output to localhost", time);
+            this.Logger.LogTrace("[Performance] Took {time} ms to update log output to localhost", (long)Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds);
         }
     }
 
@@ -5901,7 +5895,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     void UpdateStringResources()
     {
         // check performance
-        var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+        var timestamp = this.IsDebugMode ? Stopwatch.GetTimestamp() : 0L;
 
         // update string resources
         var resourceUpdated = false;
@@ -5996,10 +5990,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.OnStringUpdated(EventArgs.Empty);
         
         // check performance
-        if (time > 0)
+        if (timestamp != 0)
         {
-            time = this.stopWatch.ElapsedMilliseconds - time;
-            this.Logger.LogTrace("[Performance] Took {time} ms to update string resources", time);
+            this.Logger.LogTrace("[Performance] Took {time} ms to update string resources", (long)Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds);
         }
     }
 
@@ -6012,7 +6005,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         var themeMode = this.SelectCurrentThemeMode();
 
         // update styles
-        var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+        var timestamp = this.IsDebugMode ? Stopwatch.GetTimestamp() : 0L;
         if (this.styles is null 
             || this.stylesThemeMode != themeMode)
         {
@@ -6022,11 +6015,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 ThemeMode.Light => ThemeVariant.Light,
                 _ => ThemeVariant.Dark,
             };
-            if (time > 0)
+            if (timestamp != 0)
             {
-                var currentTime = this.stopWatch.ElapsedMilliseconds;
-                this.Logger.LogTrace("[Performance] Took {time} ms to setup base theme", currentTime - time);
-                time = currentTime;
+                var currentTimestamp = Stopwatch.GetTimestamp();
+                this.Logger.LogTrace("[Performance] Took {time} ms to setup base theme", (long)Stopwatch.GetElapsedTime(timestamp, currentTimestamp).TotalMilliseconds);
+                timestamp = currentTimestamp;
             }
             
             // remove current styles
@@ -6037,7 +6030,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             }
 
             // load styles
-            var subTime = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+            var subTimestamp = this.IsDebugMode ? Stopwatch.GetTimestamp() : 0L;
 #pragma warning disable IL2026
             this.styles = new StyleInclude(new Uri("avares://CarinaStudio.AppSuite.Core/"))
             {
@@ -6070,11 +6063,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
 #pragma warning restore IL2026
                 });
             }
-            if (subTime > 0)
+            if (subTimestamp != 0)
             {
-                var currentTime = this.stopWatch.ElapsedMilliseconds;
-                this.Logger.LogTrace("[Performance] Took {time} ms to load default theme", currentTime - subTime);
-                subTime = currentTime;
+                var currentTimestamp = Stopwatch.GetTimestamp();
+                this.Logger.LogTrace("[Performance] Took {time} ms to load default theme", (long)Stopwatch.GetElapsedTime(subTimestamp, currentTimestamp).TotalMilliseconds);
+                subTimestamp = currentTimestamp;
             }
             if (!this.AllowTransparentWindows)
             {
@@ -6101,11 +6094,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 {
                     styles.Add(it);
                 }) ?? [ this.styles, it ];
-                if (subTime > 0)
+                if (subTimestamp != 0)
                 {
-                    var currentTime = this.stopWatch.ElapsedMilliseconds;
-                    this.Logger.LogTrace("[Performance] Took {time} ms to load theme", currentTime - subTime);
-                    subTime = currentTime;
+                    var currentTimestamp = Stopwatch.GetTimestamp();
+                    this.Logger.LogTrace("[Performance] Took {time} ms to load theme", (long)Stopwatch.GetElapsedTime(subTimestamp, currentTimestamp).TotalMilliseconds);
+                    subTimestamp = currentTimestamp;
                 }
                 return (IStyle)styles;
             }) ?? this.styles;
@@ -6113,11 +6106,11 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             // apply styles
             this.Styles.Add(this.styles);
             this.stylesThemeMode = themeMode;
-            if (subTime > 0)
+            if (subTimestamp != 0)
             {
-                var currentTime = this.stopWatch.ElapsedMilliseconds;
-                this.Logger.LogTrace("[Performance] Took {time} ms to apply theme", currentTime - subTime);
-                subTime = currentTime;
+                var currentTimestamp = Stopwatch.GetTimestamp();
+                this.Logger.LogTrace("[Performance] Took {time} ms to apply theme", (long)Stopwatch.GetElapsedTime(subTimestamp, currentTimestamp).TotalMilliseconds);
+                subTimestamp = currentTimestamp;
             }
         }
         else if (!this.Styles.Contains(this.styles))
@@ -6214,10 +6207,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         this.CheckRestartingRootWindowsNeeded();
 
         // check performance
-        if (time > 0)
+        if (timestamp != 0)
         {
-            time = this.stopWatch.ElapsedMilliseconds - time;
-            this.Logger.LogTrace("[Performance] Took {time} ms to update styles", time);
+            this.Logger.LogTrace("[Performance] Took {time} ms to update styles", (long)Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds);
         }
     }
 
@@ -6226,7 +6218,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     async Task UpdateSystemThemeModeAsync(bool checkRestartingMainWindows)
     {
         // check performance
-        var time = this.IsDebugMode ? this.stopWatch.ElapsedMilliseconds : 0L;
+        var timestamp = this.IsDebugMode ? Stopwatch.GetTimestamp() : 0L;
 
         // get current theme
         var themeMode = await this.GetSystemThemeModeAsync();
@@ -6242,10 +6234,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.CheckRestartingRootWindowsNeeded();
         
         // check performance
-        if (time > 0)
+        if (timestamp != 0)
         {
-            time = this.stopWatch.ElapsedMilliseconds - time;
-            this.Logger.LogTrace("[Performance] Took {time} ms to update system theme mode", time);
+            this.Logger.LogTrace("[Performance] Took {time} ms to update system theme mode", (long)Stopwatch.GetElapsedTime(timestamp).TotalMilliseconds);
         }
     }
     

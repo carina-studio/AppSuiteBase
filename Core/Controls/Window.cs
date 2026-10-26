@@ -6,7 +6,6 @@ using CarinaStudio.Configuration;
 using CarinaStudio.Threading;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 
 namespace CarinaStudio.AppSuite.Controls;
 
@@ -23,10 +22,6 @@ public abstract class Window : CarinaStudio.Controls.ApplicationWindow<IAppSuite
     /// Property of <see cref="IsSystemChromeVisibleInClientArea"/>.
     /// </summary>
     public static readonly DirectProperty<Window, bool> IsSystemChromeVisibleInClientAreaProperty = AvaloniaProperty.RegisterDirect<Window, bool>(nameof(IsSystemChromeVisibleInClientArea), w => w.isSystemChromeVisibleInClientArea);
-
-
-    // Static fields.
-    internal static readonly Stopwatch Stopwatch = new Stopwatch().Also(it => it.Start());
 
 
     // Fields.

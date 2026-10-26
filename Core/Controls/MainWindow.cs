@@ -89,7 +89,7 @@ public abstract class MainWindow : Window
     bool isShowingInitialDialogs;
     readonly ScheduledAction notifyNetworkConnForActivatingProVersionAction;
     NSWindow? nsWindow;
-    long openedTime;
+    long openedTimestamp;
     readonly ScheduledAction reactivateProVersionAction;
     Notification? reactivateProVersionNotification;
     readonly ScheduledAction restartingRootWindowsAction;
@@ -314,11 +314,9 @@ public abstract class MainWindow : Window
     {
         if (!this.IsOpened && this.Application.IsDebugMode)
         {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
+            var startTimestamp = Stopwatch.GetTimestamp();
             var size = base.MeasureOverride(availableSize);
-            stopwatch.Stop();
-            this.Logger.LogTrace("[Performance] Took {duration} ms to perform layout measurement before opening", stopwatch.ElapsedMilliseconds);
+            this.Logger.LogTrace("[Performance] Took {duration} ms to perform layout measurement before opening", (long)Stopwatch.GetElapsedTime(startTimestamp).TotalMilliseconds);
             return size;
         }
         return base.MeasureOverride(availableSize);
@@ -692,7 +690,7 @@ public abstract class MainWindow : Window
     protected override void OnOpened(EventArgs e)
     {
         // keep time
-        this.openedTime = Stopwatch.ElapsedMilliseconds;
+        this.openedTimestamp = Stopwatch.GetTimestamp();
 
         // call base
         base.OnOpened(e);
@@ -838,7 +836,7 @@ public abstract class MainWindow : Window
                     if (Platform.IsLinux
                         && windowState == WindowState.Normal
                         && this.restoredWindowState != WindowState.Normal
-                        && (Stopwatch.ElapsedMilliseconds - this.openedTime) < RestoringWindowStateOnLinuxDuration)
+                        && Stopwatch.GetElapsedTime(this.openedTimestamp).TotalMilliseconds < RestoringWindowStateOnLinuxDuration)
                     {
                         this.RestoreToSavedSize();
                         this.SynchronizationContext.PostDelayed(() => this.RestoreToSavedWindowState(), 100);
@@ -967,7 +965,7 @@ public abstract class MainWindow : Window
             return;
 
         // show later
-        var delay = InitialDialogsDelay - (Stopwatch.ElapsedMilliseconds - this.openedTime);
+        var delay = InitialDialogsDelay - (long)Stopwatch.GetElapsedTime(this.openedTimestamp).TotalMilliseconds;
         if (delay > 0)
         {
             this.showInitDialogsAction.Reschedule((int)delay);
