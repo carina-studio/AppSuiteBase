@@ -11,14 +11,13 @@ namespace CarinaStudio.AppSuite.Native;
 /// When a window enters full-screen mode, system relocates its title bar with standard window buttons into
 /// an auto-hiding overlay window (NSToolbarFullScreenWindow). The controller hides the content of that overlay
 /// window and shows a new set of standard window buttons at top-left corner of content of window instead, so
-/// the buttons are always visible inside the title bar area drawn by application. When the menu bar won't be
-/// hidden automatically in full-screen mode, the buttons are placed below it and <see cref="TopInset"/> reports
+/// the buttons are always visible inside the title bar area drawn by application. When the menu bar stays over
+/// the top of window in full-screen mode, the buttons are placed below it and <see cref="TopInset"/> reports
 /// the space which needs to be reserved at top of window content.
 /// </remarks>
 class FullScreenWindowControls : IDisposable
 {
     // Constants.
-    const ulong AutoHideMenuBarPresentationOption = 1 << 2; // NSApplicationPresentationAutoHideMenuBar
     const string ButtonsViewClassName = "CarinaStudioFullScreenWindowControlsView";
     const double FallbackButtonLeftInset = 13;
     const double FallbackThickTitleBarHeight = 38;
@@ -34,11 +33,9 @@ class FullScreenWindowControls : IDisposable
     static NSRect CapturedMiniaturizeButtonFrame;
     static double CapturedThickTitleBarHeight;
     static NSRect CapturedZoomButtonFrame;
-    static Selector? CurrentSystemPresentationOptionsSelector;
     static Selector? FillSelector;
     static Selector? FrameSelector;
     static Selector? IgnoresMouseEventsSelector;
-    static Selector? SafeAreaInsetsSelector;
     static Selector? ScreenSelector;
     static Selector? SetFillSelector;
     static Selector? SetFrameSelector;
@@ -141,8 +138,8 @@ class FullScreenWindowControls : IDisposable
             it.IsEnabled = false); // window cannot be minimized in full-screen mode
         this.zoomButton = CreateStandardWindowButton(NSWindow.ButtonType.ZoomButton, style, zoomButtonFrame);
 
-        // layout view of buttons over the title bar area drawn by application, below the menu bar if it won't be hidden, and pin it to top-left corner
-        this.topInset = GetPersistentMenuBarHeight(this.window);
+        // layout view of buttons over the title bar area drawn by application, below the menu bar if it stays over window, and pin it to top-left corner
+        this.topInset = this.GetOverlappingMenuBarHeight();
         this.LayoutButtonsView();
         this.buttonsView.AutoresizingMask = NSView.AutoresizingMaskOptions.MaxXMargin | NSView.AutoresizingMaskOptions.MinYMargin;
 
@@ -348,34 +345,26 @@ class FullScreenWindowControls : IDisposable
     }
 
 
-    // Get height of menu bar which won't be hidden automatically while window is in full-screen mode.
-    static double GetPersistentMenuBarHeight(NSWindow window)
+    // Get height of menu bar which stays over the top of window in full-screen mode.
+    double GetOverlappingMenuBarHeight()
     {
-        // no space needed if menu bar is hidden automatically
-        CurrentSystemPresentationOptionsSelector ??= Selector.FromName("currentSystemPresentationOptions");
-        var presentationOptions = NSApplication.Shared.SendMessage<ulong>(CurrentSystemPresentationOptionsSelector);
-        if ((presentationOptions & AutoHideMenuBarPresentationOption) != 0)
+        // no space needed on Mac with camera housing, system either hides the menu bar or places window below it in full-screen mode,
+        // also keep the default behavior of system if it is unknown whether the Mac has camera housing or not
+        if (MacOS.IsBuiltInDisplayPartiallyOccluded() != false || MacOS.IsCameraHousingScreenPresent())
             return 0;
 
         // get screen of window
         ScreenSelector ??= Selector.FromName("screen");
-        var screenHandle = window.SendMessage<IntPtr>(ScreenSelector);
+        var screenHandle = this.window.SendMessage<IntPtr>(ScreenSelector);
         if (screenHandle == IntPtr.Zero)
             return 0;
 
-        // use space reserved at top of screen as height of menu bar
+        // use the part of window above the visible frame of screen as height of menu bar, it is zero if system places window below the menu bar
         FrameSelector ??= Selector.FromName("frame");
         VisibleFrameSelector ??= Selector.FromName("visibleFrame");
-        var frame = NSObject.SendMessage<NSRect>(screenHandle, FrameSelector);
+        var windowFrame = this.window.SendMessage<NSRect>(FrameSelector);
         var visibleFrame = NSObject.SendMessage<NSRect>(screenHandle, VisibleFrameSelector);
-        var menuBarHeight = (frame.Origin.Y + frame.Size.Height) - (visibleFrame.Origin.Y + visibleFrame.Size.Height);
-
-        // exclude unsafe area at top of screen (camera housing), window is placed below it in full-screen mode and the menu bar is shown inside it,
-        // ignore the remaining space less than 1 point because the visible frame is aligned to whole points but the safe area is not
-        SafeAreaInsetsSelector ??= Selector.FromName("safeAreaInsets");
-        var safeAreaInsets = NSObject.SendMessage<NSEdgeInsets>(screenHandle, SafeAreaInsetsSelector);
-        var persistentMenuBarHeight = menuBarHeight - safeAreaInsets.Top;
-        return persistentMenuBarHeight >= 1 ? persistentMenuBarHeight : 0;
+        return Math.Max(0, (windowFrame.Origin.Y + windowFrame.Size.Height) - (visibleFrame.Origin.Y + visibleFrame.Size.Height));
     }
 
 
@@ -428,7 +417,7 @@ class FullScreenWindowControls : IDisposable
 
 
     /// <summary>
-    /// Get space in points which needs to be reserved at top of window content for the menu bar which won't be hidden automatically in full-screen mode.
+    /// Get space in points which needs to be reserved at top of window content for the menu bar which stays over the top of window in full-screen mode.
     /// </summary>
     public double TopInset => this.topInset;
 
@@ -439,7 +428,7 @@ class FullScreenWindowControls : IDisposable
     public event EventHandler? TopInsetChanged;
 
 
-    // Update space reserved for menu bar, the menu bar may become hidden or shown automatically after changing system settings.
+    // Update space reserved for menu bar, system may place window and menu bar differently after changing settings or screens.
     void UpdateTopInset()
     {
         // skip if buttons are not attached
@@ -447,7 +436,7 @@ class FullScreenWindowControls : IDisposable
             return;
 
         // check height of menu bar
-        var topInset = GetPersistentMenuBarHeight(this.window);
+        var topInset = this.GetOverlappingMenuBarHeight();
         if (Math.Abs(this.topInset - topInset) < 0.01)
             return;
         this.topInset = topInset;
