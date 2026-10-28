@@ -11,9 +11,7 @@ namespace CarinaStudio.AppSuite.Native;
 /// When a window enters full-screen mode, system relocates its title bar with standard window buttons into
 /// an auto-hiding overlay window (NSToolbarFullScreenWindow). The controller hides the content of that overlay
 /// window and shows a new set of standard window buttons at top-left corner of content of window instead, so
-/// the buttons are always visible inside the title bar area drawn by application. When the menu bar stays over
-/// the top of window in full-screen mode, the buttons are placed below it and <see cref="TopInset"/> reports
-/// the space which needs to be reserved at top of window content.
+/// the buttons are always visible inside the title bar area drawn by application.
 /// </remarks>
 class FullScreenWindowControls : IDisposable
 {
@@ -34,16 +32,11 @@ class FullScreenWindowControls : IDisposable
     static double CapturedThickTitleBarHeight;
     static NSRect CapturedZoomButtonFrame;
     static Selector? FillSelector;
-    static Selector? FrameSelector;
     static Selector? IgnoresMouseEventsSelector;
-    static Selector? ScreenSelector;
     static Selector? SetFillSelector;
     static Selector? SetFrameSelector;
     static Selector? SetHighlightedSelector;
     static Selector? SetIgnoresMouseEventsSelector;
-    static Selector? VisibleFrameSelector;
-    static NSString? WindowDidBecomeKeyNotification;
-    static Selector? WindowDidBecomeKeySelector;
     static Selector? WindowDidEnterFullScreenSelector;
     static Selector? WindowWillEnterFullScreenSelector;
     static Selector? WindowWillExitFullScreenSelector;
@@ -57,7 +50,6 @@ class FullScreenWindowControls : IDisposable
     NSControl? miniaturizeButton;
     NSWindow? overlayWindow;
     bool overlayWindowIgnoredMouseEvents;
-    double topInset;
     NSTrackingArea? trackingArea;
     readonly NSWindow window;
     NSControl? zoomButton;
@@ -77,15 +69,12 @@ class FullScreenWindowControls : IDisposable
         this.buttonsView = NSObject.FromHandle<NSView>(viewHandle, true).AsNonNull();
         cls.TrySetClrObject(viewHandle, this);
 
-        // register to receive full-screen and key-window notifications of window
-        WindowDidBecomeKeyNotification ??= new NSString("NSWindowDidBecomeKeyNotification");
-        WindowDidBecomeKeySelector ??= Selector.FromName("windowDidBecomeKey:");
+        // register to receive full-screen notifications of window
         WindowDidEnterFullScreenSelector ??= Selector.FromName("windowDidEnterFullScreen:");
         WindowWillEnterFullScreenSelector ??= Selector.FromName("windowWillEnterFullScreen:");
         WindowWillExitFullScreenSelector ??= Selector.FromName("windowWillExitFullScreen:");
         NSNotificationCenter.Default.Let(it =>
         {
-            it.AddObserver(this.buttonsView, WindowDidBecomeKeySelector, WindowDidBecomeKeyNotification, window);
             it.AddObserver(this.buttonsView, WindowDidEnterFullScreenSelector, NSWindow.DidEnterFullScreenNotification, window);
             it.AddObserver(this.buttonsView, WindowWillEnterFullScreenSelector, NSWindow.WillEnterFullScreenNotification, window);
             it.AddObserver(this.buttonsView, WindowWillExitFullScreenSelector, NSWindow.WillExitFullScreenNotification, window);
@@ -121,7 +110,7 @@ class FullScreenWindowControls : IDisposable
             it.ContentView.AsNonNull().IsHidden = true;
         });
 
-        // let mouse events pass through overlay window, which stays over title bar area drawn by application when menu bar won't be hidden
+        // let mouse events pass through overlay window, which stays over title bar area drawn by application while the menu bar is shown
         IgnoresMouseEventsSelector ??= Selector.FromName("ignoresMouseEvents");
         SetIgnoresMouseEventsSelector ??= Selector.FromName("setIgnoresMouseEvents:");
         this.overlayWindowIgnoredMouseEvents = this.overlayWindow.SendMessage<bool>(IgnoresMouseEventsSelector);
@@ -138,9 +127,10 @@ class FullScreenWindowControls : IDisposable
             it.IsEnabled = false); // window cannot be minimized in full-screen mode
         this.zoomButton = CreateStandardWindowButton(NSWindow.ButtonType.ZoomButton, style, zoomButtonFrame);
 
-        // layout view of buttons over the title bar area drawn by application, below the menu bar if it stays over window, and pin it to top-left corner
-        this.topInset = this.GetOverlappingMenuBarHeight();
-        this.LayoutButtonsView();
+        // layout view of buttons over the title bar area drawn by application and pin it to top-left corner
+        var contentView = this.window.ContentView.AsNonNull();
+        SetFrameSelector ??= Selector.FromName("setFrame:");
+        this.buttonsView.SendMessage(SetFrameSelector, new NSRect(0, contentView.Bounds.Size.Height - titleBarHeight, Controls.ExtendedClientAreaWindowConfiguration.SystemChromeWidth, titleBarHeight));
         this.buttonsView.AutoresizingMask = NSView.AutoresizingMaskOptions.MaxXMargin | NSView.AutoresizingMaskOptions.MinYMargin;
 
         // attach buttons with mouse tracking to content view, buttons are hidden and represented as circles until mouse entering the view
@@ -152,12 +142,8 @@ class FullScreenWindowControls : IDisposable
         this.buttonsView.AddSubView(this.zoomButton);
         this.trackingArea = new NSTrackingArea(default, NSTrackingArea.Options.ActiveAlways | NSTrackingArea.Options.InVisibleRect | NSTrackingArea.Options.MouseEnteredAndExited, this.buttonsView);
         this.buttonsView.AddTrackingArea(this.trackingArea);
-        this.window.ContentView.AsNonNull().AddSubView(this.buttonsView);
+        contentView.AddSubView(this.buttonsView);
         this.buttonsView.NeedsDisplay = true;
-
-        // notify that space is reserved for menu bar
-        if (this.topInset > 0)
-            this.TopInsetChanged?.Invoke(this, EventArgs.Empty);
     }
 
 
@@ -222,14 +208,6 @@ class FullScreenWindowControls : IDisposable
         this.zoomButton?.RemoveFromSuperView();
         this.zoomButton = this.zoomButton.DisposeAndReturnNull();
         this.isMouseInButtonGroup = false;
-
-        // release space reserved for menu bar
-        if (this.topInset > 0)
-        {
-            this.topInset = 0;
-            if (!this.isDisposed)
-                this.TopInsetChanged?.Invoke(this, EventArgs.Empty);
-        }
     }
 
 
@@ -319,12 +297,7 @@ class FullScreenWindowControls : IDisposable
                     controls.OnMouseEnteredOrExitedButtonGroup(false);
             });
 
-            // handle key-window and full-screen notifications of window
-            cls.DefineMethod<IntPtr>("windowDidBecomeKey:", (self, _, _) =>
-            {
-                if (cls.TryGetClrObject<FullScreenWindowControls>(self, out var controls))
-                    controls.UpdateTopInset();
-            });
+            // handle full-screen notifications of window
             cls.DefineMethod<IntPtr>("windowDidEnterFullScreen:", (self, _, _) =>
             {
                 if (cls.TryGetClrObject<FullScreenWindowControls>(self, out var controls))
@@ -342,39 +315,6 @@ class FullScreenWindowControls : IDisposable
             });
         });
         return ButtonsViewClass;
-    }
-
-
-    // Get height of menu bar which stays over the top of window in full-screen mode.
-    double GetOverlappingMenuBarHeight()
-    {
-        // no space needed on Mac with camera housing, system either hides the menu bar or places window below it in full-screen mode,
-        // also keep the default behavior of system if it is unknown whether the Mac has camera housing or not
-        if (MacOS.IsBuiltInDisplayPartiallyOccluded() != false || MacOS.IsCameraHousingScreenPresent())
-            return 0;
-
-        // get screen of window
-        ScreenSelector ??= Selector.FromName("screen");
-        var screenHandle = this.window.SendMessage<IntPtr>(ScreenSelector);
-        if (screenHandle == IntPtr.Zero)
-            return 0;
-
-        // use the part of window above the visible frame of screen as height of menu bar, it is zero if system places window below the menu bar
-        FrameSelector ??= Selector.FromName("frame");
-        VisibleFrameSelector ??= Selector.FromName("visibleFrame");
-        var windowFrame = this.window.SendMessage<NSRect>(FrameSelector);
-        var visibleFrame = NSObject.SendMessage<NSRect>(screenHandle, VisibleFrameSelector);
-        return Math.Max(0, (windowFrame.Origin.Y + windowFrame.Size.Height) - (visibleFrame.Origin.Y + visibleFrame.Size.Height));
-    }
-
-
-    // Layout view of buttons at top-left corner of title bar area drawn by application.
-    void LayoutButtonsView()
-    {
-        var contentView = this.window.ContentView.AsNonNull();
-        var titleBarHeight = CapturedThickTitleBarHeight > 0 ? CapturedThickTitleBarHeight : FallbackThickTitleBarHeight;
-        SetFrameSelector ??= Selector.FromName("setFrame:");
-        this.buttonsView.SendMessage(SetFrameSelector, new NSRect(0, contentView.Bounds.Size.Height - this.topInset - titleBarHeight, Controls.ExtendedClientAreaWindowConfiguration.SystemChromeWidth, titleBarHeight));
     }
 
 
@@ -413,38 +353,5 @@ class FullScreenWindowControls : IDisposable
         var x = FallbackButtonLeftInset + (originalFrame.Origin.X - originalCloseButtonFrame.Origin.X);
         var y = (titleBarHeight - originalFrame.Size.Height) / 2;
         return new NSRect(x, y, originalFrame.Size.Width, originalFrame.Size.Height);
-    }
-
-
-    /// <summary>
-    /// Get space in points which needs to be reserved at top of window content for the menu bar which stays over the top of window in full-screen mode.
-    /// </summary>
-    public double TopInset => this.topInset;
-
-
-    /// <summary>
-    /// Raised when <see cref="TopInset"/> changed.
-    /// </summary>
-    public event EventHandler? TopInsetChanged;
-
-
-    // Update space reserved for menu bar, system may place window and menu bar differently after changing settings or screens.
-    void UpdateTopInset()
-    {
-        // skip if buttons are not attached
-        if (this.overlayWindow is null)
-            return;
-
-        // check height of menu bar
-        var topInset = this.GetOverlappingMenuBarHeight();
-        if (Math.Abs(this.topInset - topInset) < 0.01)
-            return;
-        this.topInset = topInset;
-
-        // layout view of buttons below the menu bar
-        this.LayoutButtonsView();
-
-        // notify
-        this.TopInsetChanged?.Invoke(this, EventArgs.Empty);
     }
 }

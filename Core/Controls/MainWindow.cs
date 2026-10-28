@@ -1235,8 +1235,6 @@ public abstract class MainWindow : Window
                 or WindowState.Maximized => ExtendedClientAreaWindowConfiguration.ContentPaddingInMaximized,
             _ => ExtendedClientAreaWindowConfiguration.ContentPadding,
         };
-        if (windowState == WindowState.FullScreen && this.fullScreenWindowControls is { TopInset: > 0 } fullScreenWindowControls)
-            margin = new Thickness(margin.Left, margin.Top + fullScreenWindowControls.TopInset, margin.Right, margin.Bottom);
         if (this.isFirstContentPaddingUpdate)
         {
             this.isFirstContentPaddingUpdate = false;
@@ -1291,8 +1289,7 @@ public abstract class MainWindow : Window
             if (handle != IntPtr.Zero)
             {
                 this.nsWindow = NSObject.FromHandle<NSWindow>(handle);
-                this.nsWindow?.Let(it => this.fullScreenWindowControls = new FullScreenWindowControls(it).Also(controls =>
-                    controls.TopInsetChanged += (_, _) => this.updateContentPaddingAction.Reschedule()));
+                this.nsWindow?.Let(it => this.fullScreenWindowControls = new FullScreenWindowControls(it));
             }
         }
 
