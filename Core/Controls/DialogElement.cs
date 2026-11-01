@@ -175,6 +175,10 @@ public enum DialogIconType
     /// </summary>
     Description,
     /// <summary>
+    /// Icon for description below an input control.
+    /// </summary>
+    DescriptionBelowInputControl,
+    /// <summary>
     /// Icon for description below a label.
     /// </summary>
     DescriptionBelowLabel,
@@ -263,13 +267,25 @@ public enum DialogTextRole
     /// </summary>
     DescriptionBelowCheckBox,
     /// <summary>
+    /// Description below an input control.
+    /// </summary>
+    DescriptionBelowInputControl,
+    /// <summary>
     /// Description below a label.
     /// </summary>
     DescriptionBelowLabel,
     /// <summary>
+    /// Description with error below an input control.
+    /// </summary>
+    ErrorDescriptionBelowInputControl,
+    /// <summary>
     /// Description with error below a label.
     /// </summary>
     ErrorDescriptionBelowLabel,
+    /// <summary>
+    /// Description with warning below an input control.
+    /// </summary>
+    WarningDescriptionBelowInputControl,
     /// <summary>
     /// Description with warning below a label.
     /// </summary>

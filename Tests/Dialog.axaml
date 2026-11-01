@@ -290,9 +290,25 @@
 				<Border Classes="Dialog_ItemsGroup_Container">
 					<StackPanel>
 
-						<TextBlock appControls:DialogElement.TextRole="Default" Text="Label"/>
+						<TextBlock appControls:DialogElement.TextRole="LabelAboveInputControl" Text="Label"/>
 						<TextBox Classes="Dialog_TextBox"/>
-						<TextBlock appControls:DialogElement.TextRole="DescriptionBelowLabel" Text="Description"/>
+						<TextBlock appControls:DialogElement.TextRole="DescriptionBelowInputControl" Text="Description below input control."/>
+						<Grid ColumnDefinitions="Auto,*">
+							<Image appControls:DialogElement.IconType="DescriptionBelowInputControl">
+								<DrawingImage>
+									<GeometryDrawing Brush="{DynamicResource Brush/Icon.Dialog.Description}" Geometry="{StaticResource Geometry/Icon.Information.Outline}"/>
+								</DrawingImage>
+							</Image>
+							<TextBlock appControls:DialogElement.TextRole="DescriptionBelowInputControl" Grid.Column="1" Text="Description below input control (with icon)."/>
+						</Grid>
+						<Grid ColumnDefinitions="Auto,*">
+							<Image appControls:DialogElement.IconType="DescriptionBelowInputControl" Source="{StaticResource Image/Icon.Warning.Outline.Colored.Gradient}"/>
+							<TextBlock appControls:DialogElement.TextRole="WarningDescriptionBelowInputControl" Grid.Column="1" Text="Description below input control (Warning)."/>
+						</Grid>
+						<Grid ColumnDefinitions="Auto,*">
+							<Image appControls:DialogElement.IconType="DescriptionBelowInputControl" Source="{StaticResource Image/Icon.Error.Outline.Colored}"/>
+							<TextBlock appControls:DialogElement.TextRole="ErrorDescriptionBelowInputControl" Grid.Column="1" Text="Description below input control (Error)."/>
+						</Grid>
 
 					</StackPanel>
 				</Border>
