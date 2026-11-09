@@ -531,6 +531,9 @@
 										</Slider>
 									</Border>
 									<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
+										<Slider IsEnabled="False" Maximum="100" Minimum="0" TickFrequency="10" TickPlacement="Outside" Value="40" Width="200"/>
+									</Border>
+									<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">
 										<rs:RangeSlider Maximum="100" Minimum="0" MoveWholeRange="True" TickFrequency="10" TickPlacement="Outside" Width="200"/>
 									</Border>
 									<Border BorderBrush="Red" BorderThickness="1" HorizontalAlignment="Left" Margin="5">

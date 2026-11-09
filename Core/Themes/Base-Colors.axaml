@@ -387,6 +387,12 @@
 	<Color x:Key="Color/Shadow.Darken">#1f000000</Color>
 	<Color x:Key="Color/Shadow.Lighten">#3fffffff</Color>
 	
+	<!-- Slider -->
+	<SolidColorBrush x:Key="Brush/Slider.Thumb.Border" Color="{DynamicResource Color/Control.Border}"/>
+	<SolidColorBrush x:Key="SliderThumbBackground" Color="#e6e6e6"/>
+	<SolidColorBrush x:Key="SliderThumbBackgroundPointerOver" Color="#ffffff"/>
+	<SolidColorBrush x:Key="SliderThumbBackgroundPressed" Color="#b3b3b3"/>
+	
 	<!-- SplitButton -->
 	<StaticResourceExtension x:Key="SplitButtonBackground" ResourceKey="ButtonBackground"/>
 	<SolidColorBrush x:Key="SplitButtonBackgroundChecked" Color="{DynamicResource SystemAccentColorDark2}"/>

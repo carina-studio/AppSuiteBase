@@ -6181,10 +6181,6 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             this.accentColorResources["Brush/MarkdownViewer.Markdown.Heading3.Foreground"] = new SolidColorBrush(markdownHeading3Color);
             this.accentColorResources["Brush/MarkdownViewer.Markdown.Heading4.Foreground"] = new SolidColorBrush(markdownHeading4Color);
 
-            // [Workaround] Brushes of Slider
-            this.accentColorResources["SliderThumbBackgroundPointerOver"] = new SolidColorBrush(sysAccentColorLight1);
-            this.accentColorResources["SliderThumbBackgroundPressed"] = new SolidColorBrush(sysAccentColorDark1);
-
             // [Workaround] Brushes of ToggleSwitch
             this.accentColorResources["ToggleSwitchFillOnPointerOver"] = new SolidColorBrush(sysAccentColorLight1);
             this.accentColorResources["ToggleSwitchFillOnPressed"] = new SolidColorBrush(sysAccentColorDark1);

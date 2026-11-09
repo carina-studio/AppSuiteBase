@@ -79,6 +79,12 @@
 	<!-- Separator -->
 	<Color x:Key="Color/Separator.Background">#4fffffff</Color>
 	
+	<!-- Slider -->
+	<SolidColorBrush x:Key="Brush/Slider.Thumb.Border.Disabled" Color="{DynamicResource Color/Control.Border.Dark}"/>
+	<SolidColorBrush x:Key="SliderThumbBackgroundDisabled" Color="#4d4d4d"/>
+	<SolidColorBrush x:Key="SliderTrackFillDisabled" Color="#404040"/>
+	<SolidColorBrush x:Key="SliderTrackValueFillDisabled" Color="#4d4d4d"/>
+	
 	<!-- StatusBar -->
 	<Color x:Key="Color/StatusBar.Background.Inactive">#303030</Color>
 	<StaticResourceExtension x:Key="Color/StatusBar.Border" ResourceKey="Color/Shadow.Lighten"/>

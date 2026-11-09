@@ -7,7 +7,8 @@
 		xmlns:converters="using:CarinaStudio.AppSuite.Converters"
 		xmlns:input="using:CarinaStudio.AppSuite.Input"
         xmlns:xaml="using:CarinaStudio.AppSuite.Xaml"
-		xmlns:md="using:Markdown.Avalonia">
+		xmlns:md="using:Markdown.Avalonia"
+		xmlns:rs="using:RangeSlider.Avalonia.Controls">
 
 	<!-- Resources -->
 	<Styles.Resources>
@@ -3016,6 +3017,17 @@
 		<Setter Property="EndPoint" Value="5,0"/>
 		<Setter Property="StartPoint" Value="0,0"/>
 		<Setter Property="Stroke" Value="{DynamicResource Brush/Shadow.Lighten}"/>
+	</Style>
+	
+	<!-- Slider -->
+	<!-- [Workaround] Use pseudo classes in selectors to override BorderThickness which is set in template of Fluent theme -->
+	<Style Selector="Slider:disabled /template/ Thumb, rs|RangeSlider:disabled /template/ Thumb">
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Slider.Thumb.Border.Disabled}"/>
+		<Setter Property="BorderThickness" Value="1"/>
+	</Style>
+	<Style Selector="Slider:not(:disabled) /template/ Thumb, rs|RangeSlider:not(:disabled) /template/ Thumb">
+		<Setter Property="BorderBrush" Value="{DynamicResource Brush/Slider.Thumb.Border}"/>
+		<Setter Property="BorderThickness" Value="1"/>
 	</Style>
 	
 	<!-- SplitButton -->
