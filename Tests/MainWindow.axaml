@@ -297,6 +297,12 @@
 																	</ContextMenu>
 																</appControls:ToggleSplitButton.DropDownMenu>
 															</appControls:ToggleSplitButton>
+															<appControls:ToggleSplitButton appControls:ToolbarElement.Role="Button" IsEnabled="False">
+																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Information}"/>
+															</appControls:ToggleSplitButton>
+															<appControls:SplitButton appControls:ToolbarElement.Role="Button" IsEnabled="False">
+																<Image appControls:ToolbarElement.Role="Icon" Source="{StaticResource Image/Icon.Information}"/>
+															</appControls:SplitButton>
 
 															<Separator appControls:ToolbarElement.Role="Separator"/>
 

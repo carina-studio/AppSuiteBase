@@ -4693,7 +4693,7 @@
 	<Style Selector="SplitButton[(controls|ToolbarElement.Role)=Button]:disabled">
 		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
-	<Style Selector="SplitButton[(controls|ToolbarElement.Role)=Button]:disabled /template/ ContentPresenter">
+	<Style Selector="SplitButton[(controls|ToolbarElement.Role)=Button]:disabled /template/ Button /template/ ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
 	</Style>
 	<Style Selector="SplitButton[(controls|ToolbarElement.Role)=Button]:flyout-open /template/ Border#SeparatorBorder">
@@ -4746,7 +4746,7 @@
 		<Setter Property="IsHitTestVisible" Value="False"/>
 	</Style>
 	<!-- Deprecated -->
-	<Style Selector="SplitButton.ToolBar_SplitButton:disabled /template/ ContentPresenter">
+	<Style Selector="SplitButton.ToolBar_SplitButton:disabled /template/ Button /template/ ContentPresenter">
 		<Setter Property="Background" Value="{x:Null}"/>
 	</Style>
 	<!-- Deprecated -->
