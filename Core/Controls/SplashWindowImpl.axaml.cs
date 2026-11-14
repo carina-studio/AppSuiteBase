@@ -63,8 +63,8 @@ class SplashWindowImpl : Avalonia.Controls.Window
 		this.Copyright = (app?.CopyrightBeginningYear)?.Let(beginningYear =>
 		{
 			if (beginningYear < AppSuiteApplication.CopyrightEndingYear)
-				return $"©{beginningYear}-{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
-			return $"©{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
+				return $"© {beginningYear}-{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
+			return $"© {AppSuiteApplication.CopyrightEndingYear} Carina Studio";
 		}) ?? "";
 		this.Message = app?.GetStringNonNull("SplashWindow.Launching") ?? "";
 		this.showAction = new(() =>
