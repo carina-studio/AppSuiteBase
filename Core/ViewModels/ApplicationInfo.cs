@@ -135,6 +135,12 @@ public class ApplicationInfo : ViewModel<IAppSuiteApplication>
 
 
     /// <summary>
+    /// Get opacity applied on the <see cref="BannerImage"/>.
+    /// </summary>
+    public virtual double BannerImageOpacity => 1.0;
+
+
+    /// <summary>
     /// Export application logs to given file.
     /// </summary>
     /// <param name="outputFileName">Name of file to output logs to.</param>

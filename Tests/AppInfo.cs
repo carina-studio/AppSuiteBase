@@ -24,6 +24,8 @@ class AppInfo : ViewModels.ApplicationInfo
 
     public override IImage? BannerImage { get; }
 
+    public override double BannerImageOpacity => 0.5;
+
     public override Uri GitHubProjectUri => new("http://localhost/");
 
     public override IList<string> Products =>

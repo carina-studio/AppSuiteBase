@@ -63,7 +63,7 @@
 						       VerticalAlignment="Top">
 							<Image.OpacityMask>
 								<LinearGradientBrush EndPoint="{Binding #window.BannerImageOpacityMaskEndPoint}" StartPoint="0,0">
-									<GradientStop Color="#ff000000" Offset="0"/>
+									<GradientStop Color="{Binding #window.BannerImageOpacityMaskStartColor}" Offset="0"/>
 									<GradientStop Color="#00000000" Offset="0.75"/>
 								</LinearGradientBrush>
 							</Image.OpacityMask>

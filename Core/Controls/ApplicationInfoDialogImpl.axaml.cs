@@ -39,6 +39,7 @@ class ApplicationInfoDialogImpl : Dialog
 
 	// Static fields.
 	static readonly DirectProperty<ApplicationInfoDialogImpl, string?> ApplicationNameProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, string?>(nameof(ApplicationName), w => w.appName);
+	static readonly DirectProperty<ApplicationInfoDialogImpl, Color> BannerImageOpacityMaskStartColorProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, Color>(nameof(BannerImageOpacityMaskStartColor), w => w.bannerImageOpacityMaskStartColor); 
 	static readonly StyledProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
 	static readonly StyledProperty<bool> HasExternalDependenciesProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasExternalDependencies");
 	static readonly StyledProperty<bool> HasPrivacyPolicyProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasPrivacyPolicy");
@@ -74,6 +75,7 @@ class ApplicationInfoDialogImpl : Dialog
 	// Fields.
 	string? appName;
 	readonly Panel badgesPanel;
+	Color bannerImageOpacityMaskStartColor = Color.FromArgb(255, 0, 0, 0);
 	readonly TaskCompletionSource closingTaskSource = new();
 	readonly bool isProprietaryApp;
 	PixelSize physicalScreenSize;
@@ -214,6 +216,12 @@ class ApplicationInfoDialogImpl : Dialog
 	/// Get end point of opacity mask for banner image.
 	/// </summary>
 	public RelativePoint BannerImageOpacityMaskEndPoint { get; }
+
+
+	/// <summary>
+	/// Get the color for start point of the opacity mask for the banner image.
+	/// </summary>
+	public Color BannerImageOpacityMaskStartColor => this.bannerImageOpacityMaskStartColor;
 
 
 	/**
@@ -412,6 +420,10 @@ class ApplicationInfoDialogImpl : Dialog
 			// sync state
 			this.UpdateTitle();
 			this.UpdateVersionString();
+			
+			// update banner image opacity mask
+			var bannerImageOpacity = Math.Clamp(appInfo.BannerImageOpacity, 0.0, 1.0);
+			this.SetAndRaise(BannerImageOpacityMaskStartColorProperty, ref this.bannerImageOpacityMaskStartColor, Color.FromArgb((byte)(bannerImageOpacity * 255 + 0.5), 0, 0, 0));
 			
 			// update application name
 			var appName = appInfo.IsOpenSourceBased && !this.isProprietaryApp
