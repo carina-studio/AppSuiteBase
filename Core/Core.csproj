@@ -47,7 +47,7 @@
 		<PackageReference Include="CarinaStudio.AppBase.AutoUpdate" Version="$(AppBaseVersion)" />
 		<PackageReference Include="CarinaStudio.AppBase.MacOS" Version="$(AppBaseVersion)" />
 		<PackageReference Include="CarinaStudio.Markdown.Avalonia.Tight" Version="12.0.2.907" />
-		<PackageReference Include="JetBrains.Profiler.SelfApi" Version="2.5.18" />
+		<PackageReference Include="JetBrains.Profiler.SelfApi" Version="2.5.19" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="$(DotNetLibraryVersion)" />
 		<PackageReference Include="Microsoft.Extensions.ObjectPool" Version="$(DotNetLibraryVersion)" />
 		<PackageReference Include="Microsoft.Win32.SystemEvents" Version="$(DotNetLibraryVersion)" />
@@ -57,7 +57,7 @@
 		<PackageReference Include="NUnit" Version="5.0.0" />
 		<PackageReference Include="RangeSlider.Avalonia" Version="3.0.0" />
 		<PackageReference Include="System.Management" Version="$(DotNetLibraryVersion)" />
-		<PackageReference Include="Tmds.DBus.Protocol" Version="0.94.2" />
+		<PackageReference Include="Tmds.DBus.Protocol" Version="0.95.2" />
 	</ItemGroup>
 	
 	<ItemGroup>
