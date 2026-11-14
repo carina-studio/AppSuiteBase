@@ -119,8 +119,8 @@ class ApplicationInfoDialogImpl : Dialog
 		this.Copyright = ((this.Application as AppSuiteApplication)?.CopyrightBeginningYear ?? AppSuiteApplication.CopyrightEndingYear).Let(beginningYear =>
 		{
 			if (beginningYear < AppSuiteApplication.CopyrightEndingYear)
-				return $"©{beginningYear}-{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
-			return $"©{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
+				return $"© {beginningYear}-{AppSuiteApplication.CopyrightEndingYear} Carina Studio";
+			return $"© {AppSuiteApplication.CopyrightEndingYear} Carina Studio";
 		});
 
 		// check user agreement and privacy policy
