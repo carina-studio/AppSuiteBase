@@ -5,6 +5,7 @@ namespace CarinaStudio.AppSuite;
 /// <summary>
 /// Predefined keys of configuration.
 /// </summary>
+// ReSharper disable once ClassCannotBeInstantiated
 public abstract class ConfigurationKeys
 {
     /// <summary>
@@ -51,6 +52,10 @@ public abstract class ConfigurationKeys
     /// Delay before updating navigation bar in dialog.
     /// </summary>
     public static readonly SettingKey<int> DialogNavigationBarUpdateDelay = new(nameof(DialogNavigationBarUpdateDelay), 100);
+    /// <summary>
+    /// Whether to force showing the splash window or not.
+    /// </summary>
+    public static readonly SettingKey<bool> ForceShowingSplashWindow = new(nameof(ForceShowingSplashWindow), false);
     /// <summary>
     /// Whether to force using macOS styles or not.
     /// </summary>

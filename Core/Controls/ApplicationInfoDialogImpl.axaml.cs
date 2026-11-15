@@ -39,6 +39,7 @@ class ApplicationInfoDialogImpl : Dialog
 
 	// Static fields.
 	static readonly DirectProperty<ApplicationInfoDialogImpl, string?> ApplicationNameProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, string?>(nameof(ApplicationName), w => w.appName);
+	static readonly DirectProperty<ApplicationInfoDialogImpl, RelativePoint> BannerImageOpacityMaskEndPointProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, RelativePoint>(nameof(BannerImageOpacityMaskEndPoint), w => w.bannerImageOpacityMaskEndPoint);
 	static readonly DirectProperty<ApplicationInfoDialogImpl, Color> BannerImageOpacityMaskStartColorProperty = AvaloniaProperty.RegisterDirect<ApplicationInfoDialogImpl, Color>(nameof(BannerImageOpacityMaskStartColor), w => w.bannerImageOpacityMaskStartColor); 
 	static readonly StyledProperty<bool> HasApplicationChangeListProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>(nameof(HasApplicationChangeList));
 	static readonly StyledProperty<bool> HasExternalDependenciesProperty = AvaloniaProperty.Register<ApplicationInfoDialogImpl, bool>("HasExternalDependencies");
@@ -75,6 +76,8 @@ class ApplicationInfoDialogImpl : Dialog
 	// Fields.
 	string? appName;
 	readonly Panel badgesPanel;
+	readonly double bannerImageBaseHeight;
+	RelativePoint bannerImageOpacityMaskEndPoint;
 	Color bannerImageOpacityMaskStartColor = Color.FromArgb(255, 0, 0, 0);
 	readonly TaskCompletionSource closingTaskSource = new();
 	readonly bool isProprietaryApp;
@@ -144,8 +147,8 @@ class ApplicationInfoDialogImpl : Dialog
 		this.IsApplicationUpdateCheckAvailable = this.Application.IsApplicationUpdateSupported;
 		
 		// setup controls
-		var bannerImageHeight = this.Application.FindResourceOrDefault("Double/ApplicationInfoDialog.Header.Background.Height", 0.0);
-		this.BannerImageOpacityMaskEndPoint = new(new(0, bannerImageHeight), RelativeUnit.Absolute);
+		this.bannerImageBaseHeight = this.Application.FindResourceOrDefault("Double/ApplicationInfoDialog.Header.Background.Height", 0.0);
+		this.bannerImageOpacityMaskEndPoint = new(new(0, this.bannerImageBaseHeight), RelativeUnit.Absolute);
 		AvaloniaXamlLoader.Load(this);
 		this.badgesPanel = this.Get<Panel>(nameof(badgesPanel)).AsNonNull();
 		this.Get<Panel>("itemsPanel").Also(it =>
@@ -215,7 +218,7 @@ class ApplicationInfoDialogImpl : Dialog
 	/// <summary>
 	/// Get end point of opacity mask for banner image.
 	/// </summary>
-	public RelativePoint BannerImageOpacityMaskEndPoint { get; }
+	public RelativePoint BannerImageOpacityMaskEndPoint => this.bannerImageOpacityMaskEndPoint;
 
 
 	/// <summary>
@@ -421,8 +424,20 @@ class ApplicationInfoDialogImpl : Dialog
 			this.UpdateTitle();
 			this.UpdateVersionString();
 			
-			// update banner image opacity mask
-			var bannerImageOpacity = Math.Clamp(appInfo.BannerImageOpacity, 0.0, 1.0);
+			// update banner image properties
+			var bannerImageOpacity = appInfo.BannerImageOpacity.Let(it =>
+			{
+				if (double.IsFinite(it))
+					return Math.Clamp(it, 0.0, 1.0);
+				return 1.0;
+			});
+			var bannerImageHeightScale = appInfo.BannerImageHeightScale.Let(it =>
+			{
+				if (double.IsFinite(it))
+					return Math.Max(0.0, it);
+				return 1.0;
+			});
+			this.SetAndRaise(BannerImageOpacityMaskEndPointProperty, ref this.bannerImageOpacityMaskEndPoint, new(new(0, Math.Round(this.bannerImageBaseHeight * bannerImageHeightScale)), RelativeUnit.Absolute));
 			this.SetAndRaise(BannerImageOpacityMaskStartColorProperty, ref this.bannerImageOpacityMaskStartColor, Color.FromArgb((byte)(bannerImageOpacity * 255 + 0.5), 0, 0, 0));
 			
 			// update application name

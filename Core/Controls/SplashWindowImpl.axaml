@@ -28,13 +28,9 @@
 					<GradientStop Offset="1" Color="#171717"/>
 				</LinearGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#ffffff"/>
-				<LinearGradientBrush x:Key="Brush/SplashWindow.Title.Background" EndPoint="0%,100%" StartPoint="0%,0%">
-					<GradientStop Offset="0" Color="#ef111111"/>
-					<GradientStop Offset="0.5" Color="#9f111111"/>
-					<GradientStop Offset="1" Color="#00111111"/>
-				</LinearGradientBrush>
 				<Color x:Key="Color/SplashWindow.Message.Shadow">#4f000000</Color>
 				<Color x:Key="Color/SplashWindow.Shadow">#000000</Color>
+				<Color x:Key="Color/SplashWindow.Title.Background">#000000</Color>
 				<sys:Double x:Key="Double/SplashWindow.TopBar.Opacity">0.75</sys:Double>
 			</Styles.Resources>
 		</Styles>
@@ -48,13 +44,9 @@
 					<GradientStop Offset="1" Color="#e0e0e0"/>
 				</LinearGradientBrush>
 				<SolidColorBrush x:Key="Brush/SplashWindow.Foreground" Color="#222222"/>
-				<LinearGradientBrush x:Key="Brush/SplashWindow.Title.Background" EndPoint="0%,100%" StartPoint="0%,0%">
-					<GradientStop Offset="0" Color="#eeeeee"/>
-					<GradientStop Offset="0.5" Color="#7feeeeee"/>
-					<GradientStop Offset="1" Color="#00eeeeee"/>
-				</LinearGradientBrush>
 				<Color x:Key="Color/SplashWindow.Message.Shadow">#3f000000</Color>
 				<Color x:Key="Color/SplashWindow.Shadow">#ffffff</Color>
+				<Color x:Key="Color/SplashWindow.Title.Background">#eeeeee</Color>
 				<sys:Double x:Key="Double/SplashWindow.TopBar.Opacity">0.85</sys:Double>
 			</Styles.Resources>
 		</Styles>
@@ -133,7 +125,7 @@
 					</RadialGradientBrush>
 				</Border.Background>
 			</Border>
-			<Border Background="{DynamicResource Brush/SplashWindow.Title.Background}"
+			<Border Background="{Binding #window.TitleBackgroundBrush}"
 			        CornerRadius="{StaticResource CornerRadius/SplashWindow.Title.Background}"
 			        Height="{StaticResource Double/SplashWindow.Title.Background.Height}" 
 			        VerticalAlignment="Top"/>

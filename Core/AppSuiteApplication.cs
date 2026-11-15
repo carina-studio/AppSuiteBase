@@ -2065,7 +2065,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
     /// <summary>
     /// Check whether splash window is needed when launching application or not.
     /// </summary>
-    protected virtual bool IsSplashWindowNeeded => Platform.IsNotMacOS || this.Configuration.GetValueOrDefault(ConfigurationKeys.ForceUsingWindowsStyles);
+    protected virtual bool IsSplashWindowNeeded => Platform.IsNotMacOS 
+                                                   || this.Configuration.GetValueOrDefault(ConfigurationKeys.ForceShowingSplashWindow)
+                                                   || this.Configuration.GetValueOrDefault(ConfigurationKeys.ForceUsingWindowsStyles);
 
 
     /// <summary>
@@ -3411,9 +3413,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (AssetLoader.Exists(uri))
                 return uri;
             uri = new Uri($"avares://{this.Assembly.GetName().Name}/SplashWindowBackground.png");
-            if (AssetLoader.Exists(uri))
-                return uri;
-            return null;
+            return AssetLoader.Exists(uri) 
+                ? uri
+                : null;
         });
         it.IconUri = Global.Run(() =>
         {
@@ -3421,11 +3423,12 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
             if (AssetLoader.Exists(uri))
                 return uri;
             uri = new Uri($"avares://{this.Assembly.GetName().Name}/AppIcon.ico");
-            if (AssetLoader.Exists(uri))
-                return uri;
-            throw new NotSupportedException("Cannot get default icon.");
+            return AssetLoader.Exists(uri) 
+                ? uri 
+                : throw new NotSupportedException("Cannot get default icon.");
         });
         it.MessageColor = Colors.White;
+        it.TitleBackgroundOpacity = 0.93;
     });
 
 
@@ -3544,6 +3547,7 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
                 BackgroundImageUri = splashWindowParams.BackgroundImageUri,
                 IconUri = splashWindowParams.IconUri,
                 MessageColor = splashWindowParams.MessageColor,
+                TitleBackgroundOpacity = splashWindowParams.TitleBackgroundOpacity
             };
             if (timestamp != 0)
             {

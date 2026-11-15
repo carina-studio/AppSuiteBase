@@ -33,14 +33,13 @@ class SplashWindowImpl : Avalonia.Controls.Window
 	static readonly StyledProperty<Bitmap?> IconBitmapProperty = AvaloniaProperty.Register<SplashWindowImpl, Bitmap?>(nameof(IconBitmap));
 	static readonly StyledProperty<string> MessageProperty = AvaloniaProperty.Register<SplashWindowImpl, string>(nameof(Message), " ", coerce: (_, it) => string.IsNullOrEmpty(it) ? " " : it);
 	static readonly StyledProperty<Color> MessageColorProperty = AvaloniaProperty.Register<SplashWindowImpl, Color>(nameof(MessageColor));
+	static readonly DirectProperty<SplashWindowImpl, IBrush?> TitleBackgroundBrushProperty = AvaloniaProperty.RegisterDirect<SplashWindowImpl, IBrush?>(nameof(TitleBackgroundBrush), w => w.titleBackgroundBrush);
 
 
 	// Fields.
 	Color accentColor;
 	readonly ApplicationInfo appInfo = new();
 	double backgroundImageOpacity = 1.0;
-	Uri? backgroundImageUri;
-	Uri? iconUri;
 	readonly TaskCompletionSource initAnimationTaskCompletionSource = new(); 
 	long openedTimestamp;
 	TaskCompletionSource? progressAnimationTaskSource;
@@ -48,6 +47,7 @@ class SplashWindowImpl : Avalonia.Controls.Window
 	readonly ProgressBar progressBar;
 	TaskCompletionSource? renderingTaskSource;
 	readonly ScheduledAction showAction;
+	IBrush? titleBackgroundBrush;
 
 
 	/// <summary>
@@ -189,13 +189,13 @@ class SplashWindowImpl : Avalonia.Controls.Window
 	// Get or set URI of background image.
 	public Uri? BackgroundImageUri
 	{
-		get => this.backgroundImageUri;
+		get;
 		set
 		{
 			this.VerifyAccess();
-			if (this.backgroundImageUri == value)
+			if (field == value)
 				return;
-			this.backgroundImageUri = value;
+			field = value;
 			if (value is not null)
 			{
 				this.SetValue(BackgroundImageProperty, AssetLoader.Open(value).Use(stream => 
@@ -217,14 +217,14 @@ class SplashWindowImpl : Avalonia.Controls.Window
 
 	// Get or set URI of application icon.
 	public Uri? IconUri
-    {
-		get => this.iconUri;
+	{
+		get;
 		set
         {
 			this.VerifyAccess();
-			if (this.iconUri == value)
+			if (field == value)
 				return;
-			this.iconUri = value;
+			field = value;
 			value ??= new Uri($"avares://{IAppSuiteApplication.Current.Assembly.GetName()}/AppIcon.ico");
 			this.Icon = AssetLoader.Open(value).Use(stream =>
 				new WindowIcon(stream));
@@ -346,6 +346,48 @@ class SplashWindowImpl : Avalonia.Controls.Window
 					this.renderingTaskSource = null;
 				}
 			}, DispatcherPriority.Render);
+		}
+	}
+
+
+	/// <summary>
+	/// Get the brush of title background.
+	/// </summary>
+	public IBrush? TitleBackgroundBrush => this.titleBackgroundBrush;
+
+
+	/// <summary>
+	/// Get or set the opacity of title background.
+	/// </summary>
+	public double TitleBackgroundOpacity
+	{
+		get;
+		set
+		{
+			if (!double.IsFinite(value))
+				throw new ArgumentOutOfRangeException();
+			value = Math.Clamp(value, 0.0, 1.0);
+			if (Math.Abs(field - value) < 0.001)
+				return;
+			field = value;
+			var color = this.FindResourceOrDefault("Color/SplashWindow.Title.Background", Colors.Transparent);
+			var a = (byte)(255 * value + 0.5);
+			var r = color.R;
+			var g = color.G;
+			var b = color.B;
+			var brush = value >= 0.01
+				? new LinearGradientBrush
+				{
+					EndPoint = new(0, 1, RelativeUnit.Relative),
+					GradientStops = [
+						new GradientStop { Color = Color.FromArgb(a, r, g, b), Offset = 0.0 },
+						new GradientStop { Color = Color.FromArgb((byte)(a * 0.6 + 0.5), r, g, b), Offset = 0.5 },
+						new GradientStop { Color = Color.FromArgb(0, r, g, b), Offset = 1.0 }
+					],
+					StartPoint = new(0, 0, RelativeUnit.Relative)
+				}
+				: null;
+			this.SetAndRaise(TitleBackgroundBrushProperty, ref this.titleBackgroundBrush, brush);
 		}
 	}
 

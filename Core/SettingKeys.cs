@@ -8,6 +8,7 @@ namespace CarinaStudio.AppSuite;
 /// </summary>
 // ReSharper disable once ConvertToStaticClass
 // ReSharper disable once ClassNeverInstantiated.Global
+// ReSharper disable once ClassCannotBeInstantiated
 public sealed class SettingKeys
 {
     /// <summary>

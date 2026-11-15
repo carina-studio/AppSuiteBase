@@ -135,6 +135,12 @@ public class ApplicationInfo : ViewModel<IAppSuiteApplication>
 
 
     /// <summary>
+    /// Get scale applied on the height of banner image.
+    /// </summary>
+    public virtual double BannerImageHeightScale => 1.0;
+
+
+    /// <summary>
     /// Get opacity applied on the <see cref="BannerImage"/>.
     /// </summary>
     public virtual double BannerImageOpacity => 1.0;
