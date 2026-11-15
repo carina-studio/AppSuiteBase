@@ -16,7 +16,7 @@ It is consumed by build pipelines and the `Packaging.Tests` test project. It is 
 |---|---|
 | NuGet ID | `CarinaStudio.AppSuite.Packaging` |
 | Root namespace | `CarinaStudio.AppSuite.Packaging` |
-| Target frameworks | Whatever `Directory.Build.props` sets — currently `net9.0`, `net10.0` |
+| Target frameworks | Whatever `Directory.Build.props` sets — currently `net11.0` |
 | Output type | Class library |
 | Key dependency | `CarinaStudio.AppBase.Core` (version pinned by `$(AppBaseVersion)`) |
 

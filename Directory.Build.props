@@ -15,12 +15,12 @@
 		<Company>Carina Studio</Company>
         <Copyright>© 2021-$([System.DateTime]::Now.Year) Carina Studio</Copyright>
         <Description>Base libraries for Carina Studio Application Suite.</Description>
-        <DotNetLibraryVersion>10.0.13</DotNetLibraryVersion>
+        <DotNetLibraryVersion>11.0.0</DotNetLibraryVersion>
         <LangVersion>preview</LangVersion>
 		<Nullable>enable</Nullable>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/carina-studio/AppSuiteBase/</PackageProjectUrl>
-		<TargetFrameworks>net10.0</TargetFrameworks>
+		<TargetFrameworks>net11.0</TargetFrameworks>
 
     </PropertyGroup>
 </Project>

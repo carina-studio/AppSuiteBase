@@ -14,9 +14,6 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
 {
     // Fields.
     string id;
-#if !NET10_0_OR_GREATER
-    string? name;
-#endif
 
 
     /// <summary>
@@ -88,24 +85,14 @@ public abstract class BaseProfile<TApp> : BaseApplicationObject<TApp>, IProfile<
     /// <inheritdoc/>
     public virtual string? Name
     {
-#if NET10_0_OR_GREATER
         get;
-#else
-        get => this.name;
-#endif
         set
         {
             this.VerifyAccess();
             this.VerifyBuiltIn();
-#if NET10_0_OR_GREATER
             if (field == value)
                 return;
             field = value;
-#else
-            if (this.name == value)
-                return;
-            this.name = value;
-#endif
             this.OnPropertyChanged(nameof(Name));
         }
     }

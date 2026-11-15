@@ -49,8 +49,8 @@ dotnet pack Core -c Release -o ./Packages --no-build
 ./BuildPackages.sh
 ```
 
-**SDK**: .NET 9.0.0 (pinned in `global.json`, `rollForward: latestMajor`, `allowPrerelease: true`)
-**Target frameworks**: `net10.0` for libraries; `net11.0` for the `Tests` executable
+**SDK**: .NET 11.0.100 (pinned in `global.json`, `rollForward: latestMajor`, `allowPrerelease: true`)
+**Target frameworks**: `net11.0` for libraries and the `Tests` executable
 
 ## Project Structure
 
