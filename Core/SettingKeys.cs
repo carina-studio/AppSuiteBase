@@ -38,7 +38,7 @@ public sealed class SettingKeys
     /// <summary>
     /// Default language of script.
     /// </summary>
-    public static readonly SettingKey<ScriptLanguage> DefaultScriptLanguage = new(nameof(DefaultScriptLanguage), ScriptLanguage.CSharp_14);
+    public static readonly SettingKey<ScriptLanguage> DefaultScriptLanguage = new(nameof(DefaultScriptLanguage), ScriptLanguage.CSharp_15);
     
     
     /// <summary>

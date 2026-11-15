@@ -369,6 +369,7 @@ You can change this setting at any time in Options.</sys:String>
 	<!-- ScriptLanguage -->
 	<sys:String x:Key="String/ScriptLanguage.CSharp_13">C# 13 Script</sys:String>
 	<sys:String x:Key="String/ScriptLanguage.CSharp_14">C# 14 Script</sys:String>
+	<sys:String x:Key="String/ScriptLanguage.CSharp_15">C# 15 Script</sys:String>
 	<sys:String x:Key="String/ScriptLanguage.JavaScript_ES_5_1">JavaScript (ECMAScript 5.1)</sys:String>
 	<sys:String x:Key="String/ScriptLanguage.Python_3_4">Python 3.4</sys:String>
 

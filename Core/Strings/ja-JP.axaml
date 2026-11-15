@@ -362,6 +362,7 @@
 	<!-- ScriptLanguage -->
 	<sys:String x:Key="String/ScriptLanguage.CSharp_13">C# 13 スクリプト</sys:String>
 	<sys:String x:Key="String/ScriptLanguage.CSharp_14">C# 14 スクリプト</sys:String>
+	<sys:String x:Key="String/ScriptLanguage.CSharp_15">C# 15 スクリプト</sys:String>
 
 	<!-- ScriptRuntimeErrorDialog -->
 	<sys:String x:Key="String/ScriptRuntimeErrorDialog.DefaultMessage">スクリプトの実行中に実行時エラーが発生しました。</sys:String>

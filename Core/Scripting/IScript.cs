@@ -105,6 +105,10 @@ public enum ScriptLanguage
     /// </summary>
     CSharp_14,
     /// <summary>
+    /// C# 15 script.
+    /// </summary>
+    CSharp_15,
+    /// <summary>
     /// Python 3.4.
     /// </summary>
     Python_3_4,
