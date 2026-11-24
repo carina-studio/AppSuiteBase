@@ -32,6 +32,10 @@ public class TabControl : Avalonia.Controls.TabControl
     /// </summary>
     public static readonly StyledProperty<bool> IsFullWindowModeProperty = AvaloniaProperty.Register<TabControl, bool>(nameof(IsFullWindowMode), true);
     /// <summary>
+    /// Property of <see cref="Role"/>.
+    /// </summary>
+    public static readonly StyledProperty<TabControlRole> RoleProperty = AvaloniaProperty.Register<TabControl, TabControlRole>(nameof(Role), TabControlRole.Default);
+    /// <summary>
     /// Property of <see cref="TabStripSize"/>.
     /// </summary>
     public static readonly DirectProperty<TabControl, double> TabStripSizeProperty = AvaloniaProperty.RegisterDirect<TabControl, double>(nameof(TabStripSize), t => t.tabStripSize);
@@ -73,6 +77,7 @@ public class TabControl : Avalonia.Controls.TabControl
 
 
     // Constants.
+    const string CompactPseudoClass = ":compact";
     const int DraggingThreshold = 10;
     const string MovingSelectedItemPseudoClass = ":moving-selected-item";
     const int ScrollTabStripByButtonInterval = 300;
@@ -157,6 +162,11 @@ public class TabControl : Avalonia.Controls.TabControl
                 }
                 this.UpdateExtendedTabItemStates();
             }
+        });
+        this.GetObservable(RoleProperty).Subscribe(role =>
+        {
+            this.PseudoClasses.Set(CompactPseudoClass, role == TabControlRole.Compact);
+            this.updateTabStripScrollViewerMarginAction.Schedule();
         });
         this.GetObservable(SelectedIndexProperty).Subscribe(() =>
         {
@@ -435,12 +445,23 @@ public class TabControl : Avalonia.Controls.TabControl
     /// <inheritdoc/>
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
+        // call base and observe window and items
         base.OnAttachedToVisualTree(e);
         this.attachedTopLevel = TopLevel.GetTopLevel(this)?.Also(it =>
         {
             it.PropertyChanged += this.OnWindowPropertyChanged;
         });
         this.Items.CollectionChanged += this.OnItemsChanged;
+
+        // attach to items which were added before attaching to visual tree
+        foreach (var item in this.Items)
+        {
+            if (item is Avalonia.Controls.TabItem tabItem)
+                this.AttachToTabItem(tabItem);
+        }
+        this.UpdateExtendedTabItemStates();
+
+        // update tab strip
         this.UpdateTabStripScrollViewerMargin(false);
     }
 
@@ -827,6 +848,16 @@ public class TabControl : Avalonia.Controls.TabControl
     }
 
 
+    /// <summary>
+    /// Get or set role of <see cref="TabControl"/>.
+    /// </summary>
+    public TabControlRole Role
+    {
+        get => this.GetValue(RoleProperty);
+        set => this.SetValue(RoleProperty, value);
+    }
+
+
     /// <inheritdoc/>
     protected override Type StyleKeyOverride => typeof(Avalonia.Controls.TabControl);
 
@@ -917,7 +948,8 @@ public class TabControl : Avalonia.Controls.TabControl
                 return new Thickness();
             if (!window.ExtendClientAreaToDecorationsHint
                 || !window.IsSystemChromeVisibleInClientArea
-                || !this.IsFullWindowMode)
+                || !this.IsFullWindowMode
+                || this.Role == TabControlRole.Compact)
             {
                 return new Thickness();
             }
@@ -1001,6 +1033,22 @@ public class DragOnTabItemEventArgs : TabItemEventArgs
     /// Get position of pointer relates to <see cref="HeaderVisual"/>.
     /// </summary>
     public Point PointerPosition { get; }
+}
+
+
+/// <summary>
+/// Role of <see cref="TabControl"/>.
+/// </summary>
+public enum TabControlRole
+{
+    /// <summary>
+    /// Default role, for tab control which takes the whole window or area.
+    /// </summary>
+    Default,
+    /// <summary>
+    /// Tab control placed inside a panel as sub tabs, with compact layout.
+    /// </summary>
+    Compact,
 }
 
 

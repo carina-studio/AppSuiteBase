@@ -550,7 +550,37 @@
 											</rs:RangeSlider.Resources>
 										</rs:RangeSlider>
 									</Border>
-								
+
+									<!-- Compact TabControl -->
+									<Border BorderBrush="{DynamicResource Brush/Control.Border}" BorderThickness="1" Height="150" HorizontalAlignment="Left" Margin="5" Width="500">
+										<appControls:TabControl Role="Compact">
+											<appControls:TabItem>
+												<TabItem.Header>
+													<Grid ColumnDefinitions="Auto,*,Auto">
+														<Image Classes="TabItem_Icon" Source="{DynamicResource Image/Icon.File}"/>
+														<TextBlock Classes="TabItem_TextBlock" Grid.Column="1" Text="Compact 1"/>
+														<Button Classes="TabItem_Button" Grid.Column="2">
+															<Image Classes="Icon" Source="{StaticResource Image/Icon.Close}"/>
+														</Button>
+													</Grid>
+												</TabItem.Header>
+												<TextBlock Margin="10" Text="Content 1"/>
+											</appControls:TabItem>
+											<appControls:TabItem>
+												<TabItem.Header>
+													<TextBlock Classes="TabItem_TextBlock" Text="Compact 2"/>
+												</TabItem.Header>
+												<TextBlock Margin="10" Text="Content 2"/>
+											</appControls:TabItem>
+											<appControls:TabItem>
+												<TabItem.Header>
+													<TextBlock Classes="TabItem_TextBlock" Text="Compact 3 with long header text"/>
+												</TabItem.Header>
+												<TextBlock Margin="10" Text="Content 3"/>
+											</appControls:TabItem>
+										</appControls:TabControl>
+									</Border>
+
 									<!-- Shadows -->
 									<WrapPanel>
 										<Panel Height="100" HorizontalAlignment="Left" Margin="5" Width="100">

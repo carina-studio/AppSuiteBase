@@ -12,6 +12,12 @@ static class TabItemWidthConverter
 {
     // Fields.
     static IAvaloniaApplication? app;
+    static CachedResource<Thickness>? compactEmptyTabItemPadding;
+    static CachedResource<Thickness>? compactItemsPanelMargin;
+    static CachedResource<double>? compactMaxTabItemWidth;
+    static CachedResource<double>? compactMinTabItemWidth;
+    static CachedResource<Thickness>? compactSeparatorMargin;
+    static CachedResource<Thickness>? compactTabItemMargin;
     static CachedResource<Thickness>? emptyTabItemPadding;
     static CachedResource<Thickness>? itemsPanelMargin;
     static CachedResource<double>? maxTabItemWidth;
@@ -29,6 +35,12 @@ static class TabItemWidthConverter
             {
                 if (e.PropertyName == nameof(IAppSuiteApplication.TextScaleFactor))
                 {
+                    compactEmptyTabItemPadding = null;
+                    compactItemsPanelMargin = null;
+                    compactMaxTabItemWidth = null;
+                    compactMinTabItemWidth = null;
+                    compactSeparatorMargin = null;
+                    compactTabItemMargin = null;
                     emptyTabItemPadding = null;
                     itemsPanelMargin = null;
                     maxTabItemWidth = null;
@@ -42,18 +54,50 @@ static class TabItemWidthConverter
         });
         if (resourceHost is null)
             return double.PositiveInfinity;
-        emptyTabItemPadding ??= new(resourceHost, "Thickness/TabItem.Header.Padding");
-        itemsPanelMargin ??= new(resourceHost, "Thickness/TabControl.TabStrip.Panel.Margin");
-        maxTabItemWidth ??= new(resourceHost, "Double/TabItem.Header.MaxWidth");
-        minTabItemWidth ??= new(resourceHost, "Double/TabItem.Header.MinWidth");
-        tabItemMargin ??= new(resourceHost, "Thickness/TabItem.Header.Margin");
-        separatorMargin ??= new(resourceHost, "Thickness/TabItem.Header.Separator.Margin");
         var valueList = values as IList<object?> ?? values.ToArray();
         if (valueList.Count >= 2
             && valueList[0] is TabControl tabControl
             && valueList[1] is Controls.TabStripScrollViewer tabStrip
             && tabStrip.Content is Control tabItemsContainer)
         {
+            // select resources by role of tab control
+            CachedResource<Thickness> emptyTabItemPadding;
+            CachedResource<Thickness> itemsPanelMargin;
+            CachedResource<double> maxTabItemWidth;
+            CachedResource<double> minTabItemWidth;
+            CachedResource<Thickness> separatorMargin;
+            CachedResource<Thickness> tabItemMargin;
+            if (tabControl is Controls.TabControl { Role: Controls.TabControlRole.Compact })
+            {
+                compactEmptyTabItemPadding ??= new(resourceHost, "Thickness/TabItem.Header.Padding.Compact");
+                compactItemsPanelMargin ??= new(resourceHost, "Thickness/TabControl.TabStrip.Panel.Margin.Compact");
+                compactMaxTabItemWidth ??= new(resourceHost, "Double/TabItem.Header.MaxWidth.Compact");
+                compactMinTabItemWidth ??= new(resourceHost, "Double/TabItem.Header.MinWidth.Compact");
+                compactSeparatorMargin ??= new(resourceHost, "Thickness/TabItem.Header.Separator.Margin.Compact");
+                compactTabItemMargin ??= new(resourceHost, "Thickness/TabItem.Header.Margin.Compact");
+                emptyTabItemPadding = compactEmptyTabItemPadding;
+                itemsPanelMargin = compactItemsPanelMargin;
+                maxTabItemWidth = compactMaxTabItemWidth;
+                minTabItemWidth = compactMinTabItemWidth;
+                separatorMargin = compactSeparatorMargin;
+                tabItemMargin = compactTabItemMargin;
+            }
+            else
+            {
+                TabItemWidthConverter.emptyTabItemPadding ??= new(resourceHost, "Thickness/TabItem.Header.Padding");
+                TabItemWidthConverter.itemsPanelMargin ??= new(resourceHost, "Thickness/TabControl.TabStrip.Panel.Margin");
+                TabItemWidthConverter.maxTabItemWidth ??= new(resourceHost, "Double/TabItem.Header.MaxWidth");
+                TabItemWidthConverter.minTabItemWidth ??= new(resourceHost, "Double/TabItem.Header.MinWidth");
+                TabItemWidthConverter.separatorMargin ??= new(resourceHost, "Thickness/TabItem.Header.Separator.Margin");
+                TabItemWidthConverter.tabItemMargin ??= new(resourceHost, "Thickness/TabItem.Header.Margin");
+                emptyTabItemPadding = TabItemWidthConverter.emptyTabItemPadding;
+                itemsPanelMargin = TabItemWidthConverter.itemsPanelMargin;
+                maxTabItemWidth = TabItemWidthConverter.maxTabItemWidth;
+                minTabItemWidth = TabItemWidthConverter.minTabItemWidth;
+                separatorMargin = TabItemWidthConverter.separatorMargin;
+                tabItemMargin = TabItemWidthConverter.tabItemMargin;
+            }
+
             // get size of tab strip
             var margin = tabItemsContainer.Margin;
             var padding = tabStrip.Padding;

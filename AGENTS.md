@@ -95,7 +95,7 @@ Shared build configuration lives in `Directory.Build.props`: assembly version, n
 - When you split a logical block into 2 or more sub-blocks (e.g. for readability), each resulting sub-block must have its own leading comment — adding sub-blocks without comments is not allowed.
 
 ### File and Type Organization
-- One type per file; file name matches the type name exactly.
+- One primary type per file; file name matches the primary type name exactly. Small types strongly related to the primary type — e.g. an enum used by one of its properties, or the event arguments of its events — may share its file, placed after it.
 - A trailing newline at end of file is **not** required — most source files end directly after the closing brace. Do not add one to an existing file, and do not report its absence as a finding.
 - Each subsystem gets its own subfolder under `Core/` (e.g. `Scripting/`, `Data/`, `UsageData/`).
 - Namespace matches the folder path: `CarinaStudio.AppSuite.<Subfolder>`.
@@ -106,7 +106,7 @@ Shared build configuration lives in `Directory.Build.props`: assembly version, n
 - Data members are grouped near the top of the type in this order: (1) constants under a `// Constants.` header, (2) static fields under a `// Static Fields.` header, (3) instance/private fields under a `// Fields.` header. Each group is ordered **alphabetically** by name (case-insensitive). Headers for empty groups are omitted.
 - Properties and methods follow the data members, ordered **alphabetically** by name and interleaved together (not grouped by kind).
 - **Blank lines between members** — two blank lines between members of a top-level type; one blank line between members of an inner (nested) type.
-- Enum values are ordered **alphabetically**. Exception: struct fields with `[StructLayout(LayoutKind.Sequential)]` must preserve their memory-layout order and cannot be reordered.
+- Enum values are ordered **alphabetically**. Exception: when an enum has a default value (such as `Default` or `None`), it comes **first** so it is the implicit `0`, and the rest follow alphabetically. Exception: struct fields with `[StructLayout(LayoutKind.Sequential)]` must preserve their memory-layout order and cannot be reordered.
 
 ### Interfaces and Managers
 - Subsystem interfaces are named `IXxxManager` and extend `IApplicationObject<IAppSuiteApplication>`.

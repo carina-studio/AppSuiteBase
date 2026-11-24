@@ -3554,7 +3554,7 @@
 							VerticalAlignment="{TemplateBinding VerticalAlignment}">
 						<DockPanel ClipToBounds="False">
 							<Panel ClipToBounds="False" DockPanel.Dock="Top">
-								<Border Background="{DynamicResource Brush/TabControl.TabStrip.Background}" IsHitTestVisible="False" OpacityMask="{DynamicResource OpacityMask/TabControl.TabStrip.Background}"/>
+								<Border Name="PART_TabStripBackground" Background="{DynamicResource Brush/TabControl.TabStrip.Background}" IsHitTestVisible="False" OpacityMask="{DynamicResource OpacityMask/TabControl.TabStrip.Background}"/>
 								<Border BorderBrush="{DynamicResource Brush/TabControl.TabStrip.Border}" BorderThickness="0,0,0,1" IsHitTestVisible="False"/>
 								<controls:TabStripScrollViewer Name="PART_TabStripScrollViewer" 
 								                               Background="{x:Null}" 
@@ -3576,6 +3576,22 @@
 				</ControlTemplate>
 			</Setter.Value>
 		</Setter>
+	</Style>
+	<Style Selector="TabControl:compact">
+		<Setter Property="ItemsPanel">
+			<ItemsPanelTemplate>
+				<StackPanel ClipToBounds="False" 
+				            Margin="{DynamicResource Thickness/TabControl.TabStrip.Panel.Margin.Compact}"
+				            Orientation="Horizontal"/>
+			</ItemsPanelTemplate>
+		</Setter>
+	</Style>
+	<Style Selector="TabControl:compact /template/ Border#PART_TabStripBackground">
+		<Setter Property="Background" Value="{DynamicResource Brush/TabControl.TabStrip.Background.Compact}"/>
+		<Setter Property="OpacityMask" Value="{x:Null}"/>
+	</Style>
+	<Style Selector="TabControl:compact /template/ controls|TabStripScrollViewer#PART_TabStripScrollViewer">
+		<Setter Property="Padding" Value="{DynamicResource Thickness/TabControl.TabStrip.Padding.Compact}"/>
 	</Style>
 
 	<!-- TabItem -->
@@ -3638,7 +3654,8 @@
 							<Panel DockPanel.Dock="Left">
 								<Border BorderThickness="1,0,0,0"
 								        Opacity="0"/>
-								<Border BorderBrush="{DynamicResource Brush/TabItem.Header.Separator}"
+								<Border Name="PART_Separator"
+								        BorderBrush="{DynamicResource Brush/TabItem.Header.Separator}"
 								        BorderThickness="1,0,0,0"
 								        DockPanel.Dock="Left"
 								        Margin="{DynamicResource Thickness/TabItem.Header.Separator.Margin}">
@@ -3656,12 +3673,14 @@
 
 							<DockPanel DockPanel.Dock="Left"
 							           IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemBefore}">
-								<Border BorderBrush="{DynamicResource Brush/TabItem.Header.Separator}"
+								<Border Name="PART_InsertionSeparatorBefore"
+								        BorderBrush="{DynamicResource Brush/TabItem.Header.Separator}"
 								        BorderThickness="1,0,0,0"
 								        DockPanel.Dock="Right"
 								        Margin="{DynamicResource Thickness/TabItem.Header.Separator.Margin}"/>
 								<Border Margin="{DynamicResource Thickness/TabItem.InsertionIndicator.Margin}">
-									<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" 
+									<Border Name="PART_InsertionIndicatorBefore"
+									        Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" 
 									        BorderBrush="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Border}" 
 									        BorderThickness="1" 
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
@@ -3672,12 +3691,14 @@
 
 							<DockPanel DockPanel.Dock="Right"
 							           IsVisible="{TemplateBinding controls:ItemInsertionIndicator.IsInsertingItemAfter}" >
-								<Border BorderBrush="{DynamicResource Brush/TabItem.Header.Separator}"
+								<Border Name="PART_InsertionSeparatorAfter"
+								        BorderBrush="{DynamicResource Brush/TabItem.Header.Separator}"
 								        BorderThickness="1,0,0,0"
 								        DockPanel.Dock="Left"
 								        Margin="{DynamicResource Thickness/TabItem.Header.Separator.Margin}"/>
 								<Border Margin="{DynamicResource Thickness/TabItem.InsertionIndicator.Margin}">
-									<Border Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" 
+									<Border Name="PART_InsertionIndicatorAfter"
+									        Background="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Background}" 
 									        BorderBrush="{DynamicResource Brush/TabItem.Header.InsertionIndicator.Border}" 
 									        BorderThickness="1" 
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
@@ -3699,7 +3720,8 @@
 									<Border Background="{x:Null}" 
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}" 
 									        IsVisible="{TemplateBinding IsSelected}"/>
-									<Border Background="{DynamicResource Brush/TabItem.Header.Background.PointerOver}"
+									<Border Name="PART_PointerOverBorder"
+									        Background="{DynamicResource Brush/TabItem.Header.Background.PointerOver}"
 									        BorderBrush="{DynamicResource Brush/TabItem.Header.Border.PointerOver}"
 									        BorderThickness="1"
 									        CornerRadius="{DynamicResource CornerRadius/TabItem.Header}"
@@ -3722,7 +3744,8 @@
 											</Transitions>
 										</Border.Transitions>
 									</Border>
-									<Panel Height="{DynamicResource Double/TabItem.Header.Content.Height}"
+									<Panel Name="PART_HeaderContentPanel"
+									       Height="{DynamicResource Double/TabItem.Header.Content.Height}"
 									       Margin="{DynamicResource Thickness/TabItem.Header.Padding}"
 									       VerticalAlignment="Center">
 										<ContentPresenter Content="{TemplateBinding Header}"
@@ -3740,6 +3763,38 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+	<!-- [Workaround] Use pseudo class in selectors to override values which are set in templates -->
+	<Style Selector="TabControl:compact > TabItem">
+		<Setter Property="FontSize" Value="{DynamicResource Double/TabItem.Header.FontSize.Compact}"/>
+		<Setter Property="MaxHeight" Value="{DynamicResource Double/TabItem.Header.Height.Compact}"/>
+		<Setter Property="MinHeight" Value="{DynamicResource Double/TabItem.Header.Height.Compact}"/>
+	</Style>
+	<Style Selector="TabControl:compact > TabItem /template/ Border#PART_ContentContainer, TabControl:compact > TabItem /template/ Border#PART_InsertionIndicatorAfter, TabControl:compact > TabItem /template/ Border#PART_InsertionIndicatorBefore">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Margin.Compact}"/>
+	</Style>
+	<Style Selector="TabControl:compact > TabItem /template/ Border#PART_InsertionIndicatorAfter, TabControl:compact > TabItem /template/ Border#PART_InsertionIndicatorBefore, TabControl:compact > TabItem /template/ Border#PART_PointerOverBorder, TabControl:compact > TabItem /template/ Border#PART_SelectedBorder">
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/TabItem.Header.Compact}"/>
+	</Style>
+	<Style Selector="TabControl:compact > TabItem /template/ Border#PART_InsertionSeparatorAfter, TabControl:compact > TabItem /template/ Border#PART_InsertionSeparatorBefore, TabControl:compact > TabItem /template/ Border#PART_Separator">
+		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Separator.Margin.Compact}"/>
+	</Style>
+	<Style Selector="TabControl:compact > TabItem /template/ ContentPresenter#PART_EmptyHeaderPresenter">
+		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Content.Height.Compact}"/>
+	</Style>
+	<Style Selector="TabControl:compact > TabItem /template/ Panel#PART_HeaderContentPanel">
+		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Content.Height.Compact}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Padding.Compact}"/>
+	</Style>
+	<Style Selector="TabControl:compact > TabItem Border.TabItem_Icon, TabControl:compact > TabItem :is(Image).TabItem_Icon, TabControl:compact > TabItem Panel.TabItem_Icon">
+		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Icon.Size.Compact}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Icon.Size.Compact}"/>
+	</Style>
+	<Style Selector="TabControl:compact > TabItem Button.TabItem_Button">
+		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Content.Height.Compact}"/>
+		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Button.Margin.Compact}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/TabItem.Header.Button.Padding.Compact}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Content.Height.Compact}"/>
+	</Style>
 	<Style Selector="TabControl:moving-selected-item TabItem /template/ Border#PART_SelectedBorder">
 		<!-- [Workaround] Prevent animating selection which is moved to first item temporarily by Avalonia while moving selected item -->
 		<Setter Property="Transitions" Value="{x:Null}"/>
@@ -3748,7 +3803,8 @@
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate>
-					<ContentPresenter ClipToBounds="False" 
+					<ContentPresenter Name="PART_EmptyHeaderPresenter"
+					                  ClipToBounds="False" 
 					                  Content="{TemplateBinding Header}" 
 					                  ContentTemplate="{TemplateBinding HeaderTemplate}" 
 					                  Height="{DynamicResource Double/TabItem.Header.Content.Height}" 
@@ -3768,7 +3824,8 @@
 						<Panel DockPanel.Dock="Left">
 							<Border BorderThickness="1,0,0,0"
 							        Opacity="0"/>
-							<Border BorderBrush="{DynamicResource Brush/TabItem.Header.Separator}"
+							<Border Name="PART_Separator"
+							        BorderBrush="{DynamicResource Brush/TabItem.Header.Separator}"
 							        BorderThickness="1,0,0,0"
 							        DockPanel.Dock="Left"
 							        Margin="{DynamicResource Thickness/TabItem.Header.Separator.Margin}">
@@ -3782,7 +3839,8 @@
 							</Border>
 						</Panel>
 						<Border ClipToBounds="False" Margin="{DynamicResource Thickness/AddTabItemButton.Margin}">
-							<ContentPresenter ClipToBounds="False"
+							<ContentPresenter Name="PART_EmptyHeaderPresenter"
+							                  ClipToBounds="False"
 							                  Content="{TemplateBinding Header}"
 							                  ContentTemplate="{TemplateBinding HeaderTemplate}"
 							                  Height="{DynamicResource Double/TabItem.Header.Content.Height}"

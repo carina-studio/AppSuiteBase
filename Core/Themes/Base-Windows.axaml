@@ -42,6 +42,7 @@
 
 			<!-- TabItem -->
 			<CornerRadius x:Key="CornerRadius/TabItem.Header">5</CornerRadius>
+			<CornerRadius x:Key="CornerRadius/TabItem.Header.Compact">4</CornerRadius>
 
 			<!-- ToolTip -->
 			<CornerRadius x:Key="CornerRadius/ToolTip">4</CornerRadius>

@@ -433,7 +433,9 @@
 	
 	<!-- TabControl -->
 	<SolidColorBrush x:Key="Brush/TabControl.TabStrip.Background" Color="{DynamicResource Color/Accent}"/>
+	<SolidColorBrush x:Key="Brush/TabControl.TabStrip.Background.Compact" Color="{DynamicResource Color/TabControl.TabStrip.Background.Compact}"/>
 	<SolidColorBrush x:Key="Brush/TabControl.TabStrip.Border" Color="{DynamicResource Color/TabControl.TabStrip.Border}"/>
+	<Color x:Key="Color/TabControl.TabStrip.Background.Compact">#00000000</Color>
 	<Color x:Key="Color/TabControl.TabStrip.Border">#00000000</Color>
 	<LinearGradientBrush x:Key="OpacityMask/TabControl.TabStrip.Background" EndPoint="100%,100%" StartPoint="0%,0%">
 		<GradientStop Color="#17000000" Offset="0"/>

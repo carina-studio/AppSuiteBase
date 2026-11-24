@@ -90,6 +90,7 @@
 	<StaticResourceExtension x:Key="Color/StatusBar.Border" ResourceKey="Color/Shadow.Lighten"/>
 
 	<!-- TabControl -->
+	<Color x:Key="Color/TabControl.TabStrip.Background.Compact">#222222</Color>
 	<Color x:Key="Color/TabControl.TabStrip.Border">#424242</Color>
 	<LinearGradientBrush x:Key="OpacityMask/TabControl.TabStrip.Background" EndPoint="100%,100%" StartPoint="0%,0%">
 		<GradientStop Color="#14000000" Offset="0"/>

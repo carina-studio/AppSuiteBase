@@ -108,6 +108,7 @@
 	<StaticResourceExtension x:Key="Color/StatusBar.Border" ResourceKey="Color/Shadow.Darken"/>
 
 	<!-- TabControl -->
+	<Color x:Key="Color/TabControl.TabStrip.Background.Compact">#eaeaea</Color>
 	<Color x:Key="Color/TabControl.TabStrip.Border">#d8d8d8</Color>
 
 	<!-- TabItem -->

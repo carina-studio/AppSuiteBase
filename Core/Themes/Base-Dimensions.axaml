@@ -406,28 +406,42 @@
 	<sys:Double x:Key="Double/TabControl.TabStrip.MaxEdgeFadingSize">20</sys:Double>
 	<sys:Double x:Key="Double/TabControl.TabStrip.ScrollingButton.Icon.Size">10</sys:Double>
 	<Thickness x:Key="Thickness/TabControl.TabStrip.Padding">-12,0,-17,-2</Thickness> <!-- [Workaround] Reserve at least -15px at left/right for shadows -->
+	<Thickness x:Key="Thickness/TabControl.TabStrip.Padding.Compact">0</Thickness>
 	<Thickness x:Key="Thickness/TabControl.TabStrip.Panel.Margin">15,0,15,0</Thickness> <!-- [Workaround] Reserve at least 15px at left/right for shadows -->
+	<Thickness x:Key="Thickness/TabControl.TabStrip.Panel.Margin.Compact">4,0,4,0</Thickness>
 	<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Margin">5,3,5,3</Thickness>
 	<Thickness x:Key="Thickness/TabControl.TabStrip.ScrollingButton.Padding">5</Thickness>
 
 	<!-- TabItem -->
 	<CornerRadius x:Key="CornerRadius/TabItem.Header">8</CornerRadius>
+	<CornerRadius x:Key="CornerRadius/TabItem.Header.Compact">5</CornerRadius>
 	<sys:Double x:Key="Double/TabItem.Header.ColorBar.Height">2</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.Content.Height">20</sys:Double>
+	<sys:Double x:Key="Double/TabItem.Header.Content.Height.Compact">18</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.FontSize">14</sys:Double>
+	<sys:Double x:Key="Double/TabItem.Header.FontSize.Compact">12</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.Height">40</sys:Double>
+	<sys:Double x:Key="Double/TabItem.Header.Height.Compact">30</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.Icon.Size">14</sys:Double>
+	<sys:Double x:Key="Double/TabItem.Header.Icon.Size.Compact">12</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.InsertionIndicator.Width">20</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.MaxWidth">250</sys:Double>
+	<sys:Double x:Key="Double/TabItem.Header.MaxWidth.Compact">180</sys:Double>
 	<sys:Double x:Key="Double/TabItem.Header.MinWidth">100</sys:Double>
+	<sys:Double x:Key="Double/TabItem.Header.MinWidth.Compact">60</sys:Double>
 	<Thickness x:Key="Thickness/TabItem.Empty.Padding">8,0,8,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Button.Margin">10,0,-6,0</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Button.Margin.Compact">6,0,-4,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Button.Padding">6</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Button.Padding.Compact">4</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.ColorBar.Margin">1,0,1,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Icon.Margin">0,0,10,0</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Margin">1,4,1,4</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Margin.Compact">1,2,1,2</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Padding">12,6,12,6</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Padding.Compact">8,4,8,4</Thickness>
 	<Thickness x:Key="Thickness/TabItem.Header.Separator.Margin">0,12,0,12</Thickness>
+	<Thickness x:Key="Thickness/TabItem.Header.Separator.Margin.Compact">0,8,0,8</Thickness>
 	<Thickness x:Key="Thickness/TabItem.InsertionIndicator.Margin">0</Thickness>
 
 	<!-- TextBox -->
