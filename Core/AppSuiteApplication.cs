@@ -3581,6 +3581,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         }
         var initNetworkManagerTask = NetworkManager.InitializeAsync(this);
 
+        // start initializing text shell manager
+        var initTextShellManagerTask = TextShellManager.InitializeAsync(this);
+
         // setup styles
         this.UpdateStyles();
 
@@ -3603,8 +3606,9 @@ public abstract partial class AppSuiteApplication : Application, IAppSuiteApplic
         foreach (var externalDependency in this.ExternalDependencies)
             checkExtDepTasks.Add(externalDependency.WaitForCheckingAvailability());
 
-        // complete initializing network manager
+        // complete initializing network manager and text shell manager
         await initNetworkManagerTask;
+        await initTextShellManagerTask;
 
         // initialize product manager
         try

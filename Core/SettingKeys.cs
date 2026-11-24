@@ -39,7 +39,16 @@ public sealed class SettingKeys
     /// Default language of script.
     /// </summary>
     public static readonly SettingKey<ScriptLanguage> DefaultScriptLanguage = new(nameof(DefaultScriptLanguage), ScriptLanguage.CSharp_15);
-    
+
+
+    /// <summary>
+    /// Default text shell to run commands.
+    /// </summary>
+    // The name is kept as 'TextShell' so that the value set before the key was moved from applications to here is still used.
+    public static readonly SettingKey<TextShell> DefaultTextShell = new(nameof(TextShell), Platform.IsWindows
+        ? TextShell.PowerShell
+        : Platform.IsMacOS ? TextShell.ZShell : TextShell.BourneAgainShell);
+
     
     /// <summary>
     /// Enable ligature and contextual alternatives in script or not.

@@ -24,6 +24,10 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
     /// </summary>
     public static readonly IValueConverter ApplicationCultureConverter = new Converters.EnumConverter(IAppSuiteApplication.CurrentOrNull, typeof(ApplicationCulture));
     /// <summary>
+    /// <see cref="IValueConverter"/> to convert from <see cref="TextShell"/> to <see cref="string"/>.
+    /// </summary>
+    public static readonly IValueConverter TextShellConverter = new Converters.EnumConverter(IAppSuiteApplication.CurrentOrNull, typeof(TextShell));
+    /// <summary>
     /// <see cref="IValueConverter"/> to convert from <see cref="ThemeMode"/> to <see cref="string"/>.
     /// </summary>
     public static readonly IValueConverter ThemeModeConverter = new Converters.EnumConverter(IAppSuiteApplication.CurrentOrNull, typeof(ThemeMode));
@@ -80,6 +84,9 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
                 it.ProductActivationChanged += this.OnProductActivationStateChanged;
             }
         });
+
+        // refresh installed text shells
+        _ = TextShellManager.Default.RefreshInstalledTextShellsAsync();
     }
 
 
@@ -198,7 +205,17 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
         get => this.Settings.GetValueOrDefault(SettingKeys.DefaultScriptLanguage);
         set => this.Settings.SetValue(SettingKeys.DefaultScriptLanguage, value);
     }
-    
+
+
+    /// <summary>
+    /// Get or set default text shell to run commands.
+    /// </summary>
+    public TextShell DefaultTextShell
+    {
+        get => this.Settings.GetValueOrDefault(SettingKeys.DefaultTextShell);
+        set => this.Settings.SetValue(SettingKeys.DefaultTextShell, value);
+    }
+
     
     /// <summary>
     /// Do not using ANGLE for rendering (only for Windows).
@@ -265,6 +282,12 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
         get => this.Settings.GetValueOrDefault(SettingKeys.IndentationSizeInScript);
         set => this.Settings.SetValue(SettingKeys.IndentationSizeInScript, value);
     }
+
+
+    /// <summary>
+    /// Get list of text shells installed on system.
+    /// </summary>
+    public IList<TextShell> InstalledTextShells => TextShellManager.Default.InstalledTextShells;
 
 
     /// <summary>
@@ -495,6 +518,8 @@ public class ApplicationOptions : ViewModel<IAppSuiteApplication>
             this.OnPropertyChanged(nameof(DefaultBackdropEffectStrength));
         else if (key == SettingKeys.DefaultScriptLanguage)
             this.OnPropertyChanged(nameof(DefaultScriptLanguage));
+        else if (key == SettingKeys.DefaultTextShell)
+            this.OnPropertyChanged(nameof(DefaultTextShell));
         else if (key == SettingKeys.EnableLigatureInScript)
             this.OnPropertyChanged(nameof(EnableLigatureInScript));
         else if (key == SettingKeys.EnableRunningScript)

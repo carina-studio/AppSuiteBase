@@ -91,6 +91,7 @@
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">User Interface Scale Factor</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultBackdropEffectStrength">Backdrop Effect</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">Default Language</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DefaultTextShell">Default Command-Line Shell for Command Execution</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle">Disable ANGLE Rendering</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle.Description">Prevent rendering issues with certain graphics cards, but may affect some visual effects.</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableLigatureInScript">Ligatures and Contextual Alternatives</sys:String>
@@ -396,6 +397,15 @@ You can change this setting at any time in Options.</sys:String>
 	<!-- SplashWindow -->
 	<sys:String x:Key="String/SplashWindow.Launching">Launching</sys:String>
 	<sys:String x:Key="String/SplashWindow.ShowingMainWindow">Showing main window</sys:String>
+
+	<!-- TextShell -->
+	<sys:String x:Key="String/TextShell.BourneAgainShell">bash (Bourne-Again Shell)</sys:String>
+	<sys:String x:Key="String/TextShell.BourneShell">sh (Bourne Shell)</sys:String>
+	<sys:String x:Key="String/TextShell.CommandPrompt">Cmd (Windows Command Prompt)</sys:String>
+	<sys:String x:Key="String/TextShell.CShell">csh (C Shell)</sys:String>
+	<sys:String x:Key="String/TextShell.FriendlyInteractiveShell">fish (Friendly Interactive Shell)</sys:String>
+	<sys:String x:Key="String/TextShell.PowerShell">PowerShell</sys:String>
+	<sys:String x:Key="String/TextShell.ZShell">zsh (Z Shell)</sys:String>
 
 	<!-- ThemeMode -->
 	<sys:String x:Key="String/ThemeMode.Dark">Dark</sys:String>

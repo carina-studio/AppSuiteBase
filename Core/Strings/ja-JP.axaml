@@ -84,6 +84,7 @@
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">ユーザーインターフェイスの拡大率</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultBackdropEffectStrength">背景効果</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">既定の言語</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DefaultTextShell">コマンド実行時のデフォルトコマンドラインシェル</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle">ANGLE レンダリングを無効にする</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle.Description">一部のグラフィックスカードで発生する表示の不具合を回避しますが、一部の視覚効果に影響する場合があります。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableLigatureInScript">合字とコンテキスト依存の異体字</sys:String>
@@ -387,6 +388,15 @@
 	<!-- SplashWindow -->
 	<sys:String x:Key="String/SplashWindow.Launching">起動しています</sys:String>
 	<sys:String x:Key="String/SplashWindow.ShowingMainWindow">メインウィンドウを表示しています</sys:String>
+
+	<!-- TextShell -->
+	<sys:String x:Key="String/TextShell.BourneAgainShell">bash (Bourne-Again Shell)</sys:String>
+	<sys:String x:Key="String/TextShell.BourneShell">sh (Bourne Shell)</sys:String>
+	<sys:String x:Key="String/TextShell.CommandPrompt">Cmd (Windows コマンドプロンプト)</sys:String>
+	<sys:String x:Key="String/TextShell.CShell">csh (C Shell)</sys:String>
+	<sys:String x:Key="String/TextShell.FriendlyInteractiveShell">fish (Friendly Interactive Shell)</sys:String>
+	<sys:String x:Key="String/TextShell.PowerShell">PowerShell</sys:String>
+	<sys:String x:Key="String/TextShell.ZShell">zsh (Z Shell)</sys:String>
 
 	<!-- ThemeMode -->
 	<sys:String x:Key="String/ThemeMode.Dark">ダーク</sys:String>

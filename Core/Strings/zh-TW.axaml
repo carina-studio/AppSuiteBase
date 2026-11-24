@@ -85,6 +85,7 @@
 	<sys:String x:Key="String/ApplicationOptions.CustomScreenScaleFactor">使用者介面縮放比例</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultBackdropEffectStrength">背景效果</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DefaultScriptLanguage">預設腳本語言</sys:String>
+	<sys:String x:Key="String/ApplicationOptions.DefaultTextShell">預設執行指令之命令列殼層 (Command-line Shell)</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle">停止使用 ANGLE 繪製</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.DisableAngle.Description">避免在部分顯示卡上的繪製問題，但會影響部分視覺效果。</sys:String>
 	<sys:String x:Key="String/ApplicationOptions.EnableLigatureInScript">連字及情境替代字形</sys:String>
@@ -388,6 +389,9 @@
 	<!-- SplashWindow -->
 	<sys:String x:Key="String/SplashWindow.Launching">啟動中</sys:String>
 	<sys:String x:Key="String/SplashWindow.ShowingMainWindow">顯示主視窗</sys:String>
+
+	<!-- TextShell -->
+	<sys:String x:Key="String/TextShell.CommandPrompt">Cmd (Windows 命令提示字元)</sys:String>
 
 	<!-- ThemeMode -->
 	<sys:String x:Key="String/ThemeMode.Dark">深色</sys:String>
