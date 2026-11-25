@@ -4,8 +4,10 @@
 
 	<!-- AddTabItemButton -->
 	<sys:Double x:Key="Double/AddTabItemButton.Size">26</sys:Double>
+	<sys:Double x:Key="Double/AddTabItemButton.Size.Compact">20</sys:Double>
 	<Thickness x:Key="Thickness/AddTabItemButton.Margin">0</Thickness>
 	<Thickness x:Key="Thickness/AddTabItemButton.Padding">5</Thickness>
+	<Thickness x:Key="Thickness/AddTabItemButton.Padding.Compact">4</Thickness>
 
 	<!-- AgreementDialog -->
 	<sys:Double x:Key="Double/AgreementDialog.Height">600</sys:Double>

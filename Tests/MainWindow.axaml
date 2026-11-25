@@ -578,6 +578,13 @@
 												</TabItem.Header>
 												<TextBlock Margin="10" Text="Content 3"/>
 											</appControls:TabItem>
+											<appControls:TabItem Classes="EmptyWithSeparator">
+												<TabItem.Header>
+													<Button Classes="AddTabItem">
+														<Image Classes="Icon" Source="{DynamicResource Image/Icon.Add}"/>
+													</Button>
+												</TabItem.Header>
+											</appControls:TabItem>
 										</appControls:TabControl>
 									</Border>
 

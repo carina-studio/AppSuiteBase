@@ -3789,6 +3789,12 @@
 		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Icon.Size.Compact}"/>
 		<Setter Property="Width" Value="{DynamicResource Double/TabItem.Header.Icon.Size.Compact}"/>
 	</Style>
+	<Style Selector="TabControl:compact > TabItem Button.AddTabItem">
+		<Setter Property="CornerRadius" Value="{DynamicResource CornerRadius/TabItem.Header.Compact}"/>
+		<Setter Property="Height" Value="{DynamicResource Double/AddTabItemButton.Size.Compact}"/>
+		<Setter Property="Padding" Value="{DynamicResource Thickness/AddTabItemButton.Padding.Compact}"/>
+		<Setter Property="Width" Value="{DynamicResource Double/AddTabItemButton.Size.Compact}"/>
+	</Style>
 	<Style Selector="TabControl:compact > TabItem Button.TabItem_Button">
 		<Setter Property="Height" Value="{DynamicResource Double/TabItem.Header.Content.Height.Compact}"/>
 		<Setter Property="Margin" Value="{DynamicResource Thickness/TabItem.Header.Button.Margin.Compact}"/>
