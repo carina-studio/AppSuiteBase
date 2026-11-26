@@ -946,7 +946,10 @@ public abstract class MainWindow : Window
         }
         if (this.WindowState != savedWindowState)
         {
-            this.WindowState = savedWindowState; // Size will also be restored in OnPropertyChanged()
+            if (Platform.IsNotLinux)
+                this.WindowState = savedWindowState; // Size will also be restored in OnPropertyChanged()
+            else
+                this.SynchronizationContext.PostDelayed(() => this.WindowState = savedWindowState, 300); // [Workaround] Prevent IsActive not changing to true after opening
             return true;
         }
         return false;
