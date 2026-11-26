@@ -3590,6 +3590,10 @@
 		<Setter Property="Background" Value="{DynamicResource Brush/TabControl.TabStrip.Background.Compact}"/>
 		<Setter Property="OpacityMask" Value="{x:Null}"/>
 	</Style>
+	<!-- Remove bottom margin which is set by TabControl theme of Fluent -->
+	<Style Selector="TabControl:compact /template/ ItemsPresenter#PART_ItemsPresenter">
+		<Setter Property="Margin" Value="0"/>
+	</Style>
 	<Style Selector="TabControl:compact /template/ controls|TabStripScrollViewer#PART_TabStripScrollViewer">
 		<Setter Property="Padding" Value="{DynamicResource Thickness/TabControl.TabStrip.Padding.Compact}"/>
 	</Style>
